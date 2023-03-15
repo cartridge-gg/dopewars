@@ -1,4 +1,5 @@
 #[derive(Component)]
 struct Game {
-    id: u32;
+    id: usize;
+    start_time: usize;
 }

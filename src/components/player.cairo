@@ -17,3 +17,8 @@ struct Inventory {
 struct Location {
     id: u32;
 }
+
+#[derive(Component)]
+struct Cash {
+    amount: felt252;
+}
