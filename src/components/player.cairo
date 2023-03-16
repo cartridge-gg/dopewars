@@ -1,24 +1,24 @@
 #[derive(Component)]
 struct Name {
-    name: felt252;
+    name: felt252,
 }
 
 #[derive(Component)]
 struct Stats {
-    health: u8;
+    health: u8,
 }
 
 #[derive(Component)]
 struct Inventory {
-    gun: u8;
+    gun: u8,
 }
 
 #[derive(Component)]
 struct Location {
-    id: u32;
+    id: u32,
 }
 
 #[derive(Component)]
 struct Cash {
-    amount: felt252;
+    amount: felt252,
 }

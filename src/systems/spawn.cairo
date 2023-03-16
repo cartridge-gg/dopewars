@@ -6,8 +6,8 @@ mod SpawnSystem {
     use components::Inventory;
     use components::Stats;
 
-    fn execute(game_id: usize, name: felt252) {
-        let player_id = Spawn::<(Game, Name, Location, Inventory, Stats)>::bundle((
+    fn execute(game_id: felt252, name: felt252) {
+        let player_id = Spawn::bundle((game_id), (
             Game { id: game_id },
             Name { name: name },
             Location { id: 0 },

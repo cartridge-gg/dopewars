@@ -1,5 +1,5 @@
 #[derive(Component)]
 struct MarketCurve {
-    cash: felt252;
-    quantity: felt252;
+    cash: felt252,
+    quantity: felt252,
 }
