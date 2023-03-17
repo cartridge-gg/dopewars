@@ -25,7 +25,6 @@ mod BuySystem {
 
         let game = Query::<Game>::entity((game_id));
         let player = Query::<Location, Cash>::entity((game_id, player_id.into()));
-        let next_location = Query::<Location>::entity((game_id, next_location_id));
 
         return ();
     }

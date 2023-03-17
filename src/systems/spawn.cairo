@@ -17,11 +17,10 @@ mod SpawnSystem {
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id = Spawn::bundle((game_id), (
-            Game { id: game_id },
             Name { name: name },
-            Location { id: 0 },
-            Inventory { gun: 69 },
-            Stats { health: 100 },
+            Location { id: 0_u32 },
+            Inventory { gun: 69_u8 },
+            Stats { health: 100_u8 },
         ));
         return ();
     }
