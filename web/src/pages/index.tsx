@@ -6,9 +6,11 @@ import { useModal } from "@/components/Modal/ModalProvider";
 import Cartridge from "@/components/icons/Cartridge";
 import Argent from "@/components/icons/Argent";
 import Container from "@/components/Container";
+import { useConnectors } from "@starknet-react/core";
+import { argentConnector, controllerConnector } from "./_app";
 
 export default function Home() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { connectors, connect } = useConnectors()
   const { openModal } = useModal();
 
   return (
@@ -28,10 +30,10 @@ export default function Home() {
             openModal(
               "Connect your starknet controller",
               <VStack w="full">
-                <Button w="full">
+                <Button w="full" onClick={() => controllerConnector.connect()}>
                   <Cartridge /> Connect Cartridge
                 </Button>
-                <Button variant="secondary" w="full">
+                <Button variant="secondary" w="full" onClick={() => connect(argentConnector)}>
                   <Argent /> Connect Argent
                 </Button>
               </VStack>

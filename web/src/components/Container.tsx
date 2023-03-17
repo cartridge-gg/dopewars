@@ -26,7 +26,7 @@ const Container = ({
       direction="column"
       borderRadius={4}
     >
-      <Flex textTransform="uppercase" w="full">
+      <Flex fontSize="17px" textTransform="uppercase" w="full">
         {leftHeading}
         <Spacer />
         {rightHeading}
