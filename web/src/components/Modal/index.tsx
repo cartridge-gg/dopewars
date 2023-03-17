@@ -26,8 +26,7 @@ const Modal = ({
     <ChakraModal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader fontWeight={500} fontSize="16px" textAlign="center">{title}</ModalHeader>
         <ModalBody>{children}</ModalBody>
         {footerContent && (
           <ModalFooter>

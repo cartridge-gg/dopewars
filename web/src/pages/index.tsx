@@ -1,11 +1,15 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Button, useDisclosure, useModal } from '@chakra-ui/react'
+import { Button, useDisclosure, VStack } from '@chakra-ui/react'
 import Connect from '@/components/icons/Connect'
+import { useModal } from '@/components/Modal/ModalProvider';
+import Cartridge from '@/components/icons/Cartridge';
+import Argent from '@/components/icons/Argent';
 
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { openModal } = useModal();
 
   return (
     <>
@@ -16,7 +20,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Button>
+        <Button onClick={() => openModal(
+          "Connect your starknet controller",
+          <VStack w="full">
+            <Button w="full">
+              <Cartridge /> Connect Cartridge
+            </Button>
+            <Button variant="secondary" w="full">
+              <Argent /> Connect Argent
+            </Button>
+          </VStack>
+        )}>
           <Connect /> Connect
         </Button>
       </main>

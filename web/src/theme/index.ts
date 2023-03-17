@@ -15,6 +15,7 @@ const theme = extendTheme({
         body: {
             background: "gray.400",
             fontSize: "sm",
+            fontWeight: "500",
         },
     },
   },
