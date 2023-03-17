@@ -22,7 +22,7 @@ const Container = ({
       border="2px solid black"
       bg="#202221"
       w="576px"
-      h="92%"
+      h="82%"
       direction="column"
       borderRadius={4}
     >

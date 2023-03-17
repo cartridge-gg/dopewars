@@ -1,17 +1,27 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Button, Center, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Flex,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import Connect from "@/components/icons/Connect";
 import { useModal } from "@/components/Modal/ModalProvider";
 import Cartridge from "@/components/icons/Cartridge";
 import Argent from "@/components/icons/Argent";
 import Container from "@/components/Container";
-import { useConnectors } from "@starknet-react/core";
+import { useAccount, useConnectors } from "@starknet-react/core";
 import { argentConnector, controllerConnector } from "./_app";
+import { formatAddress } from "@/utils";
+import Disconnect from "@/components/icons/Disconnect";
 
 export default function Home() {
-  const { connectors, connect } = useConnectors()
-  const { openModal } = useModal();
+  const { address } = useAccount();
+  const { connectors, connect, disconnect } = useConnectors();
+  const { openModal, closeModal } = useModal();
 
   return (
     <>
@@ -22,35 +32,56 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Button
-          position="absolute"
-          right="15"
-          top="15"
-          onClick={() =>
-            openModal(
-              "Connect your starknet controller",
-              <VStack w="full">
-                <Button w="full" onClick={() => controllerConnector.connect()}>
-                  <Cartridge /> Connect Cartridge
-                </Button>
-                <Button variant="secondary" w="full" onClick={() => connect(argentConnector)}>
-                  <Argent /> Connect Argent
-                </Button>
-              </VStack>
-            )
-          }
-        >
-          <Connect /> Connect
-        </Button>
+        {address ? (
+          <Flex position="absolute" right="15" top="15" gap="8px">
+            <Button variant="secondary">
+              {formatAddress(address)}
+            </Button>
+            <Button variant="secondary" onClick={disconnect}>
+              <Disconnect />
+            </Button>
+          </Flex>
+        ) : (
+          <Button
+            position="absolute"
+            right="15"
+            top="15"
+            onClick={() =>
+              openModal(
+                "Connect your starknet controller",
+                <VStack w="full">
+                  <Button
+                    w="full"
+                    onClick={() => {
+                      connect(controllerConnector as any);
+                      closeModal();
+                    }}
+                  >
+                    <Cartridge /> Connect Cartridge
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    w="full"
+                    onClick={() => {
+                      connect(argentConnector as any);
+                      closeModal();
+                    }}
+                  >
+                    <Argent /> Connect Argent
+                  </Button>
+                </VStack>
+              )
+            }
+          >
+            <Connect /> Connect
+          </Button>
+        )}
+
         <Center h="full">
           <Container
             leftHeading={<Text>Lobby</Text>}
             rightHeading={<Text>Starts in 1 day</Text>}
-            footer={
-              <Button
-                w="full"
-                >Continue</Button>
-            }
+            footer={<Button w="full">Continue</Button>}
           ></Container>
         </Center>
       </main>
