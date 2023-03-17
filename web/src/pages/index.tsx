@@ -20,7 +20,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Button onClick={() => openModal(
+        <Button position="absolute" right="15" top="15" onClick={() => openModal(
           "Connect your starknet controller",
           <VStack w="full">
             <Button w="full">

@@ -16,6 +16,7 @@ const theme = extendTheme({
             background: "gray.400",
             fontSize: "sm",
             fontWeight: "500",
+            backgroundImage: "url('/RYO_Background.png')",
         },
     },
   },
