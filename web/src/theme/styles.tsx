@@ -1,6 +1,6 @@
 import { Global } from '@emotion/react'
 
-const Fonts = () => (
+const Styles = () => (
   <Global
     styles={`
       @font-face {
@@ -8,8 +8,16 @@ const Fonts = () => (
         font-style: normal;
         src: url('./fonts/ChicagoFLF.ttf') format('truetype');
       }
+
+      html,
+      body,
+      body > div:first-child,
+      div#__next,
+      div#__next > div {
+        height: 100%;
+      }
       `}
   />
 )
 
-export default Fonts
+export default Styles

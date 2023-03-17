@@ -17,7 +17,11 @@ const theme = extendTheme({
             fontSize: "sm",
             fontWeight: "500",
             backgroundImage: "url('/RYO_Background.png')",
+            height: "100vh",
         },
+        main: {
+            height: "100%",
+        }
     },
   },
   components: {

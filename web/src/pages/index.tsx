@@ -1,11 +1,11 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Button, useDisclosure, VStack } from '@chakra-ui/react'
-import Connect from '@/components/icons/Connect'
-import { useModal } from '@/components/Modal/ModalProvider';
-import Cartridge from '@/components/icons/Cartridge';
-import Argent from '@/components/icons/Argent';
-
+import Head from "next/head";
+import Image from "next/image";
+import { Button, Center, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import Connect from "@/components/icons/Connect";
+import { useModal } from "@/components/Modal/ModalProvider";
+import Cartridge from "@/components/icons/Cartridge";
+import Argent from "@/components/icons/Argent";
+import Container from "@/components/Container";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -20,20 +20,38 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Button position="absolute" right="15" top="15" onClick={() => openModal(
-          "Connect your starknet controller",
-          <VStack w="full">
-            <Button w="full">
-              <Cartridge /> Connect Cartridge
-            </Button>
-            <Button variant="secondary" w="full">
-              <Argent /> Connect Argent
-            </Button>
-          </VStack>
-        )}>
+        <Button
+          position="absolute"
+          right="15"
+          top="15"
+          onClick={() =>
+            openModal(
+              "Connect your starknet controller",
+              <VStack w="full">
+                <Button w="full">
+                  <Cartridge /> Connect Cartridge
+                </Button>
+                <Button variant="secondary" w="full">
+                  <Argent /> Connect Argent
+                </Button>
+              </VStack>
+            )
+          }
+        >
           <Connect /> Connect
         </Button>
+        <Center h="full">
+          <Container
+            leftHeading={<Text>Lobby</Text>}
+            rightHeading={<Text>Starts in 1 day</Text>}
+            footer={
+              <Button
+                w="full"
+                >Continue</Button>
+            }
+          ></Container>
+        </Center>
       </main>
     </>
-  )
+  );
 }
