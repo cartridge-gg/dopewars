@@ -3,14 +3,27 @@ import React, { useState, useEffect } from "react";
 
 interface TimerProps {
   startInSeconds: number;
+  onStart?: () => void;
+  onEnd?: () => void;
 }
 
-const Timer: React.FC<TimerProps> = ({ startInSeconds }) => {
+const Timer: React.FC<TimerProps> = ({ startInSeconds, onStart, onEnd }) => {
   const [timeLeft, setTimeLeft] = useState(startInSeconds);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     if (timeLeft <= 0) {
+      if (started && onEnd) {
+        onEnd();
+      }
       return;
+    }
+
+    if (!started) {
+      setStarted(true);
+      if (onStart) {
+        onStart();
+      }
     }
 
     const interval = setInterval(() => {
@@ -20,7 +33,7 @@ const Timer: React.FC<TimerProps> = ({ startInSeconds }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [timeLeft]);
+  }, [timeLeft, started, onStart, onEnd]);
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -36,10 +49,10 @@ const Timer: React.FC<TimerProps> = ({ startInSeconds }) => {
     <div>
       {timeLeft > 0 ? (
         <Flex>
-            <Text color="#878E8E">
-          Starts in&nbsp;
-        </Text>
-        <Text color="#22B617">{formatTime(timeLeft)}</Text>
+          <Text color="#878E8E">
+            Starts in&nbsp;
+          </Text>
+          <Text color="#22B617">{formatTime(timeLeft)}</Text>
         </Flex>
       ) : (
         <Text color="#22B617">Started</Text>

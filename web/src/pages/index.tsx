@@ -19,6 +19,7 @@ import { formatAddress } from "@/utils";
 import Disconnect from "@/components/icons/Disconnect";
 import Players from "@/components/Players";
 import Timer from "@/components/Timer";
+import Lobby from "@/components/Lobby";
 
 export default function Home() {
   const { address } = useAccount();
@@ -80,18 +81,13 @@ export default function Home() {
         )}
 
         <Center h="full">
-          <Container
-            leftHeading={<Text>Lobby</Text>}
-            rightHeading={<Timer startInSeconds={400} />}
-            footer={<Button w="full">Continue</Button>}
-          >
-            <Players addresses={[
-              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
-              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
-              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
-              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
-            ]}/>
-          </Container>
+          
+            <Lobby addresses={[
+            "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+            "0x00b6b8d137192728db15ebccc9a00479d493eb5b028c3fddf0208e21c9cd60ad",
+            "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+            "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+          ]} startInSeconds={5}/>
         </Center>
       </main>
     </>
