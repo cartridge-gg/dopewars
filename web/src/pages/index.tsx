@@ -18,6 +18,7 @@ import { argentConnector, controllerConnector } from "./_app";
 import { formatAddress } from "@/utils";
 import Disconnect from "@/components/icons/Disconnect";
 import Players from "@/components/Players";
+import Timer from "@/components/Timer";
 
 export default function Home() {
   const { address } = useAccount();
@@ -81,7 +82,7 @@ export default function Home() {
         <Center h="full">
           <Container
             leftHeading={<Text>Lobby</Text>}
-            rightHeading={<Text>Starts in 1 day</Text>}
+            rightHeading={<Timer startInSeconds={400} />}
             footer={<Button w="full">Continue</Button>}
           >
             <Players addresses={[
