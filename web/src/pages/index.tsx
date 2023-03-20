@@ -17,6 +17,7 @@ import { useAccount, useConnectors } from "@starknet-react/core";
 import { argentConnector, controllerConnector } from "./_app";
 import { formatAddress } from "@/utils";
 import Disconnect from "@/components/icons/Disconnect";
+import Players from "@/components/Players";
 
 export default function Home() {
   const { address } = useAccount();
@@ -82,7 +83,14 @@ export default function Home() {
             leftHeading={<Text>Lobby</Text>}
             rightHeading={<Text>Starts in 1 day</Text>}
             footer={<Button w="full">Continue</Button>}
-          ></Container>
+          >
+            <Players addresses={[
+              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+              "0x003CF0b997899E2CD5221EE177e1ADE1dead624337662cF39Ad8B4Bde07D7D65",
+            ]}/>
+          </Container>
         </Center>
       </main>
     </>
