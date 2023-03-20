@@ -14,7 +14,7 @@ mod BuySystem {
     use rollyourown::components::player::ICashDispatcherTrait;
 
     fn execute(game_id: felt252, drug_id: usize, quantity: usize) {
-        let player_id = starknet::get_caller_address();
+        let player_id: felt252 = starknet::get_caller_address().into();
 
         // 1. Verify the caller owns the player.
         // 2. Get current price for location for quantity.
@@ -23,8 +23,8 @@ mod BuySystem {
         // 5. Update the location's inventory.
         // 6. Update the player's inventory.
 
-        let game = Query::<Game>::entity((game_id));
-        let player = Query::<Location, Cash>::entity((game_id, player_id.into()));
+        let game = Query::<Game>::entity(game_id.into());
+        let player = Query::<Location, Cash>::entity((game_id, (player_id)).into());
 
         return ();
     }

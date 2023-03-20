@@ -11,10 +11,10 @@ mod TravelSystem {
     use rollyourown::components::player::ILocationDispatcherTrait;
 
     fn execute(game_id: felt252, next_location_id: felt252) {
-        let player_id = starknet::get_caller_address();
-        let game = Query::<Game>::entity((game_id));
-        let player = Query::<Location>::entity((game_id, player_id.into()));
-        let next_location = Query::<Location>::entity((game_id, next_location_id));
+        let player_id: felt252 = starknet::get_caller_address().into();
+        let game = Query::<Game>::entity(game_id.into());
+        let player = Query::<Location>::entity((game_id, (player_id)).into());
+        let next_location = Query::<Location>::entity((game_id, (next_location_id)).into());
         // 1. Verify the caller owns the player.
         // 2. Determine if a random travel event occurs and apply it if necessary.
         // 3. Update the players location to the next_location_id.
