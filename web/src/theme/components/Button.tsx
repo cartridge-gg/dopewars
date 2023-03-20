@@ -30,12 +30,7 @@ export const Button: ComponentStyleConfig = {
         color: "#fff",
         textDecoration: "none",
       },
-      _disabled: {
-        _hover: {
-          backgroundColor: "#000 !important",
-          color: "#000",
-        },
-      },
+
     },
     secondary: {
       backgroundColor: "gray.100",
@@ -53,12 +48,6 @@ export const Button: ComponentStyleConfig = {
         backgroundColor: "#000",
         color: "#fff",
         textDecoration: "none",
-      },
-      _disabled: {
-        _hover: {
-          backgroundColor: "#000 !important",
-          color: "#000",
-        },
       },
     },
   },
