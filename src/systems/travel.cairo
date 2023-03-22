@@ -1,5 +1,6 @@
 #[system]
 mod TravelSystem {
+    use array::ArrayTrait;
     use traits::Into;
     use starknet::contract_address::ContractAddressIntoFelt252;
 

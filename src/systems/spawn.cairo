@@ -1,5 +1,6 @@
 #[system]
 mod SpawnSystem {
+    use array::ArrayTrait;
     use traits::Into;  
     use starknet::contract_address::ContractAddressIntoFelt252;
     use dojo::commands::Spawn;
