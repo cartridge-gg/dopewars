@@ -21,6 +21,7 @@ import Players from "@/components/Players";
 import Timer from "@/components/Timer";
 import Lobby from "@/components/Lobby";
 import Game from "@/components/Game";
+import Cigarette from "@/components/icons/Cigarette";
 
 export default function Home() {
   const { address } = useAccount();
@@ -36,6 +37,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Flex position="absolute" color="white" fontSize="16px" align="center" top="18" left="18" gap="4px">
+          <Cigarette />
+          RYO
+        </Flex>
         {address ? (
           <Flex position="absolute" right="15" top="15" gap="8px">
             <Button variant="secondary">
@@ -82,8 +87,8 @@ export default function Home() {
         )}
 
         <Center h="full">
-          
-            <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  />
+            <Lobby addresses={["0x0"]} startInSeconds={500} />
+            {/* <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  /> */}
         </Center>
       </main>
     </>
