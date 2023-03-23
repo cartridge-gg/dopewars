@@ -37,8 +37,8 @@ export default function Home() {
       <main>
         <Header />
         <Center h="full">
-            <Lobby addresses={["0x0"]} startInSeconds={500} />
-            {/* <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  /> */}
+            {/* <Lobby addresses={["0x0"]} startInSeconds={500} /> */}
+            <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  />
         </Center>
       </main>
     </>
