@@ -2,17 +2,10 @@
 mod BuySystem {
     use array::ArrayTrait;
     use traits::Into;
-    use starknet::contract_address::ContractAddressIntoFelt252;
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::game::IGameDispatcher;
-    use rollyourown::components::game::IGameDispatcherTrait;
     use rollyourown::components::player::Location;
-    use rollyourown::components::player::ILocationDispatcher;
-    use rollyourown::components::player::ILocationDispatcherTrait;
     use rollyourown::components::player::Cash;
-    use rollyourown::components::player::ICashDispatcher;
-    use rollyourown::components::player::ICashDispatcherTrait;
 
     fn execute(game_id: felt252, drug_id: usize, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
@@ -24,8 +17,8 @@ mod BuySystem {
         // 5. Update the location's inventory.
         // 6. Update the player's inventory.
 
-        let game = Query::<Game>::entity(game_id.into());
-        let player = Query::<Location, Cash>::entity((game_id, (player_id)).into());
+        let game = commands::<Game>::get(game_id.into());
+        let player = commands::<Location, Cash>::get((game_id, (player_id)).into());
 
         return ();
     }

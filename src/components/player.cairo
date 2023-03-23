@@ -10,7 +10,8 @@ struct Stats {
 
 #[derive(Component)]
 struct Inventory {
-    gun: u8,
+    weapon: u32,
+    shoes: u32,
 }
 
 #[derive(Component)]
