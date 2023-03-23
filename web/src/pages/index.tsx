@@ -24,6 +24,7 @@ import Lobby from "@/components/Lobby";
 import Game from "@/components/Game";
 import Cigarette from "@/components/icons/Cigarette";
 import Header from "@/components/Header";
+import Results from "@/components/PlayerResult";
 
 export default function Home() {
   return (
@@ -38,7 +39,15 @@ export default function Home() {
         <Header />
         <Center h="full">
             {/* <Lobby addresses={["0x0"]} startInSeconds={500} /> */}
-            <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  />
+            {/* <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  /> */}
+            {<Results playerResults={[
+              {
+                address: "0x0",
+                money: 100,
+                rank: 1,
+                
+              }
+            ]}/>}
         </Center>
       </main>
     </>
