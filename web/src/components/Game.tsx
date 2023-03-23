@@ -2,6 +2,7 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import Container from "./Container";
 import Calendar from "./icons/Calendar";
 import Wallet from "./icons/Wallet";
+import Product from "./Product";
 import ProductsTable from "./Products";
 
 interface GameProps {
@@ -35,7 +36,7 @@ const Game = ({ city, currentDay, totalDays, cashBalance }: GameProps) => {
         </Button>
       }
     >
-      <ProductsTable products={[
+      {/* <ProductsTable products={[
         {
             cost: 100,
             id: 1,
@@ -48,7 +49,16 @@ const Game = ({ city, currentDay, totalDays, cashBalance }: GameProps) => {
             name: "Meow",
             quantity: 10,
         },
-      ]} />
+      ]} /> */}
+      <Product 
+        product={{
+            cost: 100,
+            id: 1,
+            name: "Apple",
+            quantity: 10,
+        }}
+        isBuying={true}
+      />
     </Container>
   );
 };
