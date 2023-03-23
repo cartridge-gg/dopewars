@@ -39,15 +39,15 @@ export default function Home() {
         <Header />
         <Center h="full">
             {/* <Lobby addresses={["0x0"]} startInSeconds={500} /> */}
-            {/* <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  /> */}
-            {<Results playerResults={[
+            <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  />
+            {/* {<Results playerResults={[
               {
                 address: "0x0",
                 money: 100,
                 rank: 1,
                 
               }
-            ]}/>}
+            ]}/>} */}
         </Center>
       </main>
     </>
