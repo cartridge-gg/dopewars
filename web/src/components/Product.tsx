@@ -76,7 +76,7 @@ const Product = ({ product, isBuying }: ProductProps) => {
           >
             <SliderFilledTrack
               boxShadow="inset -2px -4px 0px rgba(0, 0, 0, 0.25), inset 2px 4px 0px rgba(255, 255, 255, 0.25)"
-              bg="#22B617"
+              bg={isBuying ? "#22B617" : "#FF2828"}
               borderRightRadius="4px"
             />
           </SliderTrack>
