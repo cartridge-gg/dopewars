@@ -3,8 +3,6 @@ import { formatAddress } from "@/utils";
 import { Button } from "@chakra-ui/button";
 import { Flex, Spacer, VStack } from "@chakra-ui/layout";
 import { useAccount, useConnectors } from "@starknet-react/core";
-import { connect } from "http2";
-import { disconnect } from "process";
 import Argent from "./icons/Argent";
 import Cartridge from "./icons/Cartridge";
 import Cigarette from "./icons/Cigarette";

@@ -1,9 +1,10 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import Pill from "./Pill";
 
-interface Product {
+export interface Product {
     id: number;
+    icon?: ReactNode;
     name: string;
     cost: number;
     quantity: number;
