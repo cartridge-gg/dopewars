@@ -74,7 +74,11 @@ const Product = ({ product, isBuying }: ProductProps) => {
             h="22px"
             bg="#141011"
           >
-            <SliderFilledTrack bg="linear-gradient(to right, #22B617 80%, #64e35b)" />
+            <SliderFilledTrack
+              boxShadow="inset -2px -4px 0px rgba(0, 0, 0, 0.25), inset 2px 4px 0px rgba(255, 255, 255, 0.25)"
+              bg={isBuying ? "#22B617" : "#FF2828"}
+              borderRightRadius="4px"
+            />
           </SliderTrack>
         </Slider>
         <Button
