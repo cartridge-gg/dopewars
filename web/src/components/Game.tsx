@@ -4,6 +4,7 @@ import Calendar from "./icons/Calendar";
 import Wallet from "./icons/Wallet";
 import Product from "./Product";
 import ProductsTable from "./Products";
+import Travel from "./Travel";
 
 interface GameProps {
   city: string;
@@ -50,7 +51,7 @@ const Game = ({ city, currentDay, totalDays, cashBalance }: GameProps) => {
             quantity: 10,
         },
       ]} /> */}
-      <Product 
+      {/* <Product 
         product={{
             cost: 100,
             id: 1,
@@ -58,7 +59,16 @@ const Game = ({ city, currentDay, totalDays, cashBalance }: GameProps) => {
             quantity: 10,
         }}
         isBuying={true}
-      />
+      /> */}
+      <Travel destinations={[{
+        id: 1,
+        name: "New York",
+        travelDays: 1,
+      }, {
+        id: 2,
+        name: "New York",
+        travelDays: 100,
+      }]} />
     </Container>
   );
 };
