@@ -9,65 +9,88 @@ import Cigarette from "./icons/Cigarette";
 import Connect from "./icons/Connect";
 import Disconnect from "./icons/Disconnect";
 import { useModal } from "./Modal/ModalProvider";
-import {Text} from "@chakra-ui/react"
+import { Text } from "@chakra-ui/react";
 
 const Header = () => {
-    const { address } = useAccount();
-    const { connectors, connect, disconnect } = useConnectors();
-    const { openModal, closeModal } = useModal();
-    
-    return (
-        <Flex position="absolute" top="0" left="0" p="12px" w="full">
-          <Flex align="center" gap="4px" fontSize="18px" color="white">
-            <Cigarette />
-            <Text>
-              RYO
-            </Text>
-          </Flex>
-          <Spacer />
-          {address ? (
-          <Flex gap="8px">
-            <Button variant="secondary">
-              {formatAddress(address)}
-            </Button>
-            <Button variant="secondary" onClick={disconnect}>
-              <Disconnect />
-            </Button>
-          </Flex>
-        ) : (
+  const { address } = useAccount();
+  const { connectors, connect, disconnect } = useConnectors();
+  const { openModal, closeModal } = useModal();
+
+  return (
+    <Flex position="absolute" top="0" left="0" p="12px" w="full">
+      <Flex align="center" gap="4px" fontSize="18px" color="white">
+        <Cigarette />
+        <Text>RYO</Text>
+      </Flex>
+      <Spacer />
+      {address ? (
+        <Flex gap="8px">
+          <Button variant="secondary">{formatAddress(address)}</Button>
           <Button
+            variant="secondary"
             onClick={() =>
               openModal(
-                "Connect your starknet controller",
+                "Disconnect",
                 <VStack w="full">
                   <Button
                     w="full"
                     onClick={() => {
-                      connect(controllerConnector as any);
+                      disconnect();
                       closeModal();
                     }}
                   >
-                    <Cartridge /> Connect Cartridge
+                    Confirm
                   </Button>
                   <Button
                     variant="secondary"
                     w="full"
                     onClick={() => {
-                      connect(argentConnector as any);
                       closeModal();
                     }}
                   >
-                    <Argent /> Connect Argent
+                    Cancel
                   </Button>
                 </VStack>
               )
             }
           >
-            <Connect /> Connect
+            <Disconnect />
           </Button>
-        )}
         </Flex>
-    )
-}
+      ) : (
+        <Button
+          onClick={() =>
+            openModal(
+              "Connect your starknet controller",
+              <VStack w="full">
+                <Button
+                  w="full"
+                  onClick={() => {
+                    connect(controllerConnector as any);
+                    closeModal();
+                  }}
+                >
+                  <Cartridge /> Connect Cartridge
+                </Button>
+                <Button
+                  variant="secondary"
+                  w="full"
+                  onClick={() => {
+                    connect(argentConnector as any);
+                    closeModal();
+                  }}
+                >
+                  <Argent /> Connect Argent
+                </Button>
+              </VStack>
+            )
+          }
+        >
+          <Connect /> Connect
+        </Button>
+      )}
+    </Flex>
+  );
+};
 
 export default Header;
