@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "ryo-client",
+    "slug": "ryo-client",
+    "version": "0.1.0",
+    "scheme": "ryo-client",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.cartridge.ryo"
+    }
+  }
+}
