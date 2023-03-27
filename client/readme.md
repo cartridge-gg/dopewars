@@ -1,3 +1,14 @@
+# Gotchas
+
+* Tailwind themes are in `packages/app/theme`. Changes don't reflect until you restart expo and clear cache `npx expo start -c`.
+* Styles in react-native does not cascade
+* Useful troubleshootings tips for Nativewind [here](https://www.nativewind.dev/guides/troubleshooting)
+* To help transition from chakra to nativewind, I created some chakra-like components `packages/app/components/index.tsx`
+
+Readme below is very information on what Solito stack does
+
+---
+
 # Solito + NativeWind Example Monorepo 🕴
 
 ```sh
