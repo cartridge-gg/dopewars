@@ -21,5 +21,5 @@ struct Location {
 
 #[derive(Component)]
 struct Cash {
-    amount: felt252,
+    amount: u256,
 }
