@@ -1,4 +1,4 @@
 #[derive(Component)]
 struct Location {
-    id: u32,
+    id: felt252,
 }

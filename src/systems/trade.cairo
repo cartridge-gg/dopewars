@@ -27,10 +27,12 @@ mod Buy {
 
         let game = commands::<Game>::get(game_id.into());
         assert(game.is_none(), 'game not found');
+        assert(game.unwrap().is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
         assert(name.is_none(), 'player not found');
+
 
         let market = commands::<MarketCurve>::get((game_id, (location_id, drug_id)).into());
         assert(market.is_none(), 'drug market not found');
@@ -98,6 +100,7 @@ mod Sell {
 
         let game = commands::<Game>::get(game_id.into());
         assert(game.is_none(), 'game not found');
+        assert(game.unwrap().is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;

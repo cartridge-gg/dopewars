@@ -12,7 +12,7 @@ mod SpawnPlayer {
         let player_id: felt252 = starknet::get_caller_address().into();
         let player_game_id = commands::set((game_id, (player_id)).into(), (
             Name { name: name },
-            Location { id: 0_u32 },
+            Location { id: 0 },
             Inventory { weapon: 69_u32, shoes: 1337_u32 },
             Stats { health: 100_u8 },
         ));
