@@ -1,5 +1,5 @@
 #[system]
-mod TravelSystem {
+mod Travel {
     use array::ArrayTrait;
     use traits::Into;
 

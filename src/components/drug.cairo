@@ -1,5 +1,5 @@
 #[derive(Component)]
-struct MarketCurve {
-    cash: u256,
+struct Drug {
+    id: felt252,
     quantity: u256,
 }

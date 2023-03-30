@@ -4,5 +4,6 @@ version = "0.1.0"
 
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo.git" }
+suna = { git = "https://github.com/auditless/suna.git" }
 
 [[target.dojo]]

@@ -1,5 +1,5 @@
 #[system]
-mod SpawnSystem {
+mod SpawnPlayer {
     use array::ArrayTrait;
     use traits::Into;  
 
@@ -10,7 +10,7 @@ mod SpawnSystem {
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
-        let player_game_id = commands::create((game_id, (player_id)).into(), (
+        let player_game_id = commands::set((game_id, (player_id)).into(), (
             Name { name: name },
             Location { id: 0_u32 },
             Inventory { weapon: 69_u32, shoes: 1337_u32 },
