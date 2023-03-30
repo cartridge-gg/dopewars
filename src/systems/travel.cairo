@@ -4,7 +4,7 @@ mod Travel {
     use traits::Into;
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::player::Location;
+    use rollyourown::components::location::Location;
 
     fn execute(game_id: felt252, next_location_id: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();

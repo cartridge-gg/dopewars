@@ -4,9 +4,9 @@ mod SpawnPlayer {
     use traits::Into;  
 
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Location;
     use rollyourown::components::player::Inventory;
     use rollyourown::components::player::Stats;
+    use rollyourown::components::location::Location;
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();

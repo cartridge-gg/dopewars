@@ -11,8 +11,8 @@ mod Buy {
     use rollyourown::components::game::Game;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::market::MarketCurve;
+    use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Location;
     use rollyourown::components::player::Inventory;
     use rollyourown::components::player::Cash;
 
@@ -88,8 +88,8 @@ mod Sell {
     use rollyourown::components::game::Game;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::market::MarketCurve;
+    use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Location;
     use rollyourown::components::player::Inventory;
     use rollyourown::components::player::Cash;
 

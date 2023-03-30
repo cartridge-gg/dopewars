@@ -15,11 +15,6 @@ struct Inventory {
 }
 
 #[derive(Component)]
-struct Location {
-    id: u32,
-}
-
-#[derive(Component)]
 struct Cash {
     amount: u256,
 }
