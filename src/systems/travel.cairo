@@ -18,16 +18,16 @@ mod Travel {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::get(game_id.into());
-        assert(game.is_none(), 'game not found');
-        assert(game.unwrap().is_finished, 'game is finished');
+        assert(game.is_some(), 'game not found');
+        assert(!game.unwrap().is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Stats, Cash>::get((game_id, (player_id)).into());
         let (name, location, stats, cash) = player;
-        assert(name.is_none(), 'player not found');
-        assert(location.unwrap().id == next_location_id, 'already at location');
+        assert(name.is_some(), 'player not found');
+        assert(location.unwrap().id != next_location_id, 'already at location');
 
         let next_location = commands::<Location>::get((game_id, (next_location_id)).into());
-        assert(next_location.is_none(), 'invalid location');
+        assert(next_location.is_some(), 'invalid location');
 
         // TODO: random event
 

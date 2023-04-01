@@ -3,3 +3,4 @@ struct Drug {
     id: felt252,
     quantity: u256,
 }
+

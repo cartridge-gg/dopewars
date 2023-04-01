@@ -1,7 +1,7 @@
 #[system]
 mod Buy {
-    use array::ArrayTrait;
     use traits::Into;
+    use array::ArrayTrait;
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
@@ -23,18 +23,18 @@ mod Buy {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::get(game_id.into());
-        assert(game.is_none(), 'game not found');
-        assert(game.unwrap().is_finished, 'game is finished');
+        assert(game.is_some(), 'game not found');
+        assert(!game.unwrap().is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
-        assert(name.is_none(), 'player not found');
+        assert(name.is_some(), 'player not found');
 
         let market = commands::<Market>::get((game_id, (location_id, drug_id)).into());
-        assert(market.is_none(), 'drug market not found');
+        assert(market.is_some(), 'drug market not found');
 
         let cost = MarketTrait::buy(market.unwrap(), quantity);
-        assert(cost > cash.unwrap().amount, 'not enough cash');
+        assert(cost < cash.unwrap().amount, 'not enough cash');
 
         // update market
         let _ = commands::set((game_id, (location_id, drug_id)).into(), (
@@ -68,8 +68,8 @@ mod Buy {
 
 #[system]
 mod Sell {
-    use array::ArrayTrait;
     use traits::Into;
+    use array::ArrayTrait;
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
@@ -85,19 +85,19 @@ mod Sell {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::get(game_id.into());
-        assert(game.is_none(), 'game not found');
-        assert(game.unwrap().is_finished, 'game is finished');
+        assert(game.is_some(), 'game not found');
+        assert(!game.unwrap().is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
-        assert(name.is_none(), 'player not found');
+        assert(name.is_some(), 'player not found');
 
         let market = commands::<Market>::get((game_id, (location_id, drug_id)).into());
-        assert(market.is_none(), 'market not found');
+        assert(market.is_some(), 'market not found');
 
         let drug = commands::<Drug>::get((game_id, (player_id, drug_id)).into());
-        assert(drug.is_none(), 'player do not own this drug');
-        assert(drug.unwrap().quantity < quantity, 'not enough drugs to sell');
+        assert(drug.is_some(), 'player do not own this drug');
+        assert(drug.unwrap().quantity >= quantity, 'not enough drugs to sell');
 
         let payout = MarketTrait::sell(market.unwrap(), quantity);
 
