@@ -16,5 +16,5 @@ struct Inventory {
 
 #[derive(Component)]
 struct Cash {
-    amount: u256,
+    amount: u128,  // fixed point
 }

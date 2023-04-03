@@ -40,7 +40,7 @@ mod SpawnPlayer {
             Location { id: 0 },
             Stats { health: 100_usize },
             Inventory { weapon: 69_usize, shoes: 1337_usize },
-            Cash { amount: 100000000000000000000.into() } // $100
+            Cash { amount: 100_u128 } // $100
         ));
 
         return ();

@@ -1,64 +1,67 @@
 use traits::Into;
-use suna::math::u256::U256TruncatedDiv;
-use suna::math::u256::U256TruncatedDivEq;
-use suna::math::u256::U256TruncatedRem;
-use suna::math::u256::U256TruncatedRemEq;
-use suna::math::u60f18::U60F18;
+use traits::TryInto;
+use option::OptionTrait;
+use debug::PrintTrait;
+
+const SCALING_FACTOR: u128 = 10000_u128;
 
 #[derive(Component)]
 struct Market {
-    cash: u256,
-    quantity: u256,
+    cash: u128, // fixed point
+    quantity: usize,
 }
 
 trait MarketTrait {
-    fn buy(self: Market, quantity: u256) -> u256;
-    fn sell(self: Market, quantity: u256) ->  u256;
+    fn buy(self: Market, quantity: usize) -> u128; 
+    fn sell(self: Market, quantity: usize) ->  u128; 
 }
 
 impl MarketImpl of MarketTrait {
-    fn buy(self: Market, quantity: u256) -> u256 {
-        assert(quantity < self.quantity, 'not enough liquidity');
-        let k = self.cash * self.quantity;
-        let cost = (k / (self.quantity - quantity)) - self.cash;
+    fn buy(market: Market, amount: usize) -> u128 {
+        assert(amount < market.quantity, 'not enough liquidity');     
+        let (amount, available, cash) = normalize(amount, market);
+        let k = cash * available;
+        let cost = (k / (available - amount)) - cash;
         cost
     }
 
-    fn sell(self: Market, quantity: u256) ->  u256 {
-        let k = self.cash * self.quantity;
-        let payout = self.cash - (k / (self.quantity + quantity));
-        assert(payout < self.cash, 'not enough liquidity');
+    fn sell(market: Market, amount: usize) ->  u128 {
+        let (amount, available, cash) = normalize(amount, market);
+        let k = cash * available;
+        let payout = cash - (k / (available + amount));
         payout
     }
 }
 
-#[test]
-#[should_panic]
-fn test_not_enough_quantity() {
-    let market = Market { cash: 1.into(), quantity: 1.into() };
-    let cost = MarketTrait::buy(market, 10.into());
+fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
+    let amount: u128 = amount.into().try_into().unwrap() * SCALING_FACTOR;
+    let available: u128 = market.quantity.into().try_into().unwrap() * SCALING_FACTOR;
+    let cash: u128 = market.cash;
+    (amount, available, cash)
 }
 
+
+
 #[test]
-#[should_panic]
-fn test_not_enough_cash() {
-    let market = Market { cash: 1.into(), quantity: 1.into() };
-    let cost = MarketTrait::sell(market, 10.into());
+#[should_panic (expected = ('not enough liquidity', ))]
+fn test_not_enough_quantity() {
+    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 1_usize }; // pool 1:1
+    let cost = MarketTrait::buy(market, 10_usize);
 }
 
 #[test]
 #[avaiable_gas(100000)]
 fn test_market_buy() {
-    let market = Market { cash: 10.into(), quantity: 10.into() };
-    let cost = MarketTrait::buy(market, 5.into());
-    assert(cost == 10.into(), 'wrong cost');
+    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
+    let cost = MarketTrait::buy(market, 5_usize);
+    assert(cost == SCALING_FACTOR * 1_u128, 'wrong cost');
 }
 
 #[test]
 #[avaiable_gas(100000)]
 fn test_market_sell() {
-    let market = Market { cash: 10.into(), quantity: 10.into() };
-    let payout = MarketTrait::sell(market, 5.into());
-    assert(payout == 4.into(), 'wrong payout');
+    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
+    let payout = MarketTrait::sell(market, 5_usize);
+    assert(payout == 3334_u128, 'wrong payout');
 }
 
