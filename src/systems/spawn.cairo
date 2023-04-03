@@ -38,8 +38,8 @@ mod SpawnPlayer {
         let player_game_id = commands::set((game_id, (player_id)).into(), (
             Name { name: name },
             Location { id: 0 },
-            Stats { health: 100_u8 },
-            Inventory { weapon: 69_u32, shoes: 1337_u32 },
+            Stats { health: 100_usize },
+            Inventory { weapon: 69_usize, shoes: 1337_usize },
             Cash { amount: 100000000000000000000.into() } // $100
         ));
 
@@ -57,7 +57,7 @@ mod SpawnGame {
     use rollyourown::components::game::IGameLibraryDispatcher;
     use rollyourown::components::game::IGameDispatcherTrait;
 
-    fn execute(start_time: u64, max_players: u32, max_turns: u32) {
+    fn execute(start_time: usize, max_players: usize, max_turns: usize) {
         let game_id = commands::uuid(); 
         let _ = commands::set(game_id.into(), (
             Game {

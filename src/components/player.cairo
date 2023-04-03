@@ -5,13 +5,13 @@ struct Name {
 
 #[derive(Component)]
 struct Stats {
-    health: u8,
+    health: usize,
 }
 
 #[derive(Component)]
 struct Inventory {
-    weapon: u32,
-    shoes: u32,
+    weapon: usize,
+    shoes: usize,
 }
 
 #[derive(Component)]
