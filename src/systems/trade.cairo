@@ -5,13 +5,34 @@ mod Buy {
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
+    use rollyourown::components::game::IGameLibraryDispatcher;
+    use rollyourown::components::game::IGameDispatcherTrait;
+
     use rollyourown::components::drug::Drug;
+    use rollyourown::components::drug::IDrugLibraryDispatcher;
+    use rollyourown::components::drug::IDrugDispatcherTrait;
+
     use rollyourown::components::market::Market;
+    use rollyourown::components::market::IMarketLibraryDispatcher;
+    use rollyourown::components::market::IMarketDispatcherTrait;
+    
     use rollyourown::components::market::MarketTrait;
+
     use rollyourown::components::location::Location;
+    use rollyourown::components::location::ILocationLibraryDispatcher;
+    use rollyourown::components::location::ILocationDispatcherTrait;
+
     use rollyourown::components::player::Name;
+    use rollyourown::components::player::INameLibraryDispatcher;
+    use rollyourown::components::player::INameDispatcherTrait;
+
     use rollyourown::components::player::Inventory;
+    use rollyourown::components::player::IInventoryLibraryDispatcher;
+    use rollyourown::components::player::IInventoryDispatcherTrait;
+
     use rollyourown::components::player::Cash;
+    use rollyourown::components::player::ICashLibraryDispatcher;
+    use rollyourown::components::player::ICashDispatcherTrait;
 
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
@@ -73,13 +94,33 @@ mod Sell {
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
+    use rollyourown::components::game::IGameLibraryDispatcher;
+    use rollyourown::components::game::IGameDispatcherTrait;
+
     use rollyourown::components::drug::Drug;
+    use rollyourown::components::drug::IDrugLibraryDispatcher;
+    use rollyourown::components::drug::IDrugDispatcherTrait;
+
     use rollyourown::components::market::Market;
+    use rollyourown::components::market::IMarketLibraryDispatcher;
+    use rollyourown::components::market::IMarketDispatcherTrait;
     use rollyourown::components::market::MarketTrait;
+
     use rollyourown::components::location::Location;
+    use rollyourown::components::location::ILocationLibraryDispatcher;
+    use rollyourown::components::location::ILocationDispatcherTrait;
+
     use rollyourown::components::player::Name;
+    use rollyourown::components::player::INameLibraryDispatcher;
+    use rollyourown::components::player::INameDispatcherTrait;
+
     use rollyourown::components::player::Inventory;
+    use rollyourown::components::player::IInventoryLibraryDispatcher;
+    use rollyourown::components::player::IInventoryDispatcherTrait;
+
     use rollyourown::components::player::Cash;
+    use rollyourown::components::player::ICashLibraryDispatcher;
+    use rollyourown::components::player::ICashDispatcherTrait;
 
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: u256) {
         let player_id: felt252 = starknet::get_caller_address().into();
