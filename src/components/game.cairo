@@ -1,8 +1,8 @@
 #[derive(Component)]
 struct Game {
-    start_time: u64,
-    max_players: u32,
-    max_turns: u32,
+    start_time: usize,
+    max_players: usize,
+    max_turns: usize,
     is_finished: bool,
 }
 

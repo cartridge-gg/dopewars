@@ -1,6 +1,6 @@
 #[derive(Component)]
 struct Drug {
     id: felt252,
-    quantity: u256,
+    quantity: usize,
 }
 

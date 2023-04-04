@@ -3,7 +3,6 @@ mod Buy {
     use traits::Into;
     use array::ArrayTrait;
     use option::OptionTrait;
-
     use rollyourown::components::game::Game;
     use rollyourown::components::game::IGameLibraryDispatcher;
     use rollyourown::components::game::IGameDispatcherTrait;
@@ -15,7 +14,7 @@ mod Buy {
     use rollyourown::components::market::Market;
     use rollyourown::components::market::IMarketLibraryDispatcher;
     use rollyourown::components::market::IMarketDispatcherTrait;
-    
+
     use rollyourown::components::market::MarketTrait;
 
     use rollyourown::components::location::Location;
@@ -40,7 +39,7 @@ mod Buy {
     // 4. Perform the trade.
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
-    fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: u256) {
+    fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::get(game_id.into());
@@ -122,7 +121,7 @@ mod Sell {
     use rollyourown::components::player::ICashLibraryDispatcher;
     use rollyourown::components::player::ICashDispatcherTrait;
 
-    fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: u256) {
+    fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::get(game_id.into());
