@@ -1,3 +1,3 @@
 mod spawn;
-// mod trade;
+mod trade;
 mod travel;
