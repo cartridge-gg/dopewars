@@ -1,8 +1,7 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Container from "./Container";
 import Event from "./Event";
-import Calendar from "./icons/Calendar";
-import Wallet from "./icons/Wallet";
+import { Calendar, Wallet } from "./icons";
 import Product from "./Product";
 import ProductsTable from "./Products";
 import Travel from "./Travel";
@@ -70,18 +69,20 @@ const Game = ({ city, currentDay, totalDays, cashBalance }: GameProps) => {
         name: "New York",
         travelDays: 100,
       }]} /> */}
-      <Event event={{
-        title: "You were mugged in the subway !!",
-        description: "They got away with half of your supply",
-        location: "New York",
-        product: {
-          id: 1,
-          name: "Apple",
-          cost: 100,
-          quantity: 10,
-        },
-        change: 0,  
-      }} />
+      <Event
+        event={{
+          title: "You were mugged in the subway !!",
+          description: "They got away with half of your supply",
+          location: "New York",
+          product: {
+            id: 1,
+            name: "Apple",
+            cost: 100,
+            quantity: 10,
+          },
+          change: 0,
+        }}
+      />
     </Container>
   );
 };

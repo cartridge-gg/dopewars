@@ -7,7 +7,7 @@ import {
   SliderTrack,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import Cart from "./icons/Cart";
+import { Cart } from "./icons";
 import Pill from "./Pill";
 import { Product } from "./Products";
 

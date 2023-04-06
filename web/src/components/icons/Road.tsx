@@ -1,15 +1,9 @@
-import React from "react";
-import { Icon, useStyleConfig } from "@chakra-ui/react";
+import { Icon, IconProps } from ".";
 
-const Road = (props: any) => {
-  const { variant, size, ...rest } = props;
-  const styles = useStyleConfig("Icon", { variant, size });
-
+export const Road = (props: IconProps) => {
   return (
-    <Icon viewBox="0 0 18 14" __css={styles} fill="currentColor" {...rest}>
-      <path d="M8.05556 0.388885H4.27778L0.5 13.6111H8.05556V11.7222V10.7778H9.94444V11.7222V13.6111H17.5L13.7222 0.388885H9.94444V2.27777V3.22222H8.05556V2.27777V0.388885ZM9.94444 6.05555V7.94444V8.88889H8.05556V7.94444V6.05555V5.11111H9.94444V6.05555Z" />
+    <Icon {...props}>
+      <path d="M11.0556 5.38892H7.27778L3.5 18.6111H11.0556V16.7222V15.7778H12.9444V16.7222V18.6111H20.5L16.7222 5.38892H12.9444V7.2778V8.22225H11.0556V7.2778V5.38892ZM12.9444 11.0556V12.9445V13.8889H11.0556V12.9445V11.0556V10.1111H12.9444V11.0556Z" />
     </Icon>
   );
 };
-
-export default Road;

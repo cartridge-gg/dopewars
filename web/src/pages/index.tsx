@@ -9,20 +9,16 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import Connect from "@/components/icons/Connect";
 import { useModal } from "@/components/Modal/ModalProvider";
-import Cartridge from "@/components/icons/Cartridge";
-import Argent from "@/components/icons/Argent";
+import { Cartridge, Connect, Disconnect, Cigarette } from "@/components/icons";
 import Container from "@/components/Container";
 import { useAccount, useConnectors } from "@starknet-react/core";
 import { argentConnector, controllerConnector } from "./_app";
 import { formatAddress } from "@/utils";
-import Disconnect from "@/components/icons/Disconnect";
 import Players from "@/components/Players";
 import Timer from "@/components/Timer";
 import Lobby from "@/components/Lobby";
 import Game from "@/components/Game";
-import Cigarette from "@/components/icons/Cigarette";
 import Header from "@/components/Header";
 import Results from "@/components/PlayerResult";
 

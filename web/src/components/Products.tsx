@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ReactNode, useState } from "react";
-import Cart from "./icons/Cart";
+import { Cart } from "./icons";
 import Pill from "./Pill";
 
 export interface Product {

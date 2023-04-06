@@ -3,11 +3,14 @@ import { formatAddress } from "@/utils";
 import { Button } from "@chakra-ui/button";
 import { Flex, Spacer, VStack } from "@chakra-ui/layout";
 import { useAccount, useConnectors } from "@starknet-react/core";
-import Argent from "./icons/Argent";
-import Cartridge from "./icons/Cartridge";
-import Cigarette from "./icons/Cigarette";
-import Connect from "./icons/Connect";
-import Disconnect from "./icons/Disconnect";
+import {
+  Argent,
+  Cartridge,
+  Cigarette,
+  Connect,
+  Disconnect,
+} from "@/components/icons";
+
 import { useModal } from "./Modal/ModalProvider";
 import { Text } from "@chakra-ui/react";
 
