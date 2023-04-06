@@ -42,22 +42,22 @@ mod Buy {
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::get(game_id.into());
+        let game = commands::<Game>::entity(game_id.into());
         assert(game.is_some(), 'game not found');
         assert(!game.unwrap().is_finished, 'game is finished');
 
-        let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
+        let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
         assert(name.is_some(), 'player not found');
 
-        let market = commands::<Market>::get((game_id, (location_id, drug_id)).into());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
         assert(market.is_some(), 'drug market not found');
 
         let cost = MarketTrait::buy(market.unwrap(), quantity);
         assert(cost < cash.unwrap().amount, 'not enough cash');
 
         // update market
-        let _ = commands::set((game_id, (location_id, drug_id)).into(), (
+        commands::set_entity((game_id, (location_id, drug_id)).into(), (
             Market {
                 cash: market.unwrap().cash + cost, 
                 quantity: market.unwrap().quantity - quantity,
@@ -65,15 +65,15 @@ mod Buy {
         ));
 
         // update player
-        let _ = commands::set((game_id, (player_id)).into(), (
+        commands::set_entity((game_id, (player_id)).into(), (
             Cash { amount: cash.unwrap().amount - cost },
         ));
-        let drug = commands::<Drug>::get((game_id, (player_id, drug_id)).into());
+        let drug = commands::<Drug>::entity((game_id, (player_id, drug_id)).into());
         let updated_quantity = match drug {
             Option::Some(x) => x.quantity + quantity,
             Option::None(_) => quantity,
         };
-        let _ = commands::set((game_id, (player_id, drug_id)).into(), (
+        commands::set_entity((game_id, (player_id, drug_id)).into(), (
             Drug { 
                 id: drug_id, 
                 quantity: updated_quantity
@@ -124,25 +124,25 @@ mod Sell {
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::get(game_id.into());
+        let game = commands::<Game>::entity(game_id.into());
         assert(game.is_some(), 'game not found');
         assert(!game.unwrap().is_finished, 'game is finished');
 
-        let player = commands::<Name, Location, Inventory, Cash>::get((game_id, (player_id)).into());
+        let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
         assert(name.is_some(), 'player not found');
 
-        let market = commands::<Market>::get((game_id, (location_id, drug_id)).into());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
         assert(market.is_some(), 'market not found');
 
-        let drug = commands::<Drug>::get((game_id, (player_id, drug_id)).into());
+        let drug = commands::<Drug>::entity((game_id, (player_id, drug_id)).into());
         assert(drug.is_some(), 'player do not own this drug');
         assert(drug.unwrap().quantity >= quantity, 'not enough drugs to sell');
 
         let payout = MarketTrait::sell(market.unwrap(), quantity);
 
         // update market
-        let _ = commands::set((game_id, (location_id, drug_id)).into(), (
+        commands::set_entity((game_id, (location_id, drug_id)).into(), (
             Market {
                 cash: market.unwrap().cash - payout, 
                 quantity: market.unwrap().quantity + quantity,
@@ -150,10 +150,10 @@ mod Sell {
         ));
 
         // update player
-        let _ = commands::set((game_id, (player_id)).into(), (
+        commands::set_entity((game_id, (player_id)).into(), (
             Cash { amount: cash.unwrap().amount + payout },
         ));
-        let _ = commands::set((game_id, (player_id, drug_id)).into(), (
+        commands::set_entity((game_id, (player_id, drug_id)).into(), (
             Drug { 
                 id: drug_id, 
                 quantity: drug.unwrap().quantity - quantity

@@ -31,22 +31,22 @@ mod Travel {
     fn execute(game_id: felt252, next_location_id: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::get(game_id.into());
+        let game = commands::<Game>::entity(game_id.into());
         assert(game.is_some(), 'game not found');
         assert(!game.unwrap().is_finished, 'game is finished');
 
-        let player = commands::<Name, Location, Stats, Cash>::get((game_id, (player_id)).into());
+        let player = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
         let (name, location, stats, cash) = player;
         assert(name.is_some(), 'player not found');
         assert(location.unwrap().id != next_location_id, 'already at location');
 
-        let next_location = commands::<Location>::get((game_id, (next_location_id)).into());
+        let next_location = commands::<Location>::entity((game_id, (next_location_id)).into());
         assert(next_location.is_some(), 'invalid location');
 
         // TODO: random event
 
         // update player
-        let _ = commands::set((game_id, (player_id)).into(), (
+        commands::set_entity((game_id, (player_id)).into(), (
             Location { id: next_location_id },
             Stats { health: stats.unwrap().health },
             Cash { amount: cash.unwrap().amount },
