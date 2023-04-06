@@ -5,24 +5,10 @@ mod Travel {
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::game::IGameLibraryDispatcher;
-    use rollyourown::components::game::IGameDispatcherTrait;
-
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::INameLibraryDispatcher;
-    use rollyourown::components::player::INameDispatcherTrait;
-
     use rollyourown::components::location::Location;
-    use rollyourown::components::location::ILocationLibraryDispatcher;
-    use rollyourown::components::location::ILocationDispatcherTrait;
-
     use rollyourown::components::player::Stats;
-    use rollyourown::components::player::IStatsLibraryDispatcher;
-    use rollyourown::components::player::IStatsDispatcherTrait;
-
     use rollyourown::components::player::Cash;
-    use rollyourown::components::player::ICashLibraryDispatcher;
-    use rollyourown::components::player::ICashDispatcherTrait;
 
     // 1. Verify the caller owns the player.
     // 2. Determine if a random travel event occurs and apply it if necessary.

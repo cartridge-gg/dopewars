@@ -5,28 +5,11 @@ mod SpawnPlayer {
     use option::OptionTrait;
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::game::IGameLibraryDispatcher;
-    use rollyourown::components::game::IGameDispatcherTrait;
-    
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::INameLibraryDispatcher;
-    use rollyourown::components::player::INameDispatcherTrait;
-
     use rollyourown::components::player::Inventory;
-    use rollyourown::components::player::IInventoryLibraryDispatcher;
-    use rollyourown::components::player::IInventoryDispatcherTrait;
-
     use rollyourown::components::player::Stats;
-    use rollyourown::components::player::IStatsLibraryDispatcher;
-    use rollyourown::components::player::IStatsDispatcherTrait;
-
     use rollyourown::components::player::Cash;
-    use rollyourown::components::player::ICashLibraryDispatcher;
-    use rollyourown::components::player::ICashDispatcherTrait;
-
     use rollyourown::components::location::Location;
-    use rollyourown::components::location::ILocationLibraryDispatcher;
-    use rollyourown::components::location::ILocationDispatcherTrait;
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
@@ -54,8 +37,6 @@ mod SpawnGame {
     use traits::Into;  
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::game::IGameLibraryDispatcher;
-    use rollyourown::components::game::IGameDispatcherTrait;
 
     fn execute(start_time: usize, max_players: usize, max_turns: usize) {
         let game_id = commands::uuid(); 
@@ -75,32 +56,41 @@ mod SpawnGame {
         locations.append('location_4');
         locations.append('location_5');
 
-        recurse_locs(ref locations, locations.len());
+        // recurse_locs(ref locations, locations.len());
     }
 
-    fn recurse_locs(
-        ref locs: Array::<felt252>, 
-        len: usize, ) {
+    // fn recurse_locs(
+    //     ref locs: Array::<felt252>, 
+    //     len: usize, ) {
 
-        if len == 0_usize {
-            ()
-        }
+        // match gas::withdraw_gas() {
+        //     Option::Some(_) => {},
+        //     Option::None(_) => {
+        //         let mut data = ArrayTrait::new();
+        //         data.append('Out of gas');
+        //         panic(data);
+        //     },
+        // }
 
-        let location_id = locs.pop_front();
+    //     if len == 0_usize {
+    //         ()
+    //     }
 
-        // FIX: commands:: error 
-        // commands::set_entity((game_id, (location_id)).into(), (
-        //     Location { id: location_id }
-        // ));
-        // 
-        // commands::set_entity((game_id, (location_id, drug_id)). into(), (
-        //     Market { 
-        //          cash: 100000000000000000000.into(),
-        //          quantity: 100000000000000000000.into(),
-        //     }
-        // ));
+    //     let location_id = locs.pop_front();
 
-        recurse_locs(ref locs, len - 1_usize);
-    }
+    //     // FIX: commands:: error 
+    //     // commands::set_entity((game_id, (location_id)).into(), (
+    //     //     Location { id: location_id }
+    //     // ));
+    //     // 
+    //     // commands::set_entity((game_id, (location_id, drug_id)). into(), (
+    //     //     Market { 
+    //     //          cash: 100000000000000000000.into(),
+    //     //          quantity: 100000000000000000000.into(),
+    //     //     }
+    //     // ));
+
+    //     recurse_locs(ref locs, len - 1_usize);
+    // }
 
 }
