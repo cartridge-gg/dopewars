@@ -14,9 +14,11 @@ mod SpawnPlayer {
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::entity(game_id.into());
-        assert(game.is_some(), 'game not found');
-        assert(!game.unwrap().is_finished, 'game is finished');
+        let maybe_game = commands::<Game>::entity(game_id.into());
+        assert(maybe_game.is_some(), 'game not found');
+
+        let game = maybe_game.unwrap();
+        assert(!game.is_finished, 'game is finished');
 
         commands::set_entity((game_id, (player_id)).into(), (
             Name { name: name },
@@ -49,48 +51,7 @@ mod SpawnGame {
             }
         ));
 
-        let mut locations = ArrayTrait::<felt252>::new();
-        locations.append('location_1');
-        locations.append('location_2');
-        locations.append('location_3');
-        locations.append('location_4');
-        locations.append('location_5');
-
-        // recurse_locs(ref locations, locations.len());
+        return ();
     }
-
-    // fn recurse_locs(
-    //     ref locs: Array::<felt252>, 
-    //     len: usize, ) {
-
-        // match gas::withdraw_gas() {
-        //     Option::Some(_) => {},
-        //     Option::None(_) => {
-        //         let mut data = ArrayTrait::new();
-        //         data.append('Out of gas');
-        //         panic(data);
-        //     },
-        // }
-
-    //     if len == 0_usize {
-    //         ()
-    //     }
-
-    //     let location_id = locs.pop_front();
-
-    //     // FIX: commands:: error 
-    //     // commands::set_entity((game_id, (location_id)).into(), (
-    //     //     Location { id: location_id }
-    //     // ));
-    //     // 
-    //     // commands::set_entity((game_id, (location_id, drug_id)). into(), (
-    //     //     Market { 
-    //     //          cash: 100000000000000000000.into(),
-    //     //          quantity: 100000000000000000000.into(),
-    //     //     }
-    //     // ));
-
-    //     recurse_locs(ref locs, len - 1_usize);
-    // }
 
 }

@@ -17,14 +17,21 @@ mod Travel {
     fn execute(game_id: felt252, next_location_id: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::entity(game_id.into());
-        assert(game.is_some(), 'game not found');
-        assert(!game.unwrap().is_finished, 'game is finished');
+        let maybe_game = commands::<Game>::entity(game_id.into());
+        assert(maybe_game.is_some(), 'game not found');
+
+        let game = maybe_game.unwrap();
+        assert(!game.is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, stats, cash) = player;
-        assert(name.is_some(), 'player not found');
-        assert(location.unwrap().id != next_location_id, 'already at location');
+        let (maybe_name, maybe_location, maybe_stats, maybe_cash) = player;
+        assert(maybe_name.is_some(), 'player not found');
+
+        let location = maybe_location.unwrap();
+        assert(location.id != next_location_id, 'already at location');
+        
+        let stats = maybe_stats.unwrap();
+        let cash = maybe_cash.unwrap();
 
         let next_location = commands::<Location>::entity((game_id, (next_location_id)).into());
         assert(next_location.is_some(), 'invalid location');
@@ -34,8 +41,8 @@ mod Travel {
         // update player
         commands::set_entity((game_id, (player_id)).into(), (
             Location { id: next_location_id },
-            Stats { health: stats.unwrap().health },
-            Cash { amount: cash.unwrap().amount },
+            Stats { health: stats.health },
+            Cash { amount: cash.amount },
         ));
 
         return ();
