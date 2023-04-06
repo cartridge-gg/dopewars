@@ -35,12 +35,16 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <Header />
-        <Center h="full">
-            {/* <Lobby addresses={["0x0"]} startInSeconds={500} /> */}
-            <Game city={"brooklyn"} currentDay={0} totalDays={30} cashBalance={100}  />
-            {/* {<Results playerResults={[
+      <Header />
+      <Center h="100vh">
+        {/* <Lobby addresses={["0x0"]} startInSeconds={500} /> */}
+        <Game
+          city={"brooklyn"}
+          currentDay={0}
+          totalDays={30}
+          cashBalance={100}
+        />
+        {/* {<Results playerResults={[
               {
                 address: "0x0",
                 money: 100,
@@ -48,8 +52,7 @@ export default function Home() {
                 
               }
             ]}/>} */}
-        </Center>
-      </main>
+      </Center>
     </>
   );
 }

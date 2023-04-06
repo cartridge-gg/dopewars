@@ -1,5 +1,4 @@
 import { ModalProvider } from "@/components/Modal/ModalProvider";
-import Styles from "@/theme/styles";
 import { ChakraProvider } from "@chakra-ui/react";
 import {
   InjectedConnector,
@@ -9,11 +8,14 @@ import {
 import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
+import localFont from "@next/font/local";
 
-export const controllerConnector = new ControllerConnector([{
-  target: "0xdead",
-  method: "have_turn",
-}]);
+export const controllerConnector = new ControllerConnector([
+  {
+    target: "0xdead",
+    method: "have_turn",
+  },
+]);
 export const argentConnector = new InjectedConnector({
   options: {
     id: "argentX",
@@ -21,13 +23,23 @@ export const argentConnector = new InjectedConnector({
 });
 export const connectors = [controllerConnector as any, argentConnector];
 
+const chicagoFont = localFont({
+  src: [
+    {
+      path: "../../public/fonts/ChicagoFLF.ttf",
+      style: "normal",
+    },
+  ],
+});
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <StarknetProvider connectors={connectors}>
       <ChakraProvider theme={theme}>
-        <Styles />
         <ModalProvider>
-          <Component {...pageProps} />
+          <main className={chicagoFont.className}>
+            <Component {...pageProps} />
+          </main>
         </ModalProvider>
       </ChakraProvider>
     </StarknetProvider>
