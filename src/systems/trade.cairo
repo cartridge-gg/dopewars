@@ -64,6 +64,21 @@ mod Buy {
     }
 }
 
+// This causes a libfunc error
+// #[system]
+// mod Test {
+//     use traits::Into;
+//     use array::ArrayTrait;
+//     use option::OptionTrait;
+//     use rollyourown::components::player::Name;
+
+//     fn execute(player_id: felt252) {
+//         let pos_1 = commands::<(Name)>::entity((0).into());
+//         assert(pos_1.is_some(), 'pos_1');
+//         let pos_2 = commands::<(Name)>::entity((0).into());
+//         pos_1.unwrap();
+//     }
+// }
 
 
 #[system]

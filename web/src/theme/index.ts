@@ -1,29 +1,15 @@
 // 1. Import `extendTheme`
 import { extendTheme } from "@chakra-ui/react";
+import { styles, textStyles, layerStyles } from "./styles";
 import * as Components from "./components";
+import colors from "./colors";
 
 // 2. Call `extendTheme` and pass your custom values
 const theme = extendTheme({
-  colors: {
-    brand: "#3523FE",
-  },
-  fonts: {
-    body: "ChicagoFLF",
-  },
-  styles: {
-    global: {
-        body: {
-            background: "gray.400",
-            fontSize: "sm",
-            fontWeight: "500",
-            backgroundImage: "url('/RYO_Background.png')",
-            height: "100vh",
-        },
-        main: {
-            height: "100%",
-        }
-    },
-  },
+  colors,
+  styles,
+  textStyles,
+  layerStyles,
   components: {
     ...Components,
   },
