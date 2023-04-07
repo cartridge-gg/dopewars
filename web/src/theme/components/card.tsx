@@ -10,6 +10,8 @@ export const Card: ComponentMultiStyleConfig = {
       bgColor: "gray.800",
     },
     header: {
+      color: "white",
+      fontSize: "22px",
       display: "flex",
       gap: "6px",
       p: "12px",
@@ -18,6 +20,7 @@ export const Card: ComponentMultiStyleConfig = {
       p: "12px",
     },
     footer: {
+      gap: "6px",
       p: "12px",
     },
   },

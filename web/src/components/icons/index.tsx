@@ -24,6 +24,7 @@ export * from "./Road";
 export * from "./User";
 export * from "./Users";
 export * from "./Clock";
+export * from "./Arrow"; // up, down, right, left variant
 export * from "./Wallet";
 export * from "./Argent";
 export * from "./Avatar";

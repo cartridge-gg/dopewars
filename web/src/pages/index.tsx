@@ -78,7 +78,7 @@ export default function Home() {
             </CardFooter>
           </Card>
           <Card h="full">
-            <CardHeader color="white">
+            <CardHeader>
               <Users />
               <Text textTransform="uppercase" fontSize="17px">
                 Available Games

@@ -9,43 +9,32 @@ export const Button: ComponentStyleConfig = {
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     position: "relative",
+    borderWidth: "2px",
+    borderColor: "gray.900",
+    borderRadius: "4px",
+    padding: "8px 12px",
     gap: "8px",
+    boxShadow:
+      "inset -1px -1px 0px rgba(0, 0, 0, 0.25), inset 1px 1px 0px rgba(255, 255, 255, 0.25)",
+    _hover: {
+      backgroundColor: "#000",
+      color: "#fff",
+      textDecoration: "none",
+    },
   },
   variants: {
     primary: {
-      backgroundColor: "brand",
       color: "white",
-      textShadow: "1px 1px 0px rgba(0, 0, 0, 0.66)",
-      border: "2px solid #000000",
-      borderRadius: "4px",
-      padding: "8px 12px",
-      boxShadow:
-        "inset -1px -1px 0px rgba(0, 0, 0, 0.25), inset 1px 1px 0px rgba(255, 255, 255, 0.25)",
       fontSize: "14px",
-      lineHeight: "1em",
-      fontWeight: "400",
-      _hover: {
-        backgroundColor: "#000",
-        color: "#fff",
-        textDecoration: "none",
-      },
+      backgroundColor: "brand",
     },
     secondary: {
-      backgroundColor: "gray.100",
       color: "black",
-      border: "2px solid #000000",
-      borderRadius: "4px",
-      padding: "8px 12px",
-      boxShadow:
-        "inset -1px -1px 0px rgba(0, 0, 0, 0.25), inset 1px 1px 0px rgba(255, 255, 255, 0.25)",
       fontSize: "14px",
-      lineHeight: "1em",
-      fontWeight: "400",
-      _hover: {
-        backgroundColor: "#000",
-        color: "#fff",
-        textDecoration: "none",
-      },
+      backgroundColor: "gray.100",
+    },
+    default: {
+      backgroundColor: "gray.600",
     },
   },
 };
