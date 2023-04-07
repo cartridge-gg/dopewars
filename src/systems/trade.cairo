@@ -84,24 +84,20 @@ mod Sell {
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::entity(game_id.into());
-        assert(game.is_some(), 'game not found');
-        assert(!game.unwrap().is_finished, 'game is finished');
+        let maybe_game = commands::<Game>::entity(game_id.into());
+        let game = maybe_game.expect('game not found');
+        assert(!game.is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
         assert(name.is_some(), 'player not found');
 
         let maybe_drug = commands::<Drug>::entity((game_id, (player_id, drug_id)).into());
-        assert(maybe_drug.is_some(), 'player do not own this drug');
-
-        let drug = maybe_drug.unwrap();
+        let drug = maybe_drug.expect('player do not own this drug');
         assert(drug.quantity >= quantity, 'not enough drugs to sell');
 
         let maybe_market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
-        assert(maybe_market.is_some(), 'market not found');
-
-        let market = maybe_market.unwrap();
+        let market = maybe_market.expect('market not found');
         let payout = market.sell(quantity);
 
         // update market
