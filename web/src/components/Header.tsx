@@ -21,10 +21,6 @@ const Header = () => {
 
   return (
     <Flex position="absolute" top="0" left="0" p="12px" w="full">
-      <Flex align="center" gap="4px" fontSize="18px" color="white">
-        <Cigarette />
-        <Text>RYO</Text>
-      </Flex>
       <Spacer />
       {address ? (
         <Flex gap="8px">
