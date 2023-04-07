@@ -9,7 +9,17 @@ export const styles = {
 };
 
 //layer styles
-export const layerStyles = {};
+export const layerStyles = {
+  card: {
+    bgColor: "gray.800",
+    borderColor: "gray.900",
+    borderStyle: "solid",
+    borderWidth: "2px",
+    borderRadius: "4px",
+    color: "white",
+    padding: "12px",
+  },
+};
 
 //text styles
 export const textStyles = {

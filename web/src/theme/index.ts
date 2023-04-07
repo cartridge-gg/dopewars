@@ -13,6 +13,7 @@ const theme = extendTheme({
   components: {
     ...Components,
   },
+  // fonts handled by @next/font
 });
 
 export default theme;
