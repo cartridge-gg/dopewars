@@ -2,7 +2,6 @@
 export const styles = {
   global: {
     body: {
-      backgroundImage: "url('/RYO_Background.png')",
       height: "100vh",
     },
   },

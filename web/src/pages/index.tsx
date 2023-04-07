@@ -36,12 +36,14 @@ import Game from "@/components/Game";
 import Header from "@/components/Header";
 import Results from "@/components/PlayerResult";
 import Window from "@/components/Window";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <>
       <Header />
-      <Container h="100vh" justifyContent="center" centerContent>
+      <Container centerContent>
         <Window bgColor="gray.700" border="none">
           <Flex align="center" justify="center" h="150px">
             <Text fontSize="14px" color="white" opacity="0.5">
@@ -64,14 +66,20 @@ export default function Home() {
             </CardBody>
             <Divider />
             <CardFooter>
-              <Button w="full" py="8px">
+              <Button
+                w="full"
+                py="8px"
+                onClick={() => {
+                  router.push("/create");
+                }}
+              >
                 Create New
               </Button>
             </CardFooter>
           </Card>
           <Card h="full">
             <CardHeader color="white">
-              <User />
+              <Users />
               <Text textTransform="uppercase" fontSize="17px">
                 Available Games
               </Text>
@@ -85,10 +93,13 @@ export default function Home() {
                 >
                   <Text>Loan Sharkz</Text>
                   <Spacer />
-                  <Clock fill="gray.400" />
-                  <Text color="blue.200">1h</Text>
-                  <Users fill="gray.400" />
-                  <Text> 3/6</Text>
+                  <HStack w="150px">
+                    <Clock fill="gray.400" />
+                    <Text color="blue.200">1h</Text>
+                    <Spacer />
+                    <Users fill="gray.400" />
+                    <Text> 3/6</Text>
+                  </HStack>
                 </HStack>
                 <HStack
                   layerStyle="card"
@@ -97,10 +108,14 @@ export default function Home() {
                 >
                   <Text>Joey's Room</Text>
                   <Spacer />
-                  <Clock fill="gray.400" />
-                  <Text color="blue.200">16m</Text>
-                  <Users fill="gray.400" />
-                  <Text> 1/6</Text>
+
+                  <HStack w="150px">
+                    <Clock fill="gray.400" />
+                    <Text color="blue.200">16m</Text>
+                    <Spacer />
+                    <Users fill="gray.400" />
+                    <Text> 1/6</Text>
+                  </HStack>
                 </HStack>
                 <HStack
                   layerStyle="card"
@@ -109,10 +124,13 @@ export default function Home() {
                 >
                   <Text>Friends</Text>
                   <Spacer />
-                  <Clock fill="gray.400" />
-                  <Text color="blue.200">3m</Text>
-                  <Users fill="gray.400" />
-                  <Text> 6/6</Text>
+                  <HStack w="150px">
+                    <Clock fill="gray.400" />
+                    <Text color="blue.200">3m</Text>
+                    <Spacer />
+                    <Users fill="gray.400" />
+                    <Text> 6/6</Text>
+                  </HStack>
                 </HStack>
               </Flex>
             </CardBody>

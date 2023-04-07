@@ -9,6 +9,7 @@ import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
 import localFont from "@next/font/local";
+import Background from "@/components/Background";
 
 export const controllerConnector = new ControllerConnector([
   {
@@ -38,6 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={theme}>
         <ModalProvider>
           <main className={chicagoFont.className}>
+            <Background />
             <Component {...pageProps} />
           </main>
         </ModalProvider>
