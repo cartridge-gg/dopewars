@@ -22,6 +22,7 @@ export * from "./Chat";
 export * from "./Cart";
 export * from "./Road";
 export * from "./User";
+export * from "./Check";
 export * from "./Users";
 export * from "./Clock";
 export * from "./Arrow"; // up, down, right, left variant

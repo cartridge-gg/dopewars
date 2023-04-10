@@ -14,16 +14,26 @@ import {
   Divider,
   Input,
   Flex,
+  Spacer,
   useCounter,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import Pending from "@/components/Pending";
 
 const MIN_PLAYERS = 6;
 const MIN_TURNS = 10;
 
+enum GAME_STATE {
+  NONE,
+  DEPLOYING,
+  STARTED,
+  FINISHED,
+}
+
 export default function Create() {
   const router = useRouter();
+  const [state, setState] = useState<GAME_STATE>(GAME_STATE.NONE);
   const {
     increment: incPlayers,
     decrement: decPlayers,
@@ -47,52 +57,61 @@ export default function Create() {
       <Header />
       <Container centerContent>
         <Window bgColor="gray.700" border="none">
-          <Card h="full">
-            <CardHeader justifyContent="center">
-              <Text>New Game</Text>
-            </CardHeader>
-            <CardBody>
-              <VStack>
-                <Row name="Game Name:">
-                  <Input placeholder="name" />
-                </Row>
-                <Row name="Players:">
-                  <Input type="number" value={numPlayers} min="0" readOnly />
-                  <Button variant="default" onClick={() => incPlayers()}>
-                    <Arrow variant="up" size="sm" />
-                  </Button>
-                  <Button variant="default" onClick={() => decPlayers()}>
-                    <Arrow variant="down" size="sm" />
-                  </Button>
-                </Row>
-                <Row name="Turns:">
-                  <Input type="number" value={numTurns} min="0" readOnly />
-                  <Button variant="default" onClick={() => incTurns()}>
-                    <Arrow variant="up" size="sm" />
-                  </Button>
-                  <Button variant="default" onClick={() => decTurns()}>
-                    <Arrow variant="down" size="sm" />
-                  </Button>
-                </Row>
-                <Row name="Starts at:">
-                  <Input placeholder="datepicker" min="0" />
-                </Row>
-              </VStack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <Button
-                variant="secondary"
-                flex="1"
-                onClick={() => router.push("/")}
-              >
-                Cancel
-              </Button>
-              <Button flex="1" isDisabled>
-                Create
-              </Button>
-            </CardFooter>
-          </Card>
+          {state == GAME_STATE.NONE && (
+            <Card h="full">
+              <CardHeader justifyContent="center">
+                <Text>New Game</Text>
+              </CardHeader>
+              <CardBody pt="40px">
+                <VStack>
+                  <Row name="Game Name:">
+                    <Input placeholder="name" />
+                  </Row>
+                  <Row name="Players:">
+                    <Input type="number" value={numPlayers} min="0" readOnly />
+                    <Button variant="default" onClick={() => incPlayers()}>
+                      <Arrow variant="up" size="sm" />
+                    </Button>
+                    <Button variant="default" onClick={() => decPlayers()}>
+                      <Arrow variant="down" size="sm" />
+                    </Button>
+                  </Row>
+                  <Row name="Turns:">
+                    <Input type="number" value={numTurns} min="0" readOnly />
+                    <Button variant="default" onClick={() => incTurns()}>
+                      <Arrow variant="up" size="sm" />
+                    </Button>
+                    <Button variant="default" onClick={() => decTurns()}>
+                      <Arrow variant="down" size="sm" />
+                    </Button>
+                  </Row>
+                  <Row name="Starts at:">
+                    <Input placeholder="datepicker" min="0" />
+                  </Row>
+                </VStack>
+              </CardBody>
+              <Divider />
+              <CardFooter>
+                <Button
+                  variant="secondary"
+                  flex="1"
+                  onClick={() => router.push("/")}
+                >
+                  Cancel
+                </Button>
+                <Button flex="1" onClick={() => setState(GAME_STATE.DEPLOYING)}>
+                  Create
+                </Button>
+              </CardFooter>
+            </Card>
+          )}
+          {state == GAME_STATE.DEPLOYING && (
+            <Pending
+              title="New Game"
+              description="Your game is being deployed..."
+              txHash="#"
+            />
+          )}
         </Window>
       </Container>
     </>

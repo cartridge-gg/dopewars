@@ -8,6 +8,7 @@ export const Card: ComponentMultiStyleConfig = {
       borderRadius: "4px",
       borderColor: "gray.900",
       bgColor: "gray.800",
+      color: "white",
     },
     header: {
       color: "white",

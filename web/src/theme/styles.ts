@@ -3,6 +3,7 @@ export const styles = {
   global: {
     body: {
       height: "100vh",
+      color: "white",
     },
   },
 };
@@ -23,7 +24,7 @@ export const layerStyles = {
 //text styles
 export const textStyles = {
   "upper-bold": {
-    fontWeight: "700",
+    fontWeight: "500",
     textTransform: "uppercase",
   },
 };
