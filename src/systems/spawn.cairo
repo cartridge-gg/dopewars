@@ -2,7 +2,6 @@
 mod SpawnPlayer {
     use traits::Into;  
     use array::ArrayTrait;
-    use option::OptionTrait;
 
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Name;
@@ -14,10 +13,7 @@ mod SpawnPlayer {
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let maybe_game = commands::<Game>::entity(game_id.into());
-        assert(maybe_game.is_some(), 'game not found');
-
-        let game = maybe_game.unwrap();
+        let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
 
         commands::set_entity((game_id, (player_id)).into(), (
