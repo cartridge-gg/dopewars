@@ -15,6 +15,8 @@ import {
   CardFooter,
   HStack,
   Divider,
+  StyleProps,
+  SystemProps,
 } from "@chakra-ui/react";
 import {
   Cartridge,
@@ -37,6 +39,14 @@ import Header from "@/components/Header";
 import Results from "@/components/PlayerResult";
 import Window from "@/components/Window";
 import { useRouter } from "next/router";
+import { number } from "starknet";
+import NextLink from "next/link";
+
+const availableGames = [
+  { name: "Loan Sharkz", startTime: "1hr", players: "3/6" },
+  { name: "Joey's Room", startTime: "16m", players: "1/6" },
+  { name: "Friend", startTime: "3m", players: "6/6" },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -86,52 +96,11 @@ export default function Home() {
             </CardHeader>
             <CardBody>
               <Flex direction="column" gap="6px">
-                <HStack
-                  layerStyle="card"
-                  bgColor="gray.900"
-                  borderColor="black"
-                >
-                  <Text>Loan Sharkz</Text>
-                  <Spacer />
-                  <HStack w="150px">
-                    <Clock fill="gray.400" />
-                    <Text color="blue.200">1h</Text>
-                    <Spacer />
-                    <Users fill="gray.400" />
-                    <Text> 3/6</Text>
-                  </HStack>
-                </HStack>
-                <HStack
-                  layerStyle="card"
-                  bgColor="gray.900"
-                  borderColor="black"
-                >
-                  <Text>Joey's Room</Text>
-                  <Spacer />
-
-                  <HStack w="150px">
-                    <Clock fill="gray.400" />
-                    <Text color="blue.200">16m</Text>
-                    <Spacer />
-                    <Users fill="gray.400" />
-                    <Text> 1/6</Text>
-                  </HStack>
-                </HStack>
-                <HStack
-                  layerStyle="card"
-                  bgColor="gray.900"
-                  borderColor="black"
-                >
-                  <Text>Friends</Text>
-                  <Spacer />
-                  <HStack w="150px">
-                    <Clock fill="gray.400" />
-                    <Text color="blue.200">3m</Text>
-                    <Spacer />
-                    <Users fill="gray.400" />
-                    <Text> 6/6</Text>
-                  </HStack>
-                </HStack>
+                {availableGames.map((gameProps, index) => (
+                  <NextLink href="/join">
+                    <GameRow {...gameProps} key={index} />
+                  </NextLink>
+                ))}
               </Flex>
             </CardBody>
           </Card>
@@ -158,3 +127,26 @@ export default function Home() {
     </>
   );
 }
+
+const GameRow = ({
+  name,
+  startTime,
+  players,
+  ...rest
+}: {
+  name: string;
+  startTime: string;
+  players: string;
+} & StyleProps) => (
+  <HStack layerStyle="card" bgColor="gray.900" borderColor="black" {...rest}>
+    <Text>{name}</Text>
+    <Spacer />
+    <HStack w="150px">
+      <Clock fill="gray.400" />
+      <Text color="blue.200">{startTime}</Text>
+      <Spacer />
+      <Users fill="gray.400" />
+      <Text>{players}</Text>
+    </HStack>
+  </HStack>
+);

@@ -24,16 +24,9 @@ import Pending from "@/components/Pending";
 const MIN_PLAYERS = 6;
 const MIN_TURNS = 10;
 
-enum GAME_STATE {
-  NONE,
-  DEPLOYING,
-  STARTED,
-  FINISHED,
-}
-
 export default function Create() {
   const router = useRouter();
-  const [state, setState] = useState<GAME_STATE>(GAME_STATE.NONE);
+  const [creating, setCreating] = useState(false);
   const {
     increment: incPlayers,
     decrement: decPlayers,
@@ -57,7 +50,15 @@ export default function Create() {
       <Header />
       <Container centerContent>
         <Window bgColor="gray.700" border="none">
-          {state == GAME_STATE.NONE && (
+          {creating ? (
+            <>
+              <Pending
+                title="New Game"
+                description="Your game is being deployed..."
+                txHash="#"
+              />
+            </>
+          ) : (
             <Card h="full">
               <CardHeader justifyContent="center">
                 <Text>New Game</Text>
@@ -99,18 +100,11 @@ export default function Create() {
                 >
                   Cancel
                 </Button>
-                <Button flex="1" onClick={() => setState(GAME_STATE.DEPLOYING)}>
+                <Button flex="1" onClick={() => setCreating(true)}>
                   Create
                 </Button>
               </CardFooter>
             </Card>
-          )}
-          {state == GAME_STATE.DEPLOYING && (
-            <Pending
-              title="New Game"
-              description="Your game is being deployed..."
-              txHash="#"
-            />
           )}
         </Window>
       </Container>
