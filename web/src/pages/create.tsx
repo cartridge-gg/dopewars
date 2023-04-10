@@ -63,7 +63,7 @@ export default function Create() {
               <CardHeader justifyContent="center">
                 <Text>New Game</Text>
               </CardHeader>
-              <CardBody pt="40px">
+              <CardBody pt="40px" px="36px">
                 <VStack>
                   <Row name="Game Name:">
                     <Input placeholder="name" />

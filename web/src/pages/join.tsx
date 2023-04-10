@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { Arrow, Clock, Connect, Users } from "@/components/icons";
+import { Arrow, Chat, Clock, Connect, Users } from "@/components/icons";
 import Pending from "@/components/Pending";
 import Window from "@/components/Window";
 import {
@@ -52,6 +52,15 @@ export default function Join() {
                   <HStack>
                     <Arrow />
                     <Text fontSize="17px">HOME</Text>
+                  </HStack>
+                </NextLink>
+                <Spacer />
+                <NextLink href="/chat">
+                  <HStack>
+                    <Chat />
+                    <Circle bgColor="gray.600" size="20px">
+                      <Text fontSize="10px">2</Text>
+                    </Circle>
                   </HStack>
                 </NextLink>
               </CardHeader>

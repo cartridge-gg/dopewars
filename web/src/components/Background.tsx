@@ -17,8 +17,8 @@ const Background = () => {
           <g
             style={{
               fill: "#313332",
-              stroke: "black",
-              strokeWidth: "2px",
+              stroke: "#111",
+              strokeWidth: "4px",
             }}
           >
             <rect width="100" height="40" />
