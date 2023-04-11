@@ -49,7 +49,7 @@ export default function Create() {
     <>
       <Header />
       <Container centerContent>
-        <Window bgColor="gray.700" border="none">
+        <Window>
           {creating ? (
             <>
               <Pending

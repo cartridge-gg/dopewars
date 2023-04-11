@@ -10,11 +10,11 @@ export const Cocaine = (props: IconProps) => {
           width="20"
           height="20"
           rx="1"
-          fill="url(#pattern0)"
+          fill="url(#cocaine)"
         />
         <defs>
           <pattern
-            id="pattern0"
+            id="cocaine"
             patternContentUnits="objectBoundingBox"
             width="1"
             height="1"

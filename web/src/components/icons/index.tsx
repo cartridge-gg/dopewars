@@ -18,6 +18,7 @@ export const Icon = ({
   );
 };
 
+export * from "./City";
 export * from "./Chat";
 export * from "./Cart";
 export * from "./Road";

@@ -4,17 +4,10 @@ export const Heroin = (props: IconProps) => {
   return (
     <Icon {...props}>
       <>
-        <rect
-          x="2"
-          y="2.5"
-          width="20"
-          height="20"
-          rx="1"
-          fill="url(#pattern0)"
-        />
+        <rect x="2" y="2.5" width="20" height="20" rx="1" fill="url(#heroin)" />
         <defs>
           <pattern
-            id="pattern0"
+            id="heroin"
             patternContentUnits="objectBoundingBox"
             width="1"
             height="1"

@@ -19,6 +19,9 @@ export const Card: ComponentMultiStyleConfig = {
     },
     body: {
       p: "12px",
+      "::-webkit-scrollbar": {
+        display: "none",
+      },
     },
     footer: {
       gap: "6px",

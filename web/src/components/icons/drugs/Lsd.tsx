@@ -4,17 +4,10 @@ export const Lsd = (props: IconProps) => {
   return (
     <Icon {...props}>
       <>
-        <rect
-          x="2"
-          y="2.5"
-          width="20"
-          height="20"
-          rx="1"
-          fill="url(#pattern0)"
-        />
+        <rect x="2" y="2.5" width="20" height="20" rx="1" fill="url(#lsd)" />
         <defs>
           <pattern
-            id="pattern0"
+            id="lsd"
             patternContentUnits="objectBoundingBox"
             width="1"
             height="1"

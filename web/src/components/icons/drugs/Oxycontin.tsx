@@ -10,11 +10,11 @@ export const Oxycontin = (props: IconProps) => {
           width="20"
           height="20"
           rx="1"
-          fill="url(#pattern0)"
+          fill="url(#oxycontin)"
         />
         <defs>
           <pattern
-            id="pattern0"
+            id="oxycontin"
             patternContentUnits="objectBoundingBox"
             width="1"
             height="1"

@@ -6,5 +6,6 @@ export * from "./modal";
 export * from "./input";
 export * from "./button";
 export * from "./divider";
+export * from "./accordion";
 export * from "./container";
 export * from "./slidertrack";
