@@ -2,7 +2,6 @@
 mod Buy {
     use traits::Into;
     use array::ArrayTrait;
-    use option::OptionTrait;
     use rollyourown::components::game::Game;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::market::Market;
@@ -22,19 +21,15 @@ mod Buy {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::entity(game_id.into());
-        assert(game.is_some(), 'game not found');
-        assert(!game.unwrap().is_finished, 'game is finished');
+        assert(!game.is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
-        assert(name.is_some(), 'player not found');
 
-        let maybe_market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
-        assert(maybe_market.is_some(), 'drug market not found');
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
 
-        let market = maybe_market.unwrap();
         let cost = market.buy(quantity);
-        assert(cost < cash.unwrap().amount, 'not enough cash');
+        assert(cost < cash.amount, 'not enough cash');
 
         // update market
         commands::set_entity((game_id, (location_id, drug_id)).into(), (
@@ -46,11 +41,11 @@ mod Buy {
 
         // update player
         commands::set_entity((game_id, (player_id)).into(), (
-            Cash { amount: cash.unwrap().amount - cost },
+            Cash { amount: cash.amount - cost },
         ));
-        let drug = commands::<Drug>::entity((game_id, (player_id, drug_id)).into());
-        let updated_quantity = match drug {
-            Option::Some(x) => x.quantity + quantity,
+        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
+        let updated_quantity = match maybe_drug {
+            Option::Some(x) => x.unwrap().quantity + quantity,
             Option::None(_) => quantity,
         };
         commands::set_entity((game_id, (player_id, drug_id)).into(), (
@@ -90,7 +85,6 @@ mod Buy {
 mod Sell {
     use traits::Into;
     use array::ArrayTrait;
-    use option::OptionTrait;
 
     use rollyourown::components::game::Game;
     use rollyourown::components::drug::Drug;
@@ -104,20 +98,23 @@ mod Sell {
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let maybe_game = commands::<Game>::entity(game_id.into());
-        let game = maybe_game.expect('game not found');
-        assert(!game.is_finished, 'game is finished');
+        let game = commands::<Game>::entity(game_id.into());
 
         let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
         let (name, location, inventory, cash) = player;
-        assert(name.is_some(), 'player not found');
 
-        let maybe_drug = commands::<Drug>::entity((game_id, (player_id, drug_id)).into());
-        let drug = maybe_drug.expect('player do not own this drug');
-        assert(drug.quantity >= quantity, 'not enough drugs to sell');
+        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
+        let player_quantity = match maybe_drug {
+            Option::Some(drug) => {
+                drug.unwrap().quantity
+            },
+            Option::None(()) => {
+                0_u32
+            }
+        };
+        assert(player_quantity >= quantity, 'not enough drugs to sell');
 
-        let maybe_market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
-        let market = maybe_market.expect('market not found');
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
         let payout = market.sell(quantity);
 
         // update market
@@ -130,12 +127,12 @@ mod Sell {
 
         // update player
         commands::set_entity((game_id, (player_id)).into(), (
-            Cash { amount: cash.unwrap().amount + payout },
+            Cash { amount: cash.amount + payout },
         ));
         commands::set_entity((game_id, (player_id, drug_id)).into(), (
             Drug { 
                 id: drug_id, 
-                quantity: drug.quantity - quantity
+                quantity: player_quantity - quantity
             }
         ));
 

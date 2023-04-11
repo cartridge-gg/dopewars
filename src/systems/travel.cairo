@@ -2,7 +2,6 @@
 mod Travel {
     use traits::Into;
     use array::ArrayTrait;
-    use option::OptionTrait;
 
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Name;
@@ -17,25 +16,15 @@ mod Travel {
     fn execute(game_id: felt252, next_location_id: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
-        let maybe_game = commands::<Game>::entity(game_id.into());
-        assert(maybe_game.is_some(), 'game not found');
-
-        let game = maybe_game.unwrap();
+        let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
 
         let player = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
-        let (maybe_name, maybe_location, maybe_stats, maybe_cash) = player;
-        assert(maybe_name.is_some(), 'player not found');
+        let (name, location, stats, cash) = player;
 
-        let location = maybe_location.unwrap();
         assert(location.id != next_location_id, 'already at location');
-        
-        let stats = maybe_stats.unwrap();
-        let cash = maybe_cash.unwrap();
 
         let next_location = commands::<Location>::entity((game_id, (next_location_id)).into());
-        assert(next_location.is_some(), 'invalid location');
-
         // TODO: random event
 
         // update player
