@@ -41,6 +41,7 @@ import Window from "@/components/Window";
 import { useRouter } from "next/router";
 import { number } from "starknet";
 import NextLink from "next/link";
+import { Weed } from "@/components/icons/drugs";
 
 const availableGames = [
   { name: "Loan Sharkz", startTime: "1hr", players: "3/6" },
@@ -97,7 +98,7 @@ export default function Home() {
             <CardBody>
               <Flex direction="column" gap="6px">
                 {availableGames.map((gameProps, index) => (
-                  <NextLink href="/join">
+                  <NextLink href="/0xdeadbeef">
                     <GameRow {...gameProps} key={index} />
                   </NextLink>
                 ))}
