@@ -3,7 +3,7 @@ use traits::TryInto;
 use option::OptionTrait;
 use debug::PrintTrait;
 
-const SCALING_FACTOR: u128 = 10000_u128;
+use rollyourown::constants::SCALING_FACTOR;
 
 #[derive(Component)]
 struct Market {
@@ -52,7 +52,7 @@ fn test_not_enough_quantity() {
 #[avaiable_gas(100000)]
 fn test_market_buy() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
-    let cost = MarketTrait::buy(market, 5_usize);
+    let cost = market.buy(5_usize);
     assert(cost == SCALING_FACTOR * 1_u128, 'wrong cost');
 }
 
@@ -60,7 +60,7 @@ fn test_market_buy() {
 #[avaiable_gas(100000)]
 fn test_market_sell() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
-    let payout = MarketTrait::sell(market, 5_usize);
+    let payout = market.sell(5_usize);
     assert(payout == 3334_u128, 'wrong payout');
 }
 

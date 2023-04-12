@@ -1,4 +1,8 @@
+use debug::PrintTrait;
+use array::ArrayTrait;
+
 #[derive(Component)]
 struct Location {
-    id: felt252,
+    id: u32,
 }
+

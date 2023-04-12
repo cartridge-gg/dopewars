@@ -5,10 +5,10 @@ mod SpawnPlayer {
 
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Inventory;
-    use rollyourown::components::player::Stats;
     use rollyourown::components::player::Cash;
+    use rollyourown::components::player::Stats;
     use rollyourown::components::location::Location;
+    use rollyourown::constants::SCALING_FACTOR;
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
@@ -18,13 +18,16 @@ mod SpawnPlayer {
 
         commands::set_entity((game_id, (player_id)).into(), (
             Name { name: name },
-            Location { id: 0 },
-            Stats { health: 100_usize },
-            Inventory { weapon: 69_usize, shoes: 1337_usize },
-            Cash { amount: 100_u128 } // $100
+            Location { id: 0_u32 },
+            Stats { 
+                health: 100_u8, 
+                respect: 0_u8,
+                turns_remaining: game.max_turns 
+            },
+            Cash { amount: 100_u128 * SCALING_FACTOR } // $100
         ));
 
-        return ();
+        ()
     }
 }
 
@@ -47,7 +50,7 @@ mod SpawnGame {
             }
         ));
 
-        return ();
+        ()
     }
 
 }

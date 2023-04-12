@@ -8,7 +8,6 @@ mod Buy {
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Inventory;
     use rollyourown::components::player::Cash;
 
     // 1. Verify the caller owns the player.
@@ -23,8 +22,8 @@ mod Buy {
         let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
 
-        let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, inventory, cash) = player;
+        let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
+        let (name, location, cash) = player;
 
         let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
 
@@ -44,14 +43,14 @@ mod Buy {
             Cash { amount: cash.amount - cost },
         ));
         let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
-        let updated_quantity = match maybe_drug {
-            Option::Some(x) => x.unwrap().quantity + quantity,
+        let player_quantity = match maybe_drug {
+            Option::Some(x) => x.quantity + quantity,
             Option::None(_) => quantity,
         };
         commands::set_entity((game_id, (player_id, drug_id)).into(), (
             Drug { 
                 id: drug_id, 
-                quantity: updated_quantity
+                quantity: player_quantity
             }
         ));
 
@@ -92,7 +91,6 @@ mod Sell {
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
-    use rollyourown::components::player::Inventory;
     use rollyourown::components::player::Cash;
 
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
@@ -100,17 +98,13 @@ mod Sell {
 
         let game = commands::<Game>::entity(game_id.into());
 
-        let player = commands::<Name, Location, Inventory, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, inventory, cash) = player;
+        let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
+        let (name, location, cash) = player;
 
         let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
         let player_quantity = match maybe_drug {
-            Option::Some(drug) => {
-                drug.unwrap().quantity
-            },
-            Option::None(()) => {
-                0_u32
-            }
+            Option::Some(drug) => drug.quantity,
+            Option::None(()) => 0_u32
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
