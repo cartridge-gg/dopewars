@@ -10,6 +10,9 @@ mod Buy {
     use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
 
+    #[event]
+    fn Bought(game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, cost: u128) {}
+
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
     // 3. Ensure user can afford it.
@@ -54,6 +57,7 @@ mod Buy {
             }
         ));
 
+        Bought(game_id, player_id, drug_id, quantity, cost);
         return ();
     }
 }
@@ -93,6 +97,9 @@ mod Sell {
     use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
 
+    #[event]
+    fn Sold(game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, payout: u128) {}
+
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
@@ -130,6 +137,7 @@ mod Sell {
             }
         ));
 
+        Sold(game_id, player_id, drug_id, quantity, payout);
         return ();
     }
 }

@@ -9,6 +9,9 @@ mod SpawnPlayer {
     use rollyourown::components::player::Stats;
     use rollyourown::components::location::Location;
     use rollyourown::constants::SCALING_FACTOR;
+    
+    #[event]
+    fn PlayerJoined(game_id: felt252, player_id: felt252) {}
 
     fn execute(game_id: felt252, name: felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
@@ -27,6 +30,7 @@ mod SpawnPlayer {
             Cash { amount: 100_u128 * SCALING_FACTOR } // $100
         ));
 
+        PlayerJoined(game_id, player_id);
         ()
     }
 }
@@ -39,6 +43,9 @@ mod SpawnGame {
 
     use rollyourown::components::game::Game;
 
+    #[event]
+    fn GameCreated(game_id: felt252) {}
+
     fn execute(start_time: usize, max_players: usize, max_turns: usize) {
         let game_id = commands::uuid(); 
         commands::set_entity(game_id.into(), (
@@ -50,7 +57,7 @@ mod SpawnGame {
             }
         ));
 
+        GameCreated(game_id);
         ()
     }
-
 }

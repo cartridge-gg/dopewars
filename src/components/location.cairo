@@ -5,4 +5,3 @@ use array::ArrayTrait;
 struct Location {
     id: u32,
 }
-

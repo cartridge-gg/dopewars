@@ -11,6 +11,9 @@ mod Travel {
     use rollyourown::components::player::Stats;
     use rollyourown::components::player::StatsTrait;
 
+    #[event]
+    fn Traveled(game_id: felt252, player_id: felt252, from_location_id: u32, to_location_id: u32) {}
+
     // 1. Verify the caller owns the player.
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
@@ -42,6 +45,7 @@ mod Travel {
             },
         ));
 
-        return ();
+        Traveled(game_id, player_id, location.id, next_location_id);
+        ()
     }
 }
