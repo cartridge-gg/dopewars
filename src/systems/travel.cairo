@@ -5,6 +5,7 @@ mod Travel {
     use array::ArrayTrait;
 
     use rollyourown::components::game::Game;
+    use rollyourown::components::game::GameTrait;
     use rollyourown::components::player::Name;
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Cash;
@@ -19,11 +20,12 @@ mod Travel {
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
     fn execute(game_id: felt252, next_location_id: u32) {
-        let player_id: felt252 = starknet::get_caller_address().into();
+        let block_info = starknet::get_block_info().unbox();
 
         let game = commands::<Game>::entity(game_id.into());
-        assert(!game.is_finished, 'game is finished');
+        assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
+        let player_id = starknet::get_caller_address().into();
         let player = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
         let (name, location, stats, cash) = player;
         

@@ -1,8 +1,11 @@
 #[system]
 mod Buy {
     use traits::Into;
+    use box::BoxTrait;
     use array::ArrayTrait;
+
     use rollyourown::components::game::Game;
+    use rollyourown::components::game::GameTrait;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
@@ -20,11 +23,12 @@ mod Buy {
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
-        let player_id: felt252 = starknet::get_caller_address().into();
+        let block_info = starknet::get_block_info().unbox();
 
         let game = commands::<Game>::entity(game_id.into());
-        assert(!game.is_finished, 'game is finished');
+        assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
+        let player_id = starknet::get_caller_address().into();
         let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
         let (name, location, cash) = player;
 
@@ -87,9 +91,11 @@ mod Buy {
 #[system]
 mod Sell {
     use traits::Into;
+    use box::BoxTrait;
     use array::ArrayTrait;
 
     use rollyourown::components::game::Game;
+    use rollyourown::components::game::GameTrait;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
@@ -101,10 +107,12 @@ mod Sell {
     fn Sold(game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, payout: u128) {}
 
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
-        let player_id: felt252 = starknet::get_caller_address().into();
+        let block_info = starknet::get_block_info().unbox();
 
         let game = commands::<Game>::entity(game_id.into());
+        assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
+        let player_id = starknet::get_caller_address().into();
         let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
         let (name, location, cash) = player;
 

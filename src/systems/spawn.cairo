@@ -19,6 +19,9 @@ mod SpawnPlayer {
         let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
 
+        let players = commands::<(Game, Player)>::entities();
+        assert(game.max_players > players.len(), 'max players');
+
         commands::set_entity((game_id, (player_id)).into(), (
             Name { name: name },
             Location { id: 0_u32 },
@@ -46,7 +49,7 @@ mod SpawnGame {
     #[event]
     fn GameCreated(game_id: felt252) {}
 
-    fn execute(start_time: usize, max_players: usize, max_turns: usize) {
+    fn execute(start_time: u64, max_players: usize, max_turns: usize) {
         let game_id = commands::uuid(); 
         commands::set_entity(game_id.into(), (
             Game {
