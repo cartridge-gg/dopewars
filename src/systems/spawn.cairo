@@ -7,7 +7,6 @@ mod SpawnPlayer {
     use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
-    use rollyourown::components::location::Location;
     use rollyourown::constants::SCALING_FACTOR;
     
     #[event]
@@ -24,10 +23,10 @@ mod SpawnPlayer {
 
         commands::set_entity((game_id, (player_id)).into(), (
             Name { name: name },
-            Location { id: 0_u32 },
             Stats { 
                 health: 100_u8, 
                 respect: 0_u8,
+                arrested: false,
                 turns_remaining: game.max_turns 
             },
             Cash { amount: 100_u128 * SCALING_FACTOR } // $100
