@@ -3,3 +3,4 @@ mod market;
 mod player;
 mod drug;
 mod location;
+mod risks;

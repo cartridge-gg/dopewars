@@ -8,11 +8,11 @@ mod Travel {
     use rollyourown::components::game::GameTrait;
     use rollyourown::components::player::Name;
     use rollyourown::components::location::Location;
-    use rollyourown::components::location::LocationTrait;
-    use rollyourown::components::location::Event;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
     use rollyourown::components::player::StatsTrait;
+    use rollyourown::components::risks::Risks;
+    use rollyourown::components::risks::RisksTrait;
 
     #[event]
     fn Traveled(game_id: felt252, player_id: felt252, from_location_id: u32, to_location_id: u32) {}
@@ -31,13 +31,12 @@ mod Travel {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let player = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, stats, cash) = player;
+        let (name, location, stats, cash)  = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
         
         assert(location.id != next_location_id, 'already at location');
         assert(stats.can_continue(), 'cannot continue');
 
-        let next_location = commands::<Location>::entity((game_id, (next_location_id.into())).into());
+        let (next_location, risks) = commands::<Location, Risks>::entity((game_id, (next_location_id.into())).into());
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_name, 
@@ -46,7 +45,7 @@ mod Travel {
             money_loss, 
             health_loss, 
             respect_loss
-        ) = next_location.risk_event(seed);
+        ) = risks.travel(seed);
 
         let updated_health = match killed {
             bool::False(()) => stats.health - health_loss,

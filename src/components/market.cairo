@@ -4,26 +4,15 @@ use option::OptionTrait;
 use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
-
 #[derive(Component)]
 struct Market {
     cash: u128, // fixed point
     quantity: usize,
 }
 
-#[derive(Drop)]
-enum Event {
-    None: (),
-    Hacked: (u128, usize),
-    Rugged: (u128, usize),
-    Slippage: u128,
-    ChainHalted: (),
-}
-
 trait MarketTrait {
     fn buy(self: Market, quantity: usize) -> u128; 
     fn sell(self: Market, quantity: usize) ->  u128; 
-    fn risk_event(self: Market, seed: felt252) -> (felt252, u128, usize);
 }
 
 impl MarketImpl of MarketTrait {
@@ -40,33 +29,6 @@ impl MarketImpl of MarketTrait {
         let k = cash * available;
         let payout = cash - (k / (available + amount));
         payout
-    }
-
-    fn risk_event(self: Market, seed: felt252) -> (
-        felt252,    // event_name
-        u128,       // money_loss
-        usize,      // drug_loss
-    ) {
-        // TODO: probablity of market events
-        let event = Event::None(());
-
-        match event {
-            Event::None(_) => {
-                ('none', 0_u128, 0_usize)
-            },
-            Event::Hacked((m, d)) => {
-                ('hacked', m, d)
-            },
-            Event::Rugged((m, d)) => {
-                ('rugged', m, d)
-            },
-            Event::Slippage(x) => {
-                ('slippage', 0_u128, 0_usize)
-            },
-            Event::ChainHalted(_) => {
-                ('chain_halted', 0_u128, 0_usize)
-            }
-        }
     }
 }
 

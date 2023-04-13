@@ -7,18 +7,19 @@ mod Buy {
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameTrait;
     use rollyourown::components::drug::Drug;
-    use rollyourown::components::market::Event;
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
+    use rollyourown::components::risks::Risks;
+    use rollyourown::components::risks::RisksTrait;
 
     #[event]
     fn Bought(game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, cost: u128) {}
 
     #[event]
-    fn MarketEvent(game_id: felt252, player_id: felt252, event_name: felt252) {}
+    fn TradeRisk(game_id: felt252, player_id: felt252, event_name: felt252) {}
 
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
@@ -33,16 +34,14 @@ mod Buy {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, cash) = player;
-
-        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
+        let (name, location, cash) = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
+        let (market, risks) = commands::<Market, Risks>::entity((game_id, (location_id, drug_id)).into());
 
         let cost = market.buy(quantity);
         assert(cost < cash.amount, 'not enough cash');
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let (event_name, money_loss, drug_loss) = market.risk_event(seed);
+        let (event_name, money_loss, drug_loss) = risks.trade(seed);
 
         // update market
         commands::set_entity((game_id, (location_id, drug_id)).into(), (
@@ -68,7 +67,7 @@ mod Buy {
             }
         ));
 
-        if event_name != 'none' { MarketEvent(game_id, player_id, event_name) }
+        if event_name != 'none' { TradeRisk(game_id, player_id, event_name) }
         Bought(game_id, player_id, drug_id, quantity, cost);
         ();
     }
@@ -88,12 +87,14 @@ mod Sell {
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
+    use rollyourown::components::risks::Risks;
+    use rollyourown::components::risks::RisksTrait;
 
     #[event]
     fn Sold(game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, payout: u128) {}
 
     #[event]
-    fn MarketEvent(game_id: felt252, player_id: felt252, event_name: felt252) {}
+    fn TradeRisk(game_id: felt252, player_id: felt252, event_name: felt252) {}
 
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let block_info = starknet::get_block_info().unbox();
@@ -102,8 +103,7 @@ mod Sell {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let player = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
-        let (name, location, cash) = player;
+        let (name, location, cash)  = commands::<Name, Location, Cash>::entity((game_id, (player_id)).into());
 
         let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
         let player_quantity = match maybe_drug {
@@ -112,11 +112,11 @@ mod Sell {
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
-        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
+        let (market, risks) = commands::<Market, Risks>::entity((game_id, (location_id, drug_id)).into());
         let payout = market.sell(quantity);
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let (event_name, money_loss, drug_loss) = market.risk_event(seed);
+        let (event_name, money_loss, drug_loss) = risks.trade(seed);
 
         // update market
         commands::set_entity((game_id, (location_id, drug_id)).into(), (
@@ -137,7 +137,7 @@ mod Sell {
             }
         ));
 
-        if event_name != 'none' { MarketEvent(game_id, player_id, event_name) }
+        if event_name != 'none' { TradeRisk(game_id, player_id, event_name) }
         Sold(game_id, player_id, drug_id, quantity, payout);
         ();
     }
