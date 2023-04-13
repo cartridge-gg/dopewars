@@ -41,34 +41,22 @@ impl LocationImpl of LocationTrait {
         // TODO: probablity of events happening
         let event = Event::None(());
 
-        let mut money_loss = 0_u128;
-        let mut health_loss = 0_u8;
-        let mut respect_loss = 0_u8;
-        let mut arrested = false;
-        let mut killed = false;
-
-        let event_name = match event {
+        match event {
             Event::None(_) => {
-                'none'
+                ('none', false, false, 0_u128, 0_u8, 0_u8)
             },
-            Event::Hurt(x) => { 
-                health_loss = x;
-                'hurt'
+            Event::Hurt(health_loss) => { 
+                ('hurt', false, false, 0_u128, health_loss, 0_u8)
             },
             Event::Killed(_) => {
-                killed = true;
-                'killed'
+                ('killed', false, true, 0_u128, 0_u8, 0_u8)
             },
-            Event::Mugged(x) => {
-                money_loss = x;
-                'mugged'
+            Event::Mugged(money_loss) => {
+                ('mugged', false, false, money_loss, 0_u8, 0_u8)
             },
             Event::Arrested(_) => {
-                arrested = true;
-                'arrested'
+                ('arrested', true, false, 0_u128, 0_u8, 0_u8)
             },
-        };
-        
-        (event_name, arrested, killed, money_loss, health_loss, respect_loss)
+        }
     }
 }

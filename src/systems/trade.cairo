@@ -42,7 +42,7 @@ mod Buy {
         assert(cost < cash.amount, 'not enough cash');
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let event = market.risk_event(seed);
+        let (event_name, money_loss, drug_loss) = market.risk_event(seed);
 
         // update market
         commands::set_entity((game_id, (location_id, drug_id)).into(), (
@@ -68,6 +68,7 @@ mod Buy {
             }
         ));
 
+        if event_name != 'none' { MarketEvent(game_id, player_id, event_name) }
         Bought(game_id, player_id, drug_id, quantity, cost);
         ();
     }
@@ -114,6 +115,9 @@ mod Sell {
         let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
         let payout = market.sell(quantity);
 
+        let seed = starknet::get_tx_info().unbox().transaction_hash;
+        let (event_name, money_loss, drug_loss) = market.risk_event(seed);
+
         // update market
         commands::set_entity((game_id, (location_id, drug_id)).into(), (
             Market {
@@ -133,6 +137,7 @@ mod Sell {
             }
         ));
 
+        if event_name != 'none' { MarketEvent(game_id, player_id, event_name) }
         Sold(game_id, player_id, drug_id, quantity, payout);
         ();
     }
