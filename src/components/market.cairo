@@ -11,25 +11,60 @@ struct Market {
     quantity: usize,
 }
 
+#[derive(Drop)]
+enum Event {
+    None: (),
+    Hacked: u128,
+    Rugged: u128,
+    Slippage: u128,
+    Chain_Halted: (),
+}
+
 trait MarketTrait {
     fn buy(self: Market, quantity: usize) -> u128; 
     fn sell(self: Market, quantity: usize) ->  u128; 
+    fn risk_event(self: Market, seed: felt252) -> felt252;
 }
 
 impl MarketImpl of MarketTrait {
-    fn buy(market: Market, amount: usize) -> u128 {
-        assert(amount < market.quantity, 'not enough liquidity');     
-        let (amount, available, cash) = normalize(amount, market);
+    fn buy(self: Market, amount: usize) -> u128 {
+        assert(amount < self.quantity, 'not enough liquidity');     
+        let (amount, available, cash) = normalize(amount, self);
         let k = cash * available;
         let cost = (k / (available - amount)) - cash;
         cost
     }
 
-    fn sell(market: Market, amount: usize) ->  u128 {
-        let (amount, available, cash) = normalize(amount, market);
+    fn sell(self: Market, amount: usize) ->  u128 {
+        let (amount, available, cash) = normalize(amount, self);
         let k = cash * available;
         let payout = cash - (k / (available + amount));
         payout
+    }
+
+    fn risk_event(self: Market, seed: felt252) -> felt252 {
+        // TODO: probablity of market events
+        let event = Event::None(());
+
+        let event_name = match event {
+            Event::None(_) => {
+                'none'
+            },
+            Event::Hacked(x) => {
+                'hacked'
+            },
+            Event::Rugged(x) => {
+                'rugged'
+            },
+            Event::Slippage(x) => {
+                'slippage'
+            },
+            Event::Chain_Halted(_) => {
+                'chain_halted'
+            }
+        };
+
+        (event_name)
     }
 }
 
