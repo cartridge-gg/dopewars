@@ -29,8 +29,8 @@ mod SpawnPlayer {
                     }, Stats {
                     health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: game.max_turns
                     }, Cash {
-                    amount: 100_u128 * SCALING_FACTOR
-                } // $100
+                    amount: 100_u128 * SCALING_FACTOR // $100
+                }
             )
         );
 

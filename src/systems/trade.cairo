@@ -20,9 +20,6 @@ mod Buy {
         game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, cost: u128
     ) {}
 
-    #[event]
-    fn TradeRisk(game_id: felt252, player_id: felt252, event_name: felt252) {}
-
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
     // 3. Ensure user can afford it.
@@ -31,7 +28,6 @@ mod Buy {
     // 6. Update the player's inventory.
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let block_info = starknet::get_block_info().unbox();
-
         let game = commands::<Game>::entity(game_id.into());
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
@@ -45,8 +41,9 @@ mod Buy {
         let cost = market.buy(quantity);
         assert(cost < cash.amount, 'not enough cash');
 
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let (event_name, money_loss, drug_loss) = risks.trade(seed);
+        // FIX: moving this to end of function for some reason causes
+        // dojo-test error: #4864: Inconsistent references annotations.
+        Bought(game_id, player_id, drug_id, quantity, cost);
 
         // update market
         commands::set_entity(
@@ -67,12 +64,6 @@ mod Buy {
             (game_id, (player_id, drug_id)).into(),
             (Drug { id: drug_id, quantity: player_quantity })
         );
-
-        if event_name != 'none' {
-            TradeRisk(game_id, player_id, event_name)
-        }
-        Bought(game_id, player_id, drug_id, quantity, cost);
-        ();
     }
 }
 
@@ -98,9 +89,6 @@ mod Sell {
         game_id: felt252, player_id: felt252, drug_id: felt252, quantity: usize, payout: u128
     ) {}
 
-    #[event]
-    fn TradeRisk(game_id: felt252, player_id: felt252, event_name: felt252) {}
-
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
         let block_info = starknet::get_block_info().unbox();
 
@@ -123,9 +111,6 @@ mod Sell {
         Risks>::entity((game_id, (location_id, drug_id)).into());
         let payout = market.sell(quantity);
 
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let (event_name, money_loss, drug_loss) = risks.trade(seed);
-
         // update market
         commands::set_entity(
             (game_id, (location_id, drug_id)).into(),
@@ -141,11 +126,7 @@ mod Sell {
             (Drug { id: drug_id, quantity: player_quantity - quantity })
         );
 
-        if event_name != 'none' {
-            TradeRisk(game_id, player_id, event_name)
-        }
         Sold(game_id, player_id, drug_id, quantity, payout);
-        ();
     }
 }
 //This causes a libfunc error
@@ -168,4 +149,5 @@ mod Sell {
 //         let pos = maybe_pos.unwrap(); // seems like any method call errs (is_none(), is_some(), etc)
 //     }
 // }
+
 

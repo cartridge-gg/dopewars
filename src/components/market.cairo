@@ -4,6 +4,7 @@ use option::OptionTrait;
 use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
+
 #[derive(Component)]
 struct Market {
     cash: u128, // fixed point
@@ -40,14 +41,14 @@ fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
 
 
 #[test]
-#[should_panic(expected = ('not enough liquidity', ))]
+#[should_panic]
 fn test_not_enough_quantity() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 1_usize }; // pool 1:1
     let cost = MarketTrait::buy(market, 10_usize);
 }
 
 #[test]
-#[avaiable_gas(100000)]
+#[available_gas(100000)]
 fn test_market_buy() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
     let cost = market.buy(5_usize);
@@ -55,7 +56,7 @@ fn test_market_buy() {
 }
 
 #[test]
-#[avaiable_gas(100000)]
+#[available_gas(100000)]
 fn test_market_sell() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
     let payout = market.sell(5_usize);

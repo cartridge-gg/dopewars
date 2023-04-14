@@ -13,12 +13,21 @@ mod Travel {
     use rollyourown::components::player::StatsTrait;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::risks::RisksTrait;
+    use rollyourown::components::risks::TravelResult;
 
     #[event]
     fn Traveled(game_id: felt252, player_id: felt252, from_location_id: u32, to_location_id: u32) {}
 
     #[event]
-    fn TravelEvent(game_id: felt252, player_id: felt252, event_name: felt252) {}
+    fn RandomEvent(
+        game_id: felt252,
+        player_id: felt252,
+        health_loss: u8,
+        money_loss: u128,
+        respect_loss: u8,
+        arrested: bool,
+        killed: bool
+    ) {}
 
     // 1. Verify the caller owns the player.
     // 2. Determine if a random travel event occurs and apply it if necessary.
@@ -43,12 +52,9 @@ mod Travel {
         Risks>::entity((game_id, (next_location_id.into())).into());
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
-        let (event_name, arrested, killed, money_loss, health_loss, respect_loss) = risks.travel(
-            seed
-        );
-
-        let updated_health = match killed {
-            bool::False(()) => stats.health - health_loss,
+        let (event_occured, result) = risks.travel(seed);
+        let updated_health = match result.killed {
+            bool::False(()) => stats.health - result.health_loss,
             bool::True(()) => 0_u8,
         };
 
@@ -59,20 +65,28 @@ mod Travel {
                 Location {
                     id: next_location_id
                     }, Cash {
-                    amount: cash.amount - money_loss
+                    amount: cash.amount - result.money_loss
                     }, Stats {
                     health: updated_health,
-                    respect: stats.respect - respect_loss,
-                    arrested,
+                    respect: stats.respect - result.respect_loss,
+                    arrested: result.arrested,
                     turns_remaining: stats.turns_remaining - 1_usize,
                 },
             )
         );
 
-        if event_name != 'none' {
-            TravelEvent(game_id, player_id, event_name)
+        if event_occured {
+            RandomEvent(
+                game_id,
+                player_id,
+                result.health_loss,
+                result.money_loss,
+                result.respect_loss,
+                result.arrested,
+                result.killed
+            );
         }
+
         Traveled(game_id, player_id, location.id, next_location_id);
-        ()
     }
 }
