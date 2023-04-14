@@ -35,8 +35,7 @@ mod Buy {
         let (name, location, cash) = commands::<Name,
         Location,
         Cash>::entity((game_id, (player_id)).into());
-        let (market, risks) = commands::<Market,
-        Risks>::entity((game_id, (location_id, drug_id)).into());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
 
         let cost = market.buy(quantity);
         assert(cost < cash.amount, 'not enough cash');
@@ -107,8 +106,7 @@ mod Sell {
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
-        let (market, risks) = commands::<Market,
-        Risks>::entity((game_id, (location_id, drug_id)).into());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
         let payout = market.sell(quantity);
 
         // update market

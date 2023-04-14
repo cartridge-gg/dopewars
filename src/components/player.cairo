@@ -5,7 +5,7 @@ struct Name {
 
 #[derive(Component)]
 struct Cash {
-    amount: u128, // fixed point                
+    amount: u128, // fixed point                                         
 }
 
 #[derive(Component)]

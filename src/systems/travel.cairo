@@ -16,7 +16,9 @@ mod Travel {
     use rollyourown::components::risks::TravelResult;
 
     #[event]
-    fn Traveled(game_id: felt252, player_id: felt252, from_location_id: u32, to_location_id: u32) {}
+    fn Traveled(
+        game_id: felt252, player_id: felt252, from_location_id: felt252, to_location_id: felt252
+    ) {}
 
     #[event]
     fn RandomEvent(
@@ -33,7 +35,7 @@ mod Travel {
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
-    fn execute(game_id: felt252, next_location_id: u32) {
+    fn execute(game_id: felt252, next_location_id: felt252) {
         let block_info = starknet::get_block_info().unbox();
 
         let game = commands::<Game>::entity(game_id.into());
@@ -49,7 +51,7 @@ mod Travel {
         assert(stats.can_continue(), 'cannot continue');
 
         let (next_location, risks) = commands::<Location,
-        Risks>::entity((game_id, (next_location_id.into())).into());
+        Risks>::entity((game_id, (next_location_id)).into());
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
