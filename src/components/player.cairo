@@ -1,11 +1,11 @@
 #[derive(Component)]
 struct Name {
-    name: felt252,
+    name: felt252, 
 }
 
 #[derive(Component)]
 struct Cash {
-    amount: u128,  // fixed point
+    amount: u128, // fixed point 
 }
 
 #[derive(Component)]
@@ -22,9 +22,15 @@ trait StatsTrait {
 
 impl StatsImpl of StatsTrait {
     fn can_continue(self: Stats) -> bool {
-        if self.arrested { return false; }
-        if self.health == 0_u8 { return false; }
-        if self.turns_remaining == 0_usize { return false; }
+        if self.arrested {
+            return false;
+        }
+        if self.health == 0_u8 {
+            return false;
+        }
+        if self.turns_remaining == 0_usize {
+            return false;
+        }
 
         true
     }

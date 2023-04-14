@@ -31,21 +31,21 @@ mod Travel {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (name, location, stats, cash)  = commands::<Name, Location, Stats, Cash>::entity((game_id, (player_id)).into());
-        
+        let (name, location, stats, cash) = commands::<Name,
+        Location,
+        Stats,
+        Cash>::entity((game_id, (player_id)).into());
+
         assert(location.id != next_location_id, 'already at location');
         assert(stats.can_continue(), 'cannot continue');
 
-        let (next_location, risks) = commands::<Location, Risks>::entity((game_id, (next_location_id.into())).into());
+        let (next_location, risks) = commands::<Location,
+        Risks>::entity((game_id, (next_location_id.into())).into());
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
-        let (event_name, 
-            arrested, 
-            killed,
-            money_loss, 
-            health_loss, 
-            respect_loss
-        ) = risks.travel(seed);
+        let (event_name, arrested, killed, money_loss, health_loss, respect_loss) = risks.travel(
+            seed
+        );
 
         let updated_health = match killed {
             bool::False(()) => stats.health - health_loss,
@@ -53,18 +53,25 @@ mod Travel {
         };
 
         // update player
-        commands::set_entity((game_id, (player_id)).into(), (
-            Location { id: next_location_id },
-            Cash { amount: cash.amount - money_loss },
-            Stats {
-                health: updated_health,
-                respect: stats.respect - respect_loss,
-                arrested,
-                turns_remaining: stats.turns_remaining - 1_usize,
-            },
-        ));
+        commands::set_entity(
+            (game_id, (player_id)).into(),
+            (
+                Location {
+                    id: next_location_id
+                    }, Cash {
+                    amount: cash.amount - money_loss
+                    }, Stats {
+                    health: updated_health,
+                    respect: stats.respect - respect_loss,
+                    arrested,
+                    turns_remaining: stats.turns_remaining - 1_usize,
+                },
+            )
+        );
 
-        if event_name != 'none' { TravelEvent(game_id, player_id, event_name) }
+        if event_name != 'none' {
+            TravelEvent(game_id, player_id, event_name)
+        }
         Traveled(game_id, player_id, location.id, next_location_id);
         ()
     }

@@ -5,6 +5,6 @@ use debug::PrintTrait;
 
 #[derive(Component)]
 struct Location {
-    id: u32,
+    id: u32, 
 }
 

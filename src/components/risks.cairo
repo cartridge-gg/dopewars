@@ -24,8 +24,7 @@ struct Risks {
     killed: u8,
     mugged: u8,
     arrested: u8,
-
-    // trade ris probabilities
+    // trade risk probabilities
     hacked: u8,
     rugged: u8,
     slippage: u8,
@@ -40,24 +39,23 @@ trait RisksTrait {
 
 impl RisksImpl of RisksTrait {
     fn travel(
-        self: Risks, 
-        seed: felt252
+        self: Risks, seed: felt252
     ) -> (
-        felt252,    // event_name
-        bool,       // arrested
-        bool,       // killed
-        u128,       // money_loss
-        u8,         // health_loss
-        u8          // respect_loss
+        felt252, // event_name
+        bool, // arrested
+        bool, // killed
+        u128, // money_loss
+        u8, // health_loss
+        u8 // respect_loss
     ) {
-         // TODO: probablity of travel events
+        // TODO: probablity of travel events
         let event = TravelEvent::None(());
 
         match event {
             TravelEvent::None(_) => {
                 ('none', false, false, 0_u128, 0_u8, 0_u8)
             },
-            TravelEvent::Hurt(health_loss) => { 
+            TravelEvent::Hurt(health_loss) => {
                 ('hurt', false, false, 0_u128, health_loss, 0_u8)
             },
             TravelEvent::Killed(_) => {
@@ -73,12 +71,10 @@ impl RisksImpl of RisksTrait {
     }
 
     fn trade(
-        self: Risks, 
-        seed: felt252
-    ) -> (
-        felt252,    // event_name 
-        u128,       // money_loss
-        usize       // drug_loss
+        self: Risks, seed: felt252
+    ) -> (felt252, // event_name 
+     u128, // money_loss
+     usize // drug_loss
     ) {
         // TODO: probablity of trade events
         let event = TradeEvent::None(());
