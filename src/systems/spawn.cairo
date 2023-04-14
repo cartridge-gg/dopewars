@@ -1,10 +1,10 @@
 #[system]
 mod SpawnPlayer {
     use traits::Into;
+    use box::BoxTrait;
     use array::ArrayTrait;
 
     use rollyourown::components::game::Game;
-    use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
     use rollyourown::constants::SCALING_FACTOR;
@@ -12,11 +12,14 @@ mod SpawnPlayer {
     #[event]
     fn PlayerJoined(game_id: felt252, player_id: felt252) {}
 
-    fn execute(game_id: felt252, name: felt252) {
+    fn execute(game_id: felt252) {
+        let block_info = starknet::get_block_info().unbox();
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
+        assert(game.start_time < block_info.block_timestamp, 'already started');
+
 
         let players = commands::<(Game, Player)>::entities();
         assert(game.max_players > players.len(), 'max players');
@@ -24,9 +27,7 @@ mod SpawnPlayer {
         commands::set_entity(
             (game_id, (player_id)).into(),
             (
-                Name {
-                    name: name
-                    }, Stats {
+                Stats {
                     health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: game.max_turns
                     }, Cash {
                     amount: 100_u128 * SCALING_FACTOR // $100
@@ -141,6 +142,9 @@ mod SpawnGame {
     use traits::Into;
 
     use rollyourown::components::game::Game;
+    use rollyourown::components::player::Cash;
+    use rollyourown::components::player::Stats;
+    use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
     fn GameCreated(game_id: felt252, creator: felt252) {}
@@ -159,6 +163,17 @@ mod SpawnGame {
                 creator: player_id,
                 max_locations
             })
+        );
+
+        commands::set_entity(
+            (game_id, (player_id)).into(),
+            (
+                Stats {
+                    health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: max_turns
+                    }, Cash {
+                    amount: 100_u128 * SCALING_FACTOR // $100
+                }
+            )
         );
 
         GameCreated(game_id, player_id);

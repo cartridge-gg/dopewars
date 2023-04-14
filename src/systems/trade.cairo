@@ -10,7 +10,6 @@ mod Buy {
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
-    use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::risks::RisksTrait;
@@ -32,9 +31,7 @@ mod Buy {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (name, location, cash) = commands::<Name,
-        Location,
-        Cash>::entity((game_id, (player_id)).into());
+        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());
         let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
 
         let cost = market.buy(quantity);
@@ -78,7 +75,6 @@ mod Sell {
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
-    use rollyourown::components::player::Name;
     use rollyourown::components::player::Cash;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::risks::RisksTrait;
@@ -95,9 +91,7 @@ mod Sell {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (name, location, cash) = commands::<Name,
-        Location,
-        Cash>::entity((game_id, (player_id)).into());
+        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());
 
         let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
         let player_quantity = match maybe_drug {

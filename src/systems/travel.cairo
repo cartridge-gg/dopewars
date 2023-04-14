@@ -6,7 +6,6 @@ mod Travel {
 
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameTrait;
-    use rollyourown::components::player::Name;
     use rollyourown::components::location::Location;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
@@ -42,8 +41,7 @@ mod Travel {
         assert(game.tick(block_info.block_timestamp), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (name, location, stats, cash) = commands::<Name,
-        Location,
+        let (location, stats, cash) = commands::<Location,
         Stats,
         Cash>::entity((game_id, (player_id)).into());
 
