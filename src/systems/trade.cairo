@@ -1,7 +1,6 @@
 #[system]
 mod Buy {
     use traits::Into;
-    use box::BoxTrait;
     use array::ArrayTrait;
 
     use rollyourown::components::game::Game;
@@ -26,9 +25,8 @@ mod Buy {
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
-        let block_info = starknet::get_block_info().unbox();
         let game = commands::<Game>::entity(game_id.into());
-        assert(game.tick(block_info.block_timestamp), 'cannot progress');
+        assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
         let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());
@@ -66,7 +64,6 @@ mod Buy {
 #[system]
 mod Sell {
     use traits::Into;
-    use box::BoxTrait;
     use array::ArrayTrait;
 
     use rollyourown::components::game::Game;
@@ -85,10 +82,8 @@ mod Sell {
     ) {}
 
     fn execute(game_id: felt252, location_id: felt252, drug_id: felt252, quantity: usize) {
-        let block_info = starknet::get_block_info().unbox();
-
         let game = commands::<Game>::entity(game_id.into());
-        assert(game.tick(block_info.block_timestamp), 'cannot progress');
+        assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
         let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());

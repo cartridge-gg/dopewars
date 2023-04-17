@@ -1,3 +1,5 @@
+use box::BoxTrait;
+
 #[derive(Component)]
 struct Game {
     start_time: u64,
@@ -10,12 +12,14 @@ struct Game {
 
 
 trait GameTrait {
-    fn tick(self: @Game, current_time: u64) -> bool;
+    fn tick(self: @Game) -> bool;
 }
 
 impl GameImpl of GameTrait {
-    fn tick(self: @Game, current_time: u64) -> bool {
-        if current_time < *self.start_time {
+    fn tick(self: @Game) -> bool {
+        let info = starknet::get_block_info().unbox();
+
+        if info.block_timestamp < *self.start_time {
             return false;
         }
         if *self.is_finished {

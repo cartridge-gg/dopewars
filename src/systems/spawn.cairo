@@ -20,7 +20,6 @@ mod SpawnPlayer {
         assert(!game.is_finished, 'game is finished');
         assert(game.start_time < block_info.block_timestamp, 'already started');
 
-
         let players = commands::<(Game, Player)>::entities();
         assert(game.max_players > players.len(), 'max players');
 

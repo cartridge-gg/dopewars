@@ -35,10 +35,8 @@ mod Travel {
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
     fn execute(game_id: felt252, next_location_id: felt252) {
-        let block_info = starknet::get_block_info().unbox();
-
         let game = commands::<Game>::entity(game_id.into());
-        assert(game.tick(block_info.block_timestamp), 'cannot progress');
+        assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
         let (location, stats, cash) = commands::<Location,
