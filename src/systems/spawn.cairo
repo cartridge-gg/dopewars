@@ -67,7 +67,7 @@ mod SpawnLocation {
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time < block_info.block_timestamp, 'already started');
 
-        let locations = commands::<(Game, Location)>::entities(); // how do we specify game_id?
+        let locations = commands::<(Game, Location)>::entities(game_id);
         assert(locations.len() < game.max_locations, 'max locations');
 
         let location_id = commands::uuid();
@@ -179,4 +179,3 @@ mod SpawnGame {
         GameCreated(game_id, player_id);
     }
 }
-

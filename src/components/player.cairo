@@ -12,18 +12,18 @@ struct Stats {
 }
 
 trait StatsTrait {
-    fn can_continue(self: Stats) -> bool;
+    fn can_continue(self: @Stats) -> bool;
 }
 
 impl StatsImpl of StatsTrait {
-    fn can_continue(self: Stats) -> bool {
-        if self.arrested {
+    fn can_continue(self: @Stats) -> bool {
+        if *self.arrested {
             return false;
         }
-        if self.health == 0_u8 {
+        if *self.health == 0_u8 {
             return false;
         }
-        if self.turns_remaining == 0_usize {
+        if *self.turns_remaining == 0_usize {
             return false;
         }
 

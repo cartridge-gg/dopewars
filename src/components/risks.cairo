@@ -37,12 +37,12 @@ struct Risks {
 }
 
 trait RisksTrait {
-    fn travel(self: Risks, seed: felt252) -> (bool, TravelResult);
-    fn trade(self: Risks, seed: felt252) -> (bool, TradeResult);
+    fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult);
+    fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult);
 }
 
 impl RisksImpl of RisksTrait {
-    fn travel(self: Risks, seed: felt252) -> (bool, TravelResult) {
+    fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult) {
         let mut seed = seed;
         let mut health_loss = 0_u8;
         let mut money_loss = 0_u128;
@@ -52,30 +52,30 @@ impl RisksImpl of RisksTrait {
         let mut event_occured = false;
 
         if occurs(
-            seed, self.travel
+            seed, *self.travel
         ) {
             seed = pedersen(seed, seed);
-            if occurs(seed, self.hurt) {
+            if occurs(seed, *self.hurt) {
                 health_loss = 5_u8;
                 event_occured = true;
             }
 
             seed = pedersen(seed, seed);
             if occurs(
-                seed, self.mugged
+                seed, *self.mugged
             ) {
                 money_loss = 20_u128 * SCALING_FACTOR;
                 event_occured = true;
             }
 
             seed = pedersen(seed, seed);
-            if occurs(seed, self.arrested) {
+            if occurs(seed, *self.arrested) {
                 arrested = true;
                 event_occured = true;
             }
 
             seed = pedersen(seed, seed);
-            if occurs(seed, self.killed) {
+            if occurs(seed, *self.killed) {
                 killed = true;
                 event_occured = true;
             }
@@ -84,7 +84,7 @@ impl RisksImpl of RisksTrait {
         (event_occured, TravelResult { money_loss, health_loss, respect_loss, arrested, killed })
     }
 
-    fn trade(self: Risks, seed: felt252) -> (bool, TradeResult) {
+    fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult) {
         let mut money_loss = 0_u128;
         let mut drug_loss = 0_usize;
 

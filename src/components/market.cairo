@@ -12,20 +12,20 @@ struct Market {
 }
 
 trait MarketTrait {
-    fn buy(self: Market, quantity: usize) -> u128;
-    fn sell(self: Market, quantity: usize) -> u128;
+    fn buy(self: @Market, quantity: usize) -> u128;
+    fn sell(self: @Market, quantity: usize) -> u128;
 }
 
 impl MarketImpl of MarketTrait {
-    fn buy(self: Market, amount: usize) -> u128 {
-        assert(amount < self.quantity, 'not enough liquidity');
+    fn buy(self: @Market, amount: usize) -> u128 {
+        assert(amount < *self.quantity, 'not enough liquidity');
         let (amount, available, cash) = normalize(amount, self);
         let k = cash * available;
         let cost = (k / (available - amount)) - cash;
         cost
     }
 
-    fn sell(self: Market, amount: usize) -> u128 {
+    fn sell(self: @Market, amount: usize) -> u128 {
         let (amount, available, cash) = normalize(amount, self);
         let k = cash * available;
         let payout = cash - (k / (available + amount));
@@ -33,10 +33,10 @@ impl MarketImpl of MarketTrait {
     }
 }
 
-fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
+fn normalize(amount: usize, market: @Market) -> (u128, u128, u128) {
     let amount: u128 = amount.into().try_into().unwrap() * SCALING_FACTOR;
-    let available: u128 = market.quantity.into().try_into().unwrap() * SCALING_FACTOR;
-    (amount, available, market.cash)
+    let available: u128 = (*market.quantity).into().try_into().unwrap() * SCALING_FACTOR;
+    (amount, available, *market.cash)
 }
 
 
@@ -44,7 +44,7 @@ fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
 #[should_panic]
 fn test_not_enough_quantity() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 1_usize }; // pool 1:1
-    let cost = MarketTrait::buy(market, 10_usize);
+    let cost = market.buy(10_usize);
 }
 
 #[test]
