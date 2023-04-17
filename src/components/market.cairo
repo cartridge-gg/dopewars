@@ -41,7 +41,7 @@ fn normalize(amount: usize, market: @Market) -> (u128, u128, u128) {
 
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('not enough liquidity', ))]
 fn test_not_enough_quantity() {
     let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 1_usize }; // pool 1:1
     let cost = market.buy(10_usize);
