@@ -8,10 +8,6 @@ import {
   useDisclosure,
   VStack,
   Container,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
   HStack,
   Divider,
   StyleProps,
@@ -45,32 +41,51 @@ import { number } from "starknet";
 import NextLink from "next/link";
 import { Weed } from "@/components/icons/drugs";
 import Button from "@/components/Button";
+import {
+  Chameleon,
+  Elephant,
+  Octopus,
+  Squirrel,
+} from "@/components/icons/animals";
+import { ReactNode } from "react";
+
+const drugs: CardProps[] = [
+  {
+    name: "Ludes",
+    price: 100,
+    quantity: 2,
+    icon: <Chameleon />,
+  },
+  {
+    name: "Speed",
+    price: 200,
+    quantity: 5,
+    icon: <Squirrel />,
+  },
+  {
+    name: "Weed",
+    price: 250,
+    quantity: 1,
+    icon: <Elephant />,
+  },
+  {
+    name: "Acid",
+    price: 69,
+    quantity: 10,
+    icon: <Octopus />,
+  },
+];
 
 export default function Home() {
   const router = useRouter();
   return (
     <>
       <Container centerContent>
-        <VStack minW="500px" gap="10px">
-          <SimpleGrid
-            columns={2}
-            w="full"
-            spacing="20px"
-            fontSize="20px"
-            color="neon.600"
-          >
-            <VStack layerStyle="card" height="200px" p="10px">
-              <Text>LUDES</Text>
-            </VStack>
-            <VStack layerStyle="card" height="200px" p="10px">
-              <Text>SPEED</Text>
-            </VStack>
-            <VStack layerStyle="card" height="200px" p="10px">
-              <Text>ACID</Text>
-            </VStack>
-            <VStack layerStyle="card" height="200px" p="10px">
-              <Text>WEED</Text>
-            </VStack>
+        <VStack minW="500px" gap="18px">
+          <SimpleGrid columns={2} w="full" gap="36px" fontSize="20px">
+            {drugs.map((drug, index) => (
+              <Card {...drug} key={index} />
+            ))}
           </SimpleGrid>
           <HStack w="full" gap="inherit">
             <Button flex="1">Buy</Button>
@@ -86,3 +101,36 @@ export default function Home() {
     </>
   );
 }
+
+interface CardProps {
+  name: string;
+  price: number;
+  quantity: number;
+  icon: ReactNode;
+}
+
+const Card = ({
+  name,
+  price,
+  quantity,
+  icon,
+  ...props
+}: CardProps & StyleProps) => (
+  <VStack
+    layerStyle="card"
+    justifyContent="space-between"
+    height="180px"
+    p="10px"
+    {...props}
+  >
+    <Text>{name}</Text>
+    <Box bgColor="neon.800" borderRadius="6px">
+      {icon}
+    </Box>
+    <HStack w="full" px="20px" fontSize="16px">
+      <Text>${price}</Text>
+      <Spacer />
+      <Text>qty: {quantity}</Text>
+    </HStack>
+  </VStack>
+);

@@ -19,7 +19,7 @@ export const layerStyles = {
     borderWidth: "2px",
     borderImageSlice: "4",
     borderImageWidth: "4px",
-    borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+    borderImageSource: `url("data:image/svg+xml,${BorderImage("11ED83")}")`,
     _before: {
       content: '""',
       position: "absolute",
@@ -31,7 +31,7 @@ export const layerStyles = {
       borderWidth: "2px",
       borderImageSlice: "4",
       borderImageWidth: "0 6px 6px 0",
-      borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("11ED83")}")`,
     },
   },
 };
