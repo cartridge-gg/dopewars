@@ -3,7 +3,8 @@ export const styles = {
   global: {
     body: {
       height: "100vh",
-      color: "white",
+      bgColor: "neon.900",
+      color: "neon.200",
     },
   },
 };
@@ -16,7 +17,7 @@ export const layerStyles = {
     borderStyle: "solid",
     borderWidth: "2px",
     borderRadius: "4px",
-    color: "white",
+    color: "neon.200",
     padding: "12px",
   },
 };
