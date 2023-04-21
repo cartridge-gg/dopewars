@@ -1,3 +1,5 @@
+import BorderImage from "@/components/icons/BorderImage";
+
 //global styles
 export const styles = {
   global: {
@@ -12,13 +14,25 @@ export const styles = {
 //layer styles
 export const layerStyles = {
   card: {
-    bgColor: "gray.800",
-    borderColor: "gray.900",
+    position: "relative",
     borderStyle: "solid",
     borderWidth: "2px",
-    borderRadius: "4px",
-    color: "neon.200",
-    padding: "12px",
+    borderImageSlice: "4",
+    borderImageWidth: "4px",
+    borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+    _before: {
+      content: '""',
+      position: "absolute",
+      bottom: "-4px",
+      right: "-4px",
+      height: "100%",
+      width: "100%",
+      borderStyle: "solid",
+      borderWidth: "2px",
+      borderImageSlice: "4",
+      borderImageWidth: "0 6px 6px 0",
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+    },
   },
 };
 

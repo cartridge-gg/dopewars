@@ -17,6 +17,7 @@ import {
   StyleProps,
   SystemProps,
   Box,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import {
   Cartridge,
@@ -50,15 +51,35 @@ export default function Home() {
   return (
     <>
       <Container centerContent>
-        <VStack minW="600px" gap="10px">
+        <VStack minW="500px" gap="10px">
+          <SimpleGrid
+            columns={2}
+            w="full"
+            spacing="20px"
+            fontSize="20px"
+            color="neon.600"
+          >
+            <VStack layerStyle="card" height="200px" p="10px">
+              <Text>LUDES</Text>
+            </VStack>
+            <VStack layerStyle="card" height="200px" p="10px">
+              <Text>SPEED</Text>
+            </VStack>
+            <VStack layerStyle="card" height="200px" p="10px">
+              <Text>ACID</Text>
+            </VStack>
+            <VStack layerStyle="card" height="200px" p="10px">
+              <Text>WEED</Text>
+            </VStack>
+          </SimpleGrid>
           <HStack w="full" gap="inherit">
-            <Button flex="1">Sell</Button>
             <Button flex="1">Buy</Button>
+            <Button flex="1" isDisabled>
+              Sell
+            </Button>
           </HStack>
           <HStack w="full" gap="inherit">
-            <Button flex="1" isDisabled>
-              Disabled
-            </Button>
+            <Button flex="1">Travel and end turn</Button>
           </HStack>
         </VStack>
       </Container>
