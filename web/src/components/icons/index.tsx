@@ -12,33 +12,24 @@ export const Icon = ({
   ...rest
 }: { children: React.ReactElement<SVGPathElement> } & IconProps) => {
   return (
-    <ChakraIcon viewBox="0 0 24 24" fill="currentColor" {...rest}>
+    <ChakraIcon viewBox="0 0 36 36" fill="currentColor" {...rest}>
       {children}
     </ChakraIcon>
   );
 };
 
-export * from "./City";
+export * from "./Car";
+export * from "./Bag";
+export * from "./Gem";
 export * from "./Chat";
-export * from "./Cart";
-export * from "./Road";
-export * from "./User";
-export * from "./Check";
-export * from "./Users";
+export * from "./Home";
+export * from "./Link";
+export * from "./Arrow";
 export * from "./Clock";
-export * from "./Arrow"; // up, down, right, left variant
-export * from "./Wallet";
-export * from "./Argent";
-export * from "./Avatar";
-export * from "./Connect";
-export * from "./Sparkle"; // has mirrored variant
-export * from "./Calendar";
-export * from "./Cigarette";
-export * from "./Cartridge";
-export * from "./Disconnect";
 
-// Template for adding new icons. When copying svg from figma, make sure to
-// select parent bounding box so dimension is 24x24
+// Template for adding new icons. When copying svg from figma, viewBox is assumed
+// to be 36x36, otherwise override within individual icons.
+//
 // import { Icon, IconProps } from ".";
 //
 // export const IconName = (props: IconProps) => {

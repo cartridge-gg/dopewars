@@ -11,6 +11,7 @@
   "dependencies": {
     "@cartridge/connector": "^0.3.15",
     "@cartridge/controller": "^0.3.15",
+    "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
