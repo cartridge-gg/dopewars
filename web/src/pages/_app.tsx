@@ -9,7 +9,7 @@ import { GameConfigProvider } from "@/hooks/config";
 import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
-import localFont from "@next/font/local";
+import Fonts from "@/theme/fonts";
 
 export const controllerConnector = new ControllerConnector([
   {
@@ -24,24 +24,14 @@ export const argentConnector = new InjectedConnector({
 });
 export const connectors = [controllerConnector as any, argentConnector];
 
-const chicagoFont = localFont({
-  src: [
-    {
-      path: "../../public/fonts/DOS_VGA.ttf",
-      style: "normal",
-    },
-  ],
-});
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <StarknetProvider connectors={connectors}>
       <ChakraProvider theme={theme}>
+        <Fonts />
         <ModalProvider>
           <GameConfigProvider>
-            <main className={chicagoFont.className}>
-              <Component {...pageProps} />
-            </main>
+            <Component {...pageProps} />
           </GameConfigProvider>
         </ModalProvider>
       </ChakraProvider>

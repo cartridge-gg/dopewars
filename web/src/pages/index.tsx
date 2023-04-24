@@ -15,6 +15,7 @@ import {
   Box,
   SimpleGrid,
   useToken,
+  Heading,
 } from "@chakra-ui/react";
 import {
   Cartridge,
@@ -76,6 +77,7 @@ export default function Home() {
   return (
     <>
       <Container centerContent>
+        <Heading size="24px">Brooklyn</Heading>
         <VStack minW="500px" gap="18px">
           <SimpleGrid columns={2} w="full" gap="36px" fontSize="20px">
             {drugs.map((drug, index) => (
