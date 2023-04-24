@@ -16,6 +16,10 @@ import {
   SimpleGrid,
   useToken,
   Heading,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
 } from "@chakra-ui/react";
 import { Chat } from "@/components/icons";
 import { css } from "@emotion/react";
@@ -37,7 +41,14 @@ import Button from "@/components/Button";
 import { Ludes, Weed, Acid, Speed } from "@/components/icons/drugs";
 import { ReactNode } from "react";
 
-const drugs: CardProps[] = [
+interface DrugProps {
+  name: string;
+  price: number;
+  quantity: number;
+  icon: ReactNode;
+}
+
+const drugs: DrugProps[] = [
   {
     name: "Ludes",
     price: 100,
@@ -68,11 +79,28 @@ export default function Home() {
   const router = useRouter();
   return (
     <>
+      <Header />
       <Container centerContent>
-        <VStack minW="500px" gap="18px">
-          <SimpleGrid columns={2} w="full" gap="36px" fontSize="20px">
+        <VStack minW="500px" gap="9px">
+          <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {drugs.map((drug, index) => (
-              <Card {...drug} key={index} />
+              <Card h="180px">
+                <CardHeader textTransform="uppercase" fontSize="20px">
+                  {drug.name}
+                </CardHeader>
+                <CardBody>
+                  <HStack w="full" justify="center">
+                    <Box bgColor="neon.800" borderRadius="6px">
+                      {drug.icon}
+                    </Box>
+                  </HStack>
+                </CardBody>
+                <CardFooter fontSize="14px">
+                  <Text>${drug.price}</Text>
+                  <Spacer />
+                  <Text>qty: {drug.quantity}</Text>
+                </CardFooter>
+              </Card>
             ))}
           </SimpleGrid>
           <HStack w="full" gap="inherit">
@@ -89,36 +117,3 @@ export default function Home() {
     </>
   );
 }
-
-interface CardProps {
-  name: string;
-  price: number;
-  quantity: number;
-  icon: ReactNode;
-}
-
-const Card = ({
-  name,
-  price,
-  quantity,
-  icon,
-  ...props
-}: CardProps & StyleProps) => (
-  <VStack
-    layerStyle="card"
-    justifyContent="space-between"
-    height="180px"
-    p="10px"
-    {...props}
-  >
-    <Text>{name}</Text>
-    <Box bgColor="neon.800" borderRadius="6px">
-      {icon}
-    </Box>
-    <HStack w="full" px="20px" fontSize="16px">
-      <Text>${price}</Text>
-      <Spacer />
-      <Text>qty: {quantity}</Text>
-    </HStack>
-  </VStack>
-);

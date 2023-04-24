@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { Arrow, Chat, Clock, Connect, Users } from "@/components/icons";
+import { Arrow, Chat, Clock } from "@/components/icons";
 import Pending from "@/components/Pending";
 import Window from "@/components/Window";
 import {
@@ -83,12 +83,13 @@ export default function Join() {
                   </ListItem>
                 </List>
                 <Button variant="default" w="full" fontSize="14px" my="12px">
-                  <Connect /> ryo.gg/invite/hJ12
+                  ryo.gg/invite/hJ12
                 </Button>
+                ``
                 <List bgColor="gray.900" borderColor="black">
                   <ListItem p="5px">
                     <HStack fontSize="14px">
-                      <Users /> <Text>LOBBY</Text>
+                      <Text>LOBBY</Text>
                       <Spacer />
                       <Circle bgColor="gray.800" size="24px">
                         6

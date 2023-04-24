@@ -15,7 +15,6 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@next/font": "^13.3.0",
     "@starknet-react/core": "^0.16.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",

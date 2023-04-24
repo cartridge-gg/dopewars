@@ -6,8 +6,8 @@ export const Icon: ComponentStyleConfig = {
   },
   sizes: {
     lg: {
-      height: "48px",
-      width: "48px",
+      height: "36px",
+      width: "36px",
     },
     md: {
       height: "24px",

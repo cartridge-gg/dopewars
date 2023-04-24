@@ -1,31 +1,38 @@
 import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
+import BorderImage from "@/components/icons/BorderImage";
+import { cardStyle } from "../styles";
 
 export const Card: ComponentMultiStyleConfig = {
   parts: ["container", "header", "body", "footer"],
   baseStyle: {
     container: {
-      borderWidth: "2px",
-      borderRadius: "4px",
-      borderColor: "gray.900",
-      bgColor: "gray.800",
-      color: "white",
+      ...cardStyle,
     },
     header: {
-      color: "white",
-      fontSize: "22px",
-      display: "flex",
-      gap: "6px",
-      p: "12px",
+      textAlign: "center",
     },
     body: {
-      p: "12px",
-      "::-webkit-scrollbar": {
-        display: "none",
+      display: "flex",
+      justifyContent: "center",
+      alignContent: "center",
+    },
+    footer: {},
+  },
+  variants: {
+    primary: {
+      header: {
+        py: "12px",
+      },
+      body: {
+        p: "0",
+      },
+      footer: {
+        px: "20px",
+        py: "12px",
       },
     },
-    footer: {
-      gap: "6px",
-      p: "12px",
-    },
+  },
+  defaultProps: {
+    variant: "primary",
   },
 };
