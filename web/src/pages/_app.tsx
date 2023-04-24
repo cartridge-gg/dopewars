@@ -5,6 +5,7 @@ import {
   StarknetConfig,
   StarknetProvider,
 } from "@starknet-react/core";
+import { GameConfigProvider } from "@/hooks/config";
 import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
@@ -37,12 +38,13 @@ export default function App({ Component, pageProps }: AppProps) {
     <StarknetProvider connectors={connectors}>
       <ChakraProvider theme={theme}>
         <ModalProvider>
-          <main className={chicagoFont.className}>
-            <Component {...pageProps} />
-          </main>
+          <GameConfigProvider>
+            <main className={chicagoFont.className}>
+              <Component {...pageProps} />
+            </main>
+          </GameConfigProvider>
         </ModalProvider>
       </ChakraProvider>
     </StarknetProvider>
   );
 }
-

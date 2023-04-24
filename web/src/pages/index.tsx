@@ -40,14 +40,8 @@ import Window from "@/components/Window";
 import { useRouter } from "next/router";
 import { number } from "starknet";
 import NextLink from "next/link";
-import { Weed } from "@/components/icons/drugs";
 import Button from "@/components/Button";
-import {
-  Chameleon,
-  Elephant,
-  Octopus,
-  Squirrel,
-} from "@/components/icons/animals";
+import { Ludes, Weed, Acid, Speed } from "@/components/icons/drugs";
 import { ReactNode } from "react";
 
 const drugs: CardProps[] = [
@@ -55,25 +49,25 @@ const drugs: CardProps[] = [
     name: "Ludes",
     price: 100,
     quantity: 2,
-    icon: <Chameleon />,
+    icon: <Ludes />,
   },
   {
     name: "Speed",
     price: 200,
     quantity: 5,
-    icon: <Squirrel />,
+    icon: <Speed />,
   },
   {
     name: "Weed",
     price: 250,
     quantity: 1,
-    icon: <Elephant />,
+    icon: <Weed />,
   },
   {
     name: "Acid",
     price: 69,
     quantity: 10,
-    icon: <Octopus />,
+    icon: <Acid />,
   },
 ];
 

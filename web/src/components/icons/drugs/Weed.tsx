@@ -1,27 +1,19 @@
-import { Icon, IconProps } from "../";
+import { useGameConfig } from "@/hooks/config";
+import { Icon, IconProps } from "..";
 
 export const Weed = (props: IconProps) => {
+  const { nsfw } = useGameConfig();
+  if (nsfw) {
+    return <></>;
+  }
+
   return (
-    <Icon {...props}>
-      <>
-        <rect x="2" y="2.5" width="20" height="20" rx="1" fill="url(#weed)" />
-        <defs>
-          <pattern
-            id="weed"
-            patternContentUnits="objectBoundingBox"
-            width="1"
-            height="1"
-          >
-            <use xlinkHref="#image0_1_266" transform="scale(0.0625)" />
-          </pattern>
-          <image
-            id="image0_1_266"
-            width="16"
-            height="16"
-            xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAEKADAAQAAAABAAAAEAAAAAA0VXHyAAAARUlEQVQ4EWNgGAUDHwKMyE6IKQ74D+LLqUmDhdvSp4LlcYmDFDGBVVJAsCDrhdn86NZTZGG4i9DFQYoodgGKTaOcAQoBAMg8DgrfxLwlAAAAAElFTkSuQmCC"
-          />
-        </defs>
-      </>
+    <Icon viewBox="0 0 60 60" height="60px" width="60px" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M30.5 13.8333H41.6111V16.6111H47.1667V24.9445H49.9445V41.6111H52.7222V47.1667H49.9445V41.6111H47.1667V33.2778H44.3889V27.7222H41.6111V30.5H38.8333V47.1667H33.2778V36.0556H30.5V47.1667H24.9444V38.8333H22.1667V47.1667H16.6111V38.8333H13.8333V47.1667H8.27778V24.9445H11.0556V22.1667H13.8333V19.3889H27.7222V16.6111H30.5V13.8333ZM41.6111 24.9445H44.3889V22.1667H41.6111V24.9445Z"
+      />
     </Icon>
   );
 };

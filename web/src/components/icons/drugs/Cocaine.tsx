@@ -1,34 +1,15 @@
+import { useGameConfig } from "@/hooks/config";
 import { Icon, IconProps } from "..";
 
 export const Cocaine = (props: IconProps) => {
+  const { nsfw } = useGameConfig();
+  if (nsfw) {
+    return <></>;
+  }
+
   return (
-    <Icon {...props}>
-      <>
-        <rect
-          x="2"
-          y="2.5"
-          width="20"
-          height="20"
-          rx="1"
-          fill="url(#cocaine)"
-        />
-        <defs>
-          <pattern
-            id="cocaine"
-            patternContentUnits="objectBoundingBox"
-            width="1"
-            height="1"
-          >
-            <use xlinkHref="#image0_1_268" transform="scale(0.0625)" />
-          </pattern>
-          <image
-            id="image0_1_268"
-            width="16"
-            height="16"
-            xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAEKADAAQAAAABAAAAEAAAAAA0VXHyAAAASklEQVQ4EWNgGAW0DYHPn7/8B2F8tjDhkyRGjgWbIpit795/BEvD+Ly8PIzo6qnrAphNMJuFBPnBFsL4MHlkl1DsAnQvjfLJCAEAXHYgD7VxGWQAAAAASUVORK5CYII="
-          />
-        </defs>
-      </>
+    <Icon viewBox="0 0 60 60" height="60px" width="60px" {...props}>
+      <path d="M48.5986 16.2178H40.9868V18.122H39.0793V20.0245H37.1767V21.9287H35.2742V23.8362H33.37V20.0345H31.4592V20.0295L29.545 20.0279V20.0229H27.6342V23.8346H25.73V21.9271H23.8275V20.0229H21.9249V18.1203H20.0158V16.2162H14.3084L12.4025 16.2178H10.5V27.6411H12.4025V29.5436H14.3067V31.4561H16.2093V33.3587H12.4026V39.0728H14.3068V42.8779H16.2093V44.7821H23.8246V42.8779H25.7271V40.9753H27.6313V42.8779H29.5421V42.8829H31.4529V42.8878H33.3637V40.977H35.2679V42.8796H37.1705V44.7837H44.7857V42.8796H46.6883V39.0745H48.5924V33.3603H44.7858V31.4578H46.6883L46.6933 29.5437H48.5975V27.6411H50.5V16.2178L48.5986 16.2178ZM31.456 21.9354V40.979L29.5452 40.9807V21.9341H31.456V21.9354Z" />
     </Icon>
   );
 };
