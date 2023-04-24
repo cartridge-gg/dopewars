@@ -14,6 +14,7 @@ import {
   SystemProps,
   Box,
   SimpleGrid,
+  useToken,
 } from "@chakra-ui/react";
 import {
   Cartridge,

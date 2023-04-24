@@ -37,16 +37,21 @@ export const Button: ComponentStyleConfig = {
   },
   variants: {
     primary: {
-      borderImageSource: `url("data:image/svg+xml,${BorderImage("11ED83")}")`,
+      color: "neon.200",
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("#11ED83")}")`,
       _before: {
-        borderImageSource: `url("data:image/svg+xml,${BorderImage("11ED83")}")`,
+        borderImageSource: `url("data:image/svg+xml,${BorderImage(
+          "#11ED83",
+        )}")`,
       },
     },
     secondary: {
       color: "neon.600",
-      borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("#157342")}")`,
       _before: {
-        borderImageSource: `url("data:image/svg+xml,${BorderImage("157342")}")`,
+        borderImageSource: `url("data:image/svg+xml,${BorderImage(
+          "#157342",
+        )}")`,
       },
     },
     default: {},
