@@ -15,14 +15,11 @@ import {
   AccordionButton,
   AccordionPanel,
 } from "@chakra-ui/react";
-import Window from "@/components/Window";
 export default function Location() {
   return (
     <>
       <Header />
-      <Container centerContent>
-        <Window></Window>
-      </Container>
+      <Container centerContent></Container>
     </>
   );
 }

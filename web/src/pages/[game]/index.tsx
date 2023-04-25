@@ -1,7 +1,5 @@
 import Header from "@/components/Header";
 import { Arrow, Chat, Clock } from "@/components/icons";
-import Pending from "@/components/Pending";
-import Window from "@/components/Window";
 import {
   Spacer,
   Text,
@@ -67,7 +65,7 @@ export default function Join() {
         <VStack minW="500px" gap="9px">
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {drugs.map((drug, index) => (
-              <Card h="180px">
+              <Card h="180px" key={index}>
                 <CardHeader textTransform="uppercase" fontSize="20px">
                   {drug.name}
                 </CardHeader>
