@@ -8,6 +8,7 @@ export const styles = {
       height: "100vh",
       bgColor: "neon.900",
       color: "neon.200",
+      letterSpacing: "0.04em",
     },
   },
 };
@@ -40,6 +41,11 @@ export const cardStyle = {
 //layer styles
 export const layerStyles = {
   card: cardStyle,
+  rounded: {
+    p: "6px",
+    borderRadius: "6px",
+    bgColor: "neon.800",
+  },
 };
 
 //text styles

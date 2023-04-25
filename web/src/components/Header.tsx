@@ -1,10 +1,8 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
 import { formatAddress } from "@/utils";
-import { Clock, Gem, Bag, Chat } from "./icons";
-
+import { Clock, Gem, Bag, Chat, Home } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
-
-import { Divider, Flex, HStack, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 
 const Header = () => {
   const { address } = useAccount();
@@ -12,16 +10,13 @@ const Header = () => {
 
   return (
     <Flex position="absolute" top="0" left="0" p="12px" w="full">
-      <HStack flex="1" justify="left"></HStack>
+      <HStack flex="1" justify="left">
+        <Box layerStyle="rounded">
+          <Home />
+        </Box>
+      </HStack>
       <HStack flex="1" justify="center">
-        <HStack
-          h="full"
-          py="8px"
-          px="20px"
-          spacing="30px"
-          bgColor="neon.800"
-          borderRadius="6px"
-        >
+        <HStack layerStyle="rounded" h="full" py="8px" px="20px" spacing="30px">
           <HStack>
             <Gem /> <Text>$2000</Text>
           </HStack>
@@ -31,12 +26,14 @@ const Header = () => {
           </HStack>
           <Divider orientation="vertical" borderColor="neon.700" h="12px" />
           <HStack>
-            <Clock /> <Text>Day 3</Text>
+            <Clock /> <Text>Day 3/30</Text>
           </HStack>
         </HStack>
       </HStack>
       <HStack flex="1" justify="right">
-        <Chat size="lg" alert={true} />
+        <Box layerStyle="rounded">
+          <Chat alert={true} />
+        </Box>
       </HStack>
     </Flex>
   );

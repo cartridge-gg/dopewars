@@ -10,6 +10,7 @@ const Fonts = () => (
     styles={`
       @font-face {
         font-family: 'dos-vga';
+        font-weight: 400;
         font-style: normal;
         src: url('./fonts/DOS_VGA.ttf');
       }

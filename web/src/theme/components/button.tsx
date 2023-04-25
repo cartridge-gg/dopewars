@@ -6,12 +6,15 @@ export const Button: ComponentStyleConfig = {
     variant: "primary",
   },
   baseStyle: {
+    fontWeight: "400",
     textTransform: "uppercase",
     position: "relative",
     borderStyle: "solid",
     borderWidth: "2px",
     borderImageSlice: "4",
     borderImageWidth: "4px",
+    px: "40px",
+    gap: "10px",
     _before: {
       content: '""',
       position: "absolute",

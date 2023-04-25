@@ -3,32 +3,58 @@ import { Arrow, Chat, Clock } from "@/components/icons";
 import Pending from "@/components/Pending";
 import Window from "@/components/Window";
 import {
+  Spacer,
   Text,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
+  VStack,
   Container,
   HStack,
-  VStack,
-  Button,
-  List,
-  ListItem,
-  Divider,
-  Link,
-  Spacer,
-  Circle,
+  Box,
+  SimpleGrid,
+  useToken,
+  Heading,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
+import Button from "@/components/Button";
+import { Ludes, Weed, Acid, Speed } from "@/components/icons/drugs";
 
-const players = [
-  "Apex Hunter",
-  "ClickSave",
-  "0x1243..123",
-  "0x5453..134",
-  "0x5413..543",
+interface DrugProps {
+  name: string;
+  price: number;
+  quantity: number;
+  icon: ReactNode;
+}
+
+const drugs: DrugProps[] = [
+  {
+    name: "Ludes",
+    price: 100,
+    quantity: 2,
+    icon: <Ludes />,
+  },
+  {
+    name: "Speed",
+    price: 200,
+    quantity: 5,
+    icon: <Speed />,
+  },
+  {
+    name: "Weed",
+    price: 250,
+    quantity: 1,
+    icon: <Weed />,
+  },
+  {
+    name: "Acid",
+    price: 69,
+    quantity: 10,
+    icon: <Acid />,
+  },
 ];
 
 export default function Join() {
@@ -38,126 +64,39 @@ export default function Join() {
     <>
       <Header />
       <Container centerContent>
-        <Window bgColor="gray.700" border="none">
-          {joining ? (
-            <Pending
-              title="Joining Game"
-              description="This will only take a minute..."
-              txHash="#"
-            />
-          ) : (
-            <Card h="full">
-              <CardHeader>
-                <NextLink href="/">
-                  <HStack>
-                    <Arrow />
-                    <Text fontSize="17px">HOME</Text>
+        <VStack minW="500px" gap="9px">
+          <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
+            {drugs.map((drug, index) => (
+              <Card h="180px">
+                <CardHeader textTransform="uppercase" fontSize="20px">
+                  {drug.name}
+                </CardHeader>
+                <CardBody>
+                  <HStack w="full" justify="center">
+                    <Box bgColor="neon.800" borderRadius="6px">
+                      {drug.icon}
+                    </Box>
                   </HStack>
-                </NextLink>
-                <Spacer />
-                <NextLink href="/chat">
-                  <HStack>
-                    <Chat />
-                    <Circle bgColor="gray.600" size="20px">
-                      <Text fontSize="10px">2</Text>
-                    </Circle>
-                  </HStack>
-                </NextLink>
-              </CardHeader>
-              <CardBody>
-                <List>
-                  <ListItem>
-                    <GamePropertyRow
-                      name="Game Title"
-                      description="Loan Sharkz"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <GamePropertyRow
-                      name="Turn Duration"
-                      description="2 minutes"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <GamePropertyRow name="Turns" description="30" />
-                  </ListItem>
-                </List>
-                <Button variant="default" w="full" fontSize="14px" my="12px">
-                  ryo.gg/invite/hJ12
-                </Button>
-                ``
-                <List bgColor="gray.900" borderColor="black">
-                  <ListItem p="5px">
-                    <HStack fontSize="14px">
-                      <Text>LOBBY</Text>
-                      <Spacer />
-                      <Circle bgColor="gray.800" size="24px">
-                        6
-                      </Circle>
-                    </HStack>
-                  </ListItem>
-                  {players.map((name, index) => (
-                    <ListItem key={index}>
-                      <PlayerRow index={index + 1} name={name} />
-                    </ListItem>
-                  ))}
-                </List>
-              </CardBody>
-              <Divider />
-              <CardFooter flexDirection="column">
-                <HStack
-                  w="full"
-                  justify="center"
-                  borderRadius="4px"
-                  bgColor="whiteAlpha.100"
-                  p="12px"
-                  fontSize="14px"
-                >
-                  <Clock />
-                  <Text>Begins in</Text>
-                  <Text color="blue.200">12m 37s</Text>
-                </HStack>
-                <Button flex="1" onClick={() => setJoining(true)}>
-                  Join
-                </Button>
-              </CardFooter>
-            </Card>
-          )}
-        </Window>
+                </CardBody>
+                <CardFooter fontSize="14px">
+                  <Text>${drug.price}</Text>
+                  <Spacer />
+                  <Text>qty: {drug.quantity}</Text>
+                </CardFooter>
+              </Card>
+            ))}
+          </SimpleGrid>
+          <HStack w="full" gap="inherit">
+            <Button flex="1">Buy</Button>
+            <Button flex="1" isDisabled>
+              Sell
+            </Button>
+          </HStack>
+          <HStack w="full" gap="inherit">
+            <Button flex="1">Travel and end turn</Button>
+          </HStack>
+        </VStack>
       </Container>
     </>
   );
 }
-
-const PlayerRow = ({
-  index,
-  name,
-  icon,
-}: {
-  index: number;
-  name: string;
-  icon?: ReactNode;
-}) => (
-  <HStack>
-    <Text fontSize="12px" opacity="0.5">
-      {index}
-    </Text>
-    <Text>{icon}</Text>
-    <Text fontSize="14px">{name}</Text>
-  </HStack>
-);
-
-const GamePropertyRow = ({
-  name,
-  description,
-}: {
-  name: string;
-  description: string;
-}) => (
-  <HStack fontSize="14px">
-    <Text minWidth="150px" color="gray.400">
-      {name}:
-    </Text>
-    <Text>{description}</Text>
-  </HStack>
-);

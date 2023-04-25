@@ -4,16 +4,22 @@ export const List: ComponentMultiStyleConfig = {
   parts: ["container", "item", "icon"],
   baseStyle: {
     container: {
-      layerStyle: "card",
+      marginInlineStart: "unset",
+      WebkitMarginStart: "unset",
       p: "0",
     },
     item: {
-      py: "12px",
-      px: "18px",
-      borderBottom: "2px solid",
-      borderColor: "inherit",
-      _last: {
-        borderBottom: "none",
+      pt: "18px",
+      pb: "6px",
+      px: "0",
+    },
+  },
+  variants: {
+    underline: {
+      item: {
+        listStyleType: "none",
+        borderBottom: "2px solid",
+        borderColor: "neon.200",
       },
     },
   },
