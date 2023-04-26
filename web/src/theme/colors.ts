@@ -10,6 +10,9 @@ const colors: ColorsType = {
     800: "#202F20",
     900: "#172217",
   },
+  yellow: {
+    400: "#FBCB4A",
+  },
   black: "#000000",
   white: "#FFFFFF",
   whiteAlpha: {

@@ -1,6 +1,6 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
 import { formatAddress } from "@/utils";
-import { Clock, Gem, Bag, Chat, Home } from "./icons";
+import { Clock, Gem, Bag, Chat, Home, Link } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
 import { Box, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 
@@ -9,8 +9,18 @@ const Header = () => {
   const { connectors, connect, disconnect } = useConnectors();
 
   return (
-    <Flex position="absolute" top="0" left="0" p="12px" w="full">
-      <HStack flex="1" justify="left">
+    <Flex
+      position="absolute"
+      top="0"
+      left="0"
+      p="24px"
+      w="full"
+      justify="flex-end"
+    >
+      <HStack layerStyle="rounded">
+        <Link /> <Text>Connect</Text>
+      </HStack>
+      {/* <HStack flex="1" justify="left">
         <Box layerStyle="rounded">
           <Home />
         </Box>
@@ -34,7 +44,7 @@ const Header = () => {
         <Box layerStyle="rounded">
           <Chat alert={true} />
         </Box>
-      </HStack>
+      </HStack> */}
     </Flex>
   );
 };

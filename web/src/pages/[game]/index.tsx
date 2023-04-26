@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
+import { breakpoint } from "@/utils/ui";
 
 export default function Join() {
   const router = useRouter();
@@ -20,15 +21,11 @@ export default function Join() {
     <Layout
       title="The Lobby"
       prefixTitle="Welcome to"
-      backgroundImage="url('./images/normies.png');"
-      position="relative"
-      alignItems="flex-start"
-      px="30px"
+      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/normies.png');"
     >
       <Content
-        w="full"
         gap="20px"
-        top="20%"
+        top={breakpoint("20px", "20%")}
         alignItems="flex-start"
         position="relative"
       >
@@ -74,8 +71,15 @@ export default function Join() {
       </Content>
       <Footer minH="100px">
         <HStack justify="flex-end" gap="10px">
-          <Button>Leave Lobby</Button>
-          <Button isDisabled>Joined</Button>
+          <Button
+            w={breakpoint("full", "auto")}
+            onClick={() => router.push("/")}
+          >
+            Leave Lobby
+          </Button>
+          <Button w={breakpoint("full", "auto")} isDisabled>
+            Joined
+          </Button>
         </HStack>
       </Footer>
     </Layout>

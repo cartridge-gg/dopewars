@@ -17,8 +17,16 @@ const Fonts = () => (
 
       @font-face {
         font-family: 'pixel-script';
+        font-weight: 400;
         font-style: normal;
         src: url('./fonts/PixelscriptPro.ttf');
+      }
+
+      @font-face {
+        font-family: 'broken-console';
+        font-weight: 400;
+        font-style: normal;
+        src: url('./fonts/broken-console-broken-console-regular-400.ttf');
       }
 `}
   />

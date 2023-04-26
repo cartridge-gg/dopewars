@@ -36,6 +36,13 @@ export const cardStyle = {
     borderImageWidth: "0 6px 6px 0",
     borderImageSource: `url("data:image/svg+xml,${BorderImage("#11ED83")}")`,
   },
+  _active: {
+    top: "2px",
+    left: "2px",
+    _before: {
+      display: "none",
+    },
+  },
 };
 
 //layer styles
@@ -51,7 +58,12 @@ export const layerStyles = {
 //text styles
 export const textStyles = {
   "upper-bold": {
-    fontWeight: "500",
+    fontWeight: "700",
     textTransform: "uppercase",
+  },
+  subheading: {
+    textTransform: "uppercase",
+    fontFamily: "broken-console",
+    letterSpacing: "0.25em",
   },
 };
