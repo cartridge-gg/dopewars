@@ -6,6 +6,7 @@ export const List: ComponentMultiStyleConfig = {
     container: {
       marginInlineStart: "unset",
       WebkitMarginStart: "unset",
+      listStylePosition: "inside",
       p: "0",
     },
     item: {
