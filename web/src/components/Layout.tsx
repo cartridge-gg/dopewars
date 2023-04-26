@@ -37,6 +37,7 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <VStack
+          // convert to next/image for better optimization
           backgroundImage={`linear-gradient(to bottom, #172217 0%, transparent 40%, transparent 90%, #172217 100%), ${backgroundImage}`}
           backgroundSize="cover"
           backgroundPosition="center"
@@ -56,7 +57,7 @@ const Layout = ({
             <Heading fontSize="24px">{title}</Heading>
           </VStack>
         </VStack>
-        <VStack flex="1" alignItems="flex-start" {...props}>
+        <VStack flex="1" {...props}>
           {children}
         </VStack>
       </Flex>
