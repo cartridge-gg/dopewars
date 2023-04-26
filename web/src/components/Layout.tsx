@@ -10,6 +10,7 @@ import { ReactNode } from "react";
 import Header from "./Header";
 import Image from "next/image";
 import { breakpoint } from "@/utils/ui";
+import { motion } from "framer-motion";
 
 export interface LayoutProps {
   title: string;
@@ -28,7 +29,13 @@ const Layout = ({
   return (
     <>
       <Header />
-      <Flex h="100vh" direction={["column", "column", "column", "row"]}>
+      <Flex
+        h="100vh"
+        direction={["column", "column", "column", "row"]}
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         <VStack
           backgroundImage={`linear-gradient(to bottom, #172217 0%, transparent 40%, transparent 90%, #172217 100%), ${backgroundImage}`}
           backgroundSize="cover"
