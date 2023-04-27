@@ -29,7 +29,7 @@ export default function Home() {
             <Text color="neon.600" fontSize="14px">
               YOU HAVE NO GAMES
             </Text>
-            <Button w="full" onClick={() => router.push("/0xdead")}>
+            <Button w="full" onClick={() => router.push("/create")}>
               Create
             </Button>
           </VStack>

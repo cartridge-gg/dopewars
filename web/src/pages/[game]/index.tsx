@@ -74,8 +74,11 @@ export default function Join() {
         <Button w={breakpoint("full", "auto")} onClick={() => router.push("/")}>
           Leave Lobby
         </Button>
-        <Button w={breakpoint("full", "auto")} isDisabled>
-          Joined
+        <Button
+          w={breakpoint("full", "auto")}
+          onClick={() => router.push("/0x12341/travel")}
+        >
+          Start
         </Button>
       </Footer>
     </Layout>

@@ -107,7 +107,12 @@ export default function Location() {
         </SimpleGrid>
       </Content>
       <Footer>
-        <Button w={breakpoint("full", "auto")}>Travel and end turn</Button>
+        <Button
+          w={breakpoint("full", "auto")}
+          onClick={() => router.push("/pending/0x123")}
+        >
+          Travel and end turn
+        </Button>
       </Footer>
     </Layout>
   );

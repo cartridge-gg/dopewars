@@ -72,7 +72,9 @@ export default function Travel() {
         </VStack>
       </Content>
       <Footer>
-        <Button>{`Travel to ${places[target].name}`}</Button>
+        <Button
+          onClick={() => router.push("/0x123/location/brooklyn")}
+        >{`Travel to ${places[target].name}`}</Button>
       </Footer>
     </Layout>
   );
