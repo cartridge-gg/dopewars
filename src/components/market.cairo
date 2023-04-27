@@ -17,16 +17,16 @@ trait MarketTrait {
 }
 
 impl MarketImpl of MarketTrait {
-    fn buy(self: @Market, amount: usize) -> u128 {
-        assert(amount < *self.quantity, 'not enough liquidity');
-        let (amount, available, cash) = normalize(amount, self);
+    fn buy(self: @Market, quantity: usize) -> u128 {
+        assert(quantity < *self.quantity, 'not enough liquidity');
+        let (amount, available, cash) = normalize(quantity, self);
         let k = cash * available;
         let cost = (k / (available - amount)) - cash;
         cost
     }
 
-    fn sell(self: @Market, amount: usize) -> u128 {
-        let (amount, available, cash) = normalize(amount, self);
+    fn sell(self: @Market, quantity: usize) -> u128 {
+        let (amount, available, cash) = normalize(quantity, self);
         let k = cash * available;
         let payout = cash - (k / (available + amount));
         payout
