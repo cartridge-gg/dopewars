@@ -2,6 +2,8 @@ import type { ComponentStyleConfig } from "@chakra-ui/theme";
 
 export const Link: ComponentStyleConfig = {
   baseStyle: {
-    color: "blue.200",
+    color: "neon.blue",
+    textDecoration: "underline",
+    fontSize: "16px",
   },
 };
