@@ -1,6 +1,8 @@
+import Content from "@/components/Content";
+import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
-import { Arrow } from "@/components/icons";
-import Window from "@/components/Window";
+import { Arrow, ArrowEnclosed } from "@/components/icons";
+import Layout from "@/components/Layout";
 import {
   HStack,
   VStack,
@@ -16,17 +18,17 @@ import {
   Flex,
   Spacer,
   useCounter,
+  UnorderedList,
+  ListItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import Pending from "@/components/Pending";
 
 const MIN_PLAYERS = 6;
 const MIN_TURNS = 10;
 
 export default function Create() {
   const router = useRouter();
-  const [creating, setCreating] = useState(false);
   const {
     increment: incPlayers,
     decrement: decPlayers,
@@ -46,77 +48,82 @@ export default function Create() {
   });
 
   return (
-    <>
-      <Header />
-      <Container centerContent>
-        <Window>
-          {creating ? (
-            <>
-              <Pending
-                title="New Game"
-                description="Your game is being deployed..."
-                txHash="#"
-              />
-            </>
-          ) : (
-            <Card h="full">
-              <CardHeader justifyContent="center">
-                <Text>New Game</Text>
-              </CardHeader>
-              <CardBody pt="40px" px="36px">
-                <VStack>
-                  <Row name="Game Name:">
-                    <Input placeholder="name" />
-                  </Row>
-                  <Row name="Players:">
-                    <Input type="number" value={numPlayers} min="0" readOnly />
-                    <Button variant="default" onClick={() => incPlayers()}>
-                      <Arrow variant="up" size="sm" />
-                    </Button>
-                    <Button variant="default" onClick={() => decPlayers()}>
-                      <Arrow variant="down" size="sm" />
-                    </Button>
-                  </Row>
-                  <Row name="Turns:">
-                    <Input type="number" value={numTurns} min="0" readOnly />
-                    <Button variant="default" onClick={() => incTurns()}>
-                      <Arrow variant="up" size="sm" />
-                    </Button>
-                    <Button variant="default" onClick={() => decTurns()}>
-                      <Arrow variant="down" size="sm" />
-                    </Button>
-                  </Row>
-                  <Row name="Starts at:">
-                    <Input placeholder="datepicker" min="0" />
-                  </Row>
-                </VStack>
-              </CardBody>
-              <Divider />
-              <CardFooter>
-                <Button
-                  variant="secondary"
-                  flex="1"
-                  onClick={() => router.push("/")}
-                >
-                  Cancel
-                </Button>
-                <Button flex="1" onClick={() => setCreating(true)}>
-                  Create
-                </Button>
-              </CardFooter>
-            </Card>
-          )}
-        </Window>
-      </Container>
-    </>
+    <Layout
+      title="New Game"
+      prefixTitle="Start a"
+      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/cash_roll.png');"
+    >
+      <Content>
+        <UnorderedList variant="underline" w="full" userSelect="none">
+          <ListItem>
+            <HStack>
+              <Label name="Title" />
+              <Input />
+            </HStack>
+          </ListItem>
+          <ListItem>
+            <HStack>
+              <Label name="Turns" />
+              <Text>{numTurns}</Text>
+              <Spacer />
+              <HStack>
+                <ArrowEnclosed
+                  variant="caret"
+                  size="sm"
+                  cursor="pointer"
+                  onClick={() => incTurns()}
+                />
+                <ArrowEnclosed
+                  variant="caret"
+                  direction="down"
+                  size="sm"
+                  cursor="pointer"
+                  color={numTurns <= MIN_TURNS ? "neon.600" : "neon.200"}
+                  onClick={() => decTurns()}
+                />
+              </HStack>
+            </HStack>
+          </ListItem>
+          <ListItem>
+            <HStack>
+              <Label name="Players" />
+              <Text>{numPlayers}</Text>
+              <Spacer />
+              <HStack>
+                <ArrowEnclosed
+                  variant="caret"
+                  size="sm"
+                  cursor="pointer"
+                  onClick={() => incPlayers()}
+                />
+                <ArrowEnclosed
+                  variant="caret"
+                  direction="down"
+                  size="sm"
+                  cursor="pointer"
+                  color={numPlayers <= MIN_PLAYERS ? "neon.600" : "neon.200"}
+                  onClick={() => decPlayers()}
+                />
+              </HStack>
+            </HStack>
+          </ListItem>
+          <ListItem>
+            <HStack>
+              <Label name="Starts" /> <Text>20:00 UTC</Text>
+            </HStack>
+          </ListItem>
+        </UnorderedList>
+      </Content>
+      <Footer>
+        <Button>Cancel</Button>
+        <Button>Create New Game</Button>
+      </Footer>
+    </Layout>
   );
 }
 
-const Row = ({ name, children }: { name: string; children: ReactNode }) => (
-  <HStack w="full" color="white">
-    <Text color="gray.400" fontSize="14px" minW="200px">
-      {name}
-    </Text>
-    {children}
-  </HStack>
+const Label = ({ name }: { name: string }) => (
+  <Text textTransform="uppercase" minWidth="100px">
+    {name}:
+  </Text>
 );

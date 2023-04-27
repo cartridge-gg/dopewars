@@ -5,19 +5,14 @@ export const Input: ComponentStyleConfig = {
   variants: {
     primary: (props: StyleFunctionProps) => ({
       field: {
-        height: "42px",
-        border: "2px solid",
-        borderColor: "gray.900",
-        bgColor: "gray.700",
-        borderRadius: "4px",
-        color: "white",
-        fontSize: "14px",
-        _placeholder: {
-          color: "gray.400",
-        },
+        px: "0",
+        color: "neon.200",
+        borderColor: "none",
+        bgColor: "transparent",
+        fontSize: "16px",
       },
     }),
-    secondary: (props: StyleFunctionProps) => ({
+    caret: (props: StyleFunctionProps) => ({
       field: {},
     }),
   },

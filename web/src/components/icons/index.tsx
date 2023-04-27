@@ -25,6 +25,7 @@ export * from "./Chat";
 export * from "./Home";
 export * from "./Link";
 export * from "./Arrow";
+export * from "./ArrowEnclosed";
 export * from "./Clock";
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed

@@ -4,13 +4,14 @@ import {
   StyleProps,
   Text,
 } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 // Can't seem to set first-letter css correctly on button in chakra theme
 // so we do it here on text...
 const Button = ({
   children,
   ...props
-}: { children: string } & StyleProps & ButtonProps) => (
+}: { children: ReactNode } & StyleProps & ButtonProps) => (
   <ChakraButton {...props}>
     <Text
       css={{

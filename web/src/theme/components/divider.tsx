@@ -5,6 +5,5 @@ export const Divider: ComponentStyleConfig = {
     borderWidth: "2px",
     borderColor: "neon.200",
     opacity: "1",
-    borderStyle: "dotted",
   },
 };

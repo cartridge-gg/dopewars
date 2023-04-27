@@ -52,7 +52,9 @@ export default function Join() {
           w="full"
           onClick={() => router.push("/0x12131/brooklyn")}
         >
-          <Link /> ryo.gg/invite/h12
+          <>
+            <Link /> ryo.gg/invite/h12
+          </>
         </Button>
         <OrderedList>
           <ListItem>Shinobi</ListItem>
