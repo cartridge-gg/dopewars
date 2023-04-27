@@ -5,9 +5,9 @@ import {
   Divider,
   UnorderedList,
   ListItem,
-  Button,
   OrderedList,
 } from "@chakra-ui/react";
+import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
@@ -23,12 +23,7 @@ export default function Join() {
       prefixTitle="Welcome to"
       backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/normies.png');"
     >
-      <Content
-        gap="20px"
-        top={breakpoint("20px", "20%")}
-        alignItems="flex-start"
-        position="relative"
-      >
+      <Content gap="20px" alignItems="flex-start">
         <UnorderedList w="100%" variant="underline">
           <ListItem>
             <HStack>
@@ -52,7 +47,11 @@ export default function Join() {
             </HStack>
           </ListItem>
         </UnorderedList>
-        <Button textTransform="none" w="full">
+        <Button
+          textTransform="none"
+          w="full"
+          onClick={() => router.push("/0x12131/brooklyn")}
+        >
           <Link /> ryo.gg/invite/h12
         </Button>
         <OrderedList>
@@ -69,18 +68,13 @@ export default function Join() {
           <Text>15m35s</Text>
         </HStack>
       </Content>
-      <Footer minH="100px">
-        <HStack justify="flex-end" gap="10px">
-          <Button
-            w={breakpoint("full", "auto")}
-            onClick={() => router.push("/")}
-          >
-            Leave Lobby
-          </Button>
-          <Button w={breakpoint("full", "auto")} isDisabled>
-            Joined
-          </Button>
-        </HStack>
+      <Footer>
+        <Button w={breakpoint("full", "auto")} onClick={() => router.push("/")}>
+          Leave Lobby
+        </Button>
+        <Button w={breakpoint("full", "auto")} isDisabled>
+          Joined
+        </Button>
       </Footer>
     </Layout>
   );

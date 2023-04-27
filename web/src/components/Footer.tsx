@@ -1,19 +1,21 @@
-import { Stack, StyleProps } from "@chakra-ui/react";
+import { HStack, StyleProps } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export const Footer = ({
   children,
   ...props
 }: { children: ReactNode } & StyleProps) => (
-  <Stack
-    gap="12px"
+  <HStack
+    p="24px"
     w="full"
+    minH="100px"
+    gap="12px"
     position="absolute"
     bottom="0"
     right="0"
-    p="24px"
+    justify="flex-end"
     {...props}
   >
     {children}
-  </Stack>
+  </HStack>
 );

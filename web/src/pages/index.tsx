@@ -1,28 +1,4 @@
-import {
-  Center,
-  Flex,
-  Spacer,
-  Text,
-  useDisclosure,
-  VStack,
-  Container,
-  HStack,
-  Divider,
-  StyleProps,
-  SystemProps,
-  Box,
-  SimpleGrid,
-  useToken,
-  Heading,
-  Card,
-  CardBody,
-  CardHeader,
-  CardFooter,
-  UnorderedList,
-  ListItem,
-  Button,
-  OrderedList,
-} from "@chakra-ui/react";
+import { Text, VStack, HStack, Divider, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Clock, Link } from "@/components/icons";
@@ -39,7 +15,7 @@ export default function Home() {
       prefixTitle="Built On Dojo"
       backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/city.png');"
     >
-      <Content position="relative" top={breakpoint("20px", "20%")}>
+      <Content>
         <VStack w="full" gap="20px">
           <Text textStyle="subheading" fontSize="13px">
             My Games

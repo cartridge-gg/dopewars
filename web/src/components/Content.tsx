@@ -8,6 +8,8 @@ const Content = ({
 }: { children: ReactNode } & StyleProps) => (
   <VStack
     w="full"
+    position="relative"
+    top={breakpoint("20px", "20%")}
     px={breakpoint("24px", "80px")}
     maxWidth={breakpoint("full", "800px")}
     {...props}
