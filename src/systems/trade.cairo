@@ -29,8 +29,8 @@ mod Buy {
         assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());
-        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
+        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into_partitioned());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into_partitioned());
 
         let cost = market.buy(quantity);
         assert(cost < cash.amount, 'not enough cash');
@@ -41,21 +41,21 @@ mod Buy {
 
         // update market
         commands::set_entity(
-            (game_id, (location_id, drug_id)).into(),
+            (game_id, (location_id, drug_id)).into_partitioned(),
             (Market { cash: market.cash + cost, quantity: market.quantity - quantity,  })
         );
 
         // update player
         commands::set_entity(
-            (game_id, (player_id)).into(), (Cash { amount: cash.amount - cost }, )
+            (game_id, (player_id)).into_partitioned(), (Cash { amount: cash.amount - cost }, )
         );
-        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
+        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into_partitioned());
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity + quantity,
             Option::None(_) => quantity,
         };
         commands::set_entity(
-            (game_id, (player_id, drug_id)).into(),
+            (game_id, (player_id, drug_id)).into_partitioned(),
             (Drug { id: drug_id, quantity: player_quantity })
         );
     }
@@ -86,30 +86,30 @@ mod Sell {
         assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into());
+        let (location, cash) = commands::<Location, Cash>::entity((game_id, (player_id)).into_partitioned());
 
-        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into());
+        let maybe_drug = commands::<Drug>::try_entity((game_id, (player_id, drug_id)).into_partitioned());
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity,
             Option::None(()) => 0_u32
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
-        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into());
+        let market = commands::<Market>::entity((game_id, (location_id, drug_id)).into_partitioned());
         let payout = market.sell(quantity);
 
         // update market
         commands::set_entity(
-            (game_id, (location_id, drug_id)).into(),
+            (game_id, (location_id, drug_id)).into_partitioned(),
             (Market { cash: market.cash - payout, quantity: market.quantity + quantity,  })
         );
 
         // update player
         commands::set_entity(
-            (game_id, (player_id)).into(), (Cash { amount: cash.amount + payout }, )
+            (game_id, (player_id)).into_partitioned(), (Cash { amount: cash.amount + payout }, )
         );
         commands::set_entity(
-            (game_id, (player_id, drug_id)).into(),
+            (game_id, (player_id, drug_id)).into_partitioned(),
             (Drug { id: drug_id, quantity: player_quantity - quantity })
         );
 

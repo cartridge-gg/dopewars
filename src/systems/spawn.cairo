@@ -66,15 +66,15 @@ mod SpawnLocation {
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time < block_info.block_timestamp, 'already started');
 
-        let locations = commands::<(Game, Location)>::entities(game_id);
+        let locations = commands::<(Game, Location)>::entities();
         assert(locations.len() < game.max_locations, 'max locations');
 
         let location_id = commands::uuid();
         commands::set_entity(
-            (game_id, (location_id)).into(),
+            (game_id, (location_id)).into_partitioned(),
             (
                 Location {
-                    id: location_id
+                    id: location_id.into()
                     }, Risks {
                     travel: travel_risk,
                     hurt: hurt_risk,
@@ -85,7 +85,7 @@ mod SpawnLocation {
             )
         );
 
-        LocationCreated(game_id, location_id);
+        LocationCreated(game_id, location_id.into());
     }
 }
 
@@ -115,21 +115,21 @@ mod SpawnMarket {
         let cash = 1000_u128 * SCALING_FACTOR;
         let quantity = 1000_usize;
         commands::set_entity(
-            (game_id, (location_id, drug_1_id)).into(), (Market { cash, quantity })
+            (game_id, (location_id, drug_1_id)).into_partitioned(), (Market { cash, quantity })
         );
 
         let drug_2_id = commands::uuid();
         let cash = 500_u128 * SCALING_FACTOR;
         let quantity = 1000_usize;
         commands::set_entity(
-            (game_id, (location_id, drug_2_id)).into(), (Market { cash, quantity })
+            (game_id, (location_id, drug_2_id)).into_partitioned(), (Market { cash, quantity })
         );
 
         let drug_3_id = commands::uuid();
         let cash = 500_u128 * SCALING_FACTOR;
         let quantity = 1000_usize;
         commands::set_entity(
-            (game_id, (location_id, drug_3_id)).into(), (Market { cash, quantity })
+            (game_id, (location_id, drug_3_id)).into_partitioned(), (Market { cash, quantity })
         );
     }
 }
@@ -175,6 +175,6 @@ mod SpawnGame {
             )
         );
 
-        GameCreated(game_id, player_id);
+        GameCreated(game_id.into(), player_id);
     }
 }
