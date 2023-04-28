@@ -1,3 +1,4 @@
+import NextHead from "next/head";
 import { ModalProvider } from "@/components/Modal/ModalProvider";
 import { ChakraProvider } from "@chakra-ui/react";
 import {
@@ -31,6 +32,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <Fonts />
         <ModalProvider>
           <GameConfigProvider>
+            <NextHead>
+              <title>Roll your Own</title>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+              />
+            </NextHead>
             <Component {...pageProps} />
           </GameConfigProvider>
         </ModalProvider>
