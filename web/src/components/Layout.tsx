@@ -30,7 +30,10 @@ const Layout = ({
     <>
       <Header />
       <Flex
-        h="100vh"
+        position="fixed"
+        top="0"
+        left="0"
+        boxSize="full"
         direction={["column", "column", "column", "row"]}
         as={motion.div}
         initial={{ opacity: 0 }}

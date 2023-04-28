@@ -8,7 +8,6 @@ export const Footer = ({
   <HStack
     p="24px"
     w="full"
-    minH="100px"
     gap="12px"
     position="absolute"
     bottom="0"

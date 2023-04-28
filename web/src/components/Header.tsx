@@ -29,6 +29,7 @@ const Header = () => {
       p={breakpoint("0 24px 24px 24px", "24px")}
       w="full"
       justify="flex-end"
+      zIndex="1"
     >
       {connected ? (
         <>
