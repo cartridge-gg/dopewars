@@ -24,6 +24,7 @@ export * from "./Gem";
 export * from "./Chat";
 export * from "./Home";
 export * from "./Link";
+export * from "./Event";
 export * from "./Arrow";
 export * from "./ArrowEnclosed";
 export * from "./Clock";

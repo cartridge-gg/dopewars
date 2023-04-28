@@ -109,7 +109,7 @@ export default function Location() {
       <Footer>
         <Button
           w={breakpoint("full", "auto")}
-          onClick={() => router.push("/pending/0x123")}
+          onClick={() => router.push("/0x1234/turn")}
         >
           Travel and end turn
         </Button>

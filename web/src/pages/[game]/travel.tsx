@@ -14,6 +14,7 @@ import {
   Queens,
   StatenIsland,
 } from "@/components/icons/locations";
+import { breakpoint } from "@/utils/ui";
 
 interface PlaceProps {
   name: string;
@@ -73,6 +74,7 @@ export default function Travel() {
       </Content>
       <Footer>
         <Button
+          w={breakpoint("full", "auto")}
           onClick={() => router.push("/0x123/location/brooklyn")}
         >{`Travel to ${places[target].name}`}</Button>
       </Footer>
