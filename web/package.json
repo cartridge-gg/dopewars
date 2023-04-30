@@ -24,7 +24,8 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "starknet": "^4.22.0"
+    "starknet": "^4.22.0",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.3",
