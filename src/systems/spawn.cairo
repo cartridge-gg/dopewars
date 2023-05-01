@@ -184,7 +184,7 @@ mod SpawnGame {
                 }
             )
         );
-
+        
         GameCreated(game_id.into(), player_id);
         game_id.into()
     }
