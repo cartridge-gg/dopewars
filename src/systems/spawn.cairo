@@ -209,10 +209,10 @@ mod tests {
     use dojo_core::interfaces::IWorldDispatcherTrait;
     use dojo_core::string::ShortStringTrait;
     use dojo_core::integer::u250Trait;
+    use dojo_core::executor::Executor;
+    use dojo_core::world::World;
 
-    use rollyourown::tests::executor::Executor;
     use rollyourown::tests::world_factory::WorldFactory;
-    use rollyourown::tests::world::World;
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameComponent;
     use rollyourown::components::player::StatsComponent;
