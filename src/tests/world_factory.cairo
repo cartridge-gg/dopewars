@@ -30,7 +30,9 @@ mod WorldFactory {
     }
 
     #[external]
-    fn spawn(name: ShortString, components: Array::<ClassHash>, systems: Array::<ClassHash>) -> ContractAddress {
+    fn spawn(
+        name: ShortString, components: Array::<ClassHash>, systems: Array::<ClassHash>
+    ) -> ContractAddress {
         // deploy world
         let mut world_constructor_calldata: Array<felt252> = ArrayTrait::new();
         world_constructor_calldata.append(name.into());
