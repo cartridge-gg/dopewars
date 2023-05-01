@@ -18,10 +18,11 @@ mod SpawnPlayer {
 
         let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');
-        assert(game.start_time < block_info.block_timestamp, 'already started');
+        assert(game.start_time >= block_info.block_timestamp, 'already started');
 
-        let players = commands::<(Game, Player)>::entities();
-        assert(game.max_players > players.len(), 'max players');
+        // FIXME: num players is always zero
+        // let players = commands::<Player>::entities(u250Trait::new(game_id));
+        // assert(game.max_players > players.len(), 'max players');
 
         commands::set_entity(
             (game_id, (player_id)).into(),
@@ -215,14 +216,18 @@ mod tests {
     use rollyourown::tests::world_factory::WorldFactory;
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameComponent;
+    use rollyourown::components::player::Stats;
     use rollyourown::components::player::StatsComponent;
+    use rollyourown::components::player::Cash;
     use rollyourown::components::player::CashComponent;
     use rollyourown::components::location::Location;
     use rollyourown::components::location::LocationComponent;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::risks::RisksComponent;
+    use rollyourown::constants::SCALING_FACTOR;
     use super::SpawnGameSystem;
     use super::SpawnLocationSystem;
+    use super::SpawnPlayerSystem;
 
     #[test]
     #[available_gas(30000000)]
@@ -244,6 +249,7 @@ mod tests {
         let mut systems = array::ArrayTrait::<ClassHash>::new();
         systems.append(SpawnGameSystem::TEST_CLASS_HASH.try_into().unwrap());
         systems.append(SpawnLocationSystem::TEST_CLASS_HASH.try_into().unwrap());
+        systems.append(SpawnPlayerSystem::TEST_CLASS_HASH.try_into().unwrap());
 
         let world_address = WorldFactory::spawn('RyoWorld'.into(), components, systems);
 
@@ -298,6 +304,14 @@ mod tests {
             'unregistered spawn'
         );
 
+        let player_hash = IWorldDispatcher {
+            contract_address: world_address
+        }.system('SpawnPlayer'.into());
+        assert(
+            player_hash == SpawnPlayerSystem::TEST_CLASS_HASH.try_into().unwrap(),
+            'unregistered spawn'
+        );
+
         let mut spawn_game_calldata = array::ArrayTrait::<felt252>::new();
         spawn_game_calldata.append(100_u64.into());
         spawn_game_calldata.append(2_usize.into());
@@ -329,6 +343,7 @@ mod tests {
     #[available_gas(30000000)]
     fn test_spawn_location() {
         let (world_address, game_id) = test_spawn_game();
+        let world = IWorldDispatcher { contract_address: world_address };
 
         let mut spawn_location_calldata = array::ArrayTrait::<felt252>::new();
         spawn_location_calldata.append(game_id);
@@ -337,8 +352,6 @@ mod tests {
         spawn_location_calldata.append(8_u8.into());
         spawn_location_calldata.append(7_u8.into());
         spawn_location_calldata.append(6_u8.into());
-
-        let world = IWorldDispatcher { contract_address: world_address };
 
         // Spawn two locations with same risk profile
         let mut res = world.execute('SpawnLocation'.into(), spawn_location_calldata.span());
@@ -369,5 +382,48 @@ mod tests {
             contract_address: world_address
         }.entities(ShortStringTrait::new('Location'), u250Trait::new(game_id));
         assert(locations.len() == 2_usize, 'wrong num locations');
+    }
+
+    #[test]
+    #[available_gas(30000000)]
+    fn test_spawn_player() {
+        let (world_address, game_id) = test_spawn_game();
+        let world = IWorldDispatcher { contract_address: world_address };
+
+        let player_one = 1;
+        let mut spawn_player_calldata = array::ArrayTrait::<felt252>::new();
+        spawn_player_calldata.append(game_id);
+
+        gas::withdraw_gas().expect('out of gas');
+        let mut res = world.execute('SpawnPlayer'.into(), spawn_player_calldata.span());
+        assert(res.len() > 0_usize, 'did not spawn');
+
+        let player_one_id = serde::Serde::<felt252>::deserialize(
+            ref res
+        ).expect('spawn deserialization failed');
+
+        let mut res = IWorldDispatcher {
+            contract_address: world_address
+        }.entity(ShortStringTrait::new('Stats'), (game_id, (player_one_id)).into(), 0_u8, 0_usize);
+        assert(res.len() > 0_usize, 'player stats not found');
+
+        let stats = serde::Serde::<Stats>::deserialize(
+            ref res
+        ).expect('stats deserialization failed');
+
+        assert(stats.health == 100_u8, 'health mismatch');
+        assert(stats.arrested == false, 'arrested mismatch');
+
+        gas::withdraw_gas().expect('out of gas');
+        let mut res = IWorldDispatcher {
+            contract_address: world_address
+        }.entity(ShortStringTrait::new('Cash'), (game_id, (player_one_id)).into(), 0_u8, 0_usize);
+        assert(res.len() > 0_usize, 'player cash not found');
+
+        let cash = serde::Serde::<Cash>::deserialize(
+            ref res
+        ).expect('cash deserialization failed');
+
+        assert(cash.amount == 100_u128 * SCALING_FACTOR, 'cash mismatch');
     }
 }
