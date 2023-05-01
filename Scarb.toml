@@ -6,6 +6,6 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-dojo_core = { git = "https://github.com/dojoengine/dojo.git", rev="69026ce7d9a034c390626c37cdcf4632f2e75552"}
+dojo_core = { git = "https://github.com/dojoengine/dojo.git", rev="aa7dd3ef0e55dc9794b62dbcb33a4cb655db39e4"}
 
 [[target.dojo]]
