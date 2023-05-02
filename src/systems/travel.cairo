@@ -42,17 +42,9 @@ mod Travel {
         let player_sk: Query = (game_id, (player_id)).into_partitioned();
         let location_sk: Query = (game_id, (next_location_id)).into_partitioned();
 
-        let (stats, cash) = commands::<(Stats, Cash)>::entity(player_sk);
+        let (location, stats, cash) = commands::<(Location, Stats, Cash)>::entity(player_sk);
         assert(stats.can_continue(), 'player cannot continue');
-
-        let maybe_location = commands::<Location>::try_entity(player_sk);
-        let location_id = match maybe_location {
-            Option::Some(location) => {
-                assert(location.id != next_location_id, 'already at location');
-                location.id
-            },
-            Option::None(_) => 0
-        };
+        assert(location.id != next_location_id, 'already at location');
 
         let (next_location, risks) = commands::<(Location, Risks)>::entity(location_sk);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
@@ -92,7 +84,7 @@ mod Travel {
             );
         }
 
-        Traveled(game_id, player_id, location_id, next_location_id);
+        Traveled(game_id, player_id, location.id, next_location_id);
         event_occured
     }
 }
