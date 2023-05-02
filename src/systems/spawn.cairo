@@ -12,13 +12,9 @@ mod SpawnPlayer {
     #[event]
     fn PlayerJoined(game_id: felt252, player_id: felt252) {}
 
-    fn execute(game_id: felt252, player_id: felt252) -> felt252 {
+    fn execute(game_id: felt252) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
-
-        let player_id = match player_id {
-            0 => starknet::get_caller_address().into(),
-            _ => player_id
-        };
+        let player_id = starknet::get_caller_address().into();
 
         let game = commands::<Game>::entity(game_id.into());
         assert(!game.is_finished, 'game is finished');

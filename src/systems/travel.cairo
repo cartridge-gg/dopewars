@@ -34,20 +34,27 @@ mod Travel {
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
-    fn execute(game_id: felt252, next_location_id: felt252) {
+    fn execute(game_id: felt252, next_location_id: felt252) -> bool {
         let game = commands::<Game>::entity(game_id.into());
-        assert(game.tick(), 'cannot progress');
+        assert(game.tick(), 'game cannot progress');
 
-        let player_id = starknet::get_caller_address().into();
-        let (location, stats, cash) = commands::<Location,
-        Stats,
-        Cash>::entity((game_id, (player_id)).into());
+        let player_id: felt252 = starknet::get_caller_address().into();
+        let player_sk: Query = (game_id, (player_id)).into_partitioned();
+        let location_sk: Query = (game_id, (next_location_id)).into_partitioned();
 
-        assert(location.id != next_location_id, 'already at location');
-        assert(stats.can_continue(), 'cannot continue');
+        let (stats, cash) = commands::<(Stats, Cash)>::entity(player_sk);
+        assert(stats.can_continue(), 'player cannot continue');
 
-        let (next_location, risks) = commands::<Location,
-        Risks>::entity((game_id, (next_location_id)).into());
+        let maybe_location = commands::<Location>::try_entity(player_sk);
+        let location_id = match maybe_location {
+            Option::Some(location) => {
+                assert(location.id != next_location_id, 'already at location');
+                location.id
+            },
+            Option::None(_) => 0
+        };
+
+        let (next_location, risks) = commands::<(Location, Risks)>::entity(location_sk);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
@@ -58,7 +65,7 @@ mod Travel {
 
         // update player
         commands::set_entity(
-            (game_id, (player_id)).into(),
+            player_sk,
             (
                 Location {
                     id: next_location_id
@@ -85,6 +92,7 @@ mod Travel {
             );
         }
 
-        Traveled(game_id, player_id, location.id, next_location_id);
+        Traveled(game_id, player_id, location_id, next_location_id);
+        event_occured
     }
 }

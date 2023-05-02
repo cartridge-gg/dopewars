@@ -137,12 +137,11 @@ fn spawn_game() -> (ContractAddress, felt252) {
     (world_address, game_id)
 }
 
-fn spawn_player(world_address: ContractAddress, game_id: felt252, player_id: felt252) -> felt252 {
+fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let world = IWorldDispatcher { contract_address: world_address };
 
     let mut spawn_player_calldata = array::ArrayTrait::<felt252>::new();
     spawn_player_calldata.append(game_id);
-    spawn_player_calldata.append(player_id);
 
     gas::withdraw_gas().expect('out of gas');
     let mut res = world.execute('SpawnPlayer'.into(), spawn_player_calldata.span());
@@ -195,7 +194,9 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let location_id = serde::Serde::<felt252>::deserialize(
         ref res
     ).expect('spawn deserialization failed');
-    let mut res = world.entity(ShortStringTrait::new('Risks'), location_id.into(), 0_u8, 0_usize);
+    let mut res = world.entity(
+        ShortStringTrait::new('Risks'), (game_id, (location_id)).into_partitioned(), 0_u8, 0_usize
+    );
     assert(res.len() > 0_usize, 'loc not found');
 
     let risks = serde::Serde::<Risks>::deserialize(ref res).expect('loc deserialization failed');
@@ -227,8 +228,5 @@ fn test_spawn_locations() {
 #[available_gas(30000000)]
 fn test_spawn_player() {
     let (world_address, game_id) = spawn_game();
-    let player_one = spawn_player(world_address, game_id, 1);
-    let player_two = spawn_player(world_address, game_id, 2);
-    assert(player_one == 1, 'wrong player id');
-    assert(player_two == 2, 'wrong player id');
+    let player_one = spawn_player(world_address, game_id);
 }
