@@ -57,8 +57,9 @@ const ARRESTED_RISK: u8 = 6_u8;
 fn assert_systems(world_address: ContractAddress, mut hashes: Array::<ClassHash>) {
     let hash = hashes.pop_front();
     match hash {
-        Option::Some(h) => {
-            let name = ISystemLibraryDispatcher { class_hash: h }.name();
+        Option::Some(class_hash) => {
+            gas::withdraw_gas().expect('out of gas');
+            let name = ISystemLibraryDispatcher { class_hash }.name();
             let registered = IWorldDispatcher { contract_address: world_address }.system(name);
             assert(registered.into() != 0, 'system not registered');
             assert_systems(world_address, hashes);
