@@ -154,6 +154,7 @@ mod SpawnGame {
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
+    use rollyourown::components::location::Location;
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
@@ -162,7 +163,6 @@ mod SpawnGame {
     fn execute(
         start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
     ) -> felt252 {
-        gas::withdraw_gas().expect('out of gas');
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game_id = commands::uuid();
@@ -179,12 +179,14 @@ mod SpawnGame {
         );
 
         commands::set_entity(
-            (game_id, (player_id)).into(),
+            (game_id, (player_id)).into_partitioned(),
             (
                 Stats {
                     health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: max_turns
                     }, Cash {
                     amount: 100_u128 * SCALING_FACTOR // $100
+                    }, Location {
+                    id: 0
                 }
             )
         );

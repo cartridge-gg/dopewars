@@ -25,27 +25,45 @@ use rollyourown::tests::spawn::spawn_location;
 use rollyourown::tests::spawn::spawn_player;
 use rollyourown::components::location::Location;
 
+// caller address within tests is not the same 
+// as in system execute, so hardcode here for now
+const PLAYER_ID: felt252 = 2;
+
 #[test]
 #[available_gas(30000000)]
 fn test_travel() {
-    let (world_address, game_id) = spawn_game();
-    let player_id = spawn_player(world_address, game_id);
-    let location_id = spawn_location(world_address, game_id);
-
+    let (world_address, game_id) = spawn_game(); // creator auto joins
+    let location_one = spawn_location(world_address, game_id);
+    let location_two = spawn_location(world_address, game_id);
     let world = IWorldDispatcher { contract_address: world_address };
+
+    gas::withdraw_gas().expect('not enough gas');
 
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id);
-    travel_calldata.append(location_id);
+    travel_calldata.append(location_one);
 
-    gas::withdraw_gas().expect('not enough gas');
     world.execute('Travel'.into(), travel_calldata.span());
 
     let mut res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, (location_id)).into_partitioned(), 0_u8, 0_usize);
+    }.entity('Location'.into(), (game_id, (PLAYER_ID)).into_partitioned(), 0_u8, 0_usize);
     assert(res.len() > 0_usize, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id == location_id, 'incorrect travel');
+    assert(location.id == location_one, 'incorrect travel');
+
+    let mut travel_calldata = array::ArrayTrait::<felt252>::new();
+    travel_calldata.append(game_id);
+    travel_calldata.append(location_two);
+
+    world.execute('Travel'.into(), travel_calldata.span());
+
+    let mut res = IWorldDispatcher {
+        contract_address: world_address
+    }.entity('Location'.into(), (game_id, (PLAYER_ID)).into_partitioned(), 0_u8, 0_usize);
+    assert(res.len() > 0_usize, 'no player location');
+
+    let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
+    assert(location.id == location_two, 'incorrect travel');
 }
