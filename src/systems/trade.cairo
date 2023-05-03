@@ -2,6 +2,7 @@
 mod Buy {
     use traits::Into;
     use array::ArrayTrait;
+    use debug::PrintTrait;
 
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameTrait;
@@ -29,8 +30,9 @@ mod Buy {
         assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (location, cash) = commands::<Location,
-        Cash>::entity((game_id, (player_id)).into_partitioned());
+        let (location, cash) = commands::<(
+            Location, Cash
+        )>::entity((game_id, (player_id)).into_partitioned());
         let market = commands::<Market>::entity(
             (game_id, (location_id, drug_id)).into_partitioned()
         );
@@ -91,8 +93,9 @@ mod Sell {
         assert(game.tick(), 'cannot progress');
 
         let player_id = starknet::get_caller_address().into();
-        let (location, cash) = commands::<Location,
-        Cash>::entity((game_id, (player_id)).into_partitioned());
+        let (location, cash) = commands::<(
+            Location, Cash
+        )>::entity((game_id, (player_id)).into_partitioned());
 
         let maybe_drug = commands::<Drug>::try_entity(
             (game_id, (player_id, drug_id)).into_partitioned()

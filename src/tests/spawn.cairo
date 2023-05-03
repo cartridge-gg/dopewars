@@ -28,8 +28,12 @@ use dojo_core::world::World;
 use rollyourown::tests::world_factory::WorldFactory;
 use rollyourown::components::game::Game;
 use rollyourown::components::game::GameComponent;
+use rollyourown::components::market::Market;
+use rollyourown::components::market::MarketComponent;
 use rollyourown::components::player::Stats;
 use rollyourown::components::player::StatsComponent;
+use rollyourown::components::drug::Drug;
+use rollyourown::components::drug::DrugComponent;
 use rollyourown::components::player::Cash;
 use rollyourown::components::player::CashComponent;
 use rollyourown::components::location::Location;
@@ -82,7 +86,7 @@ fn assert_components(world_address: ContractAddress, mut hashes: Array::<ClassHa
     }
 }
 
-fn spawn_game() -> (ContractAddress, felt252) {
+fn spawn_game() -> (ContractAddress, felt252, felt252) {
     let constructor_calldata = array::ArrayTrait::<felt252>::new();
     let (executor_address, _) = deploy_syscall(
         Executor::TEST_CLASS_HASH.try_into().unwrap(), 0, constructor_calldata.span(), false
@@ -96,6 +100,8 @@ fn spawn_game() -> (ContractAddress, felt252) {
     components.append(CashComponent::TEST_CLASS_HASH.try_into().unwrap());
     components.append(LocationComponent::TEST_CLASS_HASH.try_into().unwrap());
     components.append(RisksComponent::TEST_CLASS_HASH.try_into().unwrap());
+    components.append(MarketComponent::TEST_CLASS_HASH.try_into().unwrap());
+    components.append(DrugComponent::TEST_CLASS_HASH.try_into().unwrap());
 
     let mut systems = array::ArrayTrait::<ClassHash>::new();
     systems.append(SpawnGameSystem::TEST_CLASS_HASH.try_into().unwrap());
@@ -122,9 +128,9 @@ fn spawn_game() -> (ContractAddress, felt252) {
     let mut res = world.execute('SpawnGame'.into(), spawn_game_calldata.span());
     assert(res.len() > 0_usize, 'did not spawn');
 
-    let game_id = serde::Serde::<felt252>::deserialize(
-        ref res
-    ).expect('spawn deserialization failed');
+    let (game_id, player_id) = serde::Serde::<(
+        felt252, felt252
+    )>::deserialize(ref res).expect('spawn deserialization failed');
     let mut res = world.entity(ShortStringTrait::new('Game'), game_id.into(), 0_u8, 0_usize);
     assert(res.len() > 0_usize, 'game not found');
 
@@ -135,7 +141,7 @@ fn spawn_game() -> (ContractAddress, felt252) {
     assert(game.max_locations == MAX_LOCATIONS, 'max locations mismatch');
     assert(game.is_finished == false, 'game is finished mismatch');
 
-    (world_address, game_id)
+    (world_address, game_id, player_id)
 }
 
 fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
@@ -152,9 +158,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
         ref res
     ).expect('spawn deserialization failed');
 
-    let mut res = IWorldDispatcher {
-        contract_address: world_address
-    }.entity(
+    let mut res = world.entity(
         ShortStringTrait::new('Stats'), (game_id, (player_id)).into_partitioned(), 0_u8, 0_usize
     );
     assert(res.len() > 0_usize, 'player stats not found');
@@ -165,9 +169,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     assert(stats.arrested == false, 'arrested mismatch');
 
     gas::withdraw_gas().expect('out of gas');
-    let mut res = IWorldDispatcher {
-        contract_address: world_address
-    }.entity(
+    let mut res = world.entity(
         ShortStringTrait::new('Cash'), (game_id, (player_id)).into_partitioned(), 0_u8, 0_usize
     );
     assert(res.len() > 0_usize, 'player cash not found');
@@ -213,7 +215,7 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
 #[test]
 #[available_gas(30000000)]
 fn test_spawn_locations() {
-    let (world_address, game_id) = spawn_game();
+    let (world_address, game_id, _) = spawn_game();
     let location_one = spawn_location(world_address, game_id);
 
     gas::withdraw_gas().expect('out of gas');
@@ -228,6 +230,19 @@ fn test_spawn_locations() {
 #[test]
 #[available_gas(30000000)]
 fn test_spawn_player() {
-    let (world_address, game_id) = spawn_game();
-    let player_one = spawn_player(world_address, game_id);
+    let (world_address, game_id, _) = spawn_game(); //creator auto joins
+
+    let players = IWorldDispatcher {
+        contract_address: world_address
+    }.entities(ShortStringTrait::new('Stats'), u250Trait::new(game_id));
+    assert(players.len() == 1_usize, 'wrong num players');
 }
+// FIXME: unexpected error, maybe because ENTRPOINT_FAILED is returned
+// #[test]
+// #[should_panic(expected: ('already joined', ))]
+// fn test_already_joined() {
+//     let (world_address, game_id) = spawn_game(); //creator auto joins
+//     let player_id = spawn_player(world_address, game_id);
+// }
+
+

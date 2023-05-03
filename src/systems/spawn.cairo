@@ -25,6 +25,8 @@ mod SpawnPlayer {
         // let players = commands::<Player>::entities(u250Trait::new(game_id));
         // assert(game.max_players > players.len(), 'max players');
 
+        debug::print_felt252(player_id);
+
         commands::set_entity(
             (game_id, (player_id)).into_partitioned(),
             (
@@ -54,6 +56,11 @@ mod SpawnLocation {
     use rollyourown::components::risks::Risks;
     use rollyourown::components::game::Game;
     use rollyourown::components::location::Location;
+    use rollyourown::components::market::Market;
+    use rollyourown::components::drug::Drug;
+    use rollyourown::constants::SCALING_FACTOR;
+
+    const MAX_PRODUCTS: u8 = 6;
 
     #[event]
     fn LocationCreated(game_id: felt252, location_id: felt252) {}
@@ -94,53 +101,21 @@ mod SpawnLocation {
             )
         );
 
+        let mut i = 0;
+        loop {
+            if i >= MAX_PRODUCTS {
+                break ();
+            }
+            let quantity = 1000_usize;
+            let cash = 100_u128 * SCALING_FACTOR;
+            commands::set_entity(
+                (game_id, (location_id, i.into())).into_partitioned(), (Market { cash, quantity })
+            );
+            i += 1;
+        }
+
         LocationCreated(game_id, location_id.into());
         location_id.into()
-    }
-}
-
-// maybe this should be part of spawn location since each location can only
-// have one market. possible once commands is lined acro
-#[system]
-mod SpawnMarket {
-    use traits::Into;
-    use box::BoxTrait;
-    use array::ArrayTrait;
-
-    use rollyourown::components::game::Game;
-    use rollyourown::components::location::Location;
-    use rollyourown::components::market::Market;
-    use rollyourown::components::drug::Drug;
-    use rollyourown::constants::SCALING_FACTOR;
-
-    fn execute(game_id: felt252, location_id: felt252) {
-        let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = starknet::get_caller_address().into();
-
-        let game = commands::<Game>::entity(game_id.into());
-        assert(game.creator == player_id, 'only creator');
-        assert(game.start_time < block_info.block_timestamp, 'already started');
-
-        let drug_1_id = commands::uuid();
-        let cash = 1000_u128 * SCALING_FACTOR;
-        let quantity = 1000_usize;
-        commands::set_entity(
-            (game_id, (location_id, drug_1_id)).into_partitioned(), (Market { cash, quantity })
-        );
-
-        let drug_2_id = commands::uuid();
-        let cash = 500_u128 * SCALING_FACTOR;
-        let quantity = 1000_usize;
-        commands::set_entity(
-            (game_id, (location_id, drug_2_id)).into_partitioned(), (Market { cash, quantity })
-        );
-
-        let drug_3_id = commands::uuid();
-        let cash = 500_u128 * SCALING_FACTOR;
-        let quantity = 1000_usize;
-        commands::set_entity(
-            (game_id, (location_id, drug_3_id)).into_partitioned(), (Market { cash, quantity })
-        );
     }
 }
 
@@ -162,7 +137,7 @@ mod SpawnGame {
 
     fn execute(
         start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
-    ) -> felt252 {
+    ) -> (felt252, felt252) {
         let player_id: felt252 = starknet::get_caller_address().into();
 
         let game_id = commands::uuid();
@@ -192,6 +167,6 @@ mod SpawnGame {
         );
 
         GameCreated(game_id.into(), player_id);
-        game_id.into()
+        (game_id.into(), player_id)
     }
 }
