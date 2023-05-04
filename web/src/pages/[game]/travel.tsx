@@ -15,36 +15,37 @@ import {
   StatenIsland,
 } from "@/components/icons/locations";
 import { breakpoint } from "@/utils/ui";
+import { Map, Locations } from "@/components/Map";
 
 interface PlaceProps {
-  name: string;
+  name: Locations;
   turn: number;
   icon: ReactNode;
 }
 
 const places: PlaceProps[] = [
   {
-    name: "Manhattan",
-    turn: 1,
-    icon: <Manhattan />,
-  },
-  {
-    name: "Queens",
-    turn: 1,
-    icon: <Queens />,
-  },
-  {
-    name: "Central Park",
+    name: Locations.Central,
     turn: 1,
     icon: <CentralPark />,
   },
   {
-    name: "Staten Island",
+    name: Locations.Queens,
     turn: 1,
-    icon: <StatenIsland />,
+    icon: <Queens />,
   },
   {
-    name: "The Bronx",
+    name: Locations.Bronx,
+    turn: 1,
+    icon: <Brooklyn />,
+  },
+  {
+    name: Locations.Jersey,
+    turn: 1,
+    icon: <Manhattan />,
+  },
+  {
+    name: Locations.Coney,
     turn: 1,
     icon: <ConeyIsland />,
   },
@@ -52,12 +53,12 @@ const places: PlaceProps[] = [
 
 export default function Travel() {
   const router = useRouter();
-  const [target, setTarget] = useState<number>(0);
+  const [target, setTarget] = useState<Locations>(Locations.Central);
   return (
     <Layout
       title="Destination"
       prefixTitle="Select Your"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/map.png');"
+      map={<Map highlight={target} />}
     >
       <Content>
         <Car boxSize="60px" />
@@ -66,8 +67,8 @@ export default function Travel() {
             <Place
               {...place}
               key={index}
-              selected={target === index}
-              onClick={() => setTarget(index)}
+              selected={place.name === target}
+              onClick={() => setTarget(place.name)}
             />
           ))}
         </VStack>
@@ -76,7 +77,7 @@ export default function Travel() {
         <Button
           w={breakpoint("full", "auto")}
           onClick={() => router.push("/0x123/location/brooklyn")}
-        >{`Travel to ${places[target].name}`}</Button>
+        >{`Travel to ${target}`}</Button>
       </Footer>
     </Layout>
   );

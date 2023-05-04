@@ -5,6 +5,7 @@ import {
   Text,
   StyleProps,
   Flex,
+  Box,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
@@ -14,6 +15,7 @@ import { motion } from "framer-motion";
 
 export interface LayoutProps {
   title: string;
+  map: ReactNode;
   prefixTitle: string;
   backgroundImage: string;
   children: ReactNode;
@@ -21,6 +23,7 @@ export interface LayoutProps {
 
 const Layout = ({
   title,
+  map,
   prefixTitle,
   backgroundImage,
   children,
@@ -48,7 +51,11 @@ const Layout = ({
           minHeight="180px"
           flex={breakpoint("0", "1")}
           justify={breakpoint("flex-end", "flex-start")}
+          position="relative"
         >
+          <Flex position="absolute" boxSize="full">
+            {map}
+          </Flex>
           <VStack
             gap="10px"
             top={breakpoint("0", "20%")}
