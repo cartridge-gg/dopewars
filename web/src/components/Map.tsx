@@ -50,6 +50,7 @@ const Outline = ({ location }: { location: Locations }) => {
         transition={{
           repeat: Infinity,
           duration: 0.5,
+          ease: "easeInOut",
         }}
       >
         <Image src={`/images/map/${name}_outline.svg`} boxSize="full" />
@@ -64,12 +65,19 @@ const Outline = ({ location }: { location: Locations }) => {
         // @ts-ignore
         transition={{
           repeat: Infinity,
-          duration: 1,
+          duration: 0.5,
           ease: "easeInOut",
         }}
       >
-        <Image src={`/images/map/${name}_marker.svg`} boxSize="full" />
+        <Image src={`/images/map/${name}_callout.svg`} boxSize="full" />
       </ChakraBox>
+      <Image
+        position="absolute"
+        top="0"
+        left="0"
+        boxSize="full"
+        src={`/images/map/${name}_markers.svg`}
+      />
     </>
   );
 };

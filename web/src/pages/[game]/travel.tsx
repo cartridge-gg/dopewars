@@ -37,7 +37,7 @@ const places: PlaceProps[] = [
   {
     name: Locations.Bronx,
     turn: 1,
-    icon: <Brooklyn />,
+    icon: <StatenIsland />,
   },
   {
     name: Locations.Jersey,
@@ -48,6 +48,11 @@ const places: PlaceProps[] = [
     name: Locations.Coney,
     turn: 1,
     icon: <ConeyIsland />,
+  },
+  {
+    name: Locations.Brooklyn,
+    turn: 1,
+    icon: <Brooklyn />,
   },
 ];
 
