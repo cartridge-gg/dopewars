@@ -51,19 +51,19 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@cartridge/connector@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@cartridge/connector/-/connector-0.3.15.tgz#3cb48e3be56e6906fc32e42a627e53e2d69c3360"
-  integrity sha512-lpfXbPV3AEpUrxl8GXXp93vfarZHnD6L0OW5UT51N2eI5wzGrECJyLgDJ+awXLI6IozFOCNcSQ/KiD+//uzW0g==
+"@cartridge/connector@^0.3.18":
+  version "0.3.18"
+  resolved "https://registry.yarnpkg.com/@cartridge/connector/-/connector-0.3.18.tgz#4182260cfa195e145f00f8ebf0c6e090e7f7081d"
+  integrity sha512-PAfNTDiEF3cOJ+DgI1uUkxlbjlCzlepsY2o6kdwaansZfMNde6m6gdeucQLR+uN1jroIpy1949nfxOmFIl9ldw==
   dependencies:
-    "@cartridge/controller" "0.3.15"
-    "@starknet-react/core" "^0.14.8"
-    starknet "^4.17.1"
+    "@cartridge/controller" "0.3.18"
+    "@starknet-react/core" "^0.16.0"
+    starknet "^4.22.0"
 
-"@cartridge/controller@0.3.15", "@cartridge/controller@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@cartridge/controller/-/controller-0.3.15.tgz#cda0d18c8a24db8e992e4dc48b695a53f7542e54"
-  integrity sha512-TSUOWeEXGlEwDtLezLTALJj1r1n2nGz97V8GlXQTERJgArPqpRONP4XUKNn8Sa8YzsSohS1H5vdRnPvUtH0+Bg==
+"@cartridge/controller@0.3.18":
+  version "0.3.18"
+  resolved "https://registry.yarnpkg.com/@cartridge/controller/-/controller-0.3.18.tgz#4cd309a7c88b7a3aee2e4029dc5cb8269269a4dc"
+  integrity sha512-rsBTk0VUi9CKz80dSmUd5lb3I7hUKR0SepUdNdkbHvMdw/HnsobB4YY9kNEDzkv0ttljxFyTZjZGsM99N+kkYg==
   dependencies:
     "@cartridge/penpal" "^6.2.3"
     base64url "^3.0.1"
@@ -1235,14 +1235,6 @@
   dependencies:
     "@noble/hashes" "~1.2.0"
     "@scure/base" "~1.1.0"
-
-"@starknet-react/core@^0.14.8":
-  version "0.14.8"
-  resolved "https://registry.yarnpkg.com/@starknet-react/core/-/core-0.14.8.tgz#3e063e3d3d2832d76de44eda85b2879e93d069e0"
-  integrity sha512-PouT9Njd2Um+rbuh3thg+YGalR30uen2D9cnJsayQ+UbPwXs0W2Y1n0Kp/pSxi0z+D7wGXO8Vu3pi7jU5ZLjVg==
-  dependencies:
-    "@tanstack/react-query" "^4.3.4"
-    immutable "^4.0.0"
 
 "@starknet-react/core@^0.16.0":
   version "0.16.0"
