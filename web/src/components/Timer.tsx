@@ -49,9 +49,7 @@ const Timer: React.FC<TimerProps> = ({ startInSeconds, onStart, onEnd }) => {
     <div>
       {timeLeft > 0 ? (
         <Flex>
-          <Text color="#878E8E">
-            Starts in&nbsp;
-          </Text>
+          <Text color="#878E8E">Starts in&nbsp;</Text>
           <Text color="#22B617">{formatTime(timeLeft)}</Text>
         </Flex>
       ) : (

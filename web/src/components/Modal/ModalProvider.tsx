@@ -2,7 +2,12 @@ import React, { createContext, useContext, useState } from "react";
 import Modal from "./";
 
 type ModalContextProps = {
-  openModal: (title: string, content: React.ReactNode, footerContent?: React.ReactNode, size?: "sm" | "md" | "lg" | "xl" | "full") => void;
+  openModal: (
+    title: string,
+    content: React.ReactNode,
+    footerContent?: React.ReactNode,
+    size?: "sm" | "md" | "lg" | "xl" | "full",
+  ) => void;
   closeModal: () => void;
 };
 
@@ -23,10 +28,17 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<React.ReactNode>(null);
-  const [footerContent, setFooterContent] = useState<React.ReactNode | undefined>(undefined);
+  const [footerContent, setFooterContent] = useState<
+    React.ReactNode | undefined
+  >(undefined);
   const [size, setSize] = useState<"sm" | "md" | "lg" | "xl" | "full">("md");
 
-  const openModal = (title: string, content: React.ReactNode, footerContent?: React.ReactNode, size: "sm" | "md" | "lg" | "xl" | "full" = "md") => {
+  const openModal = (
+    title: string,
+    content: React.ReactNode,
+    footerContent?: React.ReactNode,
+    size: "sm" | "md" | "lg" | "xl" | "full" = "md",
+  ) => {
     setTitle(title);
     setContent(content);
     setFooterContent(footerContent);
