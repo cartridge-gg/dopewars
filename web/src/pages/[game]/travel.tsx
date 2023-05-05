@@ -102,7 +102,14 @@ export default function Travel() {
     <Layout
       title="Destination"
       prefixTitle="Select Your"
-      map={<Map highlight={target} />}
+      map={
+        <Map
+          highlight={target}
+          onSelect={(selected) => {
+            setTarget(selected);
+          }}
+        />
+      }
     >
       <Content>
         {!isMobile() && <Car boxSize="60px" />}
