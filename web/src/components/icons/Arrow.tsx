@@ -11,18 +11,20 @@ const rotate: RotateType = {
   left: "rotate(0deg)",
 };
 
+type StyleType = "line" | "outline" | "contained";
+
 export interface ArrowProps {
   direction?: string;
-  variant?: "line" | "outline" | "contained";
+  style?: StyleType;
 }
 
 export const Arrow = ({
   direction,
-  variant,
+  style,
   ...props
 }: ArrowProps & IconProps) => {
   let path;
-  switch (variant) {
+  switch (style) {
     case "outline":
       path = (
         <>

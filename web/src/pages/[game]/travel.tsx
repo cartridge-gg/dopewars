@@ -1,11 +1,19 @@
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
-import { Car } from "@/components/icons";
+import { Arrow, Car } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { HStack, VStack, Text, Spacer, Divider } from "@chakra-ui/react";
+import {
+  HStack,
+  VStack,
+  Text,
+  Spacer,
+  Divider,
+  useBreakpointValue,
+  useEventListener,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import {
   Brooklyn,
   CentralPark,
@@ -14,7 +22,7 @@ import {
   Queens,
   StatenIsland,
 } from "@/components/icons/locations";
-import { breakpoint } from "@/utils/ui";
+import { breakpoint, isMobile } from "@/utils/ui";
 import { Map, Locations } from "@/components/Map";
 
 interface PlaceProps {
@@ -59,6 +67,37 @@ const places: PlaceProps[] = [
 export default function Travel() {
   const router = useRouter();
   const [target, setTarget] = useState<Locations>(Locations.Central);
+
+  useEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        back();
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        next();
+        break;
+    }
+  });
+
+  const next = useCallback(() => {
+    const idx = places.findIndex((place) => place.name === target);
+    if (idx < places.length - 1) {
+      setTarget(places[idx + 1].name);
+    } else {
+      setTarget(places[0].name);
+    }
+  }, [target, places]);
+
+  const back = useCallback(() => {
+    const idx = places.findIndex((place) => place.name === target);
+    if (idx > 0) {
+      setTarget(places[idx - 1].name);
+    } else {
+      setTarget(places[places.length - 1].name);
+    }
+  }, [target, places]);
   return (
     <Layout
       title="Destination"
@@ -66,23 +105,49 @@ export default function Travel() {
       map={<Map highlight={target} />}
     >
       <Content>
-        <Car boxSize="60px" />
+        {!isMobile() && <Car boxSize="60px" />}
         <VStack w="full">
-          {places.map((place, index) => (
-            <Place
-              {...place}
-              key={index}
-              selected={place.name === target}
-              onClick={() => setTarget(place.name)}
-            />
-          ))}
+          {!isMobile() &&
+            places.map((place, index) => (
+              <Place
+                {...place}
+                key={index}
+                selected={place.name === target}
+                onClick={() => setTarget(place.name)}
+              />
+            ))}
         </VStack>
       </Content>
       <Footer>
-        <Button
-          w={breakpoint("full", "auto")}
-          onClick={() => router.push("/0x123/location/brooklyn")}
-        >{`Travel to ${target}`}</Button>
+        <VStack w="full" gap="20px" align="flex-end">
+          {isMobile() && (
+            <HStack w="full" justify="space-between" gap="20px">
+              <Arrow
+                style="outline"
+                direction="left"
+                boxSize="48px"
+                userSelect="none"
+                cursor="pointer"
+                onClick={back}
+              />
+              <HStack layerStyle="rounded" w="full" justify="center">
+                <Text>{target}</Text>
+              </HStack>
+              <Arrow
+                style="outline"
+                direction="right"
+                boxSize="48px"
+                userSelect="none"
+                cursor="pointer"
+                onClick={next}
+              />
+            </HStack>
+          )}
+          <Button
+            w={breakpoint("full", "auto")}
+            onClick={() => router.push("/0x123/location/brooklyn")}
+          >{`Travel to ${target}`}</Button>
+        </VStack>
       </Footer>
     </Layout>
   );
