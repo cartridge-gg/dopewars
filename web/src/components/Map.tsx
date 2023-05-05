@@ -32,6 +32,7 @@ export const Map = ({
         top="0"
         left="0"
         boxSize="full"
+        alt="ryo map"
       />
       <Outline location={highlight} onSelect={onSelect} />
     </Flex>
@@ -68,7 +69,11 @@ const Outline = ({
           ease: "easeInOut",
         }}
       >
-        <Image src={`/images/map/${name}_outline.svg`} boxSize="full" />
+        <Image
+          src={`/images/map/${name}_outline.svg`}
+          boxSize="full"
+          alt="outline"
+        />
       </ChakraBox>
       <ChakraBox
         position="absolute"
@@ -84,7 +89,11 @@ const Outline = ({
           ease: "easeInOut",
         }}
       >
-        <Image src={`/images/map/${name}_callout.svg`} boxSize="full" />
+        <Image
+          src={`/images/map/${name}_callout.svg`}
+          boxSize="full"
+          alt="callout"
+        />
       </ChakraBox>
       <Image
         position="absolute"
@@ -92,6 +101,7 @@ const Outline = ({
         left="0"
         boxSize="full"
         src={`/images/map/${name}_markers.svg`}
+        alt="markers"
       />
       <HitBox onSelect={onSelect} />
     </>
@@ -103,7 +113,7 @@ const HitBox = ({ onSelect }: { onSelect: (target: Locations) => void }) => (
     boxSize="full"
     viewBox="0 0 256 256"
     xmlns="http://www.w3.org/2000/svg"
-    zIndex="1"
+    zIndex="0"
     fill="#D800D8"
     fillOpacity="0"
   >

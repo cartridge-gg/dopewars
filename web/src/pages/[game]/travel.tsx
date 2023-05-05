@@ -22,7 +22,7 @@ import {
   Queens,
   StatenIsland,
 } from "@/components/icons/locations";
-import { breakpoint, isMobile } from "@/utils/ui";
+import { breakpoint, IsMobile } from "@/utils/ui";
 import { Map, Locations } from "@/components/Map";
 
 interface PlaceProps {
@@ -88,7 +88,7 @@ export default function Travel() {
     } else {
       setTarget(places[0].name);
     }
-  }, [target, places]);
+  }, [target]);
 
   const back = useCallback(() => {
     const idx = places.findIndex((place) => place.name === target);
@@ -97,7 +97,7 @@ export default function Travel() {
     } else {
       setTarget(places[places.length - 1].name);
     }
-  }, [target, places]);
+  }, [target]);
   return (
     <Layout
       title="Destination"
@@ -112,9 +112,9 @@ export default function Travel() {
       }
     >
       <Content>
-        {!isMobile() && <Car boxSize="60px" />}
+        {!IsMobile() && <Car boxSize="60px" />}
         <VStack w="full">
-          {!isMobile() &&
+          {!IsMobile() &&
             places.map((place, index) => (
               <Place
                 {...place}
@@ -127,7 +127,7 @@ export default function Travel() {
       </Content>
       <Footer>
         <VStack w="full" gap="20px" align="flex-end">
-          {isMobile() && (
+          {IsMobile() && (
             <HStack w="full" justify="space-between" gap="20px">
               <Arrow
                 style="outline"

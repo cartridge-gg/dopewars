@@ -1,5 +1,4 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
-import { formatAddress } from "@/utils";
 import { Clock, Gem, Bag, Chat, Home, Link } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
 import {
@@ -19,7 +18,7 @@ const Header = () => {
   const { address } = useAccount();
   const { connectors, connect, disconnect } = useConnectors();
   const [connected, setConnected] = useState(false);
-  const isMobile = useBreakpointValue([true, true, true, false]);
+  const IsMobile = useBreakpointValue([true, true, true, false]);
 
   return (
     <Flex
@@ -60,7 +59,7 @@ const Header = () => {
               <Divider orientation="vertical" borderColor="neon.700" h="12px" />
               <HStack>
                 <Clock />{" "}
-                <Text whiteSpace="nowrap">{!isMobile && "Day"} 3/30</Text>
+                <Text whiteSpace="nowrap">{!IsMobile && "Day"} 3/30</Text>
               </HStack>
             </HStack>
           </HStack>

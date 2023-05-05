@@ -8,4 +8,4 @@ export const breakpoint = (mobile: string, desktop: string): string[] => [
   desktop,
 ];
 
-export const isMobile = () => useBreakpointValue([true, true, true, false]);
+export const IsMobile = () => useBreakpointValue([true, true, true, false]);

@@ -11,7 +11,7 @@ import {
 import { ReactNode } from "react";
 import Header from "./Header";
 import Image from "next/image";
-import { breakpoint, isMobile } from "@/utils/ui";
+import { breakpoint, IsMobile } from "@/utils/ui";
 import { motion } from "framer-motion";
 
 export interface LayoutProps {
@@ -69,7 +69,7 @@ const Layout = ({
             <Heading fontSize="24px">{title}</Heading>
           </VStack>
         </VStack>
-        <VStack flex={map && isMobile() ? "0" : "1"} {...props}>
+        <VStack flex={map && IsMobile() ? "0" : "1"} {...props}>
           {children}
         </VStack>
       </Flex>
