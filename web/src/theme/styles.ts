@@ -9,6 +9,7 @@ export const styles = {
       bgColor: "neon.900",
       color: "neon.200",
       letterSpacing: "0.04em",
+      WebkitTapHighlightColor: "transparent",
     },
   },
 };
