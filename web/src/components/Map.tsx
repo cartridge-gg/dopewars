@@ -1,3 +1,4 @@
+import { breakpoint, IsMobile } from "@/utils/ui";
 import {
   Box,
   Icon,
@@ -5,8 +6,15 @@ import {
   Image,
   chakra,
   shouldForwardProp,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { motion, isValidMotionProp } from "framer-motion";
+import { motion, isValidMotionProp, useAnimate } from "framer-motion";
+import { useEffect } from "react";
+
+const ChakraBox = chakra(motion.div, {
+  shouldForwardProp: (prop) =>
+    isValidMotionProp(prop) || shouldForwardProp(prop),
+});
 
 export enum Locations {
   Queens = "Queens",
@@ -17,6 +25,19 @@ export enum Locations {
   Brooklyn = "Brooklyn",
 }
 
+type CoordinateType = {
+  [key in Locations]: { x: number; y: number };
+};
+
+const coordinate: CoordinateType = {
+  [Locations.Queens]: { x: -150, y: 0 },
+  [Locations.Jersey]: { x: 150, y: 0 },
+  [Locations.Bronx]: { x: 0, y: 150 },
+  [Locations.Central]: { x: 0, y: 0 },
+  [Locations.Coney]: { x: -150, y: -150 },
+  [Locations.Brooklyn]: { x: 0, y: -150 },
+};
+
 export const Map = ({
   highlight = Locations.Central,
   onSelect,
@@ -24,8 +45,18 @@ export const Map = ({
   highlight?: Locations;
   onSelect: (selected: Locations) => void;
 }) => {
+  const [scope, animate] = useAnimate();
+  const isMobile = useBreakpointValue([true, true, true, false]);
+
+  useEffect(() => {
+    const anim = isMobile
+      ? { scale: 1.75, ...coordinate[highlight] }
+      : { scale: 1, x: 0, y: 0 };
+    animate(scope.current, { ...anim }, { ease: "easeOut" });
+  }, [highlight, isMobile, animate, scope]);
+
   return (
-    <Flex userSelect="none">
+    <Flex userSelect="none" as={motion.div} ref={scope}>
       <Image
         src="/images/map/basemap.svg"
         position="absolute"
@@ -38,11 +69,6 @@ export const Map = ({
     </Flex>
   );
 };
-
-const ChakraBox = chakra(motion.div, {
-  shouldForwardProp: (prop) =>
-    isValidMotionProp(prop) || shouldForwardProp(prop),
-});
 
 const Outline = ({
   location,

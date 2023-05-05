@@ -62,6 +62,7 @@ const Layout = ({
             top={breakpoint("0", "20%")}
             position={["static", "static", "static", "relative"]}
             pointerEvents="none"
+            zIndex="1"
           >
             <Text textStyle="subheading" fontSize="11px">
               {prefixTitle}
