@@ -1,3 +1,5 @@
+import { useBreakpointValue } from "@chakra-ui/react";
+
 // remove this once we override breakpoints in chakra
 export const breakpoint = (mobile: string, desktop: string): string[] => [
   mobile,
@@ -5,3 +7,5 @@ export const breakpoint = (mobile: string, desktop: string): string[] => [
   mobile,
   desktop,
 ];
+
+export const IsMobile = () => useBreakpointValue([true, true, true, false]);
