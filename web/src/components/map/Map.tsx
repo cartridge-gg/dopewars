@@ -30,12 +30,12 @@ export const Map = ({
   const isMobile = useBreakpointValue([true, true, true, false]);
 
   useEffect(() => {
-    const anim = isMobile
+    const animation = isMobile
       ? { scale: 1.75, ...coordinate[highlight] }
       : { scale: 1, x: 0, y: 0 };
     animate(
       scope.current,
-      { ...anim },
+      { ...animation },
       {
         ease: "easeInOut",
         duration: 0.5,
@@ -46,6 +46,8 @@ export const Map = ({
   return (
     <Flex
       userSelect="none"
+      position="relative"
+      maxWidth="800px"
       as={motion.div}
       ref={scope}
       drag={isMobile}

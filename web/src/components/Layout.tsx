@@ -54,7 +54,7 @@ const Layout = ({
           justify={breakpoint(map ? "flex-start" : "flex-end", "flex-start")}
           position="relative"
         >
-          <Flex position="absolute" boxSize="full">
+          <Flex position="absolute" boxSize="full" justify="center">
             {map}
           </Flex>
           <VStack
