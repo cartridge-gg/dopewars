@@ -1,4 +1,4 @@
-import { StyleProps, VStack } from "@chakra-ui/react";
+import { StyleProps, VStack, HStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 const Content = ({
@@ -14,6 +14,8 @@ const Content = ({
     {...props}
   >
     {children}
+    {/* so we can scroll above footer */}
+    <HStack h="140px" w="full" />
   </VStack>
 );
 

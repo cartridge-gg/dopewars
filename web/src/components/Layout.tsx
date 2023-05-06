@@ -1,4 +1,11 @@
-import { VStack, Heading, Text, StyleProps, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  HStack,
+  Heading,
+  Text,
+  StyleProps,
+  Flex,
+} from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
 import Image from "next/image";
@@ -29,7 +36,8 @@ const Layout = ({
         top="0"
         left="0"
         boxSize="full"
-        direction={["column", "column", "column", "row"]}
+        gap={["40px", 0]}
+        direction={["column", "row"]}
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -61,7 +69,16 @@ const Layout = ({
             <Heading fontSize="24px">{title}</Heading>
           </VStack>
         </VStack>
-        <VStack flex={map && IsMobile() ? "0" : "1"} {...props}>
+        <VStack
+          flex={map && IsMobile() ? "0" : "1"}
+          overflowY="scroll"
+          {...props}
+          sx={{
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {children}
         </VStack>
       </Flex>

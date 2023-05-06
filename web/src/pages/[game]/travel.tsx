@@ -126,7 +126,7 @@ export default function Travel() {
             ))}
         </VStack>
       </Content>
-      <Footer>
+      <Footer transparent>
         <VStack w="full" gap="20px" align="flex-end">
           {IsMobile() && (
             <HStack w="full" justify="space-between" gap="20px">
