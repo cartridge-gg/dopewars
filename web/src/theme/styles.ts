@@ -54,6 +54,12 @@ export const layerStyles = {
     borderRadius: "6px",
     bgColor: "neon.800",
   },
+  fill: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    boxSize: "full",
+  },
 };
 
 //text styles
