@@ -7,6 +7,7 @@ import {
   chakra,
   shouldForwardProp,
   useBreakpointValue,
+  ImageProps,
 } from "@chakra-ui/react";
 import { motion, isValidMotionProp, useAnimate } from "framer-motion";
 import { useEffect } from "react";
@@ -30,6 +31,13 @@ const coordinate: CoordinateType = {
   [Locations.Brooklyn]: { x: 0, y: -150 },
 };
 
+const fill: ImageProps = {
+  top: "0",
+  left: "0",
+  boxSize: "full",
+  position: "absolute",
+};
+
 export const Map = ({
   highlight = Locations.Central,
   onSelect,
@@ -49,14 +57,7 @@ export const Map = ({
 
   return (
     <Flex userSelect="none" as={motion.div} ref={scope}>
-      <Image
-        src="/images/map/basemap.svg"
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
-        alt="ryo map"
-      />
+      <Image src="/images/map/basemap.svg" {...fill} alt="ryo map" />
       <Outline location={highlight} onSelect={onSelect} />
     </Flex>
   );
@@ -71,21 +72,19 @@ const Outline = ({
 }) => {
   const key = Object.values(Locations).indexOf(location);
   const name = Object.keys(Locations)[key].toLowerCase();
+  const transition = {
+    repeat: Infinity,
+    duration: 1,
+    ease: "easeInOut",
+  };
   return (
     <>
       <ChakraBox
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
+        {...fill}
         as={motion.div}
         animate={{ opacity: [0.5, 1, 0.5] }}
         // @ts-ignore
-        transition={{
-          repeat: Infinity,
-          duration: 0.5,
-          ease: "easeInOut",
-        }}
+        transition={transition}
       >
         <Image
           src={`/images/map/${name}_outline.svg`}
@@ -94,18 +93,11 @@ const Outline = ({
         />
       </ChakraBox>
       <ChakraBox
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
+        {...fill}
         as={motion.div}
         animate={{ y: [0, -10, 0] }}
         // @ts-ignore
-        transition={{
-          repeat: Infinity,
-          duration: 0.5,
-          ease: "easeInOut",
-        }}
+        transition={transition}
       >
         <Image
           src={`/images/map/${name}_callout.svg`}
@@ -113,14 +105,7 @@ const Outline = ({
           alt="callout"
         />
       </ChakraBox>
-      <Image
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
-        src={`/images/map/${name}_markers.svg`}
-        alt="markers"
-      />
+      <Image {...fill} src={`/images/map/${name}_markers.svg`} alt="markers" />
       <HitBox onSelect={onSelect} />
     </>
   );
