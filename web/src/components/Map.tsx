@@ -52,11 +52,22 @@ export const Map = ({
     const anim = isMobile
       ? { scale: 1.75, ...coordinate[highlight] }
       : { scale: 1, x: 0, y: 0 };
-    animate(scope.current, { ...anim }, { ease: "easeOut" });
+    animate(scope.current, { ...anim }, { ease: "easeInOut", duration: 0.5 });
   }, [highlight, isMobile, animate, scope]);
 
   return (
-    <Flex userSelect="none" as={motion.div} ref={scope}>
+    <Flex
+      userSelect="none"
+      as={motion.div}
+      ref={scope}
+      drag={isMobile}
+      dragConstraints={{
+        left: -150,
+        right: 150,
+        top: -150,
+        bottom: 150,
+      }}
+    >
       <Image src="/images/map/basemap.svg" {...fill} alt="ryo map" />
       <Outline location={highlight} onSelect={onSelect} />
     </Flex>
