@@ -23,7 +23,7 @@ import {
   StatenIsland,
 } from "@/components/icons/locations";
 import { breakpoint, IsMobile } from "@/utils/ui";
-import { Map } from "@/components/Map";
+import { Map } from "@/components/map";
 import { Locations } from "@/hooks/state";
 
 interface PlaceProps {
