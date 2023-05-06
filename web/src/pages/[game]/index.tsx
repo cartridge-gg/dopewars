@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
-import { breakpoint } from "@/utils/ui";
 
 export default function Join() {
   const router = useRouter();
@@ -71,11 +70,11 @@ export default function Join() {
         </HStack>
       </Content>
       <Footer>
-        <Button w={breakpoint("full", "auto")} onClick={() => router.push("/")}>
+        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
           Leave Lobby
         </Button>
         <Button
-          w={breakpoint("full", "auto")}
+          w={["full", "auto"]}
           onClick={() => router.push("/0x12341/travel")}
         >
           Start

@@ -9,7 +9,6 @@ import {
   Text,
   Spacer,
   Divider,
-  useBreakpointValue,
   useEventListener,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -22,7 +21,7 @@ import {
   Queens,
   StatenIsland,
 } from "@/components/icons/locations";
-import { breakpoint, IsMobile } from "@/utils/ui";
+import { IsMobile } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { Locations } from "@/hooks/state";
 
@@ -152,7 +151,7 @@ export default function Travel() {
             </HStack>
           )}
           <Button
-            w={breakpoint("full", "auto")}
+            w={["full", "auto"]}
             onClick={() => router.push("/0x123/location/brooklyn")}
           >{`Travel to ${target}`}</Button>
         </VStack>

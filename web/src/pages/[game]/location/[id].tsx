@@ -15,7 +15,6 @@ import {
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { breakpoint } from "@/utils/ui";
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import {
@@ -108,7 +107,7 @@ export default function Location() {
       </Content>
       <Footer>
         <Button
-          w={breakpoint("full", "auto")}
+          w={["full", "auto"]}
           onClick={() => router.push("/0x1234/turn")}
         >
           Travel and end turn

@@ -1,16 +1,9 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
 import { Clock, Gem, Bag, Chat, Home, Link } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
-import {
-  Box,
-  Divider,
-  Flex,
-  HStack,
-  Text,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useState } from "react";
-import { breakpoint, IsMobile } from "@/utils/ui";
+import { IsMobile } from "@/utils/ui";
 import { useRouter } from "next/router";
 
 const Header = () => {
@@ -24,7 +17,7 @@ const Header = () => {
       position="absolute"
       top="0"
       left="0"
-      p={breakpoint("0 24px 24px 24px", "24px")}
+      p={["0 24px 24px 24px", "24px"]}
       w="full"
       justify="flex-end"
       zIndex="1"
@@ -46,7 +39,7 @@ const Header = () => {
               h="full"
               py="8px"
               px="20px"
-              spacing={breakpoint("10px", "30px")}
+              spacing={["10px", "30px"]}
             >
               <HStack>
                 <Gem /> <Text>$2000</Text>

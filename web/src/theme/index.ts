@@ -4,6 +4,7 @@ import { styles, textStyles, layerStyles } from "./styles";
 import { fonts } from "./fonts";
 import * as Components from "./components";
 import colors from "./colors";
+import breakpoints from "./breakpoints";
 
 // 2. Call `extendTheme` and pass your custom values
 const theme = extendTheme({
@@ -12,6 +13,7 @@ const theme = extendTheme({
   styles,
   textStyles,
   layerStyles,
+  breakpoints,
   components: {
     ...Components,
   },

@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import { breakpoint } from "@/utils/ui";
 
 export default function Turn() {
   const router = useRouter();
@@ -75,7 +74,7 @@ export default function Turn() {
       </Content>
       <Footer>
         <Button
-          w={breakpoint("full", "auto")}
+          w={["full", "auto"]}
           onClick={() => router.push("/0x123/travel")}
         >
           Continue

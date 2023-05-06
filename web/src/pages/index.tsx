@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { Clock, Link } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
-import { breakpoint } from "@/utils/ui";
 import { User } from "@/components/icons/archive";
 import { useGameStore } from "@/hooks/state";
 import { useEffect } from "react";

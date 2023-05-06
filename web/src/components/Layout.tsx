@@ -1,17 +1,8 @@
-import {
-  SimpleGrid,
-  VStack,
-  Heading,
-  Text,
-  StyleProps,
-  Flex,
-  Box,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { VStack, Heading, Text, StyleProps, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
 import Image from "next/image";
-import { breakpoint, IsMobile } from "@/utils/ui";
+import { IsMobile } from "@/utils/ui";
 import { motion } from "framer-motion";
 
 export interface LayoutProps {
@@ -50,8 +41,8 @@ const Layout = ({
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           minHeight="180px"
-          flex={breakpoint(map ? "1" : "0", "1")}
-          justify={breakpoint(map ? "flex-start" : "flex-end", "flex-start")}
+          flex={[map ? "1" : "0", "1"]}
+          justify={[map ? "flex-start" : "flex-end", "flex-start"]}
           position="relative"
         >
           <Flex position="absolute" boxSize="full" justify="center">
@@ -59,7 +50,7 @@ const Layout = ({
           </Flex>
           <VStack
             gap="10px"
-            top={breakpoint("0", "20%")}
+            top={["0", "20%"]}
             position={["static", "static", "static", "relative"]}
             pointerEvents="none"
             zIndex="1"

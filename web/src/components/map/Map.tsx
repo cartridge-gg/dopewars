@@ -1,6 +1,6 @@
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Locations } from "@/hooks/state";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
@@ -27,7 +27,7 @@ export const Map = ({
   onSelect: (selected: Locations) => void;
 }) => {
   const [scope, animate] = useAnimate();
-  const isMobile = useBreakpointValue([true, true, true, false]);
+  const isMobile = useBreakpointValue([true, false]);
 
   useEffect(() => {
     const animation = isMobile
