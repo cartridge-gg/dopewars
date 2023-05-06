@@ -10,20 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { motion, isValidMotionProp, useAnimate } from "framer-motion";
 import { useEffect } from "react";
+import { Locations } from "@/hooks/state";
 
 const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) =>
     isValidMotionProp(prop) || shouldForwardProp(prop),
 });
-
-export enum Locations {
-  Queens = "Queens",
-  Jersey = "Jersey City",
-  Bronx = "The Bronx",
-  Central = "Central Park",
-  Coney = "Coney Island",
-  Brooklyn = "Brooklyn",
-}
 
 type CoordinateType = {
   [key in Locations]: { x: number; y: number };

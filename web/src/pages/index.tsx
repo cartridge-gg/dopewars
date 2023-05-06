@@ -10,12 +10,7 @@ import { useGameStore } from "@/hooks/state";
 import { useEffect } from "react";
 
 export default function Home() {
-  const players = useGameStore((state) => state);
-  const incPlayer = useGameStore((state) => state.incPlayer);
   const router = useRouter();
-  useEffect(() => {
-    console.log(players);
-  }, [players]);
   return (
     <Layout
       title="Roll Your Own"
@@ -36,7 +31,7 @@ export default function Home() {
             <Text color="neon.600" fontSize="14px">
               YOU HAVE NO GAMES
             </Text>
-            <Button w="full" onClick={incPlayer}>
+            <Button w="full" onClick={() => router.push("/create")}>
               Create
             </Button>
           </VStack>
