@@ -15,6 +15,7 @@ export const Button: ComponentStyleConfig = {
     borderImageWidth: "4px",
     px: "40px",
     gap: "10px",
+    bgColor: "neon.900",
     _before: {
       content: '""',
       position: "absolute",

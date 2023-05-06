@@ -1,6 +1,6 @@
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Locations } from "@/hooks/state";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";

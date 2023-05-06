@@ -50,8 +50,8 @@ const Layout = ({
           </Flex>
           <VStack
             gap="10px"
-            top={["0", "20%"]}
-            position={["static", "static", "static", "relative"]}
+            top={["10%", "20%"]}
+            position="relative"
             pointerEvents="none"
             zIndex="1"
           >

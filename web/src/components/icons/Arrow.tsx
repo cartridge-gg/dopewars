@@ -11,7 +11,7 @@ const rotate: RotateType = {
   left: "rotate(0deg)",
 };
 
-type StyleType = "line" | "outline" | "contained";
+type StyleType = "line" | "outline" | "pixel";
 
 export interface ArrowProps {
   direction?: string;
@@ -25,6 +25,11 @@ export const Arrow = ({
 }: ArrowProps & IconProps) => {
   let path;
   switch (style) {
+    case "pixel":
+      path = (
+        <path d="M20.7265 23.9998L20.7265 12L18.9088 12V14.0002L17.0911 14.0002L17.0911 16.0003H15.2734L15.2734 20.0006H17.0911L17.0911 21.9998H18.9088L18.9088 24L20.7265 23.9998Z" />
+      );
+      break;
     case "outline":
       path = (
         <>

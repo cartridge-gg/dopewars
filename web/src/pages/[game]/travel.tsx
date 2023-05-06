@@ -4,6 +4,7 @@ import { Arrow, Car } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import {
+  Box,
   HStack,
   VStack,
   Text,
@@ -171,20 +172,37 @@ const Place = ({
   onClick: () => void;
 } & PlaceProps) => {
   return (
-    <HStack
-      layerStyle={selected ? "rounded" : ""}
-      w="full"
-      py="12px"
-      px="20px"
-      cursor="pointer"
-      onClick={onClick}
-    >
-      <HStack>
-        {icon}
-        <Text whiteSpace="nowrap">{name}</Text>
+    <HStack w="full">
+      <Arrow
+        style="pixel"
+        direction="right"
+        size="lg"
+        visibility={selected ? "visible" : "hidden"}
+      />
+      <HStack
+        layerStyle={selected ? "rounded" : ""}
+        py="12px"
+        px="20px"
+        w="full"
+        cursor="pointer"
+        onClick={onClick}
+        position="relative"
+      >
+        <HStack w="full">
+          <HStack>
+            {icon}
+            <Text whiteSpace="nowrap">{name}</Text>
+          </HStack>
+          <Divider borderStyle="dotted" borderColor="neon.700" />
+          <Text whiteSpace="nowrap">{turn} DAY</Text>
+        </HStack>
       </HStack>
-      <Divider borderStyle="dotted" borderColor="neon.700" />
-      <Text whiteSpace="nowrap">{turn} DAY</Text>
+      <Arrow
+        style="pixel"
+        direction="left"
+        size="lg"
+        visibility={selected ? "visible" : "hidden"}
+      />
     </HStack>
   );
 };
