@@ -46,3 +46,10 @@ flowchart TD
     F1 --> L
     END --> |Market prices update|C
 ```
+
+#### Future improvements
+
+Currently, game initialization state is hidden during the `join` phase, players commit to a loadout (i.e. their weapons, clothing, etc) and reveal it upon their first turn. Once the game has begun, market state is randomly initialized (each location contains a constant product market) and players can start the game loop. Market state is transparent, players can view the prices at other locations as well as other player balances.
+
+- Player inventories should be hidden until the game end condition is reached, at which point, they would reveal their current inventory
+- Mugging is currently PVE, eventually, it would be cool to do it PVP, in which case, the mugger should not know the loadout of their target until the mugging is performed. Ideally there is a mechanism to force the "mugger" and "muggee" to reveal their loadout. See https://github.com/FlynnSC/zk-hunt#search
