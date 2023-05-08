@@ -1,5 +1,4 @@
 import BorderImage from "@/components/icons/BorderImage";
-import { StyleProps } from "@chakra-ui/react";
 
 //global styles
 export const styles = {

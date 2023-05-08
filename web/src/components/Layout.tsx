@@ -20,6 +20,8 @@ export interface LayoutProps {
   children: ReactNode;
 }
 
+import CrtEffect from "./CrtEffect";
+
 const Layout = ({
   title,
   map,
@@ -82,6 +84,7 @@ const Layout = ({
           {children}
         </VStack>
       </Flex>
+      <CrtEffect />
     </>
   );
 };
