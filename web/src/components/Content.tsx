@@ -8,7 +8,7 @@ const Content = ({
   <VStack
     w="full"
     position="relative"
-    top={["20px", "20%"]}
+    top={["0", "20%"]}
     px={["24px", "80px"]}
     maxWidth={["full", "800px"]}
     {...props}

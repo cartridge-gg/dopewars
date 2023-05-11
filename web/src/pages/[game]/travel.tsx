@@ -131,7 +131,7 @@ export default function Travel() {
           {IsMobile() && (
             <HStack
               position="absolute"
-              top="20px"
+              top="40px"
               left="0"
               w="full"
               px="20px"

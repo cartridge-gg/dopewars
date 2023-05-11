@@ -2,7 +2,7 @@ import { Global } from "@emotion/react";
 
 export const fonts = {
   body: `'dos-vga', san-serif`,
-  heading: `'pixel-script', san-serif`,
+  heading: `'ppmondwest', san-serif`,
 };
 
 const Fonts = () => (
@@ -27,6 +27,13 @@ const Fonts = () => (
         font-weight: 400;
         font-style: normal;
         src: url('/fonts/broken-console-broken-console-regular-400.ttf');
+      }
+
+      @font-face {
+        font-family: 'ppmondwest';
+        font-weight: 400;
+        font-style: normal;
+        src: url('/fonts/PPMondwest-Regular.otf') format('opentype');
       }
 `}
   />

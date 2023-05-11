@@ -115,8 +115,13 @@ export default function Create() {
         </UnorderedList>
       </Content>
       <Footer>
-        <Button onClick={() => router.push("/")}>Cancel</Button>
-        <Button onClick={() => router.push("/pending/0x123")}>
+        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
+          Cancel
+        </Button>
+        <Button
+          w={["full", "auto"]}
+          onClick={() => router.push("/pending/0x123")}
+        >
           Create New Game
         </Button>
       </Footer>

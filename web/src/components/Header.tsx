@@ -14,7 +14,7 @@ const Header = () => {
 
   return (
     <Flex
-      position="absolute"
+      position="fixed"
       top="0"
       left="0"
       p={["0 24px 24px 24px", "24px"]}
