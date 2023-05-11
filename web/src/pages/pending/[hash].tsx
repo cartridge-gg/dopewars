@@ -1,7 +1,6 @@
 import Content from "@/components/Content";
-import Weed from "@/components/images/Weed";
 import Layout from "@/components/Layout";
-import { Link, Text, VStack } from "@chakra-ui/react";
+import { Image, Link, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 export default function Pending() {
@@ -16,7 +15,7 @@ export default function Pending() {
     >
       <Content>
         <VStack gap="24px">
-          <Weed />
+          <Image src="/images/loading.gif" />
           <VStack>
             <Text>Transaction pending...</Text>
             <Link>View on Starkscan</Link>
