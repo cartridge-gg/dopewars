@@ -126,10 +126,19 @@ export default function Travel() {
             ))}
         </VStack>
       </Content>
-      <Footer transparent>
-        <VStack w="full" gap="20px" align="flex-end">
+      <Footer>
+        <VStack w="full" align="flex-end">
           {IsMobile() && (
-            <HStack w="full" justify="space-between" gap="20px">
+            <HStack
+              position="absolute"
+              top="20px"
+              left="0"
+              w="full"
+              px="20px"
+              justify="space-between"
+              align="center"
+              gap="20px"
+            >
               <Arrow
                 style="outline"
                 direction="left"
