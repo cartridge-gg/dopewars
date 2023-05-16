@@ -1,0 +1,15 @@
+query Event ($id: String!) {
+    event (id: $id) {
+        id
+        keys
+        data
+    }
+}
+
+query Events ($keys: [String!]!) {
+    events (keys: $keys) {
+        id
+        keys
+        data
+    }
+}

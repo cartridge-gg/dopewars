@@ -1,0 +1,21 @@
+query Entity ($id: String!) {
+    entity (id: $id) {
+        name,
+        partitionId,
+        keys,
+        transactionHash,
+        createdAt,
+        updatedAt,
+    }
+}
+
+query Entities ($partitionId: String!, $keys: [String!]) {
+    entities (partitionId: $partitionId, keys: $keys) {
+        id
+        name,
+        keys,
+        transactionHash,
+        createdAt,
+        updatedAt,
+    }
+}

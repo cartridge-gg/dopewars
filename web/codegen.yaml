@@ -1,0 +1,15 @@
+overwrite: true
+schema: ${NEXT_PUBLIC_API_URL:http://localhost:8080/graphql}
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-query"
+    config:
+      addInfiniteQuery: true
+      exposeQueryKeys: true
+  src/generated/introspection.ts:
+    plugins:
+      - fragment-matcher
