@@ -27,7 +27,7 @@ export default function Home() {
             p="30px 20px 20px 20px"
             gap="20px"
           >
-            <Text color="neon.600" fontSize="14px">
+            <Text color="neon.500" fontSize="14px">
               YOU HAVE NO GAMES
             </Text>
             <Button w="full" onClick={() => router.push("/create")}>

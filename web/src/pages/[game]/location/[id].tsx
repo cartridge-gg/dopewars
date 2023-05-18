@@ -91,7 +91,7 @@ export default function Location() {
               </CardHeader>
               <CardBody>
                 <HStack w="full" justify="center">
-                  <Box bgColor="neon.800" borderRadius="6px">
+                  <Box bgColor="neon.700" borderRadius="6px">
                     {drug.icon}
                   </Box>
                 </HStack>

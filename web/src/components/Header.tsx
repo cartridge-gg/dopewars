@@ -44,11 +44,11 @@ const Header = () => {
               <HStack>
                 <Gem /> <Text>$2000</Text>
               </HStack>
-              <Divider orientation="vertical" borderColor="neon.700" h="12px" />
+              <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
                 <Bag /> <Text>20</Text>
               </HStack>
-              <Divider orientation="vertical" borderColor="neon.700" h="12px" />
+              <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
                 <Clock />{" "}
                 <Text whiteSpace="nowrap">{!IsMobile && "Day"} 3/30</Text>

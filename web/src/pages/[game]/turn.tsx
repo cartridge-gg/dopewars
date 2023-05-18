@@ -47,7 +47,7 @@ export default function Turn() {
         </VStack>
         <VStack w="full">
           <HStack w="full">
-            <Text fontFamily="broken-console" fontSize="10px" color="neon.600">
+            <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
               Travel To
             </Text>
           </HStack>
@@ -100,7 +100,7 @@ const Product = ({
   const header = isHeader && {
     fontFamily: "broken-console",
     fontSize: "10px",
-    color: "neon.600",
+    color: "neon.500",
   };
 
   return (

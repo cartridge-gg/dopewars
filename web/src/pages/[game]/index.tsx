@@ -65,7 +65,7 @@ export default function Join() {
 
         <HStack w="full" gap="10px">
           <Text whiteSpace="nowrap">MATCH BEGINS IN</Text>
-          <Divider borderColor="neon.600" borderStyle="dotted" />
+          <Divider borderColor="neon.500" borderStyle="dotted" />
           <Text>15m35s</Text>
         </HStack>
       </Content>

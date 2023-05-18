@@ -202,7 +202,7 @@ const Place = ({
             {icon}
             <Text whiteSpace="nowrap">{name}</Text>
           </HStack>
-          <Divider borderStyle="dotted" borderColor="neon.700" />
+          <Divider borderStyle="dotted" borderColor="neon.600" />
           <Text whiteSpace="nowrap">{turn} DAY</Text>
         </HStack>
       </HStack>

@@ -51,7 +51,7 @@ export const layerStyles = {
   rounded: {
     p: "6px",
     borderRadius: "6px",
-    bgColor: "neon.800",
+    bgColor: "neon.700",
   },
   fill: {
     position: "absolute",

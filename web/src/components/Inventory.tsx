@@ -7,7 +7,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
     <HStack {...props}>
       <Bag boxSize="36px" />
       <HStack
-        bgColor="neon.800"
+        bgColor="neon.700"
         h="full"
         px="30px"
         backgroundImage="linear-gradient(to left, #172217 0%, transparent 10%), linear-gradient(to right, #172217 0%, transparent 10%)"
@@ -16,27 +16,27 @@ export const Inventory = ({ ...props }: StyleProps) => {
           <Ludes boxSize="24px" />
           <Text>25</Text>
         </HStack>
-        <Divider orientation="vertical" borderColor="neon.700" h="50%" />
+        <Divider orientation="vertical" borderColor="neon.600" h="50%" />
         <HStack>
           <Speed boxSize="24px" />
           <Text>25</Text>
         </HStack>
-        <Divider orientation="vertical" borderColor="neon.700" h="50%" />
+        <Divider orientation="vertical" borderColor="neon.600" h="50%" />
         <HStack>
           <Weed boxSize="24px" />
           <Text>25</Text>
         </HStack>
-        <Divider orientation="vertical" borderColor="neon.700" h="50%" />
+        <Divider orientation="vertical" borderColor="neon.600" h="50%" />
         <HStack>
-          <Acid boxSize="24px" color="neon.600" />
+          <Acid boxSize="24px" color="neon.500" />
         </HStack>
-        <Divider orientation="vertical" borderColor="neon.700" h="50%" />
+        <Divider orientation="vertical" borderColor="neon.600" h="50%" />
         <HStack>
-          <Heroin boxSize="24px" color="neon.600" />
+          <Heroin boxSize="24px" color="neon.500" />
         </HStack>
-        <Divider orientation="vertical" borderColor="neon.700" h="50%" />
+        <Divider orientation="vertical" borderColor="neon.600" h="50%" />
         <HStack>
-          <Cocaine boxSize="24px" color="neon.600" />
+          <Cocaine boxSize="24px" color="neon.500" />
         </HStack>
       </HStack>
     </HStack>

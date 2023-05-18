@@ -78,7 +78,7 @@ export default function Create() {
                   direction="down"
                   size="sm"
                   cursor="pointer"
-                  color={numTurns <= MIN_TURNS ? "neon.600" : "neon.200"}
+                  color={numTurns <= MIN_TURNS ? "neon.500" : "neon.200"}
                   onClick={() => decTurns()}
                 />
               </HStack>
@@ -101,7 +101,7 @@ export default function Create() {
                   direction="down"
                   size="sm"
                   cursor="pointer"
-                  color={numPlayers <= MIN_PLAYERS ? "neon.600" : "neon.200"}
+                  color={numPlayers <= MIN_PLAYERS ? "neon.500" : "neon.200"}
                   onClick={() => decPlayers()}
                 />
               </HStack>

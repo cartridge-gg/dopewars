@@ -50,7 +50,7 @@ export const Button: ComponentStyleConfig = {
       },
     },
     secondary: {
-      color: "neon.600",
+      color: "neon.500",
       borderImageSource: `url("data:image/svg+xml,${BorderImage("#157342")}")`,
       _before: {
         borderImageSource: `url("data:image/svg+xml,${BorderImage(
