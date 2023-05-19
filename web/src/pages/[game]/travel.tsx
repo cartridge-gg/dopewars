@@ -25,6 +25,7 @@ import {
 import { IsMobile } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { Locations } from "@/hooks/state";
+import { motion } from "framer-motion";
 
 interface PlaceProps {
   name: Locations;
@@ -182,12 +183,24 @@ const Place = ({
 } & PlaceProps) => {
   return (
     <HStack w="full">
-      <Arrow
-        style="pixel"
-        direction="right"
-        size="lg"
-        visibility={selected ? "visible" : "hidden"}
-      />
+      <Box
+        as={motion.div}
+        layout
+        animate={{
+          x: [5, 0, 5],
+          transition: {
+            duration: 0.5,
+            repeat: Infinity,
+          },
+        }}
+      >
+        <Arrow
+          style="pixel"
+          direction="right"
+          size="lg"
+          visibility={selected ? "visible" : "hidden"}
+        />
+      </Box>
       <HStack
         layerStyle={selected ? "rounded" : ""}
         py="12px"
@@ -206,12 +219,24 @@ const Place = ({
           <Text whiteSpace="nowrap">{turn} DAY</Text>
         </HStack>
       </HStack>
-      <Arrow
-        style="pixel"
-        direction="left"
-        size="lg"
-        visibility={selected ? "visible" : "hidden"}
-      />
+      <Box
+        as={motion.div}
+        layout
+        animate={{
+          x: [-5, 0, -5],
+          transition: {
+            duration: 0.5,
+            repeat: Infinity,
+          },
+        }}
+      >
+        <Arrow
+          style="pixel"
+          direction="left"
+          size="lg"
+          visibility={selected ? "visible" : "hidden"}
+        />
+      </Box>
     </HStack>
   );
 };
