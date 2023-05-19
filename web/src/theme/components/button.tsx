@@ -16,6 +16,7 @@ export const Button: ComponentStyleConfig = {
     px: "40px",
     gap: "10px",
     bgColor: "neon.900",
+    transition: "none",
     _before: {
       content: '""',
       position: "absolute",
@@ -48,10 +49,21 @@ export const Button: ComponentStyleConfig = {
           "#11ED83",
         )}")`,
       },
+      _hover: {
+        color: "neon.300",
+        borderImageSource: `url("data:image/svg+xml,${BorderImage(
+          "#16C973",
+        )}")`,
+        _before: {
+          borderImageSource: `url("data:image/svg+xml,${BorderImage(
+            "#16C973",
+          )}")`,
+        },
+      },
     },
     secondary: {
       color: "neon.500",
-      borderImageSource: `url("data:image/svg+xml,${BorderImage("#157342")}")`,
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("#16C973")}")`,
       _before: {
         borderImageSource: `url("data:image/svg+xml,${BorderImage(
           "#157342",

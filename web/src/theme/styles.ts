@@ -23,6 +23,13 @@ export const cardStyle = {
   borderImageSlice: "4",
   borderImageWidth: "4px",
   borderImageSource: `url("data:image/svg+xml,${BorderImage("#11ED83")}")`,
+  _hover: {
+    color: "neon.300",
+    borderImageSource: `url("data:image/svg+xml,${BorderImage("#16C973")}")`,
+    _before: {
+      borderImageSource: `url("data:image/svg+xml,${BorderImage("#16C973")}")`,
+    },
+  },
   _before: {
     content: '""',
     position: "absolute",
