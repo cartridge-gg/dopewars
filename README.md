@@ -14,7 +14,7 @@ Install the [latest Dojo toolchain](https://github.com/dojoengine/dojo/releases)
 
 ```bash
 # Build the game
-dojo build
+sozo build
 ```
 
 ### Mechanics
