@@ -1,5 +1,4 @@
-use traits::Into;
-use traits::TryInto;
+use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
@@ -44,9 +43,9 @@ trait RisksTrait {
 impl RisksImpl of RisksTrait {
     fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult) {
         let mut seed = seed;
-        let mut health_loss = 0_u8;
-        let mut money_loss = 0_u128;
-        let mut respect_loss = 0_u8;
+        let mut health_loss = 0;
+        let mut money_loss = 0;
+        let mut respect_loss = 0;
         let mut killed = false;
         let mut arrested = false;
         let mut event_occured = false;
@@ -56,7 +55,7 @@ impl RisksImpl of RisksTrait {
         ) {
             seed = pedersen(seed, seed);
             if occurs(seed, *self.hurt) {
-                health_loss = 5_u8;
+                health_loss = 5;
                 event_occured = true;
             }
 
@@ -64,7 +63,7 @@ impl RisksImpl of RisksTrait {
             if occurs(
                 seed, *self.mugged
             ) {
-                money_loss = 20_u128 * SCALING_FACTOR;
+                money_loss = 20 * SCALING_FACTOR;
                 event_occured = true;
             }
 
@@ -85,8 +84,8 @@ impl RisksImpl of RisksTrait {
     }
 
     fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult) {
-        let mut money_loss = 0_u128;
-        let mut drug_loss = 0_usize;
+        let mut money_loss = 0;
+        let mut drug_loss = 0;
 
         // TODO: trade risk effects 
 
@@ -97,7 +96,7 @@ impl RisksImpl of RisksTrait {
 fn occurs(seed: felt252, likelihood: u8) -> bool {
     let seed: u128 = seed.into().low;
     let likelihood: u128 = likelihood.into().into().low;
-    let result: u128 = seed % 100_u128;
+    let result: u128 = seed % 100;
     (result <= likelihood)
 }
 
@@ -105,12 +104,12 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[available_gas(1000000)]
 fn test_never_occurs() {
     let seed = pedersen(1, 1);
-    let risks = Risks { travel: 0_u8, hurt: 0_u8, mugged: 0_u8, killed: 0_u8, arrested: 0_u8,  };
+    let risks = Risks { travel: 0, hurt: 0, mugged: 0, killed: 0, arrested: 0,  };
     let (event_occured, result) = risks.travel(seed);
 
     assert(!event_occured, 'event occured');
-    assert(result.health_loss == 0_u8, 'health_loss occured');
-    assert(result.money_loss == 0_u128, 'money_loss ocurred');
+    assert(result.health_loss == 0, 'health_loss occured');
+    assert(result.money_loss == 0, 'money_loss ocurred');
     assert(!result.killed, 'was killed');
     assert(!result.arrested, 'was arrested');
 }
@@ -120,13 +119,13 @@ fn test_never_occurs() {
 fn test_always_occurs() {
     let seed = pedersen(1, 1);
     let risks = Risks {
-        travel: 100_u8, hurt: 100_u8, mugged: 100_u8, killed: 100_u8, arrested: 100_u8, 
+        travel: 100, hurt: 100, mugged: 100, killed: 100, arrested: 100, 
     };
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
-    assert(result.health_loss > 0_u8, 'health_loss did not occur');
-    assert(result.money_loss > 0_u128, 'money_loss did not occur');
+    assert(result.health_loss > 0, 'health_loss did not occur');
+    assert(result.money_loss > 0, 'money_loss did not occur');
     assert(result.killed, 'was not killed');
     assert(result.arrested, 'was not arrested');
 }
@@ -135,7 +134,7 @@ fn test_always_occurs() {
 #[available_gas(1000000)]
 fn test_occurs() {
     let seed = pedersen(1, 1);
-    let event = occurs(seed, 10_u8);
+    let event = occurs(seed, 10);
     assert(!event, 'should not occur');
 }
 
@@ -143,7 +142,7 @@ fn test_occurs() {
 #[available_gas(1000000)]
 fn test_not_occurs() {
     let seed = pedersen(1, 1);
-    let event = occurs(seed, 28_u8);
+    let event = occurs(seed, 28);
     assert(event, 'should occur');
 }
 

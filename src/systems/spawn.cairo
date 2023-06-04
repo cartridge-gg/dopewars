@@ -4,10 +4,7 @@ mod SpawnPlayer {
     use box::BoxTrait;
     use array::ArrayTrait;
 
-    use rollyourown::components::game::Game;
-    use rollyourown::components::player::Cash;
-    use rollyourown::components::player::Stats;
-    use rollyourown::components::location::Location;
+    use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
@@ -31,9 +28,9 @@ mod SpawnPlayer {
             (game_id, (player_id)).into_partitioned(),
             (
                 Stats {
-                    health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: game.max_turns
+                    health: 100, respect: 0, arrested: false, turns_remaining: game.max_turns
                     }, Cash {
-                    amount: 100_u128 * SCALING_FACTOR // $100
+                    amount: 100 * SCALING_FACTOR // $100
                     }, Location {
                     id: 0
                 }
@@ -73,7 +70,6 @@ mod SpawnLocation {
         mugged_risk: u8,
         arrested_risk: u8
     ) -> felt252 {
-        gas::withdraw_gas().expect('out of gas');
         let block_info = starknet::get_block_info().unbox();
         let player_id: felt252 = starknet::get_caller_address().into();
 
@@ -106,8 +102,8 @@ mod SpawnLocation {
             if i >= MAX_PRODUCTS {
                 break ();
             }
-            let quantity = 1000_usize;
-            let cash = 100_u128 * SCALING_FACTOR;
+            let quantity = 1000;
+            let cash = 100 * SCALING_FACTOR;
             commands::set_entity(
                 (game_id, (location_id, i.into())).into_partitioned(), (Market { cash, quantity })
             );
@@ -157,9 +153,9 @@ mod SpawnGame {
             (game_id, (player_id)).into_partitioned(),
             (
                 Stats {
-                    health: 100_u8, respect: 0_u8, arrested: false, turns_remaining: max_turns
+                    health: 100, respect: 0, arrested: false, turns_remaining: max_turns
                     }, Cash {
-                    amount: 100_u128 * SCALING_FACTOR // $100
+                    amount: 100 * SCALING_FACTOR // $100
                     }, Location {
                     id: 0
                 }

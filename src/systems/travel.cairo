@@ -4,15 +4,9 @@ mod Travel {
     use box::BoxTrait;
     use array::ArrayTrait;
 
-    use rollyourown::components::game::Game;
-    use rollyourown::components::game::GameTrait;
-    use rollyourown::components::location::Location;
-    use rollyourown::components::player::Cash;
-    use rollyourown::components::player::Stats;
-    use rollyourown::components::player::StatsTrait;
-    use rollyourown::components::risks::Risks;
-    use rollyourown::components::risks::RisksTrait;
-    use rollyourown::components::risks::TravelResult;
+    use rollyourown::components::{game::{Game, GameTrait}, location::Location};
+    use rollyourown::components::player::{Cash, Stats, StatsTrait};
+    use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
 
     #[event]
     fn Traveled(
@@ -52,7 +46,7 @@ mod Travel {
         let (event_occured, result) = risks.travel(seed);
         let updated_health = match result.killed {
             bool::False(()) => stats.health - result.health_loss,
-            bool::True(()) => 0_u8,
+            bool::True(()) => 0,
         };
 
         // update player
@@ -67,7 +61,7 @@ mod Travel {
                     health: updated_health,
                     respect: stats.respect - result.respect_loss,
                     arrested: result.arrested,
-                    turns_remaining: stats.turns_remaining - 1_usize,
+                    turns_remaining: stats.turns_remaining - 1,
                 },
             )
         );

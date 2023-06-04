@@ -1,5 +1,4 @@
-use traits::Into;
-use traits::TryInto;
+use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
@@ -43,23 +42,23 @@ fn normalize(amount: usize, market: @Market) -> (u128, u128, u128) {
 #[test]
 #[should_panic(expected: ('not enough liquidity', ))]
 fn test_not_enough_quantity() {
-    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 1_usize }; // pool 1:1
-    let cost = market.buy(10_usize);
+    let market = Market { cash: SCALING_FACTOR * 1, quantity: 1 }; // pool 1:1
+    let cost = market.buy(10);
 }
 
 #[test]
 #[available_gas(100000)]
 fn test_market_buy() {
-    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
-    let cost = market.buy(5_usize);
-    assert(cost == SCALING_FACTOR * 1_u128, 'wrong cost');
+    let market = Market { cash: SCALING_FACTOR * 1, quantity: 10 }; // pool 1:10
+    let cost = market.buy(5);
+    assert(cost == SCALING_FACTOR * 1, 'wrong cost');
 }
 
 #[test]
 #[available_gas(100000)]
 fn test_market_sell() {
-    let market = Market { cash: SCALING_FACTOR * 1_u128, quantity: 10_usize }; // pool 1:10
-    let payout = market.sell(5_usize);
-    assert(payout == 3334_u128, 'wrong payout');
+    let market = Market { cash: SCALING_FACTOR * 1, quantity: 10 }; // pool 1:10
+    let payout = market.sell(5);
+    assert(payout == 3334, 'wrong payout');
 }
 
