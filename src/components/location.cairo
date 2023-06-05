@@ -1,5 +1,4 @@
-use traits::Into;
-use traits::TryInto;
+use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 

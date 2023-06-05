@@ -20,10 +20,10 @@ impl StatsImpl of StatsTrait {
         if *self.arrested {
             return false;
         }
-        if *self.health == 0_u8 {
+        if *self.health == 0 {
             return false;
         }
-        if *self.turns_remaining == 0_usize {
+        if *self.turns_remaining == 0 {
             return false;
         }
 

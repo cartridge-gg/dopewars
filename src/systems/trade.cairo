@@ -4,15 +4,8 @@ mod Buy {
     use array::ArrayTrait;
     use debug::PrintTrait;
 
-    use rollyourown::components::game::Game;
-    use rollyourown::components::game::GameTrait;
-    use rollyourown::components::drug::Drug;
-    use rollyourown::components::market::Market;
-    use rollyourown::components::market::MarketTrait;
-    use rollyourown::components::location::Location;
-    use rollyourown::components::player::Cash;
-    use rollyourown::components::risks::Risks;
-    use rollyourown::components::risks::RisksTrait;
+    use rollyourown::components::{game::{Game, GameTrait}, drug::Drug, market::{Market, MarketTrait}, location::Location};
+    use rollyourown::components::{player::Cash, risks::{Risks, RisksTrait}};
 
     #[event]
     fn Bought(
@@ -102,7 +95,7 @@ mod Sell {
         );
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity,
-            Option::None(()) => 0_u32
+            Option::None(()) => 0
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
