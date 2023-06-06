@@ -87,11 +87,9 @@ const Game = ({
     cursor="pointer"
     onClick={onClick}
   >
-    <HStack overflow="hidden" whiteSpace="nowrap" flex="1">
-      <Text>{name}</Text>
-      <Divider borderColor="neon.200" borderStyle="dotted" />
-    </HStack>
-    <HStack>
+    <Text whiteSpace="nowrap">{name}</Text>
+    <Divider borderStyle="dotted" borderColor="neon.200" />
+    <HStack gap="20px">
       <HStack color="yellow.400">
         <Clock />
         <Text>{startTime}</Text>
