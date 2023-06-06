@@ -1,12 +1,10 @@
 import { Text, VStack, HStack, Divider, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { Clock, Link } from "@/components/icons";
-import { Footer } from "@/components/Footer";
+import { Clock } from "@/components/icons";
 import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
 import { useGameStore } from "@/hooks/state";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
