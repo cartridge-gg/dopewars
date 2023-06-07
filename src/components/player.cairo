@@ -1,9 +1,9 @@
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Cash {
     amount: u128, 
 }
 
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Stats {
     health: u8,
     respect: u8,

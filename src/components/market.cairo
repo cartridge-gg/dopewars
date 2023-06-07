@@ -4,7 +4,7 @@ use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
 
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Market {
     cash: u128, // fixed point
     quantity: usize,
@@ -33,8 +33,8 @@ impl MarketImpl of MarketTrait {
 }
 
 fn normalize(amount: usize, market: @Market) -> (u128, u128, u128) {
-    let amount: u128 = amount.into().try_into().unwrap() * SCALING_FACTOR;
-    let available: u128 = (*market.quantity).into().try_into().unwrap() * SCALING_FACTOR;
+    let amount: u128 = amount.into() * SCALING_FACTOR;
+    let available: u128 = (*market.quantity).into() * SCALING_FACTOR;
     (amount, available, *market.cash)
 }
 

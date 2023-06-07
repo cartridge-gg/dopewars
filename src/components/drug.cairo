@@ -1,6 +1,8 @@
-#[derive(Component)]
+use dojo_core::integer::u250;
+
+#[derive(Component, Copy, Drop, Serde)]
 struct Drug {
-    id: felt252,
+    id: u250,
     quantity: usize,
 }
 

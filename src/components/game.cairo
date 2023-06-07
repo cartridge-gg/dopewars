@@ -1,13 +1,14 @@
 use box::BoxTrait;
+use dojo_core::integer::u250;
 
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Game {
     start_time: u64,
     max_players: usize,
     max_turns: usize,
     max_locations: usize,
     is_finished: bool,
-    creator: felt252,
+    creator: u250,
 }
 
 

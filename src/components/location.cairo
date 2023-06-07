@@ -1,9 +1,7 @@
-use traits::{Into, TryInto};
-use option::OptionTrait;
-use debug::PrintTrait;
+use dojo_core::integer::u250;
 
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Location {
-    id: felt252, 
+    id: u250, 
 }
 

@@ -14,7 +14,9 @@ use dojo_core::integer::u250Trait;
 use dojo_core::executor::Executor;
 use dojo_core::world::World;
 
-use rollyourown::components::{player::Cash, drug::Drug, location::Location, market::{Market, MarketTrait}};
+use rollyourown::components::{
+    player::Cash, drug::Drug, location::Location, market::{Market, MarketTrait}
+};
 use rollyourown::tests::spawn::{spawn_game, spawn_location, spawn_player};
 use rollyourown::constants::SCALING_FACTOR;
 
@@ -43,11 +45,9 @@ fn test_player_buy() {
     buy_calldata.append(QUANTITY.into());
     world.execute('Buy'.into(), buy_calldata.span());
 
-
     // verify player has drug in inventory
-    let mut res = world.entity(
-        'Drug'.into(), (game_id, (player_id, DRUG_ID)).into_partitioned(), 0, 0
-    );
+    let mut res = world
+        .entity('Drug'.into(), (game_id, (player_id, DRUG_ID)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'no drug');
     let drug = serde::Serde::<Drug>::deserialize(ref res).expect('deserialization failed');
     assert(drug.quantity == QUANTITY, 'incorrect quantity');
@@ -57,13 +57,10 @@ fn test_player_buy() {
     let cost = market.buy(QUANTITY);
 
     // verify player has cash - cost
-    let mut res = world.entity(
-        'Cash'.into(), (game_id, (player_id)).into_partitioned(), 0, 0
-    );
+    let mut res = world.entity('Cash'.into(), (game_id, (player_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'no cash');
     let cash = serde::Serde::<Cash>::deserialize(ref res).expect('deserialization failed');
     assert(cash.amount == (100 * SCALING_FACTOR - cost), 'incorrect cash');
-
 }
 
 
@@ -78,12 +75,13 @@ fn test_player_sell() {
     // give player drug
     let mut calldata = array::ArrayTrait::new();
     serde::Serde::<Drug>::serialize(ref calldata, Drug { id: 0, quantity: QUANTITY });
-    world.set_entity(
-        'Drug'.into(),
-        (game_id, (player_id, DRUG_ID)).into_partitioned(),
-        0,
-        ArrayTrait::span(@calldata)
-    );
+    world
+        .set_entity(
+            'Drug'.into(),
+            (game_id, (player_id, DRUG_ID)).into_partitioned(),
+            0,
+            ArrayTrait::span(@calldata)
+        );
 
     // travel to location
     let mut player_travel_calldata = array::ArrayTrait::<felt252>::new();
@@ -99,11 +97,9 @@ fn test_player_sell() {
     sell_calldata.append(QUANTITY.into());
     world.execute('Sell'.into(), sell_calldata.span());
 
-
     // verify player has no drug
-    let mut res = world.entity(
-        'Drug'.into(), (game_id, (player_id, DRUG_ID)).into_partitioned(), 0, 0
-    );
+    let mut res = world
+        .entity('Drug'.into(), (game_id, (player_id, DRUG_ID)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'no drug');
     let drug = serde::Serde::<Drug>::deserialize(ref res).expect('deserialization failed');
     assert(drug.quantity == 0, 'incorrect quantity');

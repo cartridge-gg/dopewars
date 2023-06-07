@@ -3,18 +3,19 @@ mod SpawnPlayer {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
+    use dojo_core::integer::{u250, ContractAddressIntoU250};
 
     use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
-    fn PlayerJoined(game_id: felt252, player_id: felt252) {}
+    fn PlayerJoined(partition: u250, player_id: u250) {}
 
-    fn execute(game_id: felt252) -> felt252 {
+    fn execute(partition: u250) -> u250 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id = starknet::get_caller_address().into();
+        let player_id: u250 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::entity(game_id.into());
+        let game = commands::<Game>::entity(partition.into());
         assert(!game.is_finished, 'game is finished');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
@@ -22,22 +23,20 @@ mod SpawnPlayer {
         // let players = commands::<Player>::entities(u250Trait::new(game_id));
         // assert(game.max_players > players.len(), 'max players');
 
-        debug::print_felt252(player_id);
-
         commands::set_entity(
-            (game_id, (player_id)).into_partitioned(),
+            (partition, (player_id)).into_partitioned(),
             (
                 Stats {
                     health: 100, respect: 0, arrested: false, turns_remaining: game.max_turns
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0
+                    id: 0.into()
                 }
             )
         );
 
-        PlayerJoined(game_id, player_id);
+        PlayerJoined(partition, player_id);
         player_id
     }
 }
@@ -48,7 +47,7 @@ mod SpawnLocation {
     use box::BoxTrait;
     use array::ArrayTrait;
     use debug::PrintTrait;
-    use dojo_core::integer::u250Trait;
+    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::risks::Risks;
     use rollyourown::components::game::Game;
@@ -57,23 +56,23 @@ mod SpawnLocation {
     use rollyourown::components::drug::Drug;
     use rollyourown::constants::SCALING_FACTOR;
 
-    const MAX_PRODUCTS: u8 = 6;
+    const MAX_PRODUCTS: u32 = 6;
 
     #[event]
-    fn LocationCreated(game_id: felt252, location_id: felt252) {}
+    fn LocationCreated(partition: u250, location_id: u32) {}
 
     fn execute(
-        game_id: felt252,
+        partition: usize,
         travel_risk: u8,
         hurt_risk: u8,
         killed_risk: u8,
         mugged_risk: u8,
         arrested_risk: u8
-    ) -> felt252 {
+    ) -> u32 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = starknet::get_caller_address().into();
+        let player_id: u250 = starknet::get_caller_address().into();
 
-        let game = commands::<Game>::entity(game_id.into());
+        let game = commands::<Game>::entity(partition.into());
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
@@ -83,7 +82,7 @@ mod SpawnLocation {
 
         let location_id = commands::uuid();
         commands::set_entity(
-            (game_id, (location_id)).into_partitioned(),
+            (partition, (location_id)).into_partitioned(),
             (
                 Location {
                     id: location_id.into()
@@ -97,7 +96,7 @@ mod SpawnLocation {
             )
         );
 
-        let mut i = 0;
+        let mut i: u32 = 0;
         loop {
             if i >= MAX_PRODUCTS {
                 break ();
@@ -105,13 +104,13 @@ mod SpawnLocation {
             let quantity = 1000;
             let cash = 100 * SCALING_FACTOR;
             commands::set_entity(
-                (game_id, (location_id, i.into())).into_partitioned(), (Market { cash, quantity })
+                (partition, (location_id, i)).into_partitioned(), (Market { cash, quantity })
             );
             i += 1;
         }
 
-        LocationCreated(game_id, location_id.into());
-        location_id.into()
+        LocationCreated(partition.into(), location_id);
+        location_id
     }
 }
 
@@ -120,7 +119,7 @@ mod SpawnLocation {
 mod SpawnGame {
     use array::ArrayTrait;
     use traits::Into;
-    use debug::PrintTrait;
+    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Cash;
@@ -129,16 +128,16 @@ mod SpawnGame {
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
-    fn GameCreated(game_id: felt252, creator: felt252) {}
+    fn GameCreated(partition: u250, creator: u250) {}
 
     fn execute(
         start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
-    ) -> (felt252, felt252) {
-        let player_id: felt252 = starknet::get_caller_address().into();
+    ) -> (u250, u250) {
+        let player_id: u250 = starknet::get_caller_address().into();
 
-        let game_id = commands::uuid();
+        let partition = commands::uuid();
         commands::set_entity(
-            game_id.into(),
+            partition.into(),
             (Game {
                 start_time,
                 max_players,
@@ -150,19 +149,19 @@ mod SpawnGame {
         );
 
         commands::set_entity(
-            (game_id, (player_id)).into_partitioned(),
+            (partition, (player_id)).into_partitioned(),
             (
                 Stats {
                     health: 100, respect: 0, arrested: false, turns_remaining: max_turns
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0
+                    id: 0.into()
                 }
             )
         );
 
-        GameCreated(game_id.into(), player_id);
-        (game_id.into(), player_id)
+        GameCreated(partition.into(), player_id);
+        (partition.into(), player_id)
     }
 }

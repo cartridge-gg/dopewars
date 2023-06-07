@@ -19,7 +19,7 @@ struct TradeResult {
     drug_loss: usize,
 }
 
-#[derive(Component)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Risks {
     // travel risk probabilities
     travel: u8,
@@ -50,9 +50,7 @@ impl RisksImpl of RisksTrait {
         let mut arrested = false;
         let mut event_occured = false;
 
-        if occurs(
-            seed, *self.travel
-        ) {
+        if occurs(seed, *self.travel) {
             seed = pedersen(seed, seed);
             if occurs(seed, *self.hurt) {
                 health_loss = 5;
@@ -60,9 +58,7 @@ impl RisksImpl of RisksTrait {
             }
 
             seed = pedersen(seed, seed);
-            if occurs(
-                seed, *self.mugged
-            ) {
+            if occurs(seed, *self.mugged) {
                 money_loss = 20 * SCALING_FACTOR;
                 event_occured = true;
             }
@@ -94,10 +90,9 @@ impl RisksImpl of RisksTrait {
 }
 
 fn occurs(seed: felt252, likelihood: u8) -> bool {
-    let seed: u128 = seed.into().low;
-    let likelihood: u128 = likelihood.into().into().low;
-    let result: u128 = seed % 100;
-    (result <= likelihood)
+    let seed: u256 = seed.into();
+    let result: u128 = seed.low % 100;
+    (result <= likelihood.into())
 }
 
 #[test]
@@ -118,9 +113,7 @@ fn test_never_occurs() {
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen(1, 1);
-    let risks = Risks {
-        travel: 100, hurt: 100, mugged: 100, killed: 100, arrested: 100, 
-    };
+    let risks = Risks { travel: 100, hurt: 100, mugged: 100, killed: 100, arrested: 100,  };
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
