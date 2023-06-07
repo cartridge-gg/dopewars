@@ -10,8 +10,10 @@ use debug::PrintTrait;
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo_core::storage::query::{IntoPartitioned, IntoPartitionedQuery};
-use dojo_core::interfaces::{IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher,
-                            IComponentDispatcherTrait, ISystemLibraryDispatcher, ISystemDispatcherTrait};
+use dojo_core::interfaces::{
+    IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher, IComponentDispatcherTrait,
+    ISystemLibraryDispatcher, ISystemDispatcherTrait
+};
 use dojo_core::string::ShortStringTrait;
 use dojo_core::integer::u250Trait;
 use dojo_core::executor::Executor;
@@ -70,7 +72,8 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     let constructor_calldata = array::ArrayTrait::<felt252>::new();
     let (executor_address, _) = deploy_syscall(
         Executor::TEST_CLASS_HASH.try_into().unwrap(), 0, constructor_calldata.span(), false
-    ).unwrap();
+    )
+        .unwrap();
 
     WorldFactory::constructor(World::TEST_CLASS_HASH.try_into().unwrap(), executor_address);
 
@@ -108,9 +111,8 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     let mut res = world.execute('SpawnGame'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
-    let (game_id, player_id) = serde::Serde::<(
-        felt252, felt252
-    )>::deserialize(ref res).expect('spawn deserialization failed');
+    let (game_id, player_id) = serde::Serde::<(felt252, felt252)>::deserialize(ref res)
+        .expect('spawn deserialization failed');
     let mut res = world.entity(ShortStringTrait::new('Game'), game_id.into(), 0, 0);
     assert(res.len() > 0, 'game not found');
 
@@ -133,13 +135,11 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut res = world.execute('SpawnPlayer'.into(), spawn_player_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
-    let player_id = serde::Serde::<felt252>::deserialize(
-        ref res
-    ).expect('spawn deserialization failed');
+    let player_id = serde::Serde::<felt252>::deserialize(ref res)
+        .expect('spawn deserialization failed');
 
-    let mut res = world.entity(
-        ShortStringTrait::new('Stats'), (game_id, (player_id)).into_partitioned(), 0, 0
-    );
+    let mut res = world
+        .entity(ShortStringTrait::new('Stats'), (game_id, (player_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'player stats not found');
 
     let stats = serde::Serde::<Stats>::deserialize(ref res).expect('stats deserialization failed');
@@ -147,9 +147,8 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     assert(stats.health == 100, 'health mismatch');
     assert(stats.arrested == false, 'arrested mismatch');
 
-    let mut res = world.entity(
-        ShortStringTrait::new('Cash'), (game_id, (player_id)).into_partitioned(), 0, 0
-    );
+    let mut res = world
+        .entity(ShortStringTrait::new('Cash'), (game_id, (player_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'player cash not found');
 
     let cash = serde::Serde::<Cash>::deserialize(ref res).expect('cash deserialization failed');
@@ -172,12 +171,10 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut res = world.execute('SpawnLocation'.into(), spawn_location_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
-    let location_id = serde::Serde::<felt252>::deserialize(
-        ref res
-    ).expect('spawn deserialization failed');
-    let mut res = world.entity(
-        ShortStringTrait::new('Risks'), (game_id, (location_id)).into_partitioned(), 0, 0
-    );
+    let location_id = serde::Serde::<felt252>::deserialize(ref res)
+        .expect('spawn deserialization failed');
+    let mut res = world
+        .entity(ShortStringTrait::new('Risks'), (game_id, (location_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'loc not found');
 
     let risks = serde::Serde::<Risks>::deserialize(ref res).expect('loc deserialization failed');

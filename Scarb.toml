@@ -1,11 +1,12 @@
 [package]
 name = "rollyourown"
 version = "0.1.0"
+cairo-version = "1.1.0"
 
 [cairo]
 sierra-replace-ids = true
 
 [dependencies]
-dojo_core = { git = "https://github.com/dojoengine/dojo.git", rev="aa7dd3ef0e55dc9794b62dbcb33a4cb655db39e4"}
+dojo_core = { git = "https://github.com/dojoengine/dojo.git"}
 
 [[target.dojo]]

@@ -25,16 +25,13 @@ fn test_travel() {
     let location_two = spawn_location(world_address, game_id);
     let world = IWorldDispatcher { contract_address: world_address };
 
-
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id);
     travel_calldata.append(location_one);
 
     world.execute('Travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity(
-        'Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0
-    );
+    let mut res = world.entity('Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
@@ -46,9 +43,7 @@ fn test_travel() {
 
     world.execute('Travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity(
-        'Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0
-    );
+    let mut res = world.entity('Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0);
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
