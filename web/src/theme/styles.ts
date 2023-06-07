@@ -22,33 +22,24 @@ export const cardStyle = {
   borderWidth: "2px",
   borderImageSlice: "4",
   borderImageWidth: "4px",
-  borderImageSource: `url("data:image/svg+xml,${BorderImage("#11ED83")}")`,
+  borderImageSource: `url("data:image/svg+xml,${BorderImage({
+    color: "#11ED83",
+    isPressed: false,
+  })}")`,
   _hover: {
     color: "neon.300",
-    borderImageSource: `url("data:image/svg+xml,${BorderImage("#16C973")}")`,
-    _before: {
-      borderImageSource: `url("data:image/svg+xml,${BorderImage("#16C973")}")`,
-    },
-  },
-  _before: {
-    content: '""',
-    position: "absolute",
-    bottom: "-4px",
-    right: "-4px",
-    height: "100%",
-    width: "100%",
-    borderStyle: "solid",
-    borderWidth: "2px",
-    borderImageSlice: "4",
-    borderImageWidth: "0 6px 6px 0",
-    borderImageSource: `url("data:image/svg+xml,${BorderImage("#11ED83")}")`,
+    borderImageSource: `url("data:image/svg+xml,${BorderImage({
+      color: "#16C973",
+      isPressed: false,
+    })}")`,
   },
   _active: {
     top: "2px",
     left: "2px",
-    _before: {
-      display: "none",
-    },
+    borderImageSource: `url("data:image/svg+xml,${BorderImage({
+      color: "#16C973",
+      isPressed: true,
+    })}")`,
   },
 };
 
