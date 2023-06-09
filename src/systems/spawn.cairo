@@ -17,6 +17,7 @@ mod SpawnPlayer {
 
         let game = commands::<Game>::entity(partition.into());
         assert(!game.is_finished, 'game is finished');
+        assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         // spawn player into game
@@ -31,6 +32,20 @@ mod SpawnPlayer {
                     id: 0.into()
                 }
             )
+        );
+
+        // update num players joined
+        commands::set_entity(
+            partition.into(),
+            (Game {
+                start_time: game.start_time,
+                max_players: game.max_players,
+                num_players: game.num_players + 1,
+                max_turns: game.max_turns,
+                is_finished: false,
+                creator: game.creator,
+                max_locations: game.max_locations
+            })
         );
 
         PlayerJoined(partition, player_id);
@@ -121,7 +136,14 @@ mod SpawnGame {
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
-    fn GameCreated(partition: u250, creator: u250) {}
+    fn GameCreated(
+        partition: u250,
+        creator: u250,
+        start_time: u64,
+        max_turns: usize,
+        max_players: usize,
+        max_locations: usize
+    ) {}
 
     fn execute(
         start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
@@ -134,6 +156,7 @@ mod SpawnGame {
             (Game {
                 start_time,
                 max_players,
+                num_players: 1, // caller auto joins
                 max_turns,
                 is_finished: false,
                 creator: player_id,
@@ -154,7 +177,8 @@ mod SpawnGame {
             )
         );
 
-        GameCreated(partition.into(), player_id);
+        GameCreated(partition.into(), player_id, start_time, max_players, max_turns, max_locations);
+
         (partition.into(), player_id)
     }
 }

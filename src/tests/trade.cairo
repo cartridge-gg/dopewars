@@ -33,7 +33,7 @@ fn test_player_buy() {
     let location_id = spawn_location(world_address, game_id);
 
     let world = IWorldDispatcher { contract_address: world_address };
-    
+
     // travel to location
     let mut player_travel_calldata = array::ArrayTrait::<felt252>::new();
     player_travel_calldata.append(game_id);
@@ -65,7 +65,6 @@ fn test_player_buy() {
     let cash = serde::Serde::<Cash>::deserialize(ref res).expect('deserialization failed');
     assert(cash.amount == (100 * SCALING_FACTOR - cost), 'incorrect cash');
 }
-
 // FIXME
 // #[test]
 // #[available_gas(100000000)]
@@ -125,3 +124,4 @@ fn test_player_buy() {
 // // let cash = serde::Serde::<Cash>::deserialize(ref res).expect('deserialization failed');
 // // assert(cash.amount == (100 * SCALING_FACTOR + payout), 'incorrect cash');
 // }
+

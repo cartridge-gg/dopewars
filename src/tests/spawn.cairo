@@ -66,7 +66,10 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     routes.append(RouteTrait::new('SpawnGame'.into(), 'StatsWriter'.into(), 'Stats'.into()));
     routes.append(RouteTrait::new('SpawnGame'.into(), 'CashWriter'.into(), 'Cash'.into()));
     routes.append(RouteTrait::new('SpawnGame'.into(), 'LocationWriter'.into(), 'Location'.into()));
-    routes.append(RouteTrait::new('SpawnLocation'.into(), 'LocationWriter'.into(), 'Location'.into()));
+    routes
+        .append(
+            RouteTrait::new('SpawnLocation'.into(), 'LocationWriter'.into(), 'Location'.into())
+        );
     routes.append(RouteTrait::new('SpawnLocation'.into(), 'MarketWriter'.into(), 'Market'.into()));
     routes.append(RouteTrait::new('SpawnLocation'.into(), 'RisksWriter'.into(), 'Risks'.into()));
     routes.append(RouteTrait::new('Travel'.into(), 'LocationWriter'.into(), 'Location'.into()));
