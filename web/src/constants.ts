@@ -1,0 +1,2 @@
+export const RYO_WORLD_ADDRESS =
+  "0x357158d06624f4b5b25d92d49c95a1f07b0d520320b81e5c926fcdfc1decce4";
