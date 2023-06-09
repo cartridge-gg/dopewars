@@ -1,37 +1,53 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
-import { Clock, Gem, Bag, Chat, Home, Link } from "./icons";
+import { Clock, Gem, Bag, Chat, Home, Link, Sound } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
-import { Box, Divider, Flex, HStack, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { IsMobile } from "@/utils/ui";
 import { useRouter } from "next/router";
+import {
+  useSoundStore,
+  Sounds,
+  toggleIsMuted,
+  playSound,
+  stopSound,
+  initSoundStore,
+} from "@/hooks/sound";
+import { useUiStore, setIsConnected } from "@/hooks/ui";
+import HeaderButton from "@/components/HeaderButton";
 
 const Header = () => {
   const router = useRouter();
   const { address } = useAccount();
   const { connectors, connect, disconnect } = useConnectors();
-  const [connected, setConnected] = useState(false);
+
+  const isMuted = useSoundStore((state) => state.isMuted);
+  const isConnected = useUiStore((state) => state.isConnected);
+
+  useEffect(() => {
+    const init = async () => {
+      await initSoundStore();
+    };
+    init();
+  }, []);
 
   return (
     <Flex
       position="fixed"
       top="0"
       left="0"
-      p={["0 24px 24px 24px", "24px"]}
+      p={["0 6px 24px 6px", "24px"]}
+      m={"0 6px"}
       w="full"
       justify="flex-end"
       zIndex="1"
     >
-      {connected ? (
+      {isConnected ? (
         <>
           <HStack flex="1" justify="left">
-            <Box
-              layerStyle="rounded"
-              cursor="pointer"
-              onClick={() => router.push("/")}
-            >
+            <HeaderButton onClick={() => router.push("/")}>
               <Home />
-            </Box>
+            </HeaderButton>
           </HStack>
           <HStack flex="1" justify="center">
             <HStack
@@ -56,19 +72,41 @@ const Header = () => {
             </HStack>
           </HStack>
           <HStack flex="1" justify="right">
-            <Box layerStyle="rounded">
-              <Chat alert={true} />
-            </Box>
+            <HeaderButton>
+              <Chat
+                alert={true}
+                onClick={() => {
+                  stopSound(Sounds.Ambiance, 1000);
+                  setTimeout(() => {
+                    playSound(Sounds.Ambiance2, 0.8, true);
+                  },3000);
+                }}
+              />
+            </HeaderButton>
+
+            <HeaderButton onClick={() => toggleIsMuted()}>
+              <Sound isMuted={isMuted} />
+            </HeaderButton>
           </HStack>
         </>
       ) : (
-        <HStack
-          p="8px"
-          layerStyle="rounded"
-          cursor="pointer"
-          onClick={() => setConnected(true)}
-        >
-          <Link /> <Text>CONNECT</Text>
+        <HStack flex="1" justify="right">
+          <HeaderButton onClick={() => toggleIsMuted()}>
+            <Sound isMuted={isMuted} />
+          </HeaderButton>
+          <HStack
+            layerStyle="rounded"
+            cursor="pointer"
+            onClick={() => {
+              setIsConnected(true);
+              playSound(Sounds.Ambiance, 1, true);
+            }}
+            onMouseEnter={() => {
+              playSound(Sounds.HoverClick);
+            }}
+          >
+            <Link /> <Text>CONNECT</Text>
+          </HStack>
         </HStack>
       )}
     </Flex>

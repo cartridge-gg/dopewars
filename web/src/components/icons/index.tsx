@@ -28,6 +28,7 @@ export * from "./Event";
 export * from "./Arrow";
 export * from "./ArrowEnclosed";
 export * from "./Clock";
+export * from "./Sound";
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed
 // to be 36x36, otherwise override within individual icons.

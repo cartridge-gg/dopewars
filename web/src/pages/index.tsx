@@ -1,15 +1,17 @@
 import { Text, VStack, HStack, Divider, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { Clock, Link } from "@/components/icons";
+import { Clock, Link, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
 import { useGameStore } from "@/hooks/state";
 import { useEffect } from "react";
+import { playSound, Sounds } from "@/hooks/sound";
 
 export default function Home() {
   const router = useRouter();
+
   return (
     <Layout
       title="Roll Your Own"
@@ -30,7 +32,10 @@ export default function Home() {
             <Text color="neon.500" fontSize="14px">
               YOU HAVE NO GAMES
             </Text>
-            <Button w="full" onClick={() => router.push("/create")}>
+            <Button w="full" 
+            onClick={() => router.push("/create")}
+            onMouseEnter={() => playSound(Sounds.HoverClick)}
+            >
               Create
             </Button>
           </VStack>
@@ -44,6 +49,9 @@ export default function Home() {
               joined={5}
               max={6}
               onClick={() => router.push("/0xdead")}
+              onMouseEnter={()=> {
+                playSound(Sounds.HoverClick);
+              }}
             />
             <Game
               name="3V3 BGH @ CABLE ONLY!!!"
@@ -51,6 +59,9 @@ export default function Home() {
               joined={2}
               max={6}
               onClick={() => router.push("/0xdead")}
+              onMouseEnter={()=> {
+                playSound(Sounds.HoverClick);
+              }}
             />
             <Game
               name="1V1 MAX BET"
@@ -58,6 +69,9 @@ export default function Home() {
               joined={1}
               max={2}
               onClick={() => router.push("/0xdead")}
+              onMouseEnter={()=> {
+                playSound(Sounds.HoverClick);
+              }}
             />
           </VStack>
         </VStack>
@@ -72,12 +86,14 @@ const Game = ({
   joined,
   max,
   onClick,
+  onMouseEnter,
 }: {
   name: string;
   startTime: string;
   joined: number;
   max: number;
   onClick?: () => void;
+  onMouseEnter?: () => void;
 }) => (
   <HStack
     layerStyle="card"
@@ -86,6 +102,7 @@ const Game = ({
     py="10px"
     cursor="pointer"
     onClick={onClick}
+    onMouseEnter={onMouseEnter}
   >
     <HStack overflow="hidden" whiteSpace="nowrap" flex="1">
       <Text>{name}</Text>

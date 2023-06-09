@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
+import { playSound, Sounds } from "@/hooks/sound";
 
 const MIN_PLAYERS = 6;
 const MIN_TURNS = 10;
@@ -115,12 +116,21 @@ export default function Create() {
         </UnorderedList>
       </Content>
       <Footer>
-        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
+        <Button
+          w={["full", "auto"]}
+          onClick={() => router.push("/")}
+          onMouseEnter={() => {
+            playSound(Sounds.HoverClick);
+          }}
+        >
           Cancel
         </Button>
         <Button
           w={["full", "auto"]}
           onClick={() => router.push("/pending/0x123")}
+          onMouseEnter={() => {
+            playSound(Sounds.HoverClick);
+          }}
         >
           Create New Game
         </Button>
