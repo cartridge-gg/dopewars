@@ -9,8 +9,8 @@ export const Sound = ({ isMuted, ...props }: SoundProps & IconProps) => {
     <Icon {...props}>
       <>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M15.1996 8.69775V10.8794H13.018V13.061H6.47314V23.9713H13.018V26.1529H15.1996V28.3345H21.7467V8.69775H15.1996ZM13.0202 13.0632V15.2448H8.65695V21.7875H13.0202V23.9691H15.2018V26.1507H19.5629V10.8816H15.2018V13.0632H13.0202Z"
           fill="#11ED83"
         />
