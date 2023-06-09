@@ -18,7 +18,7 @@ use rollyourown::tests::spawn::{spawn_game, spawn_location, spawn_player};
 use rollyourown::components::location::Location;
 
 #[test]
-#[available_gas(30000000)]
+#[available_gas(100000000)]
 fn test_travel() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
     let location_one = spawn_location(world_address, game_id);
@@ -35,7 +35,7 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id == location_one, 'incorrect travel');
+    assert(location.id.into() == location_one, 'incorrect travel');
 
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id);
@@ -47,5 +47,5 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id == location_two, 'incorrect travel');
+    assert(location.id.into() == location_two, 'incorrect travel');
 }
