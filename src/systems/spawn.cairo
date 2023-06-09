@@ -19,10 +19,7 @@ mod SpawnPlayer {
         assert(!game.is_finished, 'game is finished');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
-        // FIXME: num players is always zero
-        // let players = commands::<Player>::entities(u250Trait::new(game_id));
-        // assert(game.max_players > players.len(), 'max players');
-
+        // spawn player into game
         commands::set_entity(
             (partition, (player_id)).into_partitioned(),
             (
@@ -75,10 +72,6 @@ mod SpawnLocation {
         let game = commands::<Game>::entity(partition.into());
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
-
-        // FIXME: num locations is always zero
-        // let locations = commands::<Location>::entities(u250Trait::new(game_id));
-        // assert(locations.len() < game.max_locations, 'max locations');
 
         let location_id = commands::uuid();
         commands::set_entity(

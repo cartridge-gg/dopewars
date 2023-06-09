@@ -18,8 +18,9 @@ use dojo_core::string::ShortStringTrait;
 use dojo_core::integer::u250Trait;
 use dojo_core::executor::Executor;
 use dojo_core::world::World;
+use dojo_core::test_utils::spawn_test_world;
+use dojo_core::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
-use rollyourown::tests::world_factory::WorldFactory;
 use rollyourown::components::game::{Game, GameComponent};
 use rollyourown::components::market::{Market, MarketComponent};
 use rollyourown::components::player::{Stats, StatsComponent};
@@ -27,9 +28,9 @@ use rollyourown::components::drug::{Drug, DrugComponent};
 use rollyourown::components::player::{Cash, CashComponent};
 use rollyourown::components::location::{Location, LocationComponent};
 use rollyourown::components::risks::{Risks, RisksComponent};
-use rollyourown::systems::travel::TravelSystem;
-use rollyourown::systems::trade::{BuySystem, SellSystem};
-use rollyourown::systems::spawn::{SpawnGameSystem, SpawnLocationSystem, SpawnPlayerSystem};
+use rollyourown::systems::travel::Travel;
+use rollyourown::systems::trade::{Buy, Sell};
+use rollyourown::systems::spawn::{SpawnGame, SpawnLocation, SpawnPlayer};
 use rollyourown::constants::SCALING_FACTOR;
 
 const START_TIME: u64 = 100;
@@ -42,72 +43,49 @@ const KILLED_RISK: u8 = 8;
 const MUGGED_RISK: u8 = 7;
 const ARRESTED_RISK: u8 = 6;
 
-fn assert_systems(world_address: ContractAddress, mut hashes: Array::<ClassHash>) {
-    let hash = hashes.pop_front();
-    match hash {
-        Option::Some(class_hash) => {
-            let name = ISystemLibraryDispatcher { class_hash }.name();
-            let registered = IWorldDispatcher { contract_address: world_address }.system(name);
-            assert(registered.into() != 0, 'system not registered');
-            assert_systems(world_address, hashes);
-        },
-        Option::None(_) => ()
-    }
-}
-
-fn assert_components(world_address: ContractAddress, mut hashes: Array::<ClassHash>) {
-    let hash = hashes.pop_front();
-    match hash {
-        Option::Some(class_hash) => {
-            let name = IComponentLibraryDispatcher { class_hash }.name();
-            let registered = IWorldDispatcher { contract_address: world_address }.component(name);
-            assert(registered.into() != 0, 'component not registered');
-            assert_components(world_address, hashes);
-        },
-        Option::None(_) => ()
-    }
-}
-
 fn spawn_game() -> (ContractAddress, felt252, felt252) {
-    let constructor_calldata = array::ArrayTrait::<felt252>::new();
-    let (executor_address, _) = deploy_syscall(
-        Executor::TEST_CLASS_HASH.try_into().unwrap(), 0, constructor_calldata.span(), false
-    )
-        .unwrap();
+    let mut components = array::ArrayTrait::new();
+    components.append(GameComponent::TEST_CLASS_HASH);
+    components.append(StatsComponent::TEST_CLASS_HASH);
+    components.append(CashComponent::TEST_CLASS_HASH);
+    components.append(LocationComponent::TEST_CLASS_HASH);
+    components.append(RisksComponent::TEST_CLASS_HASH);
+    components.append(MarketComponent::TEST_CLASS_HASH);
+    components.append(DrugComponent::TEST_CLASS_HASH);
 
-    WorldFactory::constructor(World::TEST_CLASS_HASH.try_into().unwrap(), executor_address);
+    let mut systems = array::ArrayTrait::new();
+    systems.append(SpawnGame::TEST_CLASS_HASH);
+    systems.append(SpawnLocation::TEST_CLASS_HASH);
+    systems.append(SpawnPlayer::TEST_CLASS_HASH);
+    systems.append(Travel::TEST_CLASS_HASH);
+    systems.append(Buy::TEST_CLASS_HASH);
+    systems.append(Sell::TEST_CLASS_HASH);
 
-    let mut components = array::ArrayTrait::<ClassHash>::new();
-    components.append(GameComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(StatsComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(CashComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(LocationComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(RisksComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(MarketComponent::TEST_CLASS_HASH.try_into().unwrap());
-    components.append(DrugComponent::TEST_CLASS_HASH.try_into().unwrap());
+    let mut routes = array::ArrayTrait::new();
+    routes.append(RouteTrait::new('SpawnGame'.into(), 'GameWriter'.into(), 'Game'.into()));
+    routes.append(RouteTrait::new('SpawnGame'.into(), 'StatsWriter'.into(), 'Stats'.into()));
+    routes.append(RouteTrait::new('SpawnGame'.into(), 'CashWriter'.into(), 'Cash'.into()));
+    routes.append(RouteTrait::new('SpawnGame'.into(), 'LocationWriter'.into(), 'Location'.into()));
+    routes.append(RouteTrait::new('SpawnLocation'.into(), 'LocationWriter'.into(), 'Location'.into()));
+    routes.append(RouteTrait::new('SpawnLocation'.into(), 'MarketWriter'.into(), 'Market'.into()));
+    routes.append(RouteTrait::new('SpawnLocation'.into(), 'RisksWriter'.into(), 'Risks'.into()));
+    routes.append(RouteTrait::new('Travel'.into(), 'LocationWriter'.into(), 'Location'.into()));
+    routes.append(RouteTrait::new('Travel'.into(), 'StatsWriter'.into(), 'Stats'.into()));
+    routes.append(RouteTrait::new('Travel'.into(), 'CashWriter'.into(), 'Cash'.into()));
+    routes.append(RouteTrait::new('Buy'.into(), 'MarketWriter'.into(), 'Market'.into()));
+    routes.append(RouteTrait::new('Buy'.into(), 'CashWriter'.into(), 'Cash'.into()));
+    routes.append(RouteTrait::new('Buy'.into(), 'DrugWriter'.into(), 'Drug'.into()));
+    routes.append(RouteTrait::new('Sell'.into(), 'MarketWriter'.into(), 'Market'.into()));
+    routes.append(RouteTrait::new('Sell'.into(), 'CashWriter'.into(), 'Cash'.into()));
+    routes.append(RouteTrait::new('Sell'.into(), 'DrugWriter'.into(), 'Drug'.into()));
 
-    let mut systems = array::ArrayTrait::<ClassHash>::new();
-    systems.append(SpawnGameSystem::TEST_CLASS_HASH.try_into().unwrap());
-    systems.append(SpawnLocationSystem::TEST_CLASS_HASH.try_into().unwrap());
-    systems.append(SpawnPlayerSystem::TEST_CLASS_HASH.try_into().unwrap());
-    systems.append(TravelSystem::TEST_CLASS_HASH.try_into().unwrap());
-    systems.append(BuySystem::TEST_CLASS_HASH.try_into().unwrap());
-    systems.append(SellSystem::TEST_CLASS_HASH.try_into().unwrap());
-
-    // TODO: world factory shouldn't take ownership
-    let mut systems_clone = systems.clone();
-    let mut components_clone = components.clone();
-    let world_address = WorldFactory::spawn('RyoWorld'.into(), components, systems);
-    assert_systems(world_address, systems_clone);
-    assert_components(world_address, components_clone);
+    let world = spawn_test_world(components, systems, routes);
 
     let mut spawn_game_calldata = array::ArrayTrait::<felt252>::new();
     spawn_game_calldata.append(START_TIME.into());
     spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
     spawn_game_calldata.append(MAX_LOCATIONS.into());
-
-    let world = IWorldDispatcher { contract_address: world_address };
     let mut res = world.execute('SpawnGame'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
@@ -123,7 +101,7 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     assert(game.max_locations == MAX_LOCATIONS, 'max locations mismatch');
     assert(game.is_finished == false, 'game is finished mismatch');
 
-    (world_address, game_id, player_id)
+    (world.contract_address, game_id, player_id)
 }
 
 fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
@@ -188,35 +166,27 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
 }
 
 #[test]
-#[available_gas(30000000)]
+#[available_gas(100000000)]
 fn test_spawn_locations() {
     let (world_address, game_id, _) = spawn_game();
     let location_one = spawn_location(world_address, game_id);
-
     let location_two = spawn_location(world_address, game_id);
 
-    let locations = IWorldDispatcher {
+    let (locations, _) = IWorldDispatcher {
         contract_address: world_address
     }.entities(ShortStringTrait::new('Location'), u250Trait::new(game_id));
+
     assert(locations.len() == 2, 'wrong num locations');
 }
 
 #[test]
-#[available_gas(30000000)]
+#[available_gas(100000000)]
 fn test_spawn_player() {
     let (world_address, game_id, _) = spawn_game(); //creator auto joins
 
-    let players = IWorldDispatcher {
+    let (players, _) = IWorldDispatcher {
         contract_address: world_address
     }.entities(ShortStringTrait::new('Stats'), u250Trait::new(game_id));
     assert(players.len() == 1, 'wrong num players');
 }
-// FIXME: unexpected error, maybe because ENTRPOINT_FAILED is returned
-// #[test]
-// #[should_panic(expected: ('already joined', ))]
-// fn test_already_joined() {
-//     let (world_address, game_id) = spawn_game(); //creator auto joins
-//     let player_id = spawn_player(world_address, game_id);
-// }
-
 
