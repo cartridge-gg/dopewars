@@ -31,7 +31,7 @@ const QUANTITY: usize = 50;
 fn test_player_buy() {
     let (world_address, game_id, player_id) = spawn_game();
     let location_id = spawn_location(world_address, game_id);
-
+    
     let world = IWorldDispatcher { contract_address: world_address };
 
     // travel to location

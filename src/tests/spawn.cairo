@@ -175,11 +175,15 @@ fn test_spawn_locations() {
     let location_one = spawn_location(world_address, game_id);
     let location_two = spawn_location(world_address, game_id);
 
-    let (locations, _) = IWorldDispatcher {
+    let res = IWorldDispatcher {
         contract_address: world_address
-    }.entities(ShortStringTrait::new('Location'), u250Trait::new(game_id));
+    }.entity('Location'.into(), (game_id, (location_one)).into_partitioned(), 0, 0);
+    assert(res.len() > 0, 'no location 1');
 
-    assert(locations.len() == 2, 'wrong num locations');
+    let res = IWorldDispatcher{
+        contract_address: world_address
+    }.entity('Location'.into(), (game_id, (location_two)).into_partitioned(), 0, 0);
+    assert(res.len() > 0, 'no location 2');
 }
 
 #[test]
