@@ -11,9 +11,9 @@ mod SpawnPlayer {
     #[event]
     fn PlayerJoined(partition: u250, player_id: u250) {}
 
-    fn execute(partition: u250) -> u250 {
+    fn execute(ctx: Context, partition: u250) -> u250 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: u250 = starknet::get_caller_address().into();
+        let player_id: u250 = ctx.caller_account.into();
 
         let game = commands::<Game>::entity(partition.into());
         assert(!game.is_finished, 'game is finished');
@@ -74,6 +74,7 @@ mod SpawnLocation {
     fn LocationCreated(partition: u250, location_id: u32) {}
 
     fn execute(
+        ctx: Context,
         partition: usize,
         travel_risk: u8,
         hurt_risk: u8,
@@ -82,7 +83,7 @@ mod SpawnLocation {
         arrested_risk: u8
     ) -> u32 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: u250 = starknet::get_caller_address().into();
+        let player_id: u250 = ctx.caller_account.into();
 
         let game = commands::<Game>::entity(partition.into());
         assert(game.creator == player_id, 'only creator');
@@ -146,9 +147,9 @@ mod SpawnGame {
     ) {}
 
     fn execute(
-        start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
+        ctx: Context, start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
     ) -> (u250, u250) {
-        let player_id: u250 = starknet::get_caller_address().into();
+        let player_id: u250 = ctx.caller_account.into();
 
         let partition = commands::uuid();
         commands::set_entity(
@@ -178,7 +179,6 @@ mod SpawnGame {
         );
 
         GameCreated(partition.into(), player_id, start_time, max_players, max_turns, max_locations);
-
         (partition.into(), player_id)
     }
 }

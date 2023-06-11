@@ -27,11 +27,11 @@ mod Travel {
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
-    fn execute(partition: u250, next_location_id: u250) -> bool {
+    fn execute(ctx: Context, partition: u250, next_location_id: u250) -> bool {
         let game = commands::<Game>::entity(partition.into());
         assert(game.tick(), 'game cannot progress');
 
-        let player_id: u250 = starknet::get_caller_address().into();
+        let player_id: u250 = ctx.caller_account.into();
         let player_sk: Query = (partition, (player_id)).into_partitioned();
         let location_sk: Query = (partition, (next_location_id)).into_partitioned();
 
