@@ -51,6 +51,7 @@ export const Dropdown = ({
                 w="full"
                 p="12px 6px"
                 gap="8px"
+                color={option.value === selectedOption.value ? 'neon.200' : 'neon.500'}
                 backgroundColor="neon.700"
                 _hover={{
                   color: 'neon.900',
@@ -61,7 +62,7 @@ export const Dropdown = ({
               >
                 <Text>{option.text}</Text>
                 {option.label && (
-                  <Text color="yellow.400" _groupHover={{ color: 'neon.900' }}>{option.label}</Text>
+                  <Text color={option.value === selectedOption.value ? 'yellow.400' : 'neon.500'} _groupHover={{ color: 'neon.900' }}>{option.label}</Text>
                 )}
               </HStack>
             ))}
