@@ -1,4 +1,4 @@
-import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react"
+import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { ArrowEnclosed } from "./icons";
 
