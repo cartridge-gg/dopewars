@@ -10,6 +10,9 @@ export const Input: ComponentStyleConfig = {
         borderColor: "none",
         bgColor: "transparent",
         fontSize: "16px",
+        _placeholder: {
+          color: "neon.500"
+        },
       },
     }),
     caret: (props: StyleFunctionProps) => ({
