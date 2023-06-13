@@ -60,7 +60,6 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
         onKeyDown={updateCaretPosition}
         onFocus={onFocus}
         onBlur={onBlur}
-        marginLeft="8px"
         style={{
           caretColor: "transparent",
         }}
