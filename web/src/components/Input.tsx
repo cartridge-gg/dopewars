@@ -19,8 +19,8 @@ import useCaretPosition from "use-caret-position";
 
 const blinkAnim = keyframes`  
   0% {opacity: 0.5;}   
-  60% {opacity: 0.5;}   
-  61% {opacity: 0;}   
+  70% {opacity: 0.5;}   
+  71% {opacity: 0;}   
   100% {opacity: 0;}   
 `;
 
