@@ -1,10 +1,11 @@
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
+import Input from "@/components/Input";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-
+import { Dropdown } from "@/components/Dropdown";
 import {
   HStack,
   VStack,
@@ -15,7 +16,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Input,
   Flex,
   Spacer,
   useCounter,
@@ -60,7 +60,7 @@ export default function Create() {
           <ListItem>
             <HStack>
               <Label name="Title" />
-              <Input />
+              <Input placeholder="ENTER GAME TITLE HERE" />
             </HStack>
           </ListItem>
           <ListItem>
@@ -111,7 +111,17 @@ export default function Create() {
           </ListItem>
           <ListItem>
             <HStack>
-              <Label name="Starts" /> <Text>20:00 UTC</Text>
+              <Label name="Starts" />
+              <Dropdown 
+                w="full" 
+                value={{value: 1, text: '20:00 UTC', label: '(29 min)'}}
+                options={[
+                  {value: 1, text: '20:00 UTC', label: '(29 min)'}, 
+                  {value: 2, text: '20:30 UTC', label: '(59 min)'},
+                  {value: 3, text: '21:00 UTC', label: '(1 hr 29 min)'},
+                  {value: 4, text: '21:30 UTC', label: '(1 hr 59 min)'}
+                ]}
+              />
             </HStack>
           </ListItem>
         </UnorderedList>

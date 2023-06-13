@@ -19,11 +19,11 @@ mod Buy {
     // 4. Perform the trade.
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
-    fn execute(partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
+    fn execute(ctx: Context, partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
         let game = commands::<Game>::entity(partition.into());
         assert(game.tick(), 'cannot progress');
 
-        let player_id = starknet::get_caller_address().into();
+        let player_id = ctx.caller_account.into();
         let (location, cash) = commands::<(
             Location, Cash
         )>::entity((partition, (player_id)).into_partitioned());
@@ -81,11 +81,11 @@ mod Sell {
     #[event]
     fn Sold(partition: u250, player_id: u250, drug_id: u250, quantity: usize, payout: u128) {}
 
-    fn execute(partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
+    fn execute(ctx: Context, partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
         let game = commands::<Game>::entity(partition.into());
         assert(game.tick(), 'cannot progress');
 
-        let player_id = starknet::get_caller_address().into();
+        let player_id = ctx.caller_account.into();
         let (location, cash) = commands::<(
             Location, Cash
         )>::entity((partition, (player_id)).into_partitioned());

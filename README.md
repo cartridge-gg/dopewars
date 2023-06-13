@@ -10,12 +10,43 @@ Roll Your Own is an onchain adaptation of the original Drug Wars game, built on 
 
 ### Development
 
-Install the [latest Dojo toolchain](https://github.com/dojoengine/dojo/releases)
+Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/dojo/releases) or follow the [installation guide](https://book.dojoengine.org/getting-started/installation.html)
 
 ```bash
+# Start Katana
+katana --seed 0
+
 # Build the game
 sozo build
+
+# Migrate the world, this will declare/deploy contracts to katana
+sozo migrate
+
+# Create a game, execute calldata params are defined in SpawnGame system
+sozo execute --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 SpawnGame --calldata 1686521389,2,30,1
+
+# View the schema of the Game Component
+sozo component schema --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 Game
+> struct Game {
+>    start_time: u64
+>    max_players: usize
+>    num_players: usize
+>    max_turns: usize
+>    max_locations: usize
+>    is_finished: bool
+>    creator: u250
+> }
+
+# Get the value of the Game (partition_id retrieved from events)
+sozo component entity --partition_id 1 --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 Game
+> 0x6486462d 0x2 0x1 0x1e 0x1 0x0 0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0
+
+# Start indexer, graphql endpoint at http://localhost:8080
+torii --world-address 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 --manifest path_to_target/manifest.json
+
 ```
+
+Sozo will eventually contain all commands required to interact with your world. However, CLIs like [starknet-probe](https://github.com/kariy/starknet-probe) or [starkli](https://github.com/xJonathanLEI/starkli) can also be used to interact directly with Katana. Due to JSON-RPC spec differences starknetpy may have issues.
 
 ### Mechanics
 
