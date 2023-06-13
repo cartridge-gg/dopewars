@@ -4,12 +4,12 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
+import Button from "@/components/Button";
 import { Dropdown } from "@/components/Dropdown";
 import {
   HStack,
   VStack,
   Container,
-  Button,
   Text,
   Card,
   CardHeader,
@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
+import { playSound, Sounds } from "@/hooks/sound";
 
 const MIN_PLAYERS = 6;
 const MIN_TURNS = 10;
@@ -132,6 +133,7 @@ export default function Create() {
         <Button
           w={["full", "auto"]}
           onClick={() => router.push("/pending/0x123")}
+          clickSound={Sounds.Magnum357}
         >
           Create New Game
         </Button>

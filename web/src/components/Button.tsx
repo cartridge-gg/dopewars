@@ -5,14 +5,29 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
+import { playSound, Sounds } from "@/hooks/sound";
 
 // Can't seem to set first-letter css correctly on button in chakra theme
 // so we do it here on text...
 const Button = ({
   children,
+  hoverSound = Sounds.HoverClick,
+  clickSound = undefined,
   ...props
-}: { children: ReactNode } & StyleProps & ButtonProps) => (
-  <ChakraButton {...props}>
+}: { children: ReactNode } & { hoverSound?: Sounds | undefined } & {
+  clickSound?: Sounds | undefined;
+} & StyleProps &
+  ButtonProps) => (
+  <ChakraButton
+    {...props}
+    onMouseEnter={() => {
+      hoverSound && playSound(hoverSound, 0.3);
+    }}
+    onClick={(e) => {
+      clickSound && playSound(clickSound, 0.3);
+      props.onClick && props.onClick(e);
+    }}
+  >
     <Text
       css={{
         "&:first-letter": {

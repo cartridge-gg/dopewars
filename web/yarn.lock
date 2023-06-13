@@ -2317,6 +2317,11 @@
     "@tanstack/query-core" "4.27.0"
     use-sync-external-store "^1.2.0"
 
+"@types/howler@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@types/howler/-/howler-2.2.7.tgz#5acfbed57f9e1d99b8dabe1b824729e1c1ea1fae"
+  integrity sha512-PEZldwZqJJw1PWRTpupyC7ajVTZA8aHd8nB/Y0n6zRZi5u8ktYDntsHj13ltEiBRqWwF06pASxBEvCTxniG8eA==
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
@@ -4242,6 +4247,11 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1:
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
   dependencies:
     react-is "^16.7.0"
+
+howler@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.3.tgz#a2eff9b08b586798e7a2ee17a602a90df28715da"
+  integrity sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==
 
 http-proxy-agent@^6.0.0:
   version "6.1.1"
