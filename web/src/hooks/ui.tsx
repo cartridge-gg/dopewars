@@ -8,5 +8,5 @@ export const useUiStore = create<UiState>(() => ({
   isConnected: false,
 }));
 
-export const setIsConnected = (isConnected) =>
+export const setIsConnected = (isConnected: boolean) =>
   useUiStore.setState((state) => ({ isConnected }));

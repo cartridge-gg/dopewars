@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 /* utils */
 
-const loadSoundBuffer = async (src, context) => {
+const loadSoundBuffer = async (src: string, context: AudioContext) => {
   const sound = new Audio(src);
   const res = await fetch(sound.src);
   const buffer = await res.arrayBuffer();
@@ -13,8 +13,6 @@ const loadSoundBuffer = async (src, context) => {
 /* store */
 
 export enum Sounds {
-  Ambiance = "Ambiance.mp3",
-  Ambiance2 = "Ambiance2.mp3",
   HoverClick = "HoverClick.wav",
 }
 
@@ -29,11 +27,12 @@ export interface SoundState {
   };
 }
 
+// @ts-ignore
 export const useSoundStore = create<SoundState>(() => {
   return {
     isInitialized: false,
     isMuted: false,
-    context: undefined,
+    context: {}, // can't be initialized server side
     library: {
       buffers: {},
       sources: {},
@@ -47,17 +46,25 @@ export const initSoundStore = async () => {
   if (state.isInitialized) return;
   const context = new AudioContext();
 
+  // for (let sound of Object.keys(Sounds)) {
+  //   state.library.buffers[sound] = await loadSoundBuffer(
+  //     `/sounds/${Sounds[sound as keyof Sounds]}`,
+  //     context,
+  //   );
+  // }
+
   for (let sound in Sounds) {
-    state.library.buffers[Sounds[sound]] = await loadSoundBuffer(
-      `/sounds/${Sounds[sound]}`,
+    const soundKey = sound as keyof typeof Sounds
+    state.library.buffers[Sounds[soundKey]] = await loadSoundBuffer(
+      `/sounds/${Sounds[soundKey]}`,
       context,
     );
   }
 
   useSoundStore.setState((state) => ({
     isInitialized: true,
-    context,
     library: state.library,
+    context: context,
   }));
 };
 
@@ -88,11 +95,15 @@ export const playSound = async (sound: Sounds, volume = 1, loop = false) => {
   source.loop = loop;
   source.start();
 
-  useSoundStore.setState(async (state) => {
-    let s = await state;
-    s.library.sources[sound] = source;
-    s.library.gains[sound] = gainNode;
-  });
+  library.sources[sound] = source;
+  library.gains[sound] = gainNode;
+
+  // useSoundStore.setState( (state) => {
+  //   // let s = await state;
+  //   let s = state;
+  //   s.library.sources[sound] = source;
+  //   s.library.gains[sound] = gainNode;
+  // });
 };
 
 export const stopSound = (sound: Sounds, delay = 20) => {

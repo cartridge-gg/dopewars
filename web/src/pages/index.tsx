@@ -50,7 +50,7 @@ export default function Home() {
               max={6}
               onClick={() => router.push("/0xdead")}
               onMouseEnter={()=> {
-                playSound(Sounds.HoverClick);
+                playSound(Sounds.HoverClick,0.5);
               }}
             />
             <Game
@@ -60,7 +60,7 @@ export default function Home() {
               max={6}
               onClick={() => router.push("/0xdead")}
               onMouseEnter={()=> {
-                playSound(Sounds.HoverClick);
+                playSound(Sounds.HoverClick,0.5);
               }}
             />
             <Game
@@ -70,7 +70,7 @@ export default function Home() {
               max={2}
               onClick={() => router.push("/0xdead")}
               onMouseEnter={()=> {
-                playSound(Sounds.HoverClick);
+                playSound(Sounds.HoverClick,0.5);
               }}
             />
           </VStack>

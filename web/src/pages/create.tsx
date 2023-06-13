@@ -120,7 +120,7 @@ export default function Create() {
           w={["full", "auto"]}
           onClick={() => router.push("/")}
           onMouseEnter={() => {
-            playSound(Sounds.HoverClick);
+            playSound(Sounds.HoverClick,0.5);
           }}
         >
           Cancel
@@ -129,7 +129,7 @@ export default function Create() {
           w={["full", "auto"]}
           onClick={() => router.push("/pending/0x123")}
           onMouseEnter={() => {
-            playSound(Sounds.HoverClick);
+            playSound(Sounds.HoverClick,0.5);
           }}
         >
           Create New Game

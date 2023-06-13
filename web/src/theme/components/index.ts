@@ -9,3 +9,4 @@ export * from "./divider";
 export * from "./accordion";
 export * from "./container";
 export * from "./slidertrack";
+export * from "./menu";

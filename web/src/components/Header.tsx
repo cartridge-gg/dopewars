@@ -15,6 +15,9 @@ import {
 } from "@/hooks/sound";
 import { useUiStore, setIsConnected } from "@/hooks/ui";
 import HeaderButton from "@/components/HeaderButton";
+import MediaPlayer from "@/components/MediaPlayer";
+import MobileMenu from "@/components/MobileMenu";
+import { play } from "@/hooks/media";
 
 const Header = () => {
   const router = useRouter();
@@ -23,6 +26,7 @@ const Header = () => {
 
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
+  const isMobile = IsMobile();
 
   useEffect(() => {
     const init = async () => {
@@ -72,37 +76,33 @@ const Header = () => {
             </HStack>
           </HStack>
           <HStack flex="1" justify="right">
-            <HeaderButton>
-              <Chat
-                alert={true}
-                onClick={() => {
-                  stopSound(Sounds.Ambiance, 1000);
-                  setTimeout(() => {
-                    playSound(Sounds.Ambiance2, 0.8, true);
-                  },3000);
-                }}
-              />
-            </HeaderButton>
+            {!isMobile && <MediaPlayer />}
 
-            <HeaderButton onClick={() => toggleIsMuted()}>
-              <Sound isMuted={isMuted} />
-            </HeaderButton>
+            {!isMobile && (
+              <HeaderButton>
+                <Chat alert={true} />
+              </HeaderButton>
+            )}
+            {isMobile && <MobileMenu />}
           </HStack>
         </>
       ) : (
         <HStack flex="1" justify="right">
-          <HeaderButton onClick={() => toggleIsMuted()}>
+          {/* <HeaderButton onClick={() => toggleIsMuted()}>
             <Sound isMuted={isMuted} />
-          </HeaderButton>
+          </HeaderButton> */}
+
+          {!isMobile && <MediaPlayer />}
+
           <HStack
             layerStyle="rounded"
             cursor="pointer"
             onClick={() => {
               setIsConnected(true);
-              playSound(Sounds.Ambiance, 1, true);
+              play();
             }}
             onMouseEnter={() => {
-              playSound(Sounds.HoverClick);
+              playSound(Sounds.HoverClick, 0.5);
             }}
           >
             <Link /> <Text>CONNECT</Text>

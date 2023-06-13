@@ -21,21 +21,15 @@ import {
 } from "@/hooks/media";
 
 const slideAnim = keyframes`  
-  /* to {
-    transform: translateX(-50%);
-  } */
-  0% {
-    left: 0%;
-  }
-  100% {
-    left: -100%
-  }
+  0% {transform: translateX( 0%);}
+  100% {transform: translateX(-100%);}
 `;
 
 // https://codepen.io/girish/pen/dgWqBr
 const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   const mediaStore = useMediaStore();
-  const songTitle = mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
+  const songTitle =
+    mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
 
   useEffect(() => {
     const init = async () => {
@@ -45,21 +39,24 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   }, []);
 
   return (
-    <VStack
-      w="140px"
+    <Flex
+      w={{ base: "300px", md: "140px" }}
       h="36px"
+      direction={{ base: "row", md: "column" }}
       alignItems="normal"
-      spacing={0}
+      // spacing={0}
       mr={3}
       borderRadius={6}
-      bg={"neon.700"}
+      bg={{ md: "neon.700" }}
       overflow="hidden"
       _hover={{
-        ".mediaplayer-status": {
-          transform: "translateY(-36px)",
-        },
-        ".mediaplayer-commands": {
-          transform: "translateY(-36px)",
+        lg: {
+          ".mediaplayer-status": {
+            transform: "translateY(-36px)",
+          },
+          ".mediaplayer-commands": {
+            transform: "translateY(-36px)",
+          },
         },
       }}
       css={{
@@ -71,6 +68,7 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
       <Box
         // hidden="true"
         className="mediaplayer-status"
+        w="140px"
         h="36px"
         display="flex"
         flexDirection="row"
@@ -83,18 +81,27 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
           <Note m={1} />
         </Box>
 
-        <Box style={{ overflow: "hidden" }}>
+        <Flex
+          direction="row"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          userSelect="none"
+        >
           <Box
             animation={`${slideAnim} infinite 8s linear`}
             position="relative"
-            whiteSpace="nowrap"
-            userSelect="none"
+            pl={6}
           >
             {songTitle}
-            {"     "}
+          </Box>
+          <Box
+            animation={`${slideAnim} infinite 8s linear`}
+            position="relative"
+            pl={6}
+          >
             {songTitle}
           </Box>
-        </Box>
+        </Flex>
       </Box>
 
       <Flex
@@ -104,40 +111,26 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
         justifyContent="center"
         flexShrink={0}
         m={0}
+        ml={{ base: "30px", md: "0" }}
       >
         <HStack alignItems="center" justifyContent="center">
-          <Box
-            cursor="pointer"
-            borderRadius={"50%"}
-            p={1}
-            _hover={{ bg: "neon.600" }}
-          >
+          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
             <Backward onClick={backward} />
           </Box>
 
-          <Box
-            cursor="pointer"
-            borderRadius={"50%"}
-            _hover={{ bg: "neon.600" }}
-            p={1}
-          >
+          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
             {mediaStore.isPlaying ? (
               <Pause onClick={pause} />
             ) : (
               <Play onClick={play} />
             )}
           </Box>
-          <Box
-            cursor="pointer"
-            borderRadius={"50%"}
-            _hover={{ bg: "neon.600" }}
-            p={1}
-          >
+          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
             <Forward onClick={forward} />
           </Box>
         </HStack>
       </Flex>
-    </VStack>
+    </Flex>
   );
 };
 

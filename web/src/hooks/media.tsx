@@ -20,13 +20,6 @@ export interface MediaState {
   isPlaying: boolean;
 }
 
-// export interface HowlSound {
-//   play: () => {};
-//   pause: () => {};
-//   stop: () => {};
-//   onend: () =>  {};
-// }
-
 export const useMediaStore = create<MediaState>(() => ({
   isInitialized: false,
   medias: [],
@@ -43,6 +36,8 @@ export const initMediaStore = async () => {
       ...media,
       sound: new Howl({
         src: `/medias/${media.filename}`,
+        html5: true,
+        preload: true,
       }),
     });
   }
@@ -56,7 +51,15 @@ export const initMediaStore = async () => {
 
 export const play = () => {
   const state = useMediaStore.getState();
-  state.medias[state.currentIndex].sound?.play();
+  if (
+    !state.medias[state.currentIndex] ||
+    !state.medias[state.currentIndex]?.sound
+  )
+    return;
+
+  if (!state.medias[state.currentIndex].sound?.playing()) {
+    state.medias[state.currentIndex].sound?.play();
+  }
 
   // play next when sound ends
   state.medias[state.currentIndex].sound?.on("end", () => {
