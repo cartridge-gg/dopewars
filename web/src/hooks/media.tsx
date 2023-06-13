@@ -45,7 +45,6 @@ export const initMediaStore = async () => {
   useMediaStore.setState((state) => ({
     ...state,
     isInitialized: true,
-    //  medias: state.medias,
   }));
 };
 

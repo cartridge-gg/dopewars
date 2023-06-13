@@ -3,11 +3,12 @@ import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
+import Button from "@/components/Button";
+
 import {
   HStack,
   VStack,
   Container,
-  Button,
   Text,
   Card,
   CardHeader,
@@ -116,21 +117,13 @@ export default function Create() {
         </UnorderedList>
       </Content>
       <Footer>
-        <Button
-          w={["full", "auto"]}
-          onClick={() => router.push("/")}
-          onMouseEnter={() => {
-            playSound(Sounds.HoverClick,0.5);
-          }}
-        >
+        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
           Cancel
         </Button>
         <Button
           w={["full", "auto"]}
           onClick={() => router.push("/pending/0x123")}
-          onMouseEnter={() => {
-            playSound(Sounds.HoverClick,0.5);
-          }}
+          clickSound={Sounds.Magnum357}
         >
           Create New Game
         </Button>

@@ -1,5 +1,6 @@
-import { Text, VStack, HStack, Divider, Button } from "@chakra-ui/react";
+import { Text, VStack, HStack, Divider } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
+import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { Clock, Link, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
@@ -32,10 +33,7 @@ export default function Home() {
             <Text color="neon.500" fontSize="14px">
               YOU HAVE NO GAMES
             </Text>
-            <Button w="full" 
-            onClick={() => router.push("/create")}
-            onMouseEnter={() => playSound(Sounds.HoverClick)}
-            >
+            <Button w="full" onClick={() => router.push("/create")}>
               Create
             </Button>
           </VStack>
@@ -49,9 +47,6 @@ export default function Home() {
               joined={5}
               max={6}
               onClick={() => router.push("/0xdead")}
-              onMouseEnter={()=> {
-                playSound(Sounds.HoverClick,0.5);
-              }}
             />
             <Game
               name="3V3 BGH @ CABLE ONLY!!!"
@@ -59,9 +54,6 @@ export default function Home() {
               joined={2}
               max={6}
               onClick={() => router.push("/0xdead")}
-              onMouseEnter={()=> {
-                playSound(Sounds.HoverClick,0.5);
-              }}
             />
             <Game
               name="1V1 MAX BET"
@@ -69,9 +61,6 @@ export default function Home() {
               joined={1}
               max={2}
               onClick={() => router.push("/0xdead")}
-              onMouseEnter={()=> {
-                playSound(Sounds.HoverClick,0.5);
-              }}
             />
           </VStack>
         </VStack>
@@ -102,7 +91,9 @@ const Game = ({
     py="10px"
     cursor="pointer"
     onClick={onClick}
-    onMouseEnter={onMouseEnter}
+    onMouseEnter={() => {
+      playSound(Sounds.HoverClick, 0.3);
+    }}
   >
     <HStack overflow="hidden" whiteSpace="nowrap" flex="1">
       <Text>{name}</Text>

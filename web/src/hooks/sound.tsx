@@ -14,6 +14,7 @@ const loadSoundBuffer = async (src: string, context: AudioContext) => {
 
 export enum Sounds {
   HoverClick = "HoverClick.wav",
+  Magnum357 = "Magnum357.mp3",
 }
 
 export interface SoundState {
