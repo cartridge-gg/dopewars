@@ -1,6 +1,7 @@
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
+import Input from "@/components/Input";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
 import {
@@ -14,7 +15,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Input,
   Flex,
   Spacer,
   useCounter,
@@ -58,7 +58,7 @@ export default function Create() {
           <ListItem>
             <HStack>
               <Label name="Title" />
-              <Input />
+              <Input placeholder="ENTER GAME TITLE HERE" />
             </HStack>
           </ListItem>
           <ListItem>
