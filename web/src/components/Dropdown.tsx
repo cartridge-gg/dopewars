@@ -48,13 +48,13 @@ export const Dropdown = ({
             {/* Selected option */}
             {options.map(option => (
               option.value === selectedOption.value && (
-                <DropdownOption option={option} active onClick={onOptionClicked(option)} />
+                <DropdownOption option={option} active onClick={onOptionClicked(option)} key={option.value} />
               )
             ))}
             {/* Other options */}
             {options.map(option => (
               option.value != selectedOption.value && (
-                <DropdownOption option={option} onClick={onOptionClicked(option)} />
+                <DropdownOption option={option} onClick={onOptionClicked(option)} key={option.value} />
               )
             ))}
           </VStack>
@@ -85,7 +85,6 @@ const DropdownOption = ({
       backgroundColor: 'neon.200'
     }}
     onClick={onClick}
-    key={option.value}
   >
     <Text>{option.text}</Text>
     {option.label && (
