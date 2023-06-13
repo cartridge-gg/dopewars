@@ -109,5 +109,3 @@ export const forward = () => {
   state.isPlaying && play();
 };
 
-// // Change global volume.
-// Howler.volume(0.5);

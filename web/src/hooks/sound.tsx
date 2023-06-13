@@ -47,13 +47,6 @@ export const initSoundStore = async () => {
   if (state.isInitialized) return;
   const context = new AudioContext();
 
-  // for (let sound of Object.keys(Sounds)) {
-  //   state.library.buffers[sound] = await loadSoundBuffer(
-  //     `/sounds/${Sounds[sound as keyof Sounds]}`,
-  //     context,
-  //   );
-  // }
-
   for (let sound in Sounds) {
     const soundKey = sound as keyof typeof Sounds
     state.library.buffers[Sounds[soundKey]] = await loadSoundBuffer(
@@ -99,12 +92,6 @@ export const playSound = async (sound: Sounds, volume = 1, loop = false) => {
   library.sources[sound] = source;
   library.gains[sound] = gainNode;
 
-  // useSoundStore.setState( (state) => {
-  //   // let s = await state;
-  //   let s = state;
-  //   s.library.sources[sound] = source;
-  //   s.library.gains[sound] = gainNode;
-  // });
 };
 
 export const stopSound = (sound: Sounds, delay = 20) => {

@@ -88,10 +88,6 @@ const Header = () => {
         </>
       ) : (
         <HStack flex="1" justify="right">
-          {/* <HeaderButton onClick={() => toggleIsMuted()}>
-            <Sound isMuted={isMuted} />
-          </HeaderButton> */}
-
           {!isMobile && <MediaPlayer />}
 
           <HStack
