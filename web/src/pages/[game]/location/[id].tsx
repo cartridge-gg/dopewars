@@ -82,7 +82,6 @@ export default function Location() {
       backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/streets.png');"
     >
       <Content>
-        <Inventory pb="20px" />
         <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
           {drugs.map((drug, index) => (
             <Card h="180px" key={index}>
