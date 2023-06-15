@@ -1,6 +1,6 @@
 import NextHead from "next/head";
 import { ModalProvider } from "@/components/Modal/ModalProvider";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Text } from "@chakra-ui/react";
 import {
   InjectedConnector,
   StarknetConfig,
@@ -11,6 +11,10 @@ import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
 import Fonts from "@/theme/fonts";
+
+import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
+import MakeItRain from "@/components/MakeItRain";
+import { useEffect } from "react";
 
 export const controllerConnector = new ControllerConnector([
   {
@@ -26,6 +30,19 @@ export const argentConnector = new InjectedConnector({
 export const connectors = [controllerConnector as any, argentConnector];
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { setSequence, isRightSequence, setIsRightSequence } =
+    useKonamiCode(starkpimpSequence);
+
+  useEffect(() => {
+    if (isRightSequence) {
+      // stop rain after 20s
+      setTimeout(() => {
+        isRightSequence && setIsRightSequence(false);
+        setSequence([]);
+      }, 20_000);
+    }
+  }, [isRightSequence]);
+
   return (
     <StarknetProvider connectors={connectors}>
       <ChakraProvider theme={theme}>
@@ -39,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
               />
             </NextHead>
+            {isRightSequence && <MakeItRain />}
             <Component {...pageProps} />
           </GameConfigProvider>
         </ModalProvider>
