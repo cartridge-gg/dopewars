@@ -19,14 +19,15 @@ katana --seed 0
 # Build the game
 sozo build
 
-# Migrate the world, this will declare/deploy contracts to katana
+# Migrate the world, this will declare/deploy contracts to katana,
+# update the world address in Scarb.toml
 sozo migrate
 
 # Create a game, execute calldata params are defined in SpawnGame system
-sozo execute --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 SpawnGame --calldata 1686521389,2,30,1
+sozo execute SpawnGame --calldata 1686521389,2,30,1
 
 # View the schema of the Game Component
-sozo component schema --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 Game
+sozo component schema Game
 > struct Game {
 >    start_time: u64
 >    max_players: usize
@@ -37,12 +38,20 @@ sozo component schema --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0
 >    creator: u250
 > }
 
-# Get the value of the Game (partition_id retrieved from events)
-sozo component entity --partition_id 1 --world 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 Game
-> 0x6486462d 0x2 0x1 0x1e 0x1 0x0 0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0
+# Get the value of the Game (0 represents game_id key)
+sozo component entity Game 0
+> 0x6486462d
+> 0x2
+> 0x1
+> 0x1e
+> 0x1
+> 0x0
+> 0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0
+
+# Try other commands like SpawnLocation and travel/trade
 
 # Start indexer, graphql endpoint at http://localhost:8080
-torii --world-address 0xeb752067993e3e1903ba501267664b4ef2f1e40f629a17a0180367e4f68428 --manifest path_to_target/manifest.json
+torii --world-address 0x7f1d6c1b15e03673062d8356dc1174d5d85c310479ec49fe781e8bf89e4c4f8 --manifest path_to_target/manifest.json
 
 ```
 
