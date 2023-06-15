@@ -14,8 +14,7 @@ use dojo_core::interfaces::{
     IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher, IComponentDispatcherTrait,
     ISystemLibraryDispatcher, ISystemDispatcherTrait
 };
-use dojo_core::string::ShortStringTrait;
-use dojo_core::integer::u250Trait;
+
 use dojo_core::executor::Executor;
 use dojo_core::world::World;
 use dojo_core::test_utils::spawn_test_world;
@@ -94,7 +93,7 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
 
     let (game_id, player_id) = serde::Serde::<(felt252, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
-    let mut res = world.entity(ShortStringTrait::new('Game'), game_id.into(), 0, 0);
+    let mut res = world.entity('Game'.into(), game_id.into(), 0, 0);
     assert(res.len() > 0, 'game not found');
 
     let game = serde::Serde::<Game>::deserialize(ref res).expect('game deserialization failed');
@@ -119,8 +118,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let mut res = world
-        .entity(ShortStringTrait::new('Stats'), (game_id, (player_id)).into_partitioned(), 0, 0);
+    let mut res = world.entity('Stats'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'player stats not found');
 
     let stats = serde::Serde::<Stats>::deserialize(ref res).expect('stats deserialization failed');
@@ -128,8 +126,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     assert(stats.health == 100, 'health mismatch');
     assert(stats.arrested == false, 'arrested mismatch');
 
-    let mut res = world
-        .entity(ShortStringTrait::new('Cash'), (game_id, (player_id)).into_partitioned(), 0, 0);
+    let mut res = world.entity('Cash'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'player cash not found');
 
     let cash = serde::Serde::<Cash>::deserialize(ref res).expect('cash deserialization failed');
@@ -154,8 +151,7 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
 
     let location_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
-    let mut res = world
-        .entity(ShortStringTrait::new('Risks'), (game_id, (location_id)).into_partitioned(), 0, 0);
+    let mut res = world.entity('Risks'.into(), (game_id, location_id).into(), 0, 0);
     assert(res.len() > 0, 'loc not found');
 
     let risks = serde::Serde::<Risks>::deserialize(ref res).expect('loc deserialization failed');
@@ -177,12 +173,12 @@ fn test_spawn_locations() {
 
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, (location_one)).into_partitioned(), 0, 0);
+    }.entity('Location'.into(), (game_id, location_one).into(), 0, 0);
     assert(res.len() > 0, 'no location 1');
 
-    let res = IWorldDispatcher{
+    let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, (location_two)).into_partitioned(), 0, 0);
+    }.entity('Location'.into(), (game_id, location_two).into(), 0, 0);
     assert(res.len() > 0, 'no location 2');
 }
 
@@ -193,7 +189,7 @@ fn test_spawn_player() {
 
     let (players, _) = IWorldDispatcher {
         contract_address: world_address
-    }.entities(ShortStringTrait::new('Stats'), u250Trait::new(game_id));
+    }.entities('Stats'.into(), game_id.into());
     assert(players.len() == 1, 'wrong num players');
 }
 

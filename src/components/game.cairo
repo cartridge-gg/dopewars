@@ -1,5 +1,4 @@
 use box::BoxTrait;
-use dojo_core::integer::u250;
 
 #[derive(Component, Copy, Drop, Serde)]
 struct Game {
@@ -9,7 +8,7 @@ struct Game {
     max_turns: usize,
     max_locations: usize,
     is_finished: bool,
-    creator: u250,
+    creator: felt252,
 }
 
 

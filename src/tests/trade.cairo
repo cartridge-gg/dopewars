@@ -31,7 +31,7 @@ const QUANTITY: usize = 50;
 fn test_player_buy() {
     let (world_address, game_id, player_id) = spawn_game();
     let location_id = spawn_location(world_address, game_id);
-    
+
     let world = IWorldDispatcher { contract_address: world_address };
 
     // travel to location
@@ -124,4 +124,5 @@ fn test_player_buy() {
 // // let cash = serde::Serde::<Cash>::deserialize(ref res).expect('deserialization failed');
 // // assert(cash.amount == (100 * SCALING_FACTOR + payout), 'incorrect cash');
 // }
+
 
