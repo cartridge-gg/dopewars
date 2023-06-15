@@ -27,6 +27,7 @@ export * from "./Link";
 export * from "./Event";
 export * from "./Arrow";
 export * from "./ArrowEnclosed";
+export * from "./ArrowInput";
 export * from "./Clock";
 export * from "./Sound";
 export * from "./Music";
