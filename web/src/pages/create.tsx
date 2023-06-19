@@ -2,23 +2,13 @@ import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
-import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Dropdown } from "@/components/Dropdown";
+import { InputNumber } from "@/components/InputNumber";
 import {
   HStack,
-  VStack,
-  Container,
   Text,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Flex,
-  Spacer,
-  useCounter,
   UnorderedList,
   ListItem,
 } from "@chakra-ui/react";
@@ -31,23 +21,16 @@ const MIN_TURNS = 10;
 
 export default function Create() {
   const router = useRouter();
-  const {
-    increment: incPlayers,
-    decrement: decPlayers,
-    value: numPlayers,
-  } = useCounter({
-    defaultValue: MIN_PLAYERS,
-    min: MIN_PLAYERS,
-  });
 
-  const {
-    increment: incTurns,
-    decrement: decTurns,
-    value: numTurns,
-  } = useCounter({
-    defaultValue: 30,
-    min: MIN_TURNS,
-  });
+  const [numTurns, setNumTurns] = useState<number>(30); 
+  const handleNumTurns = (numTurns: number) => {
+    setNumTurns(numTurns);
+  };
+
+  const [numPlayers, setNumPlayers] = useState<number>(MIN_PLAYERS);
+  const handleNumPlayer = (numPlayers: number) => {
+    setNumPlayers(numPlayers);
+  };
 
   return (
     <Layout
@@ -66,47 +49,13 @@ export default function Create() {
           <ListItem>
             <HStack>
               <Label name="Turns" />
-              <Text>{numTurns}</Text>
-              <Spacer />
-              <HStack>
-                <ArrowEnclosed
-                  variant="caret"
-                  size="sm"
-                  cursor="pointer"
-                  onClick={() => incTurns()}
-                />
-                <ArrowEnclosed
-                  variant="caret"
-                  direction="down"
-                  size="sm"
-                  cursor="pointer"
-                  color={numTurns <= MIN_TURNS ? "neon.500" : "neon.200"}
-                  onClick={() => decTurns()}
-                />
-              </HStack>
+              <InputNumber value={numTurns} min={MIN_TURNS} onChange={handleNumTurns} />
             </HStack>
           </ListItem>
           <ListItem>
             <HStack>
               <Label name="Players" />
-              <Text>{numPlayers}</Text>
-              <Spacer />
-              <HStack>
-                <ArrowEnclosed
-                  variant="caret"
-                  size="sm"
-                  cursor="pointer"
-                  onClick={() => incPlayers()}
-                />
-                <ArrowEnclosed
-                  variant="caret"
-                  direction="down"
-                  size="sm"
-                  cursor="pointer"
-                  color={numPlayers <= MIN_PLAYERS ? "neon.500" : "neon.200"}
-                  onClick={() => decPlayers()}
-                />
-              </HStack>
+              <InputNumber value={numPlayers} min={MIN_PLAYERS} onChange={handleNumPlayer} />
             </HStack>
           </ListItem>
           <ListItem>

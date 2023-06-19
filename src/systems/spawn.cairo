@@ -3,40 +3,40 @@ mod SpawnPlayer {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
-    use dojo_core::integer::{u250, ContractAddressIntoU250};
 
     use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
     use rollyourown::constants::SCALING_FACTOR;
 
     #[event]
-    fn PlayerJoined(partition: u250, player_id: u250) {}
+    fn PlayerJoined(game_id: u32, player_id: felt252) {}
 
-    fn execute(ctx: Context, partition: u250) -> u250 {
+    fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: u250 = ctx.caller_account.into();
+        let player_id: felt252 = ctx.caller_account.into();
 
-        let game = commands::<Game>::entity(partition.into());
+        let game_sk: Query = game_id.into();
+        let game = commands::<Game>::entity(game_sk);
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         // spawn player into game
         commands::set_entity(
-            (partition, (player_id)).into_partitioned(),
+            (game_id, player_id).into(),
             (
                 Stats {
                     health: 100, respect: 0, arrested: false, turns_remaining: game.max_turns
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0.into()
+                    id: 0_u32
                 }
             )
         );
 
         // update num players joined
         commands::set_entity(
-            partition.into(),
+            game_sk,
             (Game {
                 start_time: game.start_time,
                 max_players: game.max_players,
@@ -48,7 +48,7 @@ mod SpawnPlayer {
             })
         );
 
-        PlayerJoined(partition, player_id);
+        PlayerJoined(game_id, player_id);
         player_id
     }
 }
@@ -59,7 +59,6 @@ mod SpawnLocation {
     use box::BoxTrait;
     use array::ArrayTrait;
     use debug::PrintTrait;
-    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::risks::Risks;
     use rollyourown::components::game::Game;
@@ -71,11 +70,11 @@ mod SpawnLocation {
     const MAX_PRODUCTS: u32 = 6;
 
     #[event]
-    fn LocationCreated(partition: u250, location_id: u32) {}
+    fn LocationCreated(game_id: u32, location_id: u32) {}
 
     fn execute(
         ctx: Context,
-        partition: usize,
+        game_id: u32,
         travel_risk: u8,
         hurt_risk: u8,
         killed_risk: u8,
@@ -83,18 +82,19 @@ mod SpawnLocation {
         arrested_risk: u8
     ) -> u32 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: u250 = ctx.caller_account.into();
+        let player_id: felt252 = ctx.caller_account.into();
 
-        let game = commands::<Game>::entity(partition.into());
+        let game_sk: Query = game_id.into();
+        let game = commands::<Game>::entity(game_sk);
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         let location_id = commands::uuid();
         commands::set_entity(
-            (partition, (location_id)).into_partitioned(),
+            (game_id, location_id).into(),
             (
                 Location {
-                    id: location_id.into()
+                    id: location_id
                     }, Risks {
                     travel: travel_risk,
                     hurt: hurt_risk,
@@ -112,13 +112,11 @@ mod SpawnLocation {
             }
             let quantity = 1000;
             let cash = 100 * SCALING_FACTOR;
-            commands::set_entity(
-                (partition, (location_id, i)).into_partitioned(), (Market { cash, quantity })
-            );
+            commands::set_entity((game_id, location_id, i).into(), (Market { cash, quantity }));
             i += 1;
         }
 
-        LocationCreated(partition.into(), location_id);
+        LocationCreated(game_id, location_id);
         location_id
     }
 }
@@ -128,7 +126,6 @@ mod SpawnLocation {
 mod SpawnGame {
     use array::ArrayTrait;
     use traits::Into;
-    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Cash;
@@ -138,8 +135,8 @@ mod SpawnGame {
 
     #[event]
     fn GameCreated(
-        partition: u250,
-        creator: u250,
+        game_id: u32,
+        creator: felt252,
         start_time: u64,
         max_turns: usize,
         max_players: usize,
@@ -148,12 +145,12 @@ mod SpawnGame {
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
-    ) -> (u250, u250) {
-        let player_id: u250 = ctx.caller_account.into();
+    ) -> (u32, felt252) {
+        let player_id: felt252 = ctx.caller_account.into();
 
-        let partition = commands::uuid();
+        let game_id = commands::uuid();
         commands::set_entity(
-            partition.into(),
+            game_id.into(),
             (Game {
                 start_time,
                 max_players,
@@ -166,19 +163,19 @@ mod SpawnGame {
         );
 
         commands::set_entity(
-            (partition, (player_id)).into_partitioned(),
+            (game_id, player_id).into(),
             (
                 Stats {
                     health: 100, respect: 0, arrested: false, turns_remaining: max_turns
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0.into()
+                    id: 0_u32
                 }
             )
         );
 
-        GameCreated(partition.into(), player_id, start_time, max_players, max_turns, max_locations);
-        (partition.into(), player_id)
+        GameCreated(game_id, player_id, start_time, max_players, max_turns, max_locations);
+        (game_id, player_id)
     }
 }

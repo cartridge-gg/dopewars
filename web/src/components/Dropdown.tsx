@@ -1,6 +1,6 @@
 import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import { ArrowEnclosed } from "./icons";
+import { ArrowInput } from "./icons";
 
 export interface DropdownOptionProps {
   label?: string;
@@ -36,10 +36,9 @@ export const Dropdown = ({
           <Text color="yellow.400">{selectedOption.label}</Text>
         )}
         <Spacer />
-        <ArrowEnclosed 
-          variant="caret"
+        <ArrowInput
           direction="down"
-          size="sm"
+          size="md"
         />
       </HStack>
       {isOpen && (

@@ -7,15 +7,15 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo_core::storage::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo_core::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
-use dojo_core::string::ShortStringTrait;
-use dojo_core::integer::u250Trait;
+
 use dojo_core::executor::Executor;
 use dojo_core::world::World;
+use dojo_core::test_utils::spawn_test_world;
+use dojo_core::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
+use rollyourown::components::location::{Location, LocationComponent};
 use rollyourown::tests::spawn::{spawn_game, spawn_location, spawn_player};
-use rollyourown::components::location::Location;
 
 #[test]
 #[available_gas(100000000)]
@@ -31,7 +31,7 @@ fn test_travel() {
 
     world.execute('Travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity('Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0);
+    let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
@@ -43,7 +43,7 @@ fn test_travel() {
 
     world.execute('Travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity('Location'.into(), (game_id, (player_id)).into_partitioned(), 0, 0);
+    let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');

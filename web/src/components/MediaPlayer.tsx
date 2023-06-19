@@ -8,8 +8,9 @@ import {
   HStack,
   VStack,
   Flex,
+  BoxProps,
 } from "@chakra-ui/react";
-import { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Note, Play, Pause, Backward, Forward } from "./icons";
 import {
   initMediaStore,
@@ -25,8 +26,40 @@ const slideAnim = keyframes`
   100% {transform: translateX(-100%);}
 `;
 
-// https://codepen.io/girish/pen/dgWqBr
-const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
+const ClickFeedback = ({
+  children,
+  duration = 200,
+  ...props
+}: { children: ReactNode; duration?: number } & StyleProps & BoxProps) => {
+  const [clicked, setClicked] = useState(false);
+  useEffect(() => {
+    if (clicked) {
+      setTimeout(() => {
+        setClicked(false);
+      }, duration);
+    }
+  }, [clicked]);
+
+  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setClicked(true);
+    props.onClick && props.onClick(e);
+  };
+
+  return (
+    <Box
+      p={1}
+      cursor="pointer"
+      {...props}
+      bg={clicked ? "neon.600" : "transparent"}
+      transitionDelay="0"
+      onClick={onClick}
+    >
+      {children}
+    </Box>
+  );
+};
+
+const MediaPlayer = ({ ...props }: StyleProps) => {
   const mediaStore = useMediaStore();
   const songTitle =
     mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
@@ -44,7 +77,6 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
       h="36px"
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
-      // spacing={0}
       className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
       mr={3}
       borderRadius={6}
@@ -71,7 +103,6 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
       }}
     >
       <Box
-        // hidden="true"
         className="mediaplayer-status"
         w="140px"
         h="36px"
@@ -119,20 +150,21 @@ const MediaPlayer = ({ ...props }: StyleProps /*& ButtonProps*/) => {
         ml={{ base: "30px", md: "0" }}
       >
         <HStack alignItems="center" justifyContent="center">
-          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
+          <ClickFeedback>
             <Backward onClick={backward} />
-          </Box>
+          </ClickFeedback>
 
-          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
+          <ClickFeedback>
             {mediaStore.isPlaying ? (
               <Pause onClick={pause} />
             ) : (
               <Play onClick={play} />
             )}
-          </Box>
-          <Box cursor="pointer" p={1} _hover={{ bg: "neon.600" }}>
+          </ClickFeedback>
+
+          <ClickFeedback>
             <Forward onClick={forward} />
-          </Box>
+          </ClickFeedback>
         </HStack>
       </Flex>
     </Flex>

@@ -3,7 +3,6 @@ mod Buy {
     use traits::Into;
     use array::ArrayTrait;
     use debug::PrintTrait;
-    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::{
         game::{Game, GameTrait}, drug::Drug, market::{Market, MarketTrait}, location::Location
@@ -11,7 +10,7 @@ mod Buy {
     use rollyourown::components::{player::Cash, risks::{Risks, RisksTrait}};
 
     #[event]
-    fn Bought(partition: u250, player_id: u250, drug_id: u250, quantity: usize, cost: u128) {}
+    fn Bought(game_id: u32, player_id: felt252, drug_id: u32, quantity: usize, cost: u128) {}
 
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
@@ -19,45 +18,36 @@ mod Buy {
     // 4. Perform the trade.
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
-    fn execute(ctx: Context, partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
-        let game = commands::<Game>::entity(partition.into());
+    fn execute(ctx: Context, game_id: u32, location_id: u32, drug_id: u32, quantity: usize) {
+        let game = commands::<Game>::entity(game_id.into());
         assert(game.tick(), 'cannot progress');
 
         let player_id = ctx.caller_account.into();
-        let (location, cash) = commands::<(
-            Location, Cash
-        )>::entity((partition, (player_id)).into_partitioned());
-        let market = commands::<Market>::entity(
-            (partition, (location_id, drug_id)).into_partitioned()
-        );
+        let (location, cash) = commands::<(Location, Cash)>::entity((game_id, player_id).into());
+        let market = commands::<Market>::entity((game_id, location_id, drug_id).into());
 
         let cost = market.buy(quantity);
         assert(cost < cash.amount, 'not enough cash');
 
         // FIX: moving this to end of function for some reason causes
         // dojo-test error: #4864: Inconsistent references annotations.
-        Bought(partition, player_id, drug_id, quantity, cost);
+        Bought(game_id, player_id, drug_id, quantity, cost);
 
         // update market
         commands::set_entity(
-            (partition, (location_id, drug_id)).into_partitioned(),
+            (game_id, location_id, drug_id).into(),
             (Market { cash: market.cash + cost, quantity: market.quantity - quantity,  })
         );
 
         // update player
-        commands::set_entity(
-            (partition, (player_id)).into_partitioned(), (Cash { amount: cash.amount - cost }, )
-        );
-        let maybe_drug = commands::<Drug>::try_entity(
-            (partition, (player_id, drug_id)).into_partitioned()
-        );
+        commands::set_entity((game_id, player_id).into(), (Cash { amount: cash.amount - cost }, ));
+        let maybe_drug = commands::<Drug>::try_entity((game_id, player_id, drug_id).into());
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity + quantity,
             Option::None(_) => quantity,
         };
         commands::set_entity(
-            (partition, (player_id, drug_id)).into_partitioned(),
-            (Drug { id: drug_id, quantity: player_quantity })
+            (game_id, player_id, drug_id).into(), (Drug { id: drug_id, quantity: player_quantity })
         );
     }
 }
@@ -66,7 +56,6 @@ mod Buy {
 mod Sell {
     use traits::Into;
     use array::ArrayTrait;
-    use dojo_core::integer::{u250, ContractAddressIntoU250, U32IntoU250};
 
     use rollyourown::components::game::Game;
     use rollyourown::components::game::GameTrait;
@@ -79,47 +68,41 @@ mod Sell {
     use rollyourown::components::risks::RisksTrait;
 
     #[event]
-    fn Sold(partition: u250, player_id: u250, drug_id: u250, quantity: usize, payout: u128) {}
+    fn Sold(game_id: u32, player_id: felt252, drug_id: u32, quantity: usize, payout: u128) {}
 
-    fn execute(ctx: Context, partition: u250, location_id: u250, drug_id: u250, quantity: usize) {
-        let game = commands::<Game>::entity(partition.into());
+    fn execute(ctx: Context, game_id: u32, location_id: u32, drug_id: u32, quantity: usize) {
+        let game = commands::<Game>::entity(game_id.into());
         assert(game.tick(), 'cannot progress');
 
         let player_id = ctx.caller_account.into();
-        let (location, cash) = commands::<(
-            Location, Cash
-        )>::entity((partition, (player_id)).into_partitioned());
+        let (location, cash) = commands::<(Location, Cash)>::entity((game_id, player_id).into());
 
-        let maybe_drug = commands::<Drug>::try_entity(
-            (partition, (player_id, drug_id)).into_partitioned()
-        );
+        let maybe_drug = commands::<Drug>::try_entity((game_id, player_id, drug_id).into());
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity,
             Option::None(()) => 0
         };
         assert(player_quantity >= quantity, 'not enough drugs to sell');
 
-        let market = commands::<Market>::entity(
-            (partition, (location_id, drug_id)).into_partitioned()
-        );
+        let market = commands::<Market>::entity((game_id, location_id, drug_id).into());
         let payout = market.sell(quantity);
 
         // update market
         commands::set_entity(
-            (partition, (location_id, drug_id)).into_partitioned(),
+            (game_id, location_id, drug_id).into(),
             (Market { cash: market.cash - payout, quantity: market.quantity + quantity,  })
         );
 
         // update player
         commands::set_entity(
-            (partition, (player_id)).into_partitioned(), (Cash { amount: cash.amount + payout }, )
+            (game_id, player_id).into(), (Cash { amount: cash.amount + payout }, )
         );
         commands::set_entity(
-            (partition, (player_id, drug_id)).into_partitioned(),
+            (game_id, player_id, drug_id).into(),
             (Drug { id: drug_id, quantity: player_quantity - quantity })
         );
 
-        Sold(partition, player_id, drug_id, quantity, payout);
+        Sold(game_id, player_id, drug_id, quantity, payout);
     }
 }
 //This causes a libfunc error
