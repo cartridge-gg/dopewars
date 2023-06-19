@@ -77,24 +77,29 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       h="36px"
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
+      className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
       mr={3}
       borderRadius={6}
       bg={{ md: "neon.700" }}
       overflow="hidden"
       _hover={{
         lg: {
-          ".mediaplayer-status": {
-            transform: "translateY(-36px)",
-          },
-          ".mediaplayer-commands": {
+          ".mediaplayer-status, .mediaplayer-commands": {
             transform: "translateY(-36px)",
           },
         },
       }}
-      css={{
+      sx={{
         ".mediaplayer-status,.mediaplayer-commands": {
           transition: "all .2s",
         },
+        "&.mediaplayer-paused": {
+          ".mediaplayer-status, .mediaplayer-commands": {
+            md:{
+              transform: "translateY(-36px)",
+            }
+          }
+         }
       }}
     >
       <Box

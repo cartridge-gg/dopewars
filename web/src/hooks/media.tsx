@@ -46,6 +46,11 @@ export const initMediaStore = async () => {
     ...state,
     isInitialized: true,
   }));
+
+  const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true"
+  if(!disableAutoPlay){
+    play()
+  }
 };
 
 export const play = () => {
