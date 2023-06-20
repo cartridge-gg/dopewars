@@ -15,7 +15,7 @@ use dojo_core::test_utils::spawn_test_world;
 use dojo_core::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
 use rollyourown::components::location::{Location, LocationComponent};
-use rollyourown::tests::spawn::{spawn_game, spawn_location, spawn_player};
+use rollyourown::tests::create::{spawn_game, spawn_location, spawn_player};
 
 #[test]
 #[available_gas(100000000)]

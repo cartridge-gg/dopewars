@@ -1,0 +1,9 @@
+[package]
+name = "player_two"
+version = "0.1.0"
+
+[tool.dojo.env]
+rpc_url = "http://localhost:5050/"
+account_address = "0x033c627a3e5213790e246a917770ce23d7e562baa5b4d2917c23b1be6d91961c"
+private_key = "0x0333803103001800039980190300d206608b0070db0012135bd1fb5f6282170b"
+world_address = "0x7f1d6c1b15e03673062d8356dc1174d5d85c310479ec49fe781e8bf89e4c4f8"
