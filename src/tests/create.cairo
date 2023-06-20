@@ -29,10 +29,11 @@ use rollyourown::components::location::{Location, LocationComponent};
 use rollyourown::components::risks::{Risks, RisksComponent};
 use rollyourown::systems::travel::Travel;
 use rollyourown::systems::trade::{Buy, Sell};
-use rollyourown::systems::spawn::{SpawnGame, SpawnLocation, SpawnPlayer};
+use rollyourown::systems::join::JoinGame;
+use rollyourown::systems::create::{CreateGame, CreateLocation};
 use rollyourown::constants::SCALING_FACTOR;
 
-const START_TIME: u64 = 100;
+const START_TIME: u64 = 0;
 const MAX_PLAYERS: usize = 2;
 const MAX_TURNS: usize = 10;
 const MAX_LOCATIONS: usize = 3;
@@ -53,24 +54,24 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     components.append(DrugComponent::TEST_CLASS_HASH);
 
     let mut systems = array::ArrayTrait::new();
-    systems.append(SpawnGame::TEST_CLASS_HASH);
-    systems.append(SpawnLocation::TEST_CLASS_HASH);
-    systems.append(SpawnPlayer::TEST_CLASS_HASH);
+    systems.append(CreateGame::TEST_CLASS_HASH);
+    systems.append(CreateLocation::TEST_CLASS_HASH);
+    systems.append(JoinGame::TEST_CLASS_HASH);
     systems.append(Travel::TEST_CLASS_HASH);
     systems.append(Buy::TEST_CLASS_HASH);
     systems.append(Sell::TEST_CLASS_HASH);
 
     let mut routes = array::ArrayTrait::new();
-    routes.append(RouteTrait::new('SpawnGame'.into(), 'GameWriter'.into(), 'Game'.into()));
-    routes.append(RouteTrait::new('SpawnGame'.into(), 'StatsWriter'.into(), 'Stats'.into()));
-    routes.append(RouteTrait::new('SpawnGame'.into(), 'CashWriter'.into(), 'Cash'.into()));
-    routes.append(RouteTrait::new('SpawnGame'.into(), 'LocationWriter'.into(), 'Location'.into()));
+    routes.append(RouteTrait::new('CreateGame'.into(), 'GameWriter'.into(), 'Game'.into()));
+    routes.append(RouteTrait::new('CreateGame'.into(), 'StatsWriter'.into(), 'Stats'.into()));
+    routes.append(RouteTrait::new('CreateGame'.into(), 'CashWriter'.into(), 'Cash'.into()));
+    routes.append(RouteTrait::new('CreateGame'.into(), 'LocationWriter'.into(), 'Location'.into()));
     routes
         .append(
-            RouteTrait::new('SpawnLocation'.into(), 'LocationWriter'.into(), 'Location'.into())
+            RouteTrait::new('CreateLocation'.into(), 'LocationWriter'.into(), 'Location'.into())
         );
-    routes.append(RouteTrait::new('SpawnLocation'.into(), 'MarketWriter'.into(), 'Market'.into()));
-    routes.append(RouteTrait::new('SpawnLocation'.into(), 'RisksWriter'.into(), 'Risks'.into()));
+    routes.append(RouteTrait::new('CreateLocation'.into(), 'MarketWriter'.into(), 'Market'.into()));
+    routes.append(RouteTrait::new('CreateLocation'.into(), 'RisksWriter'.into(), 'Risks'.into()));
     routes.append(RouteTrait::new('Travel'.into(), 'LocationWriter'.into(), 'Location'.into()));
     routes.append(RouteTrait::new('Travel'.into(), 'StatsWriter'.into(), 'Stats'.into()));
     routes.append(RouteTrait::new('Travel'.into(), 'CashWriter'.into(), 'Cash'.into()));
@@ -88,7 +89,7 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
     spawn_game_calldata.append(MAX_LOCATIONS.into());
-    let mut res = world.execute('SpawnGame'.into(), spawn_game_calldata.span());
+    let mut res = world.execute('CreateGame'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let (game_id, player_id) = serde::Serde::<(felt252, felt252)>::deserialize(ref res)
@@ -112,7 +113,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut spawn_player_calldata = array::ArrayTrait::<felt252>::new();
     spawn_player_calldata.append(game_id);
 
-    let mut res = world.execute('SpawnPlayer'.into(), spawn_player_calldata.span());
+    let mut res = world.execute('JoinGame'.into(), spawn_player_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
@@ -146,7 +147,7 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     spawn_location_calldata.append(MUGGED_RISK.into());
     spawn_location_calldata.append(ARRESTED_RISK.into());
 
-    let mut res = world.execute('SpawnLocation'.into(), spawn_location_calldata.span());
+    let mut res = world.execute('CreateLocation'.into(), spawn_location_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let location_id = serde::Serde::<felt252>::deserialize(ref res)
