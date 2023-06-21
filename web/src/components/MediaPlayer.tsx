@@ -124,16 +124,18 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
           userSelect="none"
         >
           <Box
-            animation={`${slideAnim} infinite 8s linear`}
             position="relative"
             pl={6}
+            animation={`${slideAnim} infinite 8s linear`}
+            willChange="transform"
           >
             {songTitle}
           </Box>
           <Box
-            animation={`${slideAnim} infinite 8s linear`}
             position="relative"
             pl={6}
+            animation={`${slideAnim} infinite 8s linear`}
+            willChange="transform"
           >
             {songTitle}
           </Box>

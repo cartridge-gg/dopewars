@@ -1,5 +1,5 @@
 import { controllerConnector, argentConnector } from "@/pages/_app";
-import { Clock, Gem, Bag, Chat, Home, Link, Sound } from "./icons";
+import { Clock, Gem, Bag, Chat, Home, Link, Sound, Arrow } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
 import { Box, Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -18,15 +18,22 @@ import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
+import { useGameStore } from "@/hooks/state";
 
 const Header = () => {
   const router = useRouter();
   const { address } = useAccount();
   const { connectors, connect, disconnect } = useConnectors();
+  
+  const isMobile = IsMobile();
 
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
-  const isMobile = IsMobile();
+  const isBackButtonVisible = useUiStore((state) =>
+    state.isBackButtonVisible(),
+  );
+  const cash = useGameStore((state) => state.inventory.cash);
+  const turns = useGameStore((state) => state.turns);
 
   useEffect(() => {
     const init = async () => {
@@ -49,9 +56,16 @@ const Header = () => {
       {isConnected ? (
         <>
           <HStack flex="1" justify="left">
-            <HeaderButton onClick={() => router.push("/")}>
-              <Home />
-            </HeaderButton>
+            {!isBackButtonVisible && (
+              <HeaderButton onClick={() => router.push("/")}>
+                <Home />
+              </HeaderButton>
+            )}
+            {isBackButtonVisible && (
+              <HeaderButton onClick={() => router.back()}>
+                <Arrow />
+              </HeaderButton>
+            )}
           </HStack>
           <HStack flex="1" justify="center">
             <HStack
@@ -62,16 +76,16 @@ const Header = () => {
               spacing={["10px", "30px"]}
             >
               <HStack>
-                <Gem /> <Text>$2000</Text>
+                <Gem /> <Text>${cash}</Text>
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
-                <Bag /> <Text>20</Text>
+                <Bag /> <Text>???</Text>
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
                 <Clock />{" "}
-                <Text whiteSpace="nowrap">{!IsMobile && "Day"} 3/30</Text>
+                <Text whiteSpace="nowrap">{!IsMobile && "Day"} {turns.current}/{turns.total}</Text>
               </HStack>
             </HStack>
           </HStack>

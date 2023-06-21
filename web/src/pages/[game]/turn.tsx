@@ -5,6 +5,14 @@ import { Ludes, Weed } from "@/components/icons/drugs";
 import { Manhattan } from "@/components/icons/locations";
 import Layout from "@/components/Layout";
 import {
+  endTurn,
+  TradeDirection,
+  useGameStore,
+  getDrugPrice,
+} from "@/hooks/state";
+import { useUiStore } from "@/hooks/ui";
+import {
+  Box,
   Button,
   HStack,
   ListItem,
@@ -13,40 +21,51 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 export default function Turn() {
   const router = useRouter();
+
+  const { getDrugByName, getLocationByName } = useUiStore();
+
+  const turns = useGameStore((state) => state.turns);
+  const location = useGameStore((state) => state.location);
+  const locationConfig = getLocationByName(location);
+  const pendingTrades = useGameStore((state) => state.pendingTrades);
+
   return (
     <Layout
-      title="Day 2"
+      title={`Day ${turns.current}`}
       prefixTitle="End of"
       backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/end.png');"
     >
       <Content gap="30px">
         <VStack w="full">
-          <Product product="Proudct" quantity="Qty" cost="cost" isHeader />
+          <Product product="Product" direction="Action" quantity="Qty" cost="Value" isHeader />
           <UnorderedList w="full" variant="underline">
-            <ListItem>
-              <Product
-                icon={<Weed boxSize="24px" />}
-                product="Weed"
-                quantity="-100"
-                cost="$25"
-              />
-            </ListItem>
-            <ListItem>
-              <Product
-                icon={<Ludes boxSize="24px" />}
-                product="Ludes"
-                quantity="-100"
-                cost="$25"
-              />
-            </ListItem>
+            {pendingTrades &&
+              pendingTrades.map((trade, index) => {
+                const drugConfig = getDrugByName(trade.drug);
+                const price = getDrugPrice(trade.drug);
+                const total = trade.quantity * price;
+
+                return (
+                  <ListItem key={`trade-${index}`}>
+                    <Product
+                      icon={drugConfig?.icon}
+                      product={drugConfig?.name}
+                      direction={trade.direction === TradeDirection.Buy ? "BUY" : "SELL"}
+                      quantity={trade.quantity}
+                      cost={`$${total}`}
+                    />
+                  </ListItem>
+                );
+              })}
           </UnorderedList>
         </VStack>
-        <VStack w="full">
+        <VStack w="full" style={{marginTop:"30px"}}>
           <HStack w="full">
+          <Box w="24px"></Box>
             <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
               Travel To
             </Text>
@@ -54,8 +73,8 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                <Manhattan />
-                <Text>Manhattan</Text>
+                {locationConfig && locationConfig.icon}
+                <Text>{locationConfig?.name}</Text>
               </HStack>
             </ListItem>
             <ListItem>
@@ -75,7 +94,10 @@ export default function Turn() {
       <Footer>
         <Button
           w={["full", "auto"]}
-          onClick={() => router.push("/0x123/travel")}
+          onClick={() => {
+            endTurn();
+            router.push("/0x123/travel");
+          }}
         >
           Continue
         </Button>
@@ -87,14 +109,16 @@ export default function Turn() {
 const Product = ({
   icon,
   product,
+  direction,
   quantity,
   cost,
   isHeader,
 }: {
-  icon?: ReactNode;
+  icon: React.Component;
   product: string;
-  quantity: string;
-  cost: string;
+  direction: string;
+  quantity: number | string;
+  cost: number| string;
   isHeader?: boolean;
 }) => {
   const header = isHeader && {
@@ -106,11 +130,12 @@ const Product = ({
   return (
     <HStack w="full" {...header}>
       <HStack flex="2">
-        {icon}
+        {icon ? icon({ boxSize: "24px" }) : <Box w="24px"></Box>}
         <Text>{product}</Text>
       </HStack>
-      <Text flex="1">{quantity}</Text>
-      <Text flex="1">{cost}</Text>
+      <Text flex="1" >{direction}</Text>
+      <Text flex="1" textAlign="right">{quantity}</Text>
+      <Text flex="1" textAlign="right">{cost}</Text>
     </HStack>
   );
 };

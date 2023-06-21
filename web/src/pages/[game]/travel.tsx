@@ -14,61 +14,16 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useCallback, useState } from "react";
-import {
-  Brooklyn,
-  CentralPark,
-  ConeyIsland,
-  Manhattan,
-  Queens,
-  StatenIsland,
-} from "@/components/icons/locations";
 import { IsMobile } from "@/utils/ui";
 import { Map } from "@/components/map";
-import { Locations } from "@/hooks/state";
+import { Locations, travelTo } from "@/hooks/state";
 import { motion } from "framer-motion";
-
-interface PlaceProps {
-  name: Locations;
-  turn: number;
-  icon: ReactNode;
-}
-
-const places: PlaceProps[] = [
-  {
-    name: Locations.Central,
-    turn: 1,
-    icon: <CentralPark />,
-  },
-  {
-    name: Locations.Queens,
-    turn: 1,
-    icon: <Queens />,
-  },
-  {
-    name: Locations.Bronx,
-    turn: 1,
-    icon: <StatenIsland />,
-  },
-  {
-    name: Locations.Jersey,
-    turn: 1,
-    icon: <Manhattan />,
-  },
-  {
-    name: Locations.Coney,
-    turn: 1,
-    icon: <ConeyIsland />,
-  },
-  {
-    name: Locations.Brooklyn,
-    turn: 1,
-    icon: <Brooklyn />,
-  },
-];
+import { LocationProps, useUiStore } from "@/hooks/ui";
 
 export default function Travel() {
   const router = useRouter();
   const [target, setTarget] = useState<Locations>(Locations.Central);
+  const { locations } = useUiStore.getState();
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -84,22 +39,23 @@ export default function Travel() {
   });
 
   const next = useCallback(() => {
-    const idx = places.findIndex((place) => place.name === target);
-    if (idx < places.length - 1) {
-      setTarget(places[idx + 1].name);
+    const idx = locations.findIndex((location) => location.name === target);
+    if (idx < locations.length - 1) {
+      setTarget(locations[idx + 1].name);
     } else {
-      setTarget(places[0].name);
+      setTarget(locations[0].name);
     }
   }, [target]);
 
   const back = useCallback(() => {
-    const idx = places.findIndex((place) => place.name === target);
+    const idx = locations.findIndex((location) => location.name === target);
     if (idx > 0) {
-      setTarget(places[idx - 1].name);
+      setTarget(locations[idx - 1].name);
     } else {
-      setTarget(places[places.length - 1].name);
+      setTarget(locations[locations.length - 1].name);
     }
   }, [target]);
+
   return (
     <Layout
       title="Destination"
@@ -117,12 +73,12 @@ export default function Travel() {
         {!IsMobile() && <Car boxSize="60px" />}
         <VStack w="full">
           {!IsMobile() &&
-            places.map((place, index) => (
-              <Place
-                {...place}
+            locations.map((location, index) => (
+              <Location
+                {...location}
                 key={index}
-                selected={place.name === target}
-                onClick={() => setTarget(place.name)}
+                selected={location.name === target}
+                onClick={() => setTarget(location.name)}
               />
             ))}
         </VStack>
@@ -163,7 +119,14 @@ export default function Travel() {
           )}
           <Button
             w={["full", "auto"]}
-            onClick={() => router.push("/0x123/location/brooklyn")}
+            onClick={() => {
+              travelTo(target);
+              router.push(
+                `/0x123/location/${
+                  locations.find((i) => i.name === target).slug
+                }`,
+              );
+            }}
           >{`Travel to ${target}`}</Button>
         </VStack>
       </Footer>
@@ -171,7 +134,7 @@ export default function Travel() {
   );
 }
 
-const Place = ({
+const Location = ({
   name,
   turn,
   icon,
@@ -180,7 +143,7 @@ const Place = ({
 }: {
   selected: boolean;
   onClick: () => void;
-} & PlaceProps) => {
+} & LocationProps) => {
   return (
     <HStack w="full">
       <Box
