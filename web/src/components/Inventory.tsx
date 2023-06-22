@@ -6,19 +6,24 @@ import {
   VStack,
   Box,
 } from "@chakra-ui/react";
-import { Bag } from "./icons";
+import { Bag, IconProps } from "./icons";
 import { Acid, Cocaine, Heroin, Ludes, Speed, Weed } from "./icons/drugs";
 import {
   Drugs,
   DrugsType,
   GameState,
-  Inventory,
+  InventoryType,
   useGameStore,
 } from "@/hooks/state";
 import { DrugProps } from "@/hooks/ui";
 import { Component } from "react";
+import React from "react";
 
-const getItem = (inventory: Inventory, drug: DrugProps, icon: Component) => {
+const getItem = (
+  inventory: InventoryType,
+  drug: Drugs,
+  icon: React.FC,
+) => {
   const quantity = inventory.drugs[drug].quantity;
 
   return (

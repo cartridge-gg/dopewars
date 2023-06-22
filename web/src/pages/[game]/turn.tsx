@@ -30,7 +30,7 @@ export default function Turn() {
 
   const turns = useGameStore((state) => state.turns);
   const location = useGameStore((state) => state.location);
-  const locationConfig = getLocationByName(location);
+  const locationConfig = getLocationByName(location || "");
   const pendingTrades = useGameStore((state) => state.pendingTrades);
 
   return (
@@ -41,15 +41,15 @@ export default function Turn() {
     >
       <Content gap="30px">
         <VStack w="full">
-          <Product product="Product" direction="Action" quantity="Qty" cost="Value" isHeader />
+          <Product product="Product" direction="Action" quantity="Qty" cost="Value" icon={undefined} isHeader />
           <UnorderedList w="full" variant="underline">
             {pendingTrades &&
               pendingTrades.map((trade, index) => {
-                const drugConfig = getDrugByName(trade.drug);
-                const price = getDrugPrice(trade.drug);
+                const drugConfig = getDrugByName(trade.drug.name);
+                const price = getDrugPrice(trade.drug.name);
                 const total = trade.quantity * price;
 
-                return (
+                return drugConfig &&(
                   <ListItem key={`trade-${index}`}>
                     <Product
                       icon={drugConfig?.icon}
@@ -73,7 +73,7 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {locationConfig && locationConfig.icon}
+                {locationConfig && locationConfig.icon({})}
                 <Text>{locationConfig?.name}</Text>
               </HStack>
             </ListItem>
@@ -114,7 +114,7 @@ const Product = ({
   cost,
   isHeader,
 }: {
-  icon: React.Component;
+  icon: React.FC | undefined;
   product: string;
   direction: string;
   quantity: number | string;

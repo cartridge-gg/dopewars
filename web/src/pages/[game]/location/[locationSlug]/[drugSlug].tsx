@@ -28,7 +28,7 @@ import {
 } from "@/components/icons/drugs";
 import { ArrowEnclosed, Bag } from "@/components/icons";
 import Image from "next/image";
-import { useUiStore } from "@/hooks/ui";
+import { DrugProps, useUiStore } from "@/hooks/ui";
 
 import {
   Slider,
@@ -52,8 +52,8 @@ import {
   travelTo,
   trade,
   TradeDirection,
-  DrugProps,
   Drugs,
+  InventoryType,
 } from "@/hooks/state";
 import { Inventory } from "@/components/Inventory";
 
@@ -75,7 +75,8 @@ export default function Market() {
 
   useEffect(() => {
     const { getDrugBySlug } = useUiStore.getState();
-    const drug = getDrugBySlug(router.query.drugSlug);
+    const drugSlug = router.query.drugSlug?.toString() || ""
+    const drug = getDrugBySlug(drugSlug);
     setDrug(drug);
 
     // if menu not initialized force travel to this location
@@ -84,19 +85,19 @@ export default function Market() {
     //   }
   }, [router.query]);
 
-  const onTabsChange = (index) => {
+  const onTabsChange = (index: number) => {
     setMarketMode(index as MarketMode);
   };
 
   const onBuy = () => {
-    trade(TradeDirection.Buy, drug.name, quantityBuy);
+    drug && trade(TradeDirection.Buy, drug.name, quantityBuy);
 
     //todo: replace by push
     router.back();
   };
 
   const onSell = () => {
-    trade(TradeDirection.Sell, drug.name, quantitySell);
+    drug && trade(TradeDirection.Sell, drug.name, quantitySell);
 
     //todo: replace by push
     router.back();
@@ -205,9 +206,9 @@ const QuantitySelector = ({
 }: {
   type: TradeDirection;
   price: number;
-  inventory;
+  inventory:InventoryType;
   drug: DrugProps;
-  onChange: (quantity: number) => never;
+  onChange: (quantity: number) => void;
 }) => {
   const [quantity, setQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -257,7 +258,7 @@ const QuantitySelector = ({
   return (
     <VStack
       opacity={max === 0 ? "0.2" : "1"}
-      pointerEvents={max === 0 ? "none" : ""}
+      pointerEvents={max === 0 ? "none" : "all"}
     >
       <HStack w="100%" justifyContent="space-between">
         <Text>

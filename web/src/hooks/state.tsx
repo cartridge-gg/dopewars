@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { DrugProps, getDrugByName } from "./ui";
 
 export enum Locations {
   Queens = "Queens",
@@ -31,7 +32,7 @@ export enum TradeDirection {
 
 export type Trade = {
   direction: TradeDirection;
-  drug: Drugs;
+  drug: DrugProps;
   quantity: number;
   price: number;
 };
@@ -43,15 +44,15 @@ export type LocationMenu = {
   };
 };
 
-export type Inventory = {
-    cash: number;
-    drugs: DrugsType;
-}
+export type InventoryType = {
+  cash: number;
+  drugs: DrugsType;
+};
 
 export interface GameState {
   // isInitialized: Boolean;
   players: string[];
-  inventory: Inventory;
+  inventory: InventoryType;
   turns: {
     total: number;
     current: number;
@@ -93,7 +94,7 @@ const getMenu = (location: Locations): LocationMenu => {
   };
 };
 
-export const gameStartState = (turns: number, cash: number):GameState => {
+export const gameStartState = (turns: number, cash: number): GameState => {
   return {
     players: [],
     location: undefined,
@@ -155,20 +156,23 @@ export const updateLocationMenu = (menu: LocationMenu) =>
     menu,
   }));
 
-export const getDrugPrice = (drug: DrugsType): number => {
+export const getDrugPrice = (drug: Drugs): number => {
   const { menu } = useGameStore.getState();
-  return menu[drug].price;
+  return (menu && menu[drug].price) || Number.MAX_VALUE;
 };
 
 const addPendingTrade = (
   direction: TradeDirection,
-  drug: DrugsType,
+  drug: Drugs,
   quantity: number,
   price: number,
 ) => {
+  const drugConfig = getDrugByName(drug);
+  if (!drugConfig) return;
+
   const trade: Trade = {
     direction,
-    drug,
+    drug: drugConfig,
     quantity,
     price,
   };
@@ -221,7 +225,7 @@ export const endTurn = () => {
 
 export const trade = (
   direction: TradeDirection,
-  drug: DrugsType,
+  drug: Drugs,
   quantity: number,
 ) => {
   //retrieve drug price

@@ -21,50 +21,51 @@ import {
 import { Drugs, Locations } from "./state";
 
 import { Router, useRouter } from "next/router";
+import React from "react";
 
 export interface LocationProps {
   name: Locations;
   slug: string;
-  icon: ReactNode;
+  icon: React.FC;
 }
 
 export const locations: LocationProps[] = [
   {
     name: Locations.Central,
     slug: "central",
-    icon: <CentralPark />,
+    icon: CentralPark,
   },
   {
     name: Locations.Queens,
     slug: "queens",
-    icon: <Queens />,
+    icon: Queens,
   },
   {
     name: Locations.Bronx,
     slug: "bronx",
-    icon: <StatenIsland />,
+    icon: StatenIsland,
   },
   {
     name: Locations.Jersey,
     slug: "jersey",
-    icon: <Manhattan />,
+    icon: Manhattan,
   },
   {
     name: Locations.Coney,
     slug: "coney",
-    icon: <ConeyIsland />,
+    icon: ConeyIsland,
   },
   {
     name: Locations.Brooklyn,
     slug: "brooklyn",
-    icon: <Brooklyn />,
+    icon: Brooklyn,
   },
 ];
 
 export interface DrugProps {
   name: Drugs;
   slug: string;
-  icon: ReactNode;
+  icon: React.FC;
 }
 
 const drugs: DrugProps[] = [
@@ -121,12 +122,12 @@ export const isBackButtonVisible = (): Boolean => {
   );
 };
 
-export const getLocationBySlug = (slug: string): DrugProps | undefined => {
+export const getLocationBySlug = (slug: string): LocationProps | undefined => {
   const { locations } = useUiStore.getState();
   return locations.find((i) => i.slug === slug);
 };
 
-export const getLocationByName = (name: string): DrugProps | undefined => {
+export const getLocationByName = (name: string): LocationProps | undefined => {
   const { locations } = useUiStore.getState();
   return locations.find((i) => i.name === name);
 };

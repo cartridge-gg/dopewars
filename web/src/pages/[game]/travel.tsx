@@ -13,17 +13,24 @@ import {
   useEventListener,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ReactNode, useCallback, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 import { IsMobile } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { Locations, travelTo } from "@/hooks/state";
 import { motion } from "framer-motion";
-import { LocationProps, useUiStore } from "@/hooks/ui";
+import { LocationProps, useUiStore,getLocationByName } from "@/hooks/ui";
 
 export default function Travel() {
   const router = useRouter();
   const [target, setTarget] = useState<Locations>(Locations.Central);
   const { locations } = useUiStore.getState();
+
+  const [locationSlug, setLocationSlug] = useState('')
+
+  useEffect(()=> {
+    const location = getLocationByName(target)
+    setLocationSlug(location?.slug || "")
+  },[target])
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -122,9 +129,7 @@ export default function Travel() {
             onClick={() => {
               travelTo(target);
               router.push(
-                `/0x123/location/${
-                  locations.find((i) => i.name === target).slug
-                }`,
+                `/0x123/location/${locationSlug}`,
               );
             }}
           >{`Travel to ${target}`}</Button>
@@ -136,11 +141,12 @@ export default function Travel() {
 
 const Location = ({
   name,
-  turn,
   icon,
   selected,
   onClick,
 }: {
+  name: string;
+  icon: React.FC;
   selected: boolean;
   onClick: () => void;
 } & LocationProps) => {
@@ -175,11 +181,11 @@ const Location = ({
       >
         <HStack w="full">
           <HStack>
-            {icon}
+            {icon({})}
             <Text whiteSpace="nowrap">{name}</Text>
           </HStack>
           <Divider borderStyle="dotted" borderColor="neon.600" />
-          <Text whiteSpace="nowrap">{turn} DAY</Text>
+          <Text whiteSpace="nowrap">1 DAY</Text>
         </HStack>
       </HStack>
       <Box

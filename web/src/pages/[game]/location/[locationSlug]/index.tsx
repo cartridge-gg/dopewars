@@ -26,7 +26,7 @@ import {
   Cocaine,
 } from "@/components/icons/drugs";
 import { Inventory } from "@/components/Inventory";
-import { useUiStore } from "@/hooks/ui";
+import { LocationProps, useUiStore } from "@/hooks/ui";
 import { useGameStore, travelTo, endTurn } from "@/hooks/state";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -35,20 +35,21 @@ export default function Location() {
   const router = useRouter();
 
   const { locations, drugs } = useUiStore.getState();
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState<LocationProps | undefined>();
 
   const inventory = useGameStore((state) => state.inventory);
   const locationMenu = useGameStore((state) => state.menu);
 
   useEffect(() => {
     if (!locationMenu) {
-      travelTo(location);
+      location && travelTo(location.name);
     }
   }, [location]);
 
   useEffect(() => {
     const { getLocationBySlug } = useUiStore.getState();
-    const location = getLocationBySlug(router.query.locationSlug);
+    const locationSlug = router.query.locationSlug?.toString() || ""
+    const location = getLocationBySlug(locationSlug);
     location && setLocation(location);
   }, [router.query]);
 
@@ -56,9 +57,9 @@ export default function Location() {
     location &&
     locationMenu && (
       <Layout
-        title={location.name}
+        title={location?.name}
         prefixTitle="Welcome to"
-        headerImage={`/images/locations/${location.slug}.png`}
+        headerImage={`/images/locations/${location?.slug}.png`}
       >
         <Content>
           <Inventory pb="20px" />
@@ -78,7 +79,7 @@ export default function Location() {
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center">
-                    <Box>{drug.icon()}</Box>
+                    <Box>{drug.icon({})}</Box>
                   </HStack>
                 </CardBody>
                 <CardFooter fontSize="14px">
