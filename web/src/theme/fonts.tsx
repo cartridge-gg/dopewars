@@ -35,6 +35,13 @@ const Fonts = () => (
         font-style: normal;
         src: url('/fonts/PPMondwest-Regular.otf') format('opentype');
       }
+
+      @font-face {
+        font-family: 'chicago-flf';
+        font-weight: 500;
+        font-style: normal;
+        src: url('/fonts/ChicagoFLF.ttf');
+      }
 `}
   />
 );

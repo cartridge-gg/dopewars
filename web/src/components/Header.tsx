@@ -79,7 +79,7 @@ const Header = () => {
             {!isMobile && <MediaPlayer />}
 
             {!isMobile && (
-              <HeaderButton>
+              <HeaderButton onClick={() => router.push("/chat")}>
                 <Chat alert={true} />
               </HeaderButton>
             )}

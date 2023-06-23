@@ -32,6 +32,8 @@ export * from "./Clock";
 export * from "./Sound";
 export * from "./Music";
 export * from "./Dots";
+export * from "./SendMessage";
+export * from "./Sparkles";
 export * from "./Trophy";
 export * from "./User";
 
