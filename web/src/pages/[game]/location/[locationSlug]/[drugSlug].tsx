@@ -222,36 +222,36 @@ const QuantitySelector = ({
     } else if (type === TradeDirection.Sell) {
       setMax(inventory.drugs[drug.name].quantity);
     }
-  }, [type, price]);
+  }, [type, price, drug, inventory]);
 
   useEffect(() => {
     setTotalPrice(quantity * price);
     onChange(quantity);
-  }, [quantity]);
+  }, [quantity, price, onChange]);
 
   const onDown = useCallback(() => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
     }
-  },[quantity]);
+  }, [quantity]);
 
   const onUp = useCallback(() => {
     if (quantity < max) {
       setQuantity(quantity + 1);
     }
-  },[quantity]);
+  }, [quantity, max]);
 
   const onSlider = useCallback((value: number) => {
     setQuantity(value);
-  },[]);
+  }, []);
 
   const onMax = useCallback(() => {
     setQuantity(max);
-  },[max]);
+  }, [max]);
 
   const on50 = useCallback(() => {
     setQuantity(Math.floor(max / 2));
-  },[max]);
+  }, [max]);
 
   return (
     <VStack

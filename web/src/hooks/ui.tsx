@@ -109,45 +109,38 @@ export interface UiState {
   getLocationByName: (name: string) => LocationProps;
   getDrugBySlug: (slug: string) => DrugProps;
   getDrugByName: (name: string) => DrugProps;
-  isBackButtonVisible: () => Boolean;
+  isBackButtonVisible: (pathname: string) => Boolean;
 }
 
 export const setIsConnected = (isConnected: boolean) =>
   useUiStore.setState((state) => ({ isConnected }));
 
-export const isBackButtonVisible = (): Boolean => {
-  const router = useRouter();
-  return ["/[game]/location/[locationSlug]/[drugSlug]"].includes(
-    router.pathname,
-  );
+export const isBackButtonVisible = (pathname: string): Boolean => {
+  return ["/[game]/location/[locationSlug]/[drugSlug]"].includes(pathname);
 };
 
 export const getLocationBySlug = (slug: string): LocationProps => {
   const { locations } = useUiStore.getState();
   const location = locations.find((i) => i.slug === slug);
-  if (!location) throw Error(`getLocationBySlug ${slug}`);
-  return location;
+  return location || locations[0] ;
 };
 
 export const getLocationByName = (name: string): LocationProps => {
   const { locations } = useUiStore.getState();
   const location = locations.find((i) => i.name === name);
-  if (!location) throw Error(`getLocationByName ${name}`);
-  return location;
+  return location || locations[0] ;
 };
 
 export const getDrugBySlug = (slug: string): DrugProps => {
   const { drugs } = useUiStore.getState();
   const drug = drugs.find((i) => i.slug === slug);
-  if (!drug) throw Error(`getDrugBySlug ${slug}`);
-  return drug;
+  return drug || drugs[0] ;
 };
 
 export const getDrugByName = (name: string): DrugProps => {
   const { drugs } = useUiStore.getState();
   const drug = drugs.find((i) => i.name === name);
-  if (!drug) throw Error(`getDrugByName ${name}`);
-  return drug;
+  return drug || drugs[0] ;
 };
 
 export const useUiStore = create<UiState>(() => ({

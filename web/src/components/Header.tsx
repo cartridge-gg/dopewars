@@ -30,7 +30,7 @@ const Header = () => {
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
   const isBackButtonVisible = useUiStore((state) =>
-    state.isBackButtonVisible(),
+    state.isBackButtonVisible(router.pathname),
   );
   const cash = useGameStore((state) => state.inventory.cash);
   const turns = useGameStore((state) => state.turns);

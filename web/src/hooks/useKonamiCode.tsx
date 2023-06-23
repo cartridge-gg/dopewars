@@ -36,7 +36,7 @@ export default function useKonamiCode(
       setIsRightSequence(true);
       callback();
     }
-  }, [sequence]);
+  }, [sequence, callback, codeSequence, isRightSequence]);
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);

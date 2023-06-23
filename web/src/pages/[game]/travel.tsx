@@ -52,7 +52,7 @@ export default function Travel() {
     } else {
       setTarget(locations[0].name);
     }
-  }, [target]);
+  }, [target, locations]);
 
   const back = useCallback(() => {
     const idx = locations.findIndex((location) => location.name === target);
@@ -61,7 +61,7 @@ export default function Travel() {
     } else {
       setTarget(locations[locations.length - 1].name);
     }
-  }, [target]);
+  }, [target, locations]);
 
   return (
     <Layout

@@ -44,7 +44,7 @@ export default function Location() {
     if (!locationMenu) {
       location && travelTo(location.name);
     }
-  }, [location]);
+  }, [location, locationMenu]);
 
   useEffect(() => {
     const { getLocationBySlug } = useUiStore.getState();

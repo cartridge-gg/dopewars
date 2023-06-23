@@ -38,7 +38,7 @@ const ClickFeedback = ({
         setClicked(false);
       }, duration);
     }
-  }, [clicked]);
+  }, [clicked, duration]);
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setClicked(true);

@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
         setSequence([]);
       }, 20_000);
     }
-  }, [isRightSequence]);
+  }, [isRightSequence, setIsRightSequence, setSequence]);
 
   return (
     <StarknetProvider connectors={connectors}>
