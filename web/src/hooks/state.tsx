@@ -241,9 +241,9 @@ export const travelTo = (location: Locations) => {
 const getRandomTravelEvent = (): TravelEvents => {
   const rand = getRandom(0, 100);
 
-  if (rand < 2) return TravelEvents.Killed;
-  if (rand < 5) return TravelEvents.Mugged;
-  if (rand < 10) return TravelEvents.Rugged;
+  if (rand < 4) return TravelEvents.Killed;
+  if (rand < 10) return TravelEvents.Mugged;
+  if (rand < 20) return TravelEvents.Rugged;
   return TravelEvents.None;
 };
 
