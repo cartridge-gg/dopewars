@@ -105,10 +105,10 @@ export interface UiState {
   isConnected: boolean;
   locations: LocationProps[];
   drugs: DrugProps[];
-  getLocationBySlug: (slug: string) => LocationProps | undefined;
-  getLocationByName: (name: string) => LocationProps | undefined;
-  getDrugBySlug: (slug: string) => DrugProps | undefined;
-  getDrugByName: (name: string) => DrugProps | undefined;
+  getLocationBySlug: (slug: string) => LocationProps;
+  getLocationByName: (name: string) => LocationProps;
+  getDrugBySlug: (slug: string) => DrugProps;
+  getDrugByName: (name: string) => DrugProps;
   isBackButtonVisible: () => Boolean;
 }
 
@@ -122,24 +122,32 @@ export const isBackButtonVisible = (): Boolean => {
   );
 };
 
-export const getLocationBySlug = (slug: string): LocationProps | undefined => {
+export const getLocationBySlug = (slug: string): LocationProps => {
   const { locations } = useUiStore.getState();
-  return locations.find((i) => i.slug === slug);
+  const location = locations.find((i) => i.slug === slug);
+  if (!location) throw Error(`getLocationBySlug ${slug}`);
+  return location;
 };
 
-export const getLocationByName = (name: string): LocationProps | undefined => {
+export const getLocationByName = (name: string): LocationProps => {
   const { locations } = useUiStore.getState();
-  return locations.find((i) => i.name === name);
+  const location = locations.find((i) => i.name === name);
+  if (!location) throw Error(`getLocationByName ${name}`);
+  return location;
 };
 
-export const getDrugBySlug = (slug: string): DrugProps | undefined => {
+export const getDrugBySlug = (slug: string): DrugProps => {
   const { drugs } = useUiStore.getState();
-  return drugs.find((i) => i.slug === slug);
+  const drug = drugs.find((i) => i.slug === slug);
+  if (!drug) throw Error(`getDrugBySlug ${slug}`);
+  return drug;
 };
 
-export const getDrugByName = (name: string): DrugProps | undefined => {
+export const getDrugByName = (name: string): DrugProps => {
   const { drugs } = useUiStore.getState();
-  return drugs.find((i) => i.name === name);
+  const drug = drugs.find((i) => i.name === name);
+  if (!drug) throw Error(`getDrugByName ${name}`);
+  return drug;
 };
 
 export const useUiStore = create<UiState>(() => ({

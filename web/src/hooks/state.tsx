@@ -49,6 +49,13 @@ export type InventoryType = {
   drugs: DrugsType;
 };
 
+export enum TravelEvents {
+  Mugged = "Mugged",
+  Rugged = "Rugged",
+  Killed = "Killed",
+  None = "",
+}
+
 export interface GameState {
   // isInitialized: Boolean;
   players: string[];
@@ -60,10 +67,14 @@ export interface GameState {
   location: Locations | undefined;
   menu: LocationMenu | undefined;
   pendingTrades: Trade[];
+  travelEvent: {
+    event: TravelEvents;
+    description: string;
+  };
 }
 
 const getRandom = (min: number, max: number): number =>
-  Math.ceil(Math.random() * max) + min;
+  Math.floor(Math.random() * max) + min;
 
 const getMenu = (location: Locations): LocationMenu => {
   return {
@@ -94,7 +105,7 @@ const getMenu = (location: Locations): LocationMenu => {
   };
 };
 
-export const gameStartState = (turns: number, cash: number): GameState => {
+export const initGameState = (turns: number, cash: number): GameState => {
   return {
     players: [],
     location: undefined,
@@ -115,11 +126,15 @@ export const gameStartState = (turns: number, cash: number): GameState => {
     },
     pendingTrades: [],
     menu: undefined,
+    travelEvent: {
+      event: TravelEvents.None,
+      description: "",
+    },
   };
 };
 
 export const useGameStore = create<GameState>(() => ({
-  ...gameStartState(20, 420),
+  ...initGameState(20, 420),
 }));
 
 export const updateLocation = (location: Locations) =>
@@ -188,14 +203,34 @@ const clearPendingTrades = () => {
   }));
 };
 
+const clearTravelEvents = () => {
+  useGameStore.setState((state) => ({
+    travelEvent: {
+      event: TravelEvents.None,
+      description: "",
+    },
+  }));
+};
+
+const updateTravelEvent = (event: TravelEvents, description: string) =>
+  useGameStore.setState((state) => ({
+    travelEvent: {
+      event,
+      description,
+    },
+  }));
+
 export const startGame = () => {
   //set clean state
   useGameStore.setState({
-    ...gameStartState(20, 420),
+    ...initGameState(20, 420),
   });
 };
 
 export const travelTo = (location: Locations) => {
+  // clean travel events
+  clearTravelEvents();
+
   // update location
   updateLocation(location);
 
@@ -203,11 +238,59 @@ export const travelTo = (location: Locations) => {
   updateLocationMenu(getMenu(location));
 };
 
+const getRandomTravelEvent = (): TravelEvents => {
+  const rand = getRandom(0, 100);
+
+  if (rand < 2) return TravelEvents.Killed;
+  if (rand < 5) return TravelEvents.Mugged;
+  if (rand < 10) return TravelEvents.Rugged;
+  return TravelEvents.None;
+};
+
+const handleTravelEvent = () => {
+  const event = getRandomTravelEvent();
+  const { cash, drugs } = useGameStore.getState().inventory;
+
+  if (event === TravelEvents.None) return;
+
+  if (event === TravelEvents.Killed) {
+    updateCash(-cash);
+    updateDrug(Drugs.Acid, -drugs[Drugs.Acid].quantity);
+    updateDrug(Drugs.Cocaine, -drugs[Drugs.Cocaine].quantity);
+    updateDrug(Drugs.Heroin, -drugs[Drugs.Heroin].quantity);
+    updateDrug(Drugs.Ludes, -drugs[Drugs.Ludes].quantity);
+    updateDrug(Drugs.Speed, -drugs[Drugs.Speed].quantity);
+    updateDrug(Drugs.Weed, -drugs[Drugs.Weed].quantity);
+
+    updateTravelEvent(event, "You got killed ! R.I.P. ");
+  }
+
+  if (event === TravelEvents.Rugged) {
+    updateCash(-Math.ceil(cash / 2));
+
+    updateTravelEvent(event, "You got rugged and lost 50% of your cash");
+  }
+
+  if (event === TravelEvents.Mugged) {
+    updateDrug(Drugs.Acid, -Math.ceil(drugs[Drugs.Acid].quantity / 2));
+    updateDrug(Drugs.Cocaine, -Math.ceil(drugs[Drugs.Cocaine].quantity / 2));
+    updateDrug(Drugs.Heroin, -Math.ceil(drugs[Drugs.Heroin].quantity / 2));
+    updateDrug(Drugs.Ludes, -Math.ceil(drugs[Drugs.Ludes].quantity / 2));
+    updateDrug(Drugs.Speed, -Math.ceil(drugs[Drugs.Speed].quantity / 2));
+    updateDrug(Drugs.Weed, -Math.ceil(drugs[Drugs.Weed].quantity / 2));
+
+    updateTravelEvent(event, "You got mugged and lost 50% of your stocks");
+  }
+};
+
+export const travelAndEndTurn = () => {
+  // special events while traveling
+  handleTravelEvent();
+};
+
 export const endTurn = () => {
   // process trades
   clearPendingTrades();
-
-  // special events
 
   // update turns
   const { turns } = useGameStore.getState();

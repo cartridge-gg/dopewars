@@ -27,7 +27,7 @@ import {
 } from "@/components/icons/drugs";
 import { Inventory } from "@/components/Inventory";
 import { LocationProps, useUiStore } from "@/hooks/ui";
-import { useGameStore, travelTo, endTurn } from "@/hooks/state";
+import { useGameStore, travelTo, endTurn, travelAndEndTurn } from "@/hooks/state";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 
@@ -50,7 +50,7 @@ export default function Location() {
     const { getLocationBySlug } = useUiStore.getState();
     const locationSlug = router.query.locationSlug?.toString() || ""
     const location = getLocationBySlug(locationSlug);
-    location && setLocation(location);
+    setLocation(location);
   }, [router.query]);
 
   return (
@@ -98,6 +98,7 @@ export default function Location() {
           <Button
             w={["full", "auto"]}
             onClick={() => {
+              travelAndEndTurn();
               router.push("/0x1234/turn");
             }}
           >

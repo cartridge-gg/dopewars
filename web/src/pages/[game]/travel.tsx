@@ -29,7 +29,7 @@ export default function Travel() {
 
   useEffect(()=> {
     const location = getLocationByName(target)
-    setLocationSlug(location?.slug || "")
+    setLocationSlug(location.slug)
   },[target])
 
   useEventListener("keydown", (e) => {

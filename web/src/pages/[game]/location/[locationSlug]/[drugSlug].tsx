@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -75,7 +75,7 @@ export default function Market() {
 
   useEffect(() => {
     const { getDrugBySlug } = useUiStore.getState();
-    const drugSlug = router.query.drugSlug?.toString() || ""
+    const drugSlug = router.query.drugSlug?.toString() || "";
     const drug = getDrugBySlug(drugSlug);
     setDrug(drug);
 
@@ -104,7 +104,8 @@ export default function Market() {
   };
 
   return (
-    drug && locationMenu &&(
+    drug &&
+    locationMenu && (
       <Layout
         title={drug.name}
         prefixTitle="The market"
@@ -206,7 +207,7 @@ const QuantitySelector = ({
 }: {
   type: TradeDirection;
   price: number;
-  inventory:InventoryType;
+  inventory: InventoryType;
   drug: DrugProps;
   onChange: (quantity: number) => void;
 }) => {
@@ -224,36 +225,33 @@ const QuantitySelector = ({
   }, [type, price]);
 
   useEffect(() => {
+    setTotalPrice(quantity * price);
     onChange(quantity);
   }, [quantity]);
 
-  useEffect(() => {
-    setTotalPrice(quantity * price);
-  }, [quantity]);
-
-  const onDown = () => {
+  const onDown = useCallback(() => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
     }
-  };
+  },[quantity]);
 
-  const onUp = () => {
+  const onUp = useCallback(() => {
     if (quantity < max) {
       setQuantity(quantity + 1);
     }
-  };
+  },[quantity]);
 
-  const onSlider = (value: number) => {
+  const onSlider = useCallback((value: number) => {
     setQuantity(value);
-  };
+  },[]);
 
-  const onMax = () => {
+  const onMax = useCallback(() => {
     setQuantity(max);
-  };
+  },[max]);
 
-  const on50 = () => {
+  const on50 = useCallback(() => {
     setQuantity(Math.floor(max / 2));
-  };
+  },[max]);
 
   return (
     <VStack
@@ -281,6 +279,10 @@ const QuantitySelector = ({
           size="lg"
           cursor="pointer"
           onClick={onDown}
+          color="neon.500"
+          _hover={{
+            color: "neon.300",
+          }}
         />
 
         <Slider
@@ -306,6 +308,10 @@ const QuantitySelector = ({
           size="lg"
           cursor="pointer"
           onClick={onUp}
+          color="neon.500"
+          _hover={{
+            color: "neon.300",
+          }}
         />
       </HStack>
     </VStack>

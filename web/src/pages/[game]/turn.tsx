@@ -9,6 +9,7 @@ import {
   TradeDirection,
   useGameStore,
   getDrugPrice,
+  TravelEvents,
 } from "@/hooks/state";
 import { useUiStore } from "@/hooks/ui";
 import {
@@ -32,6 +33,7 @@ export default function Turn() {
   const location = useGameStore((state) => state.location);
   const locationConfig = getLocationByName(location || "");
   const pendingTrades = useGameStore((state) => state.pendingTrades);
+  const travelEvent = useGameStore((state) => state.travelEvent);
 
   return (
     <Layout
@@ -41,7 +43,14 @@ export default function Turn() {
     >
       <Content gap="30px">
         <VStack w="full">
-          <Product product="Product" direction="Action" quantity="Qty" cost="Value" icon={undefined} isHeader />
+          <Product
+            product="Product"
+            direction="Action"
+            quantity="Qty"
+            cost="Value"
+            icon={undefined}
+            isHeader
+          />
           <UnorderedList w="full" variant="underline">
             {pendingTrades &&
               pendingTrades.map((trade, index) => {
@@ -49,23 +58,29 @@ export default function Turn() {
                 const price = getDrugPrice(trade.drug.name);
                 const total = trade.quantity * price;
 
-                return drugConfig &&(
-                  <ListItem key={`trade-${index}`}>
-                    <Product
-                      icon={drugConfig?.icon}
-                      product={drugConfig?.name}
-                      direction={trade.direction === TradeDirection.Buy ? "BUY" : "SELL"}
-                      quantity={trade.quantity}
-                      cost={`$${total}`}
-                    />
-                  </ListItem>
+                return (
+                  drugConfig && (
+                    <ListItem key={`trade-${index}`}>
+                      <Product
+                        icon={drugConfig.icon}
+                        product={drugConfig.name}
+                        direction={
+                          trade.direction === TradeDirection.Buy
+                            ? "BUY"
+                            : "SELL"
+                        }
+                        quantity={trade.quantity}
+                        cost={`$${total}`}
+                      />
+                    </ListItem>
+                  )
                 );
               })}
           </UnorderedList>
         </VStack>
-        <VStack w="full" style={{marginTop:"30px"}}>
+        <VStack w="full" style={{ marginTop: "30px" }}>
           <HStack w="full">
-          <Box w="24px"></Box>
+            <Box w="24px"></Box>
             <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
               Travel To
             </Text>
@@ -73,21 +88,23 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {locationConfig && locationConfig.icon({})}
-                <Text>{locationConfig?.name}</Text>
+                {locationConfig.icon({})}
+                <Text>{locationConfig.name}</Text>
               </HStack>
             </ListItem>
-            <ListItem>
-              <HStack>
-                <HStack flex="1">
-                  <Event />
-                  <Text>Mugged</Text>
+            {travelEvent && travelEvent.event !== TravelEvents.None && (
+              <ListItem>
+                <HStack>
+                  <HStack flex="1">
+                    <Event />
+                    <Text>{travelEvent.event}</Text>
+                  </HStack>
+                  <Text flex="2" color="yellow.400">
+                    {travelEvent.description}
+                  </Text>
                 </HStack>
-                <Text flex="1" color="yellow.400">
-                  Lost 50% of supply
-                </Text>
-              </HStack>
-            </ListItem>
+              </ListItem>
+            )}
           </UnorderedList>
         </VStack>
       </Content>
@@ -118,7 +135,7 @@ const Product = ({
   product: string;
   direction: string;
   quantity: number | string;
-  cost: number| string;
+  cost: number | string;
   isHeader?: boolean;
 }) => {
   const header = isHeader && {
@@ -133,9 +150,13 @@ const Product = ({
         {icon ? icon({ boxSize: "24px" }) : <Box w="24px"></Box>}
         <Text>{product}</Text>
       </HStack>
-      <Text flex="1" >{direction}</Text>
-      <Text flex="1" textAlign="right">{quantity}</Text>
-      <Text flex="1" textAlign="right">{cost}</Text>
+      <Text flex="1">{direction}</Text>
+      <Text flex="1" textAlign="right">
+        {quantity}
+      </Text>
+      <Text flex="1" textAlign="right">
+        {cost}
+      </Text>
     </HStack>
   );
 };
