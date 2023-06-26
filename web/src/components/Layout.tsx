@@ -70,8 +70,8 @@ const Layout = ({
             <Box
               position="relative"
               marginTop="1rem !important"
-              width="60%"
-              height="50vh"
+              width="80%"
+              height="55vh"
             >
               <Image fill={true} src={headerImage} objectFit="contain" alt={headerImage}/>
             </Box>
@@ -117,7 +117,7 @@ const Title = ({
     <Text textStyle="subheading" fontSize="11px">
       {prefixTitle}
     </Text>
-    <Heading fontSize={["40px", "48px"]}>{title}</Heading>
+    <Heading fontSize={["40px", "48px"]} fontWeight="normal">{title}</Heading>
   </VStack>
 );
 

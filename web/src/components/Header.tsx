@@ -18,7 +18,7 @@ import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
-import { useGameStore } from "@/hooks/state";
+import { useGameStore, getInventoryInfos } from "@/hooks/state";
 
 const Header = () => {
   const router = useRouter();
@@ -32,8 +32,9 @@ const Header = () => {
   const isBackButtonVisible = useUiStore((state) =>
     state.isBackButtonVisible(router.pathname),
   );
-  const cash = useGameStore((state) => state.inventory.cash);
+  const inventory = useGameStore((state) => state.inventory);
   const turns = useGameStore((state) => state.turns);
+  const inventoryInfos = getInventoryInfos()
 
   useEffect(() => {
     const init = async () => {
@@ -76,11 +77,11 @@ const Header = () => {
               spacing={["10px", "30px"]}
             >
               <HStack>
-                <Gem /> <Text>${cash}</Text>
+                <Gem /> <Text>${inventory.cash}</Text>
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
-                <Bag /> <Text>???</Text>
+                <Bag /> <Text>{inventoryInfos.used}/{inventoryInfos.capacity}</Text>
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>

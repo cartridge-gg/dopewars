@@ -47,6 +47,7 @@ export type LocationMenu = {
 export type InventoryType = {
   cash: number;
   drugs: DrugsType;
+  capacity: number;
 };
 
 export enum TravelEvents {
@@ -123,6 +124,7 @@ export const initGameState = (turns: number, cash: number): GameState => {
         [Drugs.Heroin]: { quantity: 0 },
         [Drugs.Cocaine]: { quantity: 0 },
       },
+      capacity:100,
     },
     pendingTrades: [],
     menu: undefined,
@@ -175,6 +177,20 @@ export const getDrugPrice = (drug: Drugs): number => {
   const { menu } = useGameStore.getState();
   return (menu && menu[drug].price) || Number.MAX_VALUE;
 };
+
+export const getInventoryInfos = () => {
+  const { inventory } = useGameStore.getState();
+
+  const used = Object.keys(Drugs).map(d => inventory.drugs[d as Drugs].quantity)
+  .reduce((prev,curr)=> prev + curr,0)
+
+  return {
+    used: used,
+    left:  inventory.capacity-used,
+    capacity: inventory.capacity
+  }
+
+}
 
 const addPendingTrade = (
   direction: TradeDirection,

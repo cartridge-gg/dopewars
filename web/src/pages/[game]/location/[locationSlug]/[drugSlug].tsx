@@ -54,6 +54,7 @@ import {
   TradeDirection,
   Drugs,
   InventoryType,
+  getInventoryInfos,
 } from "@/hooks/state";
 import { Inventory } from "@/components/Inventory";
 
@@ -72,6 +73,7 @@ export default function Market() {
 
   const locationMenu = useGameStore((state) => state.menu);
   const inventory = useGameStore((state) => state.inventory);
+  const inventoryInfos = getInventoryInfos();
 
   useEffect(() => {
     const { getDrugBySlug } = useUiStore.getState();
@@ -113,7 +115,7 @@ export default function Market() {
       >
         <Content>
           <VStack w="100%" h="100%">
-            <Inventory />
+            <Inventory pb="20px" />
             <VStack w="100%" rounded={6} bg="neon.700" p={6} mb={6}>
               <Box position="relative" my={6}>
                 <Image
@@ -164,6 +166,7 @@ export default function Market() {
                     type={TradeDirection.Buy}
                     price={locationMenu[drug.name].price}
                     inventory={inventory}
+                    inventoryInfos={inventoryInfos}
                     drug={drug}
                     onChange={setQuantityBuy}
                   />
@@ -173,6 +176,7 @@ export default function Market() {
                     type={TradeDirection.Sell}
                     price={locationMenu[drug.name].price}
                     inventory={inventory}
+                    inventoryInfos={inventoryInfos}
                     drug={drug}
                     onChange={setQuantitySell}
                   />
@@ -202,12 +206,14 @@ const QuantitySelector = ({
   type,
   price,
   inventory,
+  inventoryInfos,
   drug,
   onChange,
 }: {
   type: TradeDirection;
   price: number;
   inventory: InventoryType;
+  inventoryInfos: { capacity: number; used: number; left: number };
   drug: DrugProps;
   onChange: (quantity: number) => void;
 }) => {
@@ -218,11 +224,13 @@ const QuantitySelector = ({
 
   useEffect(() => {
     if (type === TradeDirection.Buy) {
-      setMax(Math.floor(inventory.cash / price));
+      const maxBuyable = Math.floor(inventory.cash / price)
+      const maxInventory = inventoryInfos.left
+      setMax(Math.min(maxBuyable,maxInventory));
     } else if (type === TradeDirection.Sell) {
       setMax(inventory.drugs[drug.name].quantity);
     }
-  }, [type, price, drug, inventory]);
+  }, [type, price, drug, inventory, inventoryInfos]);
 
   useEffect(() => {
     setTotalPrice(quantity * price);
@@ -296,11 +304,16 @@ const QuantitySelector = ({
           onChange={onSlider}
         >
           <SliderTrack bg="neon.700" height="30px" rounded={6}>
-            <SliderFilledTrack bg="neon.500" />
+            <SliderFilledTrack
+              height="20px"
+              bg="linear-gradient(to right, #16c973 75%, #202f20 25%)"
+              bgSize="16px 20px"
+              bgRepeat="repeat-x"
+            />
           </SliderTrack>
-          <SliderThumb bg="transparent" outline="none">
-            <Box w="12px" h="24px" bg="neon.300"></Box>
-          </SliderThumb>
+          {/* <SliderThumb bg="transparent" outline="none">
+            <Box w="12px" h="20px" bg="neon.300" borderLeft="solid 2px #202f20"></Box>
+          </SliderThumb> */}
         </Slider>
 
         <ArrowEnclosed

@@ -39,6 +39,7 @@ export default function Location() {
 
   const inventory = useGameStore((state) => state.inventory);
   const locationMenu = useGameStore((state) => state.menu);
+  const turns = useGameStore((state) => state.turns);
 
   useEffect(() => {
     if (!locationMenu) {
@@ -58,7 +59,7 @@ export default function Location() {
     locationMenu && (
       <Layout
         title={location?.name}
-        prefixTitle="Welcome to"
+        prefixTitle={`Day ${turns.current}`}
         headerImage={`/images/locations/${location?.slug}.png`}
       >
         <Content>
@@ -74,7 +75,7 @@ export default function Location() {
                   router.push(`${router.asPath}/${drug.slug}`);
                 }}
               >
-                <CardHeader textTransform="uppercase" fontSize="20px">
+                <CardHeader textTransform="uppercase" fontSize="20px" textAlign="left">
                   {drug.name}
                 </CardHeader>
                 <CardBody>
@@ -82,12 +83,12 @@ export default function Location() {
                     <Box>{drug.icon({})}</Box>
                   </HStack>
                 </CardBody>
-                <CardFooter fontSize="14px">
+                <CardFooter fontSize="16px">
                   <Text>${locationMenu[drug.name].price}</Text>
                   <Spacer />
-                  <HStack>
+                  <HStack color={inventory.drugs[drug.name].quantity>0 ? "neon.300" : "neon.500"}>
                     <Bag />
-                    <Text> {inventory.drugs[drug.name].quantity}</Text>
+                    <Text>{inventory.drugs[drug.name].quantity}</Text>
                   </HStack>
                 </CardFooter>
               </Card>
