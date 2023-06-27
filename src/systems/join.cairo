@@ -15,13 +15,14 @@ mod JoinGame {
         let player_id: felt252 = ctx.caller_account.into();
 
         let game_sk: Query = game_id.into();
-        let game = commands::<Game>::entity(game_sk);
+        let game = get !(ctx, game_sk, Game);
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         // spawn player into game
-        commands::set_entity(
+        set !(
+            ctx,
             (game_id, player_id).into(),
             (
                 Stats {
@@ -35,7 +36,8 @@ mod JoinGame {
         );
 
         // update num players joined
-        commands::set_entity(
+        set !(
+            ctx,
             game_sk,
             (Game {
                 start_time: game.start_time,

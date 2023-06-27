@@ -9,7 +9,7 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo_core::storage::query::{IntoPartitioned, IntoPartitionedQuery};
+use dojo_core::database::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo_core::interfaces::{
     IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher, IComponentDispatcherTrait,
     ISystemLibraryDispatcher, ISystemDispatcherTrait
