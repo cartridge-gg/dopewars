@@ -2,18 +2,24 @@ import { Divider, HStack, StyleProps, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Sparkles } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
+import { Avatar } from "./avatar/Avatar";
+import { AvatarName } from "./avatar/avatars";
 
 export interface ChatEventProps {
   avatar?: string,
   connectedUser?: boolean,
   children: ReactNode,
-  type?: 'action' | 'alert' | 'game' | 'message'
+  type?: 'action' | 'alert' | 'game' | 'message',
+  user?: {
+    avatar?: AvatarName
+  }
 }
 
 export const ChatEvent = ({
   children,
   connectedUser,
   type = 'message',
+  user,
   ...props
 }: ChatEventProps & StyleProps) => {
   let chatEvent;
@@ -76,8 +82,9 @@ export const ChatEvent = ({
       chatEvent = (
         <HStack
           w="100%"
-          justify={connectedUser ? 'flex-end' : 'flex-start'}
+          flexDirection={connectedUser ? 'row-reverse' : 'row'}
         >
+          <Avatar size="lg" name={user?.avatar ? user.avatar : 'PersonA'} />
           <Text
             p="7px 12px"
             borderRadius="8px"

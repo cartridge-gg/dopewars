@@ -1,6 +1,7 @@
 import { ChatEvent, ChatInput } from "@/components";
 import Content from "@/components/Content";
 import Layout from "@/components/Layout";
+import { AvatarName } from "@/components/avatar/avatars";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -8,6 +9,9 @@ interface ChatEventType {
   connectedUser?: boolean,
   text: string,
   type?: 'action' | 'alert' | 'game' | 'message',
+  user?: {
+    avatar?: AvatarName
+  }
 }
 
 const defaultChatMessages: ChatEventType[] = [
@@ -18,19 +22,31 @@ const defaultChatMessages: ChatEventType[] = [
   {
     text: 'Hi, ready to play? ... extra text to show text wrapping',
     type: 'message',
+    user: {
+      avatar: 'PersonJ',
+    }
   },
   {
     text: 'Hi, ready to play?',
     type: 'message',
+    user: {
+      avatar: 'PersonD',
+    }
   },
   {
     text: 'Hi, ready to play?',
     type: 'message',
+    user: {
+      avatar: 'PersonB',
+    }
   },
   {
     connectedUser: true,
     text: 'glhf',
     type: 'message',
+    user: {
+      avatar: 'PersonA',
+    }
   },
   {
     text: 'New',
@@ -76,6 +92,7 @@ export default function Chat() {
               <ChatEvent
                 connectedUser={message.connectedUser}
                 type={message.type}
+                user={message.user}
                 key={index}
               >
                 {message.text}
