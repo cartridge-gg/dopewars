@@ -1,19 +1,18 @@
-import { HStack, StyleProps, Text } from "@chakra-ui/react";
+import { Divider, HStack, StyleProps, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Sparkles } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
-import { Avatar } from "@/components";
 
 export interface ChatEventProps {
   avatar?: string,
-  conectedUser?: boolean,
+  connectedUser?: boolean,
   children: ReactNode,
-  type?: 'action' | 'game' | 'message'
+  type?: 'action' | 'alert' | 'game' | 'message'
 }
 
 export const ChatEvent = ({
   children,
-  conectedUser,
+  connectedUser,
   type = 'message',
   ...props
 }: ChatEventProps & StyleProps) => {
@@ -38,6 +37,25 @@ export const ChatEvent = ({
         </HStack>
       )
       break;
+    case "alert":
+      chatEvent = (
+        <HStack
+          w="full"
+          spacing='6px'
+          color="yellow.400"
+          justify="center"
+          fontSize="16px"
+          textTransform="uppercase"
+          {...props}
+        >
+          <Divider borderColor="yellow.400" />
+          <Text>
+            {children}
+          </Text>
+          <Divider borderColor="yellow.400" />
+        </HStack>
+      )
+      break;
     case "game":
       chatEvent = (
         <HStack
@@ -58,9 +76,8 @@ export const ChatEvent = ({
       chatEvent = (
         <HStack
           w="100%"
-          justify={conectedUser ? 'flex-end' : 'flex-start'}
+          justify={connectedUser ? 'flex-end' : 'flex-start'}
         >
-          <Avatar name="PersonA" width="36px" height="36px" />
           <Text
             p="7px 12px"
             borderRadius="8px"

@@ -5,9 +5,9 @@ import { Box, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 interface ChatEventType {
-  conectedUser?: boolean,
+  connectedUser?: boolean,
   text: string,
-  type?: 'action' | 'game' | 'message',
+  type?: 'action' | 'alert' | 'game' | 'message',
 }
 
 const defaultChatMessages: ChatEventType[] = [
@@ -28,9 +28,13 @@ const defaultChatMessages: ChatEventType[] = [
     type: 'message',
   },
   {
-    conectedUser: true,
+    connectedUser: true,
     text: 'glhf',
     type: 'message',
+  },
+  {
+    text: 'New',
+    type: 'alert',
   },
   {
     text: 'Shinobi was Mugged',
@@ -40,12 +44,26 @@ const defaultChatMessages: ChatEventType[] = [
 
 export default function Chat() {
   const [messages, setMessages] = useState<ChatEventType[]>(defaultChatMessages);
+  const [messageValue, setMessageValue] = useState<string>('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageValue(event.target.value);
+  }
+  const handleSendMessage = () => {
+    setMessages((oldMessages) => [...oldMessages, { 
+      connectedUser: true,
+      text: messageValue,
+      type: 'message'
+    }]);
+    setMessageValue('');
+  }
 
   return (
     <Layout
       title="The Wire"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/chat.png');"
+      backgroundImage="url('/images/pager.gif');"
       justifyContent="space-between"
+      backHeader
     >
       <Content
         maxH="calc(100vh - 250px)"
@@ -56,7 +74,7 @@ export default function Chat() {
           {messages.length > 0 ? (
             messages.map((message, index) => (
               <ChatEvent
-                conectedUser={message.conectedUser}
+                connectedUser={message.connectedUser}
                 type={message.type}
                 key={index}
               >
@@ -69,7 +87,11 @@ export default function Chat() {
         </VStack>
       </Content>
       <Box w="100%" p="24px">
-        <ChatInput />
+        <ChatInput
+          value={messageValue}
+          onChange={handleChange}
+          onSend={handleSendMessage}
+        />
       </Box>
     </Layout>
   )
