@@ -30,12 +30,13 @@ mod CreateLocation {
         let player_id: felt252 = ctx.caller_account.into();
 
         let game_sk: Query = game_id.into();
-        let game = commands::<Game>::entity(game_sk);
+        let game = get !(ctx, game_sk, Game);
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
-        let location_id = commands::uuid();
-        commands::set_entity(
+        let location_id = ctx.world.uuid();
+        set !(
+            ctx,
             (game_id, location_id).into(),
             (
                 Location {
@@ -57,7 +58,7 @@ mod CreateLocation {
             }
             let quantity = 1000;
             let cash = 100 * SCALING_FACTOR;
-            commands::set_entity((game_id, location_id, i).into(), (Market { cash, quantity }));
+            set!(ctx, (game_id, location_id, i).into(), (Market { cash, quantity }));
             i += 1;
         }
 
@@ -93,8 +94,9 @@ mod CreateGame {
     ) -> (u32, felt252) {
         let player_id: felt252 = ctx.caller_account.into();
 
-        let game_id = commands::uuid();
-        commands::set_entity(
+        let game_id = ctx.world.uuid();
+        set !(
+            ctx,
             game_id.into(),
             (Game {
                 start_time,
@@ -107,7 +109,8 @@ mod CreateGame {
             })
         );
 
-        commands::set_entity(
+        set !(
+            ctx,
             (game_id, player_id).into(),
             (
                 Stats {

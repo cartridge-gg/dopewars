@@ -27,18 +27,18 @@ mod Travel {
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
     fn execute(ctx: Context, game_id: u32, next_location_id: u32) -> bool {
-        let game = commands::<Game>::entity(game_id.into());
+        let game = get !(ctx, game_id.into(), Game);
         assert(game.tick(), 'game cannot progress');
 
         let player_id: felt252 = ctx.caller_account.into();
         let player_sk: Query = (game_id, player_id).into();
         let location_sk: Query = (game_id, next_location_id).into();
 
-        let (location, stats, cash) = commands::<(Location, Stats, Cash)>::entity(player_sk);
+        let (location, stats, cash) = get !(ctx, player_sk, (Location, Stats, Cash));
         assert(stats.can_continue(), 'player cannot continue');
         assert(location.id != next_location_id, 'already at location');
 
-        let (next_location, risks) = commands::<(Location, Risks)>::entity(location_sk);
+        let (next_location, risks) = get !(ctx, location_sk, (Location, Risks));
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
@@ -48,7 +48,8 @@ mod Travel {
         };
 
         // update player
-        commands::set_entity(
+        set !(
+            ctx,
             player_sk,
             (
                 Location {

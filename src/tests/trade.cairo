@@ -8,7 +8,7 @@ use debug::PrintTrait;
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use starknet::contract_address_const;
-use dojo_core::storage::query::{IntoPartitioned, IntoPartitionedQuery};
+use dojo_core::database::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo_core::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo_core::execution_context::Context;
 use dojo_core::auth::components::AuthRole;
