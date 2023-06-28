@@ -71,6 +71,9 @@ export default function Market() {
   const [quantityBuy, setQuantityBuy] = useState(0);
   const [quantitySell, setQuantitySell] = useState(0);
 
+  const [canBuy, setCanBuy] = useState(false);
+  const [canSell, setCanSell] = useState(false);
+
   const locationMenu = useGameStore((state) => state.menu);
   const inventory = useGameStore((state) => state.inventory);
   const inventoryInfos = getInventoryInfos();
@@ -86,6 +89,23 @@ export default function Market() {
     //     travelTo
     //   }
   }, [router.query]);
+
+  useEffect(() => {
+    if (!drug || !locationMenu) return;
+    const drugPrice = locationMenu[drug.name].price;
+    const can =
+      quantityBuy <= inventoryInfos.left &&
+      quantityBuy * drugPrice <= inventory.cash &&
+      quantityBuy > 0;
+    setCanBuy(can);
+  }, [quantityBuy, drug, locationMenu, inventoryInfos.left, inventory.cash]);
+
+  useEffect(() => {
+    if (!drug) return;
+    const inBag = inventory.drugs[drug.name].quantity;
+    const can = quantitySell <= inBag && quantitySell > 0;
+    setCanSell(can);
+  }, [quantitySell, inventory, inventory.drugs, drug]);
 
   const onTabsChange = (index: number) => {
     setMarketMode(index as MarketMode);
@@ -186,13 +206,13 @@ export default function Market() {
           </VStack>
         </Content>
         <Footer>
-          {marketMode === MarketMode.Buy && quantityBuy > 0 && (
-            <Button w={["50%", "auto"]} onClick={onBuy}>
+          {marketMode === MarketMode.Buy && (
+            <Button w={["50%", "auto"]} onClick={onBuy} isDisabled={!canBuy}>
               Buy ({quantityBuy})
             </Button>
           )}
-          {marketMode === MarketMode.Sell && quantitySell > 0 && (
-            <Button w={["50%", "auto"]} onClick={onSell}>
+          {marketMode === MarketMode.Sell && (
+            <Button w={["50%", "auto"]} onClick={onSell} isDisabled={!canSell}>
               Sell ({quantitySell})
             </Button>
           )}
@@ -220,15 +240,19 @@ const QuantitySelector = ({
   const [quantity, setQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const [max, setMax] = useState(0);
+  const [max, setMax] = useState(1);
+
+  useEffect(() => {
+    setQuantity(1);
+  }, []);
 
   useEffect(() => {
     if (type === TradeDirection.Buy) {
-      const maxBuyable = Math.floor(inventory.cash / price)
-      const maxInventory = inventoryInfos.left
-      setMax(Math.min(maxBuyable,maxInventory));
+      const maxBuyable = Math.floor(inventory.cash / price);
+      const maxInventory = inventoryInfos.left;
+      setMax(Math.max(1, Math.min(maxBuyable, maxInventory)));
     } else if (type === TradeDirection.Sell) {
-      setMax(inventory.drugs[drug.name].quantity);
+      setMax(Math.max(1, inventory.drugs[drug.name].quantity));
     }
   }, [type, price, drug, inventory, inventoryInfos]);
 
@@ -238,7 +262,7 @@ const QuantitySelector = ({
   }, [quantity, price, onChange]);
 
   const onDown = useCallback(() => {
-    if (quantity > 0) {
+    if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   }, [quantity]);
@@ -258,7 +282,7 @@ const QuantitySelector = ({
   }, [max]);
 
   const on50 = useCallback(() => {
-    setQuantity(Math.floor(max / 2));
+    setQuantity(Math.max(1, Math.floor(max / 2)));
   }, [max]);
 
   return (
@@ -296,10 +320,10 @@ const QuantitySelector = ({
         <Slider
           aria-label="slider-quantity"
           w="100%"
-          min={0}
+          min={1}
           max={max}
           step={1}
-          defaultValue={0}
+          defaultValue={1}
           value={quantity}
           onChange={onSlider}
         >
