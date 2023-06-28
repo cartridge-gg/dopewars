@@ -86,7 +86,7 @@ export default function Location() {
                 <CardFooter fontSize="16px">
                   <Text>${locationMenu[drug.name].price}</Text>
                   <Spacer />
-                  <HStack color={inventory.drugs[drug.name].quantity>0 ? "neon.300" : "neon.500"}>
+                  <HStack color={inventory.drugs[drug.name].quantity>0 ? "neon.200" : "neon.500"}>
                     <Bag />
                     <Text>{inventory.drugs[drug.name].quantity}</Text>
                   </HStack>

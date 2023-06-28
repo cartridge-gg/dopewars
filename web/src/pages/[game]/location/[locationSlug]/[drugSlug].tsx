@@ -147,11 +147,17 @@ export default function Market() {
                   style={{ margin: "auto", width: "auto", height: "auto" }}
                 />
               </Box>
-              <HStack w="100%" justifyContent="space-between">
+              <HStack w="100%" justifyContent="space-between" fontSize="16px">
                 <Text>${drug ? locationMenu[drug.name].price : "???"}</Text>
-                <Text>
-                  <Bag />
-                  {drug ? locationMenu[drug.name].available : "???"}
+                <Text
+                  color={
+                    inventory.drugs[drug.name].quantity > 0
+                      ? "neon.200"
+                      : "neon.500"
+                  }
+                >
+                  <Bag mr={1}/>
+                  {inventory.drugs[drug.name].quantity}
                 </Text>
               </HStack>
             </VStack>
