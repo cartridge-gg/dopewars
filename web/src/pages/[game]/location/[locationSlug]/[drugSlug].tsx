@@ -156,7 +156,7 @@ export default function Market() {
                       : "neon.500"
                   }
                 >
-                  <Bag mr={1}/>
+                  <Bag mr={1} />
                   {inventory.drugs[drug.name].quantity}
                 </Text>
               </HStack>
@@ -312,16 +312,17 @@ const QuantitySelector = ({
       </HStack>
 
       <HStack w="100%">
-        <ArrowEnclosed
-          direction="down"
-          size="lg"
+        <Box
           cursor="pointer"
           onClick={onDown}
           color="neon.500"
           _hover={{
             color: "neon.300",
           }}
-        />
+          p={2}
+        >
+          <ArrowEnclosed direction="down" size="lg" />
+        </Box>
 
         <Slider
           aria-label="slider-quantity"
@@ -333,12 +334,20 @@ const QuantitySelector = ({
           value={quantity}
           onChange={onSlider}
         >
-          <SliderTrack bg="neon.700" height="30px" rounded={6}>
+          <SliderTrack
+            bg="neon.700"
+            height="30px"
+            rounded={6}
+            borderLeft="solid 5px var(--chakra-colors-neon-700)"
+            borderRight="solid 5px var(--chakra-colors-neon-700)"
+          >
             <SliderFilledTrack
               height="20px"
-              bg="linear-gradient(to right, #16c973 75%, #202f20 25%)"
-              bgSize="16px 20px"
-              bgRepeat="repeat-x"
+              bg="neon.200"
+              rounded={4}
+              // bg="linear-gradient(to right, #16c973 75%, #202f20 25%)"
+              // bgSize="16px 20px"
+              // bgRepeat="repeat-x"
             />
           </SliderTrack>
           {/* <SliderThumb bg="transparent" outline="none">
@@ -346,16 +355,17 @@ const QuantitySelector = ({
           </SliderThumb> */}
         </Slider>
 
-        <ArrowEnclosed
-          direction="up"
-          size="lg"
+        <Box
           cursor="pointer"
           onClick={onUp}
           color="neon.500"
           _hover={{
             color: "neon.300",
           }}
-        />
+          p={2}
+        >
+          <ArrowEnclosed direction="up" size="lg" />
+        </Box>
       </HStack>
     </VStack>
   );
