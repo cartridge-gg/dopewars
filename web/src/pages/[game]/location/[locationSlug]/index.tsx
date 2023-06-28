@@ -63,7 +63,7 @@ export default function Location() {
         headerImage={`/images/locations/${location?.slug}.png`}
       >
         <Content>
-          <Inventory pb="20px" />
+          {/* <Inventory pb="20px" /> */}
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {drugs.map((drug, index) => (
               <Card

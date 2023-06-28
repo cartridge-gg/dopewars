@@ -135,7 +135,7 @@ export default function Market() {
       >
         <Content>
           <VStack w="100%" h="100%">
-            <Inventory pb="20px" />
+            {/* <Inventory pb="20px" /> */}
             <VStack w="100%" rounded={6} bg="neon.700" p={6} mb={6}>
               <Box position="relative" my={6}>
                 <Image
