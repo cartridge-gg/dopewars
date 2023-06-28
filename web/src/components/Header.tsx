@@ -33,6 +33,7 @@ const Header = ({
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
   const isMobile = IsMobile();
+  const hasNewMessages = true;
 
   useEffect(() => {
     const init = async () => {
@@ -94,7 +95,7 @@ const Header = ({
 
             {!isMobile && (
               <HeaderButton onClick={() => router.push("/chat")}>
-                <Chat alert={true} />
+                <Chat color={hasNewMessages ? 'yellow.400' : 'currentColor'} />
               </HeaderButton>
             )}
             {isMobile && <MobileMenu />}

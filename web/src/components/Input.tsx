@@ -45,6 +45,13 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
     setIsFocused(false);
   };
 
+  const handleKeyDown = (e: any) => {
+    updateCaretPosition(e);
+    if (props.onKeyDown) {
+      props.onKeyDown(e);
+    }
+  }
+
   return (
     <div
       style={{
@@ -57,7 +64,7 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
         {...props}
         ref={inputRef}
         onClick={updateCaretPosition}
-        onKeyDown={updateCaretPosition}
+        onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
         style={{
