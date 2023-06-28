@@ -137,14 +137,13 @@ export default function Market() {
           <VStack w="100%" h="100%">
             {/* <Inventory pb="20px" /> */}
             <VStack w="100%" rounded={6} bg="neon.700" p={6} mb={6}>
-              <Box position="relative" my={6}>
+              <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
                 <Image
                   src={`/images/drugs/${drug.slug}.png`}
                   alt={drug.name}
-                  width={200}
-                  height={200}
+                  fill="true"
                   objectFit="contain"
-                  style={{ margin: "auto", width: "auto", height: "auto" }}
+                  style={{ margin: "auto" }}
                 />
               </Box>
               <HStack w="100%" justifyContent="space-between" fontSize="16px">
