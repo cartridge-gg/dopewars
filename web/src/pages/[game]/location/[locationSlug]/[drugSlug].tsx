@@ -154,7 +154,7 @@ export default function Market() {
                 <Text
                   color={
                     inventory.drugs[drug.name].quantity > 0
-                      ? "neon.200"
+                      ? "yellow.400"
                       : "neon.500"
                   }
                 >
@@ -216,7 +216,10 @@ export default function Market() {
                     />
                   ) : (
                     <Box>
-                      <AlertMessage message="YOU HAVE NOTHING TO SELL" />
+                      <AlertMessage
+                        textTransform="uppercase"
+                        message={`YOU HAVE NO ${drug.name} TO SELL`}
+                      />
                     </Box>
                   )}
                 </TabPanel>

@@ -98,7 +98,7 @@ export default function Location() {
                   <HStack
                     color={
                       inventory.drugs[drug.name].quantity > 0
-                        ? "neon.200"
+                        ? "yellow.400"
                         : "neon.500"
                     }
                   >
