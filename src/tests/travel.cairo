@@ -7,18 +7,18 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo_core::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use dojo_core::executor::Executor;
-use dojo_core::world::World;
-use dojo_core::test_utils::spawn_test_world;
-use dojo_core::auth::systems::{Route, RouteTrait, GrantAuthRole};
+use dojo::executor::Executor;
+use dojo::world::World;
+use dojo::test_utils::spawn_test_world;
+use dojo::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
 use rollyourown::components::location::{Location, LocationComponent};
 use rollyourown::tests::create::{spawn_game, spawn_location, spawn_player};
 
 #[test]
-#[available_gas(100000000)]
+#[available_gas(110000000)]
 fn test_travel() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
     let location_one = spawn_location(world_address, game_id);

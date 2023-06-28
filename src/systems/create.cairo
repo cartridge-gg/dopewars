@@ -5,6 +5,7 @@ mod CreateLocation {
     use array::ArrayTrait;
     use debug::PrintTrait;
 
+    use rollyourown::events::{emit, LocationCreated};
     use rollyourown::components::risks::Risks;
     use rollyourown::components::game::Game;
     use rollyourown::components::location::Location;
@@ -13,9 +14,6 @@ mod CreateLocation {
     use rollyourown::constants::SCALING_FACTOR;
 
     const MAX_PRODUCTS: u32 = 6;
-
-    #[event]
-    fn LocationCreated(game_id: u32, location_id: u32) {}
 
     fn execute(
         ctx: Context,
@@ -58,11 +56,14 @@ mod CreateLocation {
             }
             let quantity = 1000;
             let cash = 100 * SCALING_FACTOR;
-            set!(ctx, (game_id, location_id, i).into(), (Market { cash, quantity }));
+            set !(ctx, (game_id, location_id, i).into(), (Market { cash, quantity }));
             i += 1;
         }
 
-        LocationCreated(game_id, location_id);
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(@LocationCreated { game_id, location_id }, ref values);
+        emit(ctx, 'LocationCreated', values.span());
+
         location_id
     }
 }
@@ -73,21 +74,12 @@ mod CreateGame {
     use array::ArrayTrait;
     use traits::Into;
 
+    use rollyourown::events::{emit, GameCreated};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
     use rollyourown::components::location::Location;
     use rollyourown::constants::SCALING_FACTOR;
-
-    #[event]
-    fn GameCreated(
-        game_id: u32,
-        creator: felt252,
-        start_time: u64,
-        max_turns: usize,
-        max_players: usize,
-        max_locations: usize
-    ) {}
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
@@ -123,7 +115,15 @@ mod CreateGame {
             )
         );
 
-        GameCreated(game_id, player_id, start_time, max_players, max_turns, max_locations);
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @GameCreated {
+                game_id, creator: player_id, start_time, max_players, max_turns, max_locations
+            },
+            ref values
+        );
+        emit(ctx, 'GameCreated', values.span());
+
         (game_id, player_id)
     }
 }

@@ -7,7 +7,7 @@ cairo-version = "2.0.0-rc4"
 sierra-replace-ids = true
 
 [dependencies]
-dojo_core = { git = "https://github.com/dojoengine/dojo.git", rev="a319f1cf3fc8ab106c7147452a3b19b572b17f0d" }
+dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "19293e5e065e14ecda25118b1e35a486de638fe4" }
 
 [[target.dojo]]
 
@@ -17,4 +17,4 @@ rpc_url = "http://localhost:5050/"
 # Default account for katana with seed == 0
 account_address = "0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0"
 private_key = "0x0300001800000000300000180000000000030000000000003006001800006600"
-world_address = "0x7f1d6c1b15e03673062d8356dc1174d5d85c310479ec49fe781e8bf89e4c4f8"
+world_address = "0x74d6cf3625879d81555bf20ee8a2273f9cc6202c13d35d71504810c14f7ef94"

@@ -9,16 +9,16 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo_core::database::query::{IntoPartitioned, IntoPartitionedQuery};
-use dojo_core::interfaces::{
+use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
+use dojo::interfaces::{
     IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher, IComponentDispatcherTrait,
     ISystemLibraryDispatcher, ISystemDispatcherTrait
 };
 
-use dojo_core::executor::Executor;
-use dojo_core::world::World;
-use dojo_core::test_utils::spawn_test_world;
-use dojo_core::auth::systems::{Route, RouteTrait, GrantAuthRole};
+use dojo::executor::Executor;
+use dojo::world::World;
+use dojo::test_utils::spawn_test_world;
+use dojo::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
 use rollyourown::components::game::{Game, GameComponent};
 use rollyourown::components::market::{Market, MarketComponent};

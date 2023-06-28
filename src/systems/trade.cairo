@@ -19,7 +19,7 @@ mod Buy {
     // 5. Update the location's inventory.
     // 6. Update the player's inventory.
     fn execute(ctx: Context, game_id: u32, location_id: u32, drug_id: u32, quantity: usize) {
-        let game = get!(ctx, game_id.into(), Game);
+        let game = get !(ctx, game_id.into(), Game);
         assert(game.tick(), 'cannot progress');
 
         let player_id = ctx.caller_account.into();
@@ -42,7 +42,7 @@ mod Buy {
 
         // update player
         set !(ctx, (game_id, player_id).into(), (Cash { amount: cash.amount - cost }, ));
-        let maybe_drug = try_get!(ctx, (game_id, player_id, drug_id).into(), Drug);
+        let maybe_drug = try_get !(ctx, (game_id, player_id, drug_id).into(), Drug);
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity + quantity,
             Option::None(_) => quantity,

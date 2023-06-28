@@ -4,23 +4,10 @@ mod Travel {
     use box::BoxTrait;
     use array::ArrayTrait;
 
+    use rollyourown::events::{emit, Traveled, RandomEvent};
     use rollyourown::components::{game::{Game, GameTrait}, location::Location};
     use rollyourown::components::player::{Cash, Stats, StatsTrait};
     use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
-
-    #[event]
-    fn Traveled(game_id: u32, player_id: felt252, from_location_id: u32, to_location_id: u32) {}
-
-    #[event]
-    fn RandomEvent(
-        game_id: u32,
-        player_id: felt252,
-        health_loss: u8,
-        money_loss: u128,
-        respect_loss: u8,
-        arrested: bool,
-        killed: bool
-    ) {}
 
     // 1. Verify the caller owns the player.
     // 2. Determine if a random travel event occurs and apply it if necessary.
@@ -66,18 +53,31 @@ mod Travel {
         );
 
         if event_occured {
-            RandomEvent(
-                game_id,
-                player_id,
-                result.health_loss,
-                result.money_loss,
-                result.respect_loss,
-                result.arrested,
-                result.killed
+            let mut values = array::ArrayTrait::new();
+            serde::Serde::serialize(
+                @RandomEvent {
+                    game_id,
+                    player_id,
+                    health_loss: result.health_loss,
+                    money_loss: result.money_loss,
+                    respect_loss: result.respect_loss,
+                    arrested: result.arrested,
+                    killed: result.killed
+                },
+                ref values
             );
+            emit(ctx, 'RandomEvent', values.span());
         }
 
-        Traveled(game_id, player_id, location.id, next_location_id);
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @Traveled {
+                game_id, player_id, from_location_id: location.id, to_location_id: next_location_id
+            },
+            ref values
+        );
+        emit(ctx, 'Traveled', values.span());
+
         event_occured
     }
 }

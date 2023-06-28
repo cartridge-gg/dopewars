@@ -4,11 +4,9 @@ mod JoinGame {
     use box::BoxTrait;
     use array::ArrayTrait;
 
+    use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
     use rollyourown::constants::SCALING_FACTOR;
-
-    #[event]
-    fn PlayerJoined(game_id: u32, player_id: felt252) {}
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
@@ -50,7 +48,10 @@ mod JoinGame {
             })
         );
 
-        PlayerJoined(game_id, player_id);
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(@PlayerJoined { game_id, player_id }, ref values);
+        emit(ctx, 'PlayerJoined', values.span());
+
         player_id
     }
 }
