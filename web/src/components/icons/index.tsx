@@ -34,6 +34,7 @@ export * from "./Music";
 export * from "./Dots";
 export * from "./Trophy";
 export * from "./User";
+export * from "./Warning";
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed
 // to be 36x36, otherwise override within individual icons.

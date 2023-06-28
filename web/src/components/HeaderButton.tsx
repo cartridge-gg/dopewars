@@ -15,13 +15,7 @@ const clipBottomCorner = (size: string) =>
   `polygon(0% 0%, calc(100%) 0%, 100% 0%, 100% calc(100% - ${size}), calc(100% - ${size}) 100%, ${size} 100%, 0% calc(100% - ${size}), 0% ${size})`;
 
 const HeaderButton = forwardRef<ButtonProps, "button">(
-  (
-    {
-      children,
-      ...props
-    }: { children?: ReactNode } & StyleProps ,
-    ref,
-  ) => (
+  ({ children, ...props }: { children?: ReactNode } & StyleProps, ref) => (
     <Box
       ref={ref}
       as="button"

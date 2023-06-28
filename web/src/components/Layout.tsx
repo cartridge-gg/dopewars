@@ -33,7 +33,7 @@ const Layout = ({
   children,
   ...props
 }: Partial<LayoutProps> & StyleProps) => {
-  const isMobile = IsMobile()
+  const isMobile = IsMobile();
 
   return (
     <>
@@ -73,7 +73,12 @@ const Layout = ({
               width="80%"
               height="55vh"
             >
-              <Image fill={true} src={headerImage} objectFit="contain" alt={headerImage}/>
+              <Image
+                fill={true}
+                src={headerImage}
+                objectFit="contain"
+                alt={headerImage}
+              />
             </Box>
           )}
         </VStack>
@@ -117,7 +122,9 @@ const Title = ({
     <Text textStyle="subheading" fontSize="11px">
       {prefixTitle}
     </Text>
-    <Heading fontSize={["40px", "48px"]} fontWeight="normal">{title}</Heading>
+    <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+      {title}
+    </Heading>
   </VStack>
 );
 

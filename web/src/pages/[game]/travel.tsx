@@ -18,19 +18,19 @@ import { IsMobile } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { Locations, travelTo } from "@/hooks/state";
 import { motion } from "framer-motion";
-import { LocationProps, useUiStore,getLocationByName } from "@/hooks/ui";
+import { LocationProps, useUiStore, getLocationByName } from "@/hooks/ui";
 
 export default function Travel() {
   const router = useRouter();
   const [target, setTarget] = useState<Locations>(Locations.Central);
   const { locations } = useUiStore.getState();
 
-  const [locationSlug, setLocationSlug] = useState('')
+  const [locationSlug, setLocationSlug] = useState("");
 
-  useEffect(()=> {
-    const location = getLocationByName(target)
-    setLocationSlug(location.slug)
-  },[target])
+  useEffect(() => {
+    const location = getLocationByName(target);
+    setLocationSlug(location.slug);
+  }, [target]);
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -128,9 +128,7 @@ export default function Travel() {
             w={["full", "auto"]}
             onClick={() => {
               travelTo(target);
-              router.push(
-                `/0x123/location/${locationSlug}`,
-              );
+              router.push(`/0x123/location/${locationSlug}`);
             }}
           >{`Travel to ${target}`}</Button>
         </VStack>

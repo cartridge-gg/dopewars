@@ -24,26 +24,26 @@ export const InputNumber = ({
     setIsFlashed(true);
     onChange(newValue);
     setTimeout(() => {
-      setIsFlashed(false)
+      setIsFlashed(false);
     }, 200);
   };
 
   return (
     <HStack w="full" {...props}>
-      <Text 
+      <Text
         color={isFlashed ? "neon.900" : "neon.200"}
         backgroundColor={isFlashed ? "neon.200" : "transparent"}
       >
         {value}
       </Text>
       <Spacer />
-      <ArrowInput 
+      <ArrowInput
         size="md"
         cursor="pointer"
-        disabled={(max && value >= max) ? true : false}
+        disabled={max && value >= max ? true : false}
         onClick={() => onClick(value + step)}
       />
-      <ArrowInput 
+      <ArrowInput
         size="md"
         direction="down"
         cursor="pointer"
@@ -51,5 +51,5 @@ export const InputNumber = ({
         onClick={() => onClick(value - step)}
       />
     </HStack>
-  )
-}
+  );
+};

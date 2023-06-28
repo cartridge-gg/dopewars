@@ -19,11 +19,7 @@ import { DrugProps } from "@/hooks/ui";
 import { Component } from "react";
 import React from "react";
 
-const getItem = (
-  inventory: InventoryType,
-  drug: Drugs,
-  icon: React.FC,
-) => {
+const getItem = (inventory: InventoryType, drug: Drugs, icon: React.FC) => {
   const quantity = inventory.drugs[drug].quantity;
 
   return (

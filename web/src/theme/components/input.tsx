@@ -11,7 +11,7 @@ export const Input: ComponentStyleConfig = {
         bgColor: "transparent",
         fontSize: "16px",
         _placeholder: {
-          color: "neon.500"
+          color: "neon.500",
         },
       },
     }),

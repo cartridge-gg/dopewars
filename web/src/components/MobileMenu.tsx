@@ -42,7 +42,12 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
                 <MediaPlayer />
               </MenuItem>
               <MenuItem icon={<Chat />}>CHAT</MenuItem>
-              <MenuItem icon={<Trophy />} onClick={() => router.push('/leaderboard')}>LEADERBOARD</MenuItem>
+              <MenuItem
+                icon={<Trophy />}
+                onClick={() => router.push("/leaderboard")}
+              >
+                LEADERBOARD
+              </MenuItem>
               <MenuItem icon={<User />}>SHINOBI</MenuItem>
             </Menu>
             {/* <VStack alignItems="flex-start">

@@ -7,11 +7,6 @@ import {
   HStack,
   Spacer,
   Divider,
-  Card,
-  CardBody,
-  CardHeader,
-  CardFooter,
-  SimpleGrid,
 } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
@@ -57,6 +52,7 @@ import {
   getInventoryInfos,
 } from "@/hooks/state";
 import { Inventory } from "@/components/Inventory";
+import AlertMessage from "@/components/AlertMessage";
 
 enum MarketMode {
   Buy,
@@ -68,15 +64,18 @@ export default function Market() {
   const [drug, setDrug] = useState<DrugProps>();
   const [marketMode, setMarketMode] = useState(MarketMode.Buy);
 
-  const [quantityBuy, setQuantityBuy] = useState(0);
-  const [quantitySell, setQuantitySell] = useState(0);
+  const [quantityBuy, setQuantityBuy] = useState(1);
+  const [quantitySell, setQuantitySell] = useState(1);
 
-  const [canBuy, setCanBuy] = useState(false);
   const [canSell, setCanSell] = useState(false);
+  const [canBuy, setCanBuy] = useState(false);
+
+  const [canAffordOne, setCanAffordOne] = useState(true);
 
   const locationMenu = useGameStore((state) => state.menu);
   const inventory = useGameStore((state) => state.inventory);
   const inventoryInfos = getInventoryInfos();
+  const isBagFull = inventoryInfos.left == 0;
 
   useEffect(() => {
     const { getDrugBySlug } = useUiStore.getState();
@@ -93,17 +92,21 @@ export default function Market() {
   useEffect(() => {
     if (!drug || !locationMenu) return;
     const drugPrice = locationMenu[drug.name].price;
+    const canAffordOne = drugPrice <= inventory.cash;
+
     const can =
       quantityBuy <= inventoryInfos.left &&
       quantityBuy * drugPrice <= inventory.cash &&
       quantityBuy > 0;
+
     setCanBuy(can);
+    setCanAffordOne(canAffordOne);
   }, [quantityBuy, drug, locationMenu, inventoryInfos.left, inventory.cash]);
 
   useEffect(() => {
     if (!drug) return;
     const inBag = inventory.drugs[drug.name].quantity;
-    const can = quantitySell <= inBag && quantitySell > 0;
+    const can = inBag > 0;
     setCanSell(can);
   }, [quantitySell, inventory, inventory.drugs, drug]);
 
@@ -141,7 +144,7 @@ export default function Market() {
                 <Image
                   src={`/images/drugs/${drug.slug}.png`}
                   alt={drug.name}
-                  fill="true"
+                  fill={true}
                   objectFit="contain"
                   style={{ margin: "auto" }}
                 />
@@ -187,37 +190,48 @@ export default function Market() {
 
               <TabPanels mt={6}>
                 <TabPanel>
-                  <QuantitySelector
-                    type={TradeDirection.Buy}
-                    price={locationMenu[drug.name].price}
-                    inventory={inventory}
-                    inventoryInfos={inventoryInfos}
-                    drug={drug}
-                    onChange={setQuantityBuy}
-                  />
+                  {canAffordOne && !isBagFull && (
+                    <QuantitySelector
+                      type={TradeDirection.Buy}
+                      price={locationMenu[drug.name].price}
+                      inventory={inventory}
+                      inventoryInfos={inventoryInfos}
+                      drug={drug}
+                      onChange={setQuantityBuy}
+                    />
+                  )}
+
+                  {!canAffordOne && <AlertMessage message="YOU ARE BROKE" />}
+                  {isBagFull && <AlertMessage message="YOUR BAG IS FULL" />}
                 </TabPanel>
                 <TabPanel>
-                  <QuantitySelector
-                    type={TradeDirection.Sell}
-                    price={locationMenu[drug.name].price}
-                    inventory={inventory}
-                    inventoryInfos={inventoryInfos}
-                    drug={drug}
-                    onChange={setQuantitySell}
-                  />
+                  {canSell ? (
+                    <QuantitySelector
+                      type={TradeDirection.Sell}
+                      price={locationMenu[drug.name].price}
+                      inventory={inventory}
+                      inventoryInfos={inventoryInfos}
+                      drug={drug}
+                      onChange={setQuantitySell}
+                    />
+                  ) : (
+                    <Box>
+                      <AlertMessage message="YOU HAVE NOTHING TO SELL" />
+                    </Box>
+                  )}
                 </TabPanel>
               </TabPanels>
             </Tabs>
           </VStack>
         </Content>
         <Footer>
-          {marketMode === MarketMode.Buy && (
-            <Button w={["50%", "auto"]} onClick={onBuy} isDisabled={!canBuy}>
+          {marketMode === MarketMode.Buy && canBuy && (
+            <Button w={["50%", "auto"]} onClick={onBuy}>
               Buy ({quantityBuy})
             </Button>
           )}
-          {marketMode === MarketMode.Sell && (
-            <Button w={["50%", "auto"]} onClick={onSell} isDisabled={!canSell}>
+          {marketMode === MarketMode.Sell && canSell && (
+            <Button w={["50%", "auto"]} onClick={onSell}>
               Sell ({quantitySell})
             </Button>
           )}

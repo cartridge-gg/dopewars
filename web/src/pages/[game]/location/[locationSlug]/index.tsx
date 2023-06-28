@@ -27,7 +27,12 @@ import {
 } from "@/components/icons/drugs";
 import { Inventory } from "@/components/Inventory";
 import { LocationProps, useUiStore } from "@/hooks/ui";
-import { useGameStore, travelTo, endTurn, travelAndEndTurn } from "@/hooks/state";
+import {
+  useGameStore,
+  travelTo,
+  endTurn,
+  travelAndEndTurn,
+} from "@/hooks/state";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 
@@ -49,7 +54,7 @@ export default function Location() {
 
   useEffect(() => {
     const { getLocationBySlug } = useUiStore.getState();
-    const locationSlug = router.query.locationSlug?.toString() || ""
+    const locationSlug = router.query.locationSlug?.toString() || "";
     const location = getLocationBySlug(locationSlug);
     setLocation(location);
   }, [router.query]);
@@ -75,7 +80,11 @@ export default function Location() {
                   router.push(`${router.asPath}/${drug.slug}`);
                 }}
               >
-                <CardHeader textTransform="uppercase" fontSize="20px" textAlign="left">
+                <CardHeader
+                  textTransform="uppercase"
+                  fontSize="20px"
+                  textAlign="left"
+                >
                   {drug.name}
                 </CardHeader>
                 <CardBody>
@@ -86,7 +95,13 @@ export default function Location() {
                 <CardFooter fontSize="16px">
                   <Text>${locationMenu[drug.name].price}</Text>
                   <Spacer />
-                  <HStack color={inventory.drugs[drug.name].quantity>0 ? "neon.200" : "neon.500"}>
+                  <HStack
+                    color={
+                      inventory.drugs[drug.name].quantity > 0
+                        ? "neon.200"
+                        : "neon.500"
+                    }
+                  >
                     <Bag />
                     <Text>{inventory.drugs[drug.name].quantity}</Text>
                   </HStack>

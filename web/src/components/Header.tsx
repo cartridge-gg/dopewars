@@ -24,7 +24,7 @@ const Header = () => {
   const router = useRouter();
   const { address } = useAccount();
   const { connectors, connect, disconnect } = useConnectors();
-  
+
   const isMobile = IsMobile();
 
   const isMuted = useSoundStore((state) => state.isMuted);
@@ -34,7 +34,7 @@ const Header = () => {
   );
   const inventory = useGameStore((state) => state.inventory);
   const turns = useGameStore((state) => state.turns);
-  const inventoryInfos = getInventoryInfos()
+  const inventoryInfos = getInventoryInfos();
 
   useEffect(() => {
     const init = async () => {
@@ -81,12 +81,17 @@ const Header = () => {
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
-                <Bag /> <Text>{inventoryInfos.used}/{inventoryInfos.capacity}</Text>
+                <Bag />{" "}
+                <Text>
+                  {inventoryInfos.used}/{inventoryInfos.capacity}
+                </Text>
               </HStack>
               <Divider orientation="vertical" borderColor="neon.600" h="12px" />
               <HStack>
                 <Clock />{" "}
-                <Text whiteSpace="nowrap">{!IsMobile && "Day"} {turns.current}/{turns.total}</Text>
+                <Text whiteSpace="nowrap">
+                  {!IsMobile && "Day"} {turns.current}/{turns.total}
+                </Text>
               </HStack>
             </HStack>
           </HStack>

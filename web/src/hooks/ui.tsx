@@ -122,25 +122,25 @@ export const isBackButtonVisible = (pathname: string): Boolean => {
 export const getLocationBySlug = (slug: string): LocationProps => {
   const { locations } = useUiStore.getState();
   const location = locations.find((i) => i.slug === slug);
-  return location || locations[0] ;
+  return location || locations[0];
 };
 
 export const getLocationByName = (name: string): LocationProps => {
   const { locations } = useUiStore.getState();
   const location = locations.find((i) => i.name === name);
-  return location || locations[0] ;
+  return location || locations[0];
 };
 
 export const getDrugBySlug = (slug: string): DrugProps => {
   const { drugs } = useUiStore.getState();
   const drug = drugs.find((i) => i.slug === slug);
-  return drug || drugs[0] ;
+  return drug || drugs[0];
 };
 
 export const getDrugByName = (name: string): DrugProps => {
   const { drugs } = useUiStore.getState();
   const drug = drugs.find((i) => i.name === name);
-  return drug || drugs[0] ;
+  return drug || drugs[0];
 };
 
 export const useUiStore = create<UiState>(() => ({
