@@ -3,6 +3,7 @@ use traits::Into;
 
 #[derive(Component, Copy, Drop, Serde)]
 struct Game {
+    game_id: u32,
     start_time: u64,
     max_players: usize,
     num_players: usize,

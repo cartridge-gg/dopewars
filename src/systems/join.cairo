@@ -4,24 +4,23 @@ mod JoinGame {
     use box::BoxTrait;
     use array::ArrayTrait;
 
+    use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
     use rollyourown::constants::SCALING_FACTOR;
-
-    #[event]
-    fn PlayerJoined(game_id: u32, player_id: felt252) {}
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
         let player_id: felt252 = ctx.caller_account.into();
 
         let game_sk: Query = game_id.into();
-        let game = commands::<Game>::entity(game_sk);
+        let game = get !(ctx, game_sk, Game);
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         // spawn player into game
-        commands::set_entity(
+        set !(
+            ctx,
             (game_id, player_id).into(),
             (
                 Stats {
@@ -35,9 +34,11 @@ mod JoinGame {
         );
 
         // update num players joined
-        commands::set_entity(
+        set !(
+            ctx,
             game_sk,
             (Game {
+                game_id,
                 start_time: game.start_time,
                 max_players: game.max_players,
                 num_players: game.num_players + 1,
@@ -48,7 +49,10 @@ mod JoinGame {
             })
         );
 
-        PlayerJoined(game_id, player_id);
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(@PlayerJoined { game_id, player_id }, ref values);
+        emit(ctx, 'PlayerJoined', values.span());
+
         player_id
     }
 }

@@ -18,34 +18,55 @@ export type Scalars = {
   Float: number;
   Address: any;
   DateTime: any;
-  FieldElement: any;
   bool: any;
+  felt252: any;
   u8: any;
   u32: any;
+  u64: any;
+  u128: any;
+  usize: any;
+};
+
+export type Authrole = {
+  __typename?: "Authrole";
+  id: Scalars["felt252"];
+};
+
+export type Authstatus = {
+  __typename?: "Authstatus";
+  is_authorized: Scalars["bool"];
 };
 
 export type Cash = {
   __typename?: "Cash";
-  amount: Scalars["u32"];
+  amount: Scalars["u128"];
 };
 
-export type Component = {
-  __typename?: "Component";
-  classHash: Scalars["FieldElement"];
-  createdAt: Scalars["DateTime"];
-  id: Scalars["ID"];
-  name: Scalars["String"];
-  storage?: Maybe<Storage>;
-  transactionHash: Scalars["FieldElement"];
+export type ComponentUnion =
+  | Authrole
+  | Authstatus
+  | Cash
+  | Drug
+  | Game
+  | Location
+  | Market
+  | Risks
+  | Stats;
+
+export type Drug = {
+  __typename?: "Drug";
+  id: Scalars["u32"];
+  quantity: Scalars["usize"];
 };
 
 export type Entity = {
   __typename?: "Entity";
+  componentNames: Scalars["String"];
+  components?: Maybe<Array<Maybe<ComponentUnion>>>;
   createdAt: Scalars["DateTime"];
   id: Scalars["ID"];
   keys: Scalars["String"];
-  partition: Scalars["FieldElement"];
-  transactionHash: Scalars["FieldElement"];
+  updatedAt: Scalars["DateTime"];
 };
 
 export type Event = {
@@ -60,38 +81,72 @@ export type Event = {
 
 export type Game = {
   __typename?: "Game";
+  creator: Scalars["felt252"];
+  game_id: Scalars["u32"];
   is_finished: Scalars["bool"];
+  max_locations: Scalars["usize"];
+  max_players: Scalars["usize"];
+  max_turns: Scalars["usize"];
+  num_players: Scalars["usize"];
+  start_time: Scalars["u64"];
+};
+
+export type Location = {
+  __typename?: "Location";
+  id: Scalars["u32"];
+};
+
+export type Market = {
+  __typename?: "Market";
+  cash: Scalars["u128"];
+  quantity: Scalars["usize"];
 };
 
 export type Query = {
   __typename?: "Query";
-  cash: Cash;
-  component: Component;
-  components?: Maybe<Array<Maybe<Component>>>;
-  entities: Array<Entity>;
+  authroleComponents?: Maybe<Array<Maybe<Authrole>>>;
+  authstatusComponents?: Maybe<Array<Maybe<Authstatus>>>;
+  cashComponents?: Maybe<Array<Maybe<Cash>>>;
+  drugComponents?: Maybe<Array<Maybe<Drug>>>;
+  entities?: Maybe<Array<Maybe<Entity>>>;
   entity: Entity;
   event: Event;
   events?: Maybe<Array<Maybe<Event>>>;
-  game: Game;
-  stats: Stats;
+  gameComponents?: Maybe<Array<Maybe<Game>>>;
+  locationComponents?: Maybe<Array<Maybe<Location>>>;
+  marketComponents?: Maybe<Array<Maybe<Market>>>;
+  risksComponents?: Maybe<Array<Maybe<Risks>>>;
+  statsComponents?: Maybe<Array<Maybe<Stats>>>;
   system: System;
   systemCall: SystemCall;
   systemCalls?: Maybe<Array<Maybe<SystemCall>>>;
   systems?: Maybe<Array<Maybe<System>>>;
 };
 
-export type QueryComponentArgs = {
-  id: Scalars["ID"];
+export type QueryAuthroleComponentsArgs = {
+  id?: InputMaybe<Scalars["felt252"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
 };
 
-export type QueryComponentsArgs = {
+export type QueryAuthstatusComponentsArgs = {
+  is_authorized?: InputMaybe<Scalars["bool"]>;
   limit?: InputMaybe<Scalars["Int"]>;
+};
+
+export type QueryCashComponentsArgs = {
+  amount?: InputMaybe<Scalars["u128"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+};
+
+export type QueryDrugComponentsArgs = {
+  id?: InputMaybe<Scalars["u32"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  quantity?: InputMaybe<Scalars["usize"]>;
 };
 
 export type QueryEntitiesArgs = {
-  keys?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  keys: Array<Scalars["String"]>;
   limit?: InputMaybe<Scalars["Int"]>;
-  partition: Scalars["FieldElement"];
 };
 
 export type QueryEntityArgs = {
@@ -106,6 +161,46 @@ export type QueryEventsArgs = {
   limit?: InputMaybe<Scalars["Int"]>;
 };
 
+export type QueryGameComponentsArgs = {
+  creator?: InputMaybe<Scalars["felt252"]>;
+  game_id?: InputMaybe<Scalars["u32"]>;
+  is_finished?: InputMaybe<Scalars["bool"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  max_locations?: InputMaybe<Scalars["usize"]>;
+  max_players?: InputMaybe<Scalars["usize"]>;
+  max_turns?: InputMaybe<Scalars["usize"]>;
+  num_players?: InputMaybe<Scalars["usize"]>;
+  start_time?: InputMaybe<Scalars["u64"]>;
+};
+
+export type QueryLocationComponentsArgs = {
+  id?: InputMaybe<Scalars["u32"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+};
+
+export type QueryMarketComponentsArgs = {
+  cash?: InputMaybe<Scalars["u128"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  quantity?: InputMaybe<Scalars["usize"]>;
+};
+
+export type QueryRisksComponentsArgs = {
+  arrested?: InputMaybe<Scalars["u8"]>;
+  hurt?: InputMaybe<Scalars["u8"]>;
+  killed?: InputMaybe<Scalars["u8"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  mugged?: InputMaybe<Scalars["u8"]>;
+  travel?: InputMaybe<Scalars["u8"]>;
+};
+
+export type QueryStatsComponentsArgs = {
+  arrested?: InputMaybe<Scalars["bool"]>;
+  health?: InputMaybe<Scalars["u8"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  respect?: InputMaybe<Scalars["u8"]>;
+  turns_remaining?: InputMaybe<Scalars["usize"]>;
+};
+
 export type QuerySystemArgs = {
   id: Scalars["ID"];
 };
@@ -118,23 +213,32 @@ export type QuerySystemsArgs = {
   limit?: InputMaybe<Scalars["Int"]>;
 };
 
-export type Stats = {
-  __typename?: "Stats";
-  health: Scalars["u8"];
-  mana: Scalars["u8"];
+export type Risks = {
+  __typename?: "Risks";
+  arrested: Scalars["u8"];
+  hurt: Scalars["u8"];
+  killed: Scalars["u8"];
+  mugged: Scalars["u8"];
+  travel: Scalars["u8"];
 };
 
-export type Storage = Cash | Game | Stats;
+export type Stats = {
+  __typename?: "Stats";
+  arrested: Scalars["bool"];
+  health: Scalars["u8"];
+  respect: Scalars["u8"];
+  turns_remaining: Scalars["usize"];
+};
 
 export type System = {
   __typename?: "System";
   address: Scalars["Address"];
-  classHash: Scalars["FieldElement"];
+  classHash: Scalars["felt252"];
   createdAt: Scalars["DateTime"];
   id: Scalars["ID"];
   name: Scalars["String"];
   systemCalls: Array<SystemCall>;
-  transactionHash: Scalars["FieldElement"];
+  transactionHash: Scalars["felt252"];
 };
 
 export type SystemCall = {
@@ -147,96 +251,103 @@ export type SystemCall = {
   transactionHash: Scalars["String"];
 };
 
-export type ComponentQueryVariables = Exact<{
-  id: Scalars["ID"];
-}>;
+export type AvailableGamesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ComponentQuery = {
+export type AvailableGamesQuery = {
   __typename?: "Query";
-  component: {
-    __typename?: "Component";
-    name: string;
-    classHash: any;
-    transactionHash: any;
-    createdAt: any;
-  };
-};
-
-export type ComponentsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars["Int"]>;
-}>;
-
-export type ComponentsQuery = {
-  __typename?: "Query";
-  components?: Array<{
-    __typename?: "Component";
-    name: string;
-    classHash: any;
-    transactionHash: any;
-    createdAt: any;
+  gameComponents?: Array<{
+    __typename?: "Game";
+    game_id: any;
+    creator: any;
+    num_players: any;
+    max_players: any;
+    max_locations: any;
+    max_turns: any;
+    start_time: any;
   } | null> | null;
 };
 
-export type EntityQueryVariables = Exact<{
+export type UserGamesQueryVariables = Exact<{
+  id: Scalars["felt252"];
+}>;
+
+export type UserGamesQuery = {
+  __typename?: "Query";
+  gameComponents?: Array<{ __typename?: "Game"; game_id: any } | null> | null;
+};
+
+export type PlayerQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
 
-export type EntityQuery = {
+export type PlayerQuery = {
   __typename?: "Query";
   entity: {
     __typename?: "Entity";
-    partition: any;
-    keys: string;
-    transactionHash: any;
-    createdAt: any;
+    components?: Array<
+      | { __typename: "Authrole" }
+      | { __typename: "Authstatus" }
+      | { __typename: "Cash"; amount: any }
+      | { __typename: "Drug" }
+      | { __typename: "Game" }
+      | { __typename: "Location"; id: any }
+      | { __typename: "Market" }
+      | { __typename: "Risks" }
+      | { __typename: "Stats" }
+      | null
+    > | null;
   };
 };
 
-export type EntitiesQueryVariables = Exact<{
-  partition: Scalars["FieldElement"];
-  keys?: InputMaybe<
-    Array<InputMaybe<Scalars["String"]>> | InputMaybe<Scalars["String"]>
-  >;
-  limit?: InputMaybe<Scalars["Int"]>;
-}>;
-
-export type EntitiesQuery = {
-  __typename?: "Query";
-  entities: Array<{
-    __typename?: "Entity";
-    partition: any;
-    keys: string;
-    transactionHash: any;
-    createdAt: any;
-  }>;
-};
-
-export type EventQueryVariables = Exact<{
+export type LocationQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
 
-export type EventQuery = {
+export type LocationQuery = {
   __typename?: "Query";
-  event: {
-    __typename?: "Event";
-    keys: string;
-    data: string;
-    createdAt: any;
-    systemCall: { __typename?: "SystemCall"; transactionHash: string };
+  entity: {
+    __typename?: "Entity";
+    components?: Array<
+      | { __typename: "Authrole" }
+      | { __typename: "Authstatus" }
+      | { __typename: "Cash" }
+      | { __typename: "Drug" }
+      | { __typename: "Game" }
+      | { __typename: "Location"; id: any }
+      | { __typename: "Market" }
+      | {
+          __typename: "Risks";
+          travel: any;
+          hurt: any;
+          killed: any;
+          mugged: any;
+          arrested: any;
+        }
+      | { __typename: "Stats" }
+      | null
+    > | null;
   };
 };
 
-export type EventsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars["Int"]>;
+export type MarketQueryVariables = Exact<{
+  id: Scalars["ID"];
 }>;
 
-export type EventsQuery = {
+export type MarketQuery = {
   __typename?: "Query";
-  events?: Array<{
-    __typename?: "Event";
-    keys: string;
-    data: string;
-    createdAt: any;
-    systemCall: { __typename?: "SystemCall"; transactionHash: string };
-  } | null> | null;
+  entity: {
+    __typename?: "Entity";
+    components?: Array<
+      | { __typename: "Authrole" }
+      | { __typename: "Authstatus" }
+      | { __typename: "Cash" }
+      | { __typename: "Drug" }
+      | { __typename: "Game" }
+      | { __typename: "Location" }
+      | { __typename: "Market"; cash: any; quantity: any }
+      | { __typename: "Risks" }
+      | { __typename: "Stats" }
+      | null
+    > | null;
+  };
 };

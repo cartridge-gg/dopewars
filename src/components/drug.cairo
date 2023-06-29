@@ -3,4 +3,3 @@ struct Drug {
     id: u32,
     quantity: usize,
 }
-

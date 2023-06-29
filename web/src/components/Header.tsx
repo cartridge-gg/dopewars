@@ -20,7 +20,11 @@ import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
 import { useGameStore, getInventoryInfos } from "@/hooks/state";
 
-const Header = () => {
+export interface HeaderProps {
+  back?: boolean;
+}
+
+const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { address } = useAccount();
   const { connectors, connect, disconnect } = useConnectors();
@@ -35,6 +39,7 @@ const Header = () => {
   const inventory = useGameStore((state) => state.inventory);
   const turns = useGameStore((state) => state.turns);
   const inventoryInfos = getInventoryInfos();
+  const hasNewMessages = true;
 
   useEffect(() => {
     const init = async () => {
@@ -99,31 +104,40 @@ const Header = () => {
             {!isMobile && <MediaPlayer />}
 
             {!isMobile && (
-              <HeaderButton>
-                <Chat alert={true} />
+              <HeaderButton onClick={() => router.push("/chat")}>
+                <Chat color={hasNewMessages ? "yellow.400" : "currentColor"} />
               </HeaderButton>
             )}
             {isMobile && <MobileMenu />}
           </HStack>
         </>
       ) : (
-        <HStack flex="1" justify="right">
-          {!isMobile && <MediaPlayer />}
-
-          <HStack
-            layerStyle="rounded"
-            cursor="pointer"
-            onClick={() => {
-              setIsConnected(true);
-              play();
-            }}
-            onMouseEnter={() => {
-              playSound(Sounds.HoverClick, 0.5);
-            }}
-          >
-            <Link /> <Text>CONNECT</Text>
+        <>
+          <HStack flex="1" justify="left">
+            {back && (
+              <HeaderButton onClick={() => router.back()}>
+                <Arrow />
+              </HeaderButton>
+            )}
           </HStack>
-        </HStack>
+          <HStack flex="1" justify="right">
+            {!isMobile && <MediaPlayer />}
+
+            <HStack
+              layerStyle="rounded"
+              cursor="pointer"
+              onClick={() => {
+                setIsConnected(true);
+                play();
+              }}
+              onMouseEnter={() => {
+                playSound(Sounds.HoverClick, 0.5);
+              }}
+            >
+              <Link /> <Text>CONNECT</Text>
+            </HStack>
+          </HStack>
+        </>
       )}
     </Flex>
   );

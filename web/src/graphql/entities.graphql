@@ -1,17 +1,43 @@
-query Entity($id: ID!) {
+query Player($id: ID!) {
   entity(id: $id) {
-    partition
-    keys
-    transactionHash
-    createdAt
+    components {
+      __typename
+      ... on Cash {
+        amount
+      }
+      ... on Location {
+        id
+      }
+    }
   }
 }
 
-query Entities($partition: FieldElement!, $keys: [String], $limit: Int) {
-  entities(partition: $partition, keys: $keys, limit: $limit) {
-    partition
-    keys
-    transactionHash
-    createdAt
+query Location($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Location {
+        id
+      }
+      ... on Risks {
+        travel
+        hurt
+        killed
+        mugged
+        arrested
+      }
+    }
+  }
+}
+
+query Market($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Market {
+        cash
+        quantity
+      }
+    }
   }
 }

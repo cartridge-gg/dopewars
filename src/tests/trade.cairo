@@ -8,14 +8,14 @@ use debug::PrintTrait;
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use starknet::contract_address_const;
-use dojo_core::storage::query::{IntoPartitioned, IntoPartitionedQuery};
-use dojo_core::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
-use dojo_core::execution_context::Context;
-use dojo_core::auth::components::AuthRole;
-use dojo_core::string::ShortStringTrait;
-use dojo_core::integer::u250Trait;
-use dojo_core::executor::Executor;
-use dojo_core::world::World;
+use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
+use dojo::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::execution_context::Context;
+use dojo::auth::components::AuthRole;
+use dojo::string::ShortStringTrait;
+use dojo::integer::u250Trait;
+use dojo::executor::Executor;
+use dojo::world::World;
 
 use rollyourown::components::{
     player::Cash, drug::Drug, location::Location, market::{Market, MarketTrait}
