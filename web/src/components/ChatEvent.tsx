@@ -6,19 +6,19 @@ import { Avatar } from "./avatar/Avatar";
 import { AvatarName } from "./avatar/avatars";
 
 export interface ChatEventProps {
-  avatar?: string,
-  connectedUser?: boolean,
-  children: ReactNode,
-  type?: 'action' | 'alert' | 'game' | 'message',
+  avatar?: string;
+  connectedUser?: boolean;
+  children: ReactNode;
+  type?: "action" | "alert" | "game" | "message";
   user?: {
-    avatar?: AvatarName
-  }
+    avatar?: AvatarName;
+  };
 }
 
 export const ChatEvent = ({
   children,
   connectedUser,
-  type = 'message',
+  type = "message",
   user,
   ...props
 }: ChatEventProps & StyleProps) => {
@@ -28,7 +28,7 @@ export const ChatEvent = ({
       chatEvent = (
         <HStack
           w="full"
-          spacing='6px'
+          spacing="6px"
           color="neon.500"
           justify="center"
           fontFamily="chicago-flf"
@@ -36,18 +36,16 @@ export const ChatEvent = ({
           {...props}
         >
           <Sparkles />
-          <Text>
-            {children}
-          </Text>
+          <Text>{children}</Text>
           <Sparkles inverted />
         </HStack>
-      )
+      );
       break;
     case "alert":
       chatEvent = (
         <HStack
           w="full"
-          spacing='6px'
+          spacing="6px"
           color="yellow.400"
           justify="center"
           fontSize="16px"
@@ -55,18 +53,16 @@ export const ChatEvent = ({
           {...props}
         >
           <Divider borderColor="yellow.400" />
-          <Text>
-            {children}
-          </Text>
+          <Text>{children}</Text>
           <Divider borderColor="yellow.400" />
         </HStack>
-      )
+      );
       break;
     case "game":
       chatEvent = (
         <HStack
           w="full"
-          spacing='6px'
+          spacing="6px"
           color="neon.500"
           justify="center"
           fontSize="16px"
@@ -76,15 +72,12 @@ export const ChatEvent = ({
           <Text>{children}</Text>
           <Sparkles inverted />
         </HStack>
-      )
+      );
       break;
     case "message":
       chatEvent = (
-        <HStack
-          w="100%"
-          flexDirection={connectedUser ? 'row-reverse' : 'row'}
-        >
-          <Avatar size="lg" name={user?.avatar ? user.avatar : 'PersonA'} />
+        <HStack w="100%" flexDirection={connectedUser ? "row-reverse" : "row"}>
+          <Avatar size="lg" name={user?.avatar ? user.avatar : "PersonA"} />
           <Text
             p="7px 12px"
             borderRadius="8px"
@@ -94,15 +87,15 @@ export const ChatEvent = ({
               borderImageSource: `url("data:image/svg+xml,${BorderImage({
                 color: "#202F20",
                 isPressed: false,
-              })}")`
+              })}")`,
             }}
           >
             {children}
           </Text>
         </HStack>
-      )
+      );
       break;
   }
 
   return chatEvent;
-}
+};

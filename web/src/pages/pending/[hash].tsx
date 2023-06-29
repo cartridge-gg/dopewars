@@ -15,7 +15,7 @@ export default function Pending() {
     >
       <Content>
         <VStack gap="24px">
-          <Image src="/images/loading.gif" />
+          <Image src="/images/loading.gif" alt="loading..." />
           <VStack>
             <Text>Transaction pending...</Text>
             <Link>View on Starkscan</Link>

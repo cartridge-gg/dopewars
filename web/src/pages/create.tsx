@@ -6,12 +6,7 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Dropdown } from "@/components/Dropdown";
 import { InputNumber } from "@/components/InputNumber";
-import {
-  HStack,
-  Text,
-  UnorderedList,
-  ListItem,
-} from "@chakra-ui/react";
+import { HStack, Text, UnorderedList, ListItem } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
@@ -22,7 +17,7 @@ const MIN_TURNS = 10;
 export default function Create() {
   const router = useRouter();
 
-  const [numTurns, setNumTurns] = useState<number>(30); 
+  const [numTurns, setNumTurns] = useState<number>(30);
   const handleNumTurns = (numTurns: number) => {
     setNumTurns(numTurns);
   };
@@ -49,26 +44,34 @@ export default function Create() {
           <ListItem>
             <HStack>
               <Label name="Turns" />
-              <InputNumber value={numTurns} min={MIN_TURNS} onChange={handleNumTurns} />
+              <InputNumber
+                value={numTurns}
+                min={MIN_TURNS}
+                onChange={handleNumTurns}
+              />
             </HStack>
           </ListItem>
           <ListItem>
             <HStack>
               <Label name="Players" />
-              <InputNumber value={numPlayers} min={MIN_PLAYERS} onChange={handleNumPlayer} />
+              <InputNumber
+                value={numPlayers}
+                min={MIN_PLAYERS}
+                onChange={handleNumPlayer}
+              />
             </HStack>
           </ListItem>
           <ListItem>
             <HStack>
               <Label name="Starts" />
-              <Dropdown 
-                w="full" 
-                value={{value: 1, text: '20:00 UTC', label: '(29 min)'}}
+              <Dropdown
+                w="full"
+                value={{ value: 1, text: "20:00 UTC", label: "(29 min)" }}
                 options={[
-                  {value: 1, text: '20:00 UTC', label: '(29 min)'}, 
-                  {value: 2, text: '20:30 UTC', label: '(59 min)'},
-                  {value: 3, text: '21:00 UTC', label: '(1 hr 29 min)'},
-                  {value: 4, text: '21:30 UTC', label: '(1 hr 59 min)'}
+                  { value: 1, text: "20:00 UTC", label: "(29 min)" },
+                  { value: 2, text: "20:30 UTC", label: "(59 min)" },
+                  { value: 3, text: "21:00 UTC", label: "(1 hr 29 min)" },
+                  { value: 4, text: "21:30 UTC", label: "(1 hr 59 min)" },
                 ]}
               />
             </HStack>

@@ -1,12 +1,11 @@
-
-      export interface PossibleTypesResultData {
-        possibleTypes: {
-          [key: string]: string[]
-        }
-      }
-      const result: PossibleTypesResultData = {
-  "possibleTypes": {
-    "ComponentUnion": [
+export interface PossibleTypesResultData {
+  possibleTypes: {
+    [key: string]: string[];
+  };
+}
+const result: PossibleTypesResultData = {
+  possibleTypes: {
+    ComponentUnion: [
       "Authrole",
       "Authstatus",
       "Cash",
@@ -15,9 +14,8 @@
       "Location",
       "Market",
       "Risks",
-      "Stats"
-    ]
-  }
+      "Stats",
+    ],
+  },
 };
-      export default result;
-    
+export default result;

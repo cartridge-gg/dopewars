@@ -50,7 +50,7 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
     if (props.onKeyDown) {
       props.onKeyDown(e);
     }
-  }
+  };
 
   return (
     <div

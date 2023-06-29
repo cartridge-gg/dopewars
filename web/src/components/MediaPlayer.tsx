@@ -38,7 +38,7 @@ const ClickFeedback = ({
         setClicked(false);
       }, duration);
     }
-  }, [clicked]);
+  }, [clicked, duration]);
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setClicked(true);
@@ -77,7 +77,9 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       h="36px"
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
-      className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
+      className={
+        mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"
+      }
       mr={3}
       borderRadius={6}
       bg={{ md: "neon.700" }}
@@ -95,11 +97,11 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
         },
         "&.mediaplayer-paused": {
           ".mediaplayer-status, .mediaplayer-commands": {
-            md:{
+            md: {
               transform: "translateY(-36px)",
-            }
-          }
-         }
+            },
+          },
+        },
       }}
     >
       <Box
@@ -124,16 +126,18 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
           userSelect="none"
         >
           <Box
-            animation={`${slideAnim} infinite 8s linear`}
             position="relative"
             pl={6}
+            animation={`${slideAnim} infinite 8s linear`}
+            willChange="transform"
           >
             {songTitle}
           </Box>
           <Box
-            animation={`${slideAnim} infinite 8s linear`}
             position="relative"
             pl={6}
+            animation={`${slideAnim} infinite 8s linear`}
+            willChange="transform"
           >
             {songTitle}
           </Box>

@@ -47,9 +47,10 @@ export const initMediaStore = async () => {
     isInitialized: true,
   }));
 
-  const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true"
-  if(!disableAutoPlay){
-    play()
+  const disableAutoPlay =
+    process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
+  if (!disableAutoPlay) {
+    play();
   }
 };
 
@@ -113,4 +114,3 @@ export const forward = () => {
 
   state.isPlaying && play();
 };
-

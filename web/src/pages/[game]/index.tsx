@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
+import { startGame } from "@/hooks/state";
 
 export default function Join() {
   const router = useRouter();
@@ -75,7 +76,10 @@ export default function Join() {
         </Button>
         <Button
           w={["full", "auto"]}
-          onClick={() => router.push("/0x12341/travel")}
+          onClick={() => {
+            startGame();
+            router.push("/0x12341/travel");
+          }}
         >
           Start
         </Button>

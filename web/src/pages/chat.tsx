@@ -6,73 +6,77 @@ import { Box, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 interface ChatEventType {
-  connectedUser?: boolean,
-  text: string,
-  type?: 'action' | 'alert' | 'game' | 'message',
+  connectedUser?: boolean;
+  text: string;
+  type?: "action" | "alert" | "game" | "message";
   user?: {
-    avatar?: AvatarName
-  }
+    avatar?: AvatarName;
+  };
 }
 
 const defaultChatMessages: ChatEventType[] = [
   {
-    text: 'Game Created',
-    type: 'game',
+    text: "Game Created",
+    type: "game",
   },
   {
-    text: 'Hi, ready to play? ... extra text to show text wrapping',
-    type: 'message',
+    text: "Hi, ready to play? ... extra text to show text wrapping",
+    type: "message",
     user: {
-      avatar: 'PersonJ',
-    }
+      avatar: "PersonJ",
+    },
   },
   {
-    text: 'Hi, ready to play?',
-    type: 'message',
+    text: "Hi, ready to play?",
+    type: "message",
     user: {
-      avatar: 'PersonD',
-    }
+      avatar: "PersonD",
+    },
   },
   {
-    text: 'Hi, ready to play?',
-    type: 'message',
+    text: "Hi, ready to play?",
+    type: "message",
     user: {
-      avatar: 'PersonB',
-    }
+      avatar: "PersonB",
+    },
   },
   {
     connectedUser: true,
-    text: 'glhf',
-    type: 'message',
+    text: "glhf",
+    type: "message",
     user: {
-      avatar: 'PersonA',
-    }
+      avatar: "PersonA",
+    },
   },
   {
-    text: 'New',
-    type: 'alert',
+    text: "New",
+    type: "alert",
   },
   {
-    text: 'Shinobi was Mugged',
-    type: 'action',
+    text: "Shinobi was Mugged",
+    type: "action",
   },
 ];
 
 export default function Chat() {
-  const [messages, setMessages] = useState<ChatEventType[]>(defaultChatMessages);
-  const [messageValue, setMessageValue] = useState<string>('');
+  const [messages, setMessages] =
+    useState<ChatEventType[]>(defaultChatMessages);
+  const [messageValue, setMessageValue] = useState<string>("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessageValue(event.target.value);
-  }
+  };
   const handleSendMessage = () => {
-    setMessages((oldMessages) => [...oldMessages, { 
-      connectedUser: true,
-      text: messageValue,
-      type: 'message'
-    }]);
-    setMessageValue('');
-  }
+    setMessages((oldMessages) => [
+      ...oldMessages,
+      {
+        connectedUser: true,
+        text: messageValue,
+        type: "message",
+      },
+    ]);
+    setMessageValue("");
+  };
 
   return (
     <Layout
@@ -84,7 +88,7 @@ export default function Chat() {
       <Content
         maxH="calc(100vh - 250px)"
         overflowX="auto"
-        flexDirection='column-reverse'
+        flexDirection="column-reverse"
       >
         <VStack spacing="16px">
           {messages.length > 0 ? (
@@ -111,5 +115,5 @@ export default function Chat() {
         />
       </Box>
     </Layout>
-  )
+  );
 }

@@ -4,10 +4,7 @@ export interface SparklesProps {
   inverted?: boolean;
 }
 
-export const Sparkles = ({
-  inverted,
-  ...props
-}: SparklesProps & IconProps) => {
+export const Sparkles = ({ inverted, ...props }: SparklesProps & IconProps) => {
   return (
     <Icon {...props}>
       {inverted ? (
