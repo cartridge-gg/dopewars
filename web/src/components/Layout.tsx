@@ -13,6 +13,7 @@ import { IsMobile } from "@/utils/ui";
 import { motion } from "framer-motion";
 
 export interface LayoutProps {
+  backHeader?: boolean,
   title: string;
   map: ReactNode;
   prefixTitle: string;
@@ -23,6 +24,7 @@ export interface LayoutProps {
 import CrtEffect from "./CrtEffect";
 
 const Layout = ({
+  backHeader,
   title,
   prefixTitle,
   map,
@@ -32,7 +34,7 @@ const Layout = ({
 }: Partial<LayoutProps> & StyleProps) => {
   return (
     <>
-      <Header />
+      <Header back={backHeader} />
       <Flex
         position="fixed"
         top="0"
