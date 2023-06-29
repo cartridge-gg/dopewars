@@ -91,6 +91,7 @@ mod CreateGame {
             ctx,
             game_id.into(),
             (Game {
+                game_id,
                 start_time,
                 max_players,
                 num_players: 1, // caller auto joins

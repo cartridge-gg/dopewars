@@ -38,6 +38,7 @@ mod JoinGame {
             ctx,
             game_sk,
             (Game {
+                game_id,
                 start_time: game.start_time,
                 max_players: game.max_players,
                 num_players: game.num_players + 1,
