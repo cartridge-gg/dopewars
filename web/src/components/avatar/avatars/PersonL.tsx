@@ -8,8 +8,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
       path = hasCrown ? (
         <g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30 20H40.05V25H45.05V30.05H35.05V40.05H30.05V45H40V35H45.05V45.05H40.05V50.05H30V45.05H25V35.05H20V30H25V25H30V20ZM25.05 30.05V35H30V30.05H25.05Z"
             fill="#0FD976"
           />
@@ -28,8 +28,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#114329" />
           <path d="M40 50H45.05V55H50.05V60.05H40V50Z" fill="#114329" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M15 5H50.05V25H15V5ZM45.0343 10.0075H40.0386V15.005H35.0229V10.0075H30.0272V15.005H25.0114V10.0075H20.0157V19.9925H45.0343V10.0075Z"
             fill="#172217"
           />
@@ -41,8 +41,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
       ) : (
         <g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30 20H40.05V25H45.05V30.05H35.05V40.05H30.05V45H40V35H45.05V45.05H40.05V50.05H30V45.05H25V35.05H20V30H25V25H30V20ZM25.05 30.05V35H30V30.05H25.05Z"
             fill="#0FD976"
           />
@@ -68,8 +68,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
       path = hasCrown ? (
         <g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30 20H40.05V25H45.05V30.05H35.05V40.05H30.05V45H40V35H45.05V45.05H40.05V50.05H30V45.05H25V35.05H20V30H25V25H30V20ZM25.05 30.05V35H30V30.05H25.05Z"
             fill="#FDE092"
           />
@@ -88,8 +88,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#5E4E26" />
           <path d="M40 50H45.05V55H50.05V60.05H40V50Z" fill="#5E4E26" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M15 5H50.05V25H15V5ZM45.0343 10.0075H40.0386V15.005H35.0229V10.0075H30.0272V15.005H25.0114V10.0075H20.0157V19.9925H45.0343V10.0075Z"
             fill="#172217"
           />
@@ -101,8 +101,8 @@ export const PersonL = ({ color, hasCrown }: AvatarPathProps) => {
       ) : (
         <g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30 20H40.05V25H45.05V30.05H35.05V40.05H30.05V45H40V35H45.05V45.05H40.05V50.05H30V45.05H25V35.05H20V30H25V25H30V20ZM25.05 30.05V35H30V30.05H25.05Z"
             fill="#FDE092"
           />

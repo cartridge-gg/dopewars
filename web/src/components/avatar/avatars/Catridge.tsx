@@ -30,8 +30,8 @@ export const Catridge = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 20.5249H40V25.5249H35V20.5249Z" fill="#11ED83" />
           <path d="M40 15.5249H45V20.5249H40V15.5249Z" fill="#11ED83" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M12.475 5.5249H47.525V25.5249H12.475V5.5249ZM42.5093 10.5324H37.5136V15.5299H32.4979V10.5324H27.5021V15.5299H22.4864V10.5324H17.4907V20.5174H42.5093V10.5324Z"
             fill="#172217"
           />
@@ -94,8 +94,8 @@ export const Catridge = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 20.0249H40V25.0249H35V20.0249Z" fill="#FBCB4A" />
           <path d="M40 15.0249H45V20.0249H40V15.0249Z" fill="#FBCB4A" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M12.475 5.0249H47.525V25.0249H12.475V5.0249ZM42.5093 10.0324H37.5136V15.0299H32.4979V10.0324H27.5021V15.0299H22.4864V10.0324H17.4907V20.0174H42.5093V10.0324Z"
             fill="#172217"
           />
