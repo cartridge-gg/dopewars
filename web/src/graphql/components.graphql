@@ -1,17 +1,17 @@
-query Component($id: ID!) {
-  component(id: $id) {
-    name
-    classHash
-    transactionHash
-    createdAt
+query AvailableGames {
+  gameComponents(limit: 10) {
+    game_id
+    creator
+    num_players
+    max_players
+    max_locations
+    max_turns
+    start_time
   }
 }
 
-query Components($limit: Int) {
-  components(limit: $limit) {
-    name
-    classHash
-    transactionHash
-    createdAt
+query UserGames($id: felt252!) {
+  gameComponents(creator: $id) {
+    game_id
   }
 }

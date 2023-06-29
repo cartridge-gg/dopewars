@@ -6,9 +6,15 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
-    "Storage": [
+    "ComponentUnion": [
+      "Authrole",
+      "Authstatus",
       "Cash",
+      "Drug",
       "Game",
+      "Location",
+      "Market",
+      "Risks",
       "Stats"
     ]
   }
