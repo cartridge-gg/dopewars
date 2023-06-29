@@ -1,12 +1,6 @@
-import { useGameConfig } from "@/hooks/config";
 import { Icon, IconProps } from "..";
 
 export const Acid = (props: IconProps) => {
-  const { nsfw } = useGameConfig();
-  if (nsfw) {
-    return <></>;
-  }
-
   return (
     <Icon viewBox="0 0 60 60" height="60px" width="60px" {...props}>
       <path

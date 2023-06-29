@@ -1,12 +1,10 @@
 import NextHead from "next/head";
-import { ModalProvider } from "@/components/Modal/ModalProvider";
 import { ChakraProvider, Text } from "@chakra-ui/react";
 import {
   InjectedConnector,
   StarknetConfig,
   StarknetProvider,
 } from "@starknet-react/core";
-import { GameConfigProvider } from "@/hooks/config";
 import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
@@ -47,19 +45,15 @@ export default function App({ Component, pageProps }: AppProps) {
     <StarknetProvider connectors={connectors}>
       <ChakraProvider theme={theme}>
         <Fonts />
-        <ModalProvider>
-          <GameConfigProvider>
-            <NextHead>
-              <title>Roll your Own</title>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-              />
-            </NextHead>
-            {isRightSequence && <MakeItRain />}
-            <Component {...pageProps} />
-          </GameConfigProvider>
-        </ModalProvider>
+        <NextHead>
+          <title>Roll your Own</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+        </NextHead>
+        {isRightSequence && <MakeItRain />}
+        <Component {...pageProps} />
       </ChakraProvider>
     </StarknetProvider>
   );
