@@ -1,4 +1,11 @@
-import { Text, VStack, HStack, Divider } from "@chakra-ui/react";
+import {
+  Text,
+  VStack,
+  HStack,
+  Divider,
+  Card,
+  CardBody,
+} from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
@@ -9,6 +16,8 @@ import { User } from "@/components/icons/archive";
 import { useGameStore } from "@/hooks/state";
 import { useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
+import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
+import BorderImage from "@/components/icons/BorderImage";
 
 export default function Home() {
   const router = useRouter();
@@ -24,19 +33,21 @@ export default function Home() {
           <Text textStyle="subheading" fontSize="13px">
             My Games
           </Text>
-          <VStack
-            layerStyle="rounded"
-            w="full"
-            p="30px 20px 20px 20px"
-            gap="20px"
-          >
-            <Text color="neon.500" fontSize="14px">
-              YOU HAVE NO GAMES
-            </Text>
-            <Button w="full" onClick={() => router.push("/create")}>
-              Create
-            </Button>
-          </VStack>
+
+          <Card variant="pixelated">
+              <VStack
+                w="full"
+                p="30px 20px 20px 20px"
+                gap="20px"
+              >
+                <Text color="neon.500" fontSize="14px">
+                  YOU HAVE NO GAMES
+                </Text>
+                <Button w="full" onClick={() => router.push("/create")}>
+                  Create
+                </Button>
+              </VStack>
+          </Card>
           <Text textStyle="subheading" fontSize="13px" pt="15px">
             AVAILABLE GAMES
           </Text>

@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
-import { IsMobile } from "@/utils/ui";
+import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { Locations, travelTo } from "@/hooks/state";
 import { motion } from "framer-motion";
@@ -111,7 +111,13 @@ export default function Travel() {
                 cursor="pointer"
                 onClick={back}
               />
-              <HStack layerStyle="rounded" w="full" justify="center">
+              <HStack
+                p={2}
+                bg="neon.700"
+                clipPath={`polygon(${generatePixelBorderPath()})`}
+                w="full"
+                justify="center"
+              >
                 <Text>{target}</Text>
               </HStack>
               <Arrow
@@ -176,6 +182,7 @@ const Location = ({
         cursor="pointer"
         onClick={onClick}
         position="relative"
+        clipPath={`polygon(${generatePixelBorderPath()})`}
       >
         <HStack w="full">
           <HStack>

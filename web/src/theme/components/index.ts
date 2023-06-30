@@ -8,5 +8,6 @@ export * from "./button";
 export * from "./divider";
 export * from "./accordion";
 export * from "./container";
-export * from "./slidertrack";
+export * from "./slider";
 export * from "./menu";
+export * from "./tabs";

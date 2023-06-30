@@ -1,5 +1,8 @@
 import BorderImage from "@/components/icons/BorderImage";
+import { generatePixelBorderPath } from "@/utils/ui";
 import { ComponentStyleConfig } from "@chakra-ui/react";
+
+import colors from "../colors";
 
 export const Button: ComponentStyleConfig = {
   defaultProps: {
@@ -29,21 +32,30 @@ export const Button: ComponentStyleConfig = {
     primary: {
       color: "neon.200",
       borderImageSource: `url("data:image/svg+xml,${BorderImage({
-        color: "#11ED83",
+        color: colors.neon["200"].toString(),
         isPressed: false,
       })}")`,
       _hover: {
         color: "neon.300",
         borderImageSource: `url("data:image/svg+xml,${BorderImage({
-          color: "#16C973",
+          color: colors.neon["300"].toString(),
           isPressed: false,
         })}")`,
       },
       _active: {
         borderImageSource: `url("data:image/svg+xml,${BorderImage({
-          color: "#16C973",
+          color: colors.neon["300"].toString(),
           isPressed: true,
         })}")`,
+      },
+    },
+    pixelated: {
+      border: 0,
+      bg: "neon.700",
+      lineHeight: "1em",
+      clipPath: `polygon(${generatePixelBorderPath()})`,
+      _hover: {
+        bg: "neon.600",
       },
     },
     default: {},

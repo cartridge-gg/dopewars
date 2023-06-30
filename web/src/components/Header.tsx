@@ -3,7 +3,7 @@ import { Clock, Gem, Bag, Chat, Home, Link, Sound, Arrow } from "./icons";
 import { useAccount, useConnectors } from "@starknet-react/core";
 import { Box, Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { IsMobile } from "@/utils/ui";
+import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
 import {
   useSoundStore,
@@ -73,13 +73,15 @@ const Header = ({ back }: HeaderProps) => {
               </HeaderButton>
             )}
           </HStack>
+
           <HStack flex="1" justify="center">
             <HStack
-              layerStyle="rounded"
               h="full"
               py="8px"
               px="20px"
               spacing={["10px", "30px"]}
+              bg="neon.700"
+              clipPath={`polygon(${generatePixelBorderPath()})`}
             >
               <HStack>
                 <Gem /> <Text>${inventory.cash}</Text>
@@ -100,6 +102,7 @@ const Header = ({ back }: HeaderProps) => {
               </HStack>
             </HStack>
           </HStack>
+
           <HStack flex="1" justify="right">
             {!isMobile && <MediaPlayer />}
 
@@ -123,8 +126,8 @@ const Header = ({ back }: HeaderProps) => {
           <HStack flex="1" justify="right">
             {!isMobile && <MediaPlayer />}
 
-            <HStack
-              layerStyle="rounded"
+            <Button
+              variant="pixelated"
               cursor="pointer"
               onClick={() => {
                 setIsConnected(true);
@@ -135,7 +138,7 @@ const Header = ({ back }: HeaderProps) => {
               }}
             >
               <Link /> <Text>CONNECT</Text>
-            </HStack>
+            </Button>
           </HStack>
         </>
       )}
