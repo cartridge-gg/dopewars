@@ -4,6 +4,7 @@ import { Sparkles } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
 import { Avatar } from "./avatar/Avatar";
 import { AvatarName } from "./avatar/avatars";
+import colors from "@/theme/colors";
 
 export interface ChatEventProps {
   avatar?: string;
@@ -85,7 +86,7 @@ export const ChatEvent = ({
               borderImageSlice: "4",
               borderImageWidth: "2px",
               borderImageSource: `url("data:image/svg+xml,${BorderImage({
-                color: "#202F20",
+                color: colors.neon["700"].toString(),
                 isPressed: false,
               })}")`,
             }}

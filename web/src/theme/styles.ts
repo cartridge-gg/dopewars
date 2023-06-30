@@ -1,7 +1,10 @@
+import { useToken } from '@chakra-ui/react'
 import BorderImage from "@/components/icons/BorderImage";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
- 
+
 import { generatePixelBorderPath } from "@/utils/ui";
+
+import colors from './colors';
 
 //global styles
 export const styles = {
@@ -26,13 +29,13 @@ export const cardStyle = {
   borderImageSlice: "4",
   borderImageWidth: "4px",
   borderImageSource: `url("data:image/svg+xml,${BorderImage({
-    color: "#11ED83",
+    color: colors.neon["200"].toString(),
     isPressed: false,
   })}")`,
   _hover: {
     color: "neon.300",
     borderImageSource: `url("data:image/svg+xml,${BorderImage({
-      color: "#16C973",
+      color: colors.neon["300"].toString(),
       isPressed: false,
     })}")`,
   },
@@ -40,14 +43,14 @@ export const cardStyle = {
     top: "2px",
     left: "2px",
     borderImageSource: `url("data:image/svg+xml,${BorderImage({
-      color: "#16C973",
+      color: colors.neon["300"].toString(),
       isPressed: true,
     })}")`,
   },
 };
 
 // use clipPath to "cut" corners
-export const cardPixelatedStyle = ({ color = "#202F20", pixelSize = 4, radius = 4 }: { color?: string, pixelSize?: number, radius?: number }) => ({
+export const cardPixelatedStyle = ({ color = colors.neon["700"].toString(), pixelSize = 4, radius = 4 }: { color?: string, pixelSize?: number, radius?: number }) => ({
   w: "full",
   bg: color,
   borderWidth: "0",
@@ -66,7 +69,7 @@ export const cardPixelatedStyle = ({ color = "#202F20", pixelSize = 4, radius = 
 })
 
 // use borderImage & borderImageOutset to display border with outset
-export const cardPixelatedStyleOutset = ({ color = "#202F20", borderImageWidth = 8 }: { color?: string, borderImageWidth?: number }) => ({
+export const cardPixelatedStyleOutset = ({ color = colors.neon["700"].toString(), borderImageWidth = 8 }: { color?: string, borderImageWidth?: number }) => ({
   w: "full",
   bg: color,
   borderWidth: "0",
