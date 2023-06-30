@@ -20,6 +20,7 @@ import {
   backward,
   forward,
 } from "@/hooks/media";
+import { generatePixelBorderPath } from "@/utils/ui";
 
 const slideAnim = keyframes`  
   0% {transform: translateX( 0%);}
@@ -73,7 +74,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
 
   return (
     <Flex
-      w={{ base: "300px", md: "140px" }}
+      w={{ base: "320px", md: "140px" }}
       h="36px"
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
@@ -103,6 +104,8 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
           },
         },
       }}
+      clipPath={`polygon(${generatePixelBorderPath()})`}
+
     >
       <Box
         className="mediaplayer-status"

@@ -1,4 +1,5 @@
 import BorderImage from "@/components/icons/BorderImage";
+import { generatePixelBorderPath } from "@/utils/ui";
 import { ComponentStyleConfig } from "@chakra-ui/react";
 
 export const Button: ComponentStyleConfig = {
@@ -44,6 +45,15 @@ export const Button: ComponentStyleConfig = {
           color: "#16C973",
           isPressed: true,
         })}")`,
+      },
+    },
+    pixelated: {
+      border: 0,
+      bg: "neon.700",
+      lineHeight: "1em",
+      clipPath: `polygon(${generatePixelBorderPath()})`,
+      _hover: {
+        bg: "neon.600",
       },
     },
     default: {},

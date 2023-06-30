@@ -9,10 +9,7 @@ import {
 import { ReactNode } from "react";
 import { IsMobile } from "@/utils/ui";
 
-const clipCorner = (size: string) =>
-  `polygon(${size} 0%, calc(100% - ${size}) 0%, 100% ${size}, 100% calc(100% - ${size}), calc(100% - ${size}) 100%, ${size} 100%, 0% calc(100% - ${size}), 0% ${size})`;
-const clipBottomCorner = (size: string) =>
-  `polygon(0% 0%, calc(100%) 0%, 100% 0%, 100% calc(100% - ${size}), calc(100% - ${size}) 100%, ${size} 100%, 0% calc(100% - ${size}), 0% ${size})`;
+import { generatePixelBorderPath } from "@/utils/ui";
 
 const HeaderButton = forwardRef<ButtonProps, "button">(
   ({ children, ...props }: { children?: ReactNode } & StyleProps, ref) => (
@@ -25,7 +22,7 @@ const HeaderButton = forwardRef<ButtonProps, "button">(
       }}
       p={IsMobile() ? "6px" : "6px 12px"}
       bgColor="neon.700"
-      clipPath={IsMobile() ? clipBottomCorner("6px") : clipCorner("8px")}
+      clipPath={`polygon(${generatePixelBorderPath()})`}
     >
       {children}
     </Box>

@@ -1,6 +1,6 @@
 import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
 import BorderImage from "@/components/icons/BorderImage";
-import { cardStyle } from "../styles";
+import { cardStyle, cardPixelatedStyle } from "../styles";
 
 export const Card: ComponentMultiStyleConfig = {
   parts: ["container", "header", "body", "footer"],
@@ -31,6 +31,14 @@ export const Card: ComponentMultiStyleConfig = {
         py: "12px",
       },
     },
+    pixelated: {
+      container: {
+        ...cardPixelatedStyle({})
+      },
+      // body:{
+      //   bg:"neon.700"
+      // }
+    }
   },
   defaultProps: {
     variant: "primary",

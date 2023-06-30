@@ -7,6 +7,8 @@ import {
   HStack,
   Spacer,
   Divider,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
@@ -53,6 +55,7 @@ import {
 } from "@/hooks/state";
 import { Inventory } from "@/components/Inventory";
 import AlertMessage from "@/components/AlertMessage";
+import { cardPixelatedStyle } from "@/theme/styles";
 
 enum MarketMode {
   Buy,
@@ -139,30 +142,32 @@ export default function Market() {
         <Content>
           <VStack w="100%" h="100%">
             {/* <Inventory pb="20px" /> */}
-            <VStack w="100%" rounded={6} bg="neon.700" p={6} mb={6}>
-              <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
-                <Image
-                  src={`/images/drugs/${drug.slug}.png`}
-                  alt={drug.name}
-                  fill={true}
-                  objectFit="contain"
-                  style={{ margin: "auto" }}
-                />
-              </Box>
-              <HStack w="100%" justifyContent="space-between" fontSize="16px">
-                <Text>${drug ? locationMenu[drug.name].price : "???"}</Text>
-                <Text
-                  color={
-                    inventory.drugs[drug.name].quantity > 0
-                      ? "yellow.400"
-                      : "neon.500"
-                  }
-                >
-                  <Bag mr={1} />
-                  {inventory.drugs[drug.name].quantity}
-                </Text>
-              </HStack>
-            </VStack>
+            <Card variant="pixelated" p={6} mb={6}>
+              <VStack w="full">
+                <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
+                  <Image
+                    src={`/images/drugs/${drug.slug}.png`}
+                    alt={drug.name}
+                    fill={true}
+                    objectFit="contain"
+                    style={{ margin: "auto" }}
+                  />
+                </Box>
+                <HStack w="100%" justifyContent="space-between" fontSize="16px">
+                  <Text>${drug ? locationMenu[drug.name].price : "???"}</Text>
+                  <Text
+                    color={
+                      inventory.drugs[drug.name].quantity > 0
+                        ? "yellow.400"
+                        : "neon.500"
+                    }
+                  >
+                    <Bag mr={1} />
+                    {inventory.drugs[drug.name].quantity}
+                  </Text>
+                </HStack>
+              </VStack>
+            </Card>
 
             <Tabs
               w="100%"
@@ -171,21 +176,9 @@ export default function Market() {
               index={marketMode}
               onChange={onTabsChange}
             >
-              <TabList>
-                <Tab
-                  color="neon.500"
-                  _selected={{ color: "neon.300", bg: "neon.700" }}
-                  rounded={6}
-                >
-                  BUY
-                </Tab>
-                <Tab
-                  color="neon.500"
-                  _selected={{ color: "neon.300", bg: "neon.700" }}
-                  rounded={6}
-                >
-                  SELL
-                </Tab>
+              <TabList >
+                <Tab>BUY</Tab>
+                <Tab>SELL</Tab>
               </TabList>
 
               <TabPanels mt={6}>
@@ -243,6 +236,8 @@ export default function Market() {
     )
   );
 }
+
+
 
 const QuantitySelector = ({
   type,
@@ -350,25 +345,9 @@ const QuantitySelector = ({
           value={quantity}
           onChange={onSlider}
         >
-          <SliderTrack
-            bg="neon.700"
-            height="30px"
-            rounded={6}
-            borderLeft="solid 5px var(--chakra-colors-neon-700)"
-            borderRight="solid 5px var(--chakra-colors-neon-700)"
-          >
-            <SliderFilledTrack
-              height="20px"
-              bg="neon.200"
-              rounded={4}
-              // bg="linear-gradient(to right, #16c973 75%, #202f20 25%)"
-              // bgSize="16px 20px"
-              // bgRepeat="repeat-x"
-            />
+          <SliderTrack>
+            <SliderFilledTrack />
           </SliderTrack>
-          {/* <SliderThumb bg="transparent" outline="none">
-            <Box w="12px" h="20px" bg="neon.300" borderLeft="solid 2px #202f20"></Box>
-          </SliderThumb> */}
         </Slider>
 
         <Box
