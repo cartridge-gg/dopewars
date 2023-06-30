@@ -2,6 +2,11 @@ import { useBreakpointValue } from "@chakra-ui/react";
 
 export const IsMobile = () => useBreakpointValue([true, false]);
 
+
+type Point = {
+    x: number,
+    y: number
+}
 // from  https://pixelcorners.lukeb.co.uk/
 export function generatePixelBorderPath(radius = 4, pixelSize = 4) {
     const points = generatePoints(radius, pixelSize);
@@ -22,7 +27,7 @@ function generateInnerPath(radius: number, pixelSize: number, offset: number, re
     return generatePath(corners, reverse);
 }
 
-function generatePath(coords, reverse = false) {
+function generatePath(coords: Point[], reverse = false) {
     const mirroredCoords = mirrorCoords(coords);
 
     return (reverse ? mirroredCoords : mirroredCoords.reverse())
@@ -42,11 +47,9 @@ function generatePoints(radius: number, pixelSize: number, offset = 0) {
 
     for (let i = 270; i > 225; i--) {
         const x =
-            parseInt(radius * Math.sin((2 * Math.PI * i) / 360) + radius + 0.5) *
-            pixelSize;
+        Math.floor(radius * Math.sin((2 * Math.PI * i) / 360) + radius + 0.5) * pixelSize;
         const y =
-            parseInt(radius * Math.cos((2 * Math.PI * i) / 360) + radius + 0.5) *
-            pixelSize;
+        Math.floor(radius * Math.cos((2 * Math.PI * i) / 360) + radius + 0.5) * pixelSize;
 
         if (x !== lastCoords.x || y !== lastCoords.y) {
             lastCoords.x = x;
@@ -65,7 +68,7 @@ function generatePoints(radius: number, pixelSize: number, offset = 0) {
     return corners;
 }
 
-function flipCoords(coords: any[]) {
+function flipCoords(coords: Point[]) {
     return [
         ...coords,
         ...coords.map(({ x, y }) => ({ x: y, y: x })).reverse(),
@@ -74,13 +77,13 @@ function flipCoords(coords: any[]) {
     });
 }
 
-function insetCoords(coords: any[], pixelSize: number, offset: number) {
+function insetCoords(coords: Point[], pixelSize: number, offset: number) {
     return coords
         .map(({ x, y }) => ({
             x: x + pixelSize * offset,
             y: y + pixelSize * Math.floor(offset / 2),
         }))
-        .reduce((ret, item) => {
+        .reduce((ret: Point[], item) => {
             if (ret.length > 0 && ret[ret.length - 1].x === ret[ret.length - 1].y) {
                 return ret;
             }
@@ -91,8 +94,8 @@ function insetCoords(coords: any[], pixelSize: number, offset: number) {
         }, []);
 }
 
-function mergeCoords(coords: any[]) {
-    return coords.reduce((result, point, index) => {
+function mergeCoords(coords: Point[]) {
+    return coords.reduce((result: Point[], point: Point, index: number) => {
         if (
             index !== coords.length - 1 &&
             point.x === 0 &&
@@ -119,8 +122,8 @@ function mergeCoords(coords: any[]) {
     }, []);
 }
 
-function addCorners(coords: any[]) {
-    return coords.reduce((result, point, i) => {
+function addCorners(coords: Point[]) {
+    return coords.reduce((result: Point[], point: Point, i: number) => {
         result.push(point);
 
         if (
@@ -139,7 +142,7 @@ function addCorners(coords: any[]) {
     }, []);
 }
 
-function mirrorCoords(coords: any[], offset = 0) {
+function mirrorCoords(coords: Point[], offset = 0) {
     return [
         ...coords.map(({ x, y }) => ({
             x: offset ? `${x + offset}px` : `${x}px`,
