@@ -25,7 +25,8 @@ const CrtEffect = () => {
         opacity: 0,
         zIndex: "overlay",
         pointerEvents: "none",
-        animation: `${flicker} 0.1s infinite`,
+        // performance issues ?
+        // animation: `${flicker} 0.1s infinite`,
       }}
       //scanlines
       _before={{
