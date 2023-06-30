@@ -38,6 +38,13 @@ export const initMediaStore = async () => {
         src: `/medias/${media.filename}`,
         html5: true,
         preload: true,
+        onend: () => {
+          const state = useMediaStore.getState();
+          useMediaStore.setState((state) => ({
+            currentIndex: (state.currentIndex + 1) % state.medias.length,
+          }));
+          play();
+        },
       }),
     });
   }
@@ -62,19 +69,17 @@ export const play = () => {
   )
     return;
 
+  // force all other sounds to stop
+  for (let media of state.medias) {
+    if (media.sound?.playing()) {
+      media.sound?.stop();
+    }
+  }
+
+  // play sound
   if (!state.medias[state.currentIndex].sound?.playing()) {
     state.medias[state.currentIndex].sound?.play();
   }
-
-  // play next when sound ends
-  state.medias[state.currentIndex].sound?.on("end", () => {
-    const state = useMediaStore.getState();
-
-    useMediaStore.setState((state) => ({
-      currentIndex: (state.currentIndex + 1) % state.medias.length,
-    }));
-    play();
-  });
 
   useMediaStore.setState((state) => ({
     isPlaying: true,
