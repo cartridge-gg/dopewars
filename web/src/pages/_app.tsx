@@ -5,6 +5,7 @@ import {
   StarknetConfig,
   StarknetProvider,
 } from "@starknet-react/core";
+import { RpcProvider, Account } from "starknet";
 import type { AppProps } from "next/app";
 import theme from "../theme";
 import ControllerConnector from "@cartridge/connector";
@@ -27,6 +28,8 @@ export const argentConnector = new InjectedConnector({
 });
 export const connectors = [controllerConnector as any, argentConnector];
 
+const provider = new RpcProvider({ nodeUrl: "http://localhost:5050" });
+
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } =
     useKonamiCode(starkpimpSequence);
@@ -42,7 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
   return (
-    <StarknetProvider connectors={connectors}>
+    <StarknetProvider connectors={connectors} defaultProvider={provider}>
       <ChakraProvider theme={theme}>
         <Fonts />
         <NextHead>
