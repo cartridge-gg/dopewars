@@ -13,13 +13,12 @@ import { Clock, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
-import { startGame, useGameStore } from "@/hooks/state";
+import { useGameStore } from "@/hooks/state";
 import { useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
-import Leaderboard from "@/components/Leaderboard";
 
 export default function Home() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function Home() {
           href="https://www.youtube.com/watch?v=vKOB3sssTy0"
           target="_blank"
           style={{
-            marginTop: "30px",
+            marginTop:"30px"
           }}
         >
           <Button variant="pixelated">CREDITS</Button>
@@ -43,26 +42,44 @@ export default function Home() {
     >
       <Content>
         <VStack w="full" gap="20px">
+          <Text textStyle="subheading" fontSize="13px">
+            My Games
+          </Text>
+
           <Card variant="pixelated">
             <VStack w="full" p="30px 20px 20px 20px" gap="20px">
-              <Button
-                w="full"
-                onClick={() => {
-                  startGame();
-                  router.push("/0xgame/travel");
-                }}
-              >
-                Quick play
+              <Text color="neon.500" fontSize="14px">
+                YOU HAVE NO GAMES
+              </Text>
+              <Button w="full" onClick={() => router.push("/create")}>
+                Create
               </Button>
             </VStack>
           </Card>
-          <VStack w="full" gap="20px">
-            <Text>HALL OF FAME</Text>
-            <Leaderboard
-              css={{
-                maxHeight: "50vh",
-                overflowY: "auto",
-              }}
+          <Text textStyle="subheading" fontSize="13px" pt="15px">
+            AVAILABLE GAMES
+          </Text>
+          <VStack w="full" gap="12px">
+            <Game
+              name="$$ FA$TE$T POSSILBE MAP $$"
+              startTime="15m"
+              joined={5}
+              max={6}
+              onClick={() => router.push("/0xdead")}
+            />
+            <Game
+              name="3V3 BGH @ CABLE ONLY!!!"
+              startTime="26m"
+              joined={2}
+              max={6}
+              onClick={() => router.push("/0xdead")}
+            />
+            <Game
+              name="1V1 MAX BET"
+              startTime="15m"
+              joined={1}
+              max={2}
+              onClick={() => router.push("/0xdead")}
             />
           </VStack>
         </VStack>

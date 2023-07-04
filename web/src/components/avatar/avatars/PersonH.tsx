@@ -37,7 +37,7 @@ export const PersonH = ({ color, hasCrown }: AvatarPathProps) => {
           />
         </g>
       ) : (
-        <g clip-path="url(#clip0_2654_240851)">
+        <g clipPath="url(#clip0_2654_240851)">
           <path
             fillRule="evenodd"
             clipRule="evenodd"

@@ -22,6 +22,7 @@ export interface LayoutProps {
   headerImage: string;
   headerImageMaxWidth: string;
   children: ReactNode;
+  footer: ReactNode;
 }
 
 import CrtEffect from "./CrtEffect";
@@ -35,6 +36,7 @@ const Layout = ({
   headerImage,
   headerImageMaxWidth,
   children,
+  footer,
   ...props
 }: Partial<LayoutProps> & StyleProps) => {
   const isMobile = IsMobile();
@@ -86,6 +88,7 @@ const Layout = ({
               />
             </Box>
           )}
+          {!IsMobile() && footer && footer}
         </VStack>
         <VStack
           flex={map && IsMobile() ? "0" : "1"}
