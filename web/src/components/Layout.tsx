@@ -67,7 +67,7 @@ const Layout = ({
           position="relative"
         >
           <Title title={title} prefixTitle={prefixTitle} hasMap={!!map} />
-          <Flex position="absolute" top="0" boxSize="full" justify="center">
+          <Flex position="absolute" boxSize="full" justify="center">
             {map}
           </Flex>
           {headerImage && !isMobile && (

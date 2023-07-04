@@ -39,7 +39,7 @@ export default function Turn() {
     <Layout
       title={`Day ${turns.current}`}
       prefixTitle="End of"
-      headerImage="/images/knife.png"
+      headerImage="/images/sunset.png"
     >
       <Content gap="30px">
         <VStack w="full">
