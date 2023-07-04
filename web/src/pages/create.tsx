@@ -31,7 +31,7 @@ export default function Create() {
     <Layout
       title="New Game"
       prefixTitle="Start a"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/cash_roll.png');"
+      headerImage="/images/punk-girl.png"
     >
       <Content>
         <UnorderedList variant="underline" w="full" userSelect="none">

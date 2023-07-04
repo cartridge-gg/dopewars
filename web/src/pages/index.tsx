@@ -25,8 +25,8 @@ export default function Home() {
   return (
     <Layout
       title="Roll Your Own"
-      prefixTitle="Built On Dojo"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/city.png');"
+      prefixTitle="Dope Wars:"
+      headerImage="/images/punk-girl.png"
     >
       <Content>
         <VStack w="full" gap="20px">

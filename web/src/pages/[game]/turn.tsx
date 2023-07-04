@@ -39,7 +39,7 @@ export default function Turn() {
     <Layout
       title={`Day ${turns.current}`}
       prefixTitle="End of"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/end.png');"
+      headerImage="/images/knife.png"
     >
       <Content gap="30px">
         <VStack w="full">

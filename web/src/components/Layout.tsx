@@ -20,6 +20,7 @@ export interface LayoutProps {
   prefixTitle: string;
   backgroundImage: string;
   headerImage: string;
+  headerImageMaxWidth: string;
   children: ReactNode;
 }
 
@@ -32,6 +33,7 @@ const Layout = ({
   map,
   backgroundImage,
   headerImage,
+  headerImageMaxWidth,
   children,
   ...props
 }: Partial<LayoutProps> & StyleProps) => {
@@ -74,6 +76,7 @@ const Layout = ({
               marginTop="1rem !important"
               width="80%"
               height="55vh"
+              maxWidth={headerImageMaxWidth ? headerImageMaxWidth : "480px"}
             >
               <Image
                 fill={true}
