@@ -5766,16 +5766,6 @@ sponge-case@^1.0.1:
   dependencies:
     tslib "^2.0.3"
 
-starknet@/Users/broody/development/starknet.js:
-  version "5.15.1"
-  dependencies:
-    "@noble/curves" "~1.0.0"
-    isomorphic-fetch "^3.0.0"
-    lossless-json "^2.0.8"
-    micro-starknet "~0.2.1"
-    pako "^2.0.4"
-    url-join "^4.0.1"
-
 starknet@^4.17.1, starknet@^4.22.0:
   version "4.22.0"
   resolved "https://registry.yarnpkg.com/starknet/-/starknet-4.22.0.tgz#8d0c628e2a8e868ee9b4757afe89f07b05ec55ff"
@@ -5791,6 +5781,17 @@ starknet@^4.17.1, starknet@^4.22.0:
     minimalistic-assert "^1.0.1"
     pako "^2.0.4"
     ts-custom-error "^3.3.1"
+    url-join "^4.0.1"
+
+"starknet@https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e":
+  version "5.15.1"
+  resolved "https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e"
+  dependencies:
+    "@noble/curves" "~1.0.0"
+    isomorphic-fetch "^3.0.0"
+    lossless-json "^2.0.8"
+    micro-starknet "~0.2.1"
+    pako "^2.0.4"
     url-join "^4.0.1"
 
 stop-iteration-iterator@^1.0.0:
