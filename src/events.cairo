@@ -1,5 +1,4 @@
-use dojo::interfaces::IWorldDispatcherTrait;
-use dojo::execution_context::Context;
+use dojo::world::{Context, IWorldDispatcherTrait};
 use serde::Serde;
 use array::{ArrayTrait, SpanTrait};
 

@@ -7,14 +7,11 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use dojo::executor::Executor;
-use dojo::world::World;
 use dojo::test_utils::spawn_test_world;
-use dojo::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
-use rollyourown::components::location::{Location, LocationComponent};
+use rollyourown::components::location::{location, Location};
 use rollyourown::tests::create::{spawn_game, spawn_location, spawn_player};
 
 #[test]
@@ -29,7 +26,7 @@ fn test_travel() {
     travel_calldata.append(game_id);
     travel_calldata.append(location_one);
 
-    world.execute('Travel'.into(), travel_calldata.span());
+    world.execute('travel'.into(), travel_calldata.span());
 
     let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'no player location');
@@ -41,7 +38,7 @@ fn test_travel() {
     travel_calldata.append(game_id);
     travel_calldata.append(location_two);
 
-    world.execute('Travel'.into(), travel_calldata.span());
+    world.execute('travel'.into(), travel_calldata.span());
 
     let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'no player location');

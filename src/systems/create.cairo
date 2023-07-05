@@ -1,9 +1,11 @@
 #[system]
-mod CreateLocation {
+mod create_location {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
     use debug::PrintTrait;
+
+    use dojo::world::Context;
 
     use rollyourown::events::{emit, LocationCreated};
     use rollyourown::components::risks::Risks;
@@ -25,16 +27,16 @@ mod CreateLocation {
         arrested_risk: u8
     ) -> u32 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = ctx.caller_account.into();
+        let player_id: felt252 = ctx.origin.into();
 
         let game_sk: Query = game_id.into();
-        let game = get !(ctx, game_sk, Game);
+        let game = get !(ctx.world, game_sk, Game);
         assert(game.creator == player_id, 'only creator');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         let location_id = ctx.world.uuid();
         set !(
-            ctx,
+            ctx.world,
             (game_id, location_id).into(),
             (
                 Location {
@@ -56,7 +58,7 @@ mod CreateLocation {
             }
             let quantity = 1000;
             let cash = 100 * SCALING_FACTOR;
-            set !(ctx, (game_id, location_id, i).into(), (Market { cash, quantity }));
+            set !(ctx.world, (game_id, location_id, i).into(), (Market { cash, quantity }));
             i += 1;
         }
 
@@ -70,9 +72,11 @@ mod CreateLocation {
 
 
 #[system]
-mod CreateGame {
+mod create_game {
     use array::ArrayTrait;
     use traits::Into;
+
+    use dojo::world::Context;
 
     use rollyourown::events::{emit, GameCreated};
     use rollyourown::components::game::Game;
@@ -84,11 +88,11 @@ mod CreateGame {
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
     ) -> (u32, felt252) {
-        let player_id: felt252 = ctx.caller_account.into();
+        let player_id: felt252 = ctx.origin.into();
 
         let game_id = ctx.world.uuid();
         set !(
-            ctx,
+            ctx.world,
             game_id.into(),
             (Game {
                 game_id,
@@ -103,7 +107,7 @@ mod CreateGame {
         );
 
         set !(
-            ctx,
+            ctx.world,
             (game_id, player_id).into(),
             (
                 Stats {
