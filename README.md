@@ -23,8 +23,8 @@ sozo build
 # update the world address in Scarb.toml
 sozo migrate
 
-# Create a game, execute calldata params are defined in SpawnGame system
-sozo execute SpawnGame --calldata 1686521389,2,30,1
+# Create a game, execute calldata params are defined in create_game system
+sozo execute create_game --calldata 1686521389,2,30
 
 # View the schema of the Game Component
 sozo component schema Game
@@ -33,7 +33,6 @@ sozo component schema Game
 >    max_players: usize
 >    num_players: usize
 >    max_turns: usize
->    max_locations: usize
 >    is_finished: bool
 >    creator: u250
 > }
@@ -44,14 +43,13 @@ sozo component entity Game 0
 > 0x2
 > 0x1
 > 0x1e
-> 0x1
 > 0x0
 > 0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0
 
-# Try other commands like SpawnLocation and travel/trade
+# Try other commands like join_game and travel/trade
 
 # Start indexer, graphql endpoint at http://localhost:8080
-torii --world-address 0x7f1d6c1b15e03673062d8356dc1174d5d85c310479ec49fe781e8bf89e4c4f8 --manifest path_to_target/manifest.json
+torii --world-address 0x7d17bb24b59cb371c9ca36b79efca27fe53318e26340df3d8623dba5a7b9e5f --manifest path_to_target/manifest.json
 
 ```
 
