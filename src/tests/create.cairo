@@ -1,8 +1,7 @@
-use traits::Into;
+use traits::{Into, TryInto};
 use core::result::ResultTrait;
 use array::{ArrayTrait, SpanTrait};
 use option::OptionTrait;
-use traits::TryInto;
 use box::BoxTrait;
 use clone::Clone;
 use debug::PrintTrait;
@@ -11,26 +10,24 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo::interfaces::{
-    IWorldDispatcher, IWorldDispatcherTrait, IComponentLibraryDispatcher, IComponentDispatcherTrait,
-    ISystemLibraryDispatcher, ISystemDispatcherTrait
+    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher, 
+    ISystemDispatcherTrait
 };
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use dojo::executor::Executor;
-use dojo::world::World;
 use dojo::test_utils::spawn_test_world;
-use dojo::auth::systems::{Route, RouteTrait, GrantAuthRole};
 
-use rollyourown::components::game::{Game, GameComponent};
-use rollyourown::components::market::{Market, MarketComponent};
-use rollyourown::components::player::{Stats, StatsComponent};
-use rollyourown::components::drug::{Drug, DrugComponent};
-use rollyourown::components::player::{Cash, CashComponent};
-use rollyourown::components::location::{Location, LocationComponent};
-use rollyourown::components::risks::{Risks, RisksComponent};
-use rollyourown::systems::travel::Travel;
-use rollyourown::systems::trade::{Buy, Sell};
-use rollyourown::systems::join::JoinGame;
-use rollyourown::systems::create::{CreateGame, CreateLocation};
+use rollyourown::components::game::{game, Game};
+use rollyourown::components::market::{market, Market};
+use rollyourown::components::player::{stats, Stats};
+use rollyourown::components::drug::{drug, Drug};
+use rollyourown::components::player::{cash, Cash};
+use rollyourown::components::location::{location, Location};
+use rollyourown::components::risks::{risks, Risks};
+use rollyourown::systems::travel::travel;
+use rollyourown::systems::trade::{buy, sell};
+use rollyourown::systems::join::join_game;
+use rollyourown::systems::create::{create_game, create_location};
 use rollyourown::constants::SCALING_FACTOR;
 
 const START_TIME: u64 = 0;
@@ -45,51 +42,30 @@ const ARRESTED_RISK: u8 = 6;
 
 fn spawn_game() -> (ContractAddress, felt252, felt252) {
     let mut components = array::ArrayTrait::new();
-    components.append(GameComponent::TEST_CLASS_HASH);
-    components.append(StatsComponent::TEST_CLASS_HASH);
-    components.append(CashComponent::TEST_CLASS_HASH);
-    components.append(LocationComponent::TEST_CLASS_HASH);
-    components.append(RisksComponent::TEST_CLASS_HASH);
-    components.append(MarketComponent::TEST_CLASS_HASH);
-    components.append(DrugComponent::TEST_CLASS_HASH);
+    components.append(game::TEST_CLASS_HASH);
+    components.append(stats::TEST_CLASS_HASH);
+    components.append(cash::TEST_CLASS_HASH);
+    components.append(location::TEST_CLASS_HASH);
+    components.append(risks::TEST_CLASS_HASH);
+    components.append(market::TEST_CLASS_HASH);
+    components.append(drug::TEST_CLASS_HASH);
 
     let mut systems = array::ArrayTrait::new();
-    systems.append(CreateGame::TEST_CLASS_HASH);
-    systems.append(CreateLocation::TEST_CLASS_HASH);
-    systems.append(JoinGame::TEST_CLASS_HASH);
-    systems.append(Travel::TEST_CLASS_HASH);
-    systems.append(Buy::TEST_CLASS_HASH);
-    systems.append(Sell::TEST_CLASS_HASH);
+    systems.append(create_game::TEST_CLASS_HASH);
+    systems.append(create_location::TEST_CLASS_HASH);
+    systems.append(join_game::TEST_CLASS_HASH);
+    systems.append(travel::TEST_CLASS_HASH);
+    systems.append(buy::TEST_CLASS_HASH);
+    systems.append(sell::TEST_CLASS_HASH);
 
-    let mut routes = array::ArrayTrait::new();
-    routes.append(RouteTrait::new('CreateGame'.into(), 'GameWriter'.into(), 'Game'.into()));
-    routes.append(RouteTrait::new('CreateGame'.into(), 'StatsWriter'.into(), 'Stats'.into()));
-    routes.append(RouteTrait::new('CreateGame'.into(), 'CashWriter'.into(), 'Cash'.into()));
-    routes.append(RouteTrait::new('CreateGame'.into(), 'LocationWriter'.into(), 'Location'.into()));
-    routes
-        .append(
-            RouteTrait::new('CreateLocation'.into(), 'LocationWriter'.into(), 'Location'.into())
-        );
-    routes.append(RouteTrait::new('CreateLocation'.into(), 'MarketWriter'.into(), 'Market'.into()));
-    routes.append(RouteTrait::new('CreateLocation'.into(), 'RisksWriter'.into(), 'Risks'.into()));
-    routes.append(RouteTrait::new('Travel'.into(), 'LocationWriter'.into(), 'Location'.into()));
-    routes.append(RouteTrait::new('Travel'.into(), 'StatsWriter'.into(), 'Stats'.into()));
-    routes.append(RouteTrait::new('Travel'.into(), 'CashWriter'.into(), 'Cash'.into()));
-    routes.append(RouteTrait::new('Buy'.into(), 'MarketWriter'.into(), 'Market'.into()));
-    routes.append(RouteTrait::new('Buy'.into(), 'CashWriter'.into(), 'Cash'.into()));
-    routes.append(RouteTrait::new('Buy'.into(), 'DrugWriter'.into(), 'Drug'.into()));
-    routes.append(RouteTrait::new('Sell'.into(), 'MarketWriter'.into(), 'Market'.into()));
-    routes.append(RouteTrait::new('Sell'.into(), 'CashWriter'.into(), 'Cash'.into()));
-    routes.append(RouteTrait::new('Sell'.into(), 'DrugWriter'.into(), 'Drug'.into()));
-
-    let world = spawn_test_world(components, systems, routes);
+    let world = spawn_test_world(components, systems);
 
     let mut spawn_game_calldata = array::ArrayTrait::<felt252>::new();
     spawn_game_calldata.append(START_TIME.into());
     spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
     spawn_game_calldata.append(MAX_LOCATIONS.into());
-    let mut res = world.execute('CreateGame'.into(), spawn_game_calldata.span());
+    let mut res = world.execute('create_game'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let (game_id, player_id) = serde::Serde::<(felt252, felt252)>::deserialize(ref res)
@@ -113,7 +89,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut spawn_player_calldata = array::ArrayTrait::<felt252>::new();
     spawn_player_calldata.append(game_id);
 
-    let mut res = world.execute('JoinGame'.into(), spawn_player_calldata.span());
+    let mut res = world.execute('join_game'.into(), spawn_player_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
@@ -147,7 +123,7 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     spawn_location_calldata.append(MUGGED_RISK.into());
     spawn_location_calldata.append(ARRESTED_RISK.into());
 
-    let mut res = world.execute('CreateLocation'.into(), spawn_location_calldata.span());
+    let mut res = world.execute('create_location'.into(), spawn_location_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
     let location_id = serde::Serde::<felt252>::deserialize(ref res)

@@ -9,13 +9,10 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use starknet::contract_address_const;
 use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
-use dojo::interfaces::{IWorldDispatcher, IWorldDispatcherTrait};
-use dojo::execution_context::Context;
-use dojo::auth::components::AuthRole;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::world::Context;
 use dojo::string::ShortStringTrait;
 use dojo::integer::u250Trait;
-use dojo::executor::Executor;
-use dojo::world::World;
 
 use rollyourown::components::{
     player::Cash, drug::Drug, location::Location, market::{Market, MarketTrait}

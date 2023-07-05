@@ -1,8 +1,10 @@
 #[system]
-mod JoinGame {
+mod join_game {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
+
+    use dojo::world::Context;
 
     use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
@@ -10,17 +12,17 @@ mod JoinGame {
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = ctx.caller_account.into();
+        let player_id: felt252 = ctx.origin.into();
 
         let game_sk: Query = game_id.into();
-        let game = get !(ctx, game_sk, Game);
+        let game = get !(ctx.world, game_sk, Game);
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         // spawn player into game
         set !(
-            ctx,
+            ctx.world,
             (game_id, player_id).into(),
             (
                 Stats {
@@ -35,7 +37,7 @@ mod JoinGame {
 
         // update num players joined
         set !(
-            ctx,
+            ctx.world,
             game_sk,
             (Game {
                 game_id,
