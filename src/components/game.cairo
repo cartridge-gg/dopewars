@@ -8,7 +8,6 @@ struct Game {
     max_players: usize,
     num_players: usize,
     max_turns: usize,
-    max_locations: usize,
     is_finished: bool,
     creator: felt252,
 }

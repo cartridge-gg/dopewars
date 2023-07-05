@@ -1,10 +1,10 @@
-import { useToken } from '@chakra-ui/react'
+import { useToken } from "@chakra-ui/react";
 import BorderImage from "@/components/icons/BorderImage";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 
 import { generatePixelBorderPath } from "@/utils/ui";
 
-import colors from './colors';
+import colors from "./colors";
 
 //global styles
 export const styles = {
@@ -50,7 +50,15 @@ export const cardStyle = {
 };
 
 // use clipPath to "cut" corners
-export const cardPixelatedStyle = ({ color = colors.neon["700"].toString(), pixelSize = 4, radius = 4 }: { color?: string, pixelSize?: number, radius?: number }) => ({
+export const cardPixelatedStyle = ({
+  color = colors.neon["700"].toString(),
+  pixelSize = 4,
+  radius = 4,
+}: {
+  color?: string;
+  pixelSize?: number;
+  radius?: number;
+}) => ({
   w: "full",
   bg: color,
   borderWidth: "0",
@@ -65,11 +73,17 @@ export const cardPixelatedStyle = ({ color = colors.neon["700"].toString(), pixe
     left: 0,
     borderImageSource: `none`,
   },
-  clipPath: `polygon(${generatePixelBorderPath(radius, pixelSize)})`
-})
+  clipPath: `polygon(${generatePixelBorderPath(radius, pixelSize)})`,
+});
 
 // use borderImage & borderImageOutset to display border with outset
-export const cardPixelatedStyleOutset = ({ color = colors.neon["700"].toString(), borderImageWidth = 8 }: { color?: string, borderImageWidth?: number }) => ({
+export const cardPixelatedStyleOutset = ({
+  color = colors.neon["700"].toString(),
+  borderImageWidth = 8,
+}: {
+  color?: string;
+  borderImageWidth?: number;
+}) => ({
   w: "full",
   bg: color,
   borderWidth: "0",
@@ -94,7 +108,7 @@ export const cardPixelatedStyleOutset = ({ color = colors.neon["700"].toString()
       color,
     })}")`,
   },
-})
+});
 
 //layer styles
 export const layerStyles = {
@@ -124,8 +138,3 @@ export const textStyles = {
     letterSpacing: "0.25em",
   },
 };
-
-
-
-
-

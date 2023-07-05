@@ -5783,10 +5783,9 @@ starknet@^4.17.1, starknet@^4.22.0:
     ts-custom-error "^3.3.1"
     url-join "^4.0.1"
 
-starknet@^5.14.1:
-  version "5.14.1"
-  resolved "https://registry.yarnpkg.com/starknet/-/starknet-5.14.1.tgz#97fa5f99c4c24e42ffa315cfda525461d09d6087"
-  integrity sha512-EtJwQ6RmFsqSLGuMP+PRp4DwNsMYXy63HDnd1plLCdQKl3FMYajqNKf5RbDl03uGU0uE5ctGp+OW3firHuv6IA==
+"starknet@https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e":
+  version "5.15.1"
+  resolved "https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e"
   dependencies:
     "@noble/curves" "~1.0.0"
     isomorphic-fetch "^3.0.0"

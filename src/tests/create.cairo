@@ -10,7 +10,7 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo::interfaces::{
-    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher, 
+    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher,
     ISystemDispatcherTrait
 };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -33,7 +33,6 @@ use rollyourown::constants::SCALING_FACTOR;
 const START_TIME: u64 = 0;
 const MAX_PLAYERS: usize = 2;
 const MAX_TURNS: usize = 10;
-const MAX_LOCATIONS: usize = 3;
 const TRAVEL_RISK: u8 = 10;
 const HURT_RISK: u8 = 9;
 const KILLED_RISK: u8 = 8;
@@ -64,7 +63,6 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     spawn_game_calldata.append(START_TIME.into());
     spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
-    spawn_game_calldata.append(MAX_LOCATIONS.into());
     let mut res = world.execute('create_game'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
@@ -77,7 +75,6 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     assert(game.start_time == START_TIME, 'start time mismatch');
     assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
-    assert(game.max_locations == MAX_LOCATIONS, 'max locations mismatch');
     assert(game.is_finished == false, 'game is finished mismatch');
 
     (world.contract_address, game_id, player_id)

@@ -105,7 +105,6 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
         },
       }}
       clipPath={`polygon(${generatePixelBorderPath()})`}
-
     >
       <Box
         className="mediaplayer-status"
