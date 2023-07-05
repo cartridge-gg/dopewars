@@ -33,7 +33,7 @@ export default function Home() {
           href="https://www.youtube.com/watch?v=vKOB3sssTy0"
           target="_blank"
           style={{
-            marginTop:"30px"
+            marginTop: "30px",
           }}
         >
           <Button variant="pixelated">CREDITS</Button>

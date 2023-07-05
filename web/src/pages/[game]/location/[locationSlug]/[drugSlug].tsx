@@ -176,7 +176,7 @@ export default function Market() {
               index={marketMode}
               onChange={onTabsChange}
             >
-              <TabList >
+              <TabList>
                 <Tab>BUY</Tab>
                 <Tab>SELL</Tab>
               </TabList>
@@ -236,8 +236,6 @@ export default function Market() {
     )
   );
 }
-
-
 
 const QuantitySelector = ({
   type,

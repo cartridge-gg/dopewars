@@ -47,7 +47,6 @@ mod join_game {
                 max_turns: game.max_turns,
                 is_finished: false,
                 creator: game.creator,
-                max_locations: game.max_locations
             })
         );
 

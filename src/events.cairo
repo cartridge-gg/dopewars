@@ -23,7 +23,6 @@ struct GameCreated {
     start_time: u64,
     max_turns: usize,
     max_players: usize,
-    max_locations: usize
 }
 
 #[derive(Drop, Serde)]

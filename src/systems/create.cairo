@@ -86,7 +86,7 @@ mod create_game {
     use rollyourown::constants::SCALING_FACTOR;
 
     fn execute(
-        ctx: Context, start_time: u64, max_players: usize, max_turns: usize, max_locations: usize
+        ctx: Context, start_time: u64, max_players: usize, max_turns: usize
     ) -> (u32, felt252) {
         let player_id: felt252 = ctx.origin.into();
 
@@ -102,7 +102,6 @@ mod create_game {
                 max_turns,
                 is_finished: false,
                 creator: player_id,
-                max_locations
             })
         );
 
@@ -123,7 +122,7 @@ mod create_game {
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(
             @GameCreated {
-                game_id, creator: player_id, start_time, max_players, max_turns, max_locations
+                game_id, creator: player_id, start_time, max_players, max_turns
             },
             ref values
         );

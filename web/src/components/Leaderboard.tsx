@@ -12,9 +12,8 @@ import { Bag, IconProps } from "./icons";
 
 import React, { ReactNode } from "react";
 import { Avatar } from "./avatar/Avatar";
-import { AvatarName , avatars} from "./avatar/avatars";
+import { AvatarName, avatars } from "./avatar/avatars";
 import colors from "@/theme/colors";
-
 
 const USDFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -22,10 +21,8 @@ const USDFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-
-
 const randomAvatar = (): AvatarName => {
-  const avatarKeys = Object.keys(avatars)
+  const avatarKeys = Object.keys(avatars);
   const randomAvatar = Math.floor(Math.random() * avatarKeys.length);
   return avatarKeys[randomAvatar] as AvatarName;
 };
@@ -184,7 +181,9 @@ const Leaderboard = ({ ...props }: StyleProps & ListProps) => {
                 />
               </Box>
 
-              <Text flexShrink={0}>{isMe ? `${i.name} (you)` : `${i.name}`}</Text>
+              <Text flexShrink={0}>
+                {isMe ? `${i.name} (you)` : `${i.name}`}
+              </Text>
               <Text
                 backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
                 backgroundSize="10px 10px"

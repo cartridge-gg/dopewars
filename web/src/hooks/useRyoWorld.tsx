@@ -1,13 +1,22 @@
-import { Account, CallData, shortString } from "starknet";
+import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
 import { useDojo } from "./dojo";
 import { TradeDirection } from "./state";
 
-interface RyoWorldInterface {
+export enum RyoEvents {
+  GameCreated = "GameCreated",
+  PlayerJoined = "PlayerJoined",
+  Traveled = "Traveled",
+  Bought = "Bought",
+  Sold = "Sold",
+  RandomEvent = "RandomEvent",
+}
+
+export interface RyoWorldInterface {
   create: (
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<void>;
+  ) => Promise<string>;
   join: (gameId: string) => Promise<void>;
   travel: (gameId: string, locationId: string) => Promise<void>;
   trade: (
@@ -19,26 +28,26 @@ interface RyoWorldInterface {
   ) => Promise<void>;
 }
 
-const useRyoWorld = (
-  account: Account,
-  worldAddress: string,
-): RyoWorldInterface => {
-  const { execute } = useDojo();
+export const useRyoWorld = (): RyoWorldInterface => {
+  const { execute, account } = useDojo();
 
   const create = async (
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
   ) => {
-    await execute("create", []);
+    const txn = await execute("create_game", [startTime, maxPlayers, maxTurns]);
+    const receipt = await account.getTransactionReceipt(txn);
+
+    return parseGameId(receipt);
   };
 
   const join = async (gameId: string) => {
-    await execute("join", []);
+    await execute("join_game", [gameId]);
   };
 
   const travel = async (gameId: string, locationId: string) => {
-    await execute("travel", []);
+    await execute("travel", [gameId, locationId]);
   };
 
   const trade = async (
@@ -48,7 +57,7 @@ const useRyoWorld = (
     quantity: number,
     direction: TradeDirection,
   ) => {
-    await execute("trade", []);
+    await execute("trade", [gameId, locationId, drugId, quantity, direction]);
   };
 
   return {
@@ -57,4 +66,17 @@ const useRyoWorld = (
     trade,
     travel,
   };
+};
+
+const parseGameId = (receipt: InvokeTransactionReceiptResponse): string => {
+  const event = receipt.events?.find(
+    (event) =>
+      shortString.decodeShortString(event.keys[0]) === RyoEvents.GameCreated,
+  );
+
+  if (!event) {
+    throw new Error("No GameCreated event found in receipt");
+  }
+
+  return num.toHexString(event.data[0]);
 };

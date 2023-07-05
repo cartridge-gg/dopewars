@@ -10,7 +10,7 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
 use dojo::interfaces::{
-    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher, 
+    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher,
     ISystemDispatcherTrait
 };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};

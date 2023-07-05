@@ -33,12 +33,12 @@ export const Card: ComponentMultiStyleConfig = {
     },
     pixelated: {
       container: {
-        ...cardPixelatedStyle({})
+        ...cardPixelatedStyle({}),
       },
       // body:{
       //   bg:"neon.700"
       // }
-    }
+    },
   },
   defaultProps: {
     variant: "primary",
