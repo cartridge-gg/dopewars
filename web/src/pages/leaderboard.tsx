@@ -6,16 +6,21 @@ import Layout from "@/components/Layout";
 import { Container } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
+import Leaderboard from "@/components/Leaderboard";
 
-export default function Leaderboard() {
+export default function LeaderboardPage() {
   const router = useRouter();
 
   return (
     <Layout
       title="LEADERBOARD"
-      prefixTitle="WEN"
+      prefixTitle="Welcome to the"
       backgroundColor={"transparent"}
-      backgroundImage="url('/images/knife.png')"
-    ></Layout>
+      headerImage="/images/will-smith-with-attitude.png"
+    >
+      <Content>
+        <Leaderboard />
+      </Content>
+    </Layout>
   );
 }

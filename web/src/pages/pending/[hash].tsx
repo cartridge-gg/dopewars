@@ -9,16 +9,17 @@ export default function Pending() {
 
   return (
     <Layout
-      title="Pending"
-      prefixTitle="You are"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/waiting.png');"
+      title="New game"
+      prefixTitle="Start a"
+      headerImage="/images/watch.png"
+      headerImageMaxWidth="240px"
     >
       <Content>
-        <VStack gap="24px">
+        <VStack gap="24px" height="60vh" justifyContent="center">
           <Image src="/images/loading.gif" alt="loading..." />
           <VStack>
             <Text>Transaction pending...</Text>
-            <Link>View on Starkscan</Link>
+            <Link color="yellow.400">View on Starkscan</Link>
           </VStack>
         </VStack>
       </Content>

@@ -23,5 +23,12 @@ export const List: ComponentMultiStyleConfig = {
         borderColor: "neon.200",
       },
     },
+    dotted: {
+      item: {
+        listStyleType: "none",
+        pt: "9px",
+        pb: "9px",
+      },
+    },
   },
 };

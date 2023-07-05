@@ -21,7 +21,7 @@ export default function Join() {
     <Layout
       title="The Lobby"
       prefixTitle="Welcome to"
-      backgroundImage="url('https://static.cartridge.gg/games/dope-wars/ryo/normies.png');"
+      headerImage="/images/will-smith-with-attitude.png"
     >
       <Content gap="20px" alignItems="flex-start">
         <UnorderedList w="100%" variant="underline">

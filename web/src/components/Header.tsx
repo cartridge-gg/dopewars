@@ -59,21 +59,20 @@ const Header = ({ back }: HeaderProps) => {
       justify="flex-end"
       zIndex="1"
     >
+      <HStack flex="1" justify="left">
+        {!isBackButtonVisible && (
+          <HeaderButton onClick={() => router.push("/")}>
+            <Home />
+          </HeaderButton>
+        )}
+        {isBackButtonVisible && (
+          <HeaderButton onClick={() => router.back()}>
+            <Arrow />
+          </HeaderButton>
+        )}
+      </HStack>
       {isConnected ? (
         <>
-          <HStack flex="1" justify="left">
-            {!isBackButtonVisible && (
-              <HeaderButton onClick={() => router.push("/")}>
-                <Home />
-              </HeaderButton>
-            )}
-            {isBackButtonVisible && (
-              <HeaderButton onClick={() => router.back()}>
-                <Arrow />
-              </HeaderButton>
-            )}
-          </HStack>
-
           <HStack flex="1" justify="center">
             <HStack
               h="full"

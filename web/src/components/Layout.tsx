@@ -20,7 +20,9 @@ export interface LayoutProps {
   prefixTitle: string;
   backgroundImage: string;
   headerImage: string;
+  headerImageMaxWidth: string;
   children: ReactNode;
+  footer: ReactNode;
 }
 
 import CrtEffect from "./CrtEffect";
@@ -32,7 +34,9 @@ const Layout = ({
   map,
   backgroundImage,
   headerImage,
+  headerImageMaxWidth,
   children,
+  footer,
   ...props
 }: Partial<LayoutProps> & StyleProps) => {
   const isMobile = IsMobile();
@@ -65,7 +69,7 @@ const Layout = ({
           position="relative"
         >
           <Title title={title} prefixTitle={prefixTitle} hasMap={!!map} />
-          <Flex position="absolute" top="0" boxSize="full" justify="center">
+          <Flex position="absolute" boxSize="full" justify="center">
             {map}
           </Flex>
           {headerImage && !isMobile && (
@@ -74,6 +78,7 @@ const Layout = ({
               marginTop="1rem !important"
               width="80%"
               height="55vh"
+              maxWidth={headerImageMaxWidth ? headerImageMaxWidth : "480px"}
             >
               <Image
                 fill={true}
@@ -83,6 +88,7 @@ const Layout = ({
               />
             </Box>
           )}
+          {!IsMobile() && footer && footer}
         </VStack>
         <VStack
           flex={map && IsMobile() ? "0" : "1"}
