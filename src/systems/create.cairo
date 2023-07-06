@@ -1,75 +1,4 @@
 #[system]
-mod create_location {
-    use traits::Into;
-    use box::BoxTrait;
-    use array::ArrayTrait;
-    use debug::PrintTrait;
-
-    use dojo::world::Context;
-
-    use rollyourown::events::{emit, LocationCreated};
-    use rollyourown::components::risks::Risks;
-    use rollyourown::components::game::Game;
-    use rollyourown::components::location::Location;
-    use rollyourown::components::market::Market;
-    use rollyourown::components::drug::Drug;
-    use rollyourown::constants::SCALING_FACTOR;
-
-    const MAX_PRODUCTS: u32 = 6;
-
-    fn execute(
-        ctx: Context,
-        game_id: u32,
-        travel_risk: u8,
-        hurt_risk: u8,
-        mugged_risk: u8,
-        arrested_risk: u8
-    ) -> u32 {
-        let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = ctx.origin.into();
-
-        let game_sk: Query = game_id.into();
-        let game = get !(ctx.world, game_sk, Game);
-        assert(game.creator == player_id, 'only creator');
-        assert(game.start_time >= block_info.block_timestamp, 'already started');
-
-        let location_id = ctx.world.uuid();
-        set !(
-            ctx.world,
-            (game_id, location_id).into(),
-            (
-                Location {
-                    id: location_id
-                    }, Risks {
-                    travel: travel_risk,
-                    hurt: hurt_risk,
-                    mugged: mugged_risk,
-                    arrested: arrested_risk,
-                }
-            )
-        );
-
-        let mut i: u32 = 0;
-        loop {
-            if i >= MAX_PRODUCTS {
-                break ();
-            }
-            let quantity = 1000;
-            let cash = 100 * SCALING_FACTOR;
-            set !(ctx.world, (game_id, location_id, i).into(), (Market { cash, quantity }));
-            i += 1;
-        }
-
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(@LocationCreated { game_id, location_id }, ref values);
-        emit(ctx, 'LocationCreated', values.span());
-
-        location_id
-    }
-}
-
-
-#[system]
 mod create_game {
     use array::ArrayTrait;
     use traits::Into;
@@ -80,8 +9,14 @@ mod create_game {
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Cash;
     use rollyourown::components::player::Stats;
-    use rollyourown::components::location::Location;
-    use rollyourown::constants::SCALING_FACTOR;
+    use rollyourown::components::risks::Risks;
+    use rollyourown::components::market::Market;
+    use rollyourown::components::drug::Drug;
+    use rollyourown::components::location::{Location, LocationId};
+    use rollyourown::constants::{
+        SCALING_FACTOR, MAX_LOCATIONS, MAX_PRODUCTS, TRAVEL_RISK, HURT_RISK, MUGGED_RISK,
+        ARRESTED_RISK, MARKET_CASH, MARKET_QUANTITY
+    };
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
@@ -115,19 +50,53 @@ mod create_game {
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0_u32
+                    id: LocationId::None(()).into()
                 }
             )
         );
 
-        // location entities
+        // TODO: spawn locations with risk profiles balanced
+        // with market pricing
+        let mut location_index: u8 = 1;
+        loop {
+            if location_index >= MAX_LOCATIONS {
+                break ();
+            }
 
+            set !(
+                ctx.world,
+                (game_id, location_index).into(),
+                (
+                    Location {
+                        id: location_index
+                        }, Risks {
+                        travel: TRAVEL_RISK,
+                        hurt: HURT_RISK,
+                        mugged: MUGGED_RISK,
+                        arrested: ARRESTED_RISK
+                    }
+                )
+            )
+
+            let mut drug_index: u8 = 0;
+            loop {
+                if drug_index >= MAX_PRODUCTS {
+                    break ();
+                }
+                set !(
+                    ctx.world,
+                    (game_id, location_index, drug_index).into(),
+                    (Market { cash: MARKET_CASH, quantity: MARKET_QUANTITY })
+                );
+                drug_index += 1;
+            }
+
+            location_index += 1;
+        }
 
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(
-            @GameCreated {
-                game_id, creator: player_id, start_time, max_players, max_turns
-            },
+            @GameCreated { game_id, creator: player_id, start_time, max_players, max_turns },
             ref values
         );
         emit(ctx, 'GameCreated', values.span());
