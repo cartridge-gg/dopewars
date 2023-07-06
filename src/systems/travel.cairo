@@ -15,7 +15,7 @@ mod travel {
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
-    fn execute(ctx: Context, game_id: u32, next_location_id: u32) -> bool {
+    fn execute(ctx: Context, game_id: u32, next_location_id: u8) -> bool {
         let game = get !(ctx.world, game_id.into(), Game);
         assert(game.tick(), 'game cannot progress');
 

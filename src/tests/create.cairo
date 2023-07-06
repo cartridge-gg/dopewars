@@ -27,7 +27,7 @@ use rollyourown::components::risks::{risks, Risks};
 use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};
 use rollyourown::systems::join::join_game;
-use rollyourown::systems::create::{create_game, create_location};
+use rollyourown::systems::create::create_game;
 use rollyourown::constants::SCALING_FACTOR;
 
 const START_TIME: u64 = 0;
@@ -38,7 +38,7 @@ const HURT_RISK: u8 = 9;
 const MUGGED_RISK: u8 = 7;
 const ARRESTED_RISK: u8 = 6;
 
-fn spawn_game() -> (ContractAddress, felt252, felt252) {
+fn spawn_game() -> (ContractAddress, u32, felt252) {
     let mut components = array::ArrayTrait::new();
     components.append(game::TEST_CLASS_HASH);
     components.append(stats::TEST_CLASS_HASH);
@@ -50,7 +50,6 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
 
     let mut systems = array::ArrayTrait::new();
     systems.append(create_game::TEST_CLASS_HASH);
-    systems.append(create_location::TEST_CLASS_HASH);
     systems.append(join_game::TEST_CLASS_HASH);
     systems.append(travel::TEST_CLASS_HASH);
     systems.append(buy::TEST_CLASS_HASH);
@@ -65,7 +64,7 @@ fn spawn_game() -> (ContractAddress, felt252, felt252) {
     let mut res = world.execute('create_game'.into(), spawn_game_calldata.span());
     assert(res.len() > 0, 'did not spawn');
 
-    let (game_id, player_id) = serde::Serde::<(felt252, felt252)>::deserialize(ref res)
+    let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
     let mut res = world.entity('Game'.into(), game_id.into(), 0, 0);
     assert(res.len() > 0, 'game not found');
@@ -108,55 +107,21 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     player_id
 }
 
-fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
-    let world = IWorldDispatcher { contract_address: world_address };
-
-    let mut spawn_location_calldata = array::ArrayTrait::<felt252>::new();
-    spawn_location_calldata.append(game_id);
-    spawn_location_calldata.append(TRAVEL_RISK.into());
-    spawn_location_calldata.append(HURT_RISK.into());
-    spawn_location_calldata.append(MUGGED_RISK.into());
-    spawn_location_calldata.append(ARRESTED_RISK.into());
-
-    let mut res = world.execute('create_location'.into(), spawn_location_calldata.span());
-    assert(res.len() > 0, 'did not spawn');
-
-    let location_id = serde::Serde::<felt252>::deserialize(ref res)
-        .expect('spawn deserialization failed');
-    let mut res = world.entity('Risks'.into(), (game_id, location_id).into(), 0, 0);
-    assert(res.len() > 0, 'loc not found');
-
-    let risks = serde::Serde::<Risks>::deserialize(ref res).expect('loc deserialization failed');
-    assert(risks.travel == TRAVEL_RISK, 'travel risk mismatch');
-    assert(risks.hurt == HURT_RISK, 'hurt risk mismatch');
-    assert(risks.mugged == MUGGED_RISK, 'mugged risk mismatch');
-    assert(risks.arrested == ARRESTED_RISK, 'arrested risk mismatch');
-
-    location_id
-}
 
 #[test]
 #[available_gas(100000000)]
-fn test_spawn_locations() {
+fn test_create_game() {
     let (world_address, game_id, _) = spawn_game();
-    let location_one = spawn_location(world_address, game_id);
-    let location_two = spawn_location(world_address, game_id);
 
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, location_one).into(), 0, 0);
+    }.entity('Location'.into(), (game_id, 0).into(), 0, 0);
     assert(res.len() > 0, 'no location 1');
 
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, location_two).into(), 0, 0);
+    }.entity('Location'.into(), (game_id, 1).into(), 0, 0);
     assert(res.len() > 0, 'no location 2');
-}
-
-#[test]
-#[available_gas(100000000)]
-fn test_spawn_player() {
-    let (world_address, game_id, _) = spawn_game(); //creator auto joins
 
     let (players, _) = IWorldDispatcher {
         contract_address: world_address

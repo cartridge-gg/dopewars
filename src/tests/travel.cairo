@@ -11,20 +11,19 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::components::location::{location, Location};
-use rollyourown::tests::create::{spawn_game, spawn_location, spawn_player};
+use rollyourown::components::location::{location, Location, LocationId};
+use rollyourown::tests::create::{spawn_game, spawn_player};
 
 #[test]
 #[available_gas(110000000)]
 fn test_travel() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
-    let location_one = spawn_location(world_address, game_id);
-    let location_two = spawn_location(world_address, game_id);
     let world = IWorldDispatcher { contract_address: world_address };
 
+    let bronx_id: u8 = LocationId::Bronx(()).into();
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
-    travel_calldata.append(game_id);
-    travel_calldata.append(location_one);
+    travel_calldata.append(game_id.into());
+    travel_calldata.append(bronx_id.into());
 
     world.execute('travel'.into(), travel_calldata.span());
 
@@ -32,11 +31,12 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id.into() == location_one, 'incorrect travel');
+    assert(location.id == LocationId::Bronx(()).into(), 'incorrect travel');
 
+    let queens_id: u8 = LocationId::Queens(()).into();
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
-    travel_calldata.append(game_id);
-    travel_calldata.append(location_two);
+    travel_calldata.append(game_id.into());
+    travel_calldata.append(queens_id.into());
 
     world.execute('travel'.into(), travel_calldata.span());
 
@@ -44,5 +44,5 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id.into() == location_two, 'incorrect travel');
+    assert(location.id == LocationId::Queens(()).into(), 'incorrect travel');
 }

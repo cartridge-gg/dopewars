@@ -7,7 +7,9 @@ mod join_game {
     use dojo::world::Context;
 
     use rollyourown::events::{emit, PlayerJoined};
-    use rollyourown::components::{game::Game, player::{Cash, Stats}, location::Location};
+    use rollyourown::components::game::Game;
+    use rollyourown::components::player::{Cash, Stats};
+    use rollyourown::components::location::{Location, LocationId};
     use rollyourown::constants::SCALING_FACTOR;
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
@@ -30,7 +32,7 @@ mod join_game {
                     }, Cash {
                     amount: 100 * SCALING_FACTOR // $100
                     }, Location {
-                    id: 0_u32
+                    id: LocationId::None(()).into()
                 }
             )
         );
