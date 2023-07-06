@@ -23,6 +23,7 @@ mod join_game {
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
+        let location_name = LocationTrait::random(seed);
         // spawn player into game
         set !(
             ctx.world,
@@ -35,7 +36,7 @@ mod join_game {
                     arrested: false,
                     turns_remaining: game.max_turns
                     }, Location {
-                    name: LocationTrait::random(seed)
+                    name: location_name
                 }
             )
         );
@@ -56,7 +57,9 @@ mod join_game {
         );
 
         let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(@PlayerJoined { game_id, player_id }, ref values);
+        serde::Serde::serialize(
+            @PlayerJoined { game_id, player_id, location: location_name }, ref values
+        );
         emit(ctx, 'PlayerJoined', values.span());
 
         player_id

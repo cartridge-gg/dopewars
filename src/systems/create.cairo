@@ -6,7 +6,7 @@ mod create_game {
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, GameCreated};
+    use rollyourown::events::{emit, GameCreated, PlayerJoined};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::risks::Risks;
@@ -41,6 +41,7 @@ mod create_game {
         );
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
+        let location_name = LocationTrait::random(seed);
         // player entity
         set !(
             ctx.world,
@@ -53,7 +54,7 @@ mod create_game {
                     arrested: false,
                     turns_remaining: max_turns
                     }, Location {
-                    name: LocationTrait::random(seed)
+                    name: location_name
                 }
             )
         );
@@ -61,8 +62,6 @@ mod create_game {
         // TODO: spawn locations with risk profiles balanced
         // with market pricing
         let mut locations = LocationTrait::all();
-        let mut drugs = DrugTrait::all();
-
         loop {
             match locations.pop_front() {
                 Option::Some(location_name) => {
@@ -82,6 +81,7 @@ mod create_game {
                         )
                     );
 
+                    let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_name) => {
@@ -110,6 +110,14 @@ mod create_game {
             let wtf = 1;
         }
 
+        // emit player joined
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @PlayerJoined { game_id, player_id, location: location_name }, ref values
+        );
+        emit(ctx, 'PlayerJoined', values.span());
+
+        // emit game created
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(
             @GameCreated { game_id, creator: player_id, start_time, max_players, max_turns },

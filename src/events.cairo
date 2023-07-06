@@ -29,6 +29,7 @@ struct GameCreated {
 struct PlayerJoined {
     game_id: u32,
     player_id: felt252,
+    location: felt252,
 }
 
 #[derive(Drop, Serde)]

@@ -16,11 +16,11 @@ impl LocationImpl of LocationTrait {
     fn all() -> Span<felt252> {
         let mut locations = array::ArrayTrait::new();
         locations.append('Queens'.into());
-        locations.append('TheBronx'.into());
+        locations.append('The Bronx'.into());
         locations.append('Brooklyn'.into());
-        locations.append('JerseyCity'.into());
-        locations.append('CentralPark'.into());
-        locations.append('ConeyIsland'.into());
+        locations.append('Jersey City'.into());
+        locations.append('Central Park'.into());
+        locations.append('Coney Island'.into());
 
         locations.span()
     }
