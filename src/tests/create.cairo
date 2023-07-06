@@ -35,7 +35,6 @@ const MAX_PLAYERS: usize = 2;
 const MAX_TURNS: usize = 10;
 const TRAVEL_RISK: u8 = 10;
 const HURT_RISK: u8 = 9;
-const KILLED_RISK: u8 = 8;
 const MUGGED_RISK: u8 = 7;
 const ARRESTED_RISK: u8 = 6;
 
@@ -116,7 +115,6 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     spawn_location_calldata.append(game_id);
     spawn_location_calldata.append(TRAVEL_RISK.into());
     spawn_location_calldata.append(HURT_RISK.into());
-    spawn_location_calldata.append(KILLED_RISK.into());
     spawn_location_calldata.append(MUGGED_RISK.into());
     spawn_location_calldata.append(ARRESTED_RISK.into());
 
@@ -131,7 +129,6 @@ fn spawn_location(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let risks = serde::Serde::<Risks>::deserialize(ref res).expect('loc deserialization failed');
     assert(risks.travel == TRAVEL_RISK, 'travel risk mismatch');
     assert(risks.hurt == HURT_RISK, 'hurt risk mismatch');
-    assert(risks.killed == KILLED_RISK, 'killed risk mismatch');
     assert(risks.mugged == MUGGED_RISK, 'mugged risk mismatch');
     assert(risks.arrested == ARRESTED_RISK, 'arrested risk mismatch');
 

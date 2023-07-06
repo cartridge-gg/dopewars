@@ -31,9 +31,10 @@ mod travel {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
-        let updated_health = match result.killed {
-            bool::False(()) => stats.health - result.health_loss,
-            bool::True(()) => 0,
+        let updated_health = if result.health_loss < stats.health {
+            stats.health - result.health_loss
+        } else {
+            0
         };
 
         // update player
@@ -64,7 +65,6 @@ mod travel {
                     money_loss: result.money_loss,
                     respect_loss: result.respect_loss,
                     arrested: result.arrested,
-                    killed: result.killed
                 },
                 ref values
             );

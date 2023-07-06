@@ -64,6 +64,5 @@ struct RandomEvent {
     health_loss: u8,
     money_loss: u128,
     respect_loss: u8,
-    arrested: bool,
-    killed: bool
+    arrested: bool
 }

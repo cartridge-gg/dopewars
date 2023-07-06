@@ -22,7 +22,6 @@ mod create_location {
         game_id: u32,
         travel_risk: u8,
         hurt_risk: u8,
-        killed_risk: u8,
         mugged_risk: u8,
         arrested_risk: u8
     ) -> u32 {
@@ -44,7 +43,6 @@ mod create_location {
                     }, Risks {
                     travel: travel_risk,
                     hurt: hurt_risk,
-                    killed: killed_risk,
                     mugged: mugged_risk,
                     arrested: arrested_risk,
                 }
@@ -91,6 +89,8 @@ mod create_game {
         let player_id: felt252 = ctx.origin.into();
 
         let game_id = ctx.world.uuid();
+
+        // game entity
         set !(
             ctx.world,
             game_id.into(),
@@ -105,6 +105,7 @@ mod create_game {
             })
         );
 
+        // player entity
         set !(
             ctx.world,
             (game_id, player_id).into(),
@@ -118,6 +119,9 @@ mod create_game {
                 }
             )
         );
+
+        // location entities
+
 
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(
