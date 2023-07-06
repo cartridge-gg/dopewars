@@ -39,15 +39,17 @@ mod buy {
         );
 
         // update player
-        set !(ctx.world, (game_id, player_id).into(), (
-            Player {
+        set !(
+            ctx.world,
+            (game_id, player_id).into(),
+            (Player {
                 name: player.name,
                 cash: player.cash - cost,
                 health: player.health,
                 arrested: player.arrested,
                 turns_remaining: player.turns_remaining,
-            }
-        ));
+            })
+        );
         let maybe_drug = try_get !(ctx.world, (game_id, player_id, drug_id).into(), Drug);
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity + quantity,
@@ -108,15 +110,17 @@ mod sell {
         );
 
         // update player
-        set !(ctx.world, (game_id, player_id).into(), (
-            Player {
+        set !(
+            ctx.world,
+            (game_id, player_id).into(),
+            (Player {
                 name: player.name,
                 cash: player.cash + payout,
                 health: player.health,
                 arrested: player.arrested,
                 turns_remaining: player.turns_remaining,
-            }
-        ));
+            })
+        );
         set !(
             ctx.world,
             (game_id, player_id, drug_id).into(),

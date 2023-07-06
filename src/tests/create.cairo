@@ -27,6 +27,7 @@ use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};
 use rollyourown::systems::join::join_game;
 use rollyourown::systems::create::create_game;
+use rollyourown::systems::player::set_name;
 use rollyourown::constants::SCALING_FACTOR;
 
 const START_TIME: u64 = 0;
@@ -52,6 +53,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     systems.append(travel::TEST_CLASS_HASH);
     systems.append(buy::TEST_CLASS_HASH);
     systems.append(sell::TEST_CLASS_HASH);
+    systems.append(set_name::TEST_CLASS_HASH);
 
     let world = spawn_test_world(components, systems);
 
@@ -91,7 +93,8 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut res = world.entity('Player'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'player not found');
 
-    let player = serde::Serde::<Player>::deserialize(ref res).expect('player deserialization failed');
+    let player = serde::Serde::<Player>::deserialize(ref res)
+        .expect('player deserialization failed');
 
     assert(player.health == 100, 'health mismatch');
     assert(player.arrested == false, 'arrested mismatch');

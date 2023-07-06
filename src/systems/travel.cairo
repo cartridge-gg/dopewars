@@ -44,8 +44,7 @@ mod travel {
             (
                 Location {
                     id: next_location_id
-                },
-                Player {
+                    }, Player {
                     name: player.name,
                     cash: player.cash - result.money_loss,
                     health: updated_health,

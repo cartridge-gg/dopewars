@@ -33,8 +33,7 @@ mod join_game {
                     health: 100,
                     arrested: false,
                     turns_remaining: game.max_turns
-                },
-                Location {
+                    }, Location {
                     id: LocationId::None(()).into()
                 }
             )
