@@ -8,7 +8,7 @@ mod travel {
 
     use rollyourown::events::{emit, Traveled, RandomEvent};
     use rollyourown::components::{game::{Game, GameTrait}, location::Location};
-    use rollyourown::components::player::{Cash, Stats, StatsTrait};
+    use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
 
     // 1. Verify the caller owns the player.
@@ -23,16 +23,16 @@ mod travel {
         let player_sk: Query = (game_id, player_id).into();
         let location_sk: Query = (game_id, next_location_id).into();
 
-        let (location, stats, cash) = get !(ctx.world, player_sk, (Location, Stats, Cash));
-        assert(stats.can_continue(), 'player cannot continue');
+        let (location, player) = get !(ctx.world, player_sk, (Location, Player));
+        assert(player.can_continue(), 'player cannot continue');
         assert(location.id != next_location_id, 'already at location');
 
         let (next_location, risks) = get !(ctx.world, location_sk, (Location, Risks));
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
-        let updated_health = if result.health_loss < stats.health {
-            stats.health - result.health_loss
+        let updated_health = if result.health_loss < player.health {
+            player.health - result.health_loss
         } else {
             0
         };
@@ -44,14 +44,14 @@ mod travel {
             (
                 Location {
                     id: next_location_id
-                    }, Cash {
-                    amount: cash.amount - result.money_loss
-                    }, Stats {
-                    health: updated_health,
-                    respect: stats.respect - result.respect_loss,
-                    arrested: result.arrested,
-                    turns_remaining: stats.turns_remaining - 1,
                 },
+                Player {
+                    name: player.name,
+                    cash: player.cash - result.money_loss,
+                    health: updated_health,
+                    arrested: result.arrested,
+                    turns_remaining: player.turns_remaining - 1,
+                }
             )
         );
 

@@ -1,22 +1,18 @@
 #[derive(Component, Copy, Drop, Serde)]
-struct Cash {
-    amount: u128, 
-}
-
-#[derive(Component, Copy, Drop, Serde)]
-struct Stats {
+struct Player {
+    name: felt252,
+    cash: u128,
     health: u8,
-    respect: u8,
     arrested: bool,
     turns_remaining: usize,
 }
 
-trait StatsTrait {
-    fn can_continue(self: @Stats) -> bool;
+trait PlayerTrait {
+    fn can_continue(self: @Player) -> bool;
 }
 
-impl StatsImpl of StatsTrait {
-    fn can_continue(self: @Stats) -> bool {
+impl PlayerImpl of PlayerTrait {
+    fn can_continue(self: @Player) -> bool {
         if *self.arrested {
             return false;
         }

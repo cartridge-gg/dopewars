@@ -7,8 +7,7 @@ mod create_game {
 
     use rollyourown::events::{emit, GameCreated};
     use rollyourown::components::game::Game;
-    use rollyourown::components::player::Cash;
-    use rollyourown::components::player::Stats;
+    use rollyourown::components::player::Player;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::market::Market;
     use rollyourown::components::drug::Drug;
@@ -45,11 +44,14 @@ mod create_game {
             ctx.world,
             (game_id, player_id).into(),
             (
-                Stats {
-                    health: 100, respect: 0, arrested: false, turns_remaining: max_turns
-                    }, Cash {
-                    amount: 100 * SCALING_FACTOR // $100
-                    }, Location {
+                Player {
+                    name: 0, // set at end of game
+                    cash: 100 * SCALING_FACTOR, // $100
+                    health: 100,
+                    arrested: false,
+                    turns_remaining: max_turns
+                },
+                Location {
                     id: LocationId::None(()).into()
                 }
             )

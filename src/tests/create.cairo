@@ -19,9 +19,8 @@ use dojo::test_utils::spawn_test_world;
 
 use rollyourown::components::game::{game, Game};
 use rollyourown::components::market::{market, Market};
-use rollyourown::components::player::{stats, Stats};
+use rollyourown::components::player::{player, Player};
 use rollyourown::components::drug::{drug, Drug};
-use rollyourown::components::player::{cash, Cash};
 use rollyourown::components::location::{location, Location};
 use rollyourown::components::risks::{risks, Risks};
 use rollyourown::systems::travel::travel;
@@ -41,8 +40,7 @@ const ARRESTED_RISK: u8 = 6;
 fn spawn_game() -> (ContractAddress, u32, felt252) {
     let mut components = array::ArrayTrait::new();
     components.append(game::TEST_CLASS_HASH);
-    components.append(stats::TEST_CLASS_HASH);
-    components.append(cash::TEST_CLASS_HASH);
+    components.append(player::TEST_CLASS_HASH);
     components.append(location::TEST_CLASS_HASH);
     components.append(risks::TEST_CLASS_HASH);
     components.append(market::TEST_CLASS_HASH);
@@ -90,20 +88,14 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let mut res = world.entity('Stats'.into(), (game_id, player_id).into(), 0, 0);
-    assert(res.len() > 0, 'player stats not found');
+    let mut res = world.entity('Player'.into(), (game_id, player_id).into(), 0, 0);
+    assert(res.len() > 0, 'player not found');
 
-    let stats = serde::Serde::<Stats>::deserialize(ref res).expect('stats deserialization failed');
+    let player = serde::Serde::<Player>::deserialize(ref res).expect('player deserialization failed');
 
-    assert(stats.health == 100, 'health mismatch');
-    assert(stats.arrested == false, 'arrested mismatch');
-
-    let mut res = world.entity('Cash'.into(), (game_id, player_id).into(), 0, 0);
-    assert(res.len() > 0, 'player cash not found');
-
-    let cash = serde::Serde::<Cash>::deserialize(ref res).expect('cash deserialization failed');
-
-    assert(cash.amount == 100 * SCALING_FACTOR, 'cash mismatch');
+    assert(player.health == 100, 'health mismatch');
+    assert(player.arrested == false, 'arrested mismatch');
+    assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
     player_id
 }
 
@@ -125,7 +117,7 @@ fn test_create_game() {
 
     let (players, _) = IWorldDispatcher {
         contract_address: world_address
-    }.entities('Stats'.into(), game_id.into());
+    }.entities('Player'.into(), game_id.into());
     assert(players.len() == 1, 'wrong num players');
 }
 

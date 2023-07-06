@@ -9,7 +9,7 @@ mod buy {
     use rollyourown::components::{
         game::{Game, GameTrait}, drug::Drug, market::{Market, MarketTrait}, location::Location
     };
-    use rollyourown::components::{player::Cash, risks::{Risks, RisksTrait}};
+    use rollyourown::components::{player::Player, risks::{Risks, RisksTrait}};
 
     #[event]
     fn Bought(game_id: u32, player_id: felt252, drug_id: u32, quantity: usize, cost: u128) {}
@@ -25,15 +25,11 @@ mod buy {
         assert(game.tick(), 'cannot progress');
 
         let player_id = ctx.origin.into();
-        let (location, cash) = get !(ctx.world, (game_id, player_id).into(), (Location, Cash));
+        let (location, player) = get !(ctx.world, (game_id, player_id).into(), (Location, Player));
         let market = get !(ctx.world, (game_id, location_id, drug_id).into(), Market);
 
         let cost = market.buy(quantity);
-        assert(cost < cash.amount, 'not enough cash');
-
-        // FIX: moving this to end of function for some reason causes
-        // dojo-test error: #4864: Inconsistent references annotations.
-        Bought(game_id, player_id, drug_id, quantity, cost);
+        assert(cost < player.cash, 'not enough cash');
 
         // update market
         set !(
@@ -43,7 +39,15 @@ mod buy {
         );
 
         // update player
-        set !(ctx.world, (game_id, player_id).into(), (Cash { amount: cash.amount - cost }, ));
+        set !(ctx.world, (game_id, player_id).into(), (
+            Player {
+                name: player.name,
+                cash: player.cash - cost,
+                health: player.health,
+                arrested: player.arrested,
+                turns_remaining: player.turns_remaining,
+            }
+        ));
         let maybe_drug = try_get !(ctx.world, (game_id, player_id, drug_id).into(), Drug);
         let player_quantity = match maybe_drug {
             Option::Some(drug) => drug.quantity + quantity,
@@ -54,6 +58,8 @@ mod buy {
             (game_id, player_id, drug_id).into(),
             (Drug { id: drug_id, quantity: player_quantity })
         );
+
+        Bought(game_id, player_id, drug_id, quantity, cost);
     }
 }
 
@@ -70,7 +76,7 @@ mod sell {
     use rollyourown::components::market::Market;
     use rollyourown::components::market::MarketTrait;
     use rollyourown::components::location::Location;
-    use rollyourown::components::player::Cash;
+    use rollyourown::components::player::Player;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::risks::RisksTrait;
 
@@ -82,7 +88,7 @@ mod sell {
         assert(game.tick(), 'cannot progress');
 
         let player_id = ctx.origin.into();
-        let (location, cash) = get !(ctx.world, (game_id, player_id).into(), (Location, Cash));
+        let (location, player) = get !(ctx.world, (game_id, player_id).into(), (Location, Player));
 
         let maybe_drug = try_get !(ctx.world, (game_id, player_id, drug_id).into(), Drug);
         let player_quantity = match maybe_drug {
@@ -102,7 +108,15 @@ mod sell {
         );
 
         // update player
-        set !(ctx.world, (game_id, player_id).into(), (Cash { amount: cash.amount + payout }, ));
+        set !(ctx.world, (game_id, player_id).into(), (
+            Player {
+                name: player.name,
+                cash: player.cash + payout,
+                health: player.health,
+                arrested: player.arrested,
+                turns_remaining: player.turns_remaining,
+            }
+        ));
         set !(
             ctx.world,
             (game_id, player_id, drug_id).into(),
