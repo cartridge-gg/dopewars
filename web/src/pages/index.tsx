@@ -53,7 +53,7 @@ export default function Home() {
       <Content>
         <VStack w="full" gap="20px">
           <Card variant="pixelated">
-            <VStack w="full" p="30px 20px 20px 20px" gap="20px">
+            <VStack w="full" p="20px" gap="20px">
               <Button
                 w="full"
                 isDisabled={creating}

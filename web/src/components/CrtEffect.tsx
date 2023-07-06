@@ -37,7 +37,7 @@ const CrtEffect = () => {
         right: "0",
         bottom: "0",
         background:
-          "linear-gradient(rgba(0,0,0,0) 50%, rgba(20, 20, 20, 0.02) 50%), linear-gradient(90deg ,rgba(255, 0, 0, 0.06),rgba(0, 255, 0, 0.05),rgba(0,0,255,0.06))",
+          "linear-gradient(rgba(0,0,0,0) 50%, rgba(20, 20, 20, 0.2) 10%), linear-gradient(90deg ,rgba(255, 0, 0, 0.06),rgba(0, 255, 0, 0.03),rgba(0,0,255,0.01))",
         zIndex: "overlay",
         backgroundSize: "100% 2px, 3px 100%",
         pointerEvents: "none",
