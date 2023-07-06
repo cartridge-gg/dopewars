@@ -11,7 +11,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::components::location::{location, Location, LocationId};
+use rollyourown::components::location::{location, Location};
 use rollyourown::tests::create::{spawn_game, spawn_player};
 
 #[test]
@@ -20,10 +20,10 @@ fn test_travel() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
     let world = IWorldDispatcher { contract_address: world_address };
 
-    let bronx_id: u8 = LocationId::Bronx(()).into();
+    let brooklyn_id: felt252 = 'Brooklyn'.into();
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id.into());
-    travel_calldata.append(bronx_id.into());
+    travel_calldata.append(brooklyn_id.into());
 
     world.execute('travel'.into(), travel_calldata.span());
 
@@ -31,9 +31,9 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id == LocationId::Bronx(()).into(), 'incorrect travel');
+    assert(location.name == brooklyn_id, 'incorrect travel');
 
-    let queens_id: u8 = LocationId::Queens(()).into();
+    let queens_id: felt252 = 'Queens'.into();
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id.into());
     travel_calldata.append(queens_id.into());
@@ -44,5 +44,5 @@ fn test_travel() {
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.id == LocationId::Queens(()).into(), 'incorrect travel');
+    assert(location.name == queens_id, 'incorrect travel');
 }

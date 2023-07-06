@@ -53,8 +53,8 @@ struct Sold {
 struct Traveled {
     game_id: u32,
     player_id: felt252,
-    from_location_id: u8,
-    to_location_id: u8,
+    from_location: felt252,
+    to_location: felt252,
 }
 
 #[derive(Drop, Serde)]

@@ -108,15 +108,17 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
 fn test_create_game() {
     let (world_address, game_id, _) = spawn_game();
 
+    let brooklyn_id: felt252 = 'Brooklyn'.into();
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, 0).into(), 0, 0);
-    assert(res.len() > 0, 'no location 1');
+    }.entity('Location'.into(), (game_id, brooklyn_id).into(), 0, 0);
+    assert(res.len() > 0, 'no Brooklyn location');
 
+    let queens_id: felt252 = 'Queens'.into();
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, 1).into(), 0, 0);
-    assert(res.len() > 0, 'no location 2');
+    }.entity('Location'.into(), (game_id, queens_id).into(), 0, 0);
+    assert(res.len() > 0, 'no queens location');
 
     let (players, _) = IWorldDispatcher {
         contract_address: world_address

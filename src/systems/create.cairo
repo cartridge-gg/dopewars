@@ -1,6 +1,7 @@
 #[system]
 mod create_game {
     use array::ArrayTrait;
+    use box::BoxTrait;
     use traits::Into;
 
     use dojo::world::Context;
@@ -10,11 +11,11 @@ mod create_game {
     use rollyourown::components::player::Player;
     use rollyourown::components::risks::Risks;
     use rollyourown::components::market::Market;
-    use rollyourown::components::drug::Drug;
-    use rollyourown::components::location::{Location, LocationId};
+    use rollyourown::components::drug::{Drug, DrugTrait};
+    use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, MAX_LOCATIONS, MAX_PRODUCTS, TRAVEL_RISK, HURT_RISK, MUGGED_RISK,
-        ARRESTED_RISK, MARKET_CASH, MARKET_QUANTITY
+        SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MARKET_CASH,
+        MARKET_QUANTITY
     };
 
     fn execute(
@@ -39,6 +40,7 @@ mod create_game {
             })
         );
 
+        let seed = starknet::get_tx_info().unbox().transaction_hash;
         // player entity
         set !(
             ctx.world,
@@ -51,48 +53,61 @@ mod create_game {
                     arrested: false,
                     turns_remaining: max_turns
                     }, Location {
-                    id: LocationId::None(()).into()
+                    name: LocationTrait::random(seed)
                 }
             )
         );
 
         // TODO: spawn locations with risk profiles balanced
         // with market pricing
-        let mut location_index: u8 = 1;
+        let mut locations = LocationTrait::all();
+        let mut drugs = DrugTrait::all();
+
         loop {
-            if location_index >= MAX_LOCATIONS {
-                break ();
-            }
+            match locations.pop_front() {
+                Option::Some(location_name) => {
+                    //set location entity
+                    set !(
+                        ctx.world,
+                        (game_id, *location_name).into(),
+                        (
+                            Location {
+                                name: *location_name
+                                }, Risks {
+                                travel: TRAVEL_RISK,
+                                hurt: HURT_RISK,
+                                mugged: MUGGED_RISK,
+                                arrested: ARRESTED_RISK
+                            }
+                        )
+                    );
 
-            set !(
-                ctx.world,
-                (game_id, location_index).into(),
-                (
-                    Location {
-                        id: location_index
-                        }, Risks {
-                        travel: TRAVEL_RISK,
-                        hurt: HURT_RISK,
-                        mugged: MUGGED_RISK,
-                        arrested: ARRESTED_RISK
+                    loop {
+                        match drugs.pop_front() {
+                            Option::Some(drug_name) => {
+                                //set market entity
+                                set !(
+                                    ctx.world,
+                                    (game_id, *location_name, *drug_name).into(),
+                                    (Market { cash: MARKET_CASH, quantity: MARKET_QUANTITY })
+                                );
+                            },
+                            Option::None(()) => {
+                                break ();
+                            }
+                        };
+
+                        // required otherwise error: Tail expression not allowed in a `loop` block
+                        let wtf = 1;
                     }
-                )
-            )
-
-            let mut drug_index: u8 = 0;
-            loop {
-                if drug_index >= MAX_PRODUCTS {
+                },
+                Option::None(_) => {
                     break ();
                 }
-                set !(
-                    ctx.world,
-                    (game_id, location_index, drug_index).into(),
-                    (Market { cash: MARKET_CASH, quantity: MARKET_QUANTITY })
-                );
-                drug_index += 1;
-            }
+            };
 
-            location_index += 1;
+            // required otherwise error: Tail expression not allowed in a `loop` block
+            let wtf = 1;
         }
 
         let mut values = array::ArrayTrait::new();

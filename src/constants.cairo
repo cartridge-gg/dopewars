@@ -1,9 +1,6 @@
 const BALANCE_UPPER_BOUND: felt252 = 0x10000000000000000;
 const SCALING_FACTOR: u128 = 10000;
 
-const MAX_LOCATIONS: u8 = 6;
-const MAX_PRODUCTS: u8 = 6;
-
 const TRAVEL_RISK: u8 = 30;
 const HURT_RISK: u8 = 30;
 const MUGGED_RISK: u8 = 30;

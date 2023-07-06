@@ -9,7 +9,7 @@ mod join_game {
     use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
-    use rollyourown::components::location::{Location, LocationId};
+    use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::SCALING_FACTOR;
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
@@ -22,6 +22,7 @@ mod join_game {
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
+        let seed = starknet::get_tx_info().unbox().transaction_hash;
         // spawn player into game
         set !(
             ctx.world,
@@ -34,7 +35,7 @@ mod join_game {
                     arrested: false,
                     turns_remaining: game.max_turns
                     }, Location {
-                    id: LocationId::None(()).into()
+                    name: LocationTrait::random(seed)
                 }
             )
         );

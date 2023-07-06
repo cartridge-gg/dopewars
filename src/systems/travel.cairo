@@ -15,17 +15,17 @@ mod travel {
     // 2. Determine if a random travel event occurs and apply it if necessary.
     // 3. Update the players location to the next_location_id.
     // 4. Update the new locations supply based on random events.
-    fn execute(ctx: Context, game_id: u32, next_location_id: u8) -> bool {
+    fn execute(ctx: Context, game_id: u32, next_location_name: felt252) -> bool {
         let game = get !(ctx.world, game_id.into(), Game);
         assert(game.tick(), 'game cannot progress');
 
         let player_id: felt252 = ctx.origin.into();
         let player_sk: Query = (game_id, player_id).into();
-        let location_sk: Query = (game_id, next_location_id).into();
+        let location_sk: Query = (game_id, next_location_name).into();
 
         let (location, player) = get !(ctx.world, player_sk, (Location, Player));
         assert(player.can_continue(), 'player cannot continue');
-        assert(location.id != next_location_id, 'already at location');
+        assert(location.name != next_location_name, 'already at location');
 
         let (next_location, risks) = get !(ctx.world, location_sk, (Location, Risks));
         let seed = starknet::get_tx_info().unbox().transaction_hash;
@@ -43,7 +43,7 @@ mod travel {
             player_sk,
             (
                 Location {
-                    id: next_location_id
+                    name: next_location_name
                     }, Player {
                     name: player.name,
                     cash: player.cash - result.money_loss,
@@ -73,7 +73,7 @@ mod travel {
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(
             @Traveled {
-                game_id, player_id, from_location_id: location.id, to_location_id: next_location_id
+                game_id, player_id, from_location: location.name, to_location: next_location_name
             },
             ref values
         );
