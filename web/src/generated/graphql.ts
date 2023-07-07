@@ -1,10 +1,4 @@
-import {
-  useQuery,
-  useInfiniteQuery,
-  UseQueryOptions,
-  UseInfiniteQueryOptions,
-  QueryFunctionContext,
-} from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 import { useFetchData } from "@/hooks/fetcher";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -239,14 +233,13 @@ export type UserGamesQuery = {
   gameComponents?: Array<{ __typename?: "Game"; game_id: any } | null> | null;
 };
 
-export type PlayerEntitiesQueryVariables = Exact<{
-  gameId: Scalars["String"];
-  address: Scalars["String"];
+export type PlayerEntityQueryVariables = Exact<{
+  id: Scalars["ID"];
 }>;
 
-export type PlayerEntitiesQuery = {
+export type PlayerEntityQuery = {
   __typename?: "Query";
-  entities?: Array<{
+  entity: {
     __typename?: "Entity";
     components?: Array<
       | { __typename: "Drug"; name: any; quantity: any }
@@ -264,7 +257,36 @@ export type PlayerEntitiesQuery = {
       | { __typename: "Risks" }
       | null
     > | null;
-  } | null> | null;
+  };
+};
+
+export type GameEntityQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GameEntityQuery = {
+  __typename?: "Query";
+  entity: {
+    __typename?: "Entity";
+    components?: Array<
+      | { __typename: "Drug" }
+      | {
+          __typename: "Game";
+          creator: any;
+          game_id: any;
+          is_finished: any;
+          max_players: any;
+          max_turns: any;
+          num_players: any;
+          start_time: any;
+        }
+      | { __typename: "Location" }
+      | { __typename: "Market" }
+      | { __typename: "Player" }
+      | { __typename: "Risks" }
+      | null
+    > | null;
+  };
 };
 
 export type LocationEntitiesQueryVariables = Exact<{
@@ -325,31 +347,6 @@ export const useAvailableGamesQuery = <
 
 useAvailableGamesQuery.getKey = (variables?: AvailableGamesQueryVariables) =>
   variables === undefined ? ["AvailableGames"] : ["AvailableGames", variables];
-export const useInfiniteAvailableGamesQuery = <
-  TData = AvailableGamesQuery,
-  TError = unknown,
->(
-  variables?: AvailableGamesQueryVariables,
-  options?: UseInfiniteQueryOptions<AvailableGamesQuery, TError, TData>,
-) => {
-  const query = useFetchData<AvailableGamesQuery, AvailableGamesQueryVariables>(
-    AvailableGamesDocument,
-  );
-  return useInfiniteQuery<AvailableGamesQuery, TError, TData>(
-    variables === undefined
-      ? ["AvailableGames.infinite"]
-      : ["AvailableGames.infinite", variables],
-    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
-    options,
-  );
-};
-
-useInfiniteAvailableGamesQuery.getKey = (
-  variables?: AvailableGamesQueryVariables,
-) =>
-  variables === undefined
-    ? ["AvailableGames.infinite"]
-    : ["AvailableGames.infinite", variables];
 export const UserGamesDocument = `
     query UserGames($id: felt252!) {
   gameComponents(creator: $id) {
@@ -373,30 +370,9 @@ useUserGamesQuery.getKey = (variables: UserGamesQueryVariables) => [
   "UserGames",
   variables,
 ];
-export const useInfiniteUserGamesQuery = <
-  TData = UserGamesQuery,
-  TError = unknown,
->(
-  variables: UserGamesQueryVariables,
-  options?: UseInfiniteQueryOptions<UserGamesQuery, TError, TData>,
-) => {
-  const query = useFetchData<UserGamesQuery, UserGamesQueryVariables>(
-    UserGamesDocument,
-  );
-  return useInfiniteQuery<UserGamesQuery, TError, TData>(
-    ["UserGames.infinite", variables],
-    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
-    options,
-  );
-};
-
-useInfiniteUserGamesQuery.getKey = (variables: UserGamesQueryVariables) => [
-  "UserGames.infinite",
-  variables,
-];
-export const PlayerEntitiesDocument = `
-    query PlayerEntities($gameId: String!, $address: String!) {
-  entities(keys: [$gameId, $address]) {
+export const PlayerEntityDocument = `
+    query PlayerEntity($id: ID!) {
+  entity(id: $id) {
     components {
       __typename
       ... on Player {
@@ -417,45 +393,59 @@ export const PlayerEntitiesDocument = `
   }
 }
     `;
-export const usePlayerEntitiesQuery = <
-  TData = PlayerEntitiesQuery,
+export const usePlayerEntityQuery = <
+  TData = PlayerEntityQuery,
   TError = unknown,
 >(
-  variables: PlayerEntitiesQueryVariables,
-  options?: UseQueryOptions<PlayerEntitiesQuery, TError, TData>,
+  variables: PlayerEntityQueryVariables,
+  options?: UseQueryOptions<PlayerEntityQuery, TError, TData>,
 ) =>
-  useQuery<PlayerEntitiesQuery, TError, TData>(
-    ["PlayerEntities", variables],
-    useFetchData<PlayerEntitiesQuery, PlayerEntitiesQueryVariables>(
-      PlayerEntitiesDocument,
+  useQuery<PlayerEntityQuery, TError, TData>(
+    ["PlayerEntity", variables],
+    useFetchData<PlayerEntityQuery, PlayerEntityQueryVariables>(
+      PlayerEntityDocument,
     ).bind(null, variables),
     options,
   );
 
-usePlayerEntitiesQuery.getKey = (variables: PlayerEntitiesQueryVariables) => [
-  "PlayerEntities",
+usePlayerEntityQuery.getKey = (variables: PlayerEntityQueryVariables) => [
+  "PlayerEntity",
   variables,
 ];
-export const useInfinitePlayerEntitiesQuery = <
-  TData = PlayerEntitiesQuery,
-  TError = unknown,
->(
-  variables: PlayerEntitiesQueryVariables,
-  options?: UseInfiniteQueryOptions<PlayerEntitiesQuery, TError, TData>,
-) => {
-  const query = useFetchData<PlayerEntitiesQuery, PlayerEntitiesQueryVariables>(
-    PlayerEntitiesDocument,
-  );
-  return useInfiniteQuery<PlayerEntitiesQuery, TError, TData>(
-    ["PlayerEntities.infinite", variables],
-    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
+export const GameEntityDocument = `
+    query GameEntity($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Game {
+        creator
+        game_id
+        is_finished
+        max_players
+        max_turns
+        num_players
+        start_time
+      }
+    }
+  }
+}
+    `;
+export const useGameEntityQuery = <TData = GameEntityQuery, TError = unknown>(
+  variables: GameEntityQueryVariables,
+  options?: UseQueryOptions<GameEntityQuery, TError, TData>,
+) =>
+  useQuery<GameEntityQuery, TError, TData>(
+    ["GameEntity", variables],
+    useFetchData<GameEntityQuery, GameEntityQueryVariables>(
+      GameEntityDocument,
+    ).bind(null, variables),
     options,
   );
-};
 
-useInfinitePlayerEntitiesQuery.getKey = (
-  variables: PlayerEntitiesQueryVariables,
-) => ["PlayerEntities.infinite", variables];
+useGameEntityQuery.getKey = (variables: GameEntityQueryVariables) => [
+  "GameEntity",
+  variables,
+];
 export const LocationEntitiesDocument = `
     query LocationEntities($gameId: String!, $location: String!) {
   entities(keys: [$gameId, $location]) {
@@ -495,24 +485,3 @@ export const useLocationEntitiesQuery = <
 useLocationEntitiesQuery.getKey = (
   variables: LocationEntitiesQueryVariables,
 ) => ["LocationEntities", variables];
-export const useInfiniteLocationEntitiesQuery = <
-  TData = LocationEntitiesQuery,
-  TError = unknown,
->(
-  variables: LocationEntitiesQueryVariables,
-  options?: UseInfiniteQueryOptions<LocationEntitiesQuery, TError, TData>,
-) => {
-  const query = useFetchData<
-    LocationEntitiesQuery,
-    LocationEntitiesQueryVariables
-  >(LocationEntitiesDocument);
-  return useInfiniteQuery<LocationEntitiesQuery, TError, TData>(
-    ["LocationEntities.infinite", variables],
-    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
-    options,
-  );
-};
-
-useInfiniteLocationEntitiesQuery.getKey = (
-  variables: LocationEntitiesQueryVariables,
-) => ["LocationEntities.infinite", variables];

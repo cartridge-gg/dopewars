@@ -1,5 +1,5 @@
-query PlayerEntities($gameId: String!, $address: String!) {
-  entities(keys: [$gameId, $address]) {
+query PlayerEntity($id: ID!) {
+  entity(id: $id) {
     components {
       __typename
       ... on Player {
@@ -15,6 +15,23 @@ query PlayerEntities($gameId: String!, $address: String!) {
       ... on Drug {
         name
         quantity
+      }
+    }
+  }
+}
+
+query GameEntity($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Game {
+        creator
+        game_id
+        is_finished
+        max_players
+        max_turns
+        num_players
+        start_time
       }
     }
   }

@@ -1,6 +1,6 @@
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
-import { useDojo } from "./dojo";
-import { TradeDirection } from "./state";
+import { useDojo } from "../provider";
+import { TradeDirection } from "../../state";
 
 export enum RyoEvents {
   GameCreated = "GameCreated",
@@ -11,7 +11,7 @@ export enum RyoEvents {
   RandomEvent = "RandomEvent",
 }
 
-export interface RyoWorldInterface {
+export interface RyoSystemsInterface {
   create: (
     startTime: number,
     maxPlayers: number,
@@ -29,7 +29,7 @@ export interface RyoWorldInterface {
   isPending: boolean;
 }
 
-export const useRyoWorld = (): RyoWorldInterface => {
+export const useRyoSystems = (): RyoSystemsInterface => {
   const { execute, account, isPending } = useDojo();
 
   const create = async (

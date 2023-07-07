@@ -19,7 +19,7 @@ import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
-import { useRyoWorld } from "@/hooks/useRyoWorld";
+import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { getLocationByName } from "@/hooks/ui";
 
 // hardcode game params for now
@@ -29,7 +29,7 @@ const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
-  const { create, isPending } = useRyoWorld();
+  const { create, isPending } = useRyoSystems();
   return (
     <Layout
       title="Roll Your Own"

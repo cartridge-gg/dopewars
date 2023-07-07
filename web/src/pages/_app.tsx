@@ -14,7 +14,7 @@ import Fonts from "@/theme/fonts";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
-import { DojoProvider } from "@/hooks/dojo";
+import { DojoProvider } from "@/hooks/dojo/provider";
 import {
   PLAYER_ADDRESS,
   PLAYER_PRIVATE_KEY,
