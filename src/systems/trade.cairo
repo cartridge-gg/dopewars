@@ -28,6 +28,8 @@ mod buy {
 
         let player_id = ctx.origin.into();
         let (location, player) = get !(ctx.world, (game_id, player_id).into(), (Location, Player));
+        assert(location.name == location_name, 'player is not at location');
+
         let market = get !(ctx.world, (game_id, location_name, drug_name).into(), Market);
 
         let cost = market.buy(quantity);
@@ -95,6 +97,7 @@ mod sell {
 
         let player_id = ctx.origin.into();
         let (location, player) = get !(ctx.world, (game_id, player_id).into(), (Location, Player));
+        assert(location.name == location_name, 'player is not at location');
 
         let maybe_drug = try_get !(ctx.world, (game_id, player_id, drug_name).into(), Drug);
         let player_quantity = match maybe_drug {
