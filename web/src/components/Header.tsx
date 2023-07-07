@@ -19,6 +19,10 @@ import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
 import { useGameStore, getInventoryInfos } from "@/hooks/state";
+import { usePlayerEntityQuery, Entity } from "@/generated/graphql";
+import { PLAYER_ADDRESS } from "@/constants";
+import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 
 export interface HeaderProps {
   back?: boolean;
@@ -26,17 +30,21 @@ export interface HeaderProps {
 
 const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
-  const { address } = useAccount();
-  const { connectors, connect, disconnect } = useConnectors();
+  const { gameId } = router.query as { gameId: string };
+  const { player, isFetched: isFetchedPlayer } = usePlayerEntity({
+    gameId,
+    address: PLAYER_ADDRESS,
+  });
+  const { game, isFetched: isFetchedGame } = useGameEntity({
+    gameId,
+  });
 
   const isMobile = IsMobile();
-
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
   const isBackButtonVisible = useUiStore((state) =>
     state.isBackButtonVisible(router.pathname),
   );
-  const inventory = useGameStore((state) => state.inventory);
   const turns = useGameStore((state) => state.turns);
   const inventoryInfos = getInventoryInfos();
   const hasNewMessages = true;
@@ -60,87 +68,54 @@ const Header = ({ back }: HeaderProps) => {
       zIndex="1"
     >
       <HStack flex="1" justify="left">
-        {!isBackButtonVisible && (
-          <HeaderButton onClick={() => router.push("/")}>
-            <Home />
-          </HeaderButton>
-        )}
         {isBackButtonVisible && (
           <HeaderButton onClick={() => router.back()}>
             <Arrow />
           </HeaderButton>
         )}
       </HStack>
-      {isConnected ? (
-        <>
-          <HStack flex="1" justify="center">
-            <HStack
-              h="full"
-              py="8px"
-              px="20px"
-              spacing={["10px", "30px"]}
-              bg="neon.700"
-              clipPath={`polygon(${generatePixelBorderPath()})`}
-            >
-              <HStack>
-                <Gem /> <Text>${inventory.cash}</Text>
-              </HStack>
-              <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-              <HStack>
-                <Bag />{" "}
-                <Text>
-                  {inventoryInfos.used}/{inventoryInfos.capacity}
-                </Text>
-              </HStack>
-              <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-              <HStack>
-                <Clock />{" "}
-                <Text whiteSpace="nowrap">
-                  {!IsMobile && "Day"} {turns.current}/{turns.total}
-                </Text>
-              </HStack>
+      {player && game && (
+        <HStack flex="1" justify="center">
+          <HStack
+            h="full"
+            py="8px"
+            px="20px"
+            spacing={["10px", "30px"]}
+            bg="neon.700"
+            clipPath={`polygon(${generatePixelBorderPath()})`}
+          >
+            <HStack>
+              <Gem /> <Text>${player.cash}</Text>
+            </HStack>
+            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+            <HStack>
+              <Bag />{" "}
+              <Text>
+                {inventoryInfos.used}/{inventoryInfos.capacity}
+              </Text>
+            </HStack>
+            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+            <HStack>
+              <Clock />{" "}
+              <Text whiteSpace="nowrap">
+                {!IsMobile && "Day"} {game.maxTurns - player.turnsRemaining}/
+                {game.maxTurns}
+              </Text>
             </HStack>
           </HStack>
+        </HStack>
+      )}
 
-          <HStack flex="1" justify="right">
-            {!isMobile && <MediaPlayer />}
-
-            {!isMobile && (
+      <HStack flex="1" justify="right">
+        {!isMobile && <MediaPlayer />}
+        {/* Chat requires backend implementation */}
+        {/* {!isMobile && (
               <HeaderButton onClick={() => router.push("/chat")}>
                 <Chat color={hasNewMessages ? "yellow.400" : "currentColor"} />
               </HeaderButton>
-            )}
-            {isMobile && <MobileMenu />}
-          </HStack>
-        </>
-      ) : (
-        <>
-          <HStack flex="1" justify="left">
-            {back && (
-              <HeaderButton onClick={() => router.back()}>
-                <Arrow />
-              </HeaderButton>
-            )}
-          </HStack>
-          <HStack flex="1" justify="right">
-            {!isMobile && <MediaPlayer />}
-
-            <Button
-              variant="pixelated"
-              cursor="pointer"
-              onClick={() => {
-                setIsConnected(true);
-                play();
-              }}
-              onMouseEnter={() => {
-                playSound(Sounds.HoverClick, 0.5);
-              }}
-            >
-              <Link /> <Text>CONNECT</Text>
-            </Button>
-          </HStack>
-        </>
-      )}
+            )} */}
+        {isMobile && <MobileMenu />}
+      </HStack>
     </Flex>
   );
 };

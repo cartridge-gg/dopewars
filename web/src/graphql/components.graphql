@@ -4,7 +4,6 @@ query AvailableGames {
     creator
     num_players
     max_players
-    max_locations
     max_turns
     start_time
   }

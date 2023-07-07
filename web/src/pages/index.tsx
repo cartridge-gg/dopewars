@@ -14,25 +14,22 @@ import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
 import { startGame, useGameStore } from "@/hooks/state";
-import { useEffect, useState } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
-import { useRyoWorld } from "@/hooks/useRyoWorld";
+import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { getLocationByName } from "@/hooks/ui";
 
 // hardcode game params for now
 const START_TIME = 0;
-const START_CASH = 2000 * 10000; // 2000 USD
-const START_HEALTH = 100;
 const MAX_PLAYERS = 1;
 const NUM_TURNS = 10;
 
 export default function Home() {
-  const [creating, setCreating] = useState(false);
   const router = useRouter();
-  const { create } = useRyoWorld();
+  const { create, isPending } = useRyoSystems();
   return (
     <Layout
       title="Roll Your Own"
@@ -56,19 +53,23 @@ export default function Home() {
             <VStack w="full" p="20px" gap="20px">
               <Button
                 w="full"
-                isDisabled={creating}
+                isDisabled={isPending}
                 onClick={async () => {
-                  setCreating(true);
-                  const gameId = await create(
+                  const { gameId, locationName } = await create(
                     START_TIME,
                     MAX_PLAYERS,
                     NUM_TURNS,
                   );
+
                   startGame();
-                  router.push(`/${gameId}/travel`);
+                  router.push(
+                    `/${gameId}/location/${
+                      getLocationByName(locationName).slug
+                    }`,
+                  );
                 }}
               >
-                Quick play
+                Hustle
               </Button>
             </VStack>
           </Card>

@@ -1,3 +1,5 @@
+import { useQuery, UseQueryOptions } from "react-query";
+import { useFetchData } from "@/hooks/fetcher";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -27,35 +29,11 @@ export type Scalars = {
   usize: any;
 };
 
-export type Authrole = {
-  __typename?: "Authrole";
-  id: Scalars["felt252"];
-};
-
-export type Authstatus = {
-  __typename?: "Authstatus";
-  is_authorized: Scalars["bool"];
-};
-
-export type Cash = {
-  __typename?: "Cash";
-  amount: Scalars["u128"];
-};
-
-export type ComponentUnion =
-  | Authrole
-  | Authstatus
-  | Cash
-  | Drug
-  | Game
-  | Location
-  | Market
-  | Risks
-  | Stats;
+export type ComponentUnion = Drug | Game | Location | Market | Player | Risks;
 
 export type Drug = {
   __typename?: "Drug";
-  id: Scalars["u32"];
+  name: Scalars["felt252"];
   quantity: Scalars["usize"];
 };
 
@@ -84,7 +62,6 @@ export type Game = {
   creator: Scalars["felt252"];
   game_id: Scalars["u32"];
   is_finished: Scalars["bool"];
-  max_locations: Scalars["usize"];
   max_players: Scalars["usize"];
   max_turns: Scalars["usize"];
   num_players: Scalars["usize"];
@@ -93,7 +70,7 @@ export type Game = {
 
 export type Location = {
   __typename?: "Location";
-  id: Scalars["u32"];
+  name: Scalars["felt252"];
 };
 
 export type Market = {
@@ -102,11 +79,17 @@ export type Market = {
   quantity: Scalars["usize"];
 };
 
+export type Player = {
+  __typename?: "Player";
+  arrested: Scalars["bool"];
+  cash: Scalars["u128"];
+  health: Scalars["u8"];
+  name: Scalars["felt252"];
+  turns_remaining: Scalars["usize"];
+};
+
 export type Query = {
   __typename?: "Query";
-  authroleComponents?: Maybe<Array<Maybe<Authrole>>>;
-  authstatusComponents?: Maybe<Array<Maybe<Authstatus>>>;
-  cashComponents?: Maybe<Array<Maybe<Cash>>>;
   drugComponents?: Maybe<Array<Maybe<Drug>>>;
   entities?: Maybe<Array<Maybe<Entity>>>;
   entity: Entity;
@@ -115,32 +98,17 @@ export type Query = {
   gameComponents?: Maybe<Array<Maybe<Game>>>;
   locationComponents?: Maybe<Array<Maybe<Location>>>;
   marketComponents?: Maybe<Array<Maybe<Market>>>;
+  playerComponents?: Maybe<Array<Maybe<Player>>>;
   risksComponents?: Maybe<Array<Maybe<Risks>>>;
-  statsComponents?: Maybe<Array<Maybe<Stats>>>;
   system: System;
   systemCall: SystemCall;
   systemCalls?: Maybe<Array<Maybe<SystemCall>>>;
   systems?: Maybe<Array<Maybe<System>>>;
 };
 
-export type QueryAuthroleComponentsArgs = {
-  id?: InputMaybe<Scalars["felt252"]>;
-  limit?: InputMaybe<Scalars["Int"]>;
-};
-
-export type QueryAuthstatusComponentsArgs = {
-  is_authorized?: InputMaybe<Scalars["bool"]>;
-  limit?: InputMaybe<Scalars["Int"]>;
-};
-
-export type QueryCashComponentsArgs = {
-  amount?: InputMaybe<Scalars["u128"]>;
-  limit?: InputMaybe<Scalars["Int"]>;
-};
-
 export type QueryDrugComponentsArgs = {
-  id?: InputMaybe<Scalars["u32"]>;
   limit?: InputMaybe<Scalars["Int"]>;
+  name?: InputMaybe<Scalars["felt252"]>;
   quantity?: InputMaybe<Scalars["usize"]>;
 };
 
@@ -166,7 +134,6 @@ export type QueryGameComponentsArgs = {
   game_id?: InputMaybe<Scalars["u32"]>;
   is_finished?: InputMaybe<Scalars["bool"]>;
   limit?: InputMaybe<Scalars["Int"]>;
-  max_locations?: InputMaybe<Scalars["usize"]>;
   max_players?: InputMaybe<Scalars["usize"]>;
   max_turns?: InputMaybe<Scalars["usize"]>;
   num_players?: InputMaybe<Scalars["usize"]>;
@@ -174,8 +141,8 @@ export type QueryGameComponentsArgs = {
 };
 
 export type QueryLocationComponentsArgs = {
-  id?: InputMaybe<Scalars["u32"]>;
   limit?: InputMaybe<Scalars["Int"]>;
+  name?: InputMaybe<Scalars["felt252"]>;
 };
 
 export type QueryMarketComponentsArgs = {
@@ -184,21 +151,21 @@ export type QueryMarketComponentsArgs = {
   quantity?: InputMaybe<Scalars["usize"]>;
 };
 
+export type QueryPlayerComponentsArgs = {
+  arrested?: InputMaybe<Scalars["bool"]>;
+  cash?: InputMaybe<Scalars["u128"]>;
+  health?: InputMaybe<Scalars["u8"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
+  name?: InputMaybe<Scalars["felt252"]>;
+  turns_remaining?: InputMaybe<Scalars["usize"]>;
+};
+
 export type QueryRisksComponentsArgs = {
   arrested?: InputMaybe<Scalars["u8"]>;
   hurt?: InputMaybe<Scalars["u8"]>;
-  killed?: InputMaybe<Scalars["u8"]>;
   limit?: InputMaybe<Scalars["Int"]>;
   mugged?: InputMaybe<Scalars["u8"]>;
   travel?: InputMaybe<Scalars["u8"]>;
-};
-
-export type QueryStatsComponentsArgs = {
-  arrested?: InputMaybe<Scalars["bool"]>;
-  health?: InputMaybe<Scalars["u8"]>;
-  limit?: InputMaybe<Scalars["Int"]>;
-  respect?: InputMaybe<Scalars["u8"]>;
-  turns_remaining?: InputMaybe<Scalars["usize"]>;
 };
 
 export type QuerySystemArgs = {
@@ -217,17 +184,8 @@ export type Risks = {
   __typename?: "Risks";
   arrested: Scalars["u8"];
   hurt: Scalars["u8"];
-  killed: Scalars["u8"];
   mugged: Scalars["u8"];
   travel: Scalars["u8"];
-};
-
-export type Stats = {
-  __typename?: "Stats";
-  arrested: Scalars["bool"];
-  health: Scalars["u8"];
-  respect: Scalars["u8"];
-  turns_remaining: Scalars["usize"];
 };
 
 export type System = {
@@ -261,7 +219,6 @@ export type AvailableGamesQuery = {
     creator: any;
     num_players: any;
     max_players: any;
-    max_locations: any;
     max_turns: any;
     start_time: any;
   } | null> | null;
@@ -276,78 +233,255 @@ export type UserGamesQuery = {
   gameComponents?: Array<{ __typename?: "Game"; game_id: any } | null> | null;
 };
 
-export type PlayerQueryVariables = Exact<{
+export type PlayerEntityQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
 
-export type PlayerQuery = {
+export type PlayerEntityQuery = {
   __typename?: "Query";
   entity: {
     __typename?: "Entity";
     components?: Array<
-      | { __typename: "Authrole" }
-      | { __typename: "Authstatus" }
-      | { __typename: "Cash"; amount: any }
-      | { __typename: "Drug" }
+      | { __typename: "Drug"; name: any; quantity: any }
       | { __typename: "Game" }
-      | { __typename: "Location"; id: any }
-      | { __typename: "Market" }
-      | { __typename: "Risks" }
-      | { __typename: "Stats" }
-      | null
-    > | null;
-  };
-};
-
-export type LocationQueryVariables = Exact<{
-  id: Scalars["ID"];
-}>;
-
-export type LocationQuery = {
-  __typename?: "Query";
-  entity: {
-    __typename?: "Entity";
-    components?: Array<
-      | { __typename: "Authrole" }
-      | { __typename: "Authstatus" }
-      | { __typename: "Cash" }
-      | { __typename: "Drug" }
-      | { __typename: "Game" }
-      | { __typename: "Location"; id: any }
+      | { __typename: "Location"; name: any }
       | { __typename: "Market" }
       | {
-          __typename: "Risks";
-          travel: any;
-          hurt: any;
-          killed: any;
-          mugged: any;
+          __typename: "Player";
+          name: any;
+          cash: any;
+          health: any;
           arrested: any;
+          turns_remaining: any;
         }
-      | { __typename: "Stats" }
+      | { __typename: "Risks" }
       | null
     > | null;
   };
 };
 
-export type MarketQueryVariables = Exact<{
+export type GameEntityQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
 
-export type MarketQuery = {
+export type GameEntityQuery = {
   __typename?: "Query";
   entity: {
     __typename?: "Entity";
     components?: Array<
-      | { __typename: "Authrole" }
-      | { __typename: "Authstatus" }
-      | { __typename: "Cash" }
       | { __typename: "Drug" }
-      | { __typename: "Game" }
+      | {
+          __typename: "Game";
+          creator: any;
+          game_id: any;
+          is_finished: any;
+          max_players: any;
+          max_turns: any;
+          num_players: any;
+          start_time: any;
+        }
       | { __typename: "Location" }
-      | { __typename: "Market"; cash: any; quantity: any }
+      | { __typename: "Market" }
+      | { __typename: "Player" }
       | { __typename: "Risks" }
-      | { __typename: "Stats" }
       | null
     > | null;
   };
 };
+
+export type LocationEntitiesQueryVariables = Exact<{
+  gameId: Scalars["String"];
+  location: Scalars["String"];
+}>;
+
+export type LocationEntitiesQuery = {
+  __typename?: "Query";
+  entities?: Array<{
+    __typename?: "Entity";
+    components?: Array<
+      | { __typename?: "Drug" }
+      | { __typename?: "Game" }
+      | { __typename?: "Location"; name: any }
+      | { __typename?: "Market"; cash: any; quantity: any }
+      | { __typename?: "Player" }
+      | {
+          __typename?: "Risks";
+          arrested: any;
+          hurt: any;
+          mugged: any;
+          travel: any;
+        }
+      | null
+    > | null;
+  } | null> | null;
+};
+
+export const AvailableGamesDocument = `
+    query AvailableGames {
+  gameComponents(limit: 10) {
+    game_id
+    creator
+    num_players
+    max_players
+    max_turns
+    start_time
+  }
+}
+    `;
+export const useAvailableGamesQuery = <
+  TData = AvailableGamesQuery,
+  TError = unknown,
+>(
+  variables?: AvailableGamesQueryVariables,
+  options?: UseQueryOptions<AvailableGamesQuery, TError, TData>,
+) =>
+  useQuery<AvailableGamesQuery, TError, TData>(
+    variables === undefined
+      ? ["AvailableGames"]
+      : ["AvailableGames", variables],
+    useFetchData<AvailableGamesQuery, AvailableGamesQueryVariables>(
+      AvailableGamesDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useAvailableGamesQuery.getKey = (variables?: AvailableGamesQueryVariables) =>
+  variables === undefined ? ["AvailableGames"] : ["AvailableGames", variables];
+export const UserGamesDocument = `
+    query UserGames($id: felt252!) {
+  gameComponents(creator: $id) {
+    game_id
+  }
+}
+    `;
+export const useUserGamesQuery = <TData = UserGamesQuery, TError = unknown>(
+  variables: UserGamesQueryVariables,
+  options?: UseQueryOptions<UserGamesQuery, TError, TData>,
+) =>
+  useQuery<UserGamesQuery, TError, TData>(
+    ["UserGames", variables],
+    useFetchData<UserGamesQuery, UserGamesQueryVariables>(
+      UserGamesDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useUserGamesQuery.getKey = (variables: UserGamesQueryVariables) => [
+  "UserGames",
+  variables,
+];
+export const PlayerEntityDocument = `
+    query PlayerEntity($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Player {
+        name
+        cash
+        health
+        arrested
+        turns_remaining
+      }
+      ... on Location {
+        name
+      }
+      ... on Drug {
+        name
+        quantity
+      }
+    }
+  }
+}
+    `;
+export const usePlayerEntityQuery = <
+  TData = PlayerEntityQuery,
+  TError = unknown,
+>(
+  variables: PlayerEntityQueryVariables,
+  options?: UseQueryOptions<PlayerEntityQuery, TError, TData>,
+) =>
+  useQuery<PlayerEntityQuery, TError, TData>(
+    ["PlayerEntity", variables],
+    useFetchData<PlayerEntityQuery, PlayerEntityQueryVariables>(
+      PlayerEntityDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+usePlayerEntityQuery.getKey = (variables: PlayerEntityQueryVariables) => [
+  "PlayerEntity",
+  variables,
+];
+export const GameEntityDocument = `
+    query GameEntity($id: ID!) {
+  entity(id: $id) {
+    components {
+      __typename
+      ... on Game {
+        creator
+        game_id
+        is_finished
+        max_players
+        max_turns
+        num_players
+        start_time
+      }
+    }
+  }
+}
+    `;
+export const useGameEntityQuery = <TData = GameEntityQuery, TError = unknown>(
+  variables: GameEntityQueryVariables,
+  options?: UseQueryOptions<GameEntityQuery, TError, TData>,
+) =>
+  useQuery<GameEntityQuery, TError, TData>(
+    ["GameEntity", variables],
+    useFetchData<GameEntityQuery, GameEntityQueryVariables>(
+      GameEntityDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useGameEntityQuery.getKey = (variables: GameEntityQueryVariables) => [
+  "GameEntity",
+  variables,
+];
+export const LocationEntitiesDocument = `
+    query LocationEntities($gameId: String!, $location: String!) {
+  entities(keys: [$gameId, $location]) {
+    components {
+      ... on Market {
+        cash
+        quantity
+      }
+      ... on Location {
+        name
+      }
+      ... on Risks {
+        arrested
+        hurt
+        mugged
+        travel
+      }
+    }
+  }
+}
+    `;
+export const useLocationEntitiesQuery = <
+  TData = LocationEntitiesQuery,
+  TError = unknown,
+>(
+  variables: LocationEntitiesQueryVariables,
+  options?: UseQueryOptions<LocationEntitiesQuery, TError, TData>,
+) =>
+  useQuery<LocationEntitiesQuery, TError, TData>(
+    ["LocationEntities", variables],
+    useFetchData<LocationEntitiesQuery, LocationEntitiesQueryVariables>(
+      LocationEntitiesDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useLocationEntitiesQuery.getKey = (
+  variables: LocationEntitiesQueryVariables,
+) => ["LocationEntities", variables];
