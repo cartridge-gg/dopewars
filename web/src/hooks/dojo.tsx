@@ -1,9 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
-import { Account, BigNumberish, CallData, num, shortString } from "starknet";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { Account, BigNumberish, CallData, shortString } from "starknet";
 
 interface DojoInterface {
   worldAddress: string;
   account: Account;
+  isPending: boolean;
   execute: (systemName: string, params: BigNumberish[]) => Promise<string>;
 }
 
@@ -27,27 +28,34 @@ export function DojoProvider({
   account: Account;
   children?: ReactNode;
 }): JSX.Element {
+  const [isPending, setIsPending] = useState(false);
+
   const execute = async (systemName: string, params: BigNumberish[]) => {
-    const { transaction_hash } = await account.execute({
-      contractAddress: worldAddress,
-      entrypoint: "execute",
-      calldata: CallData.compile([
-        shortString.encodeShortString(systemName),
-        params.length,
-        ...params,
-      ]),
-    });
+    setIsPending(true);
 
-    console.log("transaction hash: " + transaction_hash);
-
-    // katana tx are instant
-    //await account.waitForTransaction(transaction_hash);
-
-    return transaction_hash;
+    return account
+      .execute({
+        contractAddress: worldAddress,
+        entrypoint: "execute",
+        calldata: CallData.compile([
+          shortString.encodeShortString(systemName),
+          params.length,
+          ...params,
+        ]),
+      })
+      .then(({ transaction_hash }) => {
+        console.log("transaction hash: " + transaction_hash);
+        return transaction_hash;
+      })
+      .catch((e) => {
+        console.error(e);
+        throw e;
+      })
+      .finally(() => setIsPending(false));
   };
 
   return (
-    <DojoContext.Provider value={{ worldAddress, account, execute }}>
+    <DojoContext.Provider value={{ worldAddress, account, isPending, execute }}>
       {children}
     </DojoContext.Provider>
   );

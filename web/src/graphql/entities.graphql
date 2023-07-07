@@ -1,42 +1,40 @@
-query Player($id: ID!) {
-  entity(id: $id) {
+query PlayerEntities($gameId: String!, $address: String!) {
+  entities(keys: [$gameId, $address]) {
     components {
       __typename
-      ... on Cash {
-        amount
-      }
-      ... on Location {
-        id
-      }
-    }
-  }
-}
-
-query Location($id: ID!) {
-  entity(id: $id) {
-    components {
-      __typename
-      ... on Location {
-        id
-      }
-      ... on Risks {
-        travel
-        hurt
-        killed
-        mugged
+      ... on Player {
+        name
+        cash
+        health
         arrested
+        turns_remaining
+      }
+      ... on Location {
+        name
+      }
+      ... on Drug {
+        name
+        quantity
       }
     }
   }
 }
 
-query Market($id: ID!) {
-  entity(id: $id) {
+query LocationEntities($gameId: String!, $location: String!) {
+  entities(keys: [$gameId, $location]) {
     components {
-      __typename
       ... on Market {
         cash
         quantity
+      }
+      ... on Location {
+        name
+      }
+      ... on Risks {
+        arrested
+        hurt
+        mugged
+        travel
       }
     }
   }

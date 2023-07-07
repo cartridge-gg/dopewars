@@ -16,7 +16,7 @@ export interface RyoWorldInterface {
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<string>;
+  ) => Promise<{ gameId: string; locationName: string }>;
   join: (gameId: string) => Promise<void>;
   travel: (gameId: string, locationId: string) => Promise<void>;
   trade: (
@@ -26,10 +26,11 @@ export interface RyoWorldInterface {
     quantity: number,
     direction: TradeDirection,
   ) => Promise<void>;
+  isPending: boolean;
 }
 
 export const useRyoWorld = (): RyoWorldInterface => {
-  const { execute, account } = useDojo();
+  const { execute, account, isPending } = useDojo();
 
   const create = async (
     startTime: number,
@@ -39,7 +40,7 @@ export const useRyoWorld = (): RyoWorldInterface => {
     const txn = await execute("create_game", [startTime, maxPlayers, maxTurns]);
     const receipt = await account.getTransactionReceipt(txn);
 
-    return parseGameId(receipt);
+    return parseJoinedEvent(receipt);
   };
 
   const join = async (gameId: string) => {
@@ -65,18 +66,25 @@ export const useRyoWorld = (): RyoWorldInterface => {
     join,
     trade,
     travel,
+    isPending,
   };
 };
 
-const parseGameId = (receipt: InvokeTransactionReceiptResponse): string => {
+const parseJoinedEvent = (
+  receipt: InvokeTransactionReceiptResponse,
+): { gameId: string; playerId: string; locationName: string } => {
   const event = receipt.events?.find(
     (event) =>
-      shortString.decodeShortString(event.keys[0]) === RyoEvents.GameCreated,
+      shortString.decodeShortString(event.keys[0]) === RyoEvents.PlayerJoined,
   );
 
   if (!event) {
-    throw new Error("No GameCreated event found in receipt");
+    throw new Error("No PlayerJoined event found in receipt");
   }
 
-  return num.toHexString(event.data[0]);
+  return {
+    gameId: num.toHexString(event.data[0]),
+    playerId: num.toHexString(event.data[1]),
+    locationName: shortString.decodeShortString(num.toHexString(event.data[2])),
+  };
 };

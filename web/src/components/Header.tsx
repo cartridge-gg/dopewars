@@ -19,6 +19,8 @@ import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
 import { useGameStore, getInventoryInfos } from "@/hooks/state";
+import { usePlayerEntitiesQuery } from "@/generated/graphql";
+import { PLAYER_ADDRESS } from "@/constants";
 
 export interface HeaderProps {
   back?: boolean;
@@ -26,8 +28,14 @@ export interface HeaderProps {
 
 const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
-  const { address } = useAccount();
-  const { connectors, connect, disconnect } = useConnectors();
+  const { gameId } = router.query as { gameId: string };
+
+  const { data } = usePlayerEntitiesQuery(
+    { gameId, address: PLAYER_ADDRESS },
+    {
+      enabled: !!gameId,
+    },
+  );
 
   const isMobile = IsMobile();
 
@@ -60,11 +68,6 @@ const Header = ({ back }: HeaderProps) => {
       zIndex="1"
     >
       <HStack flex="1" justify="left">
-        {!isBackButtonVisible && (
-          <HeaderButton onClick={() => router.push("/")}>
-            <Home />
-          </HeaderButton>
-        )}
         {isBackButtonVisible && (
           <HeaderButton onClick={() => router.back()}>
             <Arrow />
@@ -104,12 +107,12 @@ const Header = ({ back }: HeaderProps) => {
 
           <HStack flex="1" justify="right">
             {!isMobile && <MediaPlayer />}
-
-            {!isMobile && (
+            {/* Chat requires backend implementation */}
+            {/* {!isMobile && (
               <HeaderButton onClick={() => router.push("/chat")}>
                 <Chat color={hasNewMessages ? "yellow.400" : "currentColor"} />
               </HeaderButton>
-            )}
+            )} */}
             {isMobile && <MobileMenu />}
           </HStack>
         </>
@@ -122,7 +125,8 @@ const Header = ({ back }: HeaderProps) => {
               </HeaderButton>
             )}
           </HStack>
-          <HStack flex="1" justify="right">
+          {/* For alpha, we're using burner wallets */}
+          {/* <HStack flex="1" justify="right">
             {!isMobile && <MediaPlayer />}
 
             <Button
@@ -138,7 +142,7 @@ const Header = ({ back }: HeaderProps) => {
             >
               <Link /> <Text>CONNECT</Text>
             </Button>
-          </HStack>
+          </HStack> */}
         </>
       )}
     </Flex>
