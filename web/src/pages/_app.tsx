@@ -15,7 +15,6 @@ import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
 import { DojoProvider } from "@/hooks/dojo";
-import { PLAYER_ADDRESS, PLAYER_PRIVATE_KEY } from "@/constants";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 export const controllerConnector = new ControllerConnector([
@@ -34,7 +33,11 @@ export const connectors = [controllerConnector as any, argentConnector];
 const provider = new RpcProvider({
   nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!,
 });
-const account = new Account(provider, PLAYER_ADDRESS, PLAYER_PRIVATE_KEY);
+const account = new Account(
+  provider,
+  process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+  process.env.NEXT_PUBLIC_PLAYER_PRIVATE_KEY!,
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {

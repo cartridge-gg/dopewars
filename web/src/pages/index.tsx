@@ -59,7 +59,7 @@ export default function Home() {
                 isDisabled={isCreating}
                 onClick={async () => {
                   setIsCreating(true);
-                  
+
                   const { gameId, locationName } = await create(
                     START_TIME,
                     MAX_PLAYERS,

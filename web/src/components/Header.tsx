@@ -20,7 +20,6 @@ import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
 import { useGameStore, getInventoryInfos } from "@/hooks/state";
 import { usePlayerEntityQuery, Entity } from "@/generated/graphql";
-import { PLAYER_ADDRESS } from "@/constants";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 
@@ -33,7 +32,7 @@ const Header = ({ back }: HeaderProps) => {
   const { gameId } = router.query as { gameId: string };
   const { player, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
-    address: PLAYER_ADDRESS,
+    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
   const { game, isFetched: isFetchedGame } = useGameEntity({
     gameId,
