@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -17,16 +17,7 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
-import {
-  Ludes,
-  Weed,
-  Acid,
-  Speed,
-  Heroin,
-  Cocaine,
-} from "@/components/icons/drugs";
-import { Inventory } from "@/components/Inventory";
-import { LocationProps, useUiStore } from "@/hooks/ui";
+import { getLocationBySlug, LocationProps, useUiStore } from "@/hooks/ui";
 import {
   useGameStore,
   travelTo,
@@ -68,7 +59,6 @@ export default function Location() {
         headerImage={`/images/locations/${location?.slug}.png`}
       >
         <Content>
-          {/* <Inventory pb="20px" /> */}
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {drugs.map((drug, index) => (
               <Card
@@ -118,7 +108,7 @@ export default function Location() {
               router.push("/0x1234/turn");
             }}
           >
-            Travel and end turn
+            Continue
           </Button>
         </Footer>
       </Layout>

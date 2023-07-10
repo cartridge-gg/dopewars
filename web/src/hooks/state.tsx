@@ -137,7 +137,7 @@ export const initGameState = (turns: number, cash: number): GameState => {
 };
 
 export const useGameStore = create<GameState>(() => ({
-  ...initGameState(20, 420),
+  ...initGameState(20, 100),
 }));
 
 export const updateLocation = (location: Locations) =>

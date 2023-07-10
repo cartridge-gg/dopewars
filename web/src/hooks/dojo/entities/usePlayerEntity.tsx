@@ -1,8 +1,7 @@
 import { Player, Location, usePlayerEntityQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { ec, num, shortString } from "starknet";
-
-const SCALING_FACTOR = 10000;
+import { SCALING_FACTOR } from "..";
 
 interface PlayerEntityData {
   entity: {
@@ -11,7 +10,6 @@ interface PlayerEntityData {
 }
 
 export class PlayerEntity {
-  name: string;
   cash: number;
   health: number;
   arrested: boolean;
@@ -19,7 +17,6 @@ export class PlayerEntity {
   location_name: string;
 
   constructor(player: Player, location: Location) {
-    this.name = player.name;
     this.cash = parseInt(player.cash, 16) / SCALING_FACTOR;
     this.health = player.health;
     this.arrested = player.arrested;

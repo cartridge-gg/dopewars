@@ -9,7 +9,7 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::components::player::{player, Player};
+use rollyourown::components::name::{name, Name};
 use rollyourown::tests::create::spawn_game;
 
 #[test]
@@ -24,9 +24,9 @@ fn test_set_name() {
 
     world.execute('set_name'.into(), set_name_calldata.span());
 
-    let mut res = world.entity('Player'.into(), (game_id, player_id).into(), 0, 0);
+    let mut res = world.entity('Name'.into(), (game_id, player_id).into(), 0, 0);
     assert(res.len() > 0, 'no player');
 
-    let player = serde::Serde::<Player>::deserialize(ref res).expect('deserialization failed');
-    assert(player.name == 'Rambo'.into(), 'incorrect name');
+    let name = serde::Serde::<Name>::deserialize(ref res).expect('deserialization failed');
+    assert(name.short_string == 'Rambo'.into(), 'incorrect name');
 }

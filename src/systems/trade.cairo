@@ -47,7 +47,6 @@ mod buy {
             ctx.world,
             (game_id, player_id).into(),
             (Player {
-                name: player.name,
                 cash: player.cash - cost,
                 health: player.health,
                 arrested: player.arrested,
@@ -60,9 +59,7 @@ mod buy {
             Option::None(_) => quantity,
         };
         set !(
-            ctx.world,
-            (game_id, player_id, drug_name).into(),
-            (Drug { name: drug_name, quantity: player_quantity })
+            ctx.world, (game_id, player_id, drug_name).into(), (Drug { quantity: player_quantity })
         );
 
         Bought(game_id, player_id, drug_name, quantity, cost);
@@ -121,7 +118,6 @@ mod sell {
             ctx.world,
             (game_id, player_id).into(),
             (Player {
-                name: player.name,
                 cash: player.cash + payout,
                 health: player.health,
                 arrested: player.arrested,
@@ -131,7 +127,7 @@ mod sell {
         set !(
             ctx.world,
             (game_id, player_id, drug_name).into(),
-            (Drug { name: drug_name, quantity: player_quantity - quantity })
+            (Drug { quantity: player_quantity - quantity })
         );
 
         Sold(game_id, player_id, drug_name, quantity, payout);

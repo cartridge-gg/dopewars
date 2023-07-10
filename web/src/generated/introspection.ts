@@ -5,7 +5,15 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    ComponentUnion: ["Drug", "Game", "Location", "Market", "Player", "Risks"],
+    ComponentUnion: [
+      "Drug",
+      "Game",
+      "Location",
+      "Market",
+      "Name",
+      "Player",
+      "Risks",
+    ],
   },
 };
 export default result;
