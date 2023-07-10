@@ -26,9 +26,15 @@ import {
 } from "@/hooks/state";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
+import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 
 export default function Location() {
   const router = useRouter();
+  const { location: locationData } = useLocationEntity({
+    gameId: router.query.gameId as string,
+    locationName: getLocationBySlug(router.query.locationSlug as string)
+      .name as string,
+  });
 
   const { locations, drugs } = useUiStore.getState();
   const [location, setLocation] = useState<LocationProps | undefined>();
