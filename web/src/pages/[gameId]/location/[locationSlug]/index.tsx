@@ -17,63 +17,73 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
-import { getLocationBySlug, LocationProps, useUiStore } from "@/hooks/ui";
 import {
-  useGameStore,
-  travelTo,
-  endTurn,
-  travelAndEndTurn,
-} from "@/hooks/state";
+  getDrugByName,
+  getLocationByName,
+  getLocationBySlug,
+  LocationProps,
+  useUiStore,
+} from "@/hooks/ui";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
+import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 
 export default function Location() {
   const router = useRouter();
-  const { location: locationData } = useLocationEntity({
-    gameId: router.query.gameId as string,
-    locationName: getLocationBySlug(router.query.locationSlug as string)
-      .name as string,
+  const gameId = router.query.gameId as string;
+  const slug = router.query.locationSlug as string;
+  const locationName = getLocationBySlug(slug).name;
+
+  const { location: locationEntity } = useLocationEntity({
+    gameId,
+    locationName,
+  });
+  const { player } = usePlayerEntity({
+    gameId,
+    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
 
-  const { locations, drugs } = useUiStore.getState();
-  const [location, setLocation] = useState<LocationProps | undefined>();
-
-  const inventory = useGameStore((state) => state.inventory);
-  const locationMenu = useGameStore((state) => state.menu);
-  const turns = useGameStore((state) => state.turns);
-
   useEffect(() => {
-    if (!locationMenu) {
-      location && travelTo(location.name);
+    if (player && locationName) {
+      // check player location and forward to correct location
+      if (locationName !== player.location_name) {
+        router.replace(
+          `/${gameId}/location/${getLocationByName(player.location_name).slug}`,
+        );
+        return;
+      }
+
+      // check if game over
+      if (player.turnsRemaining <= 0) {
+        // TODO: forward to game over
+        console.log("game over");
+        return;
+      }
     }
-  }, [location, locationMenu]);
-
-  useEffect(() => {
-    const { getLocationBySlug } = useUiStore.getState();
-    const locationSlug = router.query.locationSlug?.toString() || "";
-    const location = getLocationBySlug(locationSlug);
-    setLocation(location);
-  }, [router.query]);
+  }, [locationName, player, router]);
 
   return (
-    location &&
-    locationMenu && (
+    locationEntity && (
       <Layout
-        title={location?.name}
-        prefixTitle={`Day ${turns.current}`}
-        headerImage={`/images/locations/${location?.slug}.png`}
+        title={locationEntity.name}
+        prefixTitle={`Day 1`}
+        headerImage={`/images/locations/${
+          getLocationByName(locationEntity.name).slug
+        }.png`}
       >
         <Content>
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
-            {drugs.map((drug, index) => (
+            {locationEntity.drugMarkets.map((drug, index) => (
               <Card
                 h="180px"
                 key={index}
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3, false);
-                  router.push(`${router.asPath}/${drug.slug}`);
+                  router.push(
+                    `${router.asPath}/${getDrugByName(drug.name).slug}`,
+                  );
                 }}
               >
                 <CardHeader
@@ -85,21 +95,15 @@ export default function Location() {
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center">
-                    <Box>{drug.icon({})}</Box>
+                    <Box>{getDrugByName(drug.name).icon({})}</Box>
                   </HStack>
                 </CardBody>
                 <CardFooter fontSize="16px">
-                  <Text>${locationMenu[drug.name].price}</Text>
+                  <Text>${drug.price.toString()}</Text>
                   <Spacer />
-                  <HStack
-                    color={
-                      inventory.drugs[drug.name].quantity > 0
-                        ? "yellow.400"
-                        : "neon.500"
-                    }
-                  >
+                  <HStack color={false ? "yellow.400" : "neon.500"}>
                     <Bag />
-                    <Text>{inventory.drugs[drug.name].quantity}</Text>
+                    <Text>{0}</Text>
                   </HStack>
                 </CardFooter>
               </Card>
@@ -110,8 +114,7 @@ export default function Location() {
           <Button
             w={["full", "auto"]}
             onClick={() => {
-              travelAndEndTurn();
-              router.push("/0x1234/turn");
+              router.push(`/${gameId}/turn`);
             }}
           >
             Continue

@@ -1,7 +1,7 @@
 import { Player, Location, usePlayerEntityQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { ec, num, shortString } from "starknet";
-import { SCALING_FACTOR } from "..";
+import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
 interface PlayerEntityData {
   entity: {
@@ -63,7 +63,7 @@ export const usePlayerEntity = ({
     { id: key },
     {
       enabled: !!gameId && !!address,
-      refetchInterval: 1000, // TODO: long polling
+      refetchInterval: REFETCH_INTERVAL, // TODO: long polling
     },
   );
 

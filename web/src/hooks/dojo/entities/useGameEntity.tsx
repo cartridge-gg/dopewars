@@ -1,6 +1,7 @@
 import { Game, useGameEntityQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { ec, num } from "starknet";
+import { REFETCH_INTERVAL } from "..";
 
 interface GameEntityData {
   entity: {
@@ -58,7 +59,6 @@ export const useGameEntity = ({
     { id: key },
     {
       enabled: !!gameId,
-      refetchInterval: 1000, // TODO: long polling
     },
   );
 
