@@ -1,7 +1,7 @@
 use box::BoxTrait;
 use traits::Into;
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Game {
     game_id: u32,
     start_time: u64,

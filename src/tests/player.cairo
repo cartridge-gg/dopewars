@@ -24,7 +24,8 @@ fn test_set_name() {
 
     world.execute('set_name'.into(), set_name_calldata.span());
 
-    let mut res = world.entity('Name'.into(), (game_id, player_id).into(), 0, 0);
+    let mut res = world
+        .entity('Name'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Name>::len());
     assert(res.len() > 0, 'no player');
 
     let name = serde::Serde::<Name>::deserialize(ref res).expect('deserialization failed');

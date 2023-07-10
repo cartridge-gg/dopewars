@@ -1,7 +1,7 @@
 use array::{ArrayTrait, SpanTrait};
 use traits::{Into, TryInto};
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Drug {
     quantity: usize, 
 }

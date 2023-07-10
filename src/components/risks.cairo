@@ -18,7 +18,7 @@ struct TradeResult {
     drug_loss: usize,
 }
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Risks {
     // travel risk probabilities
     travel: u8,

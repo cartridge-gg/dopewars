@@ -2,7 +2,7 @@ use array::{ArrayTrait, SpanTrait};
 use option::OptionTrait;
 use traits::{Into, TryInto};
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Location {
     name: felt252
 }

@@ -1,4 +1,4 @@
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Player {
     cash: u128,
     health: u8,

@@ -68,7 +68,8 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
 
     let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
-    let mut res = world.entity('Game'.into(), game_id.into(), 0, 0);
+
+    let mut res = world.entity('Game'.into(), game_id.into(), 0, dojo::SerdeLen::<Game>::len());
     assert(res.len() > 0, 'game not found');
 
     let game = serde::Serde::<Game>::deserialize(ref res).expect('game deserialization failed');
@@ -113,18 +114,21 @@ fn test_create_game() {
     let brooklyn_id: felt252 = 'Brooklyn'.into();
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, brooklyn_id).into(), 0, 0);
+    }
+        .entity(
+            'Location'.into(), (game_id, brooklyn_id).into(), 0, dojo::SerdeLen::<Location>::len()
+        );
     assert(res.len() > 0, 'no Brooklyn location');
 
     let queens_id: felt252 = 'Queens'.into();
     let res = IWorldDispatcher {
         contract_address: world_address
-    }.entity('Location'.into(), (game_id, queens_id).into(), 0, 0);
+    }.entity('Location'.into(), (game_id, queens_id).into(), 0, dojo::SerdeLen::<Location>::len());
     assert(res.len() > 0, 'no queens location');
 
     let (players, _) = IWorldDispatcher {
         contract_address: world_address
-    }.entities('Player'.into(), game_id.into());
+    }.entities('Player'.into(), game_id.into(), 0);
     assert(players.len() == 1, 'wrong num players');
 }
 

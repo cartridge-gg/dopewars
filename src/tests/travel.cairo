@@ -27,7 +27,10 @@ fn test_travel() {
 
     world.execute('travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
+    let mut res = world
+        .entity(
+            'Location'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Location>::len()
+        );
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
@@ -40,7 +43,10 @@ fn test_travel() {
 
     world.execute('travel'.into(), travel_calldata.span());
 
-    let mut res = world.entity('Location'.into(), (game_id, player_id).into(), 0, 0);
+    let mut res = world
+        .entity(
+            'Location'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Location>::len()
+        );
     assert(res.len() > 0, 'no player location');
 
     let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
