@@ -1,6 +1,4 @@
-import { controllerConnector, argentConnector } from "@/pages/_app";
 import { Clock, Gem, Bag, Chat, Home, Link, Sound, Arrow } from "./icons";
-import { useAccount, useConnectors } from "@starknet-react/core";
 import { Box, Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";

@@ -11,12 +11,10 @@
     "gen": "graphql-codegen --config codegen.yaml"
   },
   "dependencies": {
-    "@cartridge/connector": "^0.3.18",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@starknet-react/core": "^0.16.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "formik": "^2.2.9",

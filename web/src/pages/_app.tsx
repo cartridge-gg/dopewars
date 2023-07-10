@@ -1,14 +1,8 @@
 import NextHead from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
-import {
-  InjectedConnector,
-  StarknetConfig,
-  StarknetProvider,
-} from "@starknet-react/core";
 import { RpcProvider, Account } from "starknet";
 import type { AppProps } from "next/app";
 import theme from "../theme";
-import ControllerConnector from "@cartridge/connector";
 import Fonts from "@/theme/fonts";
 
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
@@ -16,19 +10,6 @@ import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
 import { DojoProvider } from "@/hooks/dojo";
 import { QueryClient, QueryClientProvider } from "react-query";
-
-export const controllerConnector = new ControllerConnector([
-  {
-    target: "0xdead",
-    method: "have_turn",
-  },
-]);
-export const argentConnector = new InjectedConnector({
-  options: {
-    id: "argentX",
-  },
-});
-export const connectors = [controllerConnector as any, argentConnector];
 
 const provider = new RpcProvider({
   nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!,
