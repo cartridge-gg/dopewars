@@ -116,7 +116,7 @@ export const setIsConnected = (isConnected: boolean) =>
   useUiStore.setState((state) => ({ isConnected }));
 
 export const isBackButtonVisible = (pathname: string): Boolean => {
-  return ["/[game]/location/[locationSlug]/[drugSlug]"].includes(pathname);
+  return ["/[game]/[locationSlug]/[drugSlug]"].includes(pathname);
 };
 
 export const getLocationBySlug = (slug: string): LocationProps => {

@@ -68,9 +68,7 @@ export default function Home() {
 
                   startGame();
                   router.push(
-                    `/${gameId}/location/${
-                      getLocationByName(locationName).slug
-                    }`,
+                    `/${gameId}/${getLocationByName(locationName).slug}`,
                   );
                 }}
               >

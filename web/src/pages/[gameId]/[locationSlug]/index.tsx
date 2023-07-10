@@ -49,7 +49,7 @@ export default function Location() {
       // check player location and forward to correct location
       if (locationName !== player.location_name) {
         router.replace(
-          `/${gameId}/location/${getLocationByName(player.location_name).slug}`,
+          `/${gameId}/${getLocationByName(player.location_name).slug}`,
         );
         return;
       }
