@@ -1,5 +1,5 @@
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
-import { useDojo } from "../provider";
+import { useDojo } from "..";
 import { TradeDirection } from "../../state";
 
 export enum RyoEvents {

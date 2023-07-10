@@ -14,12 +14,8 @@ import Fonts from "@/theme/fonts";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
-import { DojoProvider } from "@/hooks/dojo/provider";
-import {
-  PLAYER_ADDRESS,
-  PLAYER_PRIVATE_KEY,
-  RYO_WORLD_ADDRESS,
-} from "@/constants";
+import { DojoProvider } from "@/hooks/dojo";
+import { PLAYER_ADDRESS, PLAYER_PRIVATE_KEY } from "@/constants";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 export const controllerConnector = new ControllerConnector([
@@ -64,7 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <DojoProvider worldAddress={RYO_WORLD_ADDRESS} account={account}>
+      <DojoProvider account={account}>
         <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>

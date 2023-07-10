@@ -21,6 +21,7 @@ import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { getLocationByName } from "@/hooks/ui";
+import { useState } from "react";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -29,7 +30,8 @@ const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
-  const { create, isPending } = useRyoSystems();
+  const [isCreating, setIsCreating] = useState(false);
+  const { create } = useRyoSystems();
   return (
     <Layout
       title="Roll Your Own"
@@ -53,8 +55,11 @@ export default function Home() {
             <VStack w="full" p="20px" gap="20px">
               <Button
                 w="full"
-                isDisabled={isPending}
+                isLoading={isCreating}
+                isDisabled={isCreating}
                 onClick={async () => {
+                  setIsCreating(true);
+                  
                   const { gameId, locationName } = await create(
                     START_TIME,
                     MAX_PLAYERS,

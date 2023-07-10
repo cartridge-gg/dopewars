@@ -1,8 +1,14 @@
+import { RYO_WORLD_ADDRESS } from "@/constants";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { Account, BigNumberish, CallData, shortString } from "starknet";
+import {
+  Account,
+  BigNumberish,
+  CallData,
+  shortString,
+  TransactionStatus,
+} from "starknet";
 
 interface DojoInterface {
-  worldAddress: string;
   account: Account;
   isPending: boolean;
   execute: (systemName: string, params: BigNumberish[]) => Promise<string>;
@@ -20,11 +26,9 @@ export function useDojo() {
 }
 
 export function DojoProvider({
-  worldAddress,
   account,
   children,
 }: {
-  worldAddress: string;
   account: Account;
   children?: ReactNode;
 }): JSX.Element {
@@ -35,7 +39,7 @@ export function DojoProvider({
 
     return account
       .execute({
-        contractAddress: worldAddress,
+        contractAddress: RYO_WORLD_ADDRESS,
         entrypoint: "execute",
         calldata: CallData.compile([
           shortString.encodeShortString(systemName),
@@ -43,7 +47,12 @@ export function DojoProvider({
           ...params,
         ]),
       })
-      .then(({ transaction_hash }) => {
+      .then(async ({ transaction_hash }) => {
+        await account.waitForTransaction(transaction_hash, {
+          retryInterval: 1000,
+          successStates: [TransactionStatus.ACCEPTED_ON_L2],
+        });
+
         console.log("transaction hash: " + transaction_hash);
         return transaction_hash;
       })
@@ -55,7 +64,7 @@ export function DojoProvider({
   };
 
   return (
-    <DojoContext.Provider value={{ worldAddress, account, isPending, execute }}>
+    <DojoContext.Provider value={{ account, isPending, execute }}>
       {children}
     </DojoContext.Provider>
   );
