@@ -3,8 +3,7 @@ use traits::{Into, TryInto};
 
 #[derive(Component, Copy, Drop, Serde)]
 struct Drug {
-    name: felt252,
-    quantity: usize,
+    quantity: usize, 
 }
 
 trait DrugTrait {

@@ -7,6 +7,7 @@ mod create_game {
     use dojo::world::Context;
 
     use rollyourown::events::{emit, GameCreated, PlayerJoined};
+    use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::risks::Risks;
@@ -48,7 +49,6 @@ mod create_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    name: 0, // set at end of game
                     cash: 100 * SCALING_FACTOR, // $100
                     health: 100,
                     arrested: false,
@@ -89,7 +89,13 @@ mod create_game {
                                 set !(
                                     ctx.world,
                                     (game_id, *location_name, *drug_name).into(),
-                                    (Market { cash: MARKET_CASH, quantity: MARKET_QUANTITY })
+                                    (
+                                        Name {
+                                            short_string: *drug_name
+                                            }, Market {
+                                            cash: MARKET_CASH, quantity: MARKET_QUANTITY
+                                        }
+                                    )
                                 );
                             },
                             Option::None(()) => {

@@ -93,14 +93,6 @@ const Header = ({ back }: HeaderProps) => {
                 {inventoryInfos.used}/{inventoryInfos.capacity}
               </Text>
             </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Clock />{" "}
-              <Text whiteSpace="nowrap">
-                {!IsMobile && "Day"} {game.maxTurns - player.turnsRemaining}/
-                {game.maxTurns}
-              </Text>
-            </HStack>
           </HStack>
         </HStack>
       )}

@@ -8,6 +8,8 @@ import {
   TransactionStatus,
 } from "starknet";
 
+export const SCALING_FACTOR = 10000;
+
 interface DojoInterface {
   account: Account;
   isPending: boolean;

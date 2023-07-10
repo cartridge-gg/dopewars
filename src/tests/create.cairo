@@ -23,6 +23,7 @@ use rollyourown::components::player::{player, Player};
 use rollyourown::components::drug::{drug, Drug};
 use rollyourown::components::location::{location, Location};
 use rollyourown::components::risks::{risks, Risks};
+use rollyourown::components::name::{name, Name};
 use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};
 use rollyourown::systems::join::join_game;
@@ -46,6 +47,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     components.append(risks::TEST_CLASS_HASH);
     components.append(market::TEST_CLASS_HASH);
     components.append(drug::TEST_CLASS_HASH);
+    components.append(name::TEST_CLASS_HASH);
 
     let mut systems = array::ArrayTrait::new();
     systems.append(create_game::TEST_CLASS_HASH);

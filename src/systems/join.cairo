@@ -30,7 +30,6 @@ mod join_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    name: 0, // set at end of game
                     cash: 100 * SCALING_FACTOR, // $100
                     health: 100,
                     arrested: false,

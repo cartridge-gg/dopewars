@@ -45,7 +45,6 @@ mod travel {
                 Location {
                     name: next_location_name
                     }, Player {
-                    name: player.name,
                     cash: player.cash - result.money_loss,
                     health: updated_health,
                     arrested: result.arrested,

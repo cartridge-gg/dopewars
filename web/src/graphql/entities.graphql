@@ -3,17 +3,18 @@ query PlayerEntity($id: ID!) {
     components {
       __typename
       ... on Player {
-        name
         cash
         health
         arrested
         turns_remaining
       }
+      ... on Name {
+        short_string
+      }
       ... on Location {
         name
       }
       ... on Drug {
-        name
         quantity
       }
     }
@@ -40,6 +41,10 @@ query GameEntity($id: ID!) {
 query LocationEntities($gameId: String!, $location: String!) {
   entities(keys: [$gameId, $location]) {
     components {
+      __typename
+      ... on Name {
+        short_string
+      }
       ... on Market {
         cash
         quantity

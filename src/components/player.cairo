@@ -1,6 +1,5 @@
 #[derive(Component, Copy, Drop, Serde)]
 struct Player {
-    name: felt252,
     cash: u128,
     health: u8,
     arrested: bool,
