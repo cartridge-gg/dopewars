@@ -39,32 +39,33 @@ export default function Location() {
     gameId,
     locationName,
   });
-  const { player } = usePlayerEntity({
+  const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
 
   useEffect(() => {
-    if (player && locationName) {
-      // check player location and forward to correct location
-      if (locationName !== player.location_name) {
+    if (playerEntity && locationName) {
+      // check if player at right location
+      if (locationName !== playerEntity.location_name) {
         router.replace(
-          `/${gameId}/${getLocationByName(player.location_name).slug}`,
+          `/${gameId}/${getLocationByName(playerEntity.location_name).slug}`,
         );
         return;
       }
 
       // check if game over
-      if (player.turnsRemaining <= 0) {
+      if (playerEntity.turnsRemaining <= 0) {
         // TODO: forward to game over
         console.log("game over");
         return;
       }
     }
-  }, [locationName, player, router]);
+  }, [locationName, playerEntity, router]);
 
   return (
-    locationEntity && (
+    locationEntity &&
+    playerEntity && (
       <Layout
         title={locationEntity.name}
         prefixTitle={`Day 1`}
@@ -74,40 +75,46 @@ export default function Location() {
       >
         <Content>
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
-            {locationEntity.drugMarkets.map((drug, index) => (
-              <Card
-                h="180px"
-                key={index}
-                cursor="pointer"
-                onClick={() => {
-                  playSound(Sounds.HoverClick, 0.3, false);
-                  router.push(
-                    `${router.asPath}/${getDrugByName(drug.name).slug}`,
-                  );
-                }}
-              >
-                <CardHeader
-                  textTransform="uppercase"
-                  fontSize="20px"
-                  textAlign="left"
+            {locationEntity.drugMarkets.map((drug, index) => {
+              const playerDrug = playerEntity.drugs.find(
+                (d) => d.name === drug.name,
+              );
+
+              return (
+                <Card
+                  h="180px"
+                  key={index}
+                  cursor="pointer"
+                  onClick={() => {
+                    playSound(Sounds.HoverClick, 0.3, false);
+                    router.push(
+                      `${router.asPath}/${getDrugByName(drug.name).slug}`,
+                    );
+                  }}
                 >
-                  {drug.name}
-                </CardHeader>
-                <CardBody>
-                  <HStack w="full" justify="center">
-                    <Box>{getDrugByName(drug.name).icon({})}</Box>
-                  </HStack>
-                </CardBody>
-                <CardFooter fontSize="16px">
-                  <Text>${drug.price.toString()}</Text>
-                  <Spacer />
-                  <HStack color={false ? "yellow.400" : "neon.500"}>
-                    <Bag />
-                    <Text>{0}</Text>
-                  </HStack>
-                </CardFooter>
-              </Card>
-            ))}
+                  <CardHeader
+                    textTransform="uppercase"
+                    fontSize="20px"
+                    textAlign="left"
+                  >
+                    {drug.name}
+                  </CardHeader>
+                  <CardBody>
+                    <HStack w="full" justify="center">
+                      <Box>{getDrugByName(drug.name).icon({})}</Box>
+                    </HStack>
+                  </CardBody>
+                  <CardFooter fontSize="16px">
+                    <Text>${drug.price.toString()}</Text>
+                    <Spacer />
+                    <HStack color={playerDrug ? "yellow.400" : "neon.500"}>
+                      <Bag />
+                      <Text>{playerDrug?.quantity ?? 0}</Text>
+                    </HStack>
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </SimpleGrid>
         </Content>
         <Footer>

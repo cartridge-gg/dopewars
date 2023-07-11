@@ -1,26 +1,3 @@
-query PlayerEntity($id: ID!) {
-  entity(id: $id) {
-    components {
-      __typename
-      ... on Player {
-        cash
-        health
-        arrested
-        turns_remaining
-      }
-      ... on Name {
-        short_string
-      }
-      ... on Location {
-        name
-      }
-      ... on Drug {
-        quantity
-      }
-    }
-  }
-}
-
 query GameEntity($id: ID!) {
   entity(id: $id) {
     components {
@@ -33,6 +10,36 @@ query GameEntity($id: ID!) {
         max_turns
         num_players
         start_time
+      }
+    }
+  }
+}
+
+# NOTE: There is an issue with entities (plural) query, dojo joins
+# entity keys as csv and stores it as a string, then we do simple pattern matching.
+# However, this means the query can return components we may not want.
+#
+# TODO: refactor entities queries below once dojo starts storing each key
+# parts in its own column in entities db
+
+query PlayerEntity($gameId: String!, $playerId: String!) {
+  entities(keys: [$gameId, $playerId]) {
+    components {
+      __typename
+      ... on Player {
+        cash
+        health
+        arrested
+        turns_remaining
+      }
+      ... on Location {
+        name
+      }
+      ... on Drug {
+        quantity
+      }
+      ... on Name {
+        short_string
       }
     }
   }

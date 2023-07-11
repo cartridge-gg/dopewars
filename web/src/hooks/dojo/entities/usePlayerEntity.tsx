@@ -1,13 +1,26 @@
-import { Player, Location, usePlayerEntityQuery } from "@/generated/graphql";
+import {
+  Player,
+  Location,
+  Drug as DrugType,
+  Name,
+  usePlayerEntityQuery,
+} from "@/generated/graphql";
 import { useEffect, useState } from "react";
-import { ec, num, shortString } from "starknet";
+import { shortString } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
 interface PlayerEntityData {
-  entity: {
-    components: (Player | Location)[];
-  };
+  entities: [
+    {
+      components: (Player | Location | DrugType | Name)[];
+    },
+  ];
 }
+
+type Drug = {
+  name: string;
+  quantity: number;
+};
 
 export class PlayerEntity {
   cash: number;
@@ -15,32 +28,54 @@ export class PlayerEntity {
   arrested: boolean;
   turnsRemaining: number;
   location_name: string;
+  drugs: Drug[];
 
-  constructor(player: Player, location: Location) {
+  constructor(player: Player, location: Location, drugs: Drug[]) {
     this.cash = parseInt(player.cash, 16) / SCALING_FACTOR;
     this.health = player.health;
     this.arrested = player.arrested;
     this.turnsRemaining = player.turns_remaining;
     this.location_name = shortString.decodeShortString(location.name);
+    this.drugs = drugs;
   }
 
   static create(data: PlayerEntityData): PlayerEntity | undefined {
-    if (!data || !data.entity) return undefined;
+    if (!data || !data.entities) return undefined;
 
-    const components = data.entity.components || [];
-    const playerComponent = components.find(
+    // player related entities
+    const playerEntities = data.entities.find((entity) =>
+      entity.components.find((component) => component.__typename === "Player"),
+    );
+    const playerComponent = playerEntities?.components.find(
       (component) => component.__typename === "Player",
-    );
-    const locationComponent = components.find(
+    ) as Player;
+    const locationComponent = playerEntities?.components.find(
       (component) => component.__typename === "Location",
+    ) as Location;
+
+    // drug entities
+    const drugEntities = data.entities.filter((entity) =>
+      entity.components.find((component) => component.__typename === "Drug"),
     );
 
-    if (!playerComponent || !locationComponent) return undefined;
+    const drugs: Drug[] = drugEntities.map((entity) => {
+      const drugComponent = entity.components.find(
+        (component) => component.__typename === "Drug",
+      ) as DrugType;
 
-    return new PlayerEntity(
-      playerComponent as Player,
-      locationComponent as Location,
-    );
+      const nameComponent = entity.components.find(
+        (component) => component.__typename === "Name",
+      ) as Name;
+
+      return {
+        name: shortString.decodeShortString(nameComponent.short_string),
+        quantity: drugComponent.quantity,
+      };
+    });
+
+    if (!playerEntities) return undefined;
+
+    return new PlayerEntity(playerComponent, locationComponent, drugs);
   }
 }
 
@@ -57,25 +92,15 @@ export const usePlayerEntity = ({
   address?: string;
 }): PlayerInterface => {
   const [player, setPlayer] = useState<PlayerEntity>();
-  const [key, setKey] = useState<string>("");
 
+  // TODO: remove leading zeros in address, maybe implemented in torii
   const { data, isFetched } = usePlayerEntityQuery(
-    { id: key },
+    { gameId: gameId || "", playerId: address || "" },
     {
       enabled: !!gameId && !!address,
       refetchInterval: REFETCH_INTERVAL, // TODO: long polling
     },
   );
-
-  useEffect(() => {
-    if (gameId && address) {
-      const key_ = ec.starkCurve.poseidonHashMany([
-        num.toBigInt(gameId),
-        num.toBigInt(address),
-      ]);
-      setKey(num.toHex(key_));
-    }
-  }, [gameId, address]);
 
   useEffect(() => {
     const player_ = PlayerEntity.create(data as PlayerEntityData);

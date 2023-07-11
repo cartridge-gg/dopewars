@@ -37,10 +37,8 @@ export class LocationEntity {
   static create(data: LocationEntityData): LocationEntity | undefined {
     if (!data || !data.entities) return undefined;
 
-    const entities = data.entities || [];
-
     // location related entities
-    const locationEntities = entities.find((entity) =>
+    const locationEntities = data.entities.find((entity) =>
       entity.components.find(
         (component) => component.__typename === "Location",
       ),
@@ -54,7 +52,7 @@ export class LocationEntity {
     ) as Risks;
 
     // drug market related entities
-    const drugMarketEntities = entities.filter((entity) =>
+    const drugMarketEntities = data.entities.filter((entity) =>
       entity.components.find((component) => component.__typename === "Market"),
     );
     const drugMarkets: DrugMarket[] = drugMarketEntities.map((entity) => {
@@ -117,7 +115,6 @@ export const useLocationEntity = ({
 
   useEffect(() => {
     const location_ = LocationEntity.create(data as LocationEntityData);
-    console.log(location_);
     if (location_) setLocation(location_);
   }, [data]);
 
