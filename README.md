@@ -19,41 +19,16 @@ katana --seed 0
 # Build the game
 sozo build
 
-# Migrate the world, this will declare/deploy contracts to katana,
-# update the world address in Scarb.toml
+# Migrate the world, this will declare/deploy contracts to katana
 sozo migrate
 
-# Create a game, execute calldata params are defined in create_game system
-sozo execute create_game --calldata 1686521389,2,30
-
-# View the schema of the Game Component
-sozo component schema Game
-> struct Game {
->    start_time: u64
->    max_players: usize
->    num_players: usize
->    max_turns: usize
->    is_finished: bool
->    creator: u250
-> }
-
-# Get the value of the Game (0 represents game_id key)
-sozo component entity Game 0
-> 0x6486462d
-> 0x2
-> 0x1
-> 0x1e
-> 0x0
-> 0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0
-
-# Try other commands like join_game and travel/trade
-
 # Start indexer, graphql endpoint at http://localhost:8080
-torii --world-address 0x7d17bb24b59cb371c9ca36b79efca27fe53318e26340df3d8623dba5a7b9e5f --manifest path_to_target/manifest.json
+torii --manifest target/dev/manifest.json
 
+# Start frontend, located at http://localhost:3000
+cd web
+yarn install && yarn dev
 ```
-
-Sozo will eventually contain all commands required to interact with your world. However, CLIs like [starknet-probe](https://github.com/kariy/starknet-probe) or [starkli](https://github.com/xJonathanLEI/starkli) can also be used to interact directly with Katana. Due to JSON-RPC spec differences starknetpy may have issues.
 
 ### Mechanics
 
