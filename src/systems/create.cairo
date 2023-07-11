@@ -2,7 +2,7 @@
 mod create_game {
     use array::ArrayTrait;
     use box::BoxTrait;
-    use traits::Into;
+    use traits::{Into, TryInto};
 
     use dojo::world::Context;
 
@@ -15,9 +15,10 @@ mod create_game {
     use rollyourown::components::drug::{Drug, DrugTrait};
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MARKET_CASH,
-        MARKET_QUANTITY
+        SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MIN_CASH, MAX_CASH,
+        MIN_QUANITTY, MAX_QUANTITY
     };
+    use rollyourown::utils::random;
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
@@ -49,7 +50,7 @@ mod create_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    cash: 100 * SCALING_FACTOR, // $100
+                    cash: 2000 * SCALING_FACTOR, // $2000
                     health: 100,
                     arrested: false,
                     turns_remaining: max_turns
@@ -81,10 +82,20 @@ mod create_game {
                         )
                     );
 
+                    let mut seed = starknet::get_tx_info().unbox().transaction_hash;
                     let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_name) => {
+                                // HACK: temp hack to get some randomness
+                                seed = pedersen(seed, *drug_name);
+                                let market_cash = random(seed, MIN_CASH, MAX_CASH);
+                                let market_quantity: usize = random(
+                                    seed, MIN_QUANITTY.into(), MAX_QUANTITY.into()
+                                )
+                                    .try_into()
+                                    .unwrap();
+
                                 //set market entity
                                 set !(
                                     ctx.world,
@@ -93,7 +104,7 @@ mod create_game {
                                         Name {
                                             short_string: *drug_name
                                             }, Market {
-                                            cash: MARKET_CASH, quantity: MARKET_QUANTITY
+                                            cash: market_cash, quantity: market_quantity
                                         }
                                     )
                                 );

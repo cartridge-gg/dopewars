@@ -6,5 +6,7 @@ const HURT_RISK: u8 = 30;
 const MUGGED_RISK: u8 = 30;
 const ARRESTED_RISK: u8 = 10;
 
-const MARKET_QUANTITY: usize = 1000;
-const MARKET_CASH: u128 = 1000000; // 100USD
+const MAX_QUANTITY: usize = 500000;
+const MIN_QUANITTY: usize = 10000;
+const MAX_CASH: u128 = 100000000; // $10000USD
+const MIN_CASH: u128 = 1000000; // 100USD
