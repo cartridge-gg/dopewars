@@ -29,7 +29,7 @@ export default function Travel() {
   const [currentLocation, setCurrentLocation] = useState<Locations>();
   const { locations } = useUiStore.getState();
 
-  const { travel, isPending, isComplete } = useRyoSystems();
+  const { travel, isPending, error: txError } = useRyoSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
@@ -96,6 +96,7 @@ export default function Travel() {
                 {...location}
                 key={index}
                 name={location.name}
+                isCurrent={location.name === currentLocation}
                 selected={location.name === target}
                 onClick={() => setTarget(location.name)}
               />
@@ -145,7 +146,7 @@ export default function Travel() {
           <Button
             w={["full", "auto"]}
             isDisabled={!target || target === currentLocation}
-            isLoading={isPending && !isComplete}
+            isLoading={isPending && !txError}
             onClick={async () => {
               if (target) {
                 await travel(gameId, target);
@@ -154,7 +155,7 @@ export default function Travel() {
             }}
           >
             {target === currentLocation
-              ? "Select Location"
+              ? "Current Location"
               : `Travel to ${target}`}
           </Button>
         </VStack>
@@ -167,13 +168,16 @@ const Location = ({
   name,
   icon,
   selected,
+  isCurrent,
   onClick,
 }: {
   name: string;
   icon: React.FC;
   selected: boolean;
+  isCurrent: boolean;
   onClick: () => void;
 } & LocationProps) => {
+  const currentColor = isCurrent ? "yellow.400" : "neon.400";
   return (
     <HStack w="full">
       <Box
@@ -191,6 +195,7 @@ const Location = ({
           style="pixel"
           direction="right"
           size="lg"
+          color={currentColor}
           visibility={selected ? "visible" : "hidden"}
         />
       </Box>
@@ -204,13 +209,15 @@ const Location = ({
         position="relative"
         clipPath={`polygon(${generatePixelBorderPath()})`}
       >
-        <HStack w="full">
+        <HStack w="full" color={currentColor}>
           <HStack>
             {icon({})}
             <Text whiteSpace="nowrap">{name}</Text>
           </HStack>
           <Divider borderStyle="dotted" borderColor="neon.600" />
-          <Text whiteSpace="nowrap">1 DAY</Text>
+          <Text whiteSpace="nowrap">
+            {isCurrent ? "You are here" : "1 Day"}
+          </Text>
         </HStack>
       </HStack>
       <Box
@@ -228,6 +235,7 @@ const Location = ({
           style="pixel"
           direction="left"
           size="lg"
+          color={currentColor}
           visibility={selected ? "visible" : "hidden"}
         />
       </Box>

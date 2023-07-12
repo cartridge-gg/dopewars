@@ -29,7 +29,7 @@ const NUM_TURNS = 30;
 
 export default function Home() {
   const router = useRouter();
-  const { create, isPending, isComplete } = useRyoSystems();
+  const { create, isPending, error: txError } = useRyoSystems();
   return (
     <Layout
       title="Roll Your Own"
@@ -53,7 +53,7 @@ export default function Home() {
             <VStack w="full" p="20px" gap="20px">
               <Button
                 w="full"
-                isLoading={isPending && !isComplete}
+                isLoading={isPending && !txError}
                 onClick={async () => {
                   const { gameId, locationName } = await create(
                     START_TIME,

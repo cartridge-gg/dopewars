@@ -96,7 +96,7 @@ export default function Market() {
     setTradeDirection(index as TradeDirection);
   };
 
-  const { buy, sell, isPending, isComplete } = useRyoSystems();
+  const { buy, sell, isPending, error: txError } = useRyoSystems();
   const { addTrade } = usePlayerState();
 
   const onTrade = useCallback(async () => {
@@ -215,7 +215,7 @@ export default function Market() {
         {tradeDirection === TradeDirection.Buy && canBuy && (
           <Button
             w={["50%", "auto"]}
-            isLoading={isPending && !isComplete}
+            isLoading={isPending && !txError}
             onClick={onTrade}
           >
             Buy ({quantityBuy})
@@ -224,7 +224,7 @@ export default function Market() {
         {tradeDirection === TradeDirection.Sell && canSell && (
           <Button
             w={["50%", "auto"]}
-            isLoading={isPending && !isComplete}
+            isLoading={isPending && !txError}
             onClick={onTrade}
           >
             Sell ({quantitySell})

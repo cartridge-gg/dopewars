@@ -10,14 +10,31 @@ export enum RyoEvents {
   RandomEvent = "RandomEvent",
 }
 
+export interface RandomEventResult {
+  gameId: string;
+  playerId: string;
+  health_loss: number;
+  money_loss: number;
+  arrested: boolean;
+}
+
+export interface CreateEventResult {
+  gameId: string;
+  playerId: string;
+  locationName: string;
+}
+
 export interface RyoSystemsInterface {
   create: (
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<{ gameId: string; locationName: string }>;
+  ) => Promise<CreateEventResult>;
   join: (gameId: string) => Promise<void>;
-  travel: (gameId: string, locationId: string) => Promise<void>;
+  travel: (
+    gameId: string,
+    locationId: string,
+  ) => Promise<RandomEventResult | void>;
   buy: (
     gameId: string,
     locationName: string,
@@ -31,11 +48,11 @@ export interface RyoSystemsInterface {
     quantity: number,
   ) => Promise<void>;
   isPending: boolean;
-  isComplete: boolean;
+  error?: Error;
 }
 
 export const useRyoSystems = (): RyoSystemsInterface => {
-  const { execute, account, isPending, isComplete } = useDojo();
+  const { execute, account, error, isPending } = useDojo();
 
   const create = async (
     startTime: number,
@@ -53,7 +70,10 @@ export const useRyoSystems = (): RyoSystemsInterface => {
   };
 
   const travel = async (gameId: string, locationName: string) => {
-    await execute("travel", [gameId, locationName]);
+    const txn = await execute("travel", [gameId, locationName]);
+    const receipt = await account.getTransactionReceipt(txn);
+
+    return parseRandomEvent(receipt);
   };
 
   const buy = async (
@@ -80,14 +100,33 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     travel,
     buy,
     sell,
+    error,
     isPending,
-    isComplete,
   };
+};
+
+const parseRandomEvent = (
+  receipt: InvokeTransactionReceiptResponse,
+): RandomEventResult | void => {
+  const event = receipt.events?.find(
+    (event) =>
+      shortString.decodeShortString(event.keys[0]) === RyoEvents.RandomEvent,
+  );
+
+  if (event) {
+    return {
+      gameId: num.toHexString(event.data[0]),
+      playerId: num.toHexString(event.data[1]),
+      health_loss: Number(event.data[2]),
+      money_loss: Number(event.data[3]),
+      arrested: Boolean(event.data[4]),
+    };
+  }
 };
 
 const parseJoinedEvent = (
   receipt: InvokeTransactionReceiptResponse,
-): { gameId: string; playerId: string; locationName: string } => {
+): CreateEventResult => {
   const event = receipt.events?.find(
     (event) =>
       shortString.decodeShortString(event.keys[0]) === RyoEvents.PlayerJoined,
