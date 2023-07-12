@@ -21,19 +21,19 @@ import {
   getDrugByName,
   getLocationByName,
   getLocationBySlug,
-  LocationProps,
-  useUiStore,
 } from "@/hooks/ui";
-import { Bag } from "@/components/icons";
+import { Cart } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { formatQuantity, formatCash } from "@/utils/ui";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const slug = router.query.locationSlug as string;
-  const locationName = getLocationBySlug(slug).name;
+  const locationName = getLocationBySlug(
+    router.query.locationSlug as string,
+  ).name;
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -105,11 +105,11 @@ export default function Location() {
                     </HStack>
                   </CardBody>
                   <CardFooter fontSize="16px">
-                    <Text>${drug.price.toString()}</Text>
+                    <Text>{formatCash(drug.price)}</Text>
                     <Spacer />
-                    <HStack color={playerDrug ? "yellow.400" : "neon.500"}>
-                      <Bag />
-                      <Text>{playerDrug?.quantity ?? 0}</Text>
+                    <HStack>
+                      <Cart />
+                      <Text>({formatQuantity(drug.marketPool.quantity)})</Text>
                     </HStack>
                   </CardFooter>
                 </Card>

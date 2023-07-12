@@ -1,6 +1,5 @@
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
 import { useDojo } from "..";
-import { TradeDirection } from "../../state";
 
 export enum RyoEvents {
   GameCreated = "GameCreated",
@@ -19,12 +18,17 @@ export interface RyoSystemsInterface {
   ) => Promise<{ gameId: string; locationName: string }>;
   join: (gameId: string) => Promise<void>;
   travel: (gameId: string, locationId: string) => Promise<void>;
-  trade: (
+  buy: (
     gameId: string,
-    locationId: string,
-    drugId: string,
+    locationName: string,
+    drugName: string,
     quantity: number,
-    direction: TradeDirection,
+  ) => Promise<void>;
+  sell: (
+    gameId: string,
+    locationName: string,
+    drugName: string,
+    quantity: number,
   ) => Promise<void>;
   isPending: boolean;
 }
@@ -51,21 +55,30 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     await execute("travel", [gameId, locationId]);
   };
 
-  const trade = async (
+  const buy = async (
     gameId: string,
-    locationId: string,
-    drugId: string,
+    locationName: string,
+    drugName: string,
     quantity: number,
-    direction: TradeDirection,
   ) => {
-    await execute("trade", [gameId, locationId, drugId, quantity, direction]);
+    await execute("buy", [gameId, locationName, drugName, quantity]);
+  };
+
+  const sell = async (
+    gameId: string,
+    locationName: string,
+    drugName: string,
+    quantity: number,
+  ) => {
+    await execute("sell", [gameId, locationName, drugName, quantity]);
   };
 
   return {
     create,
     join,
-    trade,
     travel,
+    buy,
+    sell,
     isPending,
   };
 };

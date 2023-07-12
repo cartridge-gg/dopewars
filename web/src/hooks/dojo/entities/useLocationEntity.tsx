@@ -7,7 +7,7 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { shortString } from "starknet";
-import { SCALING_FACTOR } from "..";
+import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
 interface LocationEntityData {
   entities: [
@@ -19,7 +19,7 @@ interface LocationEntityData {
 
 type DrugMarket = {
   name: string; // drug name
-  price: BigInt;
+  price: number;
   marketPool: Market;
 };
 
@@ -68,12 +68,13 @@ export class LocationEntity {
         nameComponent.short_string,
       );
       const price =
-        BigInt(marketComponent.quantity) /
-        (BigInt(marketComponent.cash) / BigInt(SCALING_FACTOR));
+        Number(marketComponent.cash) /
+        Number(marketComponent.quantity) /
+        SCALING_FACTOR;
 
       return {
         name: drugName,
-        price,
+        price: price,
         marketPool: marketComponent,
       };
     });
@@ -110,6 +111,7 @@ export const useLocationEntity = ({
     },
     {
       enabled: !!gameId && !!locationName,
+      refetchInterval: REFETCH_INTERVAL,
     },
   );
 

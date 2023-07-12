@@ -178,3 +178,18 @@ function edgeCoord(n: number, offset: number) {
 
   return n === 0 ? "100%" : `calc(100% - ${n}px)`;
 }
+
+export function formatQuantity(quantity: number): string {
+  return Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(quantity);
+}
+
+export function formatCash(cash: number): string {
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(cash);
+}

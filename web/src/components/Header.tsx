@@ -16,10 +16,13 @@ import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { play } from "@/hooks/media";
-import { useGameStore, getInventoryInfos } from "@/hooks/state";
 import { usePlayerEntityQuery, Entity } from "@/generated/graphql";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
+import { formatCash } from "@/utils/ui";
+
+// TODO: constrain this on contract side
+const MAX_INVENTORY = 100;
 
 export interface HeaderProps {
   back?: boolean;
@@ -28,13 +31,16 @@ export interface HeaderProps {
 const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
-  const { player, isFetched: isFetchedPlayer } = usePlayerEntity({
+  const [inventory, setInventory] = useState(0);
+
+  const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
-  const { game, isFetched: isFetchedGame } = useGameEntity({
-    gameId,
-  });
+  // Reintroduce when we need max turns
+  // const { game: gameEntity, isFetched: isFetchedGame } = useGameEntity({
+  //   gameId,
+  // });
 
   const isMobile = IsMobile();
   const isMuted = useSoundStore((state) => state.isMuted);
@@ -42,8 +48,6 @@ const Header = ({ back }: HeaderProps) => {
   const isBackButtonVisible = useUiStore((state) =>
     state.isBackButtonVisible(router.pathname),
   );
-  const turns = useGameStore((state) => state.turns);
-  const inventoryInfos = getInventoryInfos();
   const hasNewMessages = true;
 
   useEffect(() => {
@@ -52,6 +56,16 @@ const Header = ({ back }: HeaderProps) => {
     };
     init();
   }, []);
+
+  useEffect(() => {
+    if (!playerEntity) return;
+
+    const inventory = playerEntity.drugs.reduce((acc, drug) => {
+      return acc + drug.quantity;
+    }, 0);
+
+    setInventory(inventory);
+  }, [playerEntity]);
 
   return (
     <Flex
@@ -71,7 +85,7 @@ const Header = ({ back }: HeaderProps) => {
           </HeaderButton>
         )}
       </HStack>
-      {player && game && (
+      {playerEntity && (
         <HStack flex="1" justify="center">
           <HStack
             h="full"
@@ -82,13 +96,13 @@ const Header = ({ back }: HeaderProps) => {
             clipPath={`polygon(${generatePixelBorderPath()})`}
           >
             <HStack>
-              <Gem /> <Text>${player.cash}</Text>
+              <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>
               <Bag />{" "}
               <Text>
-                {inventoryInfos.used}/{inventoryInfos.capacity}
+                {inventory}/{MAX_INVENTORY}
               </Text>
             </HStack>
           </HStack>

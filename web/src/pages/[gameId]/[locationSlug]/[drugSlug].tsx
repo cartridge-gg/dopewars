@@ -15,17 +15,9 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
-import {
-  Ludes,
-  Weed,
-  Acid,
-  Speed,
-  Heroin,
-  Cocaine,
-} from "@/components/icons/drugs";
-import { ArrowEnclosed, Bag } from "@/components/icons";
+import { ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
-import { DrugProps, useUiStore } from "@/hooks/ui";
+import { DrugProps, getDrugBySlug, getLocationBySlug } from "@/hooks/ui";
 
 import {
   Slider,
@@ -44,28 +36,30 @@ import {
   TabIndicator,
 } from "@chakra-ui/react";
 import { Sounds } from "@/hooks/sound";
-import {
-  useGameStore,
-  travelTo,
-  trade,
-  TradeDirection,
-  Drugs,
-  InventoryType,
-  getInventoryInfos,
-} from "@/hooks/state";
+import { TradeDirection, TradeType, usePlayerState } from "@/hooks/state";
 import { Inventory } from "@/components/Inventory";
 import AlertMessage from "@/components/AlertMessage";
 import { cardPixelatedStyle } from "@/theme/styles";
-
-enum MarketMode {
-  Buy,
-  Sell,
-}
+import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
+import {
+  PlayerEntity,
+  usePlayerEntity,
+} from "@/hooks/dojo/entities/usePlayerEntity";
+import { formatQuantity, formatCash } from "@/utils/ui";
+import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 
 export default function Market() {
   const router = useRouter();
-  const [drug, setDrug] = useState<DrugProps>();
-  const [marketMode, setMarketMode] = useState(MarketMode.Buy);
+  const gameId = router.query.gameId as string;
+  const location = getLocationBySlug(router.query.locationSlug as string);
+  const drug = getDrugBySlug(router.query.drugSlug as string);
+
+  const [isTrading, setIsTrading] = useState(false);
+
+  const [marketPrice, setMarketPrice] = useState<number>(0);
+  const [marketCash, setMarketCash] = useState<number>(0);
+  const [marketQuantity, setMarketQuantity] = useState<number>(0);
+  const [tradeDirection, setTradeDirection] = useState(TradeDirection.Buy);
 
   const [quantityBuy, setQuantityBuy] = useState(1);
   const [quantitySell, setQuantitySell] = useState(1);
@@ -73,67 +67,71 @@ export default function Market() {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
-  const [canAffordOne, setCanAffordOne] = useState(true);
+  const isBagFull = false;
 
-  const locationMenu = useGameStore((state) => state.menu);
-  const inventory = useGameStore((state) => state.inventory);
-  const inventoryInfos = getInventoryInfos();
-  const isBagFull = inventoryInfos.left == 0;
+  const { location: locationEntity } = useLocationEntity({
+    gameId,
+    locationName: location.name,
+  });
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+  });
 
+  // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    const { getDrugBySlug } = useUiStore.getState();
-    const drugSlug = router.query.drugSlug?.toString() || "";
-    const drug = getDrugBySlug(drugSlug);
-    setDrug(drug);
+    if (!locationEntity || !playerEntity) return;
 
-    // if menu not initialized force travel to this location
-    //   if(!locationMenu){
-    //     travelTo
-    //   }
-  }, [router.query]);
+    const market = locationEntity.drugMarkets.find((d) => d.name === drug.name);
+    if (!market) return;
 
-  useEffect(() => {
-    if (!drug || !locationMenu) return;
-    const drugPrice = locationMenu[drug.name].price;
-    const canAffordOne = drugPrice <= inventory.cash;
+    const playerDrug = playerEntity.drugs.find((d) => d.name === drug.name);
+    if (playerDrug) {
+      setCanSell(playerDrug.quantity > 0);
+    }
 
-    const can =
-      quantityBuy <= inventoryInfos.left &&
-      quantityBuy * drugPrice <= inventory.cash &&
-      quantityBuy > 0;
-
-    setCanBuy(can);
-    setCanAffordOne(canAffordOne);
-  }, [quantityBuy, drug, locationMenu, inventoryInfos.left, inventory.cash]);
-
-  useEffect(() => {
-    if (!drug) return;
-    const inBag = inventory.drugs[drug.name].quantity;
-    const can = inBag > 0;
-    setCanSell(can);
-  }, [quantitySell, inventory, inventory.drugs, drug]);
+    setCanBuy(playerEntity.cash > market.price);
+    setMarketCash(market.marketPool.cash / 10000);
+    setMarketQuantity(market.marketPool.quantity);
+    setMarketPrice(market.price);
+  }, [locationEntity, playerEntity]);
 
   const onTabsChange = (index: number) => {
-    setMarketMode(index as MarketMode);
+    setTradeDirection(index as TradeDirection);
   };
 
-  const onBuy = () => {
-    drug && trade(TradeDirection.Buy, drug.name, quantityBuy);
+  const { buy, sell } = useRyoSystems();
+  const { addTrade } = usePlayerState();
 
-    //todo: replace by push
-    router.back();
-  };
+  const onBuy = useCallback(async () => {
+    setIsTrading(true);
 
-  const onSell = () => {
-    drug && trade(TradeDirection.Sell, drug.name, quantitySell);
+    await buy(gameId, location.name, drug.name, quantityBuy);
 
-    //todo: replace by push
-    router.back();
-  };
+    addTrade(drug.name, {
+      direction: TradeDirection.Buy,
+      quantity: quantityBuy,
+    } as TradeType);
+
+    router.push(`/${gameId}/${location.slug}`);
+  }, [quantityBuy, addTrade, setIsTrading]);
+
+  const onSell = useCallback(async () => {
+    setIsTrading(true);
+
+    await sell(gameId, location.name, drug.name, quantitySell);
+
+    addTrade(drug.name, {
+      direction: TradeDirection.Sell,
+      quantity: quantitySell,
+    } as TradeType);
+
+    router.push(`/${gameId}/${location.slug}`);
+  }, [quantitySell, addTrade, setIsTrading]);
 
   return (
-    drug &&
-    locationMenu && (
+    playerEntity &&
+    drug && (
       <Layout
         title={drug.name}
         prefixTitle="The market"
@@ -141,8 +139,7 @@ export default function Market() {
       >
         <Content>
           <VStack w="100%" h="100%">
-            {/* <Inventory pb="20px" /> */}
-            <Card variant="pixelated" p={6} mb={6}>
+            <Card variant="pixelated" p={6} mb={6} _hover={{}}>
               <VStack w="full">
                 <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
                   <Image
@@ -154,17 +151,14 @@ export default function Market() {
                   />
                 </Box>
                 <HStack w="100%" justifyContent="space-between" fontSize="16px">
-                  <Text>${drug ? locationMenu[drug.name].price : "???"}</Text>
-                  <Text
-                    color={
-                      inventory.drugs[drug.name].quantity > 0
-                        ? "yellow.400"
-                        : "neon.500"
-                    }
-                  >
-                    <Bag mr={1} />
-                    {inventory.drugs[drug.name].quantity}
-                  </Text>
+                  <HStack>
+                    {drug.icon({ boxSize: "36px" })}
+                    <Text>{formatCash(marketPrice)}</Text>
+                  </HStack>
+                  <HStack>
+                    <Cart mr={1} size="lg" />
+                    <Text>({formatQuantity(marketQuantity)})</Text>
+                  </HStack>
                 </HStack>
               </VStack>
             </Card>
@@ -173,7 +167,7 @@ export default function Market() {
               w="100%"
               isFitted
               variant="unstyled"
-              index={marketMode}
+              index={tradeDirection}
               onChange={onTabsChange}
             >
               <TabList>
@@ -183,28 +177,28 @@ export default function Market() {
 
               <TabPanels mt={6}>
                 <TabPanel>
-                  {canAffordOne && !isBagFull && (
+                  {!isBagFull && (
                     <QuantitySelector
-                      type={TradeDirection.Buy}
-                      price={locationMenu[drug.name].price}
-                      inventory={inventory}
-                      inventoryInfos={inventoryInfos}
                       drug={drug}
+                      player={playerEntity}
+                      marketPrice={marketPrice}
+                      marketQuantity={marketQuantity}
+                      type={TradeDirection.Buy}
                       onChange={setQuantityBuy}
                     />
                   )}
 
-                  {!canAffordOne && <AlertMessage message="YOU ARE BROKE" />}
+                  {!canBuy && <AlertMessage message="YOU ARE BROKE" />}
                   {isBagFull && <AlertMessage message="YOUR BAG IS FULL" />}
                 </TabPanel>
                 <TabPanel>
                   {canSell ? (
                     <QuantitySelector
-                      type={TradeDirection.Sell}
-                      price={locationMenu[drug.name].price}
-                      inventory={inventory}
-                      inventoryInfos={inventoryInfos}
                       drug={drug}
+                      player={playerEntity}
+                      marketPrice={marketPrice}
+                      marketQuantity={marketQuantity}
+                      type={TradeDirection.Sell}
                       onChange={setQuantitySell}
                     />
                   ) : (
@@ -221,13 +215,13 @@ export default function Market() {
           </VStack>
         </Content>
         <Footer>
-          {marketMode === MarketMode.Buy && canBuy && (
-            <Button w={["50%", "auto"]} onClick={onBuy}>
+          {tradeDirection === TradeDirection.Buy && canBuy && (
+            <Button w={["50%", "auto"]} isLoading={isTrading} onClick={onBuy}>
               Buy ({quantityBuy})
             </Button>
           )}
-          {marketMode === MarketMode.Sell && canSell && (
-            <Button w={["50%", "auto"]} onClick={onSell}>
+          {tradeDirection === TradeDirection.Sell && canSell && (
+            <Button w={["50%", "auto"]} isLoading={isTrading} onClick={onSell}>
               Sell ({quantitySell})
             </Button>
           )}
@@ -239,42 +233,38 @@ export default function Market() {
 
 const QuantitySelector = ({
   type,
-  price,
-  inventory,
-  inventoryInfos,
+  player,
   drug,
+  marketPrice,
+  marketQuantity,
   onChange,
 }: {
   type: TradeDirection;
-  price: number;
-  inventory: InventoryType;
-  inventoryInfos: { capacity: number; used: number; left: number };
   drug: DrugProps;
+  player: PlayerEntity;
+  marketPrice: number;
+  marketQuantity: number;
   onChange: (quantity: number) => void;
 }) => {
-  const [quantity, setQuantity] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  const [max, setMax] = useState(1);
-
-  useEffect(() => {
-    setQuantity(1);
-  }, []);
+  const [totalPrice, setTotalPrice] = useState<number>(marketPrice);
+  const [quantity, setQuantity] = useState(1);
+  const [max, setMax] = useState(0);
 
   useEffect(() => {
     if (type === TradeDirection.Buy) {
-      const maxBuyable = Math.floor(inventory.cash / price);
-      const maxInventory = inventoryInfos.left;
-      setMax(Math.max(1, Math.min(maxBuyable, maxInventory)));
+      setMax(Math.floor(player.cash / marketPrice));
     } else if (type === TradeDirection.Sell) {
-      setMax(Math.max(1, inventory.drugs[drug.name].quantity));
+      const playerQuantity = player.drugs.find(
+        (d) => d.name === drug.name,
+      )?.quantity;
+      setMax(playerQuantity || 0);
     }
-  }, [type, price, drug, inventory, inventoryInfos]);
+  }, [type, drug, marketQuantity, player]);
 
   useEffect(() => {
-    setTotalPrice(quantity * price);
+    setTotalPrice(quantity * marketPrice);
     onChange(quantity);
-  }, [quantity, price, onChange]);
+  }, [quantity, marketPrice]);
 
   const onDown = useCallback(() => {
     if (quantity > 1) {
@@ -307,7 +297,7 @@ const QuantitySelector = ({
     >
       <HStack w="100%" justifyContent="space-between">
         <Text>
-          {quantity} for ${totalPrice}
+          {quantity} for {formatCash(totalPrice)}
         </Text>
 
         <HStack gap="8px">

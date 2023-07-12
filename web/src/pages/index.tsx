@@ -13,7 +13,6 @@ import { Clock, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
-import { startGame, useGameStore } from "@/hooks/state";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
@@ -66,7 +65,6 @@ export default function Home() {
                     NUM_TURNS,
                   );
 
-                  startGame();
                   router.push(
                     `/${gameId}/${getLocationByName(locationName).slug}`,
                   );
