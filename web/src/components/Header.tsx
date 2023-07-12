@@ -99,8 +99,8 @@ const Header = ({ back }: HeaderProps) => {
               <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Bag />{" "}
+            <HStack color="yellow.400">
+              <Bag />
               <Text>
                 {inventory}/{MAX_INVENTORY}
               </Text>

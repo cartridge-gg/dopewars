@@ -22,11 +22,12 @@ import {
   getLocationByName,
   getLocationBySlug,
 } from "@/hooks/ui";
-import { Bag } from "@/components/icons";
+import { Cart } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
+import { Inventory } from "@/components/Inventory";
 
 export default function Location() {
   const router = useRouter();
@@ -63,17 +64,25 @@ export default function Location() {
     }
   }, [locationName, playerEntity, router, gameId]);
 
+  if (!playerEntity || !locationEntity) {
+    return <></>;
+  }
+  const gap = "14px";
+
   return (
-    locationEntity &&
-    playerEntity && (
-      <Layout
-        title={locationEntity.name}
-        prefixTitle={`Day 1`}
-        headerImage={`/images/locations/${
-          getLocationByName(locationEntity.name).slug
-        }.png`}
-      >
-        <Content>
+    <Layout
+      title={locationEntity.name}
+      prefixTitle={`Day 1`}
+      headerImage={`/images/locations/${
+        getLocationByName(locationEntity.name).slug
+      }.png`}
+    >
+      <Content gap={gap}>
+        <Inventory gap={gap} />
+        <VStack w="full" align="flex-start" gap={gap}>
+          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+            Market
+          </Text>
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {locationEntity.drugMarkets.map((drug, index) => {
               const playerQuantity =
@@ -107,29 +116,27 @@ export default function Location() {
                   <CardFooter fontSize="16px">
                     <Text>{formatCash(drug.price)}</Text>
                     <Spacer />
-                    <HStack
-                      color={playerQuantity > 0 ? "yellow.400" : "neon.500"}
-                    >
-                      <Bag />
-                      <Text>{formatQuantity(playerQuantity)}</Text>
+                    <HStack>
+                      <Cart />
+                      <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack>
                   </CardFooter>
                 </Card>
               );
             })}
           </SimpleGrid>
-        </Content>
-        <Footer>
-          <Button
-            w={["full", "auto"]}
-            onClick={() => {
-              router.push(`/${gameId}/turn`);
-            }}
-          >
-            Continue
-          </Button>
-        </Footer>
-      </Layout>
-    )
+        </VStack>
+      </Content>
+      <Footer>
+        <Button
+          w={["full", "auto"]}
+          onClick={() => {
+            router.push(`/${gameId}/turn`);
+          }}
+        >
+          Continue
+        </Button>
+      </Footer>
+    </Layout>
   );
 }

@@ -159,7 +159,7 @@ export default function Market() {
                 </HStack>
                 <HStack>
                   <Cart mr={1} size="lg" />
-                  <Text>({formatQuantity(market.marketPool.quantity)})</Text>
+                  <Text>{formatQuantity(market.marketPool.quantity)}</Text>
                 </HStack>
               </HStack>
             </VStack>

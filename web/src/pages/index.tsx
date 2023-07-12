@@ -25,7 +25,7 @@ import { useState } from "react";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 10;
+const NUM_TURNS = 30;
 
 export default function Home() {
   const router = useRouter();

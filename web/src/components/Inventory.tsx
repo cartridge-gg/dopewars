@@ -5,18 +5,17 @@ import {
   Text,
   VStack,
   Box,
+  Card,
 } from "@chakra-ui/react";
 import { Bag, IconProps } from "./icons";
 import { Acid, Cocaine, Heroin, Ludes, Speed, Weed } from "./icons/drugs";
-import { DrugProps } from "@/hooks/ui";
+import { Drugs } from "@/hooks/state";
 import { Component } from "react";
 import React from "react";
+import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { useRouter } from "next/router";
+import { getDrugByName } from "@/hooks/ui";
 
-// TODO: will implement
-const Inventory = () => {
-  return <></>;
-};
-export default Inventory;
 // const getItem = (inventory: InventoryType, drug: Drugs, icon: React.FC) => {
 //   const quantity = inventory.drugs[drug].quantity;
 
@@ -31,33 +30,57 @@ export default Inventory;
 //   );
 // };
 
-// export const Inventory = ({ ...props }: StyleProps) => {
-//   const inventory = useGameStore((s) => s.inventory);
+export const Inventory = ({ ...props }: StyleProps) => {
+  const router = useRouter();
+  const { gameId } = router.query as { gameId: string };
+  const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
+    gameId,
+    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+  });
 
-//   return (
-//     inventory && (
-//       <HStack {...props}>
-//         <Bag boxSize="36px" />
-//         <HStack
-//           bgColor="neon.700"
-//           h="full"
-//           px="30px"
-//           py="6px"
-//           backgroundImage="linear-gradient(to left, #172217 0%, transparent 10%), linear-gradient(to right, #172217 0%, transparent 10%)"
-//         >
-//           {getItem(inventory, Drugs.Ludes, Ludes)}
-//           <Divider orientation="vertical" borderColor="neon.600" h="50%" />
-//           {getItem(inventory, Drugs.Speed, Speed)}
-//           <Divider orientation="vertical" borderColor="neon.600" h="50%" />
-//           {getItem(inventory, Drugs.Weed, Weed)}
-//           <Divider orientation="vertical" borderColor="neon.600" h="50%" />
-//           {getItem(inventory, Drugs.Acid, Acid)}
-//           <Divider orientation="vertical" borderColor="neon.600" h="50%" />
-//           {getItem(inventory, Drugs.Heroin, Heroin)}
-//           <Divider orientation="vertical" borderColor="neon.600" h="50%" />
-//           {getItem(inventory, Drugs.Cocaine, Cocaine)}
-//         </HStack>
-//       </HStack>
-//     )
-//   );
-// };
+  return (
+    <VStack {...props} w="full" align="flex-start">
+      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+        Inventory
+      </Text>
+      <Card
+        w="full"
+        h="50px"
+        px="20px"
+        justify="center"
+        variant="pixelated"
+        sx={{
+          overflowY: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        <HStack gap="10px">
+          {playerEntity?.drugs.map((drug, index) => {
+            return (
+              drug.quantity > 0 && (
+                <>
+                  <HStack color="yellow.400">
+                    {getDrugByName(drug.name).icon({ boxSize: "26" })}
+                    <Text>{drug.quantity}</Text>
+                  </HStack>
+                  {index < playerEntity.drugs.length - 1 && (
+                    <HStack>
+                      <Divider
+                        h="10px"
+                        orientation="vertical"
+                        borderWidth="1px"
+                        borderColor="neon.600"
+                      />
+                    </HStack>
+                  )}
+                </>
+              )
+            );
+          })}
+        </HStack>
+      </Card>
+    </VStack>
+  );
+};
