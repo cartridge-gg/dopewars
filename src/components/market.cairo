@@ -61,4 +61,3 @@ fn test_market_sell() {
     let payout = market.sell(5);
     assert(payout == 3334, 'wrong payout');
 }
-

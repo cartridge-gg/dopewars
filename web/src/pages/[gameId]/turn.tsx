@@ -4,13 +4,7 @@ import { Event } from "@/components/icons";
 import { Ludes, Weed } from "@/components/icons/drugs";
 import { Manhattan } from "@/components/icons/locations";
 import Layout from "@/components/Layout";
-import {
-  endTurn,
-  TradeDirection,
-  useGameStore,
-  getDrugPrice,
-  TravelEvents,
-} from "@/hooks/state";
+
 import { useUiStore } from "@/hooks/ui";
 import {
   Box,
@@ -29,15 +23,9 @@ export default function Turn() {
 
   const { getDrugByName, getLocationByName } = useUiStore();
 
-  const turns = useGameStore((state) => state.turns);
-  const location = useGameStore((state) => state.location);
-  const locationConfig = getLocationByName(location || "");
-  const pendingTrades = useGameStore((state) => state.pendingTrades);
-  const travelEvent = useGameStore((state) => state.travelEvent);
-
   return (
     <Layout
-      title={`Day ${turns.current}`}
+      title={`Day 1`}
       prefixTitle="End of"
       headerImage="/images/sunset.png"
     >
@@ -52,7 +40,7 @@ export default function Turn() {
             isHeader
           />
           <UnorderedList w="full" variant="underline">
-            {pendingTrades &&
+            {/* {pendingTrades &&
               pendingTrades.map((trade, index) => {
                 const drugConfig = getDrugByName(trade.drug.name);
                 const price = getDrugPrice(trade.drug.name);
@@ -60,7 +48,7 @@ export default function Turn() {
 
                 return (
                   drugConfig && (
-                    <ListItem key={`trade-${index}`}>
+                    <ListItem key={`trade-{index}`}>
                       <Product
                         icon={drugConfig.icon}
                         product={drugConfig.name}
@@ -74,8 +62,8 @@ export default function Turn() {
                       />
                     </ListItem>
                   )
-                );
-              })}
+                );$
+              })} */}
           </UnorderedList>
         </VStack>
         <VStack w="full" style={{ marginTop: "30px" }}>
@@ -88,19 +76,19 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {locationConfig.icon({})}
-                <Text>{locationConfig.name}</Text>
+                {"location icon"}
+                <Text>{"location name"}</Text>
               </HStack>
             </ListItem>
-            {travelEvent && travelEvent.event !== TravelEvents.None && (
+            {true && (
               <ListItem>
                 <HStack>
                   <HStack flex="1">
                     <Event />
-                    <Text>{travelEvent.event}</Text>
+                    <Text>{"event"}</Text>
                   </HStack>
                   <Text flex="2" color="yellow.400">
-                    {travelEvent.description}
+                    {"description"}
                   </Text>
                 </HStack>
               </ListItem>
@@ -112,7 +100,6 @@ export default function Turn() {
         <Button
           w={["full", "auto"]}
           onClick={() => {
-            endTurn();
             router.push("/0x123/travel");
           }}
         >

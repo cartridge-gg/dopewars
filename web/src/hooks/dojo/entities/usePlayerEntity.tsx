@@ -31,7 +31,7 @@ export class PlayerEntity {
   drugs: Drug[];
 
   constructor(player: Player, location: Location, drugs: Drug[]) {
-    this.cash = parseInt(player.cash, 16) / SCALING_FACTOR;
+    this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.arrested = player.arrested;
     this.turnsRemaining = player.turns_remaining;

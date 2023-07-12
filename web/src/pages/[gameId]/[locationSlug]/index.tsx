@@ -21,19 +21,19 @@ import {
   getDrugByName,
   getLocationByName,
   getLocationBySlug,
-  LocationProps,
-  useUiStore,
 } from "@/hooks/ui";
 import { Bag } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { formatQuantity, formatCash } from "@/utils/ui";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const slug = router.query.locationSlug as string;
-  const locationName = getLocationBySlug(slug).name;
+  const locationName = getLocationBySlug(
+    router.query.locationSlug as string,
+  ).name;
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -61,7 +61,7 @@ export default function Location() {
         return;
       }
     }
-  }, [locationName, playerEntity, router]);
+  }, [locationName, playerEntity, router, gameId]);
 
   return (
     locationEntity &&
@@ -76,9 +76,9 @@ export default function Location() {
         <Content>
           <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
             {locationEntity.drugMarkets.map((drug, index) => {
-              const playerDrug = playerEntity.drugs.find(
-                (d) => d.name === drug.name,
-              );
+              const playerQuantity =
+                playerEntity.drugs.find((d) => d.name === drug.name)
+                  ?.quantity || 0;
 
               return (
                 <Card
@@ -105,11 +105,13 @@ export default function Location() {
                     </HStack>
                   </CardBody>
                   <CardFooter fontSize="16px">
-                    <Text>${drug.price.toString()}</Text>
+                    <Text>{formatCash(drug.price)}</Text>
                     <Spacer />
-                    <HStack color={playerDrug ? "yellow.400" : "neon.500"}>
+                    <HStack
+                      color={playerQuantity > 0 ? "yellow.400" : "neon.500"}
+                    >
                       <Bag />
-                      <Text>{playerDrug?.quantity ?? 0}</Text>
+                      <Text>{formatQuantity(playerQuantity)}</Text>
                     </HStack>
                   </CardFooter>
                 </Card>
