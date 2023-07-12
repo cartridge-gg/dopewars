@@ -37,7 +37,6 @@ import {
 } from "@chakra-ui/react";
 import { Sounds } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerState } from "@/hooks/state";
-import { Inventory } from "@/components/Inventory";
 import AlertMessage from "@/components/AlertMessage";
 import { cardPixelatedStyle } from "@/theme/styles";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
@@ -94,7 +93,7 @@ export default function Market() {
     setMarketCash(market.marketPool.cash / 10000);
     setMarketQuantity(market.marketPool.quantity);
     setMarketPrice(market.price);
-  }, [locationEntity, playerEntity]);
+  }, [locationEntity, playerEntity, drug]);
 
   const onTabsChange = (index: number) => {
     setTradeDirection(index as TradeDirection);
@@ -114,7 +113,16 @@ export default function Market() {
     } as TradeType);
 
     router.push(`/${gameId}/${location.slug}`);
-  }, [quantityBuy, addTrade, setIsTrading]);
+  }, [
+    quantityBuy,
+    gameId,
+    location,
+    drug,
+    router,
+    buy,
+    addTrade,
+    setIsTrading,
+  ]);
 
   const onSell = useCallback(async () => {
     setIsTrading(true);
@@ -127,7 +135,16 @@ export default function Market() {
     } as TradeType);
 
     router.push(`/${gameId}/${location.slug}`);
-  }, [quantitySell, addTrade, setIsTrading]);
+  }, [
+    quantitySell,
+    gameId,
+    location,
+    drug,
+    router,
+    sell,
+    addTrade,
+    setIsTrading,
+  ]);
 
   return (
     playerEntity &&
@@ -259,12 +276,12 @@ const QuantitySelector = ({
       )?.quantity;
       setMax(playerQuantity || 0);
     }
-  }, [type, drug, marketQuantity, player]);
+  }, [type, drug, marketQuantity, player, marketPrice]);
 
   useEffect(() => {
     setTotalPrice(quantity * marketPrice);
     onChange(quantity);
-  }, [quantity, marketPrice]);
+  }, [quantity, marketPrice, onChange]);
 
   const onDown = useCallback(() => {
     if (quantity > 1) {
