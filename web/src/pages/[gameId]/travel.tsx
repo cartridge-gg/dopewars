@@ -149,8 +149,13 @@ export default function Travel() {
             isLoading={isPending && !txError}
             onClick={async () => {
               if (target) {
-                await travel(gameId, target);
-                router.push(`/${gameId}/${getLocationByName(target).slug}`);
+                const event = await travel(gameId, target);
+                if (event) {
+                  // TODO: goto event page
+                  console.log(event);
+                } else {
+                  router.push(`/${gameId}/${getLocationByName(target).slug}`);
+                }
               }
             }}
           >

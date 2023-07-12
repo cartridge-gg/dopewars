@@ -31,11 +31,36 @@ mod travel {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);
-        let updated_health = if result.health_loss < player.health {
-            player.health - result.health_loss
-        } else {
-            0
-        };
+        if event_occured {
+            let mut values = array::ArrayTrait::new();
+            serde::Serde::serialize(
+                @RandomEvent {
+                    game_id,
+                    player_id,
+                    health_loss: result.health_loss,
+                    money_loss: result.money_loss,
+                    arrested: result.arrested,
+                },
+                ref values
+            );
+            emit(ctx, 'RandomEvent', values.span());
+        }
+
+        // If arrested, player loses a turn and stays at same location
+        if result.arrested {
+            // player stays at same location and loses a turn
+            set !(
+                ctx.world,
+                player_sk,
+                (Player {
+                    cash: player.cash,
+                    health: player.health,
+                    turns_remaining: player.turns_remaining - 1,
+                })
+            );
+
+            return (true);
+        }
 
         // update player
         set !(
@@ -46,28 +71,11 @@ mod travel {
                     name: next_location_name
                     }, Player {
                     cash: player.cash - result.money_loss,
-                    health: updated_health,
-                    arrested: result.arrested,
+                    health: player.health,
                     turns_remaining: player.turns_remaining - 1,
                 }
             )
         );
-
-        if event_occured {
-            let mut values = array::ArrayTrait::new();
-            serde::Serde::serialize(
-                @RandomEvent {
-                    game_id,
-                    player_id,
-                    health_loss: result.health_loss,
-                    money_loss: result.money_loss,
-                    respect_loss: result.respect_loss,
-                    arrested: result.arrested,
-                },
-                ref values
-            );
-            emit(ctx, 'RandomEvent', values.span());
-        }
 
         let mut values = array::ArrayTrait::new();
         serde::Serde::serialize(

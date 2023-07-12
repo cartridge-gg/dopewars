@@ -10,7 +10,7 @@ mod join_game {
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::constants::SCALING_FACTOR;
+    use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH};
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
@@ -30,10 +30,7 @@ mod join_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    cash: 100 * SCALING_FACTOR, // $100
-                    health: 100,
-                    arrested: false,
-                    turns_remaining: game.max_turns
+                    cash: STARTING_CASH, health: 100, turns_remaining: game.max_turns
                     }, Location {
                     name: location_name
                 }

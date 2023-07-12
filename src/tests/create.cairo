@@ -100,7 +100,6 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
         .expect('player deserialization failed');
 
     assert(player.health == 100, 'health mismatch');
-    assert(player.arrested == false, 'arrested mismatch');
     assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
     player_id
 }

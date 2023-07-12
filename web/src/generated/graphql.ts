@@ -98,7 +98,6 @@ export type Name = {
 
 export type Player = {
   __typename?: "Player";
-  arrested: Scalars["bool"];
   cash: Scalars["u128"];
   health: Scalars["u8"];
   turns_remaining: Scalars["usize"];
@@ -173,7 +172,6 @@ export type QueryNameComponentsArgs = {
 };
 
 export type QueryPlayerComponentsArgs = {
-  arrested?: InputMaybe<Scalars["bool"]>;
   cash?: InputMaybe<Scalars["u128"]>;
   health?: InputMaybe<Scalars["u8"]>;
   limit?: InputMaybe<Scalars["Int"]>;
@@ -298,13 +296,7 @@ export type PlayerEntityQuery = {
       | { __typename: "Location"; name: any }
       | { __typename: "Market" }
       | { __typename: "Name"; short_string: any }
-      | {
-          __typename: "Player";
-          cash: any;
-          health: any;
-          arrested: any;
-          turns_remaining: any;
-        }
+      | { __typename: "Player"; cash: any; health: any; turns_remaining: any }
       | { __typename: "Risks" }
       | null
     > | null;
@@ -502,7 +494,6 @@ export const PlayerEntityDocument = `
       ... on Player {
         cash
         health
-        arrested
         turns_remaining
       }
       ... on Location {

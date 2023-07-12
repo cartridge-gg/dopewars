@@ -52,7 +52,6 @@ mod buy {
             (Player {
                 cash: player.cash - cost,
                 health: player.health,
-                arrested: player.arrested,
                 turns_remaining: player.turns_remaining,
             })
         );
@@ -123,7 +122,6 @@ mod sell {
             (Player {
                 cash: player.cash + payout,
                 health: player.health,
-                arrested: player.arrested,
                 turns_remaining: player.turns_remaining,
             })
         );

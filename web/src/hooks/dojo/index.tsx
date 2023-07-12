@@ -9,7 +9,7 @@ import {
 } from "starknet";
 
 export const SCALING_FACTOR = 10000;
-export const REFETCH_INTERVAL = 3000;
+export const REFETCH_INTERVAL = 2000;
 
 interface DojoInterface {
   account: Account;

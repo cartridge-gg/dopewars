@@ -16,7 +16,7 @@ mod create_game {
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
         SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MIN_CASH, MAX_CASH,
-        MIN_QUANITTY, MAX_QUANTITY
+        MIN_QUANITTY, MAX_QUANTITY, STARTING_CASH
     };
     use rollyourown::utils::random;
 
@@ -50,10 +50,7 @@ mod create_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    cash: 2000 * SCALING_FACTOR, // $2000
-                    health: 100,
-                    arrested: false,
-                    turns_remaining: max_turns
+                    cash: STARTING_CASH, health: 100, turns_remaining: max_turns
                     }, Location {
                     name: location_name
                 }
@@ -84,7 +81,7 @@ mod create_game {
 
                     let mut seed = starknet::get_tx_info().unbox().transaction_hash;
                     seed = pedersen(seed, *location_name);
-                    
+
                     let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {

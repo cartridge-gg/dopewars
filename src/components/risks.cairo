@@ -4,7 +4,7 @@ use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
 
-#[derive(Drop)]
+#[derive(Drop, Copy)]
 struct TravelResult {
     arrested: bool,
     money_loss: u128,
@@ -12,7 +12,7 @@ struct TravelResult {
     respect_loss: u8,
 }
 
-#[derive(Drop)]
+#[derive(Drop, Copy)]
 struct TradeResult {
     money_loss: u128,
     drug_loss: usize,
@@ -49,22 +49,31 @@ impl RisksImpl of RisksTrait {
 
         if occurs(seed, *self.travel) {
             seed = pedersen(seed, seed);
-            if occurs(seed, *self.hurt) {
-                health_loss = 5;
-                event_occured = true;
-            }
+            event_occured = true;
 
-            seed = pedersen(seed, seed);
-            if occurs(seed, *self.mugged) {
-                money_loss = 20 * SCALING_FACTOR;
-                event_occured = true;
-            }
-
-            seed = pedersen(seed, seed);
+            // TODO: implement more sophisticated risk events,
+            // TEMP: only inlcude two risk events (arrested and money loss)
             if occurs(seed, *self.arrested) {
                 arrested = true;
-                event_occured = true;
+            } else {
+                money_loss = 200 * SCALING_FACTOR // -$200
             }
+        // if occurs(seed, *self.hurt) {
+        //     health_loss = 5;
+        //     event_occured = true;
+        // }
+
+        // seed = pedersen(seed, seed);
+        // if occurs(seed, *self.mugged) {
+        //     money_loss = 20 * SCALING_FACTOR;
+        //     event_occured = true;
+        // }
+
+        // seed = pedersen(seed, seed);
+        // if occurs(seed, *self.arrested) {
+        //     arrested = true;
+        //     event_occured = true;
+        // }
         }
 
         (event_occured, TravelResult { money_loss, health_loss, respect_loss, arrested })
@@ -107,8 +116,6 @@ fn test_always_occurs() {
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
-    assert(result.health_loss > 0, 'health_loss did not occur');
-    assert(result.money_loss > 0, 'money_loss did not occur');
     assert(result.arrested, 'was not arrested');
 }
 

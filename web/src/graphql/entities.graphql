@@ -29,7 +29,6 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
       ... on Player {
         cash
         health
-        arrested
         turns_remaining
       }
       ... on Location {
