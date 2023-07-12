@@ -14,6 +14,7 @@ export const REFETCH_INTERVAL = 3000;
 interface DojoInterface {
   account: Account;
   isPending: boolean;
+  isComplete: boolean;
   execute: (systemName: string, params: BigNumberish[]) => Promise<string>;
 }
 
@@ -36,9 +37,11 @@ export function DojoProvider({
   children?: ReactNode;
 }): JSX.Element {
   const [isPending, setIsPending] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   const execute = async (systemName: string, params: BigNumberish[]) => {
     setIsPending(true);
+    setIsComplete(false);
 
     return account
       .execute({
@@ -57,6 +60,8 @@ export function DojoProvider({
         });
 
         console.log("transaction hash: " + transaction_hash);
+
+        setIsComplete(true);
         return transaction_hash;
       })
       .catch((e) => {
@@ -67,7 +72,7 @@ export function DojoProvider({
   };
 
   return (
-    <DojoContext.Provider value={{ account, isPending, execute }}>
+    <DojoContext.Provider value={{ account, isPending, isComplete, execute }}>
       {children}
     </DojoContext.Provider>
   );

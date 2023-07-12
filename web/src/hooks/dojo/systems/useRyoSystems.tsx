@@ -31,10 +31,11 @@ export interface RyoSystemsInterface {
     quantity: number,
   ) => Promise<void>;
   isPending: boolean;
+  isComplete: boolean;
 }
 
 export const useRyoSystems = (): RyoSystemsInterface => {
-  const { execute, account, isPending } = useDojo();
+  const { execute, account, isPending, isComplete } = useDojo();
 
   const create = async (
     startTime: number,
@@ -51,8 +52,8 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     await execute("join_game", [gameId]);
   };
 
-  const travel = async (gameId: string, locationId: string) => {
-    await execute("travel", [gameId, locationId]);
+  const travel = async (gameId: string, locationName: string) => {
+    await execute("travel", [gameId, locationName]);
   };
 
   const buy = async (
@@ -80,6 +81,7 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     buy,
     sell,
     isPending,
+    isComplete,
   };
 };
 

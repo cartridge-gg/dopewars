@@ -131,7 +131,7 @@ export default function Location() {
         <Button
           w={["full", "auto"]}
           onClick={() => {
-            router.push(`/${gameId}/turn`);
+            router.push(`/${gameId}/travel`);
           }}
         >
           Continue

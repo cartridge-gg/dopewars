@@ -56,8 +56,6 @@ export default function Market() {
   const location = getLocationBySlug(router.query.locationSlug as string);
   const drug = getDrugBySlug(router.query.drugSlug as string);
 
-  const [isTrading, setIsTrading] = useState(false);
-
   const [market, setMarket] = useState<DrugMarket>();
   const [tradeDirection, setTradeDirection] = useState(TradeDirection.Buy);
 
@@ -98,12 +96,10 @@ export default function Market() {
     setTradeDirection(index as TradeDirection);
   };
 
-  const { buy, sell } = useRyoSystems();
+  const { buy, sell, isPending, isComplete } = useRyoSystems();
   const { addTrade } = usePlayerState();
 
   const onTrade = useCallback(async () => {
-    setIsTrading(true);
-
     if (tradeDirection === TradeDirection.Buy) {
       await buy(gameId, location.name, drug.name, quantityBuy);
     } else if (tradeDirection === TradeDirection.Sell) {
@@ -128,7 +124,6 @@ export default function Market() {
     router,
     sell,
     addTrade,
-    setIsTrading,
   ]);
 
   if (!playerEntity || !drug || !market) return <></>;
@@ -218,12 +213,20 @@ export default function Market() {
       </Content>
       <Footer>
         {tradeDirection === TradeDirection.Buy && canBuy && (
-          <Button w={["50%", "auto"]} isLoading={isTrading} onClick={onTrade}>
+          <Button
+            w={["50%", "auto"]}
+            isLoading={isPending && !isComplete}
+            onClick={onTrade}
+          >
             Buy ({quantityBuy})
           </Button>
         )}
         {tradeDirection === TradeDirection.Sell && canSell && (
-          <Button w={["50%", "auto"]} isLoading={isTrading} onClick={onTrade}>
+          <Button
+            w={["50%", "auto"]}
+            isLoading={isPending && !isComplete}
+            onClick={onTrade}
+          >
             Sell ({quantitySell})
           </Button>
         )}
