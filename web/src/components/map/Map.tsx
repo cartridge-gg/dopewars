@@ -20,7 +20,7 @@ const coordinate: CoordinateType = {
 };
 
 export const Map = ({
-  highlight = Locations.Central,
+  highlight,
   onSelect,
 }: {
   highlight?: Locations;
@@ -30,17 +30,19 @@ export const Map = ({
   const isMobile = useBreakpointValue([true, false]);
 
   useEffect(() => {
-    const animation = isMobile
-      ? { scale: 1.75, ...coordinate[highlight] }
-      : { scale: 1, x: 0, y: 0 };
-    animate(
-      scope.current,
-      { ...animation },
-      {
-        ease: "easeInOut",
-        duration: 0.5,
-      },
-    );
+    if (highlight) {
+      const animation = isMobile
+        ? { scale: 1.75, ...coordinate[highlight] }
+        : { scale: 1, x: 0, y: 0 };
+      animate(
+        scope.current,
+        { ...animation },
+        {
+          ease: "easeInOut",
+          duration: 0.5,
+        },
+      );
+    }
   }, [highlight, isMobile, animate, scope]);
 
   return (

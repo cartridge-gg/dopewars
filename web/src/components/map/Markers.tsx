@@ -1,7 +1,7 @@
 import { Icon } from "@chakra-ui/react";
 import { Locations } from "@/hooks/state";
 
-export const Markers = ({ location }: { location: Locations }) => {
+export const Markers = ({ location }: { location?: Locations }) => {
   return (
     <Icon
       layerStyle="fill"

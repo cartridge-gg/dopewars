@@ -20,21 +20,28 @@ import { Map } from "@/components/map";
 import { motion } from "framer-motion";
 import { LocationProps, useUiStore, getLocationByName } from "@/hooks/ui";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 
 export default function Travel() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const [target, setTarget] = useState<Locations>(Locations.Central);
+  const [target, setTarget] = useState<Locations>();
+  const [currentLocation, setCurrentLocation] = useState<Locations>();
   const { locations } = useUiStore.getState();
 
-  const [locationSlug, setLocationSlug] = useState("");
-
   const { travel, isPending, isComplete } = useRyoSystems();
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+  });
 
   useEffect(() => {
-    const location = getLocationByName(target);
-    setLocationSlug(location.slug);
-  }, [target]);
+    if (playerEntity) {
+      const location = getLocationByName(playerEntity.location_name).name;
+      setCurrentLocation(location);
+      setTarget(location);
+    }
+  }, [playerEntity]);
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -88,6 +95,7 @@ export default function Travel() {
               <Location
                 {...location}
                 key={index}
+                name={location.name}
                 selected={location.name === target}
                 onClick={() => setTarget(location.name)}
               />
@@ -136,12 +144,19 @@ export default function Travel() {
           )}
           <Button
             w={["full", "auto"]}
+            isDisabled={!target || target === currentLocation}
             isLoading={isPending && !isComplete}
             onClick={async () => {
-              await travel(gameId, target);
-              router.push(`/${gameId}/${locationSlug}`);
+              if (target) {
+                await travel(gameId, target);
+                router.push(`/${gameId}/${getLocationByName(target).slug}`);
+              }
             }}
-          >{`Travel to ${target}`}</Button>
+          >
+            {target === currentLocation
+              ? "Select Location"
+              : `Travel to ${target}`}
+          </Button>
         </VStack>
       </Footer>
     </Layout>

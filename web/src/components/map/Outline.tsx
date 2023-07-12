@@ -8,7 +8,11 @@ const ChakraBox = chakra(motion.div, {
     isValidMotionProp(prop) || shouldForwardProp(prop),
 });
 
-export const Outline = ({ location }: { location: Locations }) => {
+export const Outline = ({ location }: { location?: Locations }) => {
+  if (!location) {
+    return <></>;
+  }
+
   const name = location.toString().toLowerCase().split(" ").join("_");
   const transition = {
     repeat: Infinity,
