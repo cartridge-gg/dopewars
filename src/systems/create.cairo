@@ -83,6 +83,8 @@ mod create_game {
                     );
 
                     let mut seed = starknet::get_tx_info().unbox().transaction_hash;
+                    seed = pedersen(seed, *location_name);
+                    
                     let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {
