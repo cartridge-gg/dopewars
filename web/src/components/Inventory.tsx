@@ -61,7 +61,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
             return (
               drug.quantity > 0 && (
                 <>
-                  <HStack color="yellow.400">
+                  <HStack color="yellow.400" key={index}>
                     {getDrugByName(drug.name).icon({ boxSize: "26" })}
                     <Text>{drug.quantity}</Text>
                   </HStack>

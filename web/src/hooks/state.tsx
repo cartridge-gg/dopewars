@@ -29,7 +29,7 @@ export type DrugsType = {
 export enum TravelEvents {
   Mugged = "Mugged",
   Rugged = "Rugged",
-  Killed = "Killed",
+  Arrested = "Arrested",
   None = "",
 }
 

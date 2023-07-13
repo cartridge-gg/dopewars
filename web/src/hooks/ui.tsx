@@ -18,7 +18,7 @@ import {
   Cocaine,
 } from "@/components/icons/drugs";
 
-import { Drugs, Locations } from "./state";
+import { Drugs, Locations, TravelEvents } from "./state";
 
 import { Router, useRouter } from "next/router";
 import React from "react";
@@ -101,14 +101,39 @@ const drugs: DrugProps[] = [
   },
 ];
 
+export interface EventProps {
+  name: TravelEvents;
+  slug: string;
+  text: string;
+  imageSrc: string;
+}
+
+export const events: EventProps[] = [
+  {
+    name: TravelEvents.Arrested,
+    slug: "arrested",
+    text: "You lost a turn",
+    imageSrc: "/images/events/police_cruiser.gif",
+  },
+  {
+    name: TravelEvents.Mugged,
+    slug: "mugged",
+    text: "You lost half your supply",
+    imageSrc: "/images/events/smoking_gun.gif",
+  },
+];
+
 export interface UiState {
   isConnected: boolean;
   locations: LocationProps[];
   drugs: DrugProps[];
+  events: EventProps[];
   getLocationBySlug: (slug: string) => LocationProps;
   getLocationByName: (name: string) => LocationProps;
   getDrugBySlug: (slug: string) => DrugProps;
   getDrugByName: (name: string) => DrugProps;
+  getEventBySlug: (slug: string) => EventProps;
+  getEventByName: (name: string) => EventProps;
   isBackButtonVisible: (pathname: string) => Boolean;
 }
 
@@ -143,13 +168,28 @@ export const getDrugByName = (name: string): DrugProps => {
   return drug || drugs[0];
 };
 
+export const getEventByName = (name: string): EventProps => {
+  const { events } = useUiStore.getState();
+  const event = events.find((i) => i.name === name);
+  return event || events[0];
+};
+
+export const getEventBySlug = (slug: string): EventProps => {
+  const { events } = useUiStore.getState();
+  const event = events.find((i) => i.slug === slug);
+  return event || events[0];
+};
+
 export const useUiStore = create<UiState>(() => ({
   isConnected: false,
   locations,
   drugs,
+  events,
   getLocationBySlug,
   getLocationByName,
   getDrugBySlug,
   getDrugByName,
+  getEventBySlug,
+  getEventByName,
   isBackButtonVisible,
 }));
