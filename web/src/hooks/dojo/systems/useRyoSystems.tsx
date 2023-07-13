@@ -1,46 +1,15 @@
-import {
-  cairo,
-  InvokeTransactionReceiptResponse,
-  num,
-  shortString,
-  types,
-} from "starknet";
+import { EventResult, parseEvent, RyoEvents } from "@/utils/event";
+import { useCallback } from "react";
 import { useDojo } from "..";
-
-export enum RyoEvents {
-  GameCreated = "GameCreated",
-  PlayerJoined = "PlayerJoined",
-  Traveled = "Traveled",
-  Bought = "Bought",
-  Sold = "Sold",
-  RandomEvent = "RandomEvent",
-}
-
-export interface RandomEventResult {
-  gameId: string;
-  playerId: string;
-  health_loss: number;
-  mugged: boolean;
-  arrested: boolean;
-}
-
-export interface CreateEventResult {
-  gameId: string;
-  playerId: string;
-  locationName: string;
-}
 
 export interface RyoSystemsInterface {
   create: (
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<CreateEventResult>;
-  join: (gameId: string) => Promise<void>;
-  travel: (
-    gameId: string,
-    locationId: string,
-  ) => Promise<RandomEventResult | void>;
+  ) => Promise<EventResult>;
+  travel: (gameId: string, locationId: string) => Promise<EventResult | void>;
+  join: (gameId: string) => Promise<EventResult>;
   buy: (
     gameId: string,
     locationName: string,
@@ -60,45 +29,77 @@ export interface RyoSystemsInterface {
 export const useRyoSystems = (): RyoSystemsInterface => {
   const { execute, account, error, isPending } = useDojo();
 
-  const create = async (
-    startTime: number,
-    maxPlayers: number,
-    maxTurns: number,
-  ) => {
-    const txn = await execute("create_game", [startTime, maxPlayers, maxTurns]);
-    const receipt = await account.getTransactionReceipt(txn);
+  const executeAndReciept = useCallback(
+    async (method: string, params: Array<string | number>) => {
+      try {
+        const txn = await execute(method, params);
+        return await account.getTransactionReceipt(txn);
+      } catch (err) {
+        console.error(`Error execute ${method}`, err);
+        throw err;
+      }
+    },
+    [execute, account],
+  );
 
-    return parseJoinedEvent(receipt);
-  };
+  const create = useCallback(
+    async (startTime: number, maxPlayers: number, maxTurns: number) => {
+      const receipt = await executeAndReciept("create_game", [
+        startTime,
+        maxPlayers,
+        maxTurns,
+      ]);
 
-  const join = async (gameId: string) => {
-    await execute("join_game", [gameId]);
-  };
+      // using joined event instead of created event to get initial location
+      return parseEvent(receipt, RyoEvents.PlayerJoined);
+    },
+    [executeAndReciept],
+  );
 
-  const travel = async (gameId: string, locationName: string) => {
-    const txn = await execute("travel", [gameId, locationName]);
-    const receipt = await account.getTransactionReceipt(txn);
+  const travel = useCallback(
+    async (gameId: string, locationName: string) => {
+      const receipt = await executeAndReciept("travel", [gameId, locationName]);
 
-    return parseRandomEvent(receipt);
-  };
+      try {
+        return parseEvent(receipt, RyoEvents.RandomEvent);
+      } catch (err) {
+        // no random event occured
+      }
+    },
+    [executeAndReciept],
+  );
 
-  const buy = async (
-    gameId: string,
-    locationName: string,
-    drugName: string,
-    quantity: number,
-  ) => {
-    await execute("buy", [gameId, locationName, drugName, quantity]);
-  };
+  const join = useCallback(
+    async (gameId: string) => {
+      const receipt = await executeAndReciept("join_game", [gameId]);
+      return parseEvent(receipt, RyoEvents.PlayerJoined);
+    },
+    [executeAndReciept],
+  );
 
-  const sell = async (
-    gameId: string,
-    locationName: string,
-    drugName: string,
-    quantity: number,
-  ) => {
-    await execute("sell", [gameId, locationName, drugName, quantity]);
-  };
+  const buy = useCallback(
+    async (
+      gameId: string,
+      locationName: string,
+      drugName: string,
+      quantity: number,
+    ) => {
+      await execute("buy", [gameId, locationName, drugName, quantity]);
+    },
+    [],
+  );
+
+  const sell = useCallback(
+    async (
+      gameId: string,
+      locationName: string,
+      drugName: string,
+      quantity: number,
+    ) => {
+      await execute("sell", [gameId, locationName, drugName, quantity]);
+    },
+    [],
+  );
 
   return {
     create,
@@ -108,44 +109,5 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     sell,
     error,
     isPending,
-  };
-};
-
-const parseRandomEvent = (
-  receipt: InvokeTransactionReceiptResponse,
-): RandomEventResult | void => {
-  const event = receipt.events?.find(
-    (event) =>
-      shortString.decodeShortString(event.keys[0]) === RyoEvents.RandomEvent,
-  );
-
-  if (event) {
-    console.log(event);
-    return {
-      gameId: num.toHexString(event.data[0]),
-      playerId: num.toHexString(event.data[1]),
-      health_loss: Number(event.data[2]),
-      mugged: Boolean(event.data[3] === "0x1"),
-      arrested: Boolean(event.data[4] === "0x1"),
-    };
-  }
-};
-
-const parseJoinedEvent = (
-  receipt: InvokeTransactionReceiptResponse,
-): CreateEventResult => {
-  const event = receipt.events?.find(
-    (event) =>
-      shortString.decodeShortString(event.keys[0]) === RyoEvents.PlayerJoined,
-  );
-
-  if (!event) {
-    throw new Error("No PlayerJoined event found in receipt");
-  }
-
-  return {
-    gameId: num.toHexString(event.data[0]),
-    playerId: num.toHexString(event.data[1]),
-    locationName: shortString.decodeShortString(num.toHexString(event.data[2])),
   };
 };

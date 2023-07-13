@@ -5,7 +5,7 @@ import {
   Name,
   usePlayerEntityQuery,
 } from "@/generated/graphql";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
@@ -92,14 +92,13 @@ export const usePlayerEntity = ({
   const [player, setPlayer] = useState<PlayerEntity>();
 
   // TODO: remove leading zeros in address, maybe implemented in torii
-  const { data, isFetched } = usePlayerEntityQuery(
+  const { data, isFetched, refetch } = usePlayerEntityQuery(
     { gameId: gameId || "", playerId: address || "" },
     {
       enabled: !!gameId && !!address,
-      refetchInterval: REFETCH_INTERVAL, // TODO: long polling
+      refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
     },
   );
-
   useEffect(() => {
     const player_ = PlayerEntity.create(data as PlayerEntityData);
     if (player_) setPlayer(player_);

@@ -8,19 +8,19 @@ import {
   HStack,
   VStack,
   Text,
-  Spacer,
   Divider,
   useEventListener,
 } from "@chakra-ui/react";
 import { Locations } from "@/hooks/state";
 import { useRouter } from "next/router";
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { motion } from "framer-motion";
 import { LocationProps, useUiStore, getLocationByName } from "@/hooks/ui";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { RandomEvent } from "@/utils/event";
 
 export default function Travel() {
   const router = useRouter();
@@ -151,7 +151,9 @@ export default function Travel() {
               if (target) {
                 const event = await travel(gameId, target);
                 if (event) {
-                  const typeSlug = event.arrested ? "arrested" : "mugged";
+                  const typeSlug = (event as RandomEvent).arrested
+                    ? "arrested"
+                    : "mugged";
                   router.push(`/${gameId}/event/${typeSlug}`);
                 } else {
                   router.push(`/${gameId}/${getLocationByName(target).slug}`);

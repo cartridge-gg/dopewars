@@ -21,6 +21,7 @@ import Leaderboard from "@/components/Leaderboard";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { getLocationByName } from "@/hooks/ui";
 import { useState } from "react";
+import { CreateEvent, JoinedEvent } from "@/utils/event";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -55,11 +56,11 @@ export default function Home() {
                 w="full"
                 isLoading={isPending && !txError}
                 onClick={async () => {
-                  const { gameId, locationName } = await create(
+                  const { gameId, locationName } = (await create(
                     START_TIME,
                     MAX_PLAYERS,
                     NUM_TURNS,
-                  );
+                  )) as JoinedEvent;
 
                   router.push(
                     `/${gameId}/${getLocationByName(locationName).slug}`,

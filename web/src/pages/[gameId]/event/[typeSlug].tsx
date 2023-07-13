@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { TravelEvents } from "@/hooks/state";
 import { getEventBySlug, getLocationByName } from "@/hooks/ui";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import CrtEffect from "@/components/CrtEffect";
 
 export default function Event() {
   const router = useRouter();
@@ -60,6 +61,7 @@ export default function Event() {
           </Button>
         </VStack>
       </VStack>
+      <CrtEffect />
     </>
   );
 }

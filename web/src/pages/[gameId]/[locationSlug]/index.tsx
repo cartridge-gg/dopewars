@@ -67,6 +67,7 @@ export default function Location() {
   if (!playerEntity || !locationEntity) {
     return <></>;
   }
+
   const gap = "14px";
 
   return (
