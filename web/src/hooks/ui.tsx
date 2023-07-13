@@ -104,7 +104,7 @@ const drugs: DrugProps[] = [
 export interface EventProps {
   name: TravelEvents;
   slug: string;
-  text: string;
+  description: string;
   imageSrc: string;
 }
 
@@ -112,13 +112,13 @@ export const events: EventProps[] = [
   {
     name: TravelEvents.Arrested,
     slug: "arrested",
-    text: "You lost a turn",
+    description: "You lost a turn",
     imageSrc: "/images/events/police_cruiser.gif",
   },
   {
     name: TravelEvents.Mugged,
     slug: "mugged",
-    text: "You lost half your supply",
+    description: "You lost half your supply",
     imageSrc: "/images/events/smoking_gun.gif",
   },
 ];

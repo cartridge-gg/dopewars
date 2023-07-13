@@ -1,4 +1,4 @@
-import { EventResult, parseEvent, RyoEvents } from "@/utils/event";
+import { BaseEventData, parseEvent, RyoEvents } from "@/utils/event";
 import { useCallback } from "react";
 import { useDojo } from "..";
 
@@ -7,9 +7,9 @@ export interface RyoSystemsInterface {
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<EventResult>;
-  travel: (gameId: string, locationId: string) => Promise<EventResult | void>;
-  join: (gameId: string) => Promise<EventResult>;
+  ) => Promise<BaseEventData>;
+  travel: (gameId: string, locationId: string) => Promise<BaseEventData | void>;
+  join: (gameId: string) => Promise<BaseEventData>;
   buy: (
     gameId: string,
     locationName: string,
@@ -86,7 +86,7 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     ) => {
       await execute("buy", [gameId, locationName, drugName, quantity]);
     },
-    [],
+    [execute],
   );
 
   const sell = useCallback(
@@ -98,7 +98,7 @@ export const useRyoSystems = (): RyoSystemsInterface => {
     ) => {
       await execute("sell", [gameId, locationName, drugName, quantity]);
     },
-    [],
+    [execute],
   );
 
   return {

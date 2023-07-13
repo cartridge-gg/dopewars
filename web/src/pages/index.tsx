@@ -20,8 +20,7 @@ import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { getLocationByName } from "@/hooks/ui";
-import { useState } from "react";
-import { CreateEvent, JoinedEvent } from "@/utils/event";
+import { JoinedEventData } from "@/utils/event";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -60,7 +59,7 @@ export default function Home() {
                     START_TIME,
                     MAX_PLAYERS,
                     NUM_TURNS,
-                  )) as JoinedEvent;
+                  )) as JoinedEventData;
 
                   router.push(
                     `/${gameId}/${getLocationByName(locationName).slug}`,

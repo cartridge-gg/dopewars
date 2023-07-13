@@ -122,6 +122,7 @@ export default function Market() {
     location,
     drug,
     router,
+    buy,
     sell,
     addTrade,
   ]);

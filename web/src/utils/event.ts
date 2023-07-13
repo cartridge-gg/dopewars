@@ -9,37 +9,37 @@ export enum RyoEvents {
   RandomEvent = "RandomEvent",
 }
 
-export interface EventResult {
+export interface BaseEventData {
   gameId: string;
 }
 
-export interface RandomEvent extends EventResult {
+export interface RandomEventData extends BaseEventData {
   playerId: string;
   healthLoss: number;
   mugged: boolean;
   arrested: boolean;
 }
 
-export interface CreateEvent extends EventResult {
+export interface CreateEventData extends BaseEventData {
   creator: string;
   startTime: number;
   maxTurns: number;
   maxPlayers: number;
 }
 
-export interface JoinedEvent extends EventResult {
+export interface JoinedEventData extends BaseEventData {
   playerId: string;
   locationName: string;
 }
 
-export interface BoughtEvent extends EventResult {
+export interface BoughtEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
   price: number;
 }
 
-export interface SoldEvent extends EventResult {
+export interface SoldEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
@@ -49,7 +49,7 @@ export interface SoldEvent extends EventResult {
 export const parseEvent = (
   receipt: InvokeTransactionReceiptResponse,
   eventType: RyoEvents,
-): EventResult => {
+): BaseEventData => {
   const raw = receipt.events?.find(
     (e) => shortString.decodeShortString(e.keys[0]) === eventType,
   );
@@ -66,7 +66,7 @@ export const parseEvent = (
         startTime: Number(raw.data[2]),
         maxTurns: Number(raw.data[3]),
         maxPlayers: Number(raw.data[4]),
-      } as CreateEvent;
+      } as CreateEventData;
 
     case RyoEvents.RandomEvent:
       return {
@@ -75,14 +75,14 @@ export const parseEvent = (
         healthLoss: Number(raw.data[2]),
         mugged: Boolean(raw.data[3] === "0x1"),
         arrested: Boolean(raw.data[4] === "0x1"),
-      } as RandomEvent;
+      } as RandomEventData;
 
     case RyoEvents.PlayerJoined:
       return {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         locationName: shortString.decodeShortString(raw.data[2]),
-      } as JoinedEvent;
+      } as JoinedEventData;
 
     case RyoEvents.Traveled:
     case RyoEvents.Bought:

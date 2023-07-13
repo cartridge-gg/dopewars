@@ -11,16 +11,21 @@ import {
   Divider,
   useEventListener,
 } from "@chakra-ui/react";
-import { Locations } from "@/hooks/state";
+import { Locations, usePlayerState, TravelEvents } from "@/hooks/state";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { motion } from "framer-motion";
-import { LocationProps, useUiStore, getLocationByName } from "@/hooks/ui";
+import {
+  LocationProps,
+  useUiStore,
+  getLocationByName,
+  getEventBySlug,
+} from "@/hooks/ui";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
-import { RandomEvent } from "@/utils/event";
+import { RandomEventData } from "@/utils/event";
 
 export default function Travel() {
   const router = useRouter();
@@ -28,6 +33,7 @@ export default function Travel() {
   const [target, setTarget] = useState<Locations>();
   const [currentLocation, setCurrentLocation] = useState<Locations>();
   const { locations } = useUiStore.getState();
+  const { addEvent } = usePlayerState();
 
   const { travel, isPending, error: txError } = useRyoSystems();
   const { player: playerEntity } = usePlayerEntity({
@@ -149,14 +155,18 @@ export default function Travel() {
             isLoading={isPending && !txError}
             onClick={async () => {
               if (target) {
-                const event = await travel(gameId, target);
-                if (event) {
-                  const typeSlug = (event as RandomEvent).arrested
+                const eventData = await travel(gameId, target);
+                if (eventData) {
+                  const typeSlug = (eventData as RandomEventData).arrested
                     ? "arrested"
                     : "mugged";
+
+                  const travelEvent = getEventBySlug(typeSlug);
+                  addEvent(travelEvent.name);
+
                   router.push(`/${gameId}/event/${typeSlug}`);
                 } else {
-                  router.push(`/${gameId}/${getLocationByName(target).slug}`);
+                  router.push(`/${gameId}/turn`);
                 }
               }
             }}

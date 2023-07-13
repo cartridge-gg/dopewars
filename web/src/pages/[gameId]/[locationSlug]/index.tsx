@@ -57,8 +57,7 @@ export default function Location() {
 
       // check if game over
       if (playerEntity.turnsRemaining <= 0) {
-        // TODO: forward to game over
-        console.log("game over");
+        router.push(`/${gameId}/end`);
         return;
       }
     }

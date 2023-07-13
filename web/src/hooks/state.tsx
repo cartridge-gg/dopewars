@@ -28,7 +28,6 @@ export type DrugsType = {
 
 export enum TravelEvents {
   Mugged = "Mugged",
-  Rugged = "Rugged",
   Arrested = "Arrested",
   None = "",
 }
@@ -44,17 +43,18 @@ export type TradeType = {
 };
 
 export interface PlayerState {
-  cash: number;
-  inventory: number;
+  events: TravelEvents[];
   trades: Map<Drugs, TradeType>;
+  addEvent: (event: TravelEvents) => void;
   addTrade: (drug: Drugs, trade: TradeType) => void;
-  clearTrades: () => void;
+  clearState: () => void;
 }
 
 export const usePlayerState = create<PlayerState>((set) => ({
-  cash: 0,
-  inventory: 0,
+  events: [],
   trades: new Map(),
+  addEvent: (event: TravelEvents) =>
+    set((state) => ({ events: [...state.events, event] })),
   addTrade: (drug: Drugs, trade: TradeType) =>
     set((state) => {
       const existingTrade = state.trades.get(drug);
@@ -89,7 +89,7 @@ export const usePlayerState = create<PlayerState>((set) => ({
       state.trades.set(drug, { quantity, direction });
       return { trades: new Map(state.trades) };
     }),
-  clearTrades: () => set({ trades: new Map() }),
+  clearState: () => set({ trades: new Map(), events: [] }),
 }));
 
 // NOTE: Keeping this for posterity, game state is retrieved from Torii
