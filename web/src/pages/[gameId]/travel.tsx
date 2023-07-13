@@ -151,8 +151,8 @@ export default function Travel() {
               if (target) {
                 const event = await travel(gameId, target);
                 if (event) {
-                  // TODO: goto event page
-                  console.log(event);
+                  const typeSlug = event.arrested ? "arrested" : "mugged";
+                  router.push(`/${gameId}/event/${typeSlug}`);
                 } else {
                   router.push(`/${gameId}/${getLocationByName(target).slug}`);
                 }

@@ -7,9 +7,8 @@ use rollyourown::constants::SCALING_FACTOR;
 #[derive(Drop, Copy)]
 struct TravelResult {
     arrested: bool,
-    money_loss: u128,
+    mugged: bool,
     health_loss: u8,
-    respect_loss: u8,
 }
 
 #[derive(Drop, Copy)]
@@ -42,9 +41,8 @@ impl RisksImpl of RisksTrait {
     fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult) {
         let mut seed = seed;
         let mut health_loss = 0;
-        let mut money_loss = 0;
-        let mut respect_loss = 0;
         let mut arrested = false;
+        let mut mugged = false;
         let mut event_occured = false;
 
         if occurs(seed, *self.travel) {
@@ -56,27 +54,11 @@ impl RisksImpl of RisksTrait {
             if occurs(seed, *self.arrested) {
                 arrested = true;
             } else {
-                money_loss = 200 * SCALING_FACTOR // -$200
+                mugged = true;
             }
-        // if occurs(seed, *self.hurt) {
-        //     health_loss = 5;
-        //     event_occured = true;
-        // }
-
-        // seed = pedersen(seed, seed);
-        // if occurs(seed, *self.mugged) {
-        //     money_loss = 20 * SCALING_FACTOR;
-        //     event_occured = true;
-        // }
-
-        // seed = pedersen(seed, seed);
-        // if occurs(seed, *self.arrested) {
-        //     arrested = true;
-        //     event_occured = true;
-        // }
         }
 
-        (event_occured, TravelResult { money_loss, health_loss, respect_loss, arrested })
+        (event_occured, TravelResult { arrested, mugged, health_loss })
     }
 
     fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult) {
@@ -104,7 +86,7 @@ fn test_never_occurs() {
 
     assert(!event_occured, 'event occured');
     assert(result.health_loss == 0, 'health_loss occured');
-    assert(result.money_loss == 0, 'money_loss ocurred');
+    assert(!result.mugged, 'was mugged');
     assert(!result.arrested, 'was arrested');
 }
 

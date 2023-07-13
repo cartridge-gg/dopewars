@@ -38,7 +38,7 @@ mod travel {
                     game_id,
                     player_id,
                     health_loss: result.health_loss,
-                    money_loss: result.money_loss,
+                    mugged: result.mugged,
                     arrested: result.arrested,
                 },
                 ref values
@@ -48,7 +48,6 @@ mod travel {
 
         // If arrested, player loses a turn and stays at same location
         if result.arrested {
-            // player stays at same location and loses a turn
             set !(
                 ctx.world,
                 player_sk,
@@ -62,6 +61,13 @@ mod travel {
             return (true);
         }
 
+        // If mugged, player loses half their cash
+        let updated_cash = if result.mugged {
+            player.cash / 2
+        } else {
+            player.cash
+        };
+
         // update player
         set !(
             ctx.world,
@@ -70,7 +76,7 @@ mod travel {
                 Location {
                     name: next_location_name
                     }, Player {
-                    cash: player.cash - result.money_loss,
+                    cash: updated_cash,
                     health: player.health,
                     turns_remaining: player.turns_remaining - 1,
                 }

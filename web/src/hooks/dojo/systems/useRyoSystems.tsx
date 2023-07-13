@@ -1,4 +1,10 @@
-import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
+import {
+  cairo,
+  InvokeTransactionReceiptResponse,
+  num,
+  shortString,
+  types,
+} from "starknet";
 import { useDojo } from "..";
 
 export enum RyoEvents {
@@ -14,7 +20,7 @@ export interface RandomEventResult {
   gameId: string;
   playerId: string;
   health_loss: number;
-  money_loss: number;
+  mugged: boolean;
   arrested: boolean;
 }
 
@@ -114,12 +120,13 @@ const parseRandomEvent = (
   );
 
   if (event) {
+    console.log(event);
     return {
       gameId: num.toHexString(event.data[0]),
       playerId: num.toHexString(event.data[1]),
       health_loss: Number(event.data[2]),
-      money_loss: Number(event.data[3]),
-      arrested: Boolean(event.data[4]),
+      mugged: Boolean(event.data[3] === "0x1"),
+      arrested: Boolean(event.data[4] === "0x1"),
     };
   }
 };
