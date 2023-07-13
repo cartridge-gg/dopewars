@@ -25,7 +25,7 @@ import { JoinedEventData } from "@/utils/event";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 30;
+const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();

@@ -43,11 +43,13 @@ export class LocationEntity {
         (component) => component.__typename === "Location",
       ),
     );
-    const locationComponent = locationEntities?.components.find(
+    if (!locationEntities) return undefined;
+
+    const locationComponent = locationEntities.components.find(
       (component) => component.__typename === "Location",
     ) as Location;
     const locationName = shortString.decodeShortString(locationComponent.name);
-    const risksComponent = locationEntities?.components.find(
+    const risksComponent = locationEntities.components.find(
       (component) => component.__typename === "Risks",
     ) as Risks;
 
@@ -79,8 +81,7 @@ export class LocationEntity {
       };
     });
 
-    if (!locationEntities || !risksComponent || drugMarkets.length === 0)
-      return undefined;
+    if (drugMarkets.length === 0) return undefined;
 
     return {
       name: locationName,

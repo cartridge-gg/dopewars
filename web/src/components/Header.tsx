@@ -101,9 +101,7 @@ const Header = ({ back }: HeaderProps) => {
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack color="yellow.400">
               <Bag />
-              <Text>
-                {inventory}/{MAX_INVENTORY}
-              </Text>
+              <Text>{inventory}</Text>
             </HStack>
           </HStack>
         </HStack>

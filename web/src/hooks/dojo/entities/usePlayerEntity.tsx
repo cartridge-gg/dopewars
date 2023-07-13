@@ -44,10 +44,12 @@ export class PlayerEntity {
     const playerEntities = data.entities.find((entity) =>
       entity.components.find((component) => component.__typename === "Player"),
     );
-    const playerComponent = playerEntities?.components.find(
+    if (!playerEntities) return undefined;
+
+    const playerComponent = playerEntities.components.find(
       (component) => component.__typename === "Player",
     ) as Player;
-    const locationComponent = playerEntities?.components.find(
+    const locationComponent = playerEntities.components.find(
       (component) => component.__typename === "Location",
     ) as Location;
 
@@ -70,8 +72,6 @@ export class PlayerEntity {
         quantity: drugComponent.quantity,
       };
     });
-
-    if (!playerEntities) return undefined;
 
     return new PlayerEntity(playerComponent, locationComponent, drugs);
   }

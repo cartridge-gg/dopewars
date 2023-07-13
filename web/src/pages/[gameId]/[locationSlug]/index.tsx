@@ -78,7 +78,7 @@ export default function Location() {
       title={locationEntity.name}
       prefixTitle={`Day ${
         gameEntity.maxTurns - playerEntity.turnsRemaining + 1
-      }`}
+      } / ${gameEntity.maxTurns}`}
       headerImage={`/images/locations/${
         getLocationByName(locationEntity.name).slug
       }.png`}
