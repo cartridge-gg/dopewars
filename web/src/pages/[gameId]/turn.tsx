@@ -40,7 +40,7 @@ export default function Turn() {
 
   return (
     <Layout
-      title={`Day 1`}
+      title={`Day ${gameEntty.maxTurns - playerEntity.turnsRemaining}`}
       prefixTitle="End of"
       headerImage="/images/sunset.png"
     >

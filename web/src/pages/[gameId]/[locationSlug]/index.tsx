@@ -28,6 +28,7 @@ import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
+import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 
 export default function Location() {
   const router = useRouter();
@@ -43,6 +44,9 @@ export default function Location() {
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+  });
+  const { game: gameEntity } = useGameEntity({
+    gameId,
   });
 
   useEffect(() => {
@@ -63,7 +67,7 @@ export default function Location() {
     }
   }, [locationName, playerEntity, router, gameId]);
 
-  if (!playerEntity || !locationEntity) {
+  if (!playerEntity || !locationEntity || !gameEntity) {
     return <></>;
   }
 
@@ -72,7 +76,9 @@ export default function Location() {
   return (
     <Layout
       title={locationEntity.name}
-      prefixTitle={`Day 1`}
+      prefixTitle={`Day ${
+        gameEntity.maxTurns - playerEntity.turnsRemaining + 1
+      }`}
       headerImage={`/images/locations/${
         getLocationByName(locationEntity.name).slug
       }.png`}
