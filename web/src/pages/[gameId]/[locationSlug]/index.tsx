@@ -15,7 +15,6 @@ import {
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import {
   getDrugByName,
@@ -79,11 +78,11 @@ export default function Location() {
       prefixTitle={`Day ${
         gameEntity.maxTurns - playerEntity.turnsRemaining + 1
       } / ${gameEntity.maxTurns}`}
-      headerImage={`/images/locations/${
+      imageSrc={`/images/locations/${
         getLocationByName(locationEntity.name).slug
       }.png`}
     >
-      <Content gap={gap}>
+      <VStack w="full" gap={gap}>
         <Inventory gap={gap} />
         <VStack w="full" align="flex-start" gap={gap}>
           <Text textStyle="subheading" fontSize="10px" color="neon.500">
@@ -132,7 +131,7 @@ export default function Location() {
             })}
           </SimpleGrid>
         </VStack>
-      </Content>
+      </VStack>
       <Footer>
         <Button
           w={["full", "auto"]}

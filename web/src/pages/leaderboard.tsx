@@ -1,4 +1,3 @@
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
@@ -15,12 +14,9 @@ export default function LeaderboardPage() {
     <Layout
       title="LEADERBOARD"
       prefixTitle="Welcome to the"
-      backgroundColor={"transparent"}
-      headerImage="/images/will-smith-with-attitude.png"
+      imageSrc="/images/will-smith-with-attitude.png"
     >
-      <Content>
-        <Leaderboard />
-      </Content>
+      <Leaderboard />
     </Layout>
   );
 }
