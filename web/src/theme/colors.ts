@@ -15,6 +15,7 @@ const colors: ColorsType = {
   yellow: {
     400: "#FBCB4A",
   },
+  red: "#FB744A",
   black: "#000000",
   white: "#FFFFFF",
   whiteAlpha: {

@@ -14,7 +14,7 @@ import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Footer } from "@/components/Footer";
-import { ArrowEnclosed, Cart } from "@/components/icons";
+import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
 import { DrugProps, getDrugBySlug, getLocationBySlug } from "@/hooks/ui";
 
@@ -48,6 +48,7 @@ import {
 } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 
 export default function Market() {
   const router = useRouter();
@@ -63,8 +64,6 @@ export default function Market() {
 
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
-
-  const isBagFull = false;
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -173,27 +172,22 @@ export default function Market() {
 
           <TabPanels mt={6}>
             <TabPanel>
-              {!isBagFull && (
-                <QuantitySelector
-                  drug={drug}
-                  player={playerEntity}
-                  marketPrice={market.price}
-                  marketQuantity={market.marketPool.quantity}
-                  type={TradeDirection.Buy}
-                  onChange={setQuantityBuy}
-                />
-              )}
+              <QuantitySelector
+                drug={drug}
+                player={playerEntity}
+                market={market}
+                type={TradeDirection.Buy}
+                onChange={setQuantityBuy}
+              />
 
               {!canBuy && <AlertMessage message="YOU ARE BROKE" />}
-              {isBagFull && <AlertMessage message="YOUR BAG IS FULL" />}
             </TabPanel>
             <TabPanel>
               {canSell ? (
                 <QuantitySelector
                   drug={drug}
                   player={playerEntity}
-                  marketPrice={market.price}
-                  marketQuantity={market.marketPool.quantity}
+                  market={market}
                   type={TradeDirection.Sell}
                   onChange={setQuantitySell}
                 />
@@ -237,36 +231,49 @@ const QuantitySelector = ({
   type,
   player,
   drug,
-  marketPrice,
-  marketQuantity,
+  market,
   onChange,
 }: {
   type: TradeDirection;
   drug: DrugProps;
   player: PlayerEntity;
-  marketPrice: number;
-  marketQuantity: number;
+  market: DrugMarket;
   onChange: (quantity: number) => void;
 }) => {
-  const [totalPrice, setTotalPrice] = useState<number>(marketPrice);
+  const [totalPrice, setTotalPrice] = useState<number>(market.price);
+  const [priceImpact, setPriceImpact] = useState<number>(0);
+  const [alertColor, setAlertColor] = useState<string>("neon.500");
   const [quantity, setQuantity] = useState(1);
   const [max, setMax] = useState(0);
 
   useEffect(() => {
     if (type === TradeDirection.Buy) {
-      setMax(Math.floor(player.cash / marketPrice));
+      setMax(calculateMaxQuantity(market.marketPool, player.cash));
     } else if (type === TradeDirection.Sell) {
       const playerQuantity = player.drugs.find(
         (d) => d.name === drug.name,
       )?.quantity;
       setMax(playerQuantity || 0);
     }
-  }, [type, drug, marketQuantity, player, marketPrice]);
+  }, [type, drug, player, market]);
 
   useEffect(() => {
-    setTotalPrice(quantity * marketPrice);
+    const slippage = calculateSlippage(market.marketPool, quantity, type);
+
+    if (slippage.priceImpact > 0.2) {
+      // >20%
+      setAlertColor("red");
+    } else if (slippage.priceImpact > 0.05) {
+      // >5%
+      setAlertColor("neon.200");
+    } else {
+      setAlertColor("neon.500");
+    }
+
+    setPriceImpact(slippage.priceImpact);
+    setTotalPrice(quantity * slippage.newPrice);
     onChange(quantity);
-  }, [quantity, marketPrice, onChange]);
+  }, [quantity, market, onChange]);
 
   const onDown = useCallback(() => {
     if (quantity > 1) {
@@ -298,9 +305,15 @@ const QuantitySelector = ({
       pointerEvents={max === 0 ? "none" : "all"}
     >
       <HStack w="100%" justifyContent="space-between">
-        <Text>
-          {quantity} for {formatCash(totalPrice)}
-        </Text>
+        <VStack align="flex-start">
+          <Text>
+            ({quantity}) for {formatCash(totalPrice)}
+          </Text>
+          <Text color={alertColor}>
+            <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage
+            (estimate)
+          </Text>
+        </VStack>
 
         <HStack gap="8px">
           <Text textDecoration="underline" cursor="pointer" onClick={on50}>
@@ -312,7 +325,7 @@ const QuantitySelector = ({
         </HStack>
       </HStack>
 
-      <HStack w="100%">
+      <HStack w="100%" py={2} gap="10px">
         <Box
           cursor="pointer"
           onClick={onDown}
@@ -320,7 +333,6 @@ const QuantitySelector = ({
           _hover={{
             color: "neon.300",
           }}
-          p={2}
         >
           <ArrowEnclosed direction="down" size="lg" />
         </Box>
@@ -347,7 +359,6 @@ const QuantitySelector = ({
           _hover={{
             color: "neon.300",
           }}
-          p={2}
         >
           <ArrowEnclosed direction="up" size="lg" />
         </Box>
