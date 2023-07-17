@@ -49,11 +49,11 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Flex
-          w={["full", "1400px"]}
+          w={["full", "1200px"]}
           h="full"
-          pt={["80px", "10%"]}
+          py={["60px", "10%"]}
           px="24px"
-          gap={["0", "200px"]}
+          gap={["0", "100px"]}
           direction={["column", "row"]}
         >
           <LeftPanel
@@ -83,7 +83,7 @@ const LeftPanel = ({
 }) => {
   return (
     <VStack flex={["0", "1"]}>
-      <VStack justify={["flex-end"]} zIndex="overlay">
+      <VStack zIndex="overlay">
         <Text textStyle="subheading" fontSize="11px">
           {prefixTitle}
         </Text>
@@ -96,7 +96,7 @@ const LeftPanel = ({
       ) : (
         <Image
           src={imageSrc}
-          maxH="600px"
+          maxH="500px"
           pt="60px"
           display={["none", "block"]}
           alt="context"

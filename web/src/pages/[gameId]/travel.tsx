@@ -92,7 +92,7 @@ export default function Travel() {
         />
       }
     >
-      <VStack w="full" pt="140px">
+      <VStack w="full" pt="100px">
         <Car boxSize="60px" />
         {locations.map((location, index) => (
           <Location
