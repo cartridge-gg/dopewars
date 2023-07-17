@@ -48,7 +48,7 @@ import {
 } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
-import { calculateMaxQuantity, calculateSlippage } from "@/utils/defi";
+import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 
 export default function Market() {
   const router = useRouter();
@@ -258,11 +258,7 @@ const QuantitySelector = ({
   }, [type, drug, player, market]);
 
   useEffect(() => {
-    const slippage = calculateSlippage(
-      { cash: market.marketPool.cash, quantity: market.marketPool.quantity },
-      quantity,
-      type,
-    );
+    const slippage = calculateSlippage(market.marketPool, quantity, type);
 
     if (slippage.priceImpact > 0.2) {
       // >20%
@@ -329,7 +325,7 @@ const QuantitySelector = ({
         </HStack>
       </HStack>
 
-      <HStack w="100%" py={2}>
+      <HStack w="100%" py={2} gap="10px">
         <Box
           cursor="pointer"
           onClick={onDown}
