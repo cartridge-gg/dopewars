@@ -1,4 +1,3 @@
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
 import { Ludes, Weed } from "@/components/icons/drugs";
@@ -42,66 +41,63 @@ export default function Turn() {
     <Layout
       title={`Day ${gameEntty.maxTurns - playerEntity.turnsRemaining}`}
       prefixTitle="End of"
-      headerImage="/images/sunset.png"
+      imageSrc="/images/sunset.png"
     >
-      <Content gap="30px">
-        {trades.size > 0 && (
-          <VStack w="full">
-            <Product
-              product="Product"
-              quantity="Qty"
-              cost="Value"
-              icon={undefined}
-              isHeader
-            />
-            <UnorderedList w="full" variant="underline">
-              {Array.from(trades).map(([drug, trade]) => {
-                const change =
-                  trade.direction === TradeDirection.Buy ? "+" : "-";
-                return (
-                  <ListItem key={drug}>
-                    <Product
-                      icon={getDrugByName(drug).icon}
-                      product={drug}
-                      quantity={`${change}${trade.quantity}`}
-                      cost={"$$$"}
-                    />
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
-          </VStack>
-        )}
+      {trades.size > 0 && (
         <VStack w="full">
-          <HStack w="full">
-            <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
-              Travel To
-            </Text>
-          </HStack>
+          <Product
+            product="Product"
+            quantity="Qty"
+            cost="Value"
+            icon={undefined}
+            isHeader
+          />
           <UnorderedList w="full" variant="underline">
-            <ListItem>
-              <HStack>
-                {getLocationByName(playerEntity.location_name).icon({})}
-                <Text>{playerEntity.location_name}</Text>
-              </HStack>
-            </ListItem>
-            {events.map((event, index) => (
-              <ListItem key={index}>
-                <HStack>
-                  <HStack flex="1">
-                    <Event />
-                    <Text>{event}</Text>
-                  </HStack>
-                  <Text flex="2" color="yellow.400">
-                    {getEventByName(event).description}
-                  </Text>
-                </HStack>
-              </ListItem>
-            ))}
-            ;
+            {Array.from(trades).map(([drug, trade]) => {
+              const change = trade.direction === TradeDirection.Buy ? "+" : "-";
+              return (
+                <ListItem key={drug}>
+                  <Product
+                    icon={getDrugByName(drug).icon}
+                    product={drug}
+                    quantity={`${change}${trade.quantity}`}
+                    cost={"$$$"}
+                  />
+                </ListItem>
+              );
+            })}
           </UnorderedList>
         </VStack>
-      </Content>
+      )}
+      <VStack w="full">
+        <HStack w="full">
+          <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
+            Travel To
+          </Text>
+        </HStack>
+        <UnorderedList w="full" variant="underline">
+          <ListItem>
+            <HStack>
+              {getLocationByName(playerEntity.location_name).icon({})}
+              <Text>{playerEntity.location_name}</Text>
+            </HStack>
+          </ListItem>
+          {events.map((event, index) => (
+            <ListItem key={index}>
+              <HStack>
+                <HStack flex="1">
+                  <Event />
+                  <Text>{event}</Text>
+                </HStack>
+                <Text flex="2" color="yellow.400">
+                  {getEventByName(event).description}
+                </Text>
+              </HStack>
+            </ListItem>
+          ))}
+          ;
+        </UnorderedList>
+      </VStack>
       <Footer>
         <Button
           w={["full", "auto"]}

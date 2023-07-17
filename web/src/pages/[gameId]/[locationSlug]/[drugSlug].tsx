@@ -13,7 +13,6 @@ import {
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import { ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
@@ -133,85 +132,83 @@ export default function Market() {
     <Layout
       title={drug.name}
       prefixTitle="The market"
-      headerImage="/images/dealer.png"
+      imageSrc="/images/dealer.png"
     >
-      <Content>
-        <VStack w="100%" h="100%">
-          <Card variant="pixelated" p={6} mb={6} _hover={{}}>
-            <VStack w="full">
-              <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
-                <Image
-                  src={`/images/drugs/${drug.slug}.png`}
-                  alt={drug.name}
-                  fill={true}
-                  objectFit="contain"
-                  style={{ margin: "auto" }}
-                />
-              </Box>
-              <HStack w="100%" justifyContent="space-between" fontSize="16px">
-                <HStack>
-                  {drug.icon({ boxSize: "36px" })}
-                  <Text>{formatCash(market.price)}</Text>
-                </HStack>
-                <HStack>
-                  <Cart mr={1} size="lg" />
-                  <Text>{formatQuantity(market.marketPool.quantity)}</Text>
-                </HStack>
+      <VStack w="100%" h="100%">
+        <Card variant="pixelated" p={6} mb={6} _hover={{}}>
+          <VStack w="full">
+            <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
+              <Image
+                src={`/images/drugs/${drug.slug}.png`}
+                alt={drug.name}
+                fill={true}
+                objectFit="contain"
+                style={{ margin: "auto" }}
+              />
+            </Box>
+            <HStack w="100%" justifyContent="space-between" fontSize="16px">
+              <HStack>
+                {drug.icon({ boxSize: "36px" })}
+                <Text>{formatCash(market.price)}</Text>
               </HStack>
-            </VStack>
-          </Card>
+              <HStack>
+                <Cart mr={1} size="lg" />
+                <Text>{formatQuantity(market.marketPool.quantity)}</Text>
+              </HStack>
+            </HStack>
+          </VStack>
+        </Card>
 
-          <Tabs
-            w="100%"
-            isFitted
-            variant="unstyled"
-            index={tradeDirection}
-            onChange={onTabsChange}
-          >
-            <TabList>
-              <Tab>BUY</Tab>
-              <Tab>SELL</Tab>
-            </TabList>
+        <Tabs
+          w="100%"
+          isFitted
+          variant="unstyled"
+          index={tradeDirection}
+          onChange={onTabsChange}
+        >
+          <TabList>
+            <Tab>BUY</Tab>
+            <Tab>SELL</Tab>
+          </TabList>
 
-            <TabPanels mt={6}>
-              <TabPanel>
-                {!isBagFull && (
-                  <QuantitySelector
-                    drug={drug}
-                    player={playerEntity}
-                    marketPrice={market.price}
-                    marketQuantity={market.marketPool.quantity}
-                    type={TradeDirection.Buy}
-                    onChange={setQuantityBuy}
+          <TabPanels mt={6}>
+            <TabPanel>
+              {!isBagFull && (
+                <QuantitySelector
+                  drug={drug}
+                  player={playerEntity}
+                  marketPrice={market.price}
+                  marketQuantity={market.marketPool.quantity}
+                  type={TradeDirection.Buy}
+                  onChange={setQuantityBuy}
+                />
+              )}
+
+              {!canBuy && <AlertMessage message="YOU ARE BROKE" />}
+              {isBagFull && <AlertMessage message="YOUR BAG IS FULL" />}
+            </TabPanel>
+            <TabPanel>
+              {canSell ? (
+                <QuantitySelector
+                  drug={drug}
+                  player={playerEntity}
+                  marketPrice={market.price}
+                  marketQuantity={market.marketPool.quantity}
+                  type={TradeDirection.Sell}
+                  onChange={setQuantitySell}
+                />
+              ) : (
+                <Box>
+                  <AlertMessage
+                    textTransform="uppercase"
+                    message={`YOU HAVE NO ${drug.name} TO SELL`}
                   />
-                )}
-
-                {!canBuy && <AlertMessage message="YOU ARE BROKE" />}
-                {isBagFull && <AlertMessage message="YOUR BAG IS FULL" />}
-              </TabPanel>
-              <TabPanel>
-                {canSell ? (
-                  <QuantitySelector
-                    drug={drug}
-                    player={playerEntity}
-                    marketPrice={market.price}
-                    marketQuantity={market.marketPool.quantity}
-                    type={TradeDirection.Sell}
-                    onChange={setQuantitySell}
-                  />
-                ) : (
-                  <Box>
-                    <AlertMessage
-                      textTransform="uppercase"
-                      message={`YOU HAVE NO ${drug.name} TO SELL`}
-                    />
-                  </Box>
-                )}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </VStack>
-      </Content>
+                </Box>
+              )}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </VStack>
       <Footer>
         {tradeDirection === TradeDirection.Buy && canBuy && (
           <Button

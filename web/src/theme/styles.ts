@@ -22,6 +22,7 @@ export const styles = {
 // applied layerStyles below and also chakra's Card component
 export const cardStyle = {
   position: "relative",
+  marginRight: "2px",
   color: "neon.200",
   bgColor: "none",
   borderStyle: "solid",

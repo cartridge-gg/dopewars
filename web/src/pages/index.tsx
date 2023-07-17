@@ -11,7 +11,6 @@ import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { Clock, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
@@ -34,7 +33,7 @@ export default function Home() {
     <Layout
       title="Roll Your Own"
       prefixTitle="Dope Wars:"
-      headerImage="/images/punk-girl.png"
+      imageSrc="/images/punk-girl.png"
       footer={
         <Link
           href="https://www.youtube.com/watch?v=vKOB3sssTy0"
@@ -47,40 +46,38 @@ export default function Home() {
         </Link>
       }
     >
-      <Content>
-        <VStack w="full" gap="20px">
-          <Card variant="pixelated">
-            <VStack w="full" p="20px" gap="20px">
-              <Button
-                w="full"
-                isLoading={isPending && !txError}
-                onClick={async () => {
-                  const { gameId, locationName } = (await create(
-                    START_TIME,
-                    MAX_PLAYERS,
-                    NUM_TURNS,
-                  )) as JoinedEventData;
+      <VStack w="full" gap="20px">
+        <Card variant="pixelated">
+          <VStack w="full" p="20px" gap="20px">
+            <Button
+              w="full"
+              isLoading={isPending && !txError}
+              onClick={async () => {
+                const { gameId, locationName } = (await create(
+                  START_TIME,
+                  MAX_PLAYERS,
+                  NUM_TURNS,
+                )) as JoinedEventData;
 
-                  router.push(
-                    `/${gameId}/${getLocationByName(locationName).slug}`,
-                  );
-                }}
-              >
-                Hustle
-              </Button>
-            </VStack>
-          </Card>
-          <VStack w="full" gap="20px">
-            <Text>HALL OF FAME</Text>
-            <Leaderboard
-              css={{
-                maxHeight: "50vh",
-                overflowY: "auto",
+                router.push(
+                  `/${gameId}/${getLocationByName(locationName).slug}`,
+                );
               }}
-            />
+            >
+              Hustle
+            </Button>
           </VStack>
+        </Card>
+        <VStack w="full" gap="20px">
+          <Text>HALL OF FAME</Text>
+          <Leaderboard
+            css={{
+              maxHeight: "50vh",
+              overflowY: "auto",
+            }}
+          />
         </VStack>
-      </Content>
+      </VStack>
     </Layout>
   );
 }
