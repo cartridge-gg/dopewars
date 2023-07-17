@@ -1,5 +1,4 @@
 import { ChatEvent, ChatInput } from "@/components";
-import Content from "@/components/Content";
 import Layout from "@/components/Layout";
 import { AvatarName } from "@/components/avatar/avatars";
 import { Box, Text, VStack } from "@chakra-ui/react";
@@ -79,34 +78,23 @@ export default function Chat() {
   };
 
   return (
-    <Layout
-      title="The Wire"
-      backgroundImage="url('/images/pager.gif');"
-      justifyContent="space-between"
-      backHeader
-    >
-      <Content
-        maxH="calc(100vh - 250px)"
-        overflowX="auto"
-        flexDirection="column-reverse"
-      >
-        <VStack spacing="16px">
-          {messages.length > 0 ? (
-            messages.map((message, index) => (
-              <ChatEvent
-                connectedUser={message.connectedUser}
-                type={message.type}
-                user={message.user}
-                key={index}
-              >
-                {message.text}
-              </ChatEvent>
-            ))
-          ) : (
-            <Text color="neon.500">Its a little lonely in here...</Text>
-          )}
-        </VStack>
-      </Content>
+    <Layout title="The Wire" imageSrc="url('/images/pager.gif');" backHeader>
+      <VStack spacing="16px">
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <ChatEvent
+              connectedUser={message.connectedUser}
+              type={message.type}
+              user={message.user}
+              key={index}
+            >
+              {message.text}
+            </ChatEvent>
+          ))
+        ) : (
+          <Text color="neon.500">Its a little lonely in here...</Text>
+        )}
+      </VStack>
       <Box w="100%" p="24px">
         <ChatInput
           value={messageValue}

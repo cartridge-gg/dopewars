@@ -99,6 +99,7 @@ const LeftPanel = ({
           maxH="600px"
           pt="60px"
           display={["none", "block"]}
+          alt="context"
         />
       )}
     </VStack>

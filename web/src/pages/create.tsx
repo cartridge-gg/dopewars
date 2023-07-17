@@ -1,4 +1,3 @@
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
@@ -31,53 +30,51 @@ export default function Create() {
     <Layout
       title="New Game"
       prefixTitle="Start a"
-      headerImage="/images/punk-girl.png"
+      imageSrc="/images/punk-girl.png"
     >
-      <Content>
-        <UnorderedList variant="underline" w="full" userSelect="none">
-          <ListItem>
-            <HStack>
-              <Label name="Title" />
-              <Input placeholder="ENTER GAME TITLE HERE" />
-            </HStack>
-          </ListItem>
-          <ListItem>
-            <HStack>
-              <Label name="Turns" />
-              <InputNumber
-                value={numTurns}
-                min={MIN_TURNS}
-                onChange={handleNumTurns}
-              />
-            </HStack>
-          </ListItem>
-          <ListItem>
-            <HStack>
-              <Label name="Players" />
-              <InputNumber
-                value={numPlayers}
-                min={MIN_PLAYERS}
-                onChange={handleNumPlayer}
-              />
-            </HStack>
-          </ListItem>
-          <ListItem>
-            <HStack>
-              <Label name="Starts" />
-              <Dropdown
-                w="full"
-                value={{ value: 1, text: "20:00 UTC", label: "(29 min)" }}
-                options={[
-                  { value: 1, text: "20:00 UTC", label: "(29 min)" },
-                  { value: 2, text: "20:30 UTC", label: "(59 min)" },
-                  { value: 3, text: "21:00 UTC", label: "(1 hr 29 min)" },
-                  { value: 4, text: "21:30 UTC", label: "(1 hr 59 min)" },
-                ]}
-              />
-            </HStack>
-          </ListItem>
-        </UnorderedList>
-      </Content>
+      <UnorderedList variant="underline" w="full" userSelect="none">
+        <ListItem>
+          <HStack>
+            <Label name="Title" />
+            <Input placeholder="ENTER GAME TITLE HERE" />
+          </HStack>
+        </ListItem>
+        <ListItem>
+          <HStack>
+            <Label name="Turns" />
+            <InputNumber
+              value={numTurns}
+              min={MIN_TURNS}
+              onChange={handleNumTurns}
+            />
+          </HStack>
+        </ListItem>
+        <ListItem>
+          <HStack>
+            <Label name="Players" />
+            <InputNumber
+              value={numPlayers}
+              min={MIN_PLAYERS}
+              onChange={handleNumPlayer}
+            />
+          </HStack>
+        </ListItem>
+        <ListItem>
+          <HStack>
+            <Label name="Starts" />
+            <Dropdown
+              w="full"
+              value={{ value: 1, text: "20:00 UTC", label: "(29 min)" }}
+              options={[
+                { value: 1, text: "20:00 UTC", label: "(29 min)" },
+                { value: 2, text: "20:30 UTC", label: "(59 min)" },
+                { value: 3, text: "21:00 UTC", label: "(1 hr 29 min)" },
+                { value: 4, text: "21:30 UTC", label: "(1 hr 59 min)" },
+              ]}
+            />
+          </HStack>
+        </ListItem>
+      </UnorderedList>
       <Footer>
         <Button w={["full", "auto"]} onClick={() => router.push("/")}>
           Cancel
