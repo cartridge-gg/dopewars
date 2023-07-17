@@ -49,9 +49,7 @@ export const Map = ({
     <Flex
       userSelect="none"
       position="relative"
-      maxWidth="800px"
-      maxHeight="75vh"
-      marginTop="25%"
+      w="inherit"
       as={motion.div}
       ref={scope}
       drag={isMobile}

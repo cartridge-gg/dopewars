@@ -11,7 +11,6 @@ import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { Clock, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import Content from "@/components/Content";
 import { User } from "@/components/icons/archive";
 import { useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
@@ -26,7 +25,7 @@ export default function Home() {
     <Layout
       title="Roll Your Own"
       prefixTitle="Dope Wars:"
-      headerImage="/images/punk-girl.png"
+      imageSrc="/images/punk-girl.png"
       footer={
         <Link
           href="https://www.youtube.com/watch?v=vKOB3sssTy0"
@@ -39,50 +38,48 @@ export default function Home() {
         </Link>
       }
     >
-      <Content>
-        <VStack w="full" gap="20px">
-          <Text textStyle="subheading" fontSize="13px">
-            My Games
-          </Text>
+      <VStack w="full" gap="20px">
+        <Text textStyle="subheading" fontSize="13px">
+          My Games
+        </Text>
 
-          <Card variant="pixelated">
-            <VStack w="full" p="30px 20px 20px 20px" gap="20px">
-              <Text color="neon.500" fontSize="14px">
-                YOU HAVE NO GAMES
-              </Text>
-              <Button w="full" onClick={() => router.push("/create")}>
-                Create
-              </Button>
-            </VStack>
-          </Card>
-          <Text textStyle="subheading" fontSize="13px" pt="15px">
-            AVAILABLE GAMES
-          </Text>
-          <VStack w="full" gap="12px">
-            <Game
-              name="$$ FA$TE$T POSSILBE MAP $$"
-              startTime="15m"
-              joined={5}
-              max={6}
-              onClick={() => router.push("/0xdead")}
-            />
-            <Game
-              name="3V3 BGH @ CABLE ONLY!!!"
-              startTime="26m"
-              joined={2}
-              max={6}
-              onClick={() => router.push("/0xdead")}
-            />
-            <Game
-              name="1V1 MAX BET"
-              startTime="15m"
-              joined={1}
-              max={2}
-              onClick={() => router.push("/0xdead")}
-            />
+        <Card variant="pixelated">
+          <VStack w="full" p="30px 20px 20px 20px" gap="20px">
+            <Text color="neon.500" fontSize="14px">
+              YOU HAVE NO GAMES
+            </Text>
+            <Button w="full" onClick={() => router.push("/create")}>
+              Create
+            </Button>
           </VStack>
+        </Card>
+        <Text textStyle="subheading" fontSize="13px" pt="15px">
+          AVAILABLE GAMES
+        </Text>
+        <VStack w="full" gap="12px">
+          <Game
+            name="$$ FA$TE$T POSSILBE MAP $$"
+            startTime="15m"
+            joined={5}
+            max={6}
+            onClick={() => router.push("/0xdead")}
+          />
+          <Game
+            name="3V3 BGH @ CABLE ONLY!!!"
+            startTime="26m"
+            joined={2}
+            max={6}
+            onClick={() => router.push("/0xdead")}
+          />
+          <Game
+            name="1V1 MAX BET"
+            startTime="15m"
+            joined={1}
+            max={2}
+            onClick={() => router.push("/0xdead")}
+          />
         </VStack>
-      </Content>
+      </VStack>
     </Layout>
   );
 }

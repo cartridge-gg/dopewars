@@ -1,4 +1,3 @@
-import Content from "@/components/Content";
 import { Footer } from "@/components/Footer";
 import { Arrow, Car } from "@/components/icons";
 import Layout from "@/components/Layout";
@@ -93,22 +92,19 @@ export default function Travel() {
         />
       }
     >
-      <Content>
-        {!IsMobile() && <Car boxSize="60px" />}
-        <VStack w="full">
-          {!IsMobile() &&
-            locations.map((location, index) => (
-              <Location
-                {...location}
-                key={index}
-                name={location.name}
-                isCurrent={location.name === currentLocation}
-                selected={location.name === target}
-                onClick={() => setTarget(location.name)}
-              />
-            ))}
-        </VStack>
-      </Content>
+      <VStack w="full" pt="140px">
+        <Car boxSize="60px" />
+        {locations.map((location, index) => (
+          <Location
+            {...location}
+            key={index}
+            name={location.name}
+            isCurrent={location.name === currentLocation}
+            selected={location.name === target}
+            onClick={() => setTarget(location.name)}
+          />
+        ))}
+      </VStack>
       <Footer>
         <VStack w="full" align="flex-end">
           {IsMobile() && (

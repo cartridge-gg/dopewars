@@ -6,21 +6,18 @@ import {
   StyleProps,
   Flex,
   Box,
+  Image,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
-import Image from "next/image";
-import { IsMobile } from "@/utils/ui";
 import { motion } from "framer-motion";
 
 export interface LayoutProps {
   backHeader?: boolean;
   title: string;
   map: ReactNode;
+  imageSrc: string;
   prefixTitle: string;
-  backgroundImage: string;
-  headerImage: string;
-  headerImageMaxWidth: string;
   children: ReactNode;
   footer: ReactNode;
 }
@@ -32,108 +29,96 @@ const Layout = ({
   title,
   prefixTitle,
   map,
-  backgroundImage,
-  headerImage,
-  headerImageMaxWidth,
+  imageSrc,
   children,
   footer,
-  ...props
-}: Partial<LayoutProps> & StyleProps) => {
-  const isMobile = IsMobile();
-
+}: Partial<LayoutProps>) => {
   return (
     <>
-      <Header back={backHeader} />
+      <Header />
       <Flex
         position="fixed"
         top="0"
         left="0"
         boxSize="full"
+        align="center"
+        justify="center"
         direction={["column", "row"]}
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <VStack
-          //convert to next/image for better optimization
-          backgroundImage={[
-            "",
-            `linear-gradient(to bottom, #172217 0%, transparent 40%, transparent 90%, #172217 100%), ${backgroundImage}`,
-          ]}
-          backgroundSize="cover"
-          backgroundPosition="center"
-          backgroundRepeat="no-repeat"
-          minHeight="200px"
-          flex={[map ? "1" : "0", "1"]}
-          justify={[map ? "flex-start" : "space-around", "flex-start"]}
-          position="relative"
+        <Flex
+          w={["full", "1400px"]}
+          h="full"
+          pt={["80px", "10%"]}
+          px="24px"
+          gap={["0", "200px"]}
+          direction={["column", "row"]}
         >
-          <Title title={title} prefixTitle={prefixTitle} hasMap={!!map} />
-          <Flex position="absolute" boxSize="full" justify="center">
-            {map}
-          </Flex>
-          {headerImage && !isMobile && (
-            <Box
-              position="relative"
-              marginTop="1rem !important"
-              width="80%"
-              height="55vh"
-              maxWidth={headerImageMaxWidth ? headerImageMaxWidth : "480px"}
-            >
-              <Image
-                fill={true}
-                src={headerImage}
-                objectFit="contain"
-                alt={headerImage}
-              />
-            </Box>
-          )}
-          {!IsMobile() && footer && footer}
-        </VStack>
-        <VStack
-          flex={map && IsMobile() ? "0" : "1"}
-          overflowY="scroll"
-          {...props}
-          sx={{
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          {children}
-        </VStack>
+          <LeftPanel
+            title={title}
+            prefixTitle={prefixTitle}
+            imageSrc={imageSrc}
+            map={map}
+          />
+          <RightPanel>{children}</RightPanel>
+        </Flex>
       </Flex>
       <CrtEffect />
     </>
   );
 };
 
-const Title = ({
+const LeftPanel = ({
   title,
   prefixTitle,
-  hasMap,
+  map,
+  imageSrc,
 }: {
-  prefixTitle?: string;
   title?: string;
-  hasMap?: boolean;
-}) => (
-  <VStack
-    spacing="0"
-    w="full"
-    h={[hasMap ? "15%" : "50%", "25%"]}
-    // position="absolute"
-    pointerEvents="none"
-    justify="flex-end"
-    zIndex="2"
-    background={hasMap ? "linear-gradient(to top, transparent, #172217)" : ""}
-  >
-    <Text textStyle="subheading" fontSize="11px">
-      {prefixTitle}
-    </Text>
-    <Heading fontSize={["40px", "48px"]} fontWeight="normal">
-      {title}
-    </Heading>
-  </VStack>
-);
+  prefixTitle?: string;
+  map?: ReactNode;
+  imageSrc?: string;
+}) => {
+  return (
+    <VStack flex={["0", "1"]}>
+      <VStack justify={["flex-end"]} zIndex="overlay">
+        <Text textStyle="subheading" fontSize="11px">
+          {prefixTitle}
+        </Text>
+        <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+          {title}
+        </Heading>
+      </VStack>
+      {map ? (
+        <Flex w="120%">{map}</Flex>
+      ) : (
+        <Image
+          src={imageSrc}
+          maxH="600px"
+          pt="60px"
+          display={["none", "block"]}
+        />
+      )}
+    </VStack>
+  );
+};
+
+const RightPanel = ({ children }: { children: ReactNode }) => {
+  return (
+    <VStack
+      flex="1"
+      sx={{
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
+      {children}
+    </VStack>
+  );
+};
 
 export default Layout;

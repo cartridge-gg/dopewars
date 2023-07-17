@@ -159,7 +159,17 @@ const sortAndCalcPosition = (
 
 const Leaderboard = ({ ...props }: StyleProps & ListProps) => {
   return (
-    <UnorderedList w="full" variant="dotted" {...props}>
+    <UnorderedList
+      w="full"
+      variant="dotted"
+      sx={{
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+      {...props}
+    >
       {sortAndCalcPosition(leaderboardDatas).map((i) => {
         const isMe = i.name === "John E. Dell";
         const color = isMe
