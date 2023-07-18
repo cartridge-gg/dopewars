@@ -118,7 +118,7 @@ export const events: EventProps[] = [
   {
     name: TravelEvents.Mugged,
     slug: "mugged",
-    description: "You lost half your supply",
+    description: "You lost half your cash",
     imageSrc: "/images/events/smoking_gun.gif",
   },
 ];
