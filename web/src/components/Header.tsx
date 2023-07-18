@@ -37,10 +37,9 @@ const Header = ({ back }: HeaderProps) => {
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
-  // Reintroduce when we need max turns
-  // const { game: gameEntity, isFetched: isFetchedGame } = useGameEntity({
-  //   gameId,
-  // });
+  const { game: gameEntity, isFetched: isFetchedGame } = useGameEntity({
+    gameId,
+  });
 
   const isMobile = IsMobile();
   const isMuted = useSoundStore((state) => state.isMuted);
@@ -66,6 +65,10 @@ const Header = ({ back }: HeaderProps) => {
 
     setInventory(inventory);
   }, [playerEntity]);
+
+  if (!gameEntity || !playerEntity) {
+    return <></>;
+  }
 
   return (
     <Flex
@@ -99,9 +102,20 @@ const Header = ({ back }: HeaderProps) => {
               <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack color="yellow.400">
+            <HStack>
               <Bag />
               <Text>{inventory}</Text>
+            </HStack>
+            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+            <HStack>
+              <Clock />
+              <Text>
+                {playerEntity.turnsRemaining === 0
+                  ? "Final"
+                  : `${gameEntity.maxTurns - playerEntity.turnsRemaining + 1}/${
+                      gameEntity.maxTurns + 1
+                    }`}
+              </Text>
             </HStack>
           </HStack>
         </HStack>
