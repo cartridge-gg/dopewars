@@ -251,6 +251,19 @@ export type UserGamesQuery = {
   gameComponents?: Array<{ __typename?: "Game"; game_id: any } | null> | null;
 };
 
+export type GlobalScoresQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars["Int"]>;
+}>;
+
+export type GlobalScoresQuery = {
+  __typename?: "Query";
+  playerComponents?: Array<{
+    __typename?: "Player";
+    cash: any;
+    turns_remaining: any;
+  } | null> | null;
+};
+
 export type GameEntityQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -431,6 +444,56 @@ useInfiniteUserGamesQuery.getKey = (variables: UserGamesQueryVariables) => [
   "UserGames.infinite",
   variables,
 ];
+export const GlobalScoresDocument = `
+    query GlobalScores($limit: Int) {
+  playerComponents(turns_remaining: 0, limit: $limit) {
+    cash
+    turns_remaining
+  }
+}
+    `;
+export const useGlobalScoresQuery = <
+  TData = GlobalScoresQuery,
+  TError = unknown,
+>(
+  variables?: GlobalScoresQueryVariables,
+  options?: UseQueryOptions<GlobalScoresQuery, TError, TData>,
+) =>
+  useQuery<GlobalScoresQuery, TError, TData>(
+    variables === undefined ? ["GlobalScores"] : ["GlobalScores", variables],
+    useFetchData<GlobalScoresQuery, GlobalScoresQueryVariables>(
+      GlobalScoresDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useGlobalScoresQuery.getKey = (variables?: GlobalScoresQueryVariables) =>
+  variables === undefined ? ["GlobalScores"] : ["GlobalScores", variables];
+export const useInfiniteGlobalScoresQuery = <
+  TData = GlobalScoresQuery,
+  TError = unknown,
+>(
+  variables?: GlobalScoresQueryVariables,
+  options?: UseInfiniteQueryOptions<GlobalScoresQuery, TError, TData>,
+) => {
+  const query = useFetchData<GlobalScoresQuery, GlobalScoresQueryVariables>(
+    GlobalScoresDocument,
+  );
+  return useInfiniteQuery<GlobalScoresQuery, TError, TData>(
+    variables === undefined
+      ? ["GlobalScores.infinite"]
+      : ["GlobalScores.infinite", variables],
+    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
+    options,
+  );
+};
+
+useInfiniteGlobalScoresQuery.getKey = (
+  variables?: GlobalScoresQueryVariables,
+) =>
+  variables === undefined
+    ? ["GlobalScores.infinite"]
+    : ["GlobalScores.infinite", variables];
 export const GameEntityDocument = `
     query GameEntity($id: ID!) {
   entity(id: $id) {

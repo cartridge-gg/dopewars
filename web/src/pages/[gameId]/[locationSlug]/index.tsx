@@ -57,12 +57,6 @@ export default function Location() {
         );
         return;
       }
-
-      // check if game over
-      if (playerEntity.turnsRemaining <= 0) {
-        router.push(`/${gameId}/end`);
-        return;
-      }
     }
   }, [locationName, playerEntity, router, gameId]);
 
@@ -70,21 +64,24 @@ export default function Location() {
     return <></>;
   }
 
-  const gap = "14px";
+  const prefixTitle =
+    playerEntity.turnsRemaining === 0
+      ? "Final Day"
+      : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
+          gameEntity.maxTurns + 1
+        }`;
 
   return (
     <Layout
       title={locationEntity.name}
-      prefixTitle={`Day ${
-        gameEntity.maxTurns - playerEntity.turnsRemaining + 1
-      } / ${gameEntity.maxTurns}`}
+      prefixTitle={prefixTitle}
       imageSrc={`/images/locations/${
         getLocationByName(locationEntity.name).slug
       }.png`}
     >
-      <VStack w="full" gap={gap}>
-        <Inventory gap={gap} />
-        <VStack w="full" align="flex-start" gap={gap}>
+      <VStack w="full" gap="14px">
+        <Inventory gap="14px" />
+        <VStack w="full" align="flex-start" gap="14px">
           <Text textStyle="subheading" fontSize="10px" color="neon.500">
             Market
           </Text>
@@ -136,10 +133,15 @@ export default function Location() {
         <Button
           w={["full", "auto"]}
           onClick={() => {
+            if (playerEntity.turnsRemaining === 0) {
+              router.push(`/${gameId}/end`);
+              return;
+            }
+
             router.push(`/${gameId}/travel`);
           }}
         >
-          Continue
+          {playerEntity.turnsRemaining === 0 ? "End Game" : "Continue"}
         </Button>
       </Footer>
     </Layout>
