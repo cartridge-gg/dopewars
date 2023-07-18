@@ -2,9 +2,12 @@ import type { ComponentStyleConfig } from "@chakra-ui/theme";
 
 export const Container: ComponentStyleConfig = {
   baseStyle: {
-    maxWidth: "1240px",
-    padding: "12px",
-    h: "100vh",
-    justifyContent: "center",
+    display: "flex",
+    maxW: "1400px",
+    h: "full",
+    py: ["60px", "10%"],
+    px: "24px",
+    gap: ["0", "100px"],
+    flexDirection: ["column", "row"],
   },
 };

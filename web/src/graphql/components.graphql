@@ -14,3 +14,10 @@ query UserGames($id: felt252!) {
     game_id
   }
 }
+
+query GlobalScores($limit: Int) {
+  playerComponents(turns_remaining: 0, limit: $limit) {
+    cash
+    turns_remaining
+  }
+}

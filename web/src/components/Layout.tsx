@@ -3,35 +3,31 @@ import {
   HStack,
   Heading,
   Text,
-  StyleProps,
   Flex,
   Box,
   Image,
+  Container,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
 export interface LayoutProps {
-  backHeader?: boolean;
   title: string;
   map: ReactNode;
   imageSrc: string;
   prefixTitle: string;
   children: ReactNode;
-  footer: ReactNode;
 }
 
 import CrtEffect from "./CrtEffect";
 
 const Layout = ({
-  backHeader,
   title,
   prefixTitle,
   map,
   imageSrc,
   children,
-  footer,
 }: Partial<LayoutProps>) => {
   return (
     <>
@@ -43,19 +39,11 @@ const Layout = ({
         boxSize="full"
         align="center"
         justify="center"
-        direction={["column", "row"]}
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Flex
-          w={["full", "1200px"]}
-          h="full"
-          py={["60px", "10%"]}
-          px="24px"
-          gap={["0", "100px"]}
-          direction={["column", "row"]}
-        >
+        <Container>
           <LeftPanel
             title={title}
             prefixTitle={prefixTitle}
@@ -63,7 +51,7 @@ const Layout = ({
             map={map}
           />
           <RightPanel>{children}</RightPanel>
-        </Flex>
+        </Container>
       </Flex>
       <CrtEffect />
     </>

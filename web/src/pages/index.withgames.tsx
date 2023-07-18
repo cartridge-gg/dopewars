@@ -26,17 +26,6 @@ export default function Home() {
       title="Roll Your Own"
       prefixTitle="Dope Wars:"
       imageSrc="/images/punk-girl.png"
-      footer={
-        <Link
-          href="https://www.youtube.com/watch?v=vKOB3sssTy0"
-          target="_blank"
-          style={{
-            marginTop: "30px",
-          }}
-        >
-          <Button variant="pixelated">CREDITS</Button>
-        </Link>
-      }
     >
       <VStack w="full" gap="20px">
         <Text textStyle="subheading" fontSize="13px">
