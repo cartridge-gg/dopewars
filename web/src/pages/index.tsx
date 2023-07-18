@@ -9,7 +9,7 @@ import {
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import { Clock, Sound } from "@/components/icons";
+import { Alert, Clock, Sound } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
@@ -17,10 +17,11 @@ import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
-import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import { getLocationByName } from "@/hooks/ui";
 import { JoinedEventData } from "@/utils/event";
 import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
+import { useToast } from "@/hooks/toast";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -29,8 +30,9 @@ const NUM_TURNS = 9;
 
 export default function Home() {
   const router = useRouter();
-  const { create, isPending, error: txError } = useRyoSystems();
+  const { create, isPending, error: txError } = useSystems();
   const { scores } = useGlobalScores();
+  const { toast } = useToast();
   return (
     <Layout
       title="Roll Your Own"
@@ -44,11 +46,13 @@ export default function Home() {
               w="full"
               isLoading={isPending && !txError}
               onClick={async () => {
-                const { gameId, locationName } = (await create(
+                const { event, hash } = await create(
                   START_TIME,
                   MAX_PLAYERS,
                   NUM_TURNS,
-                )) as JoinedEventData;
+                );
+                const { gameId, locationName } = event as JoinedEventData;
+                toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
 
                 router.push(
                   `/${gameId}/${getLocationByName(locationName).slug}`,

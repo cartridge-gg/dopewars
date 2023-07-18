@@ -2,38 +2,43 @@ import { BaseEventData, parseEvent, RyoEvents } from "@/utils/event";
 import { useCallback } from "react";
 import { useDojo } from "..";
 
-export interface RyoSystemsInterface {
+export interface SystemsInterface {
   create: (
     startTime: number,
     maxPlayers: number,
     maxTurns: number,
-  ) => Promise<BaseEventData>;
-  travel: (gameId: string, locationId: string) => Promise<BaseEventData | void>;
-  join: (gameId: string) => Promise<BaseEventData>;
+  ) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: string) => Promise<SystemExecuteResult>;
+  join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
     locationName: string,
     drugName: string,
     quantity: number,
-  ) => Promise<void>;
+  ) => Promise<SystemExecuteResult>;
   sell: (
     gameId: string,
     locationName: string,
     drugName: string,
     quantity: number,
-  ) => Promise<void>;
+  ) => Promise<SystemExecuteResult>;
   isPending: boolean;
   error?: Error;
 }
 
-export const useRyoSystems = (): RyoSystemsInterface => {
+export interface SystemExecuteResult {
+  hash: string;
+  event?: BaseEventData;
+}
+
+export const useSystems = (): SystemsInterface => {
   const { execute, account, error, isPending } = useDojo();
 
   const executeAndReciept = useCallback(
     async (method: string, params: Array<string | number>) => {
       try {
-        const txn = await execute(method, params);
-        return await account.getTransactionReceipt(txn);
+        const hash = await execute(method, params);
+        return await account.getTransactionReceipt(hash);
       } catch (err) {
         console.error(`Error execute ${method}`, err);
         throw err;
@@ -49,9 +54,13 @@ export const useRyoSystems = (): RyoSystemsInterface => {
         maxPlayers,
         maxTurns,
       ]);
-
       // using joined event instead of created event to get initial location
-      return parseEvent(receipt, RyoEvents.PlayerJoined);
+      const event = parseEvent(receipt, RyoEvents.PlayerJoined);
+
+      return {
+        hash: receipt.transaction_hash,
+        event,
+      };
     },
     [executeAndReciept],
   );
@@ -59,12 +68,15 @@ export const useRyoSystems = (): RyoSystemsInterface => {
   const travel = useCallback(
     async (gameId: string, locationName: string) => {
       const receipt = await executeAndReciept("travel", [gameId, locationName]);
+      let result = { hash: receipt.transaction_hash } as SystemExecuteResult;
 
       try {
-        return parseEvent(receipt, RyoEvents.RandomEvent);
+        result.event = parseEvent(receipt, RyoEvents.RandomEvent);
       } catch (err) {
         // no random event occured
       }
+
+      return result;
     },
     [executeAndReciept],
   );
@@ -72,7 +84,12 @@ export const useRyoSystems = (): RyoSystemsInterface => {
   const join = useCallback(
     async (gameId: string) => {
       const receipt = await executeAndReciept("join_game", [gameId]);
-      return parseEvent(receipt, RyoEvents.PlayerJoined);
+      const event = parseEvent(receipt, RyoEvents.PlayerJoined);
+
+      return {
+        hash: receipt.transaction_hash,
+        event,
+      };
     },
     [executeAndReciept],
   );
@@ -84,9 +101,18 @@ export const useRyoSystems = (): RyoSystemsInterface => {
       drugName: string,
       quantity: number,
     ) => {
-      await execute("buy", [gameId, locationName, drugName, quantity]);
+      const receipt = await executeAndReciept("buy", [
+        gameId,
+        locationName,
+        drugName,
+        quantity,
+      ]);
+
+      return {
+        hash: receipt.transaction_hash,
+      };
     },
-    [execute],
+    [executeAndReciept],
   );
 
   const sell = useCallback(
@@ -96,9 +122,18 @@ export const useRyoSystems = (): RyoSystemsInterface => {
       drugName: string,
       quantity: number,
     ) => {
-      await execute("sell", [gameId, locationName, drugName, quantity]);
+      const receipt = await executeAndReciept("sell", [
+        gameId,
+        locationName,
+        drugName,
+        quantity,
+      ]);
+
+      return {
+        hash: receipt.transaction_hash,
+      };
     },
-    [execute],
+    [executeAndReciept],
   );
 
   return {

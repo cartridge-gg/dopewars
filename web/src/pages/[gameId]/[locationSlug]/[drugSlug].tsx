@@ -47,8 +47,9 @@ import {
   usePlayerEntity,
 } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
-import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
+import { useToast } from "@/hooks/toast";
 
 export default function Market() {
   const router = useRouter();
@@ -74,6 +75,8 @@ export default function Market() {
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
   });
 
+  const { toast } = useToast();
+
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
     if (!locationEntity || !playerEntity) return;
@@ -94,18 +97,26 @@ export default function Market() {
     setTradeDirection(index as TradeDirection);
   };
 
-  const { buy, sell, isPending, error: txError } = useRyoSystems();
+  const { buy, sell, isPending, error: txError } = useSystems();
   const { addTrade } = usePlayerState();
 
   const onTrade = useCallback(async () => {
+    let toastMessage = "",
+      hash = "",
+      quantity;
+
     if (tradeDirection === TradeDirection.Buy) {
-      await buy(gameId, location.name, drug.name, quantityBuy);
+      ({ hash } = await buy(gameId, location.name, drug.name, quantityBuy));
+      toastMessage = `You bought ${quantityBuy} ${drug.name}`;
+      quantity = quantityBuy;
     } else if (tradeDirection === TradeDirection.Sell) {
-      await sell(gameId, location.name, drug.name, quantitySell);
+      ({ hash } = await sell(gameId, location.name, drug.name, quantitySell));
+      toastMessage = `You sold ${quantitySell} ${drug.name}`;
+      quantity = quantitySell;
     }
 
-    const quantity =
-      tradeDirection === TradeDirection.Buy ? quantityBuy : quantitySell;
+    toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
+
     addTrade(drug.name, {
       direction: tradeDirection,
       quantity,
@@ -122,6 +133,7 @@ export default function Market() {
     router,
     buy,
     sell,
+    toast,
     addTrade,
   ]);
 

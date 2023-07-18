@@ -1,5 +1,5 @@
 import { Footer } from "@/components/Footer";
-import { Arrow, Car } from "@/components/icons";
+import { Arrow, Car, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import {
@@ -22,9 +22,10 @@ import {
   getLocationByName,
   getEventBySlug,
 } from "@/hooks/ui";
-import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
+import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { RandomEventData } from "@/utils/event";
+import { useToast } from "@/hooks/toast";
 
 export default function Travel() {
   const router = useRouter();
@@ -33,8 +34,9 @@ export default function Travel() {
   const [currentLocation, setCurrentLocation] = useState<Locations>();
   const { locations } = useUiStore.getState();
   const { addEvent } = usePlayerState();
+  const { toast } = useToast();
 
-  const { travel, isPending, error: txError } = useRyoSystems();
+  const { travel, isPending, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
@@ -151,17 +153,29 @@ export default function Travel() {
             isLoading={isPending && !txError}
             onClick={async () => {
               if (target) {
-                const eventData = await travel(gameId, target);
-                if (eventData) {
-                  const typeSlug = (eventData as RandomEventData).arrested
+                const { event, hash } = await travel(gameId, target);
+                if (event) {
+                  const typeSlug = (event as RandomEventData).arrested
                     ? "arrested"
                     : "mugged";
 
                   const travelEvent = getEventBySlug(typeSlug);
                   addEvent(travelEvent.name);
 
+                  toast(
+                    `${travelEvent.description}`,
+                    Event,
+                    `http://amazing_explorer/${hash}`,
+                  );
+
                   router.push(`/${gameId}/event/${typeSlug}`);
                 } else {
+                  toast(
+                    `You've traveled to ${target}`,
+                    Car,
+                    `http://amazing_explorer/${hash}`,
+                  );
+
                   router.push(`/${gameId}/turn`);
                 }
               }
