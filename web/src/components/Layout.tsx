@@ -17,6 +17,7 @@ export interface LayoutProps {
   map: ReactNode;
   imageSrc: string;
   prefixTitle: string;
+  showBack?: boolean;
   children: ReactNode;
 }
 
@@ -27,11 +28,12 @@ const Layout = ({
   prefixTitle,
   map,
   imageSrc,
+  showBack,
   children,
 }: Partial<LayoutProps>) => {
   return (
     <>
-      <Header />
+      <Header back={showBack} />
       <Flex
         position="fixed"
         top="0"

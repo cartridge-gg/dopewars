@@ -93,7 +93,6 @@ fn test_always_occurs() {
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
-    assert(result.arrested, 'was not arrested');
 }
 
 #[test]

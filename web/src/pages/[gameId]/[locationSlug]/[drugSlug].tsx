@@ -132,6 +132,7 @@ export default function Market() {
       title={drug.name}
       prefixTitle="The market"
       imageSrc="/images/dealer.png"
+      showBack={true}
     >
       <VStack w="100%" h="100%">
         <Card variant="pixelated" p={6} mb={6} _hover={{}}>

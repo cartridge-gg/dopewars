@@ -44,9 +44,6 @@ const Header = ({ back }: HeaderProps) => {
   const isMobile = IsMobile();
   const isMuted = useSoundStore((state) => state.isMuted);
   const isConnected = useUiStore((state) => state.isConnected);
-  const isBackButtonVisible = useUiStore((state) =>
-    state.isBackButtonVisible(router.pathname),
-  );
   const hasNewMessages = true;
 
   useEffect(() => {
@@ -82,7 +79,7 @@ const Header = ({ back }: HeaderProps) => {
       zIndex="1"
     >
       <HStack flex="1" justify="left">
-        {isBackButtonVisible && (
+        {back && (
           <HeaderButton onClick={() => router.back()}>
             <Arrow />
           </HeaderButton>
@@ -104,9 +101,7 @@ const Header = ({ back }: HeaderProps) => {
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>
               <Bag />
-              <Text>
-                {inventory}
-              </Text>
+              <Text>{inventory}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>
