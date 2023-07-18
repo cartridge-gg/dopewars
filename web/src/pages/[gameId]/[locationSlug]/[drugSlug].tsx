@@ -154,8 +154,6 @@ export default function Market() {
                 src={`/images/drugs/${drug.slug}.png`}
                 alt={drug.name}
                 fill={true}
-                objectFit="contain"
-                style={{ margin: "auto" }}
               />
             </Box>
             <HStack w="100%" justifyContent="space-between" fontSize="16px">
@@ -185,15 +183,17 @@ export default function Market() {
 
           <TabPanels mt={6}>
             <TabPanel>
-              <QuantitySelector
-                drug={drug}
-                player={playerEntity}
-                market={market}
-                type={TradeDirection.Buy}
-                onChange={setQuantityBuy}
-              />
-
-              {!canBuy && <AlertMessage message="YOU ARE BROKE" />}
+              {canBuy ? (
+                <QuantitySelector
+                  drug={drug}
+                  player={playerEntity}
+                  market={market}
+                  type={TradeDirection.Buy}
+                  onChange={setQuantityBuy}
+                />
+              ) : (
+                <AlertMessage message="You can't afford this" />
+              )}
             </TabPanel>
             <TabPanel>
               {canSell ? (
@@ -208,7 +208,7 @@ export default function Market() {
                 <Box>
                   <AlertMessage
                     textTransform="uppercase"
-                    message={`YOU HAVE NO ${drug.name} TO SELL`}
+                    message={`You have no ${drug.name} to sell`}
                   />
                 </Box>
               )}
@@ -251,7 +251,7 @@ const QuantitySelector = ({
   drug: DrugProps;
   player: PlayerEntity;
   market: DrugMarket;
-  onChange: (quantity: number) => void;
+  onChange: (quantity: number, newPrice: number) => void;
 }) => {
   const [totalPrice, setTotalPrice] = useState<number>(market.price);
   const [priceImpact, setPriceImpact] = useState<number>(0);
@@ -285,7 +285,7 @@ const QuantitySelector = ({
 
     setPriceImpact(slippage.priceImpact);
     setTotalPrice(quantity * slippage.newPrice);
-    onChange(quantity);
+    onChange(quantity, slippage.newPrice);
   }, [quantity, market, type, onChange]);
 
   const onDown = useCallback(() => {
@@ -319,7 +319,7 @@ const QuantitySelector = ({
     >
       <HStack w="100%" justifyContent="space-between">
         <VStack align="flex-start">
-          <Text>
+          <Text textStyle="subheading" fontSize="13px">
             ({quantity}) for {formatCash(totalPrice)}
           </Text>
           <Text color={alertColor}>
@@ -328,7 +328,7 @@ const QuantitySelector = ({
           </Text>
         </VStack>
 
-        <HStack gap="8px">
+        <HStack gap="8px" textStyle="subheading" fontSize="13px">
           <Text textDecoration="underline" cursor="pointer" onClick={on50}>
             50%
           </Text>
@@ -339,17 +339,16 @@ const QuantitySelector = ({
       </HStack>
 
       <HStack w="100%" py={2} gap="10px">
-        <Box
+        <ArrowEnclosed
+          direction="down"
+          size="lg"
           cursor="pointer"
           onClick={onDown}
           color="neon.500"
           _hover={{
             color: "neon.300",
           }}
-        >
-          <ArrowEnclosed direction="down" size="lg" />
-        </Box>
-
+        />
         <Slider
           aria-label="slider-quantity"
           w="100%"
@@ -364,17 +363,16 @@ const QuantitySelector = ({
             <SliderFilledTrack />
           </SliderTrack>
         </Slider>
-
-        <Box
+        <ArrowEnclosed
+          direction="up"
+          size="lg"
           cursor="pointer"
           onClick={onUp}
           color="neon.500"
           _hover={{
             color: "neon.300",
           }}
-        >
-          <ArrowEnclosed direction="up" size="lg" />
-        </Box>
+        />
       </HStack>
     </VStack>
   );

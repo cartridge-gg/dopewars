@@ -10,8 +10,9 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   root: {},
   tab: {
-    color: "neon.500",
+    color: "neon.300",
     _selected: {
+      color: "neon.200",
       ...cardPixelatedStyle({ radius: 2 }),
     },
   },
