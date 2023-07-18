@@ -273,7 +273,7 @@ const QuantitySelector = ({
     setPriceImpact(slippage.priceImpact);
     setTotalPrice(quantity * slippage.newPrice);
     onChange(quantity);
-  }, [quantity, market, onChange]);
+  }, [quantity, market, type, onChange]);
 
   const onDown = useCallback(() => {
     if (quantity > 1) {

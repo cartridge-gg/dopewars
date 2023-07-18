@@ -117,6 +117,17 @@ const Header = ({ back }: HeaderProps) => {
                     }`}
               </Text>
             </HStack>
+            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+            <HStack>
+              <Clock />
+              <Text>
+                {playerEntity.turnsRemaining === 0
+                  ? "Final"
+                  : `${gameEntity.maxTurns - playerEntity.turnsRemaining + 1}/${
+                      gameEntity.maxTurns + 1
+                    }`}
+              </Text>
+            </HStack>
           </HStack>
         </HStack>
       )}
