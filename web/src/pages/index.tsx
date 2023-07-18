@@ -20,31 +20,22 @@ import Leaderboard from "@/components/Leaderboard";
 import { useRyoSystems } from "@/hooks/dojo/systems/useRyoSystems";
 import { getLocationByName } from "@/hooks/ui";
 import { JoinedEventData } from "@/utils/event";
+import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
 
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 30;
+const NUM_TURNS = 9;
 
 export default function Home() {
   const router = useRouter();
   const { create, isPending, error: txError } = useRyoSystems();
+  const { scores } = useGlobalScores();
   return (
     <Layout
       title="Roll Your Own"
       prefixTitle="Dope Wars:"
       imageSrc="/images/punk-girl.png"
-      footer={
-        <Link
-          href="https://www.youtube.com/watch?v=vKOB3sssTy0"
-          target="_blank"
-          style={{
-            marginTop: "30px",
-          }}
-        >
-          <Button variant="pixelated">CREDITS</Button>
-        </Link>
-      }
     >
       <VStack w="full" gap="20px">
         <Card variant="pixelated">
@@ -71,6 +62,7 @@ export default function Home() {
         <VStack w="full" gap="20px">
           <Text>HALL OF FAME</Text>
           <Leaderboard
+            scores={scores}
             css={{
               maxHeight: "50vh",
               overflowY: "auto",

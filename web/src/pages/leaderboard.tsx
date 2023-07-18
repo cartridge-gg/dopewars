@@ -16,7 +16,7 @@ export default function LeaderboardPage() {
       prefixTitle="Welcome to the"
       imageSrc="/images/will-smith-with-attitude.png"
     >
-      <Leaderboard />
+      <Leaderboard scores={[]} />
     </Layout>
   );
 }

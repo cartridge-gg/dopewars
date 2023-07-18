@@ -49,13 +49,8 @@ impl RisksImpl of RisksTrait {
             seed = pedersen(seed, seed);
             event_occured = true;
 
-            // TODO: implement more sophisticated risk events,
-            // TEMP: only inlcude two risk events (arrested and money loss)
-            if occurs(seed, *self.arrested) {
-                arrested = true;
-            } else {
-                mugged = true;
-            }
+            // TEMP: for testing, mugging is only risk
+            mugged = true;
         }
 
         (event_occured, TravelResult { arrested, mugged, health_loss })
@@ -98,7 +93,6 @@ fn test_always_occurs() {
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
-    assert(result.arrested, 'was not arrested');
 }
 
 #[test]

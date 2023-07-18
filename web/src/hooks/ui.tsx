@@ -6,7 +6,7 @@ import {
   ConeyIsland,
   Manhattan,
   Queens,
-  StatenIsland,
+  Bronx,
 } from "@/components/icons/locations";
 
 import {
@@ -43,7 +43,7 @@ export const locations: LocationProps[] = [
   {
     name: Locations.Bronx,
     slug: "bronx",
-    icon: StatenIsland,
+    icon: Bronx,
   },
   {
     name: Locations.Jersey,
