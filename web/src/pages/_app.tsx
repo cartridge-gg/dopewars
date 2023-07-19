@@ -11,15 +11,6 @@ import { useEffect } from "react";
 import { DojoProvider } from "@/hooks/dojo";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-const provider = new RpcProvider({
-  nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!,
-});
-const account = new Account(
-  provider,
-  process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
-  process.env.NEXT_PUBLIC_PLAYER_PRIVATE_KEY!,
-);
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -44,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <DojoProvider account={account}>
+      <DojoProvider>
         <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>

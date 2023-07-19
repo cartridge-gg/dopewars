@@ -1,5 +1,11 @@
 import { RYO_WORLD_ADDRESS } from "@/constants";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import {
   Account,
   BigNumberish,
@@ -7,15 +13,19 @@ import {
   shortString,
   TransactionStatus,
 } from "starknet";
+import { useBurner } from "../burner";
 
 export const SCALING_FACTOR = 10000;
 export const REFETCH_INTERVAL = 1000; // really need graphql subscriptions...
 
 interface DojoInterface {
-  account: Account;
+  account?: Account;
   isPending: boolean;
+  isBurnerDeploying: boolean;
   error?: Error;
+  createBurner: () => Promise<string>;
   execute: (systemName: string, params: BigNumberish[]) => Promise<string>;
+  call: () => void;
 }
 
 //@ts-ignore
@@ -30,49 +40,74 @@ export function useDojo() {
 }
 
 export function DojoProvider({
-  account,
   children,
 }: {
-  account: Account;
   children?: ReactNode;
 }): JSX.Element {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error>();
+  const {
+    account,
+    create: createBurner,
+    isDeploying: isBurnerDeploying,
+  } = useBurner();
 
-  const execute = async (systemName: string, params: BigNumberish[]) => {
-    setIsPending(true);
-    setError(undefined);
+  const execute = useCallback(
+    async (systemName: string, params: BigNumberish[]) => {
+      if (!account) {
+        throw new Error("No account connected");
+      }
 
-    return account
-      .execute({
-        contractAddress: RYO_WORLD_ADDRESS,
-        entrypoint: "execute",
-        calldata: CallData.compile([
-          shortString.encodeShortString(systemName),
-          params.length,
-          ...params,
-        ]),
-      })
-      .then(async ({ transaction_hash }) => {
-        await account.waitForTransaction(transaction_hash, {
-          retryInterval: 1000,
-          successStates: [TransactionStatus.ACCEPTED_ON_L2],
-        });
+      setIsPending(true);
+      setError(undefined);
 
-        console.log("transaction hash: " + transaction_hash);
+      return account
+        .execute({
+          contractAddress: RYO_WORLD_ADDRESS,
+          entrypoint: "execute",
+          calldata: CallData.compile([
+            shortString.encodeShortString(systemName),
+            params.length,
+            ...params,
+          ]),
+        })
+        .then(async ({ transaction_hash }) => {
+          await account.waitForTransaction(transaction_hash, {
+            retryInterval: 1000,
+            successStates: [TransactionStatus.ACCEPTED_ON_L2],
+          });
 
-        return transaction_hash;
-      })
-      .catch((e) => {
-        console.error(e);
-        setError(e);
-        throw e;
-      })
-      .finally(() => setIsPending(false));
-  };
+          console.log("transaction hash: " + transaction_hash);
+
+          return transaction_hash;
+        })
+        .catch((e) => {
+          console.error(e);
+          setError(e);
+          throw e;
+        })
+        .finally(() => setIsPending(false));
+    },
+    [account],
+  );
+
+  // TODO: implement
+  const call = useCallback(() => {
+    console.error("not implemented");
+  }, []);
 
   return (
-    <DojoContext.Provider value={{ account, isPending, error, execute }}>
+    <DojoContext.Provider
+      value={{
+        account,
+        isPending,
+        isBurnerDeploying,
+        error,
+        call,
+        execute,
+        createBurner,
+      }}
+    >
       {children}
     </DojoContext.Provider>
   );

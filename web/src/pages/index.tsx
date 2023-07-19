@@ -22,6 +22,9 @@ import { getLocationByName } from "@/hooks/ui";
 import { JoinedEventData } from "@/utils/event";
 import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
+import { useBurner } from "@/hooks/burner";
+import { formatAddress } from "@/utils/contract";
+import { useDojo } from "@/hooks/dojo";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -30,9 +33,11 @@ const NUM_TURNS = 9;
 
 export default function Home() {
   const router = useRouter();
-  const { create, isPending, error: txError } = useSystems();
+  const { account, isBurnerDeploying, createBurner } = useDojo();
+  const { create: createGame, isPending, error: txError } = useSystems();
   const { scores } = useGlobalScores();
   const { toast } = useToast();
+
   return (
     <Layout
       title="Roll Your Own"
@@ -41,12 +46,23 @@ export default function Home() {
     >
       <VStack w="full" gap="20px">
         <Card variant="pixelated">
-          <VStack w="full" p="20px" gap="20px">
+          <HStack w="full" p="20px" gap="10px">
             <Button
-              w="full"
+              flex="1"
+              isDisabled={!!account}
+              isLoading={isBurnerDeploying}
+              onClick={() => createBurner()}
+            >
+              {account
+                ? formatAddress(account.address)
+                : "Create Burner Wallet"}
+            </Button>
+            <Button
+              flex="1"
+              isDisabled={!account}
               isLoading={isPending && !txError}
               onClick={async () => {
-                const { event, hash } = await create(
+                const { event, hash } = await createGame(
                   START_TIME,
                   MAX_PLAYERS,
                   NUM_TURNS,
@@ -61,7 +77,7 @@ export default function Home() {
             >
               Hustle
             </Button>
-          </VStack>
+          </HStack>
         </Card>
         <VStack w="full" gap="20px">
           <Text>HALL OF FAME</Text>

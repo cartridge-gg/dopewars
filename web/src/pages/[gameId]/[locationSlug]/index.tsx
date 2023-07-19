@@ -28,6 +28,7 @@ import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
+import { useDojo } from "@/hooks/dojo";
 
 export default function Location() {
   const router = useRouter();
@@ -36,13 +37,15 @@ export default function Location() {
     router.query.locationSlug as string,
   ).name;
 
+  const { account } = useDojo();
+
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationName,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
   const { game: gameEntity } = useGameEntity({
     gameId,

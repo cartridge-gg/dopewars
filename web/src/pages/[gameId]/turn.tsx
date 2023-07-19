@@ -3,6 +3,7 @@ import { Bag, Event } from "@/components/icons";
 import { Ludes, Weed } from "@/components/icons/drugs";
 import { Manhattan } from "@/components/icons/locations";
 import Layout from "@/components/Layout";
+import { useDojo } from "@/hooks/dojo";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { TradeDirection, usePlayerState } from "@/hooks/state";
@@ -18,14 +19,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
 
 export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
+  const { account } = useDojo();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
   const { game: gameEntty } = useGameEntity({
     gameId,

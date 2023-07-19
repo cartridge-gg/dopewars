@@ -36,6 +36,10 @@ export const useSystems = (): SystemsInterface => {
 
   const executeAndReciept = useCallback(
     async (method: string, params: Array<string | number>) => {
+      if (!account) {
+        throw new Error("No account connected");
+      }
+
       try {
         const hash = await execute(method, params);
         return await account.getTransactionReceipt(hash);
