@@ -1,57 +1,34 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 pushd $(dirname "$0")/..
 
 export WORLD_ADDRESS="0x26065106fa319c3981618e7567480a50132f23932226a51c219ffb8e47daa84";
 
-# make sure all components/systems are deployed
-COMPONENTS=("Game" "Location" "Market" "Name" "Player" "Risks")
-SYSTEMS=("create_game" "join_game" "set_name" "travel" "buy" "sell")
+# to see system dependencies, run:
+# > sozo system dependency NAME
 
-# check components
-for component in ${COMPONENTS[@]}; do
-    sozo component entity $component > /dev/null
-done
+sozo auth writer Game create_game;
+sozo auth writer Location create_game;
+sozo auth writer Market create_game;
+sozo auth writer Name create_game;
+sozo auth writer Player create_game;
+sozo auth writer Risks create_game;
 
-# check systems
-for system in ${SYSTEMS[@]}; do
-    SYSTEM_OUTPUT=$(sozo system get $system)
-    if [[ "$SYSTEM_OUTPUT" == "0x0" ]]; then
-        echo "Error: Output of 'sozo system get $system' is 0x0"
-        exit 1
-    fi
-done
+sozo auth writer Game join_game;
+sozo auth writer Location join_game;
+sozo auth writer Player join_game;
 
-# enable system -> component authorizations
-CREATE_GAME_COMPONENTS=("Game" "Location" "Market" "Name" "Player" "Risks")
-JOIN_GAME_COMPONENTS=("Game" "Location" "Player")
-SET_NAME_COMPONENTS=("Name")
-BUY_COMPONENTS=("Drug" "Market" "Name" "Player")
-SELL_COMPONENTS=("Drug" "Market" "Name" "Player")
-TRAVEL_COMPONENTS=("Location" "Player")
+sozo auth writer Name set_name;
 
-for component in ${CREATE_GAME_COMPONENTS[@]}; do
-    sozo auth writer $component create_game > /dev/null
-done
+sozo auth writer Drug buy;
+sozo auth writer Market buy;
+sozo auth writer Name buy;
+sozo auth writer Player buy;
 
-for component in ${JOIN_GAME_COMPONENTS[@]}; do
-    sozo auth writer $component join_game > /dev/null
-done
+sozo auth writer Drug sell;
+sozo auth writer Market sell;
+sozo auth writer Name sell;
+sozo auth writer Player sell;
 
-for component in ${SET_NAME_COMPONENTS[@]}; do
-    sozo auth writer $component set_name > /dev/null
-done
-
-for component in ${BUY_COMPONENTS[@]}; do
-    sozo auth writer $component buy > /dev/null
-done
-
-for component in ${SELL_COMPONENTS[@]}; do
-    sozo auth writer $component sell > /dev/null
-done
-
-for component in ${TRAVEL_COMPONENTS[@]}; do
-    sozo auth writer $component travel > /dev/null
-done
-
-echo "Default authorizations have been successfully set."
+sozo auth writer Location travel;
+sozo auth writer Player travel;
