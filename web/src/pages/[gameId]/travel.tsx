@@ -85,6 +85,7 @@ export default function Travel() {
     <Layout
       title="Destination"
       prefixTitle="Select Your"
+      showBack={true}
       map={
         <Map
           highlight={target}
