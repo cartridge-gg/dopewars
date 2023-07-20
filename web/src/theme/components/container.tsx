@@ -5,7 +5,7 @@ export const Container: ComponentStyleConfig = {
     display: "flex",
     maxW: "1400px",
     h: "full",
-    py: ["60px", "10%"],
+    pt: ["60px", "10%"],
     px: "24px",
     gap: ["0", "100px"],
     flexDirection: ["column", "row"],

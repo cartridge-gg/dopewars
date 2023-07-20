@@ -14,12 +14,24 @@ export const useToast = () => {
         duration: TOAST_DURATION,
         // default overrides
         containerStyle: {
+          pointerEvents: "none",
           maxW: ["100vw", "400px"],
           minW: ["100vw", "400px"],
           px: "24px",
           m: 0,
         },
-        render: () => <Toast message={message} icon={icon} link={link} />,
+        isClosable: true,
+        render: () => (
+          <Toast
+            message={message}
+            icon={icon}
+            link={link}
+            onClose={() => {
+              // TODO: target close toast by id
+              chakraToast.closeAll();
+            }}
+          />
+        ),
       });
     },
     [chakraToast],

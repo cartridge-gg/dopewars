@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Text,
@@ -131,6 +131,7 @@ export default function Location() {
             })}
           </SimpleGrid>
         </VStack>
+        <Spacer minH="100px" />
       </VStack>
       <Footer>
         <Button
