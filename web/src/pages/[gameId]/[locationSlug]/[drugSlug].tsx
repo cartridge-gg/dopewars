@@ -225,7 +225,7 @@ export default function Market() {
           display={
             (tradeDirection === TradeDirection.Buy && canBuy) ||
             (tradeDirection === TradeDirection.Sell && canSell)
-              ? "block"
+              ? "flex"
               : "none"
           }
         >

@@ -7,10 +7,12 @@ export const Toast = ({
   message,
   icon,
   link,
+  onClose,
 }: {
   message: string;
   icon?: React.FC;
   link?: string;
+  onClose: () => void;
 }) => {
   return (
     <HStack
@@ -21,6 +23,8 @@ export const Toast = ({
       bgColor="neon.200"
       color="neon.900"
       justify="space-between"
+      pointerEvents="all"
+      onClick={onClose}
     >
       <HStack>
         <>
