@@ -215,26 +215,24 @@ export default function Market() {
             </TabPanel>
           </TabPanels>
         </Tabs>
+        <Spacer minH="100px" />
       </VStack>
       <Footer>
-        {tradeDirection === TradeDirection.Buy && canBuy && (
-          <Button
-            w={["50%", "auto"]}
-            isLoading={isPending && !txError}
-            onClick={onTrade}
-          >
-            Buy ({quantityBuy})
-          </Button>
-        )}
-        {tradeDirection === TradeDirection.Sell && canSell && (
-          <Button
-            w={["50%", "auto"]}
-            isLoading={isPending && !txError}
-            onClick={onTrade}
-          >
-            Sell ({quantitySell})
-          </Button>
-        )}
+        <Button
+          w={["100%", "auto"]}
+          isLoading={isPending && !txError}
+          onClick={onTrade}
+          display={
+            (tradeDirection === TradeDirection.Buy && canBuy) ||
+            (tradeDirection === TradeDirection.Sell && canSell)
+              ? "block"
+              : "none"
+          }
+        >
+          {tradeDirection === TradeDirection.Buy
+            ? `Buy (${quantityBuy})`
+            : `Sell (${quantitySell})`}
+        </Button>
       </Footer>
     </Layout>
   );
