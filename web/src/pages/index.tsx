@@ -53,9 +53,7 @@ export default function Home() {
               isLoading={isBurnerDeploying}
               onClick={() => createBurner()}
             >
-              {account
-                ? formatAddress(account.address)
-                : "Create Burner Wallet"}
+              {account ? formatAddress(account.address) : "Create Burner"}
             </Button>
             <Button
               flex="1"
