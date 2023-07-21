@@ -20,6 +20,7 @@ import { usePlayerEntityQuery, Entity } from "@/generated/graphql";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
+import { useDojo } from "@/hooks/dojo";
 
 // TODO: constrain this on contract side
 const MAX_INVENTORY = 100;
@@ -32,10 +33,11 @@ const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
+  const { account } = useDojo();
 
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
   const { game: gameEntity, isFetched: isFetchedGame } = useGameEntity({
     gameId,

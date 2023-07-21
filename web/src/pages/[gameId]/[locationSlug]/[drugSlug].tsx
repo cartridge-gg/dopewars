@@ -50,6 +50,7 @@ import { formatQuantity, formatCash } from "@/utils/ui";
 import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
+import { useDojo } from "@/hooks/dojo";
 
 export default function Market() {
   const router = useRouter();
@@ -66,13 +67,15 @@ export default function Market() {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
+  const { account } = useDojo();
+
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationName: location.name,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
 
   const { toast } = useToast();

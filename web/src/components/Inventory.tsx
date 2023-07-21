@@ -11,13 +11,15 @@ import React from "react";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
 import { getDrugByName } from "@/hooks/ui";
+import { useDojo } from "@/hooks/dojo";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
+  const { account } = useDojo();
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
 
   return (

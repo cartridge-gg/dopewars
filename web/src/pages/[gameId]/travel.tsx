@@ -26,6 +26,7 @@ import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { RandomEventData } from "@/utils/event";
 import { useToast } from "@/hooks/toast";
+import { useDojo } from "@/hooks/dojo";
 
 export default function Travel() {
   const router = useRouter();
@@ -35,11 +36,12 @@ export default function Travel() {
   const { locations } = useUiStore.getState();
   const { addEvent } = usePlayerState();
   const { toast } = useToast();
+  const { account } = useDojo();
 
   const { travel, isPending, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
-    address: process.env.NEXT_PUBLIC_PLAYER_ADDRESS!,
+    address: account?.address,
   });
 
   useEffect(() => {
