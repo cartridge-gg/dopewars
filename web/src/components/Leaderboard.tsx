@@ -33,17 +33,7 @@ const Leaderboard = ({
   ...props
 }: { scores: Score[] } & StyleProps & ListProps) => {
   return (
-    <UnorderedList
-      w="full"
-      variant="dotted"
-      sx={{
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-      }}
-      {...props}
-    >
+    <UnorderedList boxSize="full" variant="dotted" {...props}>
       {scores ? (
         scores?.map((score, index) => {
           const color = colors.neon["200"].toString();

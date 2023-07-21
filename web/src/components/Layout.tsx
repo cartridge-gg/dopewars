@@ -1,12 +1,12 @@
 import {
   VStack,
-  HStack,
   Heading,
   Text,
   Flex,
-  Box,
   Image,
+  StyleProps,
   Container,
+  Box,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Header from "./Header";
@@ -18,6 +18,7 @@ export interface LayoutProps {
   imageSrc: string;
   prefixTitle: string;
   showBack?: boolean;
+  actions?: ReactNode;
   children: ReactNode;
 }
 
@@ -33,18 +34,15 @@ const Layout = ({
 }: Partial<LayoutProps>) => {
   return (
     <>
-      <Header back={showBack} />
       <Flex
+        direction="column"
         position="fixed"
-        top="0"
-        left="0"
         boxSize="full"
-        align="center"
-        justify="center"
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
+        <Header back={showBack} />
         <Container>
           <LeftPanel
             title={title}
@@ -54,6 +52,7 @@ const Layout = ({
           />
           <RightPanel>{children}</RightPanel>
         </Container>
+        <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>
       <CrtEffect />
     </>
@@ -65,15 +64,20 @@ const LeftPanel = ({
   prefixTitle,
   map,
   imageSrc,
+  ...props
 }: {
   title?: string;
   prefixTitle?: string;
   map?: ReactNode;
   imageSrc?: string;
-}) => {
+} & StyleProps) => {
   return (
-    <VStack flex={["0", "1"]}>
-      <VStack zIndex="overlay">
+    <VStack my="auto" flex={["0", "1"]} {...props}>
+      <VStack
+        zIndex="overlay"
+        position={map ? "absolute" : "unset"}
+        pointerEvents="none"
+      >
         <Text textStyle="subheading" fontSize="11px">
           {prefixTitle}
         </Text>
@@ -82,7 +86,7 @@ const LeftPanel = ({
         </Heading>
       </VStack>
       {map ? (
-        <Flex w="120%">{map}</Flex>
+        <Flex w="100%">{map}</Flex>
       ) : (
         <Image
           src={imageSrc}
@@ -96,16 +100,21 @@ const LeftPanel = ({
   );
 };
 
-const RightPanel = ({ children }: { children: ReactNode }) => {
+const RightPanel = ({
+  children,
+  ...props
+}: { children: ReactNode } & StyleProps) => {
   return (
     <VStack
       flex="1"
+      position="relative"
       sx={{
         overflowY: "scroll",
         "&::-webkit-scrollbar": {
           display: "none",
         },
       }}
+      {...props}
     >
       {children}
     </VStack>

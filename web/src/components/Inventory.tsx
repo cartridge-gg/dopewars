@@ -29,7 +29,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
       </Text>
       <Card
         w="full"
-        h="50px"
+        h="40px"
         px="20px"
         justify="center"
         variant="pixelated"
