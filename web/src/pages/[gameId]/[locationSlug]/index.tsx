@@ -5,23 +5,22 @@ import {
   VStack,
   HStack,
   Spacer,
-  Divider,
   Card,
   CardBody,
   CardHeader,
   CardFooter,
   SimpleGrid,
+  Button,
 } from "@chakra-ui/react";
-import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { Footer } from "@/components/Footer";
 import {
   getDrugByName,
   getLocationByName,
   getLocationBySlug,
 } from "@/hooks/ui";
 import { Cart } from "@/components/icons";
+import { Footer } from "@/components/Footer";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
@@ -82,56 +81,60 @@ export default function Location() {
         getLocationByName(locationEntity.name).slug
       }.png`}
     >
-      <VStack w="full" gap="14px">
-        <Inventory gap="14px" />
-        <VStack w="full" align="flex-start" gap="14px">
-          <Text textStyle="subheading" fontSize="10px" color="neon.500">
-            Market
-          </Text>
-          <SimpleGrid columns={2} w="full" gap="18px" fontSize="20px">
-            {locationEntity.drugMarkets.map((drug, index) => {
-              const playerQuantity =
-                playerEntity.drugs.find((d) => d.name === drug.name)
-                  ?.quantity || 0;
-
-              return (
-                <Card
-                  h="180px"
-                  key={index}
-                  cursor="pointer"
-                  onClick={() => {
-                    playSound(Sounds.HoverClick, 0.3, false);
-                    router.push(
-                      `${router.asPath}/${getDrugByName(drug.name).slug}`,
-                    );
-                  }}
+      <Inventory />
+      <VStack
+        w="full"
+        align="flex-start"
+        gap="12px"
+        sx={{
+          overflowY: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        <Text textStyle="subheading" fontSize="10px" color="neon.500">
+          Market
+        </Text>
+        <SimpleGrid columns={2} w="full" gap="12px" fontSize="20px">
+          {locationEntity.drugMarkets.map((drug, index) => {
+            return (
+              <Card
+                h="160px"
+                key={index}
+                cursor="pointer"
+                onClick={() => {
+                  playSound(Sounds.HoverClick, 0.3, false);
+                  router.push(
+                    `${router.asPath}/${getDrugByName(drug.name).slug}`,
+                  );
+                }}
+              >
+                <CardHeader
+                  textTransform="uppercase"
+                  fontSize="20px"
+                  textAlign="left"
                 >
-                  <CardHeader
-                    textTransform="uppercase"
-                    fontSize="20px"
-                    textAlign="left"
-                  >
-                    {drug.name}
-                  </CardHeader>
-                  <CardBody>
-                    <HStack w="full" justify="center">
-                      <Box>{getDrugByName(drug.name).icon({})}</Box>
-                    </HStack>
-                  </CardBody>
-                  <CardFooter fontSize="16px">
-                    <Text>{formatCash(drug.price)}</Text>
-                    <Spacer />
-                    <HStack>
-                      <Cart />
-                      <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
-                    </HStack>
-                  </CardFooter>
-                </Card>
-              );
-            })}
-          </SimpleGrid>
-        </VStack>
-        <Spacer minH="100px" />
+                  {drug.name}
+                </CardHeader>
+                <CardBody>
+                  <HStack w="full" justify="center">
+                    <Box>{getDrugByName(drug.name).icon({})}</Box>
+                  </HStack>
+                </CardBody>
+                <CardFooter fontSize="16px">
+                  <Text>{formatCash(drug.price)}</Text>
+                  <Spacer />
+                  <HStack>
+                    <Cart />
+                    <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                  </HStack>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </SimpleGrid>
+        <Box minH="40px" />
       </VStack>
       <Footer>
         <Button

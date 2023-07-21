@@ -65,21 +65,8 @@ const Header = ({ back }: HeaderProps) => {
     setInventory(inventory);
   }, [playerEntity]);
 
-  if (!gameEntity || !playerEntity) {
-    return <></>;
-  }
-
   return (
-    <Flex
-      position="fixed"
-      top="0"
-      left="0"
-      p={["0 6px 24px 6px", "24px"]}
-      m={"0 6px"}
-      w="full"
-      justify="flex-end"
-      zIndex="1"
-    >
+    <HStack w="full" zIndex="overlay" py={["0", "20px"]} px="20px">
       <HStack flex="1" justify="left">
         {back && (
           <HeaderButton onClick={() => router.back()}>
@@ -87,11 +74,10 @@ const Header = ({ back }: HeaderProps) => {
           </HeaderButton>
         )}
       </HStack>
-      {playerEntity && (
+      {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
-            h="full"
-            py="8px"
+            h="40px"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
@@ -130,7 +116,7 @@ const Header = ({ back }: HeaderProps) => {
             )} */}
         {isMobile && <MobileMenu />}
       </HStack>
-    </Flex>
+    </HStack>
   );
 };
 

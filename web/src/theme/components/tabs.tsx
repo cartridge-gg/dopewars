@@ -17,7 +17,10 @@ const baseStyle = definePartsStyle({
     },
   },
   tablist: {},
-  tabpanels: {},
+  tabpanels: {
+    mt: "20px",
+    minH: "150px",
+  },
   tabpanel: {},
 });
 // export the base styles in the component theme

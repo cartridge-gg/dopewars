@@ -81,7 +81,6 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       className={
         mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"
       }
-      mr={3}
       borderRadius={6}
       bg={{ md: "neon.700" }}
       overflow="hidden"
