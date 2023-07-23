@@ -27,7 +27,6 @@ import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { RandomEventData } from "@/utils/event";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/hooks/dojo";
-import { Footer } from "@/components/Footer";
 
 export default function Travel() {
   const router = useRouter();

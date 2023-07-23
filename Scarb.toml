@@ -15,13 +15,13 @@ dojo = { git = "https://github.com/broody/dojo.git",  rev = "8daab475c4f04b0d633
 
 
 # Katana
-rpc_url = "http://localhost:5050"
-account_address = "0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0"
-private_key = "0x0300001800000000300000180000000000030000000000003006001800006600"
+#rpc_url = "http://localhost:5050"
+#account_address = "0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0"
+#private_key = "0x0300001800000000300000180000000000030000000000003006001800006600"
 
 # Madara
-#rpc_url = "https://rinnegan.madara.zone"
-#account_address = "0x2"
-#private_key = "0xc1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d"
+rpc_url = "https://rinnegan.madara.zone"
+account_address = "0x2"
+private_key = "0xc1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d"
 
 #world_address = "0x79a3c37167370f03882049edbb291a4c8b79b988835184a18a0695f4dc4fe0c"
