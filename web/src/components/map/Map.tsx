@@ -47,7 +47,6 @@ export const Map = ({
 
   return (
     <Flex
-      zIndex="1"
       userSelect="none"
       position="relative"
       w="inherit"

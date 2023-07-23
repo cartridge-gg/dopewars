@@ -166,44 +166,45 @@ export default function Travel() {
         background="linear-gradient(transparent, #172217)"
         gap="14px"
       >
-        <HStack w="full" pointerEvents="all">
-          <Arrow
-            style="outline"
-            direction="left"
-            boxSize="48px"
-            userSelect="none"
-            cursor="pointer"
-            onClick={back}
-          />
-          <HStack
-            p={2}
-            bg="neon.700"
-            clipPath={`polygon(${generatePixelBorderPath()})`}
-            w="full"
-            justify="center"
-          >
-            <Text>{target}</Text>
+        <VStack w="full" pointerEvents="all" zIndex="overlay">
+          <HStack w="full">
+            <Arrow
+              style="outline"
+              direction="left"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={back}
+            />
+            <HStack
+              p={2}
+              bg="neon.700"
+              clipPath={`polygon(${generatePixelBorderPath()})`}
+              w="full"
+              justify="center"
+            >
+              <Text>{target}</Text>
+            </HStack>
+            <Arrow
+              style="outline"
+              direction="right"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={next}
+            />
           </HStack>
-          <Arrow
-            style="outline"
-            direction="right"
-            boxSize="48px"
-            userSelect="none"
-            cursor="pointer"
-            onClick={next}
-          />
-        </HStack>
-        <Button
-          pointerEvents="all"
-          w={["full", "auto"]}
-          isDisabled={!target || target === currentLocation}
-          isLoading={isPending && !txError}
-          onClick={onContinue}
-        >
-          {target === currentLocation
-            ? "Current Location"
-            : `Travel to ${target}`}
-        </Button>
+          <Button
+            w={["full", "auto"]}
+            isDisabled={!target || target === currentLocation}
+            isLoading={isPending && !txError}
+            onClick={onContinue}
+          >
+            {target === currentLocation
+              ? "Current Location"
+              : `Travel to ${target}`}
+          </Button>
+        </VStack>
       </VStack>
     </Layout>
   );
