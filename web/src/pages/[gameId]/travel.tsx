@@ -1,4 +1,3 @@
-import { Footer } from "@/components/Footer";
 import { Arrow, Car, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -9,6 +8,7 @@ import {
   Text,
   Divider,
   useEventListener,
+  Spacer,
 } from "@chakra-ui/react";
 import { Locations, usePlayerState, TravelEvents } from "@/hooks/state";
 import { useRouter } from "next/router";
@@ -83,6 +83,36 @@ export default function Travel() {
     }
   }, [target, locations]);
 
+  const onContinue = useCallback(async () => {
+    if (target) {
+      const { event, hash } = await travel(gameId, target);
+      if (event) {
+        const typeSlug = (event as RandomEventData).arrested
+          ? "arrested"
+          : "mugged";
+
+        const travelEvent = getEventBySlug(typeSlug);
+        addEvent(travelEvent.name);
+
+        toast(
+          `${travelEvent.description}`,
+          Event,
+          `http://amazing_explorer/${hash}`,
+        );
+
+        router.push(`/${gameId}/event/${typeSlug}`);
+      } else {
+        toast(
+          `You've traveled to ${target}`,
+          Car,
+          `http://amazing_explorer/${hash}`,
+        );
+
+        router.push(`/${gameId}/turn`);
+      }
+    }
+  }, [target, router, gameId, addEvent, travel, toast]);
+
   return (
     <Layout
       title="Destination"
@@ -97,7 +127,7 @@ export default function Travel() {
         />
       }
     >
-      <VStack w="full" pt="100px">
+      <VStack w="full" my="auto" display={["none", "flex"]}>
         <Car boxSize="60px" />
         {locations.map((location, index) => (
           <Location
@@ -109,87 +139,70 @@ export default function Travel() {
             onClick={() => setTarget(location.name)}
           />
         ))}
+        <Spacer />
+        <Button
+          w={["full", "250px"]}
+          isDisabled={!target || target === currentLocation}
+          isLoading={isPending && !txError}
+          onClick={onContinue}
+        >
+          {target === currentLocation
+            ? "Current Location"
+            : `Travel to ${target}`}
+        </Button>
       </VStack>
-      <Footer>
-        <VStack w="full" align="flex-end">
-          {IsMobile() && (
-            <HStack
-              position="absolute"
-              top="40px"
-              left="0"
-              w="full"
-              px="20px"
-              justify="space-between"
-              align="center"
-              gap="20px"
-            >
-              <Arrow
-                style="outline"
-                direction="left"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={back}
-              />
-              <HStack
-                p={2}
-                bg="neon.700"
-                clipPath={`polygon(${generatePixelBorderPath()})`}
-                w="full"
-                justify="center"
-              >
-                <Text>{target}</Text>
-              </HStack>
-              <Arrow
-                style="outline"
-                direction="right"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={next}
-              />
-            </HStack>
-          )}
-          <Button
-            w={["full", "auto"]}
-            isDisabled={!target || target === currentLocation}
-            isLoading={isPending && !txError}
-            onClick={async () => {
-              if (target) {
-                const { event, hash } = await travel(gameId, target);
-                if (event) {
-                  const typeSlug = (event as RandomEventData).arrested
-                    ? "arrested"
-                    : "mugged";
-
-                  const travelEvent = getEventBySlug(typeSlug);
-                  addEvent(travelEvent.name);
-
-                  toast(
-                    `${travelEvent.description}`,
-                    Event,
-                    `http://amazing_explorer/${hash}`,
-                  );
-
-                  router.push(`/${gameId}/event/${typeSlug}`);
-                } else {
-                  toast(
-                    `You've traveled to ${target}`,
-                    Car,
-                    `http://amazing_explorer/${hash}`,
-                  );
-
-                  router.push(`/${gameId}/turn`);
-                }
-              }
-            }}
+      <VStack
+        display={["flex", "none"]}
+        w="full"
+        h="160px"
+        p="24px"
+        position="fixed"
+        bottom="0"
+        right="0"
+        spacing="0"
+        pointerEvents="none"
+        justify="flex-end"
+        background="linear-gradient(transparent, #172217)"
+        gap="14px"
+      >
+        <HStack w="full" pointerEvents="all">
+          <Arrow
+            style="outline"
+            direction="left"
+            boxSize="48px"
+            userSelect="none"
+            cursor="pointer"
+            onClick={back}
+          />
+          <HStack
+            p={2}
+            bg="neon.700"
+            clipPath={`polygon(${generatePixelBorderPath()})`}
+            w="full"
+            justify="center"
           >
-            {target === currentLocation
-              ? "Current Location"
-              : `Travel to ${target}`}
-          </Button>
-        </VStack>
-      </Footer>
+            <Text>{target}</Text>
+          </HStack>
+          <Arrow
+            style="outline"
+            direction="right"
+            boxSize="48px"
+            userSelect="none"
+            cursor="pointer"
+            onClick={next}
+          />
+        </HStack>
+        <Button
+          w={["full", "auto"]}
+          isDisabled={!target || target === currentLocation}
+          isLoading={isPending && !txError}
+          onClick={onContinue}
+        >
+          {target === currentLocation
+            ? "Current Location"
+            : `Travel to ${target}`}
+        </Button>
+      </VStack>
     </Layout>
   );
 }

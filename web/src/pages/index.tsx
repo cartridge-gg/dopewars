@@ -10,7 +10,6 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { Alert, Clock, Sound } from "@/components/icons";
-import { Footer } from "@/components/Footer";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
@@ -44,7 +43,7 @@ export default function Home() {
       prefixTitle="Dope Wars:"
       imageSrc="/images/punk-girl.png"
     >
-      <VStack w="full" gap="20px">
+      <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px">
             <Button
@@ -53,9 +52,7 @@ export default function Home() {
               isLoading={isBurnerDeploying}
               onClick={() => createBurner()}
             >
-              {account
-                ? formatAddress(account.address)
-                : "Create Burner Wallet"}
+              {account ? formatAddress(account.address) : "Create Burner"}
             </Button>
             <Button
               flex="1"
@@ -79,15 +76,19 @@ export default function Home() {
             </Button>
           </HStack>
         </Card>
-        <VStack w="full" gap="20px">
-          <Text>HALL OF FAME</Text>
-          <Leaderboard
-            scores={scores}
-            css={{
-              maxHeight: "50vh",
-              overflowY: "auto",
-            }}
-          />
+
+        <Text>HALL OF FAME</Text>
+        <VStack
+          boxSize="full"
+          gap="20px"
+          sx={{
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          <Leaderboard scores={scores} />
         </VStack>
       </VStack>
     </Layout>

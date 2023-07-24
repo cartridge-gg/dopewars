@@ -1,4 +1,3 @@
-import { Footer } from "@/components/Footer";
 import Header from "@/components/Header";
 import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";

@@ -1,7 +1,5 @@
 import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
-import { Ludes, Weed } from "@/components/icons/drugs";
-import { Manhattan } from "@/components/icons/locations";
 import Layout from "@/components/Layout";
 import { useDojo } from "@/hooks/dojo";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
@@ -44,77 +42,77 @@ export default function Turn() {
       prefixTitle="End of"
       imageSrc="/images/sunset.png"
     >
-      {trades.size > 0 && (
-        <VStack w="full">
-          <Product
-            product="Product"
-            quantity="Qty"
-            cost="Value"
-            icon={undefined}
-            isHeader
-          />
-          <UnorderedList w="full" variant="underline">
-            {Array.from(trades).map(([drug, trade]) => {
-              const change = trade.direction === TradeDirection.Buy ? "+" : "-";
-              return (
-                <ListItem key={drug}>
-                  <Product
-                    icon={getDrugByName(drug).icon}
-                    product={drug}
-                    quantity={`${change}${trade.quantity}`}
-                    cost={"$$$"}
-                  />
-                </ListItem>
-              );
-            })}
-          </UnorderedList>
-        </VStack>
-      )}
-      <VStack w="full">
-        <HStack w="full">
+      <VStack w="full" my={["none", "auto"]}>
+        {trades.size > 0 && (
+          <VStack w="full">
+            <Product
+              product="Product"
+              quantity="Qty"
+              cost="Value"
+              icon={undefined}
+              isHeader
+            />
+            <UnorderedList w="full" variant="underline">
+              {Array.from(trades).map(([drug, trade]) => {
+                const change =
+                  trade.direction === TradeDirection.Buy ? "+" : "-";
+                return (
+                  <ListItem key={drug}>
+                    <Product
+                      icon={getDrugByName(drug).icon}
+                      product={drug}
+                      quantity={`${change}${trade.quantity}`}
+                      cost={"$$$"}
+                    />
+                  </ListItem>
+                );
+              })}
+            </UnorderedList>
+          </VStack>
+        )}
+        <VStack w="full" pt="20px" align="flex-start">
           <Text fontFamily="broken-console" fontSize="10px" color="neon.500">
             Travel To
           </Text>
-        </HStack>
-        <UnorderedList w="full" variant="underline">
-          <ListItem>
-            <HStack>
-              {getLocationByName(playerEntity.location_name).icon({})}
-              <Text>{playerEntity.location_name}</Text>
-            </HStack>
-          </ListItem>
-          {events.map((event, index) => (
-            <ListItem key={index}>
+          <UnorderedList w="full" variant="underline">
+            <ListItem>
               <HStack>
-                <HStack flex="1">
-                  <Event />
-                  <Text>{event}</Text>
-                </HStack>
-                <Text flex="2" color="yellow.400">
-                  {getEventByName(event).description}
-                </Text>
+                {getLocationByName(playerEntity.location_name).icon({})}
+                <Text>{playerEntity.location_name}</Text>
               </HStack>
             </ListItem>
-          ))}
-          ;
-        </UnorderedList>
+            {events.map((event, index) => (
+              <ListItem key={index}>
+                <HStack>
+                  <HStack flex="1">
+                    <Event />
+                    <Text>{event}</Text>
+                  </HStack>
+                  <Text flex="2" color="yellow.400">
+                    {getEventByName(event).description}
+                  </Text>
+                </HStack>
+              </ListItem>
+            ))}
+            ;
+          </UnorderedList>
+        </VStack>
+        <Footer position={["absolute", "relative"]}>
+          <Button
+            w={["full", "auto"]}
+            onClick={() => {
+              clearState();
+              router.push(
+                `/${gameId}/${
+                  getLocationByName(playerEntity.location_name).slug
+                })}`,
+              );
+            }}
+          >
+            Continue
+          </Button>
+        </Footer>
       </VStack>
-      <Footer>
-        <Button
-          w={["full", "auto"]}
-          onClick={() => {
-            clearState();
-
-            router.push(
-              `/${gameId}/${
-                getLocationByName(playerEntity.location_name).slug
-              })}`,
-            );
-          }}
-        >
-          Continue
-        </Button>
-      </Footer>
     </Layout>
   );
 }

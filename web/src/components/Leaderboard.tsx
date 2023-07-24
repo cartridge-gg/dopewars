@@ -33,24 +33,14 @@ const Leaderboard = ({
   ...props
 }: { scores: Score[] } & StyleProps & ListProps) => {
   return (
-    <UnorderedList
-      w="full"
-      variant="dotted"
-      sx={{
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-      }}
-      {...props}
-    >
+    <UnorderedList boxSize="full" variant="dotted" {...props}>
       {scores ? (
         scores?.map((score, index) => {
           const color = colors.neon["200"].toString();
           return (
             <ListItem color={color} key={index}>
               <HStack mr={3}>
-                <Text w="30px" flexShrink={0}>
+                <Text w="30px" flexShrink={0} display={["none", "block"]}>
                   {index + 1}.
                 </Text>
                 <Box flexShrink={0} style={{ marginTop: "-8px" }}>

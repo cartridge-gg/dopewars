@@ -1,21 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  Text,
-  VStack,
-  HStack,
-  Spacer,
-  Divider,
-  Card,
-  CardBody,
-} from "@chakra-ui/react";
-import Button from "@/components/Button";
+import { Box, Text, VStack, HStack, Card, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { Footer } from "@/components/Footer";
 import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
+import { Footer } from "@/components/Footer";
 import { DrugProps, getDrugBySlug, getLocationBySlug } from "@/hooks/ui";
 
 import {
@@ -149,29 +138,34 @@ export default function Market() {
       imageSrc="/images/dealer.png"
       showBack={true}
     >
-      <VStack w="100%" h="100%">
-        <Card variant="pixelated" p={6} mb={6} _hover={{}}>
-          <VStack w="full">
-            <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
-              <Image
-                src={`/images/drugs/${drug.slug}.png`}
-                alt={drug.name}
-                fill={true}
-              />
-            </Box>
-            <HStack w="100%" justifyContent="space-between" fontSize="16px">
-              <HStack>
-                {drug.icon({ boxSize: "36px" })}
-                <Text>{formatCash(market.price)}</Text>
-              </HStack>
-              <HStack>
-                <Cart mr={1} size="lg" />
-                <Text>{formatQuantity(market.marketPool.quantity)}</Text>
-              </HStack>
+      <VStack
+        w="full"
+        sx={{
+          overflowY: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
+          <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
+            <Image
+              src={`/images/drugs/${drug.slug}.png`}
+              alt={drug.name}
+              fill={true}
+            />
+          </Box>
+          <HStack w="100%" justifyContent="space-between" fontSize="16px">
+            <HStack>
+              {drug.icon({ boxSize: "36px" })}
+              <Text>{formatCash(market.price)}</Text>
             </HStack>
-          </VStack>
+            <HStack>
+              <Cart mr={1} size="lg" />
+              <Text>{formatQuantity(market.marketPool.quantity)}</Text>
+            </HStack>
+          </HStack>
         </Card>
-
         <Tabs
           w="100%"
           isFitted
@@ -183,8 +177,7 @@ export default function Market() {
             <Tab>BUY</Tab>
             <Tab>SELL</Tab>
           </TabList>
-
-          <TabPanels mt={6}>
+          <TabPanels>
             <TabPanel>
               {canBuy ? (
                 <QuantitySelector
@@ -209,20 +202,17 @@ export default function Market() {
                 />
               ) : (
                 <Box>
-                  <AlertMessage
-                    textTransform="uppercase"
-                    message={`You have no ${drug.name} to sell`}
-                  />
+                  <AlertMessage message={`You have no ${drug.name} to sell`} />
                 </Box>
               )}
             </TabPanel>
           </TabPanels>
+          <Box h="40px" />
         </Tabs>
-        <Spacer minH="100px" />
       </VStack>
       <Footer>
         <Button
-          w={["100%", "auto"]}
+          w={["full", "auto"]}
           isLoading={isPending && !txError}
           onClick={onTrade}
           display={

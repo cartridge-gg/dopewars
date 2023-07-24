@@ -39,7 +39,7 @@ export class GlobalScores {
 export const useGlobalScores = (offset?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
   const { data, isFetched } = useGlobalScoresQuery({
-    limit: limit || 100,
+    limit: limit || 500,
   });
 
   useEffect(() => {

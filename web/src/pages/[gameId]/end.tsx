@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
 import Leaderboard from "@/components/Leaderboard";
 import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import {
   Container,
   Flex,
@@ -11,9 +10,9 @@ import {
   Text,
   VStack,
   Image,
-  Box,
   Divider,
   Button,
+  Spacer,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -29,20 +28,18 @@ export default function End() {
 
   return (
     <>
-      <Header />
       <Flex
+        direction="column"
         position="fixed"
-        top="0"
-        left="0"
         boxSize="full"
         align="center"
-        justify="center"
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
+        <Header />
         <Container>
-          <VStack flex={["0", "1"]} justify="center">
+          <VStack flex={["0", "1"]} my="auto">
             <Heading fontSize={["40px", "48px"]} fontWeight="normal">
               Game Over
             </Heading>
@@ -76,11 +73,22 @@ export default function End() {
               </Button>
             </HStack>
           </VStack>
-          <VStack flex="1" justify="center">
+          <VStack
+            flex="1"
+            my="auto"
+            maxH="600px"
+            sx={{
+              overflowY: "scroll",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+            }}
+          >
             <Text>NAME ENTRY</Text>
             <Leaderboard scores={scores} />
           </VStack>
         </Container>
+        <Spacer maxH="100px" />
       </Flex>
     </>
   );

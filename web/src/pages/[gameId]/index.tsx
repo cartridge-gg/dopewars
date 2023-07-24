@@ -11,7 +11,6 @@ import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
-import { Footer } from "@/components/Footer";
 
 export default function Join() {
   const router = useRouter();
@@ -66,7 +65,7 @@ export default function Join() {
         <Divider borderColor="neon.500" borderStyle="dotted" />
         <Text>15m35s</Text>
       </HStack>
-      <Footer>
+      {/* <Footer>
         <Button w={["full", "auto"]} onClick={() => router.push("/")}>
           Leave Lobby
         </Button>
@@ -78,7 +77,7 @@ export default function Join() {
         >
           Start
         </Button>
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 }

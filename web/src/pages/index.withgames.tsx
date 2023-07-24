@@ -10,7 +10,6 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
 import { Clock, Sound } from "@/components/icons";
-import { Footer } from "@/components/Footer";
 import { User } from "@/components/icons/archive";
 import { useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
