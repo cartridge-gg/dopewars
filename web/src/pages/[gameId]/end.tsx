@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
 import Leaderboard from "@/components/Leaderboard";
-import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
 import {
   Container,
   Flex,
@@ -20,12 +19,6 @@ import { ReactNode, useEffect } from "react";
 
 export default function End() {
   const router = useRouter();
-  const { scores } = useGlobalScores();
-
-  if (!scores) {
-    return <></>;
-  }
-
   return (
     <>
       <Flex
@@ -84,8 +77,10 @@ export default function End() {
               },
             }}
           >
-            <Text>NAME ENTRY</Text>
-            <Leaderboard scores={scores} />
+            <Text textStyle="subheading" fontSize="13px">
+              Hall of Fame
+            </Text>
+            <Leaderboard />
           </VStack>
         </Container>
         <Spacer maxH="100px" />

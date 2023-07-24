@@ -1,5 +1,6 @@
-import { Player, useGlobalScoresQuery } from "@/generated/graphql";
+import { Player, Name, useGlobalScoresQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
+import { shortString } from "starknet";
 import { SCALING_FACTOR } from "..";
 
 interface PlayerComponentData {
@@ -7,8 +8,9 @@ interface PlayerComponentData {
 }
 
 export type Score = {
+  gameId: string;
   address: string;
-  name: string;
+  name?: string;
   cash: number;
 };
 
@@ -21,13 +23,22 @@ export class GlobalScores {
   static create(data: PlayerComponentData): Score[] | undefined {
     if (!data || !data.playerComponents) return undefined;
 
-    // TODO: torii to support relationshipto retrieve player
-    // address and nameddress
-    // and name could be retrieved
     const scores = data.playerComponents.map((player) => {
+      const keys = player.entity?.keys.split(",") || [];
+      const gameId = keys[0];
+      const address = keys[1];
+
+      const components = player.entity?.components || [];
+      const nameComponent = components.find(
+        (component) => component?.__typename === "Name",
+      ) as Name;
+
       return {
-        address: "",
-        name: "",
+        gameId,
+        address,
+        name:
+          nameComponent &&
+          shortString.decodeShortString(nameComponent?.short_string),
         cash: Math.floor(Number(player.cash) / SCALING_FACTOR),
       };
     });
@@ -38,7 +49,7 @@ export class GlobalScores {
 
 export const useGlobalScores = (offset?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
-  const { data, isFetched } = useGlobalScoresQuery({
+  const { data, isFetched, refetch } = useGlobalScoresQuery({
     limit: limit || 500,
   });
 
@@ -55,5 +66,6 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
   return {
     scores,
     isFetched,
+    refetch,
   };
 };
