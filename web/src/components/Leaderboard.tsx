@@ -75,8 +75,10 @@ const Leaderboard = ({
               : colors.neon["200"].toString();
             const avatarColor = isCurrent ? "yellow" : "green";
 
-            const displayName = isOwn
-              ? `${score.name || "Anonymous (You)"}`
+            const displayName = score.name
+              ? score.name
+              : isOwn
+              ? "Anonymous (You)"
               : "Anonymous";
 
             return (
