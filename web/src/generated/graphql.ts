@@ -24,7 +24,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Address: any;
+  ContractAddress: any;
   DateTime: any;
   bool: any;
   felt252: any;
@@ -46,6 +46,8 @@ export type ComponentUnion =
 
 export type Drug = {
   __typename?: "Drug";
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   quantity: Scalars["usize"];
 };
 
@@ -72,6 +74,8 @@ export type Event = {
 export type Game = {
   __typename?: "Game";
   creator: Scalars["felt252"];
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   game_id: Scalars["u32"];
   is_finished: Scalars["bool"];
   max_players: Scalars["usize"];
@@ -82,23 +86,31 @@ export type Game = {
 
 export type Location = {
   __typename?: "Location";
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   name: Scalars["felt252"];
 };
 
 export type Market = {
   __typename?: "Market";
   cash: Scalars["u128"];
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   quantity: Scalars["usize"];
 };
 
 export type Name = {
   __typename?: "Name";
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   short_string: Scalars["felt252"];
 };
 
 export type Player = {
   __typename?: "Player";
   cash: Scalars["u128"];
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   health: Scalars["u8"];
   turns_remaining: Scalars["usize"];
 };
@@ -128,6 +140,7 @@ export type QueryDrugComponentsArgs = {
 };
 
 export type QueryEntitiesArgs = {
+  componentName?: InputMaybe<Scalars["String"]>;
   keys: Array<Scalars["String"]>;
   limit?: InputMaybe<Scalars["Int"]>;
 };
@@ -201,6 +214,8 @@ export type QuerySystemsArgs = {
 export type Risks = {
   __typename?: "Risks";
   arrested: Scalars["u8"];
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
   hurt: Scalars["u8"];
   mugged: Scalars["u8"];
   travel: Scalars["u8"];
@@ -208,7 +223,7 @@ export type Risks = {
 
 export type System = {
   __typename?: "System";
-  address: Scalars["Address"];
+  address: Scalars["ContractAddress"];
   classHash: Scalars["felt252"];
   createdAt: Scalars["DateTime"];
   id: Scalars["ID"];
@@ -260,7 +275,20 @@ export type GlobalScoresQuery = {
   playerComponents?: Array<{
     __typename?: "Player";
     cash: any;
-    turns_remaining: any;
+    entity?: {
+      __typename?: "Entity";
+      keys: string;
+      components?: Array<
+        | { __typename: "Drug" }
+        | { __typename: "Game" }
+        | { __typename: "Location" }
+        | { __typename: "Market" }
+        | { __typename: "Name"; short_string: any }
+        | { __typename: "Player" }
+        | { __typename: "Risks" }
+        | null
+      > | null;
+    } | null;
   } | null> | null;
 };
 
@@ -448,7 +476,15 @@ export const GlobalScoresDocument = `
     query GlobalScores($limit: Int) {
   playerComponents(turns_remaining: 0, limit: $limit) {
     cash
-    turns_remaining
+    entity {
+      keys
+      components {
+        __typename
+        ... on Name {
+          short_string
+        }
+      }
+    }
   }
 }
     `;

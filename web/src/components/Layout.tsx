@@ -73,7 +73,7 @@ const LeftPanel = ({
   imageSrc?: string;
 } & StyleProps) => {
   return (
-    <VStack my="auto" {...props}>
+    <VStack my="auto" flex={["0", "1"]} {...props}>
       <VStack
         zIndex="overlay"
         position={map ? "absolute" : "unset"}
@@ -107,6 +107,7 @@ const RightPanel = ({
 }: { children: ReactNode } & StyleProps) => {
   return (
     <VStack
+      flex="1"
       position="relative"
       sx={{
         overflowY: "scroll",
