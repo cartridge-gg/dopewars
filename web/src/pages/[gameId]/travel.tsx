@@ -194,6 +194,7 @@ export default function Travel() {
         </HStack>
         <Button
           w={["full", "auto"]}
+          pointerEvents="all"
           isDisabled={!target || target === currentLocation}
           isLoading={isPending && !txError}
           onClick={onContinue}
