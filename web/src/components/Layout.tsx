@@ -75,7 +75,7 @@ const LeftPanel = ({
   return (
     <VStack my="auto" flex={["0", "1"]} {...props}>
       <VStack
-        zIndex="overlay"
+        zIndex="1"
         position={map ? "absolute" : "unset"}
         pointerEvents="none"
       >
