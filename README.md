@@ -13,15 +13,16 @@ Roll Your Own is an onchain adaptation of the original Drug Wars game, built on 
 Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/dojo/releases) or follow the [installation guide](https://book.dojoengine.org/getting-started/installation.html)
 
 ### With Katana
+
 ```bash
 # Start Katana
-katana --seed 0
+katana --seed 0 --block-time 1
 
 # Build the game
 sozo build
 
 # Migrate the world, this will declare/deploy contracts to katana
-sozo migrate
+sozo migrate --name ryo
 
 # Start indexer, graphql endpoint at http://localhost:8080
 torii --manifest target/dev/manifest.json
@@ -30,7 +31,9 @@ torii --manifest target/dev/manifest.json
 cd web
 yarn install && yarn dev
 ```
+
 ### With Madara
+
 TBD
 
 ## Mechanics
