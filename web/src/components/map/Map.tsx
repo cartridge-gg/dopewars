@@ -11,12 +11,12 @@ type CoordinateType = {
 };
 
 const coordinate: CoordinateType = {
-  [Locations.Queens]: { x: -150, y: 0 },
-  [Locations.Jersey]: { x: 150, y: 0 },
-  [Locations.Bronx]: { x: 0, y: 150 },
-  [Locations.Central]: { x: 0, y: 0 },
-  [Locations.Coney]: { x: -150, y: -150 },
-  [Locations.Brooklyn]: { x: 0, y: -150 },
+  [Locations.Queens]: { x: -150, y: 150 },
+  [Locations.Jersey]: { x: 150, y: 150 },
+  [Locations.Bronx]: { x: 0, y: 300 },
+  [Locations.Central]: { x: 0, y: 150 },
+  [Locations.Coney]: { x: -150, y: -0 },
+  [Locations.Brooklyn]: { x: 0, y: -0 },
 };
 
 export const Map = ({
@@ -57,7 +57,7 @@ export const Map = ({
         left: -150,
         right: 150,
         top: -150,
-        bottom: 150,
+        bottom: 300,
       }}
     >
       <Image

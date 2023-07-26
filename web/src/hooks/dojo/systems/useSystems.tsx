@@ -22,6 +22,7 @@ export interface SystemsInterface {
     drugName: string,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
+  setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
   isPending: boolean;
   error?: Error;
 }
@@ -140,12 +141,24 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReciept],
   );
 
+  const setName = useCallback(
+    async (gameId: string, playerName: string) => {
+      const receipt = await executeAndReciept("set_name", [gameId, playerName]);
+
+      return {
+        hash: receipt.transaction_hash,
+      };
+    },
+    [executeAndReciept],
+  );
+
   return {
     create,
     join,
     travel,
     buy,
     sell,
+    setName,
     error,
     isPending,
   };

@@ -18,6 +18,14 @@ query UserGames($id: felt252!) {
 query GlobalScores($limit: Int) {
   playerComponents(turns_remaining: 0, limit: $limit) {
     cash
-    turns_remaining
+    entity {
+      keys
+      components {
+        __typename
+        ... on Name {
+          short_string
+        }
+      }
+    }
   }
 }

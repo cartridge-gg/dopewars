@@ -45,12 +45,13 @@ const Layout = ({
         <Header back={showBack} />
         <Container>
           <LeftPanel
+            flex={[map ? "1" : "0", "1"]}
             title={title}
             prefixTitle={prefixTitle}
             imageSrc={imageSrc}
             map={map}
           />
-          <RightPanel>{children}</RightPanel>
+          <RightPanel flex={[map ? "0" : "1", "1"]}>{children}</RightPanel>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>
@@ -74,7 +75,7 @@ const LeftPanel = ({
   return (
     <VStack my="auto" flex={["0", "1"]} {...props}>
       <VStack
-        zIndex="overlay"
+        zIndex="1"
         position={map ? "absolute" : "unset"}
         pointerEvents="none"
       >

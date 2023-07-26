@@ -11,7 +11,9 @@ export const Modal: ComponentMultiStyleConfig = {
     "footer",
   ],
   baseStyle: {
-    dialog: {},
+    dialog: {
+      bgColor: "neon.900",
+    },
     overlay: {},
     footer: {},
   },

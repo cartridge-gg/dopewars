@@ -88,7 +88,7 @@ export default function Home() {
             },
           }}
         >
-          <Leaderboard scores={scores} />
+          <Leaderboard />
         </VStack>
       </VStack>
     </Layout>
