@@ -82,6 +82,9 @@ export class LocationEntity {
     if (!locationEntities || !risksComponent || drugMarkets.length === 0)
       return undefined;
 
+    // sort by name
+    drugMarkets.sort((a, b) => a.name.localeCompare(b.name));
+
     return {
       name: locationName,
       risks: risksComponent,
