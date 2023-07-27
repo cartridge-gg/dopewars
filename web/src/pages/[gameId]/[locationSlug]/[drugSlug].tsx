@@ -23,7 +23,7 @@ import {
   TabPanel,
   TabIndicator,
 } from "@chakra-ui/react";
-import { Sounds } from "@/hooks/sound";
+import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerState } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
 import { cardPixelatedStyle } from "@/theme/styles";
@@ -93,6 +93,7 @@ export default function Market() {
   const { addTrade } = usePlayerState();
 
   const onTrade = useCallback(async () => {
+    playSound(Sounds.Trade);
     let toastMessage = "",
       hash = "",
       quantity;
