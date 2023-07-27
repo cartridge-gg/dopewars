@@ -26,6 +26,7 @@ import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
+import { Bank } from "@/components/Bank";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 import { useDojo } from "@/hooks/dojo";
 
@@ -81,6 +82,7 @@ export default function Location() {
         getLocationByName(locationEntity.name).slug
       }.png`}
     >
+      <Bank />
       <Inventory />
       <VStack
         w="full"

@@ -13,10 +13,11 @@ mod create_game {
     use rollyourown::components::risks::Risks;
     use rollyourown::components::market::Market;
     use rollyourown::components::drug::{Drug, DrugTrait};
+    use rollyourown::components::bank::{Bank};
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
         SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MIN_CASH, MAX_CASH,
-        MIN_QUANITTY, MAX_QUANTITY, STARTING_CASH
+        MIN_QUANITTY, MAX_QUANTITY, STARTING_CASH, STARTING_HEALTH
     };
     use rollyourown::utils::random;
 
@@ -50,9 +51,11 @@ mod create_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    cash: STARTING_CASH, health: 100, turns_remaining: max_turns
+                    cash: STARTING_CASH, health: STARTING_HEALTH, turns_remaining: max_turns
                     }, Location {
                     name: location_name
+                    }, Bank {
+                    amount: 0
                 }
             )
         );

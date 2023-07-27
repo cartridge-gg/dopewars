@@ -4,6 +4,7 @@ import {
   Drug as DrugType,
   Name,
   usePlayerEntityQuery,
+  Bank,
 } from "@/generated/graphql";
 import { useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
@@ -12,7 +13,7 @@ import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 interface PlayerEntityData {
   entities: [
     {
-      components: (Player | Location | DrugType | Name)[];
+      components: (Player | Location | DrugType | Name | Bank)[];
     },
   ];
 }
@@ -22,19 +23,32 @@ type Drug = {
   quantity: number;
 };
 
+type BankType = {
+  amount: number;
+};
+
 export class PlayerEntity {
   cash: number;
   health: number;
   turnsRemaining: number;
   location_name: string;
   drugs: Drug[];
+  bank: BankType;
 
-  constructor(player: Player, location: Location, drugs: Drug[]) {
+  constructor(
+    player: Player,
+    location: Location,
+    drugs: Drug[],
+    bank: BankType,
+  ) {
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
     this.location_name = shortString.decodeShortString(location.name);
     this.drugs = drugs;
+    this.bank = {
+      amount: Number(bank.amount) / SCALING_FACTOR,
+    };
   }
 
   static create(data: PlayerEntityData): PlayerEntity | undefined {
@@ -50,6 +64,10 @@ export class PlayerEntity {
     const locationComponent = playerEntities?.components.find(
       (component) => component.__typename === "Location",
     ) as Location;
+
+    const bankComponent = playerEntities?.components.find(
+      (component) => component.__typename === "Bank",
+    ) as Bank;
 
     // drug entities
     const drugEntities = data.entities.filter((entity) =>
@@ -73,7 +91,12 @@ export class PlayerEntity {
 
     if (!playerEntities) return undefined;
 
-    return new PlayerEntity(playerComponent, locationComponent, drugs);
+    return new PlayerEntity(
+      playerComponent,
+      locationComponent,
+      drugs,
+      bankComponent,
+    );
   }
 }
 

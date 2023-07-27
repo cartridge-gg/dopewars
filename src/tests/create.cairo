@@ -16,6 +16,7 @@ use dojo::interfaces::{
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
+use dojo::SerdeLen;
 
 use rollyourown::components::game::{game, Game};
 use rollyourown::components::market::{market, Market};
@@ -24,12 +25,14 @@ use rollyourown::components::drug::{drug, Drug};
 use rollyourown::components::location::{location, Location};
 use rollyourown::components::risks::{risks, Risks};
 use rollyourown::components::name::{name, Name};
+use rollyourown::components::bank::{bank, Bank};
 use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};
 use rollyourown::systems::join::join_game;
 use rollyourown::systems::create::create_game;
 use rollyourown::systems::player::set_name;
-use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::systems::bank::{bank_deposit, bank_withdraw};
+use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH, STARTING_HEALTH};
 
 const START_TIME: u64 = 0;
 const MAX_PLAYERS: usize = 2;
@@ -48,6 +51,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     components.append(market::TEST_CLASS_HASH);
     components.append(drug::TEST_CLASS_HASH);
     components.append(name::TEST_CLASS_HASH);
+    components.append(bank::TEST_CLASS_HASH);
 
     let mut systems = array::ArrayTrait::new();
     systems.append(create_game::TEST_CLASS_HASH);
@@ -56,6 +60,8 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     systems.append(buy::TEST_CLASS_HASH);
     systems.append(sell::TEST_CLASS_HASH);
     systems.append(set_name::TEST_CLASS_HASH);
+    systems.append(bank_deposit::TEST_CLASS_HASH);
+    systems.append(bank_withdraw::TEST_CLASS_HASH);
 
     let world = spawn_test_world(components, systems);
 
@@ -93,14 +99,15 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let mut res = world.entity('Player'.into(), (game_id, player_id).into(), 0, 0);
+    let mut res = world
+        .entity('Player'.into(), (game_id, player_id).into(), 0, SerdeLen::<Player>::len());
     assert(res.len() > 0, 'player not found');
 
     let player = serde::Serde::<Player>::deserialize(ref res)
         .expect('player deserialization failed');
 
-    assert(player.health == 100, 'health mismatch');
-    assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
+    assert(player.health == STARTING_HEALTH, 'health mismatch');
+    assert(player.cash == STARTING_CASH, 'cash mismatch');
     player_id
 }
 

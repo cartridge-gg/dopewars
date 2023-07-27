@@ -66,3 +66,18 @@ struct RandomEvent {
     mugged: bool,
     arrested: bool
 }
+
+
+#[derive(Drop, Serde)]
+struct BankDeposit {
+    game_id: u32,
+    player_id: felt252,
+    quantity: u128,
+}
+
+#[derive(Drop, Serde)]
+struct BankWithdraw {
+    game_id: u32,
+    player_id: felt252,
+    quantity: u128,
+}

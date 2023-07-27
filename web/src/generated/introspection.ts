@@ -6,6 +6,7 @@ export interface PossibleTypesResultData {
 const result: PossibleTypesResultData = {
   possibleTypes: {
     ComponentUnion: [
+      "Bank",
       "Drug",
       "Game",
       "Location",

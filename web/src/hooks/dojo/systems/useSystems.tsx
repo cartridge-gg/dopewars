@@ -23,6 +23,14 @@ export interface SystemsInterface {
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  bankDeposit: (
+    gameId: string,
+    quantity: number,
+  ) => Promise<SystemExecuteResult>;
+  bankWithdraw: (
+    gameId: string,
+    quantity: number,
+  ) => Promise<SystemExecuteResult>;
   isPending: boolean;
   error?: Error;
 }
@@ -35,7 +43,7 @@ export interface SystemExecuteResult {
 export const useSystems = (): SystemsInterface => {
   const { execute, account, error, isPending } = useDojo();
 
-  const executeAndReciept = useCallback(
+  const executeAndReceipt = useCallback(
     async (method: string, params: Array<string | number>) => {
       if (!account) {
         throw new Error("No account connected");
@@ -54,7 +62,7 @@ export const useSystems = (): SystemsInterface => {
 
   const create = useCallback(
     async (startTime: number, maxPlayers: number, maxTurns: number) => {
-      const receipt = await executeAndReciept("create_game", [
+      const receipt = await executeAndReceipt("create_game", [
         startTime,
         maxPlayers,
         maxTurns,
@@ -67,12 +75,12 @@ export const useSystems = (): SystemsInterface => {
         event,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const travel = useCallback(
     async (gameId: string, locationName: string) => {
-      const receipt = await executeAndReciept("travel", [gameId, locationName]);
+      const receipt = await executeAndReceipt("travel", [gameId, locationName]);
       let result = { hash: receipt.transaction_hash } as SystemExecuteResult;
 
       try {
@@ -83,12 +91,12 @@ export const useSystems = (): SystemsInterface => {
 
       return result;
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const join = useCallback(
     async (gameId: string) => {
-      const receipt = await executeAndReciept("join_game", [gameId]);
+      const receipt = await executeAndReceipt("join_game", [gameId]);
       const event = parseEvent(receipt, RyoEvents.PlayerJoined);
 
       return {
@@ -96,7 +104,7 @@ export const useSystems = (): SystemsInterface => {
         event,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const buy = useCallback(
@@ -106,7 +114,7 @@ export const useSystems = (): SystemsInterface => {
       drugName: string,
       quantity: number,
     ) => {
-      const receipt = await executeAndReciept("buy", [
+      const receipt = await executeAndReceipt("buy", [
         gameId,
         locationName,
         drugName,
@@ -117,7 +125,7 @@ export const useSystems = (): SystemsInterface => {
         hash: receipt.transaction_hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const sell = useCallback(
@@ -127,7 +135,7 @@ export const useSystems = (): SystemsInterface => {
       drugName: string,
       quantity: number,
     ) => {
-      const receipt = await executeAndReciept("sell", [
+      const receipt = await executeAndReceipt("sell", [
         gameId,
         locationName,
         drugName,
@@ -138,18 +146,50 @@ export const useSystems = (): SystemsInterface => {
         hash: receipt.transaction_hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const setName = useCallback(
     async (gameId: string, playerName: string) => {
-      const receipt = await executeAndReciept("set_name", [gameId, playerName]);
+      const receipt = await executeAndReceipt("set_name", [gameId, playerName]);
 
       return {
         hash: receipt.transaction_hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
+  );
+
+  const bankDeposit = useCallback(
+    async (gameId: string, quantity: number) => {
+      const receipt = await executeAndReceipt("bank_deposit", [
+        gameId,
+        quantity,
+      ]);
+      const event = parseEvent(receipt, RyoEvents.BankDeposit);
+
+      return {
+        event,
+        hash: receipt.transaction_hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  const bankWithdraw = useCallback(
+    async (gameId: string, quantity: number) => {
+      const receipt = await executeAndReceipt("bank_withdraw", [
+        gameId,
+        quantity,
+      ]);
+      const event = parseEvent(receipt, RyoEvents.BankWithdraw);
+
+      return {
+        event,
+        hash: receipt.transaction_hash,
+      };
+    },
+    [executeAndReceipt],
   );
 
   return {
@@ -159,6 +199,8 @@ export const useSystems = (): SystemsInterface => {
     buy,
     sell,
     setName,
+    bankDeposit,
+    bankWithdraw,
     error,
     isPending,
   };
