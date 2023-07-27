@@ -1,6 +1,9 @@
 import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
+import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
+import { useDojo } from "@/hooks/dojo";
+import { useSystems } from "@/hooks/dojo/systems/useSystems";
 import {
   Container,
   Flex,
@@ -15,10 +18,20 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 export default function End() {
   const router = useRouter();
+  const gameId = router.query.gameId as string;
+  const { setName: submitSetName, isPending } = useSystems();
+  const [name, setName] = useState<string>("");
+
+  const onSubmitName = useCallback(async () => {
+    if (!name) return;
+    await submitSetName(gameId, name);
+    router.push("/");
+  }, [name, router, submitSetName]);
+
   return (
     <>
       <Flex
@@ -66,21 +79,38 @@ export default function End() {
               </Button>
             </HStack>
           </VStack>
-          <VStack
-            flex="1"
-            my="auto"
-            maxH="600px"
-            sx={{
-              overflowY: "scroll",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-            }}
-          >
-            <Text textStyle="subheading" fontSize="13px">
-              Hall of Fame
-            </Text>
-            <Leaderboard />
+          <VStack flex="1" my="auto" justify="space-between">
+            <VStack w={["full", "400px"]}>
+              <Text py="20px" textStyle="subheading" fontSize="13px">
+                Name Entry
+              </Text>
+              <Input
+                px="10px"
+                border="2px"
+                borderColor="neon.500"
+                bgColor="neon.700"
+                maxLength={31}
+                placeholder="Enter your name"
+                autoFocus={true}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Text
+                w="full"
+                align="center"
+                color="red"
+                visibility={name.length === 31 ? "visible" : "hidden"}
+              >
+                Max 31 characters
+              </Text>
+            </VStack>
+            <Button
+              w={["full", "auto"]}
+              onClick={onSubmitName}
+              isLoading={isPending}
+            >
+              Submit
+            </Button>
           </VStack>
         </Container>
         <Spacer maxH="100px" />
