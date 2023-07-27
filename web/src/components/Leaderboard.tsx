@@ -69,16 +69,12 @@ const Leaderboard = ({
         {scores ? (
           scores?.map((score, index) => {
             const isOwn = score.address === account?.address;
-            const isCurrent = isOwn && score.gameId === gameId;
-            const color = isCurrent
+            const color = isOwn
               ? colors.yellow["400"].toString()
               : colors.neon["200"].toString();
-            const avatarColor = isCurrent ? "yellow" : "green";
-
+            const avatarColor = isOwn ? "yellow" : "green";
             const displayName = score.name
-              ? score.name
-              : isOwn
-              ? "Anonymous (You)"
+              ? `${score.name}${isOwn ? " (you)" : ""}`
               : "Anonymous";
 
             return (
