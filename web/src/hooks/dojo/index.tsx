@@ -28,8 +28,7 @@ interface DojoInterface {
   call: () => void;
 }
 
-//@ts-ignore
-const DojoContext = createContext<DojoInterface>(undefined);
+const DojoContext = createContext<DojoInterface>(null!);
 
 export function useDojo() {
   const context = useContext(DojoContext);

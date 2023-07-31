@@ -5575,9 +5575,9 @@ sponge-case@^1.0.1:
   dependencies:
     tslib "^2.0.3"
 
-"starknet@https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e":
-  version "5.15.1"
-  resolved "https://github.com/broody/starknet.js#2ca935e0062fc7b7a5fff2130c1255596179964e"
+"starknet@https://github.com/broody/starknet.js#551eece1857ecf8f81671ca87afc198de5ef2a5a":
+  version "5.17.0"
+  resolved "https://github.com/broody/starknet.js#551eece1857ecf8f81671ca87afc198de5ef2a5a"
   dependencies:
     "@noble/curves" "~1.0.0"
     isomorphic-fetch "^3.0.0"
