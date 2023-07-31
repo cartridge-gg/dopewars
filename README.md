@@ -25,7 +25,7 @@ sozo build
 sozo migrate --name ryo
 
 # Start indexer, graphql endpoint at http://localhost:8080
-torii --manifest target/dev/manifest.json
+torii --manifest target/dev/manifest.json --world-address 0x788f5fd335d29ed5f8686982079cc3aa9c82aa41968f759b2c3d0be8d5fa0c4
 
 # Start frontend, located at http://localhost:3000
 cd web
