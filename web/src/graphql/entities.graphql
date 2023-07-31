@@ -40,6 +40,9 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
       ... on Name {
         short_string
       }
+      ... on Bank {
+        amount
+      }
     }
   }
 }

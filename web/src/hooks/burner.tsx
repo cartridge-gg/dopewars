@@ -10,6 +10,8 @@ import {
 } from "starknet";
 import Storage from "@/utils/storage";
 import { ETH_CONTRACT_ADDRESS } from "@/constants";
+import { Alert } from "@/components/icons";
+import { useToast } from "./toast";
 
 const PREFUND_AMOUNT = "0x8AC7230489E80000"; // 10ETH
 
@@ -35,6 +37,7 @@ type BurnerStorage = {
 export const useBurner = () => {
   const [account, setAccount] = useState<Account>();
   const [isDeploying, setIsDeploying] = useState(false);
+  const { toast } = useToast();
 
   // init
   useEffect(() => {
@@ -45,7 +48,7 @@ export const useBurner = () => {
       admin.getTransactionReceipt(storage[firstAddr].deployTx).catch(() => {
         setAccount(undefined);
         Storage.remove("burners");
-        throw new Error("burners not deployed, chain may have restarted");
+        toast("burners not deployed, chain may have restarted", Alert);
       });
 
       // set active account
@@ -61,7 +64,7 @@ export const useBurner = () => {
         }
       }
     }
-  }, []);
+  }, [toast]);
 
   const list = useCallback(() => {
     let storage = Storage.get("burners") || {};

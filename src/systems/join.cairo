@@ -9,8 +9,9 @@ mod join_game {
     use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
+    use rollyourown::components::bank::{Bank};
     use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH};
+    use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH, STARTING_HEALTH};
 
     fn execute(ctx: Context, game_id: u32) -> felt252 {
         let block_info = starknet::get_block_info().unbox();
@@ -21,6 +22,7 @@ mod join_game {
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
+        // TODO : check that player can't create/join multiple times ?
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let location_name = LocationTrait::random(seed);
@@ -30,9 +32,11 @@ mod join_game {
             (game_id, player_id).into(),
             (
                 Player {
-                    cash: STARTING_CASH, health: 100, turns_remaining: game.max_turns
+                    cash: STARTING_CASH, health: STARTING_HEALTH, turns_remaining: game.max_turns
                     }, Location {
                     name: location_name
+                    }, Bank {
+                    amount: 0
                 }
             )
         );

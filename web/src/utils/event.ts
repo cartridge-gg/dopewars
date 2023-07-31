@@ -1,3 +1,4 @@
+import { SCALING_FACTOR } from "@/hooks/dojo";
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
 
 export enum RyoEvents {
@@ -7,6 +8,8 @@ export enum RyoEvents {
   Bought = "Bought",
   Sold = "Sold",
   RandomEvent = "RandomEvent",
+  BankDeposit = "BankDeposit",
+  BankWithdraw = "BankWithdraw",
 }
 
 export interface BaseEventData {
@@ -44,6 +47,16 @@ export interface SoldEventData extends BaseEventData {
   drugId: string;
   quantity: number;
   price: number;
+}
+
+export interface BankDepositData extends BaseEventData {
+  playerId: string;
+  quantity: number;
+}
+
+export interface BankWithdrawData extends BaseEventData {
+  playerId: string;
+  quantity: number;
 }
 
 export const parseEvent = (
@@ -88,5 +101,18 @@ export const parseEvent = (
     case RyoEvents.Bought:
     case RyoEvents.Sold:
       throw new Error(`event parse not implemented: ${eventType}`);
+
+    case RyoEvents.BankDeposit:
+      return {
+        gameId: num.toHexString(raw.data[0]),
+        playerId: num.toHexString(raw.data[1]),
+        quantity: Number(raw.data[2]) / SCALING_FACTOR,
+      } as BankDepositData;
+    case RyoEvents.BankWithdraw:
+      return {
+        gameId: num.toHexString(raw.data[0]),
+        playerId: num.toHexString(raw.data[1]),
+        quantity: Number(raw.data[2]) / SCALING_FACTOR,
+      } as BankWithdrawData;
   }
 };

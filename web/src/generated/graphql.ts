@@ -35,7 +35,15 @@ export type Scalars = {
   usize: any;
 };
 
+export type Bank = {
+  __typename?: "Bank";
+  amount: Scalars["u128"];
+  entity?: Maybe<Entity>;
+  entity_id: Scalars["ID"];
+};
+
 export type ComponentUnion =
+  | Bank
   | Drug
   | Game
   | Location
@@ -117,6 +125,7 @@ export type Player = {
 
 export type Query = {
   __typename?: "Query";
+  bankComponents?: Maybe<Array<Maybe<Bank>>>;
   drugComponents?: Maybe<Array<Maybe<Drug>>>;
   entities?: Maybe<Array<Maybe<Entity>>>;
   entity: Entity;
@@ -132,6 +141,11 @@ export type Query = {
   systemCall: SystemCall;
   systemCalls?: Maybe<Array<Maybe<SystemCall>>>;
   systems?: Maybe<Array<Maybe<System>>>;
+};
+
+export type QueryBankComponentsArgs = {
+  amount?: InputMaybe<Scalars["u128"]>;
+  limit?: InputMaybe<Scalars["Int"]>;
 };
 
 export type QueryDrugComponentsArgs = {
@@ -279,6 +293,7 @@ export type GlobalScoresQuery = {
       __typename?: "Entity";
       keys: string;
       components?: Array<
+        | { __typename: "Bank" }
         | { __typename: "Drug" }
         | { __typename: "Game" }
         | { __typename: "Location" }
@@ -301,6 +316,7 @@ export type GameEntityQuery = {
   entity: {
     __typename?: "Entity";
     components?: Array<
+      | { __typename: "Bank" }
       | { __typename: "Drug" }
       | {
           __typename: "Game";
@@ -332,6 +348,7 @@ export type PlayerEntityQuery = {
   entities?: Array<{
     __typename?: "Entity";
     components?: Array<
+      | { __typename: "Bank"; amount: any }
       | { __typename: "Drug"; quantity: any }
       | { __typename: "Game" }
       | { __typename: "Location"; name: any }
@@ -354,6 +371,7 @@ export type LocationEntitiesQuery = {
   entities?: Array<{
     __typename?: "Entity";
     components?: Array<
+      | { __typename: "Bank" }
       | { __typename: "Drug" }
       | { __typename: "Game" }
       | { __typename: "Location"; name: any }
@@ -603,6 +621,9 @@ export const PlayerEntityDocument = `
       }
       ... on Name {
         short_string
+      }
+      ... on Bank {
+        amount
       }
     }
   }

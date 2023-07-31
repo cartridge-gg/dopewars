@@ -14,3 +14,4 @@ const MIN_CASH: u128 = 1_000_000_000; // $100k
 
 // cash players start with
 const STARTING_CASH: u128 = 20_000_000; // $2000
+const STARTING_HEALTH: u8 = 100; 
