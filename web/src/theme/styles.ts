@@ -6,6 +6,50 @@ import { generatePixelBorderPath } from "@/utils/ui";
 
 import colors from "./colors";
 
+const scrollbarStyle = {
+  ".scrollbar-view": {
+    overflow: "auto !important",
+    marginRight: "-1px !important",
+    marginBottom: "-1px !important",
+    paddingRight: "10px",
+    paddingBottom: "10px",
+  },
+  ".scrollbar-container": {
+    height: "100%",
+    width: "100%",
+
+  },
+  ".scrollbar-vertical": {
+    height: '100%',
+    width: "16px !important",
+    top: 0,
+    right: 0,
+    bg: "neon.900",
+    border: "solid 2px",
+    borderColor: "neon.300",
+    cursor: "pointer"
+
+  },
+  ".scrollbar-horizontal": {
+    width: '100%',
+    height: "16px  !important",
+    bottom: 0,
+    left: 0,
+    bg: "neon.900",
+    border: "solid 2px",
+    borderColor: "neon.300",
+    cursor: "pointer"
+
+  },
+  ".thumb-vertical": {
+    bg: "neon.300",
+  },
+  ".thumb-horizontal": {
+    bg: "neon.300",
+
+  },
+}
+
 //global styles
 export const styles = {
   global: {
@@ -16,8 +60,10 @@ export const styles = {
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
     },
+    ...scrollbarStyle,
   },
 };
+
 
 // applied layerStyles below and also chakra's Card component
 export const cardStyle = {
