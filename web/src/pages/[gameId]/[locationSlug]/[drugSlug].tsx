@@ -94,6 +94,9 @@ export default function Market() {
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
+
+    router.push(`/${gameId}/${location.slug}`);
+
     let toastMessage = "",
       hash = "",
       quantity;
@@ -108,14 +111,12 @@ export default function Market() {
       quantity = quantitySell;
     }
 
-    toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
-
     addTrade(drug.name, {
       direction: tradeDirection,
       quantity,
     } as TradeType);
 
-    router.push(`/${gameId}/${location.slug}`);
+    toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
   }, [
     tradeDirection,
     quantityBuy,

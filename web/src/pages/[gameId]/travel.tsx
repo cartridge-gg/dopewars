@@ -9,6 +9,8 @@ import {
   Divider,
   useEventListener,
   Spacer,
+  Image,
+  keyframes,
 } from "@chakra-ui/react";
 import { Locations, usePlayerState, TravelEvents } from "@/hooks/state";
 import { useRouter } from "next/router";
@@ -28,6 +30,26 @@ import { RandomEventData } from "@/utils/event";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/hooks/dojo";
 
+const zoomAnim = keyframes`  
+  0% {
+    transform:scale(0.15);
+    opacity: 0.1;
+  } 
+  20% {
+   opacity: 0.2;
+  }   
+  50% {
+   opacity: 0.3;
+  }  
+  80% {
+   opacity: 0.6;
+  }   
+  100% {
+    transform:scale(1);
+    opacity: 1;
+  }   
+`;
+
 export default function Travel() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
@@ -37,6 +59,7 @@ export default function Travel() {
   const { addEvent } = usePlayerState();
   const { toast } = useToast();
   const { account } = useDojo();
+  const [txSent, setTxSent] = useState<boolean>(false);
 
   const { travel, isPending, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
@@ -85,7 +108,9 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
     if (target) {
+      setTxSent(true);
       const { event, hash } = await travel(gameId, target);
+
       if (event) {
         const typeSlug = (event as RandomEventData).arrested
           ? "arrested"
@@ -111,7 +136,7 @@ export default function Travel() {
         router.push(`/${gameId}/turn`);
       }
     }
-  }, [target, router, gameId, addEvent, travel, toast]);
+  }, [target, router, gameId, addEvent, travel]);
 
   return (
     <Layout
@@ -127,83 +152,101 @@ export default function Travel() {
         />
       }
     >
-      <VStack w="full" my="auto" display={["none", "flex"]}>
-        <Car boxSize="60px" />
-        {locations.map((location, index) => (
-          <Location
-            {...location}
-            key={index}
-            name={location.name}
-            isCurrent={location.name === currentLocation}
-            selected={location.name === target}
-            onClick={() => setTarget(location.name)}
-          />
-        ))}
-        <Spacer />
-        <Button
-          w={["full", "250px"]}
-          isDisabled={!target || target === currentLocation}
-          isLoading={isPending && !txError}
-          onClick={onContinue}
-        >
-          {target === currentLocation
-            ? "Current Location"
-            : `Travel to ${target}`}
-        </Button>
-      </VStack>
-      <VStack
-        display={["flex", "none"]}
-        w="full"
-        h="160px"
-        p="24px"
-        position="fixed"
-        bottom="0"
-        right="0"
-        spacing="0"
-        pointerEvents="none"
-        justify="flex-end"
-        background="linear-gradient(transparent, #172217)"
-        gap="14px"
-      >
-        <HStack w="full" pointerEvents="all">
-          <Arrow
-            style="outline"
-            direction="left"
-            boxSize="48px"
-            userSelect="none"
-            cursor="pointer"
-            onClick={back}
-          />
-          <HStack
-            p={2}
-            bg="neon.700"
-            clipPath={`polygon(${generatePixelBorderPath()})`}
-            w="full"
-            justify="center"
-          >
-            <Text>{target}</Text>
-          </HStack>
-          <Arrow
-            style="outline"
-            direction="right"
-            boxSize="48px"
-            userSelect="none"
-            cursor="pointer"
-            onClick={next}
-          />
-        </HStack>
-        <Button
-          w={["full", "auto"]}
-          pointerEvents="all"
-          isDisabled={!target || target === currentLocation}
-          isLoading={isPending && !txError}
-          onClick={onContinue}
-        >
-          {target === currentLocation
-            ? "Current Location"
-            : `Travel to ${target}`}
-        </Button>
-      </VStack>
+      <>
+        {(isPending || txSent) && (
+          <VStack height="100%" justifyContent="center">
+            {/* TODO : replace with cool driving anim ? */}
+            {target && (
+              <Image
+                src={`/images/locations/${getLocationByName(target).slug}.png`}
+                animation={`${zoomAnim} 1 5s ease-out`}
+              />
+            )}
+          </VStack>
+        )}
+
+        {!(isPending || txSent) && (
+          <>
+            <VStack w="full" my="auto" display={["none", "flex"]}>
+              <Car boxSize="60px" />
+              {locations.map((location, index) => (
+                <Location
+                  {...location}
+                  key={index}
+                  name={location.name}
+                  isCurrent={location.name === currentLocation}
+                  selected={location.name === target}
+                  onClick={() => setTarget(location.name)}
+                />
+              ))}
+              <Spacer />
+              <Button
+                w={["full", "250px"]}
+                isDisabled={!target || target === currentLocation}
+                isLoading={isPending && !txError}
+                onClick={onContinue}
+              >
+                {target === currentLocation
+                  ? "Current Location"
+                  : `Travel to ${target}`}
+              </Button>
+            </VStack>
+            <VStack
+              display={["flex", "none"]}
+              w="full"
+              h="160px"
+              p="24px"
+              position="fixed"
+              bottom="0"
+              right="0"
+              spacing="0"
+              pointerEvents="none"
+              justify="flex-end"
+              background="linear-gradient(transparent, #172217)"
+              gap="14px"
+            >
+              <HStack w="full" pointerEvents="all">
+                <Arrow
+                  style="outline"
+                  direction="left"
+                  boxSize="48px"
+                  userSelect="none"
+                  cursor="pointer"
+                  onClick={back}
+                />
+                <HStack
+                  p={2}
+                  bg="neon.700"
+                  clipPath={`polygon(${generatePixelBorderPath()})`}
+                  w="full"
+                  justify="center"
+                >
+                  <Text>{target}</Text>
+                </HStack>
+                <Arrow
+                  style="outline"
+                  direction="right"
+                  boxSize="48px"
+                  userSelect="none"
+                  cursor="pointer"
+                  onClick={next}
+                />
+              </HStack>
+              <Button
+                w={["full", "auto"]}
+                pointerEvents="all"
+                isDisabled={!target || target === currentLocation}
+                isLoading={isPending && !txError}
+                onClick={onContinue}
+              >
+                {target === currentLocation
+                  ? "Current Location"
+                  : `Travel to ${target}`}
+              </Button>
+            </VStack>
+          </>
+        )}
+      </>
     </Layout>
   );
 }
