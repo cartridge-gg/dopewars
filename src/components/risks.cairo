@@ -19,6 +19,10 @@ struct TradeResult {
 
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Risks {
+    #[key]
+    game_id: u32,
+    #[key]
+    location_id: felt252,
     // travel risk probabilities
     travel: u8,
     hurt: u8,
@@ -76,7 +80,7 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[available_gas(1000000)]
 fn test_never_occurs() {
     let seed = pedersen(1, 1);
-    let risks = Risks { travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
+    let risks = Risks { game_id: 0, location_id: 0, travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
     let (event_occured, result) = risks.travel(seed);
 
     assert(!event_occured, 'event occured');
@@ -89,7 +93,7 @@ fn test_never_occurs() {
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen(1, 1);
-    let risks = Risks { travel: 100, hurt: 100, mugged: 100, arrested: 100,  };
+    let risks = Risks { game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100,  };
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');

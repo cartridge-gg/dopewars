@@ -1,8 +1,15 @@
 use array::{ArrayTrait, SpanTrait};
 use traits::{Into, TryInto};
+use starknet::ContractAddress;
 
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Drug {
+    #[key]
+    game_id: u32,
+    #[key]
+    player_id: ContractAddress,
+    #[key]
+    drug_id: felt252,
     quantity: usize, 
 }
 

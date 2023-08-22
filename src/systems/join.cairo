@@ -3,36 +3,37 @@ mod join_game {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
+    use starknet::ContractAddress;
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, PlayerJoined};
+    use rollyourown::events::PlayerJoined;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH};
 
-    fn execute(ctx: Context, game_id: u32) -> felt252 {
+    fn execute(ctx: Context, game_id: u32) -> ContractAddress {
         let block_info = starknet::get_block_info().unbox();
-        let player_id: felt252 = ctx.origin.into();
 
-        let game_sk: Query = game_id.into();
-        let game = get !(ctx.world, game_sk, Game);
+        let game = get !(ctx.world, game_id, (Game));
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let location_name = LocationTrait::random(seed);
+        let location_id = LocationTrait::random(seed);
         // spawn player into game
         set !(
             ctx.world,
-            (game_id, player_id).into(),
             (
                 Player {
-                    cash: STARTING_CASH, health: 100, turns_remaining: game.max_turns
-                    }, Location {
-                    name: location_name
+                    game_id, 
+                    player_id: ctx.origin, 
+                    location_id, 
+                    cash: STARTING_CASH, 
+                    health: 100, 
+                    turns_remaining: game.max_turns
                 }
             )
         );
@@ -40,7 +41,6 @@ mod join_game {
         // update num players joined
         set !(
             ctx.world,
-            game_sk,
             (Game {
                 game_id,
                 start_time: game.start_time,
@@ -52,12 +52,9 @@ mod join_game {
             })
         );
 
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @PlayerJoined { game_id, player_id, location: location_name }, ref values
-        );
-        emit(ctx, 'PlayerJoined', values.span());
+        // emit player joined
+        emit!(ctx.world, PlayerJoined {game_id, player_id: ctx.origin, location_id});
 
-        player_id
+        ctx.origin
     }
 }

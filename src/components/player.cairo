@@ -1,5 +1,12 @@
+use starknet::ContractAddress;
+
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Player {
+    #[key]
+    game_id: u32,
+    #[key]
+    player_id: ContractAddress,
+    location_id: felt252,
     cash: u128,
     health: u8,
     turns_remaining: usize,
