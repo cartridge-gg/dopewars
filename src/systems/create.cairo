@@ -29,7 +29,7 @@ mod create_game {
         let game_id = ctx.world.uuid();
 
         // game entity
-        set !(
+        set!(
             ctx.world,
             (Game {
                 game_id,
@@ -45,17 +45,17 @@ mod create_game {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let location_id = LocationTrait::random(seed);
         // player entity
-        set !(
+        set!(
             ctx.world,
             (
                 Player {
-                    game_id, 
-                    player_id: ctx.origin, 
-                    location_id, 
-                    cash: STARTING_CASH, 
-                    health: 100, 
+                    game_id,
+                    player_id: ctx.origin,
+                    location_id,
+                    cash: STARTING_CASH,
+                    health: 100,
                     turns_remaining: max_turns
-                }, 
+                },
             )
         );
 
@@ -66,18 +66,16 @@ mod create_game {
             match locations.pop_front() {
                 Option::Some(location_id) => {
                     //set location entity
-                    set !(
+                    set!(
                         ctx.world,
-                        (
-                             Risks {
-                                game_id, 
-                                location_id: *location_id,
-                                travel: TRAVEL_RISK,
-                                hurt: HURT_RISK,
-                                mugged: MUGGED_RISK,
-                                arrested: ARRESTED_RISK
-                            }
-                        )
+                        (Risks {
+                            game_id,
+                            location_id: *location_id,
+                            travel: TRAVEL_RISK,
+                            hurt: HURT_RISK,
+                            mugged: MUGGED_RISK,
+                            arrested: ARRESTED_RISK
+                        })
                     );
 
                     let mut seed = starknet::get_tx_info().unbox().transaction_hash;
@@ -90,19 +88,19 @@ mod create_game {
                                 // HACK: temp hack to get some randomness
                                 seed = pedersen(seed, *drug_id);
                                 let market_cash = random(seed, MIN_CASH, MAX_CASH);
-                                let rand = random(
-                                    seed, MIN_QUANITTY.into(), MAX_QUANTITY.into()
-                                );
+                                let rand = random(seed, MIN_QUANITTY.into(), MAX_QUANTITY.into());
                                 let market_quantity: usize = rand.try_into().unwrap();
 
                                 //set market entity
-                                set !(
+                                set!(
                                     ctx.world,
-                                    ( Market {
-                                        game_id, location_id: *location_id, drug_id: *drug_id,
-                                            cash: market_cash, quantity: market_quantity
-                                        }
-                                    )
+                                    (Market {
+                                        game_id,
+                                        location_id: *location_id,
+                                        drug_id: *drug_id,
+                                        cash: market_cash,
+                                        quantity: market_quantity
+                                    })
                                 );
                             },
                             Option::None(()) => {
@@ -118,8 +116,12 @@ mod create_game {
         };
 
         // emit game created and player joined
-        emit!(ctx.world, GameCreated {game_id, creator: ctx.origin, start_time, max_turns, max_players});
-        emit!(ctx.world, PlayerJoined {game_id, player_id: ctx.origin, location_id});
+        emit!(
+            ctx.world, GameCreated {
+                game_id, creator: ctx.origin, start_time, max_turns, max_players
+            }
+        );
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id });
 
         (game_id, ctx.origin)
     }

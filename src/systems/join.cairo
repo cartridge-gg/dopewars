@@ -16,7 +16,7 @@ mod join_game {
     fn execute(ctx: Context, game_id: u32) -> ContractAddress {
         let block_info = starknet::get_block_info().unbox();
 
-        let game = get !(ctx.world, game_id, (Game));
+        let game = get!(ctx.world, game_id, (Game));
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
@@ -24,22 +24,20 @@ mod join_game {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let location_id = LocationTrait::random(seed);
         // spawn player into game
-        set !(
+        set!(
             ctx.world,
-            (
-                Player {
-                    game_id, 
-                    player_id: ctx.origin, 
-                    location_id, 
-                    cash: STARTING_CASH, 
-                    health: 100, 
-                    turns_remaining: game.max_turns
-                }
-            )
+            (Player {
+                game_id,
+                player_id: ctx.origin,
+                location_id,
+                cash: STARTING_CASH,
+                health: 100,
+                turns_remaining: game.max_turns
+            })
         );
 
         // update num players joined
-        set !(
+        set!(
             ctx.world,
             (Game {
                 game_id,
@@ -53,7 +51,7 @@ mod join_game {
         );
 
         // emit player joined
-        emit!(ctx.world, PlayerJoined {game_id, player_id: ctx.origin, location_id});
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id });
 
         ctx.origin
     }

@@ -91,7 +91,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player = get!(world, (game_id, player_id).into(), (Player));
     assert(player.health == 100, 'health mismatch');
     assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
-    
+
     player_id
 }
 
@@ -100,9 +100,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
 #[available_gas(100000000)]
 fn test_create_game() {
     let (world_address, game_id, player_id) = spawn_game();
-    let world = IWorldDispatcher {
-        contract_address: world_address
-    };
+    let world = IWorldDispatcher { contract_address: world_address };
 
     let brooklyn_risks = get!(world, (game_id, 'Brooklyn').into(), (Risks));
     assert(brooklyn_risks.location_id == 'Brooklyn', 'not Brooklyn location');

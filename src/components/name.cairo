@@ -6,5 +6,5 @@ struct Name {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    short_string: felt252, 
+    short_string: felt252,
 }

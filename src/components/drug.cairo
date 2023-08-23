@@ -10,7 +10,7 @@ struct Drug {
     player_id: ContractAddress,
     #[key]
     drug_id: felt252,
-    quantity: usize, 
+    quantity: usize,
 }
 
 trait DrugTrait {

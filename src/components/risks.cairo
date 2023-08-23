@@ -93,7 +93,9 @@ fn test_never_occurs() {
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen(1, 1);
-    let risks = Risks { game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100,  };
+    let risks = Risks {
+        game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100, 
+    };
     let (event_occured, result) = risks.travel(seed);
 
     assert(event_occured, 'event did not occur');
