@@ -4,6 +4,6 @@ mod constants;
 mod events;
 mod utils;
 
-// #[cfg(test)]
-// mod tests;
+#[cfg(test)]
+mod tests;
 

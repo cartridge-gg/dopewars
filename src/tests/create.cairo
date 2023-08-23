@@ -8,11 +8,10 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-use dojo::database::query::{IntoPartitioned, IntoPartitionedQuery};
-use dojo::interfaces::{
-    IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher,
-    ISystemDispatcherTrait
-};
+// use dojo::interfaces::{
+//     IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher,
+//     ISystemDispatcherTrait
+// };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
@@ -21,7 +20,7 @@ use rollyourown::components::game::{game, Game};
 use rollyourown::components::market::{market, Market};
 use rollyourown::components::player::{player, Player};
 use rollyourown::components::drug::{drug, Drug};
-use rollyourown::components::location::{location, Location};
+use rollyourown::components::location::Location;
 use rollyourown::components::risks::{risks, Risks};
 use rollyourown::components::name::{name, Name};
 use rollyourown::systems::travel::travel;
@@ -43,7 +42,6 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     let mut components = array::ArrayTrait::new();
     components.append(game::TEST_CLASS_HASH);
     components.append(player::TEST_CLASS_HASH);
-    components.append(location::TEST_CLASS_HASH);
     components.append(risks::TEST_CLASS_HASH);
     components.append(market::TEST_CLASS_HASH);
     components.append(drug::TEST_CLASS_HASH);
@@ -63,16 +61,13 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     spawn_game_calldata.append(START_TIME.into());
     spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
-    let mut res = world.execute('create_game'.into(), spawn_game_calldata.span());
+    let mut res = world.execute('create_game', spawn_game_calldata);
     assert(res.len() > 0, 'did not spawn');
 
     let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let mut res = world.entity('Game'.into(), game_id.into(), 0, dojo::SerdeLen::<Game>::len());
-    assert(res.len() > 0, 'game not found');
-
-    let game = serde::Serde::<Game>::deserialize(ref res).expect('game deserialization failed');
+    let game = get!(world, game_id, (Game));
     assert(game.start_time == START_TIME, 'start time mismatch');
     assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
@@ -87,20 +82,16 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let mut spawn_player_calldata = array::ArrayTrait::<felt252>::new();
     spawn_player_calldata.append(game_id);
 
-    let mut res = world.execute('join_game'.into(), spawn_player_calldata.span());
+    let mut res = world.execute('join_game', spawn_player_calldata);
     assert(res.len() > 0, 'did not spawn');
 
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let mut res = world.entity('Player'.into(), (game_id, player_id).into(), 0, 0);
-    assert(res.len() > 0, 'player not found');
-
-    let player = serde::Serde::<Player>::deserialize(ref res)
-        .expect('player deserialization failed');
-
+    let player = get!(world, (game_id, player_id).into(), (Player));
     assert(player.health == 100, 'health mismatch');
     assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
+    
     player_id
 }
 
@@ -108,26 +99,18 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
 #[test]
 #[available_gas(100000000)]
 fn test_create_game() {
-    let (world_address, game_id, _) = spawn_game();
-
-    let brooklyn_id: felt252 = 'Brooklyn'.into();
-    let res = IWorldDispatcher {
+    let (world_address, game_id, player_id) = spawn_game();
+    let world = IWorldDispatcher {
         contract_address: world_address
-    }
-        .entity(
-            'Location'.into(), (game_id, brooklyn_id).into(), 0, dojo::SerdeLen::<Location>::len()
-        );
-    assert(res.len() > 0, 'no Brooklyn location');
+    };
 
-    let queens_id: felt252 = 'Queens'.into();
-    let res = IWorldDispatcher {
-        contract_address: world_address
-    }.entity('Location'.into(), (game_id, queens_id).into(), 0, dojo::SerdeLen::<Location>::len());
-    assert(res.len() > 0, 'no queens location');
+    let brooklyn_risks = get!(world, (game_id, 'Brooklyn').into(), (Risks));
+    assert(brooklyn_risks.location_id == 'Brooklyn', 'not Brooklyn location');
 
-    let (players, _) = IWorldDispatcher {
-        contract_address: world_address
-    }.entities('Player'.into(), game_id.into(), 0);
-    assert(players.len() == 1, 'wrong num players');
+    let queens_risks = get!(world, (game_id, 'Queens').into(), (Risks));
+    assert(queens_risks.location_id == 'Queens', 'not Queens location');
+
+    let player = get!(world, (game_id, player_id).into(), (Player));
+    assert(player.turns_remaining == 10, 'wrong Player turns remaining');
 }
 
