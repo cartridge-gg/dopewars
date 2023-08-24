@@ -60,7 +60,7 @@ export default function Market() {
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
-    locationName: location.name,
+    locationId: location.name,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,

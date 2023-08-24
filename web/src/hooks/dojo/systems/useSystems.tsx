@@ -12,14 +12,14 @@ export interface SystemsInterface {
   join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
-    locationName: string,
-    drugName: string,
+    locationId: string,
+    drugId: string,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   sell: (
     gameId: string,
-    locationName: string,
-    drugName: string,
+    locationId: string,
+    drugId: string,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
@@ -71,8 +71,8 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, locationName: string) => {
-      const receipt = await executeAndReciept("travel", [gameId, locationName]);
+    async (gameId: string, locationId: string) => {
+      const receipt = await executeAndReciept("travel", [gameId, locationId]);
       let result = { hash: receipt.transaction_hash } as SystemExecuteResult;
 
       try {
@@ -102,14 +102,14 @@ export const useSystems = (): SystemsInterface => {
   const buy = useCallback(
     async (
       gameId: string,
-      locationName: string,
-      drugName: string,
+      locationId: string,
+      drugId: string,
       quantity: number,
     ) => {
       const receipt = await executeAndReciept("buy", [
         gameId,
-        locationName,
-        drugName,
+        locationId,
+        drugId,
         quantity,
       ]);
 
@@ -123,14 +123,14 @@ export const useSystems = (): SystemsInterface => {
   const sell = useCallback(
     async (
       gameId: string,
-      locationName: string,
-      drugName: string,
+      locationId: string,
+      drugId: string,
       quantity: number,
     ) => {
       const receipt = await executeAndReciept("sell", [
         gameId,
-        locationName,
-        drugName,
+        locationId,
+        drugId,
         quantity,
       ]);
 

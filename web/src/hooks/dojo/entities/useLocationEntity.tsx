@@ -1,9 +1,10 @@
 import {
   Name,
   Market,
-  Location,
   Risks,
   useLocationEntitiesQuery,
+  Entity,
+  EntityEdge,
 } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { shortString } from "starknet";
@@ -12,7 +13,7 @@ import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 interface LocationEntityData {
   entities: [
     {
-      components: (Name | Market | Location | Risks)[];
+      components: (Market | Risks)[];
     },
   ];
 }
@@ -24,7 +25,7 @@ export type DrugMarket = {
 };
 
 export class LocationEntity {
-  name: string; // location name
+  name: string; // location name same as id
   risks: Risks;
   drugMarkets: DrugMarket[];
 
@@ -34,59 +35,52 @@ export class LocationEntity {
     this.drugMarkets = drugMarkets;
   }
 
-  static create(data: LocationEntityData): LocationEntity | undefined {
-    if (!data || !data.entities) return undefined;
+  static create(edges: EntityEdge[]): LocationEntity | undefined {
+    if (!edges || edges.length === 0) return undefined;
 
-    // location related entities
-    const locationEntities = data.entities.find((entity) =>
-      entity.components.find(
-        (component) => component.__typename === "Location",
-      ),
-    );
-    const locationComponent = locationEntities?.components.find(
-      (component) => component.__typename === "Location",
-    ) as Location;
-    const locationName = shortString.decodeShortString(locationComponent.name);
-    const risksComponent = locationEntities?.components.find(
-      (component) => component.__typename === "Risks",
-    ) as Risks;
+    // we know both location and risk component uses key[1] as locationId
+    const keys = edges[0].node?.keys || [];
+    const locationId = keys[1]!;
 
-    // drug market related entities
-    const drugMarketEntities = data.entities.filter((entity) =>
-      entity.components.find((component) => component.__typename === "Market"),
-    );
-    const drugMarkets: DrugMarket[] = drugMarketEntities.map((entity) => {
-      const marketComponent = entity.components.find(
-        (component) => component.__typename === "Market",
+    const risksComponent = edges.find((edge) => {
+      const components = edge.node?.components || [];
+      return components[0]!.__typename === "Risks";
+    }) as Risks;
+
+    const drugMarketEntities = edges.filter((edge) => {
+      edge.node?.components?.find(
+        (component) => component?.__typename === "Market",
+      );
+    }) as EntityEdge[];
+
+    const drugMarkets: DrugMarket[] = drugMarketEntities.map((edge) => {
+      const marketComponent = edge.node?.components?.find(
+        (component) => component?.__typename === "Market",
       ) as Market;
 
-      const nameComponent = entity.components.find(
-        (component) => component.__typename === "Name",
-      ) as Name;
+      const keys = edge.node?.keys || [];
+      const drugName = keys[2]!;
 
-      const drugName = shortString.decodeShortString(
-        nameComponent.short_string,
-      );
+      const drugId = shortString.decodeShortString(drugName);
       const price =
         Number(marketComponent.cash) /
         Number(marketComponent.quantity) /
         SCALING_FACTOR;
 
       return {
-        name: drugName,
+        name: drugId,
         price: price,
         marketPool: marketComponent,
       };
     });
 
-    if (!locationEntities || !risksComponent || drugMarkets.length === 0)
-      return undefined;
+    if (!risksComponent || drugMarkets.length === 0) return undefined;
 
     // sort by name
     drugMarkets.sort((a, b) => a.name.localeCompare(b.name));
 
     return {
-      name: locationName,
+      name: shortString.decodeShortString(locationId),
       risks: risksComponent,
       drugMarkets: drugMarkets,
     };
@@ -100,26 +94,28 @@ export interface LocationInterface {
 
 export const useLocationEntity = ({
   gameId,
-  locationName,
+  locationId,
 }: {
   gameId?: string;
-  locationName?: string;
+  locationId?: string;
 }): LocationInterface => {
   const [location, setLocation] = useState<LocationEntity>();
 
   const { data, isFetched } = useLocationEntitiesQuery(
     {
       gameId: gameId || "",
-      location: shortString.encodeShortString(locationName || ""),
+      locationId: shortString.encodeShortString(locationId || ""),
     },
     {
-      enabled: !!gameId && !!locationName,
+      enabled: !!gameId && !!locationId,
       refetchInterval: REFETCH_INTERVAL,
     },
   );
 
   useEffect(() => {
-    const location_ = LocationEntity.create(data as LocationEntityData);
+    const location_ = LocationEntity.create(
+      data?.entities?.edges as EntityEdge[],
+    );
     if (location_) setLocation(location_);
   }, [data]);
 

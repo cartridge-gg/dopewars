@@ -1,11 +1,7 @@
-import { Player, Name, useGlobalScoresQuery } from "@/generated/graphql";
+import { PlayerEdge, Name, useGlobalScoresQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { SCALING_FACTOR } from "..";
-
-interface PlayerComponentData {
-  playerComponents: Player[];
-}
 
 export type Score = {
   gameId: string;
@@ -20,15 +16,15 @@ export class GlobalScores {
     this.scores = scores;
   }
 
-  static create(data: PlayerComponentData): Score[] | undefined {
-    if (!data || !data.playerComponents) return undefined;
+  static create(edges: PlayerEdge[]): Score[] | undefined {
+    if (!edges || edges.length === 0) return undefined;
 
-    const scores = data.playerComponents.map((player) => {
-      const keys = player.entity?.keys.split(",") || [];
-      const gameId = keys[0];
-      const address = keys[1];
+    return edges.map((edge) => {
+      const keys = edge.node?.entity?.keys || [];
+      const gameId = keys[0]!;
+      const address = keys[1]!;
 
-      const components = player.entity?.components || [];
+      const components = edge.node?.entity?.components || [];
       const nameComponent = components.find(
         (component) => component?.__typename === "Name",
       ) as Name;
@@ -39,27 +35,26 @@ export class GlobalScores {
         name:
           nameComponent &&
           shortString.decodeShortString(nameComponent?.short_string),
-        cash: Math.floor(Number(player.cash) / SCALING_FACTOR),
+        cash: Math.floor(Number(edge.node?.cash) / SCALING_FACTOR),
       };
     });
-
-    return scores;
   }
 }
 
 export const useGlobalScores = (offset?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
+  // Gets top 100
+  // TODO: paginate with cursor for more scores
   const { data, isFetched, refetch } = useGlobalScoresQuery({
-    limit: limit || 500,
+    limit: limit || 100,
   });
 
   useEffect(() => {
-    const scores_ = GlobalScores.create(data as PlayerComponentData);
-    if (scores_) {
-      // TODO: torii does not yet support orderby, so retrieve
-      // all and sort/filter here for now
-      scores_.sort((a, b) => b.cash - a.cash);
-      setScores(scores_);
+    const scores = GlobalScores.create(
+      data?.playerComponents?.edges as PlayerEdge[],
+    );
+    if (scores) {
+      setScores(scores);
     }
   }, [data]);
 

@@ -46,7 +46,7 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity) {
-      const location = getLocationByName(playerEntity.location_name).name;
+      const location = getLocationByName(playerEntity.locationId).name;
       setCurrentLocation(location);
       setTarget(location);
     }

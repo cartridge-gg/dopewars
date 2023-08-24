@@ -1,31 +1,40 @@
 query AvailableGames {
-  gameComponents(limit: 10) {
-    game_id
-    creator
-    num_players
-    max_players
-    max_turns
-    start_time
-  }
-}
-
-query UserGames($id: felt252!) {
-  gameComponents(creator: $id) {
-    game_id
+  gameComponents(first: 10) {
+    totalCount
+    edges {
+      node {
+        creator
+        num_players
+        max_players
+        max_turns
+        start_time
+      }
+      cursor
+    }
   }
 }
 
 query GlobalScores($limit: Int) {
-  playerComponents(turns_remaining: 0, limit: $limit) {
-    cash
-    entity {
-      keys
-      components {
-        __typename
-        ... on Name {
-          short_string
+  playerComponents(
+    first: $limit
+    where: { turns_remaining: 0 }
+    order: { direction: DESC, field: CASH }
+  ) {
+    totalCount
+    edges {
+      node {
+        cash
+        entity {
+          keys
+          components {
+            __typename
+            ... on Name {
+              short_string
+            }
+          }
         }
       }
+      cursor
     }
   }
 }

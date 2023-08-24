@@ -32,7 +32,7 @@ import { useDojo } from "@/hooks/dojo";
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const locationName = getLocationBySlug(
+  const locationId = getLocationBySlug(
     router.query.locationSlug as string,
   ).name;
 
@@ -40,7 +40,7 @@ export default function Location() {
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
-    locationName,
+    locationId,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -51,16 +51,16 @@ export default function Location() {
   });
 
   useEffect(() => {
-    if (playerEntity && locationName) {
+    if (playerEntity && locationId) {
       // check if player at right location
-      if (locationName !== playerEntity.location_name) {
+      if (locationId !== playerEntity.locationId) {
         router.replace(
-          `/${gameId}/${getLocationByName(playerEntity.location_name).slug}`,
+          `/${gameId}/${getLocationByName(playerEntity.locationId).slug}`,
         );
         return;
       }
     }
-  }, [locationName, playerEntity, router, gameId]);
+  }, [locationId, playerEntity, router, gameId]);
 
   if (!playerEntity || !locationEntity || !gameEntity) {
     return <></>;

@@ -11,7 +11,6 @@ interface GameEntityData {
 
 export class GameEntity {
   creator: string;
-  gameId: number;
   isFinished: boolean;
   maxPlayers: number;
   maxTurns: number;
@@ -20,7 +19,6 @@ export class GameEntity {
 
   constructor(game: Game) {
     this.creator = game.creator;
-    this.gameId = game.game_id;
     this.isFinished = game.is_finished;
     this.maxPlayers = game.max_players;
     this.maxTurns = game.max_turns;

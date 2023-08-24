@@ -77,8 +77,8 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {getLocationByName(playerEntity.location_name).icon({})}
-                <Text>{playerEntity.location_name}</Text>
+                {getLocationByName(playerEntity.locationId).icon({})}
+                <Text>{playerEntity.locationId}</Text>
               </HStack>
             </ListItem>
             {events.map((event, index) => (
@@ -104,7 +104,7 @@ export default function Turn() {
               clearState();
               router.push(
                 `/${gameId}/${
-                  getLocationByName(playerEntity.location_name).slug
+                  getLocationByName(playerEntity.locationId).slug
                 })}`,
               );
             }}

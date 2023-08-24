@@ -4,7 +4,6 @@ query GameEntity($id: ID!) {
       __typename
       ... on Game {
         creator
-        game_id
         is_finished
         max_players
         max_turns
@@ -24,46 +23,50 @@ query GameEntity($id: ID!) {
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
-    components {
-      __typename
-      ... on Player {
-        cash
-        health
-        turns_remaining
+    totalCount
+    edges {
+      node {
+        components {
+          __typename
+          ... on Player {
+            cash
+            health
+            turns_remaining
+          }
+          ... on Drug {
+            quantity
+          }
+          ... on Name {
+            short_string
+          }
+        }
       }
-      ... on Location {
-        name
-      }
-      ... on Drug {
-        quantity
-      }
-      ... on Name {
-        short_string
-      }
+      cursor
     }
   }
 }
 
-query LocationEntities($gameId: String!, $location: String!) {
-  entities(keys: [$gameId, $location]) {
-    components {
-      __typename
-      ... on Name {
-        short_string
+query LocationEntities($gameId: String!, $locationId: String!) {
+  entities(keys: [$gameId, $locationId]) {
+    totalCount
+    edges {
+      node {
+        keys
+        components {
+          __typename
+          ... on Market {
+            cash
+            quantity
+          }
+          ... on Risks {
+            arrested
+            hurt
+            mugged
+            travel
+          }
+        }
       }
-      ... on Market {
-        cash
-        quantity
-      }
-      ... on Location {
-        name
-      }
-      ... on Risks {
-        arrested
-        hurt
-        mugged
-        travel
-      }
+      cursor
     }
   }
 }
