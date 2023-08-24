@@ -8,9 +8,6 @@ mod set_name {
     use rollyourown::components::name::Name;
 
     fn execute(ctx: Context, game_id: u32, player_name: felt252) {
-        let player_id: felt252 = ctx.origin.into();
-        let player_sk: Query = (game_id, player_id).into();
-
-        set !(ctx.world, player_sk, (Name { short_string: player_name,  }))
+        set!(ctx.world, (Name { game_id, player_id: ctx.origin, short_string: player_name,  }))
     }
 }

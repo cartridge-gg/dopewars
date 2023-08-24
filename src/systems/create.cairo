@@ -1,12 +1,15 @@
 #[system]
 mod create_game {
     use array::ArrayTrait;
+    use array::SpanTrait;
     use box::BoxTrait;
+    use option::OptionTrait;
     use traits::{Into, TryInto};
+    use starknet::ContractAddress;
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, GameCreated, PlayerJoined};
+    use rollyourown::events::{GameCreated, PlayerJoined};
     use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
@@ -22,15 +25,12 @@ mod create_game {
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
-    ) -> (u32, felt252) {
-        let player_id: felt252 = ctx.origin.into();
-
+    ) -> (u32, ContractAddress) {
         let game_id = ctx.world.uuid();
 
         // game entity
-        set !(
+        set!(
             ctx.world,
-            game_id.into(),
             (Game {
                 game_id,
                 start_time,
@@ -38,22 +38,24 @@ mod create_game {
                 num_players: 1, // caller auto joins
                 max_turns,
                 is_finished: false,
-                creator: player_id,
+                creator: ctx.origin,
             })
         );
 
         let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let location_name = LocationTrait::random(seed);
+        let location_id = LocationTrait::random(seed);
         // player entity
-        set !(
+        set!(
             ctx.world,
-            (game_id, player_id).into(),
             (
                 Player {
-                    cash: STARTING_CASH, health: 100, turns_remaining: max_turns
-                    }, Location {
-                    name: location_name
-                }
+                    game_id,
+                    player_id: ctx.origin,
+                    location_id,
+                    cash: STARTING_CASH,
+                    health: 100,
+                    turns_remaining: max_turns
+                },
             )
         );
 
@@ -62,85 +64,65 @@ mod create_game {
         let mut locations = LocationTrait::all();
         loop {
             match locations.pop_front() {
-                Option::Some(location_name) => {
+                Option::Some(location_id) => {
                     //set location entity
-                    set !(
+                    set!(
                         ctx.world,
-                        (game_id, *location_name).into(),
-                        (
-                            Location {
-                                name: *location_name
-                                }, Risks {
-                                travel: TRAVEL_RISK,
-                                hurt: HURT_RISK,
-                                mugged: MUGGED_RISK,
-                                arrested: ARRESTED_RISK
-                            }
-                        )
+                        (Risks {
+                            game_id,
+                            location_id: *location_id,
+                            travel: TRAVEL_RISK,
+                            hurt: HURT_RISK,
+                            mugged: MUGGED_RISK,
+                            arrested: ARRESTED_RISK
+                        })
                     );
 
                     let mut seed = starknet::get_tx_info().unbox().transaction_hash;
-                    seed = pedersen(seed, *location_name);
+                    seed = pedersen(seed, *location_id);
 
                     let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {
-                            Option::Some(drug_name) => {
+                            Option::Some(drug_id) => {
                                 // HACK: temp hack to get some randomness
-                                seed = pedersen(seed, *drug_name);
+                                seed = pedersen(seed, *drug_id);
                                 let market_cash = random(seed, MIN_CASH, MAX_CASH);
-                                let market_quantity: usize = random(
-                                    seed, MIN_QUANITTY.into(), MAX_QUANTITY.into()
-                                )
-                                    .try_into()
-                                    .unwrap();
+                                let rand = random(seed, MIN_QUANITTY.into(), MAX_QUANTITY.into());
+                                let market_quantity: usize = rand.try_into().unwrap();
 
                                 //set market entity
-                                set !(
+                                set!(
                                     ctx.world,
-                                    (game_id, *location_name, *drug_name).into(),
-                                    (
-                                        Name {
-                                            short_string: *drug_name
-                                            }, Market {
-                                            cash: market_cash, quantity: market_quantity
-                                        }
-                                    )
+                                    (Market {
+                                        game_id,
+                                        location_id: *location_id,
+                                        drug_id: *drug_id,
+                                        cash: market_cash,
+                                        quantity: market_quantity
+                                    })
                                 );
                             },
                             Option::None(()) => {
                                 break ();
                             }
                         };
-
-                        // required otherwise error: Tail expression not allowed in a `loop` block
-                        let wtf = 1;
-                    }
+                    };
                 },
                 Option::None(_) => {
                     break ();
                 }
             };
+        };
 
-            // required otherwise error: Tail expression not allowed in a `loop` block
-            let wtf = 1;
-        }
-
-        // emit player joined
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @PlayerJoined { game_id, player_id, location: location_name }, ref values
+        // emit game created and player joined
+        emit!(
+            ctx.world, GameCreated {
+                game_id, creator: ctx.origin, start_time, max_turns, max_players
+            }
         );
-        emit(ctx, 'PlayerJoined', values.span());
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id });
 
-        // emit game created
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @GameCreated { game_id, creator: player_id, start_time, max_players, max_turns },
-            ref values
-        );
-        emit(ctx, 'GameCreated', values.span());
-
-        (game_id, player_id)
+        (game_id, ctx.origin)
     }
 }

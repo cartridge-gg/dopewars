@@ -11,7 +11,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::components::location::{location, Location};
+use rollyourown::components::player::Player;
 use rollyourown::tests::create::{spawn_game, spawn_player};
 
 #[test]
@@ -20,35 +20,23 @@ fn test_travel() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
     let world = IWorldDispatcher { contract_address: world_address };
 
-    let brooklyn_id: felt252 = 'Brooklyn'.into();
+    let brooklyn_id = 'Brooklyn';
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id.into());
-    travel_calldata.append(brooklyn_id.into());
+    travel_calldata.append(brooklyn_id);
 
-    world.execute('travel'.into(), travel_calldata.span());
+    world.execute('travel', travel_calldata);
 
-    let mut res = world
-        .entity(
-            'Location'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Location>::len()
-        );
-    assert(res.len() > 0, 'no player location');
+    let player = get!(world, (game_id, player_id).into(), (Player));
+    assert(player.location_id == brooklyn_id, 'incorrect travel');
 
-    let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.name == brooklyn_id, 'incorrect travel');
-
-    let queens_id: felt252 = 'Queens'.into();
+    let queens_id = 'Queens';
     let mut travel_calldata = array::ArrayTrait::<felt252>::new();
     travel_calldata.append(game_id.into());
-    travel_calldata.append(queens_id.into());
+    travel_calldata.append(queens_id);
 
-    world.execute('travel'.into(), travel_calldata.span());
+    world.execute('travel', travel_calldata);
 
-    let mut res = world
-        .entity(
-            'Location'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Location>::len()
-        );
-    assert(res.len() > 0, 'no player location');
-
-    let location = serde::Serde::<Location>::deserialize(ref res).expect('deserialization failed');
-    assert(location.name == queens_id, 'incorrect travel');
+    let player = get!(world, (game_id, player_id).into(), (Player));
+    assert(player.location_id == queens_id, 'incorrect travel');
 }

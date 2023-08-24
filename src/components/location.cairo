@@ -1,11 +1,9 @@
 use array::{ArrayTrait, SpanTrait};
 use option::OptionTrait;
 use traits::{Into, TryInto};
+use starknet::ContractAddress;
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
-struct Location {
-    name: felt252
-}
+struct Location {}
 
 trait LocationTrait {
     fn all() -> Span<felt252>;

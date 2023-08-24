@@ -1,15 +1,17 @@
 use box::BoxTrait;
 use traits::Into;
+use starknet::ContractAddress;
 
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Game {
+    #[key]
     game_id: u32,
     start_time: u64,
     max_players: usize,
     num_players: usize,
     max_turns: usize,
     is_finished: bool,
-    creator: felt252,
+    creator: ContractAddress,
 }
 
 

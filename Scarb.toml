@@ -7,7 +7,7 @@ cairo-version = "2.0.0-rc4"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = { git = "https://github.com/broody/dojo.git",  rev = "4f9b90aa8ca22b6e1f60afd2611596f32459f1e1" }
+dojo = { git = "https://github.com/dojoengine/dojo.git" }
 
 [[target.dojo]]
 
