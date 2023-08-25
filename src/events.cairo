@@ -3,13 +3,21 @@ use serde::Serde;
 use array::{ArrayTrait, SpanTrait};
 use starknet::ContractAddress;
 
-#[derive(Drop, starknet::Event)]
+// helper function to emit events, eventually dojo will 
+// have framework level event/logging
+fn emit(ctx: Context, name: felt252, values: Span<felt252>) {
+    let mut keys = array::ArrayTrait::new();
+    keys.append(name);
+    ctx.world.emit(keys, values);
+}
+
+#[derive(Drop, Serde)]
 struct LocationCreated {
     game_id: u32,
     location_id: u32,
 }
 
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, Serde)]
 struct GameCreated {
     game_id: u32,
     creator: ContractAddress,
@@ -18,7 +26,7 @@ struct GameCreated {
     max_players: usize,
 }
 
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, Serde)]
 struct PlayerJoined {
     game_id: u32,
     player_id: ContractAddress,
@@ -43,7 +51,7 @@ struct Sold {
     payout: u128
 }
 
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, Serde)]
 struct Traveled {
     game_id: u32,
     player_id: ContractAddress,
@@ -51,7 +59,7 @@ struct Traveled {
     to_location: felt252,
 }
 
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, Serde)]
 struct RandomEvent {
     game_id: u32,
     player_id: ContractAddress,

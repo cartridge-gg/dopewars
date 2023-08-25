@@ -9,7 +9,7 @@ mod create_game {
 
     use dojo::world::Context;
 
-    use rollyourown::events::{GameCreated, PlayerJoined};
+    use rollyourown::events::{emit, GameCreated, PlayerJoined};
     use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
@@ -115,13 +115,20 @@ mod create_game {
             };
         };
 
-        // emit game created and player joined
-        emit!(
-            ctx.world, GameCreated {
-                game_id, creator: ctx.origin, start_time, max_turns, max_players
-            }
+        // emit player joined
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }, ref values
         );
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id });
+        emit(ctx, 'PlayerJoined', values.span());
+
+        // emit game created
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns },
+            ref values
+        );
+        emit(ctx, 'GameCreated', values.span());
 
         (game_id, ctx.origin)
     }

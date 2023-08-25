@@ -7,7 +7,7 @@ mod join_game {
 
     use dojo::world::Context;
 
-    use rollyourown::events::PlayerJoined;
+    use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
@@ -51,7 +51,11 @@ mod join_game {
         );
 
         // emit player joined
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id });
+        let mut values = array::ArrayTrait::new();
+        serde::Serde::serialize(
+            @PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }, ref values
+        );
+        emit(ctx, 'PlayerJoined', values.span());
 
         ctx.origin
     }
