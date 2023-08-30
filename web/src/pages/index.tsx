@@ -43,14 +43,19 @@ export default function Home() {
       prefixTitle="Dope Wars:"
       imageSrc="/images/punk-girl.png"
     >
-      <VStack boxSize="full" gap="10px">
+      <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            {/* <Alert />
-            <Text align="center">
-              Building our empire, one update at a time.
-            </Text> */}
-            <Button
+            <VStack>
+              <HStack>
+                <Alert />
+                <Text align="center">Under Construction</Text>
+              </HStack>
+              <Text align="center">
+                Get ready hustlers... Season II starts in September
+              </Text>
+            </VStack>
+            {/* <Button
               flex="1"
               isDisabled={!!account}
               isLoading={isBurnerDeploying}
@@ -77,11 +82,11 @@ export default function Home() {
               }}
             >
               Hustle
-            </Button>
+            </Button> */}
           </HStack>
         </Card>
 
-        <Text>HALL OF FAME</Text>
+        {/* <Text>HALL OF FAME</Text>
         <VStack
           boxSize="full"
           gap="20px"
@@ -93,7 +98,7 @@ export default function Home() {
           }}
         >
           <Leaderboard />
-        </VStack>
+        </VStack> */}
       </VStack>
     </Layout>
   );
