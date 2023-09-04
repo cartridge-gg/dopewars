@@ -1,5 +1,6 @@
 import { ChatEvent, ChatInput } from "@/components";
 import Layout from "@/components/Layout";
+import { Scrollbar } from "@/components/Scrollbar";
 import { AvatarName } from "@/components/avatar/avatars";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
@@ -78,23 +79,25 @@ export default function Chat() {
   };
 
   return (
-    <Layout title="The Wire" imageSrc="url('/images/pager.gif');">
-      <VStack spacing="16px">
-        {messages.length > 0 ? (
-          messages.map((message, index) => (
-            <ChatEvent
-              connectedUser={message.connectedUser}
-              type={message.type}
-              user={message.user}
-              key={index}
-            >
-              {message.text}
-            </ChatEvent>
-          ))
-        ) : (
-          <Text color="neon.500">Its a little lonely in here...</Text>
-        )}
-      </VStack>
+    <Layout title="The Wire" imageSrc="/images/pager.gif">
+      <Scrollbar autoHeightMin="70vh">
+        <VStack spacing="16px" height="100%">
+          {messages.length > 0 ? (
+            messages.map((message, index) => (
+              <ChatEvent
+                connectedUser={message.connectedUser}
+                type={message.type}
+                user={message.user}
+                key={index}
+              >
+                {message.text}
+              </ChatEvent>
+            ))
+          ) : (
+            <Text color="neon.500">Its a little lonely in here...</Text>
+          )}
+        </VStack>
+      </Scrollbar>
       <Box w="100%" p="24px">
         <ChatInput
           value={messageValue}
