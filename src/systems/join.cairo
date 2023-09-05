@@ -7,11 +7,23 @@ mod join_game {
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, PlayerJoined};
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{SCALING_FACTOR, STARTING_CASH};
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        PlayerJoined: PlayerJoined
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct PlayerJoined {
+        game_id: u32,
+        player_id: ContractAddress,
+        location_id: felt252,
+    }
 
     fn execute(ctx: Context, game_id: u32) -> ContractAddress {
         let block_info = starknet::get_block_info().unbox();
@@ -51,11 +63,7 @@ mod join_game {
         );
 
         // emit player joined
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }, ref values
-        );
-        emit(ctx, 'PlayerJoined', values.span());
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
 
         ctx.origin
     }

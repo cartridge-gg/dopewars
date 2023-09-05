@@ -9,7 +9,6 @@ mod create_game {
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, GameCreated, PlayerJoined};
     use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
@@ -22,6 +21,30 @@ mod create_game {
         MIN_QUANITTY, MAX_QUANTITY, STARTING_CASH
     };
     use rollyourown::utils::random;
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        GameCreated: GameCreated,
+        PlayerJoined: PlayerJoined
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct GameCreated {
+        game_id: u32,
+        creator: ContractAddress,
+        start_time: u64,
+        max_turns: usize,
+        max_players: usize,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct PlayerJoined {
+        game_id: u32,
+        player_id: ContractAddress,
+        location_id: felt252,
+    }
+
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
@@ -116,19 +139,10 @@ mod create_game {
         };
 
         // emit player joined
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }, ref values
-        );
-        emit(ctx, 'PlayerJoined', values.span());
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
 
         // emit game created
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns },
-            ref values
-        );
-        emit(ctx, 'GameCreated', values.span());
+        emit!(ctx.world, GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns });
 
         (game_id, ctx.origin)
     }

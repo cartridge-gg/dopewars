@@ -3,13 +3,39 @@ mod travel {
     use traits::Into;
     use box::BoxTrait;
     use array::ArrayTrait;
+    use starknet::ContractAddress;
 
     use dojo::world::Context;
 
-    use rollyourown::events::{emit, Traveled, RandomEvent};
+
     use rollyourown::components::{game::{Game, GameTrait}, location::Location};
     use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        Traveled: Traveled,
+        RandomEvent: RandomEvent,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Traveled {
+        game_id: u32,
+        player_id: ContractAddress,
+        from_location: felt252,
+        to_location: felt252,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct RandomEvent {
+        game_id: u32,
+        player_id: ContractAddress,
+        health_loss: u8,
+        mugged: bool,
+        arrested: bool
+    }
+
 
     // 1. Verify the caller owns the player.
     // 2. Determine if a random travel event occurs and apply it if necessary.
@@ -29,18 +55,13 @@ mod travel {
 
         let (event_occured, result) = risks.travel(seed);
         if event_occured {
-            let mut values = array::ArrayTrait::new();
-            serde::Serde::serialize(
-                @RandomEvent {
+            emit!(ctx.world, RandomEvent {
                     game_id,
                     player_id,
                     health_loss: result.health_loss,
                     mugged: result.mugged,
                     arrested: result.arrested,
-                },
-                ref values
-            );
-            emit(ctx, 'RandomEvent', values.span());
+                });
         }
 
         // If arrested, player loses a turn and stays at same location
@@ -59,14 +80,9 @@ mod travel {
         player.location_id = next_location_id;
         set!(ctx.world, (player));
 
-        let mut values = array::ArrayTrait::new();
-        serde::Serde::serialize(
-            @Traveled {
+        emit!(ctx.world, Traveled {
                 game_id, player_id, from_location: player.location_id, to_location: next_location_id
-            },
-            ref values
-        );
-        emit(ctx, 'Traveled', values.span());
+            });
 
         event_occured
     }

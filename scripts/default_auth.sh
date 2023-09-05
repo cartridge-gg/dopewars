@@ -2,7 +2,7 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-export WORLD_ADDRESS="0x49eea56f14aebfad0a3f73c530f0673084cc9c4b352965e685e52939221c389";
+export WORLD_ADDRESS="0x4b603970f151d639330fc35ddd591d7bac3c94505369270a969e54304a7e3f6";
 
 # make sure all components/systems are deployed
 COMPONENTS=("Game" "Market" "Name" "Player" "Risks")

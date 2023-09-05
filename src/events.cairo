@@ -11,13 +11,13 @@ fn emit(ctx: Context, name: felt252, values: Span<felt252>) {
     ctx.world.emit(keys, values);
 }
 
-#[derive(Drop, Serde)]
+#[derive(Drop, starknet::Event)]
 struct LocationCreated {
     game_id: u32,
     location_id: u32,
 }
 
-#[derive(Drop, Serde)]
+#[derive(Drop, starknet::Event)]
 struct GameCreated {
     game_id: u32,
     creator: ContractAddress,
@@ -26,7 +26,7 @@ struct GameCreated {
     max_players: usize,
 }
 
-#[derive(Drop, Serde)]
+#[derive(Drop, starknet::Event)]
 struct PlayerJoined {
     game_id: u32,
     player_id: ContractAddress,
@@ -51,19 +51,3 @@ struct Sold {
     payout: u128
 }
 
-#[derive(Drop, Serde)]
-struct Traveled {
-    game_id: u32,
-    player_id: ContractAddress,
-    from_location: felt252,
-    to_location: felt252,
-}
-
-#[derive(Drop, Serde)]
-struct RandomEvent {
-    game_id: u32,
-    player_id: ContractAddress,
-    health_loss: u8,
-    mugged: bool,
-    arrested: bool
-}

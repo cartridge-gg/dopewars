@@ -16,12 +16,12 @@ dojo = { git = "https://github.com/dojoengine/dojo.git" }
 
 # Katana
 rpc_url = "http://localhost:5050"
-account_address = "0x03ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0"
-private_key = "0x0300001800000000300000180000000000030000000000003006001800006600"
+account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"
+private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 # Madara
-#rpc_url = "https://rinnegan.madara.zone"
+#rpc_url = "https://api.cartridge.gg/x/shinai/madara"
 #account_address = "0x2"
 #private_key = "0xc1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d"
 
-#world_address = "0x5b328933afdbbfd44901fd69a2764a254edbb6e992ae87cf958c70493f2d201"
+#world_address = "0x4b603970f151d639330fc35ddd591d7bac3c94505369270a969e54304a7e3f6"

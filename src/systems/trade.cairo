@@ -3,10 +3,10 @@ mod buy {
     use traits::Into;
     use array::ArrayTrait;
     use debug::PrintTrait;
+    use starknet::ContractAddress;
 
     use dojo::world::Context;
 
-    use rollyourown::events::Bought;
     use rollyourown::components::name::Name;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::player::Player;
@@ -14,6 +14,21 @@ mod buy {
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::market::{Market, MarketTrait};
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        Bought: Bought
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Bought {
+        game_id: u32,
+        player_id: ContractAddress,
+        drug_id: felt252,
+        quantity: usize,
+        cost: u128
+    }
 
     // 1. Verify the caller owns the player.
     // 2. Get current price for location for quantity.
@@ -60,10 +75,10 @@ mod buy {
 mod sell {
     use traits::Into;
     use array::ArrayTrait;
+    use starknet::ContractAddress;
 
     use dojo::world::Context;
 
-    use rollyourown::events::Sold;
     use rollyourown::components::name::Name;
     use rollyourown::components::drug::Drug;
     use rollyourown::components::player::Player;
@@ -71,6 +86,21 @@ mod sell {
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::market::{Market, MarketTrait};
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        Sold: Sold
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Sold {
+        game_id: u32,
+        player_id: ContractAddress,
+        drug_id: felt252,
+        quantity: usize,
+        payout: u128
+    }
 
     fn execute(
         ctx: Context, game_id: u32, location_id: felt252, drug_id: felt252, quantity: usize
