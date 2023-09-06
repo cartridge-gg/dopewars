@@ -57,13 +57,16 @@ export const useGameEntity = ({
     { id: key },
     {
       enabled: !!gameId,
+      refetchInterval: REFETCH_INTERVAL,
     },
   );
 
   useEffect(() => {
     if (gameId) {
+      console.log(gameId);
       const key_ = ec.starkCurve.poseidonHashMany([num.toBigInt(gameId)]);
       setKey(num.toHex(key_));
+      console.log(num.toHex(key_));
     }
   }, [gameId]);
 

@@ -14,13 +14,6 @@ query GameEntity($id: ID!) {
   }
 }
 
-# NOTE: There is an issue with entities (plural) query, dojo joins
-# entity keys as csv and stores it as a string, then we do simple pattern matching.
-# However, this means the query can return components we may not want.
-#
-# TODO: refactor entities queries below once dojo starts storing each key
-# parts in its own column in entities db
-
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
     totalCount
