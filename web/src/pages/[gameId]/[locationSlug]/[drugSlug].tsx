@@ -60,7 +60,7 @@ export default function Market() {
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
-    locationId: location.name,
+    locationId: location.id,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -73,10 +73,10 @@ export default function Market() {
   useEffect(() => {
     if (!locationEntity || !playerEntity) return;
 
-    const market = locationEntity.drugMarkets.find((d) => d.name === drug.name);
+    const market = locationEntity.drugMarkets.find((d) => d.id === drug.id);
     if (!market) return;
 
-    const playerDrug = playerEntity.drugs.find((d) => d.name === drug.name);
+    const playerDrug = playerEntity.drugs.find((d) => d.id === drug.id);
     if (playerDrug) {
       setCanSell(playerDrug.quantity > 0);
     }
@@ -256,7 +256,7 @@ const QuantitySelector = ({
       setMax(calculateMaxQuantity(market.marketPool, player.cash));
     } else if (type === TradeDirection.Sell) {
       const playerQuantity = player.drugs.find(
-        (d) => d.name === drug.name,
+        (d) => d.id === drug.id,
       )?.quantity;
       setMax(playerQuantity || 0);
     }

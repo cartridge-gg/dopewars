@@ -7,30 +7,22 @@ import {
   EntityEdge,
 } from "@/generated/graphql";
 import { useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
-interface LocationEntityData {
-  entities: [
-    {
-      components: (Market | Risks)[];
-    },
-  ];
-}
-
 export type DrugMarket = {
-  name: string; // drug name
+  id: string; // id is hex encoded drug name
   price: number;
   marketPool: Market;
 };
 
 export class LocationEntity {
-  name: string; // location name same as id
+  id: string; // id is hex encoded location name
   risks: Risks;
   drugMarkets: DrugMarket[];
 
-  constructor(name: string, risks: Risks, drugMarkets: DrugMarket[]) {
-    this.name = name;
+  constructor(id: string, risks: Risks, drugMarkets: DrugMarket[]) {
+    this.id = id;
     this.risks = risks;
     this.drugMarkets = drugMarkets;
   }
@@ -43,12 +35,13 @@ export class LocationEntity {
     const locationId = keys[1]!;
 
     const risksComponent = edges.find((edge) => {
-      const components = edge.node?.components || [];
-      return components[0]!.__typename === "Risks";
-    }) as Risks;
+      return edge.node?.components?.some(
+        (component) => component?.__typename === "Risks",
+      );
+    })?.node?.components?.[0] as Risks;
 
     const drugMarketEntities = edges.filter((edge) => {
-      edge.node?.components?.find(
+      return edge.node?.components?.find(
         (component) => component?.__typename === "Market",
       );
     }) as EntityEdge[];
@@ -59,28 +52,27 @@ export class LocationEntity {
       ) as Market;
 
       const keys = edge.node?.keys || [];
-      const drugName = keys[2]!;
+      const drugId = num.toHexString(keys[2]!);
 
-      const drugId = shortString.decodeShortString(drugName);
       const price =
         Number(marketComponent.cash) /
         Number(marketComponent.quantity) /
         SCALING_FACTOR;
 
       return {
-        name: drugId,
+        id: drugId,
         price: price,
         marketPool: marketComponent,
       };
     });
-
+    console.log(drugMarkets);
     if (!risksComponent || drugMarkets.length === 0) return undefined;
 
     // sort by name
-    drugMarkets.sort((a, b) => a.name.localeCompare(b.name));
+    drugMarkets.sort((a, b) => a.id.localeCompare(b.id));
 
     return {
-      name: shortString.decodeShortString(locationId),
+      id: locationId,
       risks: risksComponent,
       drugMarkets: drugMarkets,
     };
@@ -104,7 +96,7 @@ export const useLocationEntity = ({
   const { data, isFetched } = useLocationEntitiesQuery(
     {
       gameId: gameId || "",
-      locationId: shortString.encodeShortString(locationId || ""),
+      locationId: locationId || "",
     },
     {
       enabled: !!gameId && !!locationId,

@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 import {
   LocationProps,
   useUiStore,
-  getLocationByName,
+  getLocationById,
   getEventBySlug,
 } from "@/hooks/ui";
 import { useSystems } from "@/hooks/dojo/systems/useSystems";
@@ -46,7 +46,7 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity) {
-      const location = getLocationByName(playerEntity.locationId).name;
+      const location = getLocationById(playerEntity.locationId).name;
       setCurrentLocation(location);
       setTarget(location);
     }

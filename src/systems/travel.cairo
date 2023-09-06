@@ -64,13 +64,6 @@ mod travel {
                 });
         }
 
-        // If arrested, player loses a turn and stays at same location
-        if result.arrested {
-            player.turns_remaining - 1;
-            set!(ctx.world, (player));
-            return (true);
-        }
-
         // If mugged, player loses half their cash
         if result.mugged {
             player.cash /= 2;
@@ -78,6 +71,7 @@ mod travel {
 
         // update player
         player.location_id = next_location_id;
+        player.turns_remaining -= 1;
         set!(ctx.world, (player));
 
         emit!(ctx.world, Traveled {

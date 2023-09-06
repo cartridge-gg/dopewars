@@ -50,7 +50,7 @@ impl RisksImpl of RisksTrait {
         let mut event_occured = false;
 
         if occurs(seed, *self.travel) {
-            seed = pedersen(seed, seed);
+            seed = pedersen::pedersen(seed, seed);
             event_occured = true;
 
             // TEMP: for testing, mugging is only risk
@@ -79,7 +79,7 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[test]
 #[available_gas(1000000)]
 fn test_never_occurs() {
-    let seed = pedersen(1, 1);
+    let seed = pedersen::pedersen(1, 1);
     let risks = Risks { game_id: 0, location_id: 0, travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
     let (event_occured, result) = risks.travel(seed);
 
@@ -92,7 +92,7 @@ fn test_never_occurs() {
 #[test]
 #[available_gas(1000000)]
 fn test_always_occurs() {
-    let seed = pedersen(1, 1);
+    let seed = pedersen::pedersen(1, 1);
     let risks = Risks {
         game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100, 
     };
@@ -104,7 +104,7 @@ fn test_always_occurs() {
 #[test]
 #[available_gas(1000000)]
 fn test_occurs() {
-    let seed = pedersen(1, 1);
+    let seed = pedersen::pedersen(1, 1);
     let event = occurs(seed, 10);
     assert(!event, 'should not occur');
 }
@@ -112,7 +112,7 @@ fn test_occurs() {
 #[test]
 #[available_gas(1000000)]
 fn test_not_occurs() {
-    let seed = pedersen(1, 1);
+    let seed = pedersen::pedersen(1, 1);
     let event = occurs(seed, 28);
     assert(event, 'should occur');
 }

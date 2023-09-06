@@ -102,14 +102,14 @@ mod create_game {
                     );
 
                     let mut seed = starknet::get_tx_info().unbox().transaction_hash;
-                    seed = pedersen(seed, *location_id);
+                    seed = pedersen::pedersen(seed, *location_id);
 
                     let mut drugs = DrugTrait::all();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {
                                 // HACK: temp hack to get some randomness
-                                seed = pedersen(seed, *drug_id);
+                                seed = pedersen::pedersen(seed, *drug_id);
                                 let market_cash = random(seed, MIN_CASH, MAX_CASH);
                                 let rand = random(seed, MIN_QUANITTY.into(), MAX_QUANTITY.into());
                                 let market_quantity: usize = rand.try_into().unwrap();
@@ -142,7 +142,11 @@ mod create_game {
         emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
 
         // emit game created
-        emit!(ctx.world, GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns });
+        emit!(
+            ctx.world, GameCreated {
+                game_id, creator: ctx.origin, start_time, max_players, max_turns
+            }
+        );
 
         (game_id, ctx.origin)
     }

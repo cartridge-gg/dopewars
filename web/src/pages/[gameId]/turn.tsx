@@ -6,7 +6,7 @@ import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { TradeDirection, usePlayerState } from "@/hooks/state";
 
-import { getDrugByName, getEventByName, getLocationByName } from "@/hooks/ui";
+import { getDrugById, getEventByName, getLocationById } from "@/hooks/ui";
 import {
   Box,
   Button,
@@ -59,7 +59,7 @@ export default function Turn() {
                 return (
                   <ListItem key={drug}>
                     <Product
-                      icon={getDrugByName(drug).icon}
+                      icon={getDrugById(drug).icon}
                       product={drug}
                       quantity={`${change}${trade.quantity}`}
                       cost={"$$$"}
@@ -77,8 +77,8 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {getLocationByName(playerEntity.locationId).icon({})}
-                <Text>{playerEntity.locationId}</Text>
+                {getLocationById(playerEntity.locationId).icon({})}
+                <Text>{getLocationById(playerEntity.locationId).name}</Text>
               </HStack>
             </ListItem>
             {events.map((event, index) => (
@@ -103,9 +103,7 @@ export default function Turn() {
             onClick={() => {
               clearState();
               router.push(
-                `/${gameId}/${
-                  getLocationByName(playerEntity.locationId).slug
-                })}`,
+                `/${gameId}/${getLocationById(playerEntity.locationId).slug})}`,
               );
             }}
           >

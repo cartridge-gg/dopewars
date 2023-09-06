@@ -774,16 +774,18 @@ export type PlayerEntityQuery = {
       cursor: any;
       node?: {
         __typename?: "Entity";
+        keys?: Array<string | null> | null;
         components?: Array<
-          | { __typename: "Drug"; quantity?: any | null }
+          | { __typename: "Drug"; drug_id?: any | null; quantity?: any | null }
           | { __typename: "Game" }
           | { __typename: "Market" }
-          | { __typename: "Name"; short_string?: any | null }
+          | { __typename: "Name" }
           | {
               __typename: "Player";
               cash?: any | null;
               health?: any | null;
               turns_remaining?: any | null;
+              location_id?: any | null;
             }
           | { __typename: "Risks" }
           | null
@@ -1018,18 +1020,18 @@ export const PlayerEntityDocument = `
     totalCount
     edges {
       node {
+        keys
         components {
           __typename
           ... on Player {
             cash
             health
             turns_remaining
+            location_id
           }
           ... on Drug {
+            drug_id
             quantity
-          }
-          ... on Name {
-            short_string
           }
         }
       }

@@ -17,7 +17,7 @@ import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/hooks/dojo/systems/useSystems";
-import { getLocationByName } from "@/hooks/ui";
+import { getLocationById } from "@/hooks/ui";
 import { JoinedEventData } from "@/utils/event";
 import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
@@ -73,12 +73,11 @@ export default function Home() {
                   MAX_PLAYERS,
                   NUM_TURNS,
                 );
-                const { gameId, locationName } = event as JoinedEventData;
+
+                const { gameId, locationId } = event as JoinedEventData;
                 toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
 
-                router.push(
-                  `/${gameId}/${getLocationByName(locationName).slug}`,
-                );
+                router.push(`/${gameId}/${getLocationById(locationId).slug}`);
               }}
             >
               Hustle

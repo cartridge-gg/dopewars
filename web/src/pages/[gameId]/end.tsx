@@ -30,7 +30,7 @@ export default function End() {
     if (!name) return;
     await submitSetName(gameId, name);
     router.push("/");
-  }, [name, router, submitSetName]);
+  }, [name, gameId, router, submitSetName]);
 
   return (
     <>

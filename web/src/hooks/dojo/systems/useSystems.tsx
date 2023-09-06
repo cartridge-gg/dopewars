@@ -59,6 +59,7 @@ export const useSystems = (): SystemsInterface => {
         maxPlayers,
         maxTurns,
       ]);
+
       // using joined event instead of created event to get initial location
       const event = parseEvent(receipt, RyoEvents.PlayerJoined);
 

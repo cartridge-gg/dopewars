@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
-import { getDrugByName } from "@/hooks/ui";
+import { getDrugById } from "@/hooks/ui";
 import { useDojo } from "@/hooks/dojo";
 
 export const Inventory = ({ ...props }: StyleProps) => {
@@ -50,7 +50,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                   <>
                     <HStack key={index} gap="10px">
                       <HStack color="yellow.400">
-                        {getDrugByName(drug.name).icon({ boxSize: "26" })}
+                        {getDrugById(drug.id).icon({ boxSize: "26" })}
                         <Text>{drug.quantity}</Text>
                       </HStack>
                       {index < playerEntity.drugs.length - 1 && (

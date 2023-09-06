@@ -1,6 +1,4 @@
-import { Account } from "starknet";
 import { create } from "zustand";
-import { DrugProps, getDrugByName } from "./ui";
 
 export enum Locations {
   Queens = "Queens",
