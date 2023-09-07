@@ -16,21 +16,30 @@ Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/
 
 ```bash
 # Start Katana
-katana --seed 0 --block-time 1
+katana --block-time 200
 
 # Build the game
 sozo build
 
-# Migrate the world, this will declare/deploy contracts to katana
-sozo migrate --name ryo
+# Migrate the world, this will declare/deploy contracts to katana and take note of the world address
+sozo migrate
 
 # Start indexer, graphql endpoint at http://localhost:8080
-torii --manifest target/dev/manifest.json --world-address 0x788f5fd335d29ed5f8686982079cc3aa9c82aa41968f759b2c3d0be8d5fa0c4
+torii --world {world_address}
+
+# Setup default authorization
+./scripts/default_auth.sh
 
 # Start frontend, located at http://localhost:3000
 cd web
 yarn install && yarn dev
 ```
+
+Note: If the world address your game is deployed to is different, you'll need to update it in three places currently
+
+- Scarb.toml
+- script/default_auth.sh
+- web/src/constants.ts
 
 ### With Madara
 
