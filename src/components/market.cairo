@@ -4,7 +4,7 @@ use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Market {
     #[key]
     game_id: u32,

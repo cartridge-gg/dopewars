@@ -11,13 +11,7 @@ struct TravelResult {
     health_loss: u8,
 }
 
-#[derive(Drop, Copy)]
-struct TradeResult {
-    money_loss: u128,
-    drug_loss: usize,
-}
-
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Risks {
     #[key]
     game_id: u32,
@@ -28,17 +22,10 @@ struct Risks {
     hurt: u8,
     mugged: u8,
     arrested: u8,
-// trade risk probabilities
-// trade_occurance_rate: u8,
-// hacked: u8,
-// rugged: u8,
-// slippage: u8,
-// chain_halted: u8,
 }
 
 trait RisksTrait {
     fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult);
-    fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult);
 }
 
 impl RisksImpl of RisksTrait {
@@ -58,15 +45,6 @@ impl RisksImpl of RisksTrait {
         }
 
         (event_occured, TravelResult { arrested, mugged, health_loss })
-    }
-
-    fn trade(self: @Risks, seed: felt252) -> (bool, TradeResult) {
-        let mut money_loss = 0;
-        let mut drug_loss = 0;
-
-        // TODO: trade risk effects 
-
-        (false, TradeResult { money_loss, drug_loss })
     }
 }
 
