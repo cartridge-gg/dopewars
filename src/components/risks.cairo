@@ -17,26 +17,23 @@ struct Risks {
     game_id: u32,
     #[key]
     location_id: felt252,
-    // travel risk probabilities
     travel: u8,
     hurt: u8,
     mugged: u8,
     arrested: u8,
 }
 
-trait RisksTrait {
-    fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult);
-}
-
+#[generate_trait]
 impl RisksImpl of RisksTrait {
-    fn travel(self: @Risks, seed: felt252) -> (bool, TravelResult) {
+    #[inline(always)]
+    fn travel(ref self: Risks, seed: felt252) -> (bool, TravelResult) {
         let mut seed = seed;
         let mut health_loss = 0;
         let mut arrested = false;
         let mut mugged = false;
         let mut event_occured = false;
 
-        if occurs(seed, *self.travel) {
+        if occurs(seed, self.travel) {
             seed = pedersen::pedersen(seed, seed);
             event_occured = true;
 
@@ -58,7 +55,7 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[available_gas(1000000)]
 fn test_never_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let risks = Risks { game_id: 0, location_id: 0, travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
+    let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
     let (event_occured, result) = risks.travel(seed);
 
     assert(!event_occured, 'event occured');
@@ -71,7 +68,7 @@ fn test_never_occurs() {
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let risks = Risks {
+    let mut risks = Risks {
         game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100, 
     };
     let (event_occured, result) = risks.travel(seed);

@@ -47,10 +47,10 @@ mod travel {
 
         let player_id = ctx.origin;
         let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
-        assert(player.can_continue(), 'player cannot continue');
+        assert(player.can_continue(), 'player cannot travel');
         assert(player.location_id != next_location_id, 'already at location');
 
-        let risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
+        let mut risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         let (event_occured, result) = risks.travel(seed);

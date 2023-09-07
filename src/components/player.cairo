@@ -12,16 +12,14 @@ struct Player {
     turns_remaining: usize,
 }
 
-trait PlayerTrait {
-    fn can_continue(self: @Player) -> bool;
-}
-
+#[generate_trait]
 impl PlayerImpl of PlayerTrait {
-    fn can_continue(self: @Player) -> bool {
-        if *self.health == 0 {
+    #[inline(always)]
+    fn can_continue(ref self: Player) -> bool {
+        if self.health == 0 {
             return false;
         }
-        if *self.turns_remaining == 0 {
+        if self.turns_remaining == 0 {
             return false;
         }
 

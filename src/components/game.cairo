@@ -14,19 +14,16 @@ struct Game {
     creator: ContractAddress,
 }
 
-
-trait GameTrait {
-    fn tick(self: @Game) -> bool;
-}
-
+#[generate_trait]
 impl GameImpl of GameTrait {
-    fn tick(self: @Game) -> bool {
+    #[inline(always)]
+    fn tick(self: Game) -> bool {
         let info = starknet::get_block_info().unbox();
 
-        if info.block_timestamp < *self.start_time {
+        if info.block_timestamp < self.start_time {
             return false;
         }
-        if *self.is_finished {
+        if self.is_finished {
             return false;
         }
 

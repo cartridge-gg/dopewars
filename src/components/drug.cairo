@@ -13,10 +13,7 @@ struct Drug {
     quantity: usize,
 }
 
-trait DrugTrait {
-    fn all() -> Span<felt252>;
-}
-
+#[generate_trait]
 impl DrugImpl of DrugTrait {
     fn all() -> Span<felt252> {
         let mut drugs = array::ArrayTrait::new();

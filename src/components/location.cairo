@@ -5,11 +5,7 @@ use starknet::ContractAddress;
 
 struct Location {}
 
-trait LocationTrait {
-    fn all() -> Span<felt252>;
-    fn random(seed: felt252) -> felt252;
-}
-
+#[generate_trait]
 impl LocationImpl of LocationTrait {
     fn all() -> Span<felt252> {
         let mut locations = array::ArrayTrait::new();

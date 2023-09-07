@@ -9,7 +9,7 @@ mod buy {
 
     use rollyourown::components::name::Name;
     use rollyourown::components::drug::Drug;
-    use rollyourown::components::player::Player;
+    use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::location::Location;
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
@@ -45,6 +45,7 @@ mod buy {
 
         let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.location_id == location_id, 'player is not at location');
+        assert(player.can_continue(), 'player cannot trade');
 
         let mut market = get!(ctx.world, (game_id, location_id, drug_id).into(), Market);
 
