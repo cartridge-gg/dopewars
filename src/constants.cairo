@@ -1,9 +1,10 @@
 const SCALING_FACTOR: u128 = 10_000;
 
-const TRAVEL_RISK: u8 = 30;
-const HURT_RISK: u8 = 0;
-const MUGGED_RISK: u8 = 0;
-const ARRESTED_RISK: u8 = 50;
+const TRAVEL_RISK: u8 = 30; // 30% chance of mugged
+const RUN_CHANCE: u8 = 30; // 30% chance of successfully getting away
+
+const RUN_PENALTY: u8 = 30; // 30% of cash lost
+const PAY_PENALTY: u8 = 10; // 10% of cash lost
 
 // max drug price is $300
 // min drug price is $2

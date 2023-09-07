@@ -9,6 +9,7 @@ mod create_game {
 
     use dojo::world::Context;
 
+    use rollyourown::PlayerState;
     use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
@@ -17,8 +18,8 @@ mod create_game {
     use rollyourown::components::drug::{Drug, DrugTrait};
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, HURT_RISK, MUGGED_RISK, ARRESTED_RISK, MIN_CASH, MAX_CASH,
-        MIN_QUANITTY, MAX_QUANTITY, STARTING_CASH
+        SCALING_FACTOR, TRAVEL_RISK, RUN_CHANCE, MIN_CASH, MAX_CASH, MIN_QUANITTY, MAX_QUANTITY,
+        STARTING_CASH
     };
     use rollyourown::utils::random;
 
@@ -52,7 +53,7 @@ mod create_game {
         let game_id = ctx.world.uuid();
 
         // game entity
-        set!(
+        set !(
             ctx.world,
             (Game {
                 game_id,
@@ -68,7 +69,7 @@ mod create_game {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let location_id = LocationTrait::random(seed);
         // player entity
-        set!(
+        set !(
             ctx.world,
             (
                 Player {
@@ -77,7 +78,8 @@ mod create_game {
                     location_id,
                     cash: STARTING_CASH,
                     health: 100,
-                    turns_remaining: max_turns
+                    turns_remaining: max_turns,
+                    state: PlayerState::Normal(()),
                 },
             )
         );
@@ -89,15 +91,10 @@ mod create_game {
             match locations.pop_front() {
                 Option::Some(location_id) => {
                     //set location entity
-                    set!(
+                    set !(
                         ctx.world,
                         (Risks {
-                            game_id,
-                            location_id: *location_id,
-                            travel: TRAVEL_RISK,
-                            hurt: HURT_RISK,
-                            mugged: MUGGED_RISK,
-                            arrested: ARRESTED_RISK
+                            game_id, location_id: *location_id, travel: TRAVEL_RISK, run: RUN_CHANCE
                         })
                     );
 
@@ -108,14 +105,13 @@ mod create_game {
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {
-                                // HACK: temp hack to get some randomness
                                 seed = pedersen::pedersen(seed, *drug_id);
                                 let market_cash = random(seed, MIN_CASH, MAX_CASH);
                                 let rand = random(seed, MIN_QUANITTY.into(), MAX_QUANTITY.into());
                                 let market_quantity: usize = rand.try_into().unwrap();
 
                                 //set market entity
-                                set!(
+                                set !(
                                     ctx.world,
                                     (Market {
                                         game_id,
@@ -139,13 +135,14 @@ mod create_game {
         };
 
         // emit player joined
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
+        emit !(
+            ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }
+        );
 
         // emit game created
-        emit!(
-            ctx.world, GameCreated {
-                game_id, creator: ctx.origin, start_time, max_players, max_turns
-            }
+        emit !(
+            ctx.world,
+            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
         );
 
         (game_id, ctx.origin)

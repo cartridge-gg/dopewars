@@ -18,36 +18,29 @@ struct Risks {
     #[key]
     location_id: felt252,
     travel: u8,
-    hurt: u8,
-    mugged: u8,
-    arrested: u8,
+    run: u8,
 }
 
 #[generate_trait]
 impl RisksImpl of RisksTrait {
     #[inline(always)]
-    fn travel(ref self: Risks, seed: felt252) -> (bool, TravelResult) {
-        let mut seed = seed;
-        let mut health_loss = 0;
-        let mut arrested = false;
-        let mut mugged = false;
-        let mut event_occured = false;
+    fn travel(ref self: Risks, seed: felt252) -> bool {
+        occurs(seed, self.travel)
+    }
 
-        if occurs(seed, self.travel) {
-            seed = pedersen::pedersen(seed, seed);
-            event_occured = true;
-
-            // TEMP: for testing, mugging is only risk
-            mugged = true;
-        }
-
-        (event_occured, TravelResult { arrested, mugged, health_loss })
+    fn run(ref self: Risks, seed: felt252) -> bool {
+        occurs(seed, self.run)
     }
 }
 
 fn occurs(seed: felt252, likelihood: u8) -> bool {
+    if likelihood == 0 {
+        return false;
+    }
+
     let seed: u256 = seed.into();
     let result: u128 = seed.low % 100;
+
     (result <= likelihood.into())
 }
 
@@ -55,25 +48,20 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[available_gas(1000000)]
 fn test_never_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, hurt: 0, mugged: 0, arrested: 0,  };
-    let (event_occured, result) = risks.travel(seed);
+    let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, run: 0 };
+    let event = risks.travel(seed);
 
-    assert(!event_occured, 'event occured');
-    assert(result.health_loss == 0, 'health_loss occured');
-    assert(!result.mugged, 'was mugged');
-    assert(!result.arrested, 'was arrested');
+    assert(event == bool::False, 'event occured');
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let mut risks = Risks {
-        game_id: 0, location_id: 0, travel: 100, hurt: 100, mugged: 100, arrested: 100, 
-    };
-    let (event_occured, result) = risks.travel(seed);
+    let mut risks = Risks { game_id: 0, location_id: 0, travel: 100, run: 0 };
+    let event = risks.travel(seed);
 
-    assert(event_occured, 'event did not occur');
+    assert(event == bool::True, 'event did not occur');
 }
 
 #[test]
