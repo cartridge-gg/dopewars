@@ -27,6 +27,7 @@ export type Scalars = {
   ContractAddress: any;
   Cursor: any;
   DateTime: any;
+  Enum: any;
   bool: any;
   felt252: any;
   u8: any;
@@ -380,6 +381,7 @@ export type Player = {
   health?: Maybe<Scalars["u8"]>;
   location_id?: Maybe<Scalars["felt252"]>;
   player_id?: Maybe<Scalars["ContractAddress"]>;
+  status?: Maybe<Scalars["Enum"]>;
   turns_remaining?: Maybe<Scalars["usize"]>;
 };
 
@@ -406,6 +408,7 @@ export enum PlayerOrderOrderField {
   Health = "HEALTH",
   LocationId = "LOCATION_ID",
   PlayerId = "PLAYER_ID",
+  Status = "STATUS",
   TurnsRemaining = "TURNS_REMAINING",
 }
 
@@ -440,6 +443,12 @@ export type PlayerWhereInput = {
   player_idLT?: InputMaybe<Scalars["String"]>;
   player_idLTE?: InputMaybe<Scalars["String"]>;
   player_idNEQ?: InputMaybe<Scalars["String"]>;
+  status?: InputMaybe<Scalars["Int"]>;
+  statusGT?: InputMaybe<Scalars["Int"]>;
+  statusGTE?: InputMaybe<Scalars["Int"]>;
+  statusLT?: InputMaybe<Scalars["Int"]>;
+  statusLTE?: InputMaybe<Scalars["Int"]>;
+  statusNEQ?: InputMaybe<Scalars["Int"]>;
   turns_remaining?: InputMaybe<Scalars["Int"]>;
   turns_remainingGT?: InputMaybe<Scalars["Int"]>;
   turns_remainingGTE?: InputMaybe<Scalars["Int"]>;
@@ -552,12 +561,10 @@ export type QuerySystemCallArgs = {
 
 export type Risks = {
   __typename?: "Risks";
-  arrested?: Maybe<Scalars["u8"]>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars["u32"]>;
-  hurt?: Maybe<Scalars["u8"]>;
   location_id?: Maybe<Scalars["felt252"]>;
-  mugged?: Maybe<Scalars["u8"]>;
+  run?: Maybe<Scalars["u8"]>;
   travel?: Maybe<Scalars["u8"]>;
 };
 
@@ -579,45 +586,31 @@ export type RisksOrder = {
 };
 
 export enum RisksOrderOrderField {
-  Arrested = "ARRESTED",
   GameId = "GAME_ID",
-  Hurt = "HURT",
   LocationId = "LOCATION_ID",
-  Mugged = "MUGGED",
+  Run = "RUN",
   Travel = "TRAVEL",
 }
 
 export type RisksWhereInput = {
-  arrested?: InputMaybe<Scalars["Int"]>;
-  arrestedGT?: InputMaybe<Scalars["Int"]>;
-  arrestedGTE?: InputMaybe<Scalars["Int"]>;
-  arrestedLT?: InputMaybe<Scalars["Int"]>;
-  arrestedLTE?: InputMaybe<Scalars["Int"]>;
-  arrestedNEQ?: InputMaybe<Scalars["Int"]>;
   game_id?: InputMaybe<Scalars["Int"]>;
   game_idGT?: InputMaybe<Scalars["Int"]>;
   game_idGTE?: InputMaybe<Scalars["Int"]>;
   game_idLT?: InputMaybe<Scalars["Int"]>;
   game_idLTE?: InputMaybe<Scalars["Int"]>;
   game_idNEQ?: InputMaybe<Scalars["Int"]>;
-  hurt?: InputMaybe<Scalars["Int"]>;
-  hurtGT?: InputMaybe<Scalars["Int"]>;
-  hurtGTE?: InputMaybe<Scalars["Int"]>;
-  hurtLT?: InputMaybe<Scalars["Int"]>;
-  hurtLTE?: InputMaybe<Scalars["Int"]>;
-  hurtNEQ?: InputMaybe<Scalars["Int"]>;
   location_id?: InputMaybe<Scalars["String"]>;
   location_idGT?: InputMaybe<Scalars["String"]>;
   location_idGTE?: InputMaybe<Scalars["String"]>;
   location_idLT?: InputMaybe<Scalars["String"]>;
   location_idLTE?: InputMaybe<Scalars["String"]>;
   location_idNEQ?: InputMaybe<Scalars["String"]>;
-  mugged?: InputMaybe<Scalars["Int"]>;
-  muggedGT?: InputMaybe<Scalars["Int"]>;
-  muggedGTE?: InputMaybe<Scalars["Int"]>;
-  muggedLT?: InputMaybe<Scalars["Int"]>;
-  muggedLTE?: InputMaybe<Scalars["Int"]>;
-  muggedNEQ?: InputMaybe<Scalars["Int"]>;
+  run?: InputMaybe<Scalars["Int"]>;
+  runGT?: InputMaybe<Scalars["Int"]>;
+  runGTE?: InputMaybe<Scalars["Int"]>;
+  runLT?: InputMaybe<Scalars["Int"]>;
+  runLTE?: InputMaybe<Scalars["Int"]>;
+  runNEQ?: InputMaybe<Scalars["Int"]>;
   travel?: InputMaybe<Scalars["Int"]>;
   travelGT?: InputMaybe<Scalars["Int"]>;
   travelGTE?: InputMaybe<Scalars["Int"]>;
@@ -786,6 +779,7 @@ export type PlayerEntityQuery = {
               health?: any | null;
               turns_remaining?: any | null;
               location_id?: any | null;
+              status?: any | null;
             }
           | { __typename: "Risks" }
           | null
@@ -817,13 +811,7 @@ export type LocationEntitiesQuery = {
           | { __typename: "Market"; cash?: any | null; quantity?: any | null }
           | { __typename: "Name" }
           | { __typename: "Player" }
-          | {
-              __typename: "Risks";
-              arrested?: any | null;
-              hurt?: any | null;
-              mugged?: any | null;
-              travel?: any | null;
-            }
+          | { __typename: "Risks"; travel?: any | null; run?: any | null }
           | null
         > | null;
       } | null;
@@ -1028,6 +1016,7 @@ export const PlayerEntityDocument = `
             health
             turns_remaining
             location_id
+            status
           }
           ... on Drug {
             drug_id
@@ -1093,10 +1082,8 @@ export const LocationEntitiesDocument = `
             quantity
           }
           ... on Risks {
-            arrested
-            hurt
-            mugged
             travel
+            run
           }
         }
       }

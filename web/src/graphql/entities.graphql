@@ -27,6 +27,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             health
             turns_remaining
             location_id
+            status
           }
           ... on Drug {
             drug_id
@@ -52,10 +53,8 @@ query LocationEntities($gameId: String!, $locationId: String!) {
             quantity
           }
           ... on Risks {
-            arrested
-            hurt
-            mugged
             travel
+            run
           }
         }
       }

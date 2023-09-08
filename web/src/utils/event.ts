@@ -1,4 +1,4 @@
-import { PlayerState } from "@/hooks/dojo/entities/usePlayerEntity";
+import { PlayerStatus } from "@/hooks/dojo/entities/usePlayerEntity";
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
 
 // events are keyed by the hash of the event name
@@ -17,7 +17,7 @@ export interface BaseEventData {
 
 export interface RandomEventData extends BaseEventData {
   playerId: string;
-  playerState: PlayerState
+  playerStatus: PlayerStatus;
 }
 
 export interface CreateEventData extends BaseEventData {
@@ -70,7 +70,7 @@ export const parseEvent = (
       return {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
-        playerState: Number(raw.data[2]),
+        playerStatus: Number(raw.data[2]),
       } as RandomEventData;
 
     case RyoEvents.PlayerJoined:

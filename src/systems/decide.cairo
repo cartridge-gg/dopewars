@@ -19,10 +19,10 @@ mod decide {
     }
 
     #[derive(Copy, Drop, Serde, PartialEq)]
-    enum Result {
+    enum Outcome {
         Paid: (),
-        GotAway: (),
-        Mugged: (),
+        Evaded: (),
+        Apprehended: (),
     }
 
     #[event]
@@ -43,7 +43,7 @@ mod decide {
     struct Consequence {
         game_id: u32,
         player_id: ContractAddress,
-        result: Result
+        outcome: Outcome
     }
 
     fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
@@ -54,12 +54,12 @@ mod decide {
         let mut player = get !(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal(()), 'player response not needed');
 
-        let result = match action {
+        let outcome = match action {
             Action::Pay => {
                 emit !(ctx.world, Decision { game_id, player_id, action: Action::Pay });
 
                 player.cash -= 1;
-                Result::Paid(())
+                Outcome::Paid(())
             },
             Action::Run => {
                 emit !(ctx.world, Decision { game_id, player_id, action: Action::Run });
@@ -71,10 +71,10 @@ mod decide {
                 match got_away {
                     bool::False => {
                         player.cash -= 1;
-                        Result::Mugged(())
+                        Outcome::Apprehended(())
                     },
                     bool::True => {
-                        Result::GotAway(())
+                        Outcome::Evaded(())
                     }
                 }
             },
@@ -85,6 +85,6 @@ mod decide {
         player.turns_remaining -= 1;
         set !(ctx.world, (player));
 
-        emit !(ctx.world, Consequence { game_id, player_id, result });
+        emit !(ctx.world, Consequence { game_id, player_id, outcome });
     }
 }

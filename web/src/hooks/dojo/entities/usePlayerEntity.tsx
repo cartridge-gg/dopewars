@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 
-export enum PlayerState {
+export enum PlayerStatus {
   Normal,
   BeingMugged,
   BeingArrested,

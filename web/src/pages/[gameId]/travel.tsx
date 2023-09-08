@@ -87,11 +87,8 @@ export default function Travel() {
     if (target) {
       const { event, hash } = await travel(gameId, target);
       if (event) {
-        const typeSlug = (event as RandomEventData).arrested
-          ? "arrested"
-          : "mugged";
-
-        const travelEvent = getEventBySlug(typeSlug);
+        // only support mugged event for now
+        const travelEvent = getEventBySlug("mugged");
         addEvent(travelEvent.name);
 
         toast(
@@ -100,7 +97,7 @@ export default function Travel() {
           `http://amazing_explorer/${hash}`,
         );
 
-        router.push(`/${gameId}/event/${typeSlug}`);
+        router.push(`/${gameId}/event/mugged`);
       } else {
         toast(
           `You've traveled to ${target}`,

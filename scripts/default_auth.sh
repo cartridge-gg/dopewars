@@ -6,7 +6,7 @@ export WORLD_ADDRESS="0x3c3dfeb374720dfd73554dc2b9e0583cb9668efb3055d07d1533afa5
 
 # make sure all components/systems are deployed
 COMPONENTS=("Game" "Market" "Name" "Player" "Risks")
-SYSTEMS=("create_game" "join_game" "set_name" "travel" "buy" "sell")
+SYSTEMS=("create_game" "join_game" "set_name" "travel" "buy" "sell" "decide")
 
 # check components
 for component in ${COMPONENTS[@]}; do
