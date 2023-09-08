@@ -1,20 +1,19 @@
 mod components;
 mod systems;
 mod constants;
-mod events;
 mod utils;
 
 #[cfg(test)]
 mod tests;
 
 #[derive(Copy, Drop, Serde, PartialEq)]
-enum PlayerState {
+enum PlayerStatus {
     Normal: (),
     BeingMugged: (),
     BeingArrested: (),
 }
 
-impl StorageSizePlayerState of dojo::StorageSize<PlayerState> {
+impl StorageSizePlayerStatus of dojo::StorageSize<PlayerStatus> {
     #[inline(always)]
     fn unpacked_size() -> usize {
         1
@@ -26,12 +25,12 @@ impl StorageSizePlayerState of dojo::StorageSize<PlayerState> {
     }
 }
 
-impl PlayerStatePrintImpl of core::debug::PrintTrait<PlayerState> {
-    fn print(self: PlayerState) {
+impl PlayerStatusPrintImpl of core::debug::PrintTrait<PlayerStatus> {
+    fn print(self: PlayerStatus) {
         match self {
-            PlayerState::Normal(()) => 0.print(),
-            PlayerState::BeingMugged(()) => 1.print(),
-            PlayerState::BeingArrested(()) => 2.print(),
+            PlayerStatus::Normal(()) => 0.print(),
+            PlayerStatus::BeingMugged(()) => 1.print(),
+            PlayerStatus::BeingArrested(()) => 2.print(),
         }
     }
 }

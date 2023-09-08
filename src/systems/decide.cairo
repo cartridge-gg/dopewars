@@ -6,7 +6,7 @@ mod decide {
     use starknet::ContractAddress;
 
     use dojo::world::Context;
-    use rollyourown::PlayerState;
+    use rollyourown::PlayerStatus;
     use rollyourown::constants::{RUN_PENALTY, PAY_PENALTY};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
@@ -52,7 +52,7 @@ mod decide {
 
         let player_id = ctx.origin;
         let mut player = get !(ctx.world, (game_id, player_id).into(), Player);
-        assert(player.state != PlayerState::Normal(()), 'player response not needed');
+        assert(player.status != PlayerStatus::Normal(()), 'player response not needed');
 
         let result = match action {
             Action::Pay => {
@@ -80,7 +80,7 @@ mod decide {
             },
         };
 
-        player.state = PlayerState::Normal(());
+        player.status = PlayerStatus::Normal(());
         player.location_id = next_location_id;
         player.turns_remaining -= 1;
         set !(ctx.world, (player));

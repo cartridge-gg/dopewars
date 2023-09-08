@@ -7,7 +7,7 @@ mod travel {
 
     use dojo::world::Context;
 
-    use rollyourown::PlayerState;
+    use rollyourown::PlayerStatus;
     use rollyourown::components::{game::{Game, GameTrait}, location::Location};
     use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
@@ -31,7 +31,7 @@ mod travel {
     struct RandomEvent {
         game_id: u32,
         player_id: ContractAddress,
-        player_state: PlayerState,
+        player_status: PlayerStatus,
     }
 
 
@@ -52,12 +52,12 @@ mod travel {
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
         if risks.travel(seed) {
-            player.state = PlayerState::BeingMugged(());
+            player.status = PlayerStatus::BeingMugged(());
             set !(ctx.world, (player));
 
             emit !(
                 ctx.world,
-                RandomEvent { game_id, player_id, player_state: PlayerState::BeingMugged(()) }
+                RandomEvent { game_id, player_id, player_status: PlayerStatus::BeingMugged(()) }
             );
 
             return true;

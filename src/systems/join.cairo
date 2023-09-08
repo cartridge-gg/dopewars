@@ -7,7 +7,7 @@ mod join_game {
 
     use dojo::world::Context;
 
-    use rollyourown::PlayerState;
+    use rollyourown::PlayerStatus;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
@@ -46,7 +46,7 @@ mod join_game {
                 cash: STARTING_CASH,
                 health: 100,
                 turns_remaining: game.max_turns,
-                state: PlayerState::Normal(()),
+                status: PlayerStatus::Normal(()),
             })
         );
 

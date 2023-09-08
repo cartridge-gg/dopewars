@@ -9,7 +9,7 @@ mod create_game {
 
     use dojo::world::Context;
 
-    use rollyourown::PlayerState;
+    use rollyourown::PlayerStatus;
     use rollyourown::components::name::Name;
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
@@ -79,7 +79,7 @@ mod create_game {
                     cash: STARTING_CASH,
                     health: 100,
                     turns_remaining: max_turns,
-                    state: PlayerState::Normal(()),
+                    status: PlayerStatus::Normal(()),
                 },
             )
         );

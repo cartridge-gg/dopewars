@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-use rollyourown::PlayerState;
+use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
 struct Player {
@@ -11,7 +11,7 @@ struct Player {
     cash: u128,
     health: u8,
     turns_remaining: usize,
-    state: PlayerState,
+    status: PlayerStatus,
 }
 
 #[generate_trait]
@@ -24,7 +24,7 @@ impl PlayerImpl of PlayerTrait {
         if self.turns_remaining == 0 {
             return false;
         }
-        if self.state != PlayerState::Normal {
+        if self.status != PlayerStatus::Normal {
             return false;
         }
 
