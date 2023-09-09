@@ -1,17 +1,19 @@
 import CrtEffect from "@/components/CrtEffect";
-import Header from "@/components/Header";
-import { useDojo } from "@/hooks/dojo";
-import {
-  PlayerStatus,
-  usePlayerEntity,
-} from "@/hooks/dojo/entities/usePlayerEntity";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
-import { Action, usePlayerStore } from "@/hooks/state";
-import { getLocationById } from "@/hooks/ui";
-import { ConsequenceEventData } from "@/utils/event";
-import { Button, Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import Image from "next/image";
+import { useDojo } from "@/dojo";
+import { PlayerStatus, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { getLocationById } from "@/dojo/helpers";
+import { useSystems } from "@/dojo/systems/useSystems";
+import { Action } from "@/dojo/types";
+import { usePlayerStore } from "@/hooks/state";
+import { ConsequenceEventData } from "@/dojo/events";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
+import Layout from "@/components/Layout";
+import { Footer } from "@/components/Footer";
+
+const BASE_PAYMENT = 400;
 
 export default function Decision() {
   const router = useRouter();
@@ -36,10 +38,10 @@ export default function Decision() {
 
       router.replace(`/${gameId}/event/consequence?outcome=${event.outcome}`);
     },
-    [gameId, nextLocation, router, decide],
+    [gameId, nextLocation, router, addOutcome, decide],
   );
 
-  if (!playerEntity) {
+  if (!playerEntity || !router.isReady) {
     return <></>;
   }
 
@@ -51,16 +53,7 @@ export default function Decision() {
 
   return (
     <>
-      <Header />
-      <VStack
-        position="fixed"
-        top="0"
-        left="0"
-        boxSize="full"
-        align="center"
-        justify="center"
-        gap="20px"
-      >
+      <Layout isSinglePanel={true}>
         <VStack>
           <Text
             textStyle="subheading"
@@ -73,32 +66,49 @@ export default function Decision() {
             Gang!
           </Heading>
         </VStack>
-        <Image src="/images/muggers.gif" alt="muggers" />
-        <HStack w="400px">
-          <Button
-            w="full"
-            isDisabled={isRunning || isPaying}
-            isLoading={isRunning}
-            onClick={async () => {
-              setIsRunning(true);
-              onDecision(Action.Run);
-            }}
-          >
-            Run
-          </Button>
-          <Button
-            w="full"
-            isDisabled={isRunning || isPaying}
-            isLoading={isPaying}
-            onClick={async () => {
-              setIsPaying(true);
-              onDecision(Action.Pay);
-            }}
-          >
-            Pay
-          </Button>
-        </HStack>
-      </VStack>
+        <Image
+          src="/images/muggers.gif"
+          alt="muggers"
+          width={500}
+          height={500}
+        />
+        <VStack maxWidth="500px">
+          <VStack textAlign="center">
+            <Text>Better think fast...</Text>
+            <Text color="yellow.400">
+              * They are demanding at least{" "}
+              {playerEntity.cash * 0.2 < BASE_PAYMENT ? "$400" : "20%"} of your
+              cash *
+            </Text>
+          </VStack>
+          <Footer position={["absolute", "relative"]}>
+            <Button
+              w="full"
+              isDisabled={isRunning || isPaying}
+              isLoading={isRunning}
+              onClick={async () => {
+                setIsRunning(true);
+                onDecision(Action.Run);
+              }}
+            >
+              Run
+            </Button>
+            <Button
+              w="full"
+              isDisabled={
+                isRunning || isPaying || playerEntity.cash < BASE_PAYMENT
+              }
+              isLoading={isPaying}
+              onClick={async () => {
+                setIsPaying(true);
+                onDecision(Action.Pay);
+              }}
+            >
+              {playerEntity.cash >= BASE_PAYMENT ? "Pay" : "Not enough cash"}
+            </Button>
+          </Footer>
+        </VStack>
+      </Layout>
       <CrtEffect />
     </>
   );

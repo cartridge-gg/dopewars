@@ -375,7 +375,9 @@ export type NameWhereInput = {
 
 export type Player = {
   __typename?: "Player";
+  bag_limit?: Maybe<Scalars["usize"]>;
   cash?: Maybe<Scalars["u128"]>;
+  drug_count?: Maybe<Scalars["usize"]>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars["u32"]>;
   health?: Maybe<Scalars["u8"]>;
@@ -403,7 +405,9 @@ export type PlayerOrder = {
 };
 
 export enum PlayerOrderOrderField {
+  BagLimit = "BAG_LIMIT",
   Cash = "CASH",
+  DrugCount = "DRUG_COUNT",
   GameId = "GAME_ID",
   Health = "HEALTH",
   LocationId = "LOCATION_ID",
@@ -413,12 +417,24 @@ export enum PlayerOrderOrderField {
 }
 
 export type PlayerWhereInput = {
+  bag_limit?: InputMaybe<Scalars["Int"]>;
+  bag_limitGT?: InputMaybe<Scalars["Int"]>;
+  bag_limitGTE?: InputMaybe<Scalars["Int"]>;
+  bag_limitLT?: InputMaybe<Scalars["Int"]>;
+  bag_limitLTE?: InputMaybe<Scalars["Int"]>;
+  bag_limitNEQ?: InputMaybe<Scalars["Int"]>;
   cash?: InputMaybe<Scalars["String"]>;
   cashGT?: InputMaybe<Scalars["String"]>;
   cashGTE?: InputMaybe<Scalars["String"]>;
   cashLT?: InputMaybe<Scalars["String"]>;
   cashLTE?: InputMaybe<Scalars["String"]>;
   cashNEQ?: InputMaybe<Scalars["String"]>;
+  drug_count?: InputMaybe<Scalars["Int"]>;
+  drug_countGT?: InputMaybe<Scalars["Int"]>;
+  drug_countGTE?: InputMaybe<Scalars["Int"]>;
+  drug_countLT?: InputMaybe<Scalars["Int"]>;
+  drug_countLTE?: InputMaybe<Scalars["Int"]>;
+  drug_countNEQ?: InputMaybe<Scalars["Int"]>;
   game_id?: InputMaybe<Scalars["Int"]>;
   game_idGT?: InputMaybe<Scalars["Int"]>;
   game_idGTE?: InputMaybe<Scalars["Int"]>;
@@ -778,6 +794,7 @@ export type PlayerEntityQuery = {
               cash?: any | null;
               health?: any | null;
               turns_remaining?: any | null;
+              drug_count?: any | null;
               location_id?: any | null;
               status?: any | null;
             }
@@ -1015,6 +1032,7 @@ export const PlayerEntityDocument = `
             cash
             health
             turns_remaining
+            drug_count
             location_id
             status
           }

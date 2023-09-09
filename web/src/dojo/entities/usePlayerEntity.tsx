@@ -23,6 +23,7 @@ export class PlayerEntity {
   cash: number;
   health: number;
   turnsRemaining: number;
+  drugCount: number;
   locationId: string;
   status: PlayerStatus;
   drugs: Drug[];
@@ -31,6 +32,7 @@ export class PlayerEntity {
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
+    this.drugCount = player.drug_count;
     this.locationId = player.location_id;
     this.status = player.status;
     this.drugs = drugs;

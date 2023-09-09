@@ -1,26 +1,16 @@
-import { Clock, Gem, Bag, Chat, Home, Link, Sound, Arrow } from "./icons";
-import { Box, Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
+import { Clock, Gem, Bag, Arrow } from "./icons";
+import { Divider, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
-import {
-  useSoundStore,
-  Sounds,
-  toggleIsMuted,
-  playSound,
-  stopSound,
-  initSoundStore,
-} from "@/hooks/sound";
-import { useUiStore, setIsConnected } from "@/hooks/ui";
+import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { play } from "@/hooks/media";
-import { usePlayerEntityQuery, Entity } from "@/generated/graphql";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
-import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
-import { useDojo } from "@/hooks/dojo";
+import { useDojo } from "@/dojo";
 
 // TODO: constrain this on contract side
 const MAX_INVENTORY = 100;
@@ -35,18 +25,15 @@ const Header = ({ back }: HeaderProps) => {
   const [inventory, setInventory] = useState(0);
   const { account } = useDojo();
 
-  const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
+  const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
-  const { game: gameEntity, isFetched: isFetchedGame } = useGameEntity({
+  const { game: gameEntity } = useGameEntity({
     gameId,
   });
 
   const isMobile = IsMobile();
-  const isMuted = useSoundStore((state) => state.isMuted);
-  const isConnected = useUiStore((state) => state.isConnected);
-  const hasNewMessages = true;
 
   useEffect(() => {
     const init = async () => {
@@ -89,7 +76,7 @@ const Header = ({ back }: HeaderProps) => {
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>
               <Bag />
-              <Text>{inventory}</Text>
+              <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>

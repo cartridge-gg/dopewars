@@ -46,28 +46,30 @@ mod buy {
         let mut player = get !(ctx.world, (game_id, player_id).into(), Player);
         assert(player.location_id == location_id, 'player is not at location');
         assert(player.can_continue(), 'player cannot trade');
+        assert(player.drug_count + quantity <= player.bag_limit, 'no bag space');
 
         let mut market = get !(ctx.world, (game_id, location_id, drug_id).into(), Market);
 
         let cost = market.buy(quantity);
         assert(cost < player.cash, 'not enough cash');
 
+        let mut drug = get !(ctx.world, (game_id, player_id, drug_id).into(), Drug);
+
         // update market
         market.cash += cost;
         market.quantity -= quantity;
-        set !(ctx.world, (market));
 
         // update player
         player.cash -= cost;
-        set !(ctx.world, (player));
+        player.drug_count += quantity;
 
-        let mut player_drug = get !(ctx.world, (game_id, player_id, drug_id).into(), Drug);
-        player_drug.game_id = game_id;
-        player_drug.player_id = player_id;
-        player_drug.drug_id = drug_id;
-        player_drug.quantity += quantity;
-        set !(ctx.world, (player_drug));
+        // update drug
+        drug.game_id = game_id;
+        drug.player_id = player_id;
+        drug.drug_id = drug_id;
+        drug.quantity += quantity;
 
+        set !(ctx.world, (market, player, drug));
         emit !(ctx.world, Bought { game_id, player_id, drug_id, quantity, cost });
     }
 }
@@ -122,15 +124,15 @@ mod sell {
         // update market
         market.quantity += quantity;
         market.cash -= payout;
-        set !(ctx.world, (market));
 
         // update player
         player.cash += payout;
-        set !(ctx.world, (player));
+        player.drug_count -= quantity;
 
+        // update drug
         drug.quantity -= quantity;
-        set !(ctx.world, (drug));
 
+        set !(ctx.world, (market, player, drug));
         emit !(ctx.world, Sold { game_id, player_id, drug_id, quantity, payout });
     }
 }

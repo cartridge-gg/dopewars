@@ -16,9 +16,11 @@ export default function Join() {
   const router = useRouter();
   return (
     <Layout
-      title="The Lobby"
-      prefixTitle="Welcome to"
-      imageSrc="/images/will-smith-with-attitude.png"
+      leftPanelProps={{
+        title: "The Lobby",
+        prefixTitle: "Welcome to",
+        imageSrc: "/images/will-smith-with-attitude.png",
+      }}
     >
       <UnorderedList w="100%" variant="underline">
         <ListItem>

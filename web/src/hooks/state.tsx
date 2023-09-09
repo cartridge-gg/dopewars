@@ -1,25 +1,8 @@
 import { create } from "zustand";
+import { Drug, Outcome } from "../dojo/types";
 
-export enum Locations {
-  Queens = "Queens",
-  Bronx = "The Bronx",
-  Brooklyn = "Brooklyn",
-  Coney = "Coney Island",
-  Jersey = "Jersey City",
-  Central = "Central Park",
-}
-
-export enum Drugs {
-  Acid = "Acid",
-  Weed = "Weed",
-  Ludes = "Ludes",
-  Speed = "Speed",
-  Heroin = "Heroin",
-  Cocaine = "Cocaine",
-}
-
-export type DrugsType = {
-  [key in Drugs]: {
+export type DrugType = {
+  [key in Drug]: {
     quantity: number;
   };
 };
@@ -34,31 +17,26 @@ export type TradeType = {
   direction: TradeDirection;
 };
 
-export enum Action {
-  Pay,
-  Run,
-}
-
-export enum Outcome {
-  Paid,
-  Escaped,
-  Captured,
-}
-
 export interface PlayerStore {
   outcomes: Outcome[];
-  trades: Map<Drugs, TradeType>;
+  history: Outcome[];
+  trades: Map<Drug, TradeType>;
   addOutcome: (outcome: Outcome) => void;
-  addTrade: (drug: Drugs, trade: TradeType) => void;
-  clearState: () => void;
+  addTrade: (drug: Drug, trade: TradeType) => void;
+  clearTradesAndOutcomes: () => void;
+  clearAll: () => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
   outcomes: [],
+  history: [],
   trades: new Map(),
   addOutcome: (outcome: Outcome) =>
-    set((state) => ({ outcomes: [...state.outcomes, outcome] })),
-  addTrade: (drug: Drugs, trade: TradeType) =>
+    set((state) => ({
+      outcomes: [...state.outcomes, outcome],
+      history: [...state.history, outcome],
+    })),
+  addTrade: (drug: Drug, trade: TradeType) =>
     set((state) => {
       const existingTrade = state.trades.get(drug);
 
@@ -92,5 +70,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
       state.trades.set(drug, { quantity, direction });
       return { trades: new Map(state.trades) };
     }),
-  clearState: () => set({ trades: new Map(), outcomes: [] }),
+  clearTradesAndOutcomes: () => {
+    set({ trades: new Map(), outcomes: [] });
+  },
+  clearAll: () => {
+    set({ trades: new Map(), outcomes: [], history: [] });
+  },
 }));

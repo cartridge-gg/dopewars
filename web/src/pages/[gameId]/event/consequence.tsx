@@ -1,25 +1,29 @@
 import CrtEffect from "@/components/CrtEffect";
-import Header from "@/components/Header";
-import { getOutcome } from "@/hooks/ui";
-import { Button, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import Image from "next/image";
+import { Footer } from "@/components/Footer";
+import Layout from "@/components/Layout";
+import { getOutcomeByType } from "@/dojo/helpers";
+import { Outcome } from "@/dojo/types";
+import { usePlayerStore } from "@/hooks/state";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const outcome = getOutcome(Number(router.query.outcome as string));
+  const outcome = getOutcomeByType(Number(router.query.outcome as string));
+  const { history } = usePlayerStore();
+
+  const isInitial = history.includes(outcome.type);
+  const narration = outcome.getNarration(isInitial);
+
+  if (!router.isReady) {
+    return <></>;
+  }
 
   return (
     <>
-      <Header />
-      <VStack
-        position="fixed"
-        top="0"
-        left="0"
-        boxSize="full"
-        align="center"
-        justify="center"
-      >
+      <Layout isSinglePanel={true}>
         <VStack>
           <Text
             textStyle="subheading"
@@ -35,22 +39,30 @@ export default function Consequence() {
         <Image
           alt={outcome.name}
           src={outcome.imageSrc}
-          width={["250px", "auto"]}
+          width={500}
+          height={500}
         />
-        <VStack gap="40px">
-          <VStack>
-            <Text>{outcome.description}</Text>
-            <Text color="yellow.400">* *</Text>
+        <VStack maxWidth="500px">
+          <VStack textAlign="center">
+            <Text>{narration}</Text>
+            <Text color="yellow.400">
+              {outcome.type == Outcome.Captured
+                ? `* Lost half your cash and stash *`
+                : ""}
+            </Text>
           </VStack>
-          <Button
-            onClick={() => {
-              router.push(`/${gameId}/turn`);
-            }}
-          >
-            Continue
-          </Button>
+          <Footer position={["absolute", "relative"]}>
+            <Button
+              w="full"
+              onClick={() => {
+                router.push(`/${gameId}/turn`);
+              }}
+            >
+              Continue
+            </Button>
+          </Footer>
         </VStack>
-      </VStack>
+      </Layout>
       <CrtEffect />
     </>
   );

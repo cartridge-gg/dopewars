@@ -10,35 +10,33 @@ import {
   useEventListener,
   Spacer,
 } from "@chakra-ui/react";
-import { Locations, usePlayerStore } from "@/hooks/state";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { motion } from "framer-motion";
-import { LocationProps, useUiStore, getLocationById } from "@/hooks/ui";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { useSystems } from "@/dojo/systems/useSystems";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/hooks/dojo";
-import { shortString } from "starknet";
+import { useDojo } from "@/dojo";
+import { getLocationById, getLocationByType, locations } from "@/dojo/helpers";
+import { LocationInfo } from "@/dojo/types";
 
 export default function Travel() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const [targetId, setTargetId] = useState<string>("");
   const [currentLocationId, setCurrentLocationId] = useState<string>("");
-  const targetName = useMemo(() => getLocationById(targetId)?.name, [targetId]);
 
-  const { locations } = useUiStore.getState();
   const { toast } = useToast();
   const { account } = useDojo();
-
   const { travel, isPending, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
+
+  const targetLocation = useMemo(() => getLocationById(targetId), [targetId]);
 
   useEffect(() => {
     if (playerEntity) {
@@ -68,7 +66,7 @@ export default function Travel() {
     } else {
       setTargetId(locations[0].id);
     }
-  }, [targetId, locations]);
+  }, [targetId]);
 
   const back = useCallback(() => {
     const idx = locations.findIndex((location) => location.id === targetId);
@@ -77,7 +75,7 @@ export default function Travel() {
     } else {
       setTargetId(locations[locations.length - 1].id);
     }
-  }, [targetId, locations]);
+  }, [targetId]);
 
   const onContinue = useCallback(async () => {
     if (targetId) {
@@ -86,7 +84,7 @@ export default function Travel() {
         router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       } else {
         toast(
-          `You've traveled to ${targetName}`,
+          `You've traveled to ${targetLocation.name}`,
           Car,
           `http://amazing_explorer/${hash}`,
         );
@@ -94,21 +92,24 @@ export default function Travel() {
         router.push(`/${gameId}/turn`);
       }
     }
-  }, [targetId, router, gameId, travel, toast]);
+  }, [targetId, router, gameId, targetLocation, travel, toast]);
 
   return (
     <Layout
-      title="Destination"
-      prefixTitle="Select Your"
+      leftPanelProps={{
+        title: "Destination",
+        prefixTitle: "Select Your",
+        map: (
+          <Map
+            highlight={targetLocation.type}
+            onSelect={(selected) => {
+              setTargetId(getLocationByType(selected).id);
+            }}
+          />
+        ),
+      }}
+      showMap={true}
       showBack={true}
-      map={
-        <Map
-          highlight={targetName}
-          onSelect={(selected) => {
-            setTargetId(shortString.encodeShortString(selected));
-          }}
-        />
-      }
     >
       <VStack w="full" my="auto" display={["none", "flex"]}>
         <Car boxSize="60px" />
@@ -131,7 +132,7 @@ export default function Travel() {
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${targetName}`}
+            : `Travel to ${targetLocation.name}`}
         </Button>
       </VStack>
       <VStack
@@ -164,7 +165,7 @@ export default function Travel() {
             w="full"
             justify="center"
           >
-            <Text>{targetName}</Text>
+            <Text>{targetLocation.name}</Text>
           </HStack>
           <Arrow
             style="outline"
@@ -184,7 +185,7 @@ export default function Travel() {
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${targetName}`}
+            : `Travel to ${targetLocation.name}`}
         </Button>
       </VStack>
     </Layout>
@@ -203,7 +204,7 @@ const Location = ({
   selected: boolean;
   isCurrent: boolean;
   onClick: () => void;
-} & LocationProps) => {
+} & LocationInfo) => {
   const currentColor = isCurrent ? "yellow.400" : "neon.400";
   return (
     <HStack w="full">

@@ -11,9 +11,11 @@ export default function LeaderboardPage() {
 
   return (
     <Layout
-      title="LEADERBOARD"
-      prefixTitle="Welcome to the"
-      imageSrc="/images/will-smith-with-attitude.png"
+      leftPanelProps={{
+        title: "LEADERBOARD",
+        prefixTitle: "Welcome to the",
+        imageSrc: "/images/will-smith-with-attitude.png",
+      }}
     >
       <Leaderboard />
     </Layout>
