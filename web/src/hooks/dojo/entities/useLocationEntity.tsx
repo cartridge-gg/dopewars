@@ -65,7 +65,7 @@ export class LocationEntity {
         marketPool: marketComponent,
       };
     });
-    console.log(drugMarkets);
+
     if (!risksComponent || drugMarkets.length === 0) return undefined;
 
     // sort by name

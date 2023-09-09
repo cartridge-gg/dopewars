@@ -1,3 +1,4 @@
+import { Action } from "@/hooks/state";
 import { BaseEventData, parseEvent, RyoEvents } from "@/utils/event";
 import { useCallback } from "react";
 import { useDojo } from "..";
@@ -23,6 +24,11 @@ export interface SystemsInterface {
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  decide: (
+    gameId: string,
+    action: Action,
+    nextLocationId: string,
+  ) => Promise<SystemExecuteResult>;
   isPending: boolean;
   error?: Error;
 }
@@ -153,6 +159,24 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReciept],
   );
 
+  const decide = useCallback(
+    async (gameId: string, action: Action, nextLocationId: string) => {
+      const receipt = await executeAndReciept("decide", [
+        gameId,
+        action,
+        nextLocationId,
+      ]);
+
+      const event = parseEvent(receipt, RyoEvents.Consqeuence);
+
+      return {
+        hash: receipt.transaction_hash,
+        event,
+      };
+    },
+    [executeAndReciept],
+  );
+
   return {
     create,
     join,
@@ -160,6 +184,7 @@ export const useSystems = (): SystemsInterface => {
     buy,
     sell,
     setName,
+    decide,
     error,
     isPending,
   };

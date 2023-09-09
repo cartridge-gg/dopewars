@@ -4,9 +4,9 @@ import Layout from "@/components/Layout";
 import { useDojo } from "@/hooks/dojo";
 import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
 import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
-import { TradeDirection, usePlayerState } from "@/hooks/state";
+import { TradeDirection, usePlayerStore } from "@/hooks/state";
 
-import { getDrugById, getEventByName, getLocationById } from "@/hooks/ui";
+import { getDrugById, getOutcome, getLocationById } from "@/hooks/ui";
 import {
   Box,
   Button,
@@ -30,7 +30,7 @@ export default function Turn() {
     gameId,
   });
 
-  const { trades, events, clearState } = usePlayerState();
+  const { trades, outcomes, clearState } = usePlayerStore();
 
   if (!playerEntity || !gameEntty) {
     return <></>;
@@ -81,15 +81,15 @@ export default function Turn() {
                 <Text>{getLocationById(playerEntity.locationId).name}</Text>
               </HStack>
             </ListItem>
-            {events.map((event, index) => (
+            {outcomes.map((outcome, index) => (
               <ListItem key={index}>
                 <HStack>
                   <HStack flex="1">
                     <Event />
-                    <Text>{event}</Text>
+                    <Text>{getOutcome(outcome).name}</Text>
                   </HStack>
                   <Text flex="2" color="yellow.400">
-                    {getEventByName(event).description}
+                    {getOutcome(outcome).description}
                   </Text>
                 </HStack>
               </ListItem>

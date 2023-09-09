@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, Text, VStack, HStack, Card, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
@@ -7,26 +7,12 @@ import Image from "next/image";
 import { Footer } from "@/components/Footer";
 import { DrugProps, getDrugBySlug, getLocationBySlug } from "@/hooks/ui";
 
-import {
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
-} from "@chakra-ui/react";
+import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  TabIndicator,
-} from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
-import { TradeDirection, TradeType, usePlayerState } from "@/hooks/state";
+import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import { cardPixelatedStyle } from "@/theme/styles";
 import {
   DrugMarket,
   useLocationEntity,
@@ -90,7 +76,7 @@ export default function Market() {
   };
 
   const { buy, sell, isPending, error: txError } = useSystems();
-  const { addTrade } = usePlayerState();
+  const { addTrade } = usePlayerStore();
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);

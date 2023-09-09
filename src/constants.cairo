@@ -1,6 +1,6 @@
 const SCALING_FACTOR: u128 = 10_000;
 
-const TRAVEL_RISK: u8 = 30; // 30% chance of mugged
+const TRAVEL_RISK: u8 = 100; // 30% chance of mugged
 const RUN_CHANCE: u8 = 30; // 30% chance of successfully getting away
 
 const RUN_PENALTY: u8 = 30; // 30% of cash lost

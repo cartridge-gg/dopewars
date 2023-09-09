@@ -24,6 +24,7 @@ export class PlayerEntity {
   health: number;
   turnsRemaining: number;
   locationId: string;
+  status: PlayerStatus;
   drugs: Drug[];
 
   constructor(player: Player, drugs: Drug[]) {
@@ -31,6 +32,7 @@ export class PlayerEntity {
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
     this.locationId = player.location_id;
+    this.status = player.status;
     this.drugs = drugs;
   }
 
@@ -55,7 +57,7 @@ export class PlayerEntity {
       const drugComponent = edge.node?.components?.find(
         (component) => component?.__typename === "Drug",
       ) as DrugType;
-      console.log(drugComponent);
+
       return {
         id: drugComponent.drug_id,
         quantity: drugComponent.quantity,

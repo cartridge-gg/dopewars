@@ -54,4 +54,8 @@ for component in ${TRAVEL_COMPONENTS[@]}; do
     sozo auth writer $component travel --world $WORLD_ADDRESS
 done
 
+for component in ${TRAVEL_COMPONENTS[@]}; do
+    sozo auth writer $component decide --world $WORLD_ADDRESS
+done
+
 echo "Default authorizations have been successfully set."

@@ -11,7 +11,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::PlayerState;
+use rollyourown::PlayerStatus;
 use rollyourown::components::player::Player;
 use rollyourown::tests::create::{spawn_game, spawn_player};
 
@@ -29,7 +29,7 @@ fn test_travel_and_decision() {
     world.execute('travel', travel_calldata);
 
     let player = get !(world, (game_id, player_id).into(), (Player));
-    assert(player.state == PlayerState::BeingMugged(()), 'incorrect state');
+    assert(player.status == PlayerStatus::BeingMugged(()), 'incorrect status');
     assert(player.location_id != brooklyn_id, 'should not have traveled');
 
     let mut decision_calldata = array::ArrayTrait::<felt252>::new();

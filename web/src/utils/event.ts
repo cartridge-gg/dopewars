@@ -1,4 +1,5 @@
 import { PlayerStatus } from "@/hooks/dojo/entities/usePlayerEntity";
+import { Action, Outcome } from "@/hooks/state";
 import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
 
 // events are keyed by the hash of the event name
@@ -9,6 +10,8 @@ export enum RyoEvents {
   Bought = "0x20cb8131637de1953a75938db3477cc6b648e5ed255f5b3fe3f0fb9299f0afc",
   Sold = "0x123e760cef925d0b4f685db5e1ac87aadaf1ad9f8069122a5bb03353444c386",
   RandomEvent = "0x203b38ece4b4d98864bf85cb3f5261dad4c45aab6aa5d9228fbda95f7dd4f62",
+  Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
+  Consqeuence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
 }
 
 export interface BaseEventData {
@@ -46,6 +49,16 @@ export interface SoldEventData extends BaseEventData {
   price: number;
 }
 
+export interface DecisionEventData extends BaseEventData {
+  playerId: string;
+  action: Action;
+}
+
+export interface ConsequenceEventData extends BaseEventData {
+  playerId: string;
+  outcome: Outcome;
+}
+
 export const parseEvent = (
   receipt: InvokeTransactionReceiptResponse,
   eventType: RyoEvents,
@@ -79,7 +92,18 @@ export const parseEvent = (
         playerId: num.toHexString(raw.data[1]),
         locationId: num.toHexString(raw.data[2]),
       } as JoinedEventData;
-
+    case RyoEvents.Decision:
+      return {
+        gameId: num.toHexString(raw.data[0]),
+        playerId: num.toHexString(raw.data[1]),
+        action: Number(raw.data[2]),
+      } as DecisionEventData;
+    case RyoEvents.Consqeuence:
+      return {
+        gameId: num.toHexString(raw.data[0]),
+        playerId: num.toHexString(raw.data[1]),
+        outcome: Number(raw.data[2]),
+      } as ConsequenceEventData;
     case RyoEvents.Traveled:
     case RyoEvents.Bought:
     case RyoEvents.Sold:

@@ -21,8 +21,8 @@ mod decide {
     #[derive(Copy, Drop, Serde, PartialEq)]
     enum Outcome {
         Paid: (),
-        Evaded: (),
-        Apprehended: (),
+        Escaped: (),
+        Captured: (),
     }
 
     #[event]
@@ -71,10 +71,10 @@ mod decide {
                 match got_away {
                     bool::False => {
                         player.cash -= 1;
-                        Outcome::Apprehended(())
+                        Outcome::Captured(())
                     },
                     bool::True => {
-                        Outcome::Evaded(())
+                        Outcome::Escaped(())
                     }
                 }
             },
