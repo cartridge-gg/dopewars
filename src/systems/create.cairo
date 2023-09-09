@@ -19,7 +19,7 @@ mod create_game {
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
         SCALING_FACTOR, TRAVEL_RISK, RUN_CHANCE, MIN_CASH, MAX_CASH, MIN_QUANITTY, MAX_QUANTITY,
-        STARTING_CASH
+        STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
 
@@ -46,46 +46,37 @@ mod create_game {
         location_id: felt252,
     }
 
-
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
     ) -> (u32, ContractAddress) {
         let game_id = ctx.world.uuid();
-
-        // game entity
-        set !(
-            ctx.world,
-            (Game {
-                game_id,
-                start_time,
-                max_players,
-                num_players: 1, // caller auto joins
-                max_turns,
-                is_finished: false,
-                creator: ctx.origin,
-            })
-        );
-
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let location_id = LocationTrait::random(seed);
-        // player entity
-        set !(
-            ctx.world,
-            (
-                Player {
-                    game_id,
-                    player_id: ctx.origin,
-                    location_id,
-                    cash: STARTING_CASH,
-                    health: 100,
-                    turns_remaining: max_turns,
-                    status: PlayerStatus::Normal(()),
-                },
-            )
-        );
 
-        // TODO: spawn locations with risk profiles balanced
-        // with market pricing
+        let player = Player {
+            game_id,
+            player_id: ctx.origin,
+            location_id,
+            cash: STARTING_CASH,
+            health: STARTING_HEALTH,
+            drug_count: 0,
+            bag_limit: STARTING_BAG_LIMIT,
+            turns_remaining: max_turns,
+            status: PlayerStatus::Normal(()),
+        };
+
+        let game = Game {
+            game_id,
+            start_time,
+            max_players,
+            num_players: 1, // caller auto joins
+            max_turns,
+            is_finished: false,
+            creator: ctx.origin,
+        };
+
+        set !(ctx.world, (game, player));
+
         let mut locations = LocationTrait::all();
         loop {
             match locations.pop_front() {

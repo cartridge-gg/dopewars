@@ -12,26 +12,31 @@ import { ReactNode } from "react";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
-export interface LayoutProps {
-  title: string;
-  map: ReactNode;
-  imageSrc: string;
-  prefixTitle: string;
-  showBack?: boolean;
-  actions?: ReactNode;
-  children: ReactNode;
-}
-
 import CrtEffect from "./CrtEffect";
 
+export interface LayoutProps {
+  leftPanelProps?: LeftPanelProps;
+  showBack?: boolean;
+  actions?: ReactNode;
+  showMap?: boolean;
+  children: ReactNode;
+  isSinglePanel?: boolean;
+}
+
+export interface LeftPanelProps {
+  title: string;
+  prefixTitle: string;
+  imageSrc?: string;
+  map?: ReactNode;
+}
+
 const Layout = ({
-  title,
-  prefixTitle,
-  map,
-  imageSrc,
+  leftPanelProps,
   showBack,
+  showMap,
   children,
-}: Partial<LayoutProps>) => {
+  isSinglePanel = false,
+}: LayoutProps) => {
   return (
     <>
       <Flex
@@ -44,14 +49,8 @@ const Layout = ({
       >
         <Header back={showBack} />
         <Container>
-          <LeftPanel
-            flex={[map ? "1" : "0", "1"]}
-            title={title}
-            prefixTitle={prefixTitle}
-            imageSrc={imageSrc}
-            map={map}
-          />
-          <RightPanel flex={[map ? "0" : "1", "1"]}>{children}</RightPanel>
+          {!isSinglePanel && <LeftPanel {...leftPanelProps} />}
+          <RightPanel flex={[showMap ? "0" : "1", "1"]}>{children}</RightPanel>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>
@@ -66,12 +65,7 @@ const LeftPanel = ({
   map,
   imageSrc,
   ...props
-}: {
-  title?: string;
-  prefixTitle?: string;
-  map?: ReactNode;
-  imageSrc?: string;
-} & StyleProps) => {
+}: Partial<LeftPanelProps> & StyleProps) => {
   return (
     <VStack my="auto" flex={["0", "1"]} {...props}>
       <VStack

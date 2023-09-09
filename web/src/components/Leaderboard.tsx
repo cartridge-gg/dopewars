@@ -1,7 +1,6 @@
 import {
   StyleProps,
   Text,
-  VStack,
   HStack,
   UnorderedList,
   Box,
@@ -13,25 +12,20 @@ import {
   useDisclosure,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
 import Input from "@/components/Input";
-import { Bag, IconProps } from "./icons";
 
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Avatar } from "./avatar/Avatar";
-import { AvatarName, avatars, genAvatarFromAddress } from "./avatar/avatars";
+import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
-import {
-  Score,
-  useGlobalScores,
-} from "@/hooks/dojo/components/useGlobalScores";
-import { useDojo } from "@/hooks/dojo";
+import { Score, useGlobalScores } from "@/dojo/components/useGlobalScores";
+import { useDojo } from "@/dojo";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
+import { useSystems } from "@/dojo/systems/useSystems";
 
 const Leaderboard = ({
   nameEntry,

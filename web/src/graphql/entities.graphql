@@ -26,6 +26,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             cash
             health
             turns_remaining
+            drug_count
             location_id
             status
           }

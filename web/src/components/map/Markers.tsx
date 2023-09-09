@@ -1,7 +1,7 @@
+import { Location } from "@/dojo/types";
 import { Icon } from "@chakra-ui/react";
-import { Locations } from "@/hooks/state";
 
-export const Markers = ({ location }: { location?: Locations }) => {
+export const Markers = ({ location }: { location?: Location }) => {
   return (
     <Icon
       layerStyle="fill"
@@ -9,7 +9,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
       viewBox="0 0 256 256"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g visibility={Locations.Central != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Central != location ? "visibile" : "hidden"}>
         <path
           d="M120 115.996H124.01V116.996H125.01V121.006H124.01V122.006H120V121.006H119V116.996H120V115.996Z"
           fill="#172217"
@@ -19,7 +19,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
           fill="#0CA85D"
         />
       </g>
-      <g visibility={Locations.Brooklyn != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Brooklyn != location ? "visibile" : "hidden"}>
         <path
           d="M117 181.994H121.01V182.994H122.01V187.004H121.01V188.004H117V187.004H116V182.994H117V181.994Z"
           fill="#172217"
@@ -29,7 +29,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
           fill="#0CA85D"
         />
       </g>
-      <g visibility={Locations.Coney != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Coney != location ? "visibile" : "hidden"}>
         <path
           d="M191.009 202.999H195.019V203.999H196.019V208.009H195.019V209.009H191.009V208.009H190.009V203.999H191.009V202.999Z"
           fill="#172217"
@@ -39,7 +39,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
           fill="#0CA85D"
         />
       </g>
-      <g visibility={Locations.Queens != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Queens != location ? "visibile" : "hidden"}>
         <path
           d="M188.004 134.993H192.014V135.993H193.014V140.003H192.014V141.003H188.004V140.003H187.004V135.993H188.004V134.993Z"
           fill="#172217"
@@ -50,7 +50,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
         />
       </g>
 
-      <g visibility={Locations.Bronx != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Bronx != location ? "visibile" : "hidden"}>
         <path
           d="M136 43.9938H140.01V44.9938H141.01V49.0038H140.01V50.0038H136V49.0038H135V44.9938H136V43.9938Z"
           fill="#172217"
@@ -60,7 +60,7 @@ export const Markers = ({ location }: { location?: Locations }) => {
           fill="#0CA85D"
         />
       </g>
-      <g visibility={Locations.Jersey != location ? "visibile" : "hidden"}>
+      <g visibility={Location.Jersey != location ? "visibile" : "hidden"}>
         <path
           d="M70.0061 96.995H74.0161V97.995H75.0161V102.005H74.0161V103.005H70.0061V102.005H69.0061V97.995H70.0061V96.995Z"
           fill="#172217"

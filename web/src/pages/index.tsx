@@ -16,14 +16,15 @@ import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
 import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
-import { getLocationById } from "@/hooks/ui";
-import { JoinedEventData } from "@/utils/event";
-import { useGlobalScores } from "@/hooks/dojo/components/useGlobalScores";
+import { useSystems } from "@/dojo/systems/useSystems";
+import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
 import { useBurner } from "@/hooks/burner";
 import { formatAddress } from "@/utils/contract";
-import { useDojo } from "@/hooks/dojo";
+import { useDojo } from "@/dojo";
+import { JoinedEventData } from "@/dojo/events";
+import { getLocationById } from "@/dojo/helpers";
+import { usePlayerStore } from "@/hooks/state";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -35,13 +36,16 @@ export default function Home() {
   const { account, isBurnerDeploying, createBurner } = useDojo();
   const { create: createGame, isPending, error: txError } = useSystems();
   const { scores } = useGlobalScores();
+  const { clearAll } = usePlayerStore();
   const { toast } = useToast();
 
   return (
     <Layout
-      title="Roll Your Own"
-      prefixTitle="Dope Wars:"
-      imageSrc="/images/punk-girl.png"
+      leftPanelProps={{
+        title: "Roll Your Own",
+        prefixTitle: "Dope Wars",
+        imageSrc: "/images/punk-girl.png",
+      }}
     >
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
@@ -68,6 +72,7 @@ export default function Home() {
               isDisabled={!account}
               isLoading={isPending && !txError}
               onClick={async () => {
+                clearAll();
                 const { event, hash } = await createGame(
                   START_TIME,
                   MAX_PLAYERS,

@@ -1,30 +1,30 @@
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
-import { Locations } from "@/hooks/state";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
 import { Markers } from "./Markers";
+import { Location } from "@/dojo/types";
 
 type CoordinateType = {
-  [key in Locations]: { x: number; y: number };
+  [key in Location]: { x: number; y: number };
 };
 
 const coordinate: CoordinateType = {
-  [Locations.Queens]: { x: -150, y: 150 },
-  [Locations.Jersey]: { x: 150, y: 150 },
-  [Locations.Bronx]: { x: 0, y: 300 },
-  [Locations.Central]: { x: 0, y: 150 },
-  [Locations.Coney]: { x: -150, y: -0 },
-  [Locations.Brooklyn]: { x: 0, y: -0 },
+  [Location.Queens]: { x: -150, y: 150 },
+  [Location.Jersey]: { x: 150, y: 150 },
+  [Location.Bronx]: { x: 0, y: 300 },
+  [Location.Central]: { x: 0, y: 150 },
+  [Location.Coney]: { x: -150, y: -0 },
+  [Location.Brooklyn]: { x: 0, y: -0 },
 };
 
 export const Map = ({
   highlight,
   onSelect,
 }: {
-  highlight?: Locations;
-  onSelect: (selected: Locations) => void;
+  highlight?: Location;
+  onSelect: (selected: Location) => void;
 }) => {
   const [scope, animate] = useAnimate();
   const isMobile = useBreakpointValue([true, false]);

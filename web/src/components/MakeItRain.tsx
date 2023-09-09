@@ -1,5 +1,4 @@
 import { StyleProps, Box, keyframes } from "@chakra-ui/react";
-import { ReactNode } from "react";
 import {
   Acid,
   Cocaine,

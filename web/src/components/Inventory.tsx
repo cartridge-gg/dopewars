@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 
 import React from "react";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
-import { getDrugById } from "@/hooks/ui";
-import { useDojo } from "@/hooks/dojo";
+import { useDojo } from "@/dojo";
+import { getDrugById } from "@/dojo/helpers";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
@@ -41,7 +41,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
         }}
       >
         <HStack gap="10px" justify="center">
-          {playerEntity?.drugs.length === 0 ? (
+          {playerEntity?.drugCount === 0 ? (
             <Text color="neon.500">Your bag is empty</Text>
           ) : (
             playerEntity?.drugs.map((drug, index) => {

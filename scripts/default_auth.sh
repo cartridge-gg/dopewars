@@ -29,6 +29,7 @@ SET_NAME_COMPONENTS=("Name")
 BUY_COMPONENTS=("Drug" "Market" "Name" "Player")
 SELL_COMPONENTS=("Drug" "Market" "Name" "Player")
 TRAVEL_COMPONENTS=("Player")
+DECIDE_COMPONENTS=("Player" "Drug")
 
 for component in ${CREATE_GAME_COMPONENTS[@]}; do
     sozo auth writer $component create_game --world $WORLD_ADDRESS
@@ -55,6 +56,10 @@ for component in ${TRAVEL_COMPONENTS[@]}; do
 done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
+    sozo auth writer $component decide --world $WORLD_ADDRESS
+done
+
+for component in ${DECIDE_COMPONENTS[@]}; do
     sozo auth writer $component decide --world $WORLD_ADDRESS
 done
 

@@ -45,7 +45,9 @@ export const useBurner = () => {
       admin.getTransactionReceipt(storage[firstAddr].deployTx).catch(() => {
         setAccount(undefined);
         Storage.remove("burners");
-        throw new Error("burners not deployed, chain may have restarted");
+        //throw new Error("burners not deployed, chain may have restarted");
+        console.log("burners not deployed, resetting local storage");
+        return;
       });
 
       // set active account

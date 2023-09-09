@@ -1,5 +1,5 @@
 import { TradeDirection } from "@/hooks/state";
-import { SCALING_FACTOR } from "@/hooks/dojo";
+import { SCALING_FACTOR } from "@/dojo";
 import { Market } from "@/generated/graphql";
 
 export const calculateSlippage = (

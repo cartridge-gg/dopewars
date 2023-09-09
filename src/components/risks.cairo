@@ -4,13 +4,6 @@ use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
 
-#[derive(Drop, Copy)]
-struct TravelResult {
-    arrested: bool,
-    mugged: bool,
-    health_loss: u8,
-}
-
 #[derive(Component, Copy, Drop, Serde)]
 struct Risks {
     #[key]
@@ -28,6 +21,7 @@ impl RisksImpl of RisksTrait {
         occurs(seed, self.travel)
     }
 
+    #[inline(always)]
     fn run(ref self: Risks, seed: felt252) -> bool {
         occurs(seed, self.run)
     }

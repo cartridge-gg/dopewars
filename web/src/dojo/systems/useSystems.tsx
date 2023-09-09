@@ -1,7 +1,7 @@
-import { Action } from "@/hooks/state";
-import { BaseEventData, parseEvent, RyoEvents } from "@/utils/event";
 import { useCallback } from "react";
 import { useDojo } from "..";
+import { BaseEventData, parseEvent, RyoEvents } from "../events";
+import { Action } from "../types";
 
 export interface SystemsInterface {
   create: (
@@ -83,7 +83,7 @@ export const useSystems = (): SystemsInterface => {
       let result = { hash: receipt.transaction_hash } as SystemExecuteResult;
 
       try {
-        result.event = parseEvent(receipt, RyoEvents.RandomEvent);
+        result.event = parseEvent(receipt, RyoEvents.AdverseEvent);
       } catch (err) {
         // no random event occured
       }

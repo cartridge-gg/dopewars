@@ -7,11 +7,13 @@ struct Player {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    status: PlayerStatus,
     location_id: felt252,
     cash: u128,
     health: u8,
+    drug_count: usize,
+    bag_limit: usize,
     turns_remaining: usize,
-    status: PlayerStatus,
 }
 
 #[generate_trait]

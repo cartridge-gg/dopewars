@@ -10,13 +10,13 @@ mod travel {
     use rollyourown::PlayerStatus;
     use rollyourown::components::{game::{Game, GameTrait}, location::Location};
     use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait, TravelResult};
+    use rollyourown::components::risks::{Risks, RisksTrait};
 
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
         Traveled: Traveled,
-        RandomEvent: RandomEvent,
+        AdverseEvent: AdverseEvent,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -28,7 +28,7 @@ mod travel {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct RandomEvent {
+    struct AdverseEvent {
         game_id: u32,
         player_id: ContractAddress,
         player_status: PlayerStatus,
@@ -51,13 +51,14 @@ mod travel {
         let mut risks = get !(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
+        // only mugging for now
         if risks.travel(seed) {
             player.status = PlayerStatus::BeingMugged(());
             set !(ctx.world, (player));
 
             emit !(
                 ctx.world,
-                RandomEvent { game_id, player_id, player_status: PlayerStatus::BeingMugged(()) }
+                AdverseEvent { game_id, player_id, player_status: PlayerStatus::BeingMugged(()) }
             );
 
             return true;

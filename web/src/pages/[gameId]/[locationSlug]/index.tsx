@@ -14,17 +14,21 @@ import {
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { getDrugById, getLocationById, getLocationBySlug } from "@/hooks/ui";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import { Sounds, playSound } from "@/hooks/sound";
-import { useLocationEntity } from "@/hooks/dojo/entities/useLocationEntity";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
+import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
-import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
-import { useDojo } from "@/hooks/dojo";
+import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { useDojo } from "@/dojo";
 import { shortString } from "starknet";
+import {
+  getDrugById,
+  getLocationById,
+  getLocationBySlug,
+} from "@/dojo/helpers";
 
 export default function Location() {
   const router = useRouter();
@@ -69,15 +73,18 @@ export default function Location() {
 
   return (
     <Layout
-      title={shortString.decodeShortString(locationEntity.id)}
-      prefixTitle={prefixTitle}
-      imageSrc={`/images/locations/${
-        getLocationById(locationEntity.id).slug
-      }.png`}
+      leftPanelProps={{
+        title: shortString.decodeShortString(locationEntity.id),
+        prefixTitle: prefixTitle,
+        imageSrc: `/images/locations/${
+          getLocationById(locationEntity.id).slug
+        }.png`,
+      }}
     >
       <Inventory />
       <VStack
         w="full"
+        pt={["0px", "20px"]}
         align="flex-start"
         gap="12px"
         sx={{
@@ -92,6 +99,7 @@ export default function Location() {
         </Text>
         <SimpleGrid columns={2} w="full" gap="12px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
+            const drugInfo = getDrugById(drug.id);
             return (
               <Card
                 h="160px"
@@ -99,7 +107,7 @@ export default function Location() {
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3, false);
-                  router.push(`${router.asPath}/${getDrugById(drug.id).slug}`);
+                  router.push(`${router.asPath}/${drugInfo.slug}`);
                 }}
               >
                 <CardHeader
@@ -107,11 +115,11 @@ export default function Location() {
                   fontSize="20px"
                   textAlign="left"
                 >
-                  {getDrugById(drug.id).name}
+                  {drugInfo.name}
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center">
-                    <Box>{getDrugById(drug.id).icon({})}</Box>
+                    <Box>{drugInfo.icon({})}</Box>
                   </HStack>
                 </CardBody>
                 <CardFooter fontSize="16px">
