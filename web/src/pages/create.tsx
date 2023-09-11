@@ -28,9 +28,11 @@ export default function Create() {
 
   return (
     <Layout
-      title="New Game"
-      prefixTitle="Start a"
-      imageSrc="/images/punk-girl.png"
+      leftPanelProps={{
+        title: "New Game",
+        prefixTitle: "Start a",
+        imageSrc: "/images/punk-girl.png",
+      }}
     >
       <UnorderedList variant="underline" w="full" userSelect="none">
         <ListItem>

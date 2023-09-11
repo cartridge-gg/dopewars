@@ -23,11 +23,12 @@ use rollyourown::components::drug::{drug, Drug};
 use rollyourown::components::location::Location;
 use rollyourown::components::risks::{risks, Risks};
 use rollyourown::components::name::{name, Name};
+use rollyourown::systems::decide::decide;
 use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};
 use rollyourown::systems::join::join_game;
 use rollyourown::systems::create::create_game;
-use rollyourown::systems::player::set_name;
+use rollyourown::systems::set_name::set_name;
 use rollyourown::constants::SCALING_FACTOR;
 
 const START_TIME: u64 = 0;
@@ -54,6 +55,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     systems.append(buy::TEST_CLASS_HASH);
     systems.append(sell::TEST_CLASS_HASH);
     systems.append(set_name::TEST_CLASS_HASH);
+    systems.append(decide::TEST_CLASS_HASH);
 
     let world = spawn_test_world(components, systems);
 
@@ -67,7 +69,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let game = get!(world, game_id, (Game));
+    let game = get !(world, game_id, (Game));
     assert(game.start_time == START_TIME, 'start time mismatch');
     assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
@@ -88,7 +90,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
     assert(player.health == 100, 'health mismatch');
     assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
 
@@ -102,13 +104,13 @@ fn test_create_game() {
     let (world_address, game_id, player_id) = spawn_game();
     let world = IWorldDispatcher { contract_address: world_address };
 
-    let brooklyn_risks = get!(world, (game_id, 'Brooklyn').into(), (Risks));
+    let brooklyn_risks = get !(world, (game_id, 'Brooklyn').into(), (Risks));
     assert(brooklyn_risks.location_id == 'Brooklyn', 'not Brooklyn location');
 
-    let queens_risks = get!(world, (game_id, 'Queens').into(), (Risks));
+    let queens_risks = get !(world, (game_id, 'Queens').into(), (Risks));
     assert(queens_risks.location_id == 'Queens', 'not Queens location');
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
     assert(player.turns_remaining == 10, 'wrong Player turns remaining');
 }
 

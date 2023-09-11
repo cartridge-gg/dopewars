@@ -1,14 +1,17 @@
 import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
-import { useDojo } from "@/hooks/dojo";
-import { useGameEntity } from "@/hooks/dojo/entities/useGameEntity";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
-import { TradeDirection, usePlayerState } from "@/hooks/state";
-
-import { getDrugByName, getEventByName, getLocationByName } from "@/hooks/ui";
+import { useDojo } from "@/dojo";
+import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import {
-  Box,
+  getDrugByType,
+  getLocationById,
+  getOutcomeByType,
+} from "@/dojo/helpers";
+import { TradeDirection, usePlayerStore } from "@/hooks/state";
+
+import {
   Button,
   HStack,
   ListItem,
@@ -30,17 +33,21 @@ export default function Turn() {
     gameId,
   });
 
-  const { trades, events, clearState } = usePlayerState();
+  const { trades, outcomes, clearTradesAndOutcomes } = usePlayerStore();
 
   if (!playerEntity || !gameEntty) {
     return <></>;
   }
 
+  const locationInfo = getLocationById(playerEntity.locationId);
+
   return (
     <Layout
-      title={`Day ${gameEntty.maxTurns - playerEntity.turnsRemaining}`}
-      prefixTitle="End of"
-      imageSrc="/images/sunset.png"
+      leftPanelProps={{
+        title: `Day ${gameEntty.maxTurns - playerEntity.turnsRemaining}`,
+        prefixTitle: "End of",
+        imageSrc: "/images/sunset.png",
+      }}
     >
       <VStack w="full" my={["none", "auto"]}>
         {trades.size > 0 && (
@@ -56,11 +63,12 @@ export default function Turn() {
               {Array.from(trades).map(([drug, trade]) => {
                 const change =
                   trade.direction === TradeDirection.Buy ? "+" : "-";
+                const drugInfo = getDrugByType(drug);
                 return (
                   <ListItem key={drug}>
                     <Product
-                      icon={getDrugByName(drug).icon}
-                      product={drug}
+                      icon={drugInfo.icon}
+                      product={drugInfo.name}
                       quantity={`${change}${trade.quantity}`}
                       cost={"$$$"}
                     />
@@ -77,23 +85,26 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {getLocationByName(playerEntity.locationId).icon({})}
-                <Text>{playerEntity.locationId}</Text>
+                {locationInfo.icon({})}
+                <Text>{locationInfo.name}</Text>
               </HStack>
             </ListItem>
-            {events.map((event, index) => (
-              <ListItem key={index}>
-                <HStack>
-                  <HStack flex="1">
-                    <Event />
-                    <Text>{event}</Text>
+            {outcomes.map((outcome, index) => {
+              const outcomeInfo = getOutcomeByType(outcome);
+              return (
+                <ListItem key={index}>
+                  <HStack>
+                    <HStack flex="1">
+                      <Event />
+                      <Text>{outcomeInfo.name}</Text>
+                    </HStack>
+                    <Text flex="2" color="yellow.400">
+                      {}
+                    </Text>
                   </HStack>
-                  <Text flex="2" color="yellow.400">
-                    {getEventByName(event).description}
-                  </Text>
-                </HStack>
-              </ListItem>
-            ))}
+                </ListItem>
+              );
+            })}
             ;
           </UnorderedList>
         </VStack>
@@ -101,12 +112,8 @@ export default function Turn() {
           <Button
             w={["full", "auto"]}
             onClick={() => {
-              clearState();
-              router.push(
-                `/${gameId}/${
-                  getLocationByName(playerEntity.locationId).slug
-                })}`,
-              );
+              clearTradesAndOutcomes();
+              router.push(`/${gameId}/${locationInfo.slug})}`);
             }}
           >
             Continue

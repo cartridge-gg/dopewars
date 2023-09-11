@@ -2,11 +2,11 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-export WORLD_ADDRESS="0x49eea56f14aebfad0a3f73c530f0673084cc9c4b352965e685e52939221c389";
+export WORLD_ADDRESS="0x3c3dfeb374720dfd73554dc2b9e0583cb9668efb3055d07d1533afa5d219fd5";
 
 # make sure all components/systems are deployed
 COMPONENTS=("Game" "Market" "Name" "Player" "Risks")
-SYSTEMS=("create_game" "join_game" "set_name" "travel" "buy" "sell")
+SYSTEMS=("create_game" "join_game" "set_name" "travel" "buy" "sell" "decide")
 
 # check components
 for component in ${COMPONENTS[@]}; do
@@ -29,6 +29,7 @@ SET_NAME_COMPONENTS=("Name")
 BUY_COMPONENTS=("Drug" "Market" "Name" "Player")
 SELL_COMPONENTS=("Drug" "Market" "Name" "Player")
 TRAVEL_COMPONENTS=("Player")
+DECIDE_COMPONENTS=("Player" "Drug")
 
 for component in ${CREATE_GAME_COMPONENTS[@]}; do
     sozo auth writer $component create_game --world $WORLD_ADDRESS
@@ -52,6 +53,14 @@ done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
     sozo auth writer $component travel --world $WORLD_ADDRESS
+done
+
+for component in ${TRAVEL_COMPONENTS[@]}; do
+    sozo auth writer $component decide --world $WORLD_ADDRESS
+done
+
+for component in ${DECIDE_COMPONENTS[@]}; do
+    sozo auth writer $component decide --world $WORLD_ADDRESS
 done
 
 echo "Default authorizations have been successfully set."

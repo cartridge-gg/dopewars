@@ -8,7 +8,7 @@ import Fonts from "@/theme/fonts";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
-import { DojoProvider } from "@/hooks/dojo";
+import { DojoProvider } from "@/dojo";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient({

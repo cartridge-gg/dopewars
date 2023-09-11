@@ -78,7 +78,12 @@ export default function Chat() {
   };
 
   return (
-    <Layout title="The Wire" imageSrc="url('/images/pager.gif');">
+    <Layout
+      leftPanelProps={{
+        title: "The Wire",
+        imageSrc: "url('/images/pager.gif');",
+      }}
+    >
       <VStack spacing="16px">
         {messages.length > 0 ? (
           messages.map((message, index) => (

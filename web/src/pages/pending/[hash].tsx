@@ -7,7 +7,13 @@ export default function Pending() {
   const { hash } = router.query as { hash: string };
 
   return (
-    <Layout title="New game" prefixTitle="Start a" imageSrc="/images/watch.png">
+    <Layout
+      leftPanelProps={{
+        title: "New game",
+        prefixTitle: "Start a",
+        imageSrc: "/images/watch.png",
+      }}
+    >
       <VStack gap="24px" height="60vh" justifyContent="center">
         <Image src="/images/loading.gif" alt="loading..." />
         <VStack>

@@ -2,8 +2,8 @@ import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
-import { useDojo } from "@/hooks/dojo";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
+import { useDojo } from "@/dojo";
+import { useSystems } from "@/dojo/systems/useSystems";
 import {
   Container,
   Flex,
@@ -30,7 +30,7 @@ export default function End() {
     if (!name) return;
     await submitSetName(gameId, name);
     router.push("/");
-  }, [name, router, submitSetName]);
+  }, [name, gameId, router, submitSetName]);
 
   return (
     <>

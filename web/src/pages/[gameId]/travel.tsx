@@ -10,45 +10,39 @@ import {
   useEventListener,
   Spacer,
 } from "@chakra-ui/react";
-import { Locations, usePlayerState, TravelEvents } from "@/hooks/state";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
-import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { motion } from "framer-motion";
-import {
-  LocationProps,
-  useUiStore,
-  getLocationByName,
-  getEventBySlug,
-} from "@/hooks/ui";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
-import { usePlayerEntity } from "@/hooks/dojo/entities/usePlayerEntity";
-import { RandomEventData } from "@/utils/event";
+import { useSystems } from "@/dojo/systems/useSystems";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/hooks/dojo";
+import { useDojo } from "@/dojo";
+import { getLocationById, getLocationByType, locations } from "@/dojo/helpers";
+import { LocationInfo } from "@/dojo/types";
 
 export default function Travel() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const [target, setTarget] = useState<Locations>();
-  const [currentLocation, setCurrentLocation] = useState<Locations>();
-  const { locations } = useUiStore.getState();
-  const { addEvent } = usePlayerState();
+  const [targetId, setTargetId] = useState<string>("");
+  const [currentLocationId, setCurrentLocationId] = useState<string>("");
+
   const { toast } = useToast();
   const { account } = useDojo();
-
   const { travel, isPending, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
 
+  const targetLocation = useMemo(() => getLocationById(targetId), [targetId]);
+
   useEffect(() => {
     if (playerEntity) {
-      const location = getLocationByName(playerEntity.locationId).name;
-      setCurrentLocation(location);
-      setTarget(location);
+      const location = getLocationById(playerEntity.locationId);
+      setCurrentLocationId(location.id);
+      setTargetId(location.id);
     }
   }, [playerEntity]);
 
@@ -66,44 +60,31 @@ export default function Travel() {
   });
 
   const next = useCallback(() => {
-    const idx = locations.findIndex((location) => location.name === target);
+    const idx = locations.findIndex((location) => location.id === targetId);
     if (idx < locations.length - 1) {
-      setTarget(locations[idx + 1].name);
+      setTargetId(locations[idx + 1].id);
     } else {
-      setTarget(locations[0].name);
+      setTargetId(locations[0].id);
     }
-  }, [target, locations]);
+  }, [targetId]);
 
   const back = useCallback(() => {
-    const idx = locations.findIndex((location) => location.name === target);
+    const idx = locations.findIndex((location) => location.id === targetId);
     if (idx > 0) {
-      setTarget(locations[idx - 1].name);
+      setTargetId(locations[idx - 1].id);
     } else {
-      setTarget(locations[locations.length - 1].name);
+      setTargetId(locations[locations.length - 1].id);
     }
-  }, [target, locations]);
+  }, [targetId]);
 
   const onContinue = useCallback(async () => {
-    if (target) {
-      const { event, hash } = await travel(gameId, target);
+    if (targetId) {
+      const { event, hash } = await travel(gameId, targetId);
       if (event) {
-        const typeSlug = (event as RandomEventData).arrested
-          ? "arrested"
-          : "mugged";
-
-        const travelEvent = getEventBySlug(typeSlug);
-        addEvent(travelEvent.name);
-
-        toast(
-          `${travelEvent.description}`,
-          Event,
-          `http://amazing_explorer/${hash}`,
-        );
-
-        router.push(`/${gameId}/event/${typeSlug}`);
+        router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       } else {
         toast(
-          `You've traveled to ${target}`,
+          `You've traveled to ${targetLocation.name}`,
           Car,
           `http://amazing_explorer/${hash}`,
         );
@@ -111,21 +92,24 @@ export default function Travel() {
         router.push(`/${gameId}/turn`);
       }
     }
-  }, [target, router, gameId, addEvent, travel, toast]);
+  }, [targetId, router, gameId, targetLocation, travel, toast]);
 
   return (
     <Layout
-      title="Destination"
-      prefixTitle="Select Your"
+      leftPanelProps={{
+        title: "Destination",
+        prefixTitle: "Select Your",
+        map: (
+          <Map
+            highlight={targetLocation.type}
+            onSelect={(selected) => {
+              setTargetId(getLocationByType(selected).id);
+            }}
+          />
+        ),
+      }}
+      showMap={true}
       showBack={true}
-      map={
-        <Map
-          highlight={target}
-          onSelect={(selected) => {
-            setTarget(selected);
-          }}
-        />
-      }
     >
       <VStack w="full" my="auto" display={["none", "flex"]}>
         <Car boxSize="60px" />
@@ -134,21 +118,21 @@ export default function Travel() {
             {...location}
             key={index}
             name={location.name}
-            isCurrent={location.name === currentLocation}
-            selected={location.name === target}
-            onClick={() => setTarget(location.name)}
+            isCurrent={location.id === currentLocationId}
+            selected={location.id === targetId}
+            onClick={() => setTargetId(location.id)}
           />
         ))}
         <Spacer />
         <Button
           w={["full", "250px"]}
-          isDisabled={!target || target === currentLocation}
+          isDisabled={!targetId || targetId === currentLocationId}
           isLoading={isPending && !txError}
           onClick={onContinue}
         >
-          {target === currentLocation
+          {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${target}`}
+            : `Travel to ${targetLocation.name}`}
         </Button>
       </VStack>
       <VStack
@@ -181,7 +165,7 @@ export default function Travel() {
             w="full"
             justify="center"
           >
-            <Text>{target}</Text>
+            <Text>{targetLocation.name}</Text>
           </HStack>
           <Arrow
             style="outline"
@@ -195,13 +179,13 @@ export default function Travel() {
         <Button
           w={["full", "auto"]}
           pointerEvents="all"
-          isDisabled={!target || target === currentLocation}
+          isDisabled={!targetId || targetId === currentLocationId}
           isLoading={isPending && !txError}
           onClick={onContinue}
         >
-          {target === currentLocation
+          {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${target}`}
+            : `Travel to ${targetLocation.name}`}
         </Button>
       </VStack>
     </Layout>
@@ -220,7 +204,7 @@ const Location = ({
   selected: boolean;
   isCurrent: boolean;
   onClick: () => void;
-} & LocationProps) => {
+} & LocationInfo) => {
   const currentColor = isCurrent ? "yellow.400" : "neon.400";
   return (
     <HStack w="full">

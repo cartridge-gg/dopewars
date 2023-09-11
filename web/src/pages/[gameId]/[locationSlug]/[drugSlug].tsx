@@ -1,45 +1,29 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, Text, VStack, HStack, Card, Button } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
 import { Footer } from "@/components/Footer";
-import { DrugProps, getDrugBySlug, getLocationBySlug } from "@/hooks/ui";
 
-import {
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
-} from "@chakra-ui/react";
+import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  TabIndicator,
-} from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
-import { TradeDirection, TradeType, usePlayerState } from "@/hooks/state";
+import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import { cardPixelatedStyle } from "@/theme/styles";
 import {
   DrugMarket,
   useLocationEntity,
-} from "@/hooks/dojo/entities/useLocationEntity";
-import {
-  PlayerEntity,
-  usePlayerEntity,
-} from "@/hooks/dojo/entities/usePlayerEntity";
+} from "@/dojo/entities/useLocationEntity";
+import { PlayerEntity, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
-import { useSystems } from "@/hooks/dojo/systems/useSystems";
+import { useSystems } from "@/dojo/systems/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/hooks/dojo";
+import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
+import { DrugInfo } from "@/dojo/types";
+import { useDojo } from "@/dojo";
 
 export default function Market() {
   const router = useRouter();
@@ -60,7 +44,7 @@ export default function Market() {
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
-    locationId: location.name,
+    locationId: location.id,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -73,10 +57,10 @@ export default function Market() {
   useEffect(() => {
     if (!locationEntity || !playerEntity) return;
 
-    const market = locationEntity.drugMarkets.find((d) => d.name === drug.name);
+    const market = locationEntity.drugMarkets.find((d) => d.id === drug.id);
     if (!market) return;
 
-    const playerDrug = playerEntity.drugs.find((d) => d.name === drug.name);
+    const playerDrug = playerEntity.drugs.find((d) => d.id === drug.id);
     if (playerDrug) {
       setCanSell(playerDrug.quantity > 0);
     }
@@ -89,10 +73,12 @@ export default function Market() {
     setTradeDirection(index as TradeDirection);
   };
 
-  const { buy, sell, isPending, error: txError } = useSystems();
-  const { addTrade } = usePlayerState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { buy, sell, error: txError } = useSystems();
+  const { addTrade } = usePlayerStore();
 
   const onTrade = useCallback(async () => {
+    setIsSubmitting(true);
     playSound(Sounds.Trade);
     let toastMessage = "",
       hash = "",
@@ -110,7 +96,7 @@ export default function Market() {
 
     toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
 
-    addTrade(drug.name, {
+    addTrade(drug.type, {
       direction: tradeDirection,
       quantity,
     } as TradeType);
@@ -134,9 +120,11 @@ export default function Market() {
 
   return (
     <Layout
-      title={drug.name}
-      prefixTitle="The market"
-      imageSrc="/images/dealer.png"
+      leftPanelProps={{
+        title: drug.name,
+        prefixTitle: "The market",
+        imageSrc: "/images/dealer.png",
+      }}
       showBack={true}
     >
       <VStack
@@ -214,7 +202,7 @@ export default function Market() {
       <Footer>
         <Button
           w={["full", "auto"]}
-          isLoading={isPending && !txError}
+          isLoading={isSubmitting && !txError}
           onClick={onTrade}
           display={
             (tradeDirection === TradeDirection.Buy && canBuy) ||
@@ -240,7 +228,7 @@ const QuantitySelector = ({
   onChange,
 }: {
   type: TradeDirection;
-  drug: DrugProps;
+  drug: DrugInfo;
   player: PlayerEntity;
   market: DrugMarket;
   onChange: (quantity: number, newPrice: number) => void;
@@ -256,7 +244,7 @@ const QuantitySelector = ({
       setMax(calculateMaxQuantity(market.marketPool, player.cash));
     } else if (type === TradeDirection.Sell) {
       const playerQuantity = player.drugs.find(
-        (d) => d.name === drug.name,
+        (d) => d.id === drug.id,
       )?.quantity;
       setMax(playerQuantity || 0);
     }

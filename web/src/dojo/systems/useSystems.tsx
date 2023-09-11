@@ -1,6 +1,7 @@
-import { BaseEventData, parseEvent, RyoEvents } from "@/utils/event";
 import { useCallback } from "react";
 import { useDojo } from "..";
+import { BaseEventData, parseEvent, RyoEvents } from "../events";
+import { Action } from "../types";
 
 export interface SystemsInterface {
   create: (
@@ -23,6 +24,11 @@ export interface SystemsInterface {
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  decide: (
+    gameId: string,
+    action: Action,
+    nextLocationId: string,
+  ) => Promise<SystemExecuteResult>;
   isPending: boolean;
   error?: Error;
 }
@@ -59,6 +65,7 @@ export const useSystems = (): SystemsInterface => {
         maxPlayers,
         maxTurns,
       ]);
+
       // using joined event instead of created event to get initial location
       const event = parseEvent(receipt, RyoEvents.PlayerJoined);
 
@@ -76,7 +83,7 @@ export const useSystems = (): SystemsInterface => {
       let result = { hash: receipt.transaction_hash } as SystemExecuteResult;
 
       try {
-        result.event = parseEvent(receipt, RyoEvents.RandomEvent);
+        result.event = parseEvent(receipt, RyoEvents.AdverseEvent);
       } catch (err) {
         // no random event occured
       }
@@ -152,6 +159,24 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReciept],
   );
 
+  const decide = useCallback(
+    async (gameId: string, action: Action, nextLocationId: string) => {
+      const receipt = await executeAndReciept("decide", [
+        gameId,
+        action,
+        nextLocationId,
+      ]);
+
+      const event = parseEvent(receipt, RyoEvents.Consqeuence);
+
+      return {
+        hash: receipt.transaction_hash,
+        event,
+      };
+    },
+    [executeAndReciept],
+  );
+
   return {
     create,
     join,
@@ -159,6 +184,7 @@ export const useSystems = (): SystemsInterface => {
     buy,
     sell,
     setName,
+    decide,
     error,
     isPending,
   };

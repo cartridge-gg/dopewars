@@ -1,7 +1,7 @@
+import { Location } from "@/dojo/types";
 import { Icon } from "@chakra-ui/react";
-import { Locations } from "@/hooks/state";
 
-export const Callout = ({ location }: { location: Locations }) => {
+export const Callout = ({ location }: { location: Location }) => {
   return (
     <Icon
       layerStyle="fill"
@@ -9,7 +9,7 @@ export const Callout = ({ location }: { location: Locations }) => {
       viewBox="0 0 256 256"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g visibility={Locations.Central == location ? "visible" : "hidden"}>
+      <g visibility={Location.Central == location ? "visible" : "hidden"}>
         <path d="M125.01 115.997H124V117.007H125.01V115.997Z" fill="#0CA85D" />
         <path
           d="M120 109.997H124.01V110.997H125.01V115.007H124.01V116.007H123.01V118.007H121V116.007H120V115.007H119V110.997H120V109.997ZM123 114.997V114.007H121.01V114.997H123ZM124 113.997V112.007H123.01V113.997H124ZM120.01 113.997H121V112.007H120.01V113.997ZM123 111.007V111.997H121.01V111.007H123Z"
@@ -26,7 +26,7 @@ export const Callout = ({ location }: { location: Locations }) => {
           fill="#11ED83"
         />
       </g>
-      <g visibility={Locations.Brooklyn == location ? "visible" : "hidden"}>
+      <g visibility={Location.Brooklyn == location ? "visible" : "hidden"}>
         <path d="M122.01 181.995H121V183.005H122.01V181.995Z" fill="#0CA85D" />
         <path
           d="M117 175.995H121.01V176.995H122.01V181.005H121.01V182.005H120.01V184.005H118V182.005H117V181.005H116V176.995H117V175.995ZM120 180.995V180.005H118.01V180.995H120ZM121 179.995V178.005H120.01V179.995H121ZM117.01 179.995H118V178.005H117.01V179.995ZM120 177.005V177.995H118.01V177.005H120Z"
@@ -43,7 +43,7 @@ export const Callout = ({ location }: { location: Locations }) => {
           fill="#11ED83"
         />
       </g>
-      <g visibility={Locations.Coney == location ? "visible" : "hidden"}>
+      <g visibility={Location.Coney == location ? "visible" : "hidden"}>
         <path d="M196.019 203H195.009V204.01H196.019V203Z" fill="#0CA85D" />
         <path
           d="M191.009 197H195.019V198H196.019V202.01H195.019V203.01H194.019V205.01H192.009V203.01H191.009V202.01H190.009V198H191.009V197ZM194.009 202V201.01H192.019V202H194.009ZM195.009 201V199.01H194.019V201H195.009ZM191.019 201H192.009V199.01H191.019V201ZM194.009 198.01V199H192.019V198.01H194.009Z"
@@ -60,7 +60,7 @@ export const Callout = ({ location }: { location: Locations }) => {
           fill="#11ED83"
         />
       </g>
-      <g visibility={Locations.Queens == location ? "visible" : "hidden"}>
+      <g visibility={Location.Queens == location ? "visible" : "hidden"}>
         <path
           d="M193.014 134.994H192.004V136.004H193.014V134.994Z"
           fill="#0CA85D"
@@ -81,7 +81,7 @@ export const Callout = ({ location }: { location: Locations }) => {
         />
       </g>
 
-      <g visibility={Locations.Bronx == location ? "visible" : "hidden"}>
+      <g visibility={Location.Bronx == location ? "visible" : "hidden"}>
         <path d="M141.01 43.9948H140V45.0048H141.01V43.9948Z" fill="#0CA85D" />
         <path
           d="M136 37.9948H140.01V38.9948H141.01V43.0048H140.01V44.0048H139.01V46.0048H137V44.0048H136V43.0048H135V38.9948H136V37.9948ZM139 42.9948V42.0048H137.01V42.9948H139ZM140 41.9948V40.0048H139.01V41.9948H140ZM136.01 41.9948H137V40.0048H136.01V41.9948ZM139 39.0048V39.9948H137.01V39.0048H139Z"
@@ -98,7 +98,7 @@ export const Callout = ({ location }: { location: Locations }) => {
           fill="#11ED83"
         />
       </g>
-      <g visibility={Locations.Jersey == location ? "visible" : "hidden"}>
+      <g visibility={Location.Jersey == location ? "visible" : "hidden"}>
         <path d="M75.0161 96.99H74.0061V98H75.0161V96.99Z" fill="#0CA85D" />
         <path
           d="M70.0061 90.99H74.0161V91.99H75.0161V96H74.0161V97H73.0161V99H71.0061V97H70.0061V96H69.0061V91.99H70.0061V90.99ZM73.0061 95.99V95H71.0161V95.99H73.0061ZM74.0061 94.99V93H73.0161V94.99H74.0061ZM70.0161 94.99H71.0061V93H70.0161V94.99ZM73.0061 92V92.99H71.0161V92H73.0061Z"
