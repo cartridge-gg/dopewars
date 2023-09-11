@@ -161,7 +161,7 @@ mod decide {
         }
     }
 
-    // u just lost all ur drugs, ngmi
+    // sorry fren, u jus lost half ur stash, ngmi
     fn take_drugs(ctx: Context, game_id: u32, player_id: ContractAddress) {
         let mut drugs = DrugTrait::all();
         loop {

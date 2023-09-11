@@ -25,7 +25,7 @@ export interface LayoutProps {
 
 export interface LeftPanelProps {
   title: string;
-  prefixTitle: string;
+  prefixTitle?: string;
   imageSrc?: string;
   map?: ReactNode;
 }

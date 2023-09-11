@@ -67,7 +67,7 @@ export default function Decision() {
           </Heading>
         </VStack>
         <Image
-          src="/images/muggers.gif"
+          src="/images/events/muggers.gif"
           alt="muggers"
           width={500}
           height={500}

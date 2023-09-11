@@ -22,9 +22,11 @@ export default function Home() {
 
   return (
     <Layout
-      title="Roll Your Own"
-      prefixTitle="Dope Wars:"
-      imageSrc="/images/punk-girl.png"
+      leftPanelProps={{
+        title: "Roll Your Own",
+        prefixTitle: "Dope Wars:",
+        imageSrc: "/images/punk-girl.png",
+      }}
     >
       <VStack w="full" gap="20px">
         <Text textStyle="subheading" fontSize="13px">
