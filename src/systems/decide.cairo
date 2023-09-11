@@ -16,15 +16,19 @@ mod decide {
 
     #[derive(Copy, Drop, Serde, PartialEq)]
     enum Action {
-        Pay: (),
         Run: (),
+        Pay: (),
+        Fight: (),
     }
 
     #[derive(Copy, Drop, Serde, PartialEq)]
     enum Outcome {
+        Died: (),
         Paid: (),
+        Fought: (),
         Escaped: (),
         Captured: (),
+        Unsupported: (),
     }
 
     #[event]
@@ -70,40 +74,74 @@ mod decide {
         let mut player = get !(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal(()), 'player response not needed');
 
-        let (outcome, cash_loss) = match action {
-            Action::Pay => pay(ctx, game_id, player_id, player.cash),
-            Action::Run => run(ctx, game_id, player_id, player.location_id, player.cash),
+        let (mut outcome, cash_loss, health_loss) = match player.status {
+            PlayerStatus::Normal(()) => (Outcome::Unsupported(()), 0, 0),
+            PlayerStatus::BeingMugged(()) => match action {
+                Action::Run => run(
+                    ctx, game_id, player_id, player.status, player.cash, player.location_id
+                ),
+                Action::Pay => (Outcome::Unsupported(()), 0, 0),   // can't pay muggers
+                Action::Fight => fight(ctx, game_id, player_id),
+            },
+            PlayerStatus::BeingArrested(()) => match action {
+                Action::Run => run(
+                    ctx, game_id, player_id, player.status, player.cash, player.location_id
+                ),
+                Action::Pay => pay(ctx, game_id, player_id, player.cash),
+                Action::Fight => (Outcome::Unsupported(()), 0, 0), // can't fight officers
+            },
         };
 
-        player.cash -= cash_loss;
+        // you can only bribe cops and fight muggers, not the other way around
+        assert(outcome != Outcome::Unsupported(()), 'unsupported action');
+        
+        // update player data
         player.status = PlayerStatus::Normal(());
-        player.location_id = next_location_id;
-        player.turns_remaining -= 1;
+        player.cash -= cash_loss;
+        if health_loss >= player.health {
+            player.health = 0;
+            player.turns_remaining = 0;
+            outcome = Outcome::Died(());
+        } else {
+            player.health -= health_loss;
+            player.turns_remaining -= 1;
+            player.location_id = next_location_id;
+        }
 
         set !(ctx.world, (player));
         emit !(ctx.world, Consequence { game_id, player_id, outcome });
     }
 
+    // Player will fight muggers, but it kinda hurts, taking 25hp of your health. You 
+    // might also die if not enough health
+    fn fight(ctx: Context, game_id: u32, player_id: ContractAddress) -> (Outcome, u128, u8) {
+        (Outcome::Fought(()), 0, 25)
+    }
+
     // Player will hand over either 20% of their cash or $400, which ever is more
     fn pay(
         ctx: Context, game_id: u32, player_id: ContractAddress, player_cash: u128
-    ) -> (Outcome, u128) {
+    ) -> (Outcome, u128, u8) {
         assert(player_cash >= BASE_PAYMENT, 'not enough cash kid');
         let cash_loss = cmp::max(player_cash / 5, BASE_PAYMENT);
 
         emit !(ctx.world, Decision { game_id, player_id, action: Action::Pay });
         emit !(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
-        (Outcome::Paid(()), cash_loss)
+        (Outcome::Paid(()), cash_loss, 0)
     }
 
-    // Player will try to run and can escape. However, if they are captured they lose 50% of everything
+    // Player will try to run and can escape without consequence. However, if you 
+    // are caught be ready to face the consequences:
+    //     - caught escaping an officer - lose ALL your drugs and lose a turn
+    //     - caught escaping muggers - lose ALL your cash and 50% health
     fn run(
         ctx: Context,
         game_id: u32,
         player_id: ContractAddress,
-        location_id: felt252,
-        player_cash: u128
-    ) -> (Outcome, u128) {
+        player_status: PlayerStatus,
+        player_cash: u128,
+        location_id: felt252
+    ) -> (Outcome, u128, u8) {
         let mut risks = get !(ctx.world, (game_id, location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let got_away = risks.run(seed);
@@ -112,26 +150,26 @@ mod decide {
         match got_away {
             bool::False => {
                 let cash_loss = player_cash / 2;
-                halve_drugs(ctx, game_id, player_id);
+                take_drugs(ctx, game_id, player_id);
 
                 emit !(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
-                (Outcome::Captured(()), cash_loss)
+                (Outcome::Captured(()), cash_loss, 0)
             },
             bool::True => {
-                (Outcome::Escaped(()), 0)
+                (Outcome::Escaped(()), 0, 0)
             }
         }
     }
 
-    // sorry fren, u jus lost half ur stash, ngmi
-    fn halve_drugs(ctx: Context, game_id: u32, player_id: ContractAddress) {
+    // u just lost all ur drugs, ngmi
+    fn take_drugs(ctx: Context, game_id: u32, player_id: ContractAddress) {
         let mut drugs = DrugTrait::all();
         loop {
             match drugs.pop_front() {
                 Option::Some(drug_id) => {
                     let mut drug = get !(ctx.world, (game_id, player_id, *drug_id).into(), Drug);
                     if (drug.quantity != 0) {
-                        drug.quantity /= 2;
+                        drug.quantity = 0;
 
                         emit !(
                             ctx.world,

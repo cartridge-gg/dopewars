@@ -3,6 +3,7 @@ use option::OptionTrait;
 use debug::PrintTrait;
 
 use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
 struct Risks {
@@ -17,8 +18,18 @@ struct Risks {
 #[generate_trait]
 impl RisksImpl of RisksTrait {
     #[inline(always)]
-    fn travel(ref self: Risks, seed: felt252) -> bool {
-        occurs(seed, self.travel)
+    fn travel(ref self: Risks, seed: felt252) -> PlayerStatus {
+        if occurs(seed, self.travel) {
+            let seed: u256 = seed.into();
+            let result: u128 = seed.low % 100;
+
+            return match result <= 33 {
+                bool::False => PlayerStatus::BeingArrested(()),
+                bool::True => PlayerStatus::BeingMugged(()),
+            };
+        }
+
+        return PlayerStatus::Normal(());
     }
 
     #[inline(always)]
@@ -43,9 +54,9 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 fn test_never_occurs() {
     let seed = pedersen::pedersen(1, 1);
     let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, run: 0 };
-    let event = risks.travel(seed);
+    let player_status = risks.travel(seed);
 
-    assert(event == bool::False, 'event occured');
+    assert(player_status == PlayerStatus::Normal(()), 'event occured');
 }
 
 #[test]
@@ -53,9 +64,9 @@ fn test_never_occurs() {
 fn test_always_occurs() {
     let seed = pedersen::pedersen(1, 1);
     let mut risks = Risks { game_id: 0, location_id: 0, travel: 100, run: 0 };
-    let event = risks.travel(seed);
+    let player_status = risks.travel(seed);
 
-    assert(event == bool::True, 'event did not occur');
+    assert(player_status != PlayerStatus::Normal(()), 'event did not occur');
 }
 
 #[test]

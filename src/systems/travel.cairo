@@ -51,15 +51,11 @@ mod travel {
         let mut risks = get !(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
-        // only mugging for now
-        if risks.travel(seed) {
-            player.status = PlayerStatus::BeingMugged(());
+        let player_status = risks.travel(seed);
+        if player_status != PlayerStatus::Normal(()) {
             set !(ctx.world, (player));
 
-            emit !(
-                ctx.world,
-                AdverseEvent { game_id, player_id, player_status: PlayerStatus::BeingMugged(()) }
-            );
+            emit !(ctx.world, AdverseEvent { game_id, player_id, player_status });
 
             return true;
         }
