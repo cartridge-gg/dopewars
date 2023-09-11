@@ -8,7 +8,7 @@ import {
   Heading,
   Image,
   Box,
-  Link,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -32,7 +32,7 @@ import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
 import { cardPixelatedStyle, cardPixelatedStyleOutset } from "@/theme/styles";
-import * as NextLink from "next/link";
+import Link from "next/link";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -48,7 +48,7 @@ export default function Home() {
   const { toast } = useToast();
 
   return (
-    <Layout leftPanel={HomeLeftPanel()}>
+    <Layout CustomLeftPanel={HomeLeftPanel}>
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
@@ -181,7 +181,9 @@ const steps = [
 
 const HomeStep = ({
   step,
-}): { step: { step: number; title: string; desc: string } } => {
+}: {
+  step: { step: number; title: string; desc: string };
+}) => {
   return (
     <>
       <HStack
@@ -255,18 +257,17 @@ const HomeLeftPanel = () => {
             alt="context"
           />
 
-          <NextLink
+          <Link
             id="steps"
             style={{ marginTop: "30px" }}
             href="#steps"
-            smooth={true}
           >
             <ScrollDown width="40px" height="40px" />
-          </NextLink>
+          </Link>
 
           <Box>
             {steps.map((step) => {
-              return <HomeStep step={step} />;
+              return <HomeStep step={step} key={step.step} />;
             })}
           </Box>
         </VStack>
@@ -280,7 +281,7 @@ const HomeLeftPanel = () => {
             variant="pixelated"
             px="5"
           >
-            <Link
+            <ChakraLink
               href="https://cartridge.gg/"
               target="_blank"
               display="flex"
@@ -292,12 +293,12 @@ const HomeLeftPanel = () => {
               }}
             >
               BUILT BY <Cartridge ml="2" />
-            </Link>
+            </ChakraLink>
 
             <Text px="2" fontSize="xl">
               |
             </Text>
-            <Link
+            <ChakraLink
               href="https://dojoengine.org/"
               target="_blank"
               display="flex"
@@ -309,7 +310,7 @@ const HomeLeftPanel = () => {
               }}
             >
               BUILT WITH <Dojo ml="2" />
-            </Link>
+            </ChakraLink>
           </Card>
         </HStack>
       </VStack>
