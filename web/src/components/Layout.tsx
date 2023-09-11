@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import CrtEffect from "./CrtEffect";
 
 export interface LayoutProps {
+  leftPanel?: ReactNode;
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
   actions?: ReactNode;
@@ -31,6 +32,7 @@ export interface LeftPanelProps {
 }
 
 const Layout = ({
+  leftPanel,
   leftPanelProps,
   showBack,
   showMap,
@@ -48,8 +50,8 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container>
-          {!isSinglePanel && <LeftPanel {...leftPanelProps} />}
+        <Container position="relative">
+          {!isSinglePanel && ( !leftPanel ? <LeftPanel {...leftPanelProps} /> : {...leftPanel} ) }
           <RightPanel flex={[showMap ? "0" : "1", "1"]}>{children}</RightPanel>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />

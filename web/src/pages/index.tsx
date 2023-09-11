@@ -5,6 +5,10 @@ import {
   Divider,
   Card,
   CardBody,
+  Heading,
+  Image,
+  Box,
+  Link,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -14,7 +18,6 @@ import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import BorderImage from "@/components/icons/BorderImage";
-import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { useGlobalScores } from "@/dojo/components/useGlobalScores";
@@ -25,6 +28,11 @@ import { useDojo } from "@/dojo";
 import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
 import { usePlayerStore } from "@/hooks/state";
+import { Cartridge } from "@/components/icons/branding/Cartridge";
+import { Dojo } from "@/components/icons/branding/Dojo";
+import { ScrollDown } from "@/components/icons/ScrollDown";
+import { cardPixelatedStyle, cardPixelatedStyleOutset } from "@/theme/styles";
+import * as NextLink from "next/link";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -40,17 +48,11 @@ export default function Home() {
   const { toast } = useToast();
 
   return (
-    <Layout
-      leftPanelProps={{
-        title: "Roll Your Own",
-        prefixTitle: "Dope Wars",
-        imageSrc: "/images/punk-girl.png",
-      }}
-    >
+    <Layout leftPanel={HomeLeftPanel()}>
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            <VStack>
+            {/* <VStack>
               <HStack>
                 <Alert />
                 <Text align="center">Under Construction</Text>
@@ -59,7 +61,8 @@ export default function Home() {
                 Get ready hustlers... Season II starts in September
               </Text>
             </VStack>
-            {/* <Button
+            */}
+            <Button
               flex="1"
               isDisabled={!!account}
               isLoading={isBurnerDeploying}
@@ -86,11 +89,11 @@ export default function Home() {
               }}
             >
               Hustle
-            </Button> */}
+            </Button>
           </HStack>
         </Card>
 
-        {/* <Text>HALL OF FAME</Text>
+        <Text>HALL OF FAME</Text>
         <VStack
           boxSize="full"
           gap="20px"
@@ -102,7 +105,7 @@ export default function Home() {
           }}
         >
           <Leaderboard />
-        </VStack> */}
+        </VStack>
       </VStack>
     </Layout>
   );
@@ -152,3 +155,188 @@ const Game = ({
     </HStack>
   </HStack>
 );
+
+const steps = [
+  {
+    step: 1,
+    title: "Buy Low",
+    desc: "A short description of this step, maybe one to two sentences. Here is one.",
+  },
+  {
+    step: 2,
+    title: "Sell High",
+    desc: "A short description of this step, maybe one to two sentences. Here is one.",
+  },
+  {
+    step: 3,
+    title: "Get rekt",
+    desc: "A short description of this step, maybe one to two sentences. Here is one.",
+  },
+  {
+    step: 4,
+    title: "Profit",
+    desc: "A short description of this step, maybe one to two sentences. Here is one.",
+  },
+];
+
+const HomeStep = ({
+  step,
+}): { step: { step: number; title: string; desc: string } } => {
+  return (
+    <>
+      <HStack
+        flexDirection={step.step % 2 == 1 ? "row" : "row-reverse"}
+        gap="20px"
+      >
+        <Image
+          src={`/images/landing/step${step.step}.png`}
+          alt={`step${step.step}`}
+          w="42%"
+        />
+
+        <VStack w="58%" alignItems="flex-start" py="100px">
+          <HStack>
+            <Image
+              src={`/images/landing/step${step.step}-icon.png`}
+              alt={`step${step.step}`}
+              w="92px"
+            />
+            <VStack alignItems="flex-start">
+              <Text
+                fontSize="11px"
+                fontFamily="broken-console"
+                backgroundColor="#174127"
+                padding="0.5rem 0.5rem 0.25rem"
+              >
+                Step {step.step}
+              </Text>
+              <Heading fontFamily={"chicago-flf"}> {step.title}</Heading>
+            </VStack>
+          </HStack>
+          <Text p="10px">{step.desc}</Text>
+        </VStack>
+      </HStack>
+    </>
+  );
+};
+
+const HomeLeftPanel = () => {
+  return (
+    <>
+      <VStack
+        my="auto"
+        flex={["0", "1"]}
+        display={["none", "flex"]}
+        position="relative"
+        maxH="800px"
+        overflow="hidden"
+        overflowY="auto"
+        sx={{
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+          "scrollbar-width": "none",
+        }}
+      >
+        <VStack zIndex="2">
+          <Text textStyle="subheading" fontSize="11px">
+            DOPE WARS
+          </Text>
+          <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+            Roll your Own
+          </Heading>
+        </VStack>
+
+        <VStack position="relative" top="-160px">
+          <Image
+            src={"/images/landing/main.png"}
+            maxH="75vh"
+            display={["none", "block"]}
+            alt="context"
+          />
+
+          <NextLink
+            id="steps"
+            style={{ marginTop: "30px" }}
+            href="#steps"
+            smooth={true}
+          >
+            <ScrollDown width="40px" height="40px" />
+          </NextLink>
+
+          <Box>
+            {steps.map((step) => {
+              return <HomeStep step={step} />;
+            })}
+          </Box>
+        </VStack>
+
+        <HStack pb="200px">
+          <Card
+            display="flex"
+            flexDirection="row"
+            p="2"
+            alignItems="center"
+            variant="pixelated"
+            px="5"
+          >
+            <Link
+              href="https://cartridge.gg/"
+              target="_blank"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              textDecoration="none"
+              _hover={{
+                color: "cartridgeYellow",
+              }}
+            >
+              BUILT BY <Cartridge ml="2" />
+            </Link>
+
+            <Text px="2" fontSize="xl">
+              |
+            </Text>
+            <Link
+              href="https://dojoengine.org/"
+              target="_blank"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              textDecoration="none"
+              _hover={{
+                color: "dojoRed",
+              }}
+            >
+              BUILT WITH <Dojo ml="2" />
+            </Link>
+          </Card>
+        </HStack>
+      </VStack>
+
+      <HStack
+        w="calc((100% - 100px) / 2)"
+        h="200px"
+        position="absolute"
+        display={["none", "block"]}
+        top="0px"
+        marginTop="-80px"
+        zIndex={1}
+        background="linear-gradient(#172217, #172217, transparent)"
+        pointerEvents="none"
+      ></HStack>
+
+      <HStack
+        w="calc((100% - 100px) / 2)"
+        h="200px"
+        position="absolute"
+        display={["none", "block"]}
+        bottom="0px"
+        marginBottom="-80px"
+        zIndex={1}
+        background="linear-gradient(transparent, #172217, #172217)"
+        pointerEvents="none"
+      ></HStack>
+    </>
+  );
+};
