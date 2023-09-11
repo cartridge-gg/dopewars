@@ -33,34 +33,42 @@ DECIDE_COMPONENTS=("Player" "Drug")
 
 for component in ${CREATE_GAME_COMPONENTS[@]}; do
     sozo auth writer $component create_game --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${JOIN_GAME_COMPONENTS[@]}; do
     sozo auth writer $component join_game --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${SET_NAME_COMPONENTS[@]}; do
     sozo auth writer $component set_name --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${BUY_COMPONENTS[@]}; do
     sozo auth writer $component buy --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${SELL_COMPONENTS[@]}; do
     sozo auth writer $component sell --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
     sozo auth writer $component travel --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
     sozo auth writer $component decide --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 for component in ${DECIDE_COMPONENTS[@]}; do
     sozo auth writer $component decide --world $WORLD_ADDRESS
+    sleep 0.1
 done
 
 echo "Default authorizations have been successfully set."
