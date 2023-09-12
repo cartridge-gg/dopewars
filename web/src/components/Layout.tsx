@@ -8,13 +8,14 @@ import {
   Container,
   Box,
 } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
 import CrtEffect from "./CrtEffect";
 
 export interface LayoutProps {
+  CustomLeftPanel?: React.FC;
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
   actions?: ReactNode;
@@ -31,6 +32,7 @@ export interface LeftPanelProps {
 }
 
 const Layout = ({
+  CustomLeftPanel,
   leftPanelProps,
   showBack,
   showMap,
@@ -48,9 +50,14 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container>
-          {!isSinglePanel && <LeftPanel {...leftPanelProps} />}
-          <RightPanel flex={[showMap ? "0" : "1", "1"]}>{children}</RightPanel>
+        <Container position="relative">
+          <>
+            {!isSinglePanel &&
+              (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel />)}
+            <RightPanel flex={[showMap ? "0" : "1", "1"]}>
+              {children}
+            </RightPanel>
+          </>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>

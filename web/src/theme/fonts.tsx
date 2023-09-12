@@ -42,6 +42,13 @@ const Fonts = () => (
         font-style: normal;
         src: url('/fonts/ChicagoFLF.ttf');
       }
+
+      @font-face {
+        font-family: 'ppneuebit';
+        font-weight: 700;
+        font-style: normal;
+        src: url('/fonts/PPNeueBit-Bold.otf') format('opentype');
+      }
 `}
   />
 );

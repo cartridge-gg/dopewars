@@ -21,6 +21,8 @@ const colors: ColorsType = {
   whiteAlpha: {
     100: "rgba(255, 255, 255, 0.03)",
   },
+  dojoRed: "#ff2f42",
+  cartridgeYellow: "#FFC52A",
 };
 
 export default colors;
