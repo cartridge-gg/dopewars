@@ -29,7 +29,7 @@ import { usePlayerStore } from "@/hooks/state";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 9;
+const NUM_TURNS = 14;
 
 export default function Home() {
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function Home() {
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            <VStack>
+            {/* <VStack>
               <HStack>
                 <Alert />
                 <Text align="center">Under Construction</Text>
@@ -58,8 +58,8 @@ export default function Home() {
               <Text align="center">
                 Get ready hustlers... Season II starts in September
               </Text>
-            </VStack>
-            {/* <Button
+            </VStack> */}
+           <Button
               flex="1"
               isDisabled={!!account}
               isLoading={isBurnerDeploying}
@@ -86,11 +86,11 @@ export default function Home() {
               }}
             >
               Hustle
-            </Button> */}
+            </Button> 
           </HStack>
         </Card>
 
-        {/* <Text>HALL OF FAME</Text>
+        <Text>HALL OF FAME</Text>
         <VStack
           boxSize="full"
           gap="20px"
@@ -102,7 +102,7 @@ export default function Home() {
           }}
         >
           <Leaderboard />
-        </VStack> */}
+        </VStack> 
       </VStack>
     </Layout>
   );

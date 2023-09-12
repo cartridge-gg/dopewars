@@ -61,7 +61,7 @@ const Leaderboard = ({
     <>
       <UnorderedList boxSize="full" variant="dotted" {...props}>
         {scores ? (
-          scores?.map((score, index) => {
+          scores?.sort((a,b) => b.cash - a.cash).map((score, index) => {
             const isOwn = score.address === account?.address;
             const color = isOwn
               ? colors.yellow["400"].toString()
