@@ -9,6 +9,7 @@ import {
   Image,
   Box,
   Link as ChakraLink,
+  keyframes,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -38,6 +39,13 @@ import Link from "next/link";
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
 const NUM_TURNS = 9;
+
+const floatAnim = keyframes`  
+  0% {transform: translateY(0%);}
+  25% {transform: translateY(-6px);}
+  50% {transform: translateY(0%);}
+  70% {transform: translateY(8px);}
+`;
 
 export default function Home() {
   const router = useRouter();
@@ -212,7 +220,13 @@ const HomeStep = ({
               >
                 Step {step.step}
               </Text>
-              <Heading fontFamily={"chicago-flf"}> {step.title}</Heading>
+              <Heading
+                fontFamily={"ppneuebit"}
+                fontSize="44px"
+                lineHeight={"1"}
+              >
+                {step.title}
+              </Heading>
             </VStack>
           </HStack>
           <Text p="10px">{step.desc}</Text>
@@ -222,15 +236,27 @@ const HomeStep = ({
   );
 };
 
+const onScrollDown = () => {
+  let steps = document.getElementById("steps");
+
+  setTimeout(() => {
+    steps &&
+      steps.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+  }, 10);
+};
+
 const HomeLeftPanel = () => {
   return (
     <>
       <VStack
         my="auto"
-        flex={["0", "1"]}
-        display={["none", "flex"]}
+        flex={["auto", "1"]}
         position="relative"
-        maxH="800px"
+        maxH={["80px", "800px"]}
         overflow="hidden"
         overflowY="auto"
         sx={{
@@ -249,7 +275,7 @@ const HomeLeftPanel = () => {
           </Heading>
         </VStack>
 
-        <VStack position="relative" top="-160px">
+        <VStack position="relative" top="-160px" display={["none", "flex"]}>
           <Image
             src={"/images/landing/main.png"}
             maxH="75vh"
@@ -257,62 +283,65 @@ const HomeLeftPanel = () => {
             alt="context"
           />
 
-          <Link
+          <Box
             id="steps"
             style={{ marginTop: "30px" }}
-            href="#steps"
+            position="relative"
+            onClick={()=> onScrollDown()}
+            animation={`${floatAnim} infinite 3s linear`}
+            cursor={"pointer"}
           >
             <ScrollDown width="40px" height="40px" />
-          </Link>
+          </Box>
 
           <Box>
             {steps.map((step) => {
               return <HomeStep step={step} key={step.step} />;
             })}
           </Box>
+
+          <HStack py="100px">
+            <Card
+              display="flex"
+              flexDirection="row"
+              p="2"
+              alignItems="center"
+              variant="pixelated"
+              px="5"
+            >
+              <ChakraLink
+                href="https://cartridge.gg/"
+                target="_blank"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                textDecoration="none"
+                _hover={{
+                  color: "cartridgeYellow",
+                }}
+              >
+                BUILT BY <Cartridge ml="2" />
+              </ChakraLink>
+
+              <Text px="2" fontSize="xl">
+                |
+              </Text>
+              <ChakraLink
+                href="https://dojoengine.org/"
+                target="_blank"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                textDecoration="none"
+                _hover={{
+                  color: "dojoRed",
+                }}
+              >
+                BUILT WITH <Dojo ml="2" />
+              </ChakraLink>
+            </Card>
+          </HStack>
         </VStack>
-
-        <HStack pb="200px">
-          <Card
-            display="flex"
-            flexDirection="row"
-            p="2"
-            alignItems="center"
-            variant="pixelated"
-            px="5"
-          >
-            <ChakraLink
-              href="https://cartridge.gg/"
-              target="_blank"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              textDecoration="none"
-              _hover={{
-                color: "cartridgeYellow",
-              }}
-            >
-              BUILT BY <Cartridge ml="2" />
-            </ChakraLink>
-
-            <Text px="2" fontSize="xl">
-              |
-            </Text>
-            <ChakraLink
-              href="https://dojoengine.org/"
-              target="_blank"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              textDecoration="none"
-              _hover={{
-                color: "dojoRed",
-              }}
-            >
-              BUILT WITH <Dojo ml="2" />
-            </ChakraLink>
-          </Card>
-        </HStack>
       </VStack>
 
       <HStack
