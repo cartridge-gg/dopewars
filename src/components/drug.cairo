@@ -26,5 +26,4 @@ impl DrugImpl of DrugTrait {
 
         drugs.span()
     }
-   
 }

@@ -115,7 +115,7 @@ fn market_events(ctx: Context, game_id: u32) {
                                 let increase_by = random(
                                     seed + 1, MIN_PRICE_VAR.into(), MAX_PRICE_VAR.into()
                                 );
-                  
+
                                 let market_price = market.cash
                                     / Into::<usize, u128>::into(market.quantity);
                                 let target_price = market_price * (100 + increase_by) / 100;
@@ -157,7 +157,7 @@ fn market_events(ctx: Context, game_id: u32) {
                                     // decrease price by decrease_by %
                                     let target_cash = Into::<usize, u128>::into(market.quantity)
                                         * target_price;
-                               
+
                                     // update cash in market
                                     set!(
                                         ctx.world,

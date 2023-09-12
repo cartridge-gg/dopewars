@@ -32,7 +32,7 @@ mod join_game {
         let player_id = ctx.origin;
         let block_info = starknet::get_block_info().unbox();
 
-        let mut game = get !(ctx.world, game_id, (Game));
+        let mut game = get!(ctx.world, game_id, (Game));
         assert(!game.is_finished, 'game is finished');
         assert(game.max_players > game.num_players, 'game is full');
         assert(game.start_time >= block_info.block_timestamp, 'already started');
@@ -54,8 +54,8 @@ mod join_game {
             status: PlayerStatus::Normal(()),
         };
 
-        set !(ctx.world, (game, player));
-        emit !(ctx.world, PlayerJoined { game_id, player_id, location_id });
+        set!(ctx.world, (game, player));
+        emit!(ctx.world, PlayerJoined { game_id, player_id, location_id });
 
         player_id
     }

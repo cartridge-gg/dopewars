@@ -122,7 +122,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Paid,
     imageSrc: "/images/sunset.png",
     getNarration: (isInitial: boolean) => getNarration(Outcome.Paid, isInitial),
-    color: "yellow.400"
+    color: "yellow.400",
   },
   {
     name: "Captured",
@@ -130,8 +130,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/events/smoking_gun.gif",
     getNarration: (isInitial: boolean) =>
       getNarration(Outcome.Captured, isInitial),
-    color: "red"
-
+    color: "red",
   },
   {
     name: "Escaped",
@@ -139,7 +138,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/sunset.png",
     getNarration: (isInitial: boolean) =>
       getNarration(Outcome.Escaped, isInitial),
-    color: "neon.200"
+    color: "neon.200",
   },
 ];
 

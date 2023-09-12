@@ -59,7 +59,7 @@ export default function Home() {
                 Get ready hustlers... Season II starts in September
               </Text>
             </VStack> */}
-           <Button
+            <Button
               flex="1"
               isDisabled={!!account}
               isLoading={isBurnerDeploying}
@@ -86,7 +86,7 @@ export default function Home() {
               }}
             >
               Hustle
-            </Button> 
+            </Button>
           </HStack>
         </Card>
 
@@ -102,7 +102,7 @@ export default function Home() {
           }}
         >
           <Leaderboard />
-        </VStack> 
+        </VStack>
       </VStack>
     </Layout>
   );

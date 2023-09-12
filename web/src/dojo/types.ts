@@ -48,4 +48,5 @@ export interface OutcomeInfo {
   name: string;
   imageSrc: string;
   getNarration: (isInitial: boolean) => string;
+  color: string;
 }

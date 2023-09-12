@@ -243,7 +243,6 @@ const QuantitySelector = ({
     if (type === TradeDirection.Buy) {
       let max_buyable = calculateMaxQuantity(market.marketPool, player.cash);
       let bag_space = player.bagLimit - player.drugCount;
-       debugger
       setMax(Math.min(max_buyable, bag_space));
     } else if (type === TradeDirection.Sell) {
       const playerQuantity = player.drugs.find(

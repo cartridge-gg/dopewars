@@ -96,7 +96,7 @@ export default function Turn() {
                   <HStack>
                     <HStack flex="1" color={outcomeInfo.color}>
                       <Event />
-                      <Text >{outcomeInfo.name}</Text>
+                      <Text>{outcomeInfo.name}</Text>
                     </HStack>
                     <Text flex="2" color="yellow.400">
                       {}
