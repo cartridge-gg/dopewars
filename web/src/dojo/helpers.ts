@@ -23,8 +23,9 @@ import {
   LocationInfo,
   Outcome,
   OutcomeInfo,
+  PlayerStatus,
 } from "./types";
-import { getNarration } from "@/narrations";
+import { getMuggerResponses, getCopResponses } from "@/responses";
 
 export const locations: LocationInfo[] = [
   {
@@ -118,24 +119,58 @@ const drugs: DrugInfo[] = [
 
 export const outcomes: OutcomeInfo[] = [
   {
-    name: "Paid Up",
+    name: "Bribed the Cop",
     type: Outcome.Paid,
+    status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
-    getNarration: (isInitial: boolean) => getNarration(Outcome.Paid, isInitial),
+    description: "You paid the cop off",
+    getResponse: (isInitial: boolean) =>
+      getCopResponses(Outcome.Paid, isInitial),
   },
   {
-    name: "Captured",
+    name: "Got Arrested",
     type: Outcome.Captured,
-    imageSrc: "/images/events/smoking_gun.gif",
-    getNarration: (isInitial: boolean) =>
-      getNarration(Outcome.Captured, isInitial),
+    status: PlayerStatus.BeingArrested,
+    imageSrc: "/images/events/police_cruiser.gif",
+    description: "Your drugs were confiscated",
+    getResponse: (isInitial: boolean) =>
+      getCopResponses(Outcome.Captured, isInitial),
   },
   {
-    name: "Escaped",
+    name: "Escaped the Cops",
     type: Outcome.Escaped,
+    status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
-    getNarration: (isInitial: boolean) =>
-      getNarration(Outcome.Escaped, isInitial),
+    description: undefined,
+    getResponse: (isInitial: boolean) =>
+      getCopResponses(Outcome.Escaped, isInitial),
+  },
+  {
+    name: "Fought the Gang",
+    type: Outcome.Fought,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/sunset.png",
+    description: "You lost 10HP",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Fought, isInitial),
+  },
+  {
+    name: "Got Captured",
+    type: Outcome.Captured,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/sunset.png",
+    description: undefined,
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Captured, isInitial),
+  },
+  {
+    name: "Escaped the Gang",
+    type: Outcome.Escaped,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/sunset.png",
+    description: "You lost half your cash and 20HP",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Escaped, isInitial),
   },
 ];
 
@@ -167,6 +202,11 @@ export function getDrugByType(type: Drug): DrugInfo {
   return findBy<DrugInfo>(drugs, "type", type) || drugs[0];
 }
 
-export function getOutcomeByType(type: Outcome): OutcomeInfo {
-  return findBy<OutcomeInfo>(outcomes, "type", type) || outcomes[0];
+export function getOutcomeInfo(
+  status: PlayerStatus,
+  type: Outcome,
+): OutcomeInfo {
+  return outcomes.find((item) => {
+    return item.status === status && item.type === type;
+  }) || outcomes[0];
 }

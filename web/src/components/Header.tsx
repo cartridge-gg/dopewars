@@ -1,4 +1,4 @@
-import { Clock, Gem, Bag, Arrow } from "./icons";
+import { Clock, Gem, Bag, Arrow, Heart } from "./icons";
 import { Divider, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
@@ -77,6 +77,10 @@ const Header = ({ back }: HeaderProps) => {
             <HStack>
               <Bag />
               <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
+            </HStack>
+            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+            <HStack>
+              <Heart /> <Text>{playerEntity.health}</Text>
             </HStack>
             <Divider orientation="vertical" borderColor="neon.600" h="12px" />
             <HStack>

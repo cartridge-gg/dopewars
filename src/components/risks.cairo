@@ -20,10 +20,12 @@ impl RisksImpl of RisksTrait {
     #[inline(always)]
     fn travel(ref self: Risks, seed: felt252) -> PlayerStatus {
         if occurs(seed, self.travel) {
-            let seed: u256 = seed.into();
-            let result: u128 = seed.low % 100;
+            let seed = pedersen::pedersen(seed, seed);
+            let entropy: u256 = seed.into();
+            let result: u128 = entropy.low % 100;
 
-            return match result <= 33 {
+            // more bias towards gang encounter
+            return match result <= 40 {
                 bool::False => PlayerStatus::BeingArrested(()),
                 bool::True => PlayerStatus::BeingMugged(()),
             };

@@ -1,21 +1,19 @@
-import CrtEffect from "@/components/CrtEffect";
 import Image from "next/image";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
-import { getOutcomeByType } from "@/dojo/helpers";
-import { Outcome } from "@/dojo/types";
-import { usePlayerStore } from "@/hooks/state";
+import { getOutcomeInfo } from "@/dojo/helpers";
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const outcome = getOutcomeByType(Number(router.query.outcome as string));
-  const { history } = usePlayerStore();
+  const outcome = getOutcomeInfo(
+    Number(router.query.status),
+    Number(router.query.outcome),
+  );
 
-  const isInitial = history.includes(outcome.type);
-  const narration = outcome.getNarration(isInitial);
+  const response = outcome.getResponse(true);
 
   if (!router.isReady) {
     return <></>;
@@ -23,7 +21,7 @@ export default function Consequence() {
 
   return (
     <>
-      <Layout isSinglePanel={true}>
+      <Layout isSinglePanel>
         <VStack>
           <Text
             textStyle="subheading"
@@ -44,11 +42,9 @@ export default function Consequence() {
         />
         <VStack maxWidth="500px">
           <VStack textAlign="center">
-            <Text>{narration}</Text>
+            <Text>{response}</Text>
             <Text color="yellow.400">
-              {outcome.type == Outcome.Captured
-                ? `* Lost half your cash and stash *`
-                : ""}
+              {outcome.description && `* ${outcome.description} *`}
             </Text>
           </VStack>
           <Footer position={["absolute", "relative"]}>
@@ -63,7 +59,6 @@ export default function Consequence() {
           </Footer>
         </VStack>
       </Layout>
-      <CrtEffect />
     </>
   );
 }

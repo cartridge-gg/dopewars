@@ -1,6 +1,5 @@
-import { PlayerStatus } from "@/dojo/entities/usePlayerEntity";
-import { Action, Outcome } from "@/dojo/types";
-import { InvokeTransactionReceiptResponse, num, shortString } from "starknet";
+import { Action, Outcome, PlayerStatus } from "@/dojo/types";
+import { InvokeTransactionReceiptResponse, num } from "starknet";
 
 // events are keyed by the hash of the event name
 export enum RyoEvents {

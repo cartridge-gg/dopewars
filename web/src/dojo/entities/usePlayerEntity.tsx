@@ -4,15 +4,9 @@ import {
   usePlayerEntityQuery,
   EntityEdge,
 } from "@/generated/graphql";
-import { useCallback, useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { useEffect, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
-
-export enum PlayerStatus {
-  Normal,
-  BeingMugged,
-  BeingArrested,
-}
+import { PlayerStatus } from "../types";
 
 type Drug = {
   id: string;

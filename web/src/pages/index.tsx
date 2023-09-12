@@ -29,14 +29,14 @@ import { usePlayerStore } from "@/hooks/state";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 9;
+const NUM_TURNS = 14;
 
 export default function Home() {
   const router = useRouter();
   const { account, isBurnerDeploying, createBurner } = useDojo();
   const { create: createGame, isPending, error: txError } = useSystems();
   const { scores } = useGlobalScores();
-  const { clearAll } = usePlayerStore();
+  const { resetAll } = usePlayerStore();
   const { toast } = useToast();
 
   return (
@@ -72,7 +72,7 @@ export default function Home() {
               isDisabled={!account}
               isLoading={isPending && !txError}
               onClick={async () => {
-                clearAll();
+                resetAll();
                 const { event, hash } = await createGame(
                   START_TIME,
                   MAX_PLAYERS,
