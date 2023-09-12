@@ -35,7 +35,7 @@ export * from "./Connect";
 export * from "./Sparkle"; // has mirrored variant
 export * from "./Calendar";
 export * from "./Cigarette";
-export * from "./Cartridge";
+export * from "../branding/Cartridge";
 export * from "./Disconnect";
 
 // Template for adding new icons. When copying svg from figma, make sure to
