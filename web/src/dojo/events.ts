@@ -1,5 +1,9 @@
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
-import { InvokeTransactionReceiptResponse, num } from "starknet";
+import {
+  GetTransactionReceiptResponse,
+  InvokeTransactionReceiptResponse,
+  num,
+} from "starknet";
 
 // events are keyed by the hash of the event name
 export enum RyoEvents {
@@ -59,9 +63,13 @@ export interface ConsequenceEventData extends BaseEventData {
 }
 
 export const parseEvent = (
-  receipt: InvokeTransactionReceiptResponse,
+  receipt: GetTransactionReceiptResponse,
   eventType: RyoEvents,
 ): BaseEventData => {
+  if (receipt.status === "REJECTED") {
+    throw new Error(`transaction REJECTED`);
+  }
+
   const raw = receipt.events?.find((e) => e.keys[0] === eventType);
 
   if (!raw) {

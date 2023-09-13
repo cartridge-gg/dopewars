@@ -28,7 +28,7 @@ fn test_travel_and_decision() {
 
     world.execute('travel', travel_calldata);
 
-    let player = get !(world, (game_id, player_id).into(), (Player));
+    let player = get!(world, (game_id, player_id).into(), (Player));
     assert(player.status == PlayerStatus::BeingMugged(()), 'incorrect status');
     assert(player.location_id != brooklyn_id, 'should not have traveled');
 
@@ -39,6 +39,6 @@ fn test_travel_and_decision() {
 
     world.execute('decide', decision_calldata);
 
-    let player = get !(world, (game_id, player_id).into(), (Player));
+    let player = get!(world, (game_id, player_id).into(), (Player));
     assert(player.location_id == brooklyn_id, 'should have traveled');
 }

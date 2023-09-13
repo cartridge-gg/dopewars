@@ -18,6 +18,7 @@ export class PlayerEntity {
   health: number;
   turnsRemaining: number;
   drugCount: number;
+  bagLimit: number;
   locationId: string;
   status: PlayerStatus;
   drugs: Drug[];
@@ -27,6 +28,7 @@ export class PlayerEntity {
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
     this.drugCount = player.drug_count;
+    this.bagLimit = player.bag_limit;
     this.locationId = player.location_id;
     this.status = player.status;
     this.drugs = drugs;

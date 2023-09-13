@@ -126,6 +126,7 @@ export const outcomes: OutcomeInfo[] = [
     description: "You paid the cop off",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Paid, isInitial),
+    color: "yellow.400",
   },
   {
     name: "Got Arrested",
@@ -135,6 +136,7 @@ export const outcomes: OutcomeInfo[] = [
     description: "Your drugs were confiscated",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Captured, isInitial),
+    color: "red",
   },
   {
     name: "Escaped the Cops",
@@ -144,6 +146,7 @@ export const outcomes: OutcomeInfo[] = [
     description: undefined,
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
+    color: "neon.200",
   },
   {
     name: "Fought the Gang",
@@ -153,6 +156,7 @@ export const outcomes: OutcomeInfo[] = [
     description: "You lost 10HP",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Fought, isInitial),
+    color: "yellow.400",
   },
   {
     name: "Got Captured",
@@ -162,6 +166,7 @@ export const outcomes: OutcomeInfo[] = [
     description: undefined,
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Captured, isInitial),
+    color: "red",
   },
   {
     name: "Escaped the Gang",
@@ -171,6 +176,7 @@ export const outcomes: OutcomeInfo[] = [
     description: "You lost half your cash and 20HP",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
+    color: "neon.200",
   },
 ];
 
@@ -206,7 +212,9 @@ export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
 ): OutcomeInfo {
-  return outcomes.find((item) => {
-    return item.status === status && item.type === type;
-  }) || outcomes[0];
+  return (
+    outcomes.find((item) => {
+      return item.status === status && item.type === type;
+    }) || outcomes[0]
+  );
 }

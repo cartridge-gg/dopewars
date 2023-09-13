@@ -795,6 +795,7 @@ export type PlayerEntityQuery = {
               health?: any | null;
               turns_remaining?: any | null;
               drug_count?: any | null;
+              bag_limit?: any | null;
               location_id?: any | null;
               status?: any | null;
             }
@@ -1033,6 +1034,7 @@ export const PlayerEntityDocument = `
             health
             turns_remaining
             drug_count
+            bag_limit
             location_id
             status
           }
