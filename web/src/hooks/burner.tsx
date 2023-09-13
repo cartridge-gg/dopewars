@@ -6,7 +6,7 @@ import {
   hash,
   RpcProvider,
   stark,
-  TransactionStatus,
+  TransactionFinalityStatus,
 } from "starknet";
 import Storage from "@/utils/storage";
 import { ETH_CONTRACT_ADDRESS } from "@/constants";
@@ -150,6 +150,6 @@ const prefundAccount = async (address: string, account: Account) => {
 
   return await account.waitForTransaction(transaction_hash, {
     retryInterval: 1000,
-    successStates: [TransactionStatus.ACCEPTED_ON_L2],
+    successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
   });
 };
