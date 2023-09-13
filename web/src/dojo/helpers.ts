@@ -151,7 +151,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Fought the Gang",
     type: Outcome.Fought,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/fought.png",
+    imageSrc: "/images/events/fought.png",
     description: "You lost some health",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Fought, isInitial),

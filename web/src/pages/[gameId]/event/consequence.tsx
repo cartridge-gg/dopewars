@@ -37,8 +37,8 @@ export default function Consequence() {
         <Image
           alt={outcome.name}
           src={outcome.imageSrc}
-          width={500}
-          height={500}
+          width={400}
+          height={400}
         />
         <VStack maxWidth="500px">
           <VStack textAlign="center">

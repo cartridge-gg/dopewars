@@ -124,7 +124,7 @@ const Encounter = ({
           {title}
         </Heading>
       </VStack>
-      <Image src={imageSrc} alt="adverse event" width={500} height={500} />
+      <Image src={imageSrc} alt="adverse event" width={400} height={400} />
       <VStack>
         <VStack textAlign="center">
           <Text>Better think fast...</Text>
