@@ -26,7 +26,7 @@ fn test_trade() {
     let (world_address, game_id, player_id) = spawn_game(); // creator auto joins
     let world = IWorldDispatcher { contract_address: world_address };
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
 
     // market buy 3 weed
     let mut buy_calldata = array::ArrayTrait::<felt252>::new();
@@ -36,8 +36,8 @@ fn test_trade() {
     buy_calldata.append(QUANTITY.into());
     world.execute('buy'.into(), buy_calldata);
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
-    let player_drug = get!(world, (game_id, player_id, DRUG_ID).into(), (Drug));
+    let player = get !(world, (game_id, player_id).into(), (Player));
+    let player_drug = get !(world, (game_id, player_id, DRUG_ID).into(), (Drug));
     assert(player.drug_count == QUANTITY, 'wrong drug count');
     assert(player_drug.quantity == QUANTITY, 'wrong purchase amount');
 
@@ -49,6 +49,6 @@ fn test_trade() {
     sell_calldata.append(1);
     world.execute('sell'.into(), sell_calldata);
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
     assert(player.drug_count == QUANTITY - 1, 'wrong sell amount');
 }

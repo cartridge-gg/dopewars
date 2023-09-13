@@ -17,12 +17,11 @@ mod create_game {
     use rollyourown::components::market::Market;
     use rollyourown::components::drug::{Drug, DrugTrait};
     use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::components::market::{MarketTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, RUN_CHANCE, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
+        SCALING_FACTOR, TRAVEL_RISK, RUN_CHANCE, MIN_CASH, MAX_CASH, MIN_QUANITTY, MAX_QUANTITY,
+        STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
-    use debug::PrintTrait;
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -76,14 +75,14 @@ mod create_game {
             creator: ctx.origin,
         };
 
-        set!(ctx.world, (game, player));
+        set !(ctx.world, (game, player));
 
         let mut locations = LocationTrait::all();
         loop {
             match locations.pop_front() {
                 Option::Some(location_id) => {
-                    //set risks entity
-                    set!(
+                    //set location entity
+                    set !(
                         ctx.world,
                         (Risks {
                             game_id, location_id: *location_id, travel: TRAVEL_RISK, run: RUN_CHANCE
@@ -98,20 +97,12 @@ mod create_game {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {
                                 seed = pedersen::pedersen(seed, *drug_id);
-                                let pricing_infos = MarketTrait::get_pricing_info(*drug_id);
-                                let market_price = random(
-                                    seed, pricing_infos.min_price, pricing_infos.max_price
-                                );
-                                let market_quantity: usize = random(
-                                    seed, pricing_infos.min_qty, pricing_infos.max_qty
-                                )
-                                    .try_into()
-                                    .unwrap();
-
-                                let market_cash = market_quantity.into() * market_price;
+                                let market_cash = random(seed, MIN_CASH, MAX_CASH);
+                                let rand = random(seed, MIN_QUANITTY.into(), MAX_QUANTITY.into());
+                                let market_quantity: usize = rand.try_into().unwrap();
 
                                 //set market entity
-                                set!(
+                                set !(
                                     ctx.world,
                                     (Market {
                                         game_id,
@@ -135,10 +126,12 @@ mod create_game {
         };
 
         // emit player joined
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
+        emit !(
+            ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id }
+        );
 
         // emit game created
-        emit!(
+        emit !(
             ctx.world,
             GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
         );

@@ -69,7 +69,7 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let game = get!(world, game_id, (Game));
+    let game = get !(world, game_id, (Game));
     assert(game.start_time == START_TIME, 'start time mismatch');
     assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
@@ -90,7 +90,7 @@ fn spawn_player(world_address: ContractAddress, game_id: felt252) -> felt252 {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
     assert(player.health == 100, 'health mismatch');
     assert(player.cash == 100 * SCALING_FACTOR, 'cash mismatch');
 
@@ -104,13 +104,13 @@ fn test_create_game() {
     let (world_address, game_id, player_id) = spawn_game();
     let world = IWorldDispatcher { contract_address: world_address };
 
-    let brooklyn_risks = get!(world, (game_id, 'Brooklyn').into(), (Risks));
+    let brooklyn_risks = get !(world, (game_id, 'Brooklyn').into(), (Risks));
     assert(brooklyn_risks.location_id == 'Brooklyn', 'not Brooklyn location');
 
-    let queens_risks = get!(world, (game_id, 'Queens').into(), (Risks));
+    let queens_risks = get !(world, (game_id, 'Queens').into(), (Risks));
     assert(queens_risks.location_id == 'Queens', 'not Queens location');
 
-    let player = get!(world, (game_id, player_id).into(), (Player));
+    let player = get !(world, (game_id, player_id).into(), (Player));
     assert(player.turns_remaining == 10, 'wrong Player turns remaining');
 }
 

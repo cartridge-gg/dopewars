@@ -1,88 +1,25 @@
 import * as weierstrass from '@noble/curves/abstract/weierstrass';
-import { Abi as Abi$1, TypedContract as TypedContract$1 } from 'abi-wan-kanabi';
 import * as poseidon from '@noble/curves/abstract/poseidon';
 import * as json$1 from 'lossless-json';
-import * as starknet from '@scure/starknet';
+import * as microStarknet from 'micro-starknet';
 
 declare const IS_BROWSER: boolean;
-/**
- * Some functions recreated from https://github.com/pedrouid/enc-utils/blob/master/src/index.ts
- * enc-utils is not a dependency to avoid using `Buffer` which only works in node and not browsers
- */
-/**
- * Convert array buffer to string
- *
- * *[internal usage]*
- */
 declare function arrayBufferToString(array: ArrayBuffer): string;
-/**
- * Convert string to array buffer
- *
- * *[internal usage]*
- */
 declare function stringToArrayBuffer(s: string): Uint8Array;
-/**
- * Convert string to array buffer (browser and node compatible)
- */
 declare function atobUniversal(a: string): Uint8Array;
-/**
- * Convert array buffer to string (browser and node compatible)
- */
 declare function btoaUniversal(b: ArrayBuffer): string;
-/**
- * Convert array buffer to hex-string
- * @returns format: hex-string
- */
 declare function buf2hex(buffer: Uint8Array): string;
 /**
- * Remove hex prefix '0x' from hex-string
- * @param hex hex-string
- * @returns format: base16-string
+ * Some function imported from https://github.com/pedrouid/enc-utils/blob/master/src/index.ts
+ * enc-utils is no dependency to avoid using `Buffer` which just works in node and no browsers
  */
 declare function removeHexPrefix(hex: string): string;
-/**
- * Add hex prefix '0x' to base16-string
- * @param hex base16-string
- * @returns format: hex-string
- */
 declare function addHexPrefix(hex: string): string;
-/**
- * Prepend string (default with '0')
- */
 declare function padLeft(str: string, length: number, padding?: string): string;
-/**
- * Calculate byte length of string
- *
- * *[no internal usage]*
- */
-declare function calcByteLength(str: string, byteSize?: number): number;
-/**
- * Prepend '0' to string bytes
- *
- * *[no internal usage]*
- */
+declare function calcByteLength(length: number, byteSize?: number): number;
 declare function sanitizeBytes(str: string, byteSize?: number, padding?: string): string;
-/**
- * Prepend '0' to hex-string bytes
- *
- * *[no internal usage]*
- * @param hex hex-string
- * @returns format: hex-string
- */
 declare function sanitizeHex(hex: string): string;
-/**
- * Convert utf8-string to Uint8Array
- *
- * Implemented using TextEncoder to make it isomorphic
- * @param str utf8-string
- */
 declare function utf8ToArray(str: string): Uint8Array;
-/**
- * String transformation util
- *
- * Pascal case to screaming snake case
- */
-declare const pascalToSnake: (text: string) => string;
 
 declare const encode_IS_BROWSER: typeof IS_BROWSER;
 declare const encode_addHexPrefix: typeof addHexPrefix;
@@ -92,7 +29,6 @@ declare const encode_btoaUniversal: typeof btoaUniversal;
 declare const encode_buf2hex: typeof buf2hex;
 declare const encode_calcByteLength: typeof calcByteLength;
 declare const encode_padLeft: typeof padLeft;
-declare const encode_pascalToSnake: typeof pascalToSnake;
 declare const encode_removeHexPrefix: typeof removeHexPrefix;
 declare const encode_sanitizeBytes: typeof sanitizeBytes;
 declare const encode_sanitizeHex: typeof sanitizeHex;
@@ -108,7 +44,6 @@ declare namespace encode {
     encode_buf2hex as buf2hex,
     encode_calcByteLength as calcByteLength,
     encode_padLeft as padLeft,
-    encode_pascalToSnake as pascalToSnake,
     encode_removeHexPrefix as removeHexPrefix,
     encode_sanitizeBytes as sanitizeBytes,
     encode_sanitizeHex as sanitizeHex,
@@ -117,16 +52,6 @@ declare namespace encode {
   };
 }
 
-/**
- * Cairo Felt support storing max 31 character
- */
-declare const TEXT_TO_FELT_MAX_LEN = 31;
-declare const HEX_STR_TRANSACTION_VERSION_1 = "0x1";
-declare const HEX_STR_TRANSACTION_VERSION_2 = "0x2";
-declare const BN_TRANSACTION_VERSION_1 = 1n;
-declare const BN_TRANSACTION_VERSION_2 = 2n;
-declare const BN_FEE_TRANSACTION_VERSION_1: bigint;
-declare const BN_FEE_TRANSACTION_VERSION_2: bigint;
 declare const ZERO = 0n;
 declare const MASK_250: bigint;
 declare const MASK_251: bigint;
@@ -157,44 +82,58 @@ declare const UDC: {
     ADDRESS: string;
     ENTRYPOINT: string;
 };
+/**
+ * The following is taken from https://github.com/starkware-libs/starkex-resources/blob/master/crypto/starkware/crypto/signature/pedersen_params.json but converted to hex, because JS is very bad handling big integers by default
+ * Please do not edit until the JSON changes.
+ */
+declare const FIELD_PRIME = "800000000000011000000000000000000000000000000000000000000000001";
+declare const FIELD_GEN = "3";
+declare const FIELD_SIZE = 251;
+declare const EC_ORDER = "800000000000010FFFFFFFFFFFFFFFFB781126DCAE7B2321E66A241ADC64D2F";
+declare const ALPHA = "1";
+declare const BETA = "6F21413EFBE40DE150E596D72F7A8C5609AD26C15C915C1F4CDFCB99CEE9E89";
+declare const MAX_ECDSA_VAL = "800000000000000000000000000000000000000000000000000000000000000";
+declare const CONSTANT_POINTS: string[][];
 
+declare const constants_ALPHA: typeof ALPHA;
 declare const constants_API_VERSION: typeof API_VERSION;
-declare const constants_BN_FEE_TRANSACTION_VERSION_1: typeof BN_FEE_TRANSACTION_VERSION_1;
-declare const constants_BN_FEE_TRANSACTION_VERSION_2: typeof BN_FEE_TRANSACTION_VERSION_2;
-declare const constants_BN_TRANSACTION_VERSION_1: typeof BN_TRANSACTION_VERSION_1;
-declare const constants_BN_TRANSACTION_VERSION_2: typeof BN_TRANSACTION_VERSION_2;
+declare const constants_BETA: typeof BETA;
 type constants_BaseUrl = BaseUrl;
 declare const constants_BaseUrl: typeof BaseUrl;
-declare const constants_HEX_STR_TRANSACTION_VERSION_1: typeof HEX_STR_TRANSACTION_VERSION_1;
-declare const constants_HEX_STR_TRANSACTION_VERSION_2: typeof HEX_STR_TRANSACTION_VERSION_2;
+declare const constants_CONSTANT_POINTS: typeof CONSTANT_POINTS;
+declare const constants_EC_ORDER: typeof EC_ORDER;
+declare const constants_FIELD_GEN: typeof FIELD_GEN;
+declare const constants_FIELD_PRIME: typeof FIELD_PRIME;
+declare const constants_FIELD_SIZE: typeof FIELD_SIZE;
 declare const constants_IS_BROWSER: typeof IS_BROWSER;
 declare const constants_MASK_250: typeof MASK_250;
 declare const constants_MASK_251: typeof MASK_251;
+declare const constants_MAX_ECDSA_VAL: typeof MAX_ECDSA_VAL;
 type constants_NetworkName = NetworkName;
 declare const constants_NetworkName: typeof NetworkName;
 type constants_StarknetChainId = StarknetChainId;
 declare const constants_StarknetChainId: typeof StarknetChainId;
-declare const constants_TEXT_TO_FELT_MAX_LEN: typeof TEXT_TO_FELT_MAX_LEN;
 type constants_TransactionHashPrefix = TransactionHashPrefix;
 declare const constants_TransactionHashPrefix: typeof TransactionHashPrefix;
 declare const constants_UDC: typeof UDC;
 declare const constants_ZERO: typeof ZERO;
 declare namespace constants {
   export {
+    constants_ALPHA as ALPHA,
     constants_API_VERSION as API_VERSION,
-    constants_BN_FEE_TRANSACTION_VERSION_1 as BN_FEE_TRANSACTION_VERSION_1,
-    constants_BN_FEE_TRANSACTION_VERSION_2 as BN_FEE_TRANSACTION_VERSION_2,
-    constants_BN_TRANSACTION_VERSION_1 as BN_TRANSACTION_VERSION_1,
-    constants_BN_TRANSACTION_VERSION_2 as BN_TRANSACTION_VERSION_2,
+    constants_BETA as BETA,
     constants_BaseUrl as BaseUrl,
-    constants_HEX_STR_TRANSACTION_VERSION_1 as HEX_STR_TRANSACTION_VERSION_1,
-    constants_HEX_STR_TRANSACTION_VERSION_2 as HEX_STR_TRANSACTION_VERSION_2,
+    constants_CONSTANT_POINTS as CONSTANT_POINTS,
+    constants_EC_ORDER as EC_ORDER,
+    constants_FIELD_GEN as FIELD_GEN,
+    constants_FIELD_PRIME as FIELD_PRIME,
+    constants_FIELD_SIZE as FIELD_SIZE,
     constants_IS_BROWSER as IS_BROWSER,
     constants_MASK_250 as MASK_250,
     constants_MASK_251 as MASK_251,
+    constants_MAX_ECDSA_VAL as MAX_ECDSA_VAL,
     constants_NetworkName as NetworkName,
     constants_StarknetChainId as StarknetChainId,
-    constants_TEXT_TO_FELT_MAX_LEN as TEXT_TO_FELT_MAX_LEN,
     constants_TransactionHashPrefix as TransactionHashPrefix,
     constants_UDC as UDC,
     constants_ZERO as ZERO,
@@ -204,129 +143,16 @@ declare namespace constants {
 declare const ec_weierstrass: typeof weierstrass;
 declare namespace ec {
   export {
-    starknet as starkCurve,
+    microStarknet as starkCurve,
     ec_weierstrass as weierstrass,
   };
 }
 
-type CairoEnumRaw = {
-    [key: string]: any;
-};
-/**
- * Class to handle Cairo custom Enum
- * @param enumContent object containing the variants and its content. Example :
- *  {Success: 234, Warning: undefined, Error: undefined}.
- *  Only one variant with a value, object, array.
- * @returns an instance representing a Cairo custom Enum.
- * @example ```typescript
- * const myCairoEnum = new CairoCustomEnum( {Success: undefined, Warning: "0x7f32ea", Error: undefined})
- * ```
- */
-declare class CairoCustomEnum {
-    /**
-     * direct readonly access to variants of the Cairo Custom Enum.
-     * @returns a value of type any
-     * @example ```typescript
-     * const successValue = myCairoEnum.variant.Success;
-     */
-    readonly variant: CairoEnumRaw;
-    /**
-     * @param enumContent an object with the variants as keys and the content as value. Only one content shall be defined.
-     */
-    constructor(enumContent: CairoEnumRaw);
-    /**
-     *
-     * @returns the content of the valid variant of a Cairo custom Enum.
-     */
-    unwrap(): any;
-    /**
-     *
-     * @returns the name of the valid variant of a Cairo custom Enum.
-     */
-    activeVariant(): string;
-}
-
-declare enum CairoOptionVariant {
-    Some = 0,
-    None = 1
-}
-/**
- * Class to handle Cairo Option
- * @param variant CairoOptionVariant.Some or CairoOptionVariant.None
- * @param someContent value of type T.
- * @returns an instance representing a Cairo Option.
- * @example ```typescript
- * const myOption = new CairoOption<BigNumberish>(CairoOptionVariant.Some, "0x54dda8");
- * ```
- */
-declare class CairoOption<T> {
-    readonly Some?: T;
-    readonly None?: boolean;
-    constructor(variant: CairoOptionVariant, someContent?: T);
-    /**
-     *
-     * @returns the content of the valid variant of a Cairo custom Enum.
-     *  If None, returns 'undefined'.
-     */
-    unwrap(): T | undefined;
-    /**
-     *
-     * @returns true if the valid variant is 'isSome'.
-     */
-    isSome(): boolean;
-    /**
-     *
-     * @returns true if the valid variant is 'isNone'.
-     */
-    isNone(): boolean;
-}
-
-declare enum CairoResultVariant {
-    Ok = 0,
-    Err = 1
-}
-/**
- * Class to handle Cairo Result
- * @param variant CairoResultVariant.Ok or CairoResultVariant.Err
- * @param resultContent value of type T or U.
- * @returns an instance representing a Cairo Result.
- * @example ```typescript
- * const myOption = new CairoResult<BigNumberish,CustomError>(CairoResultVariant.Ok, "0x54dda8");
- * ```
- */
-declare class CairoResult<T, U> {
-    readonly Ok?: T;
-    readonly Err?: U;
-    constructor(variant: CairoResultVariant, resultContent: T | U);
-    /**
-     *
-     * @returns the content of the valid variant of a Cairo Result.
-     */
-    unwrap(): T | U;
-    /**
-     *
-     * @returns true if the valid variant is 'Ok'.
-     */
-    isOk(): boolean;
-    /**
-     *
-     * @returns true if the valid variant is 'isErr'.
-     */
-    isErr(): boolean;
-}
-
-type CairoEnum = CairoCustomEnum | CairoOption<any> | CairoResult<any, any>;
-
 /** ABI */
-type Abi = Array<FunctionAbi | EventAbi | StructAbi | any>;
+type Abi = Array<FunctionAbi | EventAbi | StructAbi>;
 type AbiEntry = {
     name: string;
     type: 'felt' | 'felt*' | string;
-};
-type EventEntry = {
-    name: string;
-    type: 'felt' | 'felt*' | string;
-    kind: 'key' | 'data';
 };
 declare enum FunctionAbiType {
     'function' = 0,
@@ -352,33 +178,7 @@ type StructAbi = {
     size: number;
     type: 'struct';
 };
-type AbiEnums = {
-    [name: string]: EnumAbi;
-};
-type EnumAbi = {
-    variants: (AbiEntry & {
-        offset: number;
-    })[];
-    name: string;
-    size: number;
-    type: 'enum';
-};
-type AbiEvents = {
-    [hash: string]: EventAbi;
-};
-type EventAbi = Cairo1Event | LegacyEvent;
-type Cairo1Event = {
-    name: string;
-    members: EventEntry[];
-    kind: 'struct';
-    type: 'event';
-};
-type LegacyEvent = {
-    name: string;
-    type: 'event';
-    data: EventEntry[];
-    keys: EventEntry[];
-};
+type EventAbi = any;
 
 /** LEGACY CONTRACT */
 /**
@@ -516,7 +316,7 @@ type RawArgsObject = {
     [inputName: string]: MultiType | MultiType[] | RawArgs;
 };
 type RawArgsArray = Array<MultiType | MultiType[] | RawArgs>;
-type MultiType = BigNumberish | Uint256 | object | boolean | CairoEnum;
+type MultiType = BigNumberish | Uint256 | object | boolean;
 type UniversalDeployerContractPayload = {
     classHash: BigNumberish;
     salt?: string;
@@ -586,28 +386,12 @@ declare enum TransactionType$1 {
     DEPLOY_ACCOUNT = "DEPLOY_ACCOUNT",
     INVOKE = "INVOKE_FUNCTION"
 }
-/**
- * new statuses are defined by props: finality_status and execution_status
- * to be #deprecated
- */
 declare enum TransactionStatus {
     NOT_RECEIVED = "NOT_RECEIVED",
     RECEIVED = "RECEIVED",
     ACCEPTED_ON_L2 = "ACCEPTED_ON_L2",
     ACCEPTED_ON_L1 = "ACCEPTED_ON_L1",
-    REJECTED = "REJECTED",
-    REVERTED = "REVERTED"
-}
-declare enum TransactionFinalityStatus$1 {
-    NOT_RECEIVED = "NOT_RECEIVED",
-    RECEIVED = "RECEIVED",
-    ACCEPTED_ON_L2 = "ACCEPTED_ON_L2",
-    ACCEPTED_ON_L1 = "ACCEPTED_ON_L1"
-}
-declare enum TransactionExecutionStatus$1 {
-    REJECTED = "REJECTED",
-    REVERTED = "REVERTED",
-    SUCCEEDED = "SUCCEEDED"
+    REJECTED = "REJECTED"
 }
 declare enum BlockStatus {
     PENDING = "PENDING",
@@ -660,18 +444,16 @@ type Args = {
     [inputName: string]: BigNumberish | BigNumberish[] | ParsedStruct | ParsedStruct[];
 };
 type ParsedStruct = {
-    [key: string]: BigNumberish | BigNumberish[] | ParsedStruct | Uint256;
+    [key: string]: BigNumberish | ParsedStruct;
 };
 type waitForTransactionOptions = {
     retryInterval?: number;
-    successStates?: Array<TransactionFinalityStatus$1 | TransactionExecutionStatus$1>;
-    errorStates?: Array<TransactionFinalityStatus$1 | TransactionExecutionStatus$1>;
+    successStates?: Array<TransactionStatus>;
 };
 type getSimulateTransactionOptions = {
     blockIdentifier?: BlockIdentifier;
     skipValidate?: boolean;
     skipExecute?: boolean;
-    skipFeeCharge?: boolean;
 };
 type getEstimateFeeBulkOptions = {
     blockIdentifier?: BlockIdentifier;
@@ -708,36 +490,23 @@ type SequencerProviderOptions = {
 });
 
 /**
- * TypeScript Representation of 'starknet-specs' (OpenRpc protocol types)
- * https://github.com/starkware-libs/starknet-specs/tree/v0.4.0-rc3
+ * Starknet RPC version 0.3.0
  *
- * Starknet Node Read API  0.4.0 - rpc tag v0.4.0-rc3
- * Starknet Node Write API 0.4.0 - rpc tag v0.4.0-rc3
- * Starknet Node Trace API 0.4.0 - rpc tag v0.4.0-rc3
- */
-/**
- * A field element. represented by at most 63 hex digits
- * @pattern ^0x(0|[a-fA-F1-9]{1}[a-fA-F0-9]{0,62})$
+ * Starknet Node API 0.50.0 - rpc 0.3.0
+ * Starknet Node Write API 0.4.0 - rpc 0.3.0
+ * Starknet Trace API 0.4.0 - rpc 0.3.0
+ *
+ * TypeScript Representation of OpenRpc protocol types
  */
 type FELT = string;
 type ADDRESS = FELT;
 type NUM_AS_HEX = string;
 type SIGNATURE = Array<FELT>;
-/**
- * an ethereum address represented as 40 hex digits
- * @pattern ^0x[a-fA-F0-9]{40}$
- */
-type ETH_ADDRESS = string;
 type BLOCK_NUMBER = number;
 type BLOCK_HASH = FELT;
 type TXN_HASH = FELT;
-declare enum TXN_TYPE {
-    DECLARE = "DECLARE",
-    DEPLOY = "DEPLOY",
-    DEPLOY_ACCOUNT = "DEPLOY_ACCOUNT",
-    INVOKE = "INVOKE",
-    L1_HANDLER = "L1_HANDLER"
-}
+type TXN_STATUS = 'ACCEPTED_ON_L2' | 'ACCEPTED_ON_L1' | 'REJECTED';
+type TXN_TYPE = 'DECLARE' | 'DEPLOY' | 'DEPLOY_ACCOUNT' | 'INVOKE' | 'L1_HANDLER';
 type BLOCK_STATUS = 'PENDING' | 'ACCEPTED_ON_L2' | 'ACCEPTED_ON_L1' | 'REJECTED';
 declare enum BLOCK_TAG {
     latest = "latest",
@@ -752,20 +521,6 @@ type MSG_TO_L1 = {
     to_address: FELT;
     payload: Array<FELT>;
 };
-type MSG_FROM_L1 = {
-    from_address: ETH_ADDRESS;
-    to_address: ADDRESS;
-    entry_point_selector: FELT;
-    payload: FELT[];
-};
-declare enum TXN_FINALITY_STATUS {
-    ACCEPTED_ON_L2 = "ACCEPTED_ON_L2",
-    ACCEPTED_ON_L1 = "ACCEPTED_ON_L1"
-}
-declare enum TXN_EXECUTION_STATUS {
-    SUCCEEDED = "SUCCEEDED",
-    REVERTED = "REVERTED"
-}
 type EVENT = {
     from_address: FELT;
     keys: Array<FELT>;
@@ -774,13 +529,11 @@ type EVENT = {
 type COMMON_RECEIPT_PROPERTIES = {
     transaction_hash: TXN_HASH;
     actual_fee: FELT;
-    execution_status: TXN_EXECUTION_STATUS;
-    finality_status: TXN_FINALITY_STATUS;
+    status: TXN_STATUS;
     block_hash?: BLOCK_HASH;
     block_number?: BLOCK_NUMBER;
     messages_sent: Array<MSG_TO_L1>;
     events: Array<EVENT>;
-    revert_reason?: string;
 };
 type PENDING_COMMON_RECEIPT_PROPERTIES = {
     transaction_hash: TXN_HASH;
@@ -788,9 +541,6 @@ type PENDING_COMMON_RECEIPT_PROPERTIES = {
     type?: TXN_TYPE;
     messages_sent: Array<MSG_TO_L1>;
     events: Array<EVENT>;
-    execution_status: TXN_EXECUTION_STATUS;
-    finality_status: TXN_FINALITY_STATUS;
-    revert_reason?: string;
 };
 type INVOKE_TXN_RECEIPT = {
     type: 'INVOKE';
@@ -829,91 +579,87 @@ type PENDING_BLOCK_WITH_TX_HASHES = BLOCK_BODY_WITH_TX_HASHES & {
     sequencer_address: FELT;
     parent_hash: BLOCK_HASH;
 };
+type COMMON_TXN_PROPERTIES = {
+    transaction_hash: TXN_HASH;
+} & BROADCASTED_TXN_COMMON_PROPERTIES;
 type FUNCTION_CALL = {
     contract_address: ADDRESS;
     entry_point_selector: FELT;
     calldata: Array<FELT>;
 };
-type INVOKE_TXN = INVOKE_TXN_V0 | INVOKE_TXN_V1;
+type INVOKE_TXN = {
+    type: 'INVOKE';
+} & COMMON_TXN_PROPERTIES & (INVOKE_TXN_V0 | INVOKE_TXN_V1);
 type DECLARE_TXN = DECLARE_TXN_V1 | DECLARE_TXN_V2;
-type DECLARE_TXN_V1 = {
+type DECLARE_TXN_V1 = COMMON_TXN_PROPERTIES & {
     type: 'DECLARE';
-    sender_address: ADDRESS;
-    max_fee: FELT;
-    version: '0x1';
-    signature: SIGNATURE;
-    nonce: FELT;
-} & ({
-    contract_class: DEPRECATED_CONTRACT_CLASS;
-} | {
     class_hash: FELT;
-});
-type DECLARE_TXN_V2 = {
-    type: 'DECLARE';
     sender_address: ADDRESS;
+};
+type DECLARE_TXN_V2 = DECLARE_TXN_V1 & {
     compiled_class_hash: FELT;
-    max_fee: FELT;
-    version: '0x2';
-    signature: SIGNATURE;
-    nonce: FELT;
-} & ({
-    contract_class: CONTRACT_CLASS;
-} | {
-    class_hash: FELT;
-});
-type DEPLOY_ACCOUNT_TXN = {
-    type: 'DEPLOY_ACCOUNT';
-    max_fee: FELT;
-    version: NUM_AS_HEX;
-    signature: SIGNATURE;
-    nonce: FELT;
-    contract_address_salt: FELT;
-    constructor_calldata: FELT[];
-    class_hash: FELT;
 };
 type DEPLOY_TXN = {
-    type: 'DEPLOY';
-    contract_address_salt: FELT;
-    constructor_calldata: FELT[];
+    transaction_hash: TXN_HASH;
     class_hash: FELT;
-    version: NUM_AS_HEX;
+} & DEPLOY_TXN_PROPERTIES;
+type DEPLOY_ACCOUNT_TXN = COMMON_TXN_PROPERTIES & DEPLOY_ACCOUNT_TXN_PROPERTIES;
+type DEPLOY_ACCOUNT_TXN_PROPERTIES = {
+    type: 'DEPLOY_ACCOUNT';
+    contract_address_salt: FELT;
+    constructor_calldata: Array<FELT>;
+    class_hash: FELT;
 };
 type DEPLOY_ACCOUNT_TXN_RECEIPT = COMMON_RECEIPT_PROPERTIES & {
     type: 'DEPLOY_ACCOUNT';
     contract_address: FELT;
 };
 type TXN = INVOKE_TXN | L1_HANDLER_TXN | DECLARE_TXN | DEPLOY_TXN | DEPLOY_ACCOUNT_TXN;
-type TXN_WITH_HASH = TXN & {
-    transaction_hash: TXN_HASH;
-};
 declare enum L1_HANDLER {
     'L1_HANDLER' = 0
 }
 type L1_HANDLER_TXN = {
+    transaction_hash: TXN_HASH;
     version: NUM_AS_HEX;
     type: L1_HANDLER;
     nonce: NUM_AS_HEX;
 } & FUNCTION_CALL;
-type INVOKE_TXN_V0 = {
+type BROADCASTED_DEPLOY_ACCOUNT_TXN = BROADCASTED_TXN_COMMON_PROPERTIES & DEPLOY_ACCOUNT_TXN_PROPERTIES;
+type BROADCASTED_TXN = BROADCASTED_INVOKE_TXN | BROADCASTED_DECLARE_TXN | BROADCASTED_DEPLOY_ACCOUNT_TXN;
+type BROADCASTED_INVOKE_TXN = BROADCASTED_TXN_COMMON_PROPERTIES & {
     type: 'INVOKE';
+} & (INVOKE_TXN_V0 | INVOKE_TXN_V1);
+type BROADCASTED_TXN_COMMON_PROPERTIES = {
     max_fee: FELT;
-    version: '0x0';
-    signature: SIGNATURE;
-    contract_address: ADDRESS;
-    entry_point_selector: FELT;
-    calldata: FELT[];
-};
-type INVOKE_TXN_V1 = {
-    type: 'INVOKE';
-    sender_address: ADDRESS;
-    calldata: FELT[];
-    max_fee: FELT;
-    version: '0x1';
+    version: NUM_AS_HEX;
     signature: SIGNATURE;
     nonce: FELT;
 };
+type BROADCASTED_DECLARE_TXN = BROADCASTED_DECLARE_TXN_V1 | BROADCASTED_DECLARE_TXN_V2;
+type BROADCASTED_DECLARE_TXN_V1 = {
+    type: 'DECLARE';
+    contract_class: DEPRECATED_CONTRACT_CLASS;
+    sender_address: ADDRESS;
+} & BROADCASTED_TXN_COMMON_PROPERTIES;
+type BROADCASTED_DECLARE_TXN_V2 = {
+    type: 'DECLARE';
+    contract_class: CONTRACT_CLASS;
+    sender_address: ADDRESS;
+    compiled_class_hash: FELT;
+} & BROADCASTED_TXN_COMMON_PROPERTIES;
+type DEPLOY_TXN_PROPERTIES = {
+    type: 'DEPLOY';
+    version: NUM_AS_HEX;
+    contract_address_salt: FELT;
+    constructor_calldata: Array<FELT>;
+};
+type INVOKE_TXN_V0 = FUNCTION_CALL;
+type INVOKE_TXN_V1 = {
+    sender_address: ADDRESS;
+    calldata: Array<FELT>;
+};
 type BLOCK_BODY_WITH_TXS = {
-    transactions: Array<TXN_WITH_HASH>;
+    transactions: Array<TXN>;
 };
 type BLOCK_WITH_TXS = {
     status: BLOCK_STATUS;
@@ -1021,16 +767,12 @@ type PENDING_STATE_UPDATE = {
         }>;
     };
 };
-/**
- * A storage key. Represented as up to 62 hex digits, 3 bits, and 5 leading zeroes.
- * @pattern ^0x0[0-7]{1}[a-fA-F0-9]{0,62}$
- */
 type STORAGE_KEY = string;
 type EVENT_FILTER = {
-    from_block?: BLOCK_ID;
-    to_block?: BLOCK_ID;
-    address?: ADDRESS;
-    keys?: Array<Array<FELT>>;
+    from_block: BLOCK_ID;
+    to_block: BLOCK_ID;
+    address: ADDRESS;
+    keys: Array<Array<FELT>>;
 };
 type EVENTS_CHUNK = {
     events: Array<EMITTED_EVENT>;
@@ -1047,11 +789,11 @@ type EMITTED_EVENT = EVENT & {
 };
 type SYNC_STATUS = {
     starting_block_hash: BLOCK_HASH;
-    starting_block_num: BLOCK_NUMBER;
+    starting_block_num: NUM_AS_HEX;
     current_block_hash: BLOCK_HASH;
-    current_block_num: BLOCK_NUMBER;
+    current_block_num: NUM_AS_HEX;
     highest_block_hash: BLOCK_HASH;
-    highest_block_num: BLOCK_NUMBER;
+    highest_block_num: NUM_AS_HEX;
 };
 type FEE_ESTIMATE = {
     gas_consumed: NUM_AS_HEX;
@@ -1069,7 +811,7 @@ declare enum ENTRY_POINT_TYPE {
 }
 type FUNCTION_INVOCATION = FUNCTION_CALL & {
     caller_address: FELT;
-    class_hash: FELT;
+    code_address: FELT;
     entry_point_type: ENTRY_POINT_TYPE;
     call_type: CALL_TYPE;
     result: FELT;
@@ -1080,9 +822,7 @@ type FUNCTION_INVOCATION = FUNCTION_CALL & {
 type NESTED_CALL = FUNCTION_INVOCATION;
 type INVOKE_TXN_TRACE = {
     validate_invocation: FUNCTION_INVOCATION;
-    execute_invocation: FUNCTION_INVOCATION | {
-        revert_reason: string;
-    };
+    execute_invocation: FUNCTION_INVOCATION;
     fee_transfer_invocation: FUNCTION_INVOCATION;
 };
 type DECLARE_TXN_TRACE = {
@@ -1099,8 +839,8 @@ type L1_HANDLER_TXN_TRACE = {
 };
 type TRANSACTION_TRACE = INVOKE_TXN_TRACE | DECLARE_TXN_TRACE | DEPLOY_ACCOUNT_TXN_TRACE | L1_HANDLER_TXN_TRACE;
 declare enum SIMULATION_FLAG$1 {
-    SKIP_VALIDATE = "SKIP_VALIDATE",
-    SKIP_FEE_CHARGE = "SKIP_FEE_CHARGE"
+    SKIP_VALIDATE = 0,
+    SKIP_EXECUTE = 1
 }
 declare namespace OPENRPC {
     type Nonce = FELT;
@@ -1109,7 +849,6 @@ declare namespace OPENRPC {
     type StateUpdate = STATE_UPDATE | PENDING_STATE_UPDATE;
     type Storage = FELT;
     type Transaction = TXN;
-    type TransactionWithHash = TXN_WITH_HASH;
     type TransactionReceipt = TXN_RECEIPT;
     type ContractClass = CONTRACT_CLASS;
     type DeprecatedContractClass = DEPRECATED_CONTRACT_CLASS;
@@ -1121,7 +860,7 @@ declare namespace OPENRPC {
         block_number: BLOCK_NUMBER;
     };
     type CHAIN_ID = string;
-    type PendingTransactions = Array<TransactionWithHash>;
+    type PendingTransactions = Array<TXN>;
     type SyncingStatus = false | SYNC_STATUS;
     type Events = EVENTS_CHUNK;
     type Trace = TRANSACTION_TRACE;
@@ -1143,13 +882,13 @@ declare namespace OPENRPC {
         transaction_hash: TXN_HASH;
         contract_address: FELT;
     };
+    type BroadcastedTransaction = BROADCASTED_TXN;
     type SimulationFlags = Array<SIMULATION_FLAG$1>;
     type SimulatedTransaction = {
         transaction_trace: Trace;
         fee_estimation: EstimatedFee;
     };
     type SimulatedTransactions = SimulatedTransaction[];
-    type BaseTransaction = DECLARE_TXN | INVOKE_TXN | DEPLOY_ACCOUNT_TXN;
     type Methods = {
         starknet_getBlockWithTxHashes: {
             params: {
@@ -1185,7 +924,7 @@ declare namespace OPENRPC {
             params: {
                 transaction_hash: TXN_HASH;
             };
-            result: TransactionWithHash;
+            result: Transaction;
             errors: Errors.TXN_HASH_NOT_FOUND;
         };
         starknet_getTransactionByBlockIdAndIndex: {
@@ -1193,7 +932,7 @@ declare namespace OPENRPC {
                 block_id: BLOCK_ID;
                 index: number;
             };
-            result: TransactionWithHash;
+            result: Transaction;
             errors: Errors.BLOCK_NOT_FOUND | Errors.INVALID_TXN_INDEX;
         };
         starknet_getTransactionReceipt: {
@@ -1244,22 +983,10 @@ declare namespace OPENRPC {
         };
         starknet_estimateFee: {
             params: {
-                request: Array<BaseTransaction>;
+                request: Array<BROADCASTED_TXN>;
                 block_id: BLOCK_ID;
             };
             result: Array<FEE_ESTIMATE>;
-            errors: Errors.CONTRACT_NOT_FOUND | Errors.CONTRACT_ERROR | Errors.BLOCK_NOT_FOUND;
-        };
-        /**
-         * estimate the L2 fee of a message sent on L1
-         * estimates the resources required by the l1_handler transaction induced by the message
-         */
-        starknet_estimateMessageFee: {
-            params: {
-                message: MSG_FROM_L1;
-                block_id: BLOCK_ID;
-            };
-            result: FEE_ESTIMATE;
             errors: Errors.CONTRACT_NOT_FOUND | Errors.CONTRACT_ERROR | Errors.BLOCK_NOT_FOUND;
         };
         starknet_blockNumber: {
@@ -1301,34 +1028,33 @@ declare namespace OPENRPC {
         };
         starknet_addInvokeTransaction: {
             params: {
-                invoke_transaction: INVOKE_TXN_V1;
+                invoke_transaction: BROADCASTED_INVOKE_TXN;
             };
             result: InvokedTransaction;
-            errors: Errors.INSUFFICIENT_ACCOUNT_BALANCE | Errors.INSUFFICIENT_MAX_FEE | Errors.INVALID_TRANSACTION_NONCE | Errors.VALIDATION_FAILURE | Errors.NON_ACCOUNT | Errors.DUPLICATE_TX | Errors.UNSUPPORTED_TX_VERSION | Errors.UNEXPECTED_ERROR;
         };
         starknet_addDeclareTransaction: {
             params: {
-                declare_transaction: DECLARE_TXN;
+                declare_transaction: BROADCASTED_DECLARE_TXN;
             };
             result: DeclaredTransaction;
-            errors: Errors.CLASS_ALREADY_DECLARED | Errors.COMPILATION_FAILED | Errors.COMPILED_CLASS_HASH_MISMATCH | Errors.INSUFFICIENT_ACCOUNT_BALANCE | Errors.INSUFFICIENT_MAX_FEE | Errors.INVALID_TRANSACTION_NONCE | Errors.VALIDATION_FAILURE | Errors.NON_ACCOUNT | Errors.DUPLICATE_TX | Errors.CONTRACT_CLASS_SIZE_IS_TOO_LARGE | Errors.UNSUPPORTED_TX_VERSION | Errors.UNSUPPORTED_CONTRACT_CLASS_VERSION | Errors.UNEXPECTED_ERROR;
+            errors: Errors.INVALID_CONTRACT_CLASS | Errors.CLASS_ALREADY_DECLARED;
         };
         starknet_addDeployAccountTransaction: {
             params: {
-                deploy_account_transaction: DEPLOY_ACCOUNT_TXN;
+                deploy_account_transaction: BROADCASTED_DEPLOY_ACCOUNT_TXN;
             };
             result: {
                 transaction_hash: TXN_HASH;
                 contract_address: FELT;
             };
-            errors: Errors.INSUFFICIENT_ACCOUNT_BALANCE | Errors.INSUFFICIENT_MAX_FEE | Errors.INVALID_TRANSACTION_NONCE | Errors.VALIDATION_FAILURE | Errors.NON_ACCOUNT | Errors.CLASS_HASH_NOT_FOUND | Errors.DUPLICATE_TX | Errors.UNSUPPORTED_TX_VERSION | Errors.UNEXPECTED_ERROR;
+            errors: Errors.CLASS_HASH_NOT_FOUND;
         };
         starknet_traceTransaction: {
             params: {
                 transaction_hash: TXN_HASH;
             };
             result: Trace;
-            errors: Errors.INVALID_TXN_HASH | Errors.NO_TRACE_AVAILABLE;
+            errors: Errors.TXN_HASH_NOT_FOUND | Errors.NO_TRACE_AVAILABLE | Errors.INVALID_BLOCK_HASH | Errors.TXN_HASH_NOT_FOUND;
         };
         starknet_traceBlockTransactions: {
             params: {
@@ -1337,14 +1063,10 @@ declare namespace OPENRPC {
             result: Traces;
             errors: Errors.INVALID_BLOCK_HASH;
         };
-        /**
-         * simulate a given sequence of transactions on the requested state, and generate the execution traces.
-         * If one of the transactions is reverted, raises CONTRACT_ERROR
-         */
-        starknet_simulateTransactions: {
+        starknet_simulateTransaction: {
             params: {
                 block_id: BLOCK_ID;
-                transactions: Array<BaseTransaction>;
+                transactions: Array<BROADCASTED_TXN>;
                 simulation_flags: Array<SIMULATION_FLAG$1>;
             };
             result: SimulatedTransactions;
@@ -1356,13 +1078,6 @@ declare namespace Errors {
     interface FAILED_TO_RECEIVE_TXN {
         code: 1;
         message: 'Failed to write transaction';
-    }
-    interface NO_TRACE_AVAILABLE {
-        code: 10;
-        message: 'No trace available for transaction';
-        data: {
-            status: 'RECEIVED' | 'REJECTED';
-        };
     }
     interface CONTRACT_NOT_FOUND {
         code: 20;
@@ -1380,14 +1095,6 @@ declare namespace Errors {
         code: 24;
         message: 'Block not found';
     }
-    interface INVALID_TXN_HASH {
-        code: 25;
-        message: 'Invalid transaction hash';
-    }
-    interface INVALID_BLOCK_HASH {
-        code: 26;
-        message: 'Invalid block hash';
-    }
     interface INVALID_TXN_INDEX {
         code: 27;
         message: 'Invalid transaction index in a block';
@@ -1395,10 +1102,6 @@ declare namespace Errors {
     interface CLASS_HASH_NOT_FOUND {
         code: 28;
         message: 'Class hash not found';
-    }
-    interface TXN_HASH_NOT_FOUND {
-        code: 29;
-        message: 'Transaction hash not found';
     }
     interface PAGE_SIZE_TOO_BIG {
         code: 31;
@@ -1420,58 +1123,28 @@ declare namespace Errors {
         code: 40;
         message: 'Contract error';
     }
+    interface INVALID_CONTRACT_CLASS {
+        code: 50;
+        message: 'Invalid contract class';
+    }
     interface CLASS_ALREADY_DECLARED {
         code: 51;
         message: 'Class already declared';
     }
-    interface INVALID_TRANSACTION_NONCE {
-        code: 52;
-        message: 'Invalid transaction nonce';
+    interface NO_TRACE_AVAILABLE {
+        code: 10;
+        message: 'No trace available for transaction';
+        data: {
+            status: 'RECEIVED' | 'REJECTED';
+        };
     }
-    interface INSUFFICIENT_MAX_FEE {
-        code: 53;
-        message: 'Max fee is smaller than the minimal transaction cost (validation plus fee transfer)';
+    interface INVALID_BLOCK_HASH {
+        code: 24;
+        message: 'Invalid block hash';
     }
-    interface INSUFFICIENT_ACCOUNT_BALANCE {
-        code: 54;
-        message: "Account balance is smaller than the transaction's max_fee";
-    }
-    interface VALIDATION_FAILURE {
-        code: 55;
-        message: 'Account validation failed';
-    }
-    interface COMPILATION_FAILED {
-        code: 56;
-        message: 'Compilation failed';
-    }
-    interface CONTRACT_CLASS_SIZE_IS_TOO_LARGE {
-        code: 57;
-        message: 'Contract class size it too large';
-    }
-    interface NON_ACCOUNT {
-        code: 58;
-        message: 'Sender address in not an account contract';
-    }
-    interface DUPLICATE_TX {
-        code: 59;
-        message: 'A transaction with the same hash already exists in the mempool';
-    }
-    interface COMPILED_CLASS_HASH_MISMATCH {
-        code: 60;
-        message: 'the compiled class hash did not match the one supplied in the transaction';
-    }
-    interface UNSUPPORTED_TX_VERSION {
-        code: 61;
-        message: 'the transaction version is not supported';
-    }
-    interface UNSUPPORTED_CONTRACT_CLASS_VERSION {
-        code: 62;
-        message: 'the contract class version is not supported';
-    }
-    interface UNEXPECTED_ERROR {
-        code: 63;
-        message: 'An unexpected error occured';
-        data: string;
+    interface TXN_HASH_NOT_FOUND {
+        code: 25;
+        message: 'Transaction hash not found';
     }
 }
 
@@ -1514,17 +1187,18 @@ type InvokedTransaction = OPENRPC.InvokedTransaction;
 type DeclaredTransaction = OPENRPC.DeclaredTransaction;
 type DeployedTransaction = OPENRPC.DeployedTransaction;
 type SimulationFlags$1 = OPENRPC.SimulationFlags;
+type BroadcastedTransaction = OPENRPC.BroadcastedTransaction;
 type EstimatedFee = OPENRPC.EstimatedFee;
 type Methods = OPENRPC.Methods;
 type Storage$2 = OPENRPC.Storage;
 type SimulateTransactionResponse$2 = OPENRPC.SimulatedTransactions;
-declare const TransactionType: typeof TXN_TYPE;
-declare const SimulationFlag: typeof SIMULATION_FLAG$1;
-declare const TransactionFinalityStatus: typeof TXN_FINALITY_STATUS;
-declare const TransactionExecutionStatus: typeof TXN_EXECUTION_STATUS;
-type BaseTransaction = OPENRPC.BaseTransaction & {
-    version: string;
-};
+declare enum TransactionType {
+    DECLARE = "DECLARE",
+    DEPLOY = "DEPLOY",
+    DEPLOY_ACCOUNT = "DEPLOY_ACCOUNT",
+    INVOKE = "INVOKE",
+    L1_HANDLER = "L1_HANDLER"
+}
 type StorageDiffs$1 = Array<CONTRACT_STORAGE_DIFF_ITEM>;
 type DeprecatedDeclaredClasses = Array<FELT>;
 type Nonces$1 = Array<{
@@ -1536,9 +1210,9 @@ type ReplacedClasses$1 = Array<{
     class_hash: FELT;
 }>;
 
-type rpc_BaseTransaction = BaseTransaction;
 type rpc_BlockHash = BlockHash;
 type rpc_BlockHashAndNumber = BlockHashAndNumber;
+type rpc_BroadcastedTransaction = BroadcastedTransaction;
 type rpc_CallResponse = CallResponse;
 type rpc_ChainId = ChainId;
 type rpc_ContractAddress = ContractAddress;
@@ -1562,20 +1236,18 @@ type rpc_InvokedTransaction = InvokedTransaction;
 type rpc_Methods = Methods;
 type rpc_PendingTransactions = PendingTransactions;
 type rpc_Response = Response;
-declare const rpc_SimulationFlag: typeof SimulationFlag;
 type rpc_StateUpdate = StateUpdate;
 type rpc_Trace = Trace;
 type rpc_Traces = Traces;
-declare const rpc_TransactionExecutionStatus: typeof TransactionExecutionStatus;
-declare const rpc_TransactionFinalityStatus: typeof TransactionFinalityStatus;
 type rpc_TransactionHash = TransactionHash;
 type rpc_TransactionReceipt = TransactionReceipt;
+type rpc_TransactionType = TransactionType;
 declare const rpc_TransactionType: typeof TransactionType;
 declare namespace rpc {
   export {
-    rpc_BaseTransaction as BaseTransaction,
     rpc_BlockHash as BlockHash,
     rpc_BlockHashAndNumber as BlockHashAndNumber,
+    rpc_BroadcastedTransaction as BroadcastedTransaction,
     rpc_CallResponse as CallResponse,
     rpc_ChainId as ChainId,
     rpc_ContractAddress as ContractAddress,
@@ -1604,7 +1276,6 @@ declare namespace rpc {
     ReplacedClasses$1 as ReplacedClasses,
     rpc_Response as Response,
     SimulateTransactionResponse$2 as SimulateTransactionResponse,
-    rpc_SimulationFlag as SimulationFlag,
     SimulationFlags$1 as SimulationFlags,
     rpc_StateUpdate as StateUpdate,
     Storage$2 as Storage,
@@ -1612,8 +1283,6 @@ declare namespace rpc {
     rpc_Trace as Trace,
     rpc_Traces as Traces,
     Transaction$1 as Transaction,
-    rpc_TransactionExecutionStatus as TransactionExecutionStatus,
-    rpc_TransactionFinalityStatus as TransactionFinalityStatus,
     rpc_TransactionHash as TransactionHash,
     rpc_TransactionReceipt as TransactionReceipt,
     rpc_TransactionType as TransactionType,
@@ -1622,14 +1291,11 @@ declare namespace rpc {
 
 type GetTransactionStatusResponse = {
     tx_status: TransactionStatus;
-    execution_status: TransactionExecutionStatus$1;
-    finality_status: TransactionFinalityStatus$1;
     block_hash?: string;
     tx_failure_reason?: {
         code: string;
         error_message: string;
     };
-    tx_revert_reason?: string;
 };
 type GetContractAddressesResponse = {
     Starknet: string;
@@ -1737,23 +1403,11 @@ interface InvokeFunctionTransactionResponse extends InvokeFunctionTransaction {
 }
 type TransactionResponse = DeclareTransaction | DeployTransaction | InvokeFunctionTransactionResponse;
 type SuccessfulTransactionResponse = {
-    execution_status: TransactionExecutionStatus$1.SUCCEEDED;
-    finality_status: TransactionFinalityStatus$1;
     status: TransactionStatus;
+    transaction: TransactionResponse;
     block_hash: string;
     block_number: BlockNumber;
     transaction_index: number;
-    transaction: TransactionResponse;
-};
-type RevertedTransactionResponse = {
-    execution_status: TransactionExecutionStatus$1.REVERTED;
-    finality_status: TransactionFinalityStatus$1;
-    status: TransactionStatus;
-    block_hash: string;
-    block_number: BlockNumber;
-    transaction_index: number;
-    transaction: TransactionResponse;
-    revert_error: string;
 };
 type FailedTransactionResponse = {
     status: TransactionStatus.REJECTED;
@@ -1763,45 +1417,28 @@ type FailedTransactionResponse = {
     };
     transaction: TransactionResponse;
 };
-type GetTransactionResponse$1 = SuccessfulTransactionResponse | RevertedTransactionResponse | FailedTransactionResponse;
-type TransactionReceiptResponse = SuccessfulTransactionReceiptResponse$1 | RevertedTransactionReceiptResponse$1 | RejectedTransactionReceiptResponse$1;
-type SuccessfulTransactionReceiptResponse$1 = {
-    execution_status: TransactionExecutionStatus$1.SUCCEEDED;
-    finality_status: TransactionFinalityStatus$1;
+type GetTransactionResponse$1 = SuccessfulTransactionResponse | FailedTransactionResponse;
+type TransactionReceiptResponse = SuccessfulTransactionReceiptResponse | FailedTransactionReceiptResponse;
+type SuccessfulTransactionReceiptResponse = {
     status: TransactionStatus;
-    actual_fee: string;
-    block_hash: string;
-    block_number: BlockNumber;
     transaction_hash: string;
     transaction_index: number;
-    l2_to_l1_messages: string[];
-    events: string[];
-    execution_resources?: ExecutionResources;
-};
-type RevertedTransactionReceiptResponse$1 = {
-    execution_status: TransactionExecutionStatus$1.REVERTED;
-    finality_status: TransactionFinalityStatus$1;
-    status: TransactionStatus.REVERTED;
-    actual_fee: string;
     block_hash: string;
     block_number: BlockNumber;
-    transaction_hash: string;
-    transaction_index: number;
     l2_to_l1_messages: string[];
     events: string[];
-    revert_error: string;
+    actual_fee: string;
+    execution_resources: ExecutionResources;
 };
-type RejectedTransactionReceiptResponse$1 = {
-    execution_status: TransactionExecutionStatus$1.REJECTED;
-    finality_status: TransactionFinalityStatus$1;
+type FailedTransactionReceiptResponse = {
     status: TransactionStatus.REJECTED;
-    transaction_hash: string;
-    l2_to_l1_messages: string[];
-    events: string[];
     transaction_failure_reason: {
         code: string;
         error_message: string;
     };
+    transaction_hash: string;
+    l2_to_l1_messages: string[];
+    events: string[];
 };
 type GetBlockResponse$1 = {
     block_number: number;
@@ -2082,6 +1719,7 @@ type sequencer_DeployedContractItem = DeployedContractItem;
 type sequencer_DeployedContracts = DeployedContracts;
 type sequencer_Endpoints = Endpoints;
 type sequencer_ExecutionResources = ExecutionResources;
+type sequencer_FailedTransactionReceiptResponse = FailedTransactionReceiptResponse;
 type sequencer_FailedTransactionResponse = FailedTransactionResponse;
 type sequencer_FunctionInvocation = FunctionInvocation;
 type sequencer_GetContractAddressesResponse = GetContractAddressesResponse;
@@ -2092,10 +1730,10 @@ type sequencer_InvokeFunctionTransactionResponse = InvokeFunctionTransactionResp
 type sequencer_Nonces = Nonces;
 type sequencer_OldDeclaredContracts = OldDeclaredContracts;
 type sequencer_ReplacedClasses = ReplacedClasses;
-type sequencer_RevertedTransactionResponse = RevertedTransactionResponse;
 type sequencer_SequencerIdentifier = SequencerIdentifier;
 type sequencer_StateDiffItem = StateDiffItem;
 type sequencer_StorageDiffs = StorageDiffs;
+type sequencer_SuccessfulTransactionReceiptResponse = SuccessfulTransactionReceiptResponse;
 type sequencer_SuccessfulTransactionResponse = SuccessfulTransactionResponse;
 type sequencer_Transaction = Transaction;
 type sequencer_TransactionReceiptResponse = TransactionReceiptResponse;
@@ -2124,6 +1762,7 @@ declare namespace sequencer {
     EstimateFeeResponse$1 as EstimateFeeResponse,
     EstimateFeeResponseBulk$1 as EstimateFeeResponseBulk,
     sequencer_ExecutionResources as ExecutionResources,
+    sequencer_FailedTransactionReceiptResponse as FailedTransactionReceiptResponse,
     sequencer_FailedTransactionResponse as FailedTransactionResponse,
     sequencer_FunctionInvocation as FunctionInvocation,
     GetBlockResponse$1 as GetBlockResponse,
@@ -2137,17 +1776,14 @@ declare namespace sequencer {
     Nonce$1 as Nonce,
     sequencer_Nonces as Nonces,
     sequencer_OldDeclaredContracts as OldDeclaredContracts,
-    RejectedTransactionReceiptResponse$1 as RejectedTransactionReceiptResponse,
     sequencer_ReplacedClasses as ReplacedClasses,
-    RevertedTransactionReceiptResponse$1 as RevertedTransactionReceiptResponse,
-    sequencer_RevertedTransactionResponse as RevertedTransactionResponse,
     sequencer_SequencerIdentifier as SequencerIdentifier,
     SimulateTransactionResponse$1 as SimulateTransactionResponse,
     sequencer_StateDiffItem as StateDiffItem,
     StateUpdateResponse$1 as StateUpdateResponse,
     Storage$1 as Storage,
     sequencer_StorageDiffs as StorageDiffs,
-    SuccessfulTransactionReceiptResponse$1 as SuccessfulTransactionReceiptResponse,
+    sequencer_SuccessfulTransactionReceiptResponse as SuccessfulTransactionReceiptResponse,
     sequencer_SuccessfulTransactionResponse as SuccessfulTransactionResponse,
     sequencer_Transaction as Transaction,
     sequencer_TransactionReceiptResponse as TransactionReceiptResponse,
@@ -2177,10 +1813,13 @@ interface GetBlockResponse {
 interface GetCodeResponse {
     bytecode: ByteCode;
 }
-interface ContractEntryPoint {
-    offset: string;
-    selector: string;
-}
+type RejectedTransactionResponse = {
+    status: `${TransactionStatus.REJECTED}`;
+    transaction_failure_reason: {
+        code: string;
+        error_message: string;
+    };
+};
 type GetTransactionResponse = InvokeTransactionResponse | DeclareTransactionResponse | RejectedTransactionResponse;
 interface CommonTransactionResponse {
     transaction_hash?: string;
@@ -2195,9 +1834,21 @@ interface InvokeTransactionResponse extends CommonTransactionResponse {
     entry_point_selector?: string;
     calldata: RawCalldata;
 }
+interface ContractEntryPoint {
+    offset: string;
+    selector: string;
+}
 interface DeclareTransactionResponse extends CommonTransactionResponse {
     contract_class?: any;
     sender_address?: string;
+}
+type RejectedTransactionReceiptResponse = RejectedTransactionResponse & (InvokeTransactionReceiptResponse | DeclareTransactionReceiptResponse);
+type GetTransactionReceiptResponse = InvokeTransactionReceiptResponse | DeclareTransactionReceiptResponse | RejectedTransactionReceiptResponse;
+interface CommonTransactionReceiptResponse {
+    transaction_hash: string;
+    status?: `${TransactionStatus}`;
+    actual_fee?: string;
+    status_data?: string;
 }
 interface MessageToL1 {
     to_address: string;
@@ -2212,64 +1863,13 @@ interface MessageToL2 {
     from_address: string;
     payload: Array<string>;
 }
-type RejectedTransactionResponse = {
-    status: `${TransactionStatus.REJECTED}`;
-    transaction_failure_reason: {
-        code: string;
-        error_message: string;
-    };
-};
-type GetTransactionReceiptResponse = SuccessfulTransactionReceiptResponse | RevertedTransactionReceiptResponse | RejectedTransactionReceiptResponse;
-type SuccessfulTransactionReceiptResponse = InvokeTransactionReceiptResponse | DeployTransactionReceiptResponse | DeclareTransactionReceiptResponse;
-interface InvokeTransactionReceiptResponse {
-    type?: TransactionType$1;
-    execution_status: TransactionExecutionStatus$1;
-    finality_status: TransactionFinalityStatus$1;
-    status?: `${TransactionStatus}`;
-    actual_fee: string;
-    block_hash: BlockHash;
-    block_number: BlockNumber;
-    transaction_hash: string;
-    transaction_index?: number;
-    messages_sent: Array<MessageToL1>;
-    events: any[];
-    execution_resources?: any;
+interface InvokeTransactionReceiptResponse extends CommonTransactionReceiptResponse {
+    /** @deprecated Use l2_to_l1_messages */
+    messages_sent?: Array<MessageToL1>;
+    events?: Array<Event>;
+    l1_origin_message?: MessageToL2;
 }
-type DeclareTransactionReceiptResponse = {
-    type?: TransactionType$1;
-    execution_status: TransactionExecutionStatus$1;
-    finality_status: TransactionFinalityStatus$1;
-    status?: `${TransactionStatus}`;
-    actual_fee: string;
-    block_hash: BlockHash;
-    block_number: BlockNumber;
-    transaction_hash: string;
-    transaction_index?: number;
-    messages_sent: Array<MessageToL1>;
-    events: any[];
-};
-type DeployTransactionReceiptResponse = InvokeTransactionReceiptResponse;
-type RejectedTransactionReceiptResponse = {
-    status: `${TransactionStatus.REJECTED}`;
-    transaction_failure_reason: {
-        code: string;
-        error_message: string;
-    };
-};
-type RevertedTransactionReceiptResponse = {
-    type?: TransactionType$1 | any;
-    execution_status: TransactionExecutionStatus$1.REVERTED | any;
-    finality_status: TransactionFinalityStatus$1 | any;
-    status?: TransactionStatus;
-    actual_fee: string;
-    block_hash?: string;
-    block_number?: BlockNumber;
-    transaction_hash: string;
-    transaction_index?: number;
-    messages_sent: Array<MessageToL1>;
-    events: any[];
-    revert_reason?: string;
-};
+type DeclareTransactionReceiptResponse = CommonTransactionReceiptResponse;
 interface EstimateFeeResponse {
     overall_fee: bigint;
     gas_consumed?: bigint;
@@ -2377,8 +1977,8 @@ type SimulateTransactionDetails = {
     skipExecute?: boolean;
 };
 declare enum SIMULATION_FLAG {
-    SKIP_VALIDATE = "SKIP_VALIDATE",
-    SKIP_EXECUTE = "SKIP_EXECUTE"
+    SKIP_VALIDATE = 0,
+    SKIP_EXECUTE = 1
 }
 
 declare enum ValidateType {
@@ -2394,16 +1994,12 @@ declare enum Uint {
     u128 = "core::integer::u128",
     u256 = "core::integer::u256"
 }
-declare enum Litteral {
-    ClassHash = "core::starknet::class_hash::ClassHash",
-    ContractAddress = "core::starknet::contract_address::ContractAddress"
-}
 
 type AsyncContractFunction<T = any> = (...args: ArgsOrCalldataWithOptions) => Promise<T>;
 type ContractFunction = (...args: ArgsOrCalldataWithOptions) => any;
 type Result = {
     [key: string]: any;
-} | Result[] | bigint | string | boolean | CairoEnum;
+} | Result[] | bigint | string | boolean;
 type ArgsOrCalldata = RawArgsArray | [Calldata] | Calldata;
 type ArgsOrCalldataWithOptions = ArgsOrCalldata & ContractOptions;
 type ContractOptions = {
@@ -2420,10 +2016,6 @@ type ContractOptions = {
 };
 type CallOptions = Pick<ContractOptions, 'blockIdentifier' | 'parseRequest' | 'parseResponse' | 'formatResponse'>;
 type InvokeOptions = Pick<ContractOptions, 'maxFee' | 'nonce' | 'signature' | 'parseRequest'>;
-type ParsedEvent = {
-    [name: string]: ParsedStruct;
-};
-type ParsedEvents = Array<ParsedEvent>;
 
 interface InvocationsSignerDetails extends Required<InvocationsDetails> {
     walletAddress: string;
@@ -2477,316 +2069,287 @@ interface TypedData {
     message: Record<string, unknown>;
 }
 
-type index$1_Abi = Abi;
-type index$1_AbiEntry = AbiEntry;
-type index$1_AbiEnums = AbiEnums;
-type index$1_AbiEvents = AbiEvents;
-type index$1_AbiStructs = AbiStructs;
-type index$1_AccountInvocationItem = AccountInvocationItem;
-type index$1_AccountInvocations = AccountInvocations;
-type index$1_AccountInvocationsFactoryDetails = AccountInvocationsFactoryDetails;
-type index$1_AllowArray<T> = AllowArray<T>;
-type index$1_Args = Args;
-type index$1_ArgsOrCalldata = ArgsOrCalldata;
-type index$1_ArgsOrCalldataWithOptions = ArgsOrCalldataWithOptions;
-type index$1_ArraySignatureType = ArraySignatureType;
-type index$1_AsyncContractFunction<T = any> = AsyncContractFunction<T>;
-type index$1_BigNumberish = BigNumberish;
-type index$1_BlockIdentifier = BlockIdentifier;
-type index$1_BlockNumber = BlockNumber;
-type index$1_BlockStatus = BlockStatus;
-declare const index$1_BlockStatus: typeof BlockStatus;
-type index$1_BlockTag = BlockTag;
-declare const index$1_BlockTag: typeof BlockTag;
-type index$1_Builtins = Builtins;
-type index$1_ByteCode = ByteCode;
-type index$1_Cairo1Event = Cairo1Event;
-type index$1_CairoAssembly = CairoAssembly;
-type index$1_CairoContract = CairoContract;
-type index$1_CairoEnum = CairoEnum;
-type index$1_CairoVersion = CairoVersion;
-type index$1_Call = Call;
-type index$1_CallContractResponse = CallContractResponse;
-type index$1_CallDetails = CallDetails;
-type index$1_CallL1Handler = CallL1Handler;
-type index$1_CallOptions = CallOptions;
-type index$1_CallStruct = CallStruct;
-type index$1_Calldata = Calldata;
-type index$1_CommonTransactionResponse = CommonTransactionResponse;
-type index$1_CompiledContract = CompiledContract;
-type index$1_CompiledSierra = CompiledSierra;
-type index$1_CompiledSierraCasm = CompiledSierraCasm;
-type index$1_CompleteDeclareContractPayload = CompleteDeclareContractPayload;
-type index$1_CompressedProgram = CompressedProgram;
-type index$1_ContractClassResponse = ContractClassResponse;
-type index$1_ContractEntryPoint = ContractEntryPoint;
-type index$1_ContractEntryPointFields = ContractEntryPointFields;
-type index$1_ContractFunction = ContractFunction;
-type index$1_ContractOptions = ContractOptions;
-type index$1_DeclareAndDeployContractPayload = DeclareAndDeployContractPayload;
-type index$1_DeclareContractPayload = DeclareContractPayload;
-type index$1_DeclareContractResponse = DeclareContractResponse;
-type index$1_DeclareContractTransaction = DeclareContractTransaction;
-type index$1_DeclareDeployUDCResponse = DeclareDeployUDCResponse;
-type index$1_DeclareSignerDetails = DeclareSignerDetails;
-type index$1_DeclareTransactionReceiptResponse = DeclareTransactionReceiptResponse;
-type index$1_DeclareTransactionResponse = DeclareTransactionResponse;
-type index$1_DeployAccountContractPayload = DeployAccountContractPayload;
-type index$1_DeployAccountContractTransaction = DeployAccountContractTransaction;
-type index$1_DeployAccountSignerDetails = DeployAccountSignerDetails;
-type index$1_DeployContractResponse = DeployContractResponse;
-type index$1_DeployContractUDCResponse = DeployContractUDCResponse;
-type index$1_DeployTransactionReceiptResponse = DeployTransactionReceiptResponse;
-type index$1_DeployedContractItem = DeployedContractItem;
-type index$1_Details = Details;
-type index$1_EntryPointType = EntryPointType;
-declare const index$1_EntryPointType: typeof EntryPointType;
-type index$1_EntryPointsByType = EntryPointsByType;
-type index$1_EnumAbi = EnumAbi;
-type index$1_EstimateFee = EstimateFee;
-type index$1_EstimateFeeAction = EstimateFeeAction;
-type index$1_EstimateFeeBulk = EstimateFeeBulk;
-type index$1_EstimateFeeDetails = EstimateFeeDetails;
-type index$1_EstimateFeeResponse = EstimateFeeResponse;
-type index$1_EstimateFeeResponseBulk = EstimateFeeResponseBulk;
-type index$1_Event = Event;
-type index$1_EventAbi = EventAbi;
-type index$1_EventEntry = EventEntry;
-type index$1_ExecutionResources = ExecutionResources;
-type index$1_FunctionAbi = FunctionAbi;
-type index$1_FunctionInvocation = FunctionInvocation;
-type index$1_GetBlockResponse = GetBlockResponse;
-type index$1_GetCodeResponse = GetCodeResponse;
-type index$1_GetContractAddressesResponse = GetContractAddressesResponse;
-type index$1_GetTransactionReceiptResponse = GetTransactionReceiptResponse;
-type index$1_GetTransactionResponse = GetTransactionResponse;
-type index$1_GetTransactionStatusResponse = GetTransactionStatusResponse;
-type index$1_HexCalldata = HexCalldata;
-type index$1_Invocation = Invocation;
-type index$1_Invocations = Invocations;
-type index$1_InvocationsDetails = InvocationsDetails;
-type index$1_InvocationsDetailsWithNonce = InvocationsDetailsWithNonce;
-type index$1_InvocationsSignerDetails = InvocationsSignerDetails;
-type index$1_InvokeFunctionResponse = InvokeFunctionResponse;
-type index$1_InvokeOptions = InvokeOptions;
-type index$1_InvokeTransactionReceiptResponse = InvokeTransactionReceiptResponse;
-type index$1_InvokeTransactionResponse = InvokeTransactionResponse;
-type index$1_LegacyCompiledContract = LegacyCompiledContract;
-type index$1_LegacyContractClass = LegacyContractClass;
-type index$1_LegacyEvent = LegacyEvent;
-type index$1_Litteral = Litteral;
-declare const index$1_Litteral: typeof Litteral;
-type index$1_MessageToL1 = MessageToL1;
-type index$1_MessageToL2 = MessageToL2;
-type index$1_MultiDeployContractResponse = MultiDeployContractResponse;
-type index$1_MultiType = MultiType;
-type index$1_Nonce = Nonce;
-type index$1_OptionalPayload<T> = OptionalPayload<T>;
-type index$1_ParsedEvent = ParsedEvent;
-type index$1_ParsedEvents = ParsedEvents;
-type index$1_ParsedStruct = ParsedStruct;
-type index$1_Program = Program;
-type index$1_ProviderOptions = ProviderOptions;
-type index$1_PythonicHints = PythonicHints;
-type index$1_RawArgs = RawArgs;
-type index$1_RawArgsArray = RawArgsArray;
-type index$1_RawArgsObject = RawArgsObject;
-type index$1_RawCalldata = RawCalldata;
-type index$1_RejectedTransactionReceiptResponse = RejectedTransactionReceiptResponse;
-type index$1_RejectedTransactionResponse = RejectedTransactionResponse;
-type index$1_Result = Result;
-type index$1_RevertedTransactionReceiptResponse = RevertedTransactionReceiptResponse;
-type index$1_RpcProviderOptions = RpcProviderOptions;
-type index$1_SIMULATION_FLAG = SIMULATION_FLAG;
-declare const index$1_SIMULATION_FLAG: typeof SIMULATION_FLAG;
-type index$1_SequencerHttpMethod = SequencerHttpMethod;
-type index$1_SequencerIdentifier = SequencerIdentifier;
-type index$1_SequencerProviderOptions = SequencerProviderOptions;
-type index$1_SierraContractClass = SierraContractClass;
-type index$1_SierraContractEntryPointFields = SierraContractEntryPointFields;
-type index$1_SierraEntryPointsByType = SierraEntryPointsByType;
-type index$1_SierraProgramDebugInfo = SierraProgramDebugInfo;
-type index$1_Signature = Signature;
-type index$1_SimulateTransactionDetails = SimulateTransactionDetails;
-type index$1_SimulateTransactionResponse = SimulateTransactionResponse;
-type index$1_SimulatedTransaction = SimulatedTransaction;
-type index$1_SimulationFlags = SimulationFlags;
-type index$1_StarkNetDomain = StarkNetDomain;
-type index$1_StarkNetMerkleType = StarkNetMerkleType;
-type index$1_StarkNetType = StarkNetType;
-type index$1_StateUpdateResponse = StateUpdateResponse;
-type index$1_Storage = Storage;
-type index$1_StructAbi = StructAbi;
-type index$1_SuccessfulTransactionReceiptResponse = SuccessfulTransactionReceiptResponse;
-type index$1_TransactionStatus = TransactionStatus;
-declare const index$1_TransactionStatus: typeof TransactionStatus;
-type index$1_Tupled = Tupled;
-type index$1_TypedData = TypedData;
-type index$1_Uint = Uint;
-declare const index$1_Uint: typeof Uint;
-type index$1_Uint256 = Uint256;
-type index$1_UniversalDeployerContractPayload = UniversalDeployerContractPayload;
-type index$1_ValidateType = ValidateType;
-declare const index$1_ValidateType: typeof ValidateType;
-type index$1_WeierstrassSignatureType = WeierstrassSignatureType;
-type index$1_getEstimateFeeBulkOptions = getEstimateFeeBulkOptions;
-type index$1_getSimulateTransactionOptions = getSimulateTransactionOptions;
-type index$1_waitForTransactionOptions = waitForTransactionOptions;
-declare namespace index$1 {
+type index_Abi = Abi;
+type index_AbiEntry = AbiEntry;
+type index_AbiStructs = AbiStructs;
+type index_AccountInvocationItem = AccountInvocationItem;
+type index_AccountInvocations = AccountInvocations;
+type index_AccountInvocationsFactoryDetails = AccountInvocationsFactoryDetails;
+type index_AllowArray<T> = AllowArray<T>;
+type index_Args = Args;
+type index_ArgsOrCalldata = ArgsOrCalldata;
+type index_ArgsOrCalldataWithOptions = ArgsOrCalldataWithOptions;
+type index_ArraySignatureType = ArraySignatureType;
+type index_AsyncContractFunction<T = any> = AsyncContractFunction<T>;
+type index_BigNumberish = BigNumberish;
+type index_BlockIdentifier = BlockIdentifier;
+type index_BlockNumber = BlockNumber;
+type index_BlockStatus = BlockStatus;
+declare const index_BlockStatus: typeof BlockStatus;
+type index_BlockTag = BlockTag;
+declare const index_BlockTag: typeof BlockTag;
+type index_Builtins = Builtins;
+type index_ByteCode = ByteCode;
+type index_CairoAssembly = CairoAssembly;
+type index_CairoContract = CairoContract;
+type index_CairoVersion = CairoVersion;
+type index_Call = Call;
+type index_CallContractResponse = CallContractResponse;
+type index_CallDetails = CallDetails;
+type index_CallL1Handler = CallL1Handler;
+type index_CallOptions = CallOptions;
+type index_CallStruct = CallStruct;
+type index_Calldata = Calldata;
+type index_CommonTransactionReceiptResponse = CommonTransactionReceiptResponse;
+type index_CommonTransactionResponse = CommonTransactionResponse;
+type index_CompiledContract = CompiledContract;
+type index_CompiledSierra = CompiledSierra;
+type index_CompiledSierraCasm = CompiledSierraCasm;
+type index_CompleteDeclareContractPayload = CompleteDeclareContractPayload;
+type index_CompressedProgram = CompressedProgram;
+type index_ContractClassResponse = ContractClassResponse;
+type index_ContractEntryPoint = ContractEntryPoint;
+type index_ContractEntryPointFields = ContractEntryPointFields;
+type index_ContractFunction = ContractFunction;
+type index_ContractOptions = ContractOptions;
+type index_DeclareAndDeployContractPayload = DeclareAndDeployContractPayload;
+type index_DeclareContractPayload = DeclareContractPayload;
+type index_DeclareContractResponse = DeclareContractResponse;
+type index_DeclareContractTransaction = DeclareContractTransaction;
+type index_DeclareDeployUDCResponse = DeclareDeployUDCResponse;
+type index_DeclareSignerDetails = DeclareSignerDetails;
+type index_DeclareTransactionReceiptResponse = DeclareTransactionReceiptResponse;
+type index_DeclareTransactionResponse = DeclareTransactionResponse;
+type index_DeployAccountContractPayload = DeployAccountContractPayload;
+type index_DeployAccountContractTransaction = DeployAccountContractTransaction;
+type index_DeployAccountSignerDetails = DeployAccountSignerDetails;
+type index_DeployContractResponse = DeployContractResponse;
+type index_DeployContractUDCResponse = DeployContractUDCResponse;
+type index_DeployedContractItem = DeployedContractItem;
+type index_Details = Details;
+type index_EntryPointType = EntryPointType;
+declare const index_EntryPointType: typeof EntryPointType;
+type index_EntryPointsByType = EntryPointsByType;
+type index_EstimateFee = EstimateFee;
+type index_EstimateFeeAction = EstimateFeeAction;
+type index_EstimateFeeBulk = EstimateFeeBulk;
+type index_EstimateFeeDetails = EstimateFeeDetails;
+type index_EstimateFeeResponse = EstimateFeeResponse;
+type index_EstimateFeeResponseBulk = EstimateFeeResponseBulk;
+type index_Event = Event;
+type index_ExecutionResources = ExecutionResources;
+type index_FunctionAbi = FunctionAbi;
+type index_FunctionInvocation = FunctionInvocation;
+type index_GetBlockResponse = GetBlockResponse;
+type index_GetCodeResponse = GetCodeResponse;
+type index_GetContractAddressesResponse = GetContractAddressesResponse;
+type index_GetTransactionReceiptResponse = GetTransactionReceiptResponse;
+type index_GetTransactionResponse = GetTransactionResponse;
+type index_GetTransactionStatusResponse = GetTransactionStatusResponse;
+type index_HexCalldata = HexCalldata;
+type index_Invocation = Invocation;
+type index_Invocations = Invocations;
+type index_InvocationsDetails = InvocationsDetails;
+type index_InvocationsDetailsWithNonce = InvocationsDetailsWithNonce;
+type index_InvocationsSignerDetails = InvocationsSignerDetails;
+type index_InvokeFunctionResponse = InvokeFunctionResponse;
+type index_InvokeOptions = InvokeOptions;
+type index_InvokeTransactionReceiptResponse = InvokeTransactionReceiptResponse;
+type index_InvokeTransactionResponse = InvokeTransactionResponse;
+type index_LegacyCompiledContract = LegacyCompiledContract;
+type index_LegacyContractClass = LegacyContractClass;
+type index_MessageToL1 = MessageToL1;
+type index_MessageToL2 = MessageToL2;
+type index_MultiDeployContractResponse = MultiDeployContractResponse;
+type index_MultiType = MultiType;
+type index_Nonce = Nonce;
+type index_OptionalPayload<T> = OptionalPayload<T>;
+type index_ParsedStruct = ParsedStruct;
+type index_Program = Program;
+type index_ProviderOptions = ProviderOptions;
+type index_PythonicHints = PythonicHints;
+type index_RawArgs = RawArgs;
+type index_RawArgsArray = RawArgsArray;
+type index_RawArgsObject = RawArgsObject;
+type index_RawCalldata = RawCalldata;
+type index_RejectedTransactionReceiptResponse = RejectedTransactionReceiptResponse;
+type index_RejectedTransactionResponse = RejectedTransactionResponse;
+type index_Result = Result;
+type index_RpcProviderOptions = RpcProviderOptions;
+type index_SIMULATION_FLAG = SIMULATION_FLAG;
+declare const index_SIMULATION_FLAG: typeof SIMULATION_FLAG;
+type index_SequencerHttpMethod = SequencerHttpMethod;
+type index_SequencerIdentifier = SequencerIdentifier;
+type index_SequencerProviderOptions = SequencerProviderOptions;
+type index_SierraContractClass = SierraContractClass;
+type index_SierraContractEntryPointFields = SierraContractEntryPointFields;
+type index_SierraEntryPointsByType = SierraEntryPointsByType;
+type index_SierraProgramDebugInfo = SierraProgramDebugInfo;
+type index_Signature = Signature;
+type index_SimulateTransactionDetails = SimulateTransactionDetails;
+type index_SimulateTransactionResponse = SimulateTransactionResponse;
+type index_SimulatedTransaction = SimulatedTransaction;
+type index_SimulationFlags = SimulationFlags;
+type index_StarkNetDomain = StarkNetDomain;
+type index_StarkNetMerkleType = StarkNetMerkleType;
+type index_StarkNetType = StarkNetType;
+type index_StateUpdateResponse = StateUpdateResponse;
+type index_Storage = Storage;
+type index_StructAbi = StructAbi;
+type index_TransactionStatus = TransactionStatus;
+declare const index_TransactionStatus: typeof TransactionStatus;
+type index_Tupled = Tupled;
+type index_TypedData = TypedData;
+type index_Uint = Uint;
+declare const index_Uint: typeof Uint;
+type index_Uint256 = Uint256;
+type index_UniversalDeployerContractPayload = UniversalDeployerContractPayload;
+type index_ValidateType = ValidateType;
+declare const index_ValidateType: typeof ValidateType;
+type index_WeierstrassSignatureType = WeierstrassSignatureType;
+type index_getEstimateFeeBulkOptions = getEstimateFeeBulkOptions;
+type index_getSimulateTransactionOptions = getSimulateTransactionOptions;
+type index_waitForTransactionOptions = waitForTransactionOptions;
+declare namespace index {
   export {
-    index$1_Abi as Abi,
-    index$1_AbiEntry as AbiEntry,
-    index$1_AbiEnums as AbiEnums,
-    index$1_AbiEvents as AbiEvents,
-    index$1_AbiStructs as AbiStructs,
-    index$1_AccountInvocationItem as AccountInvocationItem,
-    index$1_AccountInvocations as AccountInvocations,
-    index$1_AccountInvocationsFactoryDetails as AccountInvocationsFactoryDetails,
-    index$1_AllowArray as AllowArray,
-    index$1_Args as Args,
-    index$1_ArgsOrCalldata as ArgsOrCalldata,
-    index$1_ArgsOrCalldataWithOptions as ArgsOrCalldataWithOptions,
-    index$1_ArraySignatureType as ArraySignatureType,
-    index$1_AsyncContractFunction as AsyncContractFunction,
-    index$1_BigNumberish as BigNumberish,
-    index$1_BlockIdentifier as BlockIdentifier,
-    index$1_BlockNumber as BlockNumber,
-    index$1_BlockStatus as BlockStatus,
-    index$1_BlockTag as BlockTag,
-    index$1_Builtins as Builtins,
-    index$1_ByteCode as ByteCode,
-    index$1_Cairo1Event as Cairo1Event,
-    index$1_CairoAssembly as CairoAssembly,
-    index$1_CairoContract as CairoContract,
-    index$1_CairoEnum as CairoEnum,
-    index$1_CairoVersion as CairoVersion,
-    index$1_Call as Call,
-    index$1_CallContractResponse as CallContractResponse,
-    index$1_CallDetails as CallDetails,
-    index$1_CallL1Handler as CallL1Handler,
-    index$1_CallOptions as CallOptions,
-    index$1_CallStruct as CallStruct,
-    index$1_Calldata as Calldata,
-    index$1_CommonTransactionResponse as CommonTransactionResponse,
-    index$1_CompiledContract as CompiledContract,
-    index$1_CompiledSierra as CompiledSierra,
-    index$1_CompiledSierraCasm as CompiledSierraCasm,
-    index$1_CompleteDeclareContractPayload as CompleteDeclareContractPayload,
-    index$1_CompressedProgram as CompressedProgram,
+    index_Abi as Abi,
+    index_AbiEntry as AbiEntry,
+    index_AbiStructs as AbiStructs,
+    index_AccountInvocationItem as AccountInvocationItem,
+    index_AccountInvocations as AccountInvocations,
+    index_AccountInvocationsFactoryDetails as AccountInvocationsFactoryDetails,
+    index_AllowArray as AllowArray,
+    index_Args as Args,
+    index_ArgsOrCalldata as ArgsOrCalldata,
+    index_ArgsOrCalldataWithOptions as ArgsOrCalldataWithOptions,
+    index_ArraySignatureType as ArraySignatureType,
+    index_AsyncContractFunction as AsyncContractFunction,
+    index_BigNumberish as BigNumberish,
+    index_BlockIdentifier as BlockIdentifier,
+    index_BlockNumber as BlockNumber,
+    index_BlockStatus as BlockStatus,
+    index_BlockTag as BlockTag,
+    index_Builtins as Builtins,
+    index_ByteCode as ByteCode,
+    index_CairoAssembly as CairoAssembly,
+    index_CairoContract as CairoContract,
+    index_CairoVersion as CairoVersion,
+    index_Call as Call,
+    index_CallContractResponse as CallContractResponse,
+    index_CallDetails as CallDetails,
+    index_CallL1Handler as CallL1Handler,
+    index_CallOptions as CallOptions,
+    index_CallStruct as CallStruct,
+    index_Calldata as Calldata,
+    index_CommonTransactionReceiptResponse as CommonTransactionReceiptResponse,
+    index_CommonTransactionResponse as CommonTransactionResponse,
+    index_CompiledContract as CompiledContract,
+    index_CompiledSierra as CompiledSierra,
+    index_CompiledSierraCasm as CompiledSierraCasm,
+    index_CompleteDeclareContractPayload as CompleteDeclareContractPayload,
+    index_CompressedProgram as CompressedProgram,
     ContractClass$1 as ContractClass,
-    index$1_ContractClassResponse as ContractClassResponse,
-    index$1_ContractEntryPoint as ContractEntryPoint,
-    index$1_ContractEntryPointFields as ContractEntryPointFields,
-    index$1_ContractFunction as ContractFunction,
-    index$1_ContractOptions as ContractOptions,
-    index$1_DeclareAndDeployContractPayload as DeclareAndDeployContractPayload,
-    index$1_DeclareContractPayload as DeclareContractPayload,
-    index$1_DeclareContractResponse as DeclareContractResponse,
-    index$1_DeclareContractTransaction as DeclareContractTransaction,
-    index$1_DeclareDeployUDCResponse as DeclareDeployUDCResponse,
-    index$1_DeclareSignerDetails as DeclareSignerDetails,
-    index$1_DeclareTransactionReceiptResponse as DeclareTransactionReceiptResponse,
-    index$1_DeclareTransactionResponse as DeclareTransactionResponse,
-    index$1_DeployAccountContractPayload as DeployAccountContractPayload,
-    index$1_DeployAccountContractTransaction as DeployAccountContractTransaction,
-    index$1_DeployAccountSignerDetails as DeployAccountSignerDetails,
-    index$1_DeployContractResponse as DeployContractResponse,
-    index$1_DeployContractUDCResponse as DeployContractUDCResponse,
-    index$1_DeployTransactionReceiptResponse as DeployTransactionReceiptResponse,
-    index$1_DeployedContractItem as DeployedContractItem,
-    index$1_Details as Details,
-    index$1_EntryPointType as EntryPointType,
-    index$1_EntryPointsByType as EntryPointsByType,
-    index$1_EnumAbi as EnumAbi,
-    index$1_EstimateFee as EstimateFee,
-    index$1_EstimateFeeAction as EstimateFeeAction,
-    index$1_EstimateFeeBulk as EstimateFeeBulk,
-    index$1_EstimateFeeDetails as EstimateFeeDetails,
-    index$1_EstimateFeeResponse as EstimateFeeResponse,
-    index$1_EstimateFeeResponseBulk as EstimateFeeResponseBulk,
-    index$1_Event as Event,
-    index$1_EventAbi as EventAbi,
-    index$1_EventEntry as EventEntry,
-    index$1_ExecutionResources as ExecutionResources,
-    index$1_FunctionAbi as FunctionAbi,
-    index$1_FunctionInvocation as FunctionInvocation,
-    index$1_GetBlockResponse as GetBlockResponse,
-    index$1_GetCodeResponse as GetCodeResponse,
-    index$1_GetContractAddressesResponse as GetContractAddressesResponse,
-    index$1_GetTransactionReceiptResponse as GetTransactionReceiptResponse,
-    index$1_GetTransactionResponse as GetTransactionResponse,
-    index$1_GetTransactionStatusResponse as GetTransactionStatusResponse,
-    index$1_HexCalldata as HexCalldata,
-    index$1_Invocation as Invocation,
-    index$1_Invocations as Invocations,
-    index$1_InvocationsDetails as InvocationsDetails,
-    index$1_InvocationsDetailsWithNonce as InvocationsDetailsWithNonce,
-    index$1_InvocationsSignerDetails as InvocationsSignerDetails,
-    index$1_InvokeFunctionResponse as InvokeFunctionResponse,
-    index$1_InvokeOptions as InvokeOptions,
-    index$1_InvokeTransactionReceiptResponse as InvokeTransactionReceiptResponse,
-    index$1_InvokeTransactionResponse as InvokeTransactionResponse,
-    index$1_LegacyCompiledContract as LegacyCompiledContract,
-    index$1_LegacyContractClass as LegacyContractClass,
-    index$1_LegacyEvent as LegacyEvent,
-    index$1_Litteral as Litteral,
-    index$1_MessageToL1 as MessageToL1,
-    index$1_MessageToL2 as MessageToL2,
-    index$1_MultiDeployContractResponse as MultiDeployContractResponse,
-    index$1_MultiType as MultiType,
-    index$1_Nonce as Nonce,
-    index$1_OptionalPayload as OptionalPayload,
-    index$1_ParsedEvent as ParsedEvent,
-    index$1_ParsedEvents as ParsedEvents,
-    index$1_ParsedStruct as ParsedStruct,
-    index$1_Program as Program,
-    index$1_ProviderOptions as ProviderOptions,
-    index$1_PythonicHints as PythonicHints,
+    index_ContractClassResponse as ContractClassResponse,
+    index_ContractEntryPoint as ContractEntryPoint,
+    index_ContractEntryPointFields as ContractEntryPointFields,
+    index_ContractFunction as ContractFunction,
+    index_ContractOptions as ContractOptions,
+    index_DeclareAndDeployContractPayload as DeclareAndDeployContractPayload,
+    index_DeclareContractPayload as DeclareContractPayload,
+    index_DeclareContractResponse as DeclareContractResponse,
+    index_DeclareContractTransaction as DeclareContractTransaction,
+    index_DeclareDeployUDCResponse as DeclareDeployUDCResponse,
+    index_DeclareSignerDetails as DeclareSignerDetails,
+    index_DeclareTransactionReceiptResponse as DeclareTransactionReceiptResponse,
+    index_DeclareTransactionResponse as DeclareTransactionResponse,
+    index_DeployAccountContractPayload as DeployAccountContractPayload,
+    index_DeployAccountContractTransaction as DeployAccountContractTransaction,
+    index_DeployAccountSignerDetails as DeployAccountSignerDetails,
+    index_DeployContractResponse as DeployContractResponse,
+    index_DeployContractUDCResponse as DeployContractUDCResponse,
+    index_DeployedContractItem as DeployedContractItem,
+    index_Details as Details,
+    index_EntryPointType as EntryPointType,
+    index_EntryPointsByType as EntryPointsByType,
+    index_EstimateFee as EstimateFee,
+    index_EstimateFeeAction as EstimateFeeAction,
+    index_EstimateFeeBulk as EstimateFeeBulk,
+    index_EstimateFeeDetails as EstimateFeeDetails,
+    index_EstimateFeeResponse as EstimateFeeResponse,
+    index_EstimateFeeResponseBulk as EstimateFeeResponseBulk,
+    index_Event as Event,
+    index_ExecutionResources as ExecutionResources,
+    index_FunctionAbi as FunctionAbi,
+    index_FunctionInvocation as FunctionInvocation,
+    index_GetBlockResponse as GetBlockResponse,
+    index_GetCodeResponse as GetCodeResponse,
+    index_GetContractAddressesResponse as GetContractAddressesResponse,
+    index_GetTransactionReceiptResponse as GetTransactionReceiptResponse,
+    index_GetTransactionResponse as GetTransactionResponse,
+    index_GetTransactionStatusResponse as GetTransactionStatusResponse,
+    index_HexCalldata as HexCalldata,
+    index_Invocation as Invocation,
+    index_Invocations as Invocations,
+    index_InvocationsDetails as InvocationsDetails,
+    index_InvocationsDetailsWithNonce as InvocationsDetailsWithNonce,
+    index_InvocationsSignerDetails as InvocationsSignerDetails,
+    index_InvokeFunctionResponse as InvokeFunctionResponse,
+    index_InvokeOptions as InvokeOptions,
+    index_InvokeTransactionReceiptResponse as InvokeTransactionReceiptResponse,
+    index_InvokeTransactionResponse as InvokeTransactionResponse,
+    index_LegacyCompiledContract as LegacyCompiledContract,
+    index_LegacyContractClass as LegacyContractClass,
+    index_MessageToL1 as MessageToL1,
+    index_MessageToL2 as MessageToL2,
+    index_MultiDeployContractResponse as MultiDeployContractResponse,
+    index_MultiType as MultiType,
+    index_Nonce as Nonce,
+    index_OptionalPayload as OptionalPayload,
+    index_ParsedStruct as ParsedStruct,
+    index_Program as Program,
+    index_ProviderOptions as ProviderOptions,
+    index_PythonicHints as PythonicHints,
     rpc as RPC,
-    index$1_RawArgs as RawArgs,
-    index$1_RawArgsArray as RawArgsArray,
-    index$1_RawArgsObject as RawArgsObject,
-    index$1_RawCalldata as RawCalldata,
-    index$1_RejectedTransactionReceiptResponse as RejectedTransactionReceiptResponse,
-    index$1_RejectedTransactionResponse as RejectedTransactionResponse,
-    index$1_Result as Result,
-    index$1_RevertedTransactionReceiptResponse as RevertedTransactionReceiptResponse,
-    index$1_RpcProviderOptions as RpcProviderOptions,
-    index$1_SIMULATION_FLAG as SIMULATION_FLAG,
+    index_RawArgs as RawArgs,
+    index_RawArgsArray as RawArgsArray,
+    index_RawArgsObject as RawArgsObject,
+    index_RawCalldata as RawCalldata,
+    index_RejectedTransactionReceiptResponse as RejectedTransactionReceiptResponse,
+    index_RejectedTransactionResponse as RejectedTransactionResponse,
+    index_Result as Result,
+    index_RpcProviderOptions as RpcProviderOptions,
+    index_SIMULATION_FLAG as SIMULATION_FLAG,
     sequencer as Sequencer,
-    index$1_SequencerHttpMethod as SequencerHttpMethod,
-    index$1_SequencerIdentifier as SequencerIdentifier,
-    index$1_SequencerProviderOptions as SequencerProviderOptions,
-    index$1_SierraContractClass as SierraContractClass,
-    index$1_SierraContractEntryPointFields as SierraContractEntryPointFields,
-    index$1_SierraEntryPointsByType as SierraEntryPointsByType,
-    index$1_SierraProgramDebugInfo as SierraProgramDebugInfo,
-    index$1_Signature as Signature,
-    index$1_SimulateTransactionDetails as SimulateTransactionDetails,
-    index$1_SimulateTransactionResponse as SimulateTransactionResponse,
-    index$1_SimulatedTransaction as SimulatedTransaction,
-    index$1_SimulationFlags as SimulationFlags,
-    index$1_StarkNetDomain as StarkNetDomain,
-    index$1_StarkNetMerkleType as StarkNetMerkleType,
-    index$1_StarkNetType as StarkNetType,
-    index$1_StateUpdateResponse as StateUpdateResponse,
-    index$1_Storage as Storage,
-    index$1_StructAbi as StructAbi,
-    index$1_SuccessfulTransactionReceiptResponse as SuccessfulTransactionReceiptResponse,
-    TransactionExecutionStatus$1 as TransactionExecutionStatus,
-    TransactionFinalityStatus$1 as TransactionFinalityStatus,
-    index$1_TransactionStatus as TransactionStatus,
+    index_SequencerHttpMethod as SequencerHttpMethod,
+    index_SequencerIdentifier as SequencerIdentifier,
+    index_SequencerProviderOptions as SequencerProviderOptions,
+    index_SierraContractClass as SierraContractClass,
+    index_SierraContractEntryPointFields as SierraContractEntryPointFields,
+    index_SierraEntryPointsByType as SierraEntryPointsByType,
+    index_SierraProgramDebugInfo as SierraProgramDebugInfo,
+    index_Signature as Signature,
+    index_SimulateTransactionDetails as SimulateTransactionDetails,
+    index_SimulateTransactionResponse as SimulateTransactionResponse,
+    index_SimulatedTransaction as SimulatedTransaction,
+    index_SimulationFlags as SimulationFlags,
+    index_StarkNetDomain as StarkNetDomain,
+    index_StarkNetMerkleType as StarkNetMerkleType,
+    index_StarkNetType as StarkNetType,
+    index_StateUpdateResponse as StateUpdateResponse,
+    index_Storage as Storage,
+    index_StructAbi as StructAbi,
+    index_TransactionStatus as TransactionStatus,
     TransactionType$1 as TransactionType,
-    index$1_Tupled as Tupled,
-    index$1_TypedData as TypedData,
-    index$1_Uint as Uint,
-    index$1_Uint256 as Uint256,
-    index$1_UniversalDeployerContractPayload as UniversalDeployerContractPayload,
-    index$1_ValidateType as ValidateType,
-    index$1_WeierstrassSignatureType as WeierstrassSignatureType,
-    index$1_getEstimateFeeBulkOptions as getEstimateFeeBulkOptions,
-    index$1_getSimulateTransactionOptions as getSimulateTransactionOptions,
-    index$1_waitForTransactionOptions as waitForTransactionOptions,
+    index_Tupled as Tupled,
+    index_TypedData as TypedData,
+    index_Uint as Uint,
+    index_Uint256 as Uint256,
+    index_UniversalDeployerContractPayload as UniversalDeployerContractPayload,
+    index_ValidateType as ValidateType,
+    index_WeierstrassSignatureType as WeierstrassSignatureType,
+    index_getEstimateFeeBulkOptions as getEstimateFeeBulkOptions,
+    index_getSimulateTransactionOptions as getSimulateTransactionOptions,
+    index_waitForTransactionOptions as waitForTransactionOptions,
   };
 }
 
@@ -3213,11 +2776,10 @@ declare class RpcProvider implements ProviderInterface {
      * @returns events and the pagination of the events
      */
     getEvents(eventFilter: EventFilter): Promise<GetEventsResponse>;
-    getSimulateTransaction(invocations: AccountInvocations, { blockIdentifier, skipValidate, skipExecute, // @deprecated
-    skipFeeCharge, }: getSimulateTransactionOptions): Promise<SimulateTransactionResponse>;
+    getSimulateTransaction(invocations: AccountInvocations, { blockIdentifier, skipValidate, skipExecute, }: getSimulateTransactionOptions): Promise<SimulateTransactionResponse>;
     getStarkName(address: BigNumberish, StarknetIdContract?: string): Promise<string>;
     getAddressFromStarkName(name: string, StarknetIdContract?: string): Promise<string>;
-    buildTransaction(invocation: AccountInvocationItem, versionType?: 'fee' | 'transaction'): BaseTransaction;
+    buildTransaction(invocation: AccountInvocationItem, versionType?: 'fee' | 'transaction'): BroadcastedTransaction;
 }
 
 declare const defaultProvider: Provider;
@@ -3555,7 +3117,9 @@ declare class Account extends Provider implements AccountInterface {
      * First check if contract is already declared, if not declare it
      * If contract already declared returned transaction_hash is ''.
      * Method will pass even if contract is already declared
-     * @param transactionsDetail (optional)
+     * @param payload DeclareContractPayload
+     * @param transactionsDetail (optional) InvocationsDetails = \{\}
+     * @returns DeclareContractResponse
      */
     declareIfNot(payload: DeclareContractPayload, transactionsDetail?: InvocationsDetails): Promise<DeclareContractResponse>;
     declare(payload: DeclareContractPayload, transactionsDetail?: InvocationsDetails): Promise<DeclareContractResponse>;
@@ -3581,7 +3145,6 @@ declare class Account extends Provider implements AccountInterface {
     StarknetIdContract?: string): Promise<string>;
 }
 
-type TypedContract<TAbi extends Abi$1> = TypedContract$1<TAbi> & ContractInterface;
 declare abstract class ContractInterface {
     abstract abi: Abi;
     abstract address: string;
@@ -3656,13 +3219,6 @@ declare abstract class ContractInterface {
      */
     abstract populate(method: string, args?: ArgsOrCalldata): Invocation;
     /**
-     * Parse contract events of a GetTransactionReceiptResponse received from waitForTransaction. Based on contract's abi
-     *
-     * @param receipt transaction receipt
-     * @returns Events parsed
-     */
-    abstract parseEvents(receipt: GetTransactionReceiptResponse): ParsedEvents;
-    /**
      * tells if the contract comes from a Cairo 1 contract
      *
      * @returns TRUE if the contract comes from a Cairo1 contract
@@ -3672,7 +3228,6 @@ declare abstract class ContractInterface {
      * ```
      */
     abstract isCairo1(): boolean;
-    abstract typed<TAbi extends Abi$1>(tAbi: TAbi): TypedContract<TAbi>;
 }
 
 declare const splitArgsAndOptions: (args: ArgsOrCalldataWithOptions) => {
@@ -3683,6 +3238,9 @@ declare const splitArgsAndOptions: (args: ArgsOrCalldataWithOptions) => {
     options?: undefined;
 };
 declare function getCalldata(args: RawArgs, callback: Function): Calldata;
+/**
+ * Not used at the moment
+ */
 declare class Contract implements ContractInterface {
     abi: Abi;
     address: string;
@@ -3691,7 +3249,6 @@ declare class Contract implements ContractInterface {
     protected readonly structs: {
         [name: string]: StructAbi;
     };
-    protected readonly events: AbiEvents;
     readonly functions: {
         [name: string]: AsyncContractFunction;
     };
@@ -3721,9 +3278,7 @@ declare class Contract implements ContractInterface {
     invoke(method: string, args?: ArgsOrCalldata, { parseRequest, maxFee, nonce, signature }?: InvokeOptions): Promise<InvokeFunctionResponse>;
     estimate(method: string, args?: ArgsOrCalldata): Promise<EstimateFeeResponse>;
     populate(method: string, args?: RawArgs): Call;
-    parseEvents(receipt: GetTransactionReceiptResponse): ParsedEvents;
     isCairo1(): boolean;
-    typed<TAbi extends Abi$1>(tAbi: TAbi): TypedContract<TAbi>;
 }
 
 type ContractFactoryParams = {
@@ -3754,56 +3309,55 @@ declare class ContractFactory {
     constructor(params: ContractFactoryParams);
     /**
      * Deploys contract and returns new instance of the Contract
-     *
      * If contract is not declared it will first declare it, and then deploy
+     *
+     * @param args - Array of the constructor arguments for deployment
+     * @param options (optional) Object - parseRequest, parseResponse, addressSalt
+     * @returns deployed Contract
      */
     deploy(...args: ArgsOrCalldataWithOptions): Promise<Contract>;
     /**
      * Attaches to new Account
      *
-     * @param account - new Account to attach to
+     * @param account - new Provider or Account to attach to
+     * @returns ContractFactory
      */
     connect(account: AccountInterface): ContractFactory;
     /**
      * Attaches current abi and account to the new address
+     *
+     * @param address - Contract address
+     * @returns Contract
      */
     attach(address: string): Contract;
 }
 
 /**
- * Calculate hex-string keccak hash for a given BigNumberish
- *
- * BigNumberish -> hex-string keccak hash
- * @returns format: hex-string
+ * Keccak hash BigNumberish value
+ * @param value BigNumberish
+ * @returns string - hexadecimal string
  */
 declare function keccakBn(value: BigNumberish): string;
 /**
- * Calculate bigint keccak hash for a given string
- *
- * String -> bigint keccak hash
+ * Function to get the starknet keccak hash from a string
  *
  * [Reference](https://github.com/starkware-libs/cairo-lang/blob/master/src/starkware/starknet/public/abi.py#L17-L22)
- * @param str the value you want to get the keccak hash from
- * @returns starknet keccak hash as BigInt
+ * @param value - string you want to get the starknetKeccak hash from
+ * @returns starknet keccak hash as BigNumber
  */
-declare function starknetKeccak(str: string): bigint;
+declare function starknetKeccak(value: string): bigint;
 /**
- * Calculate hex-string selector for a given abi-function-name
- *
- * Abi-function-name -> hex-string selector
+ * Function to get the hex selector from a given function name
  *
  * [Reference](https://github.com/starkware-libs/cairo-lang/blob/master/src/starkware/starknet/public/abi.py#L25-L26)
- * @param funcName ascii-string of 'abi function name'
- * @returns format: hex-string; selector for 'abi function name'
+ * @param funcName - selectors abi function name
+ * @returns hex selector of given abi function name
  */
 declare function getSelectorFromName(funcName: string): string;
 /**
- * Calculate hex-string selector from abi-function-name, decimal string or hex string
- *
- * ('abi-function-name' or dec-string or hex-string) -> hex-string selector
- *
- * @param value hex-string | dec-string | ascii-string
- * @returns format: hex-string
+ * Function to get hex selector from function name, decimal string or hex string
+ * @param value hex string | decimal string | string
+ * @returns Hex selector
  */
 declare function getSelector(value: string): string;
 
@@ -3822,83 +3376,33 @@ declare namespace selector {
 
 declare const transactionVersion = 1n;
 declare const transactionVersion_2 = 2n;
-declare const feeTransactionVersion: bigint;
-declare const feeTransactionVersion_2: bigint;
+declare const feeTransactionVersion = 1n;
+declare const feeTransactionVersion_2 = 2n;
 /**
- * Return transaction versions based on version type, default version type is 'transaction'
+ * Return versions based on version type, default transaction versions
+ * @param versionType 'fee' | 'transaction'
+ * @returns versions { v1: bigint; v2: bigint; }
  */
 declare function getVersionsByType(versionType?: 'fee' | 'transaction'): {
     v1: bigint;
     v2: bigint;
 };
-/**
- * Compute pedersen hash from data
- * @returns format: hex-string - pedersen hash
- */
 declare function computeHashOnElements(data: BigNumberish[]): string;
-/**
- * Calculate transaction pedersen hash for common properties
- *
- * Following implementation is based on this python [implementation #](https://github.com/starkware-libs/cairo-lang/blob/b614d1867c64f3fb2cf4a4879348cfcf87c3a5a7/src/starkware/starknet/core/os/transaction_hash/transaction_hash.py)
- * @returns format: hex-string
- */
 declare function calculateTransactionHashCommon(txHashPrefix: TransactionHashPrefix, version: BigNumberish, contractAddress: BigNumberish, entryPointSelector: BigNumberish, calldata: RawCalldata, maxFee: BigNumberish, chainId: StarknetChainId, additionalData?: BigNumberish[]): string;
-/**
- * Calculate deploy transaction hash
- * @returns format: hex-string
- */
 declare function calculateDeployTransactionHash(contractAddress: BigNumberish, constructorCalldata: RawCalldata, version: BigNumberish, chainId: StarknetChainId, constructorName?: string): string;
-/**
- * Calculate declare transaction hash
- * @param classHash hex-string
- * @param compiledClassHash hex-string
- * @returns format: hex-string
- */
 declare function calculateDeclareTransactionHash(classHash: string, senderAddress: BigNumberish, version: BigNumberish, maxFee: BigNumberish, chainId: StarknetChainId, nonce: BigNumberish, compiledClassHash?: string): string;
-/**
- * Calculate deploy_account transaction hash
- * @returns format: hex-string
- */
 declare function calculateDeployAccountTransactionHash(contractAddress: BigNumberish, classHash: BigNumberish, constructorCalldata: RawCalldata, salt: BigNumberish, version: BigNumberish, maxFee: BigNumberish, chainId: StarknetChainId, nonce: BigNumberish): string;
-/**
- * Calculate invoke transaction hash
- * @returns format: hex-string
- */
 declare function calculateTransactionHash(contractAddress: BigNumberish, version: BigNumberish, calldata: RawCalldata, maxFee: BigNumberish, chainId: StarknetChainId, nonce: BigNumberish): string;
-/**
- * Calculate contract address from class hash
- * @returns format: hex-string
- */
 declare function calculateContractAddressFromHash(salt: BigNumberish, classHash: BigNumberish, constructorCalldata: RawArgs, deployerAddress: BigNumberish): string;
-/**
- * Format json-string to conform starknet json-string
- * @param json json-string
- * @returns format: json-string
- */
 declare function formatSpaces(json: string): string;
-/**
- * Compute hinted class hash for legacy compiled contract (Cairo 0)
- * @returns format: hex-string
- */
 declare function computeHintedClassHash(compiledContract: LegacyCompiledContract): string;
-/**
- * Computes the class hash for legacy compiled contract (Cairo 0)
- * @returns format: hex-string
- */
 declare function computeLegacyContractClassHash(contract: LegacyCompiledContract | string): string;
-/**
- * Compute compiled class hash for contract (Cairo 1)
- * @returns format: hex-string
- */
 declare function computeCompiledClassHash(casm: CompiledSierraCasm): string;
-/**
- * Compute sierra contract class hash (Cairo 1)
- * @returns format: hex-string
- */
 declare function computeSierraContractClassHash(sierra: CompiledSierra): string;
 /**
  * Compute ClassHash (sierra or legacy) based on provided contract
- * @returns format: hex-string
+ * @param contract CompiledContract | CompiledSierra | string
+ * @returns HexString ClassHash
  */
 declare function computeContractClassHash(contract: CompiledContract | string): string;
 
@@ -3952,26 +3456,8 @@ declare namespace hash {
   };
 }
 
-/**
- * Convert JSON string to JSON object
- *
- * NOTE: the String() wrapping is used so the behavior conforms to JSON.parse()
- * which can accept simple data types but is not represented in the default typing
- * @param x JSON string
- */
 declare const parse: (x: string) => any;
-/**
- * Convert JSON string to JSON object with all numbers as bigint
- * @param x JSON string
- */
 declare const parseAlwaysAsBig: (x: string) => any;
-/**
- * Convert JSON object to JSON string
- *
- * NOTE: the not-null assertion is used so the return type conforms to JSON.stringify()
- * which can also return undefined but is not represented in the default typing
- * @returns JSON string
- */
 declare const stringify: (value: json$1.JavaScriptValue, replacer?: any, space?: string | number | undefined, numberStringifiers?: json$1.NumberStringifier[] | undefined) => string;
 /** @deprecated equivalent to 'stringify', alias will be removed */
 declare const stringifyAlwaysAsBig: (value: json$1.JavaScriptValue, replacer?: any, space?: string | number | undefined, numberStringifiers?: json$1.NumberStringifier[] | undefined) => string;
@@ -3989,93 +3475,37 @@ declare namespace json {
   };
 }
 
-/**
- * Test if string is hex-string
- * @param hex hex-string
- */
 declare function isHex(hex: string): boolean;
-/**
- * Convert BigNumberish to bigint
- */
 declare function toBigInt(value: BigNumberish): bigint;
-/**
- * Test if value is bigint
- */
 declare function isBigInt(value: any): value is bigint;
-/**
- * Convert BigNumberish to hex-string
- * @returns format: hex-string
- */
 declare function toHex(number: BigNumberish): string;
 /**
- * Alias of ToHex
- */
-declare const toHexString: typeof toHex;
-/**
- * Convert BigNumberish to storage-key-string
- *
- * Same as toHex but conforming to the STORAGE_KEY pattern `^0x0[0-7]{1}[a-fA-F0-9]{0,62}$`.
- *
- * A storage key is represented as up to 62 hex digits, 3 bits, and 5 leading zeroes:
- * `0x0 + [0-7] + 62 hex = 0x + 64 hex`
- * @returns format: storage-key-string
+ * Convert BigNumberish to STORAGE_KEY
+ * Same as toHex but conforming pattern STORAGE_KEY pattern ^0x0[0-7]{1}[a-fA-F0-9]{0,62}$
+ * A storage key. Represented as up to 62 hex digits, 3 bits, and 5 leading zeroes.
+ * 0x0 + [0-7] + 62 hex = 0x + 64 hex
+ * @param number BigNumberish
  */
 declare function toStorageKey(number: BigNumberish): string;
-/**
- * Convert hexadecimal string to decimal string
- * @param hex hex-string
- * @returns format: decimal string
- */
 declare function hexToDecimalString(hex: string): string;
 /**
- * Remove hex string leading zero and lowercase it
- * @example '0x01A...' -> '0x1a..'
- * @param hex hex-string
- * @returns format: hex-string
+ * Remove hex string leading zero and lower case '0x01A'.. -> '0x1a..'
+ * @param hex string
  */
 declare const cleanHex: (hex: string) => string;
-/**
- * Asserts input is equal to or greater then lowerBound and lower then upperBound.
- *
- * The `inputName` parameter is used in the assertion message.
- */
 declare function assertInRange(input: BigNumberish, lowerBound: BigNumberish, upperBound: BigNumberish, inputName?: string): void;
-/**
- * Convert BigNumberish array to decimal string array
- * @returns format: decimal string array
- */
 declare function bigNumberishArrayToDecimalStringArray(rawCalldata: BigNumberish[]): string[];
-/**
- * Convert BigNumberish array to hexadecimal string array
- * @returns format: hex-string array
- */
 declare function bigNumberishArrayToHexadecimalStringArray(rawCalldata: BigNumberish[]): string[];
-/**
- * Test if string is whole number (0,1,2,3...)
- */
 declare const isStringWholeNumber: (value: string) => boolean;
-/**
- * Convert string to decimal string
- * @returns format: decimal string
- */
+declare const toHexString: (value: string) => string;
 declare function getDecimalString(value: string): string;
-/**
- * Convert string to hexadecimal string
- * @returns format: hex-string
- */
 declare function getHexString(value: string): string;
-/**
- * Convert string array to hex-string array
- * @returns format: hex-string array
- */
 declare function getHexStringArray(value: Array<string>): string[];
-/**
- * Convert boolean to "0" or "1"
- */
 declare const toCairoBool: (value: boolean) => string;
 /**
- * Convert hex-string to an array of Bytes (Uint8Array)
- * @param value hex-string
+ * Convert a hex string to an array of Bytes (Uint8Array)
+ * @param value hex string
+ * @returns an array of Bytes
  */
 declare function hexToBytes(value: string): Uint8Array;
 
@@ -4123,33 +3553,39 @@ declare namespace num {
 /**
  * Transforms a list of Calls, each with their own calldata, into
  * two arrays: one with the entrypoints, and one with the concatenated calldata.
+ * @param calls
+ * @returns
  */
 declare const transformCallsToMulticallArrays: (calls: Call[]) => {
     callArray: ParsedStruct[];
     calldata: Calldata;
 };
 /**
- * Transforms a list of calls into the Cairo 0 `__execute__` calldata.
+ * Transforms a list of calls in the full flattened calldata expected
+ * by the __execute__ protocol.
+ * @param calls
+ * @returns
  */
 declare const fromCallsToExecuteCalldata: (calls: Call[]) => Calldata;
-/**
- * Transforms a list of calls into the Cairo 0 `__execute__` calldata including nonce.
- *
- * @deprecated
- */
 declare const fromCallsToExecuteCalldataWithNonce: (calls: Call[], nonce: BigNumberish) => Calldata;
 /**
  * Format Data inside Calls
- *
- * @deprecated Not required for getting execute Calldata
+ * @param calls Call[]
+ * @returns CallStruct
  */
 declare const transformCallsToMulticallArrays_cairo1: (calls: Call[]) => CallStruct[];
 /**
- * Transforms a list of calls into the Cairo 1 `__execute__` calldata.
+ * Transforms a list of calls in the full flattened calldata expected
+ * by the __execute__ protocol.
+ * @param calls
+ * @returns Calldata
  */
 declare const fromCallsToExecuteCalldata_cairo1: (calls: Call[]) => Calldata;
 /**
- * Create `__execute__` Calldata from Calls based on Cairo versions
+ *
+ * @param calls Call array
+ * @param cairoVersion Defaults to 0
+ * @returns string[] of calldata
  */
 declare const getExecuteCalldata: (calls: Call[], cairoVersion?: CairoVersion) => Calldata;
 
@@ -4171,44 +3607,25 @@ declare namespace transaction {
 }
 
 /**
- * Compress compiled Cairo program
+ * Function to compress compiled cairo program
  *
  * [Reference](https://github.com/starkware-libs/cairo-lang/blob/master/src/starkware/starknet/services/api/gateway/transaction.py#L54-L58)
- * @param jsonProgram Representing the compiled cairo program
+ * @param jsonProgram - json file representing the compiled cairo program
+ * @returns Compressed cairo program
  */
 declare function compressProgram(jsonProgram: Program | string): CompressedProgram;
 /**
- * Decompress compressed compiled Cairo program
- * @param base64 Compressed program
- * @returns Parsed decompressed compiled Cairo program
+ * Function to decompress compressed compiled cairo program
+ *
+ * @param base64 CompressedProgram
+ * @returns parsed decompressed compiled cairo program
  */
 declare function decompressProgram(base64: CompressedProgram): any;
-/**
- * Random Address based on random keyPair
- */
 declare function randomAddress(): string;
-/**
- * Lowercase and hex prefix string
- *
- * @deprecated Not used internally, naming is confusing based on functionality
- */
 declare function makeAddress(input: string): string;
-/**
- * Format Signature to standard type (hex array)
- * @returns Custom hex array or weierstrass.SignatureType hex array
- */
 declare function formatSignature(sig?: Signature): ArraySignatureType;
-/**
- * Format Signature to decimal string array
- */
 declare function signatureToDecimalArray(sig?: Signature): ArraySignatureType;
-/**
- * Format Signature to hex string array
- */
 declare function signatureToHexArray(sig?: Signature): ArraySignatureType;
-/**
- * Convert estimated fee to max fee with overhead
- */
 declare function estimatedFeeToMaxFee(estimatedFee: BigNumberish, overhead?: number): bigint;
 
 declare const stark_compressProgram: typeof compressProgram;
@@ -4237,32 +3654,10 @@ declare class MerkleTree {
     branches: string[][];
     root: string;
     constructor(leafHashes: string[]);
-    /**
-     * Create Merkle tree
-     * @param leaves hex-string array
-     * @returns format: hex-string; Merkle tree root
-     */
     private build;
-    /**
-     * Create pedersen hash from a and b
-     * @returns format: hex-string
-     */
     static hash(a: string, b: string): string;
-    /**
-     * Return path to leaf
-     * @param leaf hex-string
-     * @param branch hex-string array
-     * @param hashPath hex-string array
-     * @returns format: hex-string array
-     */
     getProof(leaf: string, branch?: string[], hashPath?: string[]): string[];
 }
-/**
- * Test Merkle tree path
- * @param root hex-string
- * @param leaf hex-string
- * @param path hex-string array
- */
 declare function proofMerklePath(root: string, leaf: string, path: string[]): boolean;
 
 type merkle_MerkleTree = MerkleTree;
@@ -4275,20 +3670,11 @@ declare namespace merkle {
   };
 }
 
+declare function uint256ToBN(uint256: Uint256): bigint;
 declare const UINT_128_MAX: bigint;
 declare const UINT_256_MAX: bigint;
-/**
- * Convert Uint256 to bigint
- */
-declare function uint256ToBN(uint256: Uint256): bigint;
-/**
- * Test BigNumberish is smaller or equal 2**256-1
- */
 declare function isUint256(bn: BigNumberish): boolean;
-/**
- * Convert BigNumberish (string | number | bigint) to Uint256 (hex)
- */
-declare function bnToUint256(bn: BigNumberish): Uint256;
+declare function bnToUint256(bignumber: BigNumberish): Uint256;
 
 declare const uint256$1_UINT_128_MAX: typeof UINT_128_MAX;
 declare const uint256$1_UINT_256_MAX: typeof UINT_256_MAX;
@@ -4307,54 +3693,41 @@ declare namespace uint256$1 {
   };
 }
 
-/**
- * Test if string contains only ASCII characters (string can be ascii text)
- */
 declare function isASCII(str: string): boolean;
-/**
- * Test if string is a Cairo short string (string has less or equal 31 characters)
- */
 declare function isShortString(str: string): boolean;
+declare function isDecimalString(decim: string): boolean;
 /**
- * Test if string contains only numbers (string can be converted to decimal number)
- */
-declare function isDecimalString(str: string): boolean;
-/**
- * Test if value is a free-from string text, and not a hex string or number string
+ * check if value is string text, and not string-hex, string-number
+ * @param val any
+ * @returns boolean
  */
 declare function isText(val: any): boolean;
-/**
- * Test if value is short text
- */
 declare const isShortText: (val: any) => boolean;
-/**
- * Test if value is long text
- */
 declare const isLongText: (val: any) => boolean;
-/**
- * Split long text into short strings
- */
 declare function splitLongString(longStr: string): string[];
 /**
- * Convert an ASCII string to a hexadecimal string.
- * @param str short string (ASCII string, 31 characters max)
- * @returns format: hex-string; 248 bits max
- * @example
+ * Convert an ASCII string to an hexadecimal string.
+ * @param str - ASCII string -
+ * 31 characters maxi. Ex : "uri/item23.jpg"
+ * @returns a string representing an Hex number 248 bits max.
+ * @Example
  * ```typescript
  * const myEncodedString: string = encodeShortString("uri/pict/t38.jpg");
- * // return hex string (ex."0x7572692f706963742f7433382e6a7067")
  * ```
+ * returns : string : "0x7572692f706963742f7433382e6a7067"
  */
 declare function encodeShortString(str: string): string;
 /**
- * Convert a hexadecimal or decimal string to an ASCII string.
- * @param str representing a 248 bit max number (ex. "0x1A4F64EA56" or "236942575435676423")
- * @returns format: short string; 31 characters max
- * @example
+ * Convert an hexadecimal or decimal string to an ASCII string.
+ * @param str - string - representing a 248 bits max number.
+ *
+ * Ex : hex : "0x1A4F64EA56" or decimal : "236942575435676423"
+ * @returns a string with 31 characters max.
+ * @Example
  * ```typescript
  * const myDecodedString: string = decodeShortString("0x7572692f706963742f7433382e6a7067");
- * // return string (ex."uri/pict/t38.jpg")
  * ```
+ * return : string : "uri/pict/t38.jpg"
  */
 declare function decodeShortString(str: string): string;
 
@@ -4399,29 +3772,55 @@ interface Context {
 declare const getDependencies: (types: TypedData['types'], type: string, dependencies?: string[]) => string[];
 /**
  * Encode a type to a string. All dependant types are alphabetically sorted.
+ *
+ * @param {TypedData} typedData
+ * @param {string} type
+ * @return {string}
  */
 declare const encodeType: (types: TypedData['types'], type: string) => string;
 /**
  * Get a type string as hash.
+ *
+ * @param {TypedData} typedData
+ * @param {string} type
+ * @return {string}
  */
 declare const getTypeHash: (types: TypedData['types'], type: string) => string;
 /**
  * Encodes a single value to an ABI serialisable string, number or Buffer. Returns the data as tuple, which consists of
  * an array of ABI compatible types, and an array of corresponding values.
+ *
+ * @param {TypedData} typedData
+ * @param {string} type
+ * @param {any} data
+ * @returns {[string, string]}
  */
 declare const encodeValue: (types: TypedData['types'], type: string, data: unknown, ctx?: Context) => [string, string];
 /**
  * Encode the data to an ABI encoded Buffer. The data should be a key -> value object with all the required values. All
  * dependant types are automatically encoded.
+ *
+ * @param {TypedData} typedData
+ * @param {string} type
+ * @param {Record<string, any>} data
  */
 declare const encodeData: <T extends TypedData>(types: T["types"], type: string, data: T["message"]) => string[][];
 /**
  * Get encoded data as a hash. The data should be a key -> value object with all the required values. All dependant
  * types are automatically encoded.
+ *
+ * @param {TypedData} typedData
+ * @param {string} type
+ * @param {Record<string, any>} data
+ * @return {Buffer}
  */
 declare const getStructHash: <T extends TypedData>(types: T["types"], type: string, data: T["message"]) => string;
 /**
  * Get the EIP-191 encoded message to sign, from the typedData object.
+ *
+ * @param {TypedData} typedData
+ * @param {BigNumberish} account
+ * @return {string}
  */
 declare const getMessageHash: (typedData: TypedData, account: BigNumberish) => string;
 
@@ -4478,21 +3877,8 @@ declare namespace starknetId {
   };
 }
 
-/**
- * Helper - Async Sleep for 'delay' time
- */
 declare function wait(delay: number): Promise<unknown>;
-/**
- * Create Sierra Contract Class from a given Compiled Sierra
- *
- * CompiledSierra -> SierraContractClass
- */
 declare function createSierraContractClass(contract: CompiledSierra): SierraContractClass;
-/**
- * Create Contract Class from a given CompiledContract or string
- *
- * (CompiledContract or string) -> ContractClass
- */
 declare function parseContract(contract: CompiledContract | string): ContractClass$1;
 
 declare const provider_createSierraContractClass: typeof createSierraContractClass;
@@ -4506,25 +3892,6 @@ declare namespace provider {
   };
 }
 
-declare function getAbiEvents(abi: Abi): AbiEvents;
-/**
- * Parse raw events and structure them into response object based on a contract structs and defined events
- * @param providerReceivedEvents ProviderEvent[] - Array of raw events
- * @param abiEvents AbiEvents - Events defined in the abi
- * @param abiStructs AbiStructs - Structs defined in the abi
- * @return ParsedEvents - parsed events corresponding to the abi
- */
-declare function parseEvents(providerReceivedEvents: Array<Event>, abiEvents: AbiEvents, abiStructs: AbiStructs, abiEnums: AbiEnums): ParsedEvents;
-
-declare const index_getAbiEvents: typeof getAbiEvents;
-declare const index_parseEvents: typeof parseEvents;
-declare namespace index {
-  export {
-    index_getAbiEvents as getAbiEvents,
-    index_parseEvents as parseEvents,
-  };
-}
-
 declare function addAddressPadding(address: BigNumberish): string;
 declare function validateAndParseAddress(address: BigNumberish): string;
 declare function getChecksumAddress(address: BigNumberish): string;
@@ -4532,6 +3899,8 @@ declare function validateChecksumAddress(address: string): boolean;
 
 /**
  * Loosely validate a URL `string`.
+ * @param {String} s
+ * @return {Boolean}
  */
 declare function isUrl(s?: string): boolean;
 declare function buildUrl(baseUrl: string, defaultPath: string, urlOrPath?: string): string;
@@ -4562,19 +3931,15 @@ declare const isTypeArray: (type: string) => boolean;
 declare const isTypeTuple: (type: string) => boolean;
 declare const isTypeNamedTuple: (type: string) => boolean;
 declare const isTypeStruct: (type: string, structs: AbiStructs) => boolean;
-declare const isTypeEnum: (type: string, enums: AbiEnums) => boolean;
-declare const isTypeOption: (type: string) => boolean;
-declare const isTypeResult: (type: string) => boolean;
 declare const isTypeUint: (type: string) => boolean;
-declare const isTypeLitteral: (type: string) => boolean;
 declare const isTypeUint256: (type: string) => boolean;
 declare const isTypeBool: (type: string) => boolean;
 declare const isTypeContractAddress: (type: string) => boolean;
-declare const isTypeEthAddress: (type: string) => boolean;
 declare const isCairo1Type: (type: string) => boolean;
 declare const getArrayType: (type: string) => string;
 /**
- * Test if an ABI comes from a Cairo 1 contract
+ * tells if an ABI comes from a Cairo 1 contract
+ *
  * @param abi representing the interface of a Cairo contract
  * @returns TRUE if it is an ABI from a Cairo1 contract
  * @example
@@ -4584,29 +3949,20 @@ declare const getArrayType: (type: string) => string;
  */
 declare function isCairo1Abi(abi: Abi): boolean;
 /**
- * named tuple cairo type is described as js object {}
- * struct cairo type are described as js object {}
- * array cairo type are described as js array []
+ * named tuple are described as js object {}
+ * struct types are described as js object {}
+ * array types are described as js array []
  */
 /**
- * Create Uint256 Cairo type (helper for common struct type)
- * @example
- * ```typescript
- * uint256('892349863487563453485768723498');
- * ```
+ * Uint256 cairo type (helper for common struct type)
  */
 declare const uint256: (it: BigNumberish) => Uint256;
 /**
- * Create unnamed tuple Cairo type (helper same as common struct type)
- * @example
- * ```typescript
- * tuple(1,'0x101',16);
- * ```
+ * unnamed tuple cairo type (helper same as common struct type)
  */
 declare const tuple: (...args: (BigNumberish | object | boolean)[]) => Record<number, BigNumberish | object | boolean>;
 /**
- * Create felt Cairo type (cairo type helper)
- * @returns format: felt-string
+ * felt cairo type
  */
 declare function felt(it: BigNumberish): string;
 
@@ -4618,13 +3974,8 @@ declare const cairo_isLen: typeof isLen;
 declare const cairo_isTypeArray: typeof isTypeArray;
 declare const cairo_isTypeBool: typeof isTypeBool;
 declare const cairo_isTypeContractAddress: typeof isTypeContractAddress;
-declare const cairo_isTypeEnum: typeof isTypeEnum;
-declare const cairo_isTypeEthAddress: typeof isTypeEthAddress;
 declare const cairo_isTypeFelt: typeof isTypeFelt;
-declare const cairo_isTypeLitteral: typeof isTypeLitteral;
 declare const cairo_isTypeNamedTuple: typeof isTypeNamedTuple;
-declare const cairo_isTypeOption: typeof isTypeOption;
-declare const cairo_isTypeResult: typeof isTypeResult;
 declare const cairo_isTypeStruct: typeof isTypeStruct;
 declare const cairo_isTypeTuple: typeof isTypeTuple;
 declare const cairo_isTypeUint: typeof isTypeUint;
@@ -4641,13 +3992,8 @@ declare namespace cairo {
     cairo_isTypeArray as isTypeArray,
     cairo_isTypeBool as isTypeBool,
     cairo_isTypeContractAddress as isTypeContractAddress,
-    cairo_isTypeEnum as isTypeEnum,
-    cairo_isTypeEthAddress as isTypeEthAddress,
     cairo_isTypeFelt as isTypeFelt,
-    cairo_isTypeLitteral as isTypeLitteral,
     cairo_isTypeNamedTuple as isTypeNamedTuple,
-    cairo_isTypeOption as isTypeOption,
-    cairo_isTypeResult as isTypeResult,
     cairo_isTypeStruct as isTypeStruct,
     cairo_isTypeTuple as isTypeTuple,
     cairo_isTypeUint as isTypeUint,
@@ -4661,7 +4007,6 @@ declare class CallData {
     abi: Abi;
     parser: AbiParserInterface;
     protected readonly structs: AbiStructs;
-    protected readonly enums: AbiEnums;
     constructor(abi: Abi);
     /**
      * Validate arguments passed to the method as corresponding to the ones in the abi
@@ -4713,12 +4058,6 @@ declare class CallData {
      */
     static getAbiStruct(abi: Abi): AbiStructs;
     /**
-     * Helper to extract enums from abi
-     * @param abi Abi
-     * @returns AbiEnums - enums from abi
-     */
-    static getAbiEnum(abi: Abi): AbiEnums;
-    /**
      * Helper: Compile HexCalldata | RawCalldata | RawArgs
      * @param rawCalldata HexCalldata | RawCalldata | RawArgs
      * @returns Calldata
@@ -4736,25 +4075,28 @@ declare function isSierra(contract: CairoContract | string): contract is SierraC
 declare function extractContractHashes(payload: DeclareContractPayload): CompleteDeclareContractPayload;
 /**
  * Helper to redeclare response Cairo0 contract
+ * @param ccr ContractClassResponse
+ * @returns LegacyCompiledContract
  */
 declare function contractClassResponseToLegacyCompiledContract(ccr: ContractClassResponse): LegacyCompiledContract;
 
 /**
  * Parse Transaction Receipt Event from UDC invoke transaction and
- * create DeployContractResponse compatible response with addition of the UDC Event data
+ * create DeployContractResponse compatibile response with adition of UDC Event data
  *
+ * @param txReceipt
  * @returns DeployContractResponse | UDC Event Response data
  */
 declare function parseUDCEvent(txReceipt: InvokeTransactionReceiptResponse): {
     transaction_hash: string;
-    contract_address: any;
-    address: any;
-    deployer: any;
-    unique: any;
-    classHash: any;
-    calldata_len: any;
-    calldata: any;
-    salt: any;
+    contract_address: string;
+    address: string;
+    deployer: string;
+    unique: string;
+    classHash: string;
+    calldata_len: string;
+    calldata: string[];
+    salt: string;
 };
 
 /**
@@ -4764,4 +4106,4 @@ declare function parseUDCEvent(txReceipt: InvokeTransactionReceiptResponse): {
 /** @deprecated prefer the 'num' naming */
 declare const number: typeof num;
 
-export { Abi, AbiEntry, AbiEnums, AbiEvents, AbiStructs, Account, AccountInterface, AccountInvocationItem, AccountInvocations, AccountInvocationsFactoryDetails, AllowArray, Args, ArgsOrCalldata, ArgsOrCalldataWithOptions, ArraySignatureType, AsyncContractFunction, BigNumberish, BlockIdentifier, BlockNumber, BlockStatus, BlockTag, Builtins, ByteCode, Cairo1Event, CairoAssembly, CairoContract, CairoCustomEnum, CairoEnum, CairoEnumRaw, CairoOption, CairoOptionVariant, CairoResult, CairoResultVariant, CairoVersion, Call, CallContractResponse, CallData, CallDetails, CallL1Handler, CallOptions, CallStruct, Calldata, CommonTransactionResponse, CompiledContract, CompiledSierra, CompiledSierraCasm, CompleteDeclareContractPayload, CompressedProgram, Contract, ContractClass$1 as ContractClass, ContractClassResponse, ContractEntryPoint, ContractEntryPointFields, ContractFactory, ContractFactoryParams, ContractFunction, ContractInterface, ContractOptions, CustomError, DeclareAndDeployContractPayload, DeclareContractPayload, DeclareContractResponse, DeclareContractTransaction, DeclareDeployUDCResponse, DeclareSignerDetails, DeclareTransactionReceiptResponse, DeclareTransactionResponse, DeployAccountContractPayload, DeployAccountContractTransaction, DeployAccountSignerDetails, DeployContractResponse, DeployContractUDCResponse, DeployTransactionReceiptResponse, DeployedContractItem, Details, EntryPointType, EntryPointsByType, EnumAbi, EstimateFee, EstimateFeeAction, EstimateFeeBulk, EstimateFeeDetails, EstimateFeeResponse, EstimateFeeResponseBulk, Event, EventAbi, EventEntry, ExecutionResources, FunctionAbi, FunctionInvocation, GatewayError, GetBlockResponse, GetCodeResponse, GetContractAddressesResponse, GetTransactionReceiptResponse, GetTransactionResponse, GetTransactionStatusResponse, HexCalldata, HttpError, Invocation, Invocations, InvocationsDetails, InvocationsDetailsWithNonce, InvocationsSignerDetails, InvokeFunctionResponse, InvokeOptions, InvokeTransactionReceiptResponse, InvokeTransactionResponse, LegacyCompiledContract, LegacyContractClass, LegacyEvent, LibraryError, Litteral, MessageToL1, MessageToL2, MultiDeployContractResponse, MultiType, Nonce, OptionalPayload, ParsedEvent, ParsedEvents, ParsedStruct, Program, Provider, ProviderInterface, ProviderOptions, PythonicHints, rpc as RPC, RawArgs, RawArgsArray, RawArgsObject, RawCalldata, RejectedTransactionReceiptResponse, RejectedTransactionResponse, Result, RevertedTransactionReceiptResponse, RpcProvider, RpcProviderOptions, SIMULATION_FLAG, sequencer as Sequencer, SequencerHttpMethod, SequencerIdentifier, SequencerProvider, SequencerProviderOptions, SierraContractClass, SierraContractEntryPointFields, SierraEntryPointsByType, SierraProgramDebugInfo, Signature, Signer, SignerInterface, SimulateTransactionDetails, SimulateTransactionResponse, SimulatedTransaction, SimulationFlags, StarkNetDomain, StarkNetMerkleType, StarkNetType, StateUpdateResponse, Storage, StructAbi, SuccessfulTransactionReceiptResponse, TransactionExecutionStatus$1 as TransactionExecutionStatus, TransactionFinalityStatus$1 as TransactionFinalityStatus, TransactionStatus, TransactionType$1 as TransactionType, Tupled, TypedContract, TypedData, Uint, Uint256, UniversalDeployerContractPayload, ValidateType, WeierstrassSignatureType, addAddressPadding, buildUrl, cairo, constants, contractClassResponseToLegacyCompiledContract, defaultProvider, ec, encode, index as events, extractContractHashes, fixProto, fixStack, getCalldata, getChecksumAddress, getEstimateFeeBulkOptions, getSimulateTransactionOptions, hash, isSierra, isUrl, json, merkle, num, number, parseUDCEvent, provider, selector, shortString, splitArgsAndOptions, stark, starknetId, transaction, typedData, index$1 as types, uint256$1 as uint256, validateAndParseAddress, validateChecksumAddress, waitForTransactionOptions };
+export { Abi, AbiEntry, AbiStructs, Account, AccountInterface, AccountInvocationItem, AccountInvocations, AccountInvocationsFactoryDetails, AllowArray, Args, ArgsOrCalldata, ArgsOrCalldataWithOptions, ArraySignatureType, AsyncContractFunction, BigNumberish, BlockIdentifier, BlockNumber, BlockStatus, BlockTag, Builtins, ByteCode, CairoAssembly, CairoContract, CairoVersion, Call, CallContractResponse, CallData, CallDetails, CallL1Handler, CallOptions, CallStruct, Calldata, CommonTransactionReceiptResponse, CommonTransactionResponse, CompiledContract, CompiledSierra, CompiledSierraCasm, CompleteDeclareContractPayload, CompressedProgram, Contract, ContractClass$1 as ContractClass, ContractClassResponse, ContractEntryPoint, ContractEntryPointFields, ContractFactory, ContractFactoryParams, ContractFunction, ContractInterface, ContractOptions, CustomError, DeclareAndDeployContractPayload, DeclareContractPayload, DeclareContractResponse, DeclareContractTransaction, DeclareDeployUDCResponse, DeclareSignerDetails, DeclareTransactionReceiptResponse, DeclareTransactionResponse, DeployAccountContractPayload, DeployAccountContractTransaction, DeployAccountSignerDetails, DeployContractResponse, DeployContractUDCResponse, DeployedContractItem, Details, EntryPointType, EntryPointsByType, EstimateFee, EstimateFeeAction, EstimateFeeBulk, EstimateFeeDetails, EstimateFeeResponse, EstimateFeeResponseBulk, Event, ExecutionResources, FunctionAbi, FunctionInvocation, GatewayError, GetBlockResponse, GetCodeResponse, GetContractAddressesResponse, GetTransactionReceiptResponse, GetTransactionResponse, GetTransactionStatusResponse, HexCalldata, HttpError, Invocation, Invocations, InvocationsDetails, InvocationsDetailsWithNonce, InvocationsSignerDetails, InvokeFunctionResponse, InvokeOptions, InvokeTransactionReceiptResponse, InvokeTransactionResponse, LegacyCompiledContract, LegacyContractClass, LibraryError, MessageToL1, MessageToL2, MultiDeployContractResponse, MultiType, Nonce, OptionalPayload, ParsedStruct, Program, Provider, ProviderInterface, ProviderOptions, PythonicHints, rpc as RPC, RawArgs, RawArgsArray, RawArgsObject, RawCalldata, RejectedTransactionReceiptResponse, RejectedTransactionResponse, Result, RpcProvider, RpcProviderOptions, SIMULATION_FLAG, sequencer as Sequencer, SequencerHttpMethod, SequencerIdentifier, SequencerProvider, SequencerProviderOptions, SierraContractClass, SierraContractEntryPointFields, SierraEntryPointsByType, SierraProgramDebugInfo, Signature, Signer, SignerInterface, SimulateTransactionDetails, SimulateTransactionResponse, SimulatedTransaction, SimulationFlags, StarkNetDomain, StarkNetMerkleType, StarkNetType, StateUpdateResponse, Storage, StructAbi, TransactionStatus, TransactionType$1 as TransactionType, Tupled, TypedData, Uint, Uint256, UniversalDeployerContractPayload, ValidateType, WeierstrassSignatureType, addAddressPadding, buildUrl, cairo, constants, contractClassResponseToLegacyCompiledContract, defaultProvider, ec, encode, extractContractHashes, fixProto, fixStack, getCalldata, getChecksumAddress, getEstimateFeeBulkOptions, getSimulateTransactionOptions, hash, isSierra, isUrl, json, merkle, num, number, parseUDCEvent, provider, selector, shortString, splitArgsAndOptions, stark, starknetId, transaction, typedData, index as types, uint256$1 as uint256, validateAndParseAddress, validateChecksumAddress, waitForTransactionOptions };

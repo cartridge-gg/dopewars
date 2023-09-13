@@ -59,5 +59,4 @@ export interface OutcomeInfo {
   imageSrc: string;
   description: string | undefined;
   getResponse: (isInitial: boolean) => string;
-  color: string;
 }

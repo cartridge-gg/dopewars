@@ -26,7 +26,7 @@ fn test_set_name() {
 
     world.execute('set_name', set_name_calldata);
 
-    let name = get!(world, (game_id, player_id), (Name));
+    let name = get !(world, (game_id, player_id), (Name));
     assert(name.short_string == 'Rambo', 'incorrect name');
 }
 
@@ -48,9 +48,9 @@ fn test_join_game() {
     let player_id = serde::Serde::<felt252>::deserialize(ref res)
         .expect('spawn deserialization failed');
 
-    let game = get!(world, game_id, (Game));
+    let game = get !(world, game_id, (Game));
     assert(game.num_players == 2, 'incorrect num players');
 
-    let player = get!(world, (game_id, alice).into(), (Player));
+    let player = get !(world, (game_id, alice).into(), (Player));
     assert(player.turns_remaining == 10, 'player did not join');
 }
