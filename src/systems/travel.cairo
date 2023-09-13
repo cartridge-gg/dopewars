@@ -53,7 +53,6 @@ mod travel {
         let mut risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
-
         player.status = risks.travel(seed);
         if player.status != PlayerStatus::Normal(()) {
             set !(ctx.world, (player));
@@ -63,7 +62,7 @@ mod travel {
         }
        
         //market price fluctuation
-        market_events(ctx, game_id);
+        //market_events(ctx, game_id);
 
         player.location_id = next_location_id;
         player.turns_remaining -= 1;
