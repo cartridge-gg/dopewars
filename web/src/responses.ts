@@ -6,7 +6,7 @@ const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
   [Outcome.Fought]: {
     initial: [
       "You've got some nerve! But this isn't over.",
-      "Impressive moves, traveler. We'll remember that face.",
+      "Impressive moves, punk. We'll remember that face.",
       "You think you've won? We'll be back, and with friends.",
       "Lucky punch... next time you won't be so fortunate.",
       "You might've won the fight, but the war? It's just beginning.",
