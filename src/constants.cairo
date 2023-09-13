@@ -1,6 +1,6 @@
 const SCALING_FACTOR: u128 = 10_000;
 
-const TRAVEL_RISK: u8 = 0; // 30% chance of mugged
+const TRAVEL_RISK: u8 = 30; // 30% chance of mugged
 const RUN_CHANCE: u8 = 50; // 50% chance of successfully getting away
 
 const BASE_PAYMENT: u128 = 500_0000; // base payment is $500
