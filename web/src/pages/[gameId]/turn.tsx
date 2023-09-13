@@ -87,11 +87,13 @@ export default function Turn() {
             </ListItem>
             {lastEncounter && (
               <ListItem>
-                <HStack color={getOutcomeInfo(
-                          lastEncounter.status,
-                          lastEncounter.outcome,
-                        ).color}>
-                  <HStack flex="1" >
+                <HStack
+                  color={
+                    getOutcomeInfo(lastEncounter.status, lastEncounter.outcome)
+                      .color
+                  }
+                >
+                  <HStack flex="1">
                     <Event />
                     <Text>
                       {
@@ -102,7 +104,7 @@ export default function Turn() {
                       }
                     </Text>
                   </HStack>
-                  <Text flex="2" >
+                  <Text flex="2">
                     {
                       getOutcomeInfo(
                         lastEncounter.status,

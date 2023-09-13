@@ -157,7 +157,6 @@ export const outcomes: OutcomeInfo[] = [
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Fought, isInitial),
     color: "yellow.400",
-
   },
   {
     name: "Got Captured",
@@ -178,7 +177,6 @@ export const outcomes: OutcomeInfo[] = [
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
-
   },
 ];
 
@@ -214,7 +212,9 @@ export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
 ): OutcomeInfo {
-  return outcomes.find((item) => {
-    return item.status === status && item.type === type;
-  }) || outcomes[0];
+  return (
+    outcomes.find((item) => {
+      return item.status === status && item.type === type;
+    }) || outcomes[0]
+  );
 }

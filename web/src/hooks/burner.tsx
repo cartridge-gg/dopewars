@@ -106,11 +106,14 @@ export const useBurner = () => {
 
     // deploy burner
     const burner = new Account(provider, address, privateKey);
-    const { transaction_hash: deployTx } = await burner.deployAccount({
-      classHash: process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH!,
-      constructorCalldata: CallData.compile({ publicKey }),
-      addressSalt: publicKey,
-    });
+    const { transaction_hash: deployTx } = await burner.deployAccount(
+      {
+        classHash: process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH!,
+        constructorCalldata: CallData.compile({ publicKey }),
+        addressSalt: publicKey,
+      },
+      { maxFee: 0 },
+    );
 
     // save burner
     let storage = Storage.get("burners") || {};
@@ -142,11 +145,15 @@ export const useBurner = () => {
 };
 
 const prefundAccount = async (address: string, account: Account) => {
-  const { transaction_hash } = await account.execute({
-    contractAddress: ETH_CONTRACT_ADDRESS,
-    entrypoint: "transfer",
-    calldata: CallData.compile([address, PREFUND_AMOUNT, "0x0"]),
-  });
+  const { transaction_hash } = await account.execute(
+    {
+      contractAddress: ETH_CONTRACT_ADDRESS,
+      entrypoint: "transfer",
+      calldata: CallData.compile([address, PREFUND_AMOUNT, "0x0"]),
+    },
+    undefined,
+    { maxFee: 0 },
+  );
 
   return await account.waitForTransaction(transaction_hash, {
     retryInterval: 1000,
