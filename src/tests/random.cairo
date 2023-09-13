@@ -41,6 +41,6 @@ mod random {
             i += 1;
         };
 
-        emit !(ctx.world, Random { likelihood, iterations, num_occured })
+        emit!(ctx.world, Random { likelihood, iterations, num_occured })
     }
 }

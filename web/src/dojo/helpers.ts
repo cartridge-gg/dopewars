@@ -133,7 +133,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Captured,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/police_cruiser.gif",
-    description: "Your drugs were confiscated",
+    description: "You lost 50% of all your drugs",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Captured, isInitial),
     color: "red",
@@ -142,8 +142,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped the Cops",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/sunset.png",
-    description: undefined,
+    imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
@@ -152,8 +151,8 @@ export const outcomes: OutcomeInfo[] = [
     name: "Fought the Gang",
     type: Outcome.Fought,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/sunset.png",
-    description: "You lost 10HP",
+    imageSrc: "/images/fought.png",
+    description: "You lost some health",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Fought, isInitial),
     color: "yellow.400",
@@ -163,7 +162,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Captured,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    description: undefined,
+    description: "You lost 50% of all your cash",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Captured, isInitial),
     color: "red",
@@ -172,8 +171,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped the Gang",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/sunset.png",
-    description: "You lost half your cash and 20HP",
+    imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",

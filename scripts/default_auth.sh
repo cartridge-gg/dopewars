@@ -12,7 +12,7 @@ JOIN_GAME_COMPONENTS=("Game" "Player")
 SET_NAME_COMPONENTS=("Name")
 BUY_COMPONENTS=("Drug" "Market" "Name" "Player")
 SELL_COMPONENTS=("Drug" "Market" "Name" "Player")
-TRAVEL_COMPONENTS=("Player")
+TRAVEL_COMPONENTS=("Player" "Market")
 DECIDE_COMPONENTS=("Player" "Drug")
 
 for component in ${CREATE_GAME_COMPONENTS[@]}; do

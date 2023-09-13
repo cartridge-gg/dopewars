@@ -71,7 +71,7 @@ mod decide {
 
     fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
         let player_id = ctx.origin;
-        let mut player = get !(ctx.world, (game_id, player_id).into(), Player);
+        let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
         let (mut outcome, cash_loss, drug_count_loss, health_loss) = match player.status {
@@ -116,26 +116,26 @@ mod decide {
 
     // Player will fight muggers, but it kinda hurts, taking 10hp of your health. You 
     // might also die if not enough health
-    fn fight(ctx: Context, game_id: u32, player_id: ContractAddress) -> (Outcome, u128,u32, u8) {
+    fn fight(ctx: Context, game_id: u32, player_id: ContractAddress) -> (Outcome, u128, u32, u8) {
         (Outcome::Fought, 0, 0, 10)
     }
 
     // Player will hand over either 20% of their cash or $400, which ever is more
     fn pay(
         ctx: Context, game_id: u32, player_id: ContractAddress, player_cash: u128
-    ) -> (Outcome, u128,u32, u8) {
+    ) -> (Outcome, u128, u32, u8) {
         assert(player_cash >= BASE_PAYMENT, 'not enough cash kid');
         let cash_loss = cmp::max(player_cash / 5, BASE_PAYMENT);
 
-        emit !(ctx.world, Decision { game_id, player_id, action: Action::Pay });
-        emit !(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
-        (Outcome::Paid, cash_loss,0, 0)
+        emit!(ctx.world, Decision { game_id, player_id, action: Action::Pay });
+        emit!(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
+        (Outcome::Paid, cash_loss, 0, 0)
     }
 
     // Player will try to run and can escape without consequence. However, if you 
     // are caught be ready to face the consequences:
-    //     - caught escaping an officer - lose ALL your drugs
-    //     - caught escaping muggers - lose half your cash and 20HP
+    //     - caught escaping an officer - lose half your drugs
+    //     - caught escaping muggers - lose half your cash and hp
     fn run(
         ctx: Context,
         game_id: u32,
@@ -143,8 +143,8 @@ mod decide {
         player_status: PlayerStatus,
         player_cash: u128,
         location_id: felt252
-    ) -> (Outcome, u128,u32, u8) {
-        let mut risks = get !(ctx.world, (game_id, location_id).into(), Risks);
+    ) -> (Outcome, u128, u32, u8) {
+        let mut risks = get!(ctx.world, (game_id, location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         let got_away = risks.run(seed);
 
@@ -152,16 +152,16 @@ mod decide {
         match got_away {
             bool::False => match player_status {
                 PlayerStatus::Normal => {
-                    (Outcome::Unsupported, 0, 0,0)
+                    (Outcome::Unsupported, 0, 0, 0)
                 },
                 PlayerStatus::BeingMugged => {
                     let cash_loss = player_cash / 2;
 
-                    emit !(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
-                    (Outcome::Captured, cash_loss,0, 20)
+                    emit!(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
+                    (Outcome::Captured, cash_loss, 0, 20)
                 },
                 PlayerStatus::BeingArrested => {
-                    let drug_count_loss = take_drugs(ctx, game_id, player_id);
+                    let drug_count_loss = halve_drugs(ctx, game_id, player_id);
                     (Outcome::Captured, 0, drug_count_loss, 0)
                 }
             },
@@ -171,8 +171,8 @@ mod decide {
         }
     }
 
-    // lost all ur stash, ngmi
-    fn take_drugs(ctx: Context, game_id: u32, player_id: ContractAddress)->u32 {
+    // ngmi
+    fn halve_drugs(ctx: Context, game_id: u32, player_id: ContractAddress) -> u32 {
         let mut drugs = DrugTrait::all();
         let mut total_drug_loss = 0;
         loop {
@@ -180,8 +180,8 @@ mod decide {
                 Option::Some(drug_id) => {
                     let mut drug = get!(ctx.world, (game_id, player_id, *drug_id), Drug);
                     if (drug.quantity != 0) {
-                        total_drug_loss = drug.quantity;
-                        drug.quantity = 0;
+                        drug.quantity /= 2;
+                        total_drug_loss += drug.quantity;
 
                         emit!(
                             ctx.world,

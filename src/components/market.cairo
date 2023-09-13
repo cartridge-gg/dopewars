@@ -47,43 +47,43 @@ impl MarketImpl of MarketTrait {
     fn get_pricing_info(drug_id: felt252) -> PricingInfos {
         if drug_id == 'Acid' {
             PricingInfos {
-                min_price: 700 * SCALING_FACTOR,
-                max_price: 4400 * SCALING_FACTOR,
+                min_price: 500 * SCALING_FACTOR,
+                max_price: 1000 * SCALING_FACTOR,
                 min_qty: 400,
                 max_qty: 900,
             }
         } else if drug_id == 'Weed' {
             PricingInfos {
-                min_price: 260 * SCALING_FACTOR,
-                max_price: 720 * SCALING_FACTOR,
+                min_price: 250 * SCALING_FACTOR,
+                max_price: 500 * SCALING_FACTOR,
                 min_qty: 500,
                 max_qty: 1000,
             }
         } else if drug_id == 'Ludes' {
             PricingInfos {
-                min_price: 20 * SCALING_FACTOR,
-                max_price: 70 * SCALING_FACTOR,
+                min_price: 10 * SCALING_FACTOR,
+                max_price: 50 * SCALING_FACTOR,
                 min_qty: 800,
                 max_qty: 2000,
             }
         } else if drug_id == 'Speed' {
             PricingInfos {
-                min_price: 70 * SCALING_FACTOR,
-                max_price: 260 * SCALING_FACTOR,
+                min_price: 50 * SCALING_FACTOR,
+                max_price: 250 * SCALING_FACTOR,
                 min_qty: 600,
                 max_qty: 1500,
             }
         } else if drug_id == 'Heroin' {
             PricingInfos {
-                min_price: 6900 * SCALING_FACTOR,
-                max_price: 22000 * SCALING_FACTOR,
+                min_price: 1000 * SCALING_FACTOR,
+                max_price: 2000 * SCALING_FACTOR,
                 min_qty: 300,
                 max_qty: 700,
             }
         } else if drug_id == 'Cocaine' {
             PricingInfos {
-                min_price: 14800 * SCALING_FACTOR,
-                max_price: 36000 * SCALING_FACTOR,
+                min_price: 2000 * SCALING_FACTOR,
+                max_price: 6000 * SCALING_FACTOR,
                 min_qty: 250,
                 max_qty: 600,
             }

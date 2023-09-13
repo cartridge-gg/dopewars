@@ -57,7 +57,7 @@ export interface OutcomeInfo {
   status: PlayerStatus;
   name: string;
   imageSrc: string;
-  description: string | undefined;
+  description?: string;
   getResponse: (isInitial: boolean) => string;
   color: string;
 }

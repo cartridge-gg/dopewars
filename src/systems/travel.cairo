@@ -55,14 +55,14 @@ mod travel {
 
         player.status = risks.travel(seed);
         if player.status != PlayerStatus::Normal(()) {
-            set !(ctx.world, (player));
-            emit !(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
+            set!(ctx.world, (player));
+            emit!(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
 
             return true;
         }
-       
+
         //market price fluctuation
-        //market_events(ctx, game_id);
+        market_events(ctx, game_id);
 
         player.location_id = next_location_id;
         player.turns_remaining -= 1;
