@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardFooter,
   SimpleGrid,
-  Button,
   StyleProps,
   useDisclosure,
   useBreakpointValue,
@@ -27,6 +26,7 @@ import { Inventory } from "@/components/Inventory";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { useDojo } from "@/dojo";
 import { shortString } from "starknet";
+import Button from "@/components/Button";
 import {
   getDrugById,
   getLocationById,

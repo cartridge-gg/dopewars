@@ -8,7 +8,6 @@ import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
 
 import {
-  Button,
   HStack,
   ListItem,
   Text,
@@ -16,6 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Button from "@/components/Button";
 
 export default function Turn() {
   const router = useRouter();
