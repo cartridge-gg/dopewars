@@ -54,10 +54,17 @@ const Header = ({ back }: HeaderProps) => {
   }, [playerEntity]);
 
   return (
-    <HStack w="full" zIndex="overlay" py={["0", "20px"]} px="20px">
-      <HStack flex="1" justify="left">
+    <HStack
+      w="full"
+      px="10px"
+      py={["0", "20px"]}
+      spacing="10px"
+      zIndex="overlay"
+      align="flex-start"
+    >
+      <HStack flex="1" justify={["left", "right"]}>
         {back && (
-          <HeaderButton onClick={() => router.back()}>
+          <HeaderButton h="40px" onClick={() => router.back()}>
             <Arrow />
           </HeaderButton>
         )}
@@ -66,6 +73,7 @@ const Header = ({ back }: HeaderProps) => {
         <HStack flex="1" justify="center">
           <HStack
             h={["80px", "40px"]}
+            w="full"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
