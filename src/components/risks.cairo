@@ -26,8 +26,8 @@ impl RisksImpl of RisksTrait {
 
             // more bias towards gang encounter
             return match result <= 40 {
-                bool::False => PlayerStatus::BeingArrested(()),
-                bool::True => PlayerStatus::BeingMugged(()),
+                bool::False => PlayerStatus::BeingMugged(()),
+                bool::True => PlayerStatus::BeingArrested(()),
             };
         }
 
