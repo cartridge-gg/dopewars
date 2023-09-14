@@ -1,5 +1,5 @@
 import { Clock, Gem, Bag, Arrow, Heart } from "./icons";
-import { Divider, HStack, Text } from "@chakra-ui/react";
+import { Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
@@ -64,35 +64,56 @@ const Header = ({ back }: HeaderProps) => {
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
-            h="40px"
+            h={["80px", "40px"]}
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
             clipPath={`polygon(${generatePixelBorderPath()})`}
           >
-            <HStack>
-              <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
-            </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Bag />
-              <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
-            </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Heart /> <Text>{playerEntity.health}</Text>
-            </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Clock />
-              <Text>
-                {playerEntity.turnsRemaining === 0
-                  ? "Final"
-                  : `${gameEntity.maxTurns - playerEntity.turnsRemaining + 1}/${
-                      gameEntity.maxTurns + 1
-                    }`}
-              </Text>
-            </HStack>
+            <Flex
+              flexDirection={["column-reverse", "row"]}
+              align="center"
+              gap="10px"
+            >
+              <HStack>
+                <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
+              </HStack>
+              <HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                  visibility={["hidden", "visible"]}
+                />
+                <HStack>
+                  <Bag />
+                  <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
+                </HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                />
+                <HStack>
+                  <Heart /> <Text>{playerEntity.health}</Text>
+                </HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                />
+                <HStack>
+                  <Clock />
+                  <Text>
+                    {playerEntity.turnsRemaining === 0
+                      ? "Final"
+                      : `${
+                          gameEntity.maxTurns - playerEntity.turnsRemaining + 1
+                        }/${gameEntity.maxTurns + 1}`}
+                  </Text>
+                </HStack>
+              </HStack>
+            </Flex>
           </HStack>
         </HStack>
       )}
