@@ -11,6 +11,7 @@ import {
   CardFooter,
   SimpleGrid,
   Button,
+  StyleProps,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
@@ -29,6 +30,7 @@ import {
   getLocationById,
   getLocationBySlug,
 } from "@/dojo/helpers";
+import { motion } from "framer-motion";
 
 export default function Location() {
   const router = useRouter();
@@ -64,18 +66,10 @@ export default function Location() {
     return <></>;
   }
 
-  const prefixTitle =
-    playerEntity.turnsRemaining === 0
-      ? "Final Day"
-      : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
-          gameEntity.maxTurns + 1
-        }`;
-
   return (
     <Layout
       leftPanelProps={{
         title: shortString.decodeShortString(locationEntity.id),
-        prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${
           getLocationById(locationEntity.id).slug
         }.png`,
@@ -101,11 +95,11 @@ export default function Location() {
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
             const canBuy = drug.price <= playerEntity.cash;
-            const canSell = playerEntity.drugs.find(
+            const canSell = !!playerEntity.drugs.find(
               (d) => d.id === drug.id && d.quantity > 0,
             );
             return (
-              <Card h="220px" key={index}>
+              <Card h={["220px", "180px"]} key={index}>
                 <CardHeader
                   textTransform="uppercase"
                   fontSize="20px"
@@ -114,7 +108,23 @@ export default function Location() {
                   {drugInfo.name}
                 </CardHeader>
                 <CardBody>
-                  <HStack w="full" justify="center">
+                  <HStack w="full" justify="center" position="relative" m="2px">
+                    <Box
+                      w="full"
+                      as={motion.div}
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      position="absolute"
+                      bgColor="neon.900"
+                      pointerEvents={["none", "auto"]}
+                    >
+                      <BuySell
+                        p="20px"
+                        canSell={canSell}
+                        canBuy={canBuy}
+                        drugSlug={drugInfo.slug}
+                      />
+                    </Box>
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
@@ -127,26 +137,12 @@ export default function Location() {
                       <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack>
                   </HStack>
-                  <HStack w="full" gap="10px">
-                    <Button
-                      flex="1"
-                      onClick={() =>
-                        router.push(`${router.asPath}/${drugInfo.slug}/buy`)
-                      }
-                      isDisabled={!canBuy}
-                    >
-                      Buy
-                    </Button>
-                    <Button
-                      flex="1"
-                      onClick={() =>
-                        router.push(`${router.asPath}/${drugInfo.slug}/sell`)
-                      }
-                      isDisabled={!canSell}
-                    >
-                      Sell
-                    </Button>
-                  </HStack>
+                  <BuySell
+                    display={["flex", "none"]}
+                    canSell={canSell}
+                    canBuy={canBuy}
+                    drugSlug={drugInfo.slug}
+                  />
                 </CardFooter>
               </Card>
             );
@@ -172,3 +168,34 @@ export default function Location() {
     </Layout>
   );
 }
+
+const BuySell = ({
+  canBuy,
+  canSell,
+  drugSlug,
+  ...props
+}: {
+  canBuy: boolean;
+  canSell: boolean;
+  drugSlug: string;
+} & StyleProps) => {
+  const router = useRouter();
+  return (
+    <HStack w="full" gap="10px" {...props}>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)}
+        isDisabled={!canBuy}
+      >
+        Buy
+      </Button>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugSlug}/sell`)}
+        isDisabled={!canSell}
+      >
+        Sell
+      </Button>
+    </HStack>
+  );
+};

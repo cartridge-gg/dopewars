@@ -104,7 +104,7 @@ export default function Turn() {
                       }
                     </Text>
                   </HStack>
-                  <Text flex="2">
+                  <Text flex="1">
                     {
                       getOutcomeInfo(
                         lastEncounter.status,

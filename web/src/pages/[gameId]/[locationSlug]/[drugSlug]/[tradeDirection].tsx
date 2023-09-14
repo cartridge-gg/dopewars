@@ -31,6 +31,7 @@ import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo } from "@/dojo/types";
 import { useDojo } from "@/dojo";
+import { cardPixelatedStyle } from "@/theme/styles";
 
 export default function Market() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function Market() {
 
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    if (!locationEntity || !playerEntity) return;
+    if (!locationEntity || !playerEntity || isSubmitting) return;
 
     const market = locationEntity.drugMarkets.find((d) => d.id === drug.id);
     if (!market) return;
@@ -294,16 +295,7 @@ const QuantitySelector = ({
       </Flex>
 
       <HStack w="100%" py={2} gap="10px">
-        <ArrowEnclosed
-          direction="down"
-          size="lg"
-          cursor="pointer"
-          onClick={onDown}
-          color="neon.500"
-          _hover={{
-            color: "neon.300",
-          }}
-        />
+        <Box />
         <Slider
           aria-label="slider-quantity"
           w="100%"
@@ -318,16 +310,37 @@ const QuantitySelector = ({
             <SliderFilledTrack />
           </SliderTrack>
         </Slider>
-        <ArrowEnclosed
-          direction="up"
-          size="lg"
-          cursor="pointer"
-          onClick={onUp}
-          color="neon.500"
-          _hover={{
-            color: "neon.300",
-          }}
-        />
+        <HStack spacing="0">
+          <ArrowEnclosed
+            direction="down"
+            boxSize="48px"
+            cursor="pointer"
+            onClick={onDown}
+            color="neon.500"
+            _hover={{
+              color: "neon.300",
+            }}
+          />
+          <ArrowEnclosed
+            direction="up"
+            boxSize="48px"
+            cursor="pointer"
+            onClick={onUp}
+            color="neon.500"
+            _hover={{
+              color: "neon.300",
+            }}
+          />
+        </HStack>
+        <Button
+          h="36px"
+          w="100px"
+          variant="pixelated"
+          display={["none", "block"]}
+          onClick={() => setQuantity(max)}
+        >
+          Max
+        </Button>
       </HStack>
     </VStack>
   );
