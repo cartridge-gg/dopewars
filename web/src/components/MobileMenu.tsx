@@ -1,32 +1,24 @@
 import {
-  Button as ChakraButton,
-  ButtonProps,
   StyleProps,
-  Text,
-  Box,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
-  Button,
-  VStack,
   Menu,
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { Dots, Chat, Trophy, User } from "./icons";
+import { Dots, User, Roll } from "./icons";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "./MediaPlayer";
 import { useRouter } from "next/router";
+import { useDojo } from "@/dojo";
+import { formatAddress } from "@/utils/contract";
 
 const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   const router = useRouter();
+  const { account } = useDojo();
   return (
     <>
       <Popover placement="bottom-end">
@@ -35,24 +27,19 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
             <Dots />
           </HeaderButton>
         </PopoverTrigger>
-        <PopoverContent bg="neon.900" borderRadius={0} borderColor="neon.600">
+        <PopoverContent bg="neon.700" borderRadius={0} borderColor="neon.600">
           <PopoverBody p={0}>
             <Menu>
               <MenuItem _hover={{ bg: "transarent" }}>
                 <MediaPlayer />
               </MenuItem>
-              <MenuItem icon={<Chat />}>CHAT</MenuItem>
-              <MenuItem
-                icon={<Trophy />}
-                onClick={() => router.push("/leaderboard")}
-              >
-                LEADERBOARD
+              <MenuItem icon={<Roll />} onClick={() => {}}>
+                CREDITS
               </MenuItem>
-              <MenuItem icon={<User />}>SHINOBI</MenuItem>
+              <MenuItem icon={<User />}>
+                <>{account && formatAddress(account.address.toUpperCase())}</>
+              </MenuItem>
             </Menu>
-            {/* <VStack alignItems="flex-start">
-           
-          </VStack> */}
           </PopoverBody>
         </PopoverContent>
       </Popover>

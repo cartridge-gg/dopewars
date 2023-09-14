@@ -32,7 +32,6 @@ import { usePlayerStore } from "@/hooks/state";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
-import { cardPixelatedStyle, cardPixelatedStyleOutset } from "@/theme/styles";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -72,14 +71,6 @@ export default function Home() {
               </Text>
             </VStack>
             */}
-            <Button
-              flex="1"
-              isDisabled={!!account}
-              isLoading={isBurnerDeploying}
-              onClick={() => createBurner()}
-            >
-              {account ? formatAddress(account.address) : "Create Burner"}
-            </Button>
             <Button
               flex="1"
               isDisabled={!account}

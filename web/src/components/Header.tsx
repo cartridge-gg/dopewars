@@ -1,5 +1,5 @@
 import { Clock, Gem, Bag, Arrow, Heart } from "./icons";
-import { Divider, Flex, HStack, Text } from "@chakra-ui/react";
+import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { useDojo } from "@/dojo";
+import { formatAddress } from "@/utils/contract";
 
 // TODO: constrain this on contract side
 const MAX_INVENTORY = 100;
@@ -23,7 +24,7 @@ const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
-  const { account } = useDojo();
+  const { account, createBurner, isBurnerDeploying } = useDojo();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -119,13 +120,25 @@ const Header = ({ back }: HeaderProps) => {
       )}
 
       <HStack flex="1" justify="right">
-        {!isMobile && <MediaPlayer />}
-        {/* Chat requires backend implementation */}
-        {/* {!isMobile && (
-              <HeaderButton onClick={() => router.push("/chat")}>
-                <Chat color={hasNewMessages ? "yellow.400" : "currentColor"} />
-              </HeaderButton>
-            )} */}
+        {!isMobile && (
+          <>
+            <MediaPlayer />
+            <Button
+              variant="pixelated"
+              isLoading={isBurnerDeploying}
+              onClick={() => {
+                if (!account) {
+                  createBurner();
+                }
+              }}
+            >
+              {account
+                ? formatAddress(account.address.toUpperCase())
+                : "Create Burner"}
+            </Button>
+          </>
+        )}
+
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>
