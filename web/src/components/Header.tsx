@@ -94,7 +94,7 @@ const Header = ({ back }: HeaderProps) => {
                   h="12px"
                   visibility={["hidden", "visible"]}
                 />
-                <HStack>
+                <HStack color={inventory > 0 ? "yellow.400" : "auto"}>
                   <Bag />
                   <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
                 </HStack>
