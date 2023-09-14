@@ -94,7 +94,9 @@ export default function Location() {
         <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
-            const canBuy = drug.price <= playerEntity.cash;
+            const canBuy =
+              drug.price <= playerEntity.cash &&
+              playerEntity.drugCount < playerEntity.bagLimit;
             const canSell = !!playerEntity.drugs.find(
               (d) => d.id === drug.id && d.quantity > 0,
             );
@@ -148,7 +150,7 @@ export default function Location() {
             );
           })}
         </SimpleGrid>
-        <Box minH="40px" />
+        <Box minH="60px" />
       </VStack>
       <Footer>
         <Button
