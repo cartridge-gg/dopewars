@@ -97,11 +97,11 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={2} w="full" gap="20px" fontSize="20px">
+        <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
             return (
-              <Card h="220px" key={index} cursor="pointer">
+              <Card h="220px" key={index}>
                 <CardHeader
                   textTransform="uppercase"
                   fontSize="20px"
