@@ -1,4 +1,4 @@
-import BorderImage from "@/components/icons/BorderImage";
+import BorderImage from "@/components/icons/PressableBorderImage";
 import { generatePixelBorderPath } from "@/utils/ui";
 import { ComponentStyleConfig } from "@chakra-ui/react";
 

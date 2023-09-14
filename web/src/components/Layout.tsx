@@ -51,13 +51,13 @@ const Layout = ({
       >
         <Header back={showBack} />
         <Container position="relative">
-          <>
-            {!isSinglePanel &&
-              (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel />)}
-            <RightPanel flex={[showMap ? "0" : "1", "1"]}>
-              {children}
-            </RightPanel>
-          </>
+          {!isSinglePanel &&
+            (!CustomLeftPanel ? (
+              <LeftPanel {...leftPanelProps} />
+            ) : (
+              <CustomLeftPanel />
+            ))}
+          <RightPanel flex={[showMap ? "0" : "1", "1"]}>{children}</RightPanel>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>

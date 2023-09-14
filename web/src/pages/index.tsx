@@ -18,7 +18,7 @@ import { Alert, Clock, Sound } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
-import BorderImage from "@/components/icons/BorderImage";
+import BorderImage from "@/components/icons/PressableBorderImage";
 import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { useGlobalScores } from "@/dojo/components/useGlobalScores";
@@ -287,7 +287,7 @@ const HomeLeftPanel = () => {
             id="steps"
             style={{ marginTop: "30px" }}
             position="relative"
-            onClick={()=> onScrollDown()}
+            onClick={() => onScrollDown()}
             animation={`${floatAnim} infinite 3s linear`}
             cursor={"pointer"}
           >

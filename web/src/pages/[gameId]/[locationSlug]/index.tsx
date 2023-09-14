@@ -97,19 +97,11 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={2} w="full" gap="12px" fontSize="20px">
+        <SimpleGrid columns={2} w="full" gap="20px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
             return (
-              <Card
-                h="160px"
-                key={index}
-                cursor="pointer"
-                onClick={() => {
-                  playSound(Sounds.HoverClick, 0.3, false);
-                  router.push(`${router.asPath}/${drugInfo.slug}`);
-                }}
-              >
+              <Card h="220px" key={index} cursor="pointer">
                 <CardHeader
                   textTransform="uppercase"
                   fontSize="20px"
@@ -119,15 +111,35 @@ export default function Location() {
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center">
-                    <Box>{drugInfo.icon({})}</Box>
+                    {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
-                <CardFooter fontSize="16px">
-                  <Text>{formatCash(drug.price)}</Text>
-                  <Spacer />
+                <CardFooter fontSize="16px" flexDirection="column" gap="10px">
                   <HStack>
-                    <Cart />
-                    <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                    <Text>{formatCash(drug.price)}</Text>
+                    <Spacer />
+                    <HStack>
+                      <Cart />
+                      <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                    </HStack>
+                  </HStack>
+                  <HStack w="full" gap="10px">
+                    <Button
+                      flex="1"
+                      onClick={() =>
+                        router.push(`${router.asPath}/${drugInfo.slug}/buy`)
+                      }
+                    >
+                      Buy
+                    </Button>
+                    <Button
+                      flex="1"
+                      onClick={() =>
+                        router.push(`${router.asPath}/${drugInfo.slug}/sell`)
+                      }
+                    >
+                      Sell
+                    </Button>
                   </HStack>
                 </CardFooter>
               </Card>

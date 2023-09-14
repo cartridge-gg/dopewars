@@ -1,7 +1,7 @@
 import { Divider, HStack, StyleProps, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Sparkles } from "@/components/icons";
-import BorderImage from "@/components/icons/BorderImage";
+import BorderImage from "@/components/icons/PressableBorderImage";
 import { Avatar } from "./avatar/Avatar";
 import { AvatarName } from "./avatar/avatars";
 import colors from "@/theme/colors";

@@ -8,7 +8,6 @@ import { Footer } from "@/components/Footer";
 
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
@@ -28,15 +27,16 @@ import { useDojo } from "@/dojo";
 export default function Market() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
+  const tradeDirection =
+    (router.query.tradeDirection as string) === "buy"
+      ? TradeDirection.Buy
+      : TradeDirection.Sell;
   const location = getLocationBySlug(router.query.locationSlug as string);
   const drug = getDrugBySlug(router.query.drugSlug as string);
 
   const [market, setMarket] = useState<DrugMarket>();
-  const [tradeDirection, setTradeDirection] = useState(TradeDirection.Buy);
-
   const [quantityBuy, setQuantityBuy] = useState(1);
   const [quantitySell, setQuantitySell] = useState(1);
-
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
@@ -68,10 +68,6 @@ export default function Market() {
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
   }, [locationEntity, playerEntity, drug]);
-
-  const onTabsChange = (index: number) => {
-    setTradeDirection(index as TradeDirection);
-  };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { buy, sell, error: txError } = useSystems();
@@ -116,7 +112,7 @@ export default function Market() {
     addTrade,
   ]);
 
-  if (!playerEntity || !drug || !market) return <></>;
+  if (!router.isReady || !playerEntity || !drug || !market) return <></>;
 
   return (
     <Layout
@@ -127,15 +123,7 @@ export default function Market() {
       }}
       showBack={true}
     >
-      <VStack
-        w="full"
-        sx={{
-          overflowY: "scroll",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
+      <VStack boxSize="full" justify="center">
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
           <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
             <Image
@@ -155,67 +143,53 @@ export default function Market() {
             </HStack>
           </HStack>
         </Card>
-        <Tabs
-          w="100%"
-          isFitted
-          variant="unstyled"
-          index={tradeDirection}
-          onChange={onTabsChange}
-        >
-          <TabList>
-            <Tab>BUY</Tab>
-            <Tab>SELL</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              {canBuy ? (
-                <QuantitySelector
-                  drug={drug}
-                  player={playerEntity}
-                  market={market}
-                  type={TradeDirection.Buy}
-                  onChange={setQuantityBuy}
-                />
-              ) : (
-                <AlertMessage message="You can't afford this" />
-              )}
-            </TabPanel>
-            <TabPanel>
-              {canSell ? (
-                <QuantitySelector
-                  drug={drug}
-                  player={playerEntity}
-                  market={market}
-                  type={TradeDirection.Sell}
-                  onChange={setQuantitySell}
-                />
-              ) : (
-                <Box>
-                  <AlertMessage message={`You have no ${drug.name} to sell`} />
-                </Box>
-              )}
-            </TabPanel>
-          </TabPanels>
-          <Box h="40px" />
-        </Tabs>
+        {((tradeDirection == TradeDirection.Buy && canBuy) ||
+          (tradeDirection == TradeDirection.Sell && canSell)) && (
+          <QuantitySelector
+            drug={drug}
+            player={playerEntity}
+            market={market}
+            type={tradeDirection}
+            onChange={(quantity, _) => {
+              if (tradeDirection == TradeDirection.Buy) {
+                setQuantityBuy(quantity);
+              } else {
+                setQuantitySell(quantity);
+              }
+            }}
+          />
+        )}
+
+        {tradeDirection == TradeDirection.Buy && !canBuy && (
+          <AlertMessage message="You can't afford this" />
+        )}
+
+        {tradeDirection == TradeDirection.Sell && !canSell && (
+          <AlertMessage message={`You have no ${drug.name} to sell`} />
+        )}
+
+        <Footer alignItems={["flex-end", "flex-start"]}>
+          {tradeDirection == TradeDirection.Buy && canBuy && (
+            <Button
+              w={["full", "auto"]}
+              isLoading={isSubmitting && !txError}
+              onClick={onTrade}
+            >
+              Buy ({quantityBuy})
+            </Button>
+          )}
+
+          {tradeDirection == TradeDirection.Sell && canSell && (
+            <Button
+              w={["full", "auto"]}
+              isLoading={isSubmitting && !txError}
+              onClick={onTrade}
+            >
+              Sell ({quantitySell})
+            </Button>
+          )}
+        </Footer>
       </VStack>
-      <Footer>
-        <Button
-          w={["full", "auto"]}
-          isLoading={isSubmitting && !txError}
-          onClick={onTrade}
-          display={
-            (tradeDirection === TradeDirection.Buy && canBuy) ||
-            (tradeDirection === TradeDirection.Sell && canSell)
-              ? "flex"
-              : "none"
-          }
-        >
-          {tradeDirection === TradeDirection.Buy
-            ? `Buy (${quantityBuy})`
-            : `Sell (${quantitySell})`}
-        </Button>
-      </Footer>
     </Layout>
   );
 }
@@ -286,38 +260,19 @@ const QuantitySelector = ({
     setQuantity(value);
   }, []);
 
-  const onMax = useCallback(() => {
-    setQuantity(max);
-  }, [max]);
-
-  const on50 = useCallback(() => {
-    setQuantity(Math.max(1, Math.floor(max / 2)));
-  }, [max]);
-
   return (
     <VStack
       opacity={max === 0 ? "0.2" : "1"}
       pointerEvents={max === 0 ? "none" : "all"}
+      w="full"
     >
       <HStack w="100%" justifyContent="space-between">
-        <VStack align="flex-start">
-          <Text textStyle="subheading" fontSize="13px">
-            ({quantity}) for {formatCash(totalPrice)}
-          </Text>
-          <Text color={alertColor}>
-            <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage
-            (estimate)
-          </Text>
-        </VStack>
-
-        <HStack gap="8px" textStyle="subheading" fontSize="13px">
-          <Text textDecoration="underline" cursor="pointer" onClick={on50}>
-            50%
-          </Text>
-          <Text textDecoration="underline" cursor="pointer" onClick={onMax}>
-            MAX
-          </Text>
-        </HStack>
+        <Text color={alertColor}>
+          <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage
+        </Text>
+        <Text textStyle="subheading" fontSize="13px">
+          ({quantity}) for {formatCash(totalPrice)}
+        </Text>
       </HStack>
 
       <HStack w="100%" py={2} gap="10px">

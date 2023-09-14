@@ -32,7 +32,6 @@ export const Inventory = ({ ...props }: StyleProps) => {
         h="40px"
         px="20px"
         justify="center"
-        variant="pixelated"
         sx={{
           overflowY: "scroll",
           "&::-webkit-scrollbar": {

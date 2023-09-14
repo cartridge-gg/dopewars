@@ -1,4 +1,3 @@
-import { useToken } from "@chakra-ui/react";
 import BorderImage from "@/components/icons/BorderImage";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 
@@ -22,32 +21,14 @@ export const styles = {
 // applied layerStyles below and also chakra's Card component
 export const cardStyle = {
   position: "relative",
-  marginRight: "2px",
   color: "neon.200",
   bgColor: "none",
   borderStyle: "solid",
-  borderWidth: "2px",
-  borderImageSlice: "4",
-  borderImageWidth: "4px",
+  borderImageSlice: "6",
+  borderImageWidth: "6px",
   borderImageSource: `url("data:image/svg+xml,${BorderImage({
-    color: colors.neon["200"].toString(),
-    isPressed: false,
+    color: colors.neon["600"].toString(),
   })}")`,
-  _hover: {
-    color: "neon.300",
-    borderImageSource: `url("data:image/svg+xml,${BorderImage({
-      color: colors.neon["300"].toString(),
-      isPressed: false,
-    })}")`,
-  },
-  _active: {
-    top: "2px",
-    left: "2px",
-    borderImageSource: `url("data:image/svg+xml,${BorderImage({
-      color: colors.neon["300"].toString(),
-      isPressed: true,
-    })}")`,
-  },
 };
 
 // use clipPath to "cut" corners
