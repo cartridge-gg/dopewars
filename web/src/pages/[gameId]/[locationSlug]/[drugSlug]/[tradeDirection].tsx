@@ -44,8 +44,8 @@ export default function Market() {
   const drug = getDrugBySlug(router.query.drugSlug as string);
 
   const [market, setMarket] = useState<DrugMarket>();
-  const [quantityBuy, setQuantityBuy] = useState(1);
-  const [quantitySell, setQuantitySell] = useState(1);
+  const [quantityBuy, setQuantityBuy] = useState(0);
+  const [quantitySell, setQuantitySell] = useState(0);
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
@@ -182,6 +182,7 @@ export default function Market() {
             <Button
               w={["full", "auto"]}
               isLoading={isSubmitting && !txError}
+              isDisabled={quantityBuy === 0}
               onClick={onTrade}
             >
               Buy ({quantityBuy})
@@ -192,6 +193,7 @@ export default function Market() {
             <Button
               w={["full", "auto"]}
               isLoading={isSubmitting && !txError}
+              isDisabled={quantitySell === 0}
               onClick={onTrade}
             >
               Sell ({quantitySell})
@@ -219,7 +221,7 @@ const QuantitySelector = ({
   const [totalPrice, setTotalPrice] = useState<number>(market.price);
   const [priceImpact, setPriceImpact] = useState<number>(0);
   const [alertColor, setAlertColor] = useState<string>("neon.500");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [max, setMax] = useState(0);
 
   useEffect(() => {
@@ -283,14 +285,20 @@ const QuantitySelector = ({
         gap="20px"
       >
         <Text color={alertColor}>
-          <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage ($
-          {(totalPrice / quantity).toFixed(0)} per)
+          <Alert size="sm" />{" "}
+          {priceImpact ? (priceImpact * 100).toFixed(2) : "0"}% slippage ($
+          {totalPrice
+            ? (totalPrice / quantity).toFixed(0)
+            : market.price.toFixed(0)}{" "}
+          per)
         </Text>
         <HStack fontSize="13px">
           <Text textStyle="subheading" color="neon.500">
             Total:
           </Text>
-          <Text textStyle="subheading">{formatCash(totalPrice)}</Text>
+          <Text textStyle="subheading">
+            {totalPrice ? formatCash(totalPrice) : "$0"}
+          </Text>
         </HStack>
       </Flex>
 
@@ -299,7 +307,7 @@ const QuantitySelector = ({
         <Slider
           aria-label="slider-quantity"
           w="100%"
-          min={1}
+          min={0}
           max={max}
           step={1}
           defaultValue={1}
