@@ -12,6 +12,8 @@ import {
   SimpleGrid,
   Button,
   StyleProps,
+  useDisclosure,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
@@ -101,7 +103,7 @@ export default function Location() {
               (d) => d.id === drug.id && d.quantity > 0,
             );
             return (
-              <Card h={["220px", "180px"]} key={index}>
+              <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader
                   textTransform="uppercase"
                   fontSize="20px"
@@ -111,22 +113,23 @@ export default function Location() {
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center" position="relative" m="2px">
-                    <Box
-                      w="full"
+                    <HStack
                       as={motion.div}
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
+                      w="full"
+                      p="20px"
+                      gap="10px"
                       position="absolute"
                       bgColor="neon.900"
                       pointerEvents={["none", "auto"]}
                     >
-                      <BuySell
-                        p="20px"
-                        canSell={canSell}
+                      <BuySellBtns
                         canBuy={canBuy}
+                        canSell={canSell}
                         drugSlug={drugInfo.slug}
                       />
-                    </Box>
+                    </HStack>
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
@@ -139,8 +142,7 @@ export default function Location() {
                       <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack>
                   </HStack>
-                  <BuySell
-                    display={["flex", "none"]}
+                  <BuySellMobileToggle
                     canSell={canSell}
                     canBuy={canBuy}
                     drugSlug={drugInfo.slug}
@@ -171,19 +173,18 @@ export default function Location() {
   );
 }
 
-const BuySell = ({
+const BuySellBtns = ({
   canBuy,
   canSell,
   drugSlug,
-  ...props
 }: {
   canBuy: boolean;
   canSell: boolean;
   drugSlug: string;
-} & StyleProps) => {
+}) => {
   const router = useRouter();
   return (
-    <HStack w="full" gap="10px" {...props}>
+    <>
       <Button
         flex="1"
         onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)}
@@ -198,6 +199,49 @@ const BuySell = ({
       >
         Sell
       </Button>
-    </HStack>
+    </>
+  );
+};
+
+const BuySellMobileToggle = ({
+  canBuy,
+  canSell,
+  drugSlug,
+  ...props
+}: {
+  canBuy: boolean;
+  canSell: boolean;
+  drugSlug: string;
+} & StyleProps) => {
+  const router = useRouter();
+  const { isOpen, onToggle } = useDisclosure();
+
+  return (
+    <>
+      <Box
+        boxSize="full"
+        position="absolute"
+        top="0"
+        left="0"
+        onClick={onToggle}
+        pointerEvents={["auto", "none"]}
+      />
+      <HStack
+        as={motion.div}
+        initial={{ height: "0", opacity: 0 }}
+        animate={{
+          height: isOpen ? "auto" : "0",
+          opacity: isOpen ? 1 : 0,
+        }}
+        boxSize="full"
+        gap="10px"
+        overflow="hidden"
+        align="flex-start"
+        display={["flex", "none"]}
+        {...props}
+      >
+        <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />
+      </HStack>
+    </>
   );
 };
