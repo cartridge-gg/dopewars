@@ -34,6 +34,7 @@ import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
 import { cardPixelatedStyle, cardPixelatedStyleOutset } from "@/theme/styles";
 import Link from "next/link";
+import { useState } from "react";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -50,10 +51,11 @@ const floatAnim = keyframes`
 export default function Home() {
   const router = useRouter();
   const { account, isBurnerDeploying, createBurner } = useDojo();
-  const { create: createGame, isPending, error: txError } = useSystems();
+  const { create: createGame, error: txError } = useSystems();
   const { scores } = useGlobalScores();
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
@@ -81,8 +83,9 @@ export default function Home() {
             <Button
               flex="1"
               isDisabled={!account}
-              isLoading={isPending && !txError}
+              isLoading={isSubmitting && !txError}
               onClick={async () => {
+                setIsSubmitting(true);
                 resetAll();
                 const { event, hash } = await createGame(
                   START_TIME,
