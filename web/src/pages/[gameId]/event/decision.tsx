@@ -8,7 +8,7 @@ import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
@@ -20,6 +20,7 @@ export default function Decision() {
   const gameId = router.query.gameId as string;
   const nextLocation = getLocationById(router.query.nextId as string);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [status, setStatus] = useState<PlayerStatus>();
   const { account } = useDojo();
   const { decide } = useSystems();
   const { addEncounter } = usePlayerStore();
@@ -28,6 +29,12 @@ export default function Decision() {
     gameId,
     address: account?.address,
   });
+
+  useEffect(() => {
+    if (playerEntity && !isSubmitting) {
+      setStatus(playerEntity.status);
+    }
+  }, [playerEntity]);
 
   const onDecision = useCallback(
     async (action: Action) => {
@@ -58,7 +65,7 @@ export default function Decision() {
   return (
     <>
       <Layout isSinglePanel>
-        {playerEntity.status == PlayerStatus.BeingMugged && (
+        {status == PlayerStatus.BeingMugged && (
           <Encounter
             prefixTitle="You encountered a..."
             title="Gang!"
@@ -70,7 +77,7 @@ export default function Decision() {
           />
         )}
 
-        {playerEntity.status == PlayerStatus.BeingArrested && (
+        {status == PlayerStatus.BeingArrested && (
           <Encounter
             prefixTitle="You encountered the..."
             title="Cops!"
