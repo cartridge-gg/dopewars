@@ -100,6 +100,10 @@ export default function Location() {
         <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
+            const canBuy = drug.price <= playerEntity.cash;
+            const canSell = playerEntity.drugs.find(
+              (d) => d.id === drug.id && d.quantity > 0,
+            );
             return (
               <Card h="220px" key={index}>
                 <CardHeader
@@ -129,6 +133,7 @@ export default function Location() {
                       onClick={() =>
                         router.push(`${router.asPath}/${drugInfo.slug}/buy`)
                       }
+                      isDisabled={!canBuy}
                     >
                       Buy
                     </Button>
@@ -137,6 +142,7 @@ export default function Location() {
                       onClick={() =>
                         router.push(`${router.asPath}/${drugInfo.slug}/sell`)
                       }
+                      isDisabled={!canSell}
                     >
                       Sell
                     </Button>
