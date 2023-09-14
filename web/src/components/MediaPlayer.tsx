@@ -64,6 +64,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
   const mediaStore = useMediaStore();
   const songTitle =
     mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
+  const height = "40px";
 
   useEffect(() => {
     const init = async () => {
@@ -75,7 +76,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
   return (
     <Flex
       w={{ base: "320px", md: "140px" }}
-      h="36px"
+      h={height}
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
       className={
@@ -87,7 +88,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       _hover={{
         lg: {
           ".mediaplayer-status, .mediaplayer-commands": {
-            transform: "translateY(-36px)",
+            transform: `translateY(-${height})`,
           },
         },
       }}
@@ -98,7 +99,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
         "&.mediaplayer-paused": {
           ".mediaplayer-status, .mediaplayer-commands": {
             md: {
-              transform: "translateY(-36px)",
+              transform: `translateY(-${height})`,
             },
           },
         },
@@ -108,13 +109,14 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       <Box
         className="mediaplayer-status"
         w="140px"
-        h="36px"
+        h={height}
         display="flex"
         flexDirection="row"
         flexShrink={0}
         overflow="hidden"
         alignItems="center"
         m={0}
+        pr={4}
       >
         <Box>
           <Note m={1} />
@@ -147,7 +149,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
 
       <Flex
         className="mediaplayer-commands"
-        h="36px"
+        h={height}
         alignItems="center"
         justifyContent="center"
         flexShrink={0}
