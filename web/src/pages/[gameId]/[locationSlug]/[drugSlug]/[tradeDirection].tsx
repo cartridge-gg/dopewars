@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Text, VStack, HStack, Card, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  VStack,
+  HStack,
+  Card,
+  Button,
+  Flex,
+} from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
@@ -266,14 +274,24 @@ const QuantitySelector = ({
       pointerEvents={max === 0 ? "none" : "all"}
       w="full"
     >
-      <HStack w="100%" justifyContent="space-between">
+      <Flex
+        w="100%"
+        direction={["column", "row"]}
+        justifyContent="space-between"
+        align="center"
+        gap="20px"
+      >
         <Text color={alertColor}>
-          <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage
+          <Alert size="sm" /> {(priceImpact * 100).toFixed(2)}% slippage ($
+          {(totalPrice / quantity).toFixed(0)} per)
         </Text>
-        <Text textStyle="subheading" fontSize="13px">
-          ({quantity}) for {formatCash(totalPrice)}
-        </Text>
-      </HStack>
+        <HStack fontSize="13px">
+          <Text textStyle="subheading" color="neon.500">
+            Total:
+          </Text>
+          <Text textStyle="subheading">{formatCash(totalPrice)}</Text>
+        </HStack>
+      </Flex>
 
       <HStack w="100%" py={2} gap="10px">
         <ArrowEnclosed
