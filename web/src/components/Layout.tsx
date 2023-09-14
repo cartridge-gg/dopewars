@@ -79,6 +79,7 @@ const LeftPanel = ({
         zIndex="1"
         position={map ? "absolute" : "unset"}
         pointerEvents="none"
+        spacing="0"
       >
         <Text textStyle="subheading" fontSize="11px">
           {prefixTitle}

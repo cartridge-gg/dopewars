@@ -68,10 +68,18 @@ export default function Location() {
     return <></>;
   }
 
+  const prefixTitle =
+    playerEntity.turnsRemaining === 0
+      ? "Final Day"
+      : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
+          gameEntity.maxTurns + 1
+        }`;
+
   return (
     <Layout
       leftPanelProps={{
         title: shortString.decodeShortString(locationEntity.id),
+        prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${
           getLocationById(locationEntity.id).slug
         }.png`,
