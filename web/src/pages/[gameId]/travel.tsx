@@ -41,6 +41,7 @@ export default function Travel() {
     if (playerEntity && !isSubmitting) {
       const location = getLocationById(playerEntity.locationId);
       setCurrentLocationId(location.id);
+      setTargetId(location.id);
     }
   }, [playerEntity, isSubmitting]);
 

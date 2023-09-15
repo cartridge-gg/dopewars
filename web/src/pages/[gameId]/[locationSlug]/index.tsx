@@ -13,6 +13,7 @@ import {
   StyleProps,
   useDisclosure,
   useBreakpointValue,
+  Flex,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
@@ -120,24 +121,31 @@ export default function Location() {
                   {drugInfo.name}
                 </CardHeader>
                 <CardBody>
-                  <HStack w="full" justify="center" position="relative" m="2px">
-                    <HStack
+                  <HStack w="full" justify="center">
+                    <Flex
                       as={motion.div}
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
-                      w="full"
-                      p="20px"
-                      gap="10px"
+                      p="2px"
+                      align="center"
+                      boxSize="full"
                       position="absolute"
-                      bgColor="neon.900"
                       pointerEvents={["none", "auto"]}
                     >
-                      <BuySellBtns
-                        canBuy={canBuy}
-                        canSell={canSell}
-                        drugSlug={drugInfo.slug}
-                      />
-                    </HStack>
+                      <HStack
+                        h="100px"
+                        w="full"
+                        p="20px"
+                        gap="10px"
+                        bgColor="neon.900"
+                      >
+                        <BuySellBtns
+                          canBuy={canBuy}
+                          canSell={canSell}
+                          drugSlug={drugInfo.slug}
+                        />
+                      </HStack>
+                    </Flex>
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
