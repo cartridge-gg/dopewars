@@ -44,8 +44,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
-  const rpc_endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "";
-  const isLocal = rpc_endpoint.includes("localhost") || false;
+  const isLocal =  false;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
