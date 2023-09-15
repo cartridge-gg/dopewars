@@ -19,6 +19,7 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
+import { cardPixelatedStyle } from "@/theme/styles";
 
 const steps = [
   {
@@ -55,12 +56,16 @@ const Dot = ({
   const isCurrent = step == currentStep;
   return (
     <Box
+      {...cardPixelatedStyle({
+        radius: isCurrent ? 4 : 3,
+        pixelSize: 3 ,
+      })}
       onClick={onClick}
       cursor={"pointer"}
       bgColor={isCurrent ? "neon.200" : "neon.500"}
-      w={isCurrent ? "16px" : "12px"}
-      h={isCurrent ? "16px" : "12px"}
-      rounded={"full"}
+      w={isCurrent ? "20px" : "16px"}
+      h={isCurrent ? "20px" : "16px"}
+      // rounded={"full"}
     ></Box>
   );
 };
@@ -72,9 +77,11 @@ const TutorialStep = ({
 }) => {
   return (
     <>
-      <VStack gap="20px" justifyContent={"center"}>
-        <VStack textAlign={"center"} pt="20px">
-          <Heading fontSize="20px">{step.title}</Heading>
+      <VStack gap="20px" justifyContent="center">
+        <VStack textAlign="center" pt="20px">
+          <Heading fontSize="20px" fontFamily="dos-vga" fontWeight="normal">
+            {step.title}
+          </Heading>
           <Text color="neon.500">{step.desc}</Text>
         </VStack>
         <Image
@@ -113,7 +120,7 @@ const Tutorial = ({
   return (
     <Modal isOpen={isOpen} onClose={close} isCentered>
       <ModalOverlay />
-      <ModalContent maxH="70vh" maxWidth={"600px"} mx="10px">
+      <ModalContent maxH="70vh" maxWidth={"600px"} >
         <ModalBody justifyContent="center" minH={"360px"}>
           <Box position={"relative"}>
             {steps.map((step) => {
@@ -122,8 +129,8 @@ const Tutorial = ({
             })}
           </Box>
         </ModalBody>
-        <ModalFooter justifyContent="center" w="full">
-          <VStack>
+        <ModalFooter justifyContent="center" w="full" pb="30px">
+          <VStack  w="full">
             <HStack gap="10px" mb="16px">
               {steps.map((step) => {
                 return (

@@ -138,7 +138,7 @@ export default function End() {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader textAlign="center" mt={1}>CREDITS</ModalHeader>
-            <ModalBody>
+            <ModalBody mx->
               <UnorderedList pb={5}>
                 <ListItem>
                   Built by{" "}

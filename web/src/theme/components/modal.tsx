@@ -13,10 +13,13 @@ export const Modal: ComponentMultiStyleConfig = {
   ],
   baseStyle: {
     dialog: {
+      mx:"16px",
       bgColor: "neon.900",
       ...cardPixelatedStyle({}),
     },
-    overlay: {},
+    overlay: {
+      bgColor: ["neon900Alpha", "blackAlpha.600"]
+    },
     footer: {},
     header: {
       fontWeight: "normal"
