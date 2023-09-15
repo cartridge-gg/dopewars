@@ -133,20 +133,23 @@ const Header = ({ back }: HeaderProps) => {
         {!isMobile && (
           <>
             <MediaPlayer />
-            <Button
-              variant="pixelated"
-              isLoading={isBurnerDeploying}
-              onClick={() => {
-                if (!account) {
-                  createBurner();
-                }
-              }}
-            >
-              {account
-                ? formatAddress(account.address.toUpperCase())
-                : "Create Burner"}
-            </Button>
           </>
+        )}
+
+        {(!isMobile || (!account && isMobile)) && (
+          <Button
+            variant="pixelated"
+            isLoading={isBurnerDeploying}
+            onClick={() => {
+              if (!account) {
+                createBurner();
+              }
+            }}
+          >
+            {account
+              ? formatAddress(account.address.toUpperCase())
+              : "Create Burner"}
+          </Button>
         )}
 
         {isMobile && <MobileMenu />}
