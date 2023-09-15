@@ -44,7 +44,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
-  const isLocal =  false;
+  const isLocal =  true;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
