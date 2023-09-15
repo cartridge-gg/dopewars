@@ -14,7 +14,17 @@ import {
   Image,
   Divider,
   Spacer,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,  
+  UnorderedList,
+  ListItem,
+  Link,
 } from "@chakra-ui/react";
+
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
@@ -25,12 +35,17 @@ export default function End() {
   const gameId = router.query.gameId as string;
   const { setName: submitSetName, isPending } = useSystems();
   const [name, setName] = useState<string>("");
+  const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
     await submitSetName(gameId, name);
     router.push("/");
   }, [name, gameId, router, submitSetName]);
+
+  const onCreditClose = useCallback(() => {
+    setIsCreditOpen(false);
+  }, [setIsCreditOpen]);
 
   return (
     <>
@@ -65,7 +80,11 @@ export default function End() {
             </HStack>
 
             <HStack gap="10px" w={["full", "auto"]}>
-              <Button variant="pixelated" flex="1">
+              <Button
+                variant="pixelated"
+                flex="1"
+                onClick={() => setIsCreditOpen(true)}
+              >
                 <Roll /> Credits
               </Button>
               <Button
@@ -114,6 +133,48 @@ export default function End() {
           </VStack>
         </Container>
         <Spacer maxH="100px" />
+
+        <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader textAlign="center" mt={1}>CREDITS</ModalHeader>
+            <ModalBody>
+              <UnorderedList pb={5}>
+                <ListItem>
+                  Built by{" "}
+                  <Link href="https://cartridge.gg/" target="_blank">
+                    cartridge
+                  </Link>{" "}
+                  with{" "}
+                  <Link href="https://dojoengine.org/" target="_blank">
+                    DOJO
+                  </Link>
+                </ListItem>
+
+                <ListItem>
+                  Art by{" "}
+                  <Link href="https://twitter.com/Mr_faxu" target="_blank">
+                    Mr. Fax
+                  </Link>{" "}
+                  &{" "}
+                  <Link href="https://twitter.com/HPMNK_One" target="_blank">
+                    HPMNK
+                  </Link>
+                </ListItem>
+
+                <ListItem>
+                  Music and SFX by{" "}
+                  <Link href="https://twitter.com/CaseyWescott" target="_blank">
+                    Casey Wescott
+                  </Link>
+                </ListItem>
+              </UnorderedList>
+            </ModalBody>
+            <ModalFooter justifyContent="stretch">
+              <Button w="full" onClick={onCreditClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Flex>
     </>
   );

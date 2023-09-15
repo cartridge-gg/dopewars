@@ -1,4 +1,5 @@
 import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
+import { cardStyle, cardPixelatedStyle } from "../styles";
 
 export const Modal: ComponentMultiStyleConfig = {
   parts: [
@@ -13,8 +14,12 @@ export const Modal: ComponentMultiStyleConfig = {
   baseStyle: {
     dialog: {
       bgColor: "neon.900",
+      ...cardPixelatedStyle({}),
     },
     overlay: {},
     footer: {},
+    header: {
+      fontWeight: "normal"
+    }
   },
 };
