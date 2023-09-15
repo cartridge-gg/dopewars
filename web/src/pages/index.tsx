@@ -4,7 +4,6 @@ import {
   HStack,
   Divider,
   Card,
-  CardBody,
   Heading,
   Image,
   Box,
@@ -14,17 +13,13 @@ import {
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import { Alert, Clock, Sound } from "@/components/icons";
+import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
-import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
-import BorderImage from "@/components/icons/PressableBorderImage";
 import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
-import { useBurner } from "@/hooks/burner";
-import { formatAddress } from "@/utils/contract";
 import { useDojo } from "@/dojo";
 import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
@@ -32,7 +27,6 @@ import { usePlayerStore } from "@/hooks/state";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
-import Link from "next/link";
 import { useState } from "react";
 
 // hardcode game params for now
@@ -61,7 +55,7 @@ export default function Home() {
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            {/* <VStack>
+            <VStack>
               <HStack>
                 <Alert />
                 <Text align="center">Under Construction</Text>
@@ -70,8 +64,8 @@ export default function Home() {
                 Get ready hustlers... Season II starts in September
               </Text>
             </VStack>
-            */}
-            <Button
+
+            {/* <Button
               flex="1"
               isDisabled={!account}
               isLoading={isSubmitting && !txError}
@@ -91,11 +85,11 @@ export default function Home() {
               }}
             >
               Hustle
-            </Button>
+            </Button> */}
           </HStack>
         </Card>
 
-        <Text>HALL OF FAME</Text>
+        {/* <Text>HALL OF FAME</Text>
         <VStack
           boxSize="full"
           gap="20px"
@@ -107,7 +101,7 @@ export default function Home() {
           }}
         >
           <Leaderboard />
-        </VStack>
+        </VStack> */}
       </VStack>
     </Layout>
   );
