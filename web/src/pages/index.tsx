@@ -56,7 +56,7 @@ export default function Home() {
       setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
     [],
   );
-  
+
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
       <VStack boxSize="full" gap="10px" justify="center">
