@@ -20,7 +20,6 @@ import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 
-
 const steps = [
   {
     step: 1,
@@ -49,7 +48,8 @@ const Dot = ({
   currentStep,
   onClick,
 }: {
-  step: boolean;
+  step: number;
+  currentStep: number;
   onClick: () => void;
 }) => {
   const isCurrent = step == currentStep;
@@ -81,8 +81,8 @@ const TutorialStep = ({
           src={`/images/tutorial/tuto${step.step}.png`}
           alt={`step${step.step}`}
           w="full"
-          minH={["200px","320px"]}
-          objectFit={["cover","contain"]}
+          minH={["200px", "320px"]}
+          objectFit={["cover", "contain"]}
         />
       </VStack>
     </>
@@ -124,10 +124,11 @@ const Tutorial = ({
         </ModalBody>
         <ModalFooter justifyContent="center" w="full">
           <VStack>
-            <HStack gap="10px"  mb="16px">
+            <HStack gap="10px" mb="16px">
               {steps.map((step) => {
                 return (
                   <Dot
+                    key={`dot-${step.step}`}
                     step={step.step}
                     currentStep={currentStep}
                     onClick={() => setCurrentStep(step.step)}
@@ -136,7 +137,16 @@ const Tutorial = ({
               })}
             </HStack>
 
-            <Button onClick={onNext} w="full" hoverSound="" clickSound={currentStep == steps.length ? Sounds.Magnum357 : Sounds.HoverClick}>
+            <Button
+              onClick={onNext}
+              w="full"
+              hoverSound={undefined}
+              clickSound={
+                currentStep == steps.length
+                  ? Sounds.Magnum357
+                  : Sounds.HoverClick
+              }
+            >
               {currentStep == steps.length ? "READY TO HUSTLE" : "NEXT"}
             </Button>
           </VStack>

@@ -141,6 +141,7 @@ export default function Travel() {
               <Image
                 src={`/images/locations/${getLocationById(targetId).slug}.png`}
                 animation={`${zoomAnim} 1 5s ease-out`}
+                alt="destination"
               />
             )}
           </VStack>

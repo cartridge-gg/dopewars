@@ -43,8 +43,9 @@ export default function Home() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-  const isLocal =
-    process.env.NEXT_PUBLIC_RPC_ENDPOINT.includes("localhost") || false;
+
+  const rpc_endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "";
+  const isLocal = rpc_endpoint.includes("localhost") || false;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
