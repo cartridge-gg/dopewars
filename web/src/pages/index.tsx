@@ -27,7 +27,7 @@ import { usePlayerStore } from "@/hooks/state";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -49,59 +49,76 @@ export default function Home() {
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGated, setIsGated] = useState(false);
 
+  useEffect(
+    () =>
+      setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+    [],
+  );
+  
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            <VStack>
-              <HStack>
-                <Alert />
-                <Text align="center">Under Construction</Text>
-              </HStack>
-              <Text align="center">
-                Get ready hustlers... Season II starts in September
-              </Text>
-            </VStack>
+            {isGated ? (
+              <VStack>
+                <HStack>
+                  <Alert />
+                  <Text align="center">Under Construction</Text>
+                </HStack>
+                <Text align="center">
+                  Get ready hustlers... Season II starts in September
+                </Text>
+              </VStack>
+            ) : (
+              <Button
+                flex="1"
+                isDisabled={!account}
+                isLoading={isSubmitting && !txError}
+                onClick={async () => {
+                  setIsSubmitting(true);
+                  resetAll();
+                  const { event, hash } = await createGame(
+                    START_TIME,
+                    MAX_PLAYERS,
+                    NUM_TURNS,
+                  );
 
-            {/* <Button
-              flex="1"
-              isDisabled={!account}
-              isLoading={isSubmitting && !txError}
-              onClick={async () => {
-                setIsSubmitting(true);
-                resetAll();
-                const { event, hash } = await createGame(
-                  START_TIME,
-                  MAX_PLAYERS,
-                  NUM_TURNS,
-                );
+                  const { gameId, locationId } = event as JoinedEventData;
+                  toast(
+                    "Created Game",
+                    Alert,
+                    `http://amazing_explorer/${hash}`,
+                  );
 
-                const { gameId, locationId } = event as JoinedEventData;
-                toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
-
-                router.push(`/${gameId}/${getLocationById(locationId).slug}`);
-              }}
-            >
-              Hustle
-            </Button> */}
+                  router.push(`/${gameId}/${getLocationById(locationId).slug}`);
+                }}
+              >
+                Hustle
+              </Button>
+            )}
           </HStack>
         </Card>
 
-        {/* <Text>HALL OF FAME</Text>
-        <VStack
-          boxSize="full"
-          gap="20px"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          <Leaderboard />
-        </VStack> */}
+        {!isGated && (
+          <>
+            <Text>HALL OF FAME</Text>
+            <VStack
+              boxSize="full"
+              gap="20px"
+              sx={{
+                overflowY: "scroll",
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+              }}
+            >
+              <Leaderboard />
+            </VStack>
+          </>
+        )}
       </VStack>
     </Layout>
   );
