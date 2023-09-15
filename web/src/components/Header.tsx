@@ -122,7 +122,7 @@ const Header = ({ back }: HeaderProps) => {
                           gameEntity.maxTurns - playerEntity.turnsRemaining + 1
                         }/${gameEntity.maxTurns + 1}`}
                   </Text>
-                </HStack>  */}
+                </HStack> */}
               </HStack>
             </Flex>
           </HStack>
@@ -151,7 +151,6 @@ const Header = ({ back }: HeaderProps) => {
               : "Create Burner"}
           </Button>
         )}
-
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

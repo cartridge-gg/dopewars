@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
 import { playSound, Sounds } from "@/hooks/sound";
 
+
 const BASE_PAYMENT = 400;
 
 export default function Decision() {

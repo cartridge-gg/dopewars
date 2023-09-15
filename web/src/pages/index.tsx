@@ -29,6 +29,7 @@ import { useState } from "react";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 
+
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
@@ -42,9 +43,10 @@ export default function Home() {
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const isLocal =  true;
+
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
@@ -97,6 +99,7 @@ export default function Home() {
                 </Button>
               </>
             )}
+
           </HStack>
         </Card>
 
@@ -171,3 +174,4 @@ const Game = ({
     </HStack>
   </HStack>
 );
+
