@@ -172,7 +172,7 @@ const Encounter = ({
             <Button
               w="full"
               isDisabled={isRunning || isPaying || isFighting}
-              isLoading={isPaying}
+              isLoading={isFighting}
               onClick={() => {
                 setIsFighting(true);
                 fight();
