@@ -3,7 +3,7 @@ import { useDojo } from "@/dojo";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { getLocationById } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/systems/useSystems";
-import { Action, PlayerStatus } from "@/dojo/types";
+import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
@@ -43,6 +43,10 @@ export default function Decision() {
       const event = result.event! as ConsequenceEventData;
       addEncounter(playerEntity!.status, event.outcome);
 
+      if (event.outcome === Outcome.Died) {
+        return router.push(`/${gameId}/end`);
+      }
+
       router.replace(
         `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
           playerEntity!.status
@@ -69,7 +73,7 @@ export default function Decision() {
           <Encounter
             prefixTitle="You encountered a..."
             title="Gang!"
-            demand={`Fend them off! You might lose some health`}
+            demand={`Fend them off! You might lose some health and cash`}
             imageSrc="/images/events/muggers.gif"
             cash={playerEntity.cash}
             run={() => onDecision(Action.Run)}

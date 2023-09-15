@@ -82,7 +82,7 @@ export const usePlayerEntity = ({
 }): PlayerInterface => {
   const [player, setPlayer] = useState<PlayerEntity>();
   // TODO: remove leading zeros in address, maybe implemented in torii
-  const { data, isFetched, refetch } = usePlayerEntityQuery(
+  const { data, isFetched } = usePlayerEntityQuery(
     { gameId: gameId || "", playerId: address || "" },
     {
       enabled: !!gameId && !!address,

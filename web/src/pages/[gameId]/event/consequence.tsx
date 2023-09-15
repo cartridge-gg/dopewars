@@ -5,6 +5,10 @@ import { getOutcomeInfo } from "@/dojo/helpers";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
+import { Outcome } from "@/dojo/types";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useDojo } from "@/dojo";
+import { useMemo } from "react";
 
 export default function Consequence() {
   const router = useRouter();
@@ -14,9 +18,15 @@ export default function Consequence() {
     Number(router.query.outcome),
   );
 
-  const response = outcome.getResponse(true);
+  const { account } = useDojo();
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: account?.address,
+  });
 
-  if (!router.isReady) {
+  const response = useMemo(() => outcome.getResponse(true), [outcome]);
+
+  if (!router.isReady || !playerEntity) {
     return <></>;
   }
 
@@ -52,6 +62,13 @@ export default function Consequence() {
             <Button
               w="full"
               onClick={() => {
+                console.log(outcome);
+                if (outcome.type == Outcome.Captured) {
+                  return router.push(
+                    `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
+                  );
+                }
+
                 router.push(`/${gameId}/turn`);
               }}
             >

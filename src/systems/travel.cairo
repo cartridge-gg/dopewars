@@ -53,8 +53,8 @@ mod travel {
         let mut risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
 
-        player.status = risks.travel(seed);
-        if player.status != PlayerStatus::Normal(()) {
+        player.status = risks.travel(seed, player.cash, player.drug_count);
+        if player.status != PlayerStatus::Normal {
             set!(ctx.world, (player));
             emit!(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
 
@@ -69,8 +69,7 @@ mod travel {
         set!(ctx.world, (player));
 
         emit!(
-            ctx.world,
-            Traveled {
+            ctx.world, Traveled {
                 game_id, player_id, from_location: player.location_id, to_location: next_location_id
             }
         );

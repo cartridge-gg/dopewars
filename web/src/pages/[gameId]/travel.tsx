@@ -80,7 +80,7 @@ export default function Travel() {
     if (targetId) {
       setIsSubmitting(true);
       const { event, hash } = await travel(gameId, targetId);
-      console.log(event, hash);
+
       if (event) {
         router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       } else {

@@ -133,7 +133,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Captured,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/police_cruiser.gif",
-    description: "You lost 50% of all your drugs",
+    description: "You lost some health and drugs",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Captured, isInitial),
     color: "red",
@@ -162,7 +162,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Captured,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    description: "You lost 50% of all your cash",
+    description: "You some some health and cash",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Captured, isInitial),
     color: "red",

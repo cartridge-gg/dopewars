@@ -56,7 +56,7 @@ query LocationEntities($gameId: String!, $locationId: String!) {
           }
           ... on Risks {
             travel
-            run
+            #capture
           }
         }
       }

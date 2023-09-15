@@ -39,19 +39,19 @@ mod join_game {
 
         game.num_players += 1;
 
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let location_id = LocationTrait::random(seed);
+        let location_id = LocationTrait::random();
 
         let player = Player {
             game_id,
             player_id,
+            status: PlayerStatus::Normal(()),
             location_id,
             cash: STARTING_CASH,
             health: STARTING_HEALTH,
+            run_attempts: 0,
             drug_count: 0,
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: game.max_turns,
-            status: PlayerStatus::Normal(()),
         };
 
         set!(ctx.world, (game, player));
