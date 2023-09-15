@@ -108,7 +108,7 @@ const Header = ({ back }: HeaderProps) => {
                 <HStack>
                   <Heart /> <Text>{playerEntity.health}</Text>
                 </HStack>
-                {/* <Divider
+                 <Divider
                   orientation="vertical"
                   borderColor="neon.600"
                   h="12px"
@@ -122,7 +122,7 @@ const Header = ({ back }: HeaderProps) => {
                           gameEntity.maxTurns - playerEntity.turnsRemaining + 1
                         }/${gameEntity.maxTurns + 1}`}
                   </Text>
-                </HStack> */}
+                </HStack> 
               </HStack>
             </Flex>
           </HStack>

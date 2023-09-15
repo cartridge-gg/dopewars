@@ -6,7 +6,7 @@ const RUN_CHANCE: u8 = 50; // 50% chance of successfully getting away
 const BASE_PAYMENT: u128 = 500_0000; // base payment is $500
 
 // starting stats
-const STARTING_CASH: u128 = 4000_0000; // $4000
+const STARTING_CASH: u128 = 2000_0000; // $2000
 const STARTING_BAG_LIMIT: usize = 100; // inventory size
 const STARTING_HEALTH: u8 = 100;
 
