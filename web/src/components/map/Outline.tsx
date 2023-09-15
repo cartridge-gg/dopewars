@@ -9,16 +9,16 @@ const ChakraBox = chakra(motion.div, {
 });
 
 export const Outline = ({ location }: { location?: Location }) => {
-  if (!location) {
+  if (location === undefined) {
     return <></>;
   }
 
-  const name = location.toString().toLowerCase().split(" ").join("_");
   const transition = {
     repeat: Infinity,
     duration: 1,
     ease: "easeInOut",
   };
+
   return (
     <>
       <ChakraBox

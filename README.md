@@ -16,7 +16,7 @@ Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/
 
 ```bash
 # Start Katana
-katana --block-time 200
+katana --disable-fee
 
 # Build the game
 sozo build

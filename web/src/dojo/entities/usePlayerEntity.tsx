@@ -4,15 +4,9 @@ import {
   usePlayerEntityQuery,
   EntityEdge,
 } from "@/generated/graphql";
-import { useCallback, useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { useEffect, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
-
-export enum PlayerStatus {
-  Normal,
-  BeingMugged,
-  BeingArrested,
-}
+import { PlayerStatus } from "../types";
 
 type Drug = {
   id: string;
@@ -24,6 +18,7 @@ export class PlayerEntity {
   health: number;
   turnsRemaining: number;
   drugCount: number;
+  bagLimit: number;
   locationId: string;
   status: PlayerStatus;
   drugs: Drug[];
@@ -33,6 +28,7 @@ export class PlayerEntity {
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
     this.drugCount = player.drug_count;
+    this.bagLimit = player.bag_limit;
     this.locationId = player.location_id;
     this.status = player.status;
     this.drugs = drugs;

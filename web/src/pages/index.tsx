@@ -4,7 +4,6 @@ import {
   HStack,
   Divider,
   Card,
-  CardBody,
   Heading,
   Image,
   Box,
@@ -14,17 +13,13 @@ import {
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
-import { Alert, Clock, Sound } from "@/components/icons";
+import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
-import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
-import BorderImage from "@/components/icons/BorderImage";
 import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
-import { useBurner } from "@/hooks/burner";
-import { formatAddress } from "@/utils/contract";
 import { useDojo } from "@/dojo";
 import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
@@ -32,13 +27,12 @@ import { usePlayerStore } from "@/hooks/state";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
 import { ScrollDown } from "@/components/icons/ScrollDown";
-import { cardPixelatedStyle, cardPixelatedStyleOutset } from "@/theme/styles";
-import Link from "next/link";
+import { useState } from "react";
 
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 9;
+const NUM_TURNS = 14;
 
 const floatAnim = keyframes`  
   0% {transform: translateY(0%);}
@@ -50,10 +44,11 @@ const floatAnim = keyframes`
 export default function Home() {
   const router = useRouter();
   const { account, isBurnerDeploying, createBurner } = useDojo();
-  const { create: createGame, isPending, error: txError } = useSystems();
+  const { create: createGame, error: txError } = useSystems();
   const { scores } = useGlobalScores();
-  const { clearAll } = usePlayerStore();
+  const { resetAll } = usePlayerStore();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
@@ -69,21 +64,14 @@ export default function Home() {
                 Get ready hustlers... Season II starts in September
               </Text>
             </VStack>
-           
+
             {/* <Button
               flex="1"
-              isDisabled={!!account}
-              isLoading={isBurnerDeploying}
-              onClick={() => createBurner()}
-            >
-              {account ? formatAddress(account.address) : "Create Burner"}
-            </Button>
-            <Button
-              flex="1"
               isDisabled={!account}
-              isLoading={isPending && !txError}
+              isLoading={isSubmitting && !txError}
               onClick={async () => {
-                clearAll();
+                setIsSubmitting(true);
+                resetAll();
                 const { event, hash } = await createGame(
                   START_TIME,
                   MAX_PLAYERS,
@@ -287,7 +275,7 @@ const HomeLeftPanel = () => {
             id="steps"
             style={{ marginTop: "30px" }}
             position="relative"
-            onClick={()=> onScrollDown()}
+            onClick={() => onScrollDown()}
             animation={`${floatAnim} infinite 3s linear`}
             cursor={"pointer"}
           >

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Drug, Outcome } from "../dojo/types";
+import { Drug, Outcome, PlayerStatus } from "../dojo/types";
 
 export type DrugType = {
   [key in Drug]: {
@@ -17,25 +17,32 @@ export type TradeType = {
   direction: TradeDirection;
 };
 
+export type Encounter = {
+  status: PlayerStatus;
+  outcome: Outcome;
+};
+
 export interface PlayerStore {
-  outcomes: Outcome[];
-  history: Outcome[];
+  encounters: Encounter[];
+  lastEncounter: Encounter | null;
   trades: Map<Drug, TradeType>;
-  addOutcome: (outcome: Outcome) => void;
+  addEncounter: (status: PlayerStatus, outcome: Outcome) => void;
   addTrade: (drug: Drug, trade: TradeType) => void;
-  clearTradesAndOutcomes: () => void;
-  clearAll: () => void;
+  resetTurn: () => void;
+  resetAll: () => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
-  outcomes: [],
-  history: [],
+  encounters: [],
+  lastEncounter: null,
   trades: new Map(),
-  addOutcome: (outcome: Outcome) =>
+  addEncounter: (status: PlayerStatus, outcome: Outcome) => {
+    const encounter = { status, outcome };
     set((state) => ({
-      outcomes: [...state.outcomes, outcome],
-      history: [...state.history, outcome],
-    })),
+      encounters: [...state.encounters, encounter],
+      lastEncounter: encounter,
+    }));
+  },
   addTrade: (drug: Drug, trade: TradeType) =>
     set((state) => {
       const existingTrade = state.trades.get(drug);
@@ -70,10 +77,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
       state.trades.set(drug, { quantity, direction });
       return { trades: new Map(state.trades) };
     }),
-  clearTradesAndOutcomes: () => {
-    set({ trades: new Map(), outcomes: [] });
+  resetTurn: () => {
+    set({ trades: new Map(), lastEncounter: null });
   },
-  clearAll: () => {
-    set({ trades: new Map(), outcomes: [], history: [] });
+  resetAll: () => {
+    set({ trades: new Map(), lastEncounter: null, encounters: [] });
   },
 }));

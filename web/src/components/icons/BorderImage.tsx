@@ -1,18 +1,7 @@
-// This icon is used by button and card layerstyle only
-const BorderImage = ({
-  color,
-  isPressed,
-}: {
-  color: string;
-  isPressed: boolean;
-}) => {
-  const path = isPressed
-    ? "<path d='M2,2h2v2H2V2ZM4,0h2V2h-2V0Zm6,4h2v2h-2v-2ZM0,4H2v2H0v-2ZM6,0h2V2h-2V0Zm2,2h2v2h-2V2Zm0,6h2v2h-2v-2Zm-2,2h2v2h-2v-2ZM0,6H2v2H0v-2Zm10,0h2v2h-2v-2Zm-6,4h2v2h-2v-2Zm-2-2h2v2H2v-2Z'/>"
-    : "<path d='M2,2h2v2H2V2ZM4,0h2V2h-2V0Zm6,4h2v2h-2v-2ZM0,4H2v2H0v-2ZM6,0h2V2h-2V0Zm2,2h2v2h-2V2Zm0,6h2v2h-2v-2Zm-2,2h2v2h-2v-2ZM0,6H2v2H0v-2Zm10,0h2v2h-2v-2Zm-6,4h2v2h-2v-2Zm-2-2h2v2H2v-2Zm6-2h2v2h-2v-2Zm-2,2h2v2h-2v-2Zm2-4h2v2h-2v-2Zm-4,4h2v2h-2v-2Zm2-2h2v2h-2v-2Z'/>";
-
-  return `<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='${encodeURIComponent(
+const BorderImage = ({ color }: { color: string }) => {
+  return `<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none'><path fillRule='evenodd' clipRule='evenodd' d='M5.99252 0H10.0075V1.9975H12.005V3.995H14.0025V5.99249H16V10.0075H14.0025V12.005H12.005V14.0025H10.0075V16H5.99252V14.0025H3.995V12.005H1.9975V10.0075H0V5.99249H1.9975V3.995H3.995V1.9975H5.99252V0ZM13.9925 6.0025H11.995V4.005H9.9975V2.00751H6.0025V4.005H4.005V6.0025H2.00751V9.9975H4.005V11.995H6.0025V13.9925H9.9975V11.995H11.995V9.9975H13.9925V6.0025Z' fill='${encodeURIComponent(
     color,
-  )}' >${path}</svg>`;
+  )}' /></svg>`;
 };
 
 export default BorderImage;

@@ -17,6 +17,7 @@ const colors: ColorsType = {
   },
   red: "#FB744A",
   black: "#000000",
+  gray: "#231F20",
   white: "#FFFFFF",
   whiteAlpha: {
     100: "rgba(255, 255, 255, 0.03)",

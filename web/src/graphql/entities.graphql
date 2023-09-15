@@ -24,11 +24,12 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
           __typename
           ... on Player {
             cash
-            health
-            turns_remaining
-            drug_count
-            location_id
             status
+            health
+            drug_count
+            bag_limit
+            location_id
+            turns_remaining
           }
           ... on Drug {
             drug_id

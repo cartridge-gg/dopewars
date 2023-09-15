@@ -11,7 +11,7 @@ import {
   BigNumberish,
   CallData,
   shortString,
-  TransactionStatus,
+  TransactionFinalityStatus,
 } from "starknet";
 import { useBurner } from "../hooks/burner";
 
@@ -61,19 +61,23 @@ export function DojoProvider({
       setError(undefined);
 
       return account
-        .execute({
-          contractAddress: RYO_WORLD_ADDRESS,
-          entrypoint: "execute",
-          calldata: CallData.compile([
-            shortString.encodeShortString(systemName),
-            params.length,
-            ...params,
-          ]),
-        })
+        .execute(
+          {
+            contractAddress: RYO_WORLD_ADDRESS,
+            entrypoint: "execute",
+            calldata: CallData.compile([
+              shortString.encodeShortString(systemName),
+              params.length,
+              ...params,
+            ]),
+          },
+          undefined,
+          { maxFee: 0 },
+        )
         .then(async ({ transaction_hash }) => {
           await account.waitForTransaction(transaction_hash, {
             retryInterval: 1000,
-            successStates: [TransactionStatus.ACCEPTED_ON_L2],
+            successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
           });
 
           console.log("transaction hash: " + transaction_hash);

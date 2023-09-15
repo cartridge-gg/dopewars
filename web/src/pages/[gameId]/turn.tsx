@@ -4,15 +4,10 @@ import Layout from "@/components/Layout";
 import { useDojo } from "@/dojo";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import {
-  getDrugByType,
-  getLocationById,
-  getOutcomeByType,
-} from "@/dojo/helpers";
+import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
 
 import {
-  Button,
   HStack,
   ListItem,
   Text,
@@ -20,6 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Button from "@/components/Button";
 
 export default function Turn() {
   const router = useRouter();
@@ -33,7 +29,7 @@ export default function Turn() {
     gameId,
   });
 
-  const { trades, outcomes, clearTradesAndOutcomes } = usePlayerStore();
+  const { trades, lastEncounter, resetTurn } = usePlayerStore();
 
   if (!playerEntity || !gameEntty) {
     return <></>;
@@ -89,30 +85,43 @@ export default function Turn() {
                 <Text>{locationInfo.name}</Text>
               </HStack>
             </ListItem>
-            {outcomes.map((outcome, index) => {
-              const outcomeInfo = getOutcomeByType(outcome);
-              return (
-                <ListItem key={index}>
-                  <HStack>
-                    <HStack flex="1">
-                      <Event />
-                      <Text>{outcomeInfo.name}</Text>
-                    </HStack>
-                    <Text flex="2" color="yellow.400">
-                      {}
+            {lastEncounter && (
+              <ListItem>
+                <HStack
+                  color={
+                    getOutcomeInfo(lastEncounter.status, lastEncounter.outcome)
+                      .color
+                  }
+                >
+                  <HStack flex="1">
+                    <Event />
+                    <Text>
+                      {
+                        getOutcomeInfo(
+                          lastEncounter.status,
+                          lastEncounter.outcome,
+                        ).name
+                      }
                     </Text>
                   </HStack>
-                </ListItem>
-              );
-            })}
-            ;
+                  <Text flex="1">
+                    {
+                      getOutcomeInfo(
+                        lastEncounter.status,
+                        lastEncounter.outcome,
+                      ).description
+                    }
+                  </Text>
+                </HStack>
+              </ListItem>
+            )}
           </UnorderedList>
         </VStack>
         <Footer position={["absolute", "relative"]}>
           <Button
             w={["full", "auto"]}
             onClick={() => {
-              clearTradesAndOutcomes();
+              resetTurn();
               router.push(`/${gameId}/${locationInfo.slug})}`);
             }}
           >

@@ -1,5 +1,5 @@
-import { Clock, Gem, Bag, Arrow } from "./icons";
-import { Divider, HStack, Text } from "@chakra-ui/react";
+import { Clock, Gem, Bag, Arrow, Heart } from "./icons";
+import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { useDojo } from "@/dojo";
+import { formatAddress } from "@/utils/contract";
 
 // TODO: constrain this on contract side
 const MAX_INVENTORY = 100;
@@ -23,7 +24,7 @@ const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
-  const { account } = useDojo();
+  const { account, createBurner, isBurnerDeploying } = useDojo();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -53,10 +54,17 @@ const Header = ({ back }: HeaderProps) => {
   }, [playerEntity]);
 
   return (
-    <HStack w="full" zIndex="overlay" py={["0", "20px"]} px="20px">
-      <HStack flex="1" justify="left">
+    <HStack
+      w="full"
+      px="10px"
+      py={["0", "20px"]}
+      spacing="10px"
+      zIndex="overlay"
+      align="flex-start"
+    >
+      <HStack flex="1" justify={["left", "right"]}>
         {back && (
-          <HeaderButton onClick={() => router.back()}>
+          <HeaderButton h="40px" onClick={() => router.back()}>
             <Arrow />
           </HeaderButton>
         )}
@@ -64,43 +72,83 @@ const Header = ({ back }: HeaderProps) => {
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
-            h="40px"
+            h={["80px", "40px"]}
+            w="full"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
             clipPath={`polygon(${generatePixelBorderPath()})`}
           >
-            <HStack>
-              <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
-            </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Bag />
-              <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
-            </HStack>
-            <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-            <HStack>
-              <Clock />
-              <Text>
-                {playerEntity.turnsRemaining === 0
-                  ? "Final"
-                  : `${gameEntity.maxTurns - playerEntity.turnsRemaining + 1}/${
-                      gameEntity.maxTurns + 1
-                    }`}
-              </Text>
-            </HStack>
+            <Flex
+              w="full"
+              flexDirection={["column-reverse", "row"]}
+              align="center"
+              justify="center"
+              gap="10px"
+            >
+              <HStack>
+                <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
+              </HStack>
+              <HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                  visibility={["hidden", "visible"]}
+                />
+                <HStack color={inventory > 0 ? "yellow.400" : "auto"}>
+                  <Bag />
+                  <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
+                </HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                />
+                <HStack>
+                  <Heart /> <Text>{playerEntity.health}</Text>
+                </HStack>
+                {/* <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                />
+                <HStack>
+                  <Clock />
+                  <Text>
+                    {playerEntity.turnsRemaining === 0
+                      ? "Final"
+                      : `${
+                          gameEntity.maxTurns - playerEntity.turnsRemaining + 1
+                        }/${gameEntity.maxTurns + 1}`}
+                  </Text>
+                </HStack> */}
+              </HStack>
+            </Flex>
           </HStack>
         </HStack>
       )}
 
       <HStack flex="1" justify="right">
-        {!isMobile && <MediaPlayer />}
-        {/* Chat requires backend implementation */}
-        {/* {!isMobile && (
-              <HeaderButton onClick={() => router.push("/chat")}>
-                <Chat color={hasNewMessages ? "yellow.400" : "currentColor"} />
-              </HeaderButton>
-            )} */}
+        {!isMobile && (
+          <>
+            <MediaPlayer />
+            <Button
+              variant="pixelated"
+              isLoading={isBurnerDeploying}
+              onClick={() => {
+                if (!account) {
+                  createBurner();
+                }
+              }}
+            >
+              {account
+                ? formatAddress(account.address.toUpperCase())
+                : "Create Burner"}
+            </Button>
+          </>
+        )}
+
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

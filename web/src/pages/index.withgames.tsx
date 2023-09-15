@@ -14,7 +14,7 @@ import { User } from "@/components/icons/archive";
 import { useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
-import BorderImage from "@/components/icons/BorderImage";
+import BorderImage from "@/components/icons/PressableBorderImage";
 import Link from "next/link";
 
 export default function Home() {

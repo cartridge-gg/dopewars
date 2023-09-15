@@ -32,7 +32,6 @@ export const Inventory = ({ ...props }: StyleProps) => {
         h="40px"
         px="20px"
         justify="center"
-        variant="pixelated"
         sx={{
           overflowY: "scroll",
           "&::-webkit-scrollbar": {
@@ -47,24 +46,22 @@ export const Inventory = ({ ...props }: StyleProps) => {
             playerEntity?.drugs.map((drug, index) => {
               return (
                 drug.quantity > 0 && (
-                  <>
-                    <HStack key={index} gap="10px">
-                      <HStack color="yellow.400">
-                        {getDrugById(drug.id).icon({ boxSize: "26" })}
-                        <Text>{drug.quantity}</Text>
-                      </HStack>
-                      {index < playerEntity.drugs.length - 1 && (
-                        <HStack>
-                          <Divider
-                            h="10px"
-                            orientation="vertical"
-                            borderWidth="1px"
-                            borderColor="neon.600"
-                          />
-                        </HStack>
-                      )}
+                  <HStack key={index} gap="10px">
+                    <HStack color="yellow.400">
+                      {getDrugById(drug.id).icon({ boxSize: "26" })}
+                      <Text>{drug.quantity}</Text>
                     </HStack>
-                  </>
+                    {index < playerEntity.drugs.length - 1 && (
+                      <HStack>
+                        <Divider
+                          h="10px"
+                          orientation="vertical"
+                          borderWidth="1px"
+                          borderColor="neon.600"
+                        />
+                      </HStack>
+                    )}
+                  </HStack>
                 )
               );
             })

@@ -27,24 +27,22 @@ export default function Travel() {
   const gameId = router.query.gameId as string;
   const [targetId, setTargetId] = useState<string>("");
   const [currentLocationId, setCurrentLocationId] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
   const { account } = useDojo();
-  const { travel, isPending, error: txError } = useSystems();
+  const { travel, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
 
-  const targetLocation = useMemo(() => getLocationById(targetId), [targetId]);
-
   useEffect(() => {
-    if (playerEntity) {
+    if (playerEntity && !isSubmitting) {
       const location = getLocationById(playerEntity.locationId);
       setCurrentLocationId(location.id);
-      setTargetId(location.id);
     }
-  }, [playerEntity]);
+  }, [playerEntity, isSubmitting]);
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -79,12 +77,14 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
     if (targetId) {
+      setIsSubmitting(true);
       const { event, hash } = await travel(gameId, targetId);
+      console.log(event, hash);
       if (event) {
         router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       } else {
         toast(
-          `You've traveled to ${targetLocation.name}`,
+          `You've traveled to ${getLocationById(targetId).name}`,
           Car,
           `http://amazing_explorer/${hash}`,
         );
@@ -92,7 +92,7 @@ export default function Travel() {
         router.push(`/${gameId}/turn`);
       }
     }
-  }, [targetId, router, gameId, targetLocation, travel, toast]);
+  }, [targetId, router, gameId, travel, toast]);
 
   return (
     <Layout
@@ -101,7 +101,7 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <Map
-            highlight={targetLocation.type}
+            highlight={getLocationById(targetId).type}
             onSelect={(selected) => {
               setTargetId(getLocationByType(selected).id);
             }}
@@ -127,12 +127,12 @@ export default function Travel() {
         <Button
           w={["full", "250px"]}
           isDisabled={!targetId || targetId === currentLocationId}
-          isLoading={isPending && !txError}
+          isLoading={isSubmitting && !txError}
           onClick={onContinue}
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${targetLocation.name}`}
+            : `Travel to ${getLocationById(targetId).name}`}
         </Button>
       </VStack>
       <VStack
@@ -165,7 +165,7 @@ export default function Travel() {
             w="full"
             justify="center"
           >
-            <Text>{targetLocation.name}</Text>
+            <Text>{getLocationById(targetId).name}</Text>
           </HStack>
           <Arrow
             style="outline"
@@ -180,12 +180,12 @@ export default function Travel() {
           w={["full", "auto"]}
           pointerEvents="all"
           isDisabled={!targetId || targetId === currentLocationId}
-          isLoading={isPending && !txError}
+          isLoading={isSubmitting && !txError}
           onClick={onContinue}
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${targetLocation.name}`}
+            : `Travel to ${getLocationById(targetId).name}`}
         </Button>
       </VStack>
     </Layout>

@@ -16,13 +16,22 @@ export enum Drug {
   Cocaine,
 }
 
+export enum PlayerStatus {
+  Normal,
+  BeingMugged,
+  BeingArrested,
+}
+
 export enum Action {
-  Pay,
   Run,
+  Pay,
+  Fight,
 }
 
 export enum Outcome {
+  Died,
   Paid,
+  Fought,
   Escaped,
   Captured,
 }
@@ -45,7 +54,10 @@ export interface DrugInfo {
 
 export interface OutcomeInfo {
   type: Outcome;
+  status: PlayerStatus;
   name: string;
   imageSrc: string;
-  getNarration: (isInitial: boolean) => string;
+  description?: string;
+  getResponse: (isInitial: boolean) => string;
+  color: string;
 }

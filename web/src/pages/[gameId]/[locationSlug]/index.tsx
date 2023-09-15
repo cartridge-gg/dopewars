@@ -10,7 +10,9 @@ import {
   CardHeader,
   CardFooter,
   SimpleGrid,
-  Button,
+  StyleProps,
+  useDisclosure,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
@@ -24,11 +26,13 @@ import { Inventory } from "@/components/Inventory";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { useDojo } from "@/dojo";
 import { shortString } from "starknet";
+import Button from "@/components/Button";
 import {
   getDrugById,
   getLocationById,
   getLocationBySlug,
 } from "@/dojo/helpers";
+import { motion } from "framer-motion";
 
 export default function Location() {
   const router = useRouter();
@@ -97,19 +101,17 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={2} w="full" gap="12px" fontSize="20px">
+        <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
           {locationEntity.drugMarkets.map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
+            const canBuy =
+              drug.price <= playerEntity.cash &&
+              playerEntity.drugCount < playerEntity.bagLimit;
+            const canSell = !!playerEntity.drugs.find(
+              (d) => d.id === drug.id && d.quantity > 0,
+            );
             return (
-              <Card
-                h="160px"
-                key={index}
-                cursor="pointer"
-                onClick={() => {
-                  playSound(Sounds.HoverClick, 0.3, false);
-                  router.push(`${router.asPath}/${drugInfo.slug}`);
-                }}
-              >
+              <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader
                   textTransform="uppercase"
                   fontSize="20px"
@@ -118,23 +120,47 @@ export default function Location() {
                   {drugInfo.name}
                 </CardHeader>
                 <CardBody>
-                  <HStack w="full" justify="center">
-                    <Box>{drugInfo.icon({})}</Box>
+                  <HStack w="full" justify="center" position="relative" m="2px">
+                    <HStack
+                      as={motion.div}
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      w="full"
+                      p="20px"
+                      gap="10px"
+                      position="absolute"
+                      bgColor="neon.900"
+                      pointerEvents={["none", "auto"]}
+                    >
+                      <BuySellBtns
+                        canBuy={canBuy}
+                        canSell={canSell}
+                        drugSlug={drugInfo.slug}
+                      />
+                    </HStack>
+                    {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
-                <CardFooter fontSize="16px">
-                  <Text>{formatCash(drug.price)}</Text>
-                  <Spacer />
+                <CardFooter fontSize="16px" flexDirection="column" gap="10px">
                   <HStack>
-                    <Cart />
-                    <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                    <Text>{formatCash(drug.price)}</Text>
+                    <Spacer />
+                    <HStack>
+                      <Cart />
+                      <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                    </HStack>
                   </HStack>
+                  <BuySellMobileToggle
+                    canSell={canSell}
+                    canBuy={canBuy}
+                    drugSlug={drugInfo.slug}
+                  />
                 </CardFooter>
               </Card>
             );
           })}
         </SimpleGrid>
-        <Box minH="40px" />
+        <Box minH="60px" />
       </VStack>
       <Footer>
         <Button
@@ -154,3 +180,76 @@ export default function Location() {
     </Layout>
   );
 }
+
+const BuySellBtns = ({
+  canBuy,
+  canSell,
+  drugSlug,
+}: {
+  canBuy: boolean;
+  canSell: boolean;
+  drugSlug: string;
+}) => {
+  const router = useRouter();
+  return (
+    <>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)}
+        isDisabled={!canBuy}
+      >
+        Buy
+      </Button>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugSlug}/sell`)}
+        isDisabled={!canSell}
+      >
+        Sell
+      </Button>
+    </>
+  );
+};
+
+const BuySellMobileToggle = ({
+  canBuy,
+  canSell,
+  drugSlug,
+  ...props
+}: {
+  canBuy: boolean;
+  canSell: boolean;
+  drugSlug: string;
+} & StyleProps) => {
+  const router = useRouter();
+  const { isOpen, onToggle } = useDisclosure();
+
+  return (
+    <>
+      <Box
+        boxSize="full"
+        position="absolute"
+        top="0"
+        left="0"
+        onClick={onToggle}
+        pointerEvents={["auto", "none"]}
+      />
+      <HStack
+        as={motion.div}
+        initial={{ height: "0", opacity: 0 }}
+        animate={{
+          height: isOpen ? "auto" : "0",
+          opacity: isOpen ? 1 : 0,
+        }}
+        boxSize="full"
+        gap="10px"
+        overflow="hidden"
+        align="flex-start"
+        display={["flex", "none"]}
+        {...props}
+      >
+        <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />
+      </HStack>
+    </>
+  );
+};
