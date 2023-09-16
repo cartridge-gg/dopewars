@@ -36,8 +36,7 @@ mod decide {
     enum Event {
         Decision: Decision,
         Consequence: Consequence,
-        CashLoss: CashLoss,
-        DrugLoss: DrugLoss,
+        Losses: Losses
     }
 
     #[derive(Drop, starknet::Event)]
@@ -56,18 +55,12 @@ mod decide {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct CashLoss {
+    struct Losses {
         game_id: u32,
         player_id: ContractAddress,
-        amount: u128
-    }
-
-    #[derive(Drop, starknet::Event)]
-    struct DrugLoss {
-        game_id: u32,
-        player_id: ContractAddress,
-        drug_id: felt252,
-        quantity: usize
+        health_loss: u8,
+        drug_loss: usize,
+        cash_loss: u128
     }
 
     fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
@@ -75,7 +68,7 @@ mod decide {
         let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
-        let (mut outcome, cash_loss, drug_count_loss, health_loss) = match player.status {
+        let (mut outcome, cash_loss, drug_loss, health_loss) = match player.status {
             PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
             PlayerStatus::BeingMugged => match action {
                 Action::Run => run(
@@ -128,10 +121,14 @@ mod decide {
         }
 
         player.cash -= cash_loss;
-        player.drug_count -= drug_count_loss;
+        player.drug_count -= drug_loss;
 
         set!(ctx.world, (player));
         emit!(ctx.world, Consequence { game_id, player_id, outcome });
+
+        if health_loss > 0 || cash_loss > 0 || drug_loss > 0 {
+            emit!(ctx.world, Losses { game_id, player_id, health_loss, drug_loss, cash_loss});
+        }
     }
 
     // Player will fight muggers, but it kinda hurts, taking 20hp of your health. You 
@@ -149,7 +146,6 @@ mod decide {
         let cash_loss = cmp::max(player_cash / 5, BASE_PAYMENT);
 
         emit!(ctx.world, Decision { game_id, player_id, action: Action::Pay, run_attempts: 0 });
-        emit!(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
         (Outcome::Paid, cash_loss, 0, 0)
     }
 
@@ -184,7 +180,6 @@ mod decide {
                     let additional_penalty: u128 = run_attempts.into() * 10;
                     let cash_loss = (player_cash * (20 + additional_penalty)) / 100;
                     
-                    emit!(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
                     (Outcome::Captured, cash_loss, 0, HEALTH_IMPACT)
                 },
                 PlayerStatus::BeingArrested => {
@@ -198,7 +193,7 @@ mod decide {
         }
     }
 
-    fn take_drugs(ctx: Context, game_id: u32, player_id: ContractAddress, run_attempts: u8) -> u32 {
+    fn take_drugs(ctx: Context, game_id: u32, player_id: ContractAddress, run_attempts: u8) -> usize {
         let mut drugs = DrugTrait::all();
         let mut total_drug_loss = 0;
         loop {
@@ -211,11 +206,6 @@ mod decide {
                         drug.quantity -= drug_loss;
                         total_drug_loss += drug.quantity;
 
-                        emit!(
-                            ctx.world, DrugLoss {
-                                game_id, player_id, drug_id: *drug_id, quantity: drug.quantity
-                            }
-                        );
                         set!(ctx.world, (drug));
                     }
                 },
