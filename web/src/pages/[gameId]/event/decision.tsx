@@ -57,7 +57,7 @@ export default function Decision() {
 
       setStatus(playerEntity.status);
     }
-  }, [playerEntity]);
+  }, [playerEntity, isSubmitting]);
 
   const canPay = useMemo(() => {
     if (playerEntity && playerEntity.status == PlayerStatus.BeingArrested) {

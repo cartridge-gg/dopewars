@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 14;
+const NUM_TURNS = 9;
 
 const floatAnim = keyframes`  
   0% {transform: translateY(0%);}

@@ -48,7 +48,10 @@ export default function Market() {
   const [quantitySell, setQuantitySell] = useState(0);
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { buy, sell, error: txError } = useSystems();
+  const { addTrade } = usePlayerStore();
   const { account } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
@@ -76,11 +79,7 @@ export default function Market() {
 
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
-  }, [locationEntity, playerEntity, drug]);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { buy, sell, error: txError } = useSystems();
-  const { addTrade } = usePlayerStore();
+  }, [locationEntity, playerEntity, drug, isSubmitting]);
 
   const onTrade = useCallback(async () => {
     setIsSubmitting(true);
