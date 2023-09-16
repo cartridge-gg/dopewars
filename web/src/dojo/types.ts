@@ -25,13 +25,11 @@ export enum PlayerStatus {
 export enum Action {
   Run,
   Pay,
-  Fight,
 }
 
 export enum Outcome {
   Died,
   Paid,
-  Fought,
   Escaped,
   Captured,
 }

@@ -2,7 +2,7 @@ use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::constants::{SCALING_FACTOR, COPS_DRUG_THRESHOLD, ENCOUNTER_BIAS_GANGS};
 use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
@@ -25,15 +25,17 @@ impl RisksImpl of RisksTrait {
             let result: u128 = entropy.low % 100;
 
             // more bias towards gang encounter
-            return match result <= 30 {
-                bool::False => PlayerStatus::BeingMugged,
-                bool::True => {
-                    // don't trigger if no drugs
-                    if drug_count == 0 {
+            return match result <= ENCOUNTER_BIAS_GANGS {
+                bool::False => {
+                    if drug_count < COPS_DRUG_THRESHOLD {
                         return PlayerStatus::Normal;
                     }
+
                     PlayerStatus::BeingArrested
                 },
+                bool::True => {
+                    PlayerStatus::BeingMugged
+                }
             };
         }
 

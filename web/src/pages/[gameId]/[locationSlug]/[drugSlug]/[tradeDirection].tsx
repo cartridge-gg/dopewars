@@ -234,6 +234,7 @@ const QuantitySelector = ({
         (d) => d.id === drug.id,
       )?.quantity;
       setMax(playerQuantity || 0);
+      setQuantity(playerQuantity || 0);
     }
   }, [type, drug, player, market]);
 

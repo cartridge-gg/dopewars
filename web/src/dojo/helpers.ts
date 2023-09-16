@@ -119,7 +119,7 @@ const drugs: DrugInfo[] = [
 
 export const outcomes: OutcomeInfo[] = [
   {
-    name: "Bribed the Cop",
+    name: "Paid the Cop",
     type: Outcome.Paid,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
@@ -129,17 +129,7 @@ export const outcomes: OutcomeInfo[] = [
     color: "yellow.400",
   },
   {
-    name: "Got Arrested",
-    type: Outcome.Captured,
-    status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/events/police_cruiser.gif",
-    description: "You lost some health and drugs",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Captured, isInitial),
-    color: "red",
-  },
-  {
-    name: "Escaped the Cops",
+    name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/escaped.png",
@@ -148,27 +138,17 @@ export const outcomes: OutcomeInfo[] = [
     color: "neon.200",
   },
   {
-    name: "Fought the Gang",
-    type: Outcome.Fought,
-    status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/events/fought.png",
-    description: "You lost some health",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Fought, isInitial),
-    color: "yellow.400",
-  },
-  {
-    name: "Got Captured",
-    type: Outcome.Captured,
+    name: "Paid the Gang",
+    type: Outcome.Paid,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    description: "You some some health and cash",
+    description: "You paid the gang off",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Captured, isInitial),
-    color: "red",
+      getMuggerResponses(Outcome.Escaped, isInitial),
+    color: "neon.200",
   },
   {
-    name: "Escaped the Gang",
+    name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/escaped.png",
@@ -176,6 +156,37 @@ export const outcomes: OutcomeInfo[] = [
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
   },
+
+  // {
+  //   name: "Got Arrested",
+  //   type: Outcome.Captured,
+  //   status: PlayerStatus.BeingArrested,
+  //   imageSrc: "/images/events/police_cruiser.gif",
+  //   description: "You lost some health and drugs",
+  //   getResponse: (isInitial: boolean) =>
+  //     getCopResponses(Outcome.Captured, isInitial),
+  //   color: "red",
+  // },
+  // {
+  //   name: "Fought the Gang",
+  //   type: Outcome.Fought,
+  //   status: PlayerStatus.BeingMugged,
+  //   imageSrc: "/images/events/fought.png",
+  //   description: "You lost 20HP",
+  //   getResponse: (isInitial: boolean) =>
+  //     getMuggerResponses(Outcome.Fought, isInitial),
+  //   color: "yellow.400",
+  // },
+  // {
+  //   name: "Got Captured",
+  //   type: Outcome.Captured,
+  //   status: PlayerStatus.BeingMugged,
+  //   imageSrc: "/images/sunset.png",
+  //   description: "You some some health and cash",
+  //   getResponse: (isInitial: boolean) =>
+  //     getMuggerResponses(Outcome.Captured, isInitial),
+  //   color: "red",
+  // },
 ];
 
 function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {

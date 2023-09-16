@@ -19,7 +19,8 @@ mod create_game {
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::components::market::{MarketTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
+        SCALING_FACTOR, TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH,
+        STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
     use debug::PrintTrait;
@@ -86,7 +87,10 @@ mod create_game {
                     set!(
                         ctx.world,
                         (Risks {
-                            game_id, location_id: *location_id, travel: TRAVEL_RISK, capture: CAPTURE_RISK
+                            game_id,
+                            location_id: *location_id,
+                            travel: TRAVEL_RISK,
+                            capture: CAPTURE_RISK
                         })
                     );
 
@@ -139,9 +143,8 @@ mod create_game {
 
         // emit game created
         emit!(
-            ctx.world, GameCreated {
-                game_id, creator: ctx.origin, start_time, max_players, max_turns
-            }
+            ctx.world,
+            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
         );
 
         (game_id, ctx.origin)
