@@ -19,7 +19,7 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
-import { cardPixelatedStyle } from "@/theme/styles";
+import Dot from "./Dot";
 
 const steps = [
   {
@@ -44,31 +44,6 @@ const steps = [
   },
 ];
 
-const Dot = ({
-  step,
-  currentStep,
-  onClick,
-}: {
-  step: number;
-  currentStep: number;
-  onClick: () => void;
-}) => {
-  const isCurrent = step == currentStep;
-  return (
-    <Box
-      {...cardPixelatedStyle({
-        radius: isCurrent ? 4 : 3,
-        pixelSize: 3 ,
-      })}
-      onClick={onClick}
-      cursor={"pointer"}
-      bgColor={isCurrent ? "neon.200" : "neon.500"}
-      w={isCurrent ? "20px" : "16px"}
-      h={isCurrent ? "20px" : "16px"}
-      // rounded={"full"}
-    ></Box>
-  );
-};
 
 const TutorialStep = ({
   step,
@@ -136,8 +111,7 @@ const Tutorial = ({
                 return (
                   <Dot
                     key={`dot-${step.step}`}
-                    step={step.step}
-                    currentStep={currentStep}
+                    active={step.step == currentStep}
                     onClick={() => setCurrentStep(step.step)}
                   />
                 );
