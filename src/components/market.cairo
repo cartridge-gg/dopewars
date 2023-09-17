@@ -48,7 +48,7 @@ impl MarketImpl of MarketTrait {
         if drug_id == 'Acid' {
             PricingInfos {
                 min_price: 500 * SCALING_FACTOR,
-                max_price: 1500 * SCALING_FACTOR,
+                max_price: 1800 * SCALING_FACTOR,
                 min_qty: 400,
                 max_qty: 900,
             }
@@ -75,15 +75,15 @@ impl MarketImpl of MarketTrait {
             }
         } else if drug_id == 'Heroin' {
             PricingInfos {
-                min_price: 1000 * SCALING_FACTOR,
-                max_price: 3000 * SCALING_FACTOR,
+                min_price: 1200 * SCALING_FACTOR,
+                max_price: 4000 * SCALING_FACTOR,
                 min_qty: 300,
                 max_qty: 700,
             }
         } else if drug_id == 'Cocaine' {
             PricingInfos {
-                min_price: 2000 * SCALING_FACTOR,
-                max_price: 6000 * SCALING_FACTOR,
+                min_price: 3000 * SCALING_FACTOR,
+                max_price: 8000 * SCALING_FACTOR,
                 min_qty: 250,
                 max_qty: 600,
             }

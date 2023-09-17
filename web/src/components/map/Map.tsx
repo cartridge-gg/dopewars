@@ -30,9 +30,7 @@ export const Map = ({
   const isMobile = useBreakpointValue([true, false]);
 
   useEffect(() => {
-    console.log({ highlight });
     if (highlight !== undefined) {
-      console.log("got here");
       const animation = isMobile
         ? { scale: 1.75, ...coordinate[highlight] }
         : { scale: 1, x: 0, y: 0 };

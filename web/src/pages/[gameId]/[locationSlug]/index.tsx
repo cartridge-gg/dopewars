@@ -12,14 +12,12 @@ import {
   SimpleGrid,
   StyleProps,
   useDisclosure,
-  useBreakpointValue,
   Flex,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";

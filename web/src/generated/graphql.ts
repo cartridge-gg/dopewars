@@ -748,6 +748,27 @@ export type GlobalScoresQuery = {
   } | null;
 };
 
+export type MarketPricesQueryVariables = Exact<{
+  gameId?: InputMaybe<Scalars["Int"]>;
+}>;
+
+export type MarketPricesQuery = {
+  __typename?: "Query";
+  marketComponents?: {
+    __typename?: "MarketConnection";
+    edges?: Array<{
+      __typename?: "MarketEdge";
+      node?: {
+        __typename?: "Market";
+        drug_id?: any | null;
+        location_id?: any | null;
+        quantity?: any | null;
+        cash?: any | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
+
 export type GameEntityQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -974,6 +995,62 @@ useInfiniteGlobalScoresQuery.getKey = (
   variables === undefined
     ? ["GlobalScores.infinite"]
     : ["GlobalScores.infinite", variables];
+export const MarketPricesDocument = `
+    query MarketPrices($gameId: Int) {
+  marketComponents(first: 36, where: {game_id: $gameId}) {
+    edges {
+      node {
+        drug_id
+        location_id
+        quantity
+        cash
+      }
+    }
+  }
+}
+    `;
+export const useMarketPricesQuery = <
+  TData = MarketPricesQuery,
+  TError = unknown,
+>(
+  variables?: MarketPricesQueryVariables,
+  options?: UseQueryOptions<MarketPricesQuery, TError, TData>,
+) =>
+  useQuery<MarketPricesQuery, TError, TData>(
+    variables === undefined ? ["MarketPrices"] : ["MarketPrices", variables],
+    useFetchData<MarketPricesQuery, MarketPricesQueryVariables>(
+      MarketPricesDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useMarketPricesQuery.getKey = (variables?: MarketPricesQueryVariables) =>
+  variables === undefined ? ["MarketPrices"] : ["MarketPrices", variables];
+export const useInfiniteMarketPricesQuery = <
+  TData = MarketPricesQuery,
+  TError = unknown,
+>(
+  variables?: MarketPricesQueryVariables,
+  options?: UseInfiniteQueryOptions<MarketPricesQuery, TError, TData>,
+) => {
+  const query = useFetchData<MarketPricesQuery, MarketPricesQueryVariables>(
+    MarketPricesDocument,
+  );
+  return useInfiniteQuery<MarketPricesQuery, TError, TData>(
+    variables === undefined
+      ? ["MarketPrices.infinite"]
+      : ["MarketPrices.infinite", variables],
+    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
+    options,
+  );
+};
+
+useInfiniteMarketPricesQuery.getKey = (
+  variables?: MarketPricesQueryVariables,
+) =>
+  variables === undefined
+    ? ["MarketPrices.infinite"]
+    : ["MarketPrices.infinite", variables];
 export const GameEntityDocument = `
     query GameEntity($id: ID!) {
   entity(id: $id) {

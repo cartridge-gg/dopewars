@@ -20,7 +20,6 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
 import {
-  DrugMarket,
   useLocationEntity,
 } from "@/dojo/entities/useLocationEntity";
 import { PlayerEntity, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
@@ -29,7 +28,7 @@ import { useSystems } from "@/dojo/systems/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
-import { DrugInfo } from "@/dojo/types";
+import { DrugInfo, DrugMarket } from "@/dojo/types";
 import { useDojo } from "@/dojo";
 import { cardPixelatedStyle } from "@/theme/styles";
 
@@ -49,7 +48,7 @@ export default function Market() {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { buy, sell, error: txError } = useSystems();
   const { addTrade } = usePlayerStore();
   const { account } = useDojo();

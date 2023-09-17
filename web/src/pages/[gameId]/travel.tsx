@@ -8,6 +8,10 @@ import {
   Text,
   Divider,
   useEventListener,
+  SimpleGrid,
+  Card,
+  Grid,
+  GridItem,
   Spacer,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -19,8 +23,14 @@ import { useSystems } from "@/dojo/systems/useSystems";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
-import { getLocationById, getLocationByType, locations } from "@/dojo/helpers";
+import {
+  getDrugById,
+  getLocationById,
+  getLocationByType,
+  locations,
+} from "@/dojo/helpers";
 import { LocationInfo } from "@/dojo/types";
+import { useMarketPrices } from "@/dojo/components/useMarkets";
 
 export default function Travel() {
   const router = useRouter();
@@ -35,6 +45,10 @@ export default function Travel() {
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
+  });
+
+  const { locationPrices } = useMarketPrices({
+    gameId,
   });
 
   useEffect(() => {
@@ -113,7 +127,7 @@ export default function Travel() {
       showBack={true}
     >
       <VStack w="full" my="auto" display={["none", "flex"]}>
-        <Car boxSize="60px" />
+        {/* <Car boxSize="60px" />
         {locations.map((location, index) => (
           <Location
             {...location}
@@ -124,7 +138,38 @@ export default function Travel() {
             onClick={() => setTargetId(location.id)}
           />
         ))}
-        <Spacer />
+        <Spacer /> */}
+        <Card w="full" p="5px">
+          <Grid templateColumns="repeat(2, 1fr)" position="relative">
+            <Box
+              position="absolute"
+              boxSize="full"
+              border="2px"
+              borderColor="neon.900"
+            />
+            {locationPrices
+              ?.get(targetId)
+              ?.sort((a, b) => b.id.localeCompare(a.id))
+              .map((market, index) => {
+                return (
+                  <GridItem
+                    key={index}
+                    colSpan={1}
+                    border="1px"
+                    p="6px"
+                    borderColor="neon.600"
+                  >
+                    {getDrugById(market.id).icon({
+                      boxSize: "24px",
+                      marginRight: "10px",
+                    })}
+                    ${market.price.toFixed(0)}
+                  </GridItem>
+                );
+              })}
+          </Grid>
+        </Card>
+        <Spacer minH="100px" />
         <Button
           w={["full", "250px"]}
           isDisabled={!targetId || targetId === currentLocationId}
