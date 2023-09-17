@@ -7,14 +7,14 @@ struct Player {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    status: PlayerStatus, // player status (normal, being mugged, being arrested)
-    location_id: felt252, // current player location
-    cash: u128, // player cash
-    health: u8, // player health
-    run_attempts: u8, // num times player tries to run during a single encounter
-    drug_count: usize, // aggregate drugs player is carrying
-    bag_limit: usize, // limit player is allowed to carry
-    turns_remaining: usize, // number turns remaining
+    status: PlayerStatus,
+    location_id: felt252,
+    cash: u128,
+    health: u8,
+    run_attempts: u8,
+    drug_count: usize,
+    bag_limit: usize,
+    turns_remaining: usize,
 }
 
 #[generate_trait]

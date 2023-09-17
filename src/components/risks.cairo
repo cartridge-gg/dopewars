@@ -74,7 +74,7 @@ fn test_never_occurs() {
 fn test_always_occurs() {
     let seed = pedersen::pedersen(1, 1);
     let mut risks = Risks { game_id: 0, location_id: 0, travel: 100, capture: 0 };
-    let player_status = risks.travel(seed, 1, 1);
+    let player_status = risks.travel(seed, 1, COPS_DRUG_THRESHOLD);
 
     assert(player_status != PlayerStatus::Normal(()), 'event did not occur');
 }

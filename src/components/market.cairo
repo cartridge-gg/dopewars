@@ -45,21 +45,7 @@ impl MarketImpl of MarketTrait {
 
     #[inline(always)]
     fn get_pricing_info(drug_id: felt252) -> PricingInfos {
-        if drug_id == 'Acid' {
-            PricingInfos {
-                min_price: 500 * SCALING_FACTOR,
-                max_price: 1800 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 900,
-            }
-        } else if drug_id == 'Weed' {
-            PricingInfos {
-                min_price: 200 * SCALING_FACTOR,
-                max_price: 700 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
-            }
-        } else if drug_id == 'Ludes' {
+        if drug_id == 'Ludes' {
             PricingInfos {
                 min_price: 10 * SCALING_FACTOR,
                 max_price: 60 * SCALING_FACTOR,
@@ -72,6 +58,20 @@ impl MarketImpl of MarketTrait {
                 max_price: 300 * SCALING_FACTOR,
                 min_qty: 600,
                 max_qty: 1500,
+            }
+        } else if drug_id == 'Weed' {
+            PricingInfos {
+                min_price: 200 * SCALING_FACTOR,
+                max_price: 700 * SCALING_FACTOR,
+                min_qty: 500,
+                max_qty: 1000,
+            }
+        } else if drug_id == 'Acid' {
+            PricingInfos {
+                min_price: 500 * SCALING_FACTOR,
+                max_price: 1800 * SCALING_FACTOR,
+                min_qty: 400,
+                max_qty: 900,
             }
         } else if drug_id == 'Heroin' {
             PricingInfos {
