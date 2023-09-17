@@ -19,9 +19,7 @@ import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import {
-  useLocationEntity,
-} from "@/dojo/entities/useLocationEntity";
+import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
 import { PlayerEntity, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/systems/useSystems";
