@@ -49,7 +49,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                   <>
                     <HStack gap="10px">
                       <HStack color="yellow.400">
-                        {getDrugById(drug.id).icon({ boxSize: "26" })}
+                        {getDrugById(drug.id)?.icon({ boxSize: "26" })}
                         <Text>{drug.quantity}</Text>
                       </HStack>
                     </HStack>

@@ -54,9 +54,8 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity && !isSubmitting) {
-      const location = getLocationById(playerEntity.locationId);
-      setCurrentLocationId(location.id);
-      setTargetId(location.id);
+      setCurrentLocationId(playerEntity.locationId);
+      setTargetId(playerEntity.locationId);
     }
   }, [playerEntity, isSubmitting]);
 
@@ -100,7 +99,7 @@ export default function Travel() {
         router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       } else {
         toast(
-          `You've traveled to ${getLocationById(targetId).name}`,
+          `You've traveled to ${getLocationById(targetId)?.name}`,
           Car,
           `http://amazing_explorer/${hash}`,
         );
@@ -119,9 +118,9 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <Map
-            highlight={getLocationById(targetId).type}
+            highlight={getLocationById(targetId)?.type}
             onSelect={(selected) => {
-              setTargetId(getLocationByType(selected).id);
+              setTargetId(getLocationByType(selected)!.id);
             }}
           />
         ),
@@ -160,7 +159,7 @@ export default function Travel() {
                     p="6px"
                     borderColor="neon.600"
                   >
-                    {getDrugById(market.id).icon({
+                    {getDrugById(market.id)?.icon({
                       boxSize: "24px",
                       marginRight: "10px",
                     })}
@@ -180,7 +179,7 @@ export default function Travel() {
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${getLocationById(targetId).name}`}
+            : `Travel to ${getLocationById(targetId)?.name}`}
         </Button>
       </VStack>
       <VStack
@@ -213,7 +212,7 @@ export default function Travel() {
             w="full"
             justify="center"
           >
-            <Text>{getLocationById(targetId).name}</Text>
+            <Text>{getLocationById(targetId)?.name}</Text>
           </HStack>
           <Arrow
             style="outline"
@@ -233,7 +232,7 @@ export default function Travel() {
         >
           {targetId === currentLocationId
             ? "Current Location"
-            : `Travel to ${getLocationById(targetId).name}`}
+            : `Travel to ${getLocationById(targetId)?.name}`}
         </Button>
       </VStack>
     </Layout>

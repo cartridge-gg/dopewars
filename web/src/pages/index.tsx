@@ -93,7 +93,9 @@ export default function Home() {
                     `http://amazing_explorer/${hash}`,
                   );
 
-                  router.push(`/${gameId}/${getLocationById(locationId).slug}`);
+                  router.push(
+                    `/${gameId}/${getLocationById(locationId)?.slug}`,
+                  );
                 }}
               >
                 Hustle

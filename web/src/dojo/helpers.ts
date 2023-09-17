@@ -163,28 +163,28 @@ function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
 }
 
-export function getLocationByType(type: Location): LocationInfo {
-  return findBy<LocationInfo>(locations, "type", type) || locations[0];
+export function getLocationByType(type: Location) {
+  return findBy<LocationInfo>(locations, "type", type);
 }
 
-export function getLocationById(id: string): LocationInfo {
-  return findBy<LocationInfo>(locations, "id", id) || locations[0];
+export function getLocationById(id: string) {
+  return findBy<LocationInfo>(locations, "id", id);
 }
 
-export function getLocationBySlug(slug: string): LocationInfo {
-  return findBy<LocationInfo>(locations, "slug", slug) || locations[0];
+export function getLocationBySlug(slug: string) {
+  return findBy<LocationInfo>(locations, "slug", slug);
 }
 
-export function getDrugById(id: string): DrugInfo {
-  return findBy<DrugInfo>(drugs, "id", id) || drugs[0];
+export function getDrugById(id: string) {
+  return findBy<DrugInfo>(drugs, "id", id);
 }
 
-export function getDrugBySlug(slug: string): DrugInfo {
-  return findBy<DrugInfo>(drugs, "slug", slug) || drugs[0];
+export function getDrugBySlug(slug: string) {
+  return findBy<DrugInfo>(drugs, "slug", slug);
 }
 
-export function getDrugByType(type: Drug): DrugInfo {
-  return findBy<DrugInfo>(drugs, "type", type) || drugs[0];
+export function getDrugByType(type: Drug) {
+  return findBy<DrugInfo>(drugs, "type", type);
 }
 
 export function getOutcomeInfo(
@@ -204,22 +204,22 @@ export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
   }
 
   const ludes = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Ludes,
+    (drug) => getDrugById(drug.id)?.type === Drug.Ludes,
   )!;
   const speed = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Speed,
+    (drug) => getDrugById(drug.id)?.type === Drug.Speed,
   )!;
   const weed = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Weed,
+    (drug) => getDrugById(drug.id)?.type === Drug.Weed,
   )!;
   const acid = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Acid,
+    (drug) => getDrugById(drug.id)?.type === Drug.Acid,
   )!;
   const heroin = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Heroin,
+    (drug) => getDrugById(drug.id)?.type === Drug.Heroin,
   )!;
   const cocaine = drugMarkets.find(
-    (drug) => getDrugById(drug.id).type === Drug.Cocaine,
+    (drug) => getDrugById(drug.id)?.type === Drug.Cocaine,
   )!;
   return [ludes, speed, weed, acid, heroin, cocaine];
 }

@@ -35,7 +35,7 @@ export default function Turn() {
     return <></>;
   }
 
-  const locationInfo = getLocationById(playerEntity.locationId);
+  const locationInfo = getLocationById(playerEntity.locationId)!;
 
   return (
     <Layout
@@ -59,7 +59,7 @@ export default function Turn() {
               {Array.from(trades).map(([drug, trade]) => {
                 const change =
                   trade.direction === TradeDirection.Buy ? "+" : "-";
-                const drugInfo = getDrugByType(drug);
+                const drugInfo = getDrugByType(drug)!;
                 return (
                   <ListItem key={drug}>
                     <Product

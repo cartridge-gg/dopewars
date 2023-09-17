@@ -71,7 +71,7 @@ export default function Decision() {
       setIsSubmitting(true);
       setPenalty("");
 
-      const result = await decide(gameId, action, nextLocation.id);
+      const result = await decide(gameId, action, nextLocation!.id);
       const event = result.event! as ConsequenceEventData;
       addEncounter(playerEntity!.status, event.outcome);
 
@@ -104,7 +104,7 @@ export default function Decision() {
 
   if (playerEntity.status == PlayerStatus.Normal && !isSubmitting) {
     return router.push(
-      `/${gameId}/${getLocationById(playerEntity.locationId).slug}`,
+      `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
     );
   }
 
