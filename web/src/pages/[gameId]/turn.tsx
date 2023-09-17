@@ -122,7 +122,7 @@ export default function Turn() {
             w={["full", "auto"]}
             onClick={() => {
               resetTurn();
-              router.push(`/${gameId}/${locationInfo.slug})}`);
+              router.push(`/${gameId}/${locationInfo.slug}`);
             }}
           >
             Continue
