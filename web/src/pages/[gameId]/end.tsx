@@ -23,11 +23,14 @@ import { ReactNode, useCallback, useState } from "react";
 export default function End() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { setName: submitSetName, isPending } = useSystems();
+  const { setName: submitSetName } = useSystems();
   const [name, setName] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
+
+    setIsSubmitting(true);
     await submitSetName(gameId, name);
     router.push("/");
   }, [name, gameId, router, submitSetName]);
@@ -107,7 +110,7 @@ export default function End() {
             <Button
               w={["full", "auto"]}
               onClick={onSubmitName}
-              isLoading={isPending}
+              isLoading={isSubmitting}
             >
               Submit
             </Button>
