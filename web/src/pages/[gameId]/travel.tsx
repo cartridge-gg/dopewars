@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { generatePixelBorderPath } from "@/utils/ui";
+import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { motion } from "framer-motion";
 import { useSystems } from "@/dojo/systems/useSystems";
@@ -58,6 +58,24 @@ export default function Travel() {
       setTargetId(playerEntity.locationId);
     }
   }, [playerEntity, isSubmitting]);
+
+  const targetMarkets = useMemo(() => {
+    if (locationPrices) {
+      const currentMarkets = sortDrugMarkets(
+        locationPrices.get(currentLocationId),
+      );
+      const targetMarkets = sortDrugMarkets(locationPrices.get(targetId));
+      return targetMarkets.map((drug, index) => {
+        return {
+          id: drug.id,
+          price: drug.price,
+          targetDiff: drug.price - currentMarkets[index].price,
+        };
+      });
+    }
+
+    return [];
+  }, [locationPrices, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
     switch (e.key) {
@@ -118,7 +136,7 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <Map
-            highlight={getLocationById(targetId)?.type}
+            target={getLocationById(targetId)?.type}
             onSelect={(selected) => {
               setTargetId(getLocationByType(selected)!.id);
             }}
@@ -128,7 +146,7 @@ export default function Travel() {
       showMap={true}
       showBack={true}
     >
-      <VStack w="full" my="auto" display={["none", "flex"]}>
+      <VStack w="full" my="auto" display={["none", "flex"]} gap="16px">
         {/* <Car boxSize="60px" />
         {locations.map((location, index) => (
           <Location
@@ -141,6 +159,11 @@ export default function Travel() {
           />
         ))}
         <Spacer /> */}
+        <HStack w="full">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+            {getLocationById(targetId)?.name} Prices
+          </Text>
+        </HStack>
         <Card w="full" p="5px">
           <Grid templateColumns="repeat(2, 1fr)" position="relative">
             <Box
@@ -149,25 +172,32 @@ export default function Travel() {
               border="2px"
               borderColor="neon.900"
             />
-            {sortDrugMarkets(locationPrices.get(targetId)).map(
-              (market, index) => {
-                return (
-                  <GridItem
-                    key={index}
-                    colSpan={1}
-                    border="1px"
-                    p="6px"
-                    borderColor="neon.600"
-                  >
-                    {getDrugById(market.id)?.icon({
+            {targetMarkets.map((drug, index) => {
+              return (
+                <GridItem
+                  key={index}
+                  colSpan={1}
+                  border="1px"
+                  p="6px"
+                  borderColor="neon.600"
+                >
+                  <HStack gap="8px">
+                    {getDrugById(drug.id)?.icon({
                       boxSize: "24px",
-                      marginRight: "10px",
                     })}
-                    ${market.price.toFixed(0)}
-                  </GridItem>
-                );
-              },
-            )}
+                    <Text>${drug.price.toFixed(0)}</Text>
+                    {drug.targetDiff !== 0 && (
+                      <Text
+                        opacity="0.5"
+                        color={drug.targetDiff >= 0 ? "neon.200" : "red"}
+                      >
+                        ({formatCash(drug.targetDiff)})
+                      </Text>
+                    )}
+                  </HStack>
+                </GridItem>
+              );
+            })}
           </Grid>
         </Card>
         <Spacer minH="100px" />
