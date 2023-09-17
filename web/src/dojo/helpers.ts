@@ -19,6 +19,7 @@ import {
 import {
   Drug,
   DrugInfo,
+  DrugMarket,
   Location,
   LocationInfo,
   Outcome,
@@ -195,4 +196,30 @@ export function getOutcomeInfo(
       return item.status === status && item.type === type;
     }) || outcomes[0]
   );
+}
+
+export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
+  if (!drugMarkets) {
+    return [];
+  }
+
+  const ludes = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Ludes,
+  )!;
+  const speed = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Speed,
+  )!;
+  const weed = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Weed,
+  )!;
+  const acid = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Acid,
+  )!;
+  const heroin = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Heroin,
+  )!;
+  const cocaine = drugMarkets.find(
+    (drug) => getDrugById(drug.id).type === Drug.Cocaine,
+  )!;
+  return [ludes, speed, weed, acid, heroin, cocaine];
 }

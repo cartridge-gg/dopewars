@@ -28,6 +28,7 @@ import {
   getLocationById,
   getLocationByType,
   locations,
+  sortDrugMarkets,
 } from "@/dojo/helpers";
 import { LocationInfo } from "@/dojo/types";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
@@ -109,6 +110,8 @@ export default function Travel() {
     }
   }, [targetId, router, gameId, travel, toast]);
 
+  if (!playerEntity || !locationPrices) return <></>;
+
   return (
     <Layout
       leftPanelProps={{
@@ -147,10 +150,8 @@ export default function Travel() {
               border="2px"
               borderColor="neon.900"
             />
-            {locationPrices
-              ?.get(targetId)
-              ?.sort((a, b) => b.id.localeCompare(a.id))
-              .map((market, index) => {
+            {sortDrugMarkets(locationPrices.get(targetId)).map(
+              (market, index) => {
                 return (
                   <GridItem
                     key={index}
@@ -166,7 +167,8 @@ export default function Travel() {
                     ${market.price.toFixed(0)}
                   </GridItem>
                 );
-              })}
+              },
+            )}
           </Grid>
         </Card>
         <Spacer minH="100px" />

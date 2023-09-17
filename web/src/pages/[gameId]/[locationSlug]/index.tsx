@@ -30,6 +30,7 @@ import {
   getDrugById,
   getLocationById,
   getLocationBySlug,
+  sortDrugMarkets,
 } from "@/dojo/helpers";
 import { motion } from "framer-motion";
 
@@ -101,7 +102,7 @@ export default function Location() {
           Market
         </Text>
         <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
-          {locationEntity.drugMarkets.map((drug, index) => {
+          {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id);
             const canBuy =
               drug.price <= playerEntity.cash &&

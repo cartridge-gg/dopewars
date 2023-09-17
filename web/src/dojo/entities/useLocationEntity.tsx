@@ -4,7 +4,7 @@ import {
   useLocationEntitiesQuery,
   EntityEdge,
 } from "@/generated/graphql";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { num } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 import { DrugMarket } from "../types";
@@ -60,9 +60,6 @@ export class LocationEntity {
     });
 
     if (!risksComponent || drugMarkets.length === 0) return undefined;
-
-    // sort by price
-    drugMarkets.sort((a, b) => a.price - b.price);
 
     return {
       id: locationId,
