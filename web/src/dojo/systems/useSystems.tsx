@@ -164,8 +164,7 @@ export const useSystems = (): SystemsInterface => {
   const setName = useCallback(
     async (gameId: string, playerName: string) => {
       // not working if name is number only
-      const name =  shortString.encodeShortString(playerName);
-      debugger
+      const name = shortString.encodeShortString(playerName);
       const receipt = await executeAndReceipt("set_name", [gameId, name]);
       const hash =
         "transaction_hash" in receipt ? receipt.transaction_hash : "";

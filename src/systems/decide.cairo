@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{ COPS_DRUG_THRESHOLD,HEALTH_IMPACT,GANGS_PAYMENT,BASE_PAYMENT};
+    use rollyourown::constants::{ COPS_DRUG_THRESHOLD,HEALTH_IMPACT,GANGS_PAYMENT};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
