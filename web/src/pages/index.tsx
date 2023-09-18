@@ -25,7 +25,7 @@ import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
 import { usePlayerStore } from "@/hooks/state";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 
