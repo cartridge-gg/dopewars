@@ -4,6 +4,7 @@ pushd $(dirname "$0")/..
 
 #export RPC_URL="http://localhost:5050";
 export RPC_URL="https://api.cartridge.gg/x/rollyourown/katana";
+
 export WORLD_ADDRESS="0x3c3dfeb374720dfd73554dc2b9e0583cb9668efb3055d07d1533afa5d219fd5";
 
 # enable system -> component authorizations

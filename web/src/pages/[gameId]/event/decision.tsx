@@ -12,6 +12,8 @@ import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
+import { playSound, Sounds } from "@/hooks/sound";
+
 
 const BASE_PAYMENT = 400;
 
@@ -35,6 +37,15 @@ export default function Decision() {
       setStatus(playerEntity.status);
     }
   }, [playerEntity]);
+
+  useEffect(() => {
+    if (status == PlayerStatus.BeingArrested) {
+      playSound(Sounds.Police);
+    }
+    if (status == PlayerStatus.BeingMugged) {
+      playSound(Sounds.Gang,0.69);
+    }
+  }, [status]);
 
   const onDecision = useCallback(
     async (action: Action) => {
