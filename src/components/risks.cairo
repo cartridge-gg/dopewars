@@ -28,7 +28,7 @@ impl RisksImpl of RisksTrait {
             return match result <= ENCOUNTER_BIAS_GANGS {
                 bool::False => {
                     if drug_count < COPS_DRUG_THRESHOLD {
-                        return PlayerStatus::Normal;
+                        return PlayerStatus::BeingMugged;
                     }
 
                     PlayerStatus::BeingArrested
