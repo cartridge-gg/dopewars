@@ -13,8 +13,9 @@ import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
 import { formatCash } from "@/utils/ui";
+import { useToast } from "@/hooks/toast";
+import { Heart } from "@/components/icons";
 
-const BASE_PAYMENT = 500;
 const COPS_DRUG_THRESHOLD = 5;
 
 export default function Decision() {
@@ -28,6 +29,7 @@ export default function Decision() {
   const [demand, setDemand] = useState<string>();
   const [penalty, setPenalty] = useState<string>();
 
+  const { toast } = useToast();
   const { account } = useDojo();
   const { decide } = useSystems();
   const { addEncounter } = usePlayerStore();
@@ -43,7 +45,7 @@ export default function Decision() {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want 10% of your DRUGS and $PAPER!`);
+          setDemand(`They want 20% of your DRUGS and $PAPER!`);
           break;
         case PlayerStatus.BeingArrested:
           const payment = formatCash(copsPayment(playerEntity.drugCount));
@@ -81,9 +83,19 @@ export default function Decision() {
           setPrefixTitle("Your escape...");
           setTitle("Failed!");
           setPenalty(`You loss ${event.healthLoss}HP!`);
+          toast(
+            `You were captured and loss ${event.healthLoss}HP!`,
+            Heart,
+            `http://amazing_explorer/${result.hash}`,
+          );
           break;
 
         case Outcome.Died:
+          toast(
+            `You too ${event.healthLoss}HP damage and died...`,
+            Heart,
+            `http://amazing_explorer/${result.hash}`,
+          );
           return router.push(`/${gameId}/end`);
 
         case Outcome.Escaped:

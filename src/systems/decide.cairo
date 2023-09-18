@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
+    use rollyourown::constants::{GANGS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
@@ -63,7 +63,9 @@ mod decide {
                 let mut risks = get!(ctx.world, (game_id, player.location_id).into(), Risks);
                 let seed = starknet::get_tx_info().unbox().transaction_hash;
                 match risks.run(seed) {
-                    bool::False => (Outcome::Captured, 0, 0, HEALTH_IMPACT),
+                    bool::False => (
+                        Outcome::Captured, 0, 0, HEALTH_IMPACT * (1 + player.run_attempts)
+                    ),
                     bool::True => (Outcome::Escaped, 0, 0, 0)
                 }
             },
@@ -107,8 +109,9 @@ mod decide {
 
         emit!(ctx.world, Decision { game_id, player_id, action });
         emit!(
-            ctx.world,
-            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
+            ctx.world, Consequence {
+                game_id, player_id, outcome, health_loss, drug_loss, cash_loss
+            }
         );
     }
 
