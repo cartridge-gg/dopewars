@@ -133,7 +133,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/events/escaped.png",
+    imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
@@ -152,7 +152,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/events/escaped.png",
+    imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
