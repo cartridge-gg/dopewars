@@ -157,6 +157,24 @@ export const outcomes: OutcomeInfo[] = [
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
   },
+  {
+    name: "Got killed by the Gang",
+    type: Outcome.Died,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/events/fought.png",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Died, isInitial),
+    color: "red",
+  },
+  {
+    name: "Got killed by the Cops",
+    type: Outcome.Died,
+    status: PlayerStatus.BeingArrested,
+    imageSrc: "/images/events/fought.png",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Died, isInitial),
+    color: "red",
+  },
 ];
 
 function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
@@ -191,11 +209,13 @@ export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
 ): OutcomeInfo {
-  return (
-    outcomes.find((item) => {
-      return item.status === status && item.type === type;
-    }) || outcomes[0]
-  );
+  const found = outcomes.find((item) => {
+    return item.status === status && item.type === type;
+  });
+  if (!found) {
+    console.log(`getOutcomeInfo outcome ${status} ${type} not found !`);
+  }
+  return found || outcomes[0];
 }
 
 export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {

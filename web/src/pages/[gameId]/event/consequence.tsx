@@ -5,10 +5,13 @@ import { getOutcomeInfo } from "@/dojo/helpers";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { Outcome } from "@/dojo/types";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useDojo } from "@/dojo";
 import { useMemo } from "react";
+import { PlayerStatus } from "@/dojo/types";
+import { Outcome } from "@/dojo/types";
+import { playSound, Sounds } from "@/hooks/sound";
+import { useEffect } from "react";
 
 export default function Consequence() {
   const router = useRouter();
@@ -24,7 +27,14 @@ export default function Consequence() {
     address: account?.address,
   });
 
+  const isDead = outcome.type == Outcome.Died;
   const response = useMemo(() => outcome.getResponse(true), [outcome]);
+
+  useEffect(() => {
+    if (outcome.type == Outcome.Died) {
+      playSound(Sounds.GameOver);
+    }
+  }, [outcome]);
 
   if (!router.isReady || !playerEntity) {
     return <></>;
@@ -59,21 +69,32 @@ export default function Consequence() {
             </Text>
           </VStack>
           <Footer position={["absolute", "relative"]}>
-            <Button
-              w="full"
-              onClick={() => {
-                console.log(outcome);
-                if (outcome.type == Outcome.Captured) {
-                  return router.push(
-                    `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
-                  );
-                }
+            {!isDead ? (
+              <Button
+                w="full"
+                onClick={() => {
+                  console.log(outcome);
+                  if (outcome.type == Outcome.Captured) {
+                    return router.push(
+                      `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
+                    );
+                  }
 
-                router.push(`/${gameId}/turn`);
-              }}
-            >
-              Continue
-            </Button>
+                  router.push(`/${gameId}/turn`);
+                }}
+              >
+                Continue
+              </Button>
+            ) : (
+              <Button
+                w="full"
+                onClick={() => {
+                  router.push(`/${gameId}/end`);
+                }}
+              >
+                Game Over
+              </Button>
+            )}
           </Footer>
         </VStack>
       </Layout>

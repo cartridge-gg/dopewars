@@ -2,7 +2,9 @@ use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-use rollyourown::constants::{SCALING_FACTOR, COPS_DRUG_THRESHOLD, GANGS_CASH_THRESHOLD, ENCOUNTER_BIAS_GANGS};
+use rollyourown::constants::{
+    SCALING_FACTOR, COPS_DRUG_THRESHOLD, GANGS_CASH_THRESHOLD, ENCOUNTER_BIAS_GANGS
+};
 use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
@@ -18,8 +20,8 @@ struct Risks {
 #[generate_trait]
 impl RisksImpl of RisksTrait {
     #[inline(always)]
-    fn travel(ref self: Risks, seed: felt252, cash: u128, drug_count: usize) -> PlayerStatus {
-        if occurs(seed, self.travel) {
+    fn travel(self: @Risks, seed: felt252, cash: u128, drug_count: usize) -> PlayerStatus {
+        if occurs(seed, *self.travel) {
             let seed = pedersen::pedersen(seed, seed);
             let entropy: u256 = seed.into();
             let result: u128 = entropy.low % 100;
@@ -47,8 +49,8 @@ impl RisksImpl of RisksTrait {
     }
 
     #[inline(always)]
-    fn run(ref self: Risks, seed: felt252) -> bool {
-        occurs(seed, self.capture)
+    fn run(self: @Risks, seed: felt252) -> bool {
+        occurs(seed, *self.capture)
     }
 }
 

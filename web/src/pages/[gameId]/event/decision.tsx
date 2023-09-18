@@ -61,7 +61,7 @@ export default function Decision() {
       playSound(Sounds.Police);
     }
     if (status == PlayerStatus.BeingMugged) {
-      playSound(Sounds.Gang, 0.69);
+      playSound(Sounds.Gang);
     }
   }, [status]);
 

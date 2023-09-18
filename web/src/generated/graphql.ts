@@ -386,6 +386,7 @@ export type Player = {
   run_attempts?: Maybe<Scalars["u8"]>;
   status?: Maybe<Scalars["Enum"]>;
   turns_remaining?: Maybe<Scalars["usize"]>;
+  turns_remaining_on_death?: Maybe<Scalars["usize"]>;
 };
 
 export type PlayerConnection = {
@@ -416,6 +417,7 @@ export enum PlayerOrderOrderField {
   RunAttempts = "RUN_ATTEMPTS",
   Status = "STATUS",
   TurnsRemaining = "TURNS_REMAINING",
+  TurnsRemainingOnDeath = "TURNS_REMAINING_ON_DEATH",
 }
 
 export type PlayerWhereInput = {
@@ -479,6 +481,12 @@ export type PlayerWhereInput = {
   turns_remainingLT?: InputMaybe<Scalars["Int"]>;
   turns_remainingLTE?: InputMaybe<Scalars["Int"]>;
   turns_remainingNEQ?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_death?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_deathGT?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_deathGTE?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_deathLT?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_deathLTE?: InputMaybe<Scalars["Int"]>;
+  turns_remaining_on_deathNEQ?: InputMaybe<Scalars["Int"]>;
 };
 
 export type Query = {
@@ -827,6 +835,7 @@ export type PlayerEntityQuery = {
               bag_limit?: any | null;
               location_id?: any | null;
               turns_remaining?: any | null;
+              turns_remaining_on_death?: any | null;
             }
           | { __typename: "Risks" }
           | null
@@ -1122,6 +1131,7 @@ export const PlayerEntityDocument = `
             bag_limit
             location_id
             turns_remaining
+            turns_remaining_on_death
           }
           ... on Drug {
             drug_id
