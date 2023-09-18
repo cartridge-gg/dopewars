@@ -15,6 +15,7 @@ import Button from "@/components/Button";
 import { formatCash } from "@/utils/ui";
 import { useToast } from "@/hooks/toast";
 import { Heart } from "@/components/icons";
+import { playSound, Sounds } from "@/hooks/sound";
 
 const COPS_DRUG_THRESHOLD = 5;
 
@@ -67,6 +68,15 @@ export default function Decision() {
     }
     return true;
   }, [playerEntity]);
+
+  useEffect(() => {
+    if (status == PlayerStatus.BeingArrested) {
+      playSound(Sounds.Police);
+    }
+    if (status == PlayerStatus.BeingMugged) {
+      playSound(Sounds.Gang, 0.69);
+    }
+  }, [status]);
 
   const onDecision = useCallback(
     async (action: Action) => {

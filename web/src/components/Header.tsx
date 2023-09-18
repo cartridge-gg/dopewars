@@ -73,7 +73,7 @@ const Header = ({ back }: HeaderProps) => {
         <HStack flex="1" justify="center">
           <HStack
             h={["80px", "40px"]}
-            w="full"
+            w="auto"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
@@ -133,22 +133,24 @@ const Header = ({ back }: HeaderProps) => {
         {!isMobile && (
           <>
             <MediaPlayer />
-            <Button
-              variant="pixelated"
-              isLoading={isBurnerDeploying}
-              onClick={() => {
-                if (!account) {
-                  createBurner();
-                }
-              }}
-            >
-              {account
-                ? formatAddress(account.address.toUpperCase())
-                : "Create Burner"}
-            </Button>
           </>
         )}
 
+        {(!isMobile || (!account && isMobile)) && (
+          <Button
+            variant="pixelated"
+            isLoading={isBurnerDeploying}
+            onClick={() => {
+              if (!account) {
+                createBurner();
+              }
+            }}
+          >
+            {account
+              ? formatAddress(account.address.toUpperCase())
+              : "Create Burner"}
+          </Button>
+        )}
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

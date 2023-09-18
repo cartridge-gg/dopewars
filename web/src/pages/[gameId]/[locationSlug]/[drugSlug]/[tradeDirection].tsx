@@ -81,6 +81,9 @@ export default function Market() {
   const onTrade = useCallback(async () => {
     setIsSubmitting(true);
     playSound(Sounds.Trade);
+
+    router.push(`/${gameId}/${location!.slug}`);
+
     let toastMessage = "",
       hash = "",
       quantity;
@@ -101,8 +104,6 @@ export default function Market() {
       direction: tradeDirection,
       quantity,
     } as TradeType);
-
-    router.push(`/${gameId}/${location!.slug}`);
   }, [
     tradeDirection,
     quantityBuy,

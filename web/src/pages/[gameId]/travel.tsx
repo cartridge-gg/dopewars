@@ -12,6 +12,7 @@ import {
   Grid,
   GridItem,
   Spacer,
+  Image,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";

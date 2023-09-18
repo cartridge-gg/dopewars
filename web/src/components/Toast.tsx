@@ -1,7 +1,7 @@
 import { cardPixelatedStyle } from "@/theme/styles";
 import { HStack, Link, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { Alert, ExternalLink } from "./icons";
+import { Alert, Close, ExternalLink } from "./icons";
 
 export const Toast = ({
   message,
@@ -32,11 +32,12 @@ export const Toast = ({
           <Text>{message}</Text>
         </>
       </HStack>
-      {link && (
+      <Close onClick={onClose} cursor="pointer" />
+      {/* {link && (
         <Link href={link} isExternal>
           <ExternalLink />
         </Link>
-      )}
+      )} */}
     </HStack>
   );
 };
