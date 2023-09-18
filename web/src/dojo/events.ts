@@ -14,7 +14,7 @@ export enum RyoEvents {
   Sold = "0x123e760cef925d0b4f685db5e1ac87aadaf1ad9f8069122a5bb03353444c386",
   AdverseEvent = "0x3605d6af5b08d01a1b42fa16a5f4dc202724f1664912948dcdbe99f5c93d0a0",
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
-  Consqeuence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
+  Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
 }
 
 export interface BaseEventData {
@@ -105,7 +105,7 @@ export const parseEvent = (
         playerId: num.toHexString(raw.data[1]),
         action: Number(raw.data[2]),
       } as DecisionEventData;
-    case RyoEvents.Consqeuence:
+    case RyoEvents.Consequence:
       return {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),

@@ -52,6 +52,7 @@ mod join_game {
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: game.max_turns,
             status: PlayerStatus::Normal(()),
+            turns_remaining_on_death: 0
         };
 
         set!(ctx.world, (game, player));

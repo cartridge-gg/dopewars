@@ -18,6 +18,7 @@ export enum Sounds {
   Trade = "Trade.mp3",
   Police = "Police.mp3",
   Gang = "Gang.mp3",
+  GameOver = "GameOver.mp3",
 }
 
 export interface SoundState {

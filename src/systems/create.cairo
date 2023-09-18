@@ -64,6 +64,7 @@ mod create_game {
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: max_turns,
             status: PlayerStatus::Normal(()),
+            turns_remaining_on_death: 0
         };
 
         let game = Game {

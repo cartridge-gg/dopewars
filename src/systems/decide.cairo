@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::BASE_PAYMENT;
+    use rollyourown::constants::{BASE_PAYMENT, CAUGHT_BY_MUGGERS_HP_LOSS, FIGHT_MUGGERS_HP_LOSS};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
@@ -102,6 +102,7 @@ mod decide {
 
         if health_loss >= player.health {
             player.health = 0;
+            player.turns_remaining_on_death = player.turns_remaining;
             player.turns_remaining = 0;
             outcome = Outcome::Died;
         } else {
@@ -117,7 +118,7 @@ mod decide {
     // Player will fight muggers, but it kinda hurts, taking 10hp of your health. You 
     // might also die if not enough health
     fn fight(ctx: Context, game_id: u32, player_id: ContractAddress) -> (Outcome, u128, u32, u8) {
-        (Outcome::Fought, 0, 0, 10)
+        (Outcome::Fought, 0, 0, FIGHT_MUGGERS_HP_LOSS)
     }
 
     // Player will hand over either 20% of their cash or $400, which ever is more
@@ -158,7 +159,7 @@ mod decide {
                     let cash_loss = player_cash / 2;
 
                     emit!(ctx.world, CashLoss { game_id, player_id, amount: cash_loss });
-                    (Outcome::Captured, cash_loss, 0, 20)
+                    (Outcome::Captured, cash_loss, 0, CAUGHT_BY_MUGGERS_HP_LOSS)
                 },
                 PlayerStatus::BeingArrested => {
                     let drug_count_loss = halve_drugs(ctx, game_id, player_id);

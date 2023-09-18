@@ -2,7 +2,7 @@ use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::constants::{SCALING_FACTOR, TRAVEL_RISK_POLICE};
 use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
@@ -18,14 +18,14 @@ struct Risks {
 #[generate_trait]
 impl RisksImpl of RisksTrait {
     #[inline(always)]
-    fn travel(ref self: Risks, seed: felt252) -> PlayerStatus {
-        if occurs(seed, self.travel) {
+    fn travel(self: @Risks, seed: felt252) -> PlayerStatus {
+        if occurs(seed, *self.travel) {
             let seed = pedersen::pedersen(seed, seed);
             let entropy: u256 = seed.into();
             let result: u128 = entropy.low % 100;
 
             // more bias towards gang encounter
-            return match result <= 40 {
+            return match result <= TRAVEL_RISK_POLICE.into() {
                 bool::False => PlayerStatus::BeingMugged(()),
                 bool::True => PlayerStatus::BeingArrested(()),
             };
@@ -35,8 +35,8 @@ impl RisksImpl of RisksTrait {
     }
 
     #[inline(always)]
-    fn run(ref self: Risks, seed: felt252) -> bool {
-        occurs(seed, self.run)
+    fn run(self: @Risks, seed: felt252) -> bool {
+        occurs(seed, *self.run)
     }
 }
 

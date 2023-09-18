@@ -43,7 +43,7 @@ export default function Decision() {
       playSound(Sounds.Police);
     }
     if (status == PlayerStatus.BeingMugged) {
-      playSound(Sounds.Gang,0.69);
+      playSound(Sounds.Gang);
     }
   }, [status]);
 
@@ -93,7 +93,7 @@ export default function Decision() {
             prefixTitle="You encountered the..."
             title="Cops!"
             demand={`Pay these cops off with ${
-              playerEntity.cash * 0.2 < BASE_PAYMENT ? "$500" : "20%"
+              playerEntity.cash * 0.2 < BASE_PAYMENT ? `$${BASE_PAYMENT}` : "20%"
             } of your cash`}
             imageSrc="/images/events/cops.gif"
             cash={playerEntity.cash}
