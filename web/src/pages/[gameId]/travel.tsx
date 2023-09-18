@@ -13,6 +13,7 @@ import {
   Grid,
   GridItem,
   Spacer,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -39,6 +40,8 @@ export default function Travel() {
   const [targetId, setTargetId] = useState<string>("");
   const [currentLocationId, setCurrentLocationId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isOpen: isPercentage, onToggle: onTogglePercentage } =
+    useDisclosure();
 
   const { toast } = useToast();
   const { account } = useDojo();
@@ -66,11 +69,20 @@ export default function Travel() {
       );
       const targetMarkets = sortDrugMarkets(locationPrices.get(targetId));
 
-      return targetMarkets.map((drug, index) => ({
-        id: drug.id,
-        price: drug.price,
-        targetDiff: drug.price - currentMarkets[index].price,
-      }));
+      return targetMarkets.map((drug, index) => {
+        const diff = drug.price - currentMarkets[index].price;
+        const percentage =
+          (Math.abs(drug.price - currentMarkets[index].price) /
+            currentMarkets[index].price) *
+          100;
+
+        return {
+          id: drug.id,
+          price: drug.price,
+          diff,
+          percentage,
+        };
+      });
     }
 
     return [];
@@ -142,7 +154,7 @@ export default function Travel() {
       }}
       showBack
     >
-      <VStack w="full" my="auto" display={["none", "flex"]} gap="16px">
+      <VStack w="full" my="auto" display={["none", "flex"]} gap="0">
         {/* <Car boxSize="60px" />
         {locations.map((location, index) => (
           <Location
@@ -155,47 +167,64 @@ export default function Travel() {
           />
         ))}
         <Spacer /> */}
-        <HStack w="full">
-          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+        <HStack w="full" justify="space-between" color="neon.500">
+          <Text textStyle="subheading" fontSize="11px">
             {getLocationById(targetId)?.name} Prices
           </Text>
+          <Text
+            cursor="pointer"
+            onClick={() => {
+              onTogglePercentage();
+            }}
+            fontSize="18px"
+            userSelect="none"
+            visibility={targetId == currentLocationId ? "hidden" : "visible"}
+          >
+            ({isPercentage ? "#" : "%"})
+          </Text>
         </HStack>
-        <Card w="full" p="5px">
-          <Grid templateColumns="repeat(2, 1fr)" position="relative">
-            <Box
-              position="absolute"
-              boxSize="full"
-              border="2px"
-              borderColor="neon.900"
-            />
-            {targetMarkets.map((drug, index) => {
-              return (
-                <GridItem
-                  key={index}
-                  colSpan={1}
-                  border="1px"
-                  p="6px"
-                  borderColor="neon.600"
-                >
-                  <HStack gap="8px">
-                    {getDrugById(drug.id)?.icon({
-                      boxSize: "24px",
-                    })}
-                    <Text>${drug.price.toFixed(0)}</Text>
-                    {drug.targetDiff !== 0 && (
-                      <Text
-                        opacity="0.5"
-                        color={drug.targetDiff >= 0 ? "neon.200" : "red"}
-                      >
-                        ({formatCash(drug.targetDiff)})
-                      </Text>
-                    )}
-                  </HStack>
-                </GridItem>
-              );
-            })}
-          </Grid>
-        </Card>
+        <VStack w="full">
+          <Card w="full" p="5px">
+            <Grid templateColumns="repeat(2, 1fr)" position="relative">
+              <Box
+                position="absolute"
+                boxSize="full"
+                border="2px"
+                borderColor="neon.900"
+              />
+              {targetMarkets.map((drug, index) => {
+                return (
+                  <GridItem
+                    key={index}
+                    colSpan={1}
+                    border="1px"
+                    p="6px"
+                    borderColor="neon.600"
+                  >
+                    <HStack gap="8px">
+                      {getDrugById(drug.id)?.icon({
+                        boxSize: "24px",
+                      })}
+                      <Text>${drug.price.toFixed(0)}</Text>
+                      {drug.diff !== 0 && (
+                        <Text
+                          opacity="0.5"
+                          color={drug.diff >= 0 ? "neon.200" : "red"}
+                        >
+                          (
+                          {isPercentage
+                            ? `${drug.percentage.toFixed(0)}%`
+                            : formatCash(drug.diff)}
+                          )
+                        </Text>
+                      )}
+                    </HStack>
+                  </GridItem>
+                );
+              })}
+            </Grid>
+          </Card>
+        </VStack>
         <Spacer minH="100px" />
         <Button
           w={["full", "250px"]}
