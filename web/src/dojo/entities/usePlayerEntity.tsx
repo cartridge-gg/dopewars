@@ -4,7 +4,7 @@ import {
   usePlayerEntityQuery,
   EntityEdge,
 } from "@/generated/graphql";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 import { PlayerStatus } from "../types";
 
@@ -80,9 +80,8 @@ export const usePlayerEntity = ({
   gameId?: string;
   address?: string;
 }): PlayerInterface => {
-  const [player, setPlayer] = useState<PlayerEntity>();
   // TODO: remove leading zeros in address, maybe implemented in torii
-  const { data, isFetched, refetch } = usePlayerEntityQuery(
+  const { data, isFetched } = usePlayerEntityQuery(
     { gameId: gameId || "", playerId: address || "" },
     {
       enabled: !!gameId && !!address,
@@ -90,9 +89,8 @@ export const usePlayerEntity = ({
     },
   );
 
-  useEffect(() => {
-    const player_ = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
-    if (player_) setPlayer(player_);
+  const player = useMemo(() => {
+    return PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
   }, [data]);
 
   return {

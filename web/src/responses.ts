@@ -3,22 +3,6 @@ import { Outcome } from "./dojo/types";
 type Encounter = "initial" | "repeat";
 
 const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
-  [Outcome.Fought]: {
-    initial: [
-      "You've got some nerve! But this isn't over.",
-      "Impressive moves, punk. We'll remember that face.",
-      "You think you've won? We'll be back, and with friends.",
-      "Lucky punch... next time you won't be so fortunate.",
-      "You might've won the fight, but the war? It's just beginning.",
-    ],
-    repeat: [
-      "You again? You won't be lucky every time.",
-      "Starting to hate that face of yours. We'll get our revenge.",
-      "Twice now, you've bested us. But third time's the charm.",
-      "You're making quite a reputation around here. It won't save you forever.",
-      "How many more times are we gonna dance this dance?",
-    ],
-  },
   [Outcome.Escaped]: {
     initial: [
       "You might've outrun us this time, but the shadows talk. We'll find you.",
@@ -114,11 +98,6 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
   },
   // Not needed
   [Outcome.Died]: {
-    initial: [],
-    repeat: [],
-  },
-  // Not needed
-  [Outcome.Fought]: {
     initial: [],
     repeat: [],
   },

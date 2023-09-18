@@ -383,6 +383,7 @@ export type Player = {
   health?: Maybe<Scalars["u8"]>;
   location_id?: Maybe<Scalars["felt252"]>;
   player_id?: Maybe<Scalars["ContractAddress"]>;
+  run_attempts?: Maybe<Scalars["u8"]>;
   status?: Maybe<Scalars["Enum"]>;
   turns_remaining?: Maybe<Scalars["usize"]>;
 };
@@ -412,6 +413,7 @@ export enum PlayerOrderOrderField {
   Health = "HEALTH",
   LocationId = "LOCATION_ID",
   PlayerId = "PLAYER_ID",
+  RunAttempts = "RUN_ATTEMPTS",
   Status = "STATUS",
   TurnsRemaining = "TURNS_REMAINING",
 }
@@ -459,6 +461,12 @@ export type PlayerWhereInput = {
   player_idLT?: InputMaybe<Scalars["String"]>;
   player_idLTE?: InputMaybe<Scalars["String"]>;
   player_idNEQ?: InputMaybe<Scalars["String"]>;
+  run_attempts?: InputMaybe<Scalars["Int"]>;
+  run_attemptsGT?: InputMaybe<Scalars["Int"]>;
+  run_attemptsGTE?: InputMaybe<Scalars["Int"]>;
+  run_attemptsLT?: InputMaybe<Scalars["Int"]>;
+  run_attemptsLTE?: InputMaybe<Scalars["Int"]>;
+  run_attemptsNEQ?: InputMaybe<Scalars["Int"]>;
   status?: InputMaybe<Scalars["Int"]>;
   statusGT?: InputMaybe<Scalars["Int"]>;
   statusGTE?: InputMaybe<Scalars["Int"]>;
@@ -577,10 +585,10 @@ export type QuerySystemCallArgs = {
 
 export type Risks = {
   __typename?: "Risks";
+  capture?: Maybe<Scalars["u8"]>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars["u32"]>;
   location_id?: Maybe<Scalars["felt252"]>;
-  run?: Maybe<Scalars["u8"]>;
   travel?: Maybe<Scalars["u8"]>;
 };
 
@@ -602,13 +610,19 @@ export type RisksOrder = {
 };
 
 export enum RisksOrderOrderField {
+  Capture = "CAPTURE",
   GameId = "GAME_ID",
   LocationId = "LOCATION_ID",
-  Run = "RUN",
   Travel = "TRAVEL",
 }
 
 export type RisksWhereInput = {
+  capture?: InputMaybe<Scalars["Int"]>;
+  captureGT?: InputMaybe<Scalars["Int"]>;
+  captureGTE?: InputMaybe<Scalars["Int"]>;
+  captureLT?: InputMaybe<Scalars["Int"]>;
+  captureLTE?: InputMaybe<Scalars["Int"]>;
+  captureNEQ?: InputMaybe<Scalars["Int"]>;
   game_id?: InputMaybe<Scalars["Int"]>;
   game_idGT?: InputMaybe<Scalars["Int"]>;
   game_idGTE?: InputMaybe<Scalars["Int"]>;
@@ -621,12 +635,6 @@ export type RisksWhereInput = {
   location_idLT?: InputMaybe<Scalars["String"]>;
   location_idLTE?: InputMaybe<Scalars["String"]>;
   location_idNEQ?: InputMaybe<Scalars["String"]>;
-  run?: InputMaybe<Scalars["Int"]>;
-  runGT?: InputMaybe<Scalars["Int"]>;
-  runGTE?: InputMaybe<Scalars["Int"]>;
-  runLT?: InputMaybe<Scalars["Int"]>;
-  runLTE?: InputMaybe<Scalars["Int"]>;
-  runNEQ?: InputMaybe<Scalars["Int"]>;
   travel?: InputMaybe<Scalars["Int"]>;
   travelGT?: InputMaybe<Scalars["Int"]>;
   travelGTE?: InputMaybe<Scalars["Int"]>;
@@ -740,6 +748,27 @@ export type GlobalScoresQuery = {
   } | null;
 };
 
+export type MarketPricesQueryVariables = Exact<{
+  gameId?: InputMaybe<Scalars["Int"]>;
+}>;
+
+export type MarketPricesQuery = {
+  __typename?: "Query";
+  marketComponents?: {
+    __typename?: "MarketConnection";
+    edges?: Array<{
+      __typename?: "MarketEdge";
+      node?: {
+        __typename?: "Market";
+        drug_id?: any | null;
+        location_id?: any | null;
+        quantity?: any | null;
+        cash?: any | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
+
 export type GameEntityQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -792,12 +821,12 @@ export type PlayerEntityQuery = {
           | {
               __typename: "Player";
               cash?: any | null;
+              status?: any | null;
               health?: any | null;
-              turns_remaining?: any | null;
               drug_count?: any | null;
               bag_limit?: any | null;
               location_id?: any | null;
-              status?: any | null;
+              turns_remaining?: any | null;
             }
           | { __typename: "Risks" }
           | null
@@ -829,7 +858,7 @@ export type LocationEntitiesQuery = {
           | { __typename: "Market"; cash?: any | null; quantity?: any | null }
           | { __typename: "Name" }
           | { __typename: "Player" }
-          | { __typename: "Risks"; travel?: any | null; run?: any | null }
+          | { __typename: "Risks"; travel?: any | null }
           | null
         > | null;
       } | null;
@@ -966,6 +995,62 @@ useInfiniteGlobalScoresQuery.getKey = (
   variables === undefined
     ? ["GlobalScores.infinite"]
     : ["GlobalScores.infinite", variables];
+export const MarketPricesDocument = `
+    query MarketPrices($gameId: Int) {
+  marketComponents(first: 36, where: {game_id: $gameId}) {
+    edges {
+      node {
+        drug_id
+        location_id
+        quantity
+        cash
+      }
+    }
+  }
+}
+    `;
+export const useMarketPricesQuery = <
+  TData = MarketPricesQuery,
+  TError = unknown,
+>(
+  variables?: MarketPricesQueryVariables,
+  options?: UseQueryOptions<MarketPricesQuery, TError, TData>,
+) =>
+  useQuery<MarketPricesQuery, TError, TData>(
+    variables === undefined ? ["MarketPrices"] : ["MarketPrices", variables],
+    useFetchData<MarketPricesQuery, MarketPricesQueryVariables>(
+      MarketPricesDocument,
+    ).bind(null, variables),
+    options,
+  );
+
+useMarketPricesQuery.getKey = (variables?: MarketPricesQueryVariables) =>
+  variables === undefined ? ["MarketPrices"] : ["MarketPrices", variables];
+export const useInfiniteMarketPricesQuery = <
+  TData = MarketPricesQuery,
+  TError = unknown,
+>(
+  variables?: MarketPricesQueryVariables,
+  options?: UseInfiniteQueryOptions<MarketPricesQuery, TError, TData>,
+) => {
+  const query = useFetchData<MarketPricesQuery, MarketPricesQueryVariables>(
+    MarketPricesDocument,
+  );
+  return useInfiniteQuery<MarketPricesQuery, TError, TData>(
+    variables === undefined
+      ? ["MarketPrices.infinite"]
+      : ["MarketPrices.infinite", variables],
+    (metaData) => query({ ...variables, ...(metaData.pageParam ?? {}) }),
+    options,
+  );
+};
+
+useInfiniteMarketPricesQuery.getKey = (
+  variables?: MarketPricesQueryVariables,
+) =>
+  variables === undefined
+    ? ["MarketPrices.infinite"]
+    : ["MarketPrices.infinite", variables];
 export const GameEntityDocument = `
     query GameEntity($id: ID!) {
   entity(id: $id) {
@@ -1031,12 +1116,12 @@ export const PlayerEntityDocument = `
           __typename
           ... on Player {
             cash
+            status
             health
-            turns_remaining
             drug_count
             bag_limit
             location_id
-            status
+            turns_remaining
           }
           ... on Drug {
             drug_id
@@ -1103,7 +1188,6 @@ export const LocationEntitiesDocument = `
           }
           ... on Risks {
             travel
-            run
           }
         }
       }

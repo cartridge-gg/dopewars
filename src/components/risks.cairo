@@ -2,7 +2,7 @@ use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::constants::{SCALING_FACTOR, COPS_DRUG_THRESHOLD, ENCOUNTER_BIAS_GANGS};
 use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
@@ -12,31 +12,39 @@ struct Risks {
     #[key]
     location_id: felt252,
     travel: u8,
-    run: u8,
+    capture: u8,
 }
 
 #[generate_trait]
 impl RisksImpl of RisksTrait {
     #[inline(always)]
-    fn travel(ref self: Risks, seed: felt252) -> PlayerStatus {
+    fn travel(ref self: Risks, seed: felt252, cash: u128, drug_count: usize) -> PlayerStatus {
         if occurs(seed, self.travel) {
             let seed = pedersen::pedersen(seed, seed);
             let entropy: u256 = seed.into();
             let result: u128 = entropy.low % 100;
 
             // more bias towards gang encounter
-            return match result <= 40 {
-                bool::False => PlayerStatus::BeingMugged(()),
-                bool::True => PlayerStatus::BeingArrested(()),
+            return match result <= ENCOUNTER_BIAS_GANGS {
+                bool::False => {
+                    if drug_count < COPS_DRUG_THRESHOLD {
+                        return PlayerStatus::BeingMugged;
+                    }
+
+                    PlayerStatus::BeingArrested
+                },
+                bool::True => {
+                    PlayerStatus::BeingMugged
+                }
             };
         }
 
-        return PlayerStatus::Normal(());
+        return PlayerStatus::Normal;
     }
 
     #[inline(always)]
     fn run(ref self: Risks, seed: felt252) -> bool {
-        occurs(seed, self.run)
+        occurs(seed, self.capture)
     }
 }
 
@@ -55,8 +63,8 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
 #[available_gas(1000000)]
 fn test_never_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, run: 0 };
-    let player_status = risks.travel(seed);
+    let mut risks = Risks { game_id: 0, location_id: 0, travel: 0, capture: 0 };
+    let player_status = risks.travel(seed, 0, 0);
 
     assert(player_status == PlayerStatus::Normal(()), 'event occured');
 }
@@ -65,8 +73,8 @@ fn test_never_occurs() {
 #[available_gas(1000000)]
 fn test_always_occurs() {
     let seed = pedersen::pedersen(1, 1);
-    let mut risks = Risks { game_id: 0, location_id: 0, travel: 100, run: 0 };
-    let player_status = risks.travel(seed);
+    let mut risks = Risks { game_id: 0, location_id: 0, travel: 100, capture: 0 };
+    let player_status = risks.travel(seed, 1, COPS_DRUG_THRESHOLD);
 
     assert(player_status != PlayerStatus::Normal(()), 'event did not occur');
 }

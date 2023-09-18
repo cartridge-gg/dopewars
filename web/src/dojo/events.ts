@@ -60,6 +60,9 @@ export interface DecisionEventData extends BaseEventData {
 export interface ConsequenceEventData extends BaseEventData {
   playerId: string;
   outcome: Outcome;
+  healthLoss: number;
+  drugLoss: number;
+  cashLoss: number;
 }
 
 export const parseEvent = (
@@ -110,6 +113,9 @@ export const parseEvent = (
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         outcome: Number(raw.data[2]),
+        healthLoss: Number(raw.data[3]),
+        drugLoss: Number(raw.data[4]),
+        cashLoss: Number(raw.data[5]),
       } as ConsequenceEventData;
     case RyoEvents.Traveled:
     case RyoEvents.Bought:

@@ -39,29 +39,28 @@ export const Inventory = ({ ...props }: StyleProps) => {
           },
         }}
       >
-        <HStack gap="10px" justify="center">
+        <HStack gap="5px" justify="center">
           {playerEntity?.drugCount === 0 ? (
             <Text color="neon.500">Your bag is empty</Text>
           ) : (
-            playerEntity?.drugs.map((drug, index) => {
+            playerEntity?.drugs.map((drug) => {
               return (
                 drug.quantity > 0 && (
-                  <HStack key={index} gap="10px">
-                    <HStack color="yellow.400">
-                      {getDrugById(drug.id).icon({ boxSize: "26" })}
-                      <Text>{drug.quantity}</Text>
-                    </HStack>
-                    {index < playerEntity.drugs.length - 1 && (
-                      <HStack>
-                        <Divider
-                          h="10px"
-                          orientation="vertical"
-                          borderWidth="1px"
-                          borderColor="neon.600"
-                        />
+                  <>
+                    <HStack gap="10px">
+                      <HStack color="yellow.400">
+                        {getDrugById(drug.id)?.icon({ boxSize: "26" })}
+                        <Text>{drug.quantity}</Text>
                       </HStack>
-                    )}
-                  </HStack>
+                    </HStack>
+                    <Divider
+                      _last={{ display: "none" }}
+                      h="10px"
+                      orientation="vertical"
+                      borderWidth="1px"
+                      borderColor="neon.600"
+                    />
+                  </>
                 )
               );
             })

@@ -62,13 +62,13 @@ flowchart TD
     C --> |Buys / Sells drugs on local markets|D[Select next location to travel to]
     D --> |Player travels without incident|END[Turn ends]
     D --> F[Player is Mugged]
-    F --> F1[Fight]
+    F --> F1[Pay]
     F --> F2[Run]
     F2 --> F12[Win] --> END
     F2 --> L[Lose]
     L --> |Player loses their stash|END
     D --> G[Chased by Cops]
-    G --> F1[Fight]
+    G --> F1[Pay]
     G --> F2[Run]
     F1 --> F12
     F1 --> L

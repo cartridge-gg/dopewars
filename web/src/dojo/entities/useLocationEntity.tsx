@@ -1,20 +1,13 @@
 import {
-  Name,
   Market,
   Risks,
   useLocationEntitiesQuery,
-  Entity,
   EntityEdge,
 } from "@/generated/graphql";
-import { useEffect, useState } from "react";
-import { num, shortString } from "starknet";
+import { useMemo } from "react";
+import { num } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
-
-export type DrugMarket = {
-  id: string; // id is hex encoded drug name
-  price: number;
-  marketPool: Market;
-};
+import { DrugMarket } from "../types";
 
 export class LocationEntity {
   id: string; // id is hex encoded location name
@@ -68,9 +61,6 @@ export class LocationEntity {
 
     if (!risksComponent || drugMarkets.length === 0) return undefined;
 
-    // sort by price
-    drugMarkets.sort((a, b) => a.price - b.price);
-
     return {
       id: locationId,
       risks: risksComponent,
@@ -91,8 +81,6 @@ export const useLocationEntity = ({
   gameId?: string;
   locationId?: string;
 }): LocationInterface => {
-  const [location, setLocation] = useState<LocationEntity>();
-
   const { data, isFetched } = useLocationEntitiesQuery(
     {
       gameId: gameId || "",
@@ -104,11 +92,8 @@ export const useLocationEntity = ({
     },
   );
 
-  useEffect(() => {
-    const location_ = LocationEntity.create(
-      data?.entities?.edges as EntityEdge[],
-    );
-    if (location_) setLocation(location_);
+  const location = useMemo(() => {
+    return LocationEntity.create(data?.entities?.edges as EntityEdge[]);
   }, [data]);
 
   return {

@@ -19,7 +19,8 @@ impl LocationImpl of LocationTrait {
         locations.span()
     }
 
-    fn random(seed: felt252) -> felt252 {
+    fn random() -> felt252 {
+        let seed = starknet::get_tx_info().unbox().transaction_hash;
         let locations = LocationImpl::all();
         let seed: u256 = seed.into();
         let len: u128 = locations.len().into();

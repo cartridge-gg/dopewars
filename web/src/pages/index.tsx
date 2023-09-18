@@ -31,7 +31,7 @@ import { useEffect, useState } from "react";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 14;
+const NUM_TURNS = 9;
 
 export default function Home() {
   const router = useRouter();
@@ -50,15 +50,13 @@ export default function Home() {
   );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-  const isLocal =  true;
-
+  const isLocal = true;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-
             {isGated ? (
               <VStack>
                 <HStack>
@@ -69,7 +67,6 @@ export default function Home() {
                   Get ready hustlers... Season II starts in September
                 </Text>
               </VStack>
-
             ) : (
               <>
                 <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
@@ -96,7 +93,7 @@ export default function Home() {
                     );
 
                     router.push(
-                      `/${gameId}/${getLocationById(locationId).slug}`,
+                      `/${gameId}/${getLocationById(locationId)?.slug}`,
                     );
                   }}
                 >
@@ -178,4 +175,3 @@ const Game = ({
     </HStack>
   </HStack>
 );
-

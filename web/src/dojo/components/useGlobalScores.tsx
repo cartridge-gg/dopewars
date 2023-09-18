@@ -1,5 +1,5 @@
 import { PlayerEdge, Name, useGlobalScoresQuery } from "@/generated/graphql";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { shortString } from "starknet";
 import { SCALING_FACTOR } from "..";
 
@@ -42,20 +42,16 @@ export class GlobalScores {
 }
 
 export const useGlobalScores = (offset?: number, limit?: number) => {
-  const [scores, setScores] = useState<Score[]>([]);
   // Gets top 100
   // TODO: paginate with cursor for more scores
   const { data, isFetched, refetch } = useGlobalScoresQuery({
     limit: limit || 100,
   });
 
-  useEffect(() => {
-    const scores = GlobalScores.create(
-      data?.playerComponents?.edges as PlayerEdge[],
+  const scores: Score[] = useMemo(() => {
+    return (
+      GlobalScores.create(data?.playerComponents?.edges as PlayerEdge[]) || []
     );
-    if (scores) {
-      setScores(scores);
-    }
   }, [data]);
 
   return {

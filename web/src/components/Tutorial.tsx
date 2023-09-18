@@ -44,7 +44,6 @@ const steps = [
   },
 ];
 
-
 const TutorialStep = ({
   step,
 }: {
@@ -95,7 +94,7 @@ const Tutorial = ({
   return (
     <Modal isOpen={isOpen} onClose={close} isCentered>
       <ModalOverlay />
-      <ModalContent maxH="70vh" maxWidth={"600px"} >
+      <ModalContent maxH="70vh" maxWidth={"600px"}>
         <ModalBody justifyContent="center" minH={"360px"}>
           <Box position={"relative"}>
             {steps.map((step) => {
@@ -105,7 +104,7 @@ const Tutorial = ({
           </Box>
         </ModalBody>
         <ModalFooter justifyContent="center" w="full" pb="30px">
-          <VStack  w="full">
+          <VStack w="full">
             <HStack gap="10px" mb="16px">
               {steps.map((step) => {
                 return (

@@ -19,7 +19,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,  
+  ModalFooter,
   UnorderedList,
   ListItem,
   Link,
@@ -33,12 +33,15 @@ import { ReactNode, useCallback, useState } from "react";
 export default function End() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { setName: submitSetName, isPending } = useSystems();
+  const { setName: submitSetName } = useSystems();
   const [name, setName] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
+
+    setIsSubmitting(true);
     await submitSetName(gameId, name);
     router.push("/");
   }, [name, gameId, router, submitSetName]);
@@ -126,7 +129,7 @@ export default function End() {
             <Button
               w={["full", "auto"]}
               onClick={onSubmitName}
-              isLoading={isPending}
+              isLoading={isSubmitting}
             >
               Submit
             </Button>
@@ -137,7 +140,9 @@ export default function End() {
         <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader textAlign="center" mt={1}>CREDITS</ModalHeader>
+            <ModalHeader textAlign="center" mt={1}>
+              CREDITS
+            </ModalHeader>
             <ModalBody mx->
               <UnorderedList pb={5}>
                 <ListItem>
@@ -171,7 +176,9 @@ export default function End() {
               </UnorderedList>
             </ModalBody>
             <ModalFooter justifyContent="stretch">
-              <Button w="full" onClick={onCreditClose}>Close</Button>
+              <Button w="full" onClick={onCreditClose}>
+                Close
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

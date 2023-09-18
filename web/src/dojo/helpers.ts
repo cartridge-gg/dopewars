@@ -19,6 +19,7 @@ import {
 import {
   Drug,
   DrugInfo,
+  DrugMarket,
   Location,
   LocationInfo,
   Outcome,
@@ -119,7 +120,7 @@ const drugs: DrugInfo[] = [
 
 export const outcomes: OutcomeInfo[] = [
   {
-    name: "Bribed the Cop",
+    name: "Paid the Cop",
     type: Outcome.Paid,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
@@ -129,17 +130,7 @@ export const outcomes: OutcomeInfo[] = [
     color: "yellow.400",
   },
   {
-    name: "Got Arrested",
-    type: Outcome.Captured,
-    status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/events/police_cruiser.gif",
-    description: "You lost 50% of all your drugs",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Captured, isInitial),
-    color: "red",
-  },
-  {
-    name: "Escaped the Cops",
+    name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/escaped.png",
@@ -148,27 +139,17 @@ export const outcomes: OutcomeInfo[] = [
     color: "neon.200",
   },
   {
-    name: "Fought the Gang",
-    type: Outcome.Fought,
-    status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/events/fought.png",
-    description: "You lost some health",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Fought, isInitial),
-    color: "yellow.400",
-  },
-  {
-    name: "Got Captured",
-    type: Outcome.Captured,
+    name: "Paid the Gang",
+    type: Outcome.Paid,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    description: "You lost 50% of all your cash",
+    description: "You paid the gang off",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Captured, isInitial),
-    color: "red",
+      getMuggerResponses(Outcome.Escaped, isInitial),
+    color: "neon.200",
   },
   {
-    name: "Escaped the Gang",
+    name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/escaped.png",
@@ -182,28 +163,28 @@ function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
 }
 
-export function getLocationByType(type: Location): LocationInfo {
-  return findBy<LocationInfo>(locations, "type", type) || locations[0];
+export function getLocationByType(type: Location) {
+  return findBy<LocationInfo>(locations, "type", type);
 }
 
-export function getLocationById(id: string): LocationInfo {
-  return findBy<LocationInfo>(locations, "id", id) || locations[0];
+export function getLocationById(id: string) {
+  return findBy<LocationInfo>(locations, "id", id);
 }
 
-export function getLocationBySlug(slug: string): LocationInfo {
-  return findBy<LocationInfo>(locations, "slug", slug) || locations[0];
+export function getLocationBySlug(slug: string) {
+  return findBy<LocationInfo>(locations, "slug", slug);
 }
 
-export function getDrugById(id: string): DrugInfo {
-  return findBy<DrugInfo>(drugs, "id", id) || drugs[0];
+export function getDrugById(id: string) {
+  return findBy<DrugInfo>(drugs, "id", id);
 }
 
-export function getDrugBySlug(slug: string): DrugInfo {
-  return findBy<DrugInfo>(drugs, "slug", slug) || drugs[0];
+export function getDrugBySlug(slug: string) {
+  return findBy<DrugInfo>(drugs, "slug", slug);
 }
 
-export function getDrugByType(type: Drug): DrugInfo {
-  return findBy<DrugInfo>(drugs, "type", type) || drugs[0];
+export function getDrugByType(type: Drug) {
+  return findBy<DrugInfo>(drugs, "type", type);
 }
 
 export function getOutcomeInfo(
@@ -215,4 +196,30 @@ export function getOutcomeInfo(
       return item.status === status && item.type === type;
     }) || outcomes[0]
   );
+}
+
+export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
+  if (!drugMarkets) {
+    return [];
+  }
+
+  const ludes = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Ludes,
+  )!;
+  const speed = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Speed,
+  )!;
+  const weed = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Weed,
+  )!;
+  const acid = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Acid,
+  )!;
+  const heroin = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Heroin,
+  )!;
+  const cocaine = drugMarkets.find(
+    (drug) => getDrugById(drug.id)?.type === Drug.Cocaine,
+  )!;
+  return [ludes, speed, weed, acid, heroin, cocaine];
 }

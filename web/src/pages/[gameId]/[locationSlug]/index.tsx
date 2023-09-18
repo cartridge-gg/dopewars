@@ -12,14 +12,12 @@ import {
   SimpleGrid,
   StyleProps,
   useDisclosure,
-  useBreakpointValue,
   Flex,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import { Sounds, playSound } from "@/hooks/sound";
 import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
@@ -32,13 +30,14 @@ import {
   getDrugById,
   getLocationById,
   getLocationBySlug,
+  sortDrugMarkets,
 } from "@/dojo/helpers";
 import { motion } from "framer-motion";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const locationId = getLocationBySlug(router.query.locationSlug as string).id;
+  const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
   const { account } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
@@ -58,7 +57,7 @@ export default function Location() {
       // check if player at right location
       if (locationId !== playerEntity.locationId) {
         router.replace(
-          `/${gameId}/${getLocationById(playerEntity.locationId).slug}`,
+          `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
         );
         return;
       }
@@ -82,7 +81,7 @@ export default function Location() {
         title: shortString.decodeShortString(locationEntity.id),
         prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${
-          getLocationById(locationEntity.id).slug
+          getLocationById(locationEntity.id)?.slug
         }.png`,
       }}
     >
@@ -103,8 +102,8 @@ export default function Location() {
           Market
         </Text>
         <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
-          {locationEntity.drugMarkets.map((drug, index) => {
-            const drugInfo = getDrugById(drug.id);
+          {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
+            const drugInfo = getDrugById(drug.id)!;
             const canBuy =
               drug.price <= playerEntity.cash &&
               playerEntity.drugCount < playerEntity.bagLimit;
