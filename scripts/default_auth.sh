@@ -2,8 +2,12 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-#export RPC_URL="http://localhost:5050";
-export RPC_URL="https://api.cartridge.gg/x/rollyourown/katana";
+if [ $# -ge 1 ] && [ $1 == "local" ]
+then
+    export RPC_URL="http://localhost:5050";
+else
+    export RPC_URL="https://api.cartridge.gg/x/rollyourown/katana";
+fi
 export WORLD_ADDRESS="0x3c3dfeb374720dfd73554dc2b9e0583cb9668efb3055d07d1533afa5d219fd5";
 
 # enable system -> component authorizations
