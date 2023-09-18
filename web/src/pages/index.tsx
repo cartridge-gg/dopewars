@@ -29,7 +29,6 @@ import { useState } from "react";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 
-
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
@@ -43,6 +42,13 @@ export default function Home() {
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGated, setIsGated] = useState(false);
+
+  useEffect(
+    () =>
+      setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+    [],
+  );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const isLocal =  true;
@@ -53,7 +59,8 @@ export default function Home() {
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            {!isLocal && (
+
+            {isGated ? (
               <VStack>
                 <HStack>
                   <Alert />
@@ -63,9 +70,7 @@ export default function Home() {
                   Get ready hustlers... Season II starts in September
                 </Text>
               </VStack>
-            )}
-
-            {isLocal && (
+            ) : (
               <>
                 <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
                   Tutorial
@@ -99,11 +104,10 @@ export default function Home() {
                 </Button>
               </>
             )}
-
           </HStack>
         </Card>
 
-        {isLocal && (
+        {!isGated && (
           <>
             <Text>HALL OF FAME</Text>
             <VStack
