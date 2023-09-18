@@ -8,7 +8,6 @@ import {
   Text,
   Divider,
   useEventListener,
-  SimpleGrid,
   Card,
   Grid,
   GridItem,
@@ -40,8 +39,7 @@ export default function Travel() {
   const [targetId, setTargetId] = useState<string>("");
   const [currentLocationId, setCurrentLocationId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { isOpen: isPercentage, onToggle: onTogglePercentage } =
-    useDisclosure();
+  const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
 
   const { toast } = useToast();
   const { account } = useDojo();
@@ -145,7 +143,8 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <Map
-            highlight={getLocationById(targetId)?.type}
+            target={getLocationById(targetId)?.type}
+            current={getLocationById(currentLocationId)?.type}
             onSelect={(selected) => {
               setTargetId(getLocationByType(selected)!.id);
             }}
@@ -174,7 +173,7 @@ export default function Travel() {
           <Text
             cursor="pointer"
             onClick={() => {
-              onTogglePercentage();
+              togglePercentage();
             }}
             fontSize="18px"
             userSelect="none"

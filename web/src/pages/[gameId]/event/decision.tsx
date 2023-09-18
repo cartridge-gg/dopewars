@@ -107,7 +107,7 @@ export default function Decision() {
           );
       }
     },
-    [gameId, nextLocation, router, playerEntity, addEncounter, decide],
+    [gameId, nextLocation, router, playerEntity, addEncounter, decide, toast],
   );
 
   if (!playerEntity || !router.isReady) {

@@ -20,19 +20,21 @@ const coordinate: CoordinateType = {
 };
 
 export const Map = ({
-  highlight,
+  target,
+  current,
   onSelect,
 }: {
-  highlight?: Location;
+  target?: Location;
+  current?: Location;
   onSelect: (selected: Location) => void;
 }) => {
   const [scope, animate] = useAnimate();
   const isMobile = useBreakpointValue([true, false]);
 
   useEffect(() => {
-    if (highlight !== undefined) {
+    if (target !== undefined) {
       const animation = isMobile
-        ? { scale: 1.75, ...coordinate[highlight] }
+        ? { scale: 1.75, ...coordinate[target] }
         : { scale: 1, x: 0, y: 0 };
       animate(
         scope.current,
@@ -43,7 +45,7 @@ export const Map = ({
         },
       );
     }
-  }, [highlight, isMobile, animate, scope]);
+  }, [target, isMobile, animate, scope]);
 
   return (
     <Flex
@@ -69,8 +71,7 @@ export const Map = ({
         alt="ryo map"
       />
 
-      <Markers location={highlight} />
-      <Outline location={highlight} />
+      <Outline target={target} current={current} />
       <HitBox onSelect={onSelect} />
     </Flex>
   );
