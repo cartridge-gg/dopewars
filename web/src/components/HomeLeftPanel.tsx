@@ -36,7 +36,7 @@ const steps = [
   },
   {
     step: 3,
-    title: "Get rekt",
+    title: "???",
     desc: "A short description of this step, maybe one to two sentences. Here is one.",
   },
   {
@@ -88,7 +88,7 @@ const HomeStep = ({
               </Heading>
             </VStack>
           </HStack>
-          <Text p="10px">{step.desc}</Text>
+          {/* <Text p="10px">{step.desc}</Text> */}
         </VStack>
       </HStack>
     </>

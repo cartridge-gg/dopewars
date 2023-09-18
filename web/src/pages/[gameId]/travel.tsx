@@ -10,7 +10,6 @@ import {
   useEventListener,
   Spacer,
   Image,
-  keyframes,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,26 +22,6 @@ import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
 import { getLocationById, getLocationByType, locations } from "@/dojo/helpers";
 import { LocationInfo } from "@/dojo/types";
-
-const zoomAnim = keyframes`  
-  0% {
-    transform:scale(0.15);
-    opacity: 0.1;
-  } 
-  20% {
-   opacity: 0.2;
-  }   
-  50% {
-   opacity: 0.3;
-  }  
-  80% {
-   opacity: 0.6;
-  }   
-  100% {
-    transform:scale(1);
-    opacity: 1;
-  }   
-`;
 
 export default function Travel() {
   const router = useRouter();
@@ -135,100 +114,83 @@ export default function Travel() {
       showBack={true}
     >
       <>
-        {isSubmitting && (
-          <VStack height="100%" justifyContent="center">
-            {/* TODO : replace with cool driving anim ? */}
-            {targetId && (
-              <Image
-                src={`/images/locations/${getLocationById(targetId).slug}.png`}
-                animation={`${zoomAnim} 1 5s ease-out`}
-                alt="destination"
-              />
-            )}
-          </VStack>
-        )}
-
-        {!isSubmitting && (
-          <>
-            <VStack w="full" my="auto" display={["none", "flex"]}>
-              <Car boxSize="60px" />
-              {locations.map((location, index) => (
-                <Location
-                  {...location}
-                  key={index}
-                  name={location.name}
-                  isCurrent={location.id === currentLocationId}
-                  selected={location.id === targetId}
-                  onClick={() => setTargetId(location.id)}
-                />
-              ))}
-              <Spacer />
-              <Button
-                w={["full", "250px"]}
-                isDisabled={!targetId || targetId === currentLocationId}
-                isLoading={isSubmitting && !txError}
-                onClick={onContinue}
-              >
-                {targetId === currentLocationId
-                  ? "Current Location"
-                  : `Travel to ${getLocationById(targetId).name}`}
-              </Button>
-            </VStack>
-            <VStack
-              display={["flex", "none"]}
+        <VStack w="full" my="auto" display={["none", "flex"]}>
+          <Car boxSize="60px" />
+          {locations.map((location, index) => (
+            <Location
+              {...location}
+              key={index}
+              name={location.name}
+              isCurrent={location.id === currentLocationId}
+              selected={location.id === targetId}
+              onClick={() => setTargetId(location.id)}
+            />
+          ))}
+          <Spacer />
+          <Button
+            w={["full", "250px"]}
+            isDisabled={!targetId || targetId === currentLocationId}
+            isLoading={isSubmitting && !txError}
+            onClick={onContinue}
+          >
+            {targetId === currentLocationId
+              ? "Current Location"
+              : `Travel to ${getLocationById(targetId).name}`}
+          </Button>
+        </VStack>
+        <VStack
+          display={["flex", "none"]}
+          w="full"
+          h="160px"
+          p="24px"
+          position="fixed"
+          bottom="0"
+          right="0"
+          spacing="0"
+          pointerEvents="none"
+          justify="flex-end"
+          background="linear-gradient(transparent, #172217)"
+          gap="14px"
+        >
+          <HStack w="full" pointerEvents="all">
+            <Arrow
+              style="outline"
+              direction="left"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={back}
+            />
+            <HStack
+              p={2}
+              bg="neon.700"
+              clipPath={`polygon(${generatePixelBorderPath()})`}
               w="full"
-              h="160px"
-              p="24px"
-              position="fixed"
-              bottom="0"
-              right="0"
-              spacing="0"
-              pointerEvents="none"
-              justify="flex-end"
-              background="linear-gradient(transparent, #172217)"
-              gap="14px"
+              justify="center"
             >
-              <HStack w="full" pointerEvents="all">
-                <Arrow
-                  style="outline"
-                  direction="left"
-                  boxSize="48px"
-                  userSelect="none"
-                  cursor="pointer"
-                  onClick={back}
-                />
-                <HStack
-                  p={2}
-                  bg="neon.700"
-                  clipPath={`polygon(${generatePixelBorderPath()})`}
-                  w="full"
-                  justify="center"
-                >
-                  <Text>{getLocationById(targetId).name}</Text>
-                </HStack>
-                <Arrow
-                  style="outline"
-                  direction="right"
-                  boxSize="48px"
-                  userSelect="none"
-                  cursor="pointer"
-                  onClick={next}
-                />
-              </HStack>
-              <Button
-                w={["full", "auto"]}
-                pointerEvents="all"
-                isDisabled={!targetId || targetId === currentLocationId}
-                isLoading={isSubmitting && !txError}
-                onClick={onContinue}
-              >
-                {targetId === currentLocationId
-                  ? "Current Location"
-                  : `Travel to ${getLocationById(targetId).name}`}
-              </Button>
-            </VStack>
-          </>
-        )}
+              <Text>{getLocationById(targetId).name}</Text>
+            </HStack>
+            <Arrow
+              style="outline"
+              direction="right"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={next}
+            />
+          </HStack>
+          <Button
+            w={["full", "auto"]}
+            pointerEvents="all"
+            isDisabled={!targetId || targetId === currentLocationId}
+            isLoading={isSubmitting && !txError}
+            onClick={onContinue}
+          >
+            {targetId === currentLocationId
+              ? "Current Location"
+              : `Travel to ${getLocationById(targetId).name}`}
+          </Button>
+        </VStack>
       </>
     </Layout>
   );
