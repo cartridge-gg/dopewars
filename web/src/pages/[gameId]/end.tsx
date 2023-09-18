@@ -56,7 +56,9 @@ export default function End() {
 
   const isDead = playerEntity?.health === 0;
 
-  const turnRemaining = isDead ? playerEntity?.turnsRemainingOnDeath: playerEntity?.turnsRemaining
+  const turnRemaining = isDead
+    ? playerEntity?.turnsRemainingOnDeath
+    : playerEntity?.turnsRemaining;
   const day = (gameEntity?.maxTurns || 1_000) - (turnRemaining || 0);
 
   const onSubmitName = useCallback(async () => {
@@ -132,7 +134,7 @@ export default function End() {
               >
                 <Roll /> Credits
               </Button>
-              <Button
+              {/* <Button
                 variant="pixelated"
                 flex="1"
                 onClick={() => {
@@ -140,7 +142,22 @@ export default function End() {
                 }}
               >
                 <Roll /> Home
-              </Button>
+              </Button> */}
+
+              <Link
+                href="https://forms.gle/5hnEhybAiMzKsEx89"
+                isExternal
+                flex="1"
+                textDecoration="none"
+                _hover={{
+                  textDecoration: "none",
+                }}
+                display="flex"
+              >
+                <Button variant="pixelated" w="100%">
+                  GIVE FEEDBACK
+                </Button>
+              </Link>
             </HStack>
           </VStack>
           <VStack flex="1" my="auto" justify="space-between">
