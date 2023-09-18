@@ -143,9 +143,8 @@ mod create_game {
 
         // emit game created
         emit!(
-            ctx.world, GameCreated {
-                game_id, creator: ctx.origin, start_time, max_players, max_turns
-            }
+            ctx.world,
+            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
         );
 
         (game_id, ctx.origin)

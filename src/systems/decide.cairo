@@ -63,10 +63,10 @@ mod decide {
                 let mut risks = get!(ctx.world, (game_id, player.location_id).into(), Risks);
                 let seed = starknet::get_tx_info().unbox().transaction_hash;
                 match risks.run(seed) {
-                    bool::False => (
+                    bool::False => (Outcome::Escaped, 0, 0, 0),
+                    bool::True => (
                         Outcome::Captured, 0, 0, HEALTH_IMPACT * (1 + player.run_attempts)
-                    ),
-                    bool::True => (Outcome::Escaped, 0, 0, 0)
+                    )
                 }
             },
             Action::Pay => {
@@ -109,9 +109,8 @@ mod decide {
 
         emit!(ctx.world, Decision { game_id, player_id, action });
         emit!(
-            ctx.world, Consequence {
-                game_id, player_id, outcome, health_loss, drug_loss, cash_loss
-            }
+            ctx.world,
+            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
         );
     }
 

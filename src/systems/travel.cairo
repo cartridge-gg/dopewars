@@ -69,7 +69,8 @@ mod travel {
         set!(ctx.world, (player));
 
         emit!(
-            ctx.world, Traveled {
+            ctx.world,
+            Traveled {
                 game_id, player_id, from_location: player.location_id, to_location: next_location_id
             }
         );
