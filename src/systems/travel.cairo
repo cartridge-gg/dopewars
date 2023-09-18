@@ -47,11 +47,11 @@ mod travel {
         assert(game.tick(), 'game cannot progress');
 
         let player_id = ctx.origin;
-        let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
+        let mut player: Player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.can_continue(), 'player cannot travel');
         assert(player.location_id != next_location_id, 'already at location');
 
-        let mut risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
+        let mut risks: Risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
         let seed = starknet::get_tx_info().unbox().transaction_hash;
         player.status = risks.travel(seed, player.cash, player.drug_count);
         if player.status != PlayerStatus::Normal {
@@ -69,8 +69,7 @@ mod travel {
         set!(ctx.world, (player));
 
         emit!(
-            ctx.world,
-            Traveled {
+            ctx.world, Traveled {
                 game_id, player_id, from_location: player.location_id, to_location: next_location_id
             }
         );

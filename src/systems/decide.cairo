@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
+    use rollyourown::constants::{COPS_DRUG_THRESHOLD, HEALTH_IMPACT, GANGS_PAYMENT};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
@@ -100,6 +100,7 @@ mod decide {
         if health_loss >= player.health {
             player.health = 0;
             player.turns_remaining = 0;
+            player.turns_remaining_on_death = player.turns_remaining;
             outcome = Outcome::Died;
         } else {
             player.health -= health_loss
@@ -109,10 +110,12 @@ mod decide {
 
         emit!(ctx.world, Decision { game_id, player_id, action });
         emit!(
-            ctx.world,
-            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
+            ctx.world, Consequence {
+                game_id, player_id, outcome, health_loss, drug_loss, cash_loss
+            }
         );
     }
+
 
     fn cops_payment(drug_count: u32) -> u128 {
         if drug_count < COPS_DRUG_THRESHOLD + 20 {
@@ -125,6 +128,7 @@ mod decide {
             20000_0000 // $20000
         }
     }
+
 
     fn take_drugs(
         ctx: Context, game_id: u32, player_id: ContractAddress, percentage: usize
