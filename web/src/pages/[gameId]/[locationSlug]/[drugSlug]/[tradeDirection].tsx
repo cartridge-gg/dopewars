@@ -13,9 +13,7 @@ import { useRouter } from "next/router";
 import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
 import { Footer } from "@/components/Footer";
-
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
-
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
@@ -28,7 +26,6 @@ import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo, DrugMarket } from "@/dojo/types";
 import { useDojo } from "@/dojo";
-import { cardPixelatedStyle } from "@/theme/styles";
 
 export default function Market() {
   const router = useRouter();
@@ -131,7 +128,7 @@ export default function Market() {
     >
       <VStack boxSize="full" justify="center">
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
+          <Box position="relative" my={[0, 6]} w={[160, 240]} h={[160, 240]}>
             <Image
               src={`/images/drugs/${drug.slug}.png`}
               alt={drug.name}

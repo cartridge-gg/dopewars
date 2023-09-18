@@ -16,8 +16,6 @@ import { useToast } from "@/hooks/toast";
 import { Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
 
-const COPS_DRUG_THRESHOLD = 5;
-
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;

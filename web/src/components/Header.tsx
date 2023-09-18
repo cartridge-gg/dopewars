@@ -72,20 +72,14 @@ const Header = ({ back }: HeaderProps) => {
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
-            h={["80px", "40px"]}
+            h="40px"
             w="auto"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
             clipPath={`polygon(${generatePixelBorderPath()})`}
           >
-            <Flex
-              w="full"
-              flexDirection={["column-reverse", "row"]}
-              align="center"
-              justify="center"
-              gap="10px"
-            >
+            <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
                 <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
               </HStack>
@@ -94,35 +88,10 @@ const Header = ({ back }: HeaderProps) => {
                   orientation="vertical"
                   borderColor="neon.600"
                   h="12px"
-                  visibility={["hidden", "visible"]}
-                />
-                <HStack color={inventory > 0 ? "yellow.400" : "auto"}>
-                  <Bag />
-                  <Text>{inventory === 100 ? "Full" : `${inventory}/100`}</Text>
-                </HStack>
-                <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
                 />
                 <HStack>
                   <Heart /> <Text>{playerEntity.health}</Text>
                 </HStack>
-                {/* <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                <HStack>
-                  <Clock />
-                  <Text>
-                    {playerEntity.turnsRemaining === 0
-                      ? "Final"
-                      : `${
-                          gameEntity.maxTurns - playerEntity.turnsRemaining + 1
-                        }/${gameEntity.maxTurns + 1}`}
-                  </Text>
-                </HStack> */}
               </HStack>
             </Flex>
           </HStack>
