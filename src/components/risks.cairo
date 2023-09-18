@@ -2,7 +2,7 @@ use traits::{Into, TryInto};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-use rollyourown::constants::{SCALING_FACTOR, COPS_DRUG_THRESHOLD, ENCOUNTER_BIAS_GANGS};
+use rollyourown::constants::{SCALING_FACTOR, COPS_DRUG_THRESHOLD, GANGS_CASH_THRESHOLD, ENCOUNTER_BIAS_GANGS};
 use rollyourown::PlayerStatus;
 
 #[derive(Component, Copy, Drop, Serde)]
@@ -28,12 +28,16 @@ impl RisksImpl of RisksTrait {
             return match result <= ENCOUNTER_BIAS_GANGS {
                 bool::False => {
                     if drug_count < COPS_DRUG_THRESHOLD {
-                        return PlayerStatus::BeingMugged;
+                        return PlayerStatus::Normal;
                     }
 
                     PlayerStatus::BeingArrested
                 },
                 bool::True => {
+                    if cash <= GANGS_CASH_THRESHOLD {
+                        return PlayerStatus::Normal;
+                    }
+
                     PlayerStatus::BeingMugged
                 }
             };

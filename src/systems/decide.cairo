@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
+    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
@@ -64,23 +64,19 @@ mod decide {
                 let seed = starknet::get_tx_info().unbox().transaction_hash;
                 match risks.run(seed) {
                     bool::False => (Outcome::Escaped, 0, 0, 0),
-                    bool::True => (
-                        Outcome::Captured, 0, 0, HEALTH_IMPACT * (1 + player.run_attempts)
-                    )
+                    bool::True => (Outcome::Captured, 0, 0, HEALTH_IMPACT)
                 }
             },
             Action::Pay => {
                 match player.status {
                     PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                     PlayerStatus::BeingMugged => {
-                        let drug_loss = take_drugs(ctx, game_id, player_id, GANGS_PAYMENT);
                         let cash_loss = (player.cash * GANGS_PAYMENT.into()) / 100;
-                        (Outcome::Paid, cash_loss, drug_loss, 0)
+                        (Outcome::Paid, cash_loss, 0, 0)
                     },
                     PlayerStatus::BeingArrested => {
-                        let cash_loss = cops_payment(player.drug_count);
-                        assert(cash_loss <= player.cash, 'not enough cash to pay cops');
-                        (Outcome::Paid, cash_loss, 0, 0)
+                        let drug_loss = take_drugs(ctx, game_id, player_id, COPS_PAYMENT);
+                        (Outcome::Paid, 0, drug_loss, 0)
                     }
                 }
             },
