@@ -8,7 +8,7 @@ import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect,  useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
