@@ -14,10 +14,11 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  VStack,
 } from "@chakra-ui/react";
 import Input from "@/components/Input";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
@@ -34,6 +35,8 @@ const Leaderboard = ({
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const { account } = useDojo();
+ // TODO : use when supported on torii
+ // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
   const { scores, refetch } = useGlobalScores();
   const { setName: submitSetName, isPending } = useSystems();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,6 +44,24 @@ const Leaderboard = ({
   const [overlayDimiss, setOverlayDismiss] = useState(true);
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
+
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [visibleScores, setVisibleScores] = useState(10);
+
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    setHasNextPage(visibleScores < scores.length);
+  }, [scores,visibleScores]);
+
+
+  const fetchNextPage = useCallback(() => {
+    setVisibleScores(visibleScores+10)
+    setTimeout(() => {
+      listRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    },150)
+  });
+
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
@@ -59,11 +80,16 @@ const Leaderboard = ({
 
   return (
     <>
-      <UnorderedList boxSize="full" variant="dotted" {...props}>
+    <VStack {...props} w="full" h="100%">
+      <UnorderedList boxSize="full" variant="dotted" h="auto" maxH="calc(100% - 50px)" overflowY="auto"  sx={{
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}>
         {scores ? (
-          scores
-            ?.sort((a, b) => b.cash - a.cash)
-            .map((score, index) => {
+          scores.slice(0,visibleScores)
+            ?.map((score, index) => {
               const isOwn = score.address === account?.address;
               const color = isOwn
                 ? colors.yellow["400"].toString()
@@ -84,12 +110,13 @@ const Leaderboard = ({
                     setTargetGameId(score.gameId);
                     onOpen();
                   }}
+                  ref={index === visibleScores-1 ? listRef : undefined}
                 >
                   <HStack mr={3}>
                     <Text
                       w="30px"
                       flexShrink={0}
-                      display={["none", "block"]}
+                      // display={["none", "block"]}
                       whiteSpace="nowrap"
                     >
                       {index + 1}.
@@ -133,6 +160,13 @@ const Leaderboard = ({
           </Text>
         )}
       </UnorderedList>
+
+        {hasNextPage && (
+          <Button onClick={fetchNextPage}>Load More</Button>
+        )}
+        </VStack>
+      
+       {/* Naming modale */}
       <Modal
         closeOnOverlayClick={overlayDimiss}
         isOpen={isOpen}
