@@ -65,13 +65,12 @@ export default function Travel() {
         locationPrices.get(currentLocationId),
       );
       const targetMarkets = sortDrugMarkets(locationPrices.get(targetId));
-      return targetMarkets.map((drug, index) => {
-        return {
-          id: drug.id,
-          price: drug.price,
-          targetDiff: drug.price - currentMarkets[index].price,
-        };
-      });
+
+      return targetMarkets.map((drug, index) => ({
+        id: drug.id,
+        price: drug.price,
+        targetDiff: drug.price - currentMarkets[index].price,
+      }));
     }
 
     return [];
@@ -112,18 +111,16 @@ export default function Travel() {
     if (targetId) {
       setIsSubmitting(true);
       const { event, hash } = await travel(gameId, targetId);
-
       if (event) {
-        router.push(`/${gameId}/event/decision?nextId=${targetId}`);
-      } else {
-        toast(
-          `You've traveled to ${getLocationById(targetId)?.name}`,
-          Car,
-          `http://amazing_explorer/${hash}`,
-        );
-
-        router.push(`/${gameId}/turn`);
+        return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
+
+      toast(
+        `You've traveled to ${getLocationById(targetId)?.name}`,
+        Car,
+        `http://amazing_explorer/${hash}`,
+      );
+      router.push(`/${gameId}/turn`);
     }
   }, [targetId, router, gameId, travel, toast]);
 
@@ -136,15 +133,14 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <Map
-            target={getLocationById(targetId)?.type}
+            highlight={getLocationById(targetId)?.type}
             onSelect={(selected) => {
               setTargetId(getLocationByType(selected)!.id);
             }}
           />
         ),
       }}
-      showMap={true}
-      showBack={true}
+      showBack
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="16px">
         {/* <Car boxSize="60px" />
