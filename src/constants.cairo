@@ -9,6 +9,9 @@ const COPS_DRUG_THRESHOLD: usize = 5; // cops encounter threshold
 const HEALTH_IMPACT: u8 = 10;
 const GANGS_PAYMENT: usize = 20;
 
+// consequences
+const BASE_PAYMENT: u128 = 400_0000; // base payment is $400
+
 // starting stats
 const STARTING_CASH: u128 = 2000_0000; // $2000
 const STARTING_BAG_LIMIT: usize = 100; // inventory size

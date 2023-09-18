@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useDojo } from "..";
 import { BaseEventData, parseEvent, RyoEvents } from "../events";
 import { Action } from "../types";
+import { shortString } from "starknet";
 
 export interface SystemsInterface {
   create: (
@@ -41,7 +42,7 @@ export interface SystemExecuteResult {
 export const useSystems = (): SystemsInterface => {
   const { execute, account, error, isPending } = useDojo();
 
-  const executeAndReciept = useCallback(
+  const executeAndReceipt = useCallback(
     async (method: string, params: Array<string | number>) => {
       if (!account) {
         throw new Error("No account connected");
@@ -60,7 +61,7 @@ export const useSystems = (): SystemsInterface => {
 
   const create = useCallback(
     async (startTime: number, maxPlayers: number, maxTurns: number) => {
-      const receipt = await executeAndReciept("create_game", [
+      const receipt = await executeAndReceipt("create_game", [
         startTime,
         maxPlayers,
         maxTurns,
@@ -76,12 +77,12 @@ export const useSystems = (): SystemsInterface => {
         event,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const travel = useCallback(
     async (gameId: string, locationId: string) => {
-      const receipt = await executeAndReciept("travel", [gameId, locationId]);
+      const receipt = await executeAndReceipt("travel", [gameId, locationId]);
 
       const hash =
         "transaction_hash" in receipt ? receipt.transaction_hash : "";
@@ -95,12 +96,12 @@ export const useSystems = (): SystemsInterface => {
 
       return result;
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const join = useCallback(
     async (gameId: string) => {
-      const receipt = await executeAndReciept("join_game", [gameId]);
+      const receipt = await executeAndReceipt("join_game", [gameId]);
 
       const event = parseEvent(receipt, RyoEvents.PlayerJoined);
       const hash =
@@ -111,7 +112,7 @@ export const useSystems = (): SystemsInterface => {
         event,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const buy = useCallback(
@@ -121,7 +122,7 @@ export const useSystems = (): SystemsInterface => {
       drugId: string,
       quantity: number,
     ) => {
-      const receipt = await executeAndReciept("buy", [
+      const receipt = await executeAndReceipt("buy", [
         gameId,
         locationId,
         drugId,
@@ -134,7 +135,7 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const sell = useCallback(
@@ -144,7 +145,7 @@ export const useSystems = (): SystemsInterface => {
       drugId: string,
       quantity: number,
     ) => {
-      const receipt = await executeAndReciept("sell", [
+      const receipt = await executeAndReceipt("sell", [
         gameId,
         locationId,
         drugId,
@@ -157,12 +158,15 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const setName = useCallback(
     async (gameId: string, playerName: string) => {
-      const receipt = await executeAndReciept("set_name", [gameId, playerName]);
+      // not working if name is number only
+      const name =  shortString.encodeShortString(playerName);
+      debugger
+      const receipt = await executeAndReceipt("set_name", [gameId, name]);
       const hash =
         "transaction_hash" in receipt ? receipt.transaction_hash : "";
 
@@ -170,18 +174,18 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   const decide = useCallback(
     async (gameId: string, action: Action, nextLocationId: string) => {
-      const receipt = await executeAndReciept("decide", [
+      const receipt = await executeAndReceipt("decide", [
         gameId,
         action,
         nextLocationId,
       ]);
 
-      const event = parseEvent(receipt, RyoEvents.Consqeuence);
+      const event = parseEvent(receipt, RyoEvents.Consequence);
       const hash =
         "transaction_hash" in receipt ? receipt.transaction_hash : "";
       return {
@@ -189,7 +193,7 @@ export const useSystems = (): SystemsInterface => {
         event,
       };
     },
-    [executeAndReciept],
+    [executeAndReceipt],
   );
 
   return {

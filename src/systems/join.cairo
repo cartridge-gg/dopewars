@@ -12,7 +12,7 @@ mod join_game {
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
+        STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };
 
     #[event]
@@ -52,6 +52,7 @@ mod join_game {
             drug_count: 0,
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: game.max_turns,
+            turns_remaining_on_death: 0
         };
 
         set!(ctx.world, (game, player));

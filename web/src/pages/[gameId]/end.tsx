@@ -29,6 +29,11 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { ReactNode, useCallback, useState } from "react";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { Calendar } from "@/components/icons/archive";
+import { Skull, Heart } from "@/components/icons";
+import { formatCash } from "@/utils/ui";
 
 export default function End() {
   const router = useRouter();
@@ -37,6 +42,22 @@ export default function End() {
   const [name, setName] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
+
+  const { account } = useDojo();
+
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: account?.address,
+  });
+
+  const { game: gameEntity } = useGameEntity({
+    gameId,
+  });
+
+  const isDead = playerEntity?.health === 0;
+
+  const turnRemaining = isDead ? playerEntity?.turnsRemainingOnDeath: playerEntity?.turnsRemaining
+  const day = (gameEntity?.maxTurns || 1_000) - (turnRemaining || 0);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
@@ -64,6 +85,16 @@ export default function End() {
         <Header />
         <Container>
           <VStack flex={["0", "1"]} my="auto">
+            {isDead && (
+              <Text
+                fontSize="11px"
+                fontFamily="broken-console"
+                padding="0.5rem 0.5rem 0.25rem"
+              >
+                You died ...
+              </Text>
+            )}
+
             <Heading fontSize={["40px", "48px"]} fontWeight="normal">
               Game Over
             </Heading>
@@ -72,13 +103,24 @@ export default function End() {
                 <Image src="/images/trophy.gif" alt="winner" />
               </VStack>
               <VStack flex="1">
-                <StatsItem text="Xth place" icon={<Trophy />} />
+                {/* <StatsItem text="Xth place" icon={<Trophy />} />
+                <Divider borderColor="neon.600" /> */}
+                <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
-                <StatsItem text="$$$" icon={<Gem />} />
+                <StatsItem
+                  text={`${formatCash(playerEntity?.cash || 0)}`}
+                  icon={<Gem />}
+                />
+                <Divider borderColor="neon.600" />
+                <StatsItem
+                  text={`${playerEntity?.health} Health`}
+                  icon={isDead ? <Skull /> : <Heart />}
+                />
+                {/* 
                 <Divider borderColor="neon.600" />
                 <StatsItem text="X Muggings" icon={<Pistol />} />
                 <Divider borderColor="neon.600" />
-                <StatsItem text="X Arrest" icon={<Arrest />} />
+                <StatsItem text="X Arrest" icon={<Arrest />} /> */}
               </VStack>
             </HStack>
 

@@ -19,7 +19,7 @@ mod create_game {
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::components::market::{MarketTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH,
+         TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH,
         STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
@@ -65,6 +65,7 @@ mod create_game {
             drug_count: 0,
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: max_turns,
+            turns_remaining_on_death: 0
         };
 
         let game = Game {
