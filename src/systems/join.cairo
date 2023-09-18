@@ -11,9 +11,7 @@ mod join_game {
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::constants::{
-        STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
-    };
+    use rollyourown::constants::{STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT};
 
     #[event]
     #[derive(Drop, starknet::Event)]

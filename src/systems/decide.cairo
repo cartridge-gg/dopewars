@@ -8,7 +8,7 @@ mod decide {
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{ COPS_DRUG_THRESHOLD,HEALTH_IMPACT,GANGS_PAYMENT};
+    use rollyourown::constants::{COPS_DRUG_THRESHOLD, HEALTH_IMPACT, GANGS_PAYMENT};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
@@ -53,7 +53,7 @@ mod decide {
         cash_loss: u128
     }
 
-      fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
+    fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
         let player_id = ctx.origin;
         let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal, 'player response not needed');
@@ -110,14 +110,14 @@ mod decide {
 
         emit!(ctx.world, Decision { game_id, player_id, action });
         emit!(
-            ctx.world,
-            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
+            ctx.world, Consequence {
+                game_id, player_id, outcome, health_loss, drug_loss, cash_loss
+            }
         );
     }
-  
 
 
-      fn cops_payment(drug_count: u32) -> u128 {
+    fn cops_payment(drug_count: u32) -> u128 {
         if drug_count < COPS_DRUG_THRESHOLD + 20 {
             1000_0000 // $1000
         } else if drug_count < COPS_DRUG_THRESHOLD + 50 {
