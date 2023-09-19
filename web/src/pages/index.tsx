@@ -32,7 +32,7 @@ import { play } from "@/hooks/media";
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 9;
+const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
