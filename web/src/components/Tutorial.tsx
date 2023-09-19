@@ -94,7 +94,7 @@ const Tutorial = ({
   return (
     <Modal isOpen={isOpen} onClose={close} isCentered>
       <ModalOverlay />
-      <ModalContent maxH="70vh" maxWidth={"600px"}>
+      <ModalContent maxH="90vh" maxWidth={"600px"}>
         <ModalBody justifyContent="center" minH={"360px"}>
           <Box position={"relative"}>
             {steps.map((step) => {
