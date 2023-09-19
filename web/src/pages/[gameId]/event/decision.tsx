@@ -43,7 +43,7 @@ export default function Decision() {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want 20% of your $PAPER!`);
+          setDemand(`They want 50% of your $PAPER!`);
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
