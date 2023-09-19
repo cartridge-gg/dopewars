@@ -51,25 +51,30 @@ mod travel {
         assert(player.can_continue(), 'player cannot travel');
         assert(player.location_id != next_location_id, 'already at location');
 
-        let mut risks: Risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        player.status = risks.travel(seed, player.cash, player.drug_count);
-        if player.status != PlayerStatus::Normal {
-            set!(ctx.world, (player));
-            emit!(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
+        // initial travel when game starts has no risk or events
+        if player.location_id != 0 {
+            let mut risks: Risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
+            let seed = starknet::get_tx_info().unbox().transaction_hash;
+            player.status = risks.travel(seed, player.cash, player.drug_count);
+            if player.status != PlayerStatus::Normal {
+                set!(ctx.world, (player));
+                emit!(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
 
-            return true;
+                return true;
+            }
+
+            //market price fluctuation
+            market_events(ctx, game_id);
+
+            player.turns_remaining -= 1;
         }
 
-        //market price fluctuation
-        market_events(ctx, game_id);
-
         player.location_id = next_location_id;
-        player.turns_remaining -= 1;
         set!(ctx.world, (player));
 
         emit!(
-            ctx.world, Traveled {
+            ctx.world,
+            Traveled {
                 game_id, player_id, from_location: player.location_id, to_location: next_location_id
             }
         );

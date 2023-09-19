@@ -100,7 +100,6 @@ export const parseEvent = (
       return {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
-        locationId: num.toHexString(raw.data[2]),
       } as JoinedEventData;
     case RyoEvents.Decision:
       return {

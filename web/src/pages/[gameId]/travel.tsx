@@ -29,19 +29,20 @@ import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
+import { Location } from "@/dojo/types";
 
 interface MarketPriceInfo {
   id: string;
   price: number;
-  diff: number;
-  percentage: number;
+  diff?: number;
+  percentage?: number;
 }
 
 export default function Travel() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const [targetId, setTargetId] = useState<string>("");
-  const [currentLocationId, setCurrentLocationId] = useState<string>("");
+  const [targetId, setTargetId] = useState<string>();
+  const [currentLocationId, setCurrentLocationId] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
@@ -64,27 +65,41 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity && !isSubmitting) {
-      setCurrentLocationId(playerEntity.locationId);
-      setTargetId(playerEntity.locationId);
+      if (playerEntity.locationId) {
+        setCurrentLocationId(playerEntity.locationId);
+        setTargetId(playerEntity.locationId);
+      } else {
+        setTargetId(getLocationByType(Location.Central)?.id);
+      }
     }
   }, [playerEntity, isSubmitting]);
 
   const prices = useMemo(() => {
-    if (locationPrices) {
-      const current = sortDrugMarkets(locationPrices.get(currentLocationId));
+    if (locationPrices && targetId) {
+      const current = sortDrugMarkets(
+        locationPrices.get(currentLocationId || ""),
+      );
       const target = sortDrugMarkets(locationPrices.get(targetId));
 
       return target.map((drug, index) => {
-        const diff = drug.price - current[index].price;
-        const percentage =
-          (Math.abs(drug.price - current[index].price) / current[index].price) *
-          100;
+        if (currentLocationId) {
+          const diff = drug.price - current[index].price;
+          const percentage =
+            (Math.abs(drug.price - current[index].price) /
+              current[index].price) *
+            100;
+
+          return {
+            id: drug.id,
+            price: drug.price,
+            diff,
+            percentage,
+          } as MarketPriceInfo;
+        }
 
         return {
           id: drug.id,
           price: drug.price,
-          diff,
-          percentage,
         } as MarketPriceInfo;
       });
     }
@@ -284,7 +299,7 @@ const LocationPrices = ({
                   >
                     ${drug.price.toFixed(0)}
                   </Text>
-                  {drug.diff !== 0 && (
+                  {drug.percentage && drug.diff && drug.diff !== 0 && (
                     <Text
                       opacity="0.5"
                       color={drug.diff >= 0 ? "neon.200" : "red"}

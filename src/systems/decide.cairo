@@ -113,9 +113,8 @@ mod decide {
 
         emit!(ctx.world, Decision { game_id, player_id, action });
         emit!(
-            ctx.world, Consequence {
-                game_id, player_id, outcome, health_loss, drug_loss, cash_loss
-            }
+            ctx.world,
+            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
         );
     }
 

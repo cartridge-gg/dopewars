@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
+import { useEffect } from "react";
 
 export default function Turn() {
   const router = useRouter();
@@ -25,23 +26,36 @@ export default function Turn() {
     gameId,
     address: account?.address,
   });
-  const { game: gameEntty } = useGameEntity({
+  const { game: gameEntity } = useGameEntity({
     gameId,
   });
 
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
 
-  if (!playerEntity || !gameEntty) {
+  useEffect(() => {
+    if (gameEntity && playerEntity) {
+      // initial move, just forward user to location
+      if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
+        router.push(
+          `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
+        );
+      }
+    }
+  }, [gameEntity, playerEntity]);
+
+  if (!playerEntity || !gameEntity) {
     return <></>;
   }
 
-  const locationInfo = getLocationById(playerEntity.locationId)!;
+  if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
+    return <></>;
+  }
 
   return (
     <Layout
       leftPanelProps={{
-        title: `Day ${gameEntty.maxTurns - playerEntity.turnsRemaining}`,
         prefixTitle: "End of",
+        title: `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining}`,
         imageSrc: "/images/sunset.png",
       }}
     >
@@ -81,8 +95,8 @@ export default function Turn() {
           <UnorderedList w="full" variant="underline">
             <ListItem>
               <HStack>
-                {locationInfo.icon({})}
-                <Text>{locationInfo.name}</Text>
+                {getLocationById(playerEntity.locationId)?.icon({})}
+                <Text>{getLocationById(playerEntity.locationId)?.name}</Text>
               </HStack>
             </ListItem>
             {lastEncounter && (
@@ -122,7 +136,9 @@ export default function Turn() {
             w={["full", "auto"]}
             onClick={() => {
               resetTurn();
-              router.push(`/${gameId}/${locationInfo.slug}`);
+              router.push(
+                `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
+              );
             }}
           >
             Continue
