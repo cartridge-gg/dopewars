@@ -68,7 +68,7 @@ export default function Consequence() {
               {outcome.description && `* ${outcome.description} *`}
             </Text>
           </VStack>
-          <Footer position={["absolute", "relative"]}>
+          <Footer position={["relative", "relative"]}>
             {!isDead ? (
               <Button
                 w="full"

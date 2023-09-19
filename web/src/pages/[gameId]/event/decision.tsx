@@ -48,7 +48,7 @@ export default function Decision() {
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`The want 20% of your DRUGS!`);
+          setDemand(`They want 20% of your DRUGS!`);
           break;
       }
 
@@ -186,7 +186,7 @@ const Encounter = ({
         height={400}
         style={{ opacity: isSubmitting ? 0.5 : 1 }}
       />
-      <VStack width="500px">
+      <VStack width="full" maxW="500px">
         <VStack h="60px" textAlign="center">
           {isSubmitting ? (
             <>
@@ -200,7 +200,7 @@ const Encounter = ({
             </>
           )}
         </VStack>
-        <Footer position={["absolute", "relative"]}>
+        <Footer position={["relative", "relative"]}>
           <Button
             w="full"
             isDisabled={isRunning || isPaying}

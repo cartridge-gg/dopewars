@@ -157,7 +157,7 @@ export default function Travel() {
           />
         ),
       }}
-      showBack
+      
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
