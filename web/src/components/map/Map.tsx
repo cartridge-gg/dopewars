@@ -3,7 +3,6 @@ import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
-import { Markers } from "./Markers";
 import { Location } from "@/dojo/types";
 
 type CoordinateType = {

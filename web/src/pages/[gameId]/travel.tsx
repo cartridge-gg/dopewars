@@ -178,9 +178,7 @@ export default function Travel() {
           isLoading={isSubmitting && !txError}
           onClick={onContinue}
         >
-          {targetId === currentLocationId
-            ? "Current Location"
-            : `Travel to ${locationName}`}
+          Travel
         </Button>
       </VStack>
       <VStack
@@ -206,17 +204,23 @@ export default function Travel() {
           prices={prices}
           isCurrentLocation={targetId === currentLocationId}
         />
-        <Button
-          w={["full", "auto"]}
-          pointerEvents="all"
-          isDisabled={!targetId || targetId === currentLocationId}
-          isLoading={isSubmitting && !txError}
-          onClick={onContinue}
-        >
-          {targetId === currentLocationId
-            ? "Current Location"
-            : `Travel to ${locationName}`}
-        </Button>
+        <HStack w="full" pointerEvents="all">
+          <Button
+            isDisabled={isSubmitting}
+            w="full"
+            onClick={() => router.back()}
+          >
+            Back
+          </Button>
+          <Button
+            w={["full", "auto"]}
+            isDisabled={!targetId || targetId === currentLocationId}
+            isLoading={isSubmitting && !txError}
+            onClick={onContinue}
+          >
+            Travel
+          </Button>
+        </HStack>
       </VStack>
     </Layout>
   );

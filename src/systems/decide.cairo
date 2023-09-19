@@ -2,17 +2,18 @@
 mod decide {
     use array::ArrayTrait;
     use box::BoxTrait;
-    use traits::Into;
+    use traits::{Into, TryInto};
     use starknet::ContractAddress;
 
     use dojo::world::Context;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{COPS_DRUG_THRESHOLD, HEALTH_IMPACT, GANGS_PAYMENT};
+    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
     use rollyourown::components::game::{Game, GameTrait};
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::drug::{Drug, DrugTrait};
+    use rollyourown::utils::random;
 
     #[derive(Copy, Drop, Serde, PartialEq)]
     enum Action {
@@ -64,23 +65,25 @@ mod decide {
                 let seed = starknet::get_tx_info().unbox().transaction_hash;
                 match risks.run(seed) {
                     bool::False => (Outcome::Escaped, 0, 0, 0),
-                    bool::True => (
-                        Outcome::Captured, 0, 0, HEALTH_IMPACT * (1 + player.run_attempts)
-                    )
+                    bool::True => {
+                        let random_loss: u8 = random(seed, 0, HEALTH_IMPACT.into())
+                            .try_into()
+                            .unwrap();
+                        let health_loss: u8 = HEALTH_IMPACT + random_loss;
+                        (Outcome::Captured, 0, 0, health_loss)
+                    }
                 }
             },
             Action::Pay => {
                 match player.status {
                     PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                     PlayerStatus::BeingMugged => {
-                        let drug_loss = take_drugs(ctx, game_id, player_id, GANGS_PAYMENT);
                         let cash_loss = (player.cash * GANGS_PAYMENT.into()) / 100;
-                        (Outcome::Paid, cash_loss, drug_loss, 0)
+                        (Outcome::Paid, cash_loss, 0, 0)
                     },
                     PlayerStatus::BeingArrested => {
-                        let cash_loss = cops_payment(player.drug_count);
-                        assert(cash_loss <= player.cash, 'not enough cash to pay cops');
-                        (Outcome::Paid, cash_loss, 0, 0)
+                        let drug_loss = take_drugs(ctx, game_id, player_id, COPS_PAYMENT);
+                        (Outcome::Paid, 0, drug_loss, 0)
                     }
                 }
             },
@@ -115,20 +118,6 @@ mod decide {
             }
         );
     }
-
-
-    fn cops_payment(drug_count: u32) -> u128 {
-        if drug_count < COPS_DRUG_THRESHOLD + 20 {
-            1000_0000 // $1000
-        } else if drug_count < COPS_DRUG_THRESHOLD + 50 {
-            5000_0000 // $5000
-        } else if drug_count < COPS_DRUG_THRESHOLD + 80 {
-            10000_0000 // $10000
-        } else {
-            20000_0000 // $20000
-        }
-    }
-
 
     fn take_drugs(
         ctx: Context, game_id: u32, player_id: ContractAddress, percentage: usize

@@ -133,7 +133,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/events/escaped.png",
+    imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
@@ -152,7 +152,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/events/escaped.png",
+    imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
     color: "neon.200",
@@ -167,13 +167,13 @@ export const outcomes: OutcomeInfo[] = [
     color: "red",
   },
   {
-  name: "Got killed by the Cops",
-  type: Outcome.Died,
-  status: PlayerStatus.BeingArrested,
-  imageSrc: "/images/events/fought.png",
-  getResponse: (isInitial: boolean) =>
-    getMuggerResponses(Outcome.Died, isInitial),
-  color: "red",
+    name: "Got killed by the Cops",
+    type: Outcome.Died,
+    status: PlayerStatus.BeingArrested,
+    imageSrc: "/images/events/fought.png",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Died, isInitial),
+    color: "red",
   },
 ];
 
@@ -209,13 +209,13 @@ export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
 ): OutcomeInfo {
-    const found = outcomes.find((item) => {
-      return item.status === status && item.type === type;
-    });
-    if(!found) { 
-      console.log(`getOutcomeInfo outcome ${status} ${type} not found !`)
-    }
-    return found || outcomes[0]
+  const found = outcomes.find((item) => {
+    return item.status === status && item.type === type;
+  });
+  if (!found) {
+    console.log(`getOutcomeInfo outcome ${status} ${type} not found !`);
+  }
+  return found || outcomes[0];
 }
 
 export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {

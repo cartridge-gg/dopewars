@@ -1,13 +1,15 @@
 const SCALING_FACTOR: u128 = 10_000;
 
-const TRAVEL_RISK: u8 = 60; // 60% chance of travel encounter
+const TRAVEL_RISK: u8 = 75; // 75% chance of travel encounter
 const CAPTURE_RISK: u8 = 60; // 60% chance of capture
 
-const ENCOUNTER_BIAS_GANGS: u128 = 75; // 75% chance of gangs encounter vs cops
-const COPS_DRUG_THRESHOLD: usize = 5; // cops encounter threshold
+const ENCOUNTER_BIAS_GANGS: u128 = 50; // 50% chance of gangs encounter vs cops
+const COPS_DRUG_THRESHOLD: usize = 2; // cops encounter threshold
+const GANGS_CASH_THRESHOLD: u128 = 1000_0000; // gangs encounter threshold
 
 const HEALTH_IMPACT: u8 = 10;
-const GANGS_PAYMENT: usize = 20;
+const GANGS_PAYMENT: usize = 20; // 20% of cash
+const COPS_PAYMENT: usize = 20; // 20% of drugs
 
 // starting stats
 const STARTING_CASH: u128 = 2000_0000; // $2000

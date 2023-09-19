@@ -31,7 +31,7 @@ export default function Consequence() {
   const response = useMemo(() => outcome.getResponse(true), [outcome]);
 
   useEffect(() => {
-    if ( outcome.type == Outcome.Died) {
+    if (outcome.type == Outcome.Died) {
       playSound(Sounds.GameOver);
     }
   }, [outcome]);
@@ -69,22 +69,22 @@ export default function Consequence() {
             </Text>
           </VStack>
           <Footer position={["absolute", "relative"]}>
-         {!isDead ? (
-            <Button
-              w="full"
-              onClick={() => {
-                console.log(outcome);
-                if (outcome.type == Outcome.Captured) {
-                  return router.push(
-                    `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
-                  );
-                }
+            {!isDead ? (
+              <Button
+                w="full"
+                onClick={() => {
+                  console.log(outcome);
+                  if (outcome.type == Outcome.Captured) {
+                    return router.push(
+                      `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
+                    );
+                  }
 
-                router.push(`/${gameId}/turn`);
-              }}
-            >
-              Continue
-            </Button>
+                  router.push(`/${gameId}/turn`);
+                }}
+              >
+                Continue
+              </Button>
             ) : (
               <Button
                 w="full"

@@ -8,16 +8,13 @@ import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
-import { formatCash } from "@/utils/ui";
 import { useToast } from "@/hooks/toast";
 import { Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
-
-const COPS_DRUG_THRESHOLD = 5;
 
 export default function Decision() {
   const router = useRouter();
@@ -46,28 +43,18 @@ export default function Decision() {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want 20% of your DRUGS and $PAPER!`);
+          setDemand(`They want 20% of your $PAPER!`);
           break;
         case PlayerStatus.BeingArrested:
-          const payment = formatCash(copsPayment(playerEntity.drugCount));
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(
-            `You're carrying DRUGS! These dirty cops are demanding ${payment} PAPER!`,
-          );
+          setDemand(`The want 20% of your DRUGS!`);
           break;
       }
 
       setStatus(playerEntity.status);
     }
   }, [playerEntity, isSubmitting]);
-
-  const canPay = useMemo(() => {
-    if (playerEntity && playerEntity.status == PlayerStatus.BeingArrested) {
-      return playerEntity.cash >= copsPayment(playerEntity.drugCount);
-    }
-    return true;
-  }, [playerEntity]);
 
   useEffect(() => {
     if (status == PlayerStatus.BeingArrested) {
@@ -137,7 +124,6 @@ export default function Decision() {
           prefixTitle={prefixTitle}
           title={title}
           demand={demand}
-          canPay={canPay}
           imageSrc={`/images/events/${
             status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"
           }`}
@@ -151,25 +137,12 @@ export default function Decision() {
   );
 }
 
-const copsPayment = (drugCount: number) => {
-  if (drugCount < COPS_DRUG_THRESHOLD + 20) {
-    return 1000;
-  } else if (drugCount < COPS_DRUG_THRESHOLD + 50) {
-    return 5000;
-  } else if (drugCount < COPS_DRUG_THRESHOLD + 80) {
-    return 10000;
-  } else {
-    return 20000;
-  }
-};
-
 const Encounter = ({
   prefixTitle,
   title,
   demand,
   imageSrc,
   penalty,
-  canPay,
   isSubmitting,
   onPay,
   onRun,
@@ -179,7 +152,6 @@ const Encounter = ({
   demand?: string;
   imageSrc: string;
   penalty?: string;
-  canPay: boolean;
   isSubmitting?: boolean;
   onPay: () => void;
   onRun: () => void;
@@ -242,14 +214,14 @@ const Encounter = ({
           </Button>
           <Button
             w="full"
-            isDisabled={isPaying || isRunning || !canPay}
+            isDisabled={isPaying || isRunning}
             isLoading={isPaying}
             onClick={() => {
               setIsPaying(true);
               onPay();
             }}
           >
-            {canPay ? "PAY" : "Not enough $PAPER"}
+            PAY
           </Button>
         </Footer>
       </VStack>

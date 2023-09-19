@@ -74,7 +74,7 @@ const LeftPanel = ({
   ...props
 }: Partial<LeftPanelProps> & StyleProps) => {
   return (
-    <VStack my="auto" flex={["0", "1"]} {...props}>
+    <VStack flex={["0", "1"]} my={["none", "auto"]} {...props}>
       <VStack
         zIndex="1"
         position={map ? "absolute" : "unset"}
