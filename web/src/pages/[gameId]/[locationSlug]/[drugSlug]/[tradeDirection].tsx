@@ -126,9 +126,9 @@ export default function Market() {
       }}
       showBack={true}
     >
-      <VStack boxSize="full" justify="center">
+      <VStack boxSize="full" justify={["normal", "center"]}>
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Box position="relative" my={[0, 6]} w={[160, 240]} h={[160, 240]}>
+          <Box position="relative" my={[0, 6]} w={[140, 240]} h={[140, 240]}>
             <Image
               src={`/images/drugs/${drug.slug}.png`}
               alt={drug.name}
@@ -277,7 +277,7 @@ const QuantitySelector = ({
         direction={["column", "row"]}
         justifyContent="space-between"
         align="center"
-        gap="20px"
+        gap={["10px", "20px"]}
       >
         <Text color={alertColor}>
           <Alert size="sm" />{" "}
