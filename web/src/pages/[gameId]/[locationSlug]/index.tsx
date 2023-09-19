@@ -72,7 +72,7 @@ export default function Location() {
     playerEntity.turnsRemaining === 0
       ? "Final Day"
       : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
-          gameEntity.maxTurns + 1
+          gameEntity.maxTurns
         }`;
 
   return (
