@@ -45,10 +45,11 @@ const Leaderboard = ({
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
+  const pageSize = 10
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [visibleScores, setVisibleScores] = useState(10);
+  const [visibleScores, setVisibleScores] = useState(pageSize);
 
-  const listRef = useRef(null);
+  const listRef = useRef<null | HTMLLIElement>(null); 
 
   useEffect(() => {
     setHasNextPage(visibleScores < scores.length);
@@ -56,11 +57,13 @@ const Leaderboard = ({
 
 
   const fetchNextPage = useCallback(() => {
-    setVisibleScores(visibleScores+10)
+    setVisibleScores(visibleScores+pageSize)
     setTimeout(() => {
-      listRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+      if (! listRef.current) return
+      const lastEl = listRef.current['lastElementChild']
+      lastEl && lastEl.scrollIntoView({ behavior: 'smooth' });
     },150)
-  });
+  },[listRef.current]);
 
 
   const onSubmitName = useCallback(async () => {
@@ -80,7 +83,7 @@ const Leaderboard = ({
 
   return (
     <>
-    <VStack {...props} w="full" h="100%">
+    <VStack w="full" h="100%">
       <UnorderedList boxSize="full" variant="dotted" h="auto" maxH="calc(100% - 50px)" overflowY="auto"  sx={{
         overflowY: "scroll",
         "&::-webkit-scrollbar": {
@@ -110,7 +113,7 @@ const Leaderboard = ({
                     setTargetGameId(score.gameId);
                     onOpen();
                   }}
-                  ref={index === visibleScores-1 ? listRef : undefined}
+                  ref={listRef}
                 >
                   <HStack mr={3}>
                     <Text

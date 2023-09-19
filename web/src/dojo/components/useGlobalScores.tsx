@@ -68,48 +68,48 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
 };
 
 
-// TODO : use when supported on torii
-export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
-  const [scores, setScores] = useState<Score[]>([]);
-  // Gets top 10
-  // TODO: paginate with cursor for more scores
-  const { data, isFetched, refetch, hasNextPage, fetchNextPage, ...props } =
-    useInfiniteGlobalScoresQuery(
-      {
-        limit: limit || 10,
-      },
-      {
-        getNextPageParam: (lastPage) => {
-          const edgesCount = lastPage.playerComponents?.edges?.length || 0;
-          if ( edgesCount === 0) return undefined
-          const lastItem = lastPage.playerComponents?.edges[edgesCount - 1]
-            return {
-              limit: 10,
-              cursor: lastItem.cursor,
-            };
-          }
-        },
-    );
+// // TODO : use when supported on torii
+// export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
+//   const [scores, setScores] = useState<Score[]>([]);
+//   // Gets top 10
+//   // TODO: paginate with cursor for more scores
+//   const { data, isFetched, refetch, hasNextPage, fetchNextPage, ...props } =
+//     useInfiniteGlobalScoresQuery(
+//       {
+//         limit: limit || 10,
+//       },
+//       {
+//         getNextPageParam: (lastPage) => {
+//           const edgesCount = lastPage.playerComponents?.edges?.length || 0;
+//           if ( edgesCount === 0) return undefined
+//           const lastItem = lastPage.playerComponents?.edges[edgesCount - 1]
+//             return {
+//               limit: 10,
+//               cursor: lastItem.cursor,
+//             };
+//           }
+//         },
+//     );
 
-  useEffect(() => {
-    if (data?.pages.length == 0) return;
-    const pageCount = data?.pages.length || 0;
-    // debugger
-    const new_scores = GlobalScores.create(
-      data?.pages[pageCount - 1].playerComponents?.edges as PlayerEdge[],
-    );
+//   useEffect(() => {
+//     if (data?.pages.length == 0) return;
+//     const pageCount = data?.pages.length || 0;
+//     // debugger
+//     const new_scores = GlobalScores.create(
+//       data?.pages[pageCount - 1].playerComponents?.edges as PlayerEdge[],
+//     );
 
-    if (new_scores) {
-      setScores(scores.concat(new_scores));
-    }
-  }, [data?.pages]);
+//     if (new_scores) {
+//       setScores(scores.concat(new_scores));
+//     }
+//   }, [data?.pages]);
 
 
-  return {
-    scores,
-    isFetched,
-    refetch,
-    hasNextPage,
-    fetchNextPage,
-  };
-};
+//   return {
+//     scores,
+//     isFetched,
+//     refetch,
+//     hasNextPage,
+//     fetchNextPage,
+//   };
+// };
