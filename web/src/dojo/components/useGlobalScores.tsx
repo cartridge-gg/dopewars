@@ -43,7 +43,7 @@ export class GlobalScores {
           nameComponent &&
           shortString.decodeShortString(nameComponent?.short_string),
         cash: Math.floor(Number(edge.node?.cash) / SCALING_FACTOR),
-        dead: Number(edge.node?.turns_remaining_on_death) !== 0,
+        dead: Number(edge.node?.health) === 0,
       };
     });
   }
