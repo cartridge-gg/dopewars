@@ -8,7 +8,7 @@ const COPS_DRUG_THRESHOLD: usize = 2; // cops encounter threshold
 const GANGS_CASH_THRESHOLD: u128 = 1000_0000; // gangs encounter threshold
 
 const HEALTH_IMPACT: u8 = 10;
-const GANGS_PAYMENT: usize = 20; // 20% of cash
+const GANGS_PAYMENT: usize = 50; // 20% of cash
 const COPS_PAYMENT: usize = 20; // 20% of drugs
 
 // starting stats
