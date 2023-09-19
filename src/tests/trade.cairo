@@ -17,7 +17,7 @@ use rollyourown::components::player::Player;
 use rollyourown::tests::create::{spawn_game, spawn_player};
 use rollyourown::constants::SCALING_FACTOR;
 
-const DRUG_ID: felt252 = 0x57656564; // weed
+const WEED_ID: felt252 = 0x57656564; // weed
 const QUANTITY: usize = 3;
 
 #[test]
@@ -32,12 +32,12 @@ fn test_trade() {
     let mut buy_calldata = array::ArrayTrait::<felt252>::new();
     buy_calldata.append(game_id.into());
     buy_calldata.append(player.location_id);
-    buy_calldata.append(DRUG_ID);
+    buy_calldata.append(WEED_ID);
     buy_calldata.append(QUANTITY.into());
     world.execute('buy'.into(), buy_calldata);
 
     let player = get!(world, (game_id, player_id).into(), (Player));
-    let player_drug = get!(world, (game_id, player_id, DRUG_ID).into(), (Drug));
+    let player_drug = get!(world, (game_id, player_id, WEED_ID).into(), (Drug));
     assert(player.drug_count == QUANTITY, 'wrong drug count');
     assert(player_drug.quantity == QUANTITY, 'wrong purchase amount');
 
@@ -45,7 +45,7 @@ fn test_trade() {
     let mut sell_calldata = array::ArrayTrait::<felt252>::new();
     sell_calldata.append(game_id.into());
     sell_calldata.append(player.location_id);
-    sell_calldata.append(DRUG_ID);
+    sell_calldata.append(WEED_ID);
     sell_calldata.append(1);
     world.execute('sell'.into(), sell_calldata);
 
