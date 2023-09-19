@@ -25,7 +25,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   return (
     <VStack {...props} w="full" align="flex-start">
       <Text textStyle="subheading" fontSize="10px" color="neon.500">
-        Inventory
+        Your Inventory
       </Text>
       <Card
         w="full"
