@@ -27,6 +27,7 @@ import { useDojo } from "@/dojo";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/systems/useSystems";
+import { Skull } from "./icons";
 
 const Leaderboard = ({
   nameEntry,
@@ -35,8 +36,8 @@ const Leaderboard = ({
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const { account } = useDojo();
- // TODO : use when supported on torii
- // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
+  // TODO : use when supported on torii
+  // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
   const { scores, refetch } = useGlobalScores();
   const { setName: submitSetName, isPending } = useSystems();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,26 +46,24 @@ const Leaderboard = ({
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
-  const pageSize = 10
+  const pageSize = 10;
   const [hasNextPage, setHasNextPage] = useState(false);
   const [visibleScores, setVisibleScores] = useState(pageSize);
 
-  const listRef = useRef<null | HTMLLIElement>(null); 
+  const listRef = useRef<null | HTMLLIElement>(null);
 
   useEffect(() => {
     setHasNextPage(visibleScores < scores.length);
-  }, [scores,visibleScores]);
-
+  }, [scores, visibleScores]);
 
   const fetchNextPage = useCallback(() => {
-    setVisibleScores(visibleScores+pageSize)
+    setVisibleScores(visibleScores + pageSize);
     setTimeout(() => {
-      if (! listRef.current) return
-      const lastEl = listRef.current['lastElementChild']
-      lastEl && lastEl.scrollIntoView({ behavior: 'smooth' });
-    },150)
-  },[listRef.current]);
-
+      if (!listRef.current) return;
+      const lastEl = listRef.current["lastElementChild"];
+      lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
+    }, 150);
+  }, [listRef.current]);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
@@ -83,16 +82,22 @@ const Leaderboard = ({
 
   return (
     <>
-    <VStack w="full" h="100%">
-      <UnorderedList boxSize="full" variant="dotted" h="auto" maxH="calc(100% - 50px)" overflowY="auto"  sx={{
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-      }}>
-        {scores ? (
-          scores.slice(0,visibleScores)
-            ?.map((score, index) => {
+      <VStack w="full" h="100%">
+        <UnorderedList
+          boxSize="full"
+          variant="dotted"
+          h="auto"
+          maxH="calc(100% - 50px)"
+          overflowY="auto"
+          sx={{
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          {scores ? (
+            scores.slice(0, visibleScores)?.map((score, index) => {
               const isOwn = score.address === account?.address;
               const color = isOwn
                 ? colors.yellow["400"].toString()
@@ -125,11 +130,15 @@ const Leaderboard = ({
                       {index + 1}.
                     </Text>
                     <Box flexShrink={0} style={{ marginTop: "-8px" }}>
-                      <Avatar
-                        name={genAvatarFromAddress(score.address)}
-                        color={avatarColor}
-                        hasCrown={index === 0}
-                      />
+                      {score.dead ? (
+                        <Skull color={avatarColor} />
+                      ) : (
+                        <Avatar
+                          name={genAvatarFromAddress(score.address)}
+                          color={avatarColor}
+                          hasCrown={index === 0}
+                        />
+                      )}
                     </Box>
 
                     <HStack>
@@ -157,19 +166,17 @@ const Leaderboard = ({
                 </ListItem>
               );
             })
-        ) : (
-          <Text textAlign="center" color="neon.500">
-            No scores submitted yet
-          </Text>
-        )}
-      </UnorderedList>
+          ) : (
+            <Text textAlign="center" color="neon.500">
+              No scores submitted yet
+            </Text>
+          )}
+        </UnorderedList>
 
-        {hasNextPage && (
-          <Button onClick={fetchNextPage}>Load More</Button>
-        )}
-        </VStack>
-      
-       {/* Naming modale */}
+        {hasNextPage && <Button onClick={fetchNextPage}>Load More</Button>}
+      </VStack>
+
+      {/* Naming modale */}
       <Modal
         closeOnOverlayClick={overlayDimiss}
         isOpen={isOpen}

@@ -14,6 +14,7 @@ export type Score = {
   address: string;
   name?: string;
   cash: number;
+  dead: boolean;
 };
 
 export class GlobalScores {
@@ -42,11 +43,11 @@ export class GlobalScores {
           nameComponent &&
           shortString.decodeShortString(nameComponent?.short_string),
         cash: Math.floor(Number(edge.node?.cash) / SCALING_FACTOR),
+        dead: Number(edge.node?.turns_remaining_on_death) !== 0,
       };
     });
   }
 }
-
 
 export const useGlobalScores = (offset?: number, limit?: number) => {
   // Gets top 100
@@ -56,8 +57,9 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
   });
 
   const scores: Score[] = useMemo(() => {
-    const scores = GlobalScores.create(data?.playerComponents?.edges as PlayerEdge[]) || []
-    return scores.sort((a, b) => b.cash - a.cash)
+    const scores =
+      GlobalScores.create(data?.playerComponents?.edges as PlayerEdge[]) || [];
+    return scores.sort((a, b) => b.cash - a.cash);
   }, [data]);
 
   return {
@@ -66,7 +68,6 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
     refetch,
   };
 };
-
 
 // // TODO : use when supported on torii
 // export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
@@ -103,7 +104,6 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
 //       setScores(scores.concat(new_scores));
 //     }
 //   }, [data?.pages]);
-
 
 //   return {
 //     scores,

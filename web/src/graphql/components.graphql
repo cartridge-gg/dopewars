@@ -25,6 +25,7 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
     edges {
       node {
         cash
+        turns_remaining_on_death
         entity {
           keys
           components {

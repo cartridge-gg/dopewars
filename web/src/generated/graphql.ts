@@ -712,7 +712,7 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'Query', playerComponents?: { __typename?: 'PlayerConnection', totalCount: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor: any, node?: { __typename?: 'Player', cash?: any | null, entity?: { __typename?: 'Entity', keys?: Array<string | null> | null, components?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Market' } | { __typename: 'Name', short_string?: any | null } | { __typename: 'Player' } | { __typename: 'Risks' } | null> | null } | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'Query', playerComponents?: { __typename?: 'PlayerConnection', totalCount: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor: any, node?: { __typename?: 'Player', cash?: any | null, turns_remaining_on_death?: any | null, entity?: { __typename?: 'Entity', keys?: Array<string | null> | null, components?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Market' } | { __typename: 'Name', short_string?: any | null } | { __typename: 'Player' } | { __typename: 'Risks' } | null> | null } | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['Int']>;
@@ -803,6 +803,7 @@ export const GlobalScoresDocument = `
     edges {
       node {
         cash
+        turns_remaining_on_death
         entity {
           keys
           components {
