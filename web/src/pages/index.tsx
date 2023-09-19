@@ -44,13 +44,12 @@ export default function Home() {
   const [isGated, setIsGated] = useState(false);
 
   useEffect(
-    () =>
-      setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+    () => setIsGated(false),
+    //setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
     [],
   );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-  const isLocal = true;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
