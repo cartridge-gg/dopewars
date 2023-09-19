@@ -131,7 +131,7 @@ const Leaderboard = ({
                     </Text>
                     <Box flexShrink={0} style={{ marginTop: "-8px" }}>
                       {score.dead ? (
-                        <Skull color={avatarColor} />
+                        <Skull color={color} />
                       ) : (
                         <Avatar
                           name={genAvatarFromAddress(score.address)}
