@@ -51,7 +51,6 @@ export default function Home() {
   );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-  const isLocal = true;
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
