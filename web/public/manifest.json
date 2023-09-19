@@ -1,0 +1,21 @@
+{
+    "theme_color": "#11ED83",
+    "background_color": "#172217",
+    "display": "fullscreen",
+    "scope": "/",
+    "start_url": "/",
+    "name": "RollYourOwn",
+    "short_name": "RYO",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
