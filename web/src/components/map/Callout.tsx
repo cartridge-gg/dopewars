@@ -1,7 +1,7 @@
 import { Location } from "@/dojo/types";
 import { Icon } from "@chakra-ui/react";
 
-export const Callout = ({ location }: { location: Location }) => {
+export const Callout = ({ location }: { location?: Location }) => {
   return (
     <Icon
       layerStyle="fill"

@@ -185,7 +185,7 @@ export function getLocationByType(type: Location) {
   return findBy<LocationInfo>(locations, "type", type);
 }
 
-export function getLocationById(id: string) {
+export function getLocationById(id?: string) {
   return findBy<LocationInfo>(locations, "id", id);
 }
 

@@ -90,16 +90,14 @@ export default function Home() {
                       NUM_TURNS,
                     );
 
-                    const { gameId, locationId } = event as JoinedEventData;
+                    const { gameId } = event as JoinedEventData;
                     toast(
                       "Created Game",
                       Alert,
                       `http://amazing_explorer/${hash}`,
                     );
 
-                    router.push(
-                      `/${gameId}/${getLocationById(locationId)?.slug}`,
-                    );
+                    router.push(`/${gameId}/travel`);
                   }}
                 >
                   Hustle
