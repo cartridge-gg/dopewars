@@ -11,9 +11,7 @@ mod join_game {
     use rollyourown::components::game::Game;
     use rollyourown::components::player::Player;
     use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::constants::{
-        SCALING_FACTOR, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
-    };
+    use rollyourown::constants::{STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT};
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -39,19 +37,20 @@ mod join_game {
 
         game.num_players += 1;
 
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let location_id = LocationTrait::random(seed);
+        let location_id = LocationTrait::random();
 
         let player = Player {
             game_id,
             player_id,
+            status: PlayerStatus::Normal(()),
             location_id,
             cash: STARTING_CASH,
             health: STARTING_HEALTH,
+            run_attempts: 0,
             drug_count: 0,
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: game.max_turns,
-            status: PlayerStatus::Normal(()),
+            turns_remaining_on_death: 0
         };
 
         set!(ctx.world, (game, player));

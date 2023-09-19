@@ -5,6 +5,7 @@ import {
   useInfiniteGlobalScoresQuery,
 } from "@/generated/graphql";
 import { useCallback, useEffect, useState, useMemo } from "react";
+
 import { shortString } from "starknet";
 import { SCALING_FACTOR } from "..";
 
@@ -102,6 +103,7 @@ export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
       setScores(scores.concat(new_scores));
     }
   }, [data?.pages]);
+
 
   return {
     scores,

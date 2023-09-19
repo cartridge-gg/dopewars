@@ -4,7 +4,7 @@ import {
   usePlayerEntityQuery,
   EntityEdge,
 } from "@/generated/graphql";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 import { PlayerStatus } from "../types";
 
@@ -17,6 +17,7 @@ export class PlayerEntity {
   cash: number;
   health: number;
   turnsRemaining: number;
+  turnsRemainingOnDeath: number;
   drugCount: number;
   bagLimit: number;
   locationId: string;
@@ -27,6 +28,7 @@ export class PlayerEntity {
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
+    this.turnsRemainingOnDeath = player.turns_remaining_on_death;
     this.drugCount = player.drug_count;
     this.bagLimit = player.bag_limit;
     this.locationId = player.location_id;
@@ -80,9 +82,8 @@ export const usePlayerEntity = ({
   gameId?: string;
   address?: string;
 }): PlayerInterface => {
-  const [player, setPlayer] = useState<PlayerEntity>();
   // TODO: remove leading zeros in address, maybe implemented in torii
-  const { data, isFetched, refetch } = usePlayerEntityQuery(
+  const { data, isFetched } = usePlayerEntityQuery(
     { gameId: gameId || "", playerId: address || "" },
     {
       enabled: !!gameId && !!address,
@@ -90,9 +91,8 @@ export const usePlayerEntity = ({
     },
   );
 
-  useEffect(() => {
-    const player_ = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
-    if (player_) setPlayer(player_);
+  const player = useMemo(() => {
+    return PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
   }, [data]);
 
   return {

@@ -1,5 +1,5 @@
 import { Game, useGameEntityQuery } from "@/generated/graphql";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ec, num } from "starknet";
 import { REFETCH_INTERVAL } from "..";
 
@@ -50,8 +50,11 @@ export const useGameEntity = ({
 }: {
   gameId?: string;
 }): GameInterface => {
-  const [game, setGame] = useState<GameEntity>();
-  const [key, setKey] = useState<string>("");
+  const key: string = useMemo(() => {
+    return num.toHex(
+      ec.starkCurve.poseidonHashMany([num.toBigInt(gameId || "")]),
+    );
+  }, [gameId]);
 
   const { data, isFetched } = useGameEntityQuery(
     { id: key },
@@ -60,16 +63,8 @@ export const useGameEntity = ({
     },
   );
 
-  useEffect(() => {
-    if (gameId) {
-      const key_ = ec.starkCurve.poseidonHashMany([num.toBigInt(gameId)]);
-      setKey(num.toHex(key_));
-    }
-  }, [gameId]);
-
-  useEffect(() => {
-    const game_ = GameEntity.create(data as GameEntityData);
-    if (game_) setGame(game_);
+  const game = useMemo(() => {
+    return GameEntity.create(data as GameEntityData);
   }, [data]);
 
   return {

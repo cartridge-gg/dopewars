@@ -13,25 +13,19 @@ import { useRouter } from "next/router";
 import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import Image from "next/image";
 import { Footer } from "@/components/Footer";
-
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
-
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import {
-  DrugMarket,
-  useLocationEntity,
-} from "@/dojo/entities/useLocationEntity";
+import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
 import { PlayerEntity, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
-import { DrugInfo } from "@/dojo/types";
+import { DrugInfo, DrugMarket } from "@/dojo/types";
 import { useDojo } from "@/dojo";
-import { cardPixelatedStyle } from "@/theme/styles";
 
 export default function Market() {
   const router = useRouter();
@@ -48,12 +42,15 @@ export default function Market() {
   const [quantitySell, setQuantitySell] = useState(0);
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { buy, sell, error: txError } = useSystems();
+  const { addTrade } = usePlayerStore();
   const { account } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
-    locationId: location.id,
+    locationId: location?.id,
   });
   const { player: playerEntity } = usePlayerEntity({
     gameId,
@@ -66,47 +63,44 @@ export default function Market() {
   useEffect(() => {
     if (!locationEntity || !playerEntity || isSubmitting) return;
 
-    const market = locationEntity.drugMarkets.find((d) => d.id === drug.id);
+    const market = locationEntity.drugMarkets.find((d) => d.id === drug?.id);
     if (!market) return;
 
-    const playerDrug = playerEntity.drugs.find((d) => d.id === drug.id);
+    const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.id);
     if (playerDrug) {
       setCanSell(playerDrug.quantity > 0);
     }
 
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
-  }, [locationEntity, playerEntity, drug]);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { buy, sell, error: txError } = useSystems();
-  const { addTrade } = usePlayerStore();
+  }, [locationEntity, playerEntity, drug, isSubmitting]);
 
   const onTrade = useCallback(async () => {
     setIsSubmitting(true);
     playSound(Sounds.Trade);
+
+    router.push(`/${gameId}/${location!.slug}`);
+
     let toastMessage = "",
       hash = "",
       quantity;
 
     if (tradeDirection === TradeDirection.Buy) {
-      ({ hash } = await buy(gameId, location.name, drug.name, quantityBuy));
-      toastMessage = `You bought ${quantityBuy} ${drug.name}`;
+      ({ hash } = await buy(gameId, location!.name, drug!.name, quantityBuy));
+      toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
       quantity = quantityBuy;
     } else if (tradeDirection === TradeDirection.Sell) {
-      ({ hash } = await sell(gameId, location.name, drug.name, quantitySell));
-      toastMessage = `You sold ${quantitySell} ${drug.name}`;
+      ({ hash } = await sell(gameId, location!.name, drug!.name, quantitySell));
+      toastMessage = `You sold ${quantitySell} ${drug!.name}`;
       quantity = quantitySell;
     }
 
     toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
 
-    addTrade(drug.type, {
+    addTrade(drug!.type, {
       direction: tradeDirection,
       quantity,
     } as TradeType);
-
-    router.push(`/${gameId}/${location.slug}`);
   }, [
     tradeDirection,
     quantityBuy,
@@ -132,9 +126,9 @@ export default function Market() {
       }}
       showBack={true}
     >
-      <VStack boxSize="full" justify="center">
+      <VStack boxSize="full" justify={["normal", "center"]}>
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Box position="relative" my={6} w={[180, 240]} h={[180, 240]}>
+          <Box position="relative" my={[0, 6]} w={[140, 240]} h={[140, 240]}>
             <Image
               src={`/images/drugs/${drug.slug}.png`}
               alt={drug.name}
@@ -234,6 +228,7 @@ const QuantitySelector = ({
         (d) => d.id === drug.id,
       )?.quantity;
       setMax(playerQuantity || 0);
+      setQuantity(playerQuantity || 0);
     }
   }, [type, drug, player, market]);
 
@@ -282,7 +277,7 @@ const QuantitySelector = ({
         direction={["column", "row"]}
         justifyContent="space-between"
         align="center"
-        gap="20px"
+        gap={["10px", "20px"]}
       >
         <Text color={alertColor}>
           <Alert size="sm" />{" "}

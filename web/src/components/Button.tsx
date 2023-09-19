@@ -11,8 +11,8 @@ import { playSound, Sounds } from "@/hooks/sound";
 // so we do it here on text...
 const Button = ({
   children,
-  hoverSound = Sounds.HoverClick,
-  clickSound = undefined,
+  hoverSound = undefined,
+  clickSound = Sounds.HoverClick,
   ...props
 }: { children: ReactNode } & { hoverSound?: Sounds | undefined } & {
   clickSound?: Sounds | undefined;

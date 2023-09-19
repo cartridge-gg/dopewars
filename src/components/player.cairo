@@ -11,9 +11,11 @@ struct Player {
     location_id: felt252,
     cash: u128,
     health: u8,
+    run_attempts: u8,
     drug_count: usize,
     bag_limit: usize,
     turns_remaining: usize,
+    turns_remaining_on_death: usize
 }
 
 #[generate_trait]

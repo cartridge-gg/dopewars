@@ -19,7 +19,6 @@ export interface LayoutProps {
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
   actions?: ReactNode;
-  showMap?: boolean;
   children: ReactNode;
   isSinglePanel?: boolean;
 }
@@ -35,7 +34,6 @@ const Layout = ({
   CustomLeftPanel,
   leftPanelProps,
   showBack,
-  showMap,
   children,
   isSinglePanel = false,
 }: LayoutProps) => {
@@ -57,7 +55,9 @@ const Layout = ({
             ) : (
               <CustomLeftPanel />
             ))}
-          <RightPanel flex={[showMap ? "0" : "1", "1"]}>{children}</RightPanel>
+          <RightPanel flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}>
+            {children}
+          </RightPanel>
         </Container>
         <Box maxH="60px" h="full" display={["none", "block"]} />
       </Flex>
@@ -74,7 +74,7 @@ const LeftPanel = ({
   ...props
 }: Partial<LeftPanelProps> & StyleProps) => {
   return (
-    <VStack my="auto" flex={["0", "1"]} {...props}>
+    <VStack flex={["0", "1"]} my={["none", "auto"]} {...props}>
       <VStack
         zIndex="1"
         position={map ? "absolute" : "unset"}

@@ -19,7 +19,7 @@ mod create_game {
     use rollyourown::components::location::{Location, LocationTrait};
     use rollyourown::components::market::{MarketTrait};
     use rollyourown::constants::{
-        SCALING_FACTOR, TRAVEL_RISK, RUN_CHANCE, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
+        TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
     use debug::PrintTrait;
@@ -51,19 +51,20 @@ mod create_game {
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
     ) -> (u32, ContractAddress) {
         let game_id = ctx.world.uuid();
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let location_id = LocationTrait::random(seed);
+        let location_id = LocationTrait::random();
 
         let player = Player {
             game_id,
             player_id: ctx.origin,
+            status: PlayerStatus::Normal(()),
             location_id,
             cash: STARTING_CASH,
             health: STARTING_HEALTH,
+            run_attempts: 0,
             drug_count: 0,
             bag_limit: STARTING_BAG_LIMIT,
             turns_remaining: max_turns,
-            status: PlayerStatus::Normal(()),
+            turns_remaining_on_death: 0
         };
 
         let game = Game {
@@ -86,7 +87,10 @@ mod create_game {
                     set!(
                         ctx.world,
                         (Risks {
-                            game_id, location_id: *location_id, travel: TRAVEL_RISK, run: RUN_CHANCE
+                            game_id,
+                            location_id: *location_id,
+                            travel: TRAVEL_RISK,
+                            capture: CAPTURE_RISK
                         })
                     );
 
@@ -139,8 +143,9 @@ mod create_game {
 
         // emit game created
         emit!(
-            ctx.world,
-            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
+            ctx.world, GameCreated {
+                game_id, creator: ctx.origin, start_time, max_players, max_turns
+            }
         );
 
         (game_id, ctx.origin)

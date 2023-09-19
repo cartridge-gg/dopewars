@@ -1,3 +1,5 @@
+import { Market } from "@/generated/graphql";
+
 export enum Location {
   Queens,
   Bronx,
@@ -25,13 +27,11 @@ export enum PlayerStatus {
 export enum Action {
   Run,
   Pay,
-  Fight,
 }
 
 export enum Outcome {
   Died,
   Paid,
-  Fought,
   Escaped,
   Captured,
 }
@@ -61,3 +61,11 @@ export interface OutcomeInfo {
   getResponse: (isInitial: boolean) => string;
   color: string;
 }
+
+export type DrugMarket = {
+  id: string; // id is hex encoded drug name
+  price: number;
+  marketPool: Market;
+};
+
+export type LocationPrices = Map<string, DrugMarket[]>;

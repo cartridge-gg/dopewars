@@ -12,6 +12,7 @@ const colors: ColorsType = {
     800: "#1C291C",
     900: "#172217",
   },
+  neon900Alpha: "#424b42DD",
   yellow: {
     400: "#FBCB4A",
   },

@@ -39,3 +39,16 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
     }
   }
 }
+
+query MarketPrices($gameId: Int) {
+  marketComponents(first: 36, where: { game_id: $gameId }) {
+    edges {
+      node {
+        drug_id
+        location_id
+        quantity
+        cash
+      }
+    }
+  }
+}

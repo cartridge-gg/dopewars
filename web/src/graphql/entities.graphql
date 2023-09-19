@@ -30,6 +30,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             bag_limit
             location_id
             turns_remaining
+            turns_remaining_on_death
           }
           ... on Drug {
             drug_id
@@ -56,7 +57,7 @@ query LocationEntities($gameId: String!, $locationId: String!) {
           }
           ... on Risks {
             travel
-            run
+            #capture
           }
         }
       }
