@@ -61,7 +61,7 @@ export default function Consequence() {
           width={400}
           height={400}
         />
-        <VStack width="500px">
+        <VStack width="full" maxW="500px">
           <VStack textAlign="center">
             <Text>{response}</Text>
             <Text color="yellow.400">
