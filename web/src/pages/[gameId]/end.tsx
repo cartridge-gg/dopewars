@@ -186,24 +186,20 @@ export default function End() {
                 Max 31 characters
               </Text>
             </VStack>
-            <Footer position={["relative","relative"]}>
+            <Footer position={["relative", "relative"]}>
               <>
-            <Button
-              w={["full", "auto"]}
-              onClick={()=> router.push(`/`)}
-            >
-              Skip
-            </Button>
-            <Button
-              w={["full", "auto"]}
-              onClick={onSubmitName}
-              isLoading={isSubmitting}
-            >
-              Submit
-            </Button>
-            </>
+                <Button w={["full", "auto"]} onClick={() => router.push(`/`)}>
+                  Skip
+                </Button>
+                <Button
+                  w={["full", "auto"]}
+                  onClick={onSubmitName}
+                  isLoading={isSubmitting}
+                >
+                  Submit
+                </Button>
+              </>
             </Footer>
-          
           </VStack>
         </Container>
         <Spacer maxH="100px" />

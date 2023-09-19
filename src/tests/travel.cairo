@@ -55,3 +55,4 @@ const WEED_ID: felt252 = 0x57656564; // weed
 //     assert(player.location_id == queens_id, 'should have traveled');
 // }
 
+

@@ -53,7 +53,6 @@ export const initMediaStore = async () => {
     ...state,
     isInitialized: true,
   }));
-
 };
 
 export const play = () => {

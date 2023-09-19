@@ -29,7 +29,6 @@ import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
 
-
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
@@ -79,7 +78,10 @@ export default function Home() {
                   isDisabled={!account}
                   isLoading={isSubmitting && !txError}
                   onClick={async () => {
-                    if (process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !== "true") {
+                    if (
+                      process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !==
+                      "true"
+                    ) {
                       play();
                     }
                     setIsSubmitting(true);

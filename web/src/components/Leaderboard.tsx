@@ -172,7 +172,11 @@ const Leaderboard = ({
             </Text>
           )}
         </UnorderedList>
-        {hasNextPage && <Button variant="pixelated" onClick={fetchNextPage}>Load More</Button>}
+        {hasNextPage && (
+          <Button variant="pixelated" onClick={fetchNextPage}>
+            Load More
+          </Button>
+        )}
       </VStack>
 
       {/* Naming modale */}

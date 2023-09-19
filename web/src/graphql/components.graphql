@@ -19,8 +19,8 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
     first: $limit
     after: $cursor
     where: { turns_remaining: 0 }
-    # order: { direction: DESC, field: CASH }
-  ) {
+  ) # order: { direction: DESC, field: CASH }
+  {
     totalCount
     edges {
       node {

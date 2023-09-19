@@ -172,7 +172,6 @@ export default function Travel() {
           />
         ),
       }}
-      
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
@@ -226,7 +225,9 @@ export default function Travel() {
         />
         <LocationPrices
           prices={prices}
-          isCurrentLocation={targetId === currentLocationId}
+          isCurrentLocation={
+            currentLocationId ? targetId === currentLocationId : true
+          }
         />
         <HStack w="full" pointerEvents="all">
           <Button
