@@ -1,6 +1,6 @@
 const SCALING_FACTOR: u128 = 10_000;
 
-const TRAVEL_RISK: u8 = 60; // 60% chance of travel encounter
+const TRAVEL_RISK: u8 = 75; // 75% chance of travel encounter
 const CAPTURE_RISK: u8 = 60; // 60% chance of capture
 
 const ENCOUNTER_BIAS_GANGS: u128 = 50; // 50% chance of gangs encounter vs cops
