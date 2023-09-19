@@ -18,6 +18,8 @@ const coordinate: CoordinateType = {
   [Location.Brooklyn]: { x: 0, y: -0 },
 };
 
+const yOffset = -150
+
 export const Map = ({
   target,
   current,
@@ -33,7 +35,7 @@ export const Map = ({
   useEffect(() => {
     if (target !== undefined) {
       const animation = isMobile
-        ? { scale: 1.75, ...coordinate[target] }
+        ? { scale: 1.5, x: coordinate[target].x , y: coordinate[target].y +yOffset}
         : { scale: 1, x: 0, y: 0 };
       animate(
         scope.current,

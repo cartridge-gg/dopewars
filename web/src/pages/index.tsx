@@ -27,6 +27,8 @@ import { usePlayerStore } from "@/hooks/state";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
+import { play } from "@/hooks/media";
+
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -77,6 +79,9 @@ export default function Home() {
                   isDisabled={!account}
                   isLoading={isSubmitting && !txError}
                   onClick={async () => {
+                    if (process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !== "true") {
+                      play();
+                    }
                     setIsSubmitting(true);
                     resetAll();
                     const { event, hash } = await createGame(

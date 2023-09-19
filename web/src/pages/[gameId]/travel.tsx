@@ -157,7 +157,7 @@ export default function Travel() {
           />
         ),
       }}
-      showBack
+      
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
@@ -172,14 +172,23 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <Button
-          w={["full", "250px"]}
-          isDisabled={!targetId || targetId === currentLocationId}
-          isLoading={isSubmitting && !txError}
-          onClick={onContinue}
-        >
-          Travel
-        </Button>
+        <HStack w="full" pointerEvents="all">
+          <Button
+            isDisabled={isSubmitting}
+            w="full"
+            onClick={() => router.back()}
+          >
+            Back
+          </Button>
+          <Button
+            w="full"
+            isDisabled={!targetId || targetId === currentLocationId}
+            isLoading={isSubmitting && !txError}
+            onClick={onContinue}
+          >
+            Travel
+          </Button>
+        </HStack>
       </VStack>
       <VStack
         display={["flex", "none"]}

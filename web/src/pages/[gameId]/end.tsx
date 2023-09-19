@@ -34,6 +34,7 @@ import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { Calendar } from "@/components/icons/archive";
 import { Skull, Heart } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
+import { Footer } from "@/components/Footer";
 
 export default function End() {
   const router = useRouter();
@@ -84,8 +85,8 @@ export default function End() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Header />
-        <Container>
+        <Header back={false} />
+        <Container overflowY="auto">
           <VStack flex={["0", "1"]} my="auto">
             {isDead && (
               <Text
@@ -185,6 +186,14 @@ export default function End() {
                 Max 31 characters
               </Text>
             </VStack>
+            <Footer position={["relative","relative"]}>
+              <>
+            <Button
+              w={["full", "auto"]}
+              onClick={()=> router.push(`/`)}
+            >
+              Skip
+            </Button>
             <Button
               w={["full", "auto"]}
               onClick={onSubmitName}
@@ -192,6 +201,9 @@ export default function End() {
             >
               Submit
             </Button>
+            </>
+            </Footer>
+          
           </VStack>
         </Container>
         <Spacer maxH="100px" />
