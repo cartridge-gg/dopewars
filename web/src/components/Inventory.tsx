@@ -12,6 +12,7 @@ import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
 import { useDojo } from "@/dojo";
 import { getDrugById } from "@/dojo/helpers";
+import { Bag } from "./icons";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
@@ -24,9 +25,17 @@ export const Inventory = ({ ...props }: StyleProps) => {
 
   return (
     <VStack {...props} w="full" align="flex-start">
-      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-        Your Inventory
-      </Text>
+      <HStack w="full" justify="space-between">
+        <Text textStyle="subheading" fontSize="10px" color="neon.500">
+          Your Inventory
+        </Text>
+        <HStack color="yellow.400">
+          <Bag />
+          <Text>
+            {playerEntity?.drugCount}/{playerEntity?.bagLimit}
+          </Text>
+        </HStack>
+      </HStack>
       <Card
         w="full"
         h="40px"
