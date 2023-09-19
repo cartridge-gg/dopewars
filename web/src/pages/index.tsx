@@ -44,11 +44,11 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
-  useEffect(
-    () =>
-      setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
-    [],
-  );
+  // useEffect(
+  //   () =>
+  //     setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+  //   [],
+  // );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
