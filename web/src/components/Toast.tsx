@@ -17,9 +17,11 @@ export const Toast = ({
   return (
     <HStack
       {...cardPixelatedStyle({})}
-      h="40px"
-      p="30px"
-      mb={["80px", "20px"]}
+      // h="40px"
+      p={["8px", "20px"]}
+      mb={["16px", "20px"]}
+      fontSize={["14px", "16px"]}
+      lineHeight={["1.2", "1.5"]}
       bgColor="neon.200"
       color="neon.900"
       justify="space-between"

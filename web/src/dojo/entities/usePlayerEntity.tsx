@@ -20,7 +20,7 @@ export class PlayerEntity {
   turnsRemainingOnDeath: number;
   drugCount: number;
   bagLimit: number;
-  locationId: string;
+  locationId?: string;
   status: PlayerStatus;
   drugs: Drug[];
 
@@ -31,7 +31,8 @@ export class PlayerEntity {
     this.turnsRemainingOnDeath = player.turns_remaining_on_death;
     this.drugCount = player.drug_count;
     this.bagLimit = player.bag_limit;
-    this.locationId = player.location_id;
+    this.locationId =
+      player.location_id === "0x0" ? undefined : player.location_id;
     this.status = player.status;
     this.drugs = drugs;
   }

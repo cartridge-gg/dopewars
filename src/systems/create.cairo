@@ -43,21 +43,19 @@ mod create_game {
     #[derive(Drop, starknet::Event)]
     struct PlayerJoined {
         game_id: u32,
-        player_id: ContractAddress,
-        location_id: felt252,
+        player_id: ContractAddress
     }
 
     fn execute(
         ctx: Context, start_time: u64, max_players: usize, max_turns: usize
     ) -> (u32, ContractAddress) {
         let game_id = ctx.world.uuid();
-        let location_id = LocationTrait::random();
 
         let player = Player {
             game_id,
             player_id: ctx.origin,
-            status: PlayerStatus::Normal(()),
-            location_id,
+            status: PlayerStatus::Normal,
+            location_id: 0,
             cash: STARTING_CASH,
             health: STARTING_HEALTH,
             run_attempts: 0,
@@ -139,13 +137,12 @@ mod create_game {
         };
 
         // emit player joined
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin, location_id: location_id });
+        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin });
 
         // emit game created
         emit!(
-            ctx.world, GameCreated {
-                game_id, creator: ctx.origin, start_time, max_players, max_turns
-            }
+            ctx.world,
+            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
         );
 
         (game_id, ctx.origin)

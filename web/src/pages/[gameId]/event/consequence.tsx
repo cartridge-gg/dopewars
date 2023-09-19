@@ -61,14 +61,14 @@ export default function Consequence() {
           width={400}
           height={400}
         />
-        <VStack width="500px">
+        <VStack width="full" maxW="500px">
           <VStack textAlign="center">
             <Text>{response}</Text>
             <Text color="yellow.400">
               {outcome.description && `* ${outcome.description} *`}
             </Text>
           </VStack>
-          <Footer position={["absolute", "relative"]}>
+          <Footer position={["relative", "relative"]}>
             {!isDead ? (
               <Button
                 w="full"

@@ -33,9 +33,9 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
               <MenuItem _hover={{ bg: "transarent" }}>
                 <MediaPlayer />
               </MenuItem>
-              <MenuItem icon={<Roll />} onClick={() => {}}>
+              {/* <MenuItem icon={<Roll />} onClick={() => {}}>
                 CREDITS
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem icon={<User />}>
                 <>{account && formatAddress(account.address.toUpperCase())}</>
               </MenuItem>

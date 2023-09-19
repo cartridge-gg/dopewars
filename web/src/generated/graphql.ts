@@ -725,6 +725,7 @@ export type AvailableGamesQuery = {
 
 export type GlobalScoresQueryVariables = Exact<{
   limit?: InputMaybe<Scalars["Int"]>;
+  cursor?: InputMaybe<Scalars["Cursor"]>;
 }>;
 
 export type GlobalScoresQuery = {
@@ -738,6 +739,7 @@ export type GlobalScoresQuery = {
       node?: {
         __typename?: "Player";
         cash?: any | null;
+        health?: any | null;
         entity?: {
           __typename?: "Entity";
           keys?: Array<string | null> | null;
@@ -937,16 +939,13 @@ useInfiniteAvailableGamesQuery.getKey = (
     ? ["AvailableGames.infinite"]
     : ["AvailableGames.infinite", variables];
 export const GlobalScoresDocument = `
-    query GlobalScores($limit: Int) {
-  playerComponents(
-    first: $limit
-    where: {turns_remaining: 0}
-    order: {direction: DESC, field: CASH}
-  ) {
+    query GlobalScores($limit: Int, $cursor: Cursor) {
+  playerComponents(first: $limit, after: $cursor, where: {turns_remaining: 0}) {
     totalCount
     edges {
       node {
         cash
+        health
         entity {
           keys
           components {

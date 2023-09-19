@@ -27,11 +27,12 @@ import { usePlayerStore } from "@/hooks/state";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
+import { play } from "@/hooks/media";
 
 // hardcode game params for now
 const START_TIME = 0;
 const MAX_PLAYERS = 1;
-const NUM_TURNS = 9;
+const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
@@ -43,11 +44,11 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
-  useEffect(
-    () => setIsGated(false),
-    //setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
-    [],
-  );
+  // useEffect(
+  //   () =>
+  //     setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+  //   [],
+  // );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
@@ -76,6 +77,12 @@ export default function Home() {
                   isDisabled={!account}
                   isLoading={isSubmitting && !txError}
                   onClick={async () => {
+                    if (
+                      process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !==
+                      "true"
+                    ) {
+                      play();
+                    }
                     setIsSubmitting(true);
                     resetAll();
                     const { event, hash } = await createGame(
@@ -84,16 +91,14 @@ export default function Home() {
                       NUM_TURNS,
                     );
 
-                    const { gameId, locationId } = event as JoinedEventData;
+                    const { gameId } = event as JoinedEventData;
                     toast(
                       "Created Game",
                       Alert,
                       `http://amazing_explorer/${hash}`,
                     );
 
-                    router.push(
-                      `/${gameId}/${getLocationById(locationId)?.slug}`,
-                    );
+                    router.push(`/${gameId}/travel`);
                   }}
                 >
                   Hustle

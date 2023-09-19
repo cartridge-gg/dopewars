@@ -20,6 +20,7 @@ import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import Dot from "./Dot";
+import { useDojo } from "@/dojo";
 
 const steps = [
   {
@@ -78,9 +79,13 @@ const Tutorial = ({
   close: () => void;
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const { account, createBurner, isBurnerDeploying } = useDojo();
 
   const onNext = () => {
     if (currentStep == steps.length) {
+      if (!account) {
+        createBurner();
+      }
       close();
     } else {
       setCurrentStep(currentStep + 1);
@@ -94,7 +99,7 @@ const Tutorial = ({
   return (
     <Modal isOpen={isOpen} onClose={close} isCentered>
       <ModalOverlay />
-      <ModalContent maxH="70vh" maxWidth={"600px"}>
+      <ModalContent maxH="90vh" maxWidth={"600px"}>
         <ModalBody justifyContent="center" minH={"360px"}>
           <Box position={"relative"}>
             {steps.map((step) => {
@@ -127,7 +132,11 @@ const Tutorial = ({
                   : Sounds.HoverClick
               }
             >
-              {currentStep == steps.length ? "READY TO HUSTLE" : "NEXT"}
+              {currentStep == steps.length
+                ? account
+                  ? "READY TO HUSTLE"
+                  : "CREATE BURNER"
+                : "NEXT"}
             </Button>
           </VStack>
         </ModalFooter>

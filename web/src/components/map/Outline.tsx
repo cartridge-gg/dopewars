@@ -15,7 +15,7 @@ export const Outline = ({
   target?: Location;
   current?: Location;
 }) => {
-  if (target === undefined || current === undefined) {
+  if (target === undefined) {
     return <></>;
   }
 
@@ -58,7 +58,7 @@ const SvgHighlight = ({
   location,
   fill,
 }: {
-  location: Location;
+  location?: Location;
   fill: string;
 }) => {
   return (

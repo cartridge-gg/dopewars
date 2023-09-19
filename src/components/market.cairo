@@ -89,7 +89,7 @@ impl MarketImpl of MarketTrait {
             }
         } else {
             panic(array!['invalid drug_id']);
-            PricingInfos { min_price: 0, max_price: 0, min_qty: 0, max_qty: 0,  }
+            PricingInfos { min_price: 0, max_price: 0, min_qty: 0, max_qty: 0, }
         }
     }
 }
@@ -102,7 +102,7 @@ fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
 
 
 #[test]
-#[should_panic(expected: ('not enough liquidity', ))]
+#[should_panic(expected: ('not enough liquidity',))]
 fn test_not_enough_quantity() {
     let mut market = Market {
         game_id: 0, location_id: 0, drug_id: 0, cash: SCALING_FACTOR * 1, quantity: 1
