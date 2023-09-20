@@ -1,8 +1,5 @@
 #[system]
 mod join_game {
-    use traits::Into;
-    use box::BoxTrait;
-    use array::ArrayTrait;
     use starknet::ContractAddress;
 
     use dojo::world::Context;

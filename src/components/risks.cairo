@@ -1,7 +1,4 @@
-use traits::{Into, TryInto};
-use option::OptionTrait;
 use debug::PrintTrait;
-
 use rollyourown::constants::{
     SCALING_FACTOR, COPS_DRUG_THRESHOLD, GANGS_CASH_THRESHOLD, ENCOUNTER_BIAS_GANGS
 };

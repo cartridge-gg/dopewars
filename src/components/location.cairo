@@ -1,6 +1,3 @@
-use array::{ArrayTrait, SpanTrait};
-use option::OptionTrait;
-use traits::{Into, TryInto};
 use starknet::ContractAddress;
 
 struct Location {}
@@ -8,14 +5,9 @@ struct Location {}
 #[generate_trait]
 impl LocationImpl of LocationTrait {
     fn all() -> Span<felt252> {
-        let mut locations = array::ArrayTrait::new();
-        locations.append('Queens'.into());
-        locations.append('The Bronx'.into());
-        locations.append('Brooklyn'.into());
-        locations.append('Jersey City'.into());
-        locations.append('Central Park'.into());
-        locations.append('Coney Island'.into());
-
+        let mut locations = array![
+            'Queens', 'The Bronx', 'Brooklyn', 'Jersey City', 'Central Park', 'Coney Island'
+        ];
         locations.span()
     }
 

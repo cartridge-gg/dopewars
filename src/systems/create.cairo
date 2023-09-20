@@ -1,10 +1,5 @@
 #[system]
 mod create_game {
-    use array::ArrayTrait;
-    use array::SpanTrait;
-    use box::BoxTrait;
-    use option::OptionTrait;
-    use traits::{Into, TryInto};
     use starknet::ContractAddress;
 
     use dojo::world::Context;

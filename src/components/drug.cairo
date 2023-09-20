@@ -1,5 +1,3 @@
-use array::{ArrayTrait, SpanTrait};
-use traits::{Into, TryInto};
 use starknet::ContractAddress;
 
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
@@ -16,14 +14,7 @@ struct Drug {
 #[generate_trait]
 impl DrugImpl of DrugTrait {
     fn all() -> Span<felt252> {
-        let mut drugs = array::ArrayTrait::new();
-        drugs.append('Acid'.into());
-        drugs.append('Weed'.into());
-        drugs.append('Ludes'.into());
-        drugs.append('Speed'.into());
-        drugs.append('Heroin'.into());
-        drugs.append('Cocaine'.into());
-
+        let mut drugs = array!['Acid', 'Weed', 'Ludes', 'Speed', 'Heroin', 'Cocaine'];
         drugs.span()
     }
 }

@@ -1,7 +1,3 @@
-use traits::{Into, TryInto};
-use option::OptionTrait;
-use debug::PrintTrait;
-
 use rollyourown::constants::SCALING_FACTOR;
 
 #[derive(Component, Copy, Drop, Serde)]

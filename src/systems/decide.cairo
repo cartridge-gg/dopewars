@@ -1,8 +1,5 @@
 #[system]
 mod decide {
-    use array::ArrayTrait;
-    use box::BoxTrait;
-    use traits::{Into, TryInto};
     use starknet::ContractAddress;
 
     use dojo::world::Context;
