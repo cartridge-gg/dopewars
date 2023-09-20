@@ -186,7 +186,7 @@ const Encounter = ({
         height={400}
         style={{ opacity: isSubmitting ? 0.5 : 1 }}
       />
-      <VStack width="full" maxW="500px">
+      <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
         <VStack h="60px" textAlign="center">
           {isSubmitting ? (
             <>
