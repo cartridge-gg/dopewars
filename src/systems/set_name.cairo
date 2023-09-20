@@ -1,8 +1,5 @@
 #[system]
 mod set_name {
-    use array::ArrayTrait;
-    use traits::Into;
-
     use dojo::world::Context;
     use rollyourown::components::game::Game;
     use rollyourown::components::name::Name;

@@ -1,8 +1,5 @@
 #[system]
 mod decide {
-    use array::ArrayTrait;
-    use box::BoxTrait;
-    use traits::{Into, TryInto};
     use starknet::ContractAddress;
 
     use dojo::world::Context;
@@ -54,9 +51,10 @@ mod decide {
         cash_loss: u128
     }
 
+
     fn execute(ctx: Context, game_id: u32, action: Action, next_location_id: felt252) {
         let player_id = ctx.origin;
-        let mut player = get!(ctx.world, (game_id, player_id).into(), Player);
+        let mut player: Player = get!(ctx.world, (game_id, player_id).into(), Player);
         assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
         let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
@@ -78,13 +76,15 @@ mod decide {
                 match player.status {
                     PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                     PlayerStatus::BeingMugged => {
-                        let cash_loss = (player.cash * GANGS_PAYMENT.into()) / 100;
-                        (Outcome::Paid, cash_loss, 0, 0)
+                        // using same name cash_loss makes LS crash
+                        let cash_loss_ = (player.cash * GANGS_PAYMENT.into()) / 100;
+                        (Outcome::Paid, cash_loss_, 0, 0)
                     },
                     PlayerStatus::BeingArrested => {
-                        let drug_loss = take_drugs(ctx, game_id, player_id, COPS_PAYMENT);
-                        (Outcome::Paid, 0, drug_loss, 0)
-                    }
+                        // using same name drug_loss makes LS crash
+                        let drug_loss_ = take_drugs(ctx, game_id, player_id, COPS_PAYMENT);
+                        (Outcome::Paid, 0, drug_loss_, 0)
+                    },
                 }
             },
         };
@@ -110,12 +110,14 @@ mod decide {
         }
 
         set!(ctx.world, (player));
-
         emit!(ctx.world, Decision { game_id, player_id, action });
-        emit!(
-            ctx.world,
-            Consequence { game_id, player_id, outcome, health_loss, drug_loss, cash_loss }
-        );
+
+        // makes LS crash if inlined in emit! ( outcome / enum issue ?)
+        let consequence_event = Consequence {
+            game_id, player_id, outcome, health_loss, drug_loss, cash_loss
+        };
+        emit!(ctx.world, consequence_event);
+        
     }
 
     fn take_drugs(
@@ -148,3 +150,4 @@ mod decide {
         total_drug_loss
     }
 }
+

@@ -171,7 +171,7 @@ export default function Market() {
           <AlertMessage message={`You have no ${drug.name} to sell`} />
         )}
 
-        <Footer alignItems={["flex-end", "flex-start"]}>
+        <Footer alignItems={["flex-end", "flex-start"]}  height={["100%", "auto"]}>
           {tradeDirection == TradeDirection.Buy && canBuy && (
             <Button
               w={["full", "auto"]}
@@ -297,7 +297,7 @@ const QuantitySelector = ({
         </HStack>
       </Flex>
 
-      <HStack w="100%" py={2} gap="10px">
+      <HStack w="100%" py={2} >
         <Box />
         <Slider
           aria-label="slider-quantity"
@@ -316,7 +316,7 @@ const QuantitySelector = ({
         <HStack spacing="0">
           <ArrowEnclosed
             direction="down"
-            boxSize="48px"
+            boxSize={["36px","48px"]}
             cursor="pointer"
             onClick={onDown}
             color="neon.500"
@@ -326,7 +326,7 @@ const QuantitySelector = ({
           />
           <ArrowEnclosed
             direction="up"
-            boxSize="48px"
+            boxSize={["36px","48px"]}
             cursor="pointer"
             onClick={onUp}
             color="neon.500"
@@ -339,7 +339,8 @@ const QuantitySelector = ({
           h="36px"
           w="100px"
           variant="pixelated"
-          display={["none", "block"]}
+          marginInlineStart={0}
+          // display={["none", "block"]}
           onClick={() => setQuantity(max)}
         >
           Max

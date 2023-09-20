@@ -101,7 +101,7 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={[1, 2]} w="full" gap="20px" fontSize="20px">
+        <SimpleGrid columns={2} w="full" gap={["10px","20px"]} fontSize={["16px","20px"]}>
           {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id)!;
             const canBuy =
@@ -114,8 +114,9 @@ export default function Location() {
               <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader
                   textTransform="uppercase"
-                  fontSize="20px"
+                  fontSize={["16px","20px"]}
                   textAlign="left"
+                  padding={["6px 10px","10px 20px"]}
                 >
                   {drugInfo.name}
                 </CardHeader>
@@ -148,13 +149,13 @@ export default function Location() {
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
-                <CardFooter fontSize="16px" flexDirection="column" gap="10px">
-                  <HStack>
+               
+                <CardFooter fontSize={["14px","16px"]} flexDirection="column" padding={["0 10px","10px 20px"]} >
+                  <HStack justifyContent="space-between">
                     <Text>{formatCash(drug.price)}</Text>
-                    <Spacer />
-                    <HStack>
-                      <Cart />
-                      <Text>{formatQuantity(drug.marketPool.quantity)}</Text>
+                    <HStack >
+                      <Cart mb="4px" />
+                      <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack>
                   </HStack>
                   <BuySellMobileToggle
@@ -199,7 +200,7 @@ const BuySellBtns = ({
 }) => {
   const router = useRouter();
   return (
-    <>
+    <HStack mb="10px" w="full">
       <Button
         flex="1"
         onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)}
@@ -214,7 +215,7 @@ const BuySellBtns = ({
       >
         Sell
       </Button>
-    </>
+    </HStack>
   );
 };
 
@@ -253,6 +254,7 @@ const BuySellMobileToggle = ({
         overflow="hidden"
         align="flex-start"
         display={["flex", "none"]}
+
         {...props}
       >
         <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />

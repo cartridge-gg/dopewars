@@ -1,10 +1,6 @@
 #[system]
 mod travel {
-    use traits::Into;
-    use box::BoxTrait;
-    use array::ArrayTrait;
     use starknet::ContractAddress;
-    use debug::PrintTrait;
 
     use dojo::world::{Context};
 
@@ -84,6 +80,7 @@ mod travel {
 }
 
 use dojo::world::{Context, IWorld, IWorldDispatcher, IWorldDispatcherTrait};
+
 use rollyourown::components::drug::{Drug, DrugTrait};
 use rollyourown::components::location::{Location, LocationTrait};
 use rollyourown::components::market::{Market, MarketTrait};

@@ -54,16 +54,14 @@ const Leaderboard = ({
 
   useEffect(() => {
     setHasNextPage(visibleScores < scores.length);
+    if (!listRef.current) return;
+    const lastEl = listRef.current["lastElementChild"];
+    lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [scores, visibleScores]);
 
   const fetchNextPage = useCallback(() => {
     setVisibleScores(visibleScores + pageSize);
-    setTimeout(() => {
-      if (!listRef.current) return;
-      const lastEl = listRef.current["lastElementChild"];
-      lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-    }, 150);
-  }, [listRef.current]);
+  }, [listRef.current, visibleScores]);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
@@ -122,7 +120,8 @@ const Leaderboard = ({
                 >
                   <HStack mr={3}>
                     <Text
-                      w="30px"
+                      w={["10px","30px"]}
+                      fontSize={["10px", "16px"]}
                       flexShrink={0}
                       // display={["none", "block"]}
                       whiteSpace="nowrap"
@@ -147,6 +146,7 @@ const Leaderboard = ({
                         maxWidth={["150px", "350px"]}
                         whiteSpace="nowrap"
                         overflow="hidden"
+                        fontSize={["12px", "16px"]}
                       >
                         {displayName}
                       </Text>
@@ -158,10 +158,13 @@ const Leaderboard = ({
                       backgroundRepeat="repeat-x"
                       flexGrow={1}
                       color="transparent"
+
                     >
                       {"."}
                     </Text>
-                    <Text flexShrink={0}>{formatCash(score.cash)}</Text>
+                    <Text flexShrink={0}
+                      fontSize={["12px", "16px"]}
+                    >{formatCash(score.cash)}</Text>
                   </HStack>
                 </ListItem>
               );

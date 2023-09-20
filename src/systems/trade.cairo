@@ -1,8 +1,5 @@
 #[system]
 mod buy {
-    use traits::Into;
-    use array::ArrayTrait;
-    use debug::PrintTrait;
     use starknet::ContractAddress;
 
     use dojo::world::Context;
@@ -76,8 +73,6 @@ mod buy {
 
 #[system]
 mod sell {
-    use traits::Into;
-    use array::ArrayTrait;
     use starknet::ContractAddress;
 
     use dojo::world::Context;
