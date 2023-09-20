@@ -54,16 +54,14 @@ const Leaderboard = ({
 
   useEffect(() => {
     setHasNextPage(visibleScores < scores.length);
+    if (!listRef.current) return;
+    const lastEl = listRef.current["lastElementChild"];
+    lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [scores, visibleScores]);
 
   const fetchNextPage = useCallback(() => {
     setVisibleScores(visibleScores + pageSize);
-    setTimeout(() => {
-      if (!listRef.current) return;
-      const lastEl = listRef.current["lastElementChild"];
-      lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-    }, 150);
-  }, [listRef.current]);
+  }, [listRef.current, visibleScores]);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
