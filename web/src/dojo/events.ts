@@ -150,13 +150,14 @@ export const parseEvents = (
   const parsed = [];
 
   for (let raw of rawEvents) {
+    debugger
     switch (eventType) {
       case RyoEvents.MarketEvent:
         parsed.push({
           gameId: num.toHexString(raw.data[0]),
           locationId: num.toHexString(raw.data[1]),
           drugId: num.toHexString(raw.data[2]),
-          increase: Boolean(raw.data[3]),
+          increase: raw.data[3] === "0x0" ? false : true,
         } as MarketEventData);
         break;
 
