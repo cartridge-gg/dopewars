@@ -10,6 +10,7 @@ import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
 import { DojoProvider } from "@/dojo";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Analytics } from '@vercel/analytics/react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </NextHead>
           {isRightSequence && <MakeItRain />}
           <Component {...pageProps} />
+          <Analytics />
         </ChakraProvider>
       </DojoProvider>
     </QueryClientProvider>
