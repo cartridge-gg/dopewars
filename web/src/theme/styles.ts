@@ -99,7 +99,7 @@ export const headerStyles = {
   borderStyle: "solid",
   borderImageSlice: "8",
   borderImageWidth: "12px",
-  borderRadius: ["30px", "0"],
+  borderRadius: ["16px", "0"],
   borderImageSource: [
     `url("data:image/svg+xml,${PixelatedBorderImage({
       color: colors.neon["700"].toString(),
