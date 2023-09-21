@@ -17,6 +17,7 @@ export const Footer = ({
       bottom="0"
       justify="center"
       align="flex-end"
+      flexGrow={1}
       background="linear-gradient(transparent, #172217, #172217)"
       {...props}
     >

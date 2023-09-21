@@ -64,7 +64,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
   const mediaStore = useMediaStore();
   const songTitle =
     mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
-  const height = "40px";
+  const height = "48px";
 
   useEffect(() => {
     const init = async () => {

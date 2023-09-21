@@ -1,5 +1,6 @@
 import BorderImage from "@/components/icons/BorderImage";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
+import PixelatedBorderImage from "@/components/icons/PixelatedBorderImage";
 
 import { generatePixelBorderPath } from "@/utils/ui";
 
@@ -91,6 +92,33 @@ export const cardPixelatedStyleOutset = ({
     })}")`,
   },
 });
+
+export const headerStyles = {
+  border: 0,
+  bg: "neon.700",
+  borderStyle: "solid",
+  borderImageSlice: "8",
+  borderImageWidth: "12px",
+  borderRadius: ["30px", "0"],
+  borderImageSource: [
+    `url("data:image/svg+xml,${PixelatedBorderImage({
+      color: colors.neon["700"].toString(),
+    })}")`, 'none'
+  ],
+  clipPath: ["none", `polygon(${generatePixelBorderPath()})`],
+}
+
+export const headerButtonStyles = {
+  ...headerStyles,
+  _hover: {
+    bg: "neon.600",
+    borderImageSource: [
+      `url("data:image/svg+xml,${PixelatedBorderImage({
+        color: colors.neon["600"].toString(),
+      })}")`, 'none'
+    ]
+  },
+}
 
 //layer styles
 export const layerStyles = {

@@ -124,7 +124,6 @@ export default function Market() {
         prefixTitle: "The market",
         imageSrc: "/images/dealer.png",
       }}
-      showBack={true}
     >
       <VStack boxSize="full" justify={["normal", "center"]}>
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
@@ -172,15 +171,22 @@ export default function Market() {
         )}
 
         <Footer alignItems={["flex-end", "flex-start"]}  height={["100%", "auto"]}>
-          {tradeDirection == TradeDirection.Buy && canBuy && (
             <Button
               w={["full", "auto"]}
-              isLoading={isSubmitting && !txError}
-              isDisabled={quantityBuy === 0}
-              onClick={onTrade}
+              onClick={()=> router.back()}
             >
-              Buy ({quantityBuy})
+              Back
             </Button>
+
+          {tradeDirection == TradeDirection.Buy && canBuy && (
+            <Button
+            w={["full", "auto"]}
+            isLoading={isSubmitting && !txError}
+            isDisabled={quantityBuy === 0}
+            onClick={onTrade}
+          >
+            Buy ({quantityBuy})
+          </Button>
           )}
 
           {tradeDirection == TradeDirection.Sell && canSell && (

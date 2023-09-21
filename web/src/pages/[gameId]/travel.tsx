@@ -186,7 +186,7 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <HStack w="full" pointerEvents="all">
+        <HStack w={["auto !important","full"]} pointerEvents="all">
           <Button
             isDisabled={isSubmitting}
             w="full"

@@ -23,7 +23,7 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
     <>
       <Popover placement="bottom-end">
         <PopoverTrigger>
-          <HeaderButton>
+          <HeaderButton w="48px">
             <Dots />
           </HeaderButton>
         </PopoverTrigger>

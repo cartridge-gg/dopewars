@@ -7,22 +7,20 @@ import {
   forwardRef,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { IsMobile } from "@/utils/ui";
 
 import { generatePixelBorderPath } from "@/utils/ui";
+import { headerStyles, headerButtonStyles } from "@/theme/styles";
 
 const HeaderButton = forwardRef<ButtonProps, "button">(
   ({ children, ...props }: { children?: ReactNode } & StyleProps, ref) => (
     <Box
       ref={ref}
       as="button"
+      p={[ "6px" , "6px 12px"]}
+      h="48px"
+      sx={headerButtonStyles}
       {...props}
-      _hover={{
-        backgroundColor: "neon.600",
-      }}
-      p={IsMobile() ? "6px" : "6px 12px"}
-      bgColor="neon.700"
-      clipPath={`polygon(${generatePixelBorderPath()})`}
+
     >
       {children}
     </Box>
