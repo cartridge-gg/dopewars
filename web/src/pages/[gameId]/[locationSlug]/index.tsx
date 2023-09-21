@@ -101,7 +101,7 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={2} w="full" gap={["10px","20px"]} fontSize={["16px","20px"]}>
+        <SimpleGrid columns={2} w="full" gap={["10px","16px"]} fontSize={["16px","20px"]}>
           {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id)!;
             const canBuy =
@@ -168,7 +168,7 @@ export default function Location() {
             );
           })}
         </SimpleGrid>
-        <Box minH="60px" />
+        <Box minH={["60px", 0] }/>
       </VStack>
       <Footer>
         <Button

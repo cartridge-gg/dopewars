@@ -12,6 +12,9 @@ import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { useDojo } from "@/dojo";
 import { formatAddress } from "@/utils/contract";
+import PixelatedBorderImage from "./icons/PixelatedBorderImage";
+import colors from "@/theme/colors";
+import { headerStyles, headerButtonStyles } from "@/theme/styles";
 
 // TODO: constrain this on contract side
 const MAX_INVENTORY = 100;
@@ -57,27 +60,22 @@ const Header = ({ back }: HeaderProps) => {
     <HStack
       w="full"
       px="10px"
-      py={["0", "20px"]}
       spacing="10px"
       zIndex="overlay"
       align="flex-start"
+      py={["0", "20px"]}
     >
       <HStack flex="1" justify={["left", "right"]}>
-        {back && (
-          <HeaderButton h="40px" onClick={() => router.back()}>
-            <Arrow />
-          </HeaderButton>
-        )}
       </HStack>
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
-            h="40px"
+            h="48px"
             w="auto"
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
-            clipPath={`polygon(${generatePixelBorderPath()})`}
+            sx={{...headerStyles}}
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
@@ -106,7 +104,7 @@ const Header = ({ back }: HeaderProps) => {
         </HStack>
       )}
 
-      <HStack flex="1" justify="right">
+      <HStack flex="1" justify="right" >
         {!isMobile && (
           <>
             <MediaPlayer />
@@ -115,7 +113,8 @@ const Header = ({ back }: HeaderProps) => {
 
         {(!isMobile || (!account && isMobile)) && (
           <Button
-            variant="pixelated"
+            h="48px"
+            sx={headerButtonStyles}
             isLoading={isBurnerDeploying}
             onClick={() => {
               if (!account) {

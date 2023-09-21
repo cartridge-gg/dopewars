@@ -50,10 +50,10 @@ export class GlobalScores {
 }
 
 export const useGlobalScores = (offset?: number, limit?: number) => {
-  // Gets top 100
+  // Gets top 1000
   // TODO: paginate with cursor for more scores
   const { data, isFetched, refetch } = useGlobalScoresQuery({
-    limit: limit || 100,
+    limit: limit || 1000,
   });
 
   const scores: Score[] = useMemo(() => {
