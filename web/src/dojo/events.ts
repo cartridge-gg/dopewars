@@ -150,7 +150,6 @@ export const parseEvents = (
   const parsed = [];
 
   for (let raw of rawEvents) {
-    debugger
     switch (eventType) {
       case RyoEvents.MarketEvent:
         parsed.push({
