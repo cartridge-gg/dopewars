@@ -8,7 +8,7 @@ export const useToast = () => {
   const chakraToast = useChakraToast();
 
   const toast = useCallback(
-    (message: string, icon?: React.FC, link?: string, duration?: Number = TOAST_DURATION) => {
+    (message: string, icon?: React.FC, link?: string, duration: number = TOAST_DURATION) => {
       chakraToast({
         position: "bottom-left",
         duration,

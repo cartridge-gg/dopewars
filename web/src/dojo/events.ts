@@ -70,7 +70,7 @@ export interface MarketEventData extends BaseEventData {
   gameId: string;
   locationId: string;
   drugId: string;
-  increase: bool;
+  increase: boolean;
 }
 
 export const parseEvent = (
@@ -127,6 +127,7 @@ export const parseEvent = (
     case RyoEvents.Traveled:
     case RyoEvents.Bought:
     case RyoEvents.Sold:
+    case RyoEvents.MarketEvent:
       throw new Error(`event parse not implemented: ${eventType}`);
   }
 };
@@ -155,7 +156,7 @@ export const parseEvents = (
           gameId: num.toHexString(raw.data[0]),
           locationId: num.toHexString(raw.data[1]),
           drugId: num.toHexString(raw.data[2]),
-          increase: Number(raw.data[3]),
+          increase: Boolean(raw.data[3]),
         } as MarketEventData);
         break;
 
