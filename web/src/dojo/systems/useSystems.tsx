@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDojo } from "..";
-import { BaseEventData, parseEvent, RyoEvents } from "../events";
+import { BaseEventData, parseEvent, parseEvents, RyoEvents } from "../events";
 import { Action } from "../types";
 import { shortString } from "starknet";
 
@@ -37,6 +37,7 @@ export interface SystemsInterface {
 export interface SystemExecuteResult {
   hash: string;
   event?: BaseEventData;
+  events?: BaseEventData[];
 }
 
 export const useSystems = (): SystemsInterface => {
@@ -90,6 +91,12 @@ export const useSystems = (): SystemsInterface => {
 
       try {
         result.event = parseEvent(receipt, RyoEvents.AdverseEvent);
+      } catch (err) {
+        // no random event occured
+      }
+
+      try {
+        result.events = parseEvents(receipt, RyoEvents.MarketEvent);
       } catch (err) {
         // no random event occured
       }

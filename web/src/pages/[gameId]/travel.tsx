@@ -1,4 +1,4 @@
-import { Arrow, Car } from "@/components/icons";
+import { Arrow, Car, Siren, Truck } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import {
@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
 import { Location } from "@/dojo/types";
+import { MarketEventData } from "@/dojo/events";
 
 interface MarketPriceInfo {
   id: string;
@@ -141,17 +142,34 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId) {
       setIsSubmitting(true);
-      const { event, hash } = await travel(gameId, targetId);
+      const { event, events,  hash } = await travel(gameId, targetId);
       if (event) {
         return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
-
+      
       toast(
         `You've traveled to ${locationName}`,
         Car,
         `http://amazing_explorer/${hash}`,
       );
       router.push(`/${gameId}/turn`);
+
+      // market events 
+      if( events) {
+        for( let event of events) {
+          const e = event as MarketEventData;
+          const msg = e.increase ? 
+          `Pigs seizured ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
+          `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${getLocationById(e.locationId)?.name}`
+          const icon = e.increase ? Siren : Truck;
+          toast(
+            msg,
+            icon,
+            `http://amazing_explorer/${hash}`,
+            6000
+          );
+        }
+      }
     }
   }, [targetId, router, gameId, travel, toast]);
 
