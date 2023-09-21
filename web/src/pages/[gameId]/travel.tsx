@@ -159,7 +159,7 @@ export default function Travel() {
         for( let event of events) {
           const e = event as MarketEventData;
           const msg = e.increase ? 
-          `Pigs seizured ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
+          `Pigs seized ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
           `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${getLocationById(e.locationId)?.name}`
           const icon = e.increase ? Siren : Truck;
           toast(
