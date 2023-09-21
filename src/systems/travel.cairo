@@ -113,19 +113,19 @@ fn market_variations(ctx: Context, game_id: u32) {
                     match drugs.pop_front() {
                         Option::Some(drug_id) => {
                             seed = pedersen::pedersen(seed, *drug_id);
-                            let rand = random(seed, 0, 100);
+                            let rand = random(seed, 0, 1000);
 
-                            if rand <= PRICE_VAR_CHANCE.into() {
+                            if rand < PRICE_VAR_CHANCE.into() {
                                 // increase price
                                 price_variation_with_cash(
                                     ctx, game_id, *location_id, *drug_id, ref seed, true
                                 );
-                            } else if rand >= (99 - PRICE_VAR_CHANCE).into() {
+                            } else if rand >= (999 - PRICE_VAR_CHANCE).into() {
                                 // decrease price
                                 price_variation_with_cash(
                                     ctx, game_id, *location_id, *drug_id, ref seed, false
                                 );
-                            } else if rand > 50 && rand < 50 + MARKET_EVENT_CHANCE.into() {
+                            } else if rand > 500 && rand <= 500 + MARKET_EVENT_CHANCE.into() {
                                 // big move up
                                 price_variation_with_drug(
                                     ctx, game_id, *location_id, *drug_id, ref seed, true
@@ -139,7 +139,7 @@ fn market_variations(ctx: Context, game_id: u32) {
                                         increase: true
                                     }
                                 );
-                            } else if rand < 50 && rand > 50 - MARKET_EVENT_CHANCE.into() {
+                            } else if rand < 500 && rand >= 500 - MARKET_EVENT_CHANCE.into() {
                                 // big move down
                                 price_variation_with_drug(
                                     ctx, game_id, *location_id, *drug_id, ref seed, false
