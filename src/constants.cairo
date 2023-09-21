@@ -16,8 +16,12 @@ const STARTING_CASH: u128 = 2000_0000; // $2000
 const STARTING_BAG_LIMIT: usize = 100; // inventory size
 const STARTING_HEALTH: u8 = 100;
 
-// market events
-const PRICE_VAR: u8 = 3; // 3% chance 
-const MIN_PRICE_VAR: u8 = 20; // 20%  
-const MAX_PRICE_VAR: u8 = 50; // 50%  
-const MAX_EXTRA_PRICE_VAR: u8 = 42; // 42%  
+// market price variation
+const PRICE_VAR_CHANCE: u8 = 25; // 50% chance = 25% up / 25% down
+const PRICE_VAR_MIN: u8 = 1; // 1%  
+const PRICE_VAR_MAX: u8 = 5; // 5%  
+
+// market price events
+const MARKET_EVENT_CHANCE: u8 = 2; // 2%      = 1% up / 1% down
+const MARKET_EVENT_MIN: u8 = 50; // 50%  
+const MARKET_EVENT_MAX: u8 = 100; // 100%  

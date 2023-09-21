@@ -15,6 +15,7 @@ export enum RyoEvents {
   AdverseEvent = "0x3605d6af5b08d01a1b42fa16a5f4dc202724f1664912948dcdbe99f5c93d0a0",
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
   Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
+  MarketEvent = "0x255825b8769ab99d6c1bd893b440a284a39d8db18c76b91e8e6a70ef5c7a8e0",
 }
 
 export interface BaseEventData {
@@ -63,6 +64,13 @@ export interface ConsequenceEventData extends BaseEventData {
   healthLoss: number;
   drugLoss: number;
   cashLoss: number;
+}
+
+export interface MarketEventData extends BaseEventData {
+  gameId: string;
+  locationId: string;
+  drugId: string;
+  increase: bool;
 }
 
 export const parseEvent = (
@@ -121,4 +129,41 @@ export const parseEvent = (
     case RyoEvents.Sold:
       throw new Error(`event parse not implemented: ${eventType}`);
   }
+};
+
+
+// temps dirty solution, will change when torii index custom events
+export const parseEvents = (
+  receipt: GetTransactionReceiptResponse,
+  eventType: RyoEvents,
+): BaseEventData[] => {
+
+  if (receipt.status === "REJECTED") {
+    throw new Error(`transaction REJECTED`);
+  }
+  const rawEvents = receipt.events?.filter((e) => e.keys[0] === eventType);
+  if (rawEvents.length === 0) {
+    throw new Error(`event not found`);
+  }
+
+  const parsed = [];
+
+  for (let raw of rawEvents) {
+    switch (eventType) {
+      case RyoEvents.MarketEvent:
+        parsed.push({
+          gameId: num.toHexString(raw.data[0]),
+          locationId: num.toHexString(raw.data[1]),
+          drugId: num.toHexString(raw.data[2]),
+          increase: Number(raw.data[3]),
+        } as MarketEventData);
+        break;
+
+      default:
+        throw new Error(`event parse not implemented: ${eventType}`);
+    }
+  }
+
+  return parsed
+
 };
