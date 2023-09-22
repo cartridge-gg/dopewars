@@ -168,7 +168,7 @@ export default function Location() {
             );
           })}
         </SimpleGrid>
-        <Box minH={["60px", 0] }/>
+        <Box minH="60px"/>
       </VStack>
       <Footer>
         <Button

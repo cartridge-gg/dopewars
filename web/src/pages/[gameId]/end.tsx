@@ -146,7 +146,7 @@ export default function End() {
               </Button> */}
 
               <Link
-                href="https://forms.gle/5hnEhybAiMzKsEx89"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdHXV6YWUUd2l3azgst0L6vYvLwY6abGoQu5rbf8r7h8ffCnQ/viewform"
                 isExternal
                 flex="1"
                 textDecoration="none"
