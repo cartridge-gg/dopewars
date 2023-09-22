@@ -31,6 +31,8 @@ export const initMediaStore = async () => {
   const state = useMediaStore.getState();
   if (state.isInitialized) return;
 
+  state.currentIndex = Math.floor(Math.random()*mediaLibrary.length);
+
   for (let media of mediaLibrary) {
     state.medias.push({
       ...media,
