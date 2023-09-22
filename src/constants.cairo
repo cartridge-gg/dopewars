@@ -22,6 +22,6 @@ const PRICE_VAR_MIN: u8 = 1; // 1%
 const PRICE_VAR_MAX: u8 = 5; // 5%  
 
 // market price events
-const MARKET_EVENT_CHANCE: u32 = 5; // on 1000 : 1% = 0.5% up / 0.5% down
-const MARKET_EVENT_MIN: u8 = 50; // 50%  
-const MARKET_EVENT_MAX: u8 = 100; // 100%  
+const MARKET_EVENT_CHANCE: u32 = 7; // on 1000 : 1.4% = 0.7% up / 0.7% down
+const MARKET_EVENT_MIN: u8 = 50;  //   up 50%   | down 25%
+const MARKET_EVENT_MAX: u8 = 100; //   up 100%  | down 50%
