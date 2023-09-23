@@ -44,11 +44,11 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
-  useEffect(
-    () =>
-     setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
-      [],
-  );
+  // useEffect(
+  //   () =>
+  //     setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
+  //   [],
+  // );
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
@@ -61,15 +61,11 @@ export default function Home() {
               <VStack>
                 <HStack>
                   <Alert />
-                  <Text align="center">Under Maintenance</Text>
-                </HStack>
-                {/* <HStack>
-                  <Alert />
                   <Text align="center">Under Construction</Text>
                 </HStack>
                 <Text align="center">
                   Get ready hustlers... Season II starts in September
-                </Text> */}
+                </Text>
               </VStack>
             ) : (
               <>
