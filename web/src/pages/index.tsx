@@ -57,7 +57,7 @@ export default function Home() {
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
-            <Box>TEST</Box>
+            <Box>TEST 1</Box>
             {isGated ? (
               <VStack>
                 <HStack>
