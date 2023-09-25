@@ -25,10 +25,10 @@ import { useDojo } from "@/dojo";
 
 declare global {
   interface Window {
-    wb: {
+    workbox: {
       messageSkipWaiting(): void;
       register(): void;
-      addEventListener(name: string, callback: () => unknown);
+      addEventListener(name: string, callback: () => unknown): void;
     };
   }
 }
@@ -55,7 +55,7 @@ const PwaUpdater = () => {
   }, []);
 
   return (
-    <Modal isOpen={isOpen} isCentered>
+    <Modal isOpen={isOpen} onClose={()=>{}} isCentered>
       <ModalOverlay />
       <ModalContent maxH="90vh" maxWidth={"600px"}>
         <ModalBody justifyContent="center" minH={"360px"}>
