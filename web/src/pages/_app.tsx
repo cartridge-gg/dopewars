@@ -10,7 +10,8 @@ import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
 import { DojoProvider } from "@/dojo";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
+import PwaUpdater from "@/components/PwaUpdater";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
           {isRightSequence && <MakeItRain />}
           <Component {...pageProps} />
           <Analytics />
+          <PwaUpdater />
         </ChakraProvider>
       </DojoProvider>
     </QueryClientProvider>
