@@ -79,9 +79,9 @@ export default function Decision() {
           setIsSubmitting(false);
           setPrefixTitle("Your escape...");
           setTitle("Failed!");
-          setPenalty(`You loss ${event.healthLoss}HP!`);
+          setPenalty(`You lost ${event.healthLoss}HP!`);
           toast(
-            `You were captured and loss ${event.healthLoss}HP!`,
+            `You were captured and lost ${event.healthLoss}HP!`,
             Heart,
             `http://amazing_explorer/${result.hash}`,
           );
