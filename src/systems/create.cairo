@@ -1,8 +1,22 @@
-#[system]
+use starknet::ContractAddress;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+#[starknet::interface]
+trait IGame<TContractState> {
+    fn execute(
+        self: @TContractState,
+        world: IWorldDispatcher,
+        start_time: u64,
+        max_players: usize,
+        max_turns: usize
+    ) -> (u32, ContractAddress);
+}
+
+// #[system]
+#[starknet::contract]
 mod create_game {
     use starknet::ContractAddress;
-
-    use dojo::world::Context;
+    use starknet::get_caller_address;
 
     use rollyourown::PlayerStatus;
     use rollyourown::components::name::Name;
@@ -17,7 +31,12 @@ mod create_game {
         TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };
     use rollyourown::utils::random;
+    use super::IGame;
+    use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use debug::PrintTrait;
+
+    #[storage]
+    struct Storage {}
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -41,105 +60,115 @@ mod create_game {
         player_id: ContractAddress
     }
 
-    fn execute(
-        ctx: Context, start_time: u64, max_players: usize, max_turns: usize
-    ) -> (u32, ContractAddress) {
-        let game_id = ctx.world.uuid();
+    #[external(v0)]
+    impl GameImpl of IGame<ContractState> {
+        fn execute(
+            self: @ContractState,
+            world: IWorldDispatcher,
+            start_time: u64,
+            max_players: usize,
+            max_turns: usize
+        ) -> (u32, ContractAddress) {
+            let game_id = world.uuid();
+            let caller = get_caller_address();
 
-        let player = Player {
-            game_id,
-            player_id: ctx.origin,
-            status: PlayerStatus::Normal,
-            location_id: 0,
-            cash: STARTING_CASH,
-            health: STARTING_HEALTH,
-            run_attempts: 0,
-            drug_count: 0,
-            bag_limit: STARTING_BAG_LIMIT,
-            turns_remaining: max_turns,
-            turns_remaining_on_death: 0
-        };
-
-        let game = Game {
-            game_id,
-            start_time,
-            max_players,
-            num_players: 1, // caller auto joins
-            max_turns,
-            is_finished: false,
-            creator: ctx.origin,
-        };
-
-        set!(ctx.world, (game, player));
-
-        let mut locations = LocationTrait::all();
-        loop {
-            match locations.pop_front() {
-                Option::Some(location_id) => {
-                    //set risks entity
-                    set!(
-                        ctx.world,
-                        (Risks {
-                            game_id,
-                            location_id: *location_id,
-                            travel: TRAVEL_RISK,
-                            capture: CAPTURE_RISK
-                        })
-                    );
-
-                    let mut seed = starknet::get_tx_info().unbox().transaction_hash;
-                    seed = pedersen::pedersen(seed, *location_id);
-
-                    let mut drugs = DrugTrait::all();
-                    loop {
-                        match drugs.pop_front() {
-                            Option::Some(drug_id) => {
-                                seed = pedersen::pedersen(seed, *drug_id);
-                                let pricing_infos = MarketTrait::get_pricing_info(*drug_id);
-                                let market_price = random(
-                                    seed, pricing_infos.min_price, pricing_infos.max_price
-                                );
-                                let market_quantity: usize = random(
-                                    seed, pricing_infos.min_qty, pricing_infos.max_qty
-                                )
-                                    .try_into()
-                                    .unwrap();
-
-                                let market_cash = market_quantity.into() * market_price;
-
-                                //set market entity
-                                set!(
-                                    ctx.world,
-                                    (Market {
-                                        game_id,
-                                        location_id: *location_id,
-                                        drug_id: *drug_id,
-                                        cash: market_cash,
-                                        quantity: market_quantity
-                                    })
-                                );
-                            },
-                            Option::None(()) => {
-                                break ();
-                            }
-                        };
-                    };
-                },
-                Option::None(_) => {
-                    break ();
-                }
+            let player = Player {
+                game_id,
+                player_id: caller,
+                status: PlayerStatus::Normal,
+                location_id: 0,
+                cash: STARTING_CASH,
+                health: STARTING_HEALTH,
+                run_attempts: 0,
+                drug_count: 0,
+                bag_limit: STARTING_BAG_LIMIT,
+                turns_remaining: max_turns,
+                turns_remaining_on_death: 0
             };
-        };
 
-        // emit player joined
-        emit!(ctx.world, PlayerJoined { game_id, player_id: ctx.origin });
+            let game = Game {
+                game_id,
+                start_time,
+                max_players,
+                num_players: 1, // caller auto joins
+                max_turns,
+                is_finished: false,
+                creator: caller,
+            };
 
-        // emit game created
-        emit!(
-            ctx.world,
-            GameCreated { game_id, creator: ctx.origin, start_time, max_players, max_turns }
-        );
+            set!(world, (game, player));
 
-        (game_id, ctx.origin)
+            let mut locations = LocationTrait::all();
+            loop {
+                match locations.pop_front() {
+                    Option::Some(location_id) => {
+                        //set risks entity
+                        set!(
+                            world,
+                            (Risks {
+                                game_id,
+                                location_id: *location_id,
+                                travel: TRAVEL_RISK,
+                                capture: CAPTURE_RISK
+                            })
+                        );
+
+                        let mut seed = starknet::get_tx_info().unbox().transaction_hash;
+                        seed = pedersen::pedersen(seed, *location_id);
+
+                        let mut drugs = DrugTrait::all();
+                        loop {
+                            match drugs.pop_front() {
+                                Option::Some(drug_id) => {
+                                    seed = pedersen::pedersen(seed, *drug_id);
+                                    let pricing_infos = MarketTrait::get_pricing_info(*drug_id);
+                                    let market_price = random(
+                                        seed, pricing_infos.min_price, pricing_infos.max_price
+                                    );
+                                    let market_quantity: usize = random(
+                                        seed, pricing_infos.min_qty, pricing_infos.max_qty
+                                    )
+                                        .try_into()
+                                        .unwrap();
+
+                                    let market_cash = market_quantity.into() * market_price;
+
+                                    //set market entity
+                                    set!(
+                                        world,
+                                        (Market {
+                                            game_id,
+                                            location_id: *location_id,
+                                            drug_id: *drug_id,
+                                            cash: market_cash,
+                                            quantity: market_quantity
+                                        })
+                                    );
+                                },
+                                Option::None(()) => {
+                                    break ();
+                                }
+                            };
+                        };
+                    },
+                    Option::None(_) => {
+                        break ();
+                    }
+                };
+            };
+
+            // emit player joined
+            emit!(world, PlayerJoined { game_id, player_id: caller, });
+
+            // emit game created
+            emit!(
+                world,
+                GameCreated {
+                    game_id, creator: caller, start_time, max_players, max_turns
+                }
+            );
+
+            (game_id, caller)
+        }
     }
 }
