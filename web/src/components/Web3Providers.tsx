@@ -7,7 +7,8 @@ import {
   RainbowKitProvider,
   getDefaultWallets,
   connectorsForWallets,
-  darkTheme 
+  darkTheme, 
+  AvatarComponent
 } from "@rainbow-me/rainbowkit";
 import {
   argentWallet,
@@ -15,7 +16,7 @@ import {
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, optimism } from "wagmi/chains";
+import { mainnet, optimism, goerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Avatar,  } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
@@ -89,6 +90,7 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
       width={size}
       height={size}
       style={{ borderRadius: 999 }}
+      alt="ensAvatar"
     />
   ) : (
     <Avatar name={genAvatarFromAddress(address)} w="60px" height="60px" />

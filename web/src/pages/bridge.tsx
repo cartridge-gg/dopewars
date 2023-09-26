@@ -22,7 +22,7 @@ import { Web3Providers } from "@/components/Web3Providers";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
-import { connect, disconnect, type StarknetWindowObject } from "get-starknet";
+import { connect, ConnectOptions, disconnect, DisconnectOptions, type StarknetWindowObject } from "get-starknet";
 import { Contract, Provider, constants, uint256 } from "starknet";
 import { formatEther } from 'viem'
 
@@ -49,8 +49,9 @@ export default function BridgePage() {
   const snEth = new Contract(SnEthAbi, eth_snmainnet_address, provider);
 
   const [snWalletInfos, setSnWalletInfos] =
-    useState<StarknetWindowObject>(undefined);
-  const [snEthBalance, setSnEthBalance] = useState("")
+    useState<StarknetWindowObject | null>(null);
+  const [snEthBalance, setSnEthBalance] = useState(0)
+  
 
   const handleConnect = async (options?: ConnectOptions) => {
     const res = await connect(options);
@@ -63,7 +64,7 @@ export default function BridgePage() {
 
   const handleDisconnect = async (options?: DisconnectOptions) => {
     const res = await disconnect(options);
-    setSnWalletInfos(undefined);
+    setSnWalletInfos(null);
   };
 
   return (
@@ -83,8 +84,8 @@ export default function BridgePage() {
                   <Text fontFamily="broken-console">FROM </Text>
                   <HStack
                     w="full"
-                    direction={"flex"}
-                    justifyContent={"space-between"}
+                    display="flex"
+                    justifyContent="space-between"
                   >
                     <Box>
                       <Ethereum /> Mainnet
@@ -112,8 +113,8 @@ export default function BridgePage() {
                   <Text fontFamily="broken-console">TO </Text>
                   <HStack
                     w="full"
-                    direction={"flex"}
-                    justifyContent={"space-between"}
+                    display="flex"
+                    justifyContent="space-between"
                   >
                     <Box>
                       <Starknet /> Starknet
@@ -132,7 +133,7 @@ export default function BridgePage() {
                 <Button
                   onClick={() => handleDisconnect({ clearLastWallet: true })}
                 >
-                  Disconnect {frenlyAddress(snWalletInfos.selectedAddress)} ({Number(snEthBalance).toFixed(3)} ETH)
+                  Disconnect {frenlyAddress(snWalletInfos.selectedAddress || "" )} ({Number(snEthBalance).toFixed(3)} ETH)
                 </Button>
               )}
             </VStack>
