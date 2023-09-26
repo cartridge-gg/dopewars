@@ -7,8 +7,8 @@ import {
   RainbowKitProvider,
   getDefaultWallets,
   connectorsForWallets,
-  darkTheme, 
-  AvatarComponent
+  darkTheme,
+  AvatarComponent,
 } from "@rainbow-me/rainbowkit";
 import {
   argentWallet,
@@ -18,13 +18,13 @@ import {
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { mainnet, optimism, goerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { Avatar,  } from "./avatar/Avatar";
+import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
-   // optimism,
+    // optimism,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
   ],
   [publicProvider()],
@@ -48,7 +48,7 @@ const connectors = connectorsForWallets([
     groupName: "Other",
     wallets: [
       argentWallet({ projectId, chains }),
-      trustWallet({ projectId, chains }),
+      // trustWallet({ projectId, chains }),
       ledgerWallet({ projectId, chains }),
     ],
   },
@@ -72,8 +72,8 @@ export function Web3Providers({ children }: { children: React.ReactNode }) {
         avatar={CustomAvatar}
         modalSize="compact"
         theme={darkTheme({
-          accentColor: '#11ed83',
-          accentColorForeground: 'black',
+          accentColor: "#11ed83",
+          accentColorForeground: "black",
         })}
         coolMode
       >
@@ -84,15 +84,17 @@ export function Web3Providers({ children }: { children: React.ReactNode }) {
 }
 
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
-  return ensImage ? (
-    <img
-      src={ensImage}
-      width={size}
-      height={size}
-      style={{ borderRadius: 999 }}
-      alt="ensAvatar"
-    />
-  ) : (
-    <Avatar name={genAvatarFromAddress(address)} w="60px" height="60px" />
-  );
+  return <Avatar name={genAvatarFromAddress(address)} w="60px" height="60px" />;
+
+  // return ensImage ? (
+  //   <img
+  //     src={ensImage}
+  //     width={size}
+  //     height={size}
+  //     style={{ borderRadius: 999 }}
+  //     alt="ensAvatar"
+  //   />
+  // ) : (
+  //   <Avatar name={genAvatarFromAddress(address)} w="60px" height="60px" />
+  // );
 };
