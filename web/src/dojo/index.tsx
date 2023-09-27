@@ -13,7 +13,8 @@ import {
   shortString,
   TransactionFinalityStatus,
 } from "starknet";
-import { useBurner } from "../hooks/burner";
+
+import { useBurner } from '@dojoengine/create-burner';
 
 export const SCALING_FACTOR = 10000;
 export const REFETCH_INTERVAL = 1000; // really need graphql subscriptions...
@@ -49,7 +50,9 @@ export function DojoProvider({
     account,
     create: createBurner,
     isDeploying: isBurnerDeploying,
-  } = useBurner();
+  } = useBurner({
+    nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!
+  });
 
   const execute = useCallback(
     async (systemName: string, params: BigNumberish[]) => {
