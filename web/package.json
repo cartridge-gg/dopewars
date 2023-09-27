@@ -13,6 +13,7 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
+    "@dojoengine/create-burner": "0.0.22",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@vercel/analytics": "^1.0.2",

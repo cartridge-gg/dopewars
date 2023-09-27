@@ -12,8 +12,11 @@ import {
   CallData,
   shortString,
   TransactionFinalityStatus,
+  RpcProvider
 } from "starknet";
-import { useBurner } from "../hooks/burner";
+
+// import { useBurner } from "../hooks/burner";
+import { useBurner } from "@dojoengine/create-burner"
 
 export const SCALING_FACTOR = 10000;
 export const REFETCH_INTERVAL = 1000; // really need graphql subscriptions...
@@ -38,6 +41,16 @@ export function useDojo() {
   return useContext(DojoContext);
 }
 
+const provider = new RpcProvider({
+  nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!,
+});
+
+const admin = new Account(
+  provider,
+  process.env.NEXT_PUBLIC_ADMIN_ADDRESS!,
+  process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY!,
+);
+
 export function DojoProvider({
   children,
 }: {
@@ -49,7 +62,10 @@ export function DojoProvider({
     account,
     create: createBurner,
     isDeploying: isBurnerDeploying,
-  } = useBurner();
+  } = useBurner({
+     masterAccount:admin,
+     accountClassHash: "0x04d07e40e93398ed3c76981e72dd1fd22557a78ce36c0515f679e27f0bb5bc5f"
+      });
 
   const execute = useCallback(
     async (systemName: string, params: BigNumberish[]) => {
