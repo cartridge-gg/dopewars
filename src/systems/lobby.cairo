@@ -17,7 +17,7 @@ trait IGame<TContractState> {
 
 
 #[starknet::contract]
-mod game {
+mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 

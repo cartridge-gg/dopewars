@@ -1,37 +1,8 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-#[starknet::interface]
-trait IDecide<TContractState> {
-    fn decide(
-        self: @TContractState,
-        world: IWorldDispatcher,
-        game_id: u32,
-        action: Action,
-        next_location_id: felt252
-    );
-}
 
-#[starknet::contract]
-mod decide {
-    use starknet::ContractAddress;
-
-    use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
-    use rollyourown::components::game::{Game, GameTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait};
-    use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::drug::{Drug, DrugTrait};
-    use rollyourown::utils::random;
-
-    use super::{IWorldDispatcher, IWorldDispatcherTrait};
-
-
-    #[storage]
-    struct Storage {}
-
-
-    #[derive(Copy, Drop, Serde, PartialEq)]
+ #[derive(Copy, Drop, Serde, PartialEq)]
     enum Action {
         Run: (),
         Pay: (),
@@ -46,6 +17,39 @@ mod decide {
         Unsupported: (),
     }
 
+
+#[starknet::interface]
+trait IDecide<TContractState> {
+    fn decide(
+        self: @TContractState,
+        world: IWorldDispatcher,
+        game_id: u32,
+        action: Action,
+        next_location_id: felt252
+    );
+}
+
+#[starknet::contract]
+mod decide {
+    use starknet::ContractAddress;
+    use starknet::get_caller_address;
+
+    use rollyourown::PlayerStatus;
+    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
+    use rollyourown::components::game::{Game, GameTrait};
+    use rollyourown::components::risks::{Risks, RisksTrait};
+    use rollyourown::components::player::{Player, PlayerTrait};
+    use rollyourown::components::drug::{Drug, DrugTrait};
+    use rollyourown::utils::random;
+
+    use super::{IWorldDispatcher, IWorldDispatcherTrait};
+    use super::IDecide;
+    use super::{Action, Outcome};
+
+    #[storage]
+    struct Storage {}
+
+   
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -136,14 +140,14 @@ mod decide {
                 player.health -= health_loss
             }
 
-            set!(ctx.world, (player));
-            emit!(ctx.world, Decision { game_id, player_id, action });
+            set!(world, (player));
+            emit!(world, Decision { game_id, player_id, action });
 
             // makes LS crash if inlined in emit! ( outcome / enum issue ?)
             let consequence_event = Consequence {
                 game_id, player_id, outcome, health_loss, drug_loss, cash_loss
             };
-            emit!(ctx.world, consequence_event);
+            emit!(world, consequence_event);
         }
     }
 
