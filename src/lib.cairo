@@ -17,19 +17,6 @@ enum PlayerStatus {
     BeingArrested: (),
 }
 
-// impl StorageSizePlayerStatus of dojo::StorageSize<PlayerStatus> {
-//     #[inline(always)]
-//     fn unpacked_size() -> usize {
-//         1
-//     }
-
-//     #[inline(always)]
-//     fn packed_size() -> usize {
-//         2
-//     }
-// }
-
-
 impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     #[inline(always)]
     fn size() -> usize {

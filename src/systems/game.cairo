@@ -3,18 +3,21 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[starknet::interface]
 trait IGame<TContractState> {
-    fn execute(
+    fn create_game(
         self: @TContractState,
         world: IWorldDispatcher,
         start_time: u64,
         max_players: usize,
         max_turns: usize
     ) -> (u32, ContractAddress);
+
+    fn join_game(self: @TContractState, world: IWorldDispatcher, game_id: u32) -> ContractAddress;
+    fn set_name(self: @TContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252);
 }
 
-// #[system]
+
 #[starknet::contract]
-mod create_game {
+mod game {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
@@ -62,7 +65,7 @@ mod create_game {
 
     #[external(v0)]
     impl GameImpl of IGame<ContractState> {
-        fn execute(
+        fn create_game(
             self: @ContractState,
             world: IWorldDispatcher,
             start_time: u64,
@@ -162,13 +165,54 @@ mod create_game {
 
             // emit game created
             emit!(
-                world,
-                GameCreated {
-                    game_id, creator: caller, start_time, max_players, max_turns
-                }
+                world, GameCreated { game_id, creator: caller, start_time, max_players, max_turns }
             );
 
             (game_id, caller)
+        }
+
+
+        // not used actually, for multiplayer mode
+        fn join_game(
+            self: @ContractState, world: IWorldDispatcher, game_id: u32
+        ) -> ContractAddress {
+            let player_id = get_caller_address();
+            let block_info = starknet::get_block_info().unbox();
+
+            let mut game = get!(world, game_id, (Game));
+            assert(!game.is_finished, 'game is finished');
+            assert(game.max_players > game.num_players, 'game is full');
+            assert(game.start_time >= block_info.block_timestamp, 'already started');
+
+            game.num_players += 1;
+
+            let player = Player {
+                game_id,
+                player_id,
+                status: PlayerStatus::Normal,
+                location_id: 0,
+                cash: STARTING_CASH,
+                health: STARTING_HEALTH,
+                run_attempts: 0,
+                drug_count: 0,
+                bag_limit: STARTING_BAG_LIMIT,
+                turns_remaining: game.max_turns,
+                turns_remaining_on_death: 0
+            };
+
+            set!(world, (game, player));
+            emit!(world, PlayerJoined { game_id, player_id });
+
+            player_id
+        }
+
+        fn set_name(
+            self: @ContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252
+        ) {
+            set!(
+                world,
+                (Name { game_id, player_id: get_caller_address(), short_string: player_name, })
+            )
         }
     }
 }
