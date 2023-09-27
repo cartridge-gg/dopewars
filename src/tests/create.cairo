@@ -8,10 +8,6 @@ use debug::PrintTrait;
 
 use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
-// use dojo::interfaces::{
-//     IComponentLibraryDispatcher, IComponentDispatcherTrait, ISystemLibraryDispatcher,
-//     ISystemDispatcherTrait
-// };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
