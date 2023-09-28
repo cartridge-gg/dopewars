@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use rollyourown::PlayerStatus;
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
     game_id: u32,

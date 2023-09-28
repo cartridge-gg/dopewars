@@ -2146,10 +2146,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@dojoengine/create-burner@0.0.22":
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/@dojoengine/create-burner/-/create-burner-0.0.22.tgz#d6251a3c89ba68d698d47a6b09e418c7b26b2247"
-  integrity sha512-5FNy/CCQMmydH0Cy/bMElBZvGTwwCTw4cbDkCakcPgsoWf5BjVVq8IEBpxExnFR2NnJ/zqvey2hp5QC1S85zFQ==
+"@dojoengine/create-burner@0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@dojoengine/create-burner/-/create-burner-0.0.25.tgz#5e76a3043c04e31033cbd3ac04082f0db0aeba85"
+  integrity sha512-n0J9NOWuKDkWoxlNvj0PW1UjYugTMYDBzkcc/o/Qcxuks8qMtfYwWb1/w3yK9GTaAB8ecgFe4WFFYtUjztUb0Q==
   dependencies:
     "@starknet-react/core" "^1.0.3"
     encoding "^0.1.13"

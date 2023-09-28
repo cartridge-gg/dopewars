@@ -4,7 +4,7 @@ use rollyourown::constants::{
 };
 use rollyourown::PlayerStatus;
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Risks {
     #[key]
     game_id: u32,
