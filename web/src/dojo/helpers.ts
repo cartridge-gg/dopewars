@@ -134,8 +134,9 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => {
+      return getMuggerResponses(Outcome.Escaped, isInitial) + "\nYou fled to a random location";
+    },
     color: "neon.200",
   },
   {
@@ -153,8 +154,9 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => {
+      return getMuggerResponses(Outcome.Escaped, isInitial) + "\nYou fled to a random location";
+    },
     color: "neon.200",
   },
   {
