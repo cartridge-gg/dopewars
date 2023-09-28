@@ -46,7 +46,7 @@ Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
 dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
 </pre>
 
-In this example, this is how we would to install the correct version:
+In this example, this is how we would install the correct version:
 <pre>
 > git clone https://github.com/dojoengine/dojo.git
 > cd dojo
