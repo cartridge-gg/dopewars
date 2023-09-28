@@ -36,7 +36,7 @@ yarn install && yarn dev
 ```
 
 <details>
-<summary>Any errors during `sozo build`?</summary>
+<summary>⚠️ Any errors during the `sozo build` command?</summary>
 <br>
 This might be because your version of sozo is not correct.
 <br><br>
@@ -53,6 +53,9 @@ In this example, this is how we would to install the correct version:
 > git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
 > dojoup -p .
 </pre>
+
+This will reinstall the correct version of `sozo` in your `~/.dojo/bin` folder.
+
 </details>
 
 
