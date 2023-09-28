@@ -10,7 +10,7 @@ mod decide {
     use rollyourown::components::risks::{Risks, RisksTrait};
     use rollyourown::components::player::{Player, PlayerTrait};
     use rollyourown::components::drug::{Drug, DrugTrait};
-    use rollyourown::components::location;
+    use rollyourown::components::location::LocationTrait;
     use rollyourown::utils::random;
 
     #[derive(Copy, Drop, Serde, PartialEq)]
@@ -95,7 +95,7 @@ mod decide {
         } else {
             player.status = PlayerStatus::Normal;
             player.turns_remaining -= 1;
-            player.location_id = location::random();
+            player.location_id = LocationTrait::random();
             player.run_attempts = 0;
         }
 
@@ -118,7 +118,6 @@ mod decide {
             game_id, player_id, outcome, health_loss, drug_loss, cash_loss
         };
         emit!(ctx.world, consequence_event);
-        
     }
 
     fn take_drugs(
