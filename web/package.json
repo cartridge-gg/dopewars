@@ -8,14 +8,20 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ./src",
-    "gen": "graphql-codegen --config codegen.yaml"
+    "gen": "graphql-codegen --config codegen.yaml",
+    "gen:components" : "npx create-components ./manifest.json ./src/dojo2/contractComponents.ts"
+  },
+  "bin": {
+    "create-components": "./bin/generateComponents.cjs"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
+    "@dojoengine/core": "0.0.26",
     "@dojoengine/create-burner": "0.0.25",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@latticexyz/recs": "^1.43.0",
     "@vercel/analytics": "^1.0.2",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",

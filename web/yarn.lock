@@ -2146,6 +2146,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@dojoengine/core@0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@dojoengine/core/-/core-0.0.26.tgz#bcfb406022bc7be0a2fea30a1701365b8ab51a5a"
+  integrity sha512-hnPORJ0wQOvRi8d3G9i7DZvPeI+xz8KHjDSJrwqc8CpdXui587EWCf2TxQCK1IcKyLwb0FV0tEJnrGXUzaP16g==
+
 "@dojoengine/create-burner@0.0.25":
   version "0.0.25"
   resolved "https://registry.yarnpkg.com/@dojoengine/create-burner/-/create-burner-0.0.25.tgz#5e76a3043c04e31033cbd3ac04082f0db0aeba85"
@@ -2854,6 +2859,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
+
+"@latticexyz/recs@^1.43.0":
+  version "1.43.0"
+  resolved "https://registry.yarnpkg.com/@latticexyz/recs/-/recs-1.43.0.tgz#51d8bb0d164ef3c79b86bb8201870177d2eab91b"
+  integrity sha512-rWCtFeqeoPYT+hsu1whd47cVSvRtOrBe1tGngqxZdiYnLx1bbj5rW9xXzS1Vg+8PgLeX034yZCoV+RjcaGIRPg==
 
 "@next/env@13.2.4":
   version "13.2.4"

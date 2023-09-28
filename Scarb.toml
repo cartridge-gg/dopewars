@@ -14,6 +14,10 @@ dojo = { git = "https://github.com/dojoengine/dojo.git" }
 
 [tool.dojo.env]
 
+[scripts]
+build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json" # add generateComponents
+migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json"
+
 
 # Katana
 #rpc_url = "https://api.cartridge.gg/x/rollyourown/katana"
