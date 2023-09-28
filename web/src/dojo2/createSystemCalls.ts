@@ -1,7 +1,7 @@
 import { SetupNetworkResult } from "./setupNetwork";
 import { Account } from "starknet";
 import { EntityIndex, getComponentValue } from "@latticexyz/recs";
-// import { uuid } from "@latticexyz/utils";
+import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { updatePositionWithDirection } from "../utils";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
@@ -12,6 +12,21 @@ export function createSystemCalls(
     { execute, contractComponents }: SetupNetworkResult,
     // { Position, Moves }: ClientComponents
 ) {
+
+    const createGame = async (signer: Account, startTime: number, maxPlayers: number, nbTurns: number) => {
+        try {
+            const tx = await execute(signer, "lobby", 'create_game', [startTime, maxPlayers, nbTurns]);
+            console.log(tx)
+            const receipt = await signer.waitForTransaction(tx.transaction_hash, { retryInterval: 100 })
+            setComponentsFromEvents(contractComponents, getEvents(receipt));
+            return receipt
+
+        } catch (e) {
+            console.log(e)
+        }
+        return false
+    };
+
 
     // const spawn = async (signer: Account) => {
 
@@ -80,12 +95,11 @@ export function createSystemCalls(
 
     // };
 
-    // return {
-    //     spawn,
-    //     move
-    // };
+    return {
+        createGame
 
-    return {}
+    };
+
 }
 
 export enum Direction {

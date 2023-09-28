@@ -546,7 +546,7 @@
   "contracts": [
     {
       "name": "lobby",
-      "address": null,
+      "address": "0x6bd1bc97dce64b1a280d12bba28a9aa6ddc6dcb79f3fd770c46d95f5a65f6e8",
       "class_hash": "0x3ba589ae88c917320a3706fc80ef698ee92cd1ab3873263e0371ea254a650da",
       "abi": [
         {
@@ -1471,7 +1471,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::game::game::Event",
+          "name": "rollyourown::models::game::game::Event",
           "kind": "enum",
           "variants": []
         }
@@ -1649,7 +1649,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::market::market::Event",
+          "name": "rollyourown::models::market::market::Event",
           "kind": "enum",
           "variants": []
         }
@@ -1857,7 +1857,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::player::player::Event",
+          "name": "rollyourown::models::player::player::Event",
           "kind": "enum",
           "variants": []
         }
@@ -2030,7 +2030,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::drug::drug::Event",
+          "name": "rollyourown::models::drug::drug::Event",
           "kind": "enum",
           "variants": []
         }
@@ -2203,7 +2203,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::risks::risks::Event",
+          "name": "rollyourown::models::risks::risks::Event",
           "kind": "enum",
           "variants": []
         }
@@ -2371,7 +2371,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::components::name::name::Event",
+          "name": "rollyourown::models::name::name::Event",
           "kind": "enum",
           "variants": []
         }

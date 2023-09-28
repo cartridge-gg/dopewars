@@ -17,8 +17,8 @@ import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import Leaderboard from "@/components/Leaderboard";
-import { useSystems } from "@/dojo/systems/useSystems";
-import { useGlobalScores } from "@/dojo/components/useGlobalScores";
+// import { useSystems } from "@/dojo/systems/useSystems";
+// import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo2/DojoContext";
 import { JoinedEventData } from "@/dojo/events";
@@ -39,9 +39,15 @@ export default function Home() {
   //const { account, isBurnerDeploying, createBurner } = useDojo();
   const {
     account: { account, create: createBurner, isDeploying: isBurnerDeploying },
+    setup : {
+      systemCalls :{
+        createGame
+      }
+    
+    }
   } = useDojo();
-  const { create: createGame, error: txError } = useSystems();
-  const { scores } = useGlobalScores();
+  // const { create: createGame, error: txError } = useSystems();
+  // const { scores } = useGlobalScores();
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,7 +84,7 @@ export default function Home() {
                 <Button
                   flex="1"
                   isDisabled={!account}
-                  isLoading={isSubmitting && !txError}
+                  isLoading={isSubmitting /*&& !txError*/}
                   onClick={async () => {
                     if (
                       process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !==
@@ -88,7 +94,14 @@ export default function Home() {
                     }
                     setIsSubmitting(true);
                     resetAll();
-                    const { event, hash } = await createGame(
+                    // const { event, hash } = await createGame(
+                    //   account,
+                    //   START_TIME,
+                    //   MAX_PLAYERS,
+                    //   NUM_TURNS,
+                    // );
+                    const  { event, hash } = await createGame(
+                      account,
                       START_TIME,
                       MAX_PLAYERS,
                       NUM_TURNS,
@@ -124,7 +137,7 @@ export default function Home() {
                 },
               }}
             >
-              <Leaderboard />
+              {/* <Leaderboard /> */}
             </VStack>
           </>
         )}

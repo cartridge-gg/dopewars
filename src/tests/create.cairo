@@ -12,13 +12,13 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::components::game::{game, Game};
-use rollyourown::components::market::{market, Market};
-use rollyourown::components::player::{player, Player};
-use rollyourown::components::drug::{drug, Drug};
-use rollyourown::components::location::Location;
-use rollyourown::components::risks::{risks, Risks};
-use rollyourown::components::name::{name, Name};
+use rollyourown::models::game::{game, Game};
+use rollyourown::models::market::{market, Market};
+use rollyourown::models::player::{player, Player};
+use rollyourown::models::drug::{drug, Drug};
+use rollyourown::models::location::Location;
+use rollyourown::models::risks::{risks, Risks};
+use rollyourown::models::name::{name, Name};
 use rollyourown::systems::decide::decide;
 use rollyourown::systems::travel::travel;
 use rollyourown::systems::trade::{buy, sell};

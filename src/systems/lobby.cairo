@@ -22,14 +22,14 @@ mod lobby {
     use starknet::get_caller_address;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::components::name::Name;
-    use rollyourown::components::game::Game;
-    use rollyourown::components::player::Player;
-    use rollyourown::components::risks::Risks;
-    use rollyourown::components::market::Market;
-    use rollyourown::components::drug::{Drug, DrugTrait};
-    use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::components::market::{MarketTrait};
+    use rollyourown::models::name::Name;
+    use rollyourown::models::game::Game;
+    use rollyourown::models::player::Player;
+    use rollyourown::models::risks::Risks;
+    use rollyourown::models::market::Market;
+    use rollyourown::models::drug::{Drug, DrugTrait};
+    use rollyourown::models::location::{Location, LocationTrait};
+    use rollyourown::models::market::{MarketTrait};
     use rollyourown::constants::{
         TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
     };

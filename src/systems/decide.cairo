@@ -36,10 +36,10 @@ mod decide {
 
     use rollyourown::PlayerStatus;
     use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
-    use rollyourown::components::game::{Game, GameTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait};
-    use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::drug::{Drug, DrugTrait};
+    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::risks::{Risks, RisksTrait};
+    use rollyourown::models::player::{Player, PlayerTrait};
+    use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::utils::random;
 
     use super::{IWorldDispatcher, IWorldDispatcherTrait};

@@ -22,20 +22,20 @@ export const useDojo = () => {
     if (!value) throw new Error("The `useDojo` hook must be used within a `DojoProvider`");
 
     const provider = useMemo(() => new RpcProvider({
-        nodeUrl: import.meta.env.NEXT_PUBLIC_RPC_ENDPOINT!
+        nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT!
     }), []);
 
     // 
     // this can be substituted with a wallet provider
     //
-    const masterAddress = import.meta.env.NEXT_PUBLIC_ADMIN_ADDRESS!;
-    const privateKey = import.meta.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY!;
+    const masterAddress = process.env.NEXT_PUBLIC_ADMIN_ADDRESS!;
+    const privateKey = process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY!;
     const masterAccount = useMemo(() => new Account(provider, masterAddress, privateKey), [provider, masterAddress, privateKey]);
 
     const { create, list, get, account, select, isDeploying, clear } = useBurner(
         {
             masterAccount: masterAccount,
-            accountClassHash: import.meta.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH!
+            accountClassHash: process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH!
         }
     );
 

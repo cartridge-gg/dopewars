@@ -12,7 +12,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::test_utils::spawn_test_world;
 
 use rollyourown::PlayerStatus;
-use rollyourown::components::player::Player;
+use rollyourown::models::player::Player;
 use rollyourown::tests::create::{spawn_game, spawn_player};
 use rollyourown::constants::{TRAVEL_RISK, COPS_DRUG_THRESHOLD};
 

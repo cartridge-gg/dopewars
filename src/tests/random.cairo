@@ -4,8 +4,8 @@ mod random {
     use traits::Into;
 
     use dojo::world::Context;
-    use rollyourown::components::game::Game;
-    use rollyourown::components::name::Name;
+    use rollyourown::models::game::Game;
+    use rollyourown::models::name::Name;
 
     #[event]
     #[derive(Drop, starknet::Event)]

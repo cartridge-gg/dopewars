@@ -17,8 +17,9 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "0.0.26",
+    "@dojoengine/core": "link:../../dojo-packages/packages/core",
     "@dojoengine/create-burner": "0.0.25",
+    "@dojoengine/utils": "link:../../dojo-packages/packages/utils",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@latticexyz/recs": "2.0.0-alpha.1.177",
@@ -44,7 +45,7 @@
     "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/fragment-matcher": "^3.2.1",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/schema-ast": "^2.4.1",

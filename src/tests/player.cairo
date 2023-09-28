@@ -9,9 +9,9 @@ use starknet::{ContractAddress, syscalls::deploy_syscall};
 use starknet::class_hash::{ClassHash, Felt252TryIntoClassHash};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::components::player::{player, Player};
-use rollyourown::components::game::{game, Game};
-use rollyourown::components::name::{name, Name};
+use rollyourown::models::player::{player, Player};
+use rollyourown::models::game::{game, Game};
+use rollyourown::models::name::{name, Name};
 use rollyourown::tests::create::spawn_game;
 
 #[test]

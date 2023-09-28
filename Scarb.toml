@@ -8,16 +8,17 @@ sierra-replace-ids = true
 
 [dependencies]
 # dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "3eda0434e10dd8b350896156a5ec48b25aa0ad62" }
-dojo = { git = "https://github.com/dojoengine/dojo.git" }
+dojo = { git = "https://github.com/dojoengine/dojo.git", rev="b64e5aa3acb5b605bd0439d5707090bb0cd20e8a" }
+# dojo = { git = "https://github.com/dojoengine/dojo.git" }
 
 [[target.dojo]]
 
-[tool.dojo.env]
-
 [scripts]
-build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json" # add generateComponents
-migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json"
+# build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json" # add generateComponents
+# migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json"
 
+
+[tool.dojo.env]
 
 # Katana
 #rpc_url = "https://api.cartridge.gg/x/rollyourown/katana"

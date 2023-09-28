@@ -7,11 +7,12 @@ import Fonts from "@/theme/fonts";
 
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DojoProvider } from "@/dojo2/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
 import { setup } from "@/dojo2/setup";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default async function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } =
     useKonamiCode(starkpimpSequence);
 
@@ -38,15 +39,19 @@ export default async function App({ Component, pageProps }: AppProps) {
   const [setupResult, setSetupResult] = useState(null)
   
 
-  useEffect(async () => {
+  useEffect( () => {
+    const init = async () => {
+      const setupResult = await setup();
 
-    const setupResult = await setup();
-    setSetupResult(setupResult)
+      setSetupResult(setupResult)
+    }
+
+    init();
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <DojoProvider value={setupResult}>
+      {setupResult && <DojoProvider value={setupResult}>
         <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>
@@ -60,7 +65,7 @@ export default async function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Analytics />
         </ChakraProvider>
-      </DojoProvider>
+      </DojoProvider>}
     </QueryClientProvider>
   );
 }

@@ -12,8 +12,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::test_utils::spawn_test_world;
 
 use rollyourown::PlayerStatus;
-use rollyourown::components::drug::Drug;
-use rollyourown::components::player::Player;
+use rollyourown::models::drug::Drug;
+use rollyourown::models::player::Player;
 use rollyourown::tests::create::{spawn_game, spawn_player};
 use rollyourown::constants::SCALING_FACTOR;
 

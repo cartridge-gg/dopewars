@@ -13,14 +13,12 @@ const getContractByName = (name: string) => {
 }
 
 export async function setupNetwork() {
-    // Extract environment variables for better readability.
-    const { NEXT_PUBLIC_WORLD_ADDRESS, NEXT_PUBLIC_RPC_ENDPOINT, NEXT_PUBLIC_GRAPHQL_ENDPOINT } = import.meta.env;
 
     // Create a new RPCProvider instance.
-    const provider = new RPCProvider(NEXT_PUBLIC_WORLD_ADDRESS, NEXT_PUBLIC_RPC_ENDPOINT);
+    const provider = new RPCProvider(process.env.NEXT_PUBLIC_WORLD_ADDRESS, process.env.NEXT_PUBLIC_RPC_ENDPOINT);
 
-    // Utility function to get the SDK.
-    const createGraphSdk = () => getSdk(new GraphQLClient(NEXT_PUBLIC_GRAPHQL_ENDPOINT));
+    // // Utility function to get the SDK.
+    // const createGraphSdk = () => getSdk(new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT));
 
     // Return the setup object.
     return {
@@ -30,8 +28,8 @@ export async function setupNetwork() {
         // Define contract components for the world.
         contractComponents: defineContractComponents(world),
 
-        // Define the graph SDK instance.
-        graphSdk: createGraphSdk(),
+        // // Define the graph SDK instance.
+        // graphSdk: createGraphSdk(),
 
         // Execute function.
         execute: async (signer: Account, contract: string, system: string, call_data: num.BigNumberish[]) => {

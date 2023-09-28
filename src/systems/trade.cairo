@@ -29,13 +29,13 @@ mod trade {
     use starknet::get_caller_address;
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-    use rollyourown::components::name::Name;
-    use rollyourown::components::drug::Drug;
-    use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::location::Location;
-    use rollyourown::components::game::{Game, GameTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait};
-    use rollyourown::components::market::{Market, MarketTrait};
+    use rollyourown::models::name::Name;
+    use rollyourown::models::drug::Drug;
+    use rollyourown::models::player::{Player, PlayerTrait};
+    use rollyourown::models::location::Location;
+    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::risks::{Risks, RisksTrait};
+    use rollyourown::models::market::{Market, MarketTrait};
 
     use super::ITrade;
 

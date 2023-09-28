@@ -16,12 +16,12 @@ mod travel {
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     use rollyourown::PlayerStatus;
-    use rollyourown::components::game::{Game, GameTrait};
-    use rollyourown::components::location::{Location, LocationTrait};
-    use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait};
-    use rollyourown::components::drug::{Drug, DrugTrait};
-    use rollyourown::components::market::{Market, MarketTrait};
+    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::location::{Location, LocationTrait};
+    use rollyourown::models::player::{Player, PlayerTrait};
+    use rollyourown::models::risks::{Risks, RisksTrait};
+    use rollyourown::models::drug::{Drug, DrugTrait};
+    use rollyourown::models::market::{Market, MarketTrait};
     use rollyourown::constants::{
         PRICE_VAR_CHANCE, PRICE_VAR_MIN, PRICE_VAR_MAX, MARKET_EVENT_CHANCE, MARKET_EVENT_MIN,
         MARKET_EVENT_MAX
