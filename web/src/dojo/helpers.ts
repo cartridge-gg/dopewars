@@ -134,12 +134,9 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
-    getResponse: (isInitial: boolean) => {
-      let response = getMuggerResponses(Outcome.Escaped, isInitial);
-      // TODO: make this way nicer + color + maybe this is not the right place?
-      response += "You fled to a random location";
-      return response;
-    },
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Escaped, isInitial),
+    description: "You fled to a random location",
     color: "neon.200",
   },
   {
@@ -157,12 +154,9 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/sunset.png",
-    getResponse: (isInitial: boolean) => {
-      let response = getMuggerResponses(Outcome.Escaped, isInitial);
-      // TODO: make this way nicer + color + maybe this is not the right place?
-      response += "You fled to a random location";
-      return response;
-    },
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Escaped, isInitial),
+    description: "You fled to a random location",
     color: "neon.200",
   },
   {

@@ -28,12 +28,33 @@ sozo migrate
 torii --world {world_address}
 
 # Setup default authorization
-./scripts/default_auth.sh
+./scripts/default_auth.sh [local]
 
 # Start frontend, located at http://localhost:3000
 cd web
 yarn install && yarn dev
 ```
+
+<details>
+<summary>Any errors during `sozo build`?</summary>
+<br>
+This might be because your version of sozo is not correct.
+<br><br>
+Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
+<pre>
+[dependencies]
+dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
+</pre>
+
+In this example, this is how we would to install the correct version:
+<pre>
+> git clone https://github.com/dojoengine/dojo.git
+> cd dojo
+> git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
+> dojoup -p .
+</pre>
+</details>
+
 
 Note: If the world address your game is deployed to is different, you'll need to update it in three places currently
 
