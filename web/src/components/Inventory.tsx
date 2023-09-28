@@ -18,7 +18,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const {
-    account: { account },
+    account,
   } = useDojo();
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,

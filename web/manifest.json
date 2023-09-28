@@ -546,7 +546,7 @@
   "contracts": [
     {
       "name": "lobby",
-      "address": "0x6bd1bc97dce64b1a280d12bba28a9aa6ddc6dcb79f3fd770c46d95f5a65f6e8",
+      "address": "0x6c6b9e7ba07148fc9c6f1aa6da1a3c270123ea8c2f560cc003e3f30f6694577",
       "class_hash": "0x3ba589ae88c917320a3706fc80ef698ee92cd1ab3873263e0371ea254a650da",
       "abi": [
         {

@@ -47,9 +47,7 @@ export default function Travel() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
   const { travel, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,

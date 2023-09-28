@@ -21,9 +21,7 @@ export default function Consequence() {
     Number(router.query.outcome),
   );
 
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,

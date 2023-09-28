@@ -44,9 +44,7 @@ export default function End() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,

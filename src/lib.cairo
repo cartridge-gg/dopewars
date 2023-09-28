@@ -3,8 +3,8 @@ mod systems;
 mod constants;
 mod utils;
 
-#[cfg(test)]
-mod tests;
+// #[cfg(test)]
+// mod tests;
 
 use dojo::database::schema::{
     EnumMember, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type

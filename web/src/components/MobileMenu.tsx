@@ -18,9 +18,7 @@ import { formatAddress } from "@/utils/contract";
 
 const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   const router = useRouter();
-    const {
-    account: { account },
-  } = useDojo();
+    const { account } = useDojo();
   return (
     <>
       <Popover placement="bottom-end">

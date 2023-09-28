@@ -79,9 +79,9 @@ const Tutorial = ({
   close: () => void;
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  // const { account, createBurner, isBurnerDeploying } = useDojo();
   const {
-    account: { account, create: createBurner, isDeploying: isBurnerDeploying },
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojo();
 
   const onNext = () => {

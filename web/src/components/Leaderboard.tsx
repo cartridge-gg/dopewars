@@ -36,7 +36,7 @@ const Leaderboard = ({
   const router = useRouter();
   const gameId = router.query.gameId as string;
     const {
-    account: { account },
+    account,
   } = useDojo();
   // TODO : use when supported on torii
   // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();

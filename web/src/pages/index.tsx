@@ -36,14 +36,13 @@ const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
-  //const { account, isBurnerDeploying, createBurner } = useDojo();
+
   const {
-    account: { account, create: createBurner, isDeploying: isBurnerDeploying },
+    account,
     setup : {
       systemCalls :{
         createGame
       }
-    
     }
   } = useDojo();
   // const { create: createGame, error: txError } = useSystems();

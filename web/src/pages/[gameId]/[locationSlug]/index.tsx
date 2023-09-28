@@ -38,10 +38,7 @@ export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
-    const {
-    account: { account },
-  } = useDojo();
-
+  const { account } = useDojo();
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationId,

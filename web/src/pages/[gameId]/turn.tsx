@@ -21,9 +21,7 @@ import { useEffect } from "react";
 export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,

@@ -28,9 +28,7 @@ export default function Decision() {
   const [penalty, setPenalty] = useState<string>();
 
   const { toast } = useToast();
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
   const { decide } = useSystems();
   const { addEncounter } = usePlayerStore();
 

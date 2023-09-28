@@ -27,9 +27,9 @@ const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
-  // const { account, createBurner, isBurnerDeploying } = useDojo();
   const {
-    account: { account, create: createBurner, isDeploying: isBurnerDeploying },
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojo();
 
   const { player: playerEntity } = usePlayerEntity({

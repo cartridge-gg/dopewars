@@ -46,9 +46,7 @@ export default function Market() {
 
   const { buy, sell, error: txError } = useSystems();
   const { addTrade } = usePlayerStore();
-    const {
-    account: { account },
-  } = useDojo();
+  const { account } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
