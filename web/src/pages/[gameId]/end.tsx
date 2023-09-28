@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { useSystems } from "@/dojo/systems/useSystems";
 import {
   Container,
@@ -44,7 +44,9 @@ export default function End() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,

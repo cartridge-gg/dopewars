@@ -25,7 +25,7 @@ import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo, DrugMarket } from "@/dojo/types";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 
 export default function Market() {
   const router = useRouter();
@@ -46,7 +46,9 @@ export default function Market() {
 
   const { buy, sell, error: txError } = useSystems();
   const { addTrade } = usePlayerStore();
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
     gameId,

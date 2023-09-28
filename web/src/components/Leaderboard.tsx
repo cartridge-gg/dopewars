@@ -23,7 +23,7 @@ import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
 import { Score, useGlobalScores } from "@/dojo/components/useGlobalScores";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/systems/useSystems";
@@ -35,7 +35,9 @@ const Leaderboard = ({
 }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
   // TODO : use when supported on torii
   // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
   const { scores, refetch } = useGlobalScores();

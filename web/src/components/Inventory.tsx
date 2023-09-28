@@ -10,14 +10,16 @@ import {
 import React from "react";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { getDrugById } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
-  const { account } = useDojo();
+  const {
+    account: { account },
+  } = useDojo();
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
     address: account?.address,

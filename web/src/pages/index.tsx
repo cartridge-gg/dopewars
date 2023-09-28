@@ -20,7 +20,7 @@ import Leaderboard from "@/components/Leaderboard";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
 import { usePlayerStore } from "@/hooks/state";
@@ -36,7 +36,10 @@ const NUM_TURNS = 10;
 
 export default function Home() {
   const router = useRouter();
-  const { account, isBurnerDeploying, createBurner } = useDojo();
+  //const { account, isBurnerDeploying, createBurner } = useDojo();
+  const {
+    account: { account, create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojo();
   const { create: createGame, error: txError } = useSystems();
   const { scores } = useGlobalScores();
   const { resetAll } = usePlayerStore();

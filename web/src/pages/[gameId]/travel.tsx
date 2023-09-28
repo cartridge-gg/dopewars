@@ -27,7 +27,7 @@ import { Map } from "@/components/map";
 import { useSystems } from "@/dojo/systems/useSystems";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
 import { Location } from "@/dojo/types";
 import { MarketEventData } from "@/dojo/events";
@@ -47,7 +47,9 @@ export default function Travel() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
   const { travel, error: txError } = useSystems();
   const { player: playerEntity } = usePlayerEntity({
     gameId,

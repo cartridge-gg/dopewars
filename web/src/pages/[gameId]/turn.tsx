@@ -1,7 +1,7 @@
 import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
@@ -21,7 +21,9 @@ import { useEffect } from "react";
 export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,

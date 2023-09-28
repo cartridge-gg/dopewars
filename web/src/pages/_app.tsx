@@ -8,9 +8,10 @@ import Fonts from "@/theme/fonts";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect } from "react";
-import { DojoProvider } from "@/dojo";
+import { DojoProvider } from "@/dojo2/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
+import { setup } from "@/dojo2/setup";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default async function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } =
     useKonamiCode(starkpimpSequence);
 
@@ -34,9 +35,18 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
+  const [setupResult, setSetupResult] = useState(null)
+  
+
+  useEffect(async () => {
+
+    const setupResult = await setup();
+    setSetupResult(setupResult)
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <DojoProvider>
+      <DojoProvider value={setupResult}>
         <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>

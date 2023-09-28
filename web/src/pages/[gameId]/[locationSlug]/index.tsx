@@ -23,7 +23,7 @@ import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { shortString } from "starknet";
 import Button from "@/components/Button";
 import {
@@ -38,7 +38,9 @@ export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
 
   const { location: locationEntity } = useLocationEntity({
     gameId,

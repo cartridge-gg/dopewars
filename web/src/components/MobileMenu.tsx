@@ -13,12 +13,14 @@ import { Dots, User, Roll } from "./icons";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "./MediaPlayer";
 import { useRouter } from "next/router";
-import { useDojo } from "@/dojo";
+import { useDojo } from "@/dojo2/DojoContext";
 import { formatAddress } from "@/utils/contract";
 
 const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   const router = useRouter();
-  const { account } = useDojo();
+    const {
+    account: { account },
+  } = useDojo();
   return (
     <>
       <Popover placement="bottom-end">
