@@ -105,5 +105,3 @@ Currently, game initialization state is hidden during the `join` phase, players 
 
 - Player inventories should be hidden until the game end condition is reached, at which point, they would reveal their current inventory
 - Mugging is currently PVE, eventually, it would be cool to do it PVP, in which case, the mugger should not know the loadout of their target until the mugging is performed. Ideally there is a mechanism to force the "mugger" and "muggee" to reveal their loadout. See https://github.com/FlynnSC/zk-hunt#search
-
-
