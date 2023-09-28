@@ -218,7 +218,7 @@ fn price_variation_with_drug(
     let target_price = if increase {
         market_price * (100 + percent) / 100
     } else {
-        market_price * (100 - (percent / 2)) / 100
+        market_price * (100 - (percent/2)) / 100
     };
 
     let target_qty = market.cash / target_price;
