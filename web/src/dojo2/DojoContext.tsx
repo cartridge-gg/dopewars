@@ -51,7 +51,8 @@ export const DojoProvider = ({ children, value }: Props) => {
 
     const contextValue: RyoContext = {
         setup: value,    // the provided setup
-        account: selectedAccount,// the selected account
+       // account: selectedAccount,// the selected account
+        account: masterAccount, // use master account = full auth
         burner: {
             create,        // create a new account
             list,          // list all accounts

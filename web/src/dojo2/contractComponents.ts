@@ -14,11 +14,12 @@ export function defineContractComponents(world: World) {
           num_players: RecsType.Number,
           max_turns: RecsType.Number,
           is_finished: RecsType.Boolean,
-          creator: RecsType.Number,
+          creator: RecsType.String,
         },
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress"],
           },
         }
       );
@@ -28,12 +29,13 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          cash: RecsType.Number,
+          cash: RecsType.BigInt,
           quantity: RecsType.Number,
         },
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize"],
           },
         }
       );
@@ -44,8 +46,8 @@ export function defineContractComponents(world: World) {
         world,
         {
           status: RecsType.Number,
-          location_id: RecsType.Number,
-          cash: RecsType.Number,
+          location_id: RecsType.BigInt,
+          cash: RecsType.BigInt,
           health: RecsType.Number,
           run_attempts: RecsType.Number,
           drug_count: RecsType.Number,
@@ -56,6 +58,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize"],
           },
         }
       );
@@ -70,6 +73,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize"],
           },
         }
       );
@@ -85,6 +89,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8"],
           },
         }
       );
@@ -94,11 +99,12 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          short_string: RecsType.Number,
+          short_string: RecsType.BigInt,
         },
         {
           metadata: {
             name: name,
+            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8","felt252"],
           },
         }
       );
