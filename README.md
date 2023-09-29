@@ -35,35 +35,31 @@ cd web
 yarn install && yarn dev
 ```
 
-<details>
-<summary>Any errors during the `sozo build` command?</summary>
-<br>
-This might be because your version of sozo is not correct.
-<br><br>
-Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
-<pre>
-[dependencies]
-dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
-</pre>
-
-In this example, this is how we would install the correct version:
-<pre>
-> git clone https://github.com/dojoengine/dojo.git
-> cd dojo
-> git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
-> dojoup -p .
-</pre>
-
-This will reinstall the correct version of `sozo` in your `~/.dojo/bin` folder.
-
-</details>
-
-
 Note: If the world address your game is deployed to is different, you'll need to update it in three places currently
 
 - Scarb.toml
 - script/default_auth.sh
 - web/src/constants.ts
+
+#### Any errors when doing `sozo build` ?
+
+This might be because your version of sozo is not correct.
+
+Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
+```toml
+[dependencies]
+dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
+```
+
+In this example, this is how we would install the correct version:
+```bash
+git clone https://github.com/dojoengine/dojo.git
+cd dojo
+git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
+dojoup -p .
+```
+
+This will reinstall the binaries in your `~/.dojo/bin` folder.
 
 ### With Madara
 
