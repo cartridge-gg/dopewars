@@ -135,7 +135,7 @@ export const outcomes: OutcomeInfo[] = [
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Escaped, isInitial),
+      getCopResponses(Outcome.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
