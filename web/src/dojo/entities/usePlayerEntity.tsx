@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
 import { PlayerStatus } from "../types";
 
-type Drug = {
+export type Drug = {
   id: string;
   quantity: number;
 };

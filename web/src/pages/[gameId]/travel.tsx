@@ -1,8 +1,17 @@
-import { Arrow, Car, Siren, Truck } from "@/components/icons";
+import {
+  Arrow,
+  Car,
+  Siren,
+  Truck,
+  Bag,
+  Pistol,
+  Sparkles,
+} from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import {
   Box,
+  Divider,
   HStack,
   VStack,
   Text,
@@ -25,7 +34,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { useSystems } from "@/dojo/systems/useSystems";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { usePlayerEntity, Drug } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
@@ -142,11 +151,11 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId) {
       setIsSubmitting(true);
-      const { event, events,  hash } = await travel(gameId, targetId);
+      const { event, events, hash } = await travel(gameId, targetId);
       if (event) {
         return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
-      
+
       toast(
         `You've traveled to ${locationName}`,
         Car,
@@ -154,20 +163,19 @@ export default function Travel() {
       );
       router.push(`/${gameId}/turn`);
 
-      // market events 
-      if( events) {
-        for( let event of events) {
+      // market events
+      if (events) {
+        for (let event of events) {
           const e = event as MarketEventData;
-          const msg = e.increase ? 
-          `Pigs seized ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
-          `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${getLocationById(e.locationId)?.name}`
+          const msg = e.increase
+            ? `Pigs seized ${getDrugById(e.drugId)?.name} in ${
+                getLocationById(e.locationId)?.name
+              }`
+            : `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${
+                getLocationById(e.locationId)?.name
+              }`;
           const icon = e.increase ? Siren : Truck;
-          toast(
-            msg,
-            icon,
-            `http://amazing_explorer/${hash}`,
-            6000
-          );
+          toast(msg, icon, `http://amazing_explorer/${hash}`, 6000);
         }
       }
     }
@@ -193,6 +201,13 @@ export default function Travel() {
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
+          <LocationInventory
+            drugs={playerEntity.drugs}
+            drugCount={playerEntity.drugCount}
+            bagLimit={playerEntity.bagLimit}
+            forMobile={false}
+          />
+
           <Text textStyle="subheading" fontSize="11px" color="neon.500">
             Location
           </Text>
@@ -204,7 +219,7 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <HStack w={["auto !important","full"]} pointerEvents="all">
+        <HStack w={["auto !important", "full"]} pointerEvents="all">
           <Button
             isDisabled={isSubmitting}
             w="full"
@@ -236,6 +251,12 @@ export default function Travel() {
         background="linear-gradient(transparent, 20%, #172217, 50%, #172217)"
         gap="14px"
       >
+        <LocationInventory
+          drugs={playerEntity.drugs}
+          drugCount={playerEntity.drugCount}
+          bagLimit={playerEntity.bagLimit}
+          forMobile={true}
+        />
         <LocationSelectBar
           name={locationName}
           onNext={onNext}
@@ -268,6 +289,123 @@ export default function Travel() {
     </Layout>
   );
 }
+
+const LocationInventory = ({
+  drugs,
+  drugCount,
+  bagLimit,
+  forMobile = false,
+}: {
+  drugs: Drug[];
+  drugCount: number;
+  bagLimit: number;
+  forMobile: boolean;
+}) => {
+  return (
+    <VStack w="full" align="flex-start" mb="2">
+      {!forMobile && (
+        <HStack w="full" justify="space-between">
+          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+            Inventory
+          </Text>
+          <HStack color="yellow.400">
+            <Bag />
+            <Text>
+              {drugCount}/{bagLimit}
+            </Text>
+          </HStack>
+        </HStack>
+      )}
+      <HStack w="full" spacing={2}>
+        <Card
+          flex="15"
+          bg={forMobile ? "neon.700" : ""}
+          borderColor="gray.200"
+          w="full"
+          h="40px"
+          px="20px"
+          justify="center"
+          sx={{
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          <HStack gap="5px" justify="center">
+            {drugCount === 0 ? (
+              <Text color="neon.500">Your bag is empty</Text>
+            ) : (
+              drugs?.map((drug) => {
+                return (
+                  drug.quantity > 0 && (
+                    <>
+                      <HStack gap="10px">
+                        <HStack color="yellow.400">
+                          {getDrugById(drug.id)?.icon({ boxSize: "26" })}
+                          <Text>{drug.quantity}</Text>
+                        </HStack>
+                      </HStack>
+                      <Divider
+                        _last={{ display: "none" }}
+                        h="10px"
+                        orientation="vertical"
+                        borderWidth="1px"
+                        borderColor="neon.600"
+                      />
+                    </>
+                  )
+                );
+              })
+            )}
+          </HStack>
+        </Card>
+        <Card
+          flex="0.5"
+          cursor={"pointer"}
+          borderColor="gray.200"
+          bg={forMobile ? "neon.700" : ""}
+          w="12"
+          h="40px"
+          px="20px"
+          color="neon.500"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          <Truck color="yellow.400" />
+        </Card>
+        <Card
+          flex="0.5"
+          borderColor="gray.200"
+          cursor={"pointer"}
+          bg={forMobile ? "neon.700" : ""}
+          w="12"
+          h="40px"
+          px="20px"
+          color="neon.500"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          <Pistol color="yellow.400" />
+        </Card>
+      </HStack>
+    </VStack>
+  );
+};
 
 const LocationPrices = ({
   prices,

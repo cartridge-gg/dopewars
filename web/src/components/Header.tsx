@@ -1,4 +1,4 @@
-import { Clock, Gem, Bag, Arrow, Heart, Siren } from "./icons";
+import { Clock, Gem, Bag, Arrow, Heart, Siren, Dots } from "./icons";
 import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
@@ -7,7 +7,7 @@ import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { usePlayerEntity, PlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { useDojo } from "@/dojo";
@@ -21,6 +21,13 @@ const MAX_INVENTORY = 100;
 
 export interface HeaderProps {
   back?: boolean;
+}
+
+function getInventoryCapacityPercentage(playerEntity?: PlayerEntity): number {
+  if (!playerEntity || playerEntity.drugCount === 0) {
+    return 0;
+  }
+  return Math.ceil((playerEntity.drugCount / playerEntity.bagLimit) * 100);
 }
 
 const Header = ({ back }: HeaderProps) => {
@@ -65,8 +72,7 @@ const Header = ({ back }: HeaderProps) => {
       align="flex-start"
       py={["0", "20px"]}
     >
-      <HStack flex="1" justify={["left", "right"]}>
-      </HStack>
+      <HStack flex="1" justify={["left", "right"]}></HStack>
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
@@ -75,7 +81,7 @@ const Header = ({ back }: HeaderProps) => {
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
-            sx={{...headerStyles}}
+            sx={{ ...headerStyles }}
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
@@ -89,6 +95,15 @@ const Header = ({ back }: HeaderProps) => {
                 />
                 <HStack>
                   <Heart /> <Text>{playerEntity.health}</Text>
+                </HStack>
+                <Divider
+                  orientation="vertical"
+                  borderColor="neon.600"
+                  h="12px"
+                />
+                <HStack>
+                  <Siren />
+                  <Text>{getInventoryCapacityPercentage(playerEntity)}%</Text>
                 </HStack>
                 {/* <Divider
                   orientation="vertical"
@@ -104,7 +119,7 @@ const Header = ({ back }: HeaderProps) => {
         </HStack>
       )}
 
-      <HStack flex="1" justify="right" >
+      <HStack flex="1" justify="right">
         {!isMobile && (
           <>
             <MediaPlayer />
