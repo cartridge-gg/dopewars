@@ -1,12 +1,4 @@
-import {
-  Arrow,
-  Car,
-  Siren,
-  Truck,
-  Bag,
-  Pistol,
-  Sparkles,
-} from "@/components/icons";
+import { Arrow, Car, Siren, Truck, Bag } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import {
