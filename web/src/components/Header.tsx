@@ -23,11 +23,14 @@ export interface HeaderProps {
   back?: boolean;
 }
 
-function getInventoryCapacityPercentage(playerEntity?: PlayerEntity): number {
-  if (!playerEntity || playerEntity.drugCount === 0) {
+function getInventoryCapacityPercentage(
+  drugCount?: number,
+  bagLimit?: number,
+): number {
+  if (!drugCount || !bagLimit || drugCount === 0) {
     return 0;
   }
-  return Math.ceil((playerEntity.drugCount / playerEntity.bagLimit) * 100);
+  return Math.floor((drugCount / bagLimit) * 100);
 }
 
 const Header = ({ back }: HeaderProps) => {
@@ -103,7 +106,13 @@ const Header = ({ back }: HeaderProps) => {
                 />
                 <HStack>
                   <Siren />
-                  <Text>{getInventoryCapacityPercentage(playerEntity)}%</Text>
+                  <Text>
+                    {getInventoryCapacityPercentage(
+                      playerEntity?.drugCount,
+                      playerEntity?.bagLimit,
+                    )}
+                    %
+                  </Text>
                 </HStack>
                 {/* <Divider
                   orientation="vertical"

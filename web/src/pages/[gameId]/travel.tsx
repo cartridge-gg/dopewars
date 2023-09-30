@@ -299,7 +299,7 @@ const LocationInventory = ({
   drugs: Drug[];
   drugCount: number;
   bagLimit: number;
-  forMobile: boolean;
+  forMobile?: boolean;
 }) => {
   return (
     <VStack w="full" align="flex-start" mb="2">
@@ -359,48 +359,6 @@ const LocationInventory = ({
               })
             )}
           </HStack>
-        </Card>
-        <Card
-          flex="0.5"
-          cursor={"pointer"}
-          borderColor="gray.200"
-          bg={forMobile ? "neon.700" : ""}
-          w="12"
-          h="40px"
-          px="20px"
-          color="neon.500"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          <Truck color="yellow.400" />
-        </Card>
-        <Card
-          flex="0.5"
-          borderColor="gray.200"
-          cursor={"pointer"}
-          bg={forMobile ? "neon.700" : ""}
-          w="12"
-          h="40px"
-          px="20px"
-          color="neon.500"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          <Pistol color="yellow.400" />
         </Card>
       </HStack>
     </VStack>
