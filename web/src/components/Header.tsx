@@ -1,4 +1,4 @@
-import { Clock, Gem, Bag, Arrow, Heart, Siren, Dots } from "./icons";
+import { Clock, Gem, Bag, Arrow, Heart, Siren } from "./icons";
 import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
