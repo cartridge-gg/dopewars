@@ -7,7 +7,7 @@ import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { usePlayerEntity, PlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useGameEntity } from "@/dojo/entities/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { useDojo } from "@/dojo";
