@@ -23,16 +23,6 @@ export interface HeaderProps {
   back?: boolean;
 }
 
-function getInventoryCapacityPercentage(
-  drugCount?: number,
-  bagLimit?: number,
-): number {
-  if (!drugCount || !bagLimit || drugCount === 0) {
-    return 0;
-  }
-  return Math.floor((drugCount / bagLimit) * 100);
-}
-
 const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
