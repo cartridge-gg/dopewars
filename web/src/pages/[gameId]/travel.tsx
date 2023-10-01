@@ -194,7 +194,12 @@ export default function Travel() {
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
           <Inventory />
-          <Text pt={["0px", "20px"]} textStyle="subheading" fontSize="11px" color="neon.500">
+          <Text
+            textStyle="subheading"
+            pt={["0px", "20px"]}
+            fontSize="11px"
+            color="neon.500"
+          >
             Location
           </Text>
           <LocationSelectBar
