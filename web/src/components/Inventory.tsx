@@ -5,6 +5,7 @@ import {
   Text,
   VStack,
   Card,
+  Spacer,
 } from "@chakra-ui/react";
 
 import React from "react";
@@ -26,10 +27,16 @@ export const Inventory = ({ ...props }: StyleProps) => {
   return (
     <VStack {...props} w="full" align="flex-start">
       <HStack w="full" justify="space-between">
-        <Text textStyle="subheading" fontSize="10px" color="neon.500">
+        <Text
+          textStyle="subheading"
+          fontSize="10px"
+          display={["none", "flex"]}
+          color="neon.500"
+        >
           Your Inventory
         </Text>
-        <HStack color="yellow.400">
+        <Spacer />
+        <HStack display={["none", "flex"]} color="yellow.400">
           <Bag />
           <Text>
             {playerEntity?.drugCount}/{playerEntity?.bagLimit}

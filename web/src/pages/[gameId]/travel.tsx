@@ -1,9 +1,9 @@
-import { Arrow, Car, Siren, Truck, Bag } from "@/components/icons";
+import { Arrow, Car, Siren, Truck } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import { Inventory } from "@/components/Inventory";
 import {
   Box,
-  Divider,
   HStack,
   VStack,
   Text,
@@ -26,7 +26,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
 import { useSystems } from "@/dojo/systems/useSystems";
-import { usePlayerEntity, Drug } from "@/dojo/entities/usePlayerEntity";
+import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useToast } from "@/hooks/toast";
 import { useDojo } from "@/dojo";
 import { useMarketPrices } from "@/dojo/components/useMarkets";
@@ -193,14 +193,8 @@ export default function Travel() {
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
-          <LocationInventory
-            drugs={playerEntity.drugs}
-            drugCount={playerEntity.drugCount}
-            bagLimit={playerEntity.bagLimit}
-            forMobile={false}
-          />
-
-          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+          <Inventory />
+          <Text pt={["0px", "20px"]} textStyle="subheading" fontSize="11px" color="neon.500">
             Location
           </Text>
           <LocationSelectBar
@@ -243,12 +237,7 @@ export default function Travel() {
         background="linear-gradient(transparent, 20%, #172217, 50%, #172217)"
         gap="14px"
       >
-        <LocationInventory
-          drugs={playerEntity.drugs}
-          drugCount={playerEntity.drugCount}
-          bagLimit={playerEntity.bagLimit}
-          forMobile={true}
-        />
+        <Inventory />
         <LocationSelectBar
           name={locationName}
           onNext={onNext}
@@ -281,81 +270,6 @@ export default function Travel() {
     </Layout>
   );
 }
-
-const LocationInventory = ({
-  drugs,
-  drugCount,
-  bagLimit,
-  forMobile = false,
-}: {
-  drugs: Drug[];
-  drugCount: number;
-  bagLimit: number;
-  forMobile?: boolean;
-}) => {
-  return (
-    <VStack w="full" align="flex-start" mb="2">
-      {!forMobile && (
-        <HStack w="full" justify="space-between">
-          <Text textStyle="subheading" fontSize="10px" color="neon.500">
-            Inventory
-          </Text>
-          <HStack color="yellow.400">
-            <Bag />
-            <Text>
-              {drugCount}/{bagLimit}
-            </Text>
-          </HStack>
-        </HStack>
-      )}
-      <HStack w="full" spacing={2}>
-        <Card
-          flex="15"
-          bg={forMobile ? "neon.700" : ""}
-          borderColor="gray.200"
-          w="full"
-          h="40px"
-          px="20px"
-          justify="center"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          <HStack gap="5px" justify="center">
-            {drugCount === 0 ? (
-              <Text color="neon.500">Your bag is empty</Text>
-            ) : (
-              drugs?.map((drug) => {
-                return (
-                  drug.quantity > 0 && (
-                    <>
-                      <HStack gap="10px">
-                        <HStack color="yellow.400">
-                          {getDrugById(drug.id)?.icon({ boxSize: "26" })}
-                          <Text>{drug.quantity}</Text>
-                        </HStack>
-                      </HStack>
-                      <Divider
-                        _last={{ display: "none" }}
-                        h="10px"
-                        orientation="vertical"
-                        borderWidth="1px"
-                        borderColor="neon.600"
-                      />
-                    </>
-                  )
-                );
-              })
-            )}
-          </HStack>
-        </Card>
-      </HStack>
-    </VStack>
-  );
-};
 
 const LocationPrices = ({
   prices,

@@ -99,21 +99,6 @@ const Header = ({ back }: HeaderProps) => {
                 <HStack>
                   <Heart /> <Text>{playerEntity.health}</Text>
                 </HStack>
-                <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                <HStack>
-                  <Siren />
-                  <Text>
-                    {getInventoryCapacityPercentage(
-                      playerEntity?.drugCount,
-                      playerEntity?.bagLimit,
-                    )}
-                    %
-                  </Text>
-                </HStack>
                 {/* <Divider
                   orientation="vertical"
                   borderColor="neon.600"
