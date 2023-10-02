@@ -239,7 +239,7 @@ export default function Travel() {
         spacing="0"
         pointerEvents="none"
         justify="flex-end"
-        background="linear-gradient(transparent, 20%, #172217, 50%, #172217)"
+        background="linear-gradient(transparent, 3.5%, #172217, 14%, #172217)"
         gap="14px"
       >
         <Inventory />
