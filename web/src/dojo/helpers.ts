@@ -155,6 +155,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
+    description: "You fled to a random location",
     color: "neon.200",
   },
   {
@@ -174,6 +175,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/sunset.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
+    description: "You fled to a random location",
     color: "neon.200",
   },
   {

@@ -32,7 +32,7 @@ mod decide {
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait};
-    use rollyourown::models::location::{LocationEnum};
+    use rollyourown::models::location::{LocationEnum, LocationImpl};
     use rollyourown::models::item::{Item, ItemEnum};
 
     use rollyourown::utils::random;
@@ -183,7 +183,11 @@ mod decide {
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
                 player.turn += 1;
-                player.location_id = next_location_id;
+                if action == Action::Run {
+                    player.location_id = LocationImpl::random();
+                } else {
+                    player.location_id = next_location_id;
+                }
             }
 
             player.cash -= cash_loss;
