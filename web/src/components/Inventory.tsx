@@ -8,6 +8,9 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 
+import BorderImage from "@/components/icons/BorderImage";
+import colors from "@/theme/colors";
+
 import React from "react";
 import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
 import { useRouter } from "next/router";
@@ -49,6 +52,9 @@ export const Inventory = ({ ...props }: StyleProps) => {
         px="20px"
         justify="center"
         sx={{
+          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+            color: colors.neon["700"].toString(),
+          })}")`,
           overflowY: "scroll",
           "&::-webkit-scrollbar": {
             display: "none",

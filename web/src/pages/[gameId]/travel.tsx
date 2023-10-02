@@ -2,6 +2,8 @@ import { Arrow, Car, Siren, Truck } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Inventory } from "@/components/Inventory";
+import colors from "@/theme/colors";
+import BorderImage from "@/components/icons/BorderImage";
 import {
   Box,
   HStack,
@@ -232,17 +234,17 @@ export default function Travel() {
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="24px"
+        p="60px 24px 24px 24px"
         position="fixed"
         bottom="0"
         right="0"
         spacing="0"
         pointerEvents="none"
         justify="flex-end"
-        background="linear-gradient(transparent, 3.5%, #172217, 14%, #172217)"
+        background="linear-gradient(transparent, 10%, #172217, 25%, #172217)"
         gap="14px"
       >
-        <Inventory />
+        <Inventory pb="5px" />
         <LocationSelectBar
           name={locationName}
           onNext={onNext}
@@ -308,7 +310,16 @@ const LocationPrices = ({
           ({!isPercentage ? "#" : "%"})
         </Text>
       </HStack>
-      <Card w="full" p="5px" pointerEvents="all">
+      <Card
+        w="full"
+        p="5px"
+        pointerEvents="all"
+        sx={{
+          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+            color: colors.neon["700"].toString(),
+          })}")`,
+        }}
+      >
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box
             position="absolute"
@@ -323,7 +334,7 @@ const LocationPrices = ({
                 colSpan={1}
                 border="1px"
                 p="6px"
-                borderColor="neon.600"
+                borderColor="neon.700"
               >
                 <HStack gap="8px">
                   {getDrugById(drug.id)?.icon({
