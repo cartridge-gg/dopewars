@@ -244,7 +244,7 @@ export default function Travel() {
         background="linear-gradient(transparent, 10%, #172217, 25%, #172217)"
         gap="14px"
       >
-        <Inventory pb="5px" />
+        <Inventory />
         <LocationSelectBar
           name={locationName}
           onNext={onNext}

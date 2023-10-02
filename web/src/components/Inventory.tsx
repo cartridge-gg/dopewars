@@ -28,7 +28,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   });
 
   return (
-    <VStack {...props} w="full" align="flex-start">
+    <VStack {...props} w="full" align="flex-start" pb="5px">
       <HStack w="full" justify="space-between">
         <Text
           textStyle="subheading"
