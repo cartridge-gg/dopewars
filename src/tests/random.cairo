@@ -6,6 +6,7 @@ mod random {
     use dojo::world::Context;
     use rollyourown::models::game::Game;
     use rollyourown::models::name::Name;
+    use rollyourown::utils::random;
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -21,7 +22,7 @@ mod random {
     }
 
     fn execute(ctx: Context, likelihood: u8, iterations: u32) {
-        let mut seed = starknet::get_tx_info().unbox().transaction_hash;
+        let mut seed = random::seed();
 
         let mut i = 0;
         let mut num_occured = 0;

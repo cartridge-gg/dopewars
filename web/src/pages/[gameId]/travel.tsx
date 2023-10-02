@@ -31,12 +31,12 @@ import { Location } from "@/dojo/types";
 import { MarketEventData } from "@/dojo/events";
 // import { useEntityQuery, useComponentValue } from "@latticexyz/react";
 // import { Has } from "@latticexyz/recs";
-import { num, ec } from "starknet";
+// import { num, ec } from "starknet";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useSystems } from "@/dojo/hooks/useSystems";
-// import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
-// import { useMarketPrices } from "@/dojo/queries/useMarkets";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { useMarketPrices } from "@/dojo/queries/useMarkets";
 
 interface MarketPriceInfo {
   id: string;
@@ -59,17 +59,18 @@ export default function Travel() {
   // const playerEntityId = getEntityIdFromKeys([BigInt(gameId||"") ,BigInt(account.address||"")])
   // const playerEntity = useComponentValue(Player, playerEntityId)
   // console.log("playerEntity", playerEntity)
+  // const playerEntity = undefined;
+  // const locationPrices = undefined;
 
-  // const { player: playerEntity } = usePlayerEntity({
-  //   gameId,
-  //   address: account?.address,
-  // });
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: account?.address,
+  });
 
-  const playerEntity = undefined;
-  const locationPrices = undefined;
-  // const { locationPrices } = useMarketPrices({
-  //   gameId,
-  // });
+ 
+  const { locationPrices } = useMarketPrices({
+    gameId,
+  });
 
   const locationName = useMemo(() => {
     if (targetId) {

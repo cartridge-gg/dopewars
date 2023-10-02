@@ -2,20 +2,20 @@ use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 
- #[derive(Copy, Drop, Serde, PartialEq)]
-    enum Action {
-        Run: (),
-        Pay: (),
-    }
+#[derive(Copy, Drop, Serde, PartialEq)]
+enum Action {
+    Run: (),
+    Pay: (),
+}
 
-    #[derive(Copy, Drop, Serde, PartialEq)]
-    enum Outcome {
-        Died: (),
-        Paid: (),
-        Escaped: (),
-        Captured: (),
-        Unsupported: (),
-    }
+#[derive(Copy, Drop, Serde, PartialEq)]
+enum Outcome {
+    Died: (),
+    Paid: (),
+    Escaped: (),
+    Captured: (),
+    Unsupported: (),
+}
 
 
 #[starknet::interface]
@@ -35,7 +35,7 @@ mod decide {
     use starknet::get_caller_address;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT, COPS_DRUG_THRESHOLD};
+    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT};
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::player::{Player, PlayerTrait};
@@ -49,7 +49,7 @@ mod decide {
     #[storage]
     struct Storage {}
 
-   
+
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -91,11 +91,11 @@ mod decide {
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
                     let mut risks = get!(world, (game_id, player.location_id).into(), Risks);
-                    let seed = starknet::get_tx_info().unbox().transaction_hash;
+                    let seed = random::seed();
                     match risks.run(seed) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
-                            let random_loss: u8 = random(seed, 0, HEALTH_IMPACT.into())
+                            let random_loss: u8 = random::random(seed, 0, HEALTH_IMPACT.into())
                                 .try_into()
                                 .unwrap();
                             let health_loss: u8 = HEALTH_IMPACT + random_loss;

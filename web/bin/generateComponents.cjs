@@ -47,13 +47,13 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
 
     let types = []
 
-    data.components.forEach((component) => {
-      const tableName = component.name;
+    data.models.forEach((model) => {
+      const tableName = model.name;
       fileContent += `    ${tableName}: (() => {\n`;
       fileContent += `      const name = "${tableName}";\n`;
       fileContent += `      return defineComponent(\n        world,\n        {\n`;
 
-      component.members.filter(m => !m.key).forEach((member) => {
+      model.members.filter(m => !m.key).forEach((member) => {
         let memberType = cairoToRecsType[member.type] ?? "RecsType.Number";  // Default type set to Number
         fileContent += `          ${member.name}: ${memberType},\n`;
         types.push(member.type);

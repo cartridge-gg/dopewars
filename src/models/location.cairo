@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
+use rollyourown::utils::random;
 
 struct Location {}
-
 
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -38,13 +38,12 @@ impl LocationImpl of LocationTrait {
     }
 
     fn random() -> felt252 {
-        let seed = starknet::get_tx_info().unbox().transaction_hash;
-        let locations = LocationImpl::all();
-        let seed: u256 = seed.into();
-        let len: u128 = locations.len().into();
-        let index: usize = (seed.low % len).try_into().unwrap();
+        let seed = random::seed();
 
-        *locations.at(index)
+        let locations = LocationImpl::all();
+        let index = random::random(seed, 0, locations.len().into());
+
+        *locations.at(index.try_into().unwrap())
     }
 }
 

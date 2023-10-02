@@ -86,11 +86,7 @@ export default function Home() {
                     setIsSubmitting(true);
                     resetAll();
 
-                    const { hash, gameId } = await createGame(
-                      START_TIME,
-                      MAX_PLAYERS,
-                      NUM_TURNS,
-                    );
+                    const { hash, gameId } = await createGame(0);
 
                     toast(
                       "Created Game",

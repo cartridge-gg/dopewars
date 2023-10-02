@@ -10,7 +10,8 @@
     "lint": "next lint",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:components": "npx create-components ./manifest.json ./src/dojo2/contractComponents.ts"
+    "gen:components": "npx create-components ./manifest.json ./src/dojo/generated/contractComponents.ts",
+    "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {
     "create-components": "./bin/generateComponents.cjs",

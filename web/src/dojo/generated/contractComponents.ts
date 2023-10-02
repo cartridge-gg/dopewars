@@ -9,6 +9,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          game_mode: RecsType.Number,
           start_time: RecsType.Number,
           max_players: RecsType.Number,
           num_players: RecsType.Number,
@@ -19,7 +20,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress"],
           },
         }
       );
@@ -35,7 +36,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress","u128","usize"],
           },
         }
       );
@@ -58,7 +59,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize"],
           },
         }
       );
@@ -73,7 +74,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize"],
           },
         }
       );
@@ -89,7 +90,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8"],
           },
         }
       );
@@ -104,7 +105,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8","felt252"],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress","u128","usize","PlayerStatus","felt252","u128","u8","u8","usize","usize","usize","usize","usize","u8","u8","felt252"],
           },
         }
       );

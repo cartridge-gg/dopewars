@@ -12,13 +12,6 @@ struct Market {
     quantity: usize,
 }
 
-#[derive(Copy, Drop)]
-struct PricingInfos {
-    min_price: u128,
-    max_price: u128,
-    min_qty: u128,
-    max_qty: u128,
-}
 
 #[generate_trait]
 impl MarketImpl of MarketTrait {
@@ -37,56 +30,6 @@ impl MarketImpl of MarketTrait {
         let k = cash * available;
         let payout = cash - (k / (available + amount));
         payout
-    }
-
-    #[inline(always)]
-    fn get_pricing_info(drug_id: felt252) -> PricingInfos {
-        if drug_id == 'Ludes' {
-            PricingInfos {
-                min_price: 10 * SCALING_FACTOR,
-                max_price: 60 * SCALING_FACTOR,
-                min_qty: 800,
-                max_qty: 2000,
-            }
-        } else if drug_id == 'Speed' {
-            PricingInfos {
-                min_price: 50 * SCALING_FACTOR,
-                max_price: 300 * SCALING_FACTOR,
-                min_qty: 600,
-                max_qty: 1500,
-            }
-        } else if drug_id == 'Weed' {
-            PricingInfos {
-                min_price: 200 * SCALING_FACTOR,
-                max_price: 700 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
-            }
-        } else if drug_id == 'Acid' {
-            PricingInfos {
-                min_price: 500 * SCALING_FACTOR,
-                max_price: 1800 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 900,
-            }
-        } else if drug_id == 'Heroin' {
-            PricingInfos {
-                min_price: 1200 * SCALING_FACTOR,
-                max_price: 4000 * SCALING_FACTOR,
-                min_qty: 300,
-                max_qty: 700,
-            }
-        } else if drug_id == 'Cocaine' {
-            PricingInfos {
-                min_price: 3000 * SCALING_FACTOR,
-                max_price: 8000 * SCALING_FACTOR,
-                min_qty: 250,
-                max_qty: 600,
-            }
-        } else {
-            panic(array!['invalid drug_id']);
-            PricingInfos { min_price: 0, max_price: 0, min_qty: 0, max_qty: 0, }
-        }
     }
 }
 

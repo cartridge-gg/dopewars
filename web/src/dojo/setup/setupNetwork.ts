@@ -10,16 +10,16 @@ export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 const contractsByName = {
     lobby: {
-        address: "0x6c6b9e7ba07148fc9c6f1aa6da1a3c270123ea8c2f560cc003e3f30f6694577"
+        address: "0x817964102f5820f8f352e4127f9a92692b7ab880d8257fe031338f1592d1ee"
     },
     trade: {
-        address: "0x14ea572ce8d6ffea135c266a319a52b36cc5a3cb0952b72d2fc145ff32ff79b"
+        address: "0x592f8b83158a512eb11da9e7e8b6def37df8352d9074841671e5f3ff818bfee"
     },
     travel: {
-        address: "0x6e38af8b9ed6578127b6d7da9ce6204541de69c83438517fc1c198c1ead9799"
+        address: "0x6cc1f2fb8526e46161b0565e37006e32a62c9cd08498cca4096c19916c7b9d8"
     },
     decide: {
-        address: "0x7c2207a8196da406b8db5fa1b3dc5a82b17bcf4f32fb0164a6fdf9b213523d5"
+        address: "0x3f9f91a8b85eb22d07033dddca56eb0c35d3a7f88547bdc20b1dfbbab6ab7fa"
     },
     contract: {
         address: "0x74d97f9230afea0478057f475f4f105108d2fa99d8c7ce79f5446ef1031af1c"

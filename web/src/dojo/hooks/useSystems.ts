@@ -9,9 +9,7 @@ import { WorldEvents } from "../generated/contractEvents";
 
 export interface SystemsInterface {
   createGame: (
-    startTime: number,
-    maxPlayers: number,
-    maxTurns: number,
+    gameMode: number,
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: string) => Promise<SystemExecuteResult>;
   join: (gameId: string) => Promise<SystemExecuteResult>;
@@ -83,11 +81,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (startTime: number, maxPlayers: number, nbTurns: number) => {
+    async (gameMode: number) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [startTime, maxPlayers, nbTurns],
+        [gameMode],
       );
 
       const joinedEvent = parsedEvents.find(

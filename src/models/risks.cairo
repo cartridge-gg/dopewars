@@ -3,6 +3,7 @@ use rollyourown::constants::{
     SCALING_FACTOR, COPS_DRUG_THRESHOLD, GANGS_CASH_THRESHOLD, ENCOUNTER_BIAS_GANGS
 };
 use rollyourown::PlayerStatus;
+use rollyourown::utils::random::random;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Risks {
@@ -20,8 +21,7 @@ impl RisksImpl of RisksTrait {
     fn travel(self: @Risks, seed: felt252, cash: u128, drug_count: usize) -> PlayerStatus {
         if occurs(seed, *self.travel) {
             let seed = pedersen::pedersen(seed, seed);
-            let entropy: u256 = seed.into();
-            let result: u128 = entropy.low % 100;
+            let result: u128 = random(seed, 0, 100);
 
             // more bias towards gang encounter
             return match result <= ENCOUNTER_BIAS_GANGS {
@@ -56,9 +56,7 @@ fn occurs(seed: felt252, likelihood: u8) -> bool {
         return false;
     }
 
-    let seed: u256 = seed.into();
-    let result: u128 = seed.low % 100;
-
+    let result: u128 = random(seed, 0, 100);
     (result <= likelihood.into())
 }
 

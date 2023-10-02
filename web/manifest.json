@@ -525,7 +525,7 @@
     {
       "name": "lobby",
       "address": null,
-      "class_hash": "0x6e188ea7702ee186fedffd4b9958e41fb7411bbb9f1a81aada033fb5c38f0b0",
+      "class_hash": "0x5abf9b940b6e46dbf599e197fb0ebb6fed7600a05d4f8c7b6b3d4921a7f38a3",
       "abi": [
         {
           "type": "impl",
@@ -543,6 +543,20 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::game::GameMode",
+          "variants": [
+            {
+              "name": "Limited",
+              "type": "()"
+            },
+            {
+              "name": "Unlimited",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::lobby::IGame",
           "items": [
@@ -555,41 +569,13 @@
                   "type": "dojo::world::IWorldDispatcher"
                 },
                 {
-                  "name": "start_time",
-                  "type": "core::integer::u64"
-                },
-                {
-                  "name": "max_players",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "max_turns",
-                  "type": "core::integer::u32"
+                  "name": "game_mode",
+                  "type": "rollyourown::models::game::GameMode"
                 }
               ],
               "outputs": [
                 {
                   "type": "(core::integer::u32, core::starknet::contract_address::ContractAddress)"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "join_game",
-              "inputs": [
-                {
-                  "name": "world",
-                  "type": "dojo::world::IWorldDispatcher"
-                },
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "state_mutability": "view"
@@ -629,6 +615,11 @@
             {
               "name": "creator",
               "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "game_mode",
+              "type": "rollyourown::models::game::GameMode",
               "kind": "data"
             },
             {
@@ -687,7 +678,7 @@
     {
       "name": "trade",
       "address": null,
-      "class_hash": "0x629015eef1db688a1b61f76f4d7201dbba4793395205af9c57a7ca8b16e24b3",
+      "class_hash": "0x53ef9dafc20fa0ac244d15f54d2be70b9b46a953a468138d461ddb687923975",
       "abi": [
         {
           "type": "impl",
@@ -852,7 +843,7 @@
     {
       "name": "travel",
       "address": null,
-      "class_hash": "0x5d5c59c8d5a74884da271ff663a694176e5fd38e06a221cfa9f5a2e50af7f82",
+      "class_hash": "0x7bdc41d93e235438288c02fdbd78d518f06ad1a4ea448f1de57081cab174f43",
       "abi": [
         {
           "type": "impl",
@@ -1034,7 +1025,7 @@
     {
       "name": "decide",
       "address": null,
-      "class_hash": "0x136288e768b621126e1c878f515f9c52754817d3ca5711238018c50bcb39749",
+      "class_hash": "0x43d3def1e91891a94e694fbe82a63aa337b2862f2e224191dabacfa1fede77f",
       "abi": [
         {
           "type": "impl",
@@ -1321,6 +1312,11 @@
           "key": true
         },
         {
+          "name": "game_mode",
+          "type": "GameMode",
+          "key": false
+        },
+        {
           "name": "start_time",
           "type": "u64",
           "key": false
@@ -1351,7 +1347,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x2e84d9ea1bcb73f1633a702f3b69fb733f28576f9e7e6b4b825fe8cfdef81e8",
+      "class_hash": "0x20a765cfe2a58bb9ff118f72849eea64af83928418e0fea715e7edb6a74fa97",
       "abi": [
         {
           "type": "function",

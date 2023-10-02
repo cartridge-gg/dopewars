@@ -1,17 +1,14 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::models::game::{GameMode};
 
 #[starknet::interface]
 trait IGame<TContractState> {
     fn create_game(
-        self: @TContractState,
-        world: IWorldDispatcher,
-        start_time: u64,
-        max_players: usize,
-        max_turns: usize
+        self: @TContractState, world: IWorldDispatcher, game_mode: GameMode
     ) -> (u32, ContractAddress);
 
-    fn join_game(self: @TContractState, world: IWorldDispatcher, game_id: u32) -> ContractAddress;
+    //fn join_game(self: @TContractState, world: IWorldDispatcher, game_id: u32) -> ContractAddress;
     fn set_name(self: @TContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252);
 }
 
@@ -20,20 +17,23 @@ trait IGame<TContractState> {
 mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
+    use starknet::get_block_timestamp;
 
     use rollyourown::PlayerStatus;
     use rollyourown::models::name::Name;
-    use rollyourown::models::game::Game;
+    use rollyourown::models::game::{Game, GameMode};
     use rollyourown::models::player::Player;
     use rollyourown::models::risks::Risks;
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait};
     use rollyourown::models::market::{MarketTrait};
-    use rollyourown::constants::{
-        TRAVEL_RISK, CAPTURE_RISK, STARTING_CASH, STARTING_HEALTH, STARTING_BAG_LIMIT
-    };
     use rollyourown::utils::random;
+    use rollyourown::utils::settings::{
+        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, RiskSettings,
+        RiskSettingsImpl
+    };
+    use rollyourown::utils::market;
     use super::IGame;
     use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use debug::PrintTrait;
@@ -52,6 +52,7 @@ mod lobby {
     struct GameCreated {
         game_id: u32,
         creator: ContractAddress,
+        game_mode: GameMode,
         start_time: u64,
         max_turns: usize,
         max_players: usize,
@@ -66,35 +67,38 @@ mod lobby {
     #[external(v0)]
     impl GameImpl of IGame<ContractState> {
         fn create_game(
-            self: @ContractState,
-            world: IWorldDispatcher,
-            start_time: u64,
-            max_players: usize,
-            max_turns: usize
+            self: @ContractState, world: IWorldDispatcher, game_mode: GameMode,
         ) -> (u32, ContractAddress) {
             let game_id = world.uuid();
             let caller = get_caller_address();
+
+            let start_time = get_block_timestamp();
+
+            let game_settings = GameSettingsImpl::new(game_mode);
+            let player_settings = PlayerSettingsImpl::new(game_mode);
+            let risk_settings = RiskSettingsImpl::new(game_mode);
 
             let player = Player {
                 game_id,
                 player_id: caller,
                 status: PlayerStatus::Normal,
                 location_id: 0,
-                cash: STARTING_CASH,
-                health: STARTING_HEALTH,
+                cash: player_settings.cash,
+                health: player_settings.health,
                 run_attempts: 0,
                 drug_count: 0,
-                bag_limit: STARTING_BAG_LIMIT,
-                turns_remaining: max_turns,
+                bag_limit: player_settings.bag_limit,
+                turns_remaining: game_settings.max_turns,
                 turns_remaining_on_death: 0
             };
 
             let game = Game {
                 game_id,
-                start_time,
-                max_players,
+                game_mode,
+                start_time: start_time,
+                max_players: game_settings.max_players,
                 num_players: 1, // caller auto joins
-                max_turns,
+                max_turns: game_settings.max_turns,
                 is_finished: false,
                 creator: caller,
             };
@@ -111,48 +115,18 @@ mod lobby {
                             (Risks {
                                 game_id,
                                 location_id: *location_id,
-                                travel: TRAVEL_RISK,
-                                capture: CAPTURE_RISK
+                                travel: risk_settings.travel,
+                                capture: risk_settings.capture
                             })
                         );
 
-                        let mut seed = starknet::get_tx_info().unbox().transaction_hash;
+                        let mut seed = random::seed();
                         seed = pedersen::pedersen(seed, *location_id);
 
-                        let mut drugs = DrugTrait::all();
-                        loop {
-                            match drugs.pop_front() {
-                                Option::Some(drug_id) => {
-                                    seed = pedersen::pedersen(seed, *drug_id);
-                                    let pricing_infos = MarketTrait::get_pricing_info(*drug_id);
-                                    let market_price = random(
-                                        seed, pricing_infos.min_price, pricing_infos.max_price
-                                    );
-                                    let market_quantity: usize = random(
-                                        seed, pricing_infos.min_qty, pricing_infos.max_qty
-                                    )
-                                        .try_into()
-                                        .unwrap();
-
-                                    let market_cash = market_quantity.into() * market_price;
-
-                                    //set market entity
-                                    set!(
-                                        world,
-                                        (Market {
-                                            game_id,
-                                            location_id: *location_id,
-                                            drug_id: *drug_id,
-                                            cash: market_cash,
-                                            quantity: market_quantity
-                                        })
-                                    );
-                                },
-                                Option::None(()) => {
-                                    break ();
-                                }
-                            };
-                        };
+                        // initialize markets for location
+                        market::initialize_markets(
+                            world, ref seed, game_id, game_mode, *location_id
+                        );
                     },
                     Option::None(_) => {
                         break ();
@@ -165,45 +139,18 @@ mod lobby {
 
             // emit game created
             emit!(
-                world, GameCreated { game_id, creator: caller, start_time, max_players, max_turns }
+                world,
+                GameCreated {
+                    game_id,
+                    game_mode,
+                    creator: caller,
+                    start_time,
+                    max_players: game_settings.max_players,
+                    max_turns: game_settings.max_turns
+                }
             );
 
             (game_id, caller)
-        }
-
-
-        // not used actually, for multiplayer mode
-        fn join_game(
-            self: @ContractState, world: IWorldDispatcher, game_id: u32
-        ) -> ContractAddress {
-            let player_id = get_caller_address();
-            let block_info = starknet::get_block_info().unbox();
-
-            let mut game = get!(world, game_id, (Game));
-            assert(!game.is_finished, 'game is finished');
-            assert(game.max_players > game.num_players, 'game is full');
-            assert(game.start_time >= block_info.block_timestamp, 'already started');
-
-            game.num_players += 1;
-
-            let player = Player {
-                game_id,
-                player_id,
-                status: PlayerStatus::Normal,
-                location_id: 0,
-                cash: STARTING_CASH,
-                health: STARTING_HEALTH,
-                run_attempts: 0,
-                drug_count: 0,
-                bag_limit: STARTING_BAG_LIMIT,
-                turns_remaining: game.max_turns,
-                turns_remaining_on_death: 0
-            };
-
-            set!(world, (game, player));
-            emit!(world, PlayerJoined { game_id, player_id });
-
-            player_id
         }
 
         fn set_name(
@@ -214,5 +161,39 @@ mod lobby {
                 (Name { game_id, player_id: get_caller_address(), short_string: player_name, })
             )
         }
+    // // not used actually, for multiplayer mode
+    // fn join_game(
+    //     self: @ContractState, world: IWorldDispatcher, game_id: u32
+    // ) -> ContractAddress {
+    //     let player_id = get_caller_address();
+    //     let block_info = starknet::get_block_info().unbox();
+
+    //     let mut game = get!(world, game_id, (Game));
+    //     assert(!game.is_finished, 'game is finished');
+    //     assert(game.max_players > game.num_players, 'game is full');
+    //     assert(game.start_time >= block_info.block_timestamp, 'already started');
+
+    //     game.num_players += 1;
+
+    //     let player = Player {
+    //         game_id,
+    //         player_id,
+    //         status: PlayerStatus::Normal,
+    //         location_id: 0,
+    //         cash: STARTING_CASH,
+    //         health: STARTING_HEALTH,
+    //         run_attempts: 0,
+    //         drug_count: 0,
+    //         bag_limit: STARTING_BAG_LIMIT,
+    //         turns_remaining: game.max_turns,
+    //         turns_remaining_on_death: 0
+    //     };
+
+    //     set!(world, (game, player));
+    //     emit!(world, PlayerJoined { game_id, player_id });
+
+    //     player_id
+    // }
+
     }
 }

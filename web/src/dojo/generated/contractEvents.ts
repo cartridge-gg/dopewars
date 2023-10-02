@@ -2,7 +2,6 @@
 
 import { Type as RecsType } from "@latticexyz/recs";
 import { GetTransactionReceiptResponse, Contract } from "starknet";
-import { RyoContext } from "./DojoContext";
 
 export enum WorldEvents {
       GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
@@ -21,6 +20,7 @@ export enum WorldEvents {
 export interface GameCreatedData {
       game_id: RecsType.Number
       creator: RecsType.String
+      game_mode: RecsType.String
       start_time: RecsType.Number
       max_turns: RecsType.Number
       max_players: RecsType.Number
@@ -91,17 +91,4 @@ export interface Event1Data {
       id: RecsType.Number
       value: RecsType.BigInt
 }
-
-
-// export const parseEvents = (
-//       receipt: GetTransactionReceiptResponse,
-//       contracts: Contract[]
-// ) => {
-//       if (receipt.status === "REJECTED") {
-//             throw new Error(`transaction REJECTED`);
-//       }
-//       // not ok, all events are emmitted by world :/
-//       const events = contracts.map((contract) => contract.contract.parseEvents(receipt))
-//       return events
-// }
 
