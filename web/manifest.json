@@ -2,7 +2,7 @@
   "world": {
     "name": "world",
     "address": null,
-    "class_hash": "0x370195d9fa250c4844f750f68ca77adf86c7f3293cc1cbac5c65d3404e2b2af",
+    "class_hash": "0x260bc39baaf87e4310e5213178b5f7bea7344b9806b9d08101ec066aa7bc18",
     "abi": [
       {
         "type": "impl",
@@ -59,7 +59,7 @@
         "items": [
           {
             "type": "function",
-            "name": "component",
+            "name": "model",
             "inputs": [
               {
                 "name": "name",
@@ -75,7 +75,7 @@
           },
           {
             "type": "function",
-            "name": "register_component",
+            "name": "register_model",
             "inputs": [
               {
                 "name": "class_hash",
@@ -117,7 +117,7 @@
             "name": "entity",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -149,7 +149,7 @@
             "name": "set_entity",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -177,7 +177,7 @@
             "name": "entities",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -228,7 +228,7 @@
             "name": "delete_entity",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -296,7 +296,7 @@
             "name": "is_writer",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -316,7 +316,7 @@
             "name": "grant_writer",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -332,7 +332,7 @@
             "name": "revoke_writer",
             "inputs": [
               {
-                "name": "component",
+                "name": "model",
                 "type": "core::felt252"
               },
               {
@@ -374,7 +374,7 @@
       },
       {
         "type": "event",
-        "name": "dojo::world::world::ComponentRegistered",
+        "name": "dojo::world::world::ModelRegistered",
         "kind": "struct",
         "members": [
           {
@@ -385,23 +385,6 @@
           {
             "name": "class_hash",
             "type": "core::starknet::class_hash::ClassHash",
-            "kind": "data"
-          }
-        ]
-      },
-      {
-        "type": "event",
-        "name": "dojo::world::world::SystemRegistered",
-        "kind": "struct",
-        "members": [
-          {
-            "name": "name",
-            "type": "core::felt252",
-            "kind": "data"
-          },
-          {
-            "name": "contract_address",
-            "type": "core::starknet::contract_address::ContractAddress",
             "kind": "data"
           }
         ]
@@ -461,13 +444,8 @@
             "kind": "nested"
           },
           {
-            "name": "ComponentRegistered",
-            "type": "dojo::world::world::ComponentRegistered",
-            "kind": "nested"
-          },
-          {
-            "name": "SystemRegistered",
-            "type": "dojo::world::world::SystemRegistered",
+            "name": "ModelRegistered",
+            "type": "dojo::world::world::ModelRegistered",
             "kind": "nested"
           },
           {
@@ -546,8 +524,8 @@
   "contracts": [
     {
       "name": "lobby",
-      "address": "0x6c6b9e7ba07148fc9c6f1aa6da1a3c270123ea8c2f560cc003e3f30f6694577",
-      "class_hash": "0x3ba589ae88c917320a3706fc80ef698ee92cd1ab3873263e0371ea254a650da",
+      "address": null,
+      "class_hash": "0x6e188ea7702ee186fedffd4b9958e41fb7411bbb9f1a81aada033fb5c38f0b0",
       "abi": [
         {
           "type": "impl",
@@ -709,7 +687,7 @@
     {
       "name": "trade",
       "address": null,
-      "class_hash": "0x198a48ae0d6a0b5c83382fc569d787b1409d13ba53a74ce4cc02cdc75603235",
+      "class_hash": "0x629015eef1db688a1b61f76f4d7201dbba4793395205af9c57a7ca8b16e24b3",
       "abi": [
         {
           "type": "impl",
@@ -874,7 +852,7 @@
     {
       "name": "travel",
       "address": null,
-      "class_hash": "0x32e479cbeb9348c3a7377c6e982e197d20229f36fe2667e8e9fd72318ed3f9f",
+      "class_hash": "0x5d5c59c8d5a74884da271ff663a694176e5fd38e06a221cfa9f5a2e50af7f82",
       "abi": [
         {
           "type": "impl",
@@ -1056,8 +1034,23 @@
     {
       "name": "decide",
       "address": null,
-      "class_hash": "0x46ca93a959bf011886dcc22550cc64997bfa5aef6d998ec4d5c77e145082034",
+      "class_hash": "0x136288e768b621126e1c878f515f9c52754817d3ca5711238018c50bcb39749",
       "abi": [
+        {
+          "type": "impl",
+          "name": "DecideImpl",
+          "interface_name": "rollyourown::systems::decide::IDecide"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
         {
           "type": "enum",
           "name": "rollyourown::systems::decide::Action",
@@ -1069,6 +1062,36 @@
             {
               "name": "Pay",
               "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::decide::IDecide",
+          "items": [
+            {
+              "type": "function",
+              "name": "decide",
+              "inputs": [
+                {
+                  "name": "world",
+                  "type": "dojo::world::IWorldDispatcher"
+                },
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "action",
+                  "type": "rollyourown::systems::decide::Action"
+                },
+                {
+                  "name": "next_location_id",
+                  "type": "core::felt252"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
             }
           ]
         },
@@ -1288,7 +1311,7 @@
       ]
     }
   ],
-  "components": [
+  "models": [
     {
       "name": "Game",
       "members": [
@@ -1328,7 +1351,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x19d3c61a0748367d1f6701c972165208a25740f1826dd3b3157aa87542492b4",
+      "class_hash": "0x2e84d9ea1bcb73f1633a702f3b69fb733f28576f9e7e6b4b825fe8cfdef81e8",
       "abi": [
         {
           "type": "function",
@@ -1424,7 +1447,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -1435,8 +1468,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -1445,7 +1478,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -1454,7 +1487,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
@@ -1506,7 +1543,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x4d21e37e06c146d6d1141803243d39393be10ec7eec149c8733275e6a32e13a",
+      "class_hash": "0x340c8cece2e9a5feb9e36683da116e1e6fd54e2a12d731def51bcef61e00135",
       "abi": [
         {
           "type": "function",
@@ -1602,7 +1639,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -1613,8 +1660,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -1623,7 +1670,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -1632,7 +1679,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
@@ -1714,7 +1765,7 @@
           "key": false
         }
       ],
-      "class_hash": "0xf2315c777677865336b21f130762a8f0a391e601208e5fed98040e9c0ddc46",
+      "class_hash": "0x5cd40e7be2ff7224c4948db1519a108dc7e7b889cec2a52417b699afda72002",
       "abi": [
         {
           "type": "function",
@@ -1810,7 +1861,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -1821,8 +1882,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -1831,7 +1892,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -1840,7 +1901,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
@@ -1887,7 +1952,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x7e5b53b3fbac2867bac80074099542ab29de8625b044c23d336bb5c9a284cbb",
+      "class_hash": "0x67d728c313ef46cc64f18e5199a156906c7a08109641422bdd65eba49bf5b75",
       "abi": [
         {
           "type": "function",
@@ -1983,7 +2048,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -1994,8 +2069,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -2004,7 +2079,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -2013,7 +2088,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
@@ -2060,7 +2139,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x6497e87462c2bbb69ff4f06e38ff699e77cd8b41626c9764c95e6e723a705b5",
+      "class_hash": "0x1c0200f8683cef49c58d93683865abc11ab23d616d09ddcc81d073a06dc45e3",
       "abi": [
         {
           "type": "function",
@@ -2156,7 +2235,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -2167,8 +2256,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -2177,7 +2266,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -2186,7 +2275,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
@@ -2228,7 +2321,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x5e37829f8deb355c18e1162bd2e25b98f98c656b06bc71b82bca99a4ec8e2df",
+      "class_hash": "0x622d52b1a094d54a0b28dd826a3c7d77c6f7fd7ee0bfe0c8c231c9824da97de",
       "abi": [
         {
           "type": "function",
@@ -2324,7 +2417,17 @@
         },
         {
           "type": "struct",
-          "name": "dojo::database::schema::EnumMember",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
           "members": [
             {
               "name": "name",
@@ -2335,8 +2438,8 @@
               "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "values",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
@@ -2345,7 +2448,7 @@
           "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "Simple",
+              "name": "Primitive",
               "type": "core::felt252"
             },
             {
@@ -2354,7 +2457,11 @@
             },
             {
               "name": "Enum",
-              "type": "dojo::database::schema::EnumMember"
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },

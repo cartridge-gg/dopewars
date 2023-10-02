@@ -14,8 +14,8 @@ dojo = { git = "https://github.com/dojoengine/dojo.git" }
 [[target.dojo]]
 
 [scripts]
-# build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json" # add generateComponents
-# migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json"
+build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json" # add generateComponents
+migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json"
 
 
 [tool.dojo.env]

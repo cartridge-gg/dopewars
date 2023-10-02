@@ -7,7 +7,7 @@ mod utils;
 // mod tests;
 
 use dojo::database::schema::{
-    EnumMember, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
 };
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -31,13 +31,13 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     #[inline(always)]
     fn ty() -> Ty {
         Ty::Enum(
-            EnumMember {
+            Enum {
                 name: 'PlayerStatus',
                 attrs: array![].span(),
-                values: array![
-                    serialize_member_type(@Ty::Simple('Normal')),
-                    serialize_member_type(@Ty::Simple('BeingMugged')),
-                    serialize_member_type(@Ty::Simple('BeingArrested')),
+                children: array![
+                    ('Normal', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
                 ]
                     .span()
             }

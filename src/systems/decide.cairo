@@ -75,6 +75,7 @@ mod decide {
     }
 
 
+    #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
         fn decide(
             self: @ContractState,
