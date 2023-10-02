@@ -8,11 +8,10 @@ import Fonts from "@/theme/fonts";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect, useState } from "react";
-import { DojoProvider } from "@/dojo2/DojoContext";
+import { DojoProvider } from "@/dojo/context/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
-import { setup } from "@/dojo2/setup";
-
+import { setup } from "@/dojo/setup/setup";
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -20,7 +20,7 @@ import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import Dot from "./Dot";
-import { useDojo } from "@/dojo2/DojoContext";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 
 const steps = [
   {
@@ -82,7 +82,7 @@ const Tutorial = ({
   const {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
-  } = useDojo();
+  } = useDojoContext();
 
   const onNext = () => {
     if (currentStep == steps.length) {

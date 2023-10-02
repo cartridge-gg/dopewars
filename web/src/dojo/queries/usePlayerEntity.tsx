@@ -5,7 +5,7 @@ import {
   EntityEdge,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
-import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
+import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus } from "../types";
 
 type Drug = {

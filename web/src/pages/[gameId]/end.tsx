@@ -2,8 +2,8 @@ import Header from "@/components/Header";
 import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
-import { useDojo } from "@/dojo2/DojoContext";
-import { useSystems } from "@/dojo/systems/useSystems";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useSystems } from "@/dojo/hooks/useSystems";
 import {
   Container,
   Flex,
@@ -29,8 +29,8 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { ReactNode, useCallback, useState } from "react";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { Calendar } from "@/components/icons/archive";
 import { Skull, Heart } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
@@ -44,7 +44,7 @@ export default function End() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account } = useDojo();
+  const { account } = useDojoContext();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,

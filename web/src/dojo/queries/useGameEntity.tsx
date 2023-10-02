@@ -1,7 +1,7 @@
 import { Game, useGameEntityQuery } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { ec, num } from "starknet";
-import { REFETCH_INTERVAL } from "..";
+import { REFETCH_INTERVAL } from "../constants";
 
 interface GameEntityData {
   entity: {

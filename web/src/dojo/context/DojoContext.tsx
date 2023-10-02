@@ -1,13 +1,14 @@
 import { createContext, ReactNode, useContext, useMemo } from "react";
-import { SetupResult } from "./setup";
+import { SetupResult } from "../setup/setup";
 import { useBurner } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
 
-const DojoContext = createContext<RyoContext | null>(null);
+export const DojoContext = createContext<RyoContext | null>(null);
 
-type RyoContext = {
+export type RyoContext = {
     setup: SetupResult;
-    account: {
+    account: Account;
+    burner: {
         create: () => void;
         list: () => any[];
         get: (id: string) => any;
@@ -36,6 +37,7 @@ export const DojoProvider = ({ children, value }: Props) => {
         [],
     );
 
+  
     const masterAddress = process.env.NEXT_PUBLIC_ADMIN_ADDRESS!;
     const privateKey = process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY!;
     const masterAccount = useMemo(() => new Account(provider, masterAddress, privateKey), [provider, masterAddress, privateKey]);
@@ -68,12 +70,3 @@ export const DojoProvider = ({ children, value }: Props) => {
     return <DojoContext.Provider value={contextValue}>{children}</DojoContext.Provider>;
 };
 
-export const useDojo = () => {
-    const context = useContext(DojoContext);
-    if (!context) {
-      throw new Error("useDojo must be used within a DojoProvider");
-    }
-    return useContext(DojoContext);
-}
-
-  

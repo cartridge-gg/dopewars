@@ -8,9 +8,9 @@ import {
 } from "@chakra-ui/react";
 
 import React from "react";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useRouter } from "next/router";
-import { useDojo } from "@/dojo2/DojoContext";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
@@ -19,7 +19,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const { gameId } = router.query as { gameId: string };
   const {
     account,
-  } = useDojo();
+  } = useDojoContext();
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
     address: account?.address,

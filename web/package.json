@@ -2,6 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,18 +13,20 @@
     "gen:components": "npx create-components ./manifest.json ./src/dojo2/contractComponents.ts"
   },
   "bin": {
-    "create-components": "./bin/generateComponents.cjs"
+    "create-components": "./bin/generateComponents.cjs",
+    "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "link:../../dojo-packages/packages/core",
-    "@dojoengine/create-burner": "0.0.25",
-    "@dojoengine/utils": "link:../../dojo-packages/packages/utils",
+    "@dojoengine/core": "0.1.01",
+    "@dojoengine/create-burner": "0.1.01",
+    "@dojoengine/utils": "0.1.01",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@latticexyz/recs": "2.0.0-alpha.1.177",
-    "@latticexyz/utils": "2.0.0-alpha.1.177",
+    "@latticexyz/recs": "2.0.0-next.9",
+    "@latticexyz/react": "2.0.0-next.9",
+    "@latticexyz/utils": "2.0.0-next.9",
     "@vercel/analytics": "^1.0.2",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",

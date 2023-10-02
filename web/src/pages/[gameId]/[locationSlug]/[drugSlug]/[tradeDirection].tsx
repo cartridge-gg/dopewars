@@ -17,15 +17,15 @@ import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
-import { PlayerEntity, usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
+import { PlayerEntity, usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
-import { useSystems } from "@/dojo/systems/useSystems";
+import { useSystems } from "@/dojo/hooks/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo, DrugMarket } from "@/dojo/types";
-import { useDojo } from "@/dojo2/DojoContext";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 
 export default function Market() {
   const router = useRouter();
@@ -44,9 +44,9 @@ export default function Market() {
   const [canBuy, setCanBuy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { buy, sell, error: txError } = useSystems();
   const { addTrade } = usePlayerStore();
-  const { account } = useDojo();
+  const { account} = useDojoContext();
+  const { buy, sell } = useSystems()
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -86,11 +86,11 @@ export default function Market() {
       quantity;
 
     if (tradeDirection === TradeDirection.Buy) {
-      ({ hash } = await buy(gameId, location!.name, drug!.name, quantityBuy));
+      ({ hash } = await buy(account, gameId, location!.name, drug!.name, quantityBuy));
       toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
       quantity = quantityBuy;
     } else if (tradeDirection === TradeDirection.Sell) {
-      ({ hash } = await sell(gameId, location!.name, drug!.name, quantitySell));
+      ({ hash } = await sell(account, gameId, location!.name, drug!.name, quantitySell));
       toastMessage = `You sold ${quantitySell} ${drug!.name}`;
       quantity = quantitySell;
     }

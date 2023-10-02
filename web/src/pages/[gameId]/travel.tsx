@@ -24,13 +24,19 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Map } from "@/components/map";
-import { useSystems } from "@/dojo/systems/useSystems";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/dojo2/DojoContext";
-import { useMarketPrices } from "@/dojo/components/useMarkets";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Location } from "@/dojo/types";
 import { MarketEventData } from "@/dojo/events";
+// import { useEntityQuery, useComponentValue } from "@latticexyz/react";
+// import { Has } from "@latticexyz/recs";
+import { num, ec } from "starknet";
+
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useSystems } from "@/dojo/hooks/useSystems";
+// import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+// import { useMarketPrices } from "@/dojo/queries/useMarkets";
 
 interface MarketPriceInfo {
   id: string;
@@ -47,16 +53,23 @@ export default function Travel() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
-  const { account } = useDojo();
-  const { travel, error: txError } = useSystems();
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const { account } = useDojoContext();
+  const { travel } = useSystems();
 
-  const { locationPrices } = useMarketPrices({
-    gameId,
-  });
+  // const playerEntityId = getEntityIdFromKeys([BigInt(gameId||"") ,BigInt(account.address||"")])
+  // const playerEntity = useComponentValue(Player, playerEntityId)
+  // console.log("playerEntity", playerEntity)
+
+  // const { player: playerEntity } = usePlayerEntity({
+  //   gameId,
+  //   address: account?.address,
+  // });
+
+  const playerEntity = undefined;
+  const locationPrices = undefined;
+  // const { locationPrices } = useMarketPrices({
+  //   gameId,
+  // });
 
   const locationName = useMemo(() => {
     if (targetId) {
@@ -142,11 +155,11 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId) {
       setIsSubmitting(true);
-      const { event, events,  hash } = await travel(gameId, targetId);
+      const { event, events, hash } = await travel( gameId, targetId);
       if (event) {
         return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
-      
+
       toast(
         `You've traveled to ${locationName}`,
         Car,
@@ -154,20 +167,19 @@ export default function Travel() {
       );
       router.push(`/${gameId}/turn`);
 
-      // market events 
-      if( events) {
-        for( let event of events) {
+      // market events
+      if (events) {
+        for (let event of events) {
           const e = event as MarketEventData;
-          const msg = e.increase ? 
-          `Pigs seized ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
-          `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${getLocationById(e.locationId)?.name}`
+          const msg = e.increase
+            ? `Pigs seized ${getDrugById(e.drugId)?.name} in ${
+                getLocationById(e.locationId)?.name
+              }`
+            : `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${
+                getLocationById(e.locationId)?.name
+              }`;
           const icon = e.increase ? Siren : Truck;
-          toast(
-            msg,
-            icon,
-            `http://amazing_explorer/${hash}`,
-            6000
-          );
+          toast(msg, icon, `http://amazing_explorer/${hash}`, 6000);
         }
       }
     }
@@ -204,7 +216,7 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <HStack w={["auto !important","full"]} pointerEvents="all">
+        <HStack w={["auto !important", "full"]} pointerEvents="all">
           <Button
             isDisabled={isSubmitting}
             w="full"

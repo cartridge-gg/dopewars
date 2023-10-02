@@ -22,11 +22,11 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
-import { Score, useGlobalScores } from "@/dojo/components/useGlobalScores";
-import { useDojo } from "@/dojo2/DojoContext";
+import { Score, useGlobalScores } from "@/dojo/queries/useGlobalScores";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
-import { useSystems } from "@/dojo/systems/useSystems";
+import { useSystems } from "@/dojo/hooks/useSystems";
 import { Skull } from "./icons";
 
 const Leaderboard = ({
@@ -37,7 +37,7 @@ const Leaderboard = ({
   const gameId = router.query.gameId as string;
     const {
     account,
-  } = useDojo();
+  } = useDojoContext();
   // TODO : use when supported on torii
   // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
   const { scores, refetch } = useGlobalScores();

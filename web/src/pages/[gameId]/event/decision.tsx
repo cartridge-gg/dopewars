@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { useDojo } from "@/dojo2/DojoContext";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById } from "@/dojo/helpers";
-import { useSystems } from "@/dojo/systems/useSystems";
+import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
@@ -28,7 +28,7 @@ export default function Decision() {
   const [penalty, setPenalty] = useState<string>();
 
   const { toast } = useToast();
-  const { account } = useDojo();
+  const { account } = useDojoContext();
   const { decide } = useSystems();
   const { addEncounter } = usePlayerStore();
 

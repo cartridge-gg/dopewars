@@ -7,7 +7,7 @@ import {
 import { useCallback, useEffect, useState, useMemo } from "react";
 
 import { shortString } from "starknet";
-import { SCALING_FACTOR } from "..";
+import { SCALING_FACTOR } from "../constants";
 
 export type Score = {
   gameId: string;

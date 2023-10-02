@@ -7,17 +7,14 @@ import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { formatCash } from "@/utils/ui";
-import { useDojo } from "@/dojo2/DojoContext";
 import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
 import colors from "@/theme/colors";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-
-// TODO: constrain this on contract side
-const MAX_INVENTORY = 100;
 
 export interface HeaderProps {
   back?: boolean;
@@ -30,7 +27,7 @@ const Header = ({ back }: HeaderProps) => {
   const {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
-  } = useDojo();
+  } = useDojoContext();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,

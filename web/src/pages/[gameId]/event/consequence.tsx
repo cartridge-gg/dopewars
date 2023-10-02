@@ -5,8 +5,8 @@ import { getOutcomeInfo } from "@/dojo/helpers";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useDojo } from "@/dojo2/DojoContext";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useMemo } from "react";
 import { PlayerStatus } from "@/dojo/types";
 import { Outcome } from "@/dojo/types";
@@ -21,7 +21,7 @@ export default function Consequence() {
     Number(router.query.outcome),
   );
 
-  const { account } = useDojo();
+  const { account } = useDojoContext();
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,

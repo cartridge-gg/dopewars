@@ -17,10 +17,9 @@ import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import Leaderboard from "@/components/Leaderboard";
-// import { useSystems } from "@/dojo/systems/useSystems";
-// import { useGlobalScores } from "@/dojo/components/useGlobalScores";
+// import { useGlobalScores } from "@/dojo/queries/useGlobalScores";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/dojo2/DojoContext";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
 import { usePlayerStore } from "@/hooks/state";
@@ -28,6 +27,7 @@ import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
+import { useSystems } from "@/dojo/hooks/useSystems";
 
 // hardcode game params for now
 const START_TIME = 0;
@@ -37,15 +37,8 @@ const NUM_TURNS = 10;
 export default function Home() {
   const router = useRouter();
 
-  const {
-    account,
-    setup : {
-      systemCalls :{
-        createGame
-      }
-    }
-  } = useDojo();
-  // const { create: createGame, error: txError } = useSystems();
+  const { account } = useDojoContext();
+  const { createGame } = useSystems();
   // const { scores } = useGlobalScores();
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
@@ -58,6 +51,8 @@ export default function Home() {
   //   [],
   // );
 
+  const disableAutoPlay =
+    process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !== "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   return (
@@ -85,28 +80,18 @@ export default function Home() {
                   isDisabled={!account}
                   isLoading={isSubmitting /*&& !txError*/}
                   onClick={async () => {
-                    if (
-                      process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !==
-                      "true"
-                    ) {
+                    if (disableAutoPlay) {
                       play();
                     }
                     setIsSubmitting(true);
                     resetAll();
-                    // const { event, hash } = await createGame(
-                    //   account,
-                    //   START_TIME,
-                    //   MAX_PLAYERS,
-                    //   NUM_TURNS,
-                    // );
-                    const  { event, hash } = await createGame(
-                      account,
+
+                    const { hash, gameId } = await createGame(
                       START_TIME,
                       MAX_PLAYERS,
                       NUM_TURNS,
                     );
 
-                    const { gameId } = event as JoinedEventData;
                     toast(
                       "Created Game",
                       Alert,

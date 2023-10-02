@@ -1,7 +1,7 @@
 import { Market, MarketEdge, useMarketPricesQuery } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { num } from "starknet";
-import { REFETCH_INTERVAL, SCALING_FACTOR } from "..";
+import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { LocationPrices, DrugMarket } from "../types";
 
 export class MarketPrices {
