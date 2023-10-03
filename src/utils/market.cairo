@@ -1,17 +1,13 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::market::Market;
-use rollyourown::models::game::{GameMode};
+use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::drug::{Drug, DrugTrait};
 use rollyourown::models::location::{Location, LocationTrait};
 use rollyourown::utils::random;
 use rollyourown::utils::settings::{PriceSettings, PriceSettingsImpl};
 use rollyourown::systems::travel::travel::MarketEvent;
-
-use rollyourown::constants::{
-    PRICE_VAR_CHANCE, PRICE_VAR_MIN, PRICE_VAR_MAX, MARKET_EVENT_CHANCE, MARKET_EVENT_MIN,
-    MARKET_EVENT_MAX
-};
+use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
 
 fn initialize_markets(
     world: IWorldDispatcher,
@@ -25,7 +21,7 @@ fn initialize_markets(
         match drugs.pop_front() {
             Option::Some(drug_id) => {
                 seed = pedersen::pedersen(seed, *drug_id);
-                let price_settings = PriceSettingsImpl::new(game_mode, *drug_id);
+                let price_settings = PriceSettingsImpl::get(game_mode, *drug_id);
                 let market_price = random::random(
                     seed, price_settings.min_price, price_settings.max_price
                 );
@@ -60,6 +56,8 @@ fn initialize_markets(
 fn market_variations(world: IWorldDispatcher, game_id: u32) -> Span<MarketEvent> {
     let mut market_events: Array<MarketEvent> = array![];
     let mut locations = LocationTrait::all();
+    let game = get!(world, game_id, Game);
+    let market_settings = MarketSettingsImpl::get(game.game_mode);
     loop {
         match locations.pop_front() {
             Option::Some(location_id) => {
@@ -73,20 +71,39 @@ fn market_variations(world: IWorldDispatcher, game_id: u32) -> Span<MarketEvent>
                             seed = pedersen::pedersen(seed, *drug_id);
                             let rand = random::random(seed, 0, 1000);
 
-                            if rand < PRICE_VAR_CHANCE.into() {
+                            if rand < market_settings.price_var_chance.into() {
                                 // increase price
                                 price_variation_with_cash(
-                                    world, game_id, *location_id, *drug_id, ref seed, true
+                                    world,
+                                    game_id,
+                                    *location_id,
+                                    *drug_id,
+                                    ref seed,
+                                    market_settings,
+                                    true
                                 );
-                            } else if rand >= (999 - PRICE_VAR_CHANCE).into() {
+                            } else if rand >= (999 - market_settings.price_var_chance).into() {
                                 // decrease price
                                 price_variation_with_cash(
-                                    world, game_id, *location_id, *drug_id, ref seed, false
+                                    world,
+                                    game_id,
+                                    *location_id,
+                                    *drug_id,
+                                    ref seed,
+                                    market_settings,
+                                    false
                                 );
-                            } else if rand > 500 && rand <= 500 + MARKET_EVENT_CHANCE.into() {
+                            } else if rand > 500 && rand <= 500
+                                + market_settings.market_event_chance.into() {
                                 // big move up
                                 price_variation_with_drug(
-                                    world, game_id, *location_id, *drug_id, ref seed, true
+                                    world,
+                                    game_id,
+                                    *location_id,
+                                    *drug_id,
+                                    ref seed,
+                                    market_settings,
+                                    true
                                 );
                                 market_events
                                     .append(
@@ -97,10 +114,17 @@ fn market_variations(world: IWorldDispatcher, game_id: u32) -> Span<MarketEvent>
                                             increase: true
                                         }
                                     );
-                            } else if rand < 500 && rand >= 500 - MARKET_EVENT_CHANCE.into() {
+                            } else if rand < 500 && rand >= 500
+                                - market_settings.market_event_chance.into() {
                                 // big move down
                                 price_variation_with_drug(
-                                    world, game_id, *location_id, *drug_id, ref seed, false
+                                    world,
+                                    game_id,
+                                    *location_id,
+                                    *drug_id,
+                                    ref seed,
+                                    market_settings,
+                                    false
                                 );
                                 market_events
                                     .append(
@@ -134,10 +158,13 @@ fn price_variation_with_cash(
     location_id: felt252,
     drug_id: felt252,
     ref seed: felt252,
+    market_settings: MarketSettings,
     increase: bool
 ) {
     let market = get!(world, (game_id, location_id, drug_id), (Market));
-    let percent = random::random(seed + 1, PRICE_VAR_MIN.into(), PRICE_VAR_MAX.into());
+    let percent = random::random(
+        seed + 1, market_settings.price_var_min.into(), market_settings.price_var_max.into()
+    );
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
     let target_price = if increase {
@@ -168,10 +195,13 @@ fn price_variation_with_drug(
     location_id: felt252,
     drug_id: felt252,
     ref seed: felt252,
+    market_settings: MarketSettings,
     increase: bool
 ) {
     let market = get!(world, (game_id, location_id, drug_id), (Market));
-    let percent = random::random(seed + 1, MARKET_EVENT_MIN.into(), MARKET_EVENT_MAX.into());
+    let percent = random::random(
+        seed + 1, market_settings.market_event_min.into(), market_settings.market_event_max.into()
+    );
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
     let target_price = if increase {

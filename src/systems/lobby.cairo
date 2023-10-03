@@ -74,9 +74,9 @@ mod lobby {
 
             let start_time = get_block_timestamp();
 
-            let game_settings = GameSettingsImpl::new(game_mode);
-            let player_settings = PlayerSettingsImpl::new(game_mode);
-            let risk_settings = RiskSettingsImpl::new(game_mode);
+            let game_settings = GameSettingsImpl::get(game_mode);
+            let player_settings = PlayerSettingsImpl::get(game_mode);
+            let risk_settings = RiskSettingsImpl::get(game_mode);
 
             let player = Player {
                 game_id,

@@ -26,6 +26,7 @@ mod travel {
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
+    use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
 
 
     use super::ITravel;
@@ -86,8 +87,9 @@ mod travel {
             if player.location_id != 0 {
                 let mut risks: Risks = get!(world, (game_id, next_location_id).into(), Risks);
                 let mut seed = random::seed();
+                let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
-                player.status = risks.travel(seed, player.cash, player.drug_count);
+                player.status = risks.travel(seed, risk_settings, player.cash, player.drug_count);
                 if player.status != PlayerStatus::Normal {
                     set!(world, (player));
                     emit!(world, AdverseEvent { game_id, player_id, player_status: player.status });

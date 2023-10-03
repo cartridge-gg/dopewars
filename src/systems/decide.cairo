@@ -35,12 +35,12 @@ mod decide {
     use starknet::get_caller_address;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::constants::{GANGS_PAYMENT, COPS_PAYMENT, HEALTH_IMPACT};
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::utils::random;
+    use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl};
 
     use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::IDecide;
@@ -88,6 +88,9 @@ mod decide {
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);
             assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
+            let game = get!(world, game_id, Game);
+            let decide_settings = DecideSettingsImpl::get(game.game_mode);
+
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
                     let mut risks = get!(world, (game_id, player.location_id).into(), Risks);
@@ -95,10 +98,12 @@ mod decide {
                     match risks.run(seed) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
-                            let random_loss: u8 = random::random(seed, 0, HEALTH_IMPACT.into())
+                            let random_loss: u8 = random::random(
+                                seed, 0, decide_settings.health_impact.into()
+                            )
                                 .try_into()
                                 .unwrap();
-                            let health_loss: u8 = HEALTH_IMPACT + random_loss;
+                            let health_loss: u8 = decide_settings.health_impact + random_loss;
                             (Outcome::Captured, 0, 0, health_loss)
                         }
                     }
@@ -108,13 +113,20 @@ mod decide {
                         PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                         PlayerStatus::BeingMugged => {
                             // using same name cash_loss makes LS crash
-                            let cash_loss_ = (player.cash * GANGS_PAYMENT.into()) / 100;
+                            let cash_loss_ = (player.cash
+                                * decide_settings.gangs_payment_cash_pct.into())
+                                / 100;
                             (Outcome::Paid, cash_loss_, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
                             // using same name drug_loss makes LS crash
                             let drug_loss_ = self
-                                .take_drugs(world, game_id, player_id, COPS_PAYMENT);
+                                .take_drugs(
+                                    world,
+                                    game_id,
+                                    player_id,
+                                    decide_settings.gangs_payment_cash_pct
+                                );
                             (Outcome::Paid, 0, drug_loss_, 0)
                         },
                     }
