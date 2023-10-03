@@ -26,13 +26,14 @@ struct RiskSettings {
 
 #[derive(Copy, Drop, Serde)]
 struct MarketSettings {
-    //liquidity_scale_factor: usize,
     price_var_chance: usize,
     price_var_min: u8,
     price_var_max: u8,
     market_event_chance: usize,
     market_event_min: usize,
     market_event_max: usize,
+    liq_scaling_initial_rate: usize,
+    liq_scaling_fading_rate: usize,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -85,7 +86,14 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
 
 impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
-        PlayerSettings { health: 100_u8, cash: 2000_u128 * SCALING_FACTOR, bag_limit: 100 }
+        match game_mode {
+            GameMode::Limited => {
+                PlayerSettings { health: 100_u8, cash: 2000_u128 * SCALING_FACTOR, bag_limit: 100 }
+            },
+            GameMode::Unlimited => {
+                PlayerSettings { health: 100_u8, cash: 1000_u128 * SCALING_FACTOR, bag_limit: 100 }
+            },
+        }
     }
 }
 
@@ -147,6 +155,8 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down
                     market_event_min: 50, //   up 50%   | down 25%
                     market_event_max: 100, //   up 100%  | down 50%
+                    liq_scaling_initial_rate: 200, // 0.02
+                    liq_scaling_fading_rate: 420,
                 }
             },
             GameMode::Unlimited => {
@@ -157,6 +167,8 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down
                     market_event_min: 50, //   up 50%   | down 25%
                     market_event_max: 100, //   up 100%  | down 50%
+                    liq_scaling_initial_rate: 90, // 0.009
+                    liq_scaling_fading_rate: 350,
                 }
             },
         }

@@ -10,6 +10,7 @@ sierra-replace-ids = true
 # dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "3eda0434e10dd8b350896156a5ec48b25aa0ad62" }
 # dojo = { git = "https://github.com/dojoengine/dojo.git", rev="b64e5aa3acb5b605bd0439d5707090bb0cd20e8a" }
 dojo = { git = "https://github.com/dojoengine/dojo.git" }
+cubit = { git = "https://github.com/influenceth/cubit.git" }
 
 [[target.dojo]]
 

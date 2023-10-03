@@ -98,7 +98,7 @@ mod travel {
                 }
 
                 // market price variations
-                let mut market_events = market::market_variations(world, game_id);
+                let mut market_events = market::market_variations(world, game_id, player_id);
                 // emit events 
                 loop {
                     match market_events.pop_front() {
