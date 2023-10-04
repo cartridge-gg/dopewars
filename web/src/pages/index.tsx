@@ -28,11 +28,7 @@ import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
 import { useSystems } from "@/dojo/hooks/useSystems";
-
-// hardcode game params for now
-const START_TIME = 0;
-const MAX_PLAYERS = 1;
-const NUM_TURNS = 10;
+import { GameMode } from "@/dojo/types";
 
 export default function Home() {
   const router = useRouter();
@@ -52,8 +48,13 @@ export default function Home() {
   // );
 
   const disableAutoPlay =
-    process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !== "true";
+    process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  const onHustle = (gameMode : GameMode) => {
+    if (!disableAutoPlay) { play(); }
+    router.push(`/create/${gameMode}/new`);
+  }
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
@@ -78,26 +79,17 @@ export default function Home() {
                 <Button
                   flex="1"
                   isDisabled={!account}
-                  isLoading={isSubmitting /*&& !txError*/}
-                  onClick={async () => {
-                    if (disableAutoPlay) {
-                      play();
-                    }
-                    setIsSubmitting(true);
-                    resetAll();
-
-                    const { hash, gameId } = await createGame(0);
-
-                    toast(
-                      "Created Game",
-                      Alert,
-                      `http://amazing_explorer/${hash}`,
-                    );
-
-                    router.push(`/${gameId}/travel`);
-                  }}
+                  onClick={()=> onHustle(GameMode.Limited)}
                 >
                   Hustle
+                </Button>
+
+                <Button
+                  flex="1"
+                  isDisabled={!account}
+                  onClick={()=> onHustle(GameMode.Unlimited)}
+                >
+                  Hustle U
                 </Button>
               </>
             )}

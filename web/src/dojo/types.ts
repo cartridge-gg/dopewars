@@ -36,6 +36,11 @@ export enum Outcome {
   Captured,
 }
 
+export enum GameMode{
+  Limited,
+  Unlimited
+}
+
 export interface LocationInfo {
   type: Location;
   name: string;

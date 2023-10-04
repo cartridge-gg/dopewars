@@ -184,7 +184,7 @@ impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: felt252) -> PriceSettings {
         match game_mode {
             GameMode::Limited => {
-                pricing_broody(drug_id)
+                pricing_notme(drug_id)
             },
             GameMode::Unlimited => {
                 pricing_clicksave(drug_id)
@@ -193,8 +193,56 @@ impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     }
 }
 
+fn pricing_notme(drug_id: felt252) -> PriceSettings {
+    if drug_id == 'Ludes' {
+        PriceSettings {
+            min_price: 15 * SCALING_FACTOR,
+            max_price: 95 * SCALING_FACTOR,
+            min_qty: 900,
+            max_qty: 1800,
+        }
+    } else if drug_id == 'Speed' {
+        PriceSettings {
+            min_price: 80 * SCALING_FACTOR,
+            max_price: 420 * SCALING_FACTOR,
+            min_qty: 700,
+            max_qty: 1400,
+        }
+    } else if drug_id == 'Weed' {
+        PriceSettings {
+            min_price: 350 * SCALING_FACTOR,
+            max_price: 1500 * SCALING_FACTOR,
+            min_qty: 500,
+            max_qty: 1000,
+        }
+    } else if drug_id == 'Acid' {
+        PriceSettings {
+            min_price: 1100 * SCALING_FACTOR,
+            max_price: 4200 * SCALING_FACTOR,
+            min_qty: 400,
+            max_qty: 800,
+        }
+    } else if drug_id == 'Heroin' {
+        PriceSettings {
+            min_price: 3600 * SCALING_FACTOR,
+            max_price: 10500 * SCALING_FACTOR,
+            min_qty: 300,
+            max_qty: 600,
+        }
+    } else if drug_id == 'Cocaine' {
+        PriceSettings {
+            min_price: 8500 * SCALING_FACTOR,
+            max_price: 22500 * SCALING_FACTOR,
+            min_qty: 200,
+            max_qty: 400,
+        }
+    } else {
+        panic(array!['invalid drug_id']);
+        PriceSettings { min_price: 0, max_price: 0, min_qty: 0, max_qty: 0, }
+    }
+}
 
-// TODO: calc according liquidities
+
 fn pricing_clicksave(drug_id: felt252) -> PriceSettings {
     if drug_id == 'Ludes' {
         PriceSettings {

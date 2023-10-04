@@ -1,4 +1,4 @@
-import { defineContractComponents } from "../generated/contractComponents";
+import { defineContractComponents } from "../generated/contractModels";
 import { world } from "./world";
 import { RPCProvider, Query, } from "@dojoengine/core";
 import { Account, TypedContract, num } from "starknet";
@@ -10,19 +10,19 @@ export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 const contractsByName = {
     lobby: {
-        address: "0x817964102f5820f8f352e4127f9a92692b7ab880d8257fe031338f1592d1ee"
+        address: "0x581dd49a99c06024f1bd40e92cb1eb1ae7dcc584b9d8322ba0e3f902889ecac"
     },
     trade: {
-        address: "0x592f8b83158a512eb11da9e7e8b6def37df8352d9074841671e5f3ff818bfee"
+        address: "0x32fb88c2241725cfa617712d42d11bc11b1297818076cf9e82f37bad910c587"
     },
     travel: {
-        address: "0x6cc1f2fb8526e46161b0565e37006e32a62c9cd08498cca4096c19916c7b9d8"
+        address: "0x2ad0c7b3ac6aa6c846837405c7a8959f15e1491a2cf7af7dda32b10317a11b8"
     },
     decide: {
-        address: "0x3f9f91a8b85eb22d07033dddca56eb0c35d3a7f88547bdc20b1dfbbab6ab7fa"
+        address: "0x21caf3ecac3d59b37ee58688de218be4dd80f993aad3efa2eb34c6ec3e45d1b"
     },
     contract: {
-        address: "0x74d97f9230afea0478057f475f4f105108d2fa99d8c7ce79f5446ef1031af1c"
+        address: "0x4aea0c9d5578c7099425bfc6d3c9b23daf544cc57bd5af6d9dc6031ce975c5"
     },
 }
 

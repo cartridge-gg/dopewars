@@ -5,7 +5,7 @@ use rollyourown::models::game::{GameMode};
 #[starknet::interface]
 trait IGame<TContractState> {
     fn create_game(
-        self: @TContractState, world: IWorldDispatcher, game_mode: GameMode
+        self: @TContractState, world: IWorldDispatcher, game_mode: GameMode, player_name: felt252
     ) -> (u32, ContractAddress);
 
     //fn join_game(self: @TContractState, world: IWorldDispatcher, game_id: u32) -> ContractAddress;
@@ -51,8 +51,8 @@ mod lobby {
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
         game_id: u32,
-        creator: ContractAddress,
         game_mode: GameMode,
+        creator: ContractAddress,
         start_time: u64,
         max_turns: usize,
         max_players: usize,
@@ -61,13 +61,14 @@ mod lobby {
     #[derive(Drop, starknet::Event)]
     struct PlayerJoined {
         game_id: u32,
-        player_id: ContractAddress
+        player_id: ContractAddress,
+        player_name: felt252
     }
 
     #[external(v0)]
     impl GameImpl of IGame<ContractState> {
         fn create_game(
-            self: @ContractState, world: IWorldDispatcher, game_mode: GameMode,
+            self: @ContractState, world: IWorldDispatcher, game_mode: GameMode, player_name: felt252
         ) -> (u32, ContractAddress) {
             let game_id = world.uuid();
             let caller = get_caller_address();
@@ -81,6 +82,7 @@ mod lobby {
             let player = Player {
                 game_id,
                 player_id: caller,
+                name: player_name,
                 status: PlayerStatus::Normal,
                 location_id: 0,
                 cash: player_settings.cash,
@@ -135,7 +137,7 @@ mod lobby {
             };
 
             // emit player joined
-            emit!(world, PlayerJoined { game_id, player_id: caller, });
+            emit!(world, PlayerJoined { game_id, player_id: caller, player_name});
 
             // emit game created
             emit!(

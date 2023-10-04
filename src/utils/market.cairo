@@ -151,7 +151,7 @@ fn price_variation_with_cash(
     ref seed: felt252, ref market: Market, market_settings: MarketSettings, increase: bool
 ) {
     let percent = random::random(
-        seed + 1, market_settings.price_var_min.into(), market_settings.price_var_max.into()
+        seed, market_settings.price_var_min.into(), market_settings.price_var_max.into()
     );
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
@@ -172,7 +172,7 @@ fn price_variation_with_drug(
     ref seed: felt252, ref market: Market, market_settings: MarketSettings, increase: bool
 ) {
     let percent = random::random(
-        seed + 1, market_settings.market_event_min.into(), market_settings.market_event_max.into()
+        seed, market_settings.market_event_min.into(), market_settings.market_event_max.into()
     );
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);

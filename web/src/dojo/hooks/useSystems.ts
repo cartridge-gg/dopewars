@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 // import { BaseEventData, parseEvent, parseEvents, WorldEvents } from "../events";
-import { Action } from "../types";
+import { Action, GameMode } from "../types";
 import { shortString, GetTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
@@ -81,11 +81,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: number) => {
+    async (gameMode: GameMode, playerName: string) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [gameMode],
+        [gameMode, playerName],
       );
 
       const joinedEvent = parsedEvents.find(

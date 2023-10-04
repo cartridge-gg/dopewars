@@ -10,11 +10,12 @@
     "lint": "next lint",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:components": "npx create-components ./manifest.json ./src/dojo/generated/contractComponents.ts",
+    "gen:dojo": "yarn gen:models & yarn gen:events",
+    "gen:models": "npx create-models ./manifest.json ./src/dojo/generated/contractModels.ts",
     "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {
-    "create-components": "./bin/generateComponents.cjs",
+    "create-models": "./bin/generateModels.cjs",
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {

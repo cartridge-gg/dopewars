@@ -2,7 +2,7 @@
   "world": {
     "name": "world",
     "address": null,
-    "class_hash": "0x260bc39baaf87e4310e5213178b5f7bea7344b9806b9d08101ec066aa7bc18",
+    "class_hash": "0x45539636cfa153f8ea0975102b04d35f455240c98c1dcf1eeb0013bef358d35",
     "abi": [
       {
         "type": "impl",
@@ -26,6 +26,20 @@
           {
             "name": "snapshot",
             "type": "@core::array::Array::<core::integer::u8>"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "core::option::Option::<core::felt252>",
+        "variants": [
+          {
+            "name": "Some",
+            "type": "core::felt252"
+          },
+          {
+            "name": "None",
+            "type": "()"
           }
         ]
       },
@@ -84,6 +98,26 @@
             ],
             "outputs": [],
             "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "deploy_contract",
+            "inputs": [
+              {
+                "name": "salt",
+                "type": "core::felt252"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "view"
           },
           {
             "type": "function",
@@ -182,14 +216,18 @@
               },
               {
                 "name": "index",
-                "type": "core::felt252"
+                "type": "core::option::Option::<core::felt252>"
               },
               {
-                "name": "length",
+                "name": "values",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "values_length",
                 "type": "core::integer::u32"
               },
               {
-                "name": "layout",
+                "name": "values_layout",
                 "type": "core::array::Span::<core::integer::u8>"
               }
             ],
@@ -219,6 +257,17 @@
             "outputs": [
               {
                 "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "base",
+            "inputs": [],
+            "outputs": [
+              {
+                "type": "core::starknet::class_hash::ClassHash"
               }
             ],
             "state_mutability": "view"
@@ -352,6 +401,10 @@
           {
             "name": "executor",
             "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "contract_base",
+            "type": "core::starknet::class_hash::ClassHash"
           }
         ]
       },
@@ -520,12 +573,73 @@
       }
     ]
   },
+  "base": {
+    "name": "base",
+    "class_hash": "0x7aec2b7d7064c1294a339cd90060331ff704ab573e4ee9a1b699be2215c11c9",
+    "abi": [
+      {
+        "type": "impl",
+        "name": "Upgradeable",
+        "interface_name": "dojo::upgradable::IUpgradeable"
+      },
+      {
+        "type": "interface",
+        "name": "dojo::upgradable::IUpgradeable",
+        "items": [
+          {
+            "type": "function",
+            "name": "upgrade",
+            "inputs": [
+              {
+                "name": "new_class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          }
+        ]
+      },
+      {
+        "type": "constructor",
+        "name": "constructor",
+        "inputs": []
+      },
+      {
+        "type": "struct",
+        "name": "dojo::world::IWorldDispatcher",
+        "members": [
+          {
+            "name": "contract_address",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "event",
+        "name": "dojo::base::base::Event",
+        "kind": "enum",
+        "variants": []
+      }
+    ]
+  },
   "systems": [],
   "contracts": [
     {
       "name": "lobby",
       "address": null,
-      "class_hash": "0x5abf9b940b6e46dbf599e197fb0ebb6fed7600a05d4f8c7b6b3d4921a7f38a3",
+      "class_hash": "0x8b7af9c478e0004c26e79c1647a2a840444da0af9811f2069dad1f4d7122bd",
       "abi": [
         {
           "type": "impl",
@@ -571,6 +685,10 @@
                 {
                   "name": "game_mode",
                   "type": "rollyourown::models::game::GameMode"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [
@@ -613,13 +731,13 @@
               "kind": "data"
             },
             {
-              "name": "creator",
-              "type": "core::starknet::contract_address::ContractAddress",
+              "name": "game_mode",
+              "type": "rollyourown::models::game::GameMode",
               "kind": "data"
             },
             {
-              "name": "game_mode",
-              "type": "rollyourown::models::game::GameMode",
+              "name": "creator",
+              "type": "core::starknet::contract_address::ContractAddress",
               "kind": "data"
             },
             {
@@ -653,6 +771,11 @@
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
               "kind": "data"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
             }
           ]
         },
@@ -678,7 +801,7 @@
     {
       "name": "trade",
       "address": null,
-      "class_hash": "0x53ef9dafc20fa0ac244d15f54d2be70b9b46a953a468138d461ddb687923975",
+      "class_hash": "0x6cc978f17ed24b38f0da54387620043839596c2089a63550bd0a1131ef3223",
       "abi": [
         {
           "type": "impl",
@@ -843,7 +966,7 @@
     {
       "name": "travel",
       "address": null,
-      "class_hash": "0x7bdc41d93e235438288c02fdbd78d518f06ad1a4ea448f1de57081cab174f43",
+      "class_hash": "0x37d3960837d59312a6f0359252bae6c1639b5bacbecb229a682e14759aa3693",
       "abi": [
         {
           "type": "impl",
@@ -1025,7 +1148,7 @@
     {
       "name": "decide",
       "address": null,
-      "class_hash": "0x43d3def1e91891a94e694fbe82a63aa337b2862f2e224191dabacfa1fede77f",
+      "class_hash": "0x69799243043aa68579613e252e910be5ae38334212c9b9f41237dc6e95fc703",
       "abi": [
         {
           "type": "impl",
@@ -1716,6 +1839,11 @@
           "key": true
         },
         {
+          "name": "name",
+          "type": "felt252",
+          "key": false
+        },
+        {
           "name": "status",
           "type": "PlayerStatus",
           "key": false
@@ -1761,7 +1889,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x5cd40e7be2ff7224c4948db1519a108dc7e7b889cec2a52417b699afda72002",
+      "class_hash": "0x7a9c2f6660b2aea0cf88ce2cc66cba6794cf9df9519c857fc909697cd455161",
       "abi": [
         {
           "type": "function",
