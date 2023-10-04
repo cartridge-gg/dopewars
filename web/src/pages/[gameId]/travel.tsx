@@ -1,6 +1,9 @@
 import { Arrow, Car, Siren, Truck } from "@/components/icons";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import { Inventory } from "@/components/Inventory";
+import colors from "@/theme/colors";
+import BorderImage from "@/components/icons/BorderImage";
 import {
   Box,
   HStack,
@@ -142,11 +145,11 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId) {
       setIsSubmitting(true);
-      const { event, events,  hash } = await travel(gameId, targetId);
+      const { event, events, hash } = await travel(gameId, targetId);
       if (event) {
         return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
-      
+
       toast(
         `You've traveled to ${locationName}`,
         Car,
@@ -154,20 +157,19 @@ export default function Travel() {
       );
       router.push(`/${gameId}/turn`);
 
-      // market events 
-      if( events) {
-        for( let event of events) {
+      // market events
+      if (events) {
+        for (let event of events) {
           const e = event as MarketEventData;
-          const msg = e.increase ? 
-          `Pigs seized ${getDrugById(e.drugId)?.name} in ${getLocationById(e.locationId)?.name}` : 
-          `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${getLocationById(e.locationId)?.name}`
+          const msg = e.increase
+            ? `Pigs seized ${getDrugById(e.drugId)?.name} in ${
+                getLocationById(e.locationId)?.name
+              }`
+            : `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${
+                getLocationById(e.locationId)?.name
+              }`;
           const icon = e.increase ? Siren : Truck;
-          toast(
-            msg,
-            icon,
-            `http://amazing_explorer/${hash}`,
-            6000
-          );
+          toast(msg, icon, `http://amazing_explorer/${hash}`, 6000);
         }
       }
     }
@@ -193,7 +195,13 @@ export default function Travel() {
     >
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
-          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+          <Inventory />
+          <Text
+            textStyle="subheading"
+            pt={["0px", "20px"]}
+            fontSize="11px"
+            color="neon.500"
+          >
             Location
           </Text>
           <LocationSelectBar
@@ -204,7 +212,7 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <HStack w={["auto !important","full"]} pointerEvents="all">
+        <HStack w={["auto !important", "full"]} pointerEvents="all">
           <Button
             isDisabled={isSubmitting}
             w="full"
@@ -226,16 +234,17 @@ export default function Travel() {
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="24px"
+        p="60px 24px 24px 24px"
         position="fixed"
         bottom="0"
         right="0"
         spacing="0"
         pointerEvents="none"
         justify="flex-end"
-        background="linear-gradient(transparent, 20%, #172217, 50%, #172217)"
+        background="linear-gradient(transparent, 10%, #172217, 25%, #172217)"
         gap="14px"
       >
+        <Inventory />
         <LocationSelectBar
           name={locationName}
           onNext={onNext}
@@ -301,7 +310,16 @@ const LocationPrices = ({
           ({!isPercentage ? "#" : "%"})
         </Text>
       </HStack>
-      <Card w="full" p="5px" pointerEvents="all">
+      <Card
+        w="full"
+        p="5px"
+        pointerEvents="all"
+        sx={{
+          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+            color: colors.neon["700"].toString(),
+          })}")`,
+        }}
+      >
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box
             position="absolute"
@@ -316,7 +334,7 @@ const LocationPrices = ({
                 colSpan={1}
                 border="1px"
                 p="6px"
-                borderColor="neon.600"
+                borderColor="neon.700"
               >
                 <HStack gap="8px">
                   {getDrugById(drug.id)?.icon({

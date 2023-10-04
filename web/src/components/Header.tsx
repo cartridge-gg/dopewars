@@ -65,8 +65,7 @@ const Header = ({ back }: HeaderProps) => {
       align="flex-start"
       py={["0", "20px"]}
     >
-      <HStack flex="1" justify={["left", "right"]}>
-      </HStack>
+      <HStack flex="1" justify={["left", "right"]}></HStack>
       {playerEntity && gameEntity && (
         <HStack flex="1" justify="center">
           <HStack
@@ -75,7 +74,7 @@ const Header = ({ back }: HeaderProps) => {
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
-            sx={{...headerStyles}}
+            sx={{ ...headerStyles }}
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
@@ -104,7 +103,7 @@ const Header = ({ back }: HeaderProps) => {
         </HStack>
       )}
 
-      <HStack flex="1" justify="right" >
+      <HStack flex="1" justify="right">
         {!isMobile && (
           <>
             <MediaPlayer />
