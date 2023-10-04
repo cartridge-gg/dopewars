@@ -5,8 +5,12 @@ import {
   Text,
   VStack,
   Card,
-  Tooltip
+  Tooltip,
+  Spacer,
 } from "@chakra-ui/react";
+
+import BorderImage from "@/components/icons/BorderImage";
+import colors from "@/theme/colors";
 
 import React from "react";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
@@ -26,9 +30,14 @@ export const Inventory = ({ ...props }: StyleProps) => {
   });
 
   return (
-    <VStack {...props} w="full" align="flex-start">
-      <HStack w="full" justify="space-between">
-        <Text textStyle="subheading" fontSize="10px" color="neon.500">
+    <VStack {...props} w="full" align="flex-start" pb="5px">
+      <HStack w="full" justify={["flex-end", "space-between"]}>
+        <Text
+          textStyle="subheading"
+          fontSize="10px"
+          display={["none", "flex"]}
+          color="neon.500"
+        >
           Your Inventory
         </Text>
         <HStack color="yellow.400">
@@ -72,6 +81,9 @@ export const Inventory = ({ ...props }: StyleProps) => {
         px="20px"
         justify="center"
         sx={{
+          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+            color: colors.neon["700"].toString(),
+          })}")`,
           overflowY: "scroll",
           "&::-webkit-scrollbar": {
             display: "none",

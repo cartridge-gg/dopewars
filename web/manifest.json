@@ -858,7 +858,7 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x178740f928346be5d00cb608625ee095b67b7a10f00e335e127b51f5864fe3e",
+      "class_hash": "0x54948c65c97bfc60c1a75e36093f81b76a3581bbfbe253c636e14e8e5bcd180",
       "abi": [
         {
           "type": "impl",
@@ -1281,7 +1281,7 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x24c6ca8798df75086b7bc29c69218a7f8e977d4a34cd857c690aa9e3255fa3f",
+      "class_hash": "0x7a46d4f0eaaae8a18122b37a5f89390d84e15da2adeb969971ac56783570957",
       "abi": [
         {
           "type": "impl",
@@ -1547,7 +1547,7 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x5de6459c73d72122ba45afc6114a7993462288250bc0385e9000ef90a64175b",
+      "class_hash": "0x5f178f1cfdd5a20bffeb8e98a750e05d6dd912f9ed90f1870b195d2386a4cd0",
       "abi": [
         {
           "type": "impl",
