@@ -178,44 +178,5 @@ export function defineContractComponents(world: World) {
         },
       );
     })(),
-    Name: (() => {
-      const name = "Name";
-      return defineComponent(
-        world,
-        {
-          short_string: RecsType.BigInt,
-        },
-        {
-          metadata: {
-            name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-              "u128",
-              "usize",
-              "felt252",
-              "PlayerStatus",
-              "felt252",
-              "u128",
-              "u8",
-              "u8",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "u8",
-              "u8",
-              "felt252",
-            ],
-          },
-        },
-      );
-    })(),
   };
 }

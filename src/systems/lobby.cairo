@@ -15,12 +15,12 @@ trait IGame<TContractState> {
 
 #[starknet::contract]
 mod lobby {
+    use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::get_block_timestamp;
 
     use rollyourown::PlayerStatus;
-    use rollyourown::models::name::Name;
     use rollyourown::models::game::{Game, GameMode};
     use rollyourown::models::player::Player;
     use rollyourown::models::risks::Risks;
@@ -70,6 +70,8 @@ mod lobby {
         fn create_game(
             self: @ContractState, world: IWorldDispatcher, game_mode: GameMode, player_name: felt252
         ) -> (u32, ContractAddress) {
+            assert_valid_name(player_name);
+
             let game_id = world.uuid();
             let caller = get_caller_address();
 
@@ -137,7 +139,7 @@ mod lobby {
             };
 
             // emit player joined
-            emit!(world, PlayerJoined { game_id, player_id: caller, player_name});
+            emit!(world, PlayerJoined { game_id, player_id: caller, player_name });
 
             // emit game created
             emit!(
@@ -158,10 +160,13 @@ mod lobby {
         fn set_name(
             self: @ContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252
         ) {
-            set!(
-                world,
-                (Name { game_id, player_id: get_caller_address(), short_string: player_name, })
-            )
+            assert_valid_name(player_name);
+            
+            let player_id = get_caller_address();
+            let mut player = get!(world, (game_id, player_id), Player);
+            player.name = player_name;
+           
+            set!(world, (player))
         }
     // // not used actually, for multiplayer mode
     // fn join_game(
@@ -197,5 +202,10 @@ mod lobby {
     //     player_id
     // }
 
+    }
+
+    fn assert_valid_name(name: felt252) {
+        let name_256: u256 = name.into();
+        assert(name_256 > 0xffff, 'Invalid name');
     }
 }

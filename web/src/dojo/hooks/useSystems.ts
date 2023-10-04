@@ -10,6 +10,7 @@ import { WorldEvents } from "../generated/contractEvents";
 export interface SystemsInterface {
   createGame: (
     gameMode: number,
+    playerName: string
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: string) => Promise<SystemExecuteResult>;
   join: (gameId: string) => Promise<SystemExecuteResult>;

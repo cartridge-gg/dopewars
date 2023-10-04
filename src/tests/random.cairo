@@ -5,7 +5,6 @@ mod random {
 
     use dojo::world::Context;
     use rollyourown::models::game::Game;
-    use rollyourown::models::name::Name;
     use rollyourown::utils::random;
 
     #[event]

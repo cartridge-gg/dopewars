@@ -14,7 +14,7 @@ export enum WorldEvents {
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
   Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
   Event0 = "0x3afb3b58bf8e783fbdb6e86c3ce32687fa2b0ab2150271d34182b6f880b8d6b",
-  Event1 = "0xf162b534b1ed5 dbffafa76c1965da8a0597c8b6d5e469f9e603736977852f1",
+  Event1 = "0xf162b534b1ed5dbffafa76c1965da8a0597c8b6d5e469f9e603736977852f1",
 }
 
 export interface GameCreatedData {

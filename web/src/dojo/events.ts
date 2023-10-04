@@ -3,6 +3,7 @@ import {
   GetTransactionReceiptResponse,
   InvokeTransactionReceiptResponse,
   num,
+  shortString
 } from "starknet";
 
 import { WorldEvents } from "./generated/contractEvents";
@@ -107,6 +108,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         eventType,
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
+        playerName: shortString.decodeShortString(raw.data[1]),
       } as JoinedEventData;
     case WorldEvents.Decision:
       return {

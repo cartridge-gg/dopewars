@@ -29,7 +29,6 @@ mod trade {
     use starknet::get_caller_address;
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-    use rollyourown::models::name::Name;
     use rollyourown::models::drug::Drug;
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::Location;
