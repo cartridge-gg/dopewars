@@ -57,6 +57,13 @@ export interface DrugInfo {
   icon: React.FC;
 }
 
+export interface ShopItemInfo {
+  name: string;
+  cost: number;
+  id: string;
+  icon: React.FC;
+}
+
 export interface OutcomeInfo {
   type: Outcome;
   status: PlayerStatus;

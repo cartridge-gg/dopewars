@@ -14,7 +14,6 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 
-
 export default function Name() {
   const router = useRouter();
 
@@ -28,23 +27,19 @@ export default function Name() {
   const gameMode = router.query.gameMode as GameMode;
 
   const create = async () => {
-    setError('')
-    if (name === '' || name.length > 31 || name.length < 3){
-      setError('Invalid name, at least 3 chars!')
-      return
+    setError("");
+    if (name === "" || name.length > 31 || name.length < 3) {
+      setError("Invalid name, at least 3 chars!");
+      return;
     }
 
     const { hash, gameId } = await createGame(gameMode, name);
 
-    toast(
-      "Created Game",
-      Alert,
-      `http://amazing_explorer/${hash}`,
-    );
+    toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
 
     router.push(`/${gameId}/travel`);
-  }
- 
+  };
+
   return (
     <Layout
       leftPanelProps={{
@@ -54,27 +49,40 @@ export default function Name() {
       }}
     >
       <>
+        <VStack
+          h="80%"
+          w={["full", "400px"]}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <VStack w="full">
+            <Button
+              w={["full", "auto"]}
+              onClick={() => router.push("/0x69/pawnshop")}
+            >
+              Pawnshop
+            </Button>
+          </VStack>
 
-      <VStack h="80%" w={["full", "400px"]} alignItems="center" justifyContent="center">
-              <Text py="20px" textStyle="subheading" fontSize="13px">
-                Name Entry
-              </Text>
-              <Input
-                px="10px"
-                border="2px"
-                borderColor="neon.500"
-                bgColor="neon.700"
-                maxLength={31}
-                placeholder="Enter your name"
-                autoFocus={true}
-                value={name}
-                onChange={(e) => {
-                  setError("")
-                  setName(e.target.value)
-                }}
-              />
-              <VStack w="full" h="80px">
-
+          <VStack w="full">
+            <Text py="20px" textStyle="subheading" fontSize="13px">
+              Name Entry
+            </Text>
+            <Input
+              px="10px"
+              border="2px"
+              borderColor="neon.500"
+              bgColor="neon.700"
+              maxLength={31}
+              placeholder="Enter your name"
+              autoFocus={true}
+              value={name}
+              onChange={(e) => {
+                setError("");
+                setName(e.target.value);
+              }}
+            />
+            <VStack w="full" h="80px">
               <Text
                 w="full"
                 align="center"
@@ -91,39 +99,19 @@ export default function Name() {
               >
                 {error}
               </Text>
-              </VStack>
-
-              
             </VStack>
+          </VStack>
+        </VStack>
 
-      <Footer>
-        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
-          Back
-        </Button>
-        <Button
-          w={["full", "auto"]}
-          onClick={create}
-        >
-          Create New Game
-        </Button>
-      </Footer>
-
+        <Footer>
+          <Button w={["full", "auto"]} onClick={() => router.push("/")}>
+            Back
+          </Button>
+          <Button w={["full", "auto"]} onClick={create}>
+            Create New Game
+          </Button>
+        </Footer>
       </>
     </Layout>
   );
 }
-
-
-
- //     isLoading={isSubmitting /*&& !txError*/}
-
-// setIsSubmitting(true);
-// resetAll();
-
-// const { hash, gameId } = await createGame(0);
-
-// toast(
-//   "Created Game",
-//   Alert,
-//   `http://amazing_explorer/${hash}`,
-// );
