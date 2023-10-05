@@ -51,6 +51,19 @@ struct PriceSettings {
     max_qty: u128,
 }
 
+#[derive(Copy, Drop, Serde)]
+struct ItemSettings {
+    name: felt252,
+    cost: u128,
+    value: u128
+}
+
+#[derive(Copy, Drop, Serde)]
+struct ShopSettings {
+    max_item_allowed: u8,
+    max_item_level: u8,
+}
+
 //
 //
 //
@@ -66,6 +79,11 @@ trait DrugSettingsTrait<T> {
 trait ScalingSettingsTrait<T> {
     fn get(game_mode: GameMode, turn: usize) -> T;
 }
+
+trait ItemSettingsTrait<T> {
+    fn get(game_mode: GameMode, item_id: felt252, level: u8) -> T;
+}
+
 
 //
 //
@@ -169,6 +187,88 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     market_event_max: 100, //   up 100%  | down 50%
                     liq_scaling_initial_rate: 90, // 0.009
                     liq_scaling_fading_rate: 350,
+                }
+            },
+        }
+    }
+}
+
+//
+//
+//
+
+impl ShopSettingsImpl of ScalingSettingsTrait<ShopSettings> {
+    fn get(game_mode: GameMode, turn: usize) -> ShopSettings {
+        match game_mode {
+            GameMode::Limited => {
+                ShopSettings { max_item_allowed: 2, max_item_level: 1, }
+            },
+            GameMode::Unlimited => {
+                ShopSettings { max_item_allowed: 3, max_item_level: 2, }
+            },
+        }
+    }
+}
+
+impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
+    fn get(game_mode: GameMode, item_id: felt252, level: u8) -> ItemSettings {
+        match game_mode {
+            GameMode::Limited => {
+                // TODO: replace with enum when spported..
+                // level is ignored in Limited mode
+                if item_id == 'Attack' {
+                    ItemSettings { name: 'Knife', cost: 500 * SCALING_FACTOR, value: 10 }
+                } else if item_id == 'Defense' {
+                    ItemSettings { name: 'Kevlar', cost: 500 * SCALING_FACTOR, value: 10 }
+                } else if item_id == 'Transport' {
+                    ItemSettings { name: 'Trenchcoat', cost: 500 * SCALING_FACTOR, value: 10 }
+                } else if item_id == 'Speed' {
+                    ItemSettings { name: 'Kicks', cost: 500 * SCALING_FACTOR, value: 10 }
+                } else {
+                    panic(array!['invalid item_id',]);
+                    ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                }
+            },
+            GameMode::Unlimited => {
+                if item_id == 'Attack' {
+                    if level == 1 {
+                        ItemSettings { name: 'Knife', cost: 750 * SCALING_FACTOR, value: 10 }
+                    } else if level == 2 {
+                        ItemSettings { name: 'Glock', cost: 2500 * SCALING_FACTOR, value: 20 }
+                    } else {
+                        panic(array!['invalid level']);
+                        ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                    }
+                } else if item_id == 'Defense' {
+                    if level == 1 {
+                        ItemSettings { name: 'Kevlar1', cost: 500 * SCALING_FACTOR, value: 10 }
+                    } else if level == 2 {
+                        ItemSettings { name: 'Kevlar2', cost: 1500 * SCALING_FACTOR, value: 30 }
+                    } else {
+                        panic(array!['invalid level']);
+                        ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                    }
+                } else if item_id == 'Transport' {
+                    if level == 1 {
+                        ItemSettings { name: 'Banana', cost: 500 * SCALING_FACTOR, value: 10 }
+                    } else if level == 2 {
+                        ItemSettings { name: 'Trenchcoat', cost: 1900 * SCALING_FACTOR, value: 30 }
+                    } else {
+                        panic(array!['invalid level']);
+                        ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                    }
+                } else if item_id == 'Speed' {
+                    if level == 1 {
+                        ItemSettings { name: 'Kicks1', cost: 500 * SCALING_FACTOR, value: 10 }
+                    } else if level == 2 {
+                        ItemSettings { name: 'Kicks2', cost: 1200 * SCALING_FACTOR, value: 30 }
+                    } else {
+                        panic(array!['invalid level']);
+                        ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                    }
+                } else {
+                    panic(array!['invalid item_id']);
+                    ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
                 }
             },
         }
@@ -341,3 +441,4 @@ fn pricing_broody(drug_id: felt252) -> PriceSettings {
         PriceSettings { min_price: 0, max_price: 0, min_qty: 0, max_qty: 0, }
     }
 }
+

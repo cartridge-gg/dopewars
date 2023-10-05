@@ -3,9 +3,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[starknet::interface]
 trait ITravel<TContractState> {
-    fn travel(
-        self: @TContractState, world: IWorldDispatcher, game_id: u32, next_location_id: felt252
-    ) -> bool;
+    fn travel(self: @TContractState, game_id: u32, next_location_id: felt252) -> bool;
 }
 
 
@@ -15,14 +13,12 @@ mod travel {
     use starknet::get_caller_address;
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-    use rollyourown::PlayerStatus;
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::location::{Location, LocationTrait};
-    use rollyourown::models::player::{Player, PlayerTrait};
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::market::{Market, MarketTrait};
-
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
@@ -32,7 +28,20 @@ mod travel {
     use super::ITravel;
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        world_dispatcher: ContractAddress,
+    }
+
+    #[starknet::interface]
+    trait ISystem<TContractState> {
+        fn world(self: @TContractState) -> IWorldDispatcher;
+    }
+
+    impl ISystemImpl of ISystem<ContractState> {
+        fn world(self: @ContractState) -> IWorldDispatcher {
+            IWorldDispatcher { contract_address: self.world_dispatcher.read() }
+        }
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -72,39 +81,42 @@ mod travel {
         // 2. Determine if a random travel event occurs and apply it if necessary.
         // 3. Update the players location to the next_location_id.
         // 4. Update the new locations supply based on random events.
-        fn travel(
-            self: @ContractState, world: IWorldDispatcher, game_id: u32, next_location_id: felt252
-        ) -> bool {
-            let game = get!(world, game_id, Game);
+        fn travel(self: @ContractState, game_id: u32, next_location_id: felt252) -> bool {
+            let game = get!(self.world(), game_id, Game);
             assert(game.tick(), 'game cannot progress');
 
             let player_id = get_caller_address();
-            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+            let mut player: Player = get!(self.world(), (game_id, player_id).into(), Player);
             assert(player.can_continue(), 'player cannot travel');
             assert(player.location_id != next_location_id, 'already at location');
 
             // initial travel when game starts has no risk or events
             if player.location_id != 0 {
-                let mut risks: Risks = get!(world, (game_id, next_location_id).into(), Risks);
+                let mut risks: Risks = get!(
+                    self.world(), (game_id, next_location_id).into(), Risks
+                );
                 let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
                 player.status = risks.travel(seed, risk_settings, player.cash, player.drug_count);
                 if player.status != PlayerStatus::Normal {
-                    set!(world, (player));
-                    emit!(world, AdverseEvent { game_id, player_id, player_status: player.status });
+                    set!(self.world(), (player));
+                    emit!(
+                        self.world(),
+                        AdverseEvent { game_id, player_id, player_status: player.status }
+                    );
 
                     return true;
                 }
 
                 // market price variations
-                let mut market_events = market::market_variations(world, game_id, player_id);
+                let mut market_events = market::market_variations(self.world(), game_id, player_id);
                 // emit events 
                 loop {
                     match market_events.pop_front() {
                         Option::Some(event) => {
                             emit!(
-                                world,
+                                self.world(),
                                 MarketEvent {
                                     game_id: *event.game_id,
                                     location_id: *event.location_id,
@@ -123,10 +135,10 @@ mod travel {
             }
 
             player.location_id = next_location_id;
-            set!(world, (player));
+            set!(self.world(), (player));
 
             emit!(
-                world,
+                self.world(),
                 Traveled {
                     game_id,
                     player_id,

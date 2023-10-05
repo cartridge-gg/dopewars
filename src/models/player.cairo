@@ -1,5 +1,8 @@
 use starknet::ContractAddress;
-use rollyourown::PlayerStatus;
+use dojo::database::schema::{
+    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+};
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Player {
@@ -22,7 +25,7 @@ struct Player {
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
     #[inline(always)]
-    fn can_continue(ref self: Player) -> bool {
+    fn can_continue(self: Player) -> bool {
         if self.health == 0 {
             return false;
         }
@@ -34,5 +37,51 @@ impl PlayerImpl of PlayerTrait {
         }
 
         true
+    }
+}
+
+
+#[derive(Copy, Drop, Serde, PartialEq)]
+enum PlayerStatus {
+    Normal: (),
+    BeingMugged: (),
+    BeingArrested: (),
+}
+
+impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
+    #[inline(always)]
+    fn size() -> usize {
+        1
+    }
+
+    #[inline(always)]
+    fn layout(ref layout: Array<u8>) {
+        layout.append(8);
+    }
+
+    #[inline(always)]
+    fn ty() -> Ty {
+        Ty::Enum(
+            Enum {
+                name: 'PlayerStatus',
+                attrs: array![].span(),
+                children: array![
+                    ('Normal', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
+                ]
+                    .span()
+            }
+        )
+    }
+}
+
+impl PlayerStatusPrintImpl of core::debug::PrintTrait<PlayerStatus> {
+    fn print(self: PlayerStatus) {
+        match self {
+            PlayerStatus::Normal(()) => 0.print(),
+            PlayerStatus::BeingMugged(()) => 1.print(),
+            PlayerStatus::BeingArrested(()) => 2.print(),
+        }
     }
 }

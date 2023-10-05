@@ -20,13 +20,7 @@ enum Outcome {
 
 #[starknet::interface]
 trait IDecide<TContractState> {
-    fn decide(
-        self: @TContractState,
-        world: IWorldDispatcher,
-        game_id: u32,
-        action: Action,
-        next_location_id: felt252
-    );
+    fn decide(self: @TContractState, game_id: u32, action: Action, next_location_id: felt252);
 }
 
 #[starknet::contract]
@@ -34,10 +28,9 @@ mod decide {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::PlayerStatus;
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::risks::{Risks, RisksTrait};
-    use rollyourown::models::player::{Player, PlayerTrait};
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl};
@@ -47,8 +40,20 @@ mod decide {
     use super::{Action, Outcome};
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        world_dispatcher: ContractAddress,
+    }
 
+    #[starknet::interface]
+    trait ISystem<TContractState> {
+        fn world(self: @TContractState) -> IWorldDispatcher;
+    }
+
+    impl ISystemImpl of ISystem<ContractState> {
+        fn world(self: @ContractState) -> IWorldDispatcher {
+            IWorldDispatcher { contract_address: self.world_dispatcher.read() }
+        }
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -77,13 +82,8 @@ mod decide {
 
     #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
-        fn decide(
-            self: @ContractState,
-            world: IWorldDispatcher,
-            game_id: u32,
-            action: Action,
-            next_location_id: felt252
-        ) {
+        fn decide(self: @ContractState, game_id: u32, action: Action, next_location_id: felt252) {
+            let world = self.world();
             let player_id = get_caller_address();
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);
             assert(player.status != PlayerStatus::Normal, 'player response not needed');
@@ -122,10 +122,7 @@ mod decide {
                             // using same name drug_loss makes LS crash
                             let drug_loss_ = self
                                 .take_drugs(
-                                    world,
-                                    game_id,
-                                    player_id,
-                                    decide_settings.gangs_payment_cash_pct
+                                    game_id, player_id, decide_settings.gangs_payment_cash_pct
                                 );
                             (Outcome::Paid, 0, drug_loss_, 0)
                         },
@@ -168,12 +165,9 @@ mod decide {
     #[generate_trait]
     impl InternalImpl of DecideInternalImpl {
         fn take_drugs(
-            self: @ContractState,
-            world: IWorldDispatcher,
-            game_id: u32,
-            player_id: ContractAddress,
-            percentage: usize
+            self: @ContractState, game_id: u32, player_id: ContractAddress, percentage: usize
         ) -> usize {
+            let world = self.world();
             let mut drugs = DrugTrait::all();
             let mut total_drug_loss = 0;
             loop {

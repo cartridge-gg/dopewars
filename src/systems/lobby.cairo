@@ -3,26 +3,24 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::game::{GameMode};
 
 #[starknet::interface]
-trait IGame<TContractState> {
+trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, world: IWorldDispatcher, game_mode: GameMode, player_name: felt252
+        self: @TContractState, game_mode: GameMode, player_name: felt252
     ) -> (u32, ContractAddress);
 
-    //fn join_game(self: @TContractState, world: IWorldDispatcher, game_id: u32) -> ContractAddress;
-    fn set_name(self: @TContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252);
+    //fn join_game(self: @TContractState,  game_id: u32) -> ContractAddress;
+    fn set_name(self: @TContractState, game_id: u32, player_name: felt252);
 }
 
 
 #[starknet::contract]
 mod lobby {
-    use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::get_block_timestamp;
 
-    use rollyourown::PlayerStatus;
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::game::{Game, GameMode};
-    use rollyourown::models::player::Player;
     use rollyourown::models::risks::Risks;
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
@@ -34,12 +32,25 @@ mod lobby {
         RiskSettingsImpl
     };
     use rollyourown::utils::market;
-    use super::IGame;
+    use super::ILobby;
     use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use debug::PrintTrait;
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        world_dispatcher: ContractAddress,
+    }
+
+    #[starknet::interface]
+    trait ISystem<TContractState> {
+        fn world(self: @TContractState) -> IWorldDispatcher;
+    }
+
+    impl ISystemImpl of ISystem<ContractState> {
+        fn world(self: @ContractState) -> IWorldDispatcher {
+            IWorldDispatcher { contract_address: self.world_dispatcher.read() }
+        }
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -66,13 +77,13 @@ mod lobby {
     }
 
     #[external(v0)]
-    impl GameImpl of IGame<ContractState> {
+    impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, world: IWorldDispatcher, game_mode: GameMode, player_name: felt252
+            self: @ContractState, game_mode: GameMode, player_name: felt252
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
 
-            let game_id = world.uuid();
+            let game_id = self.world().uuid();
             let caller = get_caller_address();
 
             let start_time = get_block_timestamp();
@@ -107,7 +118,7 @@ mod lobby {
                 creator: caller,
             };
 
-            set!(world, (game, player));
+            set!(self.world(), (game, player));
 
             let mut locations = LocationTrait::all();
             loop {
@@ -115,7 +126,7 @@ mod lobby {
                     Option::Some(location_id) => {
                         //set risks entity
                         set!(
-                            world,
+                            self.world(),
                             (Risks {
                                 game_id,
                                 location_id: *location_id,
@@ -129,7 +140,7 @@ mod lobby {
 
                         // initialize markets for location
                         market::initialize_markets(
-                            world, ref seed, game_id, game_mode, *location_id
+                            self.world(), ref seed, game_id, game_mode, *location_id
                         );
                     },
                     Option::None(_) => {
@@ -139,11 +150,11 @@ mod lobby {
             };
 
             // emit player joined
-            emit!(world, PlayerJoined { game_id, player_id: caller, player_name });
+            emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });
 
             // emit game created
             emit!(
-                world,
+                self.world(),
                 GameCreated {
                     game_id,
                     game_mode,
@@ -157,25 +168,24 @@ mod lobby {
             (game_id, caller)
         }
 
-        fn set_name(
-            self: @ContractState, world: IWorldDispatcher, game_id: u32, player_name: felt252
-        ) {
+        fn set_name(self: @ContractState, game_id: u32, player_name: felt252) {
             assert_valid_name(player_name);
-            
+
             let player_id = get_caller_address();
-            let mut player = get!(world, (game_id, player_id), Player);
+            let mut player = get!(self.world(), (game_id, player_id), Player);
             player.name = player_name;
-           
-            set!(world, (player))
+
+            set!(self.world(), (player))
         }
+    //
     // // not used actually, for multiplayer mode
     // fn join_game(
-    //     self: @ContractState, world: IWorldDispatcher, game_id: u32
+    //     self: @ContractState,  game_id: u32
     // ) -> ContractAddress {
     //     let player_id = get_caller_address();
     //     let block_info = starknet::get_block_info().unbox();
 
-    //     let mut game = get!(world, game_id, (Game));
+    //     let mut game = get!(self.world(), game_id, (Game));
     //     assert(!game.is_finished, 'game is finished');
     //     assert(game.max_players > game.num_players, 'game is full');
     //     assert(game.start_time >= block_info.block_timestamp, 'already started');
