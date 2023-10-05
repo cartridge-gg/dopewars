@@ -1,4 +1,3 @@
-import { Catridge } from "./Catridge";
 import { PersonA } from "./PersonA";
 import { PersonB } from "./PersonB";
 import { PersonC } from "./PersonC";
@@ -13,7 +12,6 @@ import { PersonK } from "./PersonK";
 import { PersonL } from "./PersonL";
 
 export const avatars = {
-  Catridge: Catridge,
   PersonA: PersonA,
   PersonB: PersonB,
   PersonC: PersonC,

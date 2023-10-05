@@ -120,7 +120,7 @@ const Leaderboard = ({
                 >
                   <HStack mr={3}>
                     <Text
-                      w={["10px","30px"]}
+                      w={["10px", "30px"]}
                       fontSize={["10px", "16px"]}
                       flexShrink={0}
                       // display={["none", "block"]}
@@ -130,7 +130,7 @@ const Leaderboard = ({
                     </Text>
                     <Box flexShrink={0} style={{ marginTop: "-8px" }}>
                       {score.dead ? (
-                        <Skull color={color} />
+                        <Skull color={avatarColor} hasCrown={index === 0} />
                       ) : (
                         <Avatar
                           name={genAvatarFromAddress(score.address)}
@@ -158,13 +158,12 @@ const Leaderboard = ({
                       backgroundRepeat="repeat-x"
                       flexGrow={1}
                       color="transparent"
-
                     >
                       {"."}
                     </Text>
-                    <Text flexShrink={0}
-                      fontSize={["12px", "16px"]}
-                    >{formatCash(score.cash)}</Text>
+                    <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                      {formatCash(score.cash)}
+                    </Text>
                   </HStack>
                 </ListItem>
               );
