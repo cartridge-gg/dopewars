@@ -117,7 +117,7 @@ export default function End() {
                 <Divider borderColor="neon.600" />
                 <StatsItem
                   text={`${playerEntity?.health} Health`}
-                  icon={isDead ? <Skull /> : <Heart />}
+                  icon={isDead ? <Skull color="green" /> : <Heart />}
                 />
                 {/* 
                 <Divider borderColor="neon.600" />
