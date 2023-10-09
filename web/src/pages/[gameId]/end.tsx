@@ -28,7 +28,7 @@ import {
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { Calendar } from "@/components/icons/archive";
@@ -49,7 +49,7 @@ export default function End() {
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
-  });
+      });
 
   const { game: gameEntity } = useGameEntity({
     gameId,
@@ -61,6 +61,12 @@ export default function End() {
     ? playerEntity?.turnsRemainingOnDeath
     : playerEntity?.turnsRemaining;
   const day = (gameEntity?.maxTurns || 1_000) - (turnRemaining || 0);
+
+  useEffect(() => {
+   if( playerEntity&&playerEntity.name ) {
+    setName(playerEntity.name)
+   }
+  }, [playerEntity]);
 
   const onSubmitName = useCallback(async () => {
     if (!name) return;
@@ -196,7 +202,7 @@ export default function End() {
                   onClick={onSubmitName}
                   isLoading={isSubmitting}
                 >
-                  Submit
+                  Update Name
                 </Button>
               </>
             </Footer>

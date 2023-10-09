@@ -1,12 +1,13 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::player::{Player};
+use rollyourown::models::item::{ItemEnum};
 
 #[starknet::interface]
 trait IShop<TContractState> {
     fn is_open(self: @TContractState, player: Player) -> bool;
-    fn buy_item(self: @TContractState, game_id: u32, item_id: felt252,);
-    fn drop_item(self: @TContractState, game_id: u32, item_id: felt252,);
+    fn buy_item(self: @TContractState, game_id: u32, item_id: ItemEnum);
+    fn drop_item(self: @TContractState, game_id: u32, item_id: ItemEnum,);
 }
 
 #[starknet::contract]
@@ -18,7 +19,7 @@ mod shop {
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::Location;
     use rollyourown::models::game::{Game, GameTrait};
-    use rollyourown::models::item::{Item, ItemTrait};
+    use rollyourown::models::item::{Item, ItemTrait, ItemEnum};
     use rollyourown::utils::settings::{
         ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
     };
@@ -52,7 +53,7 @@ mod shop {
     struct BoughtItem {
         game_id: u32,
         player_id: ContractAddress,
-        item_id: felt252,
+        item_id: ItemEnum,
         level: u8,
     }
 
@@ -60,7 +61,7 @@ mod shop {
     struct DroppedItem {
         game_id: u32,
         player_id: ContractAddress,
-        item_id: felt252,
+        item_id: ItemEnum,
     }
 
     #[generate_trait]
@@ -80,7 +81,7 @@ mod shop {
             true
         }
 
-        fn buy_item(self: @ContractState, game_id: u32, item_id: felt252,) {
+        fn buy_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
             let game = get!(self.world(), game_id, (Game));
             let player_id = get_caller_address();
             let mut player = get!(self.world(), (game_id, player_id), Player);
@@ -113,7 +114,7 @@ mod shop {
             emit!(self.world(), BoughtItem { game_id, player_id, item_id, level: item.level });
         }
 
-        fn drop_item(self: @ContractState, game_id: u32, item_id: felt252,) {
+        fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
             let game = get!(self.world(), game_id, (Game));
             let player_id = get_caller_address();
             let mut player = get!(self.world(), (game_id, player_id), Player);

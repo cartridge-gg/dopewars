@@ -28,7 +28,6 @@ import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
 import { useSystems } from "@/dojo/hooks/useSystems";
-import { GameMode } from "@/dojo/types";
 
 export default function Home() {
   const router = useRouter();
@@ -51,9 +50,9 @@ export default function Home() {
     process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
-  const onHustle = (gameMode : GameMode) => {
+  const onHustle = () => {
     if (!disableAutoPlay) { play(); }
-    router.push(`/create/${gameMode}/new`);
+    router.push(`/create/new`);
   }
 
   return (
@@ -79,18 +78,12 @@ export default function Home() {
                 <Button
                   flex="1"
                   isDisabled={!account}
-                  onClick={()=> onHustle(GameMode.Limited)}
+                  onClick={()=> onHustle()}
                 >
                   Hustle
                 </Button>
 
-                <Button
-                  flex="1"
-                  isDisabled={!account}
-                  onClick={()=> onHustle(GameMode.Unlimited)}
-                >
-                  Hustle U
-                </Button>
+              
               </>
             )}
           </HStack>
@@ -109,7 +102,7 @@ export default function Home() {
                 },
               }}
             >
-              {/* <Leaderboard /> */}
+              <Leaderboard />
             </VStack>
           </>
         )}

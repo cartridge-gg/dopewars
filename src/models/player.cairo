@@ -3,6 +3,8 @@ use dojo::database::schema::{
     Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
 };
 
+use rollyourown::models::location::LocationEnum;
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Player {
@@ -12,7 +14,7 @@ struct Player {
     player_id: ContractAddress,
     name: felt252,
     status: PlayerStatus,
-    location_id: felt252,
+    location_id: LocationEnum,
     cash: u128,
     health: u8,
     run_attempts: u8,
@@ -76,12 +78,3 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     }
 }
 
-impl PlayerStatusPrintImpl of core::debug::PrintTrait<PlayerStatus> {
-    fn print(self: PlayerStatus) {
-        match self {
-            PlayerStatus::Normal(()) => 0.print(),
-            PlayerStatus::BeingMugged(()) => 1.print(),
-            PlayerStatus::BeingArrested(()) => 2.print(),
-        }
-    }
-}

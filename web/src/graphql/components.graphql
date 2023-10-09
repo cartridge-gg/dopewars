@@ -33,6 +33,8 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
             __typename
             ... on Player {
               name
+              player_id
+              game_id
             }
           }
         }

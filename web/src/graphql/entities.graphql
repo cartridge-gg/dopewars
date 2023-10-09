@@ -37,6 +37,10 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             drug_id
             quantity
           }
+          ... on Item{
+            item_id
+            level
+          }
         }
       }
     }

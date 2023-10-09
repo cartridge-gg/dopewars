@@ -10,7 +10,7 @@ import { shortString } from "starknet";
 import { SCALING_FACTOR } from "../constants";
 
 export type Score = {
-  gameId: string;
+ // gameId: string;
   address: string;
   name?: string;
   cash: number;
@@ -27,22 +27,22 @@ export class GlobalScores {
     if (!edges || edges.length === 0) return undefined;
 
     return edges.map((edge) => {
-      const keys = edge.node?.entity?.keys || [];
-      const gameId = keys[0]!;
-      const address = keys[1]!;
+      // const keys = edge.node?.entity?.keys || [];
+      // const gameId = keys[0]!;
+      // const address = keys[1]!;
 
       const models = edge.node?.entity?.models || [];
-      const nameModel = models.find(
-        (model) => model?.__typename === "Name",
-      ) as Name;
+      const playerModel = models.find(
+        (model) => model?.__typename === "Player",
+      );
 
       return {
-        gameId,
-        address,
-        name:
-          nameModel &&
-          shortString.decodeShortString(nameModel?.short_string),
-        cash: Math.floor(Number(edge.node?.cash) / SCALING_FACTOR),
+        gameId: playerModel?.game_id,
+        address: playerModel?.player_id,
+        name: shortString.decodeShortString(playerModel?.name),
+        cash: Math.floor(
+          Number(BigInt(edge.node?.cash) / BigInt(SCALING_FACTOR))
+        ),
         dead: Number(edge.node?.health) === 0,
       };
     });
@@ -58,7 +58,7 @@ export const useGlobalScores = (offset?: number, limit?: number) => {
 
   const scores: Score[] = useMemo(() => {
     const scores =
-      GlobalScores.create(data?.playerComponents?.edges as PlayerEdge[]) || [];
+      GlobalScores.create(data?.playerModels?.edges as PlayerEdge[]) || [];
     return scores.sort((a, b) => b.cash - a.cash);
   }, [data]);
 

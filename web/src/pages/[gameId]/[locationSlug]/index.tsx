@@ -77,7 +77,7 @@ export default function Location() {
   return (
     <Layout
       leftPanelProps={{
-        title: shortString.decodeShortString(locationEntity.id),
+        title: locationEntity.id,
         prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${
           getLocationById(locationEntity.id)?.slug

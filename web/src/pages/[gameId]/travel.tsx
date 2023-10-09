@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import {
   getDrugById,
+  getDrugByType,
   getLocationById,
   getLocationByType,
   locations,
@@ -73,7 +74,7 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity && !isSubmitting) {
-      if (BigInt(playerEntity.locationId) !== 0n) {
+      if (playerEntity.locationId) {
         setCurrentLocationId(playerEntity.locationId);
         setTargetId(playerEntity.locationId);
       } else {
@@ -149,7 +150,8 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId) {
       setIsSubmitting(true);
-      const { event, events, hash } = await travel( gameId, targetId);
+      const locationId = getLocationById(targetId)?.type;
+      const { event, events, hash } = await travel( gameId, locationId);
       if (event) {
         return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
       }
@@ -166,11 +168,11 @@ export default function Travel() {
         for (let event of events) {
           const e = event as MarketEventData;
           const msg = e.increase
-            ? `Pigs seized ${getDrugById(e.drugId)?.name} in ${
-                getLocationById(e.locationId)?.name
+            ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${
+              getLocationByType(Number(e.locationId))?.name
               }`
-            : `A shipment of ${getDrugById(e.drugId)?.name} has arrived to ${
-                getLocationById(e.locationId)?.name
+            : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${
+              getLocationByType(Number(e.locationId))?.name
               }`;
           const icon = e.increase ? Siren : Truck;
           toast(msg, icon, `http://amazing_explorer/${hash}`, 6000);

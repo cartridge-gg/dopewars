@@ -30,46 +30,46 @@ import { getMuggerResponses, getCopResponses } from "@/responses";
 
 export const locations: LocationInfo[] = [
   {
-    type: Location.Central,
-    name: "Central Park",
-    slug: "central",
-    id: "0x43656e7472616c205061726b",
-    icon: CentralPark,
-  },
-  {
     type: Location.Queens,
     name: "Queens",
     slug: "queens",
-    id: "0x517565656e73",
+    id: "Queens",
     icon: Queens,
   },
   {
     type: Location.Bronx,
     name: "The Bronx",
     slug: "bronx",
-    id: "0x5468652042726f6e78",
+    id: "Bronx",
     icon: Bronx,
-  },
-  {
-    type: Location.Jersey,
-    name: "Jersey City",
-    slug: "jersey",
-    id: "0x4a65727365792043697479",
-    icon: Manhattan,
-  },
-  {
-    type: Location.Coney,
-    name: "Coney Island",
-    slug: "coney",
-    id: "0x436f6e65792049736c616e64",
-    icon: ConeyIsland,
   },
   {
     type: Location.Brooklyn,
     name: "Brooklyn",
     slug: "brooklyn",
-    id: "0x42726f6f6b6c796e",
+    id: "Brooklyn",
     icon: Brooklyn,
+  },
+  {
+    type: Location.Jersey,
+    name: "Jersey City",
+    slug: "jersey",
+    id: "Jersey",
+    icon: Manhattan,
+  },
+  {
+    type: Location.Central,
+    name: "Central Park",
+    slug: "central",
+    id: "Central",
+    icon: CentralPark,
+  },
+  {
+    type: Location.Coney,
+    name: "Coney Island",
+    slug: "coney",
+    id: "Coney",
+    icon: ConeyIsland,
   },
 ];
 
@@ -78,42 +78,42 @@ const drugs: DrugInfo[] = [
     type: Drug.Ludes,
     name: "Ludes",
     slug: "ludes",
-    id: "0x4c75646573",
+    id: "Ludes",
     icon: Ludes,
   },
   {
     type: Drug.Speed,
     name: "Speed",
     slug: "speed",
-    id: "0x5370656564",
+    id: "Speed",
     icon: Speed,
   },
   {
     type: Drug.Weed,
     name: "Weed",
     slug: "weed",
-    id: "0x57656564",
+    id: "Weed",
     icon: Weed,
   },
   {
     type: Drug.Acid,
     name: "Acid",
     slug: "acid",
-    id: "0x41636964",
+    id: "Acid",
     icon: Acid,
   },
   {
     type: Drug.Heroin,
     name: "Heroin",
     slug: "heroin",
-    id: "0x4865726f696e",
+    id: "Heroin",
     icon: Heroin,
   },
   {
     type: Drug.Cocaine,
     name: "Cocaine",
     slug: "cocaine",
-    id: "0x436f6361696e65",
+    id: "Cocaine",
     icon: Cocaine,
   },
 ];
@@ -222,24 +222,5 @@ export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
   if (!drugMarkets) {
     return [];
   }
-
-  const ludes = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Ludes,
-  )!;
-  const speed = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Speed,
-  )!;
-  const weed = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Weed,
-  )!;
-  const acid = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Acid,
-  )!;
-  const heroin = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Heroin,
-  )!;
-  const cocaine = drugMarkets.find(
-    (drug) => getDrugById(drug.id)?.type === Drug.Cocaine,
-  )!;
-  return [ludes, speed, weed, acid, heroin, cocaine];
+  return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
 }

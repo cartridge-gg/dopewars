@@ -39,7 +39,8 @@ export default function Decision() {
 
   useEffect(() => {
     if (playerEntity && !isSubmitting) {
-      switch (playerEntity.status) {
+
+      switch (PlayerStatus[playerEntity.status]) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
@@ -70,13 +71,31 @@ export default function Decision() {
       setIsSubmitting(true);
       setPenalty("");
 
-      const result = await decide(gameId, action, nextLocation!.id);
+      const result = await decide(gameId, action, nextLocation!.type);
       const event = result.event! as ConsequenceEventData;
       addEncounter(playerEntity!.status, event.outcome);
 
+      setIsSubmitting(false);
+
       switch (event.outcome) {
+        case Outcome.Died:
+          toast(
+            `You too ${event.healthLoss}HP damage and died...`,
+            Heart,
+            `http://amazing_explorer/${result.hash}`,
+          );
+          return router.push(`/${gameId}/end`);
+
+        case Outcome.Paid:
+        case Outcome.Escaped:
+          return router.replace(
+            `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
+              playerEntity!.status
+            }`,
+          );
+
+
         case Outcome.Captured:
-          setIsSubmitting(false);
           setPrefixTitle("Your escape...");
           setTitle("Failed!");
           setPenalty(`You lost ${event.healthLoss}HP!`);
@@ -86,22 +105,6 @@ export default function Decision() {
             `http://amazing_explorer/${result.hash}`,
           );
           break;
-
-        case Outcome.Died:
-          toast(
-            `You too ${event.healthLoss}HP damage and died...`,
-            Heart,
-            `http://amazing_explorer/${result.hash}`,
-          );
-          return router.push(`/${gameId}/end`);
-
-        case Outcome.Escaped:
-        case Outcome.Paid:
-          return router.replace(
-            `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
-              playerEntity!.status
-            }`,
-          );
       }
     },
     [gameId, nextLocation, router, playerEntity, addEncounter, decide, toast],

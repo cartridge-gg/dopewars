@@ -6,14 +6,21 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
-import { PlayerStatus } from "../types";
+import { PlayerStatus, ItemEnum } from "../types";
+import { shortString } from "starknet";
 
 type Drug = {
   id: string;
   quantity: number;
 };
 
+type Items = {
+  id: ItemEnum;
+  level: number;
+};
+
 export class PlayerEntity {
+  name: string;
   cash: number;
   health: number;
   turnsRemaining: number;
@@ -23,8 +30,10 @@ export class PlayerEntity {
   locationId?: string;
   status: PlayerStatus;
   drugs: Drug[];
+  items: Items[];
 
-  constructor(player: Player, drugs: Drug[]) {
+  constructor(player: Player, drugs: Drug[], items: Item[]) {
+    this.name = shortString.decodeShortString(player.name)
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turnsRemaining = player.turns_remaining;
@@ -32,9 +41,11 @@ export class PlayerEntity {
     this.drugCount = player.drug_count;
     this.bagLimit = player.bag_limit;
     this.locationId =
-      player.location_id === "0x0" ? undefined : `0x${BigInt(player.location_id).toString(16)}`;
+      player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
+
     this.drugs = drugs;
+    this.items = items;
   }
 
   static create(edges: EntityEdge[]): PlayerEntity | undefined {
@@ -46,6 +57,7 @@ export class PlayerEntity {
       );
     })?.node?.models?.[0] as Player;
 
+    // TODO: create helpers
     // drug entities
     const drugEdges = edges.filter((edge) =>
       edge.node?.models?.find(
@@ -64,9 +76,27 @@ export class PlayerEntity {
       };
     });
 
+    // items 
+    const itemEdges = edges.filter((edge) =>
+      edge.node?.models?.find(
+        (model) => model?.__typename === "Item",
+      ),
+    );
+
+    const items: Item[] = itemEdges.map((edge) => {
+      const itemModel = edge.node?.models?.find(
+        (model) => model?.__typename === "Item",
+      ) as DrugType;
+
+      return {
+        id: itemModel.item_id,
+        level: itemModel.level,
+      };
+    });
+
     if (!playerModel) return undefined;
 
-    return new PlayerEntity(playerModel, drugs);
+    return new PlayerEntity(playerModel, drugs, items);
   }
 }
 

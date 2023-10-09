@@ -5,7 +5,7 @@ use rollyourown::models::market::Market;
 use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::drug::{Drug, DrugTrait};
 use rollyourown::models::player::{Player};
-use rollyourown::models::location::{Location, LocationTrait};
+use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
 use rollyourown::utils::random;
 use rollyourown::utils::settings::{PriceSettings, PriceSettingsImpl};
 use rollyourown::systems::travel::travel::MarketEvent;
@@ -19,13 +19,13 @@ fn initialize_markets(
     ref seed: felt252,
     game_id: u32,
     game_mode: GameMode,
-    location_id: felt252
+    location_id: LocationEnum
 ) {
     let mut drugs = DrugTrait::all();
     loop {
         match drugs.pop_front() {
             Option::Some(drug_id) => {
-                seed = pedersen::pedersen(seed, *drug_id);
+                seed = pedersen::pedersen(seed, (*drug_id).into());
                 let price_settings = PriceSettingsImpl::get(game_mode, *drug_id);
                 let market_price = random::random(
                     seed, price_settings.min_price, price_settings.max_price
@@ -73,13 +73,13 @@ fn market_variations(
         match locations.pop_front() {
             Option::Some(location_id) => {
                 let mut seed = random::seed();
-                seed = pedersen::pedersen(seed, *location_id);
+                seed = pedersen::pedersen(seed, (*location_id).into());
 
                 let mut drugs = DrugTrait::all();
                 loop {
                     match drugs.pop_front() {
                         Option::Some(drug_id) => {
-                            seed = pedersen::pedersen(seed, *drug_id);
+                            seed = pedersen::pedersen(seed, (*drug_id).into());
                             let rand = random::random(seed, 0, 1000);
 
                             let mut market = get!(

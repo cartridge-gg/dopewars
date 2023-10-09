@@ -1,9 +1,11 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::models::location::LocationEnum;
+
 
 #[starknet::interface]
 trait ITravel<TContractState> {
-    fn travel(self: @TContractState, game_id: u32, next_location_id: felt252) -> bool;
+    fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
 }
 
 
@@ -14,10 +16,10 @@ mod travel {
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     use rollyourown::models::game::{Game, GameTrait};
-    use rollyourown::models::location::{Location, LocationTrait};
+    use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::risks::{Risks, RisksTrait};
-    use rollyourown::models::drug::{Drug, DrugTrait};
+    use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
     use rollyourown::models::market::{Market, MarketTrait};
 
     use rollyourown::utils::random;
@@ -55,8 +57,8 @@ mod travel {
     struct Traveled {
         game_id: u32,
         player_id: ContractAddress,
-        from_location: felt252,
-        to_location: felt252,
+        from_location: LocationEnum,
+        to_location: LocationEnum,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -69,8 +71,8 @@ mod travel {
     #[derive(Drop, starknet::Event)]
     struct MarketEvent {
         game_id: u32,
-        location_id: felt252,
-        drug_id: felt252,
+        location_id: LocationEnum,
+        drug_id: DrugEnum,
         increase: bool,
     }
 
@@ -81,17 +83,18 @@ mod travel {
         // 2. Determine if a random travel event occurs and apply it if necessary.
         // 3. Update the players location to the next_location_id.
         // 4. Update the new locations supply based on random events.
-        fn travel(self: @ContractState, game_id: u32, next_location_id: felt252) -> bool {
+        fn travel(self: @ContractState, game_id: u32, next_location_id: LocationEnum) -> bool {
             let game = get!(self.world(), game_id, Game);
             assert(game.tick(), 'game cannot progress');
 
             let player_id = get_caller_address();
             let mut player: Player = get!(self.world(), (game_id, player_id).into(), Player);
             assert(player.can_continue(), 'player cannot travel');
+            assert(next_location_id != LocationEnum::Home, 'no way back');
             assert(player.location_id != next_location_id, 'already at location');
 
             // initial travel when game starts has no risk or events
-            if player.location_id != 0 {
+            if player.location_id != LocationEnum::Home {
                 let mut risks: Risks = get!(
                     self.world(), (game_id, next_location_id).into(), Risks
                 );

@@ -26,7 +26,7 @@ export type Scalars = {
 
 export type Drug = {
   __typename?: 'Drug';
-  drug_id?: Maybe<Scalars['felt252']>;
+  drug_id?: Maybe<Scalars['Enum']>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
@@ -58,13 +58,7 @@ export enum DrugOrderField {
 }
 
 export type DrugWhereInput = {
-  drug_id?: InputMaybe<Scalars['felt252']>;
-  drug_idEQ?: InputMaybe<Scalars['felt252']>;
-  drug_idGT?: InputMaybe<Scalars['felt252']>;
-  drug_idGTE?: InputMaybe<Scalars['felt252']>;
-  drug_idLT?: InputMaybe<Scalars['felt252']>;
-  drug_idLTE?: InputMaybe<Scalars['felt252']>;
-  drug_idNEQ?: InputMaybe<Scalars['felt252']>;
+  drug_id?: InputMaybe<Scalars['Enum']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
@@ -231,7 +225,7 @@ export type Item = {
   __typename?: 'Item';
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
-  item_id?: Maybe<Scalars['felt252']>;
+  item_id?: Maybe<Scalars['Enum']>;
   level?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
 };
@@ -268,13 +262,7 @@ export type ItemWhereInput = {
   game_idLT?: InputMaybe<Scalars['u32']>;
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
-  item_id?: InputMaybe<Scalars['felt252']>;
-  item_idEQ?: InputMaybe<Scalars['felt252']>;
-  item_idGT?: InputMaybe<Scalars['felt252']>;
-  item_idGTE?: InputMaybe<Scalars['felt252']>;
-  item_idLT?: InputMaybe<Scalars['felt252']>;
-  item_idLTE?: InputMaybe<Scalars['felt252']>;
-  item_idNEQ?: InputMaybe<Scalars['felt252']>;
+  item_id?: InputMaybe<Scalars['Enum']>;
   level?: InputMaybe<Scalars['u8']>;
   levelEQ?: InputMaybe<Scalars['u8']>;
   levelGT?: InputMaybe<Scalars['u8']>;
@@ -294,10 +282,10 @@ export type ItemWhereInput = {
 export type Market = {
   __typename?: 'Market';
   cash?: Maybe<Scalars['u128']>;
-  drug_id?: Maybe<Scalars['felt252']>;
+  drug_id?: Maybe<Scalars['Enum']>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
-  location_id?: Maybe<Scalars['felt252']>;
+  location_id?: Maybe<Scalars['Enum']>;
   quantity?: Maybe<Scalars['u32']>;
 };
 
@@ -334,13 +322,7 @@ export type MarketWhereInput = {
   cashLT?: InputMaybe<Scalars['u128']>;
   cashLTE?: InputMaybe<Scalars['u128']>;
   cashNEQ?: InputMaybe<Scalars['u128']>;
-  drug_id?: InputMaybe<Scalars['felt252']>;
-  drug_idEQ?: InputMaybe<Scalars['felt252']>;
-  drug_idGT?: InputMaybe<Scalars['felt252']>;
-  drug_idGTE?: InputMaybe<Scalars['felt252']>;
-  drug_idLT?: InputMaybe<Scalars['felt252']>;
-  drug_idLTE?: InputMaybe<Scalars['felt252']>;
-  drug_idNEQ?: InputMaybe<Scalars['felt252']>;
+  drug_id?: InputMaybe<Scalars['Enum']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
@@ -348,13 +330,7 @@ export type MarketWhereInput = {
   game_idLT?: InputMaybe<Scalars['u32']>;
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
-  location_id?: InputMaybe<Scalars['felt252']>;
-  location_idEQ?: InputMaybe<Scalars['felt252']>;
-  location_idGT?: InputMaybe<Scalars['felt252']>;
-  location_idGTE?: InputMaybe<Scalars['felt252']>;
-  location_idLT?: InputMaybe<Scalars['felt252']>;
-  location_idLTE?: InputMaybe<Scalars['felt252']>;
-  location_idNEQ?: InputMaybe<Scalars['felt252']>;
+  location_id?: InputMaybe<Scalars['Enum']>;
   quantity?: InputMaybe<Scalars['u32']>;
   quantityEQ?: InputMaybe<Scalars['u32']>;
   quantityGT?: InputMaybe<Scalars['u32']>;
@@ -400,7 +376,7 @@ export type Player = {
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
-  location_id?: Maybe<Scalars['felt252']>;
+  location_id?: Maybe<Scalars['Enum']>;
   name?: Maybe<Scalars['felt252']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   run_attempts?: Maybe<Scalars['u8']>;
@@ -477,13 +453,7 @@ export type PlayerWhereInput = {
   healthLT?: InputMaybe<Scalars['u8']>;
   healthLTE?: InputMaybe<Scalars['u8']>;
   healthNEQ?: InputMaybe<Scalars['u8']>;
-  location_id?: InputMaybe<Scalars['felt252']>;
-  location_idEQ?: InputMaybe<Scalars['felt252']>;
-  location_idGT?: InputMaybe<Scalars['felt252']>;
-  location_idGTE?: InputMaybe<Scalars['felt252']>;
-  location_idLT?: InputMaybe<Scalars['felt252']>;
-  location_idLTE?: InputMaybe<Scalars['felt252']>;
-  location_idNEQ?: InputMaybe<Scalars['felt252']>;
+  location_id?: InputMaybe<Scalars['Enum']>;
   name?: InputMaybe<Scalars['felt252']>;
   nameEQ?: InputMaybe<Scalars['felt252']>;
   nameGT?: InputMaybe<Scalars['felt252']>;
@@ -641,7 +611,7 @@ export type Risks = {
   capture?: Maybe<Scalars['u8']>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
-  location_id?: Maybe<Scalars['felt252']>;
+  location_id?: Maybe<Scalars['Enum']>;
   travel?: Maybe<Scalars['u8']>;
 };
 
@@ -684,13 +654,7 @@ export type RisksWhereInput = {
   game_idLT?: InputMaybe<Scalars['u32']>;
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
-  location_id?: InputMaybe<Scalars['felt252']>;
-  location_idEQ?: InputMaybe<Scalars['felt252']>;
-  location_idGT?: InputMaybe<Scalars['felt252']>;
-  location_idGTE?: InputMaybe<Scalars['felt252']>;
-  location_idLT?: InputMaybe<Scalars['felt252']>;
-  location_idLTE?: InputMaybe<Scalars['felt252']>;
-  location_idNEQ?: InputMaybe<Scalars['felt252']>;
+  location_id?: InputMaybe<Scalars['Enum']>;
   travel?: InputMaybe<Scalars['u8']>;
   travelEQ?: InputMaybe<Scalars['u8']>;
   travelGT?: InputMaybe<Scalars['u8']>;
@@ -771,7 +735,7 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', totalCount: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', cash?: any | null, health?: any | null, entity?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', totalCount: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', cash?: any | null, health?: any | null, entity?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, player_id?: any | null, game_id?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
@@ -793,7 +757,7 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, health?: any | null, drug_count?: any | null, bag_limit?: any | null, location_id?: any | null, turns_remaining?: any | null, turns_remaining_on_death?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, health?: any | null, drug_count?: any | null, bag_limit?: any | null, location_id?: any | null, turns_remaining?: any | null, turns_remaining_on_death?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -873,6 +837,8 @@ export const GlobalScoresDocument = `
             __typename
             ... on Player {
               name
+              player_id
+              game_id
             }
           }
         }
@@ -1038,6 +1004,10 @@ export const PlayerEntityDocument = `
           ... on Drug {
             drug_id
             quantity
+          }
+          ... on Item {
+            item_id
+            level
           }
         }
       }

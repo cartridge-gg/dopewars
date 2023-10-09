@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { num } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { LocationPrices, DrugMarket } from "../types";
+import { getDrugById } from "../helpers";
 
 export class MarketPrices {
   locationPrices: LocationPrices;
@@ -18,13 +19,15 @@ export class MarketPrices {
 
     for (let edge of edges) {
       const node = edge.node;
-      const locationId = num.toHexString(node?.location_id);
-      const drugId = num.toHexString(node?.drug_id);
+      const locationId = node?.location_id;
+      const drugId = node?.drug_id;
+      const drugType = getDrugById(drugId)?.type;
       const price =
         Number(node?.cash) / Number(node?.quantity) / SCALING_FACTOR;
 
       const drugMarket: DrugMarket = {
         id: drugId,
+        type: drugType, 
         price: price,
         marketPool: node as Market,
       };

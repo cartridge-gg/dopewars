@@ -86,11 +86,11 @@ export default function Market() {
       quantity;
 
     if (tradeDirection === TradeDirection.Buy) {
-      ({ hash } = await buy( gameId, location!.name, drug!.name, quantityBuy));
+      ({ hash } = await buy( gameId, location!.type, drug!.type, quantityBuy));
       toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
       quantity = quantityBuy;
     } else if (tradeDirection === TradeDirection.Sell) {
-      ({ hash } = await sell( gameId, location!.name, drug!.name, quantitySell));
+      ({ hash } = await sell( gameId, location!.type, drug!.type, quantitySell));
       toastMessage = `You sold ${quantitySell} ${drug!.name}`;
       quantity = quantitySell;
     }

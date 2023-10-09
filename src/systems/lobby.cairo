@@ -24,7 +24,7 @@ mod lobby {
     use rollyourown::models::risks::Risks;
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
-    use rollyourown::models::location::{Location, LocationTrait};
+    use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{
@@ -97,7 +97,7 @@ mod lobby {
                 player_id: caller,
                 name: player_name,
                 status: PlayerStatus::Normal,
-                location_id: 0,
+                location_id: LocationEnum::Home,
                 cash: player_settings.cash,
                 health: player_settings.health,
                 run_attempts: 0,
@@ -136,7 +136,7 @@ mod lobby {
                         );
 
                         let mut seed = random::seed();
-                        seed = pedersen::pedersen(seed, *location_id);
+                        seed = pedersen::pedersen(seed, (*location_id).into());
 
                         // initialize markets for location
                         market::initialize_markets(
@@ -177,41 +177,6 @@ mod lobby {
 
             set!(self.world(), (player))
         }
-    //
-    // // not used actually, for multiplayer mode
-    // fn join_game(
-    //     self: @ContractState,  game_id: u32
-    // ) -> ContractAddress {
-    //     let player_id = get_caller_address();
-    //     let block_info = starknet::get_block_info().unbox();
-
-    //     let mut game = get!(self.world(), game_id, (Game));
-    //     assert(!game.is_finished, 'game is finished');
-    //     assert(game.max_players > game.num_players, 'game is full');
-    //     assert(game.start_time >= block_info.block_timestamp, 'already started');
-
-    //     game.num_players += 1;
-
-    //     let player = Player {
-    //         game_id,
-    //         player_id,
-    //         status: PlayerStatus::Normal,
-    //         location_id: 0,
-    //         cash: STARTING_CASH,
-    //         health: STARTING_HEALTH,
-    //         run_attempts: 0,
-    //         drug_count: 0,
-    //         bag_limit: STARTING_BAG_LIMIT,
-    //         turns_remaining: game.max_turns,
-    //         turns_remaining_on_death: 0
-    //     };
-
-    //     set!(world, (game, player));
-    //     emit!(world, PlayerJoined { game_id, player_id });
-
-    //     player_id
-    // }
-
     }
 
     fn assert_valid_name(name: felt252) {

@@ -78,8 +78,6 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
 
     // TODO: setup auth
 
-    
-
     (world, systems)
 }
 

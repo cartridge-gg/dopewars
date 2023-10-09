@@ -8,6 +8,9 @@ import { useMemo } from "react";
 import { num } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { DrugMarket } from "../types";
+import { getLocationById, getLocationByType, getDrugByType} from "../helpers";
+import { Location,  } from "../types";
+import { type } from "os";
 
 export class LocationEntity {
   id: string; // id is hex encoded location name
@@ -25,7 +28,7 @@ export class LocationEntity {
 
     // we know both location and risk model uses key[1] as locationId
     const keys = edges[0].node?.keys || [];
-    const locationId = keys[1]!;
+    const locationId = getLocationByType(Number(keys[1]!))?.id;
 
     const risksModel = edges.find((edge) => {
       return edge.node?.models?.some(
@@ -45,8 +48,9 @@ export class LocationEntity {
       ) as Market;
 
       const keys = edge.node?.keys || [];
-      const drugId = num.toHexString(keys[2]!);
-
+      const drugId = getDrugByType(Number(keys[2]!))?.id;
+      const drugType = getDrugByType(Number(keys[2]!))?.type;
+      
       const price =
         Number(marketModel.cash) /
         Number(marketModel.quantity) /
@@ -54,6 +58,7 @@ export class LocationEntity {
 
       return {
         id: drugId,
+        type: drugType,
         price: price,
         marketPool: marketModel,
       };
@@ -81,10 +86,11 @@ export const useLocationEntity = ({
   gameId?: string;
   locationId?: string;
 }): LocationInterface => {
+
   const { data, isFetched } = useLocationEntitiesQuery(
     {
       gameId: gameId || "",
-      locationId: locationId || "",
+      locationId: `0x${getLocationById(locationId)?.type.toString(16)}` || "",
     },
     {
       enabled: !!gameId && !!locationId,

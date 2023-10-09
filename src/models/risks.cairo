@@ -1,15 +1,19 @@
 use debug::PrintTrait;
+
 use rollyourown::constants::{SCALING_FACTOR};
-use rollyourown::models::player::PlayerStatus;
 use rollyourown::utils::random::random;
 use rollyourown::utils::settings::RiskSettings;
+
+use rollyourown::models::player::PlayerStatus;
+use rollyourown::models::location::LocationEnum;
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Risks {
     #[key]
     game_id: u32,
     #[key]
-    location_id: felt252,
+    location_id: LocationEnum,
     travel: u8,
     capture: u8,
 }

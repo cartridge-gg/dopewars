@@ -1,13 +1,16 @@
 use rollyourown::constants::SCALING_FACTOR;
 
+use rollyourown::models::location::LocationEnum;
+use rollyourown::models::drug::DrugEnum;
+
 #[derive(Model, Copy, Drop, Serde)]
 struct Market {
     #[key]
     game_id: u32,
     #[key]
-    location_id: felt252,
+    location_id: LocationEnum,
     #[key]
-    drug_id: felt252,
+    drug_id: DrugEnum,
     cash: u128, // fixed point
     quantity: usize,
 }
@@ -66,4 +69,5 @@ fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
 //     let payout = market.sell(5);
 //     assert(payout == 3334, 'wrong payout');
 // }
+
 

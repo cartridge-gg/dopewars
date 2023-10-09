@@ -1,21 +1,32 @@
 import { Market } from "@/generated/graphql";
 
+
+// must have same order than cairo enum
 export enum Location {
+  Home,
   Queens,
   Bronx,
   Brooklyn,
-  Coney,
   Jersey,
   Central,
+  Coney,
 }
 
+// must have same order than cairo enum
 export enum Drug {
-  Acid,
-  Weed,
   Ludes,
   Speed,
+  Weed,
+  Acid,
   Heroin,
   Cocaine,
+}
+
+export enum ItemEnum{
+  Attack,
+  Defense,
+  Transport,
+  Speed,
 }
 
 export enum PlayerStatus {
@@ -36,7 +47,7 @@ export enum Outcome {
   Captured,
 }
 
-export enum GameMode{
+export enum GameMode {
   Limited,
   Unlimited
 }
@@ -58,6 +69,7 @@ export interface DrugInfo {
 }
 
 export interface ShopItemInfo {
+  type: ItemEnum;
   name: string;
   cost: number;
   id: string;

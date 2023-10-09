@@ -24,7 +24,7 @@ export default function Name() {
 
   const [error, setError] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const gameMode = router.query.gameMode as GameMode;
+  const [gameMode, setGameMode] = useState<GameMode>(GameMode.Limited);
 
   const create = async () => {
     setError("");
@@ -37,7 +37,9 @@ export default function Name() {
 
     toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
 
-    router.push(`/${gameId}/travel`);
+   //  router.push(`/${gameId}/travel`);
+   router.push(`/${gameId}/pawnshop`);
+
   };
 
   return (
@@ -55,13 +57,26 @@ export default function Name() {
           alignItems="center"
           justifyContent="center"
         >
-          <VStack w="full">
-            <Button
-              w={["full", "auto"]}
-              onClick={() => router.push("/0x69/pawnshop")}
-            >
-              Pawnshop
-            </Button>
+          <VStack w="full" mb="50px">
+            <Text py="20px" textStyle="subheading" fontSize="13px">
+              Mode
+            </Text>
+            <HStack>
+              <Button
+                variant="selectable"
+                isActive={gameMode === GameMode.Limited}
+                onClick={() => setGameMode(GameMode.Limited)}
+              >
+                THUG
+              </Button>
+              <Button
+                variant="selectable"
+                isActive={gameMode === GameMode.Unlimited}
+                onClick={() => setGameMode(GameMode.Unlimited)}
+              >
+                GANGSTER
+              </Button>
+            </HStack>
           </VStack>
 
           <VStack w="full">

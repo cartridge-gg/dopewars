@@ -6,13 +6,14 @@ import { shortString, GetTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
+import { Location, ItemEnum } from "../types";
 
 export interface SystemsInterface {
   createGame: (
     gameMode: number,
     playerName: string
   ) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: string) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
@@ -26,12 +27,20 @@ export interface SystemsInterface {
     drugId: string,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
-  setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  // setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
   decide: (
     gameId: string,
     action: Action,
     nextLocationId: string,
   ) => Promise<SystemExecuteResult>;
+  buyItem: (
+    gameId: string, itemId: ItemEnum
+  ) => Promise<SystemExecuteResult>;
+  dropItem: (
+    gameId: string, itemId: ItemEnum
+  ) => Promise<SystemExecuteResult>;
+
+
   isPending: boolean;
   error?: Error;
 }
@@ -103,8 +112,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, locationId: string) => {
-      debugger
+    async (gameId: string, locationId: Location) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
         "travel",
         "travel",
@@ -131,7 +139,6 @@ export const useSystems = (): SystemsInterface => {
       drugId: string,
       quantity: number,
     ) => {
-    debugger
 
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
         "trade",
@@ -184,12 +191,12 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const setName = useCallback(
-    async (gameId: string, playerName: string) => {
+  const buyItem = useCallback(
+    async (gameId: string, itemId: ItemEnum) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        "lobby",
-        "set_name",
-        [gameId, shortString.encodeShortString(playerName)],
+        "shop",
+        "buy_item",
+        [gameId, itemId],
       );
 
       return {
@@ -199,14 +206,50 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  const dropItem = useCallback(
+    async (gameId: string, itemId: ItemEnum) => {
+      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+        "shop",
+        "drop_item",
+        [gameId, itemId],
+      );
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
+
+
+  // const setName = useCallback(
+  //   async (gameId: string, playerName: string) => {
+  //     const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+  //       "lobby",
+  //       "set_name",
+  //       [gameId, shortString.encodeShortString(playerName)],
+  //     );
+
+  //     return {
+  //       hash,
+  //     };
+  //   },
+  //   [executeAndReceipt],
+  // );
+
+
   return {
     createGame,
     // join,
     travel,
     buy,
     sell,
-    setName,
+    //setName,
     decide,
+    buyItem,
+    dropItem
     // error,
     // isPending,
   };

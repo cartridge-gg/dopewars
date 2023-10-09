@@ -41,10 +41,7 @@ const Leaderboard = ({
   // TODO : use when supported on torii
   // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
   const { scores, refetch } = useGlobalScores();
-  const { setName: submitSetName, isPending } = useSystems();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [overlayDimiss, setOverlayDismiss] = useState(true);
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
@@ -65,16 +62,7 @@ const Leaderboard = ({
     setVisibleScores(visibleScores + pageSize);
   }, [listRef.current, visibleScores]);
 
-  const onSubmitName = useCallback(async () => {
-    if (!name) return;
-
-    setOverlayDismiss(false);
-    await submitSetName(targetGameId, name);
-    await refetch();
-    setOverlayDismiss(true);
-
-    onClose();
-  }, [name, targetGameId, onClose, refetch, submitSetName]);
+ 
 
   if (!scores) {
     return <></>;
@@ -184,50 +172,7 @@ const Leaderboard = ({
         )}
       </VStack>
 
-      {/* Naming modale */}
-      <Modal
-        closeOnOverlayClick={overlayDimiss}
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader
-            display="flex"
-            justifyContent="center"
-            textTransform="uppercase"
-            fontWeight="400"
-          >
-            Name Entry
-          </ModalHeader>
-          <ModalBody py="10px">
-            <Input
-              placeholder="Enter your name"
-              px="10px"
-              border="2px"
-              borderColor="neon.500"
-              maxLength={31}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Text
-              w="full"
-              align="center"
-              color="red"
-              visibility={name.length === 31 ? "visible" : "hidden"}
-            >
-              Max 31 characters
-            </Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onSubmitName} isLoading={isPending} w="full">
-              Submit
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+         </>
   );
 };
 

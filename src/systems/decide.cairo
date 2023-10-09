@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
+use rollyourown::models::location::LocationEnum;
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum Action {
@@ -20,7 +20,7 @@ enum Outcome {
 
 #[starknet::interface]
 trait IDecide<TContractState> {
-    fn decide(self: @TContractState, game_id: u32, action: Action, next_location_id: felt252);
+    fn decide(self: @TContractState, game_id: u32, action: Action, next_location_id: LocationEnum);
 }
 
 #[starknet::contract]
@@ -32,8 +32,11 @@ mod decide {
     use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait};
+    use rollyourown::models::location::{LocationEnum};
+
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl};
+
 
     use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::IDecide;
@@ -82,7 +85,9 @@ mod decide {
 
     #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
-        fn decide(self: @ContractState, game_id: u32, action: Action, next_location_id: felt252) {
+        fn decide(
+            self: @ContractState, game_id: u32, action: Action, next_location_id: LocationEnum
+        ) {
             let world = self.world();
             let player_id = get_caller_address();
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);

@@ -17,7 +17,7 @@ export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const outcome = getOutcomeInfo(
-    Number(router.query.status),
+    router.query.status,
     Number(router.query.outcome),
   );
 
@@ -27,11 +27,11 @@ export default function Consequence() {
     address: account?.address,
   });
 
-  const isDead = outcome.type == Outcome.Died;
+  const isDead = outcome.type === Outcome.Died;
   const response = useMemo(() => outcome.getResponse(true), [outcome]);
 
   useEffect(() => {
-    if (outcome.type == Outcome.Died) {
+    if (outcome.type === Outcome.Died) {
       playSound(Sounds.GameOver);
     }
   }, [outcome]);

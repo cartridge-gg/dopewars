@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState, useEffect } from "react";
-import { GameMode, ShopItemInfo } from "@/dojo/types";
+import { GameMode, ShopItemInfo, ItemEnum } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { playSound, Sounds } from "@/hooks/sound";
@@ -29,28 +29,28 @@ import { Trenchcoat, Kevlar, Kicks, Glock } from "@/components/icons/items";
 // TODO: retrieve form world
 const shopItems: ShopItemInfo[] = [
   {
-    id: "glock",
+    type: ItemEnum.Attack,
     name: "Glock",
     desc: "* Gives you some extra firepower *",
     cost: "750",
     icon: Glock,
   },
   {
-    id: "trenchcoat",
+    type: ItemEnum.Transport,
     name: "Trenchcoat",
     desc: "* Allows you to carry more product *",
     cost: "750",
     icon: Trenchcoat,
   },
   {
-    id: "kevlar",
+    type: ItemEnum.Defense,
     name: "Kevlar",
     desc: "* Allows you to absorb some damage *",
     cost: "750",
     icon: Kevlar,
   },
   {
-    id: "kicks",
+    type: ItemEnum.Speed,
     name: "Kicks",
     desc: "* Allows you to escape more easily *",
     cost: "750",
@@ -62,11 +62,11 @@ export default function PawnShop() {
   const router = useRouter();
 
   const { account } = useDojoContext();
-  const { createGame } = useSystems();
+  const { buyItem, dropItem } = useSystems();
 
   const { toast } = useToast();
 
-  const gameMode = router.query.gameId as string;
+  const gameId = router.query.gameId as string;
   const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo>(null);
 
   const selectItem = (shopItem: ShopItemInfo) => {
@@ -79,13 +79,15 @@ export default function PawnShop() {
   };
 
   const buy = async () => {
-    //   const { hash, gameId } = await createGame(gameMode, name);
+    if (!selectedShopItem) return
+
+      const { hash } = await buyItem(gameId, selectedShopItem.type);
     //   toast(
     //     "Created Game",
     //     Alert,
     //     `http://amazing_explorer/${hash}`,
     //   );
-    //   router.push(`/${gameId}/travel`);
+      router.push(`/${gameId}/travel`);
   };
 
   return (
