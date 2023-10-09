@@ -31,17 +31,17 @@ export class GlobalScores {
       const gameId = keys[0]!;
       const address = keys[1]!;
 
-      const components = edge.node?.entity?.components || [];
-      const nameComponent = components.find(
-        (component) => component?.__typename === "Name",
+      const models = edge.node?.entity?.models || [];
+      const nameModel = models.find(
+        (model) => model?.__typename === "Name",
       ) as Name;
 
       return {
         gameId,
         address,
         name:
-          nameComponent &&
-          shortString.decodeShortString(nameComponent?.short_string),
+          nameModel &&
+          shortString.decodeShortString(nameModel?.short_string),
         cash: Math.floor(Number(edge.node?.cash) / SCALING_FACTOR),
         dead: Number(edge.node?.health) === 0,
       };

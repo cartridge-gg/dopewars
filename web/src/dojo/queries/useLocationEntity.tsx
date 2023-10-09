@@ -23,47 +23,47 @@ export class LocationEntity {
   static create(edges: EntityEdge[]): LocationEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
 
-    // we know both location and risk component uses key[1] as locationId
+    // we know both location and risk model uses key[1] as locationId
     const keys = edges[0].node?.keys || [];
     const locationId = keys[1]!;
 
-    const risksComponent = edges.find((edge) => {
-      return edge.node?.components?.some(
-        (component) => component?.__typename === "Risks",
+    const risksModel = edges.find((edge) => {
+      return edge.node?.models?.some(
+        (model) => model?.__typename === "Risks",
       );
-    })?.node?.components?.[0] as Risks;
+    })?.node?.models?.[0] as Risks;
 
     const drugMarketEntities = edges.filter((edge) => {
-      return edge.node?.components?.find(
-        (component) => component?.__typename === "Market",
+      return edge.node?.models?.find(
+        (model) => model?.__typename === "Market",
       );
     }) as EntityEdge[];
 
     const drugMarkets: DrugMarket[] = drugMarketEntities.map((edge) => {
-      const marketComponent = edge.node?.components?.find(
-        (component) => component?.__typename === "Market",
+      const marketModel = edge.node?.models?.find(
+        (model) => model?.__typename === "Market",
       ) as Market;
 
       const keys = edge.node?.keys || [];
       const drugId = num.toHexString(keys[2]!);
 
       const price =
-        Number(marketComponent.cash) /
-        Number(marketComponent.quantity) /
+        Number(marketModel.cash) /
+        Number(marketModel.quantity) /
         SCALING_FACTOR;
 
       return {
         id: drugId,
         price: price,
-        marketPool: marketComponent,
+        marketPool: marketModel,
       };
     });
 
-    if (!risksComponent || drugMarkets.length === 0) return undefined;
+    if (!risksModel || drugMarkets.length === 0) return undefined;
 
     return {
       id: locationId,
-      risks: risksComponent,
+      risks: risksModel,
       drugMarkets: drugMarkets,
     };
   }

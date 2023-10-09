@@ -59,7 +59,7 @@ export const useMarketPrices = ({
   );
 
   const locationPrices = useMemo(() => {
-    return MarketPrices.create(data?.marketComponents?.edges as MarketEdge[]);
+    return MarketPrices.create(data?.marketModels?.edges as MarketEdge[]);
   }, [data]);
 
   return {

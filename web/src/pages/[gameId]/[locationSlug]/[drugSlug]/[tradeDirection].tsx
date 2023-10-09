@@ -86,11 +86,11 @@ export default function Market() {
       quantity;
 
     if (tradeDirection === TradeDirection.Buy) {
-      ({ hash } = await buy(account, gameId, location!.name, drug!.name, quantityBuy));
+      ({ hash } = await buy( gameId, location!.name, drug!.name, quantityBuy));
       toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
       quantity = quantityBuy;
     } else if (tradeDirection === TradeDirection.Sell) {
-      ({ hash } = await sell(account, gameId, location!.name, drug!.name, quantitySell));
+      ({ hash } = await sell( gameId, location!.name, drug!.name, quantitySell));
       toastMessage = `You sold ${quantitySell} ${drug!.name}`;
       quantity = quantitySell;
     }
@@ -181,7 +181,7 @@ export default function Market() {
           {tradeDirection == TradeDirection.Buy && canBuy && (
             <Button
             w={["full", "auto"]}
-            isLoading={isSubmitting && !txError}
+            isLoading={isSubmitting /* && !txError*/}
             isDisabled={quantityBuy === 0}
             onClick={onTrade}
           >
@@ -192,7 +192,7 @@ export default function Market() {
           {tradeDirection == TradeDirection.Sell && canSell && (
             <Button
               w={["full", "auto"]}
-              isLoading={isSubmitting && !txError}
+              isLoading={isSubmitting /*&& !txError*/}
               isDisabled={quantitySell === 0}
               onClick={onTrade}
             >

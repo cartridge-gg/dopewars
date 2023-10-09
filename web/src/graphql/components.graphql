@@ -1,5 +1,5 @@
 query AvailableGames {
-  gameComponents(first: 10) {
+  gameModels(first: 10) {
     totalCount
     edges {
       node {
@@ -14,12 +14,14 @@ query AvailableGames {
   }
 }
 
+
 query GlobalScores($limit: Int, $cursor: Cursor) {
-  playerComponents(
+  playerModels(
     first: $limit
     after: $cursor
     where: { turns_remaining: 0 }
-  ) # order: { direction: DESC, field: CASH }
+    order: { direction: DESC, field: CASH }
+  ) 
   {
     totalCount
     edges {
@@ -27,11 +29,10 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
         cash
         health
         entity {
-          keys
-          components {
+          models {
             __typename
-            ... on Name {
-              short_string
+            ... on Player {
+              name
             }
           }
         }
@@ -41,8 +42,8 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
   }
 }
 
-query MarketPrices($gameId: Int) {
-  marketComponents(first: 36, where: { game_id: $gameId }) {
+query MarketPrices($gameId: u32) {
+  marketModels(first: 36, where: { game_id: $gameId }) {
     edges {
       node {
         drug_id

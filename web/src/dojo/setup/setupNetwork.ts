@@ -10,19 +10,19 @@ export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 const contractsByName = {
     lobby: {
-        address: "0x581dd49a99c06024f1bd40e92cb1eb1ae7dcc584b9d8322ba0e3f902889ecac"
+        address: "0x4c255cc7009a5be276b412e9b83ab201ca65484d4a73bac3d125546c5a20b40"
     },
     trade: {
-        address: "0x32fb88c2241725cfa617712d42d11bc11b1297818076cf9e82f37bad910c587"
+        address: "0x544b787f0c0c98f716314961cdba1fda89e88b66ce8f2d09e48886eff6df74e"
     },
     travel: {
-        address: "0x2ad0c7b3ac6aa6c846837405c7a8959f15e1491a2cf7af7dda32b10317a11b8"
+        address: "0x319a74baf856f1a349bb49d22bab20cde4f9e34d7623084b2f79f975d00f1f3"
     },
     decide: {
-        address: "0x21caf3ecac3d59b37ee58688de218be4dd80f993aad3efa2eb34c6ec3e45d1b"
+        address: "0x71080eecd6f87d3ebe60db725c447d44712b842baecb75c95fbeada2acbce96"
     },
-    contract: {
-        address: "0x4aea0c9d5578c7099425bfc6d3c9b23daf544cc57bd5af6d9dc6031ce975c5"
+    shop: {
+        address: "0x16c3f315a1af66ca67385c8e9c399e232a135c3e57e0f7129629bdbca456978"
     },
 }
 

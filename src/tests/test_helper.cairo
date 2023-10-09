@@ -76,12 +76,16 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
         },
     };
 
+    // TODO: setup auth
+
+    
+
     (world, systems)
 }
 
 
 #[test]
-#[available_gas(20000000)]
+#[available_gas(200000000)]
 fn test_spawn_world() {
     let (world, systems) = spawn_world();
 }

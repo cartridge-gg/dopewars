@@ -44,17 +44,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-              "u128",
-              "usize",
-            ],
+            types: ["u128", "usize"],
           },
         },
       );
@@ -79,15 +69,6 @@ export function defineContractComponents(world: World) {
           metadata: {
             name: name,
             types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-              "u128",
-              "usize",
               "felt252",
               "PlayerStatus",
               "felt252",
@@ -113,28 +94,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-              "u128",
-              "usize",
-              "felt252",
-              "PlayerStatus",
-              "felt252",
-              "u128",
-              "u8",
-              "u8",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-            ],
+            types: ["usize"],
           },
         },
       );
@@ -150,30 +110,22 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-              "u128",
-              "usize",
-              "felt252",
-              "PlayerStatus",
-              "felt252",
-              "u128",
-              "u8",
-              "u8",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "u8",
-              "u8",
-            ],
+            types: ["u8", "u8"],
+          },
+        },
+      );
+    })(),
+    Item: (() => {
+      const name = "Item";
+      return defineComponent(
+        world,
+        {
+          level: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u8"],
           },
         },
       );

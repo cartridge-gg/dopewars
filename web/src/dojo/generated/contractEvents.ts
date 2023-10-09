@@ -13,8 +13,8 @@ export enum WorldEvents {
   MarketEvent = "0x255825b8769ab99d6c1bd893b440a284a39d8db18c76b91e8e6a70ef5c7a8e0",
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
   Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
-  Event0 = "0x3afb3b58bf8e783fbdb6e86c3ce32687fa2b0ab2150271d34182b6f880b8d6b",
-  Event1 = "0xf162b534b1ed5dbffafa76c1965da8a0597c8b6d5e469f9e603736977852f1",
+  BoughtItem = "0x96f1e086de05db8162b5bf8e95b3ff061eeb8a5a88750a793a297379dd74ea",
+  DroppedItem = "0x2abc912df1c0f1fee176c373767d13b5e7e1fcdd11f8e44714334335b1ed653",
 }
 
 export interface GameCreatedData {
@@ -83,12 +83,15 @@ export interface ConsequenceData {
   cash_loss: RecsType.BigInt;
 }
 
-export interface Event0Data {
-  caller: RecsType.String;
+export interface BoughtItemData {
+  game_id: RecsType.Number;
+  player_id: RecsType.String;
+  item_id: RecsType.BigInt;
+  level: RecsType.Number;
 }
 
-export interface Event1Data {
-  caller: RecsType.String;
-  id: RecsType.Number;
-  value: RecsType.BigInt;
+export interface DroppedItemData {
+  game_id: RecsType.Number;
+  player_id: RecsType.String;
+  item_id: RecsType.BigInt;
 }

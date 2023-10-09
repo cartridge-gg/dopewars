@@ -45,9 +45,10 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
     fileContent += `import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";\n\n`;
     fileContent += `export function defineContractComponents(world: World) {\n  return {\n`;
 
-    let types = []
 
     data.models.forEach((model) => {
+      let types = []
+
       const tableName = model.name;
       fileContent += `    ${tableName}: (() => {\n`;
       fileContent += `      const name = "${tableName}";\n`;

@@ -61,6 +61,7 @@ export const useSystems = (): SystemsInterface => {
       events: any[];
       parsedEvents: any[];
     } => {
+
       const tx = await execute(account, contract, system, callData);
       const receipt = await account.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
@@ -86,7 +87,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [gameMode, playerName],
+        [gameMode, shortString.encodeShortString(playerName)],
       );
 
       const joinedEvent = parsedEvents.find(
@@ -103,8 +104,8 @@ export const useSystems = (): SystemsInterface => {
 
   const travel = useCallback(
     async (gameId: string, locationId: string) => {
+      debugger
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        account,
         "travel",
         "travel",
         [gameId, locationId],
@@ -130,8 +131,9 @@ export const useSystems = (): SystemsInterface => {
       drugId: string,
       quantity: number,
     ) => {
+    debugger
+
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        account,
         "trade",
         "buy",
         [gameId, locationId, drugId, quantity],
@@ -152,7 +154,6 @@ export const useSystems = (): SystemsInterface => {
       quantity: number,
     ) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        account,
         "trade",
         "sell",
         [gameId, locationId, drugId, quantity],
@@ -168,7 +169,6 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: Action, nextLocationId: string) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        account,
         "decide",
         "decide",
         [gameId, action, nextLocationId],
@@ -187,10 +187,9 @@ export const useSystems = (): SystemsInterface => {
   const setName = useCallback(
     async (gameId: string, playerName: string) => {
       const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
-        account,
         "lobby",
         "set_name",
-        [gameId, playerName],
+        [gameId, shortString.encodeShortString(playerName)],
       );
 
       return {

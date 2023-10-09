@@ -5,7 +5,9 @@ import { REFETCH_INTERVAL } from "../constants";
 
 interface GameEntityData {
   entity: {
-    components: Game[];
+    gameModels: {
+      edges : Game[];
+    }
   };
 }
 
@@ -27,16 +29,15 @@ export class GameEntity {
   }
 
   static create(data: GameEntityData): GameEntity | undefined {
-    if (!data || !data.entity) return undefined;
+if (!data || !data.gameModels?.edges) return undefined;
+    const models = data.gameModels.edges || [];
+    // const gameModel = models.find(
+    //   (model) => model.__typename === "Game",
+    // );
+    const gameModel = models[0].node
+    if (!gameModel) return undefined;
 
-    const components = data.entity.components || [];
-    const gameComponent = components.find(
-      (component) => component.__typename === "Game",
-    );
-
-    if (!gameComponent) return undefined;
-
-    return new GameEntity(gameComponent as Game);
+    return new GameEntity(gameModel as Game);
   }
 }
 
@@ -50,14 +51,14 @@ export const useGameEntity = ({
 }: {
   gameId?: string;
 }): GameInterface => {
-  const key: string = useMemo(() => {
-    return num.toHex(
-      ec.starkCurve.poseidonHashMany([num.toBigInt(gameId || "")]),
-    );
-  }, [gameId]);
-
+  // const key: string = useMemo(() => {
+  //   return num.toHex(
+  //     ec.starkCurve.poseidonHashMany([num.toBigInt(gameId || "")]),
+  //   );
+  // }, [gameId]);
   const { data, isFetched } = useGameEntityQuery(
-    { id: key },
+   // { id: key },
+    { id: Number(gameId)  },
     {
       enabled: !!gameId,
     },

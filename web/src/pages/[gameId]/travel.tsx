@@ -56,17 +56,10 @@ export default function Travel() {
   const { account } = useDojoContext();
   const { travel } = useSystems();
 
-  // const playerEntityId = getEntityIdFromKeys([BigInt(gameId||"") ,BigInt(account.address||"")])
-  // const playerEntity = useComponentValue(Player, playerEntityId)
-  // console.log("playerEntity", playerEntity)
-  // const playerEntity = undefined;
-  // const locationPrices = undefined;
-
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
-
  
   const { locationPrices } = useMarketPrices({
     gameId,
@@ -80,7 +73,7 @@ export default function Travel() {
 
   useEffect(() => {
     if (playerEntity && !isSubmitting) {
-      if (playerEntity.locationId) {
+      if (BigInt(playerEntity.locationId) !== 0n) {
         setCurrentLocationId(playerEntity.locationId);
         setTargetId(playerEntity.locationId);
       } else {
@@ -94,8 +87,8 @@ export default function Travel() {
       const current = sortDrugMarkets(
         locationPrices.get(currentLocationId || ""),
       );
-      const target = sortDrugMarkets(locationPrices.get(targetId));
 
+      const target = sortDrugMarkets(locationPrices.get(targetId));
       return target.map((drug, index) => {
         if (currentLocationId) {
           const diff = drug.price - current[index].price;
@@ -186,6 +179,7 @@ export default function Travel() {
     }
   }, [targetId, router, gameId, travel, toast]);
 
+  
   if (!playerEntity || !locationPrices) return <></>;
 
   return (
@@ -228,7 +222,7 @@ export default function Travel() {
           <Button
             w="full"
             isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isSubmitting && !txError}
+            isLoading={isSubmitting /*&& !txError*/}
             onClick={onContinue}
           >
             Travel
@@ -271,7 +265,7 @@ export default function Travel() {
           <Button
             w={["full", "auto"]}
             isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isSubmitting && !txError}
+            isLoading={isSubmitting /*&& !txError*/}
             onClick={onContinue}
           >
             Travel

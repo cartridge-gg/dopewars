@@ -35,6 +35,7 @@ export default function Turn() {
   useEffect(() => {
     if (gameEntity && playerEntity) {
       // initial move, just forward user to location
+      debugger
       if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
         router.push(
           `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
@@ -46,7 +47,6 @@ export default function Turn() {
   if (!playerEntity || !gameEntity) {
     return <></>;
   }
-
   if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
     return <></>;
   }

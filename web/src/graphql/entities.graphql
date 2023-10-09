@@ -1,8 +1,9 @@
-query GameEntity($id: ID!) {
-  entity(id: $id) {
-    components {
-      __typename
-      ... on Game {
+query GameEntity($id: u32!) {
+  gameModels(where: { game_id : $id }) {
+    edges {
+      node {
+        game_id
+        game_mode
         creator
         is_finished
         max_players
@@ -19,10 +20,10 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
     totalCount
     edges {
       node {
-        keys
-        components {
+        models {
           __typename
           ... on Player {
+            name
             cash
             status
             health
@@ -38,7 +39,6 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
           }
         }
       }
-      cursor
     }
   }
 }
@@ -49,7 +49,7 @@ query LocationEntities($gameId: String!, $locationId: String!) {
     edges {
       node {
         keys
-        components {
+        models {
           __typename
           ... on Market {
             cash
@@ -57,7 +57,7 @@ query LocationEntities($gameId: String!, $locationId: String!) {
           }
           ... on Risks {
             travel
-            #capture
+            capture
           }
         }
       }
@@ -108,3 +108,4 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 #     }
 #   }
 # }
+

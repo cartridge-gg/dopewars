@@ -32,42 +32,41 @@ export class PlayerEntity {
     this.drugCount = player.drug_count;
     this.bagLimit = player.bag_limit;
     this.locationId =
-      player.location_id === "0x0" ? undefined : player.location_id;
+      player.location_id === "0x0" ? undefined : `0x${BigInt(player.location_id).toString(16)}`;
     this.status = player.status;
     this.drugs = drugs;
   }
 
   static create(edges: EntityEdge[]): PlayerEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
-
-    // player component
-    const playerComponent = edges.find((edge) => {
-      return edge.node?.components?.some(
-        (component) => component?.__typename === "Player",
+    // player model
+    const playerModel = edges.find((edge) => {
+      return edge.node?.models?.some(
+        (model) => model?.__typename === "Player",
       );
-    })?.node?.components?.[0] as Player;
+    })?.node?.models?.[0] as Player;
 
     // drug entities
     const drugEdges = edges.filter((edge) =>
-      edge.node?.components?.find(
-        (component) => component?.__typename === "Drug",
+      edge.node?.models?.find(
+        (model) => model?.__typename === "Drug",
       ),
     );
 
     const drugs: Drug[] = drugEdges.map((edge) => {
-      const drugComponent = edge.node?.components?.find(
-        (component) => component?.__typename === "Drug",
+      const drugModel = edge.node?.models?.find(
+        (model) => model?.__typename === "Drug",
       ) as DrugType;
 
       return {
-        id: drugComponent.drug_id,
-        quantity: drugComponent.quantity,
+        id: drugModel.drug_id,
+        quantity: drugModel.quantity,
       };
     });
 
-    if (!playerComponent) return undefined;
+    if (!playerModel) return undefined;
 
-    return new PlayerEntity(playerComponent, drugs);
+    return new PlayerEntity(playerModel, drugs);
   }
 }
 
