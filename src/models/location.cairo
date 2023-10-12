@@ -70,13 +70,6 @@ impl LocationEnumIntrospectionImpl of SchemaIntrospection<LocationEnum> {
 
 #[generate_trait]
 impl LocationImpl of LocationTrait {
-    // fn all() -> Span<felt252> {
-    //     let mut locations = array![
-    //         'Queens', 'The Bronx', 'Brooklyn', 'Jersey City', 'Central Park', 'Coney Island'
-    //     ];
-    //     locations.span()
-    // }
-
     fn all() -> Span<LocationEnum> {
         let mut locations = array![
             LocationEnum::Queens,
@@ -98,4 +91,6 @@ impl LocationImpl of LocationTrait {
         *locations.at(index.try_into().unwrap())
     }
 }
+
+
 

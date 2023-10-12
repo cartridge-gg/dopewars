@@ -55,7 +55,7 @@ export const useSystems = (): SystemsInterface => {
   const {
     account,
     setup: {
-      network: { provider, execute },
+      network: { provider, execute, call },
     },
   } = useDojoContext();
 
@@ -222,6 +222,31 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
+  const getAvailableItems = useCallback(
+    async (gameId: string) => {
+
+      const items = await call(
+        account,
+        "shop",
+        "available_items",
+        [Number(gameId), account.address],
+      );
+
+      return {
+        items: items.map(i => ({ 
+          item_id: Number(i.item_id), 
+          item_type: shortString.decodeShortString(i.item_type), 
+          name: shortString.decodeShortString(i.name), 
+          level: Number(i.level),
+          cost: Number(i.cost),
+          value: Number(i.cost)
+         })),
+      };
+      
+    },
+    [call],
+  );
+
 
 
   // const setName = useCallback(
@@ -249,7 +274,8 @@ export const useSystems = (): SystemsInterface => {
     //setName,
     decide,
     buyItem,
-    dropItem
+    dropItem,
+    getAvailableItems
     // error,
     // isPending,
   };

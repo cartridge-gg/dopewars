@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "world",
-    "address": null,
-    "class_hash": "0x7cb53315435063879e8aa2487ead65eb1196ac71aa7f2888e9762ac430400d",
+    "address": "0x51d1bf777ddb43361a746029303fdd2fd45f4b898243c2769b5cd70a5fa7c19",
+    "class_hash": "0x5f14aacb2bc68686eca3b024df6b79acfa8755976c9d99967af6fb99b650b8",
     "abi": [
       {
         "type": "impl",
@@ -74,7 +74,12 @@
           {
             "type": "function",
             "name": "metadata_uri",
-            "inputs": [],
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              }
+            ],
             "outputs": [
               {
                 "type": "core::array::Span::<core::felt252>"
@@ -86,6 +91,10 @@
             "type": "function",
             "name": "set_metadata_uri",
             "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
               {
                 "name": "uri",
                 "type": "core::array::Span::<core::felt252>"
@@ -140,7 +149,7 @@
                 "type": "core::starknet::contract_address::ContractAddress"
               }
             ],
-            "state_mutability": "view"
+            "state_mutability": "external"
           },
           {
             "type": "function",
@@ -320,7 +329,7 @@
                 "type": "core::starknet::contract_address::ContractAddress"
               },
               {
-                "name": "target",
+                "name": "resource",
                 "type": "core::felt252"
               }
             ],
@@ -340,7 +349,7 @@
                 "type": "core::starknet::contract_address::ContractAddress"
               },
               {
-                "name": "target",
+                "name": "resource",
                 "type": "core::felt252"
               }
             ],
@@ -356,7 +365,7 @@
                 "type": "core::starknet::contract_address::ContractAddress"
               },
               {
-                "name": "target",
+                "name": "resource",
                 "type": "core::felt252"
               }
             ],
@@ -428,10 +437,6 @@
           {
             "name": "contract_base",
             "type": "core::starknet::class_hash::ClassHash"
-          },
-          {
-            "name": "metadata_uri",
-            "type": "core::array::Span::<core::felt252>"
           }
         ]
       },
@@ -446,12 +451,46 @@
             "kind": "data"
           },
           {
-            "name": "caller",
+            "name": "creator",
             "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world::ContractDeployed",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "salt",
+            "type": "core::felt252",
             "kind": "data"
           },
           {
-            "name": "metadata_uri",
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world::MetadataUpdate",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "resource",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "uri",
             "type": "core::array::Span::<core::felt252>",
             "kind": "data"
           }
@@ -469,6 +508,11 @@
           },
           {
             "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "prev_class_hash",
             "type": "core::starknet::class_hash::ClassHash",
             "kind": "data"
           }
@@ -520,12 +564,83 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world::WriterUpdated",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "model",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "system",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "value",
+            "type": "core::bool",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world::OwnerUpdated",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "resource",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "value",
+            "type": "core::bool",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world::ExecutorUpdated",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "prev_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world::Event",
         "kind": "enum",
         "variants": [
           {
             "name": "WorldSpawned",
             "type": "dojo::world::world::WorldSpawned",
+            "kind": "nested"
+          },
+          {
+            "name": "ContractDeployed",
+            "type": "dojo::world::world::ContractDeployed",
+            "kind": "nested"
+          },
+          {
+            "name": "MetadataUpdate",
+            "type": "dojo::world::world::MetadataUpdate",
             "kind": "nested"
           },
           {
@@ -541,6 +656,21 @@
           {
             "name": "StoreDelRecord",
             "type": "dojo::world::world::StoreDelRecord",
+            "kind": "nested"
+          },
+          {
+            "name": "WriterUpdated",
+            "type": "dojo::world::world::WriterUpdated",
+            "kind": "nested"
+          },
+          {
+            "name": "OwnerUpdated",
+            "type": "dojo::world::world::OwnerUpdated",
+            "kind": "nested"
+          },
+          {
+            "name": "ExecutorUpdated",
+            "type": "dojo::world::world::ExecutorUpdated",
             "kind": "nested"
           }
         ]
@@ -666,12 +796,11 @@
       }
     ]
   },
-  "systems": [],
   "contracts": [
     {
       "name": "lobby",
-      "address": null,
-      "class_hash": "0x128cfb485d179f2755e70893dc1abc958f4b6b9d7f97754f9460fa130066fdd",
+      "address": "0x76ff3c63e60a233bf75bf50f9f9702090c9d9846633196de660020521ad03eb",
+      "class_hash": "0x3c5b4e49efc13c6a694b57224a5a07c3c0f4a1a9ccfc2292d746707ee745e57",
       "abi": [
         {
           "type": "impl",
@@ -814,13 +943,77 @@
     },
     {
       "name": "trade",
-      "address": null,
-      "class_hash": "0x1e5391f0327c4484074bb05280e0428467d0599f7b3fa6982fc1756a0e21323",
+      "address": "0x40ff8bb06f9b1f42a43372875e476f73a6f3b4d5255fedf80debef1970034a7",
+      "class_hash": "0x2eb21d1fff45eb2684bbd2dec8c7c6212c3838614cc448f3c58dde87f140551",
       "abi": [
         {
           "type": "impl",
           "name": "GameImpl",
           "interface_name": "rollyourown::systems::trade::ITrade"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::drug::DrugEnum",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
         },
         {
           "type": "interface",
@@ -836,11 +1029,11 @@
                 },
                 {
                   "name": "location_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::location::LocationEnum"
                 },
                 {
                   "name": "drug_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::drug::DrugEnum"
                 },
                 {
                   "name": "quantity",
@@ -860,11 +1053,11 @@
                 },
                 {
                   "name": "location_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::location::LocationEnum"
                 },
                 {
                   "name": "drug_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::drug::DrugEnum"
                 },
                 {
                   "name": "quantity",
@@ -893,7 +1086,7 @@
             },
             {
               "name": "drug_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::drug::DrugEnum",
               "kind": "data"
             },
             {
@@ -925,7 +1118,7 @@
             },
             {
               "name": "drug_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::drug::DrugEnum",
               "kind": "data"
             },
             {
@@ -961,13 +1154,47 @@
     },
     {
       "name": "travel",
-      "address": null,
-      "class_hash": "0x7ed57efe48ea5e26fdfc5fb35ea6785d9ff142c72822a012d52afd14c919bca",
+      "address": "0x75ce1eab09bbbc800a995886210df90ca5d77485e6991783354d47e79d235e",
+      "class_hash": "0x79fe65f7d387ee6f7aafa1ca15dcfa01e3764c7a6b29fe3924fd5bf304a0ee6",
       "abi": [
         {
           "type": "impl",
           "name": "TravelImpl",
           "interface_name": "rollyourown::systems::travel::ITravel"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
         },
         {
           "type": "enum",
@@ -997,7 +1224,7 @@
                 },
                 {
                   "name": "next_location_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::location::LocationEnum"
                 }
               ],
               "outputs": [
@@ -1026,12 +1253,12 @@
             },
             {
               "name": "from_location",
-              "type": "core::felt252",
+              "type": "rollyourown::models::location::LocationEnum",
               "kind": "data"
             },
             {
               "name": "to_location",
-              "type": "core::felt252",
+              "type": "rollyourown::models::location::LocationEnum",
               "kind": "data"
             }
           ]
@@ -1077,6 +1304,36 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::drug::DrugEnum",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::travel::travel::MarketEvent",
           "kind": "struct",
@@ -1088,12 +1345,12 @@
             },
             {
               "name": "location_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::location::LocationEnum",
               "kind": "data"
             },
             {
               "name": "drug_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::drug::DrugEnum",
               "kind": "data"
             },
             {
@@ -1129,8 +1386,8 @@
     },
     {
       "name": "decide",
-      "address": null,
-      "class_hash": "0x4256b1884fc821a71118e07914e9c6dfddb3ce5e04fbbfd7982edfa55f42682",
+      "address": "0x3411a1fc8f64c4c1bf2cf9be3b91cc7984d4e5a7e717b74b6bda79529867db0",
+      "class_hash": "0x7576134dfb464d22f20a2021d24f49ab822ba59466634492070a581f95b7ef5",
       "abi": [
         {
           "type": "impl",
@@ -1147,6 +1404,40 @@
             },
             {
               "name": "Pay",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
               "type": "()"
             }
           ]
@@ -1169,7 +1460,7 @@
                 },
                 {
                   "name": "next_location_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::location::LocationEnum"
                 }
               ],
               "outputs": [],
@@ -1283,8 +1574,8 @@
     },
     {
       "name": "shop",
-      "address": null,
-      "class_hash": "0x4adec7ebb66cfdd2dbb78e317565e99eed27dcbe99f72319bf7ba648df1525a",
+      "address": "0xddd44faf0ce7ff91fa8aec58a7cb4187841a1b4d6447283dbdf53814322dad",
+      "class_hash": "0x1a3856ab4789052d3e09b7296bc8e6cde7dbbb77cb90ed5f2d94c661d4e057d",
       "abi": [
         {
           "type": "impl",
@@ -1305,6 +1596,40 @@
             },
             {
               "name": "BeingArrested",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
               "type": "()"
             }
           ]
@@ -1331,7 +1656,7 @@
             },
             {
               "name": "location_id",
-              "type": "core::felt252"
+              "type": "rollyourown::models::location::LocationEnum"
             },
             {
               "name": "cash",
@@ -1378,6 +1703,68 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::item::ItemEnum",
+          "variants": [
+            {
+              "name": "Attack",
+              "type": "()"
+            },
+            {
+              "name": "Defense",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::shop::AvailableItem",
+          "members": [
+            {
+              "name": "item_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "item_type",
+              "type": "core::felt252"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "value",
+              "type": "core::integer::u128"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::shop::AvailableItem>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::shop::AvailableItem>"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::shop::IShop",
           "items": [
@@ -1407,7 +1794,7 @@
                 },
                 {
                   "name": "item_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::item::ItemEnum"
                 }
               ],
               "outputs": [],
@@ -1423,10 +1810,30 @@
                 },
                 {
                   "name": "item_id",
-                  "type": "core::felt252"
+                  "type": "rollyourown::models::item::ItemEnum"
                 }
               ],
               "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "available_items",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<rollyourown::systems::shop::AvailableItem>"
+                }
+              ],
               "state_mutability": "view"
             }
           ]
@@ -1448,7 +1855,7 @@
             },
             {
               "name": "item_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::item::ItemEnum",
               "kind": "data"
             },
             {
@@ -1475,7 +1882,7 @@
             },
             {
               "name": "item_id",
-              "type": "core::felt252",
+              "type": "rollyourown::models::item::ItemEnum",
               "kind": "data"
             }
           ]
@@ -1496,6 +1903,42 @@
               "kind": "nested"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "devtools",
+      "address": "0x530fb979201b1e09c2b384169d75839a9fabc6fbd8dc46457a3e5fd962a03f3",
+      "class_hash": "0x528fa78cc168613fcd7965f11e004f962c1b2a1313773c1c7f4668c51d86139",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DevtoolsImpl",
+          "interface_name": "rollyourown::systems::devtools::IDevtools"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::devtools::IDevtools",
+          "items": [
+            {
+              "type": "function",
+              "name": "feed_leaderboard",
+              "inputs": [
+                {
+                  "name": "count",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::devtools::devtools::Event",
+          "kind": "enum",
+          "variants": []
         }
       ]
     }
@@ -1545,7 +1988,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x20a765cfe2a58bb9ff118f72849eea64af83928418e0fea715e7edb6a74fa97",
+      "class_hash": "0x1a8c36190e0e40d09da0c6b8f37751918cb939505a3a466c2149886baa8728f",
       "abi": [
         {
           "type": "function",
@@ -1718,12 +2161,12 @@
         },
         {
           "name": "location_id",
-          "type": "felt252",
+          "type": "LocationEnum",
           "key": true
         },
         {
           "name": "drug_id",
-          "type": "felt252",
+          "type": "DrugEnum",
           "key": true
         },
         {
@@ -1737,7 +2180,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x340c8cece2e9a5feb9e36683da116e1e6fd54e2a12d731def51bcef61e00135",
+      "class_hash": "0x6f49b45f040b52ed3cdb20b8823646d7f0d6df182e0cb9632a6205c05e4debd",
       "abi": [
         {
           "type": "function",
@@ -1925,7 +2368,7 @@
         },
         {
           "name": "location_id",
-          "type": "felt252",
+          "type": "LocationEnum",
           "key": false
         },
         {
@@ -1964,7 +2407,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x7a9c2f6660b2aea0cf88ce2cc66cba6794cf9df9519c857fc909697cd455161",
+      "class_hash": "0x761fbdef3d6e7684b9e07e38f93ce0a2b693cdd2f9136f6c0866863a361f493",
       "abi": [
         {
           "type": "function",
@@ -2142,7 +2585,7 @@
         },
         {
           "name": "drug_id",
-          "type": "felt252",
+          "type": "DrugEnum",
           "key": true
         },
         {
@@ -2151,7 +2594,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x67d728c313ef46cc64f18e5199a156906c7a08109641422bdd65eba49bf5b75",
+      "class_hash": "0x3ed867ccd2daac94d12efa6d2d46889c06c28209410514fa46bc9fb8ca8fc19",
       "abi": [
         {
           "type": "function",
@@ -2324,7 +2767,7 @@
         },
         {
           "name": "location_id",
-          "type": "felt252",
+          "type": "LocationEnum",
           "key": true
         },
         {
@@ -2338,7 +2781,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x1c0200f8683cef49c58d93683865abc11ab23d616d09ddcc81d073a06dc45e3",
+      "class_hash": "0x30d1a9138fdf4891f3e5c38e1a860bcb218b7340c38804c9f28080e9f6c889f",
       "abi": [
         {
           "type": "function",
@@ -2516,7 +2959,7 @@
         },
         {
           "name": "item_id",
-          "type": "felt252",
+          "type": "ItemEnum",
           "key": true
         },
         {
@@ -2525,7 +2968,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x4e6c2e299b139e09d9a2b27dad0a501fa5a62f9862a6533a5f370466ff9048f",
+      "class_hash": "0x150fbd8a3723ccc001562f8498f77e722d502cd8375e8c6b97c5cccff7f2ff9",
       "abi": [
         {
           "type": "function",

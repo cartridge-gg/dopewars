@@ -3,11 +3,24 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::player::{Player};
 use rollyourown::models::item::{ItemEnum};
 
+#[derive(Copy, Drop, Serde)]
+struct AvailableItem {
+    item_id: u32,
+    item_type: felt252,
+    name: felt252,
+    level: u8,
+    cost: u128,
+    value: u128
+}
+
 #[starknet::interface]
 trait IShop<TContractState> {
     fn is_open(self: @TContractState, player: Player) -> bool;
     fn buy_item(self: @TContractState, game_id: u32, item_id: ItemEnum);
     fn drop_item(self: @TContractState, game_id: u32, item_id: ItemEnum,);
+    fn available_items(
+        self: @TContractState, game_id: u32, player_id: ContractAddress
+    ) -> Span<AvailableItem>;
 }
 
 #[starknet::contract]
@@ -23,22 +36,23 @@ mod shop {
     use rollyourown::utils::settings::{
         ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
     };
+    use rollyourown::constants::SCALING_FACTOR;
 
-    use super::IShop;
+    use super::{IShop, AvailableItem};
 
-    #[storage]
+     #[storage]
     struct Storage {
-        world_dispatcher: ContractAddress,
+        world_dispatcher: IWorldDispatcher,
     }
 
-    #[starknet::interface]
+  #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-            IWorldDispatcher { contract_address: self.world_dispatcher.read() }
+           self.world_dispatcher.read()
         }
     }
 
@@ -63,6 +77,7 @@ mod shop {
         player_id: ContractAddress,
         item_id: ItemEnum,
     }
+
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
@@ -93,7 +108,7 @@ mod shop {
                 game.game_mode, game.max_turns - player.turns_remaining
             );
 
-            assert(item.level < shop_settings.max_item_level, 'item max level');
+            assert(item.level <= shop_settings.max_item_level, 'item max level');
             // TODO: check items shop_settings.max_item_allowed
 
             let item_settings = ItemSettingsImpl::get(
@@ -130,6 +145,57 @@ mod shop {
 
             // emit event
             emit!(self.world(), DroppedItem { game_id, player_id, item_id });
+        }
+
+        #[view]
+        fn available_items(
+            self: @ContractState, game_id: u32, player_id: ContractAddress
+        ) -> Span<AvailableItem> {
+            let game = get!(self.world(), game_id, (Game));
+            let player = get!(self.world(), (game_id, player_id), Player);
+
+            self.assert_can_access_shop(@game, @player);
+
+            let shop_settings = ShopSettingsImpl::get(
+                game.game_mode, game.max_turns - player.turns_remaining
+            );
+
+            let mut available: Array<AvailableItem> = array![];
+
+            let mut items = ItemTrait::all();
+
+            loop {
+                match items.pop_front() {
+                    Option::Some(item_id) => {
+                        let player_item = get!(
+                            self.world(), (game_id, player_id, *item_id), (Item)
+                        );
+
+                        let item_settings = ItemSettingsImpl::get(
+                            game.game_mode, *item_id, player_item.level + 1
+                        );
+
+                        if player_item.level <= shop_settings.max_item_level {
+                            available
+                                .append(
+                                    AvailableItem {
+                                        item_id:(*item_id).into(),
+                                        item_type: (*item_id).into(),
+                                        level: player_item.level + 1,
+                                        name: item_settings.name,
+                                        cost: item_settings.cost / SCALING_FACTOR,
+                                        value: item_settings.value,
+                                    }
+                                );
+                        };
+                    },
+                    Option::None => {
+                        break;
+                    },
+                };
+            };
+
+            available.span()
         }
     }
 }

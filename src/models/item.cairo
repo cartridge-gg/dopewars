@@ -35,6 +35,17 @@ impl ItemEnumIntoFelt252 of Into<ItemEnum, felt252> {
     }
 }
 
+impl ItemEnumIntoU32 of Into<ItemEnum, u32> {
+    fn into(self: ItemEnum) -> u32 {
+        match self {
+            ItemEnum::Attack => 0,
+            ItemEnum::Defense => 1,
+            ItemEnum::Transport => 2,
+            ItemEnum::Speed => 3,
+        }
+    }
+}
+
 
 impl LocationEnumIntrospectionImpl of SchemaIntrospection<ItemEnum> {
     #[inline(always)]
@@ -75,4 +86,6 @@ impl ItemImpl of ItemTrait {
         items.span()
     }
 }
+
+
 

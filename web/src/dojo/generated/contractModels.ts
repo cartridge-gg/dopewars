@@ -56,7 +56,7 @@ export function defineContractComponents(world: World) {
         {
           name: RecsType.BigInt,
           status: RecsType.Number,
-          location_id: RecsType.BigInt,
+          location_id: RecsType.Number,
           cash: RecsType.BigInt,
           health: RecsType.Number,
           run_attempts: RecsType.Number,
@@ -71,7 +71,7 @@ export function defineContractComponents(world: World) {
             types: [
               "felt252",
               "PlayerStatus",
-              "felt252",
+              "LocationEnum",
               "u128",
               "u8",
               "u8",

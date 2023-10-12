@@ -9,15 +9,16 @@ sierra-replace-ids = true
 [dependencies]
 # dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "3eda0434e10dd8b350896156a5ec48b25aa0ad62" }
 # dojo = { git = "https://github.com/dojoengine/dojo.git", rev="b64e5aa3acb5b605bd0439d5707090bb0cd20e8a" }
+
 cubit = {git = "https://github.com/influenceth/cubit.git"}
 dojo = {git = "https://github.com/dojoengine/dojo.git"}
 
 [[target.dojo]]
 
 [scripts]
-build = "sozo build && cp ./target/dev/manifest.json ./web/manifest.json"
+build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
-migrate = "sozo migrate &&  cp ./target/dev/manifest.json ./web/manifest.json && scarb run gendojo"
+migrate = "sozo migrate &&  scarb run gendojo"
 
 [tool.dojo.env]
 
@@ -32,4 +33,4 @@ rpc_url = "http://localhost:5050"
 #account_address = "0x2"
 #private_key = "0xc1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d"
 
-#world_address = "0x17addb322c93c50a19714fe5a6df14e1ddae36382b39f287ed6c614299d487a"
+#world_address = "0x51d1bf777ddb43361a746029303fdd2fd45f4b898243c2769b5cd70a5fa7c19"

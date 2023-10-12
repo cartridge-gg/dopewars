@@ -38,17 +38,17 @@ mod lobby {
 
     #[storage]
     struct Storage {
-        world_dispatcher: ContractAddress,
+        world_dispatcher: IWorldDispatcher,
     }
 
-    #[starknet::interface]
+  #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-            IWorldDispatcher { contract_address: self.world_dispatcher.read() }
+           self.world_dispatcher.read()
         }
     }
 

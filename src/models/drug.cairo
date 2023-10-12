@@ -40,11 +40,6 @@ impl LocationEnumIntoFelt252 of Into<DrugEnum, felt252> {
 
 #[generate_trait]
 impl DrugImpl of DrugTrait {
-    // fn all() -> Span<felt252> {
-    //     let mut drugs = array!['Ludes', 'Speed', 'Weed', 'Acid', 'Heroin', 'Cocaine'];
-    //     drugs.span()
-    // }
-
     fn all() -> Span<DrugEnum> {
         let mut drugs = array![
             DrugEnum::Ludes,
@@ -89,3 +84,6 @@ impl DrugEnumIntrospectionImpl of SchemaIntrospection<DrugEnum> {
         )
     }
 }
+
+
+

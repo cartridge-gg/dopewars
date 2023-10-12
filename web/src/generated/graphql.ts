@@ -22,6 +22,7 @@ export type Scalars = {
   u32: any;
   u64: any;
   u128: any;
+  usize: any;
 };
 
 export type Drug = {
@@ -30,13 +31,13 @@ export type Drug = {
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
-  quantity?: Maybe<Scalars['u32']>;
+  quantity?: Maybe<Scalars['usize']>;
 };
 
 export type DrugConnection = {
   __typename?: 'DrugConnection';
   edges?: Maybe<Array<Maybe<DrugEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type DrugEdge = {
@@ -73,30 +74,30 @@ export type DrugWhereInput = {
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  quantity?: InputMaybe<Scalars['u32']>;
-  quantityEQ?: InputMaybe<Scalars['u32']>;
-  quantityGT?: InputMaybe<Scalars['u32']>;
-  quantityGTE?: InputMaybe<Scalars['u32']>;
-  quantityLT?: InputMaybe<Scalars['u32']>;
-  quantityLTE?: InputMaybe<Scalars['u32']>;
-  quantityNEQ?: InputMaybe<Scalars['u32']>;
+  quantity?: InputMaybe<Scalars['usize']>;
+  quantityEQ?: InputMaybe<Scalars['usize']>;
+  quantityGT?: InputMaybe<Scalars['usize']>;
+  quantityGTE?: InputMaybe<Scalars['usize']>;
+  quantityLT?: InputMaybe<Scalars['usize']>;
+  quantityLTE?: InputMaybe<Scalars['usize']>;
+  quantityNEQ?: InputMaybe<Scalars['usize']>;
 };
 
 export type Entity = {
   __typename?: 'Entity';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  eventId?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  event_id?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
-  modelNames?: Maybe<Scalars['String']>;
+  keys?: Maybe<Scalars['String']>;
+  model_names?: Maybe<Scalars['String']>;
   models?: Maybe<Array<Maybe<ModelUnion>>>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
 };
 
 export type EntityConnection = {
   __typename?: 'EntityConnection';
   edges?: Maybe<Array<Maybe<EntityEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type EntityEdge = {
@@ -107,18 +108,18 @@ export type EntityEdge = {
 
 export type Event = {
   __typename?: 'Event';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  created_at?: Maybe<Scalars['DateTime']>;
   data?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   keys?: Maybe<Scalars['String']>;
   systemCall: SystemCall;
-  transactionHash?: Maybe<Scalars['String']>;
+  transaction_hash?: Maybe<Scalars['String']>;
 };
 
 export type EventConnection = {
   __typename?: 'EventConnection';
   edges?: Maybe<Array<Maybe<EventEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type EventEdge = {
@@ -134,16 +135,16 @@ export type Game = {
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   is_finished?: Maybe<Scalars['bool']>;
-  max_players?: Maybe<Scalars['u32']>;
-  max_turns?: Maybe<Scalars['u32']>;
-  num_players?: Maybe<Scalars['u32']>;
+  max_players?: Maybe<Scalars['usize']>;
+  max_turns?: Maybe<Scalars['usize']>;
+  num_players?: Maybe<Scalars['usize']>;
   start_time?: Maybe<Scalars['u64']>;
 };
 
 export type GameConnection = {
   __typename?: 'GameConnection';
   edges?: Maybe<Array<Maybe<GameEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type GameEdge = {
@@ -191,27 +192,27 @@ export type GameWhereInput = {
   is_finishedLT?: InputMaybe<Scalars['bool']>;
   is_finishedLTE?: InputMaybe<Scalars['bool']>;
   is_finishedNEQ?: InputMaybe<Scalars['bool']>;
-  max_players?: InputMaybe<Scalars['u32']>;
-  max_playersEQ?: InputMaybe<Scalars['u32']>;
-  max_playersGT?: InputMaybe<Scalars['u32']>;
-  max_playersGTE?: InputMaybe<Scalars['u32']>;
-  max_playersLT?: InputMaybe<Scalars['u32']>;
-  max_playersLTE?: InputMaybe<Scalars['u32']>;
-  max_playersNEQ?: InputMaybe<Scalars['u32']>;
-  max_turns?: InputMaybe<Scalars['u32']>;
-  max_turnsEQ?: InputMaybe<Scalars['u32']>;
-  max_turnsGT?: InputMaybe<Scalars['u32']>;
-  max_turnsGTE?: InputMaybe<Scalars['u32']>;
-  max_turnsLT?: InputMaybe<Scalars['u32']>;
-  max_turnsLTE?: InputMaybe<Scalars['u32']>;
-  max_turnsNEQ?: InputMaybe<Scalars['u32']>;
-  num_players?: InputMaybe<Scalars['u32']>;
-  num_playersEQ?: InputMaybe<Scalars['u32']>;
-  num_playersGT?: InputMaybe<Scalars['u32']>;
-  num_playersGTE?: InputMaybe<Scalars['u32']>;
-  num_playersLT?: InputMaybe<Scalars['u32']>;
-  num_playersLTE?: InputMaybe<Scalars['u32']>;
-  num_playersNEQ?: InputMaybe<Scalars['u32']>;
+  max_players?: InputMaybe<Scalars['usize']>;
+  max_playersEQ?: InputMaybe<Scalars['usize']>;
+  max_playersGT?: InputMaybe<Scalars['usize']>;
+  max_playersGTE?: InputMaybe<Scalars['usize']>;
+  max_playersLT?: InputMaybe<Scalars['usize']>;
+  max_playersLTE?: InputMaybe<Scalars['usize']>;
+  max_playersNEQ?: InputMaybe<Scalars['usize']>;
+  max_turns?: InputMaybe<Scalars['usize']>;
+  max_turnsEQ?: InputMaybe<Scalars['usize']>;
+  max_turnsGT?: InputMaybe<Scalars['usize']>;
+  max_turnsGTE?: InputMaybe<Scalars['usize']>;
+  max_turnsLT?: InputMaybe<Scalars['usize']>;
+  max_turnsLTE?: InputMaybe<Scalars['usize']>;
+  max_turnsNEQ?: InputMaybe<Scalars['usize']>;
+  num_players?: InputMaybe<Scalars['usize']>;
+  num_playersEQ?: InputMaybe<Scalars['usize']>;
+  num_playersGT?: InputMaybe<Scalars['usize']>;
+  num_playersGTE?: InputMaybe<Scalars['usize']>;
+  num_playersLT?: InputMaybe<Scalars['usize']>;
+  num_playersLTE?: InputMaybe<Scalars['usize']>;
+  num_playersNEQ?: InputMaybe<Scalars['usize']>;
   start_time?: InputMaybe<Scalars['u64']>;
   start_timeEQ?: InputMaybe<Scalars['u64']>;
   start_timeGT?: InputMaybe<Scalars['u64']>;
@@ -233,7 +234,7 @@ export type Item = {
 export type ItemConnection = {
   __typename?: 'ItemConnection';
   edges?: Maybe<Array<Maybe<ItemEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type ItemEdge = {
@@ -286,13 +287,13 @@ export type Market = {
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   location_id?: Maybe<Scalars['Enum']>;
-  quantity?: Maybe<Scalars['u32']>;
+  quantity?: Maybe<Scalars['usize']>;
 };
 
 export type MarketConnection = {
   __typename?: 'MarketConnection';
   edges?: Maybe<Array<Maybe<MarketEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type MarketEdge = {
@@ -331,28 +332,46 @@ export type MarketWhereInput = {
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
   location_id?: InputMaybe<Scalars['Enum']>;
-  quantity?: InputMaybe<Scalars['u32']>;
-  quantityEQ?: InputMaybe<Scalars['u32']>;
-  quantityGT?: InputMaybe<Scalars['u32']>;
-  quantityGTE?: InputMaybe<Scalars['u32']>;
-  quantityLT?: InputMaybe<Scalars['u32']>;
-  quantityLTE?: InputMaybe<Scalars['u32']>;
-  quantityNEQ?: InputMaybe<Scalars['u32']>;
+  quantity?: InputMaybe<Scalars['usize']>;
+  quantityEQ?: InputMaybe<Scalars['usize']>;
+  quantityGT?: InputMaybe<Scalars['usize']>;
+  quantityGTE?: InputMaybe<Scalars['usize']>;
+  quantityLT?: InputMaybe<Scalars['usize']>;
+  quantityLTE?: InputMaybe<Scalars['usize']>;
+  quantityNEQ?: InputMaybe<Scalars['usize']>;
+};
+
+export type Metadata = {
+  __typename?: 'Metadata';
+  id?: Maybe<Scalars['ID']>;
+  uri?: Maybe<Scalars['String']>;
+};
+
+export type MetadataConnection = {
+  __typename?: 'MetadataConnection';
+  edges?: Maybe<Array<Maybe<MetadataEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type MetadataEdge = {
+  __typename?: 'MetadataEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Metadata>;
 };
 
 export type Model = {
   __typename?: 'Model';
-  classHash?: Maybe<Scalars['felt252']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
+  class_hash?: Maybe<Scalars['felt252']>;
+  created_at?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
-  transactionHash?: Maybe<Scalars['felt252']>;
+  transaction_hash?: Maybe<Scalars['felt252']>;
 };
 
 export type ModelConnection = {
   __typename?: 'ModelConnection';
   edges?: Maybe<Array<Maybe<ModelEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type ModelEdge = {
@@ -370,9 +389,9 @@ export enum OrderDirection {
 
 export type Player = {
   __typename?: 'Player';
-  bag_limit?: Maybe<Scalars['u32']>;
+  bag_limit?: Maybe<Scalars['usize']>;
   cash?: Maybe<Scalars['u128']>;
-  drug_count?: Maybe<Scalars['u32']>;
+  drug_count?: Maybe<Scalars['usize']>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
@@ -381,14 +400,14 @@ export type Player = {
   player_id?: Maybe<Scalars['ContractAddress']>;
   run_attempts?: Maybe<Scalars['u8']>;
   status?: Maybe<Scalars['Enum']>;
-  turns_remaining?: Maybe<Scalars['u32']>;
-  turns_remaining_on_death?: Maybe<Scalars['u32']>;
+  turns_remaining?: Maybe<Scalars['usize']>;
+  turns_remaining_on_death?: Maybe<Scalars['usize']>;
 };
 
 export type PlayerConnection = {
   __typename?: 'PlayerConnection';
   edges?: Maybe<Array<Maybe<PlayerEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type PlayerEdge = {
@@ -418,13 +437,13 @@ export enum PlayerOrderField {
 }
 
 export type PlayerWhereInput = {
-  bag_limit?: InputMaybe<Scalars['u32']>;
-  bag_limitEQ?: InputMaybe<Scalars['u32']>;
-  bag_limitGT?: InputMaybe<Scalars['u32']>;
-  bag_limitGTE?: InputMaybe<Scalars['u32']>;
-  bag_limitLT?: InputMaybe<Scalars['u32']>;
-  bag_limitLTE?: InputMaybe<Scalars['u32']>;
-  bag_limitNEQ?: InputMaybe<Scalars['u32']>;
+  bag_limit?: InputMaybe<Scalars['usize']>;
+  bag_limitEQ?: InputMaybe<Scalars['usize']>;
+  bag_limitGT?: InputMaybe<Scalars['usize']>;
+  bag_limitGTE?: InputMaybe<Scalars['usize']>;
+  bag_limitLT?: InputMaybe<Scalars['usize']>;
+  bag_limitLTE?: InputMaybe<Scalars['usize']>;
+  bag_limitNEQ?: InputMaybe<Scalars['usize']>;
   cash?: InputMaybe<Scalars['u128']>;
   cashEQ?: InputMaybe<Scalars['u128']>;
   cashGT?: InputMaybe<Scalars['u128']>;
@@ -432,13 +451,13 @@ export type PlayerWhereInput = {
   cashLT?: InputMaybe<Scalars['u128']>;
   cashLTE?: InputMaybe<Scalars['u128']>;
   cashNEQ?: InputMaybe<Scalars['u128']>;
-  drug_count?: InputMaybe<Scalars['u32']>;
-  drug_countEQ?: InputMaybe<Scalars['u32']>;
-  drug_countGT?: InputMaybe<Scalars['u32']>;
-  drug_countGTE?: InputMaybe<Scalars['u32']>;
-  drug_countLT?: InputMaybe<Scalars['u32']>;
-  drug_countLTE?: InputMaybe<Scalars['u32']>;
-  drug_countNEQ?: InputMaybe<Scalars['u32']>;
+  drug_count?: InputMaybe<Scalars['usize']>;
+  drug_countEQ?: InputMaybe<Scalars['usize']>;
+  drug_countGT?: InputMaybe<Scalars['usize']>;
+  drug_countGTE?: InputMaybe<Scalars['usize']>;
+  drug_countLT?: InputMaybe<Scalars['usize']>;
+  drug_countLTE?: InputMaybe<Scalars['usize']>;
+  drug_countNEQ?: InputMaybe<Scalars['usize']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
@@ -476,20 +495,20 @@ export type PlayerWhereInput = {
   run_attemptsLTE?: InputMaybe<Scalars['u8']>;
   run_attemptsNEQ?: InputMaybe<Scalars['u8']>;
   status?: InputMaybe<Scalars['Enum']>;
-  turns_remaining?: InputMaybe<Scalars['u32']>;
-  turns_remainingEQ?: InputMaybe<Scalars['u32']>;
-  turns_remainingGT?: InputMaybe<Scalars['u32']>;
-  turns_remainingGTE?: InputMaybe<Scalars['u32']>;
-  turns_remainingLT?: InputMaybe<Scalars['u32']>;
-  turns_remainingLTE?: InputMaybe<Scalars['u32']>;
-  turns_remainingNEQ?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_death?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathEQ?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathGT?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathGTE?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathLT?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathLTE?: InputMaybe<Scalars['u32']>;
-  turns_remaining_on_deathNEQ?: InputMaybe<Scalars['u32']>;
+  turns_remaining?: InputMaybe<Scalars['usize']>;
+  turns_remainingEQ?: InputMaybe<Scalars['usize']>;
+  turns_remainingGT?: InputMaybe<Scalars['usize']>;
+  turns_remainingGTE?: InputMaybe<Scalars['usize']>;
+  turns_remainingLT?: InputMaybe<Scalars['usize']>;
+  turns_remainingLTE?: InputMaybe<Scalars['usize']>;
+  turns_remainingNEQ?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_death?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathEQ?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathGT?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathGTE?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathLT?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathLTE?: InputMaybe<Scalars['usize']>;
+  turns_remaining_on_deathNEQ?: InputMaybe<Scalars['usize']>;
 };
 
 export type Query = {
@@ -497,11 +516,12 @@ export type Query = {
   drugModels?: Maybe<DrugConnection>;
   entities?: Maybe<EntityConnection>;
   entity: Entity;
-  event: Event;
   events?: Maybe<EventConnection>;
   gameModels?: Maybe<GameConnection>;
   itemModels?: Maybe<ItemConnection>;
   marketModels?: Maybe<MarketConnection>;
+  metadata: Metadata;
+  metadatas?: Maybe<MetadataConnection>;
   model: Model;
   models?: Maybe<ModelConnection>;
   playerModels?: Maybe<PlayerConnection>;
@@ -537,8 +557,11 @@ export type QueryEntityArgs = {
 };
 
 
-export type QueryEventArgs = {
-  id: Scalars['ID'];
+export type QueryEventsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -572,8 +595,29 @@ export type QueryMarketModelsArgs = {
 };
 
 
+export type QueryMetadataArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryMetadatasArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryModelArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -603,7 +647,23 @@ export type QuerySystemArgs = {
 
 
 export type QuerySystemCallArgs = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
+};
+
+
+export type QuerySystemCallsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QuerySystemsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type Risks = {
@@ -618,7 +678,7 @@ export type Risks = {
 export type RisksConnection = {
   __typename?: 'RisksConnection';
   edges?: Maybe<Array<Maybe<RisksEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type RisksEdge = {
@@ -682,28 +742,28 @@ export type SubscriptionModelRegisteredArgs = {
 
 export type System = {
   __typename?: 'System';
-  classHash?: Maybe<Scalars['felt252']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
+  class_hash?: Maybe<Scalars['felt252']>;
+  created_at?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   systemCalls: Array<SystemCall>;
-  transactionHash?: Maybe<Scalars['felt252']>;
+  transaction_hash?: Maybe<Scalars['felt252']>;
 };
 
 export type SystemCall = {
   __typename?: 'SystemCall';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  created_at?: Maybe<Scalars['DateTime']>;
   data?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   system: System;
-  systemId?: Maybe<Scalars['ID']>;
-  transactionHash?: Maybe<Scalars['String']>;
+  system_id?: Maybe<Scalars['ID']>;
+  transaction_hash?: Maybe<Scalars['String']>;
 };
 
 export type SystemCallConnection = {
   __typename?: 'SystemCallConnection';
   edges?: Maybe<Array<Maybe<SystemCallEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type SystemCallEdge = {
@@ -715,7 +775,7 @@ export type SystemCallEdge = {
 export type SystemConnection = {
   __typename?: 'SystemConnection';
   edges?: Maybe<Array<Maybe<SystemEdge>>>;
-  totalCount: Scalars['Int'];
+  total_count: Scalars['Int'];
 };
 
 export type SystemEdge = {
@@ -727,7 +787,7 @@ export type SystemEdge = {
 export type AvailableGamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AvailableGamesQuery = { __typename?: 'Query', gameModels?: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameEdge', cursor?: any | null, node?: { __typename?: 'Game', creator?: any | null, num_players?: any | null, max_players?: any | null, max_turns?: any | null, start_time?: any | null } | null } | null> | null } | null };
+export type AvailableGamesQuery = { __typename?: 'Query', gameModels?: { __typename?: 'GameConnection', total_count: number, edges?: Array<{ __typename?: 'GameEdge', cursor?: any | null, node?: { __typename?: 'Game', creator?: any | null, num_players?: any | null, max_players?: any | null, max_turns?: any | null, start_time?: any | null } | null } | null> | null } | null };
 
 export type GlobalScoresQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -735,7 +795,7 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', totalCount: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', cash?: any | null, health?: any | null, entity?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, player_id?: any | null, game_id?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, cash?: any | null, health?: any | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
@@ -757,7 +817,7 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, health?: any | null, drug_count?: any | null, bag_limit?: any | null, location_id?: any | null, turns_remaining?: any | null, turns_remaining_on_death?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, health?: any | null, drug_count?: any | null, bag_limit?: any | null, location_id?: any | null, turns_remaining?: any | null, turns_remaining_on_death?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -765,13 +825,13 @@ export type LocationEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null } | { __typename: 'Player' } | { __typename: 'Risks', travel?: any | null, capture?: any | null } | null> | null } | null } | null> | null } | null };
+export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null } | { __typename: 'Player' } | { __typename: 'Risks', travel?: any | null, capture?: any | null } | null> | null } | null } | null> | null } | null };
 
 
 export const AvailableGamesDocument = `
     query AvailableGames {
   gameModels(first: 10) {
-    totalCount
+    total_count
     edges {
       node {
         creator
@@ -827,21 +887,14 @@ export const GlobalScoresDocument = `
     where: {turns_remaining: 0}
     order: {direction: DESC, field: CASH}
   ) {
-    totalCount
+    total_count
     edges {
       node {
+        game_id
+        player_id
+        name
         cash
         health
-        entity {
-          models {
-            __typename
-            ... on Player {
-              name
-              player_id
-              game_id
-            }
-          }
-        }
       }
       cursor
     }
@@ -985,7 +1038,7 @@ useInfiniteGameEntityQuery.getKey = (variables: GameEntityQueryVariables) => ['G
 export const PlayerEntityDocument = `
     query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
-    totalCount
+    total_count
     edges {
       node {
         models {
@@ -1052,7 +1105,7 @@ useInfinitePlayerEntityQuery.getKey = (variables: PlayerEntityQueryVariables) =>
 export const LocationEntitiesDocument = `
     query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {
-    totalCount
+    total_count
     edges {
       node {
         keys

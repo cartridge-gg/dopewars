@@ -1,6 +1,6 @@
 query AvailableGames {
   gameModels(first: 10) {
-    totalCount
+    total_count
     edges {
       node {
         creator
@@ -14,30 +14,21 @@ query AvailableGames {
   }
 }
 
-
 query GlobalScores($limit: Int, $cursor: Cursor) {
   playerModels(
     first: $limit
     after: $cursor
     where: { turns_remaining: 0 }
     order: { direction: DESC, field: CASH }
-  ) 
-  {
-    totalCount
+  ) {
+    total_count
     edges {
       node {
+        game_id
+        player_id
+        name
         cash
         health
-        entity {
-          models {
-            __typename
-            ... on Player {
-              name
-              player_id
-              game_id
-            }
-          }
-        }
       }
       cursor
     }

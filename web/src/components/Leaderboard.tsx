@@ -22,7 +22,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
-import { Score, useGlobalScores } from "@/dojo/queries/useGlobalScores";
+import { Score, useGlobalScores, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
@@ -39,28 +39,28 @@ const Leaderboard = ({
     account,
   } = useDojoContext();
   // TODO : use when supported on torii
-  // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
-  const { scores, refetch } = useGlobalScores();
+  const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(undefined, 10);
+  // const { scores, refetch } = useGlobalScores();
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
-  const pageSize = 10;
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [visibleScores, setVisibleScores] = useState(pageSize);
+  // const pageSize = 10;
+  // const [hasNextPage, setHasNextPage] = useState(false);
+  // const [visibleScores, setVisibleScores] = useState(pageSize);
 
   const listRef = useRef<null | HTMLLIElement>(null);
 
   useEffect(() => {
-    setHasNextPage(visibleScores < scores.length);
+    //setHasNextPage(visibleScores < scores.length);
     if (!listRef.current) return;
     const lastEl = listRef.current["lastElementChild"];
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [scores, visibleScores]);
+  }, [scores/*, visibleScores*/]);
 
-  const fetchNextPage = useCallback(() => {
-    setVisibleScores(visibleScores + pageSize);
-  }, [listRef.current, visibleScores]);
+  // const fetchNextPage = useCallback(() => {
+  //   setVisibleScores(visibleScores + pageSize);
+  // }, [listRef.current, visibleScores]);
 
  
 
@@ -85,7 +85,9 @@ const Leaderboard = ({
           }}
         >
           {scores ? (
-            scores.slice(0, visibleScores)?.map((score, index) => {
+            scores
+            // .slice(0, visibleScores)?
+            .map((score, index) => {
               const isOwn = score.address === account?.address;
               const color = isOwn
                 ? colors.yellow["400"].toString()

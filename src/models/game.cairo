@@ -69,3 +69,4 @@ impl GameModeIntrospectionImpl of SchemaIntrospection<GameMode> {
         )
     }
 }
+

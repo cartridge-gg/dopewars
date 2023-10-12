@@ -81,10 +81,10 @@ const LeftPanel = ({
         pointerEvents="none"
         spacing="0"
       >
-        <Text textStyle="subheading" fontSize="11px">
+        <Text textStyle="subheading" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+        <Heading fontSize={["36px", "48px"]} fontWeight="normal">
           {title}
         </Heading>
       </VStack>

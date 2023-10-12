@@ -62,7 +62,6 @@ export default function Location() {
       }
     }
   }, [locationId, playerEntity, router, gameId]);
-
   if (!playerEntity || !locationEntity || !gameEntity) {
     return <></>;
   }

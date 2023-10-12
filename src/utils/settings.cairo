@@ -112,7 +112,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings { health: 100_u8, cash: 2000_u128 * SCALING_FACTOR, bag_limit: 100 }
             },
             GameMode::Unlimited => {
-                PlayerSettings { health: 100_u8, cash: 1000_u128 * SCALING_FACTOR, bag_limit: 100 }
+                PlayerSettings { health: 100_u8, cash: 50000_u128 * SCALING_FACTOR, bag_limit: 100 }
             },
         }
     }
@@ -220,16 +220,16 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                 // level is ignored in Limited mode
                 match item_id {
                     ItemEnum::Attack => ItemSettings {
-                        name: 'Knife', cost: 250 * SCALING_FACTOR, value: 10
+                        name: 'Glock', cost: 500 * SCALING_FACTOR, value: 20
                     },
                     ItemEnum::Defense => ItemSettings {
-                        name: 'Kevlar', cost: 250 * SCALING_FACTOR, value: 10
+                        name: 'Leather Jacket', cost: 350 * SCALING_FACTOR, value: 10
                     },
                     ItemEnum::Transport => ItemSettings {
-                        name: 'Trenchcoat', cost: 250 * SCALING_FACTOR, value: 10
+                        name: 'Trenchcoat', cost: 600 * SCALING_FACTOR, value: 20
                     },
                     ItemEnum::Speed => ItemSettings {
-                        name: 'Kicks', cost: 250 * SCALING_FACTOR, value: 10
+                        name: 'Kicks', cost: 350 * SCALING_FACTOR, value: 15
                     },
                 }
             },
@@ -237,44 +237,50 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                 match item_id {
                     ItemEnum::Attack => {
                         if level == 1 {
-                            ItemSettings { name: 'Knife', cost: 750 * SCALING_FACTOR, value: 10 }
+                            ItemSettings { name: 'Knife', cost: 250 * SCALING_FACTOR, value: 10 }
                         } else if level == 2 {
-                            ItemSettings { name: 'Glock', cost: 2500 * SCALING_FACTOR, value: 20 }
+                            ItemSettings { name: 'Glock', cost: 1800 * SCALING_FACTOR, value: 15 }
                         } else {
-                            panic(array!['invalid level']);
-                            ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                            ItemSettings { name: 'Uzi', cost: 9500 * SCALING_FACTOR, value: 25 }
                         }
                     },
                     ItemEnum::Defense => {
                         if level == 1 {
-                            ItemSettings { name: 'Kevlar1', cost: 500 * SCALING_FACTOR, value: 10 }
+                            ItemSettings {
+                                name: 'Leather Jacket', cost: 350 * SCALING_FACTOR, value: 10
+                            }
                         } else if level == 2 {
-                            ItemSettings { name: 'Kevlar2', cost: 1500 * SCALING_FACTOR, value: 30 }
+                            ItemSettings { name: 'Kevlar', cost: 2200 * SCALING_FACTOR, value: 15 }
                         } else {
-                            panic(array!['invalid level']);
-                            ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                            ItemSettings {
+                                name: 'Bulletproof Vest', cost: 12000 * SCALING_FACTOR, value: 25
+                            }
                         }
                     },
                     ItemEnum::Transport => {
                         if level == 1 {
-                            ItemSettings { name: 'Banana', cost: 500 * SCALING_FACTOR, value: 10 }
+                            ItemSettings {
+                                name: 'Banana Bag', cost: 450 * SCALING_FACTOR, value: 20
+                            }
                         } else if level == 2 {
                             ItemSettings {
-                                name: 'Trenchcoat', cost: 1900 * SCALING_FACTOR, value: 30
+                                name: 'Trenchcoat', cost: 3100 * SCALING_FACTOR, value: 30
                             }
                         } else {
-                            panic(array!['invalid level']);
-                            ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                            ItemSettings {
+                                name: 'Sport Bag', cost: 18000 * SCALING_FACTOR, value: 50
+                            }
                         }
                     },
                     ItemEnum::Speed => {
                         if level == 1 {
-                            ItemSettings { name: 'Kicks1', cost: 500 * SCALING_FACTOR, value: 10 }
+                            ItemSettings { name: 'Kicks', cost: 250 * SCALING_FACTOR, value: 10 }
                         } else if level == 2 {
-                            ItemSettings { name: 'Kicks2', cost: 1200 * SCALING_FACTOR, value: 30 }
+                            ItemSettings { name: 'Bike', cost: 2400 * SCALING_FACTOR, value: 15 }
                         } else {
-                            panic(array!['invalid level']);
-                            ItemSettings { name: '', cost: 0 * SCALING_FACTOR, value: 0 }
+                            ItemSettings {
+                                name: 'Motorbike', cost: 25000 * SCALING_FACTOR, value: 30
+                            }
                         }
                     },
                 }

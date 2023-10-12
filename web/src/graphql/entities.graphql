@@ -17,7 +17,7 @@ query GameEntity($id: u32!) {
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
-    totalCount
+    total_count
     edges {
       node {
         models {
@@ -49,7 +49,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
 
 query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {
-    totalCount
+    total_count
     edges {
       node {
         keys
@@ -73,7 +73,7 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 # TODO: Query entire game state per gameId in one query
 # query GameState($gameId: String!) {
 #   entities (first: 100, keys: [$gameId]]) {
-#     totalCount
+#     total_count
 #     edges {
 #       node {
 #         componentNames

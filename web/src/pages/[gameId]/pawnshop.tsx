@@ -22,52 +22,74 @@ import { ReactNode, useState, useEffect } from "react";
 import { GameMode, ShopItemInfo, ItemEnum } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
+import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { Trenchcoat, Kevlar, Kicks, Glock } from "@/components/icons/items";
+import { Trenchcoat, Kevlar, Kicks, Glock, Knife, Uzi } from "@/components/icons/items";
+import { Truck } from "@/components/icons/Truck";
 
-// TODO: retrieve form world
-const shopItems: ShopItemInfo[] = [
-  {
-    type: ItemEnum.Attack,
-    name: "Glock",
-    desc: "* Gives you some extra firepower *",
-    cost: "750",
-    icon: Glock,
+export const descByType = {
+  "Attack": "* Gives you some extra firepower *",
+  "Transport" : "* Allows you to carry more product *",
+  "Defense" : "* Allows you to absorb some damage *",
+  "Speed" : "* Allows you to escape more easily *",
+}
+
+export const iconByTypeAndLevel = {
+  "Attack": {
+    1:Knife,
+    2:Glock,
+    3:Uzi,
   },
-  {
-    type: ItemEnum.Transport,
-    name: "Trenchcoat",
-    desc: "* Allows you to carry more product *",
-    cost: "750",
-    icon: Trenchcoat,
+  "Transport" : {
+    1:Trenchcoat,
+    2:Truck,
+    3:Trenchcoat,
   },
-  {
-    type: ItemEnum.Defense,
-    name: "Kevlar",
-    desc: "* Allows you to absorb some damage *",
-    cost: "750",
-    icon: Kevlar,
+  "Defense" :{
+    1:Kevlar,
+    2:Kevlar,
+    3:Kevlar,
   },
-  {
-    type: ItemEnum.Speed,
-    name: "Kicks",
-    desc: "* Allows you to escape more easily *",
-    cost: "750",
-    icon: Kicks,
+  "Speed" : {
+    1:Kicks,
+    2:Kicks,
+    3:Kicks,
   },
-];
+}
 
 export default function PawnShop() {
   const router = useRouter();
+  const gameId = router.query.gameId as string;
 
   const { account } = useDojoContext();
-  const { buyItem, dropItem } = useSystems();
+  const { buyItem, dropItem, getAvailableItems } = useSystems();
+  const { player: playerEntity } = usePlayerEntity({
+    gameId,
+    address: account?.address,
+  });
 
   const { toast } = useToast();
 
-  const gameId = router.query.gameId as string;
   const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo>(null);
+  const [availableItems, setAvailableItems] = useState<ShopItemInfo[]>([]);
+
+  useEffect(() => {
+const update = async()=> {
+  const {items} = (await getAvailableItems(gameId)) || []
+  const shopItems = items.map(i => ({
+    desc: descByType[i.item_type],
+    icon: iconByTypeAndLevel[i.item_type][i.level],
+    ...i
+  }))
+  setAvailableItems(shopItems)
+}
+
+if(gameId){
+  update();
+}
+
+  }, [gameId])
 
   const selectItem = (shopItem: ShopItemInfo) => {
     // do checks
@@ -81,12 +103,12 @@ export default function PawnShop() {
   const buy = async () => {
     if (!selectedShopItem) return
 
-      const { hash } = await buyItem(gameId, selectedShopItem.type);
-    //   toast(
-    //     "Created Game",
-    //     Alert,
-    //     `http://amazing_explorer/${hash}`,
-    //   );
+      const { hash } = await buyItem(gameId, selectedShopItem.item_id);
+      toast(
+        "Was it a wise choice...",
+        Alert,
+        `http://amazing_explorer/${hash}`,
+      );
       router.push(`/${gameId}/travel`);
   };
 
@@ -120,7 +142,9 @@ export default function PawnShop() {
           gap={["10px", "16px"]}
           fontSize={["16px", "20px"]}
         >
-          {shopItems.map((shopItem, index) => {
+        <HStack>
+          </HStack>
+          {availableItems && availableItems.map((shopItem, index) => {
             return (
               <Button
                 w="full"
@@ -131,17 +155,7 @@ export default function PawnShop() {
                 onClick={() => selectItem(shopItem)}
                 variant="selectable"
                 isActive={shopItem === selectedShopItem}
-                // color={shopItem === selectedShopItem ? "yellow.400 !important" : "neon:400"}
               >
-                {/* <Card
-                  w="full"
-                  h={["auto", "100px"]}
-                  key={index}
-                  position="relative"
-                  padding="16px"
-                >
-                  <CardBody w="full"> */}
-
                 <HStack w="full" gap="20px">
                   <Box>{shopItem.icon({ width: "56px", height: "56px" })}</Box>
                   <VStack w="full" w="300px" alignItems="flex-start">
@@ -170,8 +184,6 @@ export default function PawnShop() {
                     </Text>
                   </VStack>
                 </HStack>
-                {/* </CardBody>
-                </Card> */}
               </Button>
             );
           })}
@@ -180,10 +192,12 @@ export default function PawnShop() {
       </VStack>
 
       <Footer>
-        <Button w={["full", "auto"]}>Continue</Button>
+        <Button w={["full", "auto"]} onClick={()=> {
+          router.push( `/${gameId}/travel`)
+        }}>Continue</Button>
         <Button
           w={["full", "auto"]}
-          isDisabled={!selectedShopItem}
+          isDisabled={!selectedShopItem || selectedShopItem.cost > playerEntity.cash}
           onClick={buy}
         >
           Buy

@@ -36,6 +36,9 @@ impl MarketImpl of MarketTrait {
     }
 }
 
+
+
+
 fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
     let amount: u128 = amount.into() * SCALING_FACTOR;
     let available: u128 = (market.quantity).into() * SCALING_FACTOR;

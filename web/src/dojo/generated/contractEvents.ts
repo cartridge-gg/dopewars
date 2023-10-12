@@ -35,7 +35,7 @@ export interface PlayerJoinedData {
 export interface BoughtData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
-  drug_id: RecsType.BigInt;
+  drug_id: RecsType.String;
   quantity: RecsType.Number;
   cost: RecsType.BigInt;
 }
@@ -43,7 +43,7 @@ export interface BoughtData {
 export interface SoldData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
-  drug_id: RecsType.BigInt;
+  drug_id: RecsType.String;
   quantity: RecsType.Number;
   payout: RecsType.BigInt;
 }
@@ -51,8 +51,8 @@ export interface SoldData {
 export interface TraveledData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
-  from_location: RecsType.BigInt;
-  to_location: RecsType.BigInt;
+  from_location: RecsType.String;
+  to_location: RecsType.String;
 }
 
 export interface AdverseEventData {
@@ -63,8 +63,8 @@ export interface AdverseEventData {
 
 export interface MarketEventData {
   game_id: RecsType.Number;
-  location_id: RecsType.BigInt;
-  drug_id: RecsType.BigInt;
+  location_id: RecsType.String;
+  drug_id: RecsType.String;
   increase: RecsType.Boolean;
 }
 
@@ -86,12 +86,12 @@ export interface ConsequenceData {
 export interface BoughtItemData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
-  item_id: RecsType.BigInt;
+  item_id: RecsType.String;
   level: RecsType.Number;
 }
 
 export interface DroppedItemData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
-  item_id: RecsType.BigInt;
+  item_id: RecsType.String;
 }

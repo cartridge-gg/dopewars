@@ -13,6 +13,8 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
+import { Glock } from "@/components/icons/items";
+import { Clock } from "@/components/icons";
 
 export default function Name() {
   const router = useRouter();
@@ -61,20 +63,20 @@ export default function Name() {
             <Text py="20px" textStyle="subheading" fontSize="13px">
               Mode
             </Text>
-            <HStack>
+            <HStack gap="20px">
               <Button
                 variant="selectable"
                 isActive={gameMode === GameMode.Limited}
                 onClick={() => setGameMode(GameMode.Limited)}
               >
-                THUG
+               <Clock/> THUG
               </Button>
               <Button
                 variant="selectable"
                 isActive={gameMode === GameMode.Unlimited}
                 onClick={() => setGameMode(GameMode.Unlimited)}
               >
-                GANGSTER
+               <Glock/> GANGSTER
               </Button>
             </HStack>
           </VStack>

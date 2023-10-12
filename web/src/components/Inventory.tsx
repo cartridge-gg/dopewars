@@ -14,6 +14,8 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
+import {iconByTypeAndLevel} from "@/pages/[gameId]/pawnshop";
+
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
@@ -32,10 +34,35 @@ export const Inventory = ({ ...props }: StyleProps) => {
           Your Inventory
         </Text>
         <HStack color="yellow.400">
+        <HStack gap="5px" justify="center">
+          { playerEntity?.items.map((item) => {
+              return (
+                  <>
+                    <HStack gap="10px">
+                      <HStack color="yellow.400">
+                      {iconByTypeAndLevel[item.id][item.level]({ boxSize: "26" })}
+                      </HStack>
+                    </HStack>
+                   
+                  </>
+              )
+            })}
+        </HStack>
+
+        <Divider
+                      h="10px"
+                      mx="10px"
+                      orientation="vertical"
+                      borderWidth="1px"
+                      borderColor="neon.600"
+                    />
+
+
           <Bag />
           <Text>
             {playerEntity?.drugCount}/{playerEntity?.bagLimit}
           </Text>
+
         </HStack>
       </HStack>
       <Card
@@ -50,6 +77,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
           },
         }}
       >
+         
         <HStack gap="5px" justify="center">
           {playerEntity?.drugCount === 0 ? (
             <Text color="neon.500">Your bag is empty</Text>

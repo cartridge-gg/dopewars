@@ -78,3 +78,5 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     }
 }
 
+
+
