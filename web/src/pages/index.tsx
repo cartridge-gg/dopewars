@@ -27,13 +27,11 @@ import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
-import { useSystems } from "@/dojo/hooks/useSystems";
 
 export default function Home() {
   const router = useRouter();
 
   const { account } = useDojoContext();
-  const { createGame } = useSystems();
   // const { scores } = useGlobalScores();
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();

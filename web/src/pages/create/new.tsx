@@ -20,7 +20,7 @@ export default function Name() {
   const router = useRouter();
 
   const { account } = useDojoContext();
-  const { createGame } = useSystems();
+  const { createGame, isPending } = useSystems();
 
   const { toast } = useToast();
 
@@ -30,18 +30,25 @@ export default function Name() {
 
   const create = async () => {
     setError("");
-    if (name === "" || name.length > 31 || name.length < 3) {
-      setError("Invalid name, at least 3 chars!");
+    if (name === "" || name.length > 20 || name.length < 3) {
+      setError("Invalid name, at least 3 chars, max 20!");
       return;
     }
 
-    const { hash, gameId } = await createGame(gameMode, name);
+    try {
+      const { hash, gameId } = await createGame(gameMode, name);
 
-    toast("Created Game", Alert, `http://amazing_explorer/${hash}`);
+      toast({
+        message: "Game Created!",
+        icon: Alert,
+        link: `http://amazing_explorer/${hash}`,
+      });
 
-   //  router.push(`/${gameId}/travel`);
-   router.push(`/${gameId}/pawnshop`);
-
+      //  router.push(`/${gameId}/travel`);
+      router.push(`/${gameId}/pawnshop`);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -69,14 +76,14 @@ export default function Name() {
                 isActive={gameMode === GameMode.Limited}
                 onClick={() => setGameMode(GameMode.Limited)}
               >
-               <Clock/> THUG
+                <Clock /> THUG
               </Button>
               <Button
                 variant="selectable"
                 isActive={gameMode === GameMode.Unlimited}
                 onClick={() => setGameMode(GameMode.Unlimited)}
               >
-               <Glock/> GANGSTER
+                <Glock /> GANGSTER
               </Button>
             </HStack>
           </VStack>
@@ -124,7 +131,7 @@ export default function Name() {
           <Button w={["full", "auto"]} onClick={() => router.push("/")}>
             Back
           </Button>
-          <Button w={["full", "auto"]} onClick={create}>
+          <Button w={["full", "auto"]} isLoading={isPending} onClick={create}>
             Create New Game
           </Button>
         </Footer>

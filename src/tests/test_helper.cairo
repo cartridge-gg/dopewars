@@ -21,6 +21,8 @@ use rollyourown::systems::shop::{shop, IShopDispatcher, IShopDispatcherTrait};
 use rollyourown::systems::trade::{trade, ITradeDispatcher, ITradeDispatcherTrait};
 use rollyourown::systems::travel::{travel, ITravelDispatcher, ITravelDispatcherTrait};
 
+use rollyourown::jodo::{jodo, IJodoDispatcher, IJodoDispatcherTrait};
+
 
 fn ZERO() -> ContractAddress {
     contract_address_const::<0>()
@@ -37,7 +39,8 @@ struct SystemDispatchers {
     lobby: ILobbyDispatcher,
     shop: IShopDispatcher,
     trade: ITradeDispatcher,
-    travel: ITravelDispatcher
+    travel: ITravelDispatcher,
+    jodo: IJodoDispatcher
 }
 
 
@@ -74,6 +77,10 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
             contract_address: world
                 .deploy_contract('paper', travel::TEST_CLASS_HASH.try_into().unwrap())
         },
+        jodo: IJodoDispatcher {
+            contract_address: world
+                .deploy_contract('paper', jodo::TEST_CLASS_HASH.try_into().unwrap())
+        },
     };
 
     // TODO: setup auth
@@ -86,4 +93,7 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
 #[available_gas(200000000)]
 fn test_spawn_world() {
     let (world, systems) = spawn_world();
+
+
+    systems.jodo.func1();
 }

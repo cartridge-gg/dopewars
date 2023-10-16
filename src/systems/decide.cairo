@@ -6,6 +6,7 @@ use rollyourown::models::location::LocationEnum;
 enum Action {
     Run: (),
     Pay: (),
+    Fight: (),
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -28,11 +29,13 @@ mod decide {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
+    use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{LocationEnum};
+    use rollyourown::models::item::{Item, ItemEnum};
 
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl};
@@ -90,7 +93,7 @@ mod decide {
         ) {
             let world = self.world();
             let player_id = get_caller_address();
-            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+            let mut player: Player = get!(world, (game_id, player_id), Player);
             assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
             let game = get!(world, game_id, Game);
@@ -98,6 +101,8 @@ mod decide {
 
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
+                    player.wanted += decide_settings.wanted_impact_run;
+
                     let mut risks = get!(world, (game_id, player.location_id).into(), Risks);
                     let seed = random::seed();
                     match risks.run(seed) {
@@ -108,12 +113,18 @@ mod decide {
                             )
                                 .try_into()
                                 .unwrap();
-                            let health_loss: u8 = decide_settings.health_impact + random_loss;
-                            (Outcome::Captured, 0, 0, health_loss)
+                            let health_loss: u128 = (decide_settings.health_impact + random_loss).into();
+                            let defense_item = get!(world, (game_id, player_id,ItemEnum::Defense), Item);
+
+                            // reduce dmgs by defense_item.value %
+                            let health_saved: u128 = ((health_loss * defense_item.value.into() * SCALING_FACTOR) / 100 )/SCALING_FACTOR;
+                            let final_health_loss: u8 = (health_loss - health_saved).try_into().unwrap();
+                            (Outcome::Captured, 0, 0, final_health_loss)
                         }
                     }
                 },
                 Action::Pay => {
+
                     match player.status {
                         PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                         PlayerStatus::BeingMugged => {
@@ -124,6 +135,9 @@ mod decide {
                             (Outcome::Paid, cash_loss_, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
+                            // paying cops resets wanted
+                            player.wanted = 0;
+
                             // using same name drug_loss makes LS crash
                             let drug_loss_ = self
                                 .take_drugs(
@@ -133,23 +147,26 @@ mod decide {
                         },
                     }
                 },
+                Action::Fight => {
+                    player.wanted += decide_settings.wanted_impact_fight;
+
+                    // TODO
+                    (Outcome::Escaped, 0, 0, 0)
+                },
+                
             };
 
-            if outcome == Outcome::Captured {
-                player.run_attempts += 1;
-            } else {
+            if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
-                player.turns_remaining -= 1;
+                player.turn += 1;
                 player.location_id = next_location_id;
-                player.run_attempts = 0;
             }
 
             player.cash -= cash_loss;
             player.drug_count -= drug_loss;
+
             if health_loss >= player.health {
                 player.health = 0;
-                player.turns_remaining = 0;
-                player.turns_remaining_on_death = player.turns_remaining;
                 outcome = Outcome::Died;
             } else {
                 player.health -= health_loss

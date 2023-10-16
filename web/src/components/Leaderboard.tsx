@@ -26,7 +26,6 @@ import { Score, useGlobalScores, useGlobalScoresIninite } from "@/dojo/queries/u
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
-import { useSystems } from "@/dojo/hooks/useSystems";
 import { Skull } from "./icons";
 
 const Leaderboard = ({

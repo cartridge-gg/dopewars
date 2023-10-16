@@ -26,12 +26,16 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             name
             cash
             status
-            health
-            drug_count
-            bag_limit
             location_id
-            turns_remaining
-            turns_remaining_on_death
+            drug_count
+            health
+            turn
+            max_turns
+            attack
+            defense
+            transport
+            speed
+            wanted
           }
           ... on Drug {
             drug_id
@@ -40,6 +44,8 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
           ... on Item{
             item_id
             level
+            name
+            value
           }
         }
       }

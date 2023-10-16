@@ -8,15 +8,29 @@ export const useToast = () => {
   const chakraToast = useChakraToast();
 
   const toast = useCallback(
-    (message: string, icon?: React.FC, link?: string, duration: number = TOAST_DURATION) => {
+    ({
+      message,
+      icon,
+      link,
+      duration = TOAST_DURATION,
+      isError = false
+    }: {
+      message: string;
+      icon?: React.FC;
+      link?: string;
+      duration: number;
+      isError: boolean;
+    }) => {
       chakraToast({
         position: "bottom-left",
         duration,
         // default overrides
         containerStyle: {
           pointerEvents: "none",
-          maxW: ["100vw", "400px"],
-          minW: ["100vw", "400px"],
+          maxW: "100%",
+          minW: "auto",
+          // maxW: ["100vw", "400px"],
+          // minW: ["100vw", "400px"],
           px: "24px",
           m: 0,
         },
@@ -26,6 +40,7 @@ export const useToast = () => {
             message={message}
             icon={icon}
             link={link}
+            isError={isError}
             onClose={() => {
               // TODO: target close toast by id
               chakraToast.closeAll();

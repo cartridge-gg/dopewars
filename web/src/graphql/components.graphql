@@ -18,7 +18,7 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
   playerModels(
     first: $limit
     after: $cursor
-    where: { turns_remaining: 0 }
+    # where: { turns_remaining: 0 }
     order: { direction: DESC, field: CASH }
   ) {
     total_count
@@ -29,6 +29,7 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
         name
         cash
         health
+        turn
       }
       cursor
     }

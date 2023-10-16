@@ -100,11 +100,15 @@ mod lobby {
                 location_id: LocationEnum::Home,
                 cash: player_settings.cash,
                 health: player_settings.health,
-                run_attempts: 0,
                 drug_count: 0,
-                bag_limit: player_settings.bag_limit,
-                turns_remaining: game_settings.max_turns,
-                turns_remaining_on_death: 0
+                turn:0,
+                max_turns: game_settings.max_turns,
+                wanted: player_settings.wanted,
+                attack: player_settings.attack,
+                defense: player_settings.defense,
+                transport: player_settings.transport,
+                speed: player_settings.speed,
+
             };
 
             let game = Game {
@@ -181,6 +185,7 @@ mod lobby {
 
     fn assert_valid_name(name: felt252) {
         let name_256: u256 = name.into();
-        assert(name_256 > 0xffff, 'Invalid name');
+        assert(name_256 > 0xffff, 'Name too short');
+        assert(name_256 < 0xffffffffffffffffffffffffffffffffffffffff, 'Name too long');
     }
 }

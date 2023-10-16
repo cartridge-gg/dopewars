@@ -22,22 +22,30 @@ export enum Drug {
   Cocaine,
 }
 
-export enum ItemEnum{
+export enum ItemEnum {
   Attack,
   Defense,
   Transport,
   Speed,
 }
 
+export enum ItemTextEnum {
+  Attack = "Attack",
+  Defense= "Defense",
+  Transport = "Transport",
+  Speed = "Speed",
+}
+
 export enum PlayerStatus {
-  Normal,
-  BeingMugged,
-  BeingArrested,
+  Normal = "Normal",
+  BeingMugged = "BeingMugged",
+  BeingArrested = "BeingArrested",
 }
 
 export enum Action {
   Run,
   Pay,
+  Fight,
 }
 
 export enum Outcome {

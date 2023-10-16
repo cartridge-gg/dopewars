@@ -2,8 +2,10 @@ use starknet::ContractAddress;
 use dojo::database::schema::{
     Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
 };
+use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::location::LocationEnum;
+use rollyourown::models::item::{Item, ItemEnum};
 
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -13,15 +15,21 @@ struct Player {
     #[key]
     player_id: ContractAddress,
     name: felt252,
+
     status: PlayerStatus,
     location_id: LocationEnum,
+    turn: usize,
+    max_turns: usize,
+    drug_count: usize,
     cash: u128,
     health: u8,
-    run_attempts: u8,
-    drug_count: usize,
-    bag_limit: usize,
-    turns_remaining: usize,
-    turns_remaining_on_death: usize
+
+    attack: usize,
+    defense: usize,
+    transport: usize,
+    speed: usize,
+
+    wanted: u8,
 }
 
 #[generate_trait]
@@ -31,7 +39,7 @@ impl PlayerImpl of PlayerTrait {
         if self.health == 0 {
             return false;
         }
-        if self.turns_remaining == 0 {
+        if self.max_turns != 0 && self.turn == self.max_turns {
             return false;
         }
         if self.status != PlayerStatus::Normal {
@@ -39,6 +47,27 @@ impl PlayerImpl of PlayerTrait {
         }
 
         true
+    }
+
+  
+    fn get_attack(self: Player, world: IWorldDispatcher ) -> usize {
+        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
+        self.attack + item.value
+    }
+
+    fn get_defense(self: Player, world: IWorldDispatcher ) -> usize {
+        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+        self.defense + item.value
+    }
+
+    fn get_transport(self: Player, world: IWorldDispatcher ) -> usize {
+        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
+        self.transport + item.value
+    }
+
+    fn get_speed(self: Player, world: IWorldDispatcher ) -> usize {
+        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+        self.speed + item.value
     }
 }
 

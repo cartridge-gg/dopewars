@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 // import { BaseEventData, parseEvent, parseEvents, WorldEvents } from "../events";
-import { Action, GameMode, Location, ItemEnum  } from "../types";
+import { Action, GameMode, Location, ItemEnum } from "../types";
 import { shortString, GetTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
@@ -11,7 +11,6 @@ export interface SystemsInterface {
   feedLeaderboard: (
     count: number,
   ) => Promise<SystemExecuteResult>;
-
 
   isPending: boolean;
   error?: Error;
@@ -67,6 +66,7 @@ export const useDevtools = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
+
 
 
   return {

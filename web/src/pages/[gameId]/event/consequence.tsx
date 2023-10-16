@@ -8,18 +8,14 @@ import Button from "@/components/Button";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useMemo } from "react";
-import { PlayerStatus } from "@/dojo/types";
+import { OutcomeInfo, PlayerStatus } from "@/dojo/types";
 import { Outcome } from "@/dojo/types";
 import { playSound, Sounds } from "@/hooks/sound";
-import { useEffect } from "react";
+import { useEffect, useState} from "react";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const outcome = getOutcomeInfo(
-    router.query.status,
-    Number(router.query.outcome),
-  );
 
   const { account } = useDojoContext();
   const { player: playerEntity } = usePlayerEntity({
@@ -27,16 +23,27 @@ export default function Consequence() {
     address: account?.address,
   });
 
-  const isDead = outcome.type === Outcome.Died;
-  const response = useMemo(() => outcome.getResponse(true), [outcome]);
+  const [outcome, setOutcome] = useState<OutcomeInfo|undefined>(undefined);
+  const [isDead, setIsDead] = useState<boolean>(false);
+  
+  const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
   useEffect(() => {
-    if (outcome.type === Outcome.Died) {
+    const outcomeInfos = getOutcomeInfo(
+      router.query.status,
+      Number(router.query.outcome),
+    )
+   setOutcome(outcomeInfos);
+  }, [router.query.status, router.query.outcome]);
+
+  useEffect(() => {
+    if (outcome && outcome.type === Outcome.Died) {
+      setIsDead(true)
       playSound(Sounds.GameOver);
     }
   }, [outcome]);
 
-  if (!router.isReady || !playerEntity) {
+  if (!router.isReady || !playerEntity || !outcome) {
     return <></>;
   }
 

@@ -6,7 +6,7 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
-import { PlayerStatus, ItemEnum } from "../types";
+import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
 import { shortString } from "starknet";
 
 type Drug = {
@@ -14,38 +14,61 @@ type Drug = {
   quantity: number;
 };
 
-type Items = {
-  id: ItemEnum;
+export type ShopItem = {
+  id: ItemTextEnum; // ItemEnum as string
   level: number;
+  name: string;
+  value: number;
 };
 
 export class PlayerEntity {
   name: string;
   cash: number;
   health: number;
-  turnsRemaining: number;
-  turnsRemainingOnDeath: number;
+  turn: number;
   drugCount: number;
-  bagLimit: number;
   locationId?: string;
   status: PlayerStatus;
   drugs: Drug[];
-  items: Items[];
+  items: ShopItem[];
 
-  constructor(player: Player, drugs: Drug[], items: Item[]) {
+  attack: number;
+  defense: number;
+  transport: number;
+  speed: number;
+
+  wanted: number;
+
+
+  constructor(player: Player, drugs: Drug[], items: ShopItem[]) {
     this.name = shortString.decodeShortString(player.name)
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
-    this.turnsRemaining = player.turns_remaining;
-    this.turnsRemainingOnDeath = player.turns_remaining_on_death;
+    this.turn = player.turn;
+    this.maxTurns = player.max_turns;
     this.drugCount = player.drug_count;
-    this.bagLimit = player.bag_limit;
+  
     this.locationId =
       player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
 
     this.drugs = drugs;
     this.items = items;
+
+    this.attack = player.attack;
+    this.defense = player.defense;
+    this.transport = player.transport;
+    this.speed = player.speed;
+
+    this.wanted = player.wanted;
+  }
+
+  getTransport(): number {
+    const transportItem = this.items.find(i => i.id === ItemTextEnum.Transport)
+    if (transportItem){
+      return this.transport + transportItem.value
+    }
+    return this.transport
   }
 
   static create(edges: EntityEdge[]): PlayerEntity | undefined {
@@ -83,14 +106,16 @@ export class PlayerEntity {
       ),
     );
 
-    const items: Item[] = itemEdges.map((edge) => {
+    const items: ShopItem[] = itemEdges.map((edge) => {
       const itemModel = edge.node?.models?.find(
         (model) => model?.__typename === "Item",
       ) as DrugType;
 
       return {
-        id: itemModel.item_id,
+        id: itemModel.item_id as ItemTextEnum,
         level: itemModel.level,
+        name: shortString.decodeShortString(itemModel.name),
+        value: itemModel.value,
       };
     });
 

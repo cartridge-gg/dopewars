@@ -8,11 +8,13 @@ export const Toast = ({
   icon,
   link,
   onClose,
+  isError,
 }: {
   message: string;
   icon?: React.FC;
   link?: string;
   onClose: () => void;
+  isError: boolean;
 }) => {
   return (
     <HStack
@@ -22,13 +24,13 @@ export const Toast = ({
       mb={["16px", "20px"]}
       fontSize={["14px", "16px"]}
       lineHeight={["1.2", "1.5"]}
-      bgColor="neon.200"
+      bgColor={isError ? "red" : "neon.200"}
       color="neon.900"
       justify="space-between"
       pointerEvents="all"
       onClick={onClose}
     >
-      <HStack>
+      <HStack w="full">
         <>
           {icon ? icon({ size: "lg" }) : <Alert size="lg" />}
           <Text>{message}</Text>

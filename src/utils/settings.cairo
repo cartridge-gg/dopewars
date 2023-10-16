@@ -14,7 +14,11 @@ struct GameSettings {
 struct PlayerSettings {
     health: u8,
     cash: u128,
-    bag_limit: usize
+    wanted: u8,
+    attack: usize,
+    defense: usize,
+    transport: usize,
+    speed: usize,
 }
 
 // TODO: update % to %0
@@ -25,6 +29,8 @@ struct RiskSettings {
     encounter_bias_gangs: u128,
     cops_drug_threshold: usize,
     gangs_cash_threshold: u128,
+
+    wanted_decrease_by_turn: u8,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -44,6 +50,8 @@ struct DecideSettings {
     gangs_payment_cash_pct: usize,
     cops_payment_drug_pct: usize,
     health_impact: u8,
+    wanted_impact_run: u8,
+    wanted_impact_fight: u8,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -58,13 +66,14 @@ struct PriceSettings {
 struct ItemSettings {
     name: felt252,
     cost: u128,
-    value: u128
+    value: usize
 }
 
 #[derive(Copy, Drop, Serde)]
 struct ShopSettings {
     max_item_allowed: u8,
     max_item_level: u8,
+    opening_freq: u32
 }
 
 //
@@ -99,7 +108,7 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
                 GameSettings { max_players: 1, max_turns: 10 }
             },
             GameMode::Unlimited => {
-                GameSettings { max_players: 1, max_turns: 1000 }
+                GameSettings { max_players: 1, max_turns: 0 }
             },
         }
     }
@@ -109,10 +118,26 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         match game_mode {
             GameMode::Limited => {
-                PlayerSettings { health: 100_u8, cash: 2000_u128 * SCALING_FACTOR, bag_limit: 100 }
+                PlayerSettings {
+                    health: 100_u8,
+                    cash: 2000_u128 * SCALING_FACTOR,
+                    wanted: 30,
+                    attack: 0,
+                    defense: 0,
+                    transport: 100,
+                    speed: 30
+                }
             },
             GameMode::Unlimited => {
-                PlayerSettings { health: 100_u8, cash: 50000_u128 * SCALING_FACTOR, bag_limit: 100 }
+                PlayerSettings {
+                    health: 100_u8,
+                    cash: 3000_u128 * SCALING_FACTOR,
+                    wanted: 20,
+                    attack: 0,
+                    defense: 0,
+                    transport: 100,
+                    speed: 30
+                }
             },
         }
     }
@@ -126,17 +151,19 @@ impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
                     travel: 75, // 75% chance of travel encounter
                     capture: 60, // 60% chance of capture
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-                    cops_drug_threshold: 2, // cops encounter threshold
+                    cops_drug_threshold: 5, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
+                    wanted_decrease_by_turn : 5,
                 }
             },
             GameMode::Unlimited => {
                 RiskSettings {
-                    travel: 10, // 10% chance of travel encounter
-                    capture: 10, // 10% chance of capture
+                    travel: 50, // 50% chance of travel encounter
+                    capture: 60, // 60% chance of capture
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-                    cops_drug_threshold: 50, // cops encounter threshold
+                    cops_drug_threshold: 10, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
+                    wanted_decrease_by_turn : 2,
                 }
             },
         }
@@ -152,6 +179,8 @@ impl DecideSettingsImpl of SettingsTrait<DecideSettings> {
                     gangs_payment_cash_pct: 20, //% of cash
                     cops_payment_drug_pct: 20, //% of drug
                     health_impact: 15,
+                    wanted_impact_run: 4,
+                    wanted_impact_fight: 10,
                 }
             },
             GameMode::Unlimited => {
@@ -159,6 +188,8 @@ impl DecideSettingsImpl of SettingsTrait<DecideSettings> {
                     gangs_payment_cash_pct: 25, //% of cash
                     cops_payment_drug_pct: 25, //% of drug
                     health_impact: 10,
+                    wanted_impact_run: 2,
+                    wanted_impact_fight: 8,
                 }
             },
         }
@@ -200,14 +231,14 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
 //
 //
 
-impl ShopSettingsImpl of ScalingSettingsTrait<ShopSettings> {
-    fn get(game_mode: GameMode, turn: usize) -> ShopSettings {
+impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
+    fn get(game_mode: GameMode) -> ShopSettings {
         match game_mode {
             GameMode::Limited => {
-                ShopSettings { max_item_allowed: 2, max_item_level: 1, }
+                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 2 }
             },
             GameMode::Unlimited => {
-                ShopSettings { max_item_allowed: 3, max_item_level: 2, }
+                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 5 }
             },
         }
     }
@@ -220,16 +251,16 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                 // level is ignored in Limited mode
                 match item_id {
                     ItemEnum::Attack => ItemSettings {
-                        name: 'Glock', cost: 500 * SCALING_FACTOR, value: 20
+                        name: 'Knife', cost: 500 * SCALING_FACTOR, value: 20
                     },
                     ItemEnum::Defense => ItemSettings {
-                        name: 'Leather Jacket', cost: 350 * SCALING_FACTOR, value: 10
+                        name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 35
                     },
                     ItemEnum::Transport => ItemSettings {
-                        name: 'Trenchcoat', cost: 600 * SCALING_FACTOR, value: 20
+                        name: 'Fanny pack', cost: 600 * SCALING_FACTOR, value: 20
                     },
                     ItemEnum::Speed => ItemSettings {
-                        name: 'Kicks', cost: 350 * SCALING_FACTOR, value: 15
+                        name: 'Shoes', cost: 350 * SCALING_FACTOR, value: 15
                     },
                 }
             },
@@ -239,47 +270,49 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                         if level == 1 {
                             ItemSettings { name: 'Knife', cost: 250 * SCALING_FACTOR, value: 10 }
                         } else if level == 2 {
-                            ItemSettings { name: 'Glock', cost: 1800 * SCALING_FACTOR, value: 15 }
+                            ItemSettings { name: 'Glock', cost: 1800 * SCALING_FACTOR, value: 25 }
                         } else {
-                            ItemSettings { name: 'Uzi', cost: 9500 * SCALING_FACTOR, value: 25 }
+                            ItemSettings { name: 'Uzi', cost: 9500 * SCALING_FACTOR, value: 50 }
                         }
                     },
                     ItemEnum::Defense => {
                         if level == 1 {
                             ItemSettings {
-                                name: 'Leather Jacket', cost: 350 * SCALING_FACTOR, value: 10
+                                name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 25
                             }
                         } else if level == 2 {
-                            ItemSettings { name: 'Kevlar', cost: 2200 * SCALING_FACTOR, value: 15 }
-                        } else {
                             ItemSettings {
-                                name: 'Bulletproof Vest', cost: 12000 * SCALING_FACTOR, value: 25
+                                name: 'Leather Jacket', cost: 2200 * SCALING_FACTOR, value: 40
                             }
+                        } else {
+                            ItemSettings { name: 'Kevlar', cost: 12000 * SCALING_FACTOR, value: 60 }
                         }
                     },
                     ItemEnum::Transport => {
                         if level == 1 {
                             ItemSettings {
-                                name: 'Banana Bag', cost: 450 * SCALING_FACTOR, value: 20
+                                name: 'Fanny pack', cost: 450 * SCALING_FACTOR, value: 20
                             }
                         } else if level == 2 {
                             ItemSettings {
-                                name: 'Trenchcoat', cost: 3100 * SCALING_FACTOR, value: 30
+                                name: 'Backpack', cost: 3100 * SCALING_FACTOR, value: 50
                             }
                         } else {
                             ItemSettings {
-                                name: 'Sport Bag', cost: 18000 * SCALING_FACTOR, value: 50
+                                name: 'Duffle Bag', cost: 18000 * SCALING_FACTOR, value: 100
                             }
                         }
                     },
                     ItemEnum::Speed => {
                         if level == 1 {
-                            ItemSettings { name: 'Kicks', cost: 250 * SCALING_FACTOR, value: 10 }
+                            ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 10 }
                         } else if level == 2 {
-                            ItemSettings { name: 'Bike', cost: 2400 * SCALING_FACTOR, value: 15 }
+                            ItemSettings {
+                                name: 'Skateboard', cost: 2400 * SCALING_FACTOR, value: 25
+                            }
                         } else {
                             ItemSettings {
-                                name: 'Motorbike', cost: 25000 * SCALING_FACTOR, value: 30
+                                name: 'Bicycle', cost: 25000 * SCALING_FACTOR, value: 40
                             }
                         }
                     },

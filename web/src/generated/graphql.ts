@@ -228,7 +228,9 @@ export type Item = {
   game_id?: Maybe<Scalars['u32']>;
   item_id?: Maybe<Scalars['Enum']>;
   level?: Maybe<Scalars['u8']>;
+  name?: Maybe<Scalars['felt252']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
+  value?: Maybe<Scalars['usize']>;
 };
 
 export type ItemConnection = {
@@ -252,7 +254,9 @@ export enum ItemOrderField {
   GameId = 'GAME_ID',
   ItemId = 'ITEM_ID',
   Level = 'LEVEL',
-  PlayerId = 'PLAYER_ID'
+  Name = 'NAME',
+  PlayerId = 'PLAYER_ID',
+  Value = 'VALUE'
 }
 
 export type ItemWhereInput = {
@@ -271,6 +275,13 @@ export type ItemWhereInput = {
   levelLT?: InputMaybe<Scalars['u8']>;
   levelLTE?: InputMaybe<Scalars['u8']>;
   levelNEQ?: InputMaybe<Scalars['u8']>;
+  name?: InputMaybe<Scalars['felt252']>;
+  nameEQ?: InputMaybe<Scalars['felt252']>;
+  nameGT?: InputMaybe<Scalars['felt252']>;
+  nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameLT?: InputMaybe<Scalars['felt252']>;
+  nameLTE?: InputMaybe<Scalars['felt252']>;
+  nameNEQ?: InputMaybe<Scalars['felt252']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -278,6 +289,13 @@ export type ItemWhereInput = {
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  value?: InputMaybe<Scalars['usize']>;
+  valueEQ?: InputMaybe<Scalars['usize']>;
+  valueGT?: InputMaybe<Scalars['usize']>;
+  valueGTE?: InputMaybe<Scalars['usize']>;
+  valueLT?: InputMaybe<Scalars['usize']>;
+  valueLTE?: InputMaybe<Scalars['usize']>;
+  valueNEQ?: InputMaybe<Scalars['usize']>;
 };
 
 export type Market = {
@@ -389,19 +407,22 @@ export enum OrderDirection {
 
 export type Player = {
   __typename?: 'Player';
-  bag_limit?: Maybe<Scalars['usize']>;
+  attack?: Maybe<Scalars['usize']>;
   cash?: Maybe<Scalars['u128']>;
+  defense?: Maybe<Scalars['usize']>;
   drug_count?: Maybe<Scalars['usize']>;
   entity?: Maybe<Entity>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
   location_id?: Maybe<Scalars['Enum']>;
+  max_turns?: Maybe<Scalars['usize']>;
   name?: Maybe<Scalars['felt252']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
-  run_attempts?: Maybe<Scalars['u8']>;
+  speed?: Maybe<Scalars['usize']>;
   status?: Maybe<Scalars['Enum']>;
-  turns_remaining?: Maybe<Scalars['usize']>;
-  turns_remaining_on_death?: Maybe<Scalars['usize']>;
+  transport?: Maybe<Scalars['usize']>;
+  turn?: Maybe<Scalars['usize']>;
+  wanted?: Maybe<Scalars['u8']>;
 };
 
 export type PlayerConnection = {
@@ -422,28 +443,31 @@ export type PlayerOrder = {
 };
 
 export enum PlayerOrderField {
-  BagLimit = 'BAG_LIMIT',
+  Attack = 'ATTACK',
   Cash = 'CASH',
+  Defense = 'DEFENSE',
   DrugCount = 'DRUG_COUNT',
   GameId = 'GAME_ID',
   Health = 'HEALTH',
   LocationId = 'LOCATION_ID',
+  MaxTurns = 'MAX_TURNS',
   Name = 'NAME',
   PlayerId = 'PLAYER_ID',
-  RunAttempts = 'RUN_ATTEMPTS',
+  Speed = 'SPEED',
   Status = 'STATUS',
-  TurnsRemaining = 'TURNS_REMAINING',
-  TurnsRemainingOnDeath = 'TURNS_REMAINING_ON_DEATH'
+  Transport = 'TRANSPORT',
+  Turn = 'TURN',
+  Wanted = 'WANTED'
 }
 
 export type PlayerWhereInput = {
-  bag_limit?: InputMaybe<Scalars['usize']>;
-  bag_limitEQ?: InputMaybe<Scalars['usize']>;
-  bag_limitGT?: InputMaybe<Scalars['usize']>;
-  bag_limitGTE?: InputMaybe<Scalars['usize']>;
-  bag_limitLT?: InputMaybe<Scalars['usize']>;
-  bag_limitLTE?: InputMaybe<Scalars['usize']>;
-  bag_limitNEQ?: InputMaybe<Scalars['usize']>;
+  attack?: InputMaybe<Scalars['usize']>;
+  attackEQ?: InputMaybe<Scalars['usize']>;
+  attackGT?: InputMaybe<Scalars['usize']>;
+  attackGTE?: InputMaybe<Scalars['usize']>;
+  attackLT?: InputMaybe<Scalars['usize']>;
+  attackLTE?: InputMaybe<Scalars['usize']>;
+  attackNEQ?: InputMaybe<Scalars['usize']>;
   cash?: InputMaybe<Scalars['u128']>;
   cashEQ?: InputMaybe<Scalars['u128']>;
   cashGT?: InputMaybe<Scalars['u128']>;
@@ -451,6 +475,13 @@ export type PlayerWhereInput = {
   cashLT?: InputMaybe<Scalars['u128']>;
   cashLTE?: InputMaybe<Scalars['u128']>;
   cashNEQ?: InputMaybe<Scalars['u128']>;
+  defense?: InputMaybe<Scalars['usize']>;
+  defenseEQ?: InputMaybe<Scalars['usize']>;
+  defenseGT?: InputMaybe<Scalars['usize']>;
+  defenseGTE?: InputMaybe<Scalars['usize']>;
+  defenseLT?: InputMaybe<Scalars['usize']>;
+  defenseLTE?: InputMaybe<Scalars['usize']>;
+  defenseNEQ?: InputMaybe<Scalars['usize']>;
   drug_count?: InputMaybe<Scalars['usize']>;
   drug_countEQ?: InputMaybe<Scalars['usize']>;
   drug_countGT?: InputMaybe<Scalars['usize']>;
@@ -473,6 +504,13 @@ export type PlayerWhereInput = {
   healthLTE?: InputMaybe<Scalars['u8']>;
   healthNEQ?: InputMaybe<Scalars['u8']>;
   location_id?: InputMaybe<Scalars['Enum']>;
+  max_turns?: InputMaybe<Scalars['usize']>;
+  max_turnsEQ?: InputMaybe<Scalars['usize']>;
+  max_turnsGT?: InputMaybe<Scalars['usize']>;
+  max_turnsGTE?: InputMaybe<Scalars['usize']>;
+  max_turnsLT?: InputMaybe<Scalars['usize']>;
+  max_turnsLTE?: InputMaybe<Scalars['usize']>;
+  max_turnsNEQ?: InputMaybe<Scalars['usize']>;
   name?: InputMaybe<Scalars['felt252']>;
   nameEQ?: InputMaybe<Scalars['felt252']>;
   nameGT?: InputMaybe<Scalars['felt252']>;
@@ -487,28 +525,35 @@ export type PlayerWhereInput = {
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  run_attempts?: InputMaybe<Scalars['u8']>;
-  run_attemptsEQ?: InputMaybe<Scalars['u8']>;
-  run_attemptsGT?: InputMaybe<Scalars['u8']>;
-  run_attemptsGTE?: InputMaybe<Scalars['u8']>;
-  run_attemptsLT?: InputMaybe<Scalars['u8']>;
-  run_attemptsLTE?: InputMaybe<Scalars['u8']>;
-  run_attemptsNEQ?: InputMaybe<Scalars['u8']>;
+  speed?: InputMaybe<Scalars['usize']>;
+  speedEQ?: InputMaybe<Scalars['usize']>;
+  speedGT?: InputMaybe<Scalars['usize']>;
+  speedGTE?: InputMaybe<Scalars['usize']>;
+  speedLT?: InputMaybe<Scalars['usize']>;
+  speedLTE?: InputMaybe<Scalars['usize']>;
+  speedNEQ?: InputMaybe<Scalars['usize']>;
   status?: InputMaybe<Scalars['Enum']>;
-  turns_remaining?: InputMaybe<Scalars['usize']>;
-  turns_remainingEQ?: InputMaybe<Scalars['usize']>;
-  turns_remainingGT?: InputMaybe<Scalars['usize']>;
-  turns_remainingGTE?: InputMaybe<Scalars['usize']>;
-  turns_remainingLT?: InputMaybe<Scalars['usize']>;
-  turns_remainingLTE?: InputMaybe<Scalars['usize']>;
-  turns_remainingNEQ?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_death?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathEQ?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathGT?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathGTE?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathLT?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathLTE?: InputMaybe<Scalars['usize']>;
-  turns_remaining_on_deathNEQ?: InputMaybe<Scalars['usize']>;
+  transport?: InputMaybe<Scalars['usize']>;
+  transportEQ?: InputMaybe<Scalars['usize']>;
+  transportGT?: InputMaybe<Scalars['usize']>;
+  transportGTE?: InputMaybe<Scalars['usize']>;
+  transportLT?: InputMaybe<Scalars['usize']>;
+  transportLTE?: InputMaybe<Scalars['usize']>;
+  transportNEQ?: InputMaybe<Scalars['usize']>;
+  turn?: InputMaybe<Scalars['usize']>;
+  turnEQ?: InputMaybe<Scalars['usize']>;
+  turnGT?: InputMaybe<Scalars['usize']>;
+  turnGTE?: InputMaybe<Scalars['usize']>;
+  turnLT?: InputMaybe<Scalars['usize']>;
+  turnLTE?: InputMaybe<Scalars['usize']>;
+  turnNEQ?: InputMaybe<Scalars['usize']>;
+  wanted?: InputMaybe<Scalars['u8']>;
+  wantedEQ?: InputMaybe<Scalars['u8']>;
+  wantedGT?: InputMaybe<Scalars['u8']>;
+  wantedGTE?: InputMaybe<Scalars['u8']>;
+  wantedLT?: InputMaybe<Scalars['u8']>;
+  wantedLTE?: InputMaybe<Scalars['u8']>;
+  wantedNEQ?: InputMaybe<Scalars['u8']>;
 };
 
 export type Query = {
@@ -538,6 +583,8 @@ export type QueryDrugModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<DrugOrder>;
   where?: InputMaybe<DrugWhereInput>;
 };
@@ -549,6 +596,8 @@ export type QueryEntitiesArgs = {
   first?: InputMaybe<Scalars['Int']>;
   keys?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -562,6 +611,8 @@ export type QueryEventsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -570,6 +621,8 @@ export type QueryGameModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<GameOrder>;
   where?: InputMaybe<GameWhereInput>;
 };
@@ -580,6 +633,8 @@ export type QueryItemModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<ItemOrder>;
   where?: InputMaybe<ItemWhereInput>;
 };
@@ -590,6 +645,8 @@ export type QueryMarketModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<MarketOrder>;
   where?: InputMaybe<MarketWhereInput>;
 };
@@ -605,6 +662,8 @@ export type QueryMetadatasArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -618,6 +677,8 @@ export type QueryModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -626,6 +687,8 @@ export type QueryPlayerModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<PlayerOrder>;
   where?: InputMaybe<PlayerWhereInput>;
 };
@@ -636,6 +699,8 @@ export type QueryRisksModelsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<RisksOrder>;
   where?: InputMaybe<RisksWhereInput>;
 };
@@ -656,6 +721,8 @@ export type QuerySystemCallsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -664,6 +731,8 @@ export type QuerySystemsArgs = {
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type Risks = {
@@ -795,7 +864,7 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, cash?: any | null, health?: any | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, cash?: any | null, health?: any | null, turn?: any | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
@@ -817,7 +886,7 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, health?: any | null, drug_count?: any | null, bag_limit?: any | null, location_id?: any | null, turns_remaining?: any | null, turns_remaining_on_death?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | { __typename: 'Risks' } | null> | null } | null } | null> | null } | null };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -884,7 +953,6 @@ export const GlobalScoresDocument = `
   playerModels(
     first: $limit
     after: $cursor
-    where: {turns_remaining: 0}
     order: {direction: DESC, field: CASH}
   ) {
     total_count
@@ -895,6 +963,7 @@ export const GlobalScoresDocument = `
         name
         cash
         health
+        turn
       }
       cursor
     }
@@ -1047,12 +1116,16 @@ export const PlayerEntityDocument = `
             name
             cash
             status
-            health
-            drug_count
-            bag_limit
             location_id
-            turns_remaining
-            turns_remaining_on_death
+            drug_count
+            health
+            turn
+            max_turns
+            attack
+            defense
+            transport
+            speed
+            wanted
           }
           ... on Drug {
             drug_id
@@ -1061,6 +1134,8 @@ export const PlayerEntityDocument = `
           ... on Item {
             item_id
             level
+            name
+            value
           }
         }
       }

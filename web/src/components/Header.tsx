@@ -53,6 +53,7 @@ const Header = ({ back }: HeaderProps) => {
       return acc + drug.quantity;
     }, 0);
 
+
     setInventory(inventory);
   }, [playerEntity]);
 
@@ -89,14 +90,14 @@ const Header = ({ back }: HeaderProps) => {
                 <HStack>
                   <Heart /> <Text>{playerEntity.health}</Text>
                 </HStack>
-                {/* <Divider
+                <Divider
                   orientation="vertical"
                   borderColor="neon.600"
                   h="12px"
                 />
-                  <HStack color="red" >
-                  <Siren /> <Text>69%</Text>
-                </HStack> */}
+                 <HStack color={playerEntity.wanted > 68 ? "red": (playerEntity.wanted > 29 ? "yellow.400" : "neon.400")} >
+                  <Siren /> <Text>{playerEntity.wanted}</Text>
+                </HStack>
               </HStack>
             </Flex>
           </HStack>

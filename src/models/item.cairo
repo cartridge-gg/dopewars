@@ -11,16 +11,18 @@ struct Item {
     player_id: ContractAddress,
     #[key]
     item_id: ItemEnum,
-    level: u8
+    level: u8,
+    name: felt252,
+    value: usize,
 }
 
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum ItemEnum {
-    Attack,
-    Defense,
-    Transport,
-    Speed,
+    Attack, // figth
+    Defense, // less dmgs
+    Transport, // bag size
+    Speed, // run away 
 // Style
 }
 

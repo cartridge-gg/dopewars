@@ -5,6 +5,7 @@ import {
   Text,
   VStack,
   Card,
+  Tooltip
 } from "@chakra-ui/react";
 
 import React from "react";
@@ -14,14 +15,12 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
-import {iconByTypeAndLevel} from "@/pages/[gameId]/pawnshop";
+import { iconByTypeAndLevel } from "@/pages/[gameId]/pawnshop";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
-  const {
-    account,
-  } = useDojoContext();
+  const { account } = useDojoContext();
   const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
     gameId,
     address: account?.address,
@@ -34,35 +33,38 @@ export const Inventory = ({ ...props }: StyleProps) => {
           Your Inventory
         </Text>
         <HStack color="yellow.400">
-        <HStack gap="5px" justify="center">
-          { playerEntity?.items.map((item) => {
+          <HStack gap="5px" justify="center">
+            {playerEntity?.items.map((item) => {
               return (
-                  <>
-                    <HStack gap="10px">
-                      <HStack color="yellow.400">
-                      {iconByTypeAndLevel[item.id][item.level]({ boxSize: "26" })}
-                      </HStack>
+                <>
+                  <HStack gap="10px">
+                  <Tooltip label={`${item.name} (+${item.value})`}>
+                    <HStack color="yellow.400" >
+                     <>
+                     {iconByTypeAndLevel[item.id][item.level]({
+                        boxSize: "26",
+                      })} 
+                     </>
                     </HStack>
-                   
-                  </>
-              )
+                    </Tooltip>
+                  </HStack>
+                </>
+              );
             })}
-        </HStack>
+          </HStack>
 
-        <Divider
-                      h="10px"
-                      mx="10px"
-                      orientation="vertical"
-                      borderWidth="1px"
-                      borderColor="neon.600"
-                    />
-
+          <Divider
+            h="10px"
+            mx="10px"
+            orientation="vertical"
+            borderWidth="1px"
+            borderColor="neon.600"
+          />
 
           <Bag />
           <Text>
-            {playerEntity?.drugCount}/{playerEntity?.bagLimit}
+            {playerEntity?.drugCount}/{playerEntity?.getTransport()}
           </Text>
-
         </HStack>
       </HStack>
       <Card
@@ -77,7 +79,6 @@ export const Inventory = ({ ...props }: StyleProps) => {
           },
         }}
       >
-         
         <HStack gap="5px" justify="center">
           {playerEntity?.drugCount === 0 ? (
             <Text color="neon.500">Your bag is empty</Text>

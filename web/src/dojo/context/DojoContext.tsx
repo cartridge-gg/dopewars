@@ -3,7 +3,7 @@ import { SetupResult } from "../setup/setup";
 import { useBurner } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
 
-export const DojoContext = createContext<RyoContext | null>(null);
+export const DojoContext = createContext<RyoContext>();
 
 export type RyoContext = {
     setup: SetupResult;

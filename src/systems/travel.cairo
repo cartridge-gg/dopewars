@@ -134,7 +134,12 @@ mod travel {
                     };
                 };
 
-                player.turns_remaining -= 1;
+                if player.wanted > risk_settings.wanted_decrease_by_turn {
+                    player.wanted -=risk_settings.wanted_decrease_by_turn
+                }
+
+                player.turn += 1;
+                
             }
 
             player.location_id = next_location_id;

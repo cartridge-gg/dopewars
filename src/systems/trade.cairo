@@ -34,7 +34,6 @@ mod trade {
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game, GameTrait};
-    use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::market::{Market, MarketTrait};
 
     use super::ITrade;
@@ -104,7 +103,7 @@ mod trade {
             let mut player = get!(self.world(), (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');
             assert(player.can_continue(), 'player cannot trade');
-            assert(player.drug_count + quantity <= player.bag_limit, 'no bag space');
+            assert(player.drug_count + quantity <= player.get_transport(self.world()), 'no bag space');
 
             let mut market = get!(self.world(), (game_id, location_id, drug_id).into(), Market);
 

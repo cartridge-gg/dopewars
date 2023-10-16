@@ -30,9 +30,6 @@ import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Location } from "@/dojo/types";
 import { MarketEventData } from "@/dojo/events";
-// import { useEntityQuery, useComponentValue } from "@latticexyz/react";
-// import { Has } from "@latticexyz/recs";
-// import { num, ec } from "starknet";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useSystems } from "@/dojo/hooks/useSystems";
@@ -51,17 +48,16 @@ export default function Travel() {
   const gameId = router.query.gameId as string;
   const [targetId, setTargetId] = useState<string>();
   const [currentLocationId, setCurrentLocationId] = useState<string>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+ 
   const { toast } = useToast();
   const { account } = useDojoContext();
-  const { travel } = useSystems();
+  const { travel, isPending } = useSystems();
 
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
   });
- 
+
   const { locationPrices } = useMarketPrices({
     gameId,
   });
@@ -73,7 +69,7 @@ export default function Travel() {
   }, [targetId]);
 
   useEffect(() => {
-    if (playerEntity && !isSubmitting) {
+    if (playerEntity && !isPending) {
       if (playerEntity.locationId) {
         setCurrentLocationId(playerEntity.locationId);
         setTargetId(playerEntity.locationId);
@@ -81,7 +77,7 @@ export default function Travel() {
         setTargetId(getLocationByType(Location.Central)?.id);
       }
     }
-  }, [playerEntity, isSubmitting]);
+  }, [playerEntity, isPending]);
 
   const prices = useMemo(() => {
     if (locationPrices && targetId) {
@@ -149,39 +145,51 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
     if (targetId) {
-      setIsSubmitting(true);
-      const locationId = getLocationById(targetId)?.type;
-      const { event, events, hash } = await travel( gameId, locationId);
-      if (event) {
-        return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
-      }
+      
 
-      toast(
-        `You've traveled to ${locationName}`,
-        Car,
-        `http://amazing_explorer/${hash}`,
-      );
-      router.push(`/${gameId}/turn`);
-
-      // market events
-      if (events) {
-        for (let event of events) {
-          const e = event as MarketEventData;
-          const msg = e.increase
-            ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${
-              getLocationByType(Number(e.locationId))?.name
-              }`
-            : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${
-              getLocationByType(Number(e.locationId))?.name
-              }`;
-          const icon = e.increase ? Siren : Truck;
-          toast(msg, icon, `http://amazing_explorer/${hash}`, 6000);
+      try {
+        const locationId = getLocationById(targetId)?.type;
+        const { event, events, hash } = await travel(gameId, locationId);
+        if (event) {
+          return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
         }
+
+        toast({
+          message: `You've traveled to ${locationName}`,
+          icon: Car,
+          link: `http://amazing_explorer/${hash}`,
+        });
+
+        router.push(`/${gameId}/turn`);
+
+        // market events
+        if (events) {
+          for (let event of events) {
+            const e = event as MarketEventData;
+            const msg = e.increase
+              ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${
+                  getLocationByType(Number(e.locationId))?.name
+                }`
+              : `A shipment of ${
+                  getDrugByType(Number(e.drugId))?.name
+                } has arrived to ${
+                  getLocationByType(Number(e.locationId))?.name
+                }`;
+            const icon = e.increase ? Siren : Truck;
+            toast({
+              message: msg,
+              icon: icon,
+              link: `http://amazing_explorer/${hash}`,
+              duration: 6000,
+            });
+          }
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel, toast]);
+  }, [targetId, router, gameId, travel,locationName, toast]);
 
-  
   if (!playerEntity || !locationPrices) return <></>;
 
   return (
@@ -215,7 +223,7 @@ export default function Travel() {
         <Spacer minH="100px" />
         <HStack w={["auto !important", "full"]} pointerEvents="all">
           <Button
-            isDisabled={isSubmitting}
+            isDisabled={isPending}
             w="full"
             onClick={() => router.back()}
           >
@@ -224,7 +232,7 @@ export default function Travel() {
           <Button
             w="full"
             isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isSubmitting /*&& !txError*/}
+            isLoading={isPending /*&& !txError*/}
             onClick={onContinue}
           >
             Travel
@@ -258,7 +266,7 @@ export default function Travel() {
         />
         <HStack w="full" pointerEvents="all">
           <Button
-            isDisabled={isSubmitting}
+            isDisabled={isPending}
             w="full"
             onClick={() => router.back()}
           >
@@ -267,7 +275,7 @@ export default function Travel() {
           <Button
             w={["full", "auto"]}
             isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isSubmitting /*&& !txError*/}
+            isLoading={isPending /*&& !txError*/}
             onClick={onContinue}
           >
             Travel

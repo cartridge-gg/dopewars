@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "world",
-    "address": "0x51d1bf777ddb43361a746029303fdd2fd45f4b898243c2769b5cd70a5fa7c19",
-    "class_hash": "0x5f14aacb2bc68686eca3b024df6b79acfa8755976c9d99967af6fb99b650b8",
+    "address": "0x6520bf0821b49c60e712237221c0f9e2f54fa73ad76ed5448c845279704f14b",
+    "class_hash": "0x2611f073498530f0faa0fda87956a405ae8cbd85cc6a28f4d8961d66cc51e4b",
     "abi": [
       {
         "type": "impl",
@@ -266,6 +266,22 @@
             "outputs": [
               {
                 "type": "(core::array::Span::<core::felt252>, core::array::Span::<core::array::Span::<core::felt252>>)"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "entity_ids",
+            "inputs": [
+              {
+                "name": "model",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::array::Span::<core::felt252>"
               }
             ],
             "state_mutability": "view"
@@ -799,8 +815,8 @@
   "contracts": [
     {
       "name": "lobby",
-      "address": "0x76ff3c63e60a233bf75bf50f9f9702090c9d9846633196de660020521ad03eb",
-      "class_hash": "0x3c5b4e49efc13c6a694b57224a5a07c3c0f4a1a9ccfc2292d746707ee745e57",
+      "address": "0x5b2e0a0999c48270ed8268b1449e053edcef1a35ab09483bbcc8dc910a25916",
+      "class_hash": "0x113c3354190c92868837e1bea6d4e93edf218ed88bc3240a1188bef3a07015d",
       "abi": [
         {
           "type": "impl",
@@ -943,8 +959,8 @@
     },
     {
       "name": "trade",
-      "address": "0x40ff8bb06f9b1f42a43372875e476f73a6f3b4d5255fedf80debef1970034a7",
-      "class_hash": "0x2eb21d1fff45eb2684bbd2dec8c7c6212c3838614cc448f3c58dde87f140551",
+      "address": "0x6fb35c74cd110f2033b8943d28e48df86bfaab9743d148a64e8b3667f24153a",
+      "class_hash": "0x7db9623c516be07ab95d4fece76193f90d72a34ed89e5c9dfd14bda326f6da8",
       "abi": [
         {
           "type": "impl",
@@ -1154,8 +1170,8 @@
     },
     {
       "name": "travel",
-      "address": "0x75ce1eab09bbbc800a995886210df90ca5d77485e6991783354d47e79d235e",
-      "class_hash": "0x79fe65f7d387ee6f7aafa1ca15dcfa01e3764c7a6b29fe3924fd5bf304a0ee6",
+      "address": "0x7de1153d977237ebec35fd4db925cae69bf7768ca03e52d09ad9ccd39cc6f5f",
+      "class_hash": "0x6d64ca1533a4d020c8a1e8b18e2f85cbe1d14232b485c88d70fef90eb22d118",
       "abi": [
         {
           "type": "impl",
@@ -1386,8 +1402,8 @@
     },
     {
       "name": "decide",
-      "address": "0x3411a1fc8f64c4c1bf2cf9be3b91cc7984d4e5a7e717b74b6bda79529867db0",
-      "class_hash": "0x7576134dfb464d22f20a2021d24f49ab822ba59466634492070a581f95b7ef5",
+      "address": "0x41eda9dde516f12219852e3935069e5c60acccc7f7ace326416287ee3449ba8",
+      "class_hash": "0x11cb81b91ec513c845b64293e96886387434a5612e2302d239fdca49a2e337e",
       "abi": [
         {
           "type": "impl",
@@ -1404,6 +1420,10 @@
             },
             {
               "name": "Pay",
+              "type": "()"
+            },
+            {
+              "name": "Fight",
               "type": "()"
             }
           ]
@@ -1574,119 +1594,13 @@
     },
     {
       "name": "shop",
-      "address": "0xddd44faf0ce7ff91fa8aec58a7cb4187841a1b4d6447283dbdf53814322dad",
-      "class_hash": "0x1a3856ab4789052d3e09b7296bc8e6cde7dbbb77cb90ed5f2d94c661d4e057d",
+      "address": "0x1bb601f4f576714a1544d1bbd0d80619a2fb5cd7eb8fcf62b06cb607ef28bf3",
+      "class_hash": "0x30623b056eb49da40ba64b89f15961747ffbbe3a7e540c4b4931d5fcdb4ba3f",
       "abi": [
         {
           "type": "impl",
           "name": "ShopImpl",
           "interface_name": "rollyourown::systems::shop::IShop"
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::models::player::PlayerStatus",
-          "variants": [
-            {
-              "name": "Normal",
-              "type": "()"
-            },
-            {
-              "name": "BeingMugged",
-              "type": "()"
-            },
-            {
-              "name": "BeingArrested",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::models::location::LocationEnum",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::models::player::Player",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "status",
-              "type": "rollyourown::models::player::PlayerStatus"
-            },
-            {
-              "name": "location_id",
-              "type": "rollyourown::models::location::LocationEnum"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u128"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "run_attempts",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "drug_count",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "bag_limit",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "turns_remaining",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "turns_remaining_on_death",
-              "type": "core::integer::u32"
-            }
-          ]
         },
         {
           "type": "enum",
@@ -1750,7 +1664,7 @@
             },
             {
               "name": "value",
-              "type": "core::integer::u128"
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -1773,8 +1687,12 @@
               "name": "is_open",
               "inputs": [
                 {
-                  "name": "player",
-                  "type": "rollyourown::models::player::Player"
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [
@@ -1908,8 +1826,8 @@
     },
     {
       "name": "devtools",
-      "address": "0x530fb979201b1e09c2b384169d75839a9fabc6fbd8dc46457a3e5fd962a03f3",
-      "class_hash": "0x528fa78cc168613fcd7965f11e004f962c1b2a1313773c1c7f4668c51d86139",
+      "address": "0x5a5d586acbd67fa201f031d2013afebcf6cf421057c128bb06ae49f5e3c8277",
+      "class_hash": "0x2149f12c01c00dc17f9e10a749a64202067292e1d2d968f7d3920a9a4b38e53",
       "abi": [
         {
           "type": "impl",
@@ -1920,6 +1838,13 @@
           "type": "interface",
           "name": "rollyourown::systems::devtools::IDevtools",
           "items": [
+            {
+              "type": "function",
+              "name": "failing_tx",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
             {
               "type": "function",
               "name": "feed_leaderboard",
@@ -2372,6 +2297,21 @@
           "key": false
         },
         {
+          "name": "turn",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "max_turns",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "drug_count",
+          "type": "usize",
+          "key": false
+        },
+        {
           "name": "cash",
           "type": "u128",
           "key": false
@@ -2382,32 +2322,32 @@
           "key": false
         },
         {
-          "name": "run_attempts",
+          "name": "attack",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "defense",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "transport",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "speed",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "wanted",
           "type": "u8",
-          "key": false
-        },
-        {
-          "name": "drug_count",
-          "type": "usize",
-          "key": false
-        },
-        {
-          "name": "bag_limit",
-          "type": "usize",
-          "key": false
-        },
-        {
-          "name": "turns_remaining",
-          "type": "usize",
-          "key": false
-        },
-        {
-          "name": "turns_remaining_on_death",
-          "type": "usize",
           "key": false
         }
       ],
-      "class_hash": "0x761fbdef3d6e7684b9e07e38f93ce0a2b693cdd2f9136f6c0866863a361f493",
+      "class_hash": "0x7e0ec9f3959b8a7eea12af505172988aac7c22cbcb822d6b619bccab4c30ec3",
       "abi": [
         {
           "type": "function",
@@ -2966,9 +2906,19 @@
           "name": "level",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "name",
+          "type": "felt252",
+          "key": false
+        },
+        {
+          "name": "value",
+          "type": "usize",
+          "key": false
         }
       ],
-      "class_hash": "0x150fbd8a3723ccc001562f8498f77e722d502cd8375e8c6b97c5cccff7f2ff9",
+      "class_hash": "0x186918ab7915a33c0e40c1306d40443ef05d1cf6931b50ef499919d5610a817",
       "abi": [
         {
           "type": "function",

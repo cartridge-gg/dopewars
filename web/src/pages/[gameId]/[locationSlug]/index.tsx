@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -38,6 +38,7 @@ export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
+
   const { account } = useDojoContext();
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -51,6 +52,8 @@ export default function Location() {
     gameId,
   });
 
+  const [isLastDay, setIsLastDay] = useState(false);
+
   useEffect(() => {
     if (playerEntity && locationId) {
       // check if player at right location
@@ -60,18 +63,23 @@ export default function Location() {
         );
         return;
       }
+
+      setIsLastDay(
+        playerEntity.maxTurns > 0 &&
+          playerEntity.turn + 1 >= playerEntity.maxTurns,
+      );
     }
   }, [locationId, playerEntity, router, gameId]);
+
   if (!playerEntity || !locationEntity || !gameEntity) {
     return <></>;
   }
 
-  const prefixTitle =
-    playerEntity.turnsRemaining === 0
-      ? "Final Day"
-      : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
-          gameEntity.maxTurns
-        }`;
+  const prefixTitle = isLastDay
+    ? "Final Day"
+    : `Day ${playerEntity.turn + 1} ${
+        playerEntity.maxTurns === 0 ? "" : "/ " + playerEntity.maxTurns
+      }`;
 
   return (
     <Layout
@@ -99,12 +107,17 @@ export default function Location() {
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
-        <SimpleGrid columns={2} w="full" gap={["10px","16px"]} fontSize={["16px","20px"]}>
+        <SimpleGrid
+          columns={2}
+          w="full"
+          gap={["10px", "16px"]}
+          fontSize={["16px", "20px"]}
+        >
           {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id)!;
             const canBuy =
               drug.price <= playerEntity.cash &&
-              playerEntity.drugCount < playerEntity.bagLimit;
+              playerEntity.drugCount < playerEntity.getTransport();
             const canSell = !!playerEntity.drugs.find(
               (d) => d.id === drug.id && d.quantity > 0,
             );
@@ -112,9 +125,9 @@ export default function Location() {
               <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader
                   textTransform="uppercase"
-                  fontSize={["16px","20px"]}
+                  fontSize={["16px", "20px"]}
                   textAlign="left"
-                  padding={["6px 10px","10px 20px"]}
+                  padding={["6px 10px", "10px 20px"]}
                 >
                   {drugInfo.name}
                 </CardHeader>
@@ -147,13 +160,19 @@ export default function Location() {
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
-               
-                <CardFooter fontSize={["14px","16px"]} flexDirection="column" padding={["0 10px","10px 20px"]} >
+
+                <CardFooter
+                  fontSize={["14px", "16px"]}
+                  flexDirection="column"
+                  padding={["0 10px", "10px 20px"]}
+                >
                   <HStack justifyContent="space-between">
                     <Text>{formatCash(drug.price)}</Text>
-                    <HStack >
+                    <HStack>
                       <Cart mb="4px" />
-                      <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
+                      <Text marginInlineStart="0 !important">
+                        {formatQuantity(drug.marketPool.quantity)}
+                      </Text>
                     </HStack>
                   </HStack>
                   <BuySellMobileToggle
@@ -166,21 +185,20 @@ export default function Location() {
             );
           })}
         </SimpleGrid>
-        <Box minH="60px"/>
+        <Box minH="60px" />
       </VStack>
       <Footer>
         <Button
           w={["full", "auto"]}
           onClick={() => {
-            if (playerEntity.turnsRemaining === 0) {
+            if (isLastDay) {
               router.push(`/${gameId}/end`);
-              return;
+            } else {
+              router.push(`/${gameId}/travel`);
             }
-
-            router.push(`/${gameId}/travel`);
           }}
         >
-          {playerEntity.turnsRemaining === 0 ? "End Game" : "Continue"}
+          {isLastDay ? "End Game" : "Continue"}
         </Button>
       </Footer>
     </Layout>
@@ -252,7 +270,6 @@ const BuySellMobileToggle = ({
         overflow="hidden"
         align="flex-start"
         display={["flex", "none"]}
-
         {...props}
       >
         <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />

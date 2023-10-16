@@ -139,7 +139,6 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
     case WorldEvents.Traveled:
     case WorldEvents.Bought:
     case WorldEvents.Sold:
-    case WorldEvents.MarketEvent:
       console.log(`event parse not implemented: ${eventType}`)
       //throw new Error(`event parse not implemented: ${eventType}`);
       return {

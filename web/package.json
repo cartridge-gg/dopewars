@@ -26,7 +26,6 @@
     "@dojoengine/utils": "0.1.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@latticexyz/react": "2.0.0-next.9",
     "@latticexyz/recs": "2.0.0-next.9",
     "@latticexyz/utils": "2.0.0-next.9",
     "@vercel/analytics": "^1.0.2",

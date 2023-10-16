@@ -42,11 +42,10 @@ export default function Market() {
   const [quantitySell, setQuantitySell] = useState(0);
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { addTrade } = usePlayerStore();
-  const { account} = useDojoContext();
-  const { buy, sell } = useSystems()
+  const { account } = useDojoContext();
+  const { buy, sell, isPending } = useSystems();
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
@@ -61,7 +60,7 @@ export default function Market() {
 
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    if (!locationEntity || !playerEntity || isSubmitting) return;
+    if (!locationEntity || !playerEntity || isPending) return;
 
     const market = locationEntity.drugMarkets.find((d) => d.id === drug?.id);
     if (!market) return;
@@ -73,10 +72,10 @@ export default function Market() {
 
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
-  }, [locationEntity, playerEntity, drug, isSubmitting]);
+  }, [locationEntity, playerEntity, drug, isPending]);
 
   const onTrade = useCallback(async () => {
-    setIsSubmitting(true);
+   
     playSound(Sounds.Trade);
 
     router.push(`/${gameId}/${location!.slug}`);
@@ -85,22 +84,36 @@ export default function Market() {
       hash = "",
       quantity;
 
-    if (tradeDirection === TradeDirection.Buy) {
-      ({ hash } = await buy( gameId, location!.type, drug!.type, quantityBuy));
-      toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
-      quantity = quantityBuy;
-    } else if (tradeDirection === TradeDirection.Sell) {
-      ({ hash } = await sell( gameId, location!.type, drug!.type, quantitySell));
-      toastMessage = `You sold ${quantitySell} ${drug!.name}`;
-      quantity = quantitySell;
+    try {
+      if (tradeDirection === TradeDirection.Buy) {
+        ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy));
+        toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
+        quantity = quantityBuy;
+      } else if (tradeDirection === TradeDirection.Sell) {
+        ({ hash } = await sell(
+          gameId,
+          location!.type,
+          drug!.type,
+          quantitySell,
+        ));
+        toastMessage = `You sold ${quantitySell} ${drug!.name}`;
+        quantity = quantitySell;
+      }
+
+      toast({
+        message: toastMessage,
+        icon: Cart,
+        link: `http://amazing_explorer/${hash}`,
+      });
+
+      addTrade(drug!.type, {
+        direction: tradeDirection,
+        quantity,
+      } as TradeType);
+    } catch (e) {
+      console.log(e);
     }
 
-    toast(toastMessage, Cart, `http://amazing_explorer/${hash}`);
-
-    addTrade(drug!.type, {
-      direction: tradeDirection,
-      quantity,
-    } as TradeType);
   }, [
     tradeDirection,
     quantityBuy,
@@ -170,29 +183,29 @@ export default function Market() {
           <AlertMessage message={`You have no ${drug.name} to sell`} />
         )}
 
-        <Footer alignItems={["flex-end", "flex-start"]}  height={["100%", "auto"]}>
-            <Button
-              w={["full", "auto"]}
-              onClick={()=> router.back()}
-            >
-              Back
-            </Button>
+        <Footer
+          alignItems={["flex-end", "flex-start"]}
+          height={["100%", "auto"]}
+        >
+          <Button w={["full", "auto"]} onClick={() => router.back()}>
+            Back
+          </Button>
 
           {tradeDirection == TradeDirection.Buy && canBuy && (
             <Button
-            w={["full", "auto"]}
-            isLoading={isSubmitting /* && !txError*/}
-            isDisabled={quantityBuy === 0}
-            onClick={onTrade}
-          >
-            Buy ({quantityBuy})
-          </Button>
+              w={["full", "auto"]}
+              isLoading={isPending /* && !txError*/}
+              isDisabled={quantityBuy === 0}
+              onClick={onTrade}
+            >
+              Buy ({quantityBuy})
+            </Button>
           )}
 
           {tradeDirection == TradeDirection.Sell && canSell && (
             <Button
               w={["full", "auto"]}
-              isLoading={isSubmitting /*&& !txError*/}
+              isLoading={isPending /*&& !txError*/}
               isDisabled={quantitySell === 0}
               onClick={onTrade}
             >
@@ -227,7 +240,7 @@ const QuantitySelector = ({
   useEffect(() => {
     if (type === TradeDirection.Buy) {
       let max_buyable = calculateMaxQuantity(market.marketPool, player.cash);
-      let bag_space = player.bagLimit - player.drugCount;
+      let bag_space = player.getTransport() - player.drugCount;
       setMax(Math.min(max_buyable, bag_space));
     } else if (type === TradeDirection.Sell) {
       const playerQuantity = player.drugs.find(
@@ -303,7 +316,7 @@ const QuantitySelector = ({
         </HStack>
       </Flex>
 
-      <HStack w="100%" py={2} >
+      <HStack w="100%" py={2}>
         <Box />
         <Slider
           aria-label="slider-quantity"
@@ -322,7 +335,7 @@ const QuantitySelector = ({
         <HStack spacing="0">
           <ArrowEnclosed
             direction="down"
-            boxSize={["36px","48px"]}
+            boxSize={["36px", "48px"]}
             cursor="pointer"
             onClick={onDown}
             color="neon.500"
@@ -332,7 +345,7 @@ const QuantitySelector = ({
           />
           <ArrowEnclosed
             direction="up"
-            boxSize={["36px","48px"]}
+            boxSize={["36px", "48px"]}
             cursor="pointer"
             onClick={onUp}
             color="neon.500"

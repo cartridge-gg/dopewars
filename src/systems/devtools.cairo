@@ -4,7 +4,9 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[starknet::interface]
 trait IDevtools<TContractState> {
+    fn failing_tx(self: @TContractState);
     fn feed_leaderboard(self: @TContractState, count: u32);
+    //fn get_cash(self: @TContractState, count: u32);
 }
 
 #[starknet::contract]
@@ -67,11 +69,14 @@ mod devtools {
                     location_id: LocationEnum::Home,
                     cash: rand * SCALING_FACTOR,
                     health: rand_100,
-                    run_attempts: 0,
                     drug_count: 0,
-                    bag_limit: 0,
-                    turns_remaining: 0,
-                    turns_remaining_on_death: 0,
+                    turn: rand_100.into(),
+                    max_turns: rand_100.into(),
+                    wanted:69,
+                    attack:42,
+                    defense:42,
+                    transport:42,
+                    speed:42,
                 };
 
                 set!(self.world(), (player));
@@ -79,6 +84,11 @@ mod devtools {
                 i += 1;
             };
         }
+
+        fn failing_tx(self: @ContractState) {
+            assert(0 == 1, 'failing tx');
+        }
+
     }
 }
 

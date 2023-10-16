@@ -11,3 +11,4 @@ export * from "./container";
 export * from "./slider";
 export * from "./menu";
 export * from "./tabs";
+export * from "./tooltip";

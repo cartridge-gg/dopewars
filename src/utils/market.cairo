@@ -66,8 +66,7 @@ fn market_variations(
     let game = get!(world, game_id, Game);
     let player = get!(world, (game_id, player_id), Player);
     let market_settings = MarketSettingsImpl::get(game.game_mode);
-    let turn = (game.max_turns - player.turns_remaining);
-    let scaling_factor = get_liquidity_scaling_factor(market_settings, turn);
+    let scaling_factor = get_liquidity_scaling_factor(market_settings, player.turn);
 
     loop {
         match locations.pop_front() {

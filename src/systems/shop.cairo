@@ -10,12 +10,12 @@ struct AvailableItem {
     name: felt252,
     level: u8,
     cost: u128,
-    value: u128
+    value: usize
 }
 
 #[starknet::interface]
 trait IShop<TContractState> {
-    fn is_open(self: @TContractState, player: Player) -> bool;
+    fn is_open(self: @TContractState, game_id: u32, player_id: ContractAddress) -> bool;
     fn buy_item(self: @TContractState, game_id: u32, item_id: ItemEnum);
     fn drop_item(self: @TContractState, game_id: u32, item_id: ItemEnum,);
     fn available_items(
@@ -40,19 +40,19 @@ mod shop {
 
     use super::{IShop, AvailableItem};
 
-     #[storage]
+    #[storage]
     struct Storage {
         world_dispatcher: IWorldDispatcher,
     }
 
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -82,7 +82,7 @@ mod shop {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn assert_can_access_shop(self: @ContractState, game: @Game, player: @Player) {
-            assert(self.is_open(*player), 'shop is closed!');
+            assert(self.is_open((*game).game_id, (*player).player_id), 'shop is closed!');
             assert((*game).tick(), 'cannot progress');
             assert((*player).can_continue(), 'player cannot shop');
         }
@@ -90,10 +90,12 @@ mod shop {
 
     #[external(v0)]
     impl ShopImpl of IShop<ContractState> {
-        fn is_open(self: @ContractState, player: Player) -> bool {
-            // ( game.max_turns - player.turns_remaining ) % 5 ?
-            //
-            true
+        fn is_open(self: @ContractState, game_id: u32, player_id: ContractAddress) -> bool {
+            let game = get!(self.world(), game_id, (Game));
+            let player = get!(self.world(), (game_id, player_id), Player);
+            let shop_settings = ShopSettingsImpl::get(game.game_mode);
+
+            (player.turn % shop_settings.opening_freq) == 0
         }
 
         fn buy_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
@@ -104,12 +106,12 @@ mod shop {
             self.assert_can_access_shop(@game, @player);
 
             let mut item = get!(self.world(), (game_id, player_id, item_id), Item);
-            let shop_settings = ShopSettingsImpl::get(
-                game.game_mode, game.max_turns - player.turns_remaining
-            );
+            let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
-            assert(item.level <= shop_settings.max_item_level, 'item max level');
+            assert(item.level < shop_settings.max_item_level, 'item max level');
+
             // TODO: check items shop_settings.max_item_allowed
+            // TODO: check can only 1 item by turn
 
             let item_settings = ItemSettingsImpl::get(
                 game.game_mode, item_id, level: item.level + 1
@@ -123,6 +125,8 @@ mod shop {
 
             // update item
             item.level += 1;
+            item.name = item_settings.name;
+            item.value = item_settings.value;
             set!(self.world(), (item));
 
             // emit event
@@ -141,6 +145,8 @@ mod shop {
 
             // update item
             item.level = 0;
+            item.name = '';
+            item.value = 0;
             set!(self.world(), (item));
 
             // emit event
@@ -154,14 +160,13 @@ mod shop {
             let game = get!(self.world(), game_id, (Game));
             let player = get!(self.world(), (game_id, player_id), Player);
 
-            self.assert_can_access_shop(@game, @player);
-
-            let shop_settings = ShopSettingsImpl::get(
-                game.game_mode, game.max_turns - player.turns_remaining
-            );
-
             let mut available: Array<AvailableItem> = array![];
 
+            if !self.is_open(game_id,player_id){
+                return available.span();
+            };
+
+            let shop_settings = ShopSettingsImpl::get(game.game_mode);
             let mut items = ItemTrait::all();
 
             loop {
@@ -175,11 +180,11 @@ mod shop {
                             game.game_mode, *item_id, player_item.level + 1
                         );
 
-                        if player_item.level <= shop_settings.max_item_level {
+                        if player_item.level < shop_settings.max_item_level {
                             available
                                 .append(
                                     AvailableItem {
-                                        item_id:(*item_id).into(),
+                                        item_id: (*item_id).into(),
                                         item_type: (*item_id).into(),
                                         level: player_item.level + 1,
                                         name: item_settings.name,

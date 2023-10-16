@@ -56,11 +56,7 @@ export default function End() {
   });
 
   const isDead = playerEntity?.health === 0;
-
-  const turnRemaining = isDead
-    ? playerEntity?.turnsRemainingOnDeath
-    : playerEntity?.turnsRemaining;
-  const day = (gameEntity?.maxTurns || 1_000) - (turnRemaining || 0);
+  const day = playerEntity.turn + 1;
 
   useEffect(() => {
    if( playerEntity&&playerEntity.name ) {
@@ -68,13 +64,13 @@ export default function End() {
    }
   }, [playerEntity]);
 
-  const onSubmitName = useCallback(async () => {
-    if (!name) return;
+  // const onSubmitName = useCallback(async () => {
+  //   if (!name) return;
 
-    setIsSubmitting(true);
-    await submitSetName(gameId, name);
-    router.push("/");
-  }, [name, gameId, router, submitSetName]);
+  //   setIsSubmitting(true);
+  //   await submitSetName(gameId, name);
+  //   router.push("/");
+  // }, [name, gameId, router, submitSetName]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
@@ -168,7 +164,7 @@ export default function End() {
             </HStack>
           </VStack>
           <VStack flex="1" my="auto" justify="space-between">
-            <VStack w={["full", "400px"]}>
+            {/* <VStack w={["full", "400px"]}>
               <Text py="20px" textStyle="subheading" fontSize="13px">
                 Name Entry
               </Text>
@@ -205,7 +201,7 @@ export default function End() {
                   Update Name
                 </Button>
               </>
-            </Footer>
+            </Footer> */}
           </VStack>
         </Container>
         <Spacer maxH="100px" />

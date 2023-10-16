@@ -34,7 +34,7 @@ if (!data || !data.gameModels?.edges) return undefined;
     // const gameModel = models.find(
     //   (model) => model.__typename === "Game",
     // );
-    const gameModel = models[0].node
+    const gameModel = models[0]?.node
     if (!gameModel) return undefined;
 
     return new GameEntity(gameModel as Game);

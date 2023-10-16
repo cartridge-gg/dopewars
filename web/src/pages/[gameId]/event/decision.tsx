@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { usePlayerEntity, ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
-import { Action, Outcome, PlayerStatus } from "@/dojo/types";
+import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
@@ -21,15 +21,15 @@ export default function Decision() {
   const gameId = router.query.gameId as string;
   const nextLocation = getLocationById(router.query.nextId as string);
   const [status, setStatus] = useState<PlayerStatus>();
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [prefixTitle, setPrefixTitle] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [demand, setDemand] = useState<string>();
   const [penalty, setPenalty] = useState<string>();
-
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
+ 
   const { toast } = useToast();
   const { account } = useDojoContext();
-  const { decide } = useSystems();
+  const { decide, isPending } = useSystems();
   const { addEncounter } = usePlayerStore();
 
   const { player: playerEntity } = usePlayerEntity({
@@ -37,9 +37,9 @@ export default function Decision() {
     address: account?.address,
   });
 
-  useEffect(() => {
-    if (playerEntity && !isSubmitting) {
 
+  useEffect(() => {
+    if (playerEntity && !isPending) {
       switch (PlayerStatus[playerEntity.status]) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
@@ -53,9 +53,10 @@ export default function Decision() {
           break;
       }
 
+    
       setStatus(playerEntity.status);
     }
-  }, [playerEntity, isSubmitting]);
+  }, [playerEntity, isPending]);
 
   useEffect(() => {
     if (status == PlayerStatus.BeingArrested) {
@@ -68,75 +69,79 @@ export default function Decision() {
 
   const onDecision = useCallback(
     async (action: Action) => {
-      setIsSubmitting(true);
-      setPenalty("");
+      try {
+        setPenalty("");
 
-      const result = await decide(gameId, action, nextLocation!.type);
-      const event = result.event! as ConsequenceEventData;
-      addEncounter(playerEntity!.status, event.outcome);
+        const result = await decide(gameId, action, nextLocation!.type);
+        const event = result.event! as ConsequenceEventData;
+        addEncounter(playerEntity!.status, event.outcome);
 
-      setIsSubmitting(false);
+        switch (event.outcome) {
+          case Outcome.Died:
+            toast({
+              message: `You too ${event.healthLoss}HP damage and died...`,
+              icon: Heart,
+              link: `http://amazing_explorer/${result.hash}`,
+            });
+            setIsRedirecting(true);
+            return router.push(`/${gameId}/end`);
 
-      switch (event.outcome) {
-        case Outcome.Died:
-          toast(
-            `You too ${event.healthLoss}HP damage and died...`,
-            Heart,
-            `http://amazing_explorer/${result.hash}`,
-          );
-          return router.push(`/${gameId}/end`);
+          case Outcome.Paid:
+          case Outcome.Escaped:
+            setIsRedirecting(true);
+            return router.replace(
+              `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
+                playerEntity!.status
+              }`,
+            );
 
-        case Outcome.Paid:
-        case Outcome.Escaped:
-          return router.replace(
-            `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
-              playerEntity!.status
-            }`,
-          );
-
-
-        case Outcome.Captured:
-          setPrefixTitle("Your escape...");
-          setTitle("Failed!");
-          setPenalty(`You lost ${event.healthLoss}HP!`);
-          toast(
-            `You were captured and lost ${event.healthLoss}HP!`,
-            Heart,
-            `http://amazing_explorer/${result.hash}`,
-          );
-          break;
+          case Outcome.Captured:
+            setPrefixTitle("Your escape...");
+            setTitle("Failed!");
+            setPenalty(`You lost ${event.healthLoss}HP!`);
+            toast({
+              message: `You were captured and lost ${event.healthLoss}HP!`,
+              icon: Heart,
+              link: `http://amazing_explorer/${result.hash}`,
+            });
+            break;
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
     [gameId, nextLocation, router, playerEntity, addEncounter, decide, toast],
   );
 
-  if (!playerEntity || !router.isReady) {
+  if (!playerEntity || !router.isReady || isRedirecting) {
     return <></>;
   }
 
-  if (playerEntity.status == PlayerStatus.Normal && !isSubmitting) {
-    return router.push(
-      `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
-    );
+  if (playerEntity.status == PlayerStatus.Normal && !isPending) {
+    router.push(`/${gameId}/turn`);
+    // router.push(
+    //   `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
+    // );
+    return <></>;
   }
 
   return (
-    <>
-      <Layout isSinglePanel>
-        <Encounter
-          prefixTitle={prefixTitle}
-          title={title}
-          demand={demand}
-          imageSrc={`/images/events/${
-            status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"
-          }`}
-          penalty={penalty}
-          isSubmitting={isSubmitting}
-          onRun={() => onDecision(Action.Run)}
-          onPay={() => onDecision(Action.Pay)}
-        />
-      </Layout>
-    </>
+    <Layout isSinglePanel>
+      <Encounter
+        prefixTitle={prefixTitle}
+        title={title}
+        demand={demand}
+        imageSrc={`/images/events/${
+          status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"
+        }`}
+        penalty={penalty}
+        isSubmitting={isPending}
+        playerEntity={playerEntity}
+        onRun={() => onDecision(Action.Run)}
+        onPay={() => onDecision(Action.Pay)}
+        onFight={() => onDecision(Action.Fight)}
+      />
+    </Layout>
   );
 }
 
@@ -149,6 +154,8 @@ const Encounter = ({
   isSubmitting,
   onPay,
   onRun,
+  onFight,
+  playerEntity
 }: {
   prefixTitle?: string;
   title?: string;
@@ -158,14 +165,29 @@ const Encounter = ({
   isSubmitting?: boolean;
   onPay: () => void;
   onRun: () => void;
+  onFight: () => void;
+  playerEntity: PlayerEntity;
 }) => {
+
+
+  const [attackItem, setAttackItem] = useState<ShopItem|undefined>(undefined);
+  const [speedItem, setSpeedItem] = useState<ShopItem|undefined>(undefined);
+
   const [isPaying, setIsPaying] = useState<boolean>(false);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isFigthing, setIsFigthing] = useState<boolean>(false);
+
+  useEffect(() => {
+    setAttackItem(playerEntity.items.find(i => i.id === ItemTextEnum.Attack));
+    setSpeedItem(playerEntity.items.find(i => i.id === ItemTextEnum.Speed));
+  
+  }, [playerEntity]);
 
   useEffect(() => {
     if (!isSubmitting) {
       setIsPaying(false);
       setIsRunning(false);
+      setIsFigthing(false);
     }
   }, [isSubmitting]);
   return (
@@ -195,6 +217,7 @@ const Encounter = ({
             <>
               {isRunning && <Text>You split without a second thought</Text>}
               {isPaying && <Text>You decided to pay up</Text>}
+              {isFigthing && <Text>Bouyakaaa</Text>}
             </>
           ) : (
             <>
@@ -204,9 +227,24 @@ const Encounter = ({
           )}
         </VStack>
         <Footer position={["relative", "relative"]}>
+        
+         {attackItem && (
           <Button
+          w="full"
+          isDisabled={isRunning || isPaying }
+          isLoading={isFigthing}
+          onClick={() => {
+            setIsFigthing(true);
+            onFight();
+          }}
+          >
+          Figth
+          </Button>
+          )}
+       
+        <Button
             w="full"
-            isDisabled={isRunning || isPaying}
+            isDisabled={isPaying || isFigthing}
             isLoading={isRunning}
             onClick={() => {
               setIsRunning(true);
@@ -217,7 +255,7 @@ const Encounter = ({
           </Button>
           <Button
             w="full"
-            isDisabled={isPaying || isRunning}
+            isDisabled={isRunning || isFigthing}
             isLoading={isPaying}
             onClick={() => {
               setIsPaying(true);

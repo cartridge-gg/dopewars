@@ -6,6 +6,7 @@ import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
+import { useSystems } from "@/dojo/hooks/useSystems";
 
 import {
   HStack,
@@ -16,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Turn() {
   const router = useRouter();
@@ -31,11 +32,13 @@ export default function Turn() {
   });
 
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
+  const {getAvailableItems} = useSystems();
+  const [availableItems, setAvailableItems] = useState([]);
 
   useEffect(() => {
     if (gameEntity && playerEntity) {
       // initial move, just forward user to location
-      if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
+      if (playerEntity.turn === 0) {
         const location = getLocationById(playerEntity.locationId);
         if(location){
           router.push(
@@ -44,12 +47,20 @@ export default function Turn() {
         }
       }
     }
-  }, [gameEntity, playerEntity]);
+  }, [gameEntity, playerEntity, gameId, router]);
 
-  if (!playerEntity || !gameEntity) {
-    return <></>;
-  }
-  if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
+  useEffect(() => {
+    const update = async()=> {
+      const {items} = (await getAvailableItems(gameId)) || []
+      setAvailableItems(items)
+    }
+
+    if (gameEntity && playerEntity) {
+      update()
+    }
+  }, [gameEntity, playerEntity, gameId, getAvailableItems]);
+
+  if (!playerEntity || !gameEntity || playerEntity.turn === playerEntity.max_turns) {
     return <></>;
   }
 
@@ -57,7 +68,7 @@ export default function Turn() {
     <Layout
       leftPanelProps={{
         prefixTitle: "End of",
-        title: `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining}`,
+        title: `Day ${playerEntity.turn}`,
         imageSrc: "/images/sunset.png",
       }}
     >
@@ -134,7 +145,25 @@ export default function Turn() {
           </UnorderedList>
         </VStack>
         <Footer position={["absolute", "relative"]}>
-          <Button
+          <HStack gap="20px">
+
+       
+
+
+          {availableItems && availableItems.length > 0 && (
+            <Button
+                      w={["full", "auto"]}
+                      onClick={() => {
+                        router.push(
+                          `/${gameId}/pawnshop`,
+                        );
+                      }}
+                    >
+                      Visit Pawnshop
+                    </Button>
+          )}
+
+<Button
             w={["full", "auto"]}
             onClick={() => {
               resetTurn();
@@ -145,6 +174,11 @@ export default function Turn() {
           >
             Continue
           </Button>
+
+          </HStack>
+          
+          
+
         </Footer>
       </VStack>
     </Layout>

@@ -1,6 +1,5 @@
 use debug::PrintTrait;
 
-use rollyourown::constants::{SCALING_FACTOR};
 use rollyourown::utils::random::random;
 use rollyourown::utils::settings::RiskSettings;
 

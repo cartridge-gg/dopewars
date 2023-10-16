@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
-// import { BaseEventData, parseEvent, parseEvents, WorldEvents } from "../events";
 import { Action, GameMode } from "../types";
 import { shortString, GetTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
+import { useState } from "react";
+import { useToast } from "@/hooks/toast";
 
 export interface SystemsInterface {
   createGame: (
@@ -39,7 +40,11 @@ export interface SystemsInterface {
   dropItem: (
     gameId: string, itemId: ItemEnum
   ) => Promise<SystemExecuteResult>;
+  getAvailableItems: (
+    gameId: string
+  ) => Promise<SystemExecuteResult>;
 
+  failingTx: () => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: Error;
@@ -51,6 +56,10 @@ export interface SystemExecuteResult {
   events?: BaseEventData[];
 }
 
+const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export const useSystems = (): SystemsInterface => {
   const {
     account,
@@ -58,6 +67,11 @@ export const useSystems = (): SystemsInterface => {
       network: { provider, execute, call },
     },
   } = useDojoContext();
+
+  const { toast } = useToast();
+
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | undefined>(undefined);
 
   const executeAndReceipt = useCallback(
     async (
@@ -71,29 +85,50 @@ export const useSystems = (): SystemsInterface => {
       parsedEvents: any[];
     } => {
 
+      setError(undefined)
+      setIsPending(true)
+
       const tx = await execute(account, contract, system, callData);
+
       const receipt = await account.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
       });
+
+      if (receipt.execution_status != "SUCCEEDED") {
+        setError(receipt.execution_status)
+        setIsPending(false)
+
+        toast({
+          message: receipt.revert_reason,
+          duration: 20_000,
+          isError: true
+        })
+        throw Error(receipt.revert_reason)
+      }
+
       const events = getEvents(receipt);
       const parsedEvents = parseAllEvents(receipt);
+
+      //torii too slow indexing...
+      await sleep(1_500);
+
+      setIsPending(false)
 
       // useless
       // setComponentsFromEvents(contractComponents, events);
 
       return {
-        hash: tx.transaction_hash,
-        receipt,
+        hash: tx?.transaction_hash,
         events,
         parsedEvents,
       };
     },
-    [execute, account],
+    [execute, account, toast ],
   );
 
   const createGame = useCallback(
     async (gameMode: GameMode, playerName: string) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
         [gameMode, shortString.encodeShortString(playerName)],
@@ -113,7 +148,7 @@ export const useSystems = (): SystemsInterface => {
 
   const travel = useCallback(
     async (gameId: string, locationId: Location) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "travel",
         "travel",
         [gameId, locationId],
@@ -140,7 +175,7 @@ export const useSystems = (): SystemsInterface => {
       quantity: number,
     ) => {
 
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "trade",
         "buy",
         [gameId, locationId, drugId, quantity],
@@ -160,7 +195,7 @@ export const useSystems = (): SystemsInterface => {
       drugId: string,
       quantity: number,
     ) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "trade",
         "sell",
         [gameId, locationId, drugId, quantity],
@@ -175,7 +210,7 @@ export const useSystems = (): SystemsInterface => {
 
   const decide = useCallback(
     async (gameId: string, action: Action, nextLocationId: string) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "decide",
         "decide",
         [gameId, action, nextLocationId],
@@ -193,7 +228,7 @@ export const useSystems = (): SystemsInterface => {
 
   const buyItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "shop",
         "buy_item",
         [gameId, itemId],
@@ -208,7 +243,7 @@ export const useSystems = (): SystemsInterface => {
 
   const dropItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         "shop",
         "drop_item",
         [gameId, itemId],
@@ -222,36 +257,62 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
+
+
   const getAvailableItems = useCallback(
     async (gameId: string) => {
 
-      const items = await call(
-        account,
-        "shop",
-        "available_items",
-        [Number(gameId), account.address],
-      );
+      let items = []
+      try {
+
+        items = await call(
+          account,
+          "shop",
+          "available_items",
+          [Number(gameId), account.address],
+        );
+      }
+      catch (e) {
+        console.log(e)
+        // shop is closed
+      }
 
       return {
-        items: items.map(i => ({ 
-          item_id: Number(i.item_id), 
-          item_type: shortString.decodeShortString(i.item_type), 
-          name: shortString.decodeShortString(i.name), 
+        items: items.map(i => ({
+          item_id: Number(i.item_id),
+          item_type: shortString.decodeShortString(i.item_type),
+          name: shortString.decodeShortString(i.name),
           level: Number(i.level),
           cost: Number(i.cost),
           value: Number(i.cost)
-         })),
+        })),
       };
-      
+
     },
-    [call],
+    [call, account],
   );
 
 
 
+  const failingTx = useCallback(
+    async () => {
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "devtools",
+        "failing_tx",
+        [],
+      );
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
   // const setName = useCallback(
   //   async (gameId: string, playerName: string) => {
-  //     const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+  //     const { hash,  events, parsedEvents } = await executeAndReceipt(
   //       "lobby",
   //       "set_name",
   //       [gameId, shortString.encodeShortString(playerName)],
@@ -275,8 +336,12 @@ export const useSystems = (): SystemsInterface => {
     decide,
     buyItem,
     dropItem,
-    getAvailableItems
-    // error,
-    // isPending,
+    getAvailableItems,
+
+    // devtool
+    failingTx,
+
+    error,
+    isPending,
   };
 };
