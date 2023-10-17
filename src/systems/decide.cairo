@@ -161,6 +161,7 @@ mod decide {
                 
             };
 
+            // TODO : use same logic than in travel (market events, etc..)
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
                 player.turn += 1;

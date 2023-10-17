@@ -29,6 +29,7 @@ mod shop {
     use starknet::get_caller_address;
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
+    use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::Location;
     use rollyourown::models::game::{Game, GameTrait};
@@ -36,7 +37,7 @@ mod shop {
     use rollyourown::utils::settings::{
         ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
     };
-    use rollyourown::constants::SCALING_FACTOR;
+    use rollyourown::utils::shop::{ShopImpl, ShopTrait};
 
     use super::{IShop, AvailableItem};
 
@@ -89,13 +90,13 @@ mod shop {
     }
 
     #[external(v0)]
-    impl ShopImpl of IShop<ContractState> {
+    impl ShopExternalImpl of IShop<ContractState> {
         fn is_open(self: @ContractState, game_id: u32, player_id: ContractAddress) -> bool {
             let game = get!(self.world(), game_id, (Game));
             let player = get!(self.world(), (game_id, player_id), Player);
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
-            (player.turn % shop_settings.opening_freq) == 0
+            shop_settings.is_open(@player)
         }
 
         fn buy_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
@@ -109,9 +110,13 @@ mod shop {
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
             assert(item.level < shop_settings.max_item_level, 'item max level');
+           
+            // buyin a new item, not upgrading
+            if item.level == 0 {
+                assert(player.get_item_count(self.world()) < shop_settings.max_item_allowed, 'max item count')
+            }
 
-            // TODO: check items shop_settings.max_item_allowed
-            // TODO: check can only 1 item by turn
+            // TODO: check can only buy 1 item by turn
 
             let item_settings = ItemSettingsImpl::get(
                 game.game_mode, item_id, level: item.level + 1

@@ -133,7 +133,7 @@ mod travel {
                 };
 
                 if player.wanted > risk_settings.wanted_decrease_by_turn {
-                    player.wanted -=risk_settings.wanted_decrease_by_turn
+                    player.wanted -= risk_settings.wanted_decrease_by_turn
                 }
 
                 player.turn += 1;

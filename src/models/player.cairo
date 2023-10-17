@@ -50,6 +50,19 @@ impl PlayerImpl of PlayerTrait {
 
         true
     }
+
+    fn get_item_count(self: Player, world: IWorldDispatcher ) -> u8 {
+        let attack_item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
+        let defense_item = get!( world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+        let transport_item = get!( world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
+        let speed_item = get!( world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+
+        let mut total: u8 = if attack_item.level > 0 { 1 } else { 0 };
+        total += if defense_item.level > 0 { 1 } else { 0 };
+        total += if transport_item.level > 0 { 1 } else { 0 };
+        total += if speed_item.level > 0 { 1 } else { 0 };
+        total
+    }
   
     fn get_attack(self: Player, world: IWorldDispatcher ) -> usize {
         let item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
