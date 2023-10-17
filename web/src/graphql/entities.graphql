@@ -65,10 +65,6 @@ query LocationEntities($gameId: String!, $locationId: String!) {
             cash
             quantity
           }
-          ... on Risks {
-            travel
-            capture
-          }
         }
       }
       cursor
@@ -106,12 +102,6 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 #             location_id
 #             cash
 #             quantity
-#           }
-#           ... on Risks {
-#             arrested
-#             hurt
-#             mugged
-#             travel
 #           }
 #         }
 #       }

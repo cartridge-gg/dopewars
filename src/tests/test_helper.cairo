@@ -13,15 +13,12 @@ use rollyourown::models::game::{game, Game};
 use rollyourown::models::item::{item, Item};
 use rollyourown::models::market::{market, Market};
 use rollyourown::models::player::{player, Player};
-use rollyourown::models::risks::{risks, Risks};
 
 use rollyourown::systems::decide::{decide, IDecideDispatcher, IDecideDispatcherTrait};
 use rollyourown::systems::lobby::{lobby, ILobbyDispatcher, ILobbyDispatcherTrait};
 use rollyourown::systems::shop::{shop, IShopDispatcher, IShopDispatcherTrait};
 use rollyourown::systems::trade::{trade, ITradeDispatcher, ITradeDispatcherTrait};
 use rollyourown::systems::travel::{travel, ITravelDispatcher, ITravelDispatcherTrait};
-
-use rollyourown::jodo::{jodo, IJodoDispatcher, IJodoDispatcherTrait};
 
 
 fn ZERO() -> ContractAddress {
@@ -40,7 +37,6 @@ struct SystemDispatchers {
     shop: IShopDispatcher,
     trade: ITradeDispatcher,
     travel: ITravelDispatcher,
-    jodo: IJodoDispatcher
 }
 
 
@@ -51,7 +47,6 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
         item::TEST_CLASS_HASH,
         market::TEST_CLASS_HASH,
         player::TEST_CLASS_HASH,
-        risks::TEST_CLASS_HASH,
     ];
 
     let world = spawn_test_world(models);
@@ -77,10 +72,6 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
             contract_address: world
                 .deploy_contract('paper', travel::TEST_CLASS_HASH.try_into().unwrap())
         },
-        jodo: IJodoDispatcher {
-            contract_address: world
-                .deploy_contract('paper', jodo::TEST_CLASS_HASH.try_into().unwrap())
-        },
     };
 
     // TODO: setup auth
@@ -94,6 +85,4 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
 fn test_spawn_world() {
     let (world, systems) = spawn_world();
 
-
-    systems.jodo.func1();
 }

@@ -105,22 +105,6 @@ export function defineContractComponents(world: World) {
         },
       );
     })(),
-    Risks: (() => {
-      const name = "Risks";
-      return defineComponent(
-        world,
-        {
-          travel: RecsType.Number,
-          capture: RecsType.Number,
-        },
-        {
-          metadata: {
-            name: name,
-            types: ["u8", "u8"],
-          },
-        },
-      );
-    })(),
     Item: (() => {
       const name = "Item";
       return defineComponent(

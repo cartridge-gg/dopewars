@@ -21,15 +21,13 @@ mod lobby {
 
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::game::{Game, GameMode};
-    use rollyourown::models::risks::Risks;
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{
-        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, RiskSettings,
-        RiskSettingsImpl
+        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl
     };
     use rollyourown::utils::market;
     use super::ILobby;
@@ -90,7 +88,6 @@ mod lobby {
 
             let game_settings = GameSettingsImpl::get(game_mode);
             let player_settings = PlayerSettingsImpl::get(game_mode);
-            let risk_settings = RiskSettingsImpl::get(game_mode);
 
             let player = Player {
                 game_id,
@@ -128,17 +125,7 @@ mod lobby {
             loop {
                 match locations.pop_front() {
                     Option::Some(location_id) => {
-                        //set risks entity
-                        set!(
-                            self.world(),
-                            (Risks {
-                                game_id,
-                                location_id: *location_id,
-                                travel: risk_settings.travel,
-                                capture: risk_settings.capture
-                            })
-                        );
-
+                        
                         let mut seed = random::seed();
                         seed = pedersen::pedersen(seed, (*location_id).into());
 

@@ -16,13 +16,12 @@ struct Item {
     value: usize,
 }
 
-
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum ItemEnum {
-    Attack, // figth
-    Defense, // less dmgs
-    Transport, // bag size
-    Speed, // run away 
+    Attack, // allow to fight cops/ gangs
+    Defense, // reduced dmgs taken by %
+    Transport, // increase drug nb transportable
+    Speed, // increase run away chances by %
 // Style
 }
 

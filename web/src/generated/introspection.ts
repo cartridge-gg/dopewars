@@ -11,8 +11,7 @@
       "Game",
       "Item",
       "Market",
-      "Player",
-      "Risks"
+      "Player"
     ]
   }
 };

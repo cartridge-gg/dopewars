@@ -20,9 +20,11 @@ struct Player {
     location_id: LocationEnum,
     turn: usize,
     max_turns: usize,
-    drug_count: usize,
+
     cash: u128,
     health: u8,
+
+    drug_count: usize,
 
     attack: usize,
     defense: usize,
@@ -48,7 +50,6 @@ impl PlayerImpl of PlayerTrait {
 
         true
     }
-
   
     fn get_attack(self: Player, world: IWorldDispatcher ) -> usize {
         let item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));

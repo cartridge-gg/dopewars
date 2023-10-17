@@ -18,14 +18,13 @@ mod travel {
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
     use rollyourown::models::market::{Market, MarketTrait};
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
     use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
-
+    use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::ITravel;
 
@@ -34,7 +33,7 @@ mod travel {
         world_dispatcher: IWorldDispatcher,
     }
 
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
@@ -89,19 +88,18 @@ mod travel {
 
             let player_id = get_caller_address();
             let mut player: Player = get!(self.world(), (game_id, player_id).into(), Player);
+            
             assert(player.can_continue(), 'player cannot travel');
             assert(next_location_id != LocationEnum::Home, 'no way back');
             assert(player.location_id != next_location_id, 'already at location');
 
             // initial travel when game starts has no risk or events
             if player.location_id != LocationEnum::Home {
-                let mut risks: Risks = get!(
-                    self.world(), (game_id, next_location_id).into(), Risks
-                );
                 let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
-                player.status = risks.travel(seed, risk_settings, player.cash, player.drug_count);
+                player.status = risk_settings.travel(seed, player.cash, player.drug_count);
+                
                 if player.status != PlayerStatus::Normal {
                     set!(self.world(), (player));
                     emit!(

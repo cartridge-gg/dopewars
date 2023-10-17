@@ -31,15 +31,14 @@ mod decide {
 
     use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::game::{Game, GameTrait};
-    use rollyourown::models::risks::{Risks, RisksTrait};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{LocationEnum};
     use rollyourown::models::item::{Item, ItemEnum};
 
     use rollyourown::utils::random;
-    use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl};
-
+    use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl};
+    use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::IDecide;
@@ -98,14 +97,14 @@ mod decide {
 
             let game = get!(world, game_id, Game);
             let decide_settings = DecideSettingsImpl::get(game.game_mode);
+            let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
                     player.wanted += decide_settings.wanted_impact_run;
 
-                    let mut risks = get!(world, (game_id, player.location_id).into(), Risks);
                     let seed = random::seed();
-                    match risks.run(seed) {
+                    match risk_settings.run(seed) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
@@ -119,6 +118,7 @@ mod decide {
                             // reduce dmgs by defense_item.value %
                             let health_saved: u128 = ((health_loss * defense_item.value.into() * SCALING_FACTOR) / 100 )/SCALING_FACTOR;
                             let final_health_loss: u8 = (health_loss - health_saved).try_into().unwrap();
+                            
                             (Outcome::Captured, 0, 0, final_health_loss)
                         }
                     }
@@ -128,21 +128,26 @@ mod decide {
                     match player.status {
                         PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                         PlayerStatus::BeingMugged => {
+                            // paying gangs divide wanted by 2
+                            player.wanted = player.wanted / 2;
+
                             // using same name cash_loss makes LS crash
                             let cash_loss_ = (player.cash
                                 * decide_settings.gangs_payment_cash_pct.into())
                                 / 100;
+                          
                             (Outcome::Paid, cash_loss_, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
-                            // paying cops resets wanted
-                            player.wanted = 0;
+                            // paying cops divide wanted by 3
+                            player.wanted = player.wanted / 3;
 
                             // using same name drug_loss makes LS crash
                             let drug_loss_ = self
                                 .take_drugs(
                                     game_id, player_id, decide_settings.gangs_payment_cash_pct
                                 );
+                           
                             (Outcome::Paid, 0, drug_loss_, 0)
                         },
                     }

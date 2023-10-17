@@ -145,7 +145,6 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
     if (targetId) {
-      
 
       try {
         const locationId = getLocationById(targetId)?.type;

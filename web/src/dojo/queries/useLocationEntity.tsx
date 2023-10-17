@@ -1,6 +1,5 @@
 import {
   Market,
-  Risks,
   useLocationEntitiesQuery,
   EntityEdge,
 } from "@/generated/graphql";
@@ -14,12 +13,10 @@ import { type } from "os";
 
 export class LocationEntity {
   id: string; // id is hex encoded location name
-  risks: Risks;
   drugMarkets: DrugMarket[];
 
-  constructor(id: string, risks: Risks, drugMarkets: DrugMarket[]) {
+  constructor(id: string,  drugMarkets: DrugMarket[]) {
     this.id = id;
-    this.risks = risks;
     this.drugMarkets = drugMarkets;
   }
 
@@ -29,12 +26,6 @@ export class LocationEntity {
     // we know both location and risk model uses key[1] as locationId
     const keys = edges[0].node?.keys.split('/') || [];
     const locationId = getLocationByType(Number(keys[1]!))?.id;
-
-    const risksModel = edges.find((edge) => {
-      return edge.node?.models?.some(
-        (model) => model?.__typename === "Risks",
-      );
-    })?.node?.models?.[0] as Risks;
 
     const drugMarketEntities = edges.filter((edge) => {
       return edge.node?.models?.find(
@@ -64,11 +55,10 @@ export class LocationEntity {
       };
     });
 
-    if (!risksModel || drugMarkets.length === 0) return undefined;
+    if ( drugMarkets.length === 0) return undefined;
 
     return {
       id: locationId,
-      risks: risksModel,
       drugMarkets: drugMarkets,
     };
   }
