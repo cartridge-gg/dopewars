@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState, useEffect } from "react";
-import { GameMode, ShopItemInfo, ItemEnum } from "@/dojo/types";
+import { GameMode, ShopItemInfo, ItemEnum, ItemTextEnum } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
@@ -167,7 +167,10 @@ export default function PawnShop() {
         }}
         margin="auto"
       >
+        <VStack w="full">
         <Text>You can buy an item, or not...</Text>
+        <Text fontSize="12px">Max items : {playerEntity && playerEntity.maxItems}</Text>
+        </VStack>
 
         <SimpleGrid
           columns={1}
@@ -239,7 +242,9 @@ export default function PawnShop() {
           w={["full", "auto"]}
           isLoading={isPending}
           isDisabled={
-            !selectedShopItem || selectedShopItem.cost > playerEntity.cash
+            !selectedShopItem || selectedShopItem.cost > playerEntity.cash || (
+              playerEntity?.items.length === playerEntity?.maxItems && !playerEntity?.items.find(i => i.id === selectedShopItem.id)
+              )
           }
           onClick={buy}
         >

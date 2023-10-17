@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "world",
-    "address": "0x6520bf0821b49c60e712237221c0f9e2f54fa73ad76ed5448c845279704f14b",
-    "class_hash": "0x2611f073498530f0faa0fda87956a405ae8cbd85cc6a28f4d8961d66cc51e4b",
+    "address": "0x20bcb70f0e44b059638938c17d89c90edcbb6afba0944f5196e18340069781c",
+    "class_hash": "0x5179c281a8d3cca6cfb820201fa7a81150b56f9db492405a29e9564222370b8",
     "abi": [
       {
         "type": "impl",
@@ -147,6 +147,26 @@
             "outputs": [
               {
                 "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_contract",
+            "inputs": [
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::class_hash::ClassHash"
               }
             ],
             "state_mutability": "external"
@@ -497,6 +517,23 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world::ContractUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world::MetadataUpdate",
         "kind": "struct",
         "members": [
@@ -652,6 +689,11 @@
           {
             "name": "ContractDeployed",
             "type": "dojo::world::world::ContractDeployed",
+            "kind": "nested"
+          },
+          {
+            "name": "ContractUpgraded",
+            "type": "dojo::world::world::ContractUpgraded",
             "kind": "nested"
           },
           {
@@ -815,8 +857,8 @@
   "contracts": [
     {
       "name": "lobby",
-      "address": "0x5b2e0a0999c48270ed8268b1449e053edcef1a35ab09483bbcc8dc910a25916",
-      "class_hash": "0x44e506e84825978e1bb74e61a51344b44e2a6ea2c400cce30352d0d066f39b6",
+      "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
+      "class_hash": "0x3dcc50d1c04a708c9c49b95071bd13ba6d45066894e6e7d0e2f72e895ce8ddd",
       "abi": [
         {
           "type": "impl",
@@ -959,8 +1001,8 @@
     },
     {
       "name": "trade",
-      "address": "0x6fb35c74cd110f2033b8943d28e48df86bfaab9743d148a64e8b3667f24153a",
-      "class_hash": "0x761f791a06c07bcdcaec43eaa8dd9d8ff6bdd75ef9b3d8b70238e3c36f174aa",
+      "address": "0x22a5538d516d281927572adef2af5ecef8904840a86ffa316b3952941d51798",
+      "class_hash": "0x390bc0680d35c0d7d8da1679182e338527e2ce79a6ebf4fd421df8c9879b4f3",
       "abi": [
         {
           "type": "impl",
@@ -1170,8 +1212,8 @@
     },
     {
       "name": "travel",
-      "address": "0x7de1153d977237ebec35fd4db925cae69bf7768ca03e52d09ad9ccd39cc6f5f",
-      "class_hash": "0x58de505b99e364a8efe0cb1a2f36ceaa89b9e8689b24f6ec3604bdec892e861",
+      "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
+      "class_hash": "0x6bb426f4e3140ae25213eea02a19cc952e84f8a71e0dd7a9ecdb972feaaf912",
       "abi": [
         {
           "type": "impl",
@@ -1402,8 +1444,8 @@
     },
     {
       "name": "decide",
-      "address": "0x41eda9dde516f12219852e3935069e5c60acccc7f7ace326416287ee3449ba8",
-      "class_hash": "0x25e192af5b53a6d4869113a8ec58d6e466233117d589d9b987373d1a0cd6807",
+      "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
+      "class_hash": "0x206bc4bd39e9b319080e3c10310372fd94b5b79743712e3fc25c1637ed87665",
       "abi": [
         {
           "type": "impl",
@@ -1594,8 +1636,8 @@
     },
     {
       "name": "shop",
-      "address": "0x1bb601f4f576714a1544d1bbd0d80619a2fb5cd7eb8fcf62b06cb607ef28bf3",
-      "class_hash": "0x664ca067a4d98d1c058e7ab61a65190415fa8bb0c6cfcd58a0c7585f313649f",
+      "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
+      "class_hash": "0x25330f63a92909ce7eaf2eec5d3c8f11e61dd885357faf3a87c3e37465133fe",
       "abi": [
         {
           "type": "impl",
@@ -1826,8 +1868,8 @@
     },
     {
       "name": "devtools",
-      "address": "0x5a5d586acbd67fa201f031d2013afebcf6cf421057c128bb06ae49f5e3c8277",
-      "class_hash": "0x64a6ef7586a951d7b35d9ecee0f323797a102e5ce9949e9db4b2927ed355325",
+      "address": "0x63a0e87fdd2eba1cade12af18aea1cd551f9eb2fb543268be51b67fd7a8d6c3",
+      "class_hash": "0x5c2e8451b81e59641010ae6c5aace6a433e0722c776f5d46afb0a4fec266314",
       "abi": [
         {
           "type": "impl",
@@ -2307,6 +2349,11 @@
           "key": false
         },
         {
+          "name": "max_items",
+          "type": "u8",
+          "key": false
+        },
+        {
           "name": "cash",
           "type": "u128",
           "key": false
@@ -2347,7 +2394,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x240482ba750c5572f9fc3332a5f6847c22d944fc3c9c0826da45f96ee72641",
+      "class_hash": "0x349b1bfa60237588e72c90a90d82dd6934055315dd42fb6261d33c771a0354e",
       "abi": [
         {
           "type": "function",

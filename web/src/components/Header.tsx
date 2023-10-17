@@ -87,7 +87,7 @@ const Header = ({ back }: HeaderProps) => {
                   borderColor="neon.600"
                   h="12px"
                 />
-                <HStack>
+                <HStack  color={playerEntity.health > 59 ? "neon.400": (playerEntity.health > 29 ? "yellow.400" : "red")}>
                   <Heart /> <Text>{playerEntity.health}</Text>
                 </HStack>
                 <Divider

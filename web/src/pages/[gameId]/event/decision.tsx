@@ -15,6 +15,8 @@ import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
 import { Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
+import { iconByTypeAndLevel } from "@/pages/[gameId]/pawnshop";
+
 
 export default function Decision() {
   const router = useRouter();
@@ -238,7 +240,9 @@ const Encounter = ({
             onFight();
           }}
           >
-          Fight
+          Fight{iconByTypeAndLevel[attackItem.id][attackItem.level]({
+                        boxSize: "26",
+                      })} 
           </Button>
           )}
        
@@ -251,7 +255,9 @@ const Encounter = ({
               onRun();
             }}
           >
-            Run
+            Run{speedItem && iconByTypeAndLevel[speedItem.id][speedItem.level]({
+                        boxSize: "26",
+                      })} 
           </Button>
           <Button
             w="full"

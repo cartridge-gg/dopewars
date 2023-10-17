@@ -26,6 +26,8 @@ export class PlayerEntity {
   cash: number;
   health: number;
   turn: number;
+  maxTurns: number;
+  maxItems: number;
   drugCount: number;
   locationId?: string;
   status: PlayerStatus;
@@ -39,13 +41,14 @@ export class PlayerEntity {
 
   wanted: number;
 
-
   constructor(player: Player, drugs: Drug[], items: ShopItem[]) {
     this.name = shortString.decodeShortString(player.name)
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turn = player.turn;
     this.maxTurns = player.max_turns;
+    this.maxItems = player.max_items;
+    
     this.drugCount = player.drug_count;
   
     this.locationId =

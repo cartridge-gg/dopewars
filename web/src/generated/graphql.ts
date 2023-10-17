@@ -415,6 +415,7 @@ export type Player = {
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
   location_id?: Maybe<Scalars['Enum']>;
+  max_items?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['usize']>;
   name?: Maybe<Scalars['felt252']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
@@ -450,6 +451,7 @@ export enum PlayerOrderField {
   GameId = 'GAME_ID',
   Health = 'HEALTH',
   LocationId = 'LOCATION_ID',
+  MaxItems = 'MAX_ITEMS',
   MaxTurns = 'MAX_TURNS',
   Name = 'NAME',
   PlayerId = 'PLAYER_ID',
@@ -504,6 +506,13 @@ export type PlayerWhereInput = {
   healthLTE?: InputMaybe<Scalars['u8']>;
   healthNEQ?: InputMaybe<Scalars['u8']>;
   location_id?: InputMaybe<Scalars['Enum']>;
+  max_items?: InputMaybe<Scalars['u8']>;
+  max_itemsEQ?: InputMaybe<Scalars['u8']>;
+  max_itemsGT?: InputMaybe<Scalars['u8']>;
+  max_itemsGTE?: InputMaybe<Scalars['u8']>;
+  max_itemsLT?: InputMaybe<Scalars['u8']>;
+  max_itemsLTE?: InputMaybe<Scalars['u8']>;
+  max_itemsNEQ?: InputMaybe<Scalars['u8']>;
   max_turns?: InputMaybe<Scalars['usize']>;
   max_turnsEQ?: InputMaybe<Scalars['usize']>;
   max_turnsGT?: InputMaybe<Scalars['usize']>;
@@ -815,7 +824,7 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1050,6 +1059,7 @@ export const PlayerEntityDocument = `
             health
             turn
             max_turns
+            max_items
             attack
             defense
             transport

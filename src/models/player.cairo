@@ -20,6 +20,7 @@ struct Player {
     location_id: LocationEnum,
     turn: usize,
     max_turns: usize,
+    max_items: u8,
 
     cash: u128,
     health: u8,

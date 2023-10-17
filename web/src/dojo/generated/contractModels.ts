@@ -20,17 +20,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-            ],
+            types: ["GameMode","u64","usize","usize","usize","bool","ContractAddress"],
           },
-        },
+        }
       );
     })(),
     Market: (() => {
@@ -44,9 +36,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u128", "usize"],
+            types: ["u128","usize"],
           },
-        },
+        }
       );
     })(),
     Player: (() => {
@@ -59,6 +51,7 @@ export function defineContractComponents(world: World) {
           location_id: RecsType.Number,
           turn: RecsType.Number,
           max_turns: RecsType.Number,
+          max_items: RecsType.Number,
           cash: RecsType.BigInt,
           health: RecsType.Number,
           drug_count: RecsType.Number,
@@ -71,23 +64,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "felt252",
-              "PlayerStatus",
-              "LocationEnum",
-              "usize",
-              "usize",
-              "u128",
-              "u8",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "u8",
-            ],
+            types: ["felt252","PlayerStatus","LocationEnum","usize","usize","u8","u128","u8","usize","usize","usize","usize","usize","u8"],
           },
-        },
+        }
       );
     })(),
     Drug: (() => {
@@ -102,7 +81,7 @@ export function defineContractComponents(world: World) {
             name: name,
             types: ["usize"],
           },
-        },
+        }
       );
     })(),
     Item: (() => {
@@ -117,9 +96,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u8", "felt252", "usize"],
+            types: ["u8","felt252","usize"],
           },
-        },
+        }
       );
     })(),
   };

@@ -27,7 +27,7 @@ mod lobby {
     use rollyourown::models::market::{MarketTrait};
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{
-        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl
+        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings, ShopSettingsImpl
     };
     use rollyourown::utils::market;
     use super::ILobby;
@@ -88,6 +88,7 @@ mod lobby {
 
             let game_settings = GameSettingsImpl::get(game_mode);
             let player_settings = PlayerSettingsImpl::get(game_mode);
+            let shop_settings = ShopSettingsImpl::get(game_mode);
 
             let player = Player {
                 game_id,
@@ -100,6 +101,7 @@ mod lobby {
                 drug_count: 0,
                 turn:0,
                 max_turns: game_settings.max_turns,
+                max_items: shop_settings.max_item_allowed,
                 wanted: player_settings.wanted,
                 attack: player_settings.attack,
                 defense: player_settings.defense,

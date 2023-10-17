@@ -72,6 +72,7 @@ mod devtools {
                     drug_count: 0,
                     turn: rand_100.into(),
                     max_turns: rand_100.into(),
+                    max_items: 2,
                     wanted:69,
                     attack:42,
                     defense:42,
