@@ -7,9 +7,6 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-# dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "3eda0434e10dd8b350896156a5ec48b25aa0ad62" }
-# dojo = { git = "https://github.com/dojoengine/dojo.git", rev="b64e5aa3acb5b605bd0439d5707090bb0cd20e8a" }
-
 cubit = {git = "https://github.com/influenceth/cubit.git"}
 dojo = {git = "https://github.com/dojoengine/dojo.git"}
 
@@ -22,16 +19,16 @@ auth = "./scripts/default_auth.sh local"
 migrate = "sozo migrate && scarb run gendojo && scarb run auth"
 
 [tool.dojo.env]
-
 # Katana
-#rpc_url = "https://api.cartridge.gg/x/rollyourown/katana"
 account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 rpc_url = "http://localhost:5050"
+#rpc_url = "https://api.cartridge.gg/x/rollyourown/katana"
 
-# Madara
-#rpc_url = "https://api.cartridge.gg/x/shinai/madara"
-#account_address = "0x2"
-#private_key = "0xc1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d"
-
-#world_address = "0x51d1bf777ddb43361a746029303fdd2fd45f4b898243c2769b5cd70a5fa7c19"
+[tool.dojo.world]
+name = "Roll Your Own"
+description = "example world"
+website = "https://rollyourown.preview.cartridge.gg/"
+icon_uri = "file://assets/icon.png"
+cover_uri = "file://assets/cover.png"
+socials.x = "https://x.com/TheDopeWars"
