@@ -98,7 +98,7 @@ mod travel {
                 let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
-                player.status = risk_settings.travel(seed, player.cash, player.drug_count);
+                player.status = risk_settings.travel(seed, @player);
                 
                 if player.status != PlayerStatus::Normal {
                     set!(self.world(), (player));

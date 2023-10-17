@@ -101,10 +101,14 @@ mod decide {
 
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
-                    player.wanted += decide_settings.wanted_impact_run;
+                    if player.wanted + decide_settings.wanted_impact_run <= 100 {
+                        player.wanted += decide_settings.wanted_impact_run;
+                    }  else{
+                        player.wanted = 100;
+                    }
 
                     let seed = random::seed();
-                    match risk_settings.run(seed) {
+                    match risk_settings.run(seed, @player) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
@@ -153,7 +157,19 @@ mod decide {
                     }
                 },
                 Action::Fight => {
-                    player.wanted += decide_settings.wanted_impact_fight;
+                    if player.wanted + decide_settings.wanted_impact_fight <= 100 {
+                        player.wanted += decide_settings.wanted_impact_fight;
+                    }  else{
+                        player.wanted = 100;
+                    }
+
+                    // match player.status {
+                    //     PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
+                    //     PlayerStatus::BeingMugged => {
+                    //     }
+                    //     PlayerStatus::BeingArrested => {
+                    //     }
+                    // }
 
                     // TODO
                     (Outcome::Escaped, 0, 0, 0)

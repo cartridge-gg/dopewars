@@ -121,7 +121,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 2000_u128 * SCALING_FACTOR,
-                    wanted: 30,
+                    wanted: 29,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -132,7 +132,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 3000_u128 * SCALING_FACTOR,
-                    wanted: 20,
+                    wanted: 29,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -143,13 +143,14 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     }
 }
 
+
 impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
     fn get(game_mode: GameMode) -> RiskSettings {
         match game_mode {
             GameMode::Limited => {
                 RiskSettings {
-                    travel: 75, // 75% chance of travel encounter
-                    capture: 60, // 60% chance of capture
+                    travel: 45, // 45% chance of travel encounter + 0.5 wanted (max 50)
+                    capture: 60, // 60% chance of capture + 0.2 wanted (max 20)
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
                     cops_drug_threshold: 5, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
@@ -158,8 +159,8 @@ impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
             },
             GameMode::Unlimited => {
                 RiskSettings {
-                    travel: 50, // 50% chance of travel encounter
-                    capture: 60, // 60% chance of capture
+                    travel: 40, // 50% chance of travel encounter + 0.5 wanted (max 50)
+                    capture: 60, // 60% chance of capture + 0.2 wanted (max 20)
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
                     cops_drug_threshold: 10, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
