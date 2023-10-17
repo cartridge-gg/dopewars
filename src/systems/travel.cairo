@@ -135,7 +135,11 @@ mod travel {
                 if player.wanted > risk_settings.wanted_decrease_by_turn {
                     player.wanted -= risk_settings.wanted_decrease_by_turn
                 }
-
+                
+                if player.drug_count == 0 && player.wanted > risk_settings.wanted_decrease_zero_drug {
+                    player.wanted -= risk_settings.wanted_decrease_zero_drug
+                }
+                
                 player.turn += 1;
                 
             }

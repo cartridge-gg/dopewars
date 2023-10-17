@@ -238,7 +238,7 @@ const Encounter = ({
             onFight();
           }}
           >
-          Figth
+          Fight
           </Button>
           )}
        

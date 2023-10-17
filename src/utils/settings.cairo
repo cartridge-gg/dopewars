@@ -31,6 +31,7 @@ struct RiskSettings {
     gangs_cash_threshold: u128,
 
     wanted_decrease_by_turn: u8,
+    wanted_decrease_zero_drug: u8,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -125,7 +126,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                     attack: 0,
                     defense: 0,
                     transport: 100,
-                    speed: 30
+                    speed: 0
                 }
             },
             GameMode::Unlimited => {
@@ -136,7 +137,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                     attack: 0,
                     defense: 0,
                     transport: 100,
-                    speed: 30
+                    speed: 0
                 }
             },
         }
@@ -155,6 +156,7 @@ impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
                     cops_drug_threshold: 5, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
                     wanted_decrease_by_turn : 5,
+                    wanted_decrease_zero_drug : 10,
                 }
             },
             GameMode::Unlimited => {
@@ -165,6 +167,7 @@ impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
                     cops_drug_threshold: 10, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
                     wanted_decrease_by_turn : 2,
+                    wanted_decrease_zero_drug : 7,
                 }
             },
         }

@@ -1,12 +1,14 @@
 use debug::PrintTrait;
 
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
 use rollyourown::utils::random::random;
 use rollyourown::utils::settings::RiskSettings;
-use rollyourown::models::player::{Player, PlayerStatus};
+use rollyourown::models::player::{Player, PlayerStatus, PlayerTrait, PlayerImpl};
 
 trait RiskTrait<T> {
     fn travel( self: T,seed: felt252, player: @Player) -> PlayerStatus;
-    fn run( self: T, seed: felt252, player: @Player) -> bool;
+    fn run( self: T,world: IWorldDispatcher, seed: felt252, player: @Player) -> bool;
 }
 
 impl RiskImpl of RiskTrait<RiskSettings> {
@@ -40,8 +42,8 @@ impl RiskImpl of RiskTrait<RiskSettings> {
     }
 
     #[inline(always)]
-    fn run( self: RiskSettings, seed: felt252, player: @Player ) -> bool {
-        let capture_threshold = self.capture + ( (*player).wanted / 5 );
+    fn run( self: RiskSettings, world: IWorldDispatcher, seed: felt252, player: @Player ) -> bool {
+        let capture_threshold = self.capture + ( (*player).wanted / 5 ) - (*player).get_speed(world).try_into().unwrap();
         occurs(seed, capture_threshold)
     }
 }

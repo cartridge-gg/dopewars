@@ -108,7 +108,7 @@ mod decide {
                     }
 
                     let seed = random::seed();
-                    match risk_settings.run(seed, @player) {
+                    match risk_settings.run(world,seed, @player) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
