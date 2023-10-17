@@ -12,10 +12,9 @@ import React from "react";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { getDrugById } from "@/dojo/helpers";
+import { getDrugById, getShopItem } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
-import { iconByTypeAndLevel } from "@/pages/[gameId]/pawnshop";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
@@ -41,7 +40,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                   <Tooltip label={`${item.name} (+${item.value})`}>
                     <HStack color="yellow.400" >
                      <>
-                     {iconByTypeAndLevel[item.id][item.level]({
+                     {getShopItem(item.id,item.level)?.icon({
                         boxSize: "26",
                       })} 
                      </>

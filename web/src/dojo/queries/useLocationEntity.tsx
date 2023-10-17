@@ -24,7 +24,8 @@ export class LocationEntity {
     if (!edges || edges.length === 0) return undefined;
 
     // we know both location and risk model uses key[1] as locationId
-    const keys = edges[0].node?.keys.split('/') || [];
+    //const keys = edges[0].node?.keys.split('/') || [];
+    const keys = edges[0].node?.keys || [];
     const locationId = getLocationByType(Number(keys[1]!))?.id;
 
     const drugMarketEntities = edges.filter((edge) => {
@@ -38,7 +39,8 @@ export class LocationEntity {
         (model) => model?.__typename === "Market",
       ) as Market;
 
-      const keys = edge.node?.keys.split('/') || [];
+     // const keys = edge.node?.keys.split('/') || [];
+      const keys = edge.node?.keys || [];
       const drugId = getDrugByType(Number(keys[2]!))?.id;
       const drugType = getDrugByType(Number(keys[2]!))?.type;
       

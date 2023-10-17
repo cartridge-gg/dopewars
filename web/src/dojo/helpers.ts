@@ -20,13 +20,32 @@ import {
   Drug,
   DrugInfo,
   DrugMarket,
+  ItemEnum,
+  ItemTextEnum,
   Location,
   LocationInfo,
   Outcome,
   OutcomeInfo,
   PlayerStatus,
+  ShopItemInfo
 } from "./types";
 import { getMuggerResponses, getCopResponses } from "@/responses";
+
+import {
+  Trenchcoat,
+  Kevlar,
+  Shoes,
+  Glock,
+  Knife,
+  Uzi,
+  Backpack,
+  Bicycle,
+  Dufflebag,
+  Fannypack,
+  Kneepads,
+  Leatherjacket,
+  Skateboard,
+} from "@/components/icons/items";
 
 export const locations: LocationInfo[] = [
   {
@@ -177,6 +196,125 @@ export const outcomes: OutcomeInfo[] = [
   },
 ];
 
+
+
+export const shopItemInfos: ShopItemInfo[] = [
+  // attack 
+  {
+    id: ItemTextEnum.Attack,
+    type: ItemEnum.Attack,
+    level: 1,
+    icon: Knife,
+    desc: "* Gives you some extra firepower *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Attack,
+    type: ItemEnum.Attack,
+    level: 2,
+    icon: Glock,
+    desc: "* Gives you some extra firepower *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Attack,
+    type: ItemEnum.Attack,
+    level: 3,
+    icon: Uzi,
+    desc: "* Gives you some extra firepower *",
+    name: "",
+    cost: 0,
+  },
+
+  // transport 
+  {
+    id: ItemTextEnum.Transport,
+    type: ItemEnum.Transport,
+    level: 1,
+    icon: Fannypack,
+    desc: "* Allows you to carry more product *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Transport,
+    type: ItemEnum.Transport,
+    level: 2,
+    icon: Backpack,
+    desc: "* Allows you to carry more product *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Transport,
+    type: ItemEnum.Transport,
+    level: 3,
+    icon: Dufflebag,
+    desc: "* Allows you to carry more product *",
+    name: "",
+    cost: 0,
+  },
+
+  // defense 
+  {
+    id: ItemTextEnum.Defense,
+    type: ItemEnum.Defense,
+    level: 1,
+    icon: Kneepads,
+    desc: "* Allows you to absorb some damage *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Defense,
+    type: ItemEnum.Defense,
+    level: 2,
+    icon: Leatherjacket,
+    desc: "* Allows you to absorb some damage *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Defense,
+    type: ItemEnum.Defense,
+    level: 3,
+    icon: Kevlar,
+    desc: "* Allows you to absorb some damage *",
+    name: "",
+    cost: 0,
+  },
+  // speed 
+  {
+    id: ItemTextEnum.Speed,
+    type: ItemEnum.Speed,
+    level: 1,
+    icon: Shoes,
+    desc: "* Allows you to escape more easily *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Speed,
+    type: ItemEnum.Speed,
+    level: 2,
+    icon: Skateboard,
+    desc: "* Allows you to escape more easily *",
+    name: "",
+    cost: 0,
+  },
+  {
+    id: ItemTextEnum.Speed,
+    type: ItemEnum.Speed,
+    level: 3,
+    icon: Bicycle,
+    desc: "* Allows you to escape more easily *",
+    name: "",
+    cost: 0,
+  },
+]
+
 function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
 }
@@ -205,6 +343,14 @@ export function getDrugByType(type: Drug) {
   return findBy<DrugInfo>(drugs, "type", type);
 }
 
+export function getShopItem(id: ItemTextEnum, level: number): ShopItemInfo {
+  const item = shopItemInfos.find(i => i.id === id && i.level === level);
+  if (!item) {
+    throw Error('item not found!');
+  }
+  return item;
+}
+
 export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
@@ -222,5 +368,6 @@ export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
   if (!drugMarkets) {
     return [];
   }
+  
   return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
 }

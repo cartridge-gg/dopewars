@@ -86,6 +86,7 @@ export default function Travel() {
       );
 
       const target = sortDrugMarkets(locationPrices.get(targetId));
+      
       return target.map((drug, index) => {
         if (currentLocationId) {
           const diff = drug.price - current[index].price;

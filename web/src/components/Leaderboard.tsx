@@ -22,7 +22,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress } from "./avatar/avatars";
 import colors from "@/theme/colors";
-import { Score, useGlobalScores, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
+import { Score, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
@@ -37,31 +37,20 @@ const Leaderboard = ({
     const {
     account,
   } = useDojoContext();
-  // TODO : use when supported on torii
   const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(undefined, 10);
-  // const { scores, refetch } = useGlobalScores();
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
-  // const pageSize = 10;
-  // const [hasNextPage, setHasNextPage] = useState(false);
-  // const [visibleScores, setVisibleScores] = useState(pageSize);
-
-  const listRef = useRef<null | HTMLLIElement>(null);
+  const listRef = useRef(null);
 
   useEffect(() => {
-    //setHasNextPage(visibleScores < scores.length);
     if (!listRef.current) return;
     const lastEl = listRef.current["lastElementChild"];
+    // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [scores/*, visibleScores*/]);
+  }, [scores]);
 
-  // const fetchNextPage = useCallback(() => {
-  //   setVisibleScores(visibleScores + pageSize);
-  // }, [listRef.current, visibleScores]);
-
- 
 
   if (!scores) {
     return <></>;
@@ -82,10 +71,11 @@ const Leaderboard = ({
               display: "none",
             },
           }}
+          ref={listRef}
+
         >
           {scores ? (
             scores
-            // .slice(0, visibleScores)?
             .map((score, index) => {
               const isOwn = score.address === account?.address;
               const color = isOwn
@@ -101,13 +91,6 @@ const Leaderboard = ({
                   color={color}
                   key={index}
                   cursor={isOwn && !score.name ? "pointer" : "auto"}
-                  onClick={() => {
-                    if (!isOwn || score.name) return;
-
-                    setTargetGameId(score.gameId);
-                    onOpen();
-                  }}
-                  ref={listRef}
                 >
                   <HStack mr={3}>
                     <Text
@@ -167,7 +150,7 @@ const Leaderboard = ({
           )}
         </UnorderedList>
         {hasNextPage && (
-          <Button variant="pixelated" onClick={fetchNextPage}>
+          <Button variant="pixelated" onClick={() => fetchNextPage()}>
             Load More
           </Button>
         )}

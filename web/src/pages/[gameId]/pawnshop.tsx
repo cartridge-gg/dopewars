@@ -25,61 +25,20 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import {
-  Trenchcoat,
-  Kevlar,
-  Shoes,
-  Glock,
-  Knife,
-  Uzi,
-  Backpack,
-  Bicycle,
-  Dufflebag,
-  Fannypack,
-  Kneepads,
-  Leatherjacket,
-  Skateboard,
-} from "@/components/icons/items";
+
 import { Truck } from "@/components/icons/Truck";
 import { useGameEntity } from "@/dojo/queries/useGameEntity";
-import { getLocationById, getLocationByType } from "@/dojo/helpers";
+import { getLocationById, getLocationByType, getShopItem } from "@/dojo/helpers";
+import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 
-export const descByType = {
-  Attack: "* Gives you some extra firepower *",
-  Transport: "* Allows you to carry more product *",
-  Defense: "* Allows you to absorb some damage *",
-  Speed: "* Allows you to escape more easily *",
-};
-
-export const iconByTypeAndLevel = {
-  Attack: {
-    1: Knife,
-    2: Glock,
-    3: Uzi,
-  },
-  Transport: {
-    1: Fannypack,
-    2: Backpack,
-    3: Dufflebag,
-  },
-  Defense: {
-    1: Kneepads,
-    2: Leatherjacket,
-    3: Kevlar,
-  },
-  Speed: {
-    1: Shoes,
-    2: Skateboard,
-    3: Bicycle,
-  },
-};
 
 export default function PawnShop() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
   const { account } = useDojoContext();
-  const { buyItem, dropItem, getAvailableItems, isPending } = useSystems();
+  const { buyItem, dropItem, isPending } = useSystems();
+  const { availableShopItems } = useAvailableShopItems(gameId);
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
@@ -91,23 +50,6 @@ export default function PawnShop() {
   const { toast } = useToast();
 
   const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo>(null);
-  const [availableItems, setAvailableItems] = useState<ShopItemInfo[]>([]);
-
-  useEffect(() => {
-    const update = async () => {
-      const { items } = (await getAvailableItems(gameId)) || [];
-      const shopItems = items.map((i) => ({
-        desc: descByType[i.item_type],
-        icon: iconByTypeAndLevel[i.item_type][i.level],
-        ...i,
-      }));
-      setAvailableItems(shopItems);
-    };
-
-    if (gameId) {
-      update();
-    }
-  }, [gameId, getAvailableItems]);
 
   const selectItem = (shopItem: ShopItemInfo) => {
     // do checks
@@ -134,7 +76,7 @@ export default function PawnShop() {
     if (!selectedShopItem) return;
 
     try {
-      const { hash } = await buyItem(gameId, selectedShopItem.item_id);
+      const { hash } = await buyItem(gameId, selectedShopItem.id);
       toast({
         message: "Was it a wise choice...",
         icon: Alert,
@@ -181,8 +123,8 @@ export default function PawnShop() {
           fontSize={["16px", "20px"]}
         >
          
-          {availableItems &&
-            availableItems.map((shopItem, index) => {
+          {availableShopItems &&
+            availableShopItems.map((shopItem, index) => {
               return (
                 <Button
                   w="full"
@@ -251,6 +193,6 @@ export default function PawnShop() {
           Buy
         </Button>
       </Footer>
-    </Layout>
+     </Layout>
   );
 }

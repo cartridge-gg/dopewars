@@ -79,8 +79,10 @@ export interface DrugInfo {
 export interface ShopItemInfo {
   type: ItemEnum;
   name: string;
+  desc: string;
   cost: number;
   id: string;
+  level: number;
   icon: React.FC;
 }
 
@@ -96,6 +98,7 @@ export interface OutcomeInfo {
 
 export type DrugMarket = {
   id: string; // id is hex encoded drug name
+  type: string;
   price: number;
   marketPool: Market;
 };

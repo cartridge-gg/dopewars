@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
+import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 
 export default function Turn() {
   const router = useRouter();
@@ -31,10 +32,9 @@ export default function Turn() {
     gameId,
   });
 
+  const { availableShopItems } = useAvailableShopItems(gameId);
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
-  const {getAvailableItems} = useSystems();
-  const [availableItems, setAvailableItems] = useState([]);
-
+ 
   useEffect(() => {
     if (gameEntity && playerEntity) {
       // initial move, just forward user to location
@@ -49,16 +49,6 @@ export default function Turn() {
     }
   }, [gameEntity, playerEntity, gameId, router]);
 
-  useEffect(() => {
-    const update = async()=> {
-      const {items} = (await getAvailableItems(gameId)) || []
-      setAvailableItems(items)
-    }
-
-    if (gameEntity && playerEntity) {
-      update()
-    }
-  }, [gameEntity, playerEntity, gameId, getAvailableItems]);
 
   if (!playerEntity || !gameEntity || playerEntity.turn === playerEntity.max_turns) {
     return <></>;
@@ -150,7 +140,7 @@ export default function Turn() {
        
 
 
-          {availableItems && availableItems.length > 0 && (
+          {availableShopItems && availableShopItems.length > 0 && (
             <Button
                       w={["full", "auto"]}
                       onClick={() => {

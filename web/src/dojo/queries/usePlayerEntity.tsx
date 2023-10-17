@@ -146,6 +146,7 @@ export const usePlayerEntity = ({
     {
       enabled: !!gameId && !!address,
       refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
+      
     },
   );
 

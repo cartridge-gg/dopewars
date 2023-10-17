@@ -1,19 +1,20 @@
 import { useCallback } from "react";
-import { useDojoContext } from "./useDojoContext";
+import { useDojoContext } from "./useDojoContext.ts";
 // import { BaseEventData, parseEvent, parseEvents, WorldEvents } from "../events";
 import { Action, GameMode, Location, ItemEnum } from "../types";
-import { shortString, GetTransactionReceiptResponse } from "starknet";
+import { shortString, GetTransactionReceiptResponse, BigNumberish } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
+import { SystemExecuteResult } from "./useSystems";
 
 export interface SystemsInterface {
   feedLeaderboard: (
     count: number,
   ) => Promise<SystemExecuteResult>;
 
-  isPending: boolean;
-  error?: Error;
+  // isPending: boolean;
+  // error?: Error;
 }
 
 
@@ -32,12 +33,10 @@ export const useDevtools = (): SystemsInterface => {
       contract: string,
       system: string,
       callData: BigNumberish[],
-    ): {
+    ): Promise<{
       hash: string;
       receipt: GetTransactionReceiptResponse;
-      events: any[];
-      parsedEvents: any[];
-    } => {
+    }> => {
 
       const tx = await execute(masterAccount, contract, system, callData);
       const receipt = await masterAccount.waitForTransaction(tx.transaction_hash, {
@@ -46,7 +45,7 @@ export const useDevtools = (): SystemsInterface => {
 
       return {
         hash: tx.transaction_hash,
-
+        receipt
       };
     },
     [execute, masterAccount],
@@ -54,7 +53,7 @@ export const useDevtools = (): SystemsInterface => {
 
   const feedLeaderboard = useCallback(
     async (count: number) => {
-      const { hash, receipt, events, parsedEvents } = await executeAndReceipt(
+      const { hash, receipt, } = await executeAndReceipt(
         "devtools",
         "feed_leaderboard",
         [count],
@@ -62,6 +61,7 @@ export const useDevtools = (): SystemsInterface => {
 
       return {
         hash,
+        receipt
       };
     },
     [executeAndReceipt],

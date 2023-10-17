@@ -20,7 +20,6 @@ import Leaderboard from "@/components/Leaderboard";
 // import { useGlobalScores } from "@/dojo/queries/useGlobalScores";
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { JoinedEventData } from "@/dojo/events";
 import { getLocationById } from "@/dojo/helpers";
 import { usePlayerStore } from "@/hooks/state";
 import HomeLeftPanel from "@/components/HomeLeftPanel";

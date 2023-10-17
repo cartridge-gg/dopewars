@@ -2,6 +2,7 @@ import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import {
   GetTransactionReceiptResponse,
   InvokeTransactionReceiptResponse,
+  SuccessfulTransactionReceiptResponse,
   num,
   shortString
 } from "starknet";
@@ -26,8 +27,9 @@ export interface CreateEventData extends BaseEventData {
 }
 
 export interface JoinedEventData extends BaseEventData {
+  gameId: string;
   playerId: string;
-  locationId: string;
+  playerName: string;
 }
 
 export interface BoughtEventData extends BaseEventData {
@@ -69,15 +71,18 @@ export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
   if (receipt.status === "REJECTED") {
     throw new Error(`transaction REJECTED`);
   }
+  if (receipt.status === "REVERTED") {
+    throw new Error(`transaction REVERTED`);
+  }
 
   const allEvents = []
   for (let eventType of Object.values(WorldEvents)) {
-    allEvents.push(parseEvents(receipt, eventType))
+    allEvents.push(parseEvents((receipt as SuccessfulTransactionReceiptResponse), eventType))
   }
   return allEvents.flat()
 }
 
-export const parseEvents = (receipt: GetTransactionReceiptResponse, eventType: WorldEvents) => {
+export const parseEvents = (receipt: SuccessfulTransactionReceiptResponse, eventType: WorldEvents) => {
   const events = receipt.events.filter(e => e.keys[0] === eventType)
   return events.map(e => parseEvent(e, eventType))
 }
@@ -100,7 +105,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         eventType,
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
-        playerStatus: Number(raw.data[2]),
+        playerStatus: shortString.decodeShortString(raw.data[2]),
       } as AdverseEventData;
 
     case WorldEvents.PlayerJoined:

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { usePlayerEntity, ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { getLocationById } from "@/dojo/helpers";
+import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
@@ -15,8 +15,6 @@ import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
 import { Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
-import { iconByTypeAndLevel } from "@/pages/[gameId]/pawnshop";
-
 
 export default function Decision() {
   const router = useRouter();
@@ -240,7 +238,7 @@ const Encounter = ({
             onFight();
           }}
           >
-          Fight{iconByTypeAndLevel[attackItem.id][attackItem.level]({
+          Fight{getShopItem(attackItem.id,attackItem.level).icon({
                         boxSize: "26",
                       })} 
           </Button>
@@ -255,7 +253,7 @@ const Encounter = ({
               onRun();
             }}
           >
-            Run{speedItem && iconByTypeAndLevel[speedItem.id][speedItem.level]({
+            Run{speedItem && getShopItem(speedItem.id,speedItem.level).icon({
                         boxSize: "26",
                       })} 
           </Button>

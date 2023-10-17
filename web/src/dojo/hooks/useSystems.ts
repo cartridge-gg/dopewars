@@ -1,13 +1,14 @@
 import { useCallback } from "react";
-import { useDojoContext } from "./useDojoContext";
-import { Action, GameMode } from "../types";
-import { shortString, GetTransactionReceiptResponse } from "starknet";
+import { useDojoContext } from "./useDojoContext.ts";
+import { Action, GameMode, ShopItemInfo } from "../types";
+import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
-import { parseAllEvents } from "../events";
+import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
 import { useState } from "react";
 import { useToast } from "@/hooks/toast";
+import { ShopItem } from "../queries/usePlayerEntity";
 
 export interface SystemsInterface {
   createGame: (
@@ -40,14 +41,11 @@ export interface SystemsInterface {
   dropItem: (
     gameId: string, itemId: ItemEnum
   ) => Promise<SystemExecuteResult>;
-  getAvailableItems: (
-    gameId: string
-  ) => Promise<SystemExecuteResult>;
-
+ 
   failingTx: () => Promise<SystemExecuteResult>;
 
   isPending: boolean;
-  error?: Error;
+  error?: string;
 }
 
 export interface SystemExecuteResult {
@@ -55,6 +53,7 @@ export interface SystemExecuteResult {
   event?: BaseEventData;
   events?: BaseEventData[];
 }
+
 
 const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -71,39 +70,49 @@ export const useSystems = (): SystemsInterface => {
   const { toast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<Error | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const executeAndReceipt = useCallback(
     async (
       contract: string,
       system: string,
       callData: BigNumberish[],
-    ): {
+    ): Promise<{
       hash: string;
       receipt: GetTransactionReceiptResponse;
       events: any[];
       parsedEvents: any[];
-    } => {
+    }> => {
 
       setError(undefined)
       setIsPending(true)
 
       const tx = await execute(account, contract, system, callData);
-
       const receipt = await account.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
       });
 
-      if (receipt.execution_status != "SUCCEEDED") {
-        setError(receipt.execution_status)
+      if (receipt.status === "REJECTED") {
+        setError("Transaction Rejected")
         setIsPending(false)
-
         toast({
-          message: receipt.revert_reason,
+          message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message,
           duration: 20_000,
           isError: true
         })
-        throw Error(receipt.revert_reason)
+        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
+      }
+
+      if (receipt.execution_status === "REVERTED") {
+        setError("Transaction Reverted")
+        setIsPending(false)
+
+        toast({
+          message: (receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted',
+          duration: 20_000,
+          isError: true
+        })
+        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
       }
 
       const events = getEvents(receipt);
@@ -119,11 +128,12 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash: tx?.transaction_hash,
+        receipt,
         events,
         parsedEvents,
       };
     },
-    [execute, account, toast ],
+    [execute, account, toast],
   );
 
   const createGame = useCallback(
@@ -257,43 +267,6 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
-
-
-  const getAvailableItems = useCallback(
-    async (gameId: string) => {
-
-      let items = []
-      try {
-
-        items = await call(
-          account,
-          "shop",
-          "available_items",
-          [Number(gameId), account.address],
-        );
-      }
-      catch (e) {
-        console.log(e)
-        // shop is closed
-      }
-
-      return {
-        items: items.map(i => ({
-          item_id: Number(i.item_id),
-          item_type: shortString.decodeShortString(i.item_type),
-          name: shortString.decodeShortString(i.name),
-          level: Number(i.level),
-          cost: Number(i.cost),
-          value: Number(i.cost)
-        })),
-      };
-
-    },
-    [call, account],
-  );
-
-
-
   const failingTx = useCallback(
     async () => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -336,8 +309,7 @@ export const useSystems = (): SystemsInterface => {
     decide,
     buyItem,
     dropItem,
-    getAvailableItems,
-
+   
     // devtool
     failingTx,
 
