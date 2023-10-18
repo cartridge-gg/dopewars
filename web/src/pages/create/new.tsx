@@ -9,17 +9,15 @@ import { VStack, HStack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
 import { GameMode } from "@/dojo/types";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Glock } from "@/components/icons/items";
 import { Clock } from "@/components/icons";
 
-export default function Name() {
+export default function New() {
   const router = useRouter();
 
-  const { account } = useDojoContext();
   const { createGame, isPending } = useSystems();
 
   const { toast } = useToast();
