@@ -61,8 +61,8 @@ export const DojoProvider = ({
 
   const ryoContext = {
     setup: value, // the provided setup
-    // account: selectedAccount,// the selected account
-    account: masterAccount, // use master account = full auth
+    account: selectedAccount,// the selected account
+    //account: masterAccount, // use master account = full auth
     burner: {
       create, // create a new account
       list, // list all accounts
