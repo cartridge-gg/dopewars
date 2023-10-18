@@ -65,6 +65,8 @@ query LocationEntities($gameId: String!, $locationId: String!) {
           ... on Market {
             cash
             quantity
+            location_id
+            drug_id
           }
         }
       }

@@ -3,13 +3,18 @@ import { world } from "./world";
 import { RPCProvider, Query, } from "@dojoengine/core";
 import { Account, Contract, TypedContract, num, shortString } from "starknet";
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from '../generated/graphql';
-import { createClientContracts } from "./createClientContracts";
+// import { getSdk } from '../generated/graphql';
+// import { createClientContracts } from "./createClientContracts";
+
+export type ManifestContract = {
+    name: string;
+    abi: any
+};
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export const getContractByName = (name: string, manifest: any) => {
-    let contract = manifest.contracts.find((contract) => contract.name === name);
+    let contract = manifest.contracts.find((contract: ManifestContract) => contract.name === name);
     return contract
 }
 

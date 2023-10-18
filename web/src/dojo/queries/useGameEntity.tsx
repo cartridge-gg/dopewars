@@ -4,11 +4,9 @@ import { ec, num } from "starknet";
 import { REFETCH_INTERVAL } from "../constants";
 
 interface GameEntityData {
-  entity: {
-    gameModels: {
-      edges : Game[];
-    }
-  };
+  gameModels: {
+    edges : {node: Game}[];
+  }
 }
 
 export class GameEntity {

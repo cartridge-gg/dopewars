@@ -1,5 +1,5 @@
 
-import { DojoContext } from "../context/DojoContext.tsx";
+import { DojoContext } from "../context/DojoContext";
 import { useContext, useMemo } from "react";
 
 import { SetupResult } from "../setup/setup";
@@ -11,13 +11,13 @@ export type RyoContext = {
   account: Account;
   burner: {
     create: () => void;
-    list: () => any[];
-    get: (id: string) => any;
-    select: (id: string) => void;
-    account: Account | null;
+    // list: () => any[];
+    // get: (id: string) => any;
+    // select: (id: string) => void;
+    // account: Account | null;
     masterAccount: Account;
     isDeploying: boolean;
-    clear: () => void;
+    // clear: () => void;
   };
 }
 
@@ -40,9 +40,11 @@ export const useDojoContext = () => {
   const privateKey = process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY!;
 
   const masterAccount = useMemo(() => {
-    return new Account({ rpc: {
-      nodeUrl: value.network.provider.provider.nodeUrl
-    }}, masterAddress, privateKey)
+    return new Account({
+      rpc: {
+        nodeUrl: value.network.provider.provider.nodeUrl
+      }
+    }, masterAddress, privateKey)
   }, [value.network.provider.provider, masterAddress, privateKey])
 
   // this breaks all
@@ -60,7 +62,9 @@ export const useDojoContext = () => {
     // account: selectedAccount,// the selected account
     account: masterAccount, // use master account = full auth
     burner: {
-      create: () => { }
+      create: () => { },
+      isDeploying: false,
+      masterAccount
     },
     // burner: {
     //   create,        // create a new account

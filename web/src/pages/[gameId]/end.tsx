@@ -39,8 +39,9 @@ import { Footer } from "@/components/Footer";
 export default function End() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { setName: submitSetName } = useSystems();
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState("");
+  const [isDead, setIsDead] = useState(false);
+  const [day, setDay] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
@@ -55,12 +56,12 @@ export default function End() {
     gameId,
   });
 
-  const isDead = playerEntity?.health === 0;
-  const day = playerEntity.turn + 1;
 
   useEffect(() => {
-   if( playerEntity&&playerEntity.name ) {
+   if( playerEntity ) {
     setName(playerEntity.name)
+    setIsDead(playerEntity?.health === 0)
+    setDay(playerEntity.turn + 1)
    }
   }, [playerEntity]);
 

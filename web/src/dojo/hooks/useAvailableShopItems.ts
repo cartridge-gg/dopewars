@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDojoContext } from "./useDojoContext.ts";
+import { useDojoContext } from "./useDojoContext";
 import { ItemTextEnum, ShopItemInfo } from "../types";
 import { shortString } from "starknet";
 import { getShopItem } from "../helpers";
@@ -27,8 +27,8 @@ export const useAvailableShopItems = (gameId: string) => {
                 const shopItems = items.map(i => {
                     const itemInfos = getShopItem(shortString.decodeShortString(i.item_type) as ItemTextEnum, Number(i.level));
                     return {
-                        id: Number(i.item_id),
-                        type: shortString.decodeShortString(i.item_type),
+                        id:i.item_id,
+                        type: itemInfos.type,
                         name: shortString.decodeShortString(i.name),
                         level: Number(i.level),
                         cost: Number(i.cost),
@@ -51,7 +51,7 @@ export const useAvailableShopItems = (gameId: string) => {
         if (gameId) {
             update();
         }
-    }, [gameId])
+    }, [gameId, account, call])
 
     return { availableShopItems }
 

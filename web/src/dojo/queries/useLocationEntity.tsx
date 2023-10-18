@@ -26,7 +26,7 @@ export class LocationEntity {
     // we know both location and risk model uses key[1] as locationId
     //const keys = edges[0].node?.keys.split('/') || [];
     const keys = edges[0].node?.keys || [];
-    const locationId = getLocationByType(Number(keys[1]!))?.id;
+    const locationId = getLocationByType(Number(keys[1]!))!.id;
 
     const drugMarketEntities = edges.filter((edge) => {
       return edge.node?.models?.find(
@@ -41,8 +41,8 @@ export class LocationEntity {
 
      // const keys = edge.node?.keys.split('/') || [];
       const keys = edge.node?.keys || [];
-      const drugId = getDrugByType(Number(keys[2]!))?.id;
-      const drugType = getDrugByType(Number(keys[2]!))?.type;
+      const drugId = getDrugByType(Number(keys[2]!))!.id;
+      const drugType = getDrugByType(Number(keys[2]!))!.type;
       
       const price =
         Number(marketModel.cash) /
@@ -51,7 +51,7 @@ export class LocationEntity {
 
       return {
         id: drugId,
-        type: drugType,
+        type: drugType ,
         price: price,
         marketPool: marketModel,
       };

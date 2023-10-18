@@ -49,12 +49,12 @@ export default function PawnShop() {
 
   const { toast } = useToast();
 
-  const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo>(null);
+  const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo| undefined>(undefined);
 
   const selectItem = (shopItem: ShopItemInfo) => {
     // do checks
     if (selectedShopItem === shopItem) {
-      setSelectedShopItem(null);
+      setSelectedShopItem(undefined);
     } else {
       setSelectedShopItem(shopItem);
     }
@@ -76,7 +76,7 @@ export default function PawnShop() {
     if (!selectedShopItem) return;
 
     try {
-      const { hash } = await buyItem(gameId, selectedShopItem.id);
+      const { hash } = await buyItem(gameId, selectedShopItem.type);
       toast({
         message: "Was it a wise choice...",
         icon: Alert,
@@ -88,6 +88,10 @@ export default function PawnShop() {
       console.log(e);
     }
   };
+
+  if(!playerEntity || !gameEntity){
+    return null
+  }
 
   return (
     <Layout

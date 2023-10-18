@@ -3,6 +3,7 @@ import {
   Drug as DrugType,
   usePlayerEntityQuery,
   EntityEdge,
+  Item,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
@@ -112,7 +113,7 @@ export class PlayerEntity {
     const items: ShopItem[] = itemEdges.map((edge) => {
       const itemModel = edge.node?.models?.find(
         (model) => model?.__typename === "Item",
-      ) as DrugType;
+      ) as Item;
 
       return {
         id: itemModel.item_id as ItemTextEnum,

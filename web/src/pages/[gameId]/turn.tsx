@@ -50,7 +50,7 @@ export default function Turn() {
   }, [gameEntity, playerEntity, gameId, router]);
 
 
-  if (!playerEntity || !gameEntity || playerEntity.turn === playerEntity.max_turns) {
+  if (!playerEntity || !gameEntity || playerEntity.turn === playerEntity.maxTurns) {
     return <></>;
   }
 

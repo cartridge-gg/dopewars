@@ -21,7 +21,7 @@ export class MarketPrices {
       const node = edge.node;
       const locationId = node?.location_id;
       const drugId = node?.drug_id;
-      const drugType = getDrugById(drugId)?.type;
+      const drugType = getDrugById(drugId)!.type;
       const price =
         Number(node?.cash) / Number(node?.quantity) / SCALING_FACTOR;
 

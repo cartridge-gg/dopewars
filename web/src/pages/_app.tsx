@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { DojoProvider } from "@/dojo/context/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
-import { setup } from "@/dojo/setup/setup";
+import { SetupResult, setup } from "@/dojo/setup/setup";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,13 +35,12 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  const [setupResult, setSetupResult] = useState(null)
+  const [setupResult, setSetupResult] = useState<SetupResult|undefined>(undefined)
   
 
   useEffect( () => {
     const init = async () => {
       const setupResult = await setup();
-
       setSetupResult(setupResult)
     }
 

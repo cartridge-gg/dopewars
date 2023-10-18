@@ -1,11 +1,11 @@
-import { SetupNetworkResult, getContractByName } from "./setupNetwork";
+import { ManifestContract, SetupNetworkResult, getContractByName } from "./setupNetwork";
 import { AccountInterface, Contract, ProviderInterface } from "starknet";
 
 export type ClientContracts = ReturnType<typeof createClientContracts>;
 
 export function createClientContracts(provider: ProviderInterface | AccountInterface, manifest: any) {
 
-    return manifest.contracts.map(contract => {
+    return manifest.contracts.map((contract: ManifestContract ) => {
         const name = contract.name
         const address = getContractByName(name, manifest).address
         const instance = new Contract(contract.abi, address, provider);

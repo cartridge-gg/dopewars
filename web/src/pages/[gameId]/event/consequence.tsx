@@ -30,7 +30,7 @@ export default function Consequence() {
 
   useEffect(() => {
     const outcomeInfos = getOutcomeInfo(
-      router.query.status,
+      router.query.status as PlayerStatus,
       Number(router.query.outcome),
     )
    setOutcome(outcomeInfos);

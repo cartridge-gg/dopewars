@@ -7895,19 +7895,6 @@ starknet@^5.19.5:
     pako "^2.0.4"
     url-join "^4.0.1"
 
-starknet@^5.19.6:
-  version "5.19.6"
-  resolved "https://registry.yarnpkg.com/starknet/-/starknet-5.19.6.tgz#61e43e083888ef64598473bc2e4bd3e1e07fe9d4"
-  integrity sha512-MyO48QKu+d8CBH/7ruI/RPrDwoFRNV/uxql2nBeA4ccqBXs698FkeGkMhZv++VIwf1MRajHcTM91KuyZQMyMLw==
-  dependencies:
-    "@noble/curves" "~1.2.0"
-    "@scure/starknet" "~0.3.0"
-    abi-wan-kanabi "^1.0.3"
-    isomorphic-fetch "^3.0.0"
-    lossless-json "^2.0.8"
-    pako "^2.0.4"
-    url-join "^4.0.1"
-
 stop-iteration-iterator@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stop-iteration-iterator/-/stop-iteration-iterator-1.0.0.tgz#6a60be0b4ee757d1ed5254858ec66b10c49285e4"

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useDojoContext } from "./useDojoContext.ts";
-import { Action, GameMode, ShopItemInfo } from "../types";
+import { useDojoContext } from "./useDojoContext";
+import { Action, Drug, GameMode, ShopItemInfo } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData } from "../events";
@@ -16,24 +16,24 @@ export interface SystemsInterface {
     playerName: string
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
-  join: (gameId: string) => Promise<SystemExecuteResult>;
+ // join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
-    locationId: string,
-    drugId: string,
+    locationId: Location,
+    drugId: Drug,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   sell: (
     gameId: string,
-    locationId: string,
-    drugId: string,
+    locationId: Location,
+    drugId: Drug,
     quantity: number,
   ) => Promise<SystemExecuteResult>;
   // setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
   decide: (
     gameId: string,
     action: Action,
-    nextLocationId: string,
+    nextLocationId: Location,
   ) => Promise<SystemExecuteResult>;
   buyItem: (
     gameId: string, itemId: ItemEnum
@@ -52,6 +52,7 @@ export interface SystemExecuteResult {
   hash: string;
   event?: BaseEventData;
   events?: BaseEventData[];
+  [key: string]: any;
 }
 
 
@@ -180,8 +181,8 @@ export const useSystems = (): SystemsInterface => {
   const buy = useCallback(
     async (
       gameId: string,
-      locationId: string,
-      drugId: string,
+      locationId: Location,
+      drugId: Drug,
       quantity: number,
     ) => {
 
@@ -201,8 +202,8 @@ export const useSystems = (): SystemsInterface => {
   const sell = useCallback(
     async (
       gameId: string,
-      locationId: string,
-      drugId: string,
+      locationId: Location,
+      drugId: Drug,
       quantity: number,
     ) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -219,7 +220,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const decide = useCallback(
-    async (gameId: string, action: Action, nextLocationId: string) => {
+    async (gameId: string, action: Action, nextLocationId: Location) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "decide",
         "decide",

@@ -88,7 +88,7 @@ export type Entity = {
   created_at?: Maybe<Scalars['DateTime']>;
   event_id?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  keys?: Maybe<Scalars['String']>;
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
   model_names?: Maybe<Scalars['String']>;
   models?: Maybe<Array<Maybe<ModelUnion>>>;
   updated_at?: Maybe<Scalars['DateTime']>;
@@ -109,9 +109,9 @@ export type EntityEdge = {
 export type Event = {
   __typename?: 'Event';
   created_at?: Maybe<Scalars['DateTime']>;
-  data?: Maybe<Scalars['String']>;
+  data?: Maybe<Array<Maybe<Scalars['String']>>>;
   id?: Maybe<Scalars['ID']>;
-  keys?: Maybe<Scalars['String']>;
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
   systemCall: SystemCall;
   transaction_hash?: Maybe<Scalars['String']>;
 };
@@ -832,7 +832,7 @@ export type LocationEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
+export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
 
 
 export const AvailableGamesDocument = `
@@ -1128,6 +1128,8 @@ export const LocationEntitiesDocument = `
           ... on Market {
             cash
             quantity
+            location_id
+            drug_id
           }
         }
       }

@@ -18,8 +18,8 @@ export const useToast = () => {
       message: string;
       icon?: React.FC;
       link?: string;
-      duration: number;
-      isError: boolean;
+      duration?: number;
+      isError?: boolean;
     }) => {
       chakraToast({
         position: "bottom-left",

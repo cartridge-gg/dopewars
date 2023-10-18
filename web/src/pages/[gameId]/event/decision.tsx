@@ -117,8 +117,9 @@ export default function Decision() {
     return <></>;
   }
 
+  // if playerEntity is too slow to update, PlayerStatus is still Normal
   if (playerEntity.status == PlayerStatus.Normal && !isPending) {
-    router.push(`/${gameId}/turn`);
+    //router.push(`/${gameId}/turn`);
     // router.push(
     //   `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
     // );

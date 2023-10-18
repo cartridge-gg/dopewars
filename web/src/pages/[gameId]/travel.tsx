@@ -148,7 +148,7 @@ export default function Travel() {
     if (targetId) {
 
       try {
-        const locationId = getLocationById(targetId)?.type;
+        const locationId = getLocationById(targetId)!.type;
         const { event, events, hash } = await travel(gameId, locationId);
         if (event) {
           return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
