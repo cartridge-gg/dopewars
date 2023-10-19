@@ -3,17 +3,17 @@ import { createClient } from "graphql-ws";
 
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { create } from "zustand";
-import { EntityEdge, PlayerEntityDocument } from "@/generated/graphql";
+import { EntityEdge, PlayerEntityDocument, PlayerEntityQuery } from "@/generated/graphql";
 
-const wsClient = createClient({ url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS });
-const client = new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT);
+const wsClient = createClient({ url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS! });
+const client = new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!);
 
 
 export interface PlayerEntityStore {
-    id: string,
-    playerEntity: PlayerEntity,
+    id: string | null,
+    playerEntity: PlayerEntity | null,
     initPlayerEntity: (gameId: string, playerId: string) => void;
-    resetAll: () => void;
+    reset: () => void;
     unsubscribe: () => void;
   }
   
@@ -73,16 +73,21 @@ export const usePlayerEntityStore = create<PlayerEntityStore>((set, get) => ({
     const data = await client.request(PlayerEntityDocument, {
         "gameId": gameId,
         "playerId":playerId
-    });
+    }) as PlayerEntityQuery;
 
-    const id = data.entities.edges[0].node.id;
-    const player = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
+    const edges = (data!.entities!.edges as EntityEdge[])
+
+    if (edges && edges[0] && edges[0].node){
+        const id = edges[0].node.id;
+        const player = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
+        
+        usePlayerEntityStore.setState({playerEntity: player})
     
-    usePlayerEntityStore.setState({playerEntity: player})
-
-    console.log("executeQuery : ", id)
-
-    return id
+        console.log("executeQuery : ", id)
+    
+        return id
+    }
+    return ""
   }
   
 

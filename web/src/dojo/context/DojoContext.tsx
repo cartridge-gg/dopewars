@@ -2,10 +2,10 @@ import { createContext, ReactNode, useContext, useMemo } from "react";
 import { SetupResult } from "../setup/setup";
 import { useBurner } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
-import { usePlayerEntityStore } from "@/hooks/player";
+import { PlayerEntityStore, usePlayerEntityStore } from "@/hooks/player";
 
 export type RyoContext = {
-  playerEntity: any;
+  playerEntityStore: PlayerEntityStore;
   setup: SetupResult;
   account: Account | null
   burner: {
