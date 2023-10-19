@@ -84,21 +84,14 @@ export default function New() {
                 <Glock /> GANGSTER
               </Button>
             </HStack>
-            <>
-            {gameMode === GameMode.Limited && (
-              <Text  py="10px" fontSize="13px" color="neon.500">
-              TURN LIMITED
-            </Text>
-            )}
-
-            {gameMode === GameMode.Unlimited && (
-              <Text py="10px" fontSize="13px" color="neon.500">
-             NO TURN LIMIT! HUSTLE FOREVA
-            </Text>
-            )}
-          
-            </>
-          
+            <HStack py="10px" fontSize="13px" color="neon.500">
+              {gameMode === GameMode.Limited && (
+                <Text>TURN LIMITED</Text>
+              )}
+              {gameMode === GameMode.Unlimited && (
+                <Text >NO TURN LIMIT! HUSTLE FOREVA </Text>
+              )}
+            </HStack>
           </VStack>
 
           <VStack w="full">

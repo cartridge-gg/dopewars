@@ -79,7 +79,7 @@ export default function Decision() {
         switch (event.outcome) {
           case Outcome.Died:
             toast({
-              message: `You too ${event.healthLoss}HP damage and died...`,
+              message: `You took ${event.healthLoss}HP damage and died...`,
               icon: Heart,
               link: `http://amazing_explorer/${result.hash}`,
             });

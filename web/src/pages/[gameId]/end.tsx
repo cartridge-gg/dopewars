@@ -165,6 +165,12 @@ export default function End() {
             </HStack>
           </VStack>
           <VStack flex="1" my="auto" justify="space-between">
+            <Image display={["none", "flex"]} src="/images/sunset.png" />
+            <Button  mt="20px" onClick={() => {
+              router.push("/")
+            }}>
+              Play again
+            </Button>
             {/* <VStack w={["full", "400px"]}>
               <Text py="20px" textStyle="subheading" fontSize="13px">
                 Name Entry

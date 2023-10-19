@@ -133,8 +133,8 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
             GameMode::Unlimited => {
                 PlayerSettings {
                     health: 100_u8,
-                    cash: 3000_u128 * SCALING_FACTOR,
-                    wanted: 29,
+                    cash: 1500_u128 * SCALING_FACTOR,
+                    wanted: 24,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -191,10 +191,10 @@ impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
                 DecideSettings {
                     gangs_payment_cash_pct: 20, //% of cash
                     cops_payment_drug_pct: 20, //% of drug
-                    health_impact: (12 + ((*player).turn / 3 * 2))
+                    health_impact: (10 + ((*player).turn / 3 * 2))
                         .try_into()
                         .unwrap(), // 10 + (2 each 3 turn)
-                    wanted_impact_run: 5,
+                    wanted_impact_run: 4,
                     wanted_impact_fight: 10,
                 }
             },
@@ -202,10 +202,10 @@ impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
                 DecideSettings {
                     gangs_payment_cash_pct: 25, //% of cash
                     cops_payment_drug_pct: 25, //% of drug
-                    health_impact: (10 + ((*player).turn / 5))
+                    health_impact: (8 + ((*player).turn / 5))
                         .try_into()
                         .unwrap(), // 10 + (1 each 5 turn)
-                    wanted_impact_run: 2,
+                    wanted_impact_run: 3,
                     wanted_impact_fight: 8,
                 }
             },

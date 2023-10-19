@@ -126,6 +126,13 @@ mod travel {
                 };
 
                 risk_settings.update_wanted(ref player);
+
+                if player.health + 2  >= 100{
+                    player.health = 100;
+                } else {
+                    player.health += 2;
+                }
+
                 player.turn += 1;
             }
 

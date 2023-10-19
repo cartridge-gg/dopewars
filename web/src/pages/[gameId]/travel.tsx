@@ -160,7 +160,14 @@ export default function Travel() {
           link: `http://amazing_explorer/${hash}`,
         });
 
-        router.push(`/${gameId}/turn`);
+        if( playerEntity?.turn <= 1) {
+          const locationSlug = getLocationById(targetId)!.slug;
+            router.push(
+              `/${gameId}/${locationSlug}`,
+            );
+        }else {
+          router.push(`/${gameId}/turn`);
+        }
 
         // market events
         if (events) {
