@@ -12,6 +12,7 @@ import { DojoProvider } from "@/dojo/context/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
 import { SetupResult, setup } from "@/dojo/setup/setup";
+import RegisterEntities from "@/components/RegisterEntities";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +51,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {setupResult && <DojoProvider value={setupResult}>
-        <ChakraProvider theme={theme}>
+          <RegisterEntities />
+          <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>
             <title>Roll your Own</title>

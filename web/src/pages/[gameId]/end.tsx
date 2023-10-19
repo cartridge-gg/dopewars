@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
+import { Gem, Trophy, Pistol, Arrest, Roll, Siren } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -29,8 +29,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { Calendar } from "@/components/icons/archive";
 import { Skull, Heart } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
@@ -45,17 +43,10 @@ export default function End() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-      });
-
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
-
+  const { playerEntity } = playerEntityStore
+ 
 
   useEffect(() => {
    if( playerEntity ) {
@@ -121,6 +112,11 @@ export default function End() {
                 <StatsItem
                   text={`${playerEntity?.health} Health`}
                   icon={isDead ? <Skull color="green" /> : <Heart />}
+                />
+                <Divider borderColor="neon.600" />
+                <StatsItem
+                  text={`${playerEntity?.wanted} Wanted`}
+                  icon={<Siren color="red" /> }
                 />
                 {/* 
                 <Divider borderColor="neon.600" />

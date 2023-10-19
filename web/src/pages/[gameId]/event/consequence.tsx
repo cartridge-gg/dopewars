@@ -5,7 +5,6 @@ import { getOutcomeInfo } from "@/dojo/helpers";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useMemo } from "react";
 import { OutcomeInfo, PlayerStatus } from "@/dojo/types";
@@ -17,11 +16,8 @@ export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account } = useDojoContext();
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity} = playerEntityStore;
 
   const [outcome, setOutcome] = useState<OutcomeInfo|undefined>(undefined);
   const [isDead, setIsDead] = useState<boolean>(false);

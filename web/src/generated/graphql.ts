@@ -824,7 +824,7 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1048,6 +1048,7 @@ export const PlayerEntityDocument = `
     total_count
     edges {
       node {
+        id
         models {
           __typename
           ... on Player {

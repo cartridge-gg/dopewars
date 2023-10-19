@@ -36,7 +36,6 @@ import { MarketEventData } from "@/dojo/events";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useSystems } from "@/dojo/hooks/useSystems";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useMarketPrices } from "@/dojo/queries/useMarkets";
 
 interface MarketPriceInfo {
@@ -53,13 +52,10 @@ export default function Travel() {
   const [currentLocationId, setCurrentLocationId] = useState<string>();
  
   const { toast } = useToast();
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
   const { travel, isPending } = useSystems();
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const { playerEntity } = playerEntityStore
 
   const { locationPrices } = useMarketPrices({
     gameId,

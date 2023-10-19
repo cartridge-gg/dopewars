@@ -9,7 +9,6 @@ import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { formatCash } from "@/utils/ui";
 import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
@@ -25,17 +24,13 @@ const Header = ({ back }: HeaderProps) => {
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
   const {
+    playerEntityStore,
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+  const  { playerEntity } = playerEntityStore
+
 
   const isMobile = IsMobile();
 
@@ -67,7 +62,7 @@ const Header = ({ back }: HeaderProps) => {
       py={["0", "20px"]}
     >
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && gameEntity && (
+      {playerEntity &&  (
         <HStack flex="1" justify="center">
           <HStack
             h="48px"

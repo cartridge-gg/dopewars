@@ -2,8 +2,10 @@ import { createContext, ReactNode, useContext, useMemo } from "react";
 import { SetupResult } from "../setup/setup";
 import { useBurner } from "@dojoengine/create-burner";
 import { Account, RpcProvider } from "starknet";
+import { usePlayerEntityStore } from "@/hooks/player";
 
 export type RyoContext = {
+  playerEntity: any;
   setup: SetupResult;
   account: Account | null
   burner: {
@@ -61,6 +63,7 @@ export const DojoProvider = ({
   }, [account]);
 
   const ryoContext = {
+    playerEntityStore: usePlayerEntityStore(),
     setup: value, // the provided setup
     account: selectedAccount,// the selected account
     //account: masterAccount, // use master account = full auth

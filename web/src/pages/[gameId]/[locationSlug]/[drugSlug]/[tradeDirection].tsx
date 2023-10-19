@@ -18,7 +18,7 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
 import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
-import { PlayerEntity, usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
@@ -44,18 +44,17 @@ export default function Market() {
   const [canBuy, setCanBuy] = useState(false);
 
   const { addTrade } = usePlayerStore();
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
   const { buy, sell, isPending } = useSystems();
+
+  const { playerEntity} = playerEntityStore;
 
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationId: location?.id,
   });
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-
+ 
+ 
   const { toast } = useToast();
 
   // market price and quantity can fluctuate as players trade

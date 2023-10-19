@@ -363,48 +363,48 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
             PriceSettings {
                 min_price: 15 * SCALING_FACTOR,
                 max_price: 95 * SCALING_FACTOR,
-                min_qty: 900,
-                max_qty: 1800,
+                min_qty: 1200,
+                max_qty: 2400,
             }
         },
         DrugEnum::Speed => {
             PriceSettings {
                 min_price: 80 * SCALING_FACTOR,
-                max_price: 420 * SCALING_FACTOR,
-                min_qty: 700,
-                max_qty: 1400,
+                max_price: 480 * SCALING_FACTOR,
+                min_qty: 1000,
+                max_qty: 2000,
             }
         },
         DrugEnum::Weed => {
             PriceSettings {
                 min_price: 350 * SCALING_FACTOR,
-                max_price: 1500 * SCALING_FACTOR,
-                min_qty: 600,
-                max_qty: 1200,
+                max_price: 1600 * SCALING_FACTOR,
+                min_qty: 900,
+                max_qty: 1800,
             }
         },
         DrugEnum::Acid => {
             PriceSettings {
                 min_price: 1100 * SCALING_FACTOR,
-                max_price: 4200 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
+                max_price: 4400 * SCALING_FACTOR,
+                min_qty: 800,
+                max_qty: 1600,
             }
         },
         DrugEnum::Heroin => {
             PriceSettings {
                 min_price: 3600 * SCALING_FACTOR,
-                max_price: 10500 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 800,
+                max_price: 12500 * SCALING_FACTOR,
+                min_qty: 600,
+                max_qty: 1200,
             }
         },
         DrugEnum::Cocaine => {
             PriceSettings {
                 min_price: 8500 * SCALING_FACTOR,
-                max_price: 22500 * SCALING_FACTOR,
-                min_qty: 350,
-                max_qty: 700,
+                max_price: 25500 * SCALING_FACTOR,
+                min_qty: 500,
+                max_qty: 1000,
             }
         },
     }

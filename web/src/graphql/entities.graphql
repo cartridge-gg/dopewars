@@ -20,6 +20,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
     total_count
     edges {
       node {
+        id
         models {
           __typename
           ... on Player {

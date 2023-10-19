@@ -19,10 +19,8 @@ import { useRouter } from "next/router";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
-import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { shortString } from "starknet";
 import Button from "@/components/Button";
@@ -39,19 +37,19 @@ export default function Location() {
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
 
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationId,
   });
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
 
+  const { playerEntity } = playerEntityStore
+
+  // const { player: playerEntity } = usePlayerEntity({
+  //   gameId,
+  //   address: account?.address,
+  // });
+ 
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
@@ -71,7 +69,7 @@ export default function Location() {
     }
   }, [locationId, playerEntity, router, gameId]);
 
-  if (!playerEntity || !locationEntity || !gameEntity) {
+  if (!playerEntity || !locationEntity ) {
     return <></>;
   }
 

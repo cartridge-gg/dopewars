@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerEntity, ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import {  ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
@@ -28,15 +28,11 @@ export default function Decision() {
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
  
   const { toast } = useToast();
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
   const { decide, isPending } = useSystems();
   const { addEncounter } = usePlayerStore();
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-
+  const { playerEntity} = playerEntityStore
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -78,11 +74,11 @@ export default function Decision() {
 
         switch (event.outcome) {
           case Outcome.Died:
-            toast({
-              message: `You took ${event.healthLoss}HP damage and died...`,
-              icon: Heart,
-              link: `http://amazing_explorer/${result.hash}`,
-            });
+            // toast({
+            //   message: `You took ${event.healthLoss}HP damage and died...`,
+            //   icon: Heart,
+            //   link: `http://amazing_explorer/${result.hash}`,
+            // });
             setIsRedirecting(true);
             return router.push(`/${gameId}/end`);
 
@@ -99,11 +95,11 @@ export default function Decision() {
             setPrefixTitle("Your escape...");
             setTitle("Failed!");
             setPenalty(`You lost ${event.healthLoss}HP!`);
-            toast({
-              message: `You were captured and lost ${event.healthLoss}HP!`,
-              icon: Heart,
-              link: `http://amazing_explorer/${result.hash}`,
-            });
+            // toast({
+            //   message: `You were captured and lost ${event.healthLoss}HP!`,
+            //   icon: Heart,
+            //   link: `http://amazing_explorer/${result.hash}`,
+            // });
             break;
         }
       } catch (e) {

@@ -25,6 +25,7 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
+import { usePlayerEntityStore } from "@/hooks/player";
 
 import { Truck } from "@/components/icons/Truck";
 import { useGameEntity } from "@/dojo/queries/useGameEntity";
@@ -36,7 +37,7 @@ export default function PawnShop() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
   const { buyItem, dropItem, isPending } = useSystems();
   const { availableShopItems } = useAvailableShopItems(gameId);
   const { player: playerEntity } = usePlayerEntity({

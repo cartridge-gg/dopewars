@@ -13,7 +13,6 @@ import BorderImage from "@/components/icons/BorderImage";
 import colors from "@/theme/colors";
 
 import React from "react";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById, getShopItem } from "@/dojo/helpers";
@@ -23,11 +22,8 @@ import { Bag } from "./icons";
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
-  const { account } = useDojoContext();
-  const { player: playerEntity, isFetched: isFetchedPlayer } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity} = playerEntityStore;
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="5px">

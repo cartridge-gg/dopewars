@@ -2,8 +2,6 @@ import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useGameEntity } from "@/dojo/queries/useGameEntity";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
 import { useSystems } from "@/dojo/hooks/useSystems";
@@ -25,21 +23,15 @@ import Image from "next/image";
 export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { account } = useDojoContext();
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+  const { account, playerEntityStore } = useDojoContext();
+ 
+  const { playerEntity } = playerEntityStore
 
   const { availableShopItems } = useAvailableShopItems(gameId);
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
 
   if (
     !playerEntity ||
-    !gameEntity ||
     playerEntity.turn === playerEntity.maxTurns
   ) {
     return <></>;
