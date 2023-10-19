@@ -2240,10 +2240,10 @@
   dependencies:
     starknet "^5.19.5"
 
-"@dojoengine/create-burner@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@dojoengine/create-burner/-/create-burner-0.1.2.tgz#35e170c32cc621241bbb6e7ec5fafdb723dd21b6"
-  integrity sha512-QXAGVww1B8EfdCyUZYJzvq1MBH01YmcNxsc+xIJ2TLTiOfIe4EBQS6n+yLDkBJqhJ9BgkPFWx6Wb0BcXrWJg9Q==
+"@dojoengine/create-burner@0.1.29":
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@dojoengine/create-burner/-/create-burner-0.1.29.tgz#1d00b340b124ef458879d6ed41307a00bfcffa4a"
+  integrity sha512-HR6aW7dTh0dniBp49tbNH/Kl6Qly+pbiKO47B1l0Yb/SZn96LhMxMDYlwjLJhb7JE6HR8dBhjHjZ5VbSIee/Sw==
   dependencies:
     "@starknet-react/core" "^1.0.3"
     encoding "^0.1.13"

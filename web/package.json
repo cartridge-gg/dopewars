@@ -22,7 +22,7 @@
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "^0.1.2",
-    "@dojoengine/create-burner": "0.1.2",
+    "@dojoengine/create-burner": "0.1.29",
     "@dojoengine/utils": "0.1.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",

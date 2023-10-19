@@ -49,8 +49,9 @@ export const DojoProvider = ({
     return {
       masterAccount: masterAccount,
       accountClassHash: process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH!,
+      nodeUrl: value.network.provider.provider.nodeUrl,
     };
-  }, [masterAccount]);
+  }, [masterAccount, value.network.provider.provider]);
 
   const { create, list, get, account, select, isDeploying, clear } =
     useBurner(burnerOptions);
