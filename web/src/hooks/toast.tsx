@@ -22,7 +22,7 @@ export const useToast = () => {
       isError?: boolean;
     }) => {
       chakraToast({
-        position: "bottom-left",
+        position: "top-left",
         duration,
         // default overrides
         containerStyle: {

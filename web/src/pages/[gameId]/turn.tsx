@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
+import { formatCash } from "@/utils/ui";
 
 export default function Turn() {
   const router = useRouter();
@@ -68,7 +69,7 @@ export default function Turn() {
             <Product
               product="Product"
               quantity="Qty"
-              cost="Value"
+              total="Value"
               icon={undefined}
               isHeader
             />
@@ -83,7 +84,7 @@ export default function Turn() {
                       icon={drugInfo.icon}
                       product={drugInfo.name}
                       quantity={`${change}${trade.quantity}`}
-                      cost={"$$$"}
+                      total={formatCash(Math.abs(trade.total))}
                     />
                   </ListItem>
                 );
@@ -179,13 +180,13 @@ const Product = ({
   icon,
   product,
   quantity,
-  cost,
+  total,
   isHeader,
 }: {
   icon: React.FC | undefined;
   product: string;
   quantity: number | string;
-  cost: number | string;
+  total: number | string;
   isHeader?: boolean;
 }) => {
   const header = isHeader && {
@@ -200,13 +201,14 @@ const Product = ({
         {icon && icon({ boxSize: "24px" })}
         <Text>{product}</Text>
       </HStack>
-      <Text flex="3" textAlign="right">
-        {cost}
-      </Text>
+    
       <HStack flex="3" justify="right">
-        <Bag />
         <Text>{quantity}</Text>
       </HStack>
+
+      <Text flex="3" textAlign="right">
+        {total}
+      </Text>
     </HStack>
   );
 };

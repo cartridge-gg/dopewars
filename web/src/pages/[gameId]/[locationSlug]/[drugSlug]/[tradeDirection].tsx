@@ -82,13 +82,17 @@ export default function Market() {
 
     let toastMessage = "",
       hash = "",
-      quantity;
+      quantity, total;
 
     try {
       if (tradeDirection === TradeDirection.Buy) {
         ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy));
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
+      
+        const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
+        total = slippage.newPrice * quantity
+
       } else if (tradeDirection === TradeDirection.Sell) {
         ({ hash } = await sell(
           gameId,
@@ -98,6 +102,9 @@ export default function Market() {
         ));
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
+
+        const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
+        total = slippage.newPrice * quantity
       }
 
       toast({
@@ -109,6 +116,7 @@ export default function Market() {
       addTrade(drug!.type, {
         direction: tradeDirection,
         quantity,
+        total: total
       } as TradeType);
     } catch (e) {
       console.log(e);

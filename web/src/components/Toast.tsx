@@ -21,7 +21,7 @@ export const Toast = ({
       {...cardPixelatedStyle({})}
       // h="40px"
       p={["8px", "20px"]}
-      mb={["16px", "20px"]}
+      mt={["16px", "20px"]}
       fontSize={["14px", "16px"]}
       lineHeight={["1.2", "1.5"]}
       bgColor={isError ? "red" : "neon.200"}

@@ -18,7 +18,8 @@ dojo = {git = "https://github.com/dojoengine/dojo.git"}
 [scripts]
 build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
-migrate = "sozo migrate &&  scarb run gendojo"
+auth = "./scripts/default_auth.sh local"
+migrate = "sozo migrate && scarb run gendojo && scarb run auth"
 
 [tool.dojo.env]
 

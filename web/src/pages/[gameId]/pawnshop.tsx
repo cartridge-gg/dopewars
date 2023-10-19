@@ -78,7 +78,7 @@ export default function PawnShop() {
     try {
       const { hash } = await buyItem(gameId, selectedShopItem.type);
       toast({
-        message: "Was it a wise choice...",
+        message: `You bought ${selectedShopItem.name}!`,
         icon: Alert,
         link: `http://amazing_explorer/${hash}`,
       });

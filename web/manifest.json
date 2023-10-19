@@ -858,8 +858,31 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x3dcc50d1c04a708c9c49b95071bd13ba6d45066894e6e7d0e2f72e895ce8ddd",
+      "class_hash": "0x6befc2da8bb340f877e89914d2a77a4f93f298b829b8d6471d79bf3dfeb1fac",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "LobbyImpl",
@@ -920,6 +943,17 @@
               "state_mutability": "view"
             }
           ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
         },
         {
           "type": "event",
@@ -1002,8 +1036,31 @@
     {
       "name": "trade",
       "address": "0x22a5538d516d281927572adef2af5ecef8904840a86ffa316b3952941d51798",
-      "class_hash": "0x390bc0680d35c0d7d8da1679182e338527e2ce79a6ebf4fd421df8c9879b4f3",
+      "class_hash": "0x1bc7664a680e898f1318b161e385bbb119c667a239c0b4cbbdf12a904e6b627",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "GameImpl",
@@ -1128,6 +1185,17 @@
           ]
         },
         {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::trade::trade::Bought",
           "kind": "struct",
@@ -1213,8 +1281,31 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x6bb426f4e3140ae25213eea02a19cc952e84f8a71e0dd7a9ecdb972feaaf912",
+      "class_hash": "0x7de538b2c72703d776ce62039f014ec7601bfb53c6cf5702941b16dad1ddd6b",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "TravelImpl",
@@ -1293,6 +1384,17 @@
               "state_mutability": "view"
             }
           ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
         },
         {
           "type": "event",
@@ -1445,8 +1547,31 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x206bc4bd39e9b319080e3c10310372fd94b5b79743712e3fc25c1637ed87665",
+      "class_hash": "0x31652cb2c769c500e49689d9bfe25ce90979148258708e3aecddc6082a95e56",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "DecideImpl",
@@ -1529,6 +1654,17 @@
               "state_mutability": "view"
             }
           ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
         },
         {
           "type": "event",
@@ -1637,8 +1773,31 @@
     {
       "name": "shop",
       "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0x25330f63a92909ce7eaf2eec5d3c8f11e61dd885357faf3a87c3e37465133fe",
+      "class_hash": "0x1417d8ad632f95614f9ed8992622c9cfb450c69b624875761f3b601d45ce4e4",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "ShopExternalImpl",
@@ -1799,6 +1958,17 @@
           ]
         },
         {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::shop::shop::BoughtItem",
           "kind": "struct",
@@ -1869,8 +2039,31 @@
     {
       "name": "devtools",
       "address": "0x63a0e87fdd2eba1cade12af18aea1cd551f9eb2fb543268be51b67fd7a8d6c3",
-      "class_hash": "0x5c2e8451b81e59641010ae6c5aace6a433e0722c776f5d46afb0a4fec266314",
+      "class_hash": "0x7f3fa67bc77c097b50c9a361195acfb92c493f00e7b0711de4b94ee2dc3d82a",
       "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
         {
           "type": "impl",
           "name": "DevtoolsImpl",
@@ -1900,6 +2093,17 @@
               "state_mutability": "view"
             }
           ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
         },
         {
           "type": "event",
