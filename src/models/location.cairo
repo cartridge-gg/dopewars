@@ -10,7 +10,7 @@ struct Location {}
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum LocationEnum {
-    Home,  // 0
+    Home, // 0
     Queens, // 1
     Bronx, // 2
     Brooklyn, // 3
@@ -91,6 +91,4 @@ impl LocationImpl of LocationTrait {
         *locations.at(index.try_into().unwrap())
     }
 }
-
-
 

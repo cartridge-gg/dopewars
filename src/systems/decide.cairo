@@ -36,7 +36,9 @@ mod decide {
     use rollyourown::models::item::{Item, ItemEnum};
 
     use rollyourown::utils::random;
-    use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl};
+    use rollyourown::utils::settings::{
+        DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl
+    };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::IDecide;
@@ -49,7 +51,7 @@ mod decide {
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -89,19 +91,19 @@ mod decide {
             assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
             let game = get!(world, game_id, Game);
-            let decide_settings = DecideSettingsImpl::get(game.game_mode);
-            let risk_settings = RiskSettingsImpl::get(game.game_mode);
+            let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
+            let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
             let (mut outcome, cash_loss, drug_loss, health_loss) = match action {
                 Action::Run => {
                     if player.wanted + decide_settings.wanted_impact_run <= 100 {
                         player.wanted += decide_settings.wanted_impact_run;
-                    }  else{
+                    } else {
                         player.wanted = 100;
                     }
 
                     let seed = random::seed();
-                    match risk_settings.run(world,seed, @player) {
+                    match risk_settings.run(world, seed, @player) {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
@@ -109,19 +111,27 @@ mod decide {
                             )
                                 .try_into()
                                 .unwrap();
-                            let health_loss: u128 = (decide_settings.health_impact + random_loss).into();
-                            let defense_item = get!(world, (game_id, player_id,ItemEnum::Defense), Item);
+                            let health_loss: u128 = (decide_settings.health_impact + random_loss)
+                                .into();
+                            let defense_item = get!(
+                                world, (game_id, player_id, ItemEnum::Defense), Item
+                            );
 
                             // reduce dmgs by defense_item.value %
-                            let health_saved: u128 = ((health_loss * defense_item.value.into() * SCALING_FACTOR) / 100 )/SCALING_FACTOR;
-                            let final_health_loss: u8 = (health_loss - health_saved).try_into().unwrap();
-                            
+                            let health_saved: u128 = ((health_loss
+                                * defense_item.value.into()
+                                * SCALING_FACTOR)
+                                / 100)
+                                / SCALING_FACTOR;
+                            let final_health_loss: u8 = (health_loss - health_saved)
+                                .try_into()
+                                .unwrap();
+
                             (Outcome::Captured, 0, 0, final_health_loss)
                         }
                     }
                 },
                 Action::Pay => {
-
                     match player.status {
                         PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0),
                         PlayerStatus::BeingMugged => {
@@ -132,7 +142,7 @@ mod decide {
                             let cash_loss_ = (player.cash
                                 * decide_settings.gangs_payment_cash_pct.into())
                                 / 100;
-                          
+
                             (Outcome::Paid, cash_loss_, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
@@ -144,7 +154,7 @@ mod decide {
                                 .take_drugs(
                                     game_id, player_id, decide_settings.gangs_payment_cash_pct
                                 );
-                           
+
                             (Outcome::Paid, 0, drug_loss_, 0)
                         },
                     }
@@ -152,7 +162,7 @@ mod decide {
                 Action::Fight => {
                     if player.wanted + decide_settings.wanted_impact_fight <= 100 {
                         player.wanted += decide_settings.wanted_impact_fight;
-                    }  else{
+                    } else {
                         player.wanted = 100;
                     }
 
@@ -167,7 +177,6 @@ mod decide {
                     // TODO
                     (Outcome::Escaped, 0, 0, 0)
                 },
-                
             };
 
             // TODO : use same logic than in travel (market events, etc..)

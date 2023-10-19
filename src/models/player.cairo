@@ -15,23 +15,18 @@ struct Player {
     #[key]
     player_id: ContractAddress,
     name: felt252,
-
     status: PlayerStatus,
     location_id: LocationEnum,
     turn: usize,
     max_turns: usize,
     max_items: u8,
-
     cash: u128,
     health: u8,
-
     drug_count: usize,
-
     attack: usize,
     defense: usize,
     transport: usize,
     speed: usize,
-
     wanted: u8,
 }
 
@@ -52,36 +47,54 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
-    fn get_item_count(self: Player, world: IWorldDispatcher ) -> u8 {
-        let attack_item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
-        let defense_item = get!( world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
-        let transport_item = get!( world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
-        let speed_item = get!( world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+    fn get_item_count(self: Player, world: IWorldDispatcher) -> u8 {
+        let attack_item = get!(world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
+        let defense_item = get!(world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+        let transport_item = get!(
+            world, (self.game_id, self.player_id, ItemEnum::Transport), (Item)
+        );
+        let speed_item = get!(world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
 
-        let mut total: u8 = if attack_item.level > 0 { 1 } else { 0 };
-        total += if defense_item.level > 0 { 1 } else { 0 };
-        total += if transport_item.level > 0 { 1 } else { 0 };
-        total += if speed_item.level > 0 { 1 } else { 0 };
+        let mut total: u8 = if attack_item.level > 0 {
+            1
+        } else {
+            0
+        };
+        total += if defense_item.level > 0 {
+            1
+        } else {
+            0
+        };
+        total += if transport_item.level > 0 {
+            1
+        } else {
+            0
+        };
+        total += if speed_item.level > 0 {
+            1
+        } else {
+            0
+        };
         total
     }
-  
-    fn get_attack(self: Player, world: IWorldDispatcher ) -> usize {
-        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
+
+    fn get_attack(self: Player, world: IWorldDispatcher) -> usize {
+        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
         self.attack + item.value
     }
 
-    fn get_defense(self: Player, world: IWorldDispatcher ) -> usize {
-        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+    fn get_defense(self: Player, world: IWorldDispatcher) -> usize {
+        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
         self.defense + item.value
     }
 
-    fn get_transport(self: Player, world: IWorldDispatcher ) -> usize {
-        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
+    fn get_transport(self: Player, world: IWorldDispatcher) -> usize {
+        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
         self.transport + item.value
     }
 
-    fn get_speed(self: Player, world: IWorldDispatcher ) -> usize {
-        let item = get!( world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+    fn get_speed(self: Player, world: IWorldDispatcher) -> usize {
+        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
         self.speed + item.value
     }
 }
@@ -121,6 +134,4 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
         )
     }
 }
-
-
 

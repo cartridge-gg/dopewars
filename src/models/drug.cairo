@@ -85,5 +85,3 @@ impl DrugEnumIntrospectionImpl of SchemaIntrospection<DrugEnum> {
     }
 }
 
-
-

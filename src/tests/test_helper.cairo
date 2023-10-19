@@ -84,5 +84,4 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
 #[available_gas(200000000)]
 fn test_spawn_world() {
     let (world, systems) = spawn_world();
-
 }

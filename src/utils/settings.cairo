@@ -2,6 +2,7 @@ use rollyourown::constants::SCALING_FACTOR;
 use rollyourown::models::game::GameMode;
 use rollyourown::models::drug::DrugEnum;
 use rollyourown::models::item::ItemEnum;
+use rollyourown::models::player::Player;
 
 
 #[derive(Copy, Drop, Serde)]
@@ -29,9 +30,9 @@ struct RiskSettings {
     encounter_bias_gangs: u128,
     cops_drug_threshold: usize,
     gangs_cash_threshold: u128,
-
     wanted_decrease_by_turn: u8,
     wanted_decrease_zero_drug: u8,
+    wanted_increase_by_drug: u8,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -89,8 +90,8 @@ trait DrugSettingsTrait<T> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> T;
 }
 
-trait ScalingSettingsTrait<T> {
-    fn get(game_mode: GameMode, turn: usize) -> T;
+trait PlayerSettingsTrait<T> {
+    fn get(game_mode: GameMode, player: @Player) -> T;
 }
 
 trait ItemSettingsTrait<T> {
@@ -145,29 +146,37 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
 }
 
 
-impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
-    fn get(game_mode: GameMode) -> RiskSettings {
+impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
+    fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
         match game_mode {
             GameMode::Limited => {
+                let travel: u8 = (45 + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
+                let capture: u8 = (60 + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
+
                 RiskSettings {
-                    travel: 45, // 45% chance of travel encounter + 0.5 wanted (max 50)
-                    capture: 60, // 60% chance of capture + 0.2 wanted (max 20)
+                    travel,
+                    capture,
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
                     cops_drug_threshold: 5, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-                    wanted_decrease_by_turn : 5,
-                    wanted_decrease_zero_drug : 10,
+                    wanted_decrease_by_turn: 3,
+                    wanted_decrease_zero_drug: 20,
+                    wanted_increase_by_drug: ((*player).drug_count / 7).try_into().unwrap()
                 }
             },
             GameMode::Unlimited => {
+                let travel = (40 + (*player).wanted / 2); // 40% chance of travel encounter + 0.5 wanted (max 50)
+                let capture = (60 + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
+
                 RiskSettings {
-                    travel: 40, // 50% chance of travel encounter + 0.5 wanted (max 50)
-                    capture: 60, // 60% chance of capture + 0.2 wanted (max 20)
+                    travel,
+                    capture,
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
                     cops_drug_threshold: 10, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-                    wanted_decrease_by_turn : 2,
-                    wanted_decrease_zero_drug : 7,
+                    wanted_decrease_by_turn: 2,
+                    wanted_decrease_zero_drug: 10,
+                    wanted_increase_by_drug: ((*player).drug_count / 10).try_into().unwrap()
                 }
             },
         }
@@ -175,15 +184,17 @@ impl RiskSettingsImpl of SettingsTrait<RiskSettings> {
 }
 
 
-impl DecideSettingsImpl of SettingsTrait<DecideSettings> {
-    fn get(game_mode: GameMode) -> DecideSettings {
+impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
+    fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
         match game_mode {
             GameMode::Limited => {
                 DecideSettings {
                     gangs_payment_cash_pct: 20, //% of cash
                     cops_payment_drug_pct: 20, //% of drug
-                    health_impact: 15,
-                    wanted_impact_run: 4,
+                    health_impact: (12 + ((*player).turn / 3 * 2))
+                        .try_into()
+                        .unwrap(), // 10 + (2 each 3 turn)
+                    wanted_impact_run: 5,
                     wanted_impact_fight: 10,
                 }
             },
@@ -191,7 +202,9 @@ impl DecideSettingsImpl of SettingsTrait<DecideSettings> {
                 DecideSettings {
                     gangs_payment_cash_pct: 25, //% of cash
                     cops_payment_drug_pct: 25, //% of drug
-                    health_impact: 10,
+                    health_impact: (10 + ((*player).turn / 5))
+                        .try_into()
+                        .unwrap(), // 10 + (1 each 5 turn)
                     wanted_impact_run: 2,
                     wanted_impact_fight: 8,
                 }
@@ -239,10 +252,10 @@ impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
         match game_mode {
             GameMode::Limited => {
-                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 2 }
+                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 3 }
             },
             GameMode::Unlimited => {
-                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 5 }
+                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 7 }
             },
         }
     }
@@ -338,7 +351,7 @@ impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
                 pricing_notme(drug_id)
             },
             GameMode::Unlimited => {
-                pricing_clicksave(drug_id)
+                pricing_notme(drug_id)
             },
         }
     }
@@ -366,32 +379,32 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
             PriceSettings {
                 min_price: 350 * SCALING_FACTOR,
                 max_price: 1500 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
+                min_qty: 600,
+                max_qty: 1200,
             }
         },
         DrugEnum::Acid => {
             PriceSettings {
                 min_price: 1100 * SCALING_FACTOR,
                 max_price: 4200 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 800,
+                min_qty: 500,
+                max_qty: 1000,
             }
         },
         DrugEnum::Heroin => {
             PriceSettings {
                 min_price: 3600 * SCALING_FACTOR,
                 max_price: 10500 * SCALING_FACTOR,
-                min_qty: 300,
-                max_qty: 600,
+                min_qty: 400,
+                max_qty: 800,
             }
         },
         DrugEnum::Cocaine => {
             PriceSettings {
                 min_price: 8500 * SCALING_FACTOR,
                 max_price: 22500 * SCALING_FACTOR,
-                min_qty: 200,
-                max_qty: 400,
+                min_qty: 350,
+                max_qty: 700,
             }
         },
     }

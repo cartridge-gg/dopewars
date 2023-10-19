@@ -8,9 +8,7 @@ trait ShopTrait<T> {
 }
 
 impl ShopImpl of ShopTrait<ShopSettings> {
- 
     fn is_open(self: @ShopSettings, player: @Player) -> bool {
         ((*player).turn % (*self).opening_freq) == 0
     }
-
 }

@@ -89,7 +89,7 @@ mod travel {
             // initial travel when game starts has no risk or events
             if player.location_id != LocationEnum::Home {
                 let mut seed = random::seed();
-                let risk_settings = RiskSettingsImpl::get(game.game_mode);
+                let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
                 player.status = risk_settings.travel(seed, @player);
 
@@ -125,15 +125,7 @@ mod travel {
                     };
                 };
 
-                if player.wanted > risk_settings.wanted_decrease_by_turn {
-                    player.wanted -= risk_settings.wanted_decrease_by_turn
-                }
-
-                if player.drug_count == 0
-                    && player.wanted > risk_settings.wanted_decrease_zero_drug {
-                    player.wanted -= risk_settings.wanted_decrease_zero_drug
-                }
-
+                risk_settings.update_wanted(ref player);
                 player.turn += 1;
             }
 
