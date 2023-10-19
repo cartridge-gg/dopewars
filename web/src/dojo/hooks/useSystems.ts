@@ -88,8 +88,8 @@ export const useSystems = (): SystemsInterface => {
       setError(undefined)
       setIsPending(true)
 
-      const tx = await execute(account, contract, system, callData);
-      const receipt = await account.waitForTransaction(tx.transaction_hash, {
+      const tx = await execute(account!, contract, system, callData);
+      const receipt = await account!.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
       });
 
@@ -134,7 +134,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [execute, account, toast],
+    [execute, account!, toast],
   );
 
   const createGame = useCallback(

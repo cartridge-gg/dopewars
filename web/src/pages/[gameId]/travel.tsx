@@ -148,7 +148,7 @@ export default function Travel() {
   }, [targetId]);
 
   const onContinue = useCallback(async () => {
-    if (targetId) {
+    if (targetId && playerEntity) {
 
       try {
         const locationId = getLocationById(targetId)!.type;

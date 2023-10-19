@@ -18,10 +18,10 @@ export const useAvailableShopItems = (gameId: string) => {
         const update = async () => {
             try {
                 const items = await call(
-                    account,
+                    account!,
                     "shop",
                     "available_items",
-                    [Number(gameId), account.address],
+                    [Number(gameId), account!.address],
                 ) as any[];
 
                 const shopItems = items.map(i => {

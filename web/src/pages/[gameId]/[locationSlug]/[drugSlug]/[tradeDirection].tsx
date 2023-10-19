@@ -90,7 +90,7 @@ export default function Market() {
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
       
-        const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
+        const slippage = calculateSlippage(market!.marketPool, quantity, tradeDirection);
         total = slippage.newPrice * quantity
 
       } else if (tradeDirection === TradeDirection.Sell) {
@@ -103,7 +103,7 @@ export default function Market() {
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
 
-        const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
+        const slippage = calculateSlippage(market!.marketPool, quantity, tradeDirection);
         total = slippage.newPrice * quantity
       }
 

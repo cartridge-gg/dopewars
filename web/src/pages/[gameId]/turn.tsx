@@ -138,7 +138,7 @@ export default function Turn() {
                   alignItems="center"
                   justifyContent="center"
                   leftIcon={
-                    <Image src="/images/pawnshop.png" width={60} height={60} />
+                    <Image src="/images/pawnshop.png" width={60} height={60} alt="pawnshop"/>
                   }
                 >
                   <Text>Visit Pawnshop</Text>

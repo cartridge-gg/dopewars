@@ -5,13 +5,13 @@ import { Account, RpcProvider } from "starknet";
 
 export type RyoContext = {
   setup: SetupResult;
-  account: Account;
+  account: Account | null
   burner: {
     create: () => void;
     list: () => any[];
     get: (id: string) => any;
     select: (id: string) => void;
-    account: Account | null;
+    account: Account | null ;
     masterAccount: Account;
     isDeploying: boolean;
     clear: () => void;
