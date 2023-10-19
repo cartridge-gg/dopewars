@@ -1,25 +1,20 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 
 #[starknet::interface]
 trait IDevtools<TContractState> {
     fn failing_tx(self: @TContractState);
     fn feed_leaderboard(self: @TContractState, count: u32);
-    //fn get_cash(self: @TContractState, count: u32);
+//fn get_cash(self: @TContractState, count: u32);
 }
 
-#[starknet::contract]
+#[dojo::contract]
 mod devtools {
     use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::contract_address::Felt252TryIntoContractAddress;
 
-
-    use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::IDevtools;
-
 
     use rollyourown::constants::SCALING_FACTOR;
 
@@ -28,19 +23,14 @@ mod devtools {
     use rollyourown::models::location::{LocationEnum};
 
 
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
-
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -73,11 +63,11 @@ mod devtools {
                     turn: rand_100.into(),
                     max_turns: rand_100.into(),
                     max_items: 2,
-                    wanted:69,
-                    attack:42,
-                    defense:42,
-                    transport:42,
-                    speed:42,
+                    wanted: 69,
+                    attack: 42,
+                    defense: 42,
+                    transport: 42,
+                    speed: 42,
                 };
 
                 set!(self.world(), (player));
@@ -89,7 +79,6 @@ mod devtools {
         fn failing_tx(self: @ContractState) {
             assert(0 == 1, 'failing tx');
         }
-
     }
 }
 

@@ -1,5 +1,4 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::game::{GameMode};
 
 #[starknet::interface]
@@ -13,7 +12,7 @@ trait ILobby<TContractState> {
 }
 
 
-#[starknet::contract]
+#[dojo::contract]
 mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
@@ -27,26 +26,22 @@ mod lobby {
     use rollyourown::models::market::{MarketTrait};
     use rollyourown::utils::random;
     use rollyourown::utils::settings::{
-        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings, ShopSettingsImpl
+        GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
+        ShopSettingsImpl
     };
     use rollyourown::utils::market;
     use super::ILobby;
-    use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use debug::PrintTrait;
 
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
 
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -99,7 +94,7 @@ mod lobby {
                 cash: player_settings.cash,
                 health: player_settings.health,
                 drug_count: 0,
-                turn:0,
+                turn: 0,
                 max_turns: game_settings.max_turns,
                 max_items: shop_settings.max_item_allowed,
                 wanted: player_settings.wanted,
@@ -107,7 +102,6 @@ mod lobby {
                 defense: player_settings.defense,
                 transport: player_settings.transport,
                 speed: player_settings.speed,
-
             };
 
             let game = Game {
@@ -127,7 +121,6 @@ mod lobby {
             loop {
                 match locations.pop_front() {
                     Option::Some(location_id) => {
-                        
                         let mut seed = random::seed();
                         seed = pedersen::pedersen(seed, (*location_id).into());
 

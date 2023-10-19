@@ -1,5 +1,4 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::location::LocationEnum;
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -24,7 +23,7 @@ trait IDecide<TContractState> {
     fn decide(self: @TContractState, game_id: u32, action: Action, next_location_id: LocationEnum);
 }
 
-#[starknet::contract]
+#[dojo::contract]
 mod decide {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
@@ -40,16 +39,10 @@ mod decide {
     use rollyourown::utils::settings::{DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl};
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
-    use super::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::IDecide;
     use super::{Action, Outcome};
 
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
-
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }

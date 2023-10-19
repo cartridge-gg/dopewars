@@ -1,5 +1,4 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::location::{LocationEnum};
 use rollyourown::models::drug::{DrugEnum};
 
@@ -24,11 +23,10 @@ trait ITrade<TContractState> {
 }
 
 
-#[starknet::contract]
+#[dojo::contract]
 mod trade {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     use rollyourown::models::drug::{Drug, DrugEnum};
     use rollyourown::models::player::{Player, PlayerTrait};
@@ -38,19 +36,15 @@ mod trade {
 
     use super::ITrade;
 
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
 
-  #[starknet::interface]
+    #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
     }
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -103,7 +97,9 @@ mod trade {
             let mut player = get!(self.world(), (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');
             assert(player.can_continue(), 'player cannot trade');
-            assert(player.drug_count + quantity <= player.get_transport(self.world()), 'no bag space');
+            assert(
+                player.drug_count + quantity <= player.get_transport(self.world()), 'no bag space'
+            );
 
             let mut market = get!(self.world(), (game_id, location_id, drug_id).into(), Market);
 

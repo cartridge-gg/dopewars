@@ -1,5 +1,4 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::location::LocationEnum;
 
 
@@ -9,11 +8,10 @@ trait ITravel<TContractState> {
 }
 
 
-#[starknet::contract]
+#[dojo::contract]
 mod travel {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
@@ -28,11 +26,6 @@ mod travel {
 
     use super::ITravel;
 
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
-
     #[starknet::interface]
     trait ISystem<TContractState> {
         fn world(self: @TContractState) -> IWorldDispatcher;
@@ -40,7 +33,7 @@ mod travel {
 
     impl ISystemImpl of ISystem<ContractState> {
         fn world(self: @ContractState) -> IWorldDispatcher {
-           self.world_dispatcher.read()
+            self.world_dispatcher.read()
         }
     }
 
@@ -88,7 +81,7 @@ mod travel {
 
             let player_id = get_caller_address();
             let mut player: Player = get!(self.world(), (game_id, player_id).into(), Player);
-            
+
             assert(player.can_continue(), 'player cannot travel');
             assert(next_location_id != LocationEnum::Home, 'no way back');
             assert(player.location_id != next_location_id, 'already at location');
@@ -99,7 +92,7 @@ mod travel {
                 let risk_settings = RiskSettingsImpl::get(game.game_mode);
 
                 player.status = risk_settings.travel(seed, @player);
-                
+
                 if player.status != PlayerStatus::Normal {
                     set!(self.world(), (player));
                     emit!(
@@ -135,13 +128,13 @@ mod travel {
                 if player.wanted > risk_settings.wanted_decrease_by_turn {
                     player.wanted -= risk_settings.wanted_decrease_by_turn
                 }
-                
-                if player.drug_count == 0 && player.wanted > risk_settings.wanted_decrease_zero_drug {
+
+                if player.drug_count == 0
+                    && player.wanted > risk_settings.wanted_decrease_zero_drug {
                     player.wanted -= risk_settings.wanted_decrease_zero_drug
                 }
-                
+
                 player.turn += 1;
-                
             }
 
             player.location_id = next_location_id;

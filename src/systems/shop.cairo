@@ -1,5 +1,4 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::player::{Player};
 use rollyourown::models::item::{ItemEnum};
 
@@ -23,11 +22,10 @@ trait IShop<TContractState> {
     ) -> Span<AvailableItem>;
 }
 
-#[starknet::contract]
+#[dojo::contract]
 mod shop {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::player::{Player, PlayerTrait};
@@ -40,11 +38,6 @@ mod shop {
     use rollyourown::utils::shop::{ShopImpl, ShopTrait};
 
     use super::{IShop, AvailableItem};
-
-    #[storage]
-    struct Storage {
-        world_dispatcher: IWorldDispatcher,
-    }
 
     #[starknet::interface]
     trait ISystem<TContractState> {
@@ -110,10 +103,13 @@ mod shop {
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
             assert(item.level < shop_settings.max_item_level, 'item max level');
-           
+
             // buyin a new item, not upgrading
             if item.level == 0 {
-                assert(player.get_item_count(self.world()) < shop_settings.max_item_allowed, 'max item count')
+                assert(
+                    player.get_item_count(self.world()) < shop_settings.max_item_allowed,
+                    'max item count'
+                )
             }
 
             // TODO: check can only buy 1 item by turn
@@ -167,7 +163,7 @@ mod shop {
 
             let mut available: Array<AvailableItem> = array![];
 
-            if !self.is_open(game_id,player_id){
+            if !self.is_open(game_id, player_id) {
                 return available.span();
             };
 
