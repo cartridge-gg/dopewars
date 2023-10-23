@@ -204,28 +204,31 @@ export const shopItemInfos: ShopItemInfo[] = [
   // attack 
   {
     id: ItemTextEnum.Attack,
+    typeText: ItemTextEnum.Attack,
     type: ItemEnum.Attack,
     level: 1,
     icon: Knife,
-    desc: "* Gives you some extra firepower *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Attack,
+    typeText: ItemTextEnum.Attack,
     type: ItemEnum.Attack,
     level: 2,
     icon: Glock,
-    desc: "* Gives you some extra firepower *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Attack,
+    typeText: ItemTextEnum.Attack,
     type: ItemEnum.Attack,
     level: 3,
     icon: Uzi,
-    desc: "* Gives you some extra firepower *",
+    value: 0,
     name: "",
     cost: 0,
   },
@@ -233,28 +236,31 @@ export const shopItemInfos: ShopItemInfo[] = [
   // transport 
   {
     id: ItemTextEnum.Transport,
+    typeText: ItemTextEnum.Transport,
     type: ItemEnum.Transport,
     level: 1,
     icon: Fannypack,
-    desc: "* Allows you to carry more product *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Transport,
+    typeText: ItemTextEnum.Transport,
     type: ItemEnum.Transport,
     level: 2,
     icon: Backpack,
-    desc: "* Allows you to carry more product *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Transport,
+    typeText: ItemTextEnum.Transport,
     type: ItemEnum.Transport,
     level: 3,
     icon: Dufflebag,
-    desc: "* Allows you to carry more product *",
+    value: 0,
     name: "",
     cost: 0,
   },
@@ -262,56 +268,62 @@ export const shopItemInfos: ShopItemInfo[] = [
   // defense 
   {
     id: ItemTextEnum.Defense,
+    typeText: ItemTextEnum.Defense,
     type: ItemEnum.Defense,
     level: 1,
     icon: Kneepads,
-    desc: "* Allows you to absorb some damage *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Defense,
+    typeText: ItemTextEnum.Defense,
     type: ItemEnum.Defense,
     level: 2,
     icon: Leatherjacket,
-    desc: "* Allows you to absorb some damage *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Defense,
+    typeText: ItemTextEnum.Defense,
     type: ItemEnum.Defense,
     level: 3,
     icon: Kevlar,
-    desc: "* Allows you to absorb some damage *",
+    value: 0,
     name: "",
     cost: 0,
   },
   // speed 
   {
     id: ItemTextEnum.Speed,
+    typeText: ItemTextEnum.Speed,
     type: ItemEnum.Speed,
     level: 1,
     icon: Shoes,
-    desc: "* Allows you to escape more easily *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Speed,
+    typeText: ItemTextEnum.Speed,
     type: ItemEnum.Speed,
     level: 2,
     icon: Skateboard,
-    desc: "* Allows you to escape more easily *",
+    value: 0,
     name: "",
     cost: 0,
   },
   {
     id: ItemTextEnum.Speed,
+    typeText: ItemTextEnum.Speed,
     type: ItemEnum.Speed,
     level: 3,
     icon: Bicycle,
-    desc: "* Allows you to escape more easily *",
+    value: 0,
     name: "",
     cost: 0,
   },
@@ -353,6 +365,21 @@ export function getShopItem(id: ItemTextEnum, level: number): ShopItemInfo {
   return item;
 }
 
+export function getShopItemStatname(typ: ItemTextEnum): string {
+  switch (typ) {
+    case ItemTextEnum.Attack:
+      return "ATK"
+    case ItemTextEnum.Defense:
+      return "DEF"
+    case ItemTextEnum.Transport:
+      return "INV"
+    case ItemTextEnum.Speed:
+      return "SPD"
+    default:
+      return "?"
+  }
+}
+
 export function getOutcomeInfo(
   status: PlayerStatus,
   type: Outcome,
@@ -370,6 +397,6 @@ export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
   if (!drugMarkets) {
     return [];
   }
-  
+
   return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
 }

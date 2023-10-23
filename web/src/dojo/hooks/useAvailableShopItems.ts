@@ -29,12 +29,12 @@ export const useAvailableShopItems = (gameId: string) => {
                     return {
                         id:i.item_id,
                         type: itemInfos.type,
+                        typeText: itemInfos.id,
                         name: shortString.decodeShortString(i.name),
                         level: Number(i.level),
                         cost: Number(i.cost),
-                        value: Number(i.cost),
+                        value: Number(i.value),
                         icon: itemInfos.icon,
-                        desc: itemInfos.desc
                     } as ShopItemInfo
                 })
 

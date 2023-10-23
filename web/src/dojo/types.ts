@@ -78,9 +78,10 @@ export interface DrugInfo {
 
 export interface ShopItemInfo {
   type: ItemEnum;
+  typeText : ItemTextEnum;
   name: string;
-  desc: string;
   cost: number;
+  value: number;
   id: string;
   level: number;
   icon: React.FC;

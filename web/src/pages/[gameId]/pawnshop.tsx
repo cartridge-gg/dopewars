@@ -29,9 +29,9 @@ import { usePlayerEntityStore } from "@/hooks/player";
 
 import { Truck } from "@/components/icons/Truck";
 import { useGameEntity } from "@/dojo/queries/useGameEntity";
-import { getLocationById, getLocationByType, getShopItem } from "@/dojo/helpers";
+import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
-
+import { Inventory } from "@/components/Inventory";
 
 export default function PawnShop() {
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function PawnShop() {
 
   const { toast } = useToast();
 
-  const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo| undefined>(undefined);
+  const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo | undefined>(undefined);
 
   const selectItem = (shopItem: ShopItemInfo) => {
     // do checks
@@ -67,9 +67,7 @@ export default function PawnShop() {
       router.push(`/${gameId}/travel`);
     } else {
       // redirect to location
-      router.push(
-        `/${gameId}/${getLocationById(playerEntity?.locationId)?.slug}`,
-      );
+      router.push(`/${gameId}/${getLocationById(playerEntity?.locationId)?.slug}`);
     }
   };
 
@@ -90,8 +88,8 @@ export default function PawnShop() {
     }
   };
 
-  if(!playerEntity || !gameEntity){
-    return null
+  if (!playerEntity || !gameEntity) {
+    return null;
   }
 
   return (
@@ -114,66 +112,46 @@ export default function PawnShop() {
         }}
         margin="auto"
       >
-        <VStack w="full">
-        <Text>You can buy an item, or not...</Text>
-        <Text fontSize="12px">Max items : {playerEntity && playerEntity.maxItems}</Text>
+        <Inventory />
+
+        <VStack w="full" alignItems="flex-start" mt="10px">
+          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+            For sale
+          </Text>
+          {/* <VStack w="full">
+            <Text fontSize="12px">Max items : {playerEntity && playerEntity.maxItems}</Text>
+          </VStack> */}
         </VStack>
 
-        <SimpleGrid
-          columns={1}
-          w="full"
-          maxW="420px"
-          margin="auto"
-          gap={["10px", "16px"]}
-          fontSize={["16px", "20px"]}
-        >
-         
+        <SimpleGrid columns={2} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
           {availableShopItems &&
             availableShopItems.map((shopItem, index) => {
               return (
                 <Button
                   w="full"
-                  h={["auto", "110px"]}
+                  h={["auto", "100px"]}
                   key={index}
                   position="relative"
                   padding="16px"
                   onClick={() => selectItem(shopItem)}
                   variant="selectable"
                   isActive={shopItem === selectedShopItem}
+                  justifyContent="stretch"
                 >
-                  <HStack w="full" gap="20px">
-                    <VStack>
-                    <Text display="inline" fontSize="11px" >LVL {shopItem.level}</Text>
-                      {shopItem.icon({ width: "56px", height: "56px" })}
-                    </VStack>
-                    <VStack w="full" alignItems="flex-start">
-                      <HStack w="full" justifyContent="space-between">
-                        <Text
-                          textStyle="heading"
-                          textTransform="uppercase"
-                          fontSize={["16px", "20px"]}
-                        >
-                          {shopItem.name} 
-                        </Text>
-                        <Text fontSize={["16px", "20px"]}>
-                          ${shopItem.cost}
-                        </Text>
-                      </HStack>
-                      <Text
-                        opacity={0.4}
-                        w="full"
-                        h="40px"
-                        maxW="280px"
-                        textAlign="left"
-                        fontSize={["12px", "16px"]}
-                        whiteSpace="pre-wrap"
-                        justifyContent="center"
-                        textTransform="none"
-                      >
-                        {shopItem.desc}
+                  <VStack w="full" gap="10px">
+                    <HStack w="full" justify="space-between">
+                      <Text textStyle="heading" textTransform="uppercase" fontSize={["16px", "20px"]}>
+                        {shopItem.name}
                       </Text>
-                    </VStack>
-                  </HStack>
+                      {shopItem.icon({ width: "40px", height: "40px" })}
+                    </HStack>
+                    <HStack w="full" justifyContent="space-between">
+                      <Text fontSize={["16px", "20px"]}>${shopItem.cost}</Text>
+                      <Text fontSize={["14px", "16px"]} opacity="0.5">
+                        {getShopItemStatname(shopItem.typeText)} +{shopItem.value}
+                      </Text>
+                    </HStack>
+                  </VStack>
                 </Button>
               );
             })}
@@ -189,15 +167,16 @@ export default function PawnShop() {
           w={["full", "auto"]}
           isLoading={isPending}
           isDisabled={
-            !selectedShopItem || selectedShopItem.cost > playerEntity.cash || (
-              playerEntity?.items.length === playerEntity?.maxItems && !playerEntity?.items.find(i => i.id === selectedShopItem.id)
-              )
+            !selectedShopItem ||
+            selectedShopItem.cost > playerEntity.cash ||
+            (playerEntity?.items.length === playerEntity?.maxItems &&
+              !playerEntity?.items.find((i) => i.id === selectedShopItem.id))
           }
           onClick={buy}
         >
           Buy
         </Button>
       </Footer>
-     </Layout>
+    </Layout>
   );
 }

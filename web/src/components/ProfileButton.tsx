@@ -27,7 +27,7 @@ import { headerStyles, headerButtonStyles } from "@/theme/styles";
 import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { ShopItem } from "@/dojo/queries/usePlayerEntity";
-import { getShopItem } from "@/dojo/helpers";
+import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Dots, Gem, Heart, Roll, Siren } from "./icons";
 import { formatCash } from "@/utils/ui";
 import Link from "next/link";
@@ -97,19 +97,19 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
             <Card w="full">
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
                 <HStack flex="1" justify="center" color={attackItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>ATK:</Text>
+                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Attack)}:</Text>
                   <Text>{attackItem?.value || 0}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={defenseItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>DEF:</Text>
+                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Defense)}:</Text>
                   <Text> {defenseItem?.value || 0}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={speedItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>SPD:</Text>
+                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Speed)}:</Text>
                   <Text> {speedItem?.value || 0}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={transportItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>INV:</Text>
+                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Transport)}:</Text>
                   <Text> {playerEntity?.getTransport()}</Text>
                 </HStack>
               </HStack>
@@ -164,9 +164,9 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
             <Button w="full" onClick={close}>
               Close
             </Button>
-            <Link href={`https://twitter.com/intent/tweet?text=${window.location}`} target="_blank">
+            <ChakraLink w="full" href={`https://twitter.com/intent/tweet?text=${window.location}`} target="_blank">
               <Button w="full">X Share</Button>
-            </Link>
+            </ChakraLink>
           </HStack>
         </ModalFooter>
       </ModalContent>
@@ -178,7 +178,7 @@ const ProfileButton = () => {
   const { account } = useDojoContext();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!account ) return null;
+  if (!account) return null;
 
   return (
     <>

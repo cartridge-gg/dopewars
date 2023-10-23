@@ -28,7 +28,7 @@ const Button = ({
       props.onClick && props.onClick(e);
     }}
   >
-    <Text
+    <Text w="full" textAlign="center"
       css={{
         "&:first-letter": {
           textDecoration: "underline",
