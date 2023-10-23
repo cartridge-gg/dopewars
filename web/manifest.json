@@ -858,7 +858,7 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x54948c65c97bfc60c1a75e36093f81b76a3581bbfbe253c636e14e8e5bcd180",
+      "class_hash": "0x7e1619fedce760a3fe10c31c6899b0514c39542511dd151ffdae80798f77496",
       "abi": [
         {
           "type": "impl",

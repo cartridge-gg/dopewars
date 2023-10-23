@@ -15,6 +15,23 @@ query GameEntity($id: u32!) {
   }
 }
 
+fragment PlayerProps on Player {
+  name
+  cash
+  status
+  location_id
+  drug_count
+  health
+  turn
+  max_turns
+  max_items
+  attack
+  defense
+  transport
+  speed
+  wanted
+}
+
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
     total_count
@@ -24,20 +41,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
         models {
           __typename
           ... on Player {
-            name
-            cash
-            status
-            location_id
-            drug_count
-            health
-            turn
-            max_turns
-            max_items
-            attack
-            defense
-            transport
-            speed
-            wanted
+            ...PlayerProps
           }
           ... on Drug {
             drug_id
@@ -54,6 +58,21 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
     }
   }
 }
+
+subscription PlayerEntitySubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Player {
+        ...PlayerProps
+      }
+    }
+  }
+}
+
 
 query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {

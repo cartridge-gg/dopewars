@@ -818,6 +818,8 @@ export type GameEntityQueryVariables = Exact<{
 
 export type GameEntityQuery = { __typename?: 'Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, creator?: any | null, is_finished?: any | null, max_players?: any | null, max_turns?: any | null, num_players?: any | null, start_time?: any | null } | null } | null> | null } | null };
 
+export type PlayerPropsFragment = { __typename?: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null };
+
 export type PlayerEntityQueryVariables = Exact<{
   gameId: Scalars['String'];
   playerId: Scalars['String'];
@@ -825,6 +827,13 @@ export type PlayerEntityQueryVariables = Exact<{
 
 
 export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
+
+export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -834,7 +843,24 @@ export type LocationEntitiesQueryVariables = Exact<{
 
 export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
 
-
+export const PlayerPropsFragmentDoc = `
+    fragment PlayerProps on Player {
+  name
+  cash
+  status
+  location_id
+  drug_count
+  health
+  turn
+  max_turns
+  max_items
+  attack
+  defense
+  transport
+  speed
+  wanted
+}
+    `;
 export const AvailableGamesDocument = `
     query AvailableGames {
   gameModels(first: 10) {
@@ -1052,20 +1078,7 @@ export const PlayerEntityDocument = `
         models {
           __typename
           ... on Player {
-            name
-            cash
-            status
-            location_id
-            drug_count
-            health
-            turn
-            max_turns
-            max_items
-            attack
-            defense
-            transport
-            speed
-            wanted
+            ...PlayerProps
           }
           ... on Drug {
             drug_id
@@ -1082,7 +1095,7 @@ export const PlayerEntityDocument = `
     }
   }
 }
-    `;
+    ${PlayerPropsFragmentDoc}`;
 export const usePlayerEntityQuery = <
       TData = PlayerEntityQuery,
       TError = unknown
@@ -1117,6 +1130,21 @@ export const useInfinitePlayerEntityQuery = <
 useInfinitePlayerEntityQuery.getKey = (variables: PlayerEntityQueryVariables) => ['PlayerEntity.infinite', variables];
 ;
 
+export const PlayerEntitySubscriptionDocument = `
+    subscription PlayerEntitySubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Player {
+        ...PlayerProps
+      }
+    }
+  }
+}
+    ${PlayerPropsFragmentDoc}`;
 export const LocationEntitiesDocument = `
     query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {

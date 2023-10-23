@@ -34,7 +34,6 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Location } from "@/dojo/types";
 import { MarketEventData } from "@/dojo/events";
 
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { useMarketPrices } from "@/dojo/queries/useMarkets";
 

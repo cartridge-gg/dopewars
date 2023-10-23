@@ -29,8 +29,7 @@ const Header = ({ back }: HeaderProps) => {
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-  const  { playerEntity } = playerEntityStore
-
+  const { playerEntity } = playerEntityStore;
 
   const isMobile = IsMobile();
 
@@ -48,7 +47,6 @@ const Header = ({ back }: HeaderProps) => {
       return acc + drug.quantity;
     }, 0);
 
-
     setInventory(inventory);
   }, [playerEntity]);
 
@@ -62,42 +60,59 @@ const Header = ({ back }: HeaderProps) => {
       py={["0", "20px"]}
     >
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity &&  (
-        <HStack flex="1" justify="center">
-          <HStack
-            h="48px"
-            w="auto"
-            px="20px"
-            spacing={["10px", "30px"]}
-            bg="neon.700"
-            sx={{ ...headerStyles }}
-          >
-            <Flex w="full" align="center" justify="center" gap="10px">
-              <HStack>
-                <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
-              </HStack>
-              <HStack>
-                <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                <HStack  color={playerEntity.health > 59 ? "neon.400": (playerEntity.health > 29 ? "yellow.400" : "red")}>
-                  <Heart /> <Text>{playerEntity.health}</Text>
+      {playerEntity && (
+          <HStack flex="1" justify="center">
+            <HStack
+              h="48px"
+              w="auto"
+              px="20px"
+              spacing={["10px", "30px"]}
+              bg="neon.700"
+              sx={{ ...headerStyles }}
+            >
+              <Flex w="full" align="center" justify="center" gap="10px">
+                <HStack>
+                  <Gem />
+                  <Text>{formatCash(playerEntity.cash)}</Text>
                 </HStack>
-                <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                 <HStack color={playerEntity.wanted > 68 ? "red": (playerEntity.wanted > 29 ? "yellow.400" : "neon.400")} >
-                  <Siren /> <Text>{playerEntity.wanted}</Text>
+                <HStack>
+                  <Divider
+                    orientation="vertical"
+                    borderColor="neon.600"
+                    h="12px"
+                  />
+                  <HStack
+                    color={
+                      playerEntity.health > 59
+                        ? "neon.400"
+                        : playerEntity.health > 29
+                        ? "yellow.400"
+                        : "red"
+                    }
+                  >
+                    <Heart /> <Text>{playerEntity.health}</Text>
+                  </HStack>
+                  <Divider
+                    orientation="vertical"
+                    borderColor="neon.600"
+                    h="12px"
+                  />
+                  <HStack
+                    color={
+                      playerEntity.wanted > 68
+                        ? "red"
+                        : playerEntity.wanted > 29
+                        ? "yellow.400"
+                        : "neon.400"
+                    }
+                  >
+                    <Siren /> <Text>{playerEntity.wanted}</Text>
+                  </HStack>
                 </HStack>
-              </HStack>
-            </Flex>
+              </Flex>
+            </HStack>
           </HStack>
-        </HStack>
-      )}
+        )}
 
       <HStack flex="1" justify="right">
         {!isMobile && (

@@ -43,15 +43,15 @@ export class PlayerEntity {
   wanted: number;
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[]) {
-    this.name = shortString.decodeShortString(player.name)
+    this.name = shortString.decodeShortString(player.name);
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turn = player.turn;
     this.maxTurns = player.max_turns;
     this.maxItems = player.max_items;
-    
+
     this.drugCount = player.drug_count;
-  
+
     this.locationId =
       player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
@@ -67,29 +67,38 @@ export class PlayerEntity {
     this.wanted = player.wanted;
   }
 
+  update(player: Player) {
+    this.cash = Number(player.cash) / SCALING_FACTOR;
+    this.health = player.health;
+    this.turn = player.turn;
+    this.drugCount = player.drug_count;
+    this.locationId =
+      player.location_id === "Home" ? undefined : player.location_id;
+    this.status = player.status;
+    this.wanted = player.wanted;
+  }
+
   getTransport(): number {
-    const transportItem = this.items.find(i => i.id === ItemTextEnum.Transport)
-    if (transportItem){
-      return this.transport + transportItem.value
+    const transportItem = this.items.find(
+      (i) => i.id === ItemTextEnum.Transport,
+    );
+    if (transportItem) {
+      return this.transport + transportItem.value;
     }
-    return this.transport
+    return this.transport;
   }
 
   static create(edges: EntityEdge[]): PlayerEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
     // player model
     const playerModel = edges.find((edge) => {
-      return edge.node?.models?.some(
-        (model) => model?.__typename === "Player",
-      );
+      return edge.node?.models?.some((model) => model?.__typename === "Player");
     })?.node?.models?.[0] as Player;
 
     // TODO: create helpers
     // drug entities
     const drugEdges = edges.filter((edge) =>
-      edge.node?.models?.find(
-        (model) => model?.__typename === "Drug",
-      ),
+      edge.node?.models?.find((model) => model?.__typename === "Drug"),
     );
 
     const drugs: Drug[] = drugEdges.map((edge) => {
@@ -103,11 +112,9 @@ export class PlayerEntity {
       };
     });
 
-    // items 
+    // items
     const itemEdges = edges.filter((edge) =>
-      edge.node?.models?.find(
-        (model) => model?.__typename === "Item",
-      ),
+      edge.node?.models?.find((model) => model?.__typename === "Item"),
     );
 
     const items: ShopItem[] = itemEdges.map((edge) => {
@@ -147,7 +154,6 @@ export const usePlayerEntity = ({
     {
       enabled: !!gameId && !!address,
       refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
-      
     },
   );
 
