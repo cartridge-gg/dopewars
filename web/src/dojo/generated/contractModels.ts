@@ -20,15 +20,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: [
-              "GameMode",
-              "u64",
-              "usize",
-              "usize",
-              "usize",
-              "bool",
-              "ContractAddress",
-            ],
+            types: ["GameMode", "u64", "usize", "usize", "usize", "bool", "ContractAddress"],
           },
         },
       );
@@ -55,6 +47,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           name: RecsType.BigInt,
+          avatar_id: RecsType.Number,
           status: RecsType.Number,
           location_id: RecsType.Number,
           turn: RecsType.Number,
@@ -74,6 +67,7 @@ export function defineContractComponents(world: World) {
             name: name,
             types: [
               "felt252",
+              "u8",
               "PlayerStatus",
               "LocationEnum",
               "usize",

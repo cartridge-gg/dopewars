@@ -3,9 +3,9 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { Alert } from "@/components/icons";
+import { Alert, Arrow, ArrowInput } from "@/components/icons";
 import { InputNumber } from "@/components/InputNumber";
-import { VStack, HStack, Text } from "@chakra-ui/react";
+import { VStack, HStack, Text, Card } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
 import { GameMode } from "@/dojo/types";
@@ -14,6 +14,8 @@ import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Glock } from "@/components/icons/items";
 import { Clock } from "@/components/icons";
+import { Avatar } from "@/components/avatar/Avatar";
+import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
 
 export default function New() {
   const router = useRouter();
@@ -22,9 +24,10 @@ export default function New() {
 
   const { toast } = useToast();
 
-  const [error, setError] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [gameMode, setGameMode] = useState<GameMode>(GameMode.Limited);
+  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const [avatarId, setAvatarId] = useState(0);
+  const [gameMode, setGameMode] = useState(GameMode.Unlimited);
 
   const create = async () => {
     setError("");
@@ -34,7 +37,7 @@ export default function New() {
     }
 
     try {
-      const { hash, gameId } = await createGame(gameMode, name);
+      const { hash, gameId } = await createGame(gameMode, name, avatarId);
 
       toast({
         message: "Game Created!",
@@ -58,49 +61,44 @@ export default function New() {
       }}
     >
       <>
-        <VStack
-          h="80%"
-          w={["full", "400px"]}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <VStack w="full" mb="50px">
-            <Text py="20px" textStyle="subheading" fontSize="13px">
-              Mode
-            </Text>
-            <HStack gap="20px">
-              <Button
-                variant="selectable"
-                isActive={gameMode === GameMode.Limited}
-                onClick={() => setGameMode(GameMode.Limited)}
-              >
-                <Clock /> THUG
-              </Button>
-              <Button
-                variant="selectable"
-                isActive={gameMode === GameMode.Unlimited}
-                onClick={() => setGameMode(GameMode.Unlimited)}
-              >
-                <Glock /> GANGSTER
-              </Button>
-            </HStack>
-            <HStack py="10px" fontSize="13px" color="neon.500">
-              {gameMode === GameMode.Limited && (
-                <Text>TURN LIMITED</Text>
-              )}
-              {gameMode === GameMode.Unlimited && (
-                <Text >NO TURN LIMIT! HUSTLE FOREVA </Text>
-              )}
-            </HStack>
-          </VStack>
-
+        <VStack h="80%" w={["full", "400px"]} alignItems="center" justifyContent="center">
           <VStack w="full">
-            <Text py="20px" textStyle="subheading" fontSize="13px">
+            <Text textStyle="subheading" fontSize="13px">
               Name Entry
             </Text>
+            <HStack color="neon.500">
+              <Text > What&apos;s your name playa ?</Text>
+            </HStack>
+
+            <HStack my="30px" align="center" justify="center">
+              <Arrow
+                style="outline"
+                direction="left"
+                boxSize="48px"
+                userSelect="none"
+                cursor="pointer"
+                onClick={() => (avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount()))}
+              />
+
+              <Card mx="20px">
+                <Avatar name={genAvatarFromId(avatarId)} w="96px" h="96px" />
+              </Card>
+
+              <Arrow
+                style="outline"
+                direction="right"
+                boxSize="48px"
+                userSelect="none"
+                cursor="pointer"
+                onClick={() => setAvatarId((avatarId + 1) % getAvatarCount())}
+              />
+            </HStack>
             <Input
+              display="flex"
               px="10px"
+              mx="auto"
               border="2px"
+              maxW="260px"
               borderColor="neon.500"
               bgColor="neon.700"
               maxLength={31}
@@ -113,20 +111,10 @@ export default function New() {
               }}
             />
             <VStack w="full" h="80px">
-              <Text
-                w="full"
-                align="center"
-                color="red"
-                display={name.length === 31 ? "block" : "none"}
-              >
+              <Text w="full" align="center" color="red" display={name.length === 31 ? "block" : "none"}>
                 Max 31 characters
               </Text>
-              <Text
-                w="full"
-                align="center"
-                color="red"
-                display={error !== "" ? "block" : "none"}
-              >
+              <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
                 {error}
               </Text>
             </VStack>

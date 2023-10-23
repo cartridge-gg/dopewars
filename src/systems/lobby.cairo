@@ -4,7 +4,7 @@ use rollyourown::models::game::{GameMode};
 #[starknet::interface]
 trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, game_mode: GameMode, player_name: felt252
+        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
     ) -> (u32, ContractAddress);
 
     //fn join_game(self: @TContractState,  game_id: u32) -> ContractAddress;
@@ -72,7 +72,7 @@ mod lobby {
     #[external(v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, player_name: felt252
+            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
 
@@ -89,6 +89,7 @@ mod lobby {
                 game_id,
                 player_id: caller,
                 name: player_name,
+                avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
                 location_id: LocationEnum::Home,
                 cash: player_settings.cash,

@@ -30,8 +30,20 @@ export type AvatarName = keyof typeof avatars;
 
 // super simple way to generate an avatar from an address,
 // the least significant byte of the address is used to get the avatar
+
+export const getAvatarCount = () => {
+  const avatarKeys = Object.keys(avatars);
+  return avatarKeys.length
+}
+
 export const genAvatarFromAddress = (address: String) => {
   const avatarKeys = Object.keys(avatars);
   const avatarIndex = parseInt(address.slice(-2), 16) % avatarKeys.length;
+  return avatarKeys[avatarIndex] as AvatarName;
+};
+
+export const genAvatarFromId = (id: number) => {
+  const avatarKeys = Object.keys(avatars);
+  const avatarIndex = id % avatarKeys.length;
   return avatarKeys[avatarIndex] as AvatarName;
 };

@@ -22,7 +22,7 @@ import { playSound, Sounds } from "@/hooks/sound";
 import Dot from "./Dot";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Avatar } from "./avatar/Avatar";
-import { genAvatarFromAddress } from "./avatar/avatars";
+import { genAvatarFromAddress, genAvatarFromId } from "./avatar/avatars";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
 import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
@@ -69,7 +69,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card flex={1}>
-                <Avatar name={genAvatarFromAddress(account.address)} w="80px" h="80px" />
+                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
               </Card>
               <Card flex={3}>
                 <HStack w="full" gap="0">
@@ -175,15 +175,16 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
 };
 
 const ProfileButton = () => {
-  const { account } = useDojoContext();
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!account) return null;
+  if (!account || !playerEntity) return null;
 
   return (
     <>
       <Button h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
-        <Avatar name={genAvatarFromAddress(account.address)} />
+        <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
       </Button>
       <Profile isOpen={isOpen} close={() => setIsOpen(false)} />
     </>

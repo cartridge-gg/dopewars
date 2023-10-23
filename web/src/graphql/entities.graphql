@@ -17,6 +17,7 @@ query GameEntity($id: u32!) {
 
 fragment PlayerProps on Player {
   name
+  avatar_id
   cash
   status
   location_id

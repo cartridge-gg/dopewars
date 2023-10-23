@@ -15,6 +15,7 @@ struct Player {
     #[key]
     player_id: ContractAddress,
     name: felt252,
+    avatar_id: u8,
     status: PlayerStatus,
     location_id: LocationEnum,
     turn: usize,

@@ -27,6 +27,7 @@ query GlobalScores($limit: Int, $cursor: Cursor) {
         game_id
         player_id
         name
+        avatar_id
         cash
         health
         turn

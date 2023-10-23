@@ -72,6 +72,9 @@ export const Inventory = ({ ...props }: StyleProps) => {
                 </>
               );
             })}
+            {playerEntity?.items.length === 0 && (
+              <Text color="neon.500">You own no item</Text>
+            )}
           </HStack>
         </Card>
 

@@ -13,7 +13,8 @@ import { ShopItem } from "../queries/usePlayerEntity";
 export interface SystemsInterface {
   createGame: (
     gameMode: number,
-    playerName: string
+    playerName: string,
+    avatarId: number
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
  // join: (gameId: string) => Promise<SystemExecuteResult>;
@@ -138,11 +139,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string) => {
+    async (gameMode: GameMode, playerName: string, avatarId: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [gameMode, shortString.encodeShortString(playerName)],
+        [gameMode, shortString.encodeShortString(playerName), avatarId],
       );
 
       const joinedEvent = parsedEvents.find(

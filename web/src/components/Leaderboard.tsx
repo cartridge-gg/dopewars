@@ -20,7 +20,7 @@ import Input from "@/components/Input";
 
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
-import { genAvatarFromAddress } from "./avatar/avatars";
+import { genAvatarFromId } from "./avatar/avatars";
 import colors from "@/theme/colors";
 import { Score, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -28,15 +28,10 @@ import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
 import { Skull } from "./icons";
 
-const Leaderboard = ({
-  nameEntry,
-  ...props
-}: { nameEntry?: boolean } & StyleProps & ListProps) => {
+const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-    const {
-    account,
-  } = useDojoContext();
+  const { account } = useDojoContext();
   const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(undefined, 10);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
@@ -50,7 +45,6 @@ const Leaderboard = ({
     // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [scores]);
-
 
   if (!scores) {
     return <></>;
@@ -72,26 +66,16 @@ const Leaderboard = ({
             },
           }}
           ref={listRef}
-
         >
           {scores ? (
-            scores
-            .map((score, index) => {
+            scores.map((score, index) => {
               const isOwn = score.address === account?.address;
-              const color = isOwn
-                ? colors.yellow["400"].toString()
-                : colors.neon["200"].toString();
+              const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = score.name
-                ? `${score.name}${isOwn ? " (you)" : ""}`
-                : "Anonymous";
+              const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
 
               return (
-                <ListItem
-                  color={color}
-                  key={index}
-                  cursor={isOwn && !score.name ? "pointer" : "auto"}
-                >
+                <ListItem color={color} key={index} cursor={isOwn && !score.name ? "pointer" : "auto"}>
                   <HStack mr={3}>
                     <Text
                       w={["10px", "30px"]}
@@ -106,11 +90,7 @@ const Leaderboard = ({
                       {score.dead ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
                       ) : (
-                        <Avatar
-                          name={genAvatarFromAddress(score.address)}
-                          color={avatarColor}
-                          hasCrown={index === 0}
-                        />
+                        <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
                       )}
                     </Box>
 
@@ -154,8 +134,7 @@ const Leaderboard = ({
           </Button>
         )}
       </VStack>
-
-         </>
+    </>
   );
 };
 

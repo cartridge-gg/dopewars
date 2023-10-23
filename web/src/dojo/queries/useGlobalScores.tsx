@@ -11,6 +11,7 @@ import { SCALING_FACTOR } from "../constants";
 export type Score = {
   address: string;
   name?: string;
+  avatarId: number;
   cash: number;
   dead: boolean;
 };
@@ -31,6 +32,7 @@ export class GlobalScores {
         gameId: playerModel?.game_id,
         address: playerModel?.player_id,
         name: shortString.decodeShortString(playerModel?.name),
+        avatarId: playerModel?.avatar_id,
         cash: Math.floor(
           Number(BigInt(edge.node?.cash) / BigInt(SCALING_FACTOR)),
         ),

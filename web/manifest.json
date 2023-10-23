@@ -858,7 +858,7 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x7e1619fedce760a3fe10c31c6899b0514c39542511dd151ffdae80798f77496",
+      "class_hash": "0x10ef72a82ced54e89245f6590389ec2056507974b84c085e95e34de898bf544",
       "abi": [
         {
           "type": "impl",
@@ -917,6 +917,10 @@
                 {
                   "name": "player_name",
                   "type": "core::felt252"
+                },
+                {
+                  "name": "avatar_id",
+                  "type": "core::integer::u8"
                 }
               ],
               "outputs": [
@@ -1036,7 +1040,7 @@
     {
       "name": "trade",
       "address": "0x22a5538d516d281927572adef2af5ecef8904840a86ffa316b3952941d51798",
-      "class_hash": "0x1bc7664a680e898f1318b161e385bbb119c667a239c0b4cbbdf12a904e6b627",
+      "class_hash": "0x36b0618327c25d7b88080c62591ff4ccf5a512befd192ec3c3c27d608127085",
       "abi": [
         {
           "type": "impl",
@@ -1281,7 +1285,7 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x7a46d4f0eaaae8a18122b37a5f89390d84e15da2adeb969971ac56783570957",
+      "class_hash": "0x7ac117e76fc8a833d5443225f42434b5dda680b55761b9bfd950a431e61d07b",
       "abi": [
         {
           "type": "impl",
@@ -1547,7 +1551,7 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x5f178f1cfdd5a20bffeb8e98a750e05d6dd912f9ed90f1870b195d2386a4cd0",
+      "class_hash": "0x3c82870af165fa334781a906e8aa5ef240ba5815acf8b7cac010b5916cc34f7",
       "abi": [
         {
           "type": "impl",
@@ -1773,7 +1777,7 @@
     {
       "name": "shop",
       "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0x6dc3b6157087c2db9bad59b92c67c1bb112b4e9175ac7067d0db26a11e87db8",
+      "class_hash": "0x525380613cb00ace3991715828b75130d5f2331cfc9321861fcd739929f5f4c",
       "abi": [
         {
           "type": "impl",
@@ -2039,7 +2043,7 @@
     {
       "name": "devtools",
       "address": "0x63a0e87fdd2eba1cade12af18aea1cd551f9eb2fb543268be51b67fd7a8d6c3",
-      "class_hash": "0x7f3fa67bc77c097b50c9a361195acfb92c493f00e7b0711de4b94ee2dc3d82a",
+      "class_hash": "0x6cb80864504ccb07a5ab9e9bccb07ef2b8cffe7d97dbc99ab42abf852aeb4b",
       "abi": [
         {
           "type": "impl",
@@ -2533,6 +2537,11 @@
           "key": false
         },
         {
+          "name": "avatar_id",
+          "type": "u8",
+          "key": false
+        },
+        {
           "name": "status",
           "type": "PlayerStatus",
           "key": false
@@ -2598,7 +2607,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x349b1bfa60237588e72c90a90d82dd6934055315dd42fb6261d33c771a0354e",
+      "class_hash": "0x355b4114117a4c3dd7f64e11e6dc7781d753ebb0b3c1b3394ff1d8f12eee34e",
       "abi": [
         {
           "type": "function",

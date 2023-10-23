@@ -28,10 +28,10 @@ echo shop  : $SHOP_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-LOBBY_COMPONENTS=("Game" "Market" "Name" "Player" )
+LOBBY_COMPONENTS=("Game" "Market" "Player" )
 TRAVEL_COMPONENTS=("Player" "Market")
 DECIDE_COMPONENTS=("Player" "Drug")
-TRADE_COMPONENTS=("Drug" "Market" "Name" "Player")
+TRADE_COMPONENTS=("Drug" "Market" "Player")
 SHOP_COMPONENTS=("Player" "Item")
 
 for component in ${LOBBY_COMPONENTS[@]}; do

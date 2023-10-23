@@ -24,6 +24,7 @@ export type ShopItem = {
 
 export class PlayerEntity {
   name: string;
+  avatarId: number;
   cash: number;
   health: number;
   turn: number;
@@ -44,6 +45,7 @@ export class PlayerEntity {
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[]) {
     this.name = shortString.decodeShortString(player.name);
+    this.avatarId = player.avatar_id;
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;
     this.turn = player.turn;
