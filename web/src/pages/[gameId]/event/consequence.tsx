@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
-import { getOutcomeInfo } from "@/dojo/helpers";
+import { getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
@@ -83,7 +83,8 @@ export default function Consequence() {
                     );
                   }
 
-                  router.push(`/${gameId}/turn`);
+                  // router.push(`/${gameId}/turn`);
+                  router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
                 }}
               >
                 Continue
