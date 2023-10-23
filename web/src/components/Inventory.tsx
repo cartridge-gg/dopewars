@@ -9,9 +9,6 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 
-import BorderImage from "@/components/icons/BorderImage";
-import colors from "@/theme/colors";
-
 import React from "react";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -43,21 +40,12 @@ export const Inventory = ({ ...props }: StyleProps) => {
         </HStack>
       </HStack>
 
-      <HStack w="full" flex justify="space-between">
+      <HStack w="full" justify="space-between">
         <Card
           // w="full"
           h="40px"
           px="20px"
           justify="center"
-          sx={{
-            borderImageSource: `url("data:image/svg+xml,${BorderImage({
-              color: colors.neon["700"].toString(),
-            })}")`,
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
         >
           <HStack gap="10px" justify="flex-end">
             {playerEntity?.items.map((item) => {
@@ -92,15 +80,6 @@ export const Inventory = ({ ...props }: StyleProps) => {
           h="40px"
           px="20px"
           justify="center"
-          sx={{
-            borderImageSource: `url("data:image/svg+xml,${BorderImage({
-              color: colors.neon["700"].toString(),
-            })}")`,
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
         >
           <HStack gap="10px" justify="flex-start">
             {playerEntity?.drugCount === 0 ? (

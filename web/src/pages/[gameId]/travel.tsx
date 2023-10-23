@@ -334,11 +334,6 @@ const LocationPrices = ({
         w="full"
         p="5px"
         pointerEvents="all"
-        sx={{
-          borderImageSource: `url("data:image/svg+xml,${BorderImage({
-            color: colors.neon["700"].toString(),
-          })}")`,
-        }}
       >
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box
@@ -354,7 +349,7 @@ const LocationPrices = ({
                 colSpan={1}
                 border="1px"
                 p="6px"
-                borderColor="neon.700"
+                borderColor="neon.600"
               >
                 <HStack gap="8px">
                   {getDrugById(drug.id)?.icon({

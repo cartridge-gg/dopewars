@@ -10,11 +10,12 @@ import {
   PlayerEntityDocument,
   PlayerEntityQuery,
   PlayerEntitySubscriptionDocument,
+  Subscription,
 } from "@/generated/graphql";
 
 export interface PlayerEntityStore {
-  client: Client | null;
-  wsClient: GraphQLClient | null;
+  client: GraphQLClient | null;
+  wsClient: Client | null;
   id: string | null;
   playerEntity: PlayerEntity | null;
   initPlayerEntity: (gameId: string, playerId: string) => void;
@@ -48,7 +49,8 @@ export const usePlayerEntityStore = create<PlayerEntityStore>((set, get) => ({
   unsubscribe: () => {},
   reset: () => {
     get().unsubscribe();
-    get().client?.terminate();
+    const wsClient = get().wsClient;
+    wsClient && wsClient.dispose();
     set({ client: null, wsClient: null, id: null, playerEntity: null });
   },
 }));
@@ -66,12 +68,14 @@ const subscribe = async (gameId: string, playerId: string) => {
       },
     },
     {
-      next: ({ data }) => {
+      next: ({ data }: { data: Subscription }) => {
         console.log("next : ", data);
+
+        if (!data?.entityUpdated?.models) return;
 
         // update player
         const player = usePlayerEntityStore.getState().playerEntity!;
-        player.update(data.entityUpdated.models[0] as Player);
+        player.update(data?.entityUpdated?.models[0] as Player);
 
         usePlayerEntityStore.setState({ playerEntity: player });
 
@@ -88,12 +92,10 @@ const subscribe = async (gameId: string, playerId: string) => {
 };
 
 const executeQuery = async (gameId: string, playerId: string) => {
-  const data = (await usePlayerEntityStore
-    .getState()
-    .client!.request(PlayerEntityDocument, {
-      gameId: gameId,
-      playerId: playerId,
-    })) as PlayerEntityQuery;
+  const data = (await usePlayerEntityStore.getState().client!.request(PlayerEntityDocument, {
+    gameId: gameId,
+    playerId: playerId,
+  })) as PlayerEntityQuery;
 
   const edges = data!.entities!.edges as EntityEdge[];
 
