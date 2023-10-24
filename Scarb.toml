@@ -17,7 +17,7 @@ build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
 auth = "./scripts/default_auth.sh local"
 migrate = "sozo migrate && scarb run gendojo && scarb run auth"
-migrate_dev = "sozo migrate --world 0x20bcb70f0e44b059638938c17d89c90edcbb6afba0944f5196e18340069781c --rpc-url https://api.cartridge.gg/x/ryo/katana --account-address 0x511b881032a0c9778b86d4dc3c173f6dacabe684737fbe9c674ae61653e028 --private-key 0x4d24ed04e4ad2d2a1c9ec175b2820b176e94fc911b4acc157c2d311711b4db6 && scarb run gendojo"
+migrate_dev = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryo1/katana --account-address 0x41d017913d81b1a6b476a3a59122a82fdd64fde2010c79ff3dfd151544a2450 --private-key 0x1dd41713d8e369fb26850ac2e399ebe5932764ce62dc8a8e5b0d46fb360dcf3"
 
 [tool.dojo.env]
 # Katana
@@ -25,9 +25,9 @@ account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f816
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 rpc_url = "http://localhost:5050"
 
-# account_address = "0x511b881032a0c9778b86d4dc3c173f6dacabe684737fbe9c674ae61653e028"
-# private_key = "0x4d24ed04e4ad2d2a1c9ec175b2820b176e94fc911b4acc157c2d311711b4db6"
-# rpc_url = "https://api.cartridge.gg/x/ryo/katana"
+# account_address = "0x41d017913d81b1a6b476a3a59122a82fdd64fde2010c79ff3dfd151544a2450"
+# private_key = "0x1dd41713d8e369fb26850ac2e399ebe5932764ce62dc8a8e5b0d46fb360dcf3"
+# rpc_url = "https://api.cartridge.gg/x/ryo1/katana"
 
 [tool.dojo.world]
 name = "Roll Your Own"
