@@ -11,6 +11,7 @@ export enum WorldEvents {
   Traveled = "0x2c4d9d5da873550ed167876bf0bc2ae300ce1db2eeff67927a85693680a2328",
   AdverseEvent = "0x3605d6af5b08d01a1b42fa16a5f4dc202724f1664912948dcdbe99f5c93d0a0",
   MarketEvent = "0x255825b8769ab99d6c1bd893b440a284a39d8db18c76b91e8e6a70ef5c7a8e0",
+  AtPawnshop = "0x32bd5f84a36928d15d6fee2bf7ac959c1443e069aac774e6e00e596dec31a65",
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
   Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
   BoughtItem = "0x96f1e086de05db8162b5bf8e95b3ff061eeb8a5a88750a793a297379dd74ea",
@@ -66,6 +67,11 @@ export interface MarketEventData {
   location_id: RecsType.String;
   drug_id: RecsType.String;
   increase: RecsType.Boolean;
+}
+
+export interface AtPawnshopData {
+  game_id: RecsType.Number;
+  player_id: RecsType.String;
 }
 
 export interface DecisionData {

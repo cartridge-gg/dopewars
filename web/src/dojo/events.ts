@@ -8,6 +8,8 @@ import {
 } from "starknet";
 
 import { WorldEvents } from "./generated/contractEvents";
+import { Siren, Truck } from "@/components/icons";
+import { getLocationByType, getDrugByType } from "./helpers"
 
 export interface BaseEventData {
   gameId: string;
@@ -17,6 +19,10 @@ export interface BaseEventData {
 export interface AdverseEventData extends BaseEventData {
   playerId: string;
   playerStatus: PlayerStatus;
+}
+
+export interface AtPawnshopEventData extends BaseEventData {
+  playerId: string;
 }
 
 export interface CreateEventData extends BaseEventData {
@@ -79,6 +85,7 @@ export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
   for (let eventType of Object.values(WorldEvents)) {
     allEvents.push(parseEvents((receipt as SuccessfulTransactionReceiptResponse), eventType))
   }
+
   return allEvents.flat()
 }
 
@@ -107,6 +114,13 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         playerId: num.toHexString(raw.data[1]),
         playerStatus: shortString.decodeShortString(raw.data[2]),
       } as AdverseEventData;
+
+    case WorldEvents.AtPawnshop:
+      return {
+        eventType,
+        gameId: num.toHexString(raw.data[0]),
+        playerId: num.toHexString(raw.data[1]),
+      } as AtPawnshopEventData;
 
     case WorldEvents.PlayerJoined:
       return {
@@ -144,6 +158,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
     case WorldEvents.Traveled:
     case WorldEvents.Bought:
     case WorldEvents.Sold:
+    default:
       console.log(`event parse not implemented: ${eventType}`)
       //throw new Error(`event parse not implemented: ${eventType}`);
       return {
@@ -152,4 +167,24 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
       break;
   }
 
+}
+
+
+export function displayMarketEvents(events: MarketEventData[], toast: ToastType) {
+  // market events
+  for (let event of events) {
+    const e = event as MarketEventData;
+    const msg = e.increase
+      ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${getLocationByType(Number(e.locationId))?.name
+      }`
+      : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${getLocationByType(Number(e.locationId))?.name
+      }`;
+    const icon = e.increase ? Siren : Truck;
+    toast({
+      message: msg,
+      icon: icon,
+      // link: `http://amazing_explorer/${hash}`,
+      duration: 6000,
+    });
+  }
 }

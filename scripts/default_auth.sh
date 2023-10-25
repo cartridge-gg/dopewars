@@ -30,9 +30,9 @@ echo "--------------------------------------------------------------------------
 # enable system -> component authorizations
 LOBBY_COMPONENTS=("Game" "Market" "Player" )
 TRAVEL_COMPONENTS=("Player" "Market")
-DECIDE_COMPONENTS=("Player" "Drug")
+DECIDE_COMPONENTS=("Player" "Drug" "Market")
 TRADE_COMPONENTS=("Drug" "Market" "Player")
-SHOP_COMPONENTS=("Player" "Item")
+SHOP_COMPONENTS=("Player" "Item" "Market")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL

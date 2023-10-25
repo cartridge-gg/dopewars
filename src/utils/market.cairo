@@ -58,10 +58,7 @@ fn initialize_markets(
 }
 
 
-fn market_variations(
-    world: IWorldDispatcher, game_id: u32, player_id: ContractAddress
-) -> Span<MarketEvent> {
-    let mut market_events: Array<MarketEvent> = array![];
+fn market_variations(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) {
     let mut locations = LocationTrait::all();
     let game = get!(world, game_id, Game);
     let player = get!(world, (game_id, player_id), Player);
@@ -102,30 +99,36 @@ fn market_variations(
                                 price_variation_with_drug(
                                     ref seed, ref market, market_settings, true
                                 );
-                                market_events
-                                    .append(
-                                        MarketEvent {
-                                            game_id,
-                                            location_id: *location_id,
-                                            drug_id: *drug_id,
-                                            increase: true
-                                        }
-                                    );
+
+                                // emit raw event
+                                let location_id_u8: u8 = (*location_id).into();
+                                let drug_id_u8: u8 = (*drug_id).into();
+                                let mut keys = array![selector!("MarketEvent")];
+                                let mut values: Array<felt252> = array![
+                                    game_id.into(),
+                                    location_id_u8.into(),
+                                    drug_id_u8.into(),
+                                    true.into()
+                                ];
+                                world.emit(keys, values.span());
                             } else if rand < 500 && rand >= 500
                                 - market_settings.market_event_chance.into() {
                                 // big move down
                                 price_variation_with_drug(
                                     ref seed, ref market, market_settings, false
                                 );
-                                market_events
-                                    .append(
-                                        MarketEvent {
-                                            game_id,
-                                            location_id: *location_id,
-                                            drug_id: *drug_id,
-                                            increase: false
-                                        }
-                                    );
+
+                                // emit raw event
+                                let location_id_u8: u8 = (*location_id).into();
+                                let drug_id_u8: u8 = (*drug_id).into();
+                                let mut keys = array![selector!("MarketEvent")];
+                                let mut values: Array<felt252> = array![
+                                    game_id.into(),
+                                    location_id_u8.into(),
+                                    drug_id_u8.into(),
+                                    false.into()
+                                ];
+                                world.emit(keys, values.span());
                             }
 
                             // update market
@@ -142,7 +145,6 @@ fn market_variations(
             }
         };
     };
-    market_events.span()
 }
 
 

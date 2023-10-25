@@ -3,7 +3,7 @@ import { Market } from "@/generated/graphql";
 
 // must have same order than cairo enum
 export enum Location {
-  Home,
+  Pawnshop,
   Queens,
   Bronx,
   Brooklyn,
@@ -40,6 +40,7 @@ export enum PlayerStatus {
   Normal = "Normal",
   BeingMugged = "BeingMugged",
   BeingArrested = "BeingArrested",
+  AtPawnshop = "AtPawnshop"
 }
 
 export enum Action {

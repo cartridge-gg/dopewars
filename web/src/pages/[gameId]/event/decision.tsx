@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import {  ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { getLocationById, getShopItem } from "@/dojo/helpers";
+import {  getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
-import { ConsequenceEventData } from "@/dojo/events";
+import { ConsequenceEventData, displayMarketEvents } from "@/dojo/events";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -19,7 +19,7 @@ import { playSound, Sounds } from "@/hooks/sound";
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const nextLocation = getLocationById(router.query.nextId as string);
+  // const nextLocation = getLocationById(router.query.nextId as string);
   const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState<string>();
   const [title, setTitle] = useState<string>();
@@ -68,17 +68,15 @@ export default function Decision() {
       try {
         setPenalty("");
 
-        const result = await decide(gameId, action, nextLocation!.type);
-        const event = result.event! as ConsequenceEventData;
-        addEncounter(playerEntity!.status, event.outcome);
+        const {event, events} = await decide(gameId, action);
 
-        switch (event.outcome) {
+        displayMarketEvents(events, toast);
+
+        const consequenceEvent = event as ConsequenceEventData;
+        addEncounter(playerEntity!.status, consequenceEvent.outcome);
+
+        switch (consequenceEvent.outcome) {
           case Outcome.Died:
-            // toast({
-            //   message: `You took ${event.healthLoss}HP damage and died...`,
-            //   icon: Heart,
-            //   link: `http://amazing_explorer/${result.hash}`,
-            // });
             setIsRedirecting(true);
             return router.push(`/${gameId}/end`);
 
@@ -86,7 +84,7 @@ export default function Decision() {
           case Outcome.Escaped:
             setIsRedirecting(true);
             return router.replace(
-              `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
+              `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${
                 playerEntity!.status
               }`,
             );
@@ -94,19 +92,14 @@ export default function Decision() {
           case Outcome.Captured:
             setPrefixTitle("Your escape...");
             setTitle("Failed!");
-            setPenalty(`You lost ${event.healthLoss}HP!`);
-            // toast({
-            //   message: `You were captured and lost ${event.healthLoss}HP!`,
-            //   icon: Heart,
-            //   link: `http://amazing_explorer/${result.hash}`,
-            // });
+            setPenalty(`You lost ${consequenceEvent.healthLoss}HP!`);
             break;
         }
       } catch (e) {
         console.log(e);
       }
     },
-    [gameId, nextLocation, router, playerEntity, addEncounter, decide, toast],
+    [gameId, router, playerEntity, addEncounter, decide, toast],
   );
 
   if (!playerEntity || !router.isReady || isRedirecting) {

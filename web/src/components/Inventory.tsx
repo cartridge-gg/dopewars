@@ -1,13 +1,4 @@
-import {
-  Divider,
-  HStack,
-  StyleProps,
-  Text,
-  VStack,
-  Card,
-  Tooltip,
-  Spacer,
-} from "@chakra-ui/react";
+import { Divider, HStack, StyleProps, Text, VStack, Card, Tooltip, Spacer } from "@chakra-ui/react";
 
 import React from "react";
 import { useRouter } from "next/router";
@@ -24,12 +15,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   return (
     <VStack {...props} w="full" align="flex-start" pb="5px">
       <HStack w="full" justify={["flex-end", "space-between"]}>
-        <Text
-          textStyle="subheading"
-          fontSize="10px"
-          display={["none", "flex"]}
-          color="neon.500"
-        >
+        <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
           Your Inventory
         </Text>
         <HStack color="yellow.400">
@@ -48,9 +34,9 @@ export const Inventory = ({ ...props }: StyleProps) => {
           justify="center"
         >
           <HStack gap="10px" justify="flex-end">
-            {playerEntity?.items.map((item) => {
+            {playerEntity?.items.map((item, key) => {
               return (
-                <>
+                <div key={`item-${key}`}>
                   <HStack gap="10px">
                     <Tooltip label={`${item.name} (+${item.value})`}>
                       <HStack color="yellow.400">
@@ -69,12 +55,10 @@ export const Inventory = ({ ...props }: StyleProps) => {
                     borderWidth="1px"
                     borderColor="neon.600"
                   />
-                </>
+                </div>
               );
             })}
-            {playerEntity?.items.length === 0 && (
-              <Text color="neon.500">You own no item</Text>
-            )}
+            {playerEntity?.items.length === 0 && <Text color="neon.500">You own no item</Text>}
           </HStack>
         </Card>
 
@@ -88,10 +72,10 @@ export const Inventory = ({ ...props }: StyleProps) => {
             {playerEntity?.drugCount === 0 ? (
               <Text color="neon.500">Your bag is empty</Text>
             ) : (
-              playerEntity?.drugs.map((drug) => {
+              playerEntity?.drugs.map((drug, key) => {
                 return (
                   drug.quantity > 0 && (
-                    <>
+                    <div key={`item-${key}`}>
                       <HStack gap="10px">
                         <HStack color="yellow.400">
                           {getDrugById(drug.id)?.icon({ boxSize: "26" })}
@@ -105,7 +89,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                         borderWidth="1px"
                         borderColor="neon.600"
                       />
-                    </>
+                    </div>
                   )
                 );
               })

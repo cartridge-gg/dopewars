@@ -45,8 +45,8 @@ export default function New() {
         link: `http://amazing_explorer/${hash}`,
       });
 
-      //  router.push(`/${gameId}/travel`);
-      router.push(`/${gameId}/pawnshop`);
+       router.push(`/${gameId}/travel`);
+      //router.push(`/${gameId}/pawnshop`);
     } catch (e) {
       console.log(e);
     }
@@ -54,6 +54,7 @@ export default function New() {
 
   return (
     <Layout
+    
       leftPanelProps={{
         prefixTitle: "Start a",
         title: "New Game",

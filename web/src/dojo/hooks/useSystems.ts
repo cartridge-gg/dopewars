@@ -17,7 +17,7 @@ export interface SystemsInterface {
     avatarId: number
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
- // join: (gameId: string) => Promise<SystemExecuteResult>;
+  // join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
     locationId: Location,
@@ -34,7 +34,6 @@ export interface SystemsInterface {
   decide: (
     gameId: string,
     action: Action,
-    nextLocationId: Location,
   ) => Promise<SystemExecuteResult>;
   buyItem: (
     gameId: string, itemId: ItemEnum
@@ -42,7 +41,10 @@ export interface SystemsInterface {
   dropItem: (
     gameId: string, itemId: ItemEnum
   ) => Promise<SystemExecuteResult>;
- 
+  skipShop: (
+    gameId: string
+  ) => Promise<SystemExecuteResult>;
+
   failingTx: () => Promise<SystemExecuteResult>;
 
   isPending: boolean;
@@ -166,11 +168,18 @@ export const useSystems = (): SystemsInterface => {
         [gameId, locationId],
       );
 
+      const adverseEvent = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.AdverseEvent,
+      ) as AdverseEventData
+
+      const atPawnshopEvent = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.AtPawnshop,
+      ) as AtPawnshopEventData
+
+
       return {
         hash,
-        event: parsedEvents.find(
-          (e) => e.eventType === WorldEvents.AdverseEvent,
-        ) as AdverseEventData,
+        event: adverseEvent || atPawnshopEvent,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.MarketEvent)
           .map((e) => e as MarketEventData),
@@ -221,18 +230,25 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const decide = useCallback(
-    async (gameId: string, action: Action, nextLocationId: Location) => {
+    async (gameId: string, action: Action) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "decide",
         "decide",
-        [gameId, action, nextLocationId],
+        [gameId, action],
       );
+
+      const consequenceEvent = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.Consequence,
+      ) as ConsequenceEventData
 
       return {
         hash,
         event: parsedEvents.find(
           (e) => e.eventType === WorldEvents.Consequence,
         ) as ConsequenceEventData,
+        events: parsedEvents
+          .filter((e) => e.eventType === WorldEvents.MarketEvent)
+          .map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
@@ -246,8 +262,12 @@ export const useSystems = (): SystemsInterface => {
         [gameId, itemId],
       );
 
+      debugger
       return {
         hash,
+        events: parsedEvents
+          .filter((e) => e.eventType === WorldEvents.MarketEvent)
+          .map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
@@ -267,6 +287,26 @@ export const useSystems = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
+
+  const skipShop = useCallback(
+    async (gameId: string, itemId: ItemEnum) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "shop",
+        "skip",
+        [gameId],
+      );
+
+      return {
+        hash,
+        events: parsedEvents
+          .filter((e) => e.eventType === WorldEvents.MarketEvent)
+          .map((e) => e as MarketEventData),
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
 
 
   const failingTx = useCallback(
@@ -311,7 +351,8 @@ export const useSystems = (): SystemsInterface => {
     decide,
     buyItem,
     dropItem,
-   
+    skipShop,
+
     // devtool
     failingTx,
 

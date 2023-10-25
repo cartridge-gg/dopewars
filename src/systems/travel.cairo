@@ -1,12 +1,10 @@
 use starknet::ContractAddress;
 use rollyourown::models::location::LocationEnum;
 
-
 #[starknet::interface]
 trait ITravel<TContractState> {
     fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
 }
-
 
 #[dojo::contract]
 mod travel {
@@ -25,6 +23,7 @@ mod travel {
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::ITravel;
+    use super::on_turn_end;
 
     #[starknet::interface]
     trait ISystem<TContractState> {
@@ -43,6 +42,7 @@ mod travel {
         Traveled: Traveled,
         AdverseEvent: AdverseEvent,
         MarketEvent: MarketEvent,
+        AtPawnshop: AtPawnshop,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -61,13 +61,18 @@ mod travel {
     }
 
     #[derive(Drop, starknet::Event)]
+    struct AtPawnshop {
+        game_id: u32,
+        player_id: ContractAddress,
+    }
+
+    #[derive(Drop, starknet::Event)]
     struct MarketEvent {
         game_id: u32,
         location_id: LocationEnum,
         drug_id: DrugEnum,
         increase: bool,
     }
-
 
     #[external(v0)]
     impl TravelImpl of ITravel<ContractState> {
@@ -76,81 +81,110 @@ mod travel {
         // 3. Update the players location to the next_location_id.
         // 4. Update the new locations supply based on random events.
         fn travel(self: @ContractState, game_id: u32, next_location_id: LocationEnum) -> bool {
-            let game = get!(self.world(), game_id, Game);
+            let world = self.world();
+            let game = get!(world, game_id, Game);
             assert(game.tick(), 'game cannot progress');
 
             let player_id = get_caller_address();
-            let mut player: Player = get!(self.world(), (game_id, player_id).into(), Player);
+            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
 
             assert(player.can_continue(), 'player cannot travel');
-            assert(next_location_id != LocationEnum::Home, 'no way back');
+            assert(next_location_id != LocationEnum::Home, 'cannot travel to Home');
             assert(player.location_id != next_location_id, 'already at location');
 
+            // save next_location_id
+            player.next_location_id = next_location_id;
+
             // initial travel when game starts has no risk or events
-            if player.location_id != LocationEnum::Home {
+            if player.turn > 0 {
                 let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
                 player.status = risk_settings.travel(seed, @player);
 
-                if player.status != PlayerStatus::Normal {
-                    set!(self.world(), (player));
-                    emit!(
-                        self.world(),
-                        AdverseEvent { game_id, player_id, player_status: player.status }
-                    );
+                if player.status == PlayerStatus::BeingMugged
+                    || player.status == PlayerStatus::BeingArrested {
+                    set!(world, (player));
+                    emit!(world, AdverseEvent { game_id, player_id, player_status: player.status });
 
                     return true;
                 }
 
-                // market price variations
-                let mut market_events = market::market_variations(self.world(), game_id, player_id);
-                // emit events 
-                loop {
-                    match market_events.pop_front() {
-                        Option::Some(event) => {
-                            emit!(
-                                self.world(),
-                                MarketEvent {
-                                    game_id: *event.game_id,
-                                    location_id: *event.location_id,
-                                    drug_id: *event.drug_id,
-                                    increase: *event.increase,
-                                }
-                            );
-                        },
-                        Option::None => {
-                            break;
-                        }
-                    };
-                };
-
-                risk_settings.update_wanted(ref player);
-
-                if player.health + 2  >= 100{
-                    player.health = 100;
-                } else {
-                    player.health += 2;
-                }
-
-                player.turn += 1;
+                on_turn_end(world, @game, ref player);
+            } else {
+                on_turn_end(world, @game, ref player);
             }
 
-            player.location_id = next_location_id;
-            set!(self.world(), (player));
-
-            emit!(
-                self.world(),
-                Traveled {
-                    game_id,
-                    player_id,
-                    from_location: player.location_id,
-                    to_location: next_location_id
-                }
-            );
+            set!(world, (player));
 
             false
         }
     }
 }
 
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::models::game::{Game};
+use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
+use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
+use rollyourown::utils::settings::{ShopSettings, ShopSettingsImpl};
+use rollyourown::utils::shop::ShopImpl;
+use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+use rollyourown::utils::market;
+use super::travel::travel::MarketEvent;
+
+fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool {
+    let shop_settings = ShopSettingsImpl::get(*game.game_mode);
+
+    // check if can access pawnshop
+    if shop_settings.is_open(@player) {
+        if player.status == PlayerStatus::AtPawnshop {
+            // exit pawnshop 
+            player.status = PlayerStatus::Normal;
+        } else {
+            // force pawnshop
+            player.status = PlayerStatus::AtPawnshop;
+
+            // emit raw event
+            let mut keys = array![selector!("AtPawnshop")];
+            let mut values: Array<felt252> = array![
+                (*game.game_id).into(), player.player_id.into()
+            ];
+            world.emit(keys, values.span());
+
+            return false;
+        };
+    }
+
+    // update location
+    player.location_id = player.next_location_id;
+
+    //  emit!(
+    //             world,
+    //             Traveled {
+    //                 game_id,
+    //                 player_id,
+    //                 from_location: player.location_id,
+    //                 to_location: next_location_id
+    //             }
+    //         );
+
+    let risk_settings = RiskSettingsImpl::get(*game.game_mode, @player);
+
+    // market price variations
+    market::market_variations(world, *game.game_id, player.player_id);
+
+    // update wanted
+    risk_settings.update_wanted(ref player);
+
+    // update HP
+    if player.health + 2 >= 100 {
+        player.health = 100;
+    } else {
+        player.health += 2;
+    }
+
+    // update turn
+    player.turn += 1;
+
+    true
+}

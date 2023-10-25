@@ -4,6 +4,8 @@ import { Toast } from "@/components/Toast";
 
 const TOAST_DURATION = 2500;
 
+export type ToastType = ReturnType<typeof useToast>
+
 export const useToast = () => {
   const chakraToast = useChakraToast();
 

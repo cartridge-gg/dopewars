@@ -17,7 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {
-  getDrugById,
+ getDrugById,
   getDrugByType,
   getLocationById,
   getLocationByType,
@@ -32,10 +32,11 @@ import { Map } from "@/components/map";
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Location } from "@/dojo/types";
-import { MarketEventData } from "@/dojo/events";
+import { MarketEventData, displayMarketEvents } from "@/dojo/events";
 
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { useMarketPrices } from "@/dojo/queries/useMarkets";
+import { WorldEvents } from "@/dojo/generated/contractEvents";
 
 interface MarketPriceInfo {
   id: string;
@@ -49,12 +50,12 @@ export default function Travel() {
   const gameId = router.query.gameId as string;
   const [targetId, setTargetId] = useState<string>();
   const [currentLocationId, setCurrentLocationId] = useState<string>();
- 
+
   const { toast } = useToast();
   const { account, playerEntityStore } = useDojoContext();
   const { travel, isPending } = useSystems();
 
-  const { playerEntity } = playerEntityStore
+  const { playerEntity } = playerEntityStore;
 
   const { locationPrices } = useMarketPrices({
     gameId,
@@ -79,19 +80,14 @@ export default function Travel() {
 
   const prices = useMemo(() => {
     if (locationPrices && targetId) {
-      const current = sortDrugMarkets(
-        locationPrices.get(currentLocationId || ""),
-      );
+      const current = sortDrugMarkets(locationPrices.get(currentLocationId || ""));
 
       const target = sortDrugMarkets(locationPrices.get(targetId));
-      
+
       return target.map((drug, index) => {
         if (currentLocationId) {
           const diff = drug.price - current[index].price;
-          const percentage =
-            (Math.abs(drug.price - current[index].price) /
-              current[index].price) *
-            100;
+          const percentage = (Math.abs(drug.price - current[index].price) / current[index].price) * 100;
 
           return {
             id: drug.id,
@@ -144,13 +140,20 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
     if (targetId && playerEntity) {
-
       try {
         const locationId = getLocationById(targetId)!.type;
         const { event, events, hash } = await travel(gameId, locationId);
+
         if (event) {
-          return router.push(`/${gameId}/event/decision?nextId=${targetId}`);
+          if (event.eventType === WorldEvents.AdverseEvent) {
+            return router.push(`/${gameId}/event/decision`);
+          }
+          if (event.eventType === WorldEvents.AtPawnshop) {
+            return router.push(`/${gameId}/pawnshop`);
+          }
         }
+
+        displayMarketEvents(events, toast);
 
         toast({
           message: `You've traveled to ${locationName}`,
@@ -158,42 +161,15 @@ export default function Travel() {
           link: `http://amazing_explorer/${hash}`,
         });
 
-        //if( playerEntity?.turn <= 1) {
-          const locationSlug = getLocationById(targetId)!.slug;
-            router.push(
-              `/${gameId}/${locationSlug}`,
-            );
-        //}else {
-        //  router.push(`/${gameId}/turn`);
-        //}
+        const locationSlug = getLocationById(targetId)!.slug;
+        router.push(`/${gameId}/${locationSlug}`);
 
-        // market events
-        if (events) {
-          for (let event of events) {
-            const e = event as MarketEventData;
-            const msg = e.increase
-              ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${
-                  getLocationByType(Number(e.locationId))?.name
-                }`
-              : `A shipment of ${
-                  getDrugByType(Number(e.drugId))?.name
-                } has arrived to ${
-                  getLocationByType(Number(e.locationId))?.name
-                }`;
-            const icon = e.increase ? Siren : Truck;
-            toast({
-              message: msg,
-              icon: icon,
-              link: `http://amazing_explorer/${hash}`,
-              duration: 6000,
-            });
-          }
-        }
+        
       } catch (e) {
         console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel,locationName, toast]);
+  }, [targetId, router, gameId, travel, locationName, toast]);
 
   if (!playerEntity || !locationPrices) return <></>;
 
@@ -216,28 +192,15 @@ export default function Travel() {
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
         <VStack w="full" align="flex-start">
           <Inventory />
-          <Text
-            textStyle="subheading"
-            pt={["0px", "20px"]}
-            fontSize="11px"
-            color="neon.500"
-          >
+          <Text textStyle="subheading" pt={["0px", "20px"]} fontSize="11px" color="neon.500">
             Location
           </Text>
-          <LocationSelectBar
-            name={locationName}
-            onNext={onNext}
-            onBack={onBack}
-          />
+          <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
         <HStack w={["auto !important", "full"]} pointerEvents="all">
-          <Button
-            isDisabled={isPending}
-            w="full"
-            onClick={() => router.back()}
-          >
+          <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
             Back
           </Button>
           <Button
@@ -265,23 +228,10 @@ export default function Travel() {
         gap="14px"
       >
         <Inventory />
-        <LocationSelectBar
-          name={locationName}
-          onNext={onNext}
-          onBack={onBack}
-        />
-        <LocationPrices
-          prices={prices}
-          isCurrentLocation={
-            currentLocationId ? targetId === currentLocationId : true
-          }
-        />
+        <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
+        <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} />
         <HStack w="full" pointerEvents="all">
-          <Button
-            isDisabled={isPending}
-            w="full"
-            onClick={() => router.back()}
-          >
+          <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
             Back
           </Button>
           <Button
@@ -298,23 +248,12 @@ export default function Travel() {
   );
 }
 
-const LocationPrices = ({
-  prices,
-  isCurrentLocation,
-}: {
-  prices: MarketPriceInfo[];
-  isCurrentLocation?: boolean;
-}) => {
+const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
 
   return (
     <VStack w="full">
-      <HStack
-        w="full"
-        justify="space-between"
-        color="neon.500"
-        display={["none", "flex"]}
-      >
+      <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
         <Text textStyle="subheading" fontSize="11px">
           Prices
         </Text>
@@ -330,46 +269,20 @@ const LocationPrices = ({
           ({!isPercentage ? "#" : "%"})
         </Text>
       </HStack>
-      <Card
-        w="full"
-        p="5px"
-        pointerEvents="all"
-      >
+      <Card w="full" p="5px" pointerEvents="all">
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
-          <Box
-            position="absolute"
-            boxSize="full"
-            border="2px"
-            borderColor="neon.900"
-          />
+          <Box position="absolute" boxSize="full" border="2px" borderColor="neon.900" />
           {prices.map((drug, index) => {
             return (
-              <GridItem
-                key={index}
-                colSpan={1}
-                border="1px"
-                p="6px"
-                borderColor="neon.600"
-              >
+              <GridItem key={index} colSpan={1} border="1px" p="6px" borderColor="neon.600">
                 <HStack gap="8px">
                   {getDrugById(drug.id)?.icon({
                     boxSize: "24px",
                   })}
-                  <Text
-                    display={isCurrentLocation ? "block" : ["none", "block"]}
-                  >
-                    ${drug.price.toFixed(0)}
-                  </Text>
+                  <Text display={isCurrentLocation ? "block" : ["none", "block"]}>${drug.price.toFixed(0)}</Text>
                   {drug.percentage && drug.diff && drug.diff !== 0 && (
-                    <Text
-                      opacity="0.5"
-                      color={drug.diff >= 0 ? "neon.200" : "red"}
-                    >
-                      (
-                      {!isPercentage
-                        ? `${drug.percentage.toFixed(0)}%`
-                        : formatCash(drug.diff)}
-                      )
+                    <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
+                      ({!isPercentage ? `${drug.percentage.toFixed(0)}%` : formatCash(drug.diff)})
                     </Text>
                   )}
                 </HStack>
@@ -382,42 +295,14 @@ const LocationPrices = ({
   );
 };
 
-const LocationSelectBar = ({
-  name,
-  onNext,
-  onBack,
-}: {
-  name?: string;
-  onNext: () => void;
-  onBack: () => void;
-}) => {
+const LocationSelectBar = ({ name, onNext, onBack }: { name?: string; onNext: () => void; onBack: () => void }) => {
   return (
     <HStack w="full" pointerEvents="all">
-      <Arrow
-        style="outline"
-        direction="left"
-        boxSize="48px"
-        userSelect="none"
-        cursor="pointer"
-        onClick={onBack}
-      />
-      <HStack
-        p={2}
-        bg="neon.700"
-        clipPath={`polygon(${generatePixelBorderPath()})`}
-        w="full"
-        justify="center"
-      >
+      <Arrow style="outline" direction="left" boxSize="48px" userSelect="none" cursor="pointer" onClick={onBack} />
+      <HStack p={2} bg="neon.700" clipPath={`polygon(${generatePixelBorderPath()})`} w="full" justify="center">
         <Text>{name}</Text>
       </HStack>
-      <Arrow
-        style="outline"
-        direction="right"
-        boxSize="48px"
-        userSelect="none"
-        cursor="pointer"
-        onClick={onNext}
-      />
+      <Arrow style="outline" direction="right" boxSize="48px" userSelect="none" cursor="pointer" onClick={onNext} />
     </HStack>
   );
 };

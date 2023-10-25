@@ -123,7 +123,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 2000_u128 * SCALING_FACTOR,
-                    wanted: 29,
+                    wanted: 39,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -134,7 +134,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 1500_u128 * SCALING_FACTOR,
-                    wanted: 24,
+                    wanted: 39,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -150,8 +150,10 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
     fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
         match game_mode {
             GameMode::Limited => {
-                let travel: u8 = (45 + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
-                let capture: u8 = (60 + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
+                let travel: u8 = (45
+                    + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
+                let capture: u8 = (60
+                    + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
 
                 RiskSettings {
                     travel,
@@ -165,8 +167,10 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
                 }
             },
             GameMode::Unlimited => {
-                let travel = (40 + (*player).wanted / 2); // 40% chance of travel encounter + 0.5 wanted (max 50)
-                let capture = (60 + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
+                let travel = (45
+                    + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
+                let capture = (50
+                    + (*player).wanted / 5); // 50% chance of capture + 0.2 wanted (max 20)
 
                 RiskSettings {
                     travel,
@@ -174,9 +178,9 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
                     encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
                     cops_drug_threshold: 10, // cops encounter threshold
                     gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-                    wanted_decrease_by_turn: 2,
+                    wanted_decrease_by_turn: 1,
                     wanted_decrease_zero_drug: 10,
-                    wanted_increase_by_drug: ((*player).drug_count / 10).try_into().unwrap()
+                    wanted_increase_by_drug: ((*player).drug_count / 7).try_into().unwrap()
                 }
             },
         }
@@ -200,13 +204,13 @@ impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
             },
             GameMode::Unlimited => {
                 DecideSettings {
-                    gangs_payment_cash_pct: 25, //% of cash
-                    cops_payment_drug_pct: 25, //% of drug
+                    gangs_payment_cash_pct: 20, //% of cash
+                    cops_payment_drug_pct: 20, //% of drug
                     health_impact: (8 + ((*player).turn / 5))
                         .try_into()
                         .unwrap(), // 10 + (1 each 5 turn)
-                    wanted_impact_run: 3,
-                    wanted_impact_fight: 8,
+                    wanted_impact_run: 4,
+                    wanted_impact_fight: 10,
                 }
             },
         }
@@ -233,7 +237,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
                     price_var_min: 1, // 1%  
                     price_var_max: 5, // 5%  
-                    market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down
+                    market_event_chance: 20, // on 1000 : 1.4% = 0.7% up / 0.7% down   TODO: rollback
                     market_event_min: 50, //   up 50%   | down 25%
                     market_event_max: 100, //   up 100%  | down 50%
                     liq_scaling_initial_rate: 90, // 0.009
@@ -252,10 +256,10 @@ impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
         match game_mode {
             GameMode::Limited => {
-                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 3 }
+                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 2 }
             },
             GameMode::Unlimited => {
-                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 7 }
+                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 2 }
             },
         }
     }

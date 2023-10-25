@@ -78,13 +78,20 @@ export default function Consequence() {
                 onClick={() => {
                   console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
+                    debugger
                     return router.push(
                       `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
                     );
                   }
 
-                  // router.push(`/${gameId}/turn`);
-                  router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
+                  
+                  if ( playerEntity.status === PlayerStatus.AtPawnshop){
+                    router.push(`/${gameId}/pawnshop`);
+                  }
+
+                  if ( playerEntity.status === PlayerStatus.Normal){
+                    router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
+                  }
                 }}
               >
                 Continue

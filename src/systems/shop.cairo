@@ -15,6 +15,7 @@ struct AvailableItem {
 #[starknet::interface]
 trait IShop<TContractState> {
     fn is_open(self: @TContractState, game_id: u32, player_id: ContractAddress) -> bool;
+    fn skip(self: @TContractState, game_id: u32);
     fn buy_item(self: @TContractState, game_id: u32, item_id: ItemEnum);
     fn drop_item(self: @TContractState, game_id: u32, item_id: ItemEnum,);
     fn available_items(
@@ -28,14 +29,15 @@ mod shop {
     use starknet::get_caller_address;
 
     use rollyourown::constants::SCALING_FACTOR;
-    use rollyourown::models::player::{Player, PlayerTrait};
-    use rollyourown::models::location::Location;
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
+    use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::item::{Item, ItemTrait, ItemEnum};
     use rollyourown::utils::settings::{
         ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
     };
     use rollyourown::utils::shop::{ShopImpl, ShopTrait};
+    use rollyourown::systems::travel::on_turn_end;
 
     use super::{IShop, AvailableItem};
 
@@ -77,29 +79,45 @@ mod shop {
     impl InternalImpl of InternalTrait {
         fn assert_can_access_shop(self: @ContractState, game: @Game, player: @Player) {
             assert(self.is_open((*game).game_id, (*player).player_id), 'shop is closed!');
+            assert((*player).status == PlayerStatus::AtPawnshop, 'not at shop!');
             assert((*game).tick(), 'cannot progress');
-            assert((*player).can_continue(), 'player cannot shop');
         }
     }
 
     #[external(v0)]
     impl ShopExternalImpl of IShop<ContractState> {
+        fn skip(self: @ContractState, game_id: u32) {
+            let world = self.world();
+            let player_id = get_caller_address();
+            let game = get!(world, game_id, (Game));
+            let mut player = get!(world, (game_id, player_id), Player);
+
+            assert(player.status == PlayerStatus::AtPawnshop, 'not at pawnshop !');
+            assert(self.is_open(game_id, player_id), 'pawnshop not open !');
+
+            on_turn_end(world, @game,ref player);
+            set!(world, (player));
+        }
+
+
         fn is_open(self: @ContractState, game_id: u32, player_id: ContractAddress) -> bool {
-            let game = get!(self.world(), game_id, (Game));
-            let player = get!(self.world(), (game_id, player_id), Player);
+            let world = self.world();
+            let game = get!(world, game_id, (Game));
+            let player = get!(world, (game_id, player_id), Player);
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
             shop_settings.is_open(@player)
         }
 
         fn buy_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
-            let game = get!(self.world(), game_id, (Game));
+            let world = self.world();
+            let game = get!(world, game_id, (Game));
             let player_id = get_caller_address();
-            let mut player = get!(self.world(), (game_id, player_id), Player);
+            let mut player = get!(world, (game_id, player_id), Player);
 
             self.assert_can_access_shop(@game, @player);
 
-            let mut item = get!(self.world(), (game_id, player_id, item_id), Item);
+            let mut item = get!(world, (game_id, player_id, item_id), Item);
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
             assert(item.level < shop_settings.max_item_level, 'item max level');
@@ -107,12 +125,9 @@ mod shop {
             // buyin a new item, not upgrading
             if item.level == 0 {
                 assert(
-                    player.get_item_count(self.world()) < shop_settings.max_item_allowed,
-                    'max item count'
+                    player.get_item_count(world) < shop_settings.max_item_allowed, 'max item count'
                 )
             }
-
-            // TODO: check can only buy 1 item by turn
 
             let item_settings = ItemSettingsImpl::get(
                 game.game_mode, item_id, level: item.level + 1
@@ -122,44 +137,51 @@ mod shop {
 
             // pay item
             player.cash -= item_settings.cost;
-            set!(self.world(), (player));
 
             // update item
             item.level += 1;
             item.name = item_settings.name;
             item.value = item_settings.value;
-            set!(self.world(), (item));
+            set!(world, (item));
+
+            on_turn_end(world, @game,ref player);
+            set!(world, (player));
 
             // emit event
             emit!(self.world(), BoughtItem { game_id, player_id, item_id, level: item.level });
         }
 
         fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
-            let game = get!(self.world(), game_id, (Game));
+            let world = self.world();
+            let game = get!(world, game_id, (Game));
             let player_id = get_caller_address();
-            let mut player = get!(self.world(), (game_id, player_id), Player);
+            let mut player = get!(world, (game_id, player_id), Player);
 
             self.assert_can_access_shop(@game, @player);
 
-            let mut item = get!(self.world(), (game_id, player_id, item_id), Item);
+            let mut item = get!(world, (game_id, player_id, item_id), Item);
             assert(item.level > 0, '404 item not found');
 
             // update item
             item.level = 0;
             item.name = '';
             item.value = 0;
-            set!(self.world(), (item));
+            set!(world, (item));
+
+            on_turn_end(world, @game,ref player);
+            set!(world, (player));
 
             // emit event
-            emit!(self.world(), DroppedItem { game_id, player_id, item_id });
+            emit!(world, DroppedItem { game_id, player_id, item_id });
         }
 
         #[view]
         fn available_items(
             self: @ContractState, game_id: u32, player_id: ContractAddress
         ) -> Span<AvailableItem> {
-            let game = get!(self.world(), game_id, (Game));
-            let player = get!(self.world(), (game_id, player_id), Player);
+            let world = self.world();
+            let game = get!(world, game_id, (Game));
+            let player = get!(world, (game_id, player_id), Player);
 
             let mut available: Array<AvailableItem> = array![];
 
@@ -173,9 +195,7 @@ mod shop {
             loop {
                 match items.pop_front() {
                     Option::Some(item_id) => {
-                        let player_item = get!(
-                            self.world(), (game_id, player_id, *item_id), (Item)
-                        );
+                        let player_item = get!(world, (game_id, player_id, *item_id), (Item));
 
                         let item_settings = ItemSettingsImpl::get(
                             game.game_mode, *item_id, player_item.level + 1

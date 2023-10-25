@@ -89,24 +89,23 @@ mod trade {
             drug_id: DrugEnum,
             quantity: usize
         ) {
+            let world = self.world();
             let player_id = get_caller_address();
 
-            let game = get!(self.world(), game_id, (Game));
+            let game = get!(world, game_id, (Game));
             assert(game.tick(), 'cannot progress');
 
-            let mut player = get!(self.world(), (game_id, player_id).into(), Player);
+            let mut player = get!(world, (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');
             assert(player.can_continue(), 'player cannot trade');
-            assert(
-                player.drug_count + quantity <= player.get_transport(self.world()), 'no bag space'
-            );
+            assert(player.drug_count + quantity <= player.get_transport(world), 'no bag space');
 
-            let mut market = get!(self.world(), (game_id, location_id, drug_id).into(), Market);
+            let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
 
             let cost = market.buy(quantity);
             assert(cost < player.cash, 'not enough cash');
 
-            let mut drug = get!(self.world(), (game_id, player_id, drug_id).into(), Drug);
+            let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
 
             // update market
             market.cash += cost;
@@ -119,8 +118,8 @@ mod trade {
             // update drug
             drug.quantity += quantity;
 
-            set!(self.world(), (market, player, drug));
-            emit!(self.world(), Bought { game_id, player_id, drug_id, quantity, cost });
+            set!(world, (market, player, drug));
+            emit!(world, Bought { game_id, player_id, drug_id, quantity, cost });
         }
 
 
@@ -131,18 +130,19 @@ mod trade {
             drug_id: DrugEnum,
             quantity: usize
         ) {
+            let world = self.world();
             let player_id = get_caller_address();
 
-            let game = get!(self.world(), game_id, Game);
+            let game = get!(world, game_id, Game);
             assert(game.tick(), 'cannot progress');
 
-            let mut player = get!(self.world(), (game_id, player_id).into(), Player);
+            let mut player = get!(world, (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');
 
-            let mut drug = get!(self.world(), (game_id, player_id, drug_id).into(), Drug);
+            let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
             assert(drug.quantity >= quantity, 'not enough drugs to sell');
 
-            let mut market = get!(self.world(), (game_id, location_id, drug_id).into(), Market);
+            let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
             let payout = market.sell(quantity);
 
             // update market
@@ -156,8 +156,8 @@ mod trade {
             // update drug
             drug.quantity -= quantity;
 
-            set!(self.world(), (market, player, drug));
-            emit!(self.world(), Sold { game_id, player_id, drug_id, quantity, payout });
+            set!(world, (market, player, drug));
+            emit!(world, Sold { game_id, player_id, drug_id, quantity, payout });
         }
     }
 }

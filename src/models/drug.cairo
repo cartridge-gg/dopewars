@@ -25,7 +25,7 @@ enum DrugEnum {
     Cocaine,
 }
 
-impl LocationEnumIntoFelt252 of Into<DrugEnum, felt252> {
+impl DrugEnumIntoFelt252 of Into<DrugEnum, felt252> {
     fn into(self: DrugEnum) -> felt252 {
         match self {
             DrugEnum::Ludes => 'Ludes',
@@ -34,6 +34,19 @@ impl LocationEnumIntoFelt252 of Into<DrugEnum, felt252> {
             DrugEnum::Acid => 'Acid',
             DrugEnum::Heroin => 'Heroin',
             DrugEnum::Cocaine => 'Cocaine',
+        }
+    }
+}
+
+impl DrugEnumIntoU8 of Into<DrugEnum, u8> {
+    fn into(self: DrugEnum) -> u8 {
+        match self {
+            DrugEnum::Ludes => 0,
+            DrugEnum::Speed => 1,
+            DrugEnum::Weed => 2,
+            DrugEnum::Acid => 3,
+            DrugEnum::Heroin => 4,
+            DrugEnum::Cocaine => 5,
         }
     }
 }

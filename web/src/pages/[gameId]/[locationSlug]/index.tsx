@@ -53,7 +53,7 @@ export default function Location() {
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-    if (playerEntity && locationId) {
+    if (playerEntity ) {
       // check if player at right location
       if (locationId !== playerEntity.locationId) {
         router.replace(

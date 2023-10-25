@@ -17,10 +17,9 @@ enum Outcome {
     Unsupported: (),
 }
 
-
 #[starknet::interface]
 trait IDecide<TContractState> {
-    fn decide(self: @TContractState, game_id: u32, action: Action, next_location_id: LocationEnum);
+    fn decide(self: @TContractState, game_id: u32, action: Action);
 }
 
 #[dojo::contract]
@@ -31,7 +30,7 @@ mod decide {
     use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::game::{Game, GameTrait};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::drug::{Drug, DrugTrait};
+    use rollyourown::models::drug::{Drug, DrugEnum, DrugTrait};
     use rollyourown::models::location::{LocationEnum, LocationImpl};
     use rollyourown::models::item::{Item, ItemEnum};
 
@@ -40,6 +39,7 @@ mod decide {
         DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+    use rollyourown::systems::travel::on_turn_end;
 
     use super::IDecide;
     use super::{Action, Outcome};
@@ -79,12 +79,9 @@ mod decide {
         cash_loss: u128
     }
 
-
     #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
-        fn decide(
-            self: @ContractState, game_id: u32, action: Action, next_location_id: LocationEnum
-        ) {
+        fn decide(self: @ContractState, game_id: u32, action: Action) {
             let world = self.world();
             let player_id = get_caller_address();
             let mut player: Player = get!(world, (game_id, player_id), Player);
@@ -157,6 +154,7 @@ mod decide {
 
                             (Outcome::Paid, 0, drug_loss_, 0)
                         },
+                        PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0),
                     }
                 },
                 Action::Fight => {
@@ -179,17 +177,6 @@ mod decide {
                 },
             };
 
-            // TODO : use same logic than in travel (market events, etc..)
-            if outcome != Outcome::Captured {
-                player.status = PlayerStatus::Normal;
-                player.turn += 1;
-                if action == Action::Run {
-                    player.location_id = LocationImpl::random();
-                } else {
-                    player.location_id = next_location_id;
-                }
-            }
-
             player.cash -= cash_loss;
             player.drug_count -= drug_loss;
 
@@ -198,6 +185,16 @@ mod decide {
                 outcome = Outcome::Died;
             } else {
                 player.health -= health_loss
+            }
+
+            if outcome != Outcome::Captured {
+                player.status = PlayerStatus::Normal;
+
+                on_turn_end(world, @game,ref player);
+
+                if action == Action::Run {
+                    player.location_id = LocationImpl::random();
+                }
             }
 
             set!(world, (player));

@@ -1,10 +1,4 @@
-import {
-  Player,
-  Drug as DrugType,
-  usePlayerEntityQuery,
-  EntityEdge,
-  Item,
-} from "@/generated/graphql";
+import { Player, Drug as DrugType, usePlayerEntityQuery, EntityEdge, Item } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
@@ -54,8 +48,8 @@ export class PlayerEntity {
 
     this.drugCount = player.drug_count;
 
-    this.locationId =
-      player.location_id === "Home" ? undefined : player.location_id;
+    this.locationId = player.location_id === "Home" ? undefined : player.location_id;
+    this.nextLocationId = player.next_location_id === "Home" ? undefined : player.next_location_id;
     this.status = player.status;
 
     this.drugs = drugs;
@@ -74,16 +68,13 @@ export class PlayerEntity {
     this.health = player.health;
     this.turn = player.turn;
     this.drugCount = player.drug_count;
-    this.locationId =
-      player.location_id === "Home" ? undefined : player.location_id;
+    this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
     this.wanted = player.wanted;
   }
 
   getTransport(): number {
-    const transportItem = this.items.find(
-      (i) => i.id === ItemTextEnum.Transport,
-    );
+    const transportItem = this.items.find((i) => i.id === ItemTextEnum.Transport);
     if (transportItem) {
       return this.transport + transportItem.value;
     }
@@ -99,14 +90,10 @@ export class PlayerEntity {
 
     // TODO: create helpers
     // drug entities
-    const drugEdges = edges.filter((edge) =>
-      edge.node?.models?.find((model) => model?.__typename === "Drug"),
-    );
+    const drugEdges = edges.filter((edge) => edge.node?.models?.find((model) => model?.__typename === "Drug"));
 
     const drugs: Drug[] = drugEdges.map((edge) => {
-      const drugModel = edge.node?.models?.find(
-        (model) => model?.__typename === "Drug",
-      ) as DrugType;
+      const drugModel = edge.node?.models?.find((model) => model?.__typename === "Drug") as DrugType;
 
       return {
         id: drugModel.drug_id,
@@ -115,14 +102,10 @@ export class PlayerEntity {
     });
 
     // items
-    const itemEdges = edges.filter((edge) =>
-      edge.node?.models?.find((model) => model?.__typename === "Item"),
-    );
+    const itemEdges = edges.filter((edge) => edge.node?.models?.find((model) => model?.__typename === "Item"));
 
     const items: ShopItem[] = itemEdges.map((edge) => {
-      const itemModel = edge.node?.models?.find(
-        (model) => model?.__typename === "Item",
-      ) as Item;
+      const itemModel = edge.node?.models?.find((model) => model?.__typename === "Item") as Item;
 
       return {
         id: itemModel.item_id as ItemTextEnum,
@@ -143,13 +126,7 @@ export interface PlayerInterface {
   isFetched: boolean;
 }
 
-export const usePlayerEntity = ({
-  gameId,
-  address,
-}: {
-  gameId?: string;
-  address?: string;
-}): PlayerInterface => {
+export const usePlayerEntity = ({ gameId, address }: { gameId?: string; address?: string }): PlayerInterface => {
   // TODO: remove leading zeros in address, maybe implemented in torii
   const { data, isFetched } = usePlayerEntityQuery(
     { gameId: gameId || "", playerId: address || "" },

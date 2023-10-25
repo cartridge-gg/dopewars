@@ -34,6 +34,20 @@ impl LocationEnumIntoFelt252 of Into<LocationEnum, felt252> {
     }
 }
 
+impl LocationEnumIntoU8 of Into<LocationEnum, u8> {
+    fn into(self: LocationEnum) -> u8 {
+        match self {
+            LocationEnum::Home => 0,
+            LocationEnum::Queens => 1,
+            LocationEnum::Bronx => 2,
+            LocationEnum::Brooklyn => 3,
+            LocationEnum::Jersey => 4,
+            LocationEnum::Central => 5,
+            LocationEnum::Coney => 6,
+        }
+    }
+}
+
 
 impl LocationEnumIntrospectionImpl of SchemaIntrospection<LocationEnum> {
     #[inline(always)]

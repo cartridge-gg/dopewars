@@ -858,7 +858,7 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x10ef72a82ced54e89245f6590389ec2056507974b84c085e95e34de898bf544",
+      "class_hash": "0x53e5ebd56d235cd6fa370945d19fbce255dd6c9bbcbb8ab1a5e9244a0bb152f",
       "abi": [
         {
           "type": "impl",
@@ -1040,7 +1040,7 @@
     {
       "name": "trade",
       "address": "0x22a5538d516d281927572adef2af5ecef8904840a86ffa316b3952941d51798",
-      "class_hash": "0x36b0618327c25d7b88080c62591ff4ccf5a512befd192ec3c3c27d608127085",
+      "class_hash": "0x2713def9151f2a9c086d1080c7e19a1e6c5372449a8b2d28d631903b4bee86f",
       "abi": [
         {
           "type": "impl",
@@ -1285,7 +1285,7 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x7ac117e76fc8a833d5443225f42434b5dda680b55761b9bfd950a431e61d07b",
+      "class_hash": "0x3352f4f81a5c67f0a2c06bb219d592ffa141dd38fbb5f23dae05da13c822b21",
       "abi": [
         {
           "type": "impl",
@@ -1442,6 +1442,10 @@
             {
               "name": "BeingArrested",
               "type": "()"
+            },
+            {
+              "name": "AtPawnshop",
+              "type": "()"
             }
           ]
         },
@@ -1526,6 +1530,23 @@
         },
         {
           "type": "event",
+          "name": "rollyourown::systems::travel::travel::AtPawnshop",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::travel::travel::Event",
           "kind": "enum",
           "variants": [
@@ -1543,6 +1564,11 @@
               "name": "MarketEvent",
               "type": "rollyourown::systems::travel::travel::MarketEvent",
               "kind": "nested"
+            },
+            {
+              "name": "AtPawnshop",
+              "type": "rollyourown::systems::travel::travel::AtPawnshop",
+              "kind": "nested"
             }
           ]
         }
@@ -1551,7 +1577,7 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x3c82870af165fa334781a906e8aa5ef240ba5815acf8b7cac010b5916cc34f7",
+      "class_hash": "0x365ee19eb58e8cd6dfd2cc520e2ae2ec8626380f876bd4d566b60dd433d8e4c",
       "abi": [
         {
           "type": "impl",
@@ -1600,40 +1626,6 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::models::location::LocationEnum",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
           "type": "interface",
           "name": "rollyourown::systems::decide::IDecide",
           "items": [
@@ -1648,10 +1640,6 @@
                 {
                   "name": "action",
                   "type": "rollyourown::systems::decide::Action"
-                },
-                {
-                  "name": "next_location_id",
-                  "type": "rollyourown::models::location::LocationEnum"
                 }
               ],
               "outputs": [],
@@ -1777,7 +1765,7 @@
     {
       "name": "shop",
       "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0x525380613cb00ace3991715828b75130d5f2331cfc9321861fcd739929f5f4c",
+      "class_hash": "0x214c8b00ed5e6ae4b1f1977ec76a6b9469f0cdc158ab99c404d3c7193c55098",
       "abi": [
         {
           "type": "impl",
@@ -1905,6 +1893,18 @@
                   "type": "core::bool"
                 }
               ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "skip",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
               "state_mutability": "view"
             },
             {
@@ -2043,7 +2043,7 @@
     {
       "name": "devtools",
       "address": "0x63a0e87fdd2eba1cade12af18aea1cd551f9eb2fb543268be51b67fd7a8d6c3",
-      "class_hash": "0x6cb80864504ccb07a5ab9e9bccb07ef2b8cffe7d97dbc99ab42abf852aeb4b",
+      "class_hash": "0x740ec4e78c1b58a1d94ec120c6dda3f062ab3b64e3d6bc065ab738d8be71845",
       "abi": [
         {
           "type": "impl",
@@ -2552,6 +2552,11 @@
           "key": false
         },
         {
+          "name": "next_location_id",
+          "type": "LocationEnum",
+          "key": false
+        },
+        {
           "name": "turn",
           "type": "usize",
           "key": false
@@ -2607,7 +2612,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x355b4114117a4c3dd7f64e11e6dc7781d753ebb0b3c1b3394ff1d8f12eee34e",
+      "class_hash": "0x5c7da6e112dbec440ecbb9ee868dc6079cba3bb023515884ad1da7e3371983c",
       "abi": [
         {
           "type": "function",

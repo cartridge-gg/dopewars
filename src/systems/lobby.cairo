@@ -92,6 +92,7 @@ mod lobby {
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
                 location_id: LocationEnum::Home,
+                next_location_id: LocationEnum::Home,
                 cash: player_settings.cash,
                 health: player_settings.health,
                 drug_count: 0,

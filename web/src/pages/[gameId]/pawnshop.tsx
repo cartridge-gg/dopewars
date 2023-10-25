@@ -28,24 +28,21 @@ import { useToast } from "@/hooks/toast";
 import { usePlayerEntityStore } from "@/hooks/player";
 
 import { Truck } from "@/components/icons/Truck";
-import { useGameEntity } from "@/dojo/queries/useGameEntity";
 import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 import { Inventory } from "@/components/Inventory";
+import { displayMarketEvents } from "@/dojo/events";
 
 export default function PawnShop() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
   const { account, playerEntityStore } = useDojoContext();
-  const { buyItem, dropItem, isPending } = useSystems();
+  const { buyItem, dropItem, skipShop, isPending } = useSystems();
   const { availableShopItems } = useAvailableShopItems(gameId);
   const { player: playerEntity } = usePlayerEntity({
     gameId,
     address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
   });
 
   const { toast } = useToast();
@@ -61,13 +58,15 @@ export default function PawnShop() {
     }
   };
 
-  const onContinue = () => {
-    if (playerEntity?.turn === 0) {
-      // first turn --> redirect to travel
-      router.push(`/${gameId}/travel`);
-    } else {
-      // redirect to location
-      router.push(`/${gameId}/${getLocationById(playerEntity?.locationId)?.slug}`);
+  const onSkip = async () => {
+    try {
+      const { hash, events } = await skipShop(gameId);
+
+      displayMarketEvents(events, toast);
+
+      router.push(`/${gameId}/${getLocationById(playerEntity?.nextLocationId)?.slug}`);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -75,20 +74,22 @@ export default function PawnShop() {
     if (!selectedShopItem) return;
 
     try {
-      const { hash } = await buyItem(gameId, selectedShopItem.type);
+      const { hash, events } = await buyItem(gameId, selectedShopItem.type);
       toast({
         message: `You bought ${selectedShopItem.name}!`,
         icon: Alert,
         link: `http://amazing_explorer/${hash}`,
       });
 
-      onContinue();
+      displayMarketEvents(events, toast);
+
+      router.push(`/${gameId}/${getLocationById(playerEntity?.nextLocationId)?.slug}`);
     } catch (e) {
       console.log(e);
     }
   };
 
-  if (!playerEntity || !gameEntity) {
+  if (!playerEntity ) {
     return null;
   }
 
@@ -160,17 +161,17 @@ export default function PawnShop() {
       </VStack>
 
       <Footer>
-        <Button w={["full", "auto"]} onClick={onContinue}>
-          Continue
+        <Button w={["full", "full"]} isLoading={isPending} onClick={onSkip}>
+          Skip
         </Button>
         <Button
-          w={["full", "auto"]}
+          w={["full", "full"]}
           isLoading={isPending}
           isDisabled={
             !selectedShopItem ||
             selectedShopItem.cost > playerEntity.cash ||
             (playerEntity?.items.length === playerEntity?.maxItems &&
-              !playerEntity?.items.find((i) => i.id === selectedShopItem.id))
+              playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
           }
           onClick={buy}
         >

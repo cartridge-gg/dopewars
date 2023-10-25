@@ -18,6 +18,7 @@ struct Player {
     avatar_id: u8,
     status: PlayerStatus,
     location_id: LocationEnum,
+    next_location_id: LocationEnum,
     turn: usize,
     max_turns: usize,
     max_items: u8,
@@ -61,21 +62,16 @@ impl PlayerImpl of PlayerTrait {
         } else {
             0
         };
-        total += if defense_item.level > 0 {
-            1
-        } else {
-            0
-        };
-        total += if transport_item.level > 0 {
-            1
-        } else {
-            0
-        };
-        total += if speed_item.level > 0 {
-            1
-        } else {
-            0
-        };
+        if defense_item.level > 0 {
+            total += 1;
+        }
+        if transport_item.level > 0 {
+            total += 1;
+        }
+        if speed_item.level > 0 {
+            total += 1;
+        }
+
         total
     }
 
@@ -106,6 +102,7 @@ enum PlayerStatus {
     Normal: (),
     BeingMugged: (),
     BeingArrested: (),
+    AtPawnshop: (),
 }
 
 impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
@@ -129,6 +126,7 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
                     ('Normal', serialize_member_type(@Ty::Tuple(array![].span()))),
                     ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
                     ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('AtPawnshop', serialize_member_type(@Ty::Tuple(array![].span()))),
                 ]
                     .span()
             }
