@@ -1,4 +1,4 @@
-import { Player, Drug as DrugType, usePlayerEntityQuery, EntityEdge, Item } from "@/generated/graphql";
+import { Player, Drug as DrugType, usePlayerEntityQuery, EntityEdge, Item as ItemType } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
@@ -71,6 +71,36 @@ export class PlayerEntity {
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
     this.wanted = player.wanted;
+    return this;
+  }
+
+  updateDrug(newDrug: DrugType) {
+    const drug = this.drugs.find((i) => i.id === newDrug.drug_id);
+    if (drug) {
+      drug.quantity = newDrug.quantity;
+    } else {
+      this.drugs.push({
+        id: newDrug.drug_id,
+        quantity: newDrug.quantity,
+      });
+    }
+    return this;
+  }
+
+  updateItem(newItem: ItemType) {
+    const item = this.items.find((i) => i.id === newItem.item_id);
+    if (item) {
+      item.level = newItem.level;
+      item.value = newItem.value;
+    } else {
+      this.items.push({
+        id: newItem.item_id as ItemTextEnum,
+        level: newItem.level,
+        name: shortString.decodeShortString(newItem.name),
+        value: newItem.value,
+      });
+    }
+    return this;
   }
 
   getTransport(): number {

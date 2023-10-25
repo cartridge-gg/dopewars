@@ -74,11 +74,12 @@ export default function PawnShop() {
     if (!selectedShopItem) return;
 
     try {
+      const icon = selectedShopItem.icon;
       const { hash, events } = await buyItem(gameId, selectedShopItem.type);
       toast({
-        message: `You bought ${selectedShopItem.name}!`,
-        icon: Alert,
+        message: `${selectedShopItem.name} equiped!`,
         link: `http://amazing_explorer/${hash}`,
+        icon,
       });
 
       displayMarketEvents(events, toast);
@@ -89,7 +90,7 @@ export default function PawnShop() {
     }
   };
 
-  if (!playerEntity ) {
+  if (!playerEntity) {
     return null;
   }
 
@@ -138,6 +139,11 @@ export default function PawnShop() {
                   variant="selectable"
                   isActive={shopItem === selectedShopItem}
                   justifyContent="stretch"
+                  isDisabled={
+                    shopItem.cost > playerEntity.cash ||
+                    (playerEntity?.items.length === playerEntity?.maxItems &&
+                      playerEntity?.items.find((i) => i.id === shopItem?.typeText) === undefined)
+                  }
                 >
                   <VStack w="full" gap="10px">
                     <HStack w="full" justify="space-between">
@@ -161,13 +167,13 @@ export default function PawnShop() {
       </VStack>
 
       <Footer>
-        <Button w={["full", "full"]} isLoading={isPending} onClick={onSkip}>
+        <Button w={["full", "full"]} isDisabled={isPending} onClick={onSkip}>
           Skip
         </Button>
         <Button
           w={["full", "full"]}
-          isLoading={isPending}
           isDisabled={
+            isPending ||
             !selectedShopItem ||
             selectedShopItem.cost > playerEntity.cash ||
             (playerEntity?.items.length === playerEntity?.maxItems &&

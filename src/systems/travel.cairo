@@ -19,7 +19,7 @@ mod travel {
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
-    use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
+    use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl};
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::ITravel;
@@ -104,6 +104,15 @@ mod travel {
 
                 if player.status == PlayerStatus::BeingMugged
                     || player.status == PlayerStatus::BeingArrested {
+
+                    let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
+                    //player lose some HP
+                    if decide_settings.health_impact >= player.health {
+                        player.health = 1;
+                    } else {
+                        player.health -= decide_settings.health_impact/2;
+                    }
+
                     set!(world, (player));
                     emit!(world, AdverseEvent { game_id, player_id, player_status: player.status });
 
@@ -176,11 +185,13 @@ fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool
     // update wanted
     risk_settings.update_wanted(ref player);
 
-    // update HP
-    if player.health + 2 >= 100 {
-        player.health = 100;
-    } else {
-        player.health += 2;
+    // update HP if not dead
+    if player.health > 0 {
+        if player.health + 1 >= 100 {
+            player.health = 100;
+        } else {
+            player.health += 1;
+        }
     }
 
     // update turn

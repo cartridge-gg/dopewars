@@ -52,17 +52,17 @@ export default function Consequence() {
             fontSize={["10px", "11px"]}
             letterSpacing="0.25em"
           >
-            You...
+            {outcome.title}
           </Text>
           <Heading fontSize={["40px", "48px"]} fontWeight="400">
-            {outcome.name}
+          {outcome.name}
           </Heading>
         </VStack>
         <Image
           alt={outcome.name}
           src={outcome.imageSrc}
-          width={400}
-          height={400}
+          width={500}
+          height={500}
         />
         <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
           <VStack textAlign="center">
@@ -78,12 +78,10 @@ export default function Consequence() {
                 onClick={() => {
                   console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
-                    debugger
                     return router.push(
-                      `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
+                      `/${gameId}/event/decision`,
                     );
                   }
-
                   
                   if ( playerEntity.status === PlayerStatus.AtPawnshop){
                     router.push(`/${gameId}/pawnshop`);

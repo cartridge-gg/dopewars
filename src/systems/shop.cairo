@@ -95,7 +95,7 @@ mod shop {
             assert(player.status == PlayerStatus::AtPawnshop, 'not at pawnshop !');
             assert(self.is_open(game_id, player_id), 'pawnshop not open !');
 
-            on_turn_end(world, @game,ref player);
+            on_turn_end(world, @game, ref player);
             set!(world, (player));
         }
 
@@ -144,7 +144,7 @@ mod shop {
             item.value = item_settings.value;
             set!(world, (item));
 
-            on_turn_end(world, @game,ref player);
+            on_turn_end(world, @game, ref player);
             set!(world, (player));
 
             // emit event
@@ -168,7 +168,7 @@ mod shop {
             item.value = 0;
             set!(world, (item));
 
-            on_turn_end(world, @game,ref player);
+            on_turn_end(world, @game, ref player);
             set!(world, (player));
 
             // emit event

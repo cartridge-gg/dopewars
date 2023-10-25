@@ -14,6 +14,7 @@ enum Outcome {
     Paid: (),
     Escaped: (),
     Captured: (),
+    Victorious: (),
     Unsupported: (),
 }
 
@@ -104,7 +105,7 @@ mod decide {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
-                                seed, 0, decide_settings.health_impact.into()
+                                seed+1, 0, decide_settings.health_impact.into()
                             )
                                 .try_into()
                                 .unwrap();
@@ -173,7 +174,7 @@ mod decide {
                     // }
 
                     // TODO
-                    (Outcome::Escaped, 0, 0, 0)
+                    (Outcome::Victorious, 0, 0, 0)
                 },
             };
 
@@ -190,7 +191,7 @@ mod decide {
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
 
-                on_turn_end(world, @game,ref player);
+                on_turn_end(world, @game, ref player);
 
                 if action == Action::Run {
                     player.location_id = LocationImpl::random();

@@ -141,46 +141,61 @@ const drugs: DrugInfo[] = [
 
 export const outcomes: OutcomeInfo[] = [
   {
+    title: "You",
     name: "Paid the Cop",
     type: Outcome.Paid,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/sunset.png",
+    imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Paid, isInitial),
     color: "yellow.400",
   },
   {
+    title: "You",
+    name: "Paid the Gang",
+    type: Outcome.Paid,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/events/paid.png",
+    description: "You paid the gang off",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Paid, isInitial),
+    color: "neon.200",
+  },
+  {
+    title: "You",
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/sunset.png",
+    imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(Outcome.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
   {
-    name: "Paid the Gang",
-    type: Outcome.Paid,
-    status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/sunset.png",
-    description: "You paid the gang off",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Escaped, isInitial),
-    color: "neon.200",
-  },
-  {
+    title: "You",
     name: "Escaped",
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
-    imageSrc: "/images/sunset.png",
+    imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(Outcome.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
   {
+    title: "You",
+    name: "Got killed by the Cops",
+    type: Outcome.Died,
+    status: PlayerStatus.BeingArrested,
+    imageSrc: "/images/events/fought.png",
+    getResponse: (isInitial: boolean) =>
+      getCopResponses(Outcome.Died, isInitial),
+    color: "red",
+  },
+  {
+    title: "You",
     name: "Got killed by the Gang",
     type: Outcome.Died,
     status: PlayerStatus.BeingMugged,
@@ -190,14 +205,27 @@ export const outcomes: OutcomeInfo[] = [
     color: "red",
   },
   {
-    name: "Got killed by the Cops",
-    type: Outcome.Died,
+    title: "You are",
+    name: "Victorious!",
+    type: Outcome.Victorious,
     status: PlayerStatus.BeingArrested,
-    imageSrc: "/images/events/fought.png",
+    imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Died, isInitial),
-    color: "red",
+      getCopResponses(Outcome.Victorious, isInitial),
+    color: "neon.200",
   },
+  {
+    title: "You are",
+    name: "Victorious!",
+    type: Outcome.Victorious,
+    status: PlayerStatus.BeingMugged,
+    imageSrc: "/images/events/victorious.png",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(Outcome.Victorious, isInitial),
+    color: "neon.200",
+  },
+
+
 ];
 
 

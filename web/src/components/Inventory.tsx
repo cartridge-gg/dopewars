@@ -36,8 +36,8 @@ export const Inventory = ({ ...props }: StyleProps) => {
           <HStack gap="10px" justify="flex-end">
             {playerEntity?.items.map((item, key) => {
               return (
-                <div key={`item-${key}`}>
-                  <HStack gap="10px">
+                <>
+                  <HStack gap="10px" key={`item-${key}`}>
                     <Tooltip label={`${item.name} (+${item.value})`}>
                       <HStack color="yellow.400">
                         <>
@@ -55,7 +55,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                     borderWidth="1px"
                     borderColor="neon.600"
                   />
-                </div>
+                </>
               );
             })}
             {playerEntity?.items.length === 0 && <Text color="neon.500">You own no item</Text>}
@@ -75,8 +75,8 @@ export const Inventory = ({ ...props }: StyleProps) => {
               playerEntity?.drugs.map((drug, key) => {
                 return (
                   drug.quantity > 0 && (
-                    <div key={`item-${key}`}>
-                      <HStack gap="10px">
+                    <>
+                      <HStack gap="10px" key={`item-${key}`}>
                         <HStack color="yellow.400">
                           {getDrugById(drug.id)?.icon({ boxSize: "26" })}
                           <Text>{drug.quantity}</Text>
@@ -89,7 +89,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                         borderWidth="1px"
                         borderColor="neon.600"
                       />
-                    </div>
+                    </>
                   )
                 );
               })

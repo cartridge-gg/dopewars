@@ -237,7 +237,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
                     price_var_min: 1, // 1%  
                     price_var_max: 5, // 5%  
-                    market_event_chance: 20, // on 1000 : 1.4% = 0.7% up / 0.7% down   TODO: rollback
+                    market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down   TODO: rollback
                     market_event_min: 50, //   up 50%   | down 25%
                     market_event_max: 100, //   up 100%  | down 50%
                     liq_scaling_initial_rate: 90, // 0.009
@@ -352,173 +352,64 @@ impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
         match game_mode {
             GameMode::Limited => {
-                pricing_notme(drug_id)
+                pricing(drug_id)
             },
             GameMode::Unlimited => {
-                pricing_notme(drug_id)
+                pricing(drug_id)
             },
         }
     }
 }
 
-fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
+fn pricing(drug_id: DrugEnum) -> PriceSettings {
     match drug_id {
         DrugEnum::Ludes => {
             PriceSettings {
                 min_price: 15 * SCALING_FACTOR,
-                max_price: 95 * SCALING_FACTOR,
+                max_price: 105 * SCALING_FACTOR,
                 min_qty: 1200,
                 max_qty: 2400,
             }
         },
         DrugEnum::Speed => {
             PriceSettings {
-                min_price: 80 * SCALING_FACTOR,
-                max_price: 480 * SCALING_FACTOR,
+                min_price: 90 * SCALING_FACTOR,
+                max_price: 540 * SCALING_FACTOR,
                 min_qty: 1000,
                 max_qty: 2000,
             }
         },
         DrugEnum::Weed => {
             PriceSettings {
-                min_price: 350 * SCALING_FACTOR,
-                max_price: 1600 * SCALING_FACTOR,
+                min_price: 450 * SCALING_FACTOR,
+                max_price: 2250 * SCALING_FACTOR,
                 min_qty: 900,
                 max_qty: 1800,
             }
         },
         DrugEnum::Acid => {
             PriceSettings {
-                min_price: 1100 * SCALING_FACTOR,
-                max_price: 4400 * SCALING_FACTOR,
+                min_price: 1800 * SCALING_FACTOR,
+                max_price: 7200 * SCALING_FACTOR,
                 min_qty: 800,
                 max_qty: 1600,
             }
         },
         DrugEnum::Heroin => {
             PriceSettings {
-                min_price: 3600 * SCALING_FACTOR,
-                max_price: 12500 * SCALING_FACTOR,
+                min_price: 5400 * SCALING_FACTOR,
+                max_price: 16200 * SCALING_FACTOR,
                 min_qty: 600,
                 max_qty: 1200,
             }
         },
         DrugEnum::Cocaine => {
             PriceSettings {
-                min_price: 8500 * SCALING_FACTOR,
-                max_price: 25500 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
-            }
-        },
-    }
-}
-
-
-fn pricing_clicksave(drug_id: DrugEnum) -> PriceSettings {
-    match drug_id {
-        DrugEnum::Ludes => {
-            PriceSettings {
-                min_price: 15 * SCALING_FACTOR,
-                max_price: 105 * SCALING_FACTOR,
-                min_qty: 800,
-                max_qty: 2000,
-            }
-        },
-        DrugEnum::Speed => {
-            PriceSettings {
-                min_price: 90 * SCALING_FACTOR,
-                max_price: 540 * SCALING_FACTOR,
-                min_qty: 600,
-                max_qty: 1500,
-            }
-        },
-        DrugEnum::Weed => {
-            PriceSettings {
-                min_price: 450 * SCALING_FACTOR,
-                max_price: 2250 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
-            }
-        },
-        DrugEnum::Acid => {
-            PriceSettings {
-                min_price: 1800 * SCALING_FACTOR,
-                max_price: 7200 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 900,
-            }
-        },
-        DrugEnum::Heroin => {
-            PriceSettings {
-                min_price: 5400 * SCALING_FACTOR,
-                max_price: 16200 * SCALING_FACTOR,
-                min_qty: 300,
-                max_qty: 700,
-            }
-        },
-        DrugEnum::Cocaine => {
-            PriceSettings {
                 min_price: 10800 * SCALING_FACTOR,
                 max_price: 21600 * SCALING_FACTOR,
-                min_qty: 250,
-                max_qty: 600,
-            }
-        },
-    }
-}
-
-
-fn pricing_broody(drug_id: DrugEnum) -> PriceSettings {
-    match drug_id {
-        DrugEnum::Ludes => {
-            PriceSettings {
-                min_price: 10 * SCALING_FACTOR,
-                max_price: 60 * SCALING_FACTOR,
-                min_qty: 800,
-                max_qty: 2000,
-            }
-        },
-        DrugEnum::Speed => {
-            PriceSettings {
-                min_price: 50 * SCALING_FACTOR,
-                max_price: 300 * SCALING_FACTOR,
-                min_qty: 600,
-                max_qty: 1500,
-            }
-        },
-        DrugEnum::Weed => {
-            PriceSettings {
-                min_price: 200 * SCALING_FACTOR,
-                max_price: 700 * SCALING_FACTOR,
                 min_qty: 500,
                 max_qty: 1000,
             }
         },
-        DrugEnum::Acid => {
-            PriceSettings {
-                min_price: 500 * SCALING_FACTOR,
-                max_price: 1800 * SCALING_FACTOR,
-                min_qty: 400,
-                max_qty: 900,
-            }
-        },
-        DrugEnum::Heroin => {
-            PriceSettings {
-                min_price: 1200 * SCALING_FACTOR,
-                max_price: 4000 * SCALING_FACTOR,
-                min_qty: 300,
-                max_qty: 700,
-            }
-        },
-        DrugEnum::Cocaine => {
-            PriceSettings {
-                min_price: 3000 * SCALING_FACTOR,
-                max_price: 8000 * SCALING_FACTOR,
-                min_qty: 250,
-                max_qty: 600,
-            }
-        },
     }
 }
-

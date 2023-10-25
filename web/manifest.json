@@ -858,7 +858,7 @@
     {
       "name": "lobby",
       "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x53e5ebd56d235cd6fa370945d19fbce255dd6c9bbcbb8ab1a5e9244a0bb152f",
+      "class_hash": "0x2f703dc3fd659708a90be18afb13b3fdfe8a63de2fdbac753403231e20b3b98",
       "abi": [
         {
           "type": "impl",
@@ -1285,7 +1285,7 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x3352f4f81a5c67f0a2c06bb219d592ffa141dd38fbb5f23dae05da13c822b21",
+      "class_hash": "0x1ec9d7fdc13f916c01fb7fe8695932d10e44f70e87a4bf8a0e7cc3813b999e5",
       "abi": [
         {
           "type": "impl",
@@ -1577,7 +1577,7 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x365ee19eb58e8cd6dfd2cc520e2ae2ec8626380f876bd4d566b60dd433d8e4c",
+      "class_hash": "0x3b40fbd27ad81b950efb6cdee09e90fd4239177e1301455cfac36f5f8350edb",
       "abi": [
         {
           "type": "impl",
@@ -1701,6 +1701,10 @@
               "type": "()"
             },
             {
+              "name": "Victorious",
+              "type": "()"
+            },
+            {
               "name": "Unsupported",
               "type": "()"
             }
@@ -1765,7 +1769,7 @@
     {
       "name": "shop",
       "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0x214c8b00ed5e6ae4b1f1977ec76a6b9469f0cdc158ab99c404d3c7193c55098",
+      "class_hash": "0xdf32bf66f3d0da2a358d4d01f6013cac1a93ddaa669c97adb425d5d2c6392b",
       "abi": [
         {
           "type": "impl",

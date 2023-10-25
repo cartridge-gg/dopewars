@@ -129,6 +129,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         playerId: num.toHexString(raw.data[1]),
         playerName: shortString.decodeShortString(raw.data[1]),
       } as JoinedEventData;
+
     case WorldEvents.Decision:
       return {
         eventType,
@@ -136,6 +137,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         playerId: num.toHexString(raw.data[1]),
         action: Number(raw.data[2]),
       } as DecisionEventData;
+
     case WorldEvents.Consequence:
       return {
         eventType,
@@ -146,6 +148,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         drugLoss: Number(raw.data[4]),
         cashLoss: Number(raw.data[5]),
       } as ConsequenceEventData;
+      
     case WorldEvents.MarketEvent:
       return {
         eventType,

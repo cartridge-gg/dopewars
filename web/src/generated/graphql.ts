@@ -419,6 +419,7 @@ export type Player = {
   max_items?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['usize']>;
   name?: Maybe<Scalars['felt252']>;
+  next_location_id?: Maybe<Scalars['Enum']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   speed?: Maybe<Scalars['usize']>;
   status?: Maybe<Scalars['Enum']>;
@@ -456,6 +457,7 @@ export enum PlayerOrderField {
   MaxItems = 'MAX_ITEMS',
   MaxTurns = 'MAX_TURNS',
   Name = 'NAME',
+  NextLocationId = 'NEXT_LOCATION_ID',
   PlayerId = 'PLAYER_ID',
   Speed = 'SPEED',
   Status = 'STATUS',
@@ -536,6 +538,7 @@ export type PlayerWhereInput = {
   nameLT?: InputMaybe<Scalars['felt252']>;
   nameLTE?: InputMaybe<Scalars['felt252']>;
   nameNEQ?: InputMaybe<Scalars['felt252']>;
+  next_location_id?: InputMaybe<Scalars['Enum']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -821,13 +824,6 @@ export type MarketPricesQueryVariables = Exact<{
 
 export type MarketPricesQuery = { __typename?: 'Query', marketModels?: { __typename?: 'MarketConnection', edges?: Array<{ __typename?: 'MarketEdge', node?: { __typename?: 'Market', drug_id?: any | null, location_id?: any | null, quantity?: any | null, cash?: any | null } | null } | null> | null } | null };
 
-export type GameEntityQueryVariables = Exact<{
-  id: Scalars['u32'];
-}>;
-
-
-export type GameEntityQuery = { __typename?: 'Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, creator?: any | null, is_finished?: any | null, max_players?: any | null, max_turns?: any | null, num_players?: any | null, start_time?: any | null } | null } | null> | null } | null };
-
 export type PlayerPropsFragment = { __typename?: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null };
 
 export type PlayerEntityQueryVariables = Exact<{
@@ -844,6 +840,13 @@ export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
 
 
 export type PlayerEntitySubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
+
+export type PlayerEntityDrugOrItemSubscriptionSubscriptionVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type PlayerEntityDrugOrItemSubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player' } | null> | null } };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1028,58 +1031,6 @@ export const useInfiniteMarketPricesQuery = <
 useInfiniteMarketPricesQuery.getKey = (variables?: MarketPricesQueryVariables) => variables === undefined ? ['MarketPrices.infinite'] : ['MarketPrices.infinite', variables];
 ;
 
-export const GameEntityDocument = `
-    query GameEntity($id: u32!) {
-  gameModels(where: {game_id: $id}) {
-    edges {
-      node {
-        game_id
-        game_mode
-        creator
-        is_finished
-        max_players
-        max_turns
-        num_players
-        start_time
-      }
-    }
-  }
-}
-    `;
-export const useGameEntityQuery = <
-      TData = GameEntityQuery,
-      TError = unknown
-    >(
-      variables: GameEntityQueryVariables,
-      options?: UseQueryOptions<GameEntityQuery, TError, TData>
-    ) =>
-    useQuery<GameEntityQuery, TError, TData>(
-      ['GameEntity', variables],
-      useFetchData<GameEntityQuery, GameEntityQueryVariables>(GameEntityDocument).bind(null, variables),
-      options
-    );
-
-useGameEntityQuery.getKey = (variables: GameEntityQueryVariables) => ['GameEntity', variables];
-;
-
-export const useInfiniteGameEntityQuery = <
-      TData = GameEntityQuery,
-      TError = unknown
-    >(
-      variables: GameEntityQueryVariables,
-      options?: UseInfiniteQueryOptions<GameEntityQuery, TError, TData>
-    ) =>{
-    const query = useFetchData<GameEntityQuery, GameEntityQueryVariables>(GameEntityDocument)
-    return useInfiniteQuery<GameEntityQuery, TError, TData>(
-      ['GameEntity.infinite', variables],
-      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
-      options
-    )};
-
-
-useInfiniteGameEntityQuery.getKey = (variables: GameEntityQueryVariables) => ['GameEntity.infinite', variables];
-;
-
 export const PlayerEntityDocument = `
     query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
@@ -1157,6 +1108,28 @@ export const PlayerEntitySubscriptionDocument = `
   }
 }
     ${PlayerPropsFragmentDoc}`;
+export const PlayerEntityDrugOrItemSubscriptionDocument = `
+    subscription PlayerEntityDrugOrItemSubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Drug {
+        drug_id
+        quantity
+      }
+      ... on Item {
+        item_id
+        level
+        name
+        value
+      }
+    }
+  }
+}
+    `;
 export const LocationEntitiesDocument = `
     query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {

@@ -15,6 +15,7 @@ import MediaPlayer from "./MediaPlayer";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatAddress } from "@/utils/contract";
+import {ProfileButtonMobile} from "./ProfileButton";
 
 const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
   const router = useRouter();
@@ -36,9 +37,10 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
               {/* <MenuItem icon={<Roll />} onClick={() => {}}>
                 CREDITS
               </MenuItem> */}
-              <MenuItem icon={<User />}>
-                <>{account && formatAddress(account.address.toUpperCase())}</>
-              </MenuItem>
+              {/* <MenuItem> */}
+                {/* <>{account && formatAddress(account.address.toUpperCase())}</> */}
+                <ProfileButtonMobile />
+              {/* </MenuItem> */}
             </Menu>
           </PopoverBody>
         </PopoverContent>

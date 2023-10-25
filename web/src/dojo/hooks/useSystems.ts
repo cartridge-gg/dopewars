@@ -123,7 +123,7 @@ export const useSystems = (): SystemsInterface => {
       const parsedEvents = parseAllEvents(receipt);
 
       //torii too slow indexing...
-      await sleep(1_500);
+      await sleep(2_000);
 
       setIsPending(false)
 
@@ -262,7 +262,6 @@ export const useSystems = (): SystemsInterface => {
         [gameId, itemId],
       );
 
-      debugger
       return {
         hash,
         events: parsedEvents

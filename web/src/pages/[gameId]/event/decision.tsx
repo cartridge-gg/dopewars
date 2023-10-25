@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import {  ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import {  getLocationById, getShopItem } from "@/dojo/helpers";
+import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
@@ -26,13 +26,13 @@ export default function Decision() {
   const [demand, setDemand] = useState<string>();
   const [penalty, setPenalty] = useState<string>();
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
- 
+
   const { toast } = useToast();
   const { account, playerEntityStore } = useDojoContext();
   const { decide, isPending } = useSystems();
   const { addEncounter } = usePlayerStore();
 
-  const { playerEntity} = playerEntityStore
+  const { playerEntity } = playerEntityStore;
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -49,7 +49,6 @@ export default function Decision() {
           break;
       }
 
-    
       setStatus(playerEntity.status);
     }
   }, [playerEntity, isPending]);
@@ -68,25 +67,28 @@ export default function Decision() {
       try {
         setPenalty("");
 
-        const {event, events} = await decide(gameId, action);
+        // save player status
+        const playerStatus = playerEntity?.status;
+
+        const { event, events } = await decide(gameId, action);
 
         displayMarketEvents(events, toast);
 
         const consequenceEvent = event as ConsequenceEventData;
-        addEncounter(playerEntity!.status, consequenceEvent.outcome);
+        addEncounter(playerStatus, consequenceEvent.outcome);
 
         switch (consequenceEvent.outcome) {
-          case Outcome.Died:
-            setIsRedirecting(true);
-            return router.push(`/${gameId}/end`);
+          // case Outcome.Died:
+          //   setIsRedirecting(true);
+          //   return router.push(`/${gameId}/end`);
 
+          case Outcome.Died:
           case Outcome.Paid:
           case Outcome.Escaped:
+          case Outcome.Victorious:
             setIsRedirecting(true);
             return router.replace(
-              `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${
-                playerEntity!.status
-              }`,
+              `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
             );
 
           case Outcome.Captured:
@@ -121,9 +123,7 @@ export default function Decision() {
         prefixTitle={prefixTitle}
         title={title}
         demand={demand}
-        imageSrc={`/images/events/${
-          status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"
-        }`}
+        imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
         penalty={penalty}
         isSubmitting={isPending}
         playerEntity={playerEntity}
@@ -145,7 +145,7 @@ const Encounter = ({
   onPay,
   onRun,
   onFight,
-  playerEntity
+  playerEntity,
 }: {
   prefixTitle?: string;
   title?: string;
@@ -158,19 +158,16 @@ const Encounter = ({
   onFight: () => void;
   playerEntity: PlayerEntity;
 }) => {
-
-
-  const [attackItem, setAttackItem] = useState<ShopItem|undefined>(undefined);
-  const [speedItem, setSpeedItem] = useState<ShopItem|undefined>(undefined);
+  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
+  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
 
   const [isPaying, setIsPaying] = useState<boolean>(false);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isFigthing, setIsFigthing] = useState<boolean>(false);
 
   useEffect(() => {
-    setAttackItem(playerEntity.items.find(i => i.id === ItemTextEnum.Attack));
-    setSpeedItem(playerEntity.items.find(i => i.id === ItemTextEnum.Speed));
-  
+    setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
+    setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
   }, [playerEntity]);
 
   useEffect(() => {
@@ -183,24 +180,14 @@ const Encounter = ({
   return (
     <>
       <VStack>
-        <Text
-          textStyle="subheading"
-          fontSize={["10px", "11px"]}
-          letterSpacing="0.25em"
-        >
+        <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
         </Text>
         <Heading fontSize={["40px", "48px"]} fontWeight="400">
           {title}
         </Heading>
       </VStack>
-      <Image
-        src={imageSrc}
-        alt="adverse event"
-        width={400}
-        height={400}
-        style={{ opacity: isSubmitting ? 0.5 : 1 }}
-      />
+      <Image src={imageSrc} alt="adverse event" width={400} height={400} style={{ opacity: isSubmitting ? 0.5 : 1 }} />
       <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
         <VStack h="60px" textAlign="center">
           {isSubmitting ? (
@@ -217,24 +204,24 @@ const Encounter = ({
           )}
         </VStack>
         <Footer position={["relative", "relative"]}>
-        
-         {attackItem && (
-          <Button
-          w="full"
-          isDisabled={isRunning || isPaying }
-          isLoading={isFigthing}
-          onClick={() => {
-            setIsFigthing(true);
-            onFight();
-          }}
-          >
-          Fight{getShopItem(attackItem.id,attackItem.level).icon({
-                        boxSize: "26",
-                      })} 
-          </Button>
+          {attackItem && (
+            <Button
+              w="full"
+              isDisabled={isRunning || isPaying}
+              isLoading={isFigthing}
+              onClick={() => {
+                setIsFigthing(true);
+                onFight();
+              }}
+            >
+              Fight
+              {getShopItem(attackItem.id, attackItem.level).icon({
+                boxSize: "26",
+              })}
+            </Button>
           )}
-       
-        <Button
+
+          <Button
             w="full"
             isDisabled={isPaying || isFigthing}
             isLoading={isRunning}
@@ -243,9 +230,11 @@ const Encounter = ({
               onRun();
             }}
           >
-            Run{speedItem && getShopItem(speedItem.id,speedItem.level).icon({
-                        boxSize: "26",
-                      })} 
+            Run
+            {speedItem &&
+              getShopItem(speedItem.id, speedItem.level).icon({
+                boxSize: "26",
+              })}
           </Button>
           <Button
             w="full"

@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { Gem, Trophy, Pistol, Arrest, Roll, Siren } from "@/components/icons";
+import { Skull, Heart, DollarBag, Trophy, Pistol, Arrest, Roll, Siren } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -30,7 +30,6 @@ import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { Calendar } from "@/components/icons/archive";
-import { Skull, Heart } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 import { Footer } from "@/components/Footer";
 
@@ -52,7 +51,7 @@ export default function End() {
    if( playerEntity ) {
     setName(playerEntity.name)
     setIsDead(playerEntity?.health === 0)
-    setDay(playerEntity.turn + 1)
+    setDay(playerEntity.turn )
    }
   }, [playerEntity]);
 
@@ -106,7 +105,7 @@ export default function End() {
                 <Divider borderColor="neon.600" />
                 <StatsItem
                   text={`${formatCash(playerEntity?.cash || 0)}`}
-                  icon={<Gem />}
+                  icon={<DollarBag />}
                 />
                 <Divider borderColor="neon.600" />
                 <StatsItem

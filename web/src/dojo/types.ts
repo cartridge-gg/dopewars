@@ -54,6 +54,7 @@ export enum Outcome {
   Paid,
   Escaped,
   Captured,
+  Victorious,
 }
 
 export enum GameMode {
@@ -89,6 +90,7 @@ export interface ShopItemInfo {
 }
 
 export interface OutcomeInfo {
+  title: string;
   type: Outcome;
   status: PlayerStatus;
   name: string;

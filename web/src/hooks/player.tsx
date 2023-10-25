@@ -8,10 +8,13 @@ import {
   EntityEdge,
   Player,
   PlayerEntityDocument,
+  PlayerEntityDrugOrItemSubscriptionDocument,
   PlayerEntityQuery,
   PlayerEntitySubscriptionDocument,
   Subscription,
 } from "@/generated/graphql";
+import { Drug } from "@/dojo/types";
+import { SCALING_FACTOR } from "@/dojo/constants";
 
 export interface PlayerEntityStore {
   client: GraphQLClient | null;
@@ -19,7 +22,7 @@ export interface PlayerEntityStore {
   id: string | null;
   playerEntity: PlayerEntity | null;
   initPlayerEntity: (gameId: string, playerId: string) => void;
-  unsubscribe: () => void;
+  unsubscribers: Array<() => void>;
   reset: () => void;
 }
 
@@ -46,49 +49,63 @@ export const usePlayerEntityStore = create<PlayerEntityStore>((set, get) => ({
       subscribe(gameId, playerId);
     }
   },
-  unsubscribe: () => {},
+  unsubscribers: [],
   reset: () => {
-    get().unsubscribe();
+    for (let unsubscribe of get().unsubscribers) {
+      unsubscribe();
+    }
     const wsClient = get().wsClient;
     wsClient && wsClient.dispose();
-    set({ client: null, wsClient: null, id: null, playerEntity: null });
+    set({ client: null, wsClient: null, id: null, playerEntity: null, unsubscribers: [] });
   },
 }));
 
 const subscribe = async (gameId: string, playerId: string) => {
+  const { wsClient, unsubscribers } = usePlayerEntityStore.getState();
   const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
-  usePlayerEntityStore.setState({ id: id });
 
-  const data = await executeQuery(gameId, playerId);
-  const unsubscribe = usePlayerEntityStore.getState().wsClient!.subscribe(
-    {
-      query: PlayerEntitySubscriptionDocument,
-      variables: {
-        id,
+  //load playerEntity
+  await executeQuery(gameId, playerId);
+
+  //subscribe to playerEntity changes
+  unsubscribers.push(
+    usePlayerEntityStore.getState().wsClient!.subscribe(
+      {
+        query: PlayerEntitySubscriptionDocument,
+        variables: {
+          id,
+        },
       },
-    },
-    {
-      next: ({ data }: { data: Subscription }) => {
-        console.log("next : ", data);
-
-        if (!data?.entityUpdated?.models) return;
-
-        // update player
-        const player = usePlayerEntityStore.getState().playerEntity!;
-        player.update(data?.entityUpdated?.models[0] as Player);
-
-        usePlayerEntityStore.setState({ playerEntity: player });
-
-        // force to load drugs & items
-        executeQuery(gameId, playerId);
-        //console.log(data)
+      {
+        next: onPlayerEntityData,
+        error: (error) => console.log({ error }),
+        complete: () => console.log("complete"),
       },
-      error: (error) => console.log({ error }),
-      complete: () => console.log("complete"),
-    },
+    ),
   );
 
-  usePlayerEntityStore.setState({ unsubscribe: unsubscribe });
+  //subscribe to player Drug / Items changes
+  for (let drugId of [0, 1, 2, 3, 4, 5]) {
+    const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
+
+    unsubscribers.push(
+      usePlayerEntityStore.getState().wsClient!.subscribe(
+        {
+          query: PlayerEntityDrugOrItemSubscriptionDocument,
+          variables: {
+            id,
+          },
+        },
+        {
+          next: onPlayerEntityDrugData,
+          error: (error) => console.log({ error }),
+          complete: () => console.log("complete"),
+        },
+      ),
+    );
+  }
+
+  usePlayerEntityStore.setState({ id: id, unsubscribers: unsubscribers });
 };
 
 const executeQuery = async (gameId: string, playerId: string) => {
@@ -103,4 +120,42 @@ const executeQuery = async (gameId: string, playerId: string) => {
     const player = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
     usePlayerEntityStore.setState({ playerEntity: player });
   }
+};
+
+const onPlayerEntityData = ({ data }: { data: Subscription }) => {
+  if (!data?.entityUpdated?.models) return;
+
+  // update player
+  let playerUpdate = data?.entityUpdated?.models[0] as Player;
+  usePlayerEntityStore.setState((state) => ({
+    playerEntity: state.playerEntity?.update(playerUpdate),
+  }));
+  
+  console.log("updated : Player");
+
+  // force to load drugs & items
+  //executeQuery(gameId, playerId);
+  //console.log(data)
+};
+
+const onPlayerEntityDrugData = ({ data }: { data: Subscription }) => {
+ 
+  if (!data?.entityUpdated?.models) return;
+
+  for (let model of data?.entityUpdated?.models) {
+    if (model.__typename === "Drug") {
+      usePlayerEntityStore.setState((state) => ({
+        playerEntity: state.playerEntity?.updateDrug(model as Drug),
+      }));
+      console.log(`updated : Drug`);
+    }
+
+    if (model.__typename === "Item") {
+      usePlayerEntityStore.setState((state) => ({
+        playerEntity: state.playerEntity?.updateItem(model as Item),
+      }));
+      console.log(`updated : Item`);
+    }
+  }
+
 };

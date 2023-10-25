@@ -45,6 +45,11 @@ const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
     initial: [],
     repeat: [],
   },
+  // Not needed
+  [Outcome.Victorious]: {
+    initial: ["Its about sending a message!"],
+    repeat: [],
+  },
 };
 
 const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
@@ -99,6 +104,11 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
   // Not needed
   [Outcome.Died]: {
     initial: [],
+    repeat: [],
+  },
+  // Not needed
+  [Outcome.Victorious]: {
+    initial: ["Its about sending a message!"],
     repeat: [],
   },
 };

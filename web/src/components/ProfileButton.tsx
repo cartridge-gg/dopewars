@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  MenuItem,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -28,7 +29,7 @@ import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, Gem, Heart, Roll, Siren } from "./icons";
+import { Dots, DollarBag, Heart, Roll, Siren } from "./icons";
 import { formatCash } from "@/utils/ui";
 import Link from "next/link";
 
@@ -61,7 +62,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
               {playerEntity.name}
             </Heading>
             <HStack color="neon.500">
-              <Calendar /> <Text>DAY {playerEntity.turn + 1}</Text>
+              <Calendar /> <Text>DAY {playerEntity.turn }</Text>
             </HStack>
           </VStack>
         </ModalHeader>
@@ -75,10 +76,10 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
                 <HStack w="full" gap="0">
                   <VStack w="full" align="flex-start" gap="0">
                     <HStack h="40px" w="full" borderBottom="solid 2px" borderRight="solid 2px" borderColor="neon.600">
-                      <Gem ml="8px" /> <Text>{formatCash(playerEntity?.cash)}</Text>
+                      <DollarBag ml="8px" /> <Text>{formatCash(playerEntity?.cash)}</Text>
                     </HStack>
                     <HStack h="40px" w="full" borderRight="solid 2px" borderColor="neon.600">
-                      <Gem ml="8px" /> <Text>{formatCash(420)}</Text>
+                      <DollarBag ml="8px" /> <Text>{formatCash(420)}</Text>
                     </HStack>
                   </VStack>
 
@@ -174,6 +175,24 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   );
 };
 
+
+export const ProfileButtonMobile = () => {
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!account || !playerEntity) return null;
+
+  return (
+    <>
+      <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
+        <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
+      </MenuItem>
+      <Profile isOpen={isOpen} close={() => setIsOpen(false)} />
+    </>
+  );
+};
+
 const ProfileButton = () => {
   const { account, playerEntityStore } = useDojoContext();
   const { playerEntity } = playerEntityStore;
@@ -192,3 +211,5 @@ const ProfileButton = () => {
 };
 
 export default ProfileButton;
+
+

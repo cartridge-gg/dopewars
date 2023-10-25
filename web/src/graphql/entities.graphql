@@ -1,20 +1,3 @@
-query GameEntity($id: u32!) {
-  gameModels(where: { game_id : $id }) {
-    edges {
-      node {
-        game_id
-        game_mode
-        creator
-        is_finished
-        max_players
-        max_turns
-        num_players
-        start_time
-      }
-    }
-  }
-}
-
 fragment PlayerProps on Player {
   name
   avatar_id
@@ -73,6 +56,28 @@ subscription PlayerEntitySubscription($id: ID) {
     }
   }
 }
+
+subscription PlayerEntityDrugOrItemSubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Drug {
+        drug_id
+        quantity
+      }
+      ... on Item{
+        item_id
+        level
+        name
+        value
+      }
+    }
+  }
+}
+
 
 
 query LocationEntities($gameId: String!, $locationId: String!) {
