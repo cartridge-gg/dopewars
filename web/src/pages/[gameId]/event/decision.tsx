@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById, getShopItem } from "@/dojo/helpers";
@@ -6,29 +5,45 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData, displayMarketEvents } from "@/dojo/events";
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Card, Divider, HStack, Heading, Text, VStack, Image } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
-import { Heart } from "@/components/icons";
+import { DollarBag, Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
+import { Inventory } from "@/components/Inventory";
+import { IsMobile } from "@/utils/ui";
+
+type CombatLog = {
+  text: string;
+  color: string;
+};
 
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  // const nextLocation = getLocationById(router.query.nextId as string);
+
+  const { account, playerEntityStore } = useDojoContext();
+
   const [status, setStatus] = useState<PlayerStatus>();
-  const [prefixTitle, setPrefixTitle] = useState<string>();
-  const [title, setTitle] = useState<string>();
-  const [demand, setDemand] = useState<string>();
-  const [penalty, setPenalty] = useState<string>();
-  const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
+  const [prefixTitle, setPrefixTitle] = useState("");
+  const [title, setTitle] = useState("");
+  const [demand, setDemand] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
+  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
+  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
+
+  const [isPaying, setIsPaying] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isFigthing, setIsFigthing] = useState(false);
+
+  const [combatLogs, setCombatLogs] = useState<CombatLog[]>([]);
 
   const { toast } = useToast();
-  const { account, playerEntityStore } = useDojoContext();
   const { decide, isPending } = useSystems();
   const { addEncounter } = usePlayerStore();
 
@@ -62,47 +77,78 @@ export default function Decision() {
     }
   }, [status]);
 
-  const onDecision = useCallback(
-    async (action: Action) => {
-      try {
-        setPenalty("");
+  useEffect(() => {
+    if (playerEntity && playerEntity.items) {
+      setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
+      setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
+    }
+  }, [playerEntity]);
 
-        // save player status
-        const playerStatus = playerEntity?.status;
+  useEffect(() => {
+    if (!isPending) {
+      setIsPaying(false);
+      setIsRunning(false);
+      setIsFigthing(false);
+    }
+  }, [isPending]);
 
-        const { event, events } = await decide(gameId, action);
+  const addCombatLog = (log: CombatLog) => {
+    setCombatLogs((logs) => [...logs, log]);
+  };
 
-        displayMarketEvents(events, toast);
-
-        const consequenceEvent = event as ConsequenceEventData;
-        addEncounter(playerStatus, consequenceEvent.outcome);
-
-        switch (consequenceEvent.outcome) {
-          // case Outcome.Died:
-          //   setIsRedirecting(true);
-          //   return router.push(`/${gameId}/end`);
-
-          case Outcome.Died:
-          case Outcome.Paid:
-          case Outcome.Escaped:
-          case Outcome.Victorious:
-            setIsRedirecting(true);
-            return router.replace(
-              `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
-            );
-
-          case Outcome.Captured:
-            setPrefixTitle("Your escape...");
-            setTitle("Failed!");
-            setPenalty(`You lost ${consequenceEvent.healthLoss}HP!`);
-            break;
-        }
-      } catch (e) {
-        console.log(e);
+  const onDecision = async (action: Action) => {
+    try {
+      switch (action) {
+        case Action.Pay:
+          addCombatLog({ text: "You decided to pay up", color: "neon.400" });
+          break;
+        case Action.Run:
+          addCombatLog({ text: "You split without a second thought", color: "neon.400" });
+          break;
+        case Action.Fight:
+          addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
+          break;
       }
-    },
-    [gameId, router, playerEntity, addEncounter, decide, toast],
-  );
+
+      // setIsPaying(false);
+      // setIsRunning(false);
+      // setIsFigthing(false);
+      // return;
+
+      // save player status
+      const playerStatus = playerEntity?.status;
+
+      const { event, events } = await decide(gameId, action);
+
+      displayMarketEvents(events, toast);
+
+      const consequenceEvent = event as ConsequenceEventData;
+      addEncounter(playerStatus, consequenceEvent.outcome);
+
+      switch (consequenceEvent.outcome) {
+        // case Outcome.Died:
+        //   setIsRedirecting(true);
+        //   return router.push(`/${gameId}/end`);
+
+        case Outcome.Died:
+        case Outcome.Paid:
+        case Outcome.Escaped:
+        case Outcome.Victorious:
+          setIsRedirecting(true);
+          return router.replace(
+            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
+          );
+
+        case Outcome.Captured:
+          // setPrefixTitle("Your escape...");
+          // setTitle("Failed!");
+          addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red" });
+          break;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   if (!playerEntity || !router.isReady || isRedirecting) {
     return <></>;
@@ -119,18 +165,89 @@ export default function Decision() {
 
   return (
     <Layout isSinglePanel>
-      <Encounter
-        prefixTitle={prefixTitle}
-        title={title}
-        demand={demand}
-        imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
-        penalty={penalty}
-        isSubmitting={isPending}
-        playerEntity={playerEntity}
-        onRun={() => onDecision(Action.Run)}
-        onPay={() => onDecision(Action.Pay)}
-        onFight={() => onDecision(Action.Fight)}
-      />
+      <HStack w="full" h="full" flexDir={["column", "row"]}>
+        <Encounter
+          prefixTitle={prefixTitle}
+          title={title}
+          demand={demand}
+          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
+          flex={[0, 1]}
+          mb={["20px", "0"]}
+          w="full"
+        />
+
+        <VStack flex={[0, 1]} w="full" minH="80%">
+          <Inventory />
+
+          <VStack w="full" alignItems="flex-start">
+            <Text textStyle="subheading" mt={["10px","30px"]} fontSize="10px" color="neon.500">
+              Combat Log
+            </Text>
+            <Card w="full" alignItems="flex-start" px="16px" py="8px">
+              <Text>{demand}</Text>
+
+              {combatLogs && combatLogs.length > 0 && (
+                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" my="8px" />
+              )}
+
+              <VStack w="full" alignItems="flex-start">
+                {combatLogs &&
+                  combatLogs.map((i, key) => (
+                    <Text key={`log-${key}`} color={i.color}>
+                      {i.text}
+                    </Text>
+                  ))}
+              </VStack>
+            </Card>
+          </VStack>
+
+          <Footer position={["relative", "relative"]}>
+            {attackItem && (
+              <Button
+                w="full"
+                isDisabled={isRunning || isPaying}
+                isLoading={isFigthing}
+                onClick={() => {
+                  setIsFigthing(true);
+                  onDecision(Action.Fight);
+                }}
+              >
+                Fight
+                {getShopItem(attackItem.id, attackItem.level).icon({
+                  boxSize: "26",
+                })}
+              </Button>
+            )}
+
+            <Button
+              w="full"
+              isDisabled={isPaying || isFigthing}
+              isLoading={isRunning}
+              onClick={() => {
+                setIsRunning(true);
+                onDecision(Action.Run);
+              }}
+            >
+              Run
+              {speedItem &&
+                getShopItem(speedItem.id, speedItem.level).icon({
+                  boxSize: "26",
+                })}
+            </Button>
+            <Button
+              w="full"
+              isDisabled={isRunning || isFigthing}
+              isLoading={isPaying}
+              onClick={() => {
+                setIsPaying(true);
+                onDecision(Action.Pay);
+              }}
+            >
+              PAY
+            </Button>
+          </Footer>
+        </VStack>
+      </HStack>
     </Layout>
   );
 }
@@ -140,45 +257,15 @@ const Encounter = ({
   title,
   demand,
   imageSrc,
-  penalty,
-  isSubmitting,
-  onPay,
-  onRun,
-  onFight,
-  playerEntity,
+  ...props
 }: {
   prefixTitle?: string;
   title?: string;
   demand?: string;
   imageSrc: string;
-  penalty?: string;
-  isSubmitting?: boolean;
-  onPay: () => void;
-  onRun: () => void;
-  onFight: () => void;
-  playerEntity: PlayerEntity;
 }) => {
-  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
-  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
-
-  const [isPaying, setIsPaying] = useState<boolean>(false);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [isFigthing, setIsFigthing] = useState<boolean>(false);
-
-  useEffect(() => {
-    setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
-    setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
-  }, [playerEntity]);
-
-  useEffect(() => {
-    if (!isSubmitting) {
-      setIsPaying(false);
-      setIsRunning(false);
-      setIsFigthing(false);
-    }
-  }, [isSubmitting]);
   return (
-    <>
+    <VStack {...props}>
       <VStack>
         <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
@@ -187,68 +274,26 @@ const Encounter = ({
           {title}
         </Heading>
       </VStack>
-      <Image src={imageSrc} alt="adverse event" width={400} height={400} style={{ opacity: isSubmitting ? 0.5 : 1 }} />
-      <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-        <VStack h="60px" textAlign="center">
-          {isSubmitting ? (
-            <>
-              {isRunning && <Text>You split without a second thought</Text>}
-              {isPaying && <Text>You decided to pay up</Text>}
-              {isFigthing && <Text>Bouyakaaa</Text>}
-            </>
-          ) : (
-            <>
-              <Text>{demand}</Text>
-              <Text color="red">{penalty}</Text>
-            </>
-          )}
-        </VStack>
-        <Footer position={["relative", "relative"]}>
-          {attackItem && (
-            <Button
-              w="full"
-              isDisabled={isRunning || isPaying}
-              isLoading={isFigthing}
-              onClick={() => {
-                setIsFigthing(true);
-                onFight();
-              }}
-            >
-              Fight
-              {getShopItem(attackItem.id, attackItem.level).icon({
-                boxSize: "26",
-              })}
-            </Button>
-          )}
+      <VStack w="full" flexDir={["row", "column"]} justifyContent="center">
+        <Image src={imageSrc} alt="adverse event" w={[150, 400]} h={[150, 400]} />
 
-          <Button
-            w="full"
-            isDisabled={isPaying || isFigthing}
-            isLoading={isRunning}
-            onClick={() => {
-              setIsRunning(true);
-              onRun();
-            }}
-          >
-            Run
-            {speedItem &&
-              getShopItem(speedItem.id, speedItem.level).icon({
-                boxSize: "26",
-              })}
-          </Button>
-          <Button
-            w="full"
-            isDisabled={isRunning || isFigthing}
-            isLoading={isPaying}
-            onClick={() => {
-              setIsPaying(true);
-              onPay();
-            }}
-          >
-            PAY
-          </Button>
-        </Footer>
+        <Card alignItems="center" justify="center" mt={["20px","50px"]}>
+          <HStack px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
+            <HStack>
+              <DollarBag /> <Text> $10,000</Text>
+            </HStack>
+            {IsMobile() ? (
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+            ) : (
+              <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+            )}
+            {/* */}
+            <HStack>
+              <Heart /> <Text> 20</Text>
+            </HStack>
+          </HStack>
+        </Card>
       </VStack>
-    </>
+    </VStack>
   );
 };

@@ -54,7 +54,7 @@ export default function Consequence() {
           >
             {outcome.title}
           </Text>
-          <Heading fontSize={["40px", "48px"]} fontWeight="400">
+          <Heading fontSize={["40px", "48px"]} fontWeight="400" textAlign="center">
           {outcome.name}
           </Heading>
         </VStack>

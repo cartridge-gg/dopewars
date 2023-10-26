@@ -16,7 +16,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
     <VStack {...props} w="full" align="flex-start" pb="5px">
       <HStack w="full" justify={["flex-end", "space-between"]}>
         <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
-          Your Inventory
+          Inventory
         </Text>
         <HStack color="yellow.400">
           <Bag />

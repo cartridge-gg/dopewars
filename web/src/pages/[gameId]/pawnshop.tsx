@@ -45,6 +45,9 @@ export default function PawnShop() {
     address: account?.address,
   });
 
+  const [ isBuying, setIsBuying] = useState(false)
+  const [ isSkipping, setIsSkipping] = useState(false)
+
   const { toast } = useToast();
 
   const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo | undefined>(undefined);
@@ -59,6 +62,7 @@ export default function PawnShop() {
   };
 
   const onSkip = async () => {
+    setIsSkipping(true)
     try {
       const { hash, events } = await skipShop(gameId);
 
@@ -68,10 +72,13 @@ export default function PawnShop() {
     } catch (e) {
       console.log(e);
     }
+    setIsSkipping(false)
   };
 
   const buy = async () => {
     if (!selectedShopItem) return;
+
+    setIsBuying(true)
 
     try {
       const icon = selectedShopItem.icon;
@@ -88,6 +95,9 @@ export default function PawnShop() {
     } catch (e) {
       console.log(e);
     }
+
+    setIsBuying(false)
+
   };
 
   if (!playerEntity) {
@@ -118,7 +128,7 @@ export default function PawnShop() {
 
         <VStack w="full" alignItems="flex-start" mt="10px">
           <Text textStyle="subheading" fontSize="10px" color="neon.500">
-            For sale
+            For sale - choose one
           </Text>
           {/* <VStack w="full">
             <Text fontSize="12px">Max items : {playerEntity && playerEntity.maxItems}</Text>
@@ -167,11 +177,12 @@ export default function PawnShop() {
       </VStack>
 
       <Footer>
-        <Button w={["full", "full"]} isDisabled={isPending} onClick={onSkip}>
+        <Button w={["full", "full"]} isLoading={isSkipping} isDisabled={isPending}  onClick={onSkip}>
           Skip
         </Button>
         <Button
           w={["full", "full"]}
+          isLoading={isBuying} 
           isDisabled={
             isPending ||
             !selectedShopItem ||
