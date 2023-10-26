@@ -27,11 +27,12 @@ import { genAvatarFromAddress, genAvatarFromId } from "./avatar/avatars";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
 import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
-import { ShopItem } from "@/dojo/queries/usePlayerEntity";
+import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, DollarBag, Heart, Roll, Siren } from "./icons";
+import { Dots, DollarBag, Heart, Roll, Siren, Twitter } from "./icons";
 import { formatCash } from "@/utils/ui";
 import Link from "next/link";
+import { SCALING_FACTOR } from "@/dojo/constants";
 
 const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   const { account, playerEntityStore } = useDojoContext();
@@ -62,7 +63,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
               {playerEntity.name}
             </Heading>
             <HStack color="neon.500">
-              <Calendar /> <Text>DAY {playerEntity.turn }</Text>
+              <Calendar /> <Text>DAY {playerEntity.turn}</Text>
             </HStack>
           </VStack>
         </ModalHeader>
@@ -165,8 +166,14 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
             <Button w="full" onClick={close}>
               Close
             </Button>
-            <ChakraLink w="full" href={`https://twitter.com/intent/tweet?text=${window.location}`} target="_blank">
-              <Button w="full">X Share</Button>
+            <ChakraLink
+              w="full"
+              href={`https://twitter.com/intent/tweet?text=${getShareText(playerEntity)}`}
+              target="_blank"
+            >
+              <Button w="full">
+                <Twitter /> Share
+              </Button>
             </ChakraLink>
           </HStack>
         </ModalFooter>
@@ -175,6 +182,21 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   );
 };
 
+const getShareText = (playerEntity: PlayerEntity): string => {
+  if (playerEntity.health > 0) {
+    return encodeURIComponent(
+      `${playerEntity.name} has reached Day ${playerEntity.turn} with ${formatCash(
+        playerEntity.cash,
+      )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
+    );
+  } else {
+    return encodeURIComponent(
+      `${playerEntity.name} got dropped on Day ${playerEntity.turn} but pocketed ${formatCash(
+        playerEntity.cash,
+      )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
+    );
+  }
+};
 
 export const ProfileButtonMobile = () => {
   const { account, playerEntityStore } = useDojoContext();
@@ -211,5 +233,3 @@ const ProfileButton = () => {
 };
 
 export default ProfileButton;
-
-

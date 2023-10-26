@@ -1285,7 +1285,7 @@
     {
       "name": "travel",
       "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x1ec9d7fdc13f916c01fb7fe8695932d10e44f70e87a4bf8a0e7cc3813b999e5",
+      "class_hash": "0x2a88fd43fd32c638d40b72517134d6188bebf98fcb79559e237e698af3bf2f1",
       "abi": [
         {
           "type": "impl",
@@ -1577,7 +1577,7 @@
     {
       "name": "decide",
       "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x3b40fbd27ad81b950efb6cdee09e90fd4239177e1301455cfac36f5f8350edb",
+      "class_hash": "0x32f9d0dbe38b50cb43ecb4cd768335d5dc47bc2034bed471eb21c0087f90098",
       "abi": [
         {
           "type": "impl",
@@ -1769,7 +1769,7 @@
     {
       "name": "shop",
       "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0xdf32bf66f3d0da2a358d4d01f6013cac1a93ddaa669c97adb425d5d2c6392b",
+      "class_hash": "0x1727c388f6668dbdc426eace49c9179b573b15653fdd6bb425f660c886f7ab9",
       "abi": [
         {
           "type": "impl",

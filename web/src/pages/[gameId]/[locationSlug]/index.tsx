@@ -57,7 +57,7 @@ export default function Location() {
 
       setIsLastDay(playerEntity.maxTurns > 0 && playerEntity.turn >= playerEntity.maxTurns);
     }
-  }, [locationId, playerEntity,playerEntity.locationId, router, gameId]);
+  }, [locationId, playerEntity,playerEntity?.locationId, router, gameId]);
 
   if (!playerEntity || !locationEntity) {
     return <></>;
