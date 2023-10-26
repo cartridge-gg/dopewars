@@ -240,7 +240,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
                     market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down   TODO: rollback
                     market_event_min: 50, //   up 50%   | down 25%
                     market_event_max: 100, //   up 100%  | down 50%
-                    liq_scaling_initial_rate: 90, // 0.009
+                    liq_scaling_initial_rate: 140, // 0.014
                     liq_scaling_fading_rate: 350,
                 }
             },
@@ -291,9 +291,9 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                         if level == 1 {
                             ItemSettings { name: 'Knife', cost: 250 * SCALING_FACTOR, value: 10 }
                         } else if level == 2 {
-                            ItemSettings { name: 'Glock', cost: 1800 * SCALING_FACTOR, value: 25 }
+                            ItemSettings { name: 'Glock', cost: 4200 * SCALING_FACTOR, value: 25 }
                         } else {
-                            ItemSettings { name: 'Uzi', cost: 9500 * SCALING_FACTOR, value: 50 }
+                            ItemSettings { name: 'Uzi', cost: 38000 * SCALING_FACTOR, value: 50 }
                         }
                     },
                     ItemEnum::Defense => {
@@ -303,10 +303,10 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                             }
                         } else if level == 2 {
                             ItemSettings {
-                                name: 'Leather Jacket', cost: 2200 * SCALING_FACTOR, value: 40
+                                name: 'Leather Jacket', cost: 3700 * SCALING_FACTOR, value: 40
                             }
                         } else {
-                            ItemSettings { name: 'Kevlar', cost: 12000 * SCALING_FACTOR, value: 60 }
+                            ItemSettings { name: 'Kevlar', cost: 28000 * SCALING_FACTOR, value: 60 }
                         }
                     },
                     ItemEnum::Transport => {
@@ -316,11 +316,11 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                             }
                         } else if level == 2 {
                             ItemSettings {
-                                name: 'Backpack', cost: 3100 * SCALING_FACTOR, value: 50
+                                name: 'Backpack', cost: 6900 * SCALING_FACTOR, value: 50
                             }
                         } else {
                             ItemSettings {
-                                name: 'Duffle Bag', cost: 18000 * SCALING_FACTOR, value: 100
+                                name: 'Duffle Bag', cost: 42000 * SCALING_FACTOR, value: 100
                             }
                         }
                     },
@@ -333,7 +333,7 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                             }
                         } else {
                             ItemSettings {
-                                name: 'Bicycle', cost: 25000 * SCALING_FACTOR, value: 40
+                                name: 'Bicycle', cost: 32000 * SCALING_FACTOR, value: 40
                             }
                         }
                     },

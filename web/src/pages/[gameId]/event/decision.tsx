@@ -12,10 +12,12 @@ import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
-import { DollarBag, Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
 import { Inventory } from "@/components/Inventory";
 import { IsMobile } from "@/utils/ui";
+import { getSentence } from "@/responses";
+import CashIndicator from "@/components/player/CashIndicator";
+import HealthIndicator from "@/components/player/HealthIndicator";
 
 type CombatLog = {
   text: string;
@@ -25,6 +27,7 @@ type CombatLog = {
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
+  const healthLoss = router.query.healthLoss as number;
 
   const { account, playerEntityStore } = useDojoContext();
 
@@ -42,6 +45,7 @@ export default function Decision() {
   const [isFigthing, setIsFigthing] = useState(false);
 
   const [combatLogs, setCombatLogs] = useState<CombatLog[]>([]);
+  const [sentence, setSentence] = useState("");
 
   const { toast } = useToast();
   const { decide, isPending } = useSystems();
@@ -56,11 +60,13 @@ export default function Decision() {
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
           setDemand(`They want 20% of your $PAPER!`);
+          setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
           setDemand(`They want 20% of your DRUGS!`);
+          setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
           break;
       }
 
@@ -101,12 +107,18 @@ export default function Decision() {
       switch (action) {
         case Action.Pay:
           addCombatLog({ text: "You decided to pay up", color: "neon.400" });
+          setSentence(getSentence(playerEntity.status, Action.Pay));
           break;
         case Action.Run:
           addCombatLog({ text: "You split without a second thought", color: "neon.400" });
+          setSentence(getSentence(playerEntity.status, Action.Run));
           break;
         case Action.Fight:
           addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
+          setSentence(getSentence(playerEntity.status, Action.Fight));
+          if (attackItem?.level > 1) {
+            playSound(Sounds.Magnum357);
+          }
           break;
       }
 
@@ -170,6 +182,7 @@ export default function Decision() {
           prefixTitle={prefixTitle}
           title={title}
           demand={demand}
+          sentence={sentence}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
           flex={[0, 1]}
           mb={["20px", "0"]}
@@ -180,15 +193,16 @@ export default function Decision() {
           <Inventory />
 
           <VStack w="full" alignItems="flex-start">
-            <Text textStyle="subheading" mt={["10px","30px"]} fontSize="10px" color="neon.500">
+            <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
               Combat Log
             </Text>
             <Card w="full" alignItems="flex-start" px="16px" py="8px">
               <Text>{demand}</Text>
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" my="8px" />
 
-              {combatLogs && combatLogs.length > 0 && (
-                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" my="8px" />
-              )}
+              <Text color="red" mb="10px">
+                You lost {healthLoss} HP!
+              </Text>
 
               <VStack w="full" alignItems="flex-start">
                 {combatLogs &&
@@ -215,6 +229,7 @@ export default function Decision() {
                 Fight
                 {getShopItem(attackItem.id, attackItem.level).icon({
                   boxSize: "26",
+                  color: "yellow.400",
                 })}
               </Button>
             )}
@@ -232,6 +247,7 @@ export default function Decision() {
               {speedItem &&
                 getShopItem(speedItem.id, speedItem.level).icon({
                   boxSize: "26",
+                  color: "yellow.400",
                 })}
             </Button>
             <Button
@@ -257,12 +273,14 @@ const Encounter = ({
   title,
   demand,
   imageSrc,
+  sentence,
   ...props
 }: {
   prefixTitle?: string;
   title?: string;
   demand?: string;
   imageSrc: string;
+  sentence: string;
 }) => {
   return (
     <VStack {...props}>
@@ -275,22 +293,43 @@ const Encounter = ({
         </Heading>
       </VStack>
       <VStack w="full" flexDir={["row", "column"]} justifyContent="center">
-        <Image src={imageSrc} alt="adverse event" w={[150, 400]} h={[150, 400]} />
+        {!IsMobile() && sentence && (
+          <>
+            <Card top="180px" position="absolute" w="280px" fontSize="12px" p="10px" textAlign="center">
+              {sentence}
+            </Card>
+            <Card
+              top="260px"
+              marginLeft="80px"
+              position="absolute"
+              w="10px"
+              fontSize="12px"
+              p="8px"
+              textAlign="justify"
+            ></Card>
+            <Card
+              top="280px"
+              marginLeft="100px"
+              position="absolute"
+              w="10px"
+              fontSize="12px"
+              p="6px"
+              textAlign="justify"
+            ></Card>
+          </>
+        )}
 
-        <Card alignItems="center" justify="center" mt={["20px","50px"]}>
+        <Image src={imageSrc} alt="adverse event" mt="10px" w={[150, 400]} h={[150, 400]} />
+
+        <Card alignItems="center" justify="center" mt={["20px", "50px"]}>
           <HStack px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-            <HStack>
-              <DollarBag /> <Text> $10,000</Text>
-            </HStack>
+            <CashIndicator cash={10_000} />
             {IsMobile() ? (
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
             ) : (
               <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
             )}
-            {/* */}
-            <HStack>
-              <Heart /> <Text> 20</Text>
-            </HStack>
+            <HealthIndicator health={20} />
           </HStack>
         </Card>
       </VStack>

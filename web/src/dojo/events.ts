@@ -19,6 +19,7 @@ export interface BaseEventData {
 export interface AdverseEventData extends BaseEventData {
   playerId: string;
   playerStatus: PlayerStatus;
+  healthLoss: number;
 }
 
 export interface AtPawnshopEventData extends BaseEventData {
@@ -113,6 +114,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         playerStatus: shortString.decodeShortString(raw.data[2]),
+        healthLoss:  Number(raw.data[3]),
       } as AdverseEventData;
 
     case WorldEvents.AtPawnshop:

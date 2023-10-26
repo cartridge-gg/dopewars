@@ -29,10 +29,13 @@ import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, DollarBag, Heart, Roll, Siren, Twitter } from "./icons";
+import { Dots, Twitter } from "./icons";
 import { formatCash } from "@/utils/ui";
 import Link from "next/link";
 import { SCALING_FACTOR } from "@/dojo/constants";
+import HealthIndicator from "./player/HealthIndicator";
+import WantedIndicator from "./player/WantedIndicator";
+import CashIndicator from "./player/CashIndicator";
 
 const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   const { account, playerEntityStore } = useDojoContext();
@@ -76,21 +79,27 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
               <Card flex={3}>
                 <HStack w="full" gap="0">
                   <VStack w="full" align="flex-start" gap="0">
-                    <HStack h="40px" w="full" borderBottom="solid 2px" borderRight="solid 2px" borderColor="neon.600">
-                      <DollarBag ml="8px" /> <Text>{formatCash(playerEntity?.cash)}</Text>
-                    </HStack>
-                    <HStack h="40px" w="full" borderRight="solid 2px" borderColor="neon.600">
-                      <DollarBag ml="8px" /> <Text>{formatCash(420)}</Text>
-                    </HStack>
+                    <CashIndicator cash={playerEntity?.cash} h="40px" w="full" ml="8px" />
+                    <Divider
+                      orientation="horizontal"
+                      borderTopWidth="1px"
+                      borderBottomWidth="1px"
+                      borderColor="neon.600"
+                    />
+                    <CashIndicator cash={420} h="40px" w="full" ml="8px" />
                   </VStack>
+                  <Divider orientation="vertical" h="80px" borderWidth="1px" borderColor="neon.600" />
 
                   <VStack w="110px" align="flex-start" gap="0">
-                    <HStack h="40px" w="full" borderBottom="solid 2px" borderColor="neon.600">
-                      <Heart ml="8px" /> <Text>{playerEntity?.health}</Text>
-                    </HStack>
-                    <HStack h="40px" w="full">
-                      <Siren ml="8px" /> <Text>{playerEntity?.wanted}</Text>
-                    </HStack>
+                    <HealthIndicator health={playerEntity?.health} h="40px" w="full" ml="8px" />
+                    <Divider
+                      orientation="horizontal"
+                      w="full"
+                      borderTopWidth="1px"
+                      borderBottomWidth="1px"
+                      borderColor="neon.600"
+                    />
+                    <WantedIndicator wanted={playerEntity?.wanted} h="40px" w="full" ml="8px" />
                   </VStack>
                 </HStack>
               </Card>

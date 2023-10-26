@@ -32,7 +32,7 @@ import { Map } from "@/components/map";
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Location } from "@/dojo/types";
-import { MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { useMarketPrices } from "@/dojo/queries/useMarkets";
@@ -146,7 +146,7 @@ export default function Travel() {
 
         if (event) {
           if (event.eventType === WorldEvents.AdverseEvent) {
-            return router.push(`/${gameId}/event/decision`);
+            return router.push(`/${gameId}/event/decision?healthLoss=${(event as AdverseEventData).healthLoss}`);
           }
           if (event.eventType === WorldEvents.AtPawnshop) {
             return router.push(`/${gameId}/pawnshop`);

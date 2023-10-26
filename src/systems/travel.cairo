@@ -60,6 +60,7 @@ mod travel {
         game_id: u32,
         player_id: ContractAddress,
         player_status: PlayerStatus,
+        health_loss: u8,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -107,15 +108,17 @@ mod travel {
                 if player.status == PlayerStatus::BeingMugged
                     || player.status == PlayerStatus::BeingArrested {
                     let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
+                    
                     //player lose some HP
-                    if decide_settings.health_impact >= player.health {
-                        player.health = 1;
+                    let mut health_loss = if (decide_settings.health_impact / 2) >= player.health {
+                        player.health - 1
                     } else {
-                        player.health -= decide_settings.health_impact / 2;
-                    }
+                        decide_settings.health_impact / 2
+                    };
+                    player.health -= health_loss;
 
                     set!(world, (player));
-                    emit!(world, AdverseEvent { game_id, player_id, player_status: player.status });
+                    emit!(world, AdverseEvent { game_id, player_id, player_status: player.status, health_loss });
 
                     return true;
                 }

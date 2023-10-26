@@ -1127,7 +1127,7 @@
     {
       "name": "lobby",
       "address": "0x4d10ee045ea65f9e2931c16b8e85c9ade80b044cbd1976d77e594dc43abb620",
-      "class_hash": "0xb02ce9f2037194f1aebbccf516d243a31a5cf6bcf4e46b263650115b08533e",
+      "class_hash": "0x2a410eac62f270fca8ce9eea84c4473061129a5edf3043a26db621ef19a55cf",
       "abi": [
         {
           "type": "impl",
@@ -1309,7 +1309,7 @@
     {
       "name": "shop",
       "address": "0x4ec6c8c03d67bc27abb6269313981f9e727937413875d2efabbcbce3535c400",
-      "class_hash": "0x5771a09184ccc748658ccbbe6cee51d83358b2eafb058d96dec6a04bfabf0e6",
+      "class_hash": "0x74d895828b8b1057bfa7241e08cb411ba4570f2244494ebf40e1d0efe85efef",
       "abi": [
         {
           "type": "impl",
@@ -1832,7 +1832,7 @@
     {
       "name": "travel",
       "address": "0x768a9517c343f0171664bbe87bdb274cb6c6a4c4c5c0e2745d2a5e4b3885c3f",
-      "class_hash": "0x38423f17e8895ff0e5cd578e41903ab9183151c885269544ddb9ab156f33184",
+      "class_hash": "0x4d632b4533c0ddb622aa0cac97858c68a657d9cdb945377696b10c2397530cb",
       "abi": [
         {
           "type": "impl",
@@ -2014,6 +2014,11 @@
             {
               "name": "player_status",
               "type": "rollyourown::models::player::PlayerStatus",
+              "kind": "data"
+            },
+            {
+              "name": "health_loss",
+              "type": "core::integer::u8",
               "kind": "data"
             }
           ]
