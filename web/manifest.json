@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "world",
-    "address": "0x20bcb70f0e44b059638938c17d89c90edcbb6afba0944f5196e18340069781c",
-    "class_hash": "0x5179c281a8d3cca6cfb820201fa7a81150b56f9db492405a29e9564222370b8",
+    "address": "0x1490285b1732e3284c22d56a13423a03c9fc4088707fcb04e69544b388aadd9",
+    "class_hash": "0x25e33883f34b7b2ce1adc3e3cf0640d389ccfeca742c11d3d3cf55362153b19",
     "abi": [
       {
         "type": "impl",
@@ -738,7 +738,7 @@
   "executor": {
     "name": "executor",
     "address": null,
-    "class_hash": "0x2b35dd4816731188ed1ad16caa73bde76075c9d9cb8cbfa3e447d3ab9b1ab33",
+    "class_hash": "0xc56cfd3556105b87f396de49355cfe57a48b14f79197c680fda568ffb5dfdf",
     "abi": [
       {
         "type": "impl",
@@ -795,7 +795,7 @@
   },
   "base": {
     "name": "base",
-    "class_hash": "0x7aec2b7d7064c1294a339cd90060331ff704ab573e4ee9a1b699be2215c11c9",
+    "class_hash": "0x515233234b830aa4c52a3b14acdf6413caa6a96967c5a55bba47337ba3d4406",
     "abi": [
       {
         "type": "impl",
@@ -856,9 +856,278 @@
   },
   "contracts": [
     {
+      "name": "decide",
+      "address": "0x15e077e87ad137ae423445419894ec12054f05627be764e53a00dc17185133d",
+      "class_hash": "0x36218b9abed3cb44804eeaab890588fb149cd1bb584f247e0d6f1e2ec137b4c",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "DecideImpl",
+          "interface_name": "rollyourown::systems::decide::IDecide"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::decide::Action",
+          "variants": [
+            {
+              "name": "Run",
+              "type": "()"
+            },
+            {
+              "name": "Pay",
+              "type": "()"
+            },
+            {
+              "name": "Fight",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::decide::IDecide",
+          "items": [
+            {
+              "type": "function",
+              "name": "decide",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "action",
+                  "type": "rollyourown::systems::decide::Action"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::decide::decide::Decision",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "action",
+              "type": "rollyourown::systems::decide::Action",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::decide::Outcome",
+          "variants": [
+            {
+              "name": "Died",
+              "type": "()"
+            },
+            {
+              "name": "Paid",
+              "type": "()"
+            },
+            {
+              "name": "Escaped",
+              "type": "()"
+            },
+            {
+              "name": "Captured",
+              "type": "()"
+            },
+            {
+              "name": "Victorious",
+              "type": "()"
+            },
+            {
+              "name": "Unsupported",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::decide::decide::Consequence",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "outcome",
+              "type": "rollyourown::systems::decide::Outcome",
+              "kind": "data"
+            },
+            {
+              "name": "health_loss",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "drug_loss",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash_loss",
+              "type": "core::integer::u128",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::decide::decide::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Decision",
+              "type": "rollyourown::systems::decide::decide::Decision",
+              "kind": "nested"
+            },
+            {
+              "name": "Consequence",
+              "type": "rollyourown::systems::decide::decide::Consequence",
+              "kind": "nested"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "devtools",
+      "address": "0x25d2dd1aba0117a10a254c6a9a1b0d238cbe200367972a8e681264ed2756cdc",
+      "class_hash": "0x1f1e45e9eb9bf12929963411c6200ad2fc94627f62fb026e81cebbd5a091267",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "DevtoolsImpl",
+          "interface_name": "rollyourown::systems::devtools::IDevtools"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::devtools::IDevtools",
+          "items": [
+            {
+              "type": "function",
+              "name": "failing_tx",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "feed_leaderboard",
+              "inputs": [
+                {
+                  "name": "count",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::devtools::devtools::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
       "name": "lobby",
-      "address": "0x554f230e6a95c14a7a8f36829864b6826d43d5726fcbd586f5a31954463f3f6",
-      "class_hash": "0x2f703dc3fd659708a90be18afb13b3fdfe8a63de2fdbac753403231e20b3b98",
+      "address": "0x4d10ee045ea65f9e2931c16b8e85c9ade80b044cbd1976d77e594dc43abb620",
+      "class_hash": "0xb02ce9f2037194f1aebbccf516d243a31a5cf6bcf4e46b263650115b08533e",
       "abi": [
         {
           "type": "impl",
@@ -1038,9 +1307,287 @@
       ]
     },
     {
+      "name": "shop",
+      "address": "0x4ec6c8c03d67bc27abb6269313981f9e727937413875d2efabbcbce3535c400",
+      "class_hash": "0x5771a09184ccc748658ccbbe6cee51d83358b2eafb058d96dec6a04bfabf0e6",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "Upgradeable",
+          "interface_name": "dojo::upgradable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::upgradable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "ShopExternalImpl",
+          "interface_name": "rollyourown::systems::shop::IShop"
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::item::ItemEnum",
+          "variants": [
+            {
+              "name": "Attack",
+              "type": "()"
+            },
+            {
+              "name": "Defense",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::shop::AvailableItem",
+          "members": [
+            {
+              "name": "item_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "item_type",
+              "type": "core::felt252"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "value",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::shop::AvailableItem>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::shop::AvailableItem>"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::shop::IShop",
+          "items": [
+            {
+              "type": "function",
+              "name": "is_open",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "skip",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "buy_item",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "item_id",
+                  "type": "rollyourown::models::item::ItemEnum"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "drop_item",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "item_id",
+                  "type": "rollyourown::models::item::ItemEnum"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "available_items",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<rollyourown::systems::shop::AvailableItem>"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::shop::shop::BoughtItem",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "item_id",
+              "type": "rollyourown::models::item::ItemEnum",
+              "kind": "data"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::shop::shop::DroppedItem",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "item_id",
+              "type": "rollyourown::models::item::ItemEnum",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::shop::shop::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "BoughtItem",
+              "type": "rollyourown::systems::shop::shop::BoughtItem",
+              "kind": "nested"
+            },
+            {
+              "name": "DroppedItem",
+              "type": "rollyourown::systems::shop::shop::DroppedItem",
+              "kind": "nested"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "trade",
-      "address": "0x22a5538d516d281927572adef2af5ecef8904840a86ffa316b3952941d51798",
-      "class_hash": "0x2713def9151f2a9c086d1080c7e19a1e6c5372449a8b2d28d631903b4bee86f",
+      "address": "0x718a9b0b27fbe8bff6e55d72b62dafd955372cda8f18dc3ecef78c040ab36c4",
+      "class_hash": "0x4337ca0ac948fa6ede24dd0e06386c728a4982252245832ff47bd944fd70df1",
       "abi": [
         {
           "type": "impl",
@@ -1284,8 +1831,8 @@
     },
     {
       "name": "travel",
-      "address": "0x66d31bd0e1f5b75093d92e9ad13c68dfcfd26db65fe15a4b0ea693677d29d0f",
-      "class_hash": "0x2a88fd43fd32c638d40b72517134d6188bebf98fcb79559e237e698af3bf2f1",
+      "address": "0x768a9517c343f0171664bbe87bdb274cb6c6a4c4c5c0e2745d2a5e4b3885c3f",
+      "class_hash": "0x38423f17e8895ff0e5cd578e41903ab9183151c885269544ddb9ab156f33184",
       "abi": [
         {
           "type": "impl",
@@ -1573,80 +2120,35 @@
           ]
         }
       ]
-    },
+    }
+  ],
+  "models": [
     {
-      "name": "decide",
-      "address": "0xdf865711d21814c44f16e2eff2ff6ff3755800456fcf4311f9950f860208f0",
-      "class_hash": "0x32f9d0dbe38b50cb43ecb4cd768335d5dc47bc2034bed471eb21c0087f90098",
+      "name": "Drug",
+      "members": [
+        {
+          "name": "game_id",
+          "type": "u32",
+          "key": true
+        },
+        {
+          "name": "player_id",
+          "type": "ContractAddress",
+          "key": true
+        },
+        {
+          "name": "drug_id",
+          "type": "DrugEnum",
+          "key": true
+        },
+        {
+          "name": "quantity",
+          "type": "usize",
+          "key": false
+        }
+      ],
+      "class_hash": "0x1493f1b0bf73a352a0b5601784a0aa565679b3d5735994a5e40e31e419aab99",
       "abi": [
-        {
-          "type": "impl",
-          "name": "Upgradeable",
-          "interface_name": "dojo::upgradable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::upgradable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "DecideImpl",
-          "interface_name": "rollyourown::systems::decide::IDecide"
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::systems::decide::Action",
-          "variants": [
-            {
-              "name": "Run",
-              "type": "()"
-            },
-            {
-              "name": "Pay",
-              "type": "()"
-            },
-            {
-              "name": "Fight",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::decide::IDecide",
-          "items": [
-            {
-              "type": "function",
-              "name": "decide",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "action",
-                  "type": "rollyourown::systems::decide::Action"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            }
-          ]
-        },
         {
           "type": "function",
           "name": "name",
@@ -1659,470 +2161,155 @@
           "state_mutability": "view"
         },
         {
-          "type": "event",
-          "name": "rollyourown::systems::decide::decide::Decision",
-          "kind": "struct",
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
           "members": [
             {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            },
-            {
-              "name": "action",
-              "type": "rollyourown::systems::decide::Action",
-              "kind": "data"
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
             }
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::systems::decide::Outcome",
-          "variants": [
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
             {
-              "name": "Died",
-              "type": "()"
-            },
-            {
-              "name": "Paid",
-              "type": "()"
-            },
-            {
-              "name": "Escaped",
-              "type": "()"
-            },
-            {
-              "name": "Captured",
-              "type": "()"
-            },
-            {
-              "name": "Victorious",
-              "type": "()"
-            },
-            {
-              "name": "Unsupported",
-              "type": "()"
+              "type": "core::array::Span::<core::integer::u8>"
             }
-          ]
+          ],
+          "state_mutability": "view"
         },
         {
-          "type": "event",
-          "name": "rollyourown::systems::decide::decide::Consequence",
-          "kind": "struct",
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
           "members": [
             {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            },
-            {
-              "name": "outcome",
-              "type": "rollyourown::systems::decide::Outcome",
-              "kind": "data"
-            },
-            {
-              "name": "health_loss",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "drug_loss",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "cash_loss",
-              "type": "core::integer::u128",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::decide::decide::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Decision",
-              "type": "rollyourown::systems::decide::decide::Decision",
-              "kind": "nested"
-            },
-            {
-              "name": "Consequence",
-              "type": "rollyourown::systems::decide::decide::Consequence",
-              "kind": "nested"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "shop",
-      "address": "0x5c271986f9eb8dbc0fede72a90da797b6109d93b51886d0143e42b09787b964",
-      "class_hash": "0x1727c388f6668dbdc426eace49c9179b573b15653fdd6bb425f660c886f7ab9",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "Upgradeable",
-          "interface_name": "dojo::upgradable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::upgradable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "ShopExternalImpl",
-          "interface_name": "rollyourown::systems::shop::IShop"
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::models::item::ItemEnum",
-          "variants": [
-            {
-              "name": "Attack",
-              "type": "()"
-            },
-            {
-              "name": "Defense",
-              "type": "()"
-            },
-            {
-              "name": "Transport",
-              "type": "()"
-            },
-            {
-              "name": "Speed",
-              "type": "()"
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
             }
           ]
         },
         {
           "type": "struct",
-          "name": "rollyourown::systems::shop::AvailableItem",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
           "members": [
             {
-              "name": "item_id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "item_type",
-              "type": "core::felt252"
-            },
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Struct",
+          "members": [
             {
               "name": "name",
               "type": "core::felt252"
             },
             {
-              "name": "level",
-              "type": "core::integer::u8"
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "cost",
-              "type": "core::integer::u128"
-            },
-            {
-              "name": "value",
-              "type": "core::integer::u32"
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<rollyourown::systems::shop::AvailableItem>",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::systems::shop::AvailableItem>"
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
         {
-          "type": "interface",
-          "name": "rollyourown::systems::shop::IShop",
-          "items": [
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
+          "members": [
             {
-              "type": "function",
-              "name": "is_open",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "player_id",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::bool"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "skip",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "buy_item",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "item_id",
-                  "type": "rollyourown::models::item::ItemEnum"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "drop_item",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "item_id",
-                  "type": "rollyourown::models::item::ItemEnum"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "available_items",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "player_id",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<rollyourown::systems::shop::AvailableItem>"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "name",
-          "inputs": [],
-          "outputs": [
-            {
+              "name": "name",
               "type": "core::felt252"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::shop::shop::BoughtItem",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "data"
             },
             {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
             },
             {
-              "name": "item_id",
-              "type": "rollyourown::models::item::ItemEnum",
-              "kind": "data"
-            },
-            {
-              "name": "level",
-              "type": "core::integer::u8",
-              "kind": "data"
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
             }
           ]
         },
         {
-          "type": "event",
-          "name": "rollyourown::systems::shop::shop::DroppedItem",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            },
-            {
-              "name": "item_id",
-              "type": "rollyourown::models::item::ItemEnum",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::shop::shop::Event",
-          "kind": "enum",
+          "type": "enum",
+          "name": "dojo::database::schema::Ty",
           "variants": [
             {
-              "name": "BoughtItem",
-              "type": "rollyourown::systems::shop::shop::BoughtItem",
-              "kind": "nested"
+              "name": "Primitive",
+              "type": "core::felt252"
             },
             {
-              "name": "DroppedItem",
-              "type": "rollyourown::systems::shop::shop::DroppedItem",
-              "kind": "nested"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "devtools",
-      "address": "0x63a0e87fdd2eba1cade12af18aea1cd551f9eb2fb543268be51b67fd7a8d6c3",
-      "class_hash": "0x740ec4e78c1b58a1d94ec120c6dda3f062ab3b64e3d6bc065ab738d8be71845",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "Upgradeable",
-          "interface_name": "dojo::upgradable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::upgradable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "DevtoolsImpl",
-          "interface_name": "rollyourown::systems::devtools::IDevtools"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::devtools::IDevtools",
-          "items": [
-            {
-              "type": "function",
-              "name": "failing_tx",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "view"
+              "name": "Struct",
+              "type": "dojo::database::schema::Struct"
             },
             {
-              "type": "function",
-              "name": "feed_leaderboard",
-              "inputs": [
-                {
-                  "name": "count",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
+              "name": "Enum",
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
             }
           ]
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "schema",
           "inputs": [],
           "outputs": [
             {
-              "type": "core::felt252"
+              "type": "dojo::database::schema::Ty"
             }
           ],
           "state_mutability": "view"
         },
         {
           "type": "event",
-          "name": "rollyourown::systems::devtools::devtools::Event",
+          "name": "rollyourown::models::drug::drug::Event",
           "kind": "enum",
           "variants": []
         }
       ]
-    }
-  ],
-  "models": [
+    },
     {
       "name": "Game",
       "members": [
@@ -2167,7 +2354,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x1a8c36190e0e40d09da0c6b8f37751918cb939505a3a466c2149886baa8728f",
+      "class_hash": "0x6f50602b4965be0ff7313854aacfc940811ddeade67ee693da28d1409f5eb0f",
       "abi": [
         {
           "type": "function",
@@ -2331,6 +2518,203 @@
       ]
     },
     {
+      "name": "Item",
+      "members": [
+        {
+          "name": "game_id",
+          "type": "u32",
+          "key": true
+        },
+        {
+          "name": "player_id",
+          "type": "ContractAddress",
+          "key": true
+        },
+        {
+          "name": "item_id",
+          "type": "ItemEnum",
+          "key": true
+        },
+        {
+          "name": "level",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "name",
+          "type": "felt252",
+          "key": false
+        },
+        {
+          "name": "value",
+          "type": "usize",
+          "key": false
+        }
+      ],
+      "class_hash": "0x3c04be08715c969c604d74516ec5483335bfc20b6d8ac8b7f5bde7624fc5234",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::schema::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::schema::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::schema::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::models::item::item::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
       "name": "Market",
       "members": [
         {
@@ -2359,7 +2743,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x6f49b45f040b52ed3cdb20b8823646d7f0d6df182e0cb9632a6205c05e4debd",
+      "class_hash": "0x2822d753e6911ebf90ca9a64877659c2712a143f9ed185241545bc2110011ae",
       "abi": [
         {
           "type": "function",
@@ -2616,7 +3000,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x5c7da6e112dbec440ecbb9ee868dc6079cba3bb023515884ad1da7e3371983c",
+      "class_hash": "0x5d2f3aac80fcad0ff9d2c69bb20d67adeec8b96e3b0f0f1c4d469c5662d6762",
       "abi": [
         {
           "type": "function",
@@ -2774,390 +3158,6 @@
         {
           "type": "event",
           "name": "rollyourown::models::player::player::Event",
-          "kind": "enum",
-          "variants": []
-        }
-      ]
-    },
-    {
-      "name": "Drug",
-      "members": [
-        {
-          "name": "game_id",
-          "type": "u32",
-          "key": true
-        },
-        {
-          "name": "player_id",
-          "type": "ContractAddress",
-          "key": true
-        },
-        {
-          "name": "drug_id",
-          "type": "DrugEnum",
-          "key": true
-        },
-        {
-          "name": "quantity",
-          "type": "usize",
-          "key": false
-        }
-      ],
-      "class_hash": "0x3ed867ccd2daac94d12efa6d2d46889c06c28209410514fa46bc9fb8ca8fc19",
-      "abi": [
-        {
-          "type": "function",
-          "name": "name",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::felt252"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "function",
-          "name": "unpacked_size",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::integer::u32"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "function",
-          "name": "packed_size",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::integer::u32"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::integer::u8>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u8>"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "layout",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::array::Span::<core::integer::u8>"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::schema::Struct",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::schema::Enum",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "dojo::database::schema::Ty",
-          "variants": [
-            {
-              "name": "Primitive",
-              "type": "core::felt252"
-            },
-            {
-              "name": "Struct",
-              "type": "dojo::database::schema::Struct"
-            },
-            {
-              "name": "Enum",
-              "type": "dojo::database::schema::Enum"
-            },
-            {
-              "name": "Tuple",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "schema",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "dojo::database::schema::Ty"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::models::drug::drug::Event",
-          "kind": "enum",
-          "variants": []
-        }
-      ]
-    },
-    {
-      "name": "Item",
-      "members": [
-        {
-          "name": "game_id",
-          "type": "u32",
-          "key": true
-        },
-        {
-          "name": "player_id",
-          "type": "ContractAddress",
-          "key": true
-        },
-        {
-          "name": "item_id",
-          "type": "ItemEnum",
-          "key": true
-        },
-        {
-          "name": "level",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "name",
-          "type": "felt252",
-          "key": false
-        },
-        {
-          "name": "value",
-          "type": "usize",
-          "key": false
-        }
-      ],
-      "class_hash": "0x186918ab7915a33c0e40c1306d40443ef05d1cf6931b50ef499919d5610a817",
-      "abi": [
-        {
-          "type": "function",
-          "name": "name",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::felt252"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "function",
-          "name": "unpacked_size",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::integer::u32"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "function",
-          "name": "packed_size",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::integer::u32"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::integer::u8>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u8>"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "layout",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::array::Span::<core::integer::u8>"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::schema::Struct",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::schema::Enum",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "dojo::database::schema::Ty",
-          "variants": [
-            {
-              "name": "Primitive",
-              "type": "core::felt252"
-            },
-            {
-              "name": "Struct",
-              "type": "dojo::database::schema::Struct"
-            },
-            {
-              "name": "Enum",
-              "type": "dojo::database::schema::Enum"
-            },
-            {
-              "name": "Tuple",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "schema",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "dojo::database::schema::Ty"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::models::item::item::Event",
           "kind": "enum",
           "variants": []
         }

@@ -19,7 +19,9 @@ mod travel {
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
-    use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl};
+    use rollyourown::utils::settings::{
+        RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl
+    };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
     use super::ITravel;
@@ -104,13 +106,12 @@ mod travel {
 
                 if player.status == PlayerStatus::BeingMugged
                     || player.status == PlayerStatus::BeingArrested {
-
                     let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
                     //player lose some HP
                     if decide_settings.health_impact >= player.health {
                         player.health = 1;
                     } else {
-                        player.health -= decide_settings.health_impact/2;
+                        player.health -= decide_settings.health_impact / 2;
                     }
 
                     set!(world, (player));

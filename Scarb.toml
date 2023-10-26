@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.2.0"
+cairo-version = "2.3.0"
 name = "rollyourown"
 version = "0.1.0"
 
@@ -7,10 +7,11 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-cubit = {git = "https://github.com/influenceth/cubit.git"}
+# cubit = {git = "https://github.com/influenceth/cubit.git"}
+cubit = {git = "https://github.com/raphaelDkhn/cubit.git"}
 # dojo = {git = "https://github.com/dojoengine/dojo.git"}
 # dojo = {git = "https://github.com/dojoengine/dojo.git", rev = "d7f46502cba3d6462b68a4dfb07336377bca2678"}
-dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.1"}
+dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.2"}
 
 
 [[target.dojo]]

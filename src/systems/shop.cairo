@@ -175,7 +175,6 @@ mod shop {
             emit!(world, DroppedItem { game_id, player_id, item_id });
         }
 
-        #[view]
         fn available_items(
             self: @ContractState, game_id: u32, player_id: ContractAddress
         ) -> Span<AvailableItem> {

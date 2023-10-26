@@ -4,20 +4,19 @@ version = 1
 [[package]]
 name = "cubit"
 version = "1.2.0"
-source = "git+https://github.com/influenceth/cubit.git#2ccb2536dffa3f15ebd38b755c1be65fde1eab0c"
+source = "git+https://github.com/raphaelDkhn/cubit.git#e6331ebf98c5d5f442a0e5edefe0b367c8e270d9"
 
 [[package]]
 name = "dojo"
-version = "0.3.1"
-source = "git+https://github.com/dojoengine/dojo.git?rev=d7f46502cba3d6462b68a4dfb07336377bca2678#d7f46502cba3d6462b68a4dfb07336377bca2678"
+version = "0.3.2"
+source = "git+https://github.com/dojoengine/dojo.git?tag=v0.3.2#a0fa1ad96fb98c088be05da6178f43217891c8c6"
 dependencies = [
  "dojo_plugin",
 ]
 
 [[package]]
 name = "dojo_plugin"
-version = "0.3.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.1#4ae61b3fa8e39af9387f05af264e1c24865e971c"
+version = "0.3.2"
 
 [[package]]
 name = "rollyourown"

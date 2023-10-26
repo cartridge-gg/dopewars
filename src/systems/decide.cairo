@@ -105,7 +105,7 @@ mod decide {
                         bool::False => (Outcome::Escaped, 0, 0, 0),
                         bool::True => {
                             let random_loss: u8 = random::random(
-                                seed+1, 0, decide_settings.health_impact.into()
+                                seed + 1, 0, decide_settings.health_impact.into()
                             )
                                 .try_into()
                                 .unwrap();

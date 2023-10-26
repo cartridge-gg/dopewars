@@ -367,24 +367,24 @@ fn pricing(drug_id: DrugEnum) -> PriceSettings {
             PriceSettings {
                 min_price: 15 * SCALING_FACTOR,
                 max_price: 105 * SCALING_FACTOR,
-                min_qty: 1200,
-                max_qty: 2400,
+                min_qty: 1500,
+                max_qty: 3000,
             }
         },
         DrugEnum::Speed => {
             PriceSettings {
                 min_price: 90 * SCALING_FACTOR,
                 max_price: 540 * SCALING_FACTOR,
-                min_qty: 1000,
-                max_qty: 2000,
+                min_qty: 1200,
+                max_qty: 2400,
             }
         },
         DrugEnum::Weed => {
             PriceSettings {
                 min_price: 450 * SCALING_FACTOR,
                 max_price: 2250 * SCALING_FACTOR,
-                min_qty: 900,
-                max_qty: 1800,
+                min_qty: 1000,
+                max_qty: 2000,
             }
         },
         DrugEnum::Acid => {

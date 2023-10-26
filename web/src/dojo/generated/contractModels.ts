@@ -4,6 +4,21 @@ import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";
 
 export function defineContractComponents(world: World) {
   return {
+    Drug: (() => {
+      const name = "Drug";
+      return defineComponent(
+        world,
+        {
+          quantity: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["usize"],
+          },
+        },
+      );
+    })(),
     Game: (() => {
       const name = "Game";
       return defineComponent(
@@ -21,6 +36,23 @@ export function defineContractComponents(world: World) {
           metadata: {
             name: name,
             types: ["GameMode", "u64", "usize", "usize", "usize", "bool", "ContractAddress"],
+          },
+        },
+      );
+    })(),
+    Item: (() => {
+      const name = "Item";
+      return defineComponent(
+        world,
+        {
+          level: RecsType.Number,
+          name: RecsType.BigInt,
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u8", "felt252", "usize"],
           },
         },
       );
@@ -84,38 +116,6 @@ export function defineContractComponents(world: World) {
               "usize",
               "u8",
             ],
-          },
-        },
-      );
-    })(),
-    Drug: (() => {
-      const name = "Drug";
-      return defineComponent(
-        world,
-        {
-          quantity: RecsType.Number,
-        },
-        {
-          metadata: {
-            name: name,
-            types: ["usize"],
-          },
-        },
-      );
-    })(),
-    Item: (() => {
-      const name = "Item";
-      return defineComponent(
-        world,
-        {
-          level: RecsType.Number,
-          name: RecsType.BigInt,
-          value: RecsType.Number,
-        },
-        {
-          metadata: {
-            name: name,
-            types: ["u8", "felt252", "usize"],
           },
         },
       );
