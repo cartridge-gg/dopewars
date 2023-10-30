@@ -120,5 +120,22 @@ export function defineContractComponents(world: World) {
         },
       );
     })(),
+    Encounter: (() => {
+      const name = "Encounter";
+      return defineComponent(
+        world,
+        {
+          level: RecsType.Number,
+          health: RecsType.Number,
+          payout: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u8", "u8", "u128"],
+          },
+        },
+      );
+    })(),
   };
 }

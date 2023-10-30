@@ -5,16 +5,21 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::utils::random::random;
 use rollyourown::utils::settings::RiskSettings;
 use rollyourown::models::player::{Player, PlayerStatus, PlayerTrait, PlayerImpl};
+use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
 
 trait RiskTrait<T> {
     fn update_wanted(self: T, ref player: Player);
-    fn travel(self: T, seed: felt252, player: @Player) -> PlayerStatus;
+    fn travel(
+        self: T, world: IWorldDispatcher, seed: felt252, player: @Player
+    ) -> Option<Encounter>;
     fn run(self: T, world: IWorldDispatcher, seed: felt252, player: @Player) -> bool;
 }
 
 impl RiskImpl of RiskTrait<RiskSettings> {
     #[inline(always)]
-    fn travel(self: RiskSettings, seed: felt252, player: @Player) -> PlayerStatus {
+    fn travel(
+        self: RiskSettings, world: IWorldDispatcher, seed: felt252, player: @Player
+    ) -> Option<Encounter> {
         let travel_threshold = self.travel;
 
         if occurs(seed, travel_threshold) {
@@ -23,23 +28,25 @@ impl RiskImpl of RiskTrait<RiskSettings> {
 
             return match result <= self.encounter_bias_gangs {
                 bool::False => {
-                    if (*player).drug_count < self.cops_drug_threshold {
-                        return PlayerStatus::Normal;
-                    }
-
-                    PlayerStatus::BeingArrested
+                    // if (*player).drug_count < self.cops_drug_threshold {
+                    //     return PlayerStatus::Normal;
+                    // }
+                    //
+                    Option::Some(EncounterImpl::get_or_spawn(world, player, EncounterType::Cops))
+                //PlayerStatus::BeingArrested
                 },
                 bool::True => {
-                    if (*player).cash <= self.gangs_cash_threshold {
-                        return PlayerStatus::Normal;
-                    }
-
-                    PlayerStatus::BeingMugged
+                    // if (*player).cash <= self.gangs_cash_threshold {
+                    //     return PlayerStatus::Normal;
+                    // }
+                    Option::Some(EncounterImpl::get_or_spawn(world, player, EncounterType::Gang))
+                //PlayerStatus::BeingMugged
                 }
             };
         }
 
-        return PlayerStatus::Normal;
+        Option::None
+    //return PlayerStatus::Normal;
     }
 
     #[inline(always)]

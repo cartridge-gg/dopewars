@@ -149,6 +149,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         healthLoss: Number(raw.data[3]),
         drugLoss: Number(raw.data[4]),
         cashLoss: Number(raw.data[5]),
+        dmgDealt:  Number(raw.data[6]),
       } as ConsequenceEventData;
       
     case WorldEvents.MarketEvent:

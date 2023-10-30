@@ -114,7 +114,7 @@ export default function End() {
                 />
                 <Divider borderColor="neon.600" />
                 <StatsItem
-                  text={`${playerEntity?.wanted} Wanted`}
+                  text={`${playerEntity?.wanted}% Wanted`}
                   icon={<Siren color="red" /> }
                 />
                 {/* 

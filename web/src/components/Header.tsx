@@ -56,7 +56,7 @@ const Header = ({ back }: HeaderProps) => {
   return (
     <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]}>
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && (
+      {playerEntity && playerEntity.health > 0 && (
         <HStack flex="1" justify="center">
           <HStack h="48px" w="auto" px="20px" spacing={["10px", "30px"]} bg="neon.700" sx={{ ...headerStyles }}>
             <Flex w="full" align="center" justify="center" gap="10px">

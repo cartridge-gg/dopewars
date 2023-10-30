@@ -18,6 +18,7 @@ import { IsMobile } from "@/utils/ui";
 import { getSentence } from "@/responses";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
+import { Encounter } from "@/generated/graphql";
 
 type CombatLog = {
   text: string;
@@ -36,6 +37,7 @@ export default function Decision() {
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [encounter, setEncounter] = useState(undefined);
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
@@ -88,7 +90,18 @@ export default function Decision() {
       setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
       setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
     }
-  }, [playerEntity]);
+  }, [playerEntity?.items]);
+
+  useEffect(() => {
+    if (playerEntity && playerEntity.encounters && !isPending) {
+      if (status === PlayerStatus.BeingMugged) {
+        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Gang"));
+      }
+      if (status === PlayerStatus.BeingArrested) {
+        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
+      }
+    }
+  }, [playerEntity?.encounters, status, isPending]);
 
   useEffect(() => {
     if (!isPending) {
@@ -108,16 +121,28 @@ export default function Decision() {
         case Action.Pay:
           addCombatLog({ text: "You decided to pay up", color: "neon.400" });
           setSentence(getSentence(playerEntity.status, Action.Pay));
+          playSound(Sounds.Pay);
           break;
         case Action.Run:
           addCombatLog({ text: "You split without a second thought", color: "neon.400" });
           setSentence(getSentence(playerEntity.status, Action.Run));
+          playSound(Sounds.Run);
           break;
         case Action.Fight:
-          addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
+          //addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
           setSentence(getSentence(playerEntity.status, Action.Fight));
-          if (attackItem?.level > 1) {
-            playSound(Sounds.Magnum357);
+          switch (attackItem?.level) {
+            case 1:
+              playSound(Sounds.Knife);
+              break;
+            case 2:
+              playSound(Sounds.Magnum357);
+              break;
+            case 3:
+              playSound(Sounds.Uzi);
+              break;
+            default:
+              break;
           }
           break;
       }
@@ -145,15 +170,26 @@ export default function Decision() {
         case Outcome.Died:
         case Outcome.Paid:
         case Outcome.Escaped:
-        case Outcome.Victorious:
           setIsRedirecting(true);
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
           return router.replace(
             `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
+          );
+
+        case Outcome.Victorious:
+          setIsRedirecting(true);
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
+          return router.replace(
+            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${encounter.payout}`,
           );
 
         case Outcome.Captured:
           // setPrefixTitle("Your escape...");
           // setTitle("Failed!");
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
           addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red" });
           break;
       }
@@ -167,7 +203,7 @@ export default function Decision() {
   }
 
   // if playerEntity is too slow to update, PlayerStatus is still Normal
-  if (playerEntity.status == PlayerStatus.Normal && !isPending) {
+  if ((playerEntity.status == PlayerStatus.Normal || !encounter) && !isPending) {
     //router.push(`/${gameId}/turn`);
     // router.push(
     //   `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
@@ -183,6 +219,7 @@ export default function Decision() {
           title={title}
           demand={demand}
           sentence={sentence}
+          encounter={encounter}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
           flex={[0, 1]}
           mb={["20px", "0"]}
@@ -274,6 +311,7 @@ const Encounter = ({
   demand,
   imageSrc,
   sentence,
+  encounter,
   ...props
 }: {
   prefixTitle?: string;
@@ -281,6 +319,7 @@ const Encounter = ({
   demand?: string;
   imageSrc: string;
   sentence: string;
+  encounter: Encounter;
 }) => {
   return (
     <VStack {...props}>
@@ -323,13 +362,21 @@ const Encounter = ({
 
         <Card alignItems="center" justify="center" mt={["20px", "50px"]}>
           <HStack px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-            <CashIndicator cash={10_000} />
+            <HStack>
+              <Text>LVL {encounter.level}</Text>
+            </HStack>
             {IsMobile() ? (
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
             ) : (
               <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
             )}
-            <HealthIndicator health={20} />
+            <CashIndicator cash={encounter.payout} />
+            {IsMobile() ? (
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+            ) : (
+              <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+            )}
+            <HealthIndicator health={encounter.health} />
           </HStack>
         </Card>
       </VStack>

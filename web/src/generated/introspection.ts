@@ -8,6 +8,7 @@
   "possibleTypes": {
     "ModelUnion": [
       "Drug",
+      "Encounter",
       "Game",
       "Item",
       "Market",

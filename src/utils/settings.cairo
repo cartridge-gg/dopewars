@@ -78,6 +78,15 @@ struct ShopSettings {
     opening_freq: u32
 }
 
+
+#[derive(Copy, Drop, Serde)]
+struct EncounterSettings {
+    level: u8,
+    health: u8,
+    dmg: u8,
+    payout: u128,
+}
+
 //
 //
 //
@@ -98,6 +107,9 @@ trait ItemSettingsTrait<T> {
     fn get(game_mode: GameMode, item_id: ItemEnum, level: u8) -> T;
 }
 
+trait EncounterSettingsTrait<T> {
+    fn get(player: @Player, level: u8) -> T;
+}
 
 //
 //
@@ -123,7 +135,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 2000_u128 * SCALING_FACTOR,
-                    wanted: 39,
+                    wanted: 100, // TODO: revert to 39,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -134,7 +146,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
                 PlayerSettings {
                     health: 100_u8,
                     cash: 1500_u128 * SCALING_FACTOR,
-                    wanted: 39,
+                    wanted: 100, // TODO: revert to 39,
                     attack: 0,
                     defense: 0,
                     transport: 100,
@@ -340,6 +352,27 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                 }
             },
         }
+    }
+}
+
+//
+//
+//
+
+impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
+    fn get(player: @Player, level: u8) -> EncounterSettings {
+        // game should not exceed 100 turns
+        let turn: u8 = (*player.turn).try_into().unwrap();
+        let mut health = level * 10 + turn;
+        let mut health = if health > 100 {
+            100
+        } else {
+            health
+        };
+        let dmg = health / 4;
+        let payout: u128 = SCALING_FACTOR * level.into() * (10000 + (1000 * turn.into()));
+
+        EncounterSettings { level, health, dmg, payout }
     }
 }
 

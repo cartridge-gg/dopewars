@@ -29,8 +29,8 @@ echo "--------------------------------------------------------------------------
 
 # enable system -> component authorizations
 LOBBY_COMPONENTS=("Game" "Market" "Player" )
-TRAVEL_COMPONENTS=("Player" "Market")
-DECIDE_COMPONENTS=("Player" "Drug" "Market")
+TRAVEL_COMPONENTS=("Player" "Market" "Encounter")
+DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter")
 TRADE_COMPONENTS=("Drug" "Market" "Player")
 SHOP_COMPONENTS=("Player" "Item" "Market")
 

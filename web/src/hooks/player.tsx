@@ -8,10 +8,11 @@ import {
   EntityEdge,
   Player,
   PlayerEntityDocument,
-  PlayerEntityDrugOrItemSubscriptionDocument,
+  PlayerEntityRelatedDataSubscriptionDocument,
   PlayerEntityQuery,
   PlayerEntitySubscriptionDocument,
   Subscription,
+  Encounter,
 } from "@/generated/graphql";
 import { Drug } from "@/dojo/types";
 import { SCALING_FACTOR } from "@/dojo/constants";
@@ -84,20 +85,20 @@ const subscribe = async (gameId: string, playerId: string) => {
     ),
   );
 
-  //subscribe to player Drug / Items changes
+  //subscribe to player Drug / Items / Encounter changes
   for (let drugId of [0, 1, 2, 3, 4, 5]) {
     const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
 
     unsubscribers.push(
       usePlayerEntityStore.getState().wsClient!.subscribe(
         {
-          query: PlayerEntityDrugOrItemSubscriptionDocument,
+          query: PlayerEntityRelatedDataSubscriptionDocument,
           variables: {
             id,
           },
         },
         {
-          next: onPlayerEntityDrugData,
+          next: onPlayerEntityRelatedData,
           error: (error) => console.log({ error }),
           complete: () => console.log("complete"),
         },
@@ -130,7 +131,7 @@ const onPlayerEntityData = ({ data }: { data: Subscription }) => {
   usePlayerEntityStore.setState((state) => ({
     playerEntity: state.playerEntity?.update(playerUpdate),
   }));
-  
+
   console.log("updated : Player");
 
   // force to load drugs & items
@@ -138,8 +139,7 @@ const onPlayerEntityData = ({ data }: { data: Subscription }) => {
   //console.log(data)
 };
 
-const onPlayerEntityDrugData = ({ data }: { data: Subscription }) => {
- 
+const onPlayerEntityRelatedData = ({ data }: { data: Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {
@@ -156,6 +156,12 @@ const onPlayerEntityDrugData = ({ data }: { data: Subscription }) => {
       }));
       console.log(`updated : Item`);
     }
-  }
 
+    if (model.__typename === "Encounter") {
+      usePlayerEntityStore.setState((state) => ({
+        playerEntity: state.playerEntity?.updateEncounter(model as Encounter),
+      }));
+      console.log(`updated : Encounter`);
+    }
+  }
 };

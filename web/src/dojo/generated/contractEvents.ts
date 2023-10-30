@@ -31,6 +31,7 @@ export interface ConsequenceData {
   health_loss: RecsType.Number;
   drug_loss: RecsType.Number;
   cash_loss: RecsType.BigInt;
+  dmg_dealt: RecsType.Number;
 }
 
 export interface GameCreatedData {

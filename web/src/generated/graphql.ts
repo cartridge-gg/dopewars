@@ -83,6 +83,82 @@ export type DrugWhereInput = {
   quantityNEQ?: InputMaybe<Scalars['usize']>;
 };
 
+export type Encounter = {
+  __typename?: 'Encounter';
+  encounter_id?: Maybe<Scalars['Enum']>;
+  entity?: Maybe<Entity>;
+  game_id?: Maybe<Scalars['u32']>;
+  health?: Maybe<Scalars['u8']>;
+  level?: Maybe<Scalars['u8']>;
+  payout?: Maybe<Scalars['u128']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
+};
+
+export type EncounterConnection = {
+  __typename?: 'EncounterConnection';
+  edges?: Maybe<Array<Maybe<EncounterEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type EncounterEdge = {
+  __typename?: 'EncounterEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Encounter>;
+};
+
+export type EncounterOrder = {
+  direction: OrderDirection;
+  field: EncounterOrderField;
+};
+
+export enum EncounterOrderField {
+  EncounterId = 'ENCOUNTER_ID',
+  GameId = 'GAME_ID',
+  Health = 'HEALTH',
+  Level = 'LEVEL',
+  Payout = 'PAYOUT',
+  PlayerId = 'PLAYER_ID'
+}
+
+export type EncounterWhereInput = {
+  encounter_id?: InputMaybe<Scalars['Enum']>;
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  health?: InputMaybe<Scalars['u8']>;
+  healthEQ?: InputMaybe<Scalars['u8']>;
+  healthGT?: InputMaybe<Scalars['u8']>;
+  healthGTE?: InputMaybe<Scalars['u8']>;
+  healthLT?: InputMaybe<Scalars['u8']>;
+  healthLTE?: InputMaybe<Scalars['u8']>;
+  healthNEQ?: InputMaybe<Scalars['u8']>;
+  level?: InputMaybe<Scalars['u8']>;
+  levelEQ?: InputMaybe<Scalars['u8']>;
+  levelGT?: InputMaybe<Scalars['u8']>;
+  levelGTE?: InputMaybe<Scalars['u8']>;
+  levelLT?: InputMaybe<Scalars['u8']>;
+  levelLTE?: InputMaybe<Scalars['u8']>;
+  levelNEQ?: InputMaybe<Scalars['u8']>;
+  payout?: InputMaybe<Scalars['u128']>;
+  payoutEQ?: InputMaybe<Scalars['u128']>;
+  payoutGT?: InputMaybe<Scalars['u128']>;
+  payoutGTE?: InputMaybe<Scalars['u128']>;
+  payoutLT?: InputMaybe<Scalars['u128']>;
+  payoutLTE?: InputMaybe<Scalars['u128']>;
+  payoutNEQ?: InputMaybe<Scalars['u128']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+};
+
 export type Entity = {
   __typename?: 'Entity';
   created_at?: Maybe<Scalars['DateTime']>;
@@ -397,7 +473,7 @@ export type ModelEdge = {
   node?: Maybe<Model>;
 };
 
-export type ModelUnion = Drug | Game | Item | Market | Player;
+export type ModelUnion = Drug | Encounter | Game | Item | Market | Player;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -579,6 +655,7 @@ export type PlayerWhereInput = {
 export type Query = {
   __typename?: 'Query';
   drugModels?: Maybe<DrugConnection>;
+  encounterModels?: Maybe<EncounterConnection>;
   entities?: Maybe<EntityConnection>;
   entity: Entity;
   events?: Maybe<EventConnection>;
@@ -604,6 +681,18 @@ export type QueryDrugModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<DrugOrder>;
   where?: InputMaybe<DrugWhereInput>;
+};
+
+
+export type QueryEncounterModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<EncounterOrder>;
+  where?: InputMaybe<EncounterWhereInput>;
 };
 
 
@@ -794,21 +883,21 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
 
 export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntitySubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
 
-export type PlayerEntityDrugOrItemSubscriptionSubscriptionVariables = Exact<{
+export type PlayerEntityRelatedDataSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntityDrugOrItemSubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player' } | null> | null } };
+export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player' } | null> | null } };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -816,7 +905,7 @@ export type LocationEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
+export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
 
 export const PlayerPropsFragmentDoc = `
     fragment PlayerProps on Player {
@@ -1015,6 +1104,12 @@ export const PlayerEntityDocument = `
             name
             value
           }
+          ... on Encounter {
+            encounter_id
+            level
+            health
+            payout
+          }
         }
       }
     }
@@ -1070,8 +1165,8 @@ export const PlayerEntitySubscriptionDocument = `
   }
 }
     ${PlayerPropsFragmentDoc}`;
-export const PlayerEntityDrugOrItemSubscriptionDocument = `
-    subscription PlayerEntityDrugOrItemSubscription($id: ID) {
+export const PlayerEntityRelatedDataSubscriptionDocument = `
+    subscription PlayerEntityRelatedDataSubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
@@ -1087,6 +1182,12 @@ export const PlayerEntityDrugOrItemSubscriptionDocument = `
         level
         name
         value
+      }
+      ... on Encounter {
+        encounter_id
+        level
+        health
+        payout
       }
     }
   }

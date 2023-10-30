@@ -31,11 +31,17 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             drug_id
             quantity
           }
-          ... on Item{
+          ... on Item {
             item_id
             level
             name
             value
+          }
+          ... on Encounter {
+            encounter_id
+            level
+            health
+            payout
           }
         }
       }
@@ -57,7 +63,7 @@ subscription PlayerEntitySubscription($id: ID) {
   }
 }
 
-subscription PlayerEntityDrugOrItemSubscription($id: ID) {
+subscription PlayerEntityRelatedDataSubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
@@ -68,17 +74,21 @@ subscription PlayerEntityDrugOrItemSubscription($id: ID) {
         drug_id
         quantity
       }
-      ... on Item{
+      ... on Item {
         item_id
         level
         name
         value
       }
+      ... on Encounter {
+        encounter_id
+        level
+        health
+        payout
+      }
     }
   }
 }
-
-
 
 query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {
@@ -137,4 +147,3 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 #     }
 #   }
 # }
-

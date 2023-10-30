@@ -10,31 +10,33 @@ import { useMemo } from "react";
 import { OutcomeInfo, PlayerStatus } from "@/dojo/types";
 import { Outcome } from "@/dojo/types";
 import { playSound, Sounds } from "@/hooks/sound";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { formatCash } from "@/utils/ui";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
   const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity} = playerEntityStore;
+  const { playerEntity } = playerEntityStore;
 
-  const [outcome, setOutcome] = useState<OutcomeInfo|undefined>(undefined);
+  const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
   const [isDead, setIsDead] = useState<boolean>(false);
-  
+  const [payout, setPayout] = useState(undefined);
+
   const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
   useEffect(() => {
-    const outcomeInfos = getOutcomeInfo(
-      router.query.status as PlayerStatus,
-      Number(router.query.outcome),
-    )
-   setOutcome(outcomeInfos);
-  }, [router.query.status, router.query.outcome]);
+    const outcomeInfos = getOutcomeInfo(router.query.status as PlayerStatus, Number(router.query.outcome));
+    setOutcome(outcomeInfos);
+    if (router.query.payout) {
+      setPayout(Number(router.query.payout));
+    }
+  }, [router.query.status, router.query.outcome, router.query.payout]);
 
   useEffect(() => {
     if (outcome && outcome.type === Outcome.Died) {
-      setIsDead(true)
+      setIsDead(true);
       playSound(Sounds.GameOver);
     }
   }, [outcome]);
@@ -47,29 +49,19 @@ export default function Consequence() {
     <>
       <Layout isSinglePanel>
         <VStack>
-          <Text
-            textStyle="subheading"
-            fontSize={["10px", "11px"]}
-            letterSpacing="0.25em"
-          >
+          <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
             {outcome.title}
           </Text>
           <Heading fontSize={["40px", "48px"]} fontWeight="400" textAlign="center">
-          {outcome.name}
+            {outcome.name}
           </Heading>
         </VStack>
-        <Image
-          alt={outcome.name}
-          src={outcome.imageSrc}
-          width={500}
-          height={500}
-        />
+        <Image alt={outcome.name} src={outcome.imageSrc} width={500} height={500} />
         <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
           <VStack textAlign="center">
             <Text>{response}</Text>
-            <Text color="yellow.400">
-              {outcome.description && `* ${outcome.description} *`}
-            </Text>
+            <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
+            <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
           </VStack>
           <Footer position={["relative", "relative"]}>
             {!isDead ? (
@@ -78,16 +70,14 @@ export default function Consequence() {
                 onClick={() => {
                   console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
-                    return router.push(
-                      `/${gameId}/event/decision`,
-                    );
+                    return router.push(`/${gameId}/event/decision`);
                   }
-                  
-                  if ( playerEntity.status === PlayerStatus.AtPawnshop){
+
+                  if (playerEntity.status === PlayerStatus.AtPawnshop) {
                     router.push(`/${gameId}/pawnshop`);
                   }
 
-                  if ( playerEntity.status === PlayerStatus.Normal){
+                  if (playerEntity.status === PlayerStatus.Normal) {
                     router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
                   }
                 }}

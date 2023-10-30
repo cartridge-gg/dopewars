@@ -1,4 +1,5 @@
 use starknet::ContractAddress;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::location::LocationEnum;
 
 #[starknet::interface]
@@ -16,11 +17,14 @@ mod travel {
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
     use rollyourown::models::market::{Market, MarketTrait};
+    use rollyourown::models::encounter::{Encounter, EncounterType};
+
 
     use rollyourown::utils::random;
     use rollyourown::utils::market;
     use rollyourown::utils::settings::{
-        RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl
+        RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl, EncounterSettings,
+        EncounterSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 
@@ -103,24 +107,39 @@ mod travel {
                 let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
-                player.status = risk_settings.travel(seed, @player);
+                let encounter_option = risk_settings.travel(world, seed, @player);
 
-                if player.status == PlayerStatus::BeingMugged
-                    || player.status == PlayerStatus::BeingArrested {
-                    let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
-                    
-                    //player lose some HP
-                    let mut health_loss = if (decide_settings.health_impact / 2) >= player.health {
-                        player.health - 1
-                    } else {
-                        decide_settings.health_impact / 2
-                    };
-                    player.health -= health_loss;
+                match encounter_option {
+                    Option::Some(encounter) => {
+                        // update player status
+                        player.status = match encounter.encounter_id {
+                            EncounterType::Gang => PlayerStatus::BeingMugged,
+                            EncounterType::Cops => PlayerStatus::BeingArrested
+                        };
 
-                    set!(world, (player));
-                    emit!(world, AdverseEvent { game_id, player_id, player_status: player.status, health_loss });
+                        let encounter_settings = EncounterSettingsImpl::get(
+                            @player, encounter.level
+                        );
 
-                    return true;
+                        //player lose some HP
+                        let mut health_loss = if (encounter_settings.dmg / 2) >= player.health {
+                            player.health - 1
+                        } else {
+                            encounter_settings.dmg / 2
+                        };
+                        player.health -= health_loss;
+
+                        set!(world, (player));
+                        emit!(
+                            world,
+                            AdverseEvent {
+                                game_id, player_id, player_status: player.status, health_loss
+                            }
+                        );
+
+                        return true;
+                    },
+                    Option::None => {}
                 }
 
                 on_turn_end(world, @game, ref player);
@@ -135,7 +154,6 @@ mod travel {
     }
 }
 
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::game::{Game};
 use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
 use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};

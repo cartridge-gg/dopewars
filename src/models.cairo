@@ -4,3 +4,4 @@ mod player;
 mod drug;
 mod location;
 mod item;
+mod encounter;
