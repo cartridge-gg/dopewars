@@ -110,7 +110,7 @@ const Header = ({ back }: HeaderProps) => {
           </>
         )}
 
-        {(!isMobile || (!account && isMobile)) && (
+        {/* {(!isMobile || (!account && isMobile)) && (
           <Button
             h="48px"
             sx={headerButtonStyles}
@@ -125,7 +125,7 @@ const Header = ({ back }: HeaderProps) => {
               ? formatAddress(account.address.toUpperCase())
               : "Create Burner"}
           </Button>
-        )}
+        )} */}
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>
