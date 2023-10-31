@@ -10,8 +10,12 @@ export const blinkAnim = keyframes`
 
 const HealthIndicator = ({ health, ...props }: { health: number }) => {
   return (
-    <HStack color={health > 59 ? "neon.400" : health > 29 ? "yellow.400" : "red"} {...props}>
-      <Heart animation={health <= 20 && `${blinkAnim} infinite 1.4s linear`} /> <Text>{health}</Text>
+    <HStack
+      color={health > 59 ? "neon.400" : health > 29 ? "yellow.400" : "red"}
+      animation={health <= 20 && `${blinkAnim} infinite 1.4s linear`}
+      {...props}
+    >
+      <Heart /> <Text>{health}</Text>
     </HStack>
   );
 };
