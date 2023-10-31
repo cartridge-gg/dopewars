@@ -20,6 +20,7 @@ dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.2"}
 build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
 auth = "./scripts/default_auth.sh local"
+auth_dev = "./scripts/default_auth.sh"
 migrate = "sozo migrate && scarb run gendojo && scarb run auth"
 migrate_dev = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryo/katana --account-address 0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6 --private-key 0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
 
@@ -30,7 +31,7 @@ private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 rpc_url = "http://localhost:5050"
 
 # seed 420
-# account_address = "0x41d017913d81b1a6b476a3a59122a82fdd64fde2010c79ff3dfd151544a2450"
+# account_address = "0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6"
 # private_key = "0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
 # rpc_url = "https://api.cartridge.gg/x/ryo/katana"
 

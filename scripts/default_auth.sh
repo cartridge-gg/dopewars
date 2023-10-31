@@ -18,6 +18,7 @@ export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | se
 export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
 
 echo "---------------------------------------------------------------------------"
+echo rpc : $RPC_URL 
 echo world : $WORLD_ADDRESS 
 echo " "
 echo lobby : $LOBBY_ADDRESS
