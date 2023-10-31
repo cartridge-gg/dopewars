@@ -6,7 +6,7 @@ if [ $# -ge 1 ] && [ $1 == "local" ]
 then
     export RPC_URL="http://localhost:5050";
 else
-    export RPC_URL="https://api.cartridge.gg/x/ryo1/katana";
+    export RPC_URL="https://api.cartridge.gg/x/ryo/katana";
 fi
 
 export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
