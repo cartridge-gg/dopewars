@@ -4,8 +4,8 @@ import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
-import { ConsequenceEventData, displayMarketEvents } from "@/dojo/events";
-import { Card, Divider, HStack, Heading, Text, VStack, Image } from "@chakra-ui/react";
+import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
@@ -28,7 +28,7 @@ type CombatLog = {
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const healthLoss = router.query.healthLoss as number;
+  const healthLoss = router.query.healthLoss as string;
 
   const { account, playerEntityStore } = useDojoContext();
 
@@ -37,7 +37,7 @@ export default function Decision() {
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [encounter, setEncounter] = useState(undefined);
+  const [encounter, setEncounter] = useState<Encounter | undefined>(undefined);
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
@@ -49,7 +49,7 @@ export default function Decision() {
   const [combatLogs, setCombatLogs] = useState<CombatLog[]>([]);
   const [sentence, setSentence] = useState("");
 
-  const { toast } = useToast();
+  const toaster = useToast();
   const { decide, isPending } = useSystems();
   const { addEncounter } = usePlayerStore();
 
@@ -120,17 +120,17 @@ export default function Decision() {
       switch (action) {
         case Action.Pay:
           addCombatLog({ text: "You decided to pay up", color: "neon.400" });
-          setSentence(getSentence(playerEntity.status, Action.Pay));
+          setSentence(getSentence(playerEntity!.status, Action.Pay));
           playSound(Sounds.Pay);
           break;
         case Action.Run:
           addCombatLog({ text: "You split without a second thought", color: "neon.400" });
-          setSentence(getSentence(playerEntity.status, Action.Run));
+          setSentence(getSentence(playerEntity!.status, Action.Run));
           playSound(Sounds.Run);
           break;
         case Action.Fight:
           //addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
-          setSentence(getSentence(playerEntity.status, Action.Fight));
+          setSentence(getSentence(playerEntity!.status, Action.Fight));
           switch (attackItem?.level) {
             case 1:
               playSound(Sounds.Knife);
@@ -157,10 +157,12 @@ export default function Decision() {
 
       const { event, events } = await decide(gameId, action);
 
-      displayMarketEvents(events, toast);
+      if (events) {
+        displayMarketEvents(events as MarketEventData[], toaster);
+      }
 
       const consequenceEvent = event as ConsequenceEventData;
-      addEncounter(playerStatus, consequenceEvent.outcome);
+      addEncounter(playerStatus!, consequenceEvent.outcome);
 
       switch (consequenceEvent.outcome) {
         // case Outcome.Died:
@@ -182,7 +184,9 @@ export default function Decision() {
           consequenceEvent.dmgDealt > 0 &&
             addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
           return router.replace(
-            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${encounter.payout}`,
+            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${
+              encounter!.payout
+            }`,
           );
 
         case Outcome.Captured:
@@ -219,7 +223,7 @@ export default function Decision() {
           title={title}
           demand={demand}
           sentence={sentence}
-          encounter={encounter}
+          encounter={encounter!}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
           flex={[0, 1]}
           mb={["20px", "0"]}
@@ -320,7 +324,7 @@ const Encounter = ({
   imageSrc: string;
   sentence: string;
   encounter: Encounter;
-}) => {
+} & StyleProps) => {
   return (
     <VStack {...props}>
       <VStack>

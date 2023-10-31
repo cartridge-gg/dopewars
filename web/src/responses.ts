@@ -147,7 +147,17 @@ export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
 
 
 
-const encounterSentences: Record<PlayerStatus, Recored<Action, string[]>> = {
+const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
+  [PlayerStatus.Normal]: {
+    [Action.Pay]: [],
+    [Action.Run]: [],
+    [Action.Fight]: [],
+  },
+  [PlayerStatus.AtPawnshop]: {
+    [Action.Pay]: [],
+    [Action.Run]: [],
+    [Action.Fight]: [],
+  },
   [PlayerStatus.BeingMugged]: {
     [Action.Pay]: [
       "You come on my block trying to buy me off? I'll take the cash but don't come around here again.",

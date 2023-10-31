@@ -1,10 +1,10 @@
-import { HStack, Text } from "@chakra-ui/react";
+import { StyleProps, HStack, Text } from "@chakra-ui/react";
 import { DollarBag } from "../icons";
 import { formatCash } from "@/utils/ui";
 
- const CashIndicator = ({ cash, ...props }: { cash: number }) => {
+const CashIndicator = ({ cash, ...props }: { cash: number } & StyleProps) => {
   return (
-    <HStack {...props} >
+    <HStack {...props}>
       <DollarBag /> <Text>{formatCash(cash)}</Text>
     </HStack>
   );

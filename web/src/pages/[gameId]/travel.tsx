@@ -51,7 +51,7 @@ export default function Travel() {
   const [targetId, setTargetId] = useState<string>();
   const [currentLocationId, setCurrentLocationId] = useState<string>();
 
-  const { toast } = useToast();
+  const toaster = useToast();
   const { account, playerEntityStore } = useDojoContext();
   const { travel, isPending } = useSystems();
 
@@ -153,9 +153,11 @@ export default function Travel() {
           }
         }
 
-        displayMarketEvents(events, toast);
+        if ( events){
+          displayMarketEvents(events  as MarketEventData[], toaster);
+        }
 
-        toast({
+        toaster.toast({
           message: `You've traveled to ${locationName}`,
           icon: Car,
           link: `http://amazing_explorer/${hash}`,
@@ -169,7 +171,7 @@ export default function Travel() {
         console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel, locationName, toast]);
+  }, [targetId, router, gameId, travel, locationName, toaster]);
 
   if (!playerEntity || !locationPrices) return <></>;
 

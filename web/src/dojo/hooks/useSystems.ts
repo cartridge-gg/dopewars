@@ -3,7 +3,7 @@ import { useDojoContext } from "./useDojoContext";
 import { Action, Drug, GameMode, ShopItemInfo } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
-import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData } from "../events";
+import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export interface SystemsInterface {
     gameId: string, itemId: ItemEnum
   ) => Promise<SystemExecuteResult>;
   skipShop: (
-    gameId: string
+    gameId: string,
   ) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
@@ -288,7 +288,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const skipShop = useCallback(
-    async (gameId: string, itemId: ItemEnum) => {
+    async (gameId: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "shop",
         "skip",

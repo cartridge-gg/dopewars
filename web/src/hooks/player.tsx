@@ -7,6 +7,8 @@ import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import {
   EntityEdge,
   Player,
+  Drug,
+  Item,
   PlayerEntityDocument,
   PlayerEntityRelatedDataSubscriptionDocument,
   PlayerEntityQuery,
@@ -14,7 +16,6 @@ import {
   Subscription,
   Encounter,
 } from "@/generated/graphql";
-import { Drug } from "@/dojo/types";
 import { SCALING_FACTOR } from "@/dojo/constants";
 
 export interface PlayerEntityStore {
@@ -143,23 +144,23 @@ const onPlayerEntityRelatedData = ({ data }: { data: Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {
-    if (model.__typename === "Drug") {
+    if (model && model.__typename === "Drug") {
       usePlayerEntityStore.setState((state) => ({
-        playerEntity: state.playerEntity?.updateDrug(model as Drug),
+        playerEntity: state.playerEntity?.updateDrug(model as unknown as Drug),
       }));
       console.log(`updated : Drug`);
     }
 
-    if (model.__typename === "Item") {
+    if (model && model.__typename === "Item") {
       usePlayerEntityStore.setState((state) => ({
-        playerEntity: state.playerEntity?.updateItem(model as Item),
+        playerEntity: state.playerEntity?.updateItem(model as unknown as Item),
       }));
       console.log(`updated : Item`);
     }
 
-    if (model.__typename === "Encounter") {
+    if (model && model.__typename === "Encounter") {
       usePlayerEntityStore.setState((state) => ({
-        playerEntity: state.playerEntity?.updateEncounter(model as Encounter),
+        playerEntity: state.playerEntity?.updateEncounter(model as unknown as Encounter),
       }));
       console.log(`updated : Encounter`);
     }

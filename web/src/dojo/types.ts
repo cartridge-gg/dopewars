@@ -3,7 +3,7 @@ import { Market } from "@/generated/graphql";
 
 // must have same order than cairo enum
 export enum Location {
-  Pawnshop,
+  Home,
   Queens,
   Bronx,
   Brooklyn,

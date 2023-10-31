@@ -91,7 +91,7 @@ const Header = ({ back }: HeaderProps) => {
               }
             }}
           >
-            {account ? formatAddress(account.address.toUpperCase()) : "Create Burner"}
+            Create Burner
           </Button>
         )}
         {!isMobile && account && playerEntity && <ProfileButton />}

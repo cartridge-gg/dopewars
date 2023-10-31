@@ -10,6 +10,7 @@ import {
 import { WorldEvents } from "./generated/contractEvents";
 import { Siren, Truck } from "@/components/icons";
 import { getLocationByType, getDrugByType } from "./helpers"
+import { ToastType } from "@/hooks/toast";
 
 export interface BaseEventData {
   gameId: string;
@@ -64,6 +65,7 @@ export interface ConsequenceEventData extends BaseEventData {
   healthLoss: number;
   drugLoss: number;
   cashLoss: number;
+  dmgDealt: number;
 }
 
 export interface MarketEventData extends BaseEventData {
@@ -114,7 +116,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         playerStatus: shortString.decodeShortString(raw.data[2]),
-        healthLoss:  Number(raw.data[3]),
+        healthLoss: Number(raw.data[3]),
       } as AdverseEventData;
 
     case WorldEvents.AtPawnshop:
@@ -149,9 +151,9 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
         healthLoss: Number(raw.data[3]),
         drugLoss: Number(raw.data[4]),
         cashLoss: Number(raw.data[5]),
-        dmgDealt:  Number(raw.data[6]),
+        dmgDealt: Number(raw.data[6]),
       } as ConsequenceEventData;
-      
+
     case WorldEvents.MarketEvent:
       return {
         eventType,
@@ -176,7 +178,7 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
 }
 
 
-export function displayMarketEvents(events: MarketEventData[], toast: ToastType) {
+export function displayMarketEvents(events: MarketEventData[], toaster: ToastType) {
   // market events
   for (let event of events) {
     const e = event as MarketEventData;
@@ -186,7 +188,7 @@ export function displayMarketEvents(events: MarketEventData[], toast: ToastType)
       : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${getLocationByType(Number(e.locationId))?.name
       }`;
     const icon = e.increase ? Siren : Truck;
-    toast({
+    toaster.toast({
       message: msg,
       icon: icon,
       // link: `http://amazing_explorer/${hash}`,

@@ -26,6 +26,7 @@ export class PlayerEntity {
   maxItems: number;
   drugCount: number;
   locationId?: string;
+  nextLocationId?: string;
   status: PlayerStatus;
 
   drugs: Drug[];
@@ -153,7 +154,7 @@ export class PlayerEntity {
     const itemEdges = edges.filter((edge) => edge.node?.models?.find((model) => model?.__typename === "Item"));
 
     const items: ShopItem[] = itemEdges.map((edge) => {
-      const itemModel = edge.node?.models?.find((model) => model?.__typename === "Item") as Item;
+      const itemModel = edge.node?.models?.find((model) => model?.__typename === "Item") as ItemType;
 
       return {
         id: itemModel.item_id as ItemTextEnum,

@@ -22,7 +22,7 @@ export default function Consequence() {
 
   const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
   const [isDead, setIsDead] = useState<boolean>(false);
-  const [payout, setPayout] = useState(undefined);
+  const [payout, setPayout] = useState<number | undefined>(undefined);
 
   const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
