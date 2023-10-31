@@ -17,6 +17,7 @@ mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::get_block_timestamp;
+    use starknet::info::get_tx_info;
 
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::game::{Game, GameMode};
@@ -30,6 +31,7 @@ mod lobby {
         ShopSettingsImpl
     };
     use rollyourown::utils::market;
+
     use super::ILobby;
     use debug::PrintTrait;
 
@@ -75,6 +77,7 @@ mod lobby {
             self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
+            assert_valid_chain(game_mode);
 
             let game_id = self.world().uuid();
             let caller = get_caller_address();
@@ -131,9 +134,7 @@ mod lobby {
                             self.world(), ref seed, game_id, game_mode, *location_id
                         );
                     },
-                    Option::None(_) => {
-                        break ();
-                    }
+                    Option::None(_) => { break (); }
                 };
             };
 
@@ -165,6 +166,12 @@ mod lobby {
 
             set!(self.world(), (player))
         }
+    }
+
+    fn assert_valid_chain(game_mode: GameMode) {//if game_mode == GameMode::Test {
+    // let chain_id = get_tx_info().unbox().chain_id;
+    // assert(chain_id != 'KATANA', 'wrong chain_id');
+    // }
     }
 
     fn assert_valid_name(name: felt252) {

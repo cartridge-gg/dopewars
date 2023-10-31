@@ -97,8 +97,8 @@ mod devtools {
     #[generate_trait]
     impl DevtoolsInternalImpl of DevtoolsInternalTrait {
         fn check_chain(self: @ContractState) {
-            let chain_id = get_tx_info().unbox().chain_id;
-            assert(chain_id == 'KATANA', 'wrong chain_id');
+            // let chain_id = get_tx_info().unbox().chain_id;
+            // assert(chain_id != 'KATANA', 'wrong chain_id');
         }
     }
 }

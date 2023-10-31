@@ -5,6 +5,7 @@ use dojo::database::schema::{
 };
 
 use rollyourown::models::player::Player;
+use rollyourown::models::game::Game;
 use rollyourown::utils::settings::{EncounterSettings, EncounterSettingsImpl};
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -28,8 +29,11 @@ impl EncounterImpl of EncounterTrait {
         let mut encounter = get!(
             world, (*player.game_id, *player.player_id, encounter_id), (Encounter)
         );
+        let game = get!(
+            world, (*player.game_id), (Game)
+        );
 
-        let encounter_settings = EncounterSettingsImpl::get(player, encounter.level + 1);
+        let encounter_settings = EncounterSettingsImpl::get(game.game_mode, player, encounter.level + 1);
         if encounter.level == 0 {
             // first meet, spawn new Encounter
             encounter =

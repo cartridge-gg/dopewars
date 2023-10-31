@@ -858,7 +858,7 @@
     {
       "name": "decide",
       "address": "0x15e077e87ad137ae423445419894ec12054f05627be764e53a00dc17185133d",
-      "class_hash": "0x63686ec896d0c5d81fa660f8b53ef957d49c5a5bd297cb3b81a1bbd5aa075f",
+      "class_hash": "0x4011ca1b79d84451bf0cd36698f330f9d717138226c9153af3bc1eb3b6b1b03",
       "abi": [
         {
           "type": "impl",
@@ -1055,7 +1055,7 @@
     {
       "name": "devtools",
       "address": "0x25d2dd1aba0117a10a254c6a9a1b0d238cbe200367972a8e681264ed2756cdc",
-      "class_hash": "0x5d8e2ae011d2de4cb87ad234b769503cbbc17d7690be37c52b57edd3018bef6",
+      "class_hash": "0x42f0a7543725aeafa40ae185dce66b2fe8350b61f5f0012c42c31ec37bbe17f",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "lobby",
       "address": "0x4d10ee045ea65f9e2931c16b8e85c9ade80b044cbd1976d77e594dc43abb620",
-      "class_hash": "0x3c7cbb7f8e1e9f1e1975b3711f3c7b19a317da9eb6af660a49ad897fc4ffaf5",
+      "class_hash": "0x5441b832ab1ad318f236b1f243b700e65d87250805175793e5af2da7f8e771",
       "abi": [
         {
           "type": "impl",
@@ -1167,7 +1167,7 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Limited",
+              "name": "Test",
               "type": "()"
             },
             {
@@ -1314,7 +1314,7 @@
     {
       "name": "shop",
       "address": "0x4ec6c8c03d67bc27abb6269313981f9e727937413875d2efabbcbce3535c400",
-      "class_hash": "0x6c712ffca23d3d6e37e1e112ce8c604e404c6783ac87c5fa1eaeed8bdf00436",
+      "class_hash": "0x484445f102edc6bd08d634c25635706d5cb20fb31bca6dcbce41bc9d8d055dc",
       "abi": [
         {
           "type": "impl",
@@ -1837,7 +1837,7 @@
     {
       "name": "travel",
       "address": "0x768a9517c343f0171664bbe87bdb274cb6c6a4c4c5c0e2745d2a5e4b3885c3f",
-      "class_hash": "0x647e099bf089f96cdfdafc0951a650e7752bb1dc2160db927934fe0d17a88de",
+      "class_hash": "0x3d54b392e1e485e46c72333268a2cb12d39c078202f24892db8fbb3e7e1baf6",
       "abi": [
         {
           "type": "impl",

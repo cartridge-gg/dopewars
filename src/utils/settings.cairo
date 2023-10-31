@@ -30,6 +30,7 @@ struct RiskSettings {
     encounter_bias_gangs: u128,
     cops_drug_threshold: usize,
     gangs_cash_threshold: u128,
+    health_increase_by_turn: u8,
     wanted_decrease_by_turn: u8,
     wanted_decrease_zero_drug: u8,
     wanted_increase_by_drug: u8,
@@ -108,7 +109,7 @@ trait ItemSettingsTrait<T> {
 }
 
 trait EncounterSettingsTrait<T> {
-    fn get(player: @Player, level: u8) -> T;
+    fn get(game_mode: GameMode, player: @Player, level: u8) -> T;
 }
 
 //
@@ -117,146 +118,92 @@ trait EncounterSettingsTrait<T> {
 
 impl GameSettingsImpl of SettingsTrait<GameSettings> {
     fn get(game_mode: GameMode) -> GameSettings {
-        match game_mode {
-            GameMode::Limited => {
-                GameSettings { max_players: 1, max_turns: 10 }
-            },
-            GameMode::Unlimited => {
-                GameSettings { max_players: 1, max_turns: 0 }
-            },
-        }
+        let game_settings = GameSettings { max_players: 1, max_turns: 0 };
+        game_settings
     }
 }
 
 impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
-        match game_mode {
-            GameMode::Limited => {
-                PlayerSettings {
-                    health: 100_u8,
-                    cash: 2000_u128 * SCALING_FACTOR,
-                    wanted: 100, // TODO: revert to 39,
-                    attack: 0,
-                    defense: 0,
-                    transport: 100,
-                    speed: 0
-                }
-            },
-            GameMode::Unlimited => {
-                PlayerSettings {
-                    health: 100_u8,
-                    cash: 1500_u128 * SCALING_FACTOR,
-                    wanted: 100, // TODO: revert to 39,
-                    attack: 0,
-                    defense: 0,
-                    transport: 100,
-                    speed: 0
-                }
-            },
+        let mut player_settings = PlayerSettings {
+            health: 100_u8,
+            cash: 1000_u128 * SCALING_FACTOR,
+            wanted: 39,
+            attack: 0,
+            defense: 0,
+            transport: 100,
+            speed: 0
+        };
+
+        if game_mode == GameMode::Test {
+            player_settings.wanted = 100;
+            player_settings.cash = 1500_u128 * SCALING_FACTOR;
         }
+
+        player_settings
     }
 }
 
 
 impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
     fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
-        match game_mode {
-            GameMode::Limited => {
-                let travel: u8 = (45
-                    + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
-                let capture: u8 = (60
-                    + (*player).wanted / 5); // 60% chance of capture + 0.2 wanted (max 20)
+        let travel = (45
+            + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
+        let capture = (50 + (*player).wanted / 5); // 50% chance of capture + 0.2 wanted (max 20)
 
-                RiskSettings {
-                    travel,
-                    capture,
-                    encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-                    cops_drug_threshold: 5, // cops encounter threshold
-                    gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-                    wanted_decrease_by_turn: 3,
-                    wanted_decrease_zero_drug: 20,
-                    wanted_increase_by_drug: ((*player).drug_count / 7).try_into().unwrap()
-                }
-            },
-            GameMode::Unlimited => {
-                let travel = (45
-                    + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
-                let capture = (50
-                    + (*player).wanted / 5); // 50% chance of capture + 0.2 wanted (max 20)
+        let mut risk_settings = RiskSettings {
+            travel,
+            capture,
+            encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
+            cops_drug_threshold: 10, // cops encounter threshold
+            gangs_cash_threshold: 1000_0000, // gangs encounter threshold
+            health_increase_by_turn: 1,
+            wanted_decrease_by_turn: 1,
+            wanted_decrease_zero_drug: 10,
+            wanted_increase_by_drug: ((*player).drug_count / 6).try_into().unwrap()
+        };
 
-                RiskSettings {
-                    travel,
-                    capture,
-                    encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-                    cops_drug_threshold: 10, // cops encounter threshold
-                    gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-                    wanted_decrease_by_turn: 1,
-                    wanted_decrease_zero_drug: 10,
-                    wanted_increase_by_drug: ((*player).drug_count / 7).try_into().unwrap()
-                }
-            },
-        }
+        if game_mode == GameMode::Test {
+            risk_settings.health_increase_by_turn = 2;
+            risk_settings.wanted_decrease_by_turn = 0;
+        };
+
+        risk_settings
     }
 }
 
 
 impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
     fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
-        match game_mode {
-            GameMode::Limited => {
-                DecideSettings {
-                    gangs_payment_cash_pct: 20, //% of cash
-                    cops_payment_drug_pct: 20, //% of drug
-                    health_impact: (10 + ((*player).turn / 3 * 2))
-                        .try_into()
-                        .unwrap(), // 10 + (2 each 3 turn)
-                    wanted_impact_run: 4,
-                    wanted_impact_fight: 10,
-                }
-            },
-            GameMode::Unlimited => {
-                DecideSettings {
-                    gangs_payment_cash_pct: 20, //% of cash
-                    cops_payment_drug_pct: 20, //% of drug
-                    health_impact: (8 + ((*player).turn / 5))
-                        .try_into()
-                        .unwrap(), // 10 + (1 each 5 turn)
-                    wanted_impact_run: 4,
-                    wanted_impact_fight: 10,
-                }
-            },
-        }
+        let decide_settings = DecideSettings {
+            gangs_payment_cash_pct: 20, //% of cash
+            cops_payment_drug_pct: 20, //% of drug
+            health_impact: (8 + ((*player).turn / 5)).try_into().unwrap(), // 10 + (1 each 5 turn)
+            wanted_impact_run: 4,
+            wanted_impact_fight: 10,
+        };
+        decide_settings
     }
 }
 
 impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
     fn get(game_mode: GameMode) -> MarketSettings {
-        match game_mode {
-            GameMode::Limited => {
-                MarketSettings {
-                    price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
-                    price_var_min: 1, // 1%  
-                    price_var_max: 5, // 5%  
-                    market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down
-                    market_event_min: 50, //   up 50%   | down 25%
-                    market_event_max: 100, //   up 100%  | down 50%
-                    liq_scaling_initial_rate: 200, // 0.02
-                    liq_scaling_fading_rate: 420,
-                }
-            },
-            GameMode::Unlimited => {
-                MarketSettings {
-                    price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
-                    price_var_min: 1, // 1%  
-                    price_var_max: 5, // 5%  
-                    market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down   TODO: rollback
-                    market_event_min: 50, //   up 50%   | down 25%
-                    market_event_max: 100, //   up 100%  | down 50%
-                    liq_scaling_initial_rate: 140, // 0.014
-                    liq_scaling_fading_rate: 350,
-                }
-            },
+        let mut market_settings = MarketSettings {
+            price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
+            price_var_min: 1, // 1%  
+            price_var_max: 5, // 5%  
+            market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down  
+            market_event_min: 40, //   up 40%  | down 20%
+            market_event_max: 80, //   up 80%  | down 40%
+            liq_scaling_initial_rate: 150, // 0.015
+            liq_scaling_fading_rate: 360,
+        };
+
+        if game_mode == GameMode::Test {
+            market_settings.market_event_chance = 14; // on 1000 : 2.8% = 1.4% up / 1.4% down   
         }
+
+        market_settings
     }
 }
 
@@ -266,92 +213,59 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
 
 impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
-        match game_mode {
-            GameMode::Limited => {
-                ShopSettings { max_item_allowed: 2, max_item_level: 1, opening_freq: 2 }
-            },
-            GameMode::Unlimited => {
-                ShopSettings { max_item_allowed: 3, max_item_level: 3, opening_freq: 2 }
-            },
+        let mut shop_settings = ShopSettings {
+            max_item_allowed: 3, max_item_level: 3, opening_freq: 5
+        };
+
+        if game_mode == GameMode::Test {
+            shop_settings.opening_freq = 2;
         }
+
+        shop_settings
     }
 }
 
 impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
     fn get(game_mode: GameMode, item_id: ItemEnum, level: u8) -> ItemSettings {
-        match game_mode {
-            GameMode::Limited => {
-                // level is ignored in Limited mode
-                match item_id {
-                    ItemEnum::Attack => ItemSettings {
-                        name: 'Knife', cost: 500 * SCALING_FACTOR, value: 20
-                    },
-                    ItemEnum::Defense => ItemSettings {
-                        name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 35
-                    },
-                    ItemEnum::Transport => ItemSettings {
-                        name: 'Fanny pack', cost: 600 * SCALING_FACTOR, value: 20
-                    },
-                    ItemEnum::Speed => ItemSettings {
-                        name: 'Shoes', cost: 350 * SCALING_FACTOR, value: 15
-                    },
+        let item_settings = match item_id {
+            ItemEnum::Attack => {
+                if level == 1 {
+                    ItemSettings { name: 'Knife', cost: 450 * SCALING_FACTOR, value: 10 }
+                } else if level == 2 {
+                    ItemSettings { name: 'Glock', cost: 9900 * SCALING_FACTOR, value: 25 }
+                } else {
+                    ItemSettings { name: 'Uzi', cost: 89000 * SCALING_FACTOR, value: 50 }
                 }
             },
-            GameMode::Unlimited => {
-                match item_id {
-                    ItemEnum::Attack => {
-                        if level == 1 {
-                            ItemSettings { name: 'Knife', cost: 250 * SCALING_FACTOR, value: 10 }
-                        } else if level == 2 {
-                            ItemSettings { name: 'Glock', cost: 4200 * SCALING_FACTOR, value: 25 }
-                        } else {
-                            ItemSettings { name: 'Uzi', cost: 38000 * SCALING_FACTOR, value: 50 }
-                        }
-                    },
-                    ItemEnum::Defense => {
-                        if level == 1 {
-                            ItemSettings {
-                                name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 25
-                            }
-                        } else if level == 2 {
-                            ItemSettings {
-                                name: 'Leather Jacket', cost: 3700 * SCALING_FACTOR, value: 40
-                            }
-                        } else {
-                            ItemSettings { name: 'Kevlar', cost: 28000 * SCALING_FACTOR, value: 60 }
-                        }
-                    },
-                    ItemEnum::Transport => {
-                        if level == 1 {
-                            ItemSettings {
-                                name: 'Fanny pack', cost: 450 * SCALING_FACTOR, value: 20
-                            }
-                        } else if level == 2 {
-                            ItemSettings {
-                                name: 'Backpack', cost: 6900 * SCALING_FACTOR, value: 50
-                            }
-                        } else {
-                            ItemSettings {
-                                name: 'Duffle Bag', cost: 42000 * SCALING_FACTOR, value: 100
-                            }
-                        }
-                    },
-                    ItemEnum::Speed => {
-                        if level == 1 {
-                            ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 10 }
-                        } else if level == 2 {
-                            ItemSettings {
-                                name: 'Skateboard', cost: 2400 * SCALING_FACTOR, value: 25
-                            }
-                        } else {
-                            ItemSettings {
-                                name: 'Bicycle', cost: 32000 * SCALING_FACTOR, value: 40
-                            }
-                        }
-                    },
+            ItemEnum::Defense => {
+                if level == 1 {
+                    ItemSettings { name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 25 }
+                } else if level == 2 {
+                    ItemSettings { name: 'Leather Jacket', cost: 6900 * SCALING_FACTOR, value: 40 }
+                } else {
+                    ItemSettings { name: 'Kevlar', cost: 49000 * SCALING_FACTOR, value: 60 }
                 }
             },
-        }
+            ItemEnum::Transport => {
+                if level == 1 {
+                    ItemSettings { name: 'Fanny pack', cost: 500 * SCALING_FACTOR, value: 20 }
+                } else if level == 2 {
+                    ItemSettings { name: 'Backpack', cost: 12000 * SCALING_FACTOR, value: 50 }
+                } else {
+                    ItemSettings { name: 'Duffle Bag', cost: 85000 * SCALING_FACTOR, value: 100 }
+                }
+            },
+            ItemEnum::Speed => {
+                if level == 1 {
+                    ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 10 }
+                } else if level == 2 {
+                    ItemSettings { name: 'Skateboard', cost: 8000 * SCALING_FACTOR, value: 25 }
+                } else {
+                    ItemSettings { name: 'Bicycle', cost: 42000 * SCALING_FACTOR, value: 40 }
+                }
+            },
+        };
+        item_settings
     }
 }
 
@@ -360,7 +274,7 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
 //
 
 impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
-    fn get(player: @Player, level: u8) -> EncounterSettings {
+    fn get(game_mode: GameMode, player: @Player, level: u8) -> EncounterSettings {
         // game should not exceed 100 turns
         let turn: u8 = (*player.turn).try_into().unwrap();
         let mut health = level * 10 + turn;
@@ -370,7 +284,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
             health
         };
         let dmg = health / 4;
-        let payout: u128 = SCALING_FACTOR * level.into() * (10000 + (1000 * turn.into()));
+        let payout: u128 = SCALING_FACTOR * level.into() * (8000 + (1000 * turn.into()));
 
         EncounterSettings { level, health, dmg, payout }
     }
@@ -384,17 +298,68 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
         match game_mode {
-            GameMode::Limited => {
-                pricing(drug_id)
-            },
-            GameMode::Unlimited => {
-                pricing(drug_id)
-            },
+            GameMode::Test => { pricing_clicksave(drug_id) },
+            GameMode::Unlimited => { pricing_notme(drug_id) },
         }
     }
 }
 
-fn pricing(drug_id: DrugEnum) -> PriceSettings {
+
+fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
+    match drug_id {
+        DrugEnum::Ludes => {
+            PriceSettings {
+                min_price: 30 * SCALING_FACTOR,
+                max_price: 140 * SCALING_FACTOR,
+                min_qty: 1800,
+                max_qty: 3600,
+            }
+        },
+        DrugEnum::Speed => {
+            PriceSettings {
+                min_price: 120 * SCALING_FACTOR,
+                max_price: 480 * SCALING_FACTOR,
+                min_qty: 1500,
+                max_qty: 3000,
+            }
+        },
+        DrugEnum::Weed => {
+            PriceSettings {
+                min_price: 420 * SCALING_FACTOR,
+                max_price: 1600 * SCALING_FACTOR,
+                min_qty: 1300,
+                max_qty: 2600,
+            }
+        },
+        DrugEnum::Acid => {
+            PriceSettings {
+                min_price: 1200 * SCALING_FACTOR,
+                max_price: 4000 * SCALING_FACTOR,
+                min_qty: 1200,
+                max_qty: 2400,
+            }
+        },
+        DrugEnum::Heroin => {
+            PriceSettings {
+                min_price: 3800 * SCALING_FACTOR,
+                max_price: 10500 * SCALING_FACTOR,
+                min_qty: 1100,
+                max_qty: 2200,
+            }
+        },
+        DrugEnum::Cocaine => {
+            PriceSettings {
+                min_price: 8800 * SCALING_FACTOR,
+                max_price: 20500 * SCALING_FACTOR,
+                min_qty: 900,
+                max_qty: 1800,
+            }
+        },
+    }
+}
+
+
+fn pricing_clicksave(drug_id: DrugEnum) -> PriceSettings {
     match drug_id {
         DrugEnum::Ludes => {
             PriceSettings {

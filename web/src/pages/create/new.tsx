@@ -27,9 +27,8 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
-  const [gameMode, setGameMode] = useState(GameMode.Unlimited);
 
-  const create = async () => {
+  const create = async (gameMode: GameMode) => {
     setError("");
     if (name === "" || name.length > 20 || name.length < 3) {
       setError("Invalid name, at least 3 chars, max 20!");
@@ -45,8 +44,7 @@ export default function New() {
         link: `http://amazing_explorer/${hash}`,
       });
 
-       router.push(`/${gameId}/travel`);
-      //router.push(`/${gameId}/pawnshop`);
+      router.push(`/${gameId}/travel`);
     } catch (e) {
       console.log(e);
     }
@@ -54,7 +52,6 @@ export default function New() {
 
   return (
     <Layout
-    
       leftPanelProps={{
         prefixTitle: "Start a",
         title: "New Game",
@@ -68,7 +65,7 @@ export default function New() {
               Name Entry
             </Text>
             <HStack color="neon.500">
-              <Text > What&apos;s your name playa ?</Text>
+              <Text> What&apos;s your name playa ?</Text>
             </HStack>
 
             <HStack my="30px" align="center" justify="center">
@@ -112,8 +109,8 @@ export default function New() {
               }}
             />
             <VStack w="full" h="80px">
-              <Text w="full" align="center" color="red" display={name.length === 31 ? "block" : "none"}>
-                Max 31 characters
+              <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
+                Max 20 characters
               </Text>
               <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
                 {error}
@@ -126,8 +123,11 @@ export default function New() {
           <Button w={["full", "auto"]} onClick={() => router.push("/")}>
             Back
           </Button>
-          <Button w={["full", "auto"]} isLoading={isPending} onClick={create}>
+          <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Unlimited)}>
             Create New Game
+          </Button>
+          <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
+            Create New Test Game
           </Button>
         </Footer>
       </>

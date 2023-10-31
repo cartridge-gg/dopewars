@@ -113,7 +113,7 @@ mod decide {
                                 world, @player, EncounterType::Gang
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
-                                @player, encounter.level
+                                game.game_mode, @player, encounter.level
                             );
                             encounter_settings.dmg
                         },
@@ -122,7 +122,7 @@ mod decide {
                                 world, @player, EncounterType::Cops
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
-                                @player, encounter.level
+                                game.game_mode, @player, encounter.level
                             );
                             encounter_settings.dmg
                         },
@@ -133,13 +133,10 @@ mod decide {
                     match risk_settings.run(world, seed, @player) {
                         bool::False => (Outcome::Escaped, 0, 0, 0, 0, 0),
                         bool::True => {
-                            let random_loss: u8 = random::random(
-                                seed + 1, 0, encounter_dmg.into()
-                            )
+                            let random_loss: u8 = random::random(seed + 1, 0, encounter_dmg.into())
                                 .try_into()
                                 .unwrap();
-                            let health_loss: u128 = (encounter_dmg + random_loss)
-                                .into();
+                            let health_loss: u128 = (encounter_dmg + random_loss).into();
                             let defense_item = get!(
                                 world, (game_id, player_id, ItemEnum::Defense), Item
                             );
@@ -203,7 +200,7 @@ mod decide {
                                 world, @player, EncounterType::Gang
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
-                                @player, encounter.level
+                                game.game_mode, @player, encounter.level
                             );
 
                             // calc player dmg
@@ -276,7 +273,7 @@ mod decide {
                                 world, @player, EncounterType::Cops
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
-                                @player, encounter.level
+                                game.game_mode, @player, encounter.level
                             );
 
                             // calc player dmg

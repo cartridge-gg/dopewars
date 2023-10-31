@@ -4,7 +4,7 @@ fn seed() -> felt252 {
 
 // TODO: implement proper pseudo random number generator
 fn random(seed: felt252, min: u128, max: u128) -> u128 {
-    if min == max {
+    if min >= max {
         return 0;
     };
     let seed = pedersen::pedersen(seed, seed);

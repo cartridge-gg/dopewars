@@ -58,7 +58,7 @@ export enum Outcome {
 }
 
 export enum GameMode {
-  Limited,
+  Test,
   Unlimited
 }
 

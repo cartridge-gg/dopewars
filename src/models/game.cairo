@@ -13,9 +13,9 @@ struct Game {
     creator: ContractAddress,
 }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, PartialEq)]
 enum GameMode {
-    Limited,
+    Test,
     Unlimited
 }
 

@@ -118,7 +118,7 @@ mod travel {
                         };
 
                         let encounter_settings = EncounterSettingsImpl::get(
-                            @player, encounter.level
+                           game.game_mode, @player, encounter.level
                         );
 
                         //player lose some HP
@@ -209,10 +209,10 @@ fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool
 
     // update HP if not dead
     if player.health > 0 {
-        if player.health + 1 >= 100 {
+        if player.health + risk_settings.health_increase_by_turn >= 100 {
             player.health = 100;
         } else {
-            player.health += 1;
+            player.health += risk_settings.health_increase_by_turn;
         }
     }
 
