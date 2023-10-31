@@ -7,12 +7,15 @@ trait IDevtools<TContractState> {
 //fn get_cash(self: @TContractState, count: u32);
 }
 
+// use with katana --chain_id != 'KATANA'
+
 #[dojo::contract]
 mod devtools {
     use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::contract_address::Felt252TryIntoContractAddress;
+    use starknet::info::get_tx_info;
 
     use super::IDevtools;
 
@@ -38,6 +41,8 @@ mod devtools {
     #[external(v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
         fn feed_leaderboard(self: @ContractState, count: u32) {
+            self.check_chain();
+
             let mut i = 0;
             loop {
                 if i == count {
@@ -83,7 +88,17 @@ mod devtools {
         }
 
         fn failing_tx(self: @ContractState) {
+            self.check_chain();
+
             assert(0 == 1, 'failing tx');
+        }
+    }
+
+    #[generate_trait]
+    impl DevtoolsInternalImpl of DevtoolsInternalTrait {
+        fn check_chain(self: @ContractState) {
+            let chain_id = get_tx_info().unbox().chain_id;
+            assert(chain_id == 'KATANA', 'wrong chain_id');
         }
     }
 }
