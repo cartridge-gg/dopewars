@@ -3,7 +3,7 @@ import { Divider, HStack, StyleProps, Text, VStack, Card, Tooltip, Spacer } from
 import React from "react";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { getDrugById, getShopItem } from "@/dojo/helpers";
+import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Bag } from "./icons";
 
 export const Inventory = ({ ...props }: StyleProps) => {
@@ -26,7 +26,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
         </HStack>
       </HStack>
 
-      <HStack w="full" justify="space-between">
+      <HStack w="full" flexWrap={"wrap"} justify="space-between">
         <Card
           // w="full"
           h="40px"
@@ -38,7 +38,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
               return (
                 <>
                   <HStack gap="10px" key={`item-${key}`}>
-                    <Tooltip label={`${item.name} (+${item.value})`}>
+                    <Tooltip label={`${item.name} (+${item.value} ${getShopItemStatname(item.id)})`}>
                       <HStack color="yellow.400">
                         <>
                           {getShopItem(item.id, item.level)?.icon({
@@ -58,7 +58,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
                 </>
               );
             })}
-            {playerEntity?.items.length === 0 && <Text color="neon.500">You own no item</Text>}
+            {playerEntity?.items.length === 0 && <Text color="neon.500">No item</Text>}
           </HStack>
         </Card>
 
@@ -70,7 +70,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
         >
           <HStack gap="10px" justify="flex-start">
             {playerEntity?.drugCount === 0 ? (
-              <Text color="neon.500">Your bag is empty</Text>
+              <Text color="neon.500">Bag is empty</Text>
             ) : (
               playerEntity?.drugs.map((drug, key) => {
                 return (

@@ -192,6 +192,7 @@ export default function Decision() {
         case Outcome.Captured:
           // setPrefixTitle("Your escape...");
           // setTitle("Failed!");
+          playSound(Sounds.Ooo)
           consequenceEvent.dmgDealt > 0 &&
             addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
           addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red" });

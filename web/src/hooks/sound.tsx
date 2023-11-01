@@ -22,7 +22,8 @@ export enum Sounds {
   Knife = "Knife.wav",
   Uzi = "Uzi.wav",
   Run = "Run.mp3",
-  Pay = "Pay.wav"
+  Pay = "Pay.wav",
+  Ooo = "Ooo.wav"
 }
 
 export interface SoundState {

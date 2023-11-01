@@ -1,19 +1,5 @@
-import {
-  Input as ChakraInput,
-  InputProps,
-  StyleProps,
-  Text,
-  Box,
-  keyframes,
-} from "@chakra-ui/react";
-import {
-  ReactNode,
-  useLayoutEffect,
-  useState,
-  useRef,
-  MouseEventHandler,
-  useEffect,
-} from "react";
+import { Input as ChakraInput, InputProps, StyleProps, Text, Box, keyframes } from "@chakra-ui/react";
+import { ReactNode, useLayoutEffect, useState, useRef, MouseEventHandler, useEffect } from "react";
 
 // @ts-ignore
 import useCaretPosition from "use-caret-position";

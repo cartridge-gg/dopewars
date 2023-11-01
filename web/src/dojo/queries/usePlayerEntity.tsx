@@ -96,6 +96,7 @@ export class PlayerEntity {
     if (item) {
       item.level = newItem.level;
       item.value = newItem.value;
+      item.name = shortString.decodeShortString(newItem.name);
     } else {
       this.items.push({
         id: newItem.item_id as ItemTextEnum,
