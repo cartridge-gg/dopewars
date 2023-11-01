@@ -192,7 +192,7 @@ export default function Decision() {
         case Outcome.Captured:
           // setPrefixTitle("Your escape...");
           // setTitle("Failed!");
-          playSound(Sounds.Ooo)
+          playSound(Sounds.Ooo);
           consequenceEvent.dmgDealt > 0 &&
             addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
           addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red" });
@@ -268,11 +268,10 @@ export default function Decision() {
                   onDecision(Action.Fight);
                 }}
               >
-                Fight
                 {getShopItem(attackItem.id, attackItem.level).icon({
                   boxSize: "26",
-                  color: "yellow.400",
                 })}
+                Fight
               </Button>
             )}
 
@@ -285,12 +284,11 @@ export default function Decision() {
                 onDecision(Action.Run);
               }}
             >
-              Run
               {speedItem &&
                 getShopItem(speedItem.id, speedItem.level).icon({
                   boxSize: "26",
-                  color: "yellow.400",
                 })}
+              Run
             </Button>
             <Button
               w="full"
