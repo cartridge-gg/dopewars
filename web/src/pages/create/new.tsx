@@ -93,13 +93,9 @@ export default function New() {
             </HStack>
             <Input
               display="flex"
-              px="10px"
               mx="auto"
-              border="2px"
               maxW="260px"
-              borderColor="neon.500"
-              bgColor="neon.700"
-              maxLength={31}
+              maxLength={20}
               placeholder="Enter your name"
               autoFocus={true}
               value={name}

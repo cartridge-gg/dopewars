@@ -1,25 +1,35 @@
 import type { ComponentStyleConfig } from "@chakra-ui/theme";
 import { StyleFunctionProps } from "@chakra-ui/theme-tools";
+import { cardStyle } from "../styles";
 
-export const Input: ComponentStyleConfig = {
-  variants: {
-    primary: (props: StyleFunctionProps) => ({
-      field: {
-        px: "0",
-        color: "neon.200",
-        borderColor: "none",
-        bgColor: "transparent",
-        fontSize: "16px",
-        _placeholder: {
-          color: "neon.500",
-        },
-      },
-    }),
-    caret: (props: StyleFunctionProps) => ({
-      field: {},
-    }),
+import { inputAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
+
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(inputAnatomy.keys);
+
+const baseStyle = definePartsStyle({
+  // define the part you're going to style
+});
+
+const primaryStyle = definePartsStyle({
+  // define the part you're going to style
+  field: {
+    border: 0,
+    borderWidth: 0,
+    
+    ...cardStyle,
+
+    bgColor: "transparent",
+    borderRadius:"12px",
+    overflow:"hidden",
+
+    _focus: {
+      bgColor: "neon.700",
+    },
+    _placeholder: {
+      color: "neon.500",
+    },
   },
-  defaultProps: {
-    variant: "primary",
-  },
-};
+});
+
+export const Input = defineMultiStyleConfig({ baseStyle, variants: { primary: primaryStyle } });
