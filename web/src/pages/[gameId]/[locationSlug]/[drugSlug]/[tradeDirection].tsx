@@ -147,7 +147,7 @@ export default function Market() {
     >
       <VStack boxSize="full" justify={["normal", "center"]}>
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Box position="relative" my={[0, 6]} w={[140, 240]} h={[140, 240]}>
+          <Box position="relative" my={[0, 3]} w={[140, 180]} h={[140, 180]}>
             <Image
               src={`/images/drugs/${drug.slug}.png`}
               alt={drug.name}
@@ -191,7 +191,6 @@ export default function Market() {
         )}
 
         <Footer
-          alignItems={["flex-end", "flex-start"]}
           height={["100%", "auto"]}
         >
           <Button w={["full", "auto"]} onClick={() => router.back()}>
