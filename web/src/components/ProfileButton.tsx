@@ -36,6 +36,7 @@ import { SCALING_FACTOR } from "@/dojo/constants";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
 import CashIndicator from "./player/CashIndicator";
+import ShareButton from "./ShareButton";
 
 const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   const { account, playerEntityStore } = useDojoContext();
@@ -74,7 +75,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card flex={1}>
-                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
+              <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
               </Card>
               <Card flex={3}>
                 <HStack w="full" gap="0">
@@ -175,15 +176,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
             <Button w="full" onClick={close}>
               Close
             </Button>
-            <ChakraLink
-              w="full"
-              href={`https://twitter.com/intent/tweet?text=${getShareText(playerEntity)}`}
-              target="_blank"
-            >
-              <Button w="full">
-                <Twitter /> Share
-              </Button>
-            </ChakraLink>
+            <ShareButton />
           </HStack>
         </ModalFooter>
       </ModalContent>

@@ -5,9 +5,9 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
-import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps } from "@chakra-ui/react";
+import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
@@ -19,10 +19,12 @@ import { getSentence } from "@/responses";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
+import { DollarBag, Heart, Siren } from "@/components/icons";
 
 type CombatLog = {
   text: string;
   color: string;
+  icon?: React.FC;
 };
 
 export default function Decision() {
@@ -119,12 +121,16 @@ export default function Decision() {
     try {
       switch (action) {
         case Action.Pay:
-          addCombatLog({ text: "You decided to pay up", color: "neon.400" });
+          addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
           setSentence(getSentence(playerEntity!.status, Action.Pay));
           playSound(Sounds.Pay);
           break;
         case Action.Run:
-          addCombatLog({ text: "You split without a second thought", color: "neon.400" });
+          addCombatLog({
+            text: "You split without a second thought",
+            color: "neon.400",
+            icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : undefined,
+          });
           setSentence(getSentence(playerEntity!.status, Action.Run));
           playSound(Sounds.Run);
           break;
@@ -165,16 +171,19 @@ export default function Decision() {
       addEncounter(playerStatus!, consequenceEvent.outcome);
 
       switch (consequenceEvent.outcome) {
-        // case Outcome.Died:
-        //   setIsRedirecting(true);
-        //   return router.push(`/${gameId}/end`);
-
         case Outcome.Died:
+          setIsRedirecting(true);
+          return router.replace(`/${gameId}/end`);
+
         case Outcome.Paid:
         case Outcome.Escaped:
           setIsRedirecting(true);
           consequenceEvent.dmgDealt > 0 &&
-            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
+            addCombatLog({
+              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+              color: "neon.400",
+              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : undefined,
+            });
           return router.replace(
             `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
           );
@@ -190,8 +199,6 @@ export default function Decision() {
           );
 
         case Outcome.Captured:
-          // setPrefixTitle("Your escape...");
-          // setTitle("Failed!");
           playSound(Sounds.Ooo);
           consequenceEvent.dmgDealt > 0 &&
             addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
@@ -239,19 +246,20 @@ export default function Decision() {
               Combat Log
             </Text>
             <Card w="full" alignItems="flex-start" px="16px" py="8px">
-              <Text>{demand}</Text>
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" my="8px" />
-
               <Text color="red" mb="10px">
-                You lost {healthLoss} HP!
+               <Heart /> You lost {healthLoss} HP!
               </Text>
 
               <VStack w="full" alignItems="flex-start">
                 {combatLogs &&
                   combatLogs.map((i, key) => (
-                    <Text key={`log-${key}`} color={i.color}>
-                      {i.text}
-                    </Text>
+                    <HStack key={`log-${key}`} color={i.color} _last={{marginBottom:0}}>
+                      {i.icon &&
+                        i.icon({
+                          boxSize: "26",
+                        })}
+                      <Text>{i.text}</Text>
+                    </HStack>
                   ))}
               </VStack>
             </Card>
@@ -337,10 +345,10 @@ const Encounter = ({
       <VStack w="full" flexDir={["row", "column"]} justifyContent="center">
         {!IsMobile() && sentence && (
           <>
-            <Card top="180px" position="absolute" w="280px" fontSize="12px" p="10px" textAlign="center">
+            <Box top="150px" position="absolute" w="280px" fontSize="14px" p="10px" color="neon.500" textAlign="center">
               {sentence}
-            </Card>
-            <Card
+            </Box>
+            {/* <Card
               top="260px"
               marginLeft="80px"
               position="absolute"
@@ -357,7 +365,7 @@ const Encounter = ({
               fontSize="12px"
               p="6px"
               textAlign="justify"
-            ></Card>
+            ></Card> */}
           </>
         )}
 
@@ -366,7 +374,7 @@ const Encounter = ({
         <Card alignItems="center" justify="center" mt={["20px", "50px"]}>
           <HStack px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
             <HStack>
-              <Text>LVL {encounter.level}</Text>
+              <Siren /> <Text> LVL {encounter.level}</Text>
             </HStack>
             {IsMobile() ? (
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
@@ -382,6 +390,8 @@ const Encounter = ({
             <HealthIndicator health={encounter.health} />
           </HStack>
         </Card>
+
+        <Text color="yellow.400">{demand}</Text>
       </VStack>
     </VStack>
   );

@@ -202,11 +202,11 @@ export default function Travel() {
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
         <HStack w={["auto !important", "full"]} pointerEvents="all">
-          <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
+          <Button isDisabled={isPending} w={['full', 'auto']} onClick={() => router.back()}>
             Back
           </Button>
           <Button
-            w="full"
+            w={['full', 'auto']}
             isDisabled={!targetId || targetId === currentLocationId}
             isLoading={isPending /*&& !txError*/}
             onClick={onContinue}

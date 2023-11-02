@@ -147,9 +147,9 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
 
 impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
     fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
-        let travel = (45
-            + (*player).wanted / 2); // 45% chance of travel encounter + 0.5 wanted (max 50)
-        let capture = (50 + (*player).wanted / 5); // 50% chance of capture + 0.2 wanted (max 20)
+        let travel = (35
+            + (*player).wanted / 2); // 35% chance of travel encounter + 0.5 wanted (max 50)
+        let capture = (45 + (*player).wanted / 4); // 45% chance of capture + 0.25 wanted (max 25)
 
         let mut risk_settings = RiskSettings {
             travel,
@@ -157,7 +157,7 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
             encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
             cops_drug_threshold: 10, // cops encounter threshold
             gangs_cash_threshold: 1000_0000, // gangs encounter threshold
-            health_increase_by_turn: 1,
+            health_increase_by_turn: 0,
             wanted_decrease_by_turn: 1,
             wanted_decrease_zero_drug: 10,
             wanted_increase_by_drug: ((*player).drug_count / 6).try_into().unwrap()

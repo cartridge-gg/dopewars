@@ -84,6 +84,7 @@ export default function PawnShop() {
 
     try {
       const icon = selectedShopItem.icon;
+      playSound(Sounds.Trade)
       const { hash, events } = await buyItem(gameId, selectedShopItem.type);
 
       toaster.toast({

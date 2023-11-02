@@ -40,11 +40,6 @@ export default function Location() {
 
   const { playerEntity } = playerEntityStore;
 
-  // const { player: playerEntity } = usePlayerEntity({
-  //   gameId,
-  //   address: account?.address,
-  // });
-
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
@@ -70,7 +65,7 @@ export default function Location() {
   return (
     <Layout
       leftPanelProps={{
-        title: locationEntity.id,
+        title: getLocationById(locationEntity.id)!.name,
         prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${getLocationById(locationEntity.id)?.slug}.png`,
       }}

@@ -1,9 +1,4 @@
-import {
-  Button as ChakraButton,
-  ButtonProps,
-  StyleProps,
-  Text,
-} from "@chakra-ui/react";
+import { Button as ChakraButton, ButtonProps, StyleProps, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 
@@ -28,12 +23,15 @@ const Button = ({
       props.onClick && props.onClick(e);
     }}
   >
-    <Text as="div" w="full" textAlign="center"
-      css={{
-        "&:first-letter": {
-          textDecoration: "underline",
-        },
-      }}
+    <Text
+      as="div"
+      w="full"
+      textAlign="center"
+      // css={{
+      //   "&:first-letter": {
+      //     textDecoration: "underline",
+      //   },
+      // }}
     >
       {children}
     </Text>

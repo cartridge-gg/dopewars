@@ -170,7 +170,10 @@ export class PlayerEntity {
 
     const encounters: Encounter[] = encounterEdges.map((edge) => {
       const encounterModel = edge.node?.models?.find((model) => model?.__typename === "Encounter") as Encounter;
-      return encounterModel
+      return {
+        ...encounterModel,
+        payout:Number(encounterModel.payout) / SCALING_FACTOR,
+      }
     });
 
     if (!playerModel) return undefined;

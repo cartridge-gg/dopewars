@@ -19,6 +19,23 @@ export function defineContractComponents(world: World) {
         },
       );
     })(),
+    Encounter: (() => {
+      const name = "Encounter";
+      return defineComponent(
+        world,
+        {
+          level: RecsType.Number,
+          health: RecsType.Number,
+          payout: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u8", "u8", "u128"],
+          },
+        },
+      );
+    })(),
     Game: (() => {
       const name = "Game";
       return defineComponent(
@@ -116,23 +133,6 @@ export function defineContractComponents(world: World) {
               "usize",
               "u8",
             ],
-          },
-        },
-      );
-    })(),
-    Encounter: (() => {
-      const name = "Encounter";
-      return defineComponent(
-        world,
-        {
-          level: RecsType.Number,
-          health: RecsType.Number,
-          payout: RecsType.BigInt,
-        },
-        {
-          metadata: {
-            name: name,
-            types: ["u8", "u8", "u128"],
           },
         },
       );

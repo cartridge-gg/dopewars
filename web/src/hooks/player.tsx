@@ -134,10 +134,6 @@ const onPlayerEntityData = ({ data }: { data: Subscription }) => {
   }));
 
   console.log("updated : Player");
-
-  // force to load drugs & items
-  //executeQuery(gameId, playerId);
-  //console.log(data)
 };
 
 const onPlayerEntityRelatedData = ({ data }: { data: Subscription }) => {

@@ -66,7 +66,7 @@ export default function Consequence() {
           <Footer position={["relative", "relative"]}>
             {!isDead ? (
               <Button
-                w="full"
+                w={["full", "auto"]}
                 onClick={() => {
                   console.log(outcome);
                   if (outcome.type == Outcome.Captured) {

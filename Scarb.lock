@@ -8,15 +8,15 @@ source = "git+https://github.com/raphaelDkhn/cubit.git#e6331ebf98c5d5f442a0e5ede
 
 [[package]]
 name = "dojo"
-version = "0.3.2"
-source = "git+https://github.com/dojoengine/dojo.git?tag=v0.3.2#a0fa1ad96fb98c088be05da6178f43217891c8c6"
+version = "0.3.3"
+source = "git+https://github.com/dojoengine/dojo.git#3c9f109e667ca5d12739e6553fdb8261378f4ecf"
 dependencies = [
  "dojo_plugin",
 ]
 
 [[package]]
 name = "dojo_plugin"
-version = "0.3.2"
+version = "0.3.3"
 
 [[package]]
 name = "rollyourown"
