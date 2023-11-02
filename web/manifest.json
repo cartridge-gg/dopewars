@@ -1,7 +1,7 @@
 {
   "world": {
     "name": "world",
-    "address": null,
+    "address": "0x25ea98af7dc3213012eea21cfaa6dc81612374d10544379062548c35af67a9a",
     "class_hash": "0x6441e7fc96d795ec94fca66634e6d87edf84362e564ef80eb13f459914b8b",
     "abi": [
       {
@@ -861,7 +861,7 @@
   "contracts": [
     {
       "name": "decide",
-      "address": null,
+      "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
       "class_hash": "0x5dd6c83d0cff97779127ac0f14e61b55dba5e6df55de24ce6ac66d3f1ceee59",
       "abi": [
         {
@@ -1068,7 +1068,7 @@
     },
     {
       "name": "devtools",
-      "address": null,
+      "address": "0x73206b1b6f40059698fce0af853293d9da3809309530f6cbb7065594980d28f",
       "class_hash": "0x2ab767d94be251a7a0487f994d222e5f1d400437812b9bf0174afd3225773ae",
       "abi": [
         {
@@ -1147,7 +1147,7 @@
     },
     {
       "name": "lobby",
-      "address": null,
+      "address": "0x24658d9efcc9b88af349c1143528a403831163178ccf5e3ef228947a8ba18c7",
       "class_hash": "0xca2f4dba227d2ce72c6118dcd850305a3beb75d8b1eaffe0b6decab54e0926",
       "abi": [
         {
@@ -1336,7 +1336,7 @@
     },
     {
       "name": "shop",
-      "address": null,
+      "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
       "class_hash": "0x39296a3171f39cc9d305132291bc28d98f155adfe42c0917fd32e7cf43780a9",
       "abi": [
         {
@@ -1623,7 +1623,7 @@
     },
     {
       "name": "trade",
-      "address": null,
+      "address": "0x7a511bfccd30f580a2b2f0e246177f681033fb24259fcc014de29b4c260c502",
       "class_hash": "0x5cbb4a9648ef076dbccfb84c44a12d8534d3117380327bb458179759f17eb5f",
       "abi": [
         {
@@ -1879,7 +1879,7 @@
     },
     {
       "name": "travel",
-      "address": null,
+      "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
       "class_hash": "0x5475e89c5732530cbe2d82c1af88e7c07307a82ccb0f15079436ae8692aca79",
       "abi": [
         {
