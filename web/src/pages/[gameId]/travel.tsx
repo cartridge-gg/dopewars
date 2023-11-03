@@ -17,7 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {
- getDrugById,
+  getDrugById,
   getDrugByType,
   getLocationById,
   getLocationByType,
@@ -153,8 +153,8 @@ export default function Travel() {
           }
         }
 
-        if ( events){
-          displayMarketEvents(events  as MarketEventData[], toaster);
+        if (events) {
+          displayMarketEvents(events as MarketEventData[], toaster);
         }
 
         toaster.toast({
@@ -165,8 +165,6 @@ export default function Travel() {
 
         const locationSlug = getLocationById(targetId)!.slug;
         router.push(`/${gameId}/${locationSlug}`);
-
-        
       } catch (e) {
         console.log(e);
       }
@@ -201,12 +199,14 @@ export default function Travel() {
         </VStack>
         <LocationPrices prices={prices} />
         <Spacer minH="100px" />
-        <HStack w={["auto !important", "full"]} pointerEvents="all">
-          <Button isDisabled={isPending} w={['full', 'auto']} onClick={() => router.back()}>
-            Back
-          </Button>
+        <HStack w={["auto !important", "full"]} position={["relative", "absolute"]} bottom={0} pointerEvents="all">
+          {playerEntity.turn > 0 && (
+            <Button isDisabled={isPending} w={["full", "auto"]} onClick={() => router.back()}>
+              Back
+            </Button>
+          )}
           <Button
-            w={['full', 'auto']}
+            w={["full", "auto"]}
             isDisabled={!targetId || targetId === currentLocationId}
             isLoading={isPending /*&& !txError*/}
             onClick={onContinue}

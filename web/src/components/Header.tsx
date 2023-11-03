@@ -79,8 +79,7 @@ const Header = ({ back }: HeaderProps) => {
           </>
         )}
 
-        {/* {(!isMobile || (!account && isMobile)) && ( */}
-        {!account && (
+        {/* {!account && (
           <Button
             h="48px"
             sx={headerButtonStyles}
@@ -93,7 +92,8 @@ const Header = ({ back }: HeaderProps) => {
           >
             Create Burner
           </Button>
-        )}
+        )} */}
+
         {!isMobile && account && playerEntity && <ProfileButton />}
         {isMobile && <MobileMenu />}
       </HStack>

@@ -36,6 +36,7 @@ import { Footer } from "@/components/Footer";
 import { genAvatarFromId } from "@/components/avatar/avatars";
 import { Avatar } from "@/components/avatar/Avatar";
 import ShareButton from "@/components/ShareButton";
+import { playSound, Sounds } from "@/hooks/sound";
 
 export default function End() {
   const router = useRouter();
@@ -48,8 +49,11 @@ export default function End() {
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account, playerEntityStore } = useDojoContext();
-
   const { playerEntity } = playerEntityStore;
+
+  useEffect(() => {
+    playSound(Sounds.Death);
+  }, []);
 
   useEffect(() => {
     if (playerEntity) {
@@ -103,10 +107,7 @@ export default function End() {
                 {/* <StatsItem text="Xth place" icon={<Trophy />} />
                 <Divider borderColor="neon.600" /> */}
 
-                <StatsItem
-                  text={name}
-                  icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />}
-                />
+                <StatsItem text={name} icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />} />
 
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`${formatCash(playerEntity?.cash || 0)}`} icon={<DollarBag />} />
@@ -129,7 +130,7 @@ export default function End() {
 
             <HStack gap="10px" w={["full", "auto"]}>
               <Button variant="pixelated" w="full" onClick={() => setIsCreditOpen(true)}>
-                  <Roll />
+                <Roll />
               </Button>
 
               <ShareButton variant="pixelated" />

@@ -123,9 +123,7 @@ export default function PawnShop() {
         gap="20px"
         sx={{
           overflowY: "scroll",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
+        
         }}
         margin="auto"
       >
@@ -140,7 +138,7 @@ export default function PawnShop() {
           </VStack> */}
         </VStack>
 
-        <SimpleGrid columns={2} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
+        <SimpleGrid columns={[1,2]} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
           {availableShopItems &&
             availableShopItems.map((shopItem, index) => {
               return (

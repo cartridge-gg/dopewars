@@ -60,6 +60,10 @@ mod devtools {
                     .try_into()
                     .unwrap();
 
+                let rand_2: u8 = random::random((random::seed() + uuid_f), 0, 2)
+                    .try_into()
+                    .unwrap();
+
                 let player = Player {
                     game_id: uuid,
                     player_id: uuid_f.try_into().unwrap(),
@@ -69,7 +73,7 @@ mod devtools {
                     location_id: LocationEnum::Home,
                     next_location_id: LocationEnum::Home,
                     cash: rand * SCALING_FACTOR,
-                    health: rand_100,
+                    health: rand_2,
                     drug_count: 0,
                     turn: rand_100.into(),
                     max_turns: rand_100.into(),

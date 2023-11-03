@@ -81,7 +81,9 @@ fn market_variations(world: IWorldDispatcher, game_id: u32, player_id: ContractA
                             let mut market = get!(
                                 world, (game_id, *location_id, *drug_id).into(), Market
                             );
-                            scale_market(ref market, scaling_factor);
+                            // flat 2%
+                            scale_market(ref market, market_settings.liq_scaling_flat.into());
+                            //scale_market(ref market, scaling_factor);
 
                             if rand < market_settings.price_var_chance.into() {
                                 // increase price

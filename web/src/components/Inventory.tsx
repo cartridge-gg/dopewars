@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Bag } from "./icons";
+import { Ring } from "./icons/Ring";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
@@ -13,12 +14,19 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const { playerEntity } = playerEntityStore;
 
   return (
-    <VStack {...props} w="full" align="flex-start" pb="5px">
-      <HStack w="full" justify={["flex-end", "space-between"]}>
-        <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
-          Inventory
-        </Text>
-        <HStack color="yellow.400">
+    <VStack {...props} w="full" align="flex-start" pb="0">
+      {/* <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
+        Inventory
+      </Text> */}
+      <HStack w="full" justify={"space-between"}>
+        <HStack color="yellow.400" justify="center">
+          <Ring />
+          <Text>
+            {playerEntity?.items.length || 0}/{playerEntity?.maxItems}
+          </Text>
+        </HStack>
+
+        <HStack color="yellow.400" justify="center">
           <Bag />
           <Text>
             {playerEntity?.drugCount}/{playerEntity?.getTransport()}

@@ -110,15 +110,15 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
                 <HStack flex="1" justify="center" color={attackItem ? "yellow.400" : "neon.400"}>
                   <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Attack)}:</Text>
-                  <Text>{attackItem?.value || 0}</Text>
+                  <Text>{playerEntity.getAttack()}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={defenseItem ? "yellow.400" : "neon.400"}>
                   <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Defense)}:</Text>
-                  <Text> {defenseItem?.value || 0}</Text>
+                  <Text> {playerEntity.getDefense()}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={speedItem ? "yellow.400" : "neon.400"}>
                   <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Speed)}:</Text>
-                  <Text> {speedItem?.value || 0}</Text>
+                  <Text> {playerEntity.getSpeed()}</Text>
                 </HStack>
                 <HStack flex="1" justify="center" color={transportItem ? "yellow.400" : "neon.400"}>
                   <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Transport)}:</Text>

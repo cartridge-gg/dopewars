@@ -7,7 +7,7 @@ import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
@@ -19,7 +19,7 @@ import { getSentence } from "@/responses";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
-import { DollarBag, Heart, Siren } from "@/components/icons";
+import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
 type CombatLog = {
   text: string;
@@ -56,6 +56,8 @@ export default function Decision() {
   const { addEncounter } = usePlayerStore();
 
   const { playerEntity } = playerEntityStore;
+
+  const combatsListRef = useRef(null);
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -113,6 +115,13 @@ export default function Decision() {
     }
   }, [isPending]);
 
+  useEffect(() => {
+    if (!combatsListRef.current) return;
+    const lastEl = combatsListRef.current["lastElementChild"];
+    // @ts-ignore
+    lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
+  }, [combatLogs.length]);
+
   const addCombatLog = (log: CombatLog) => {
     setCombatLogs((logs) => [...logs, log]);
   };
@@ -129,7 +138,7 @@ export default function Decision() {
           addCombatLog({
             text: "You split without a second thought",
             color: "neon.400",
-            icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : undefined,
+            icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
           });
           setSentence(getSentence(playerEntity!.status, Action.Run));
           playSound(Sounds.Run);
@@ -148,6 +157,7 @@ export default function Decision() {
               playSound(Sounds.Uzi);
               break;
             default:
+              playSound(Sounds.Punch);
               break;
           }
           break;
@@ -201,8 +211,12 @@ export default function Decision() {
         case Outcome.Captured:
           playSound(Sounds.Ooo);
           consequenceEvent.dmgDealt > 0 &&
-            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
-          addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red" });
+            addCombatLog({
+              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+              color: "neon.400",
+              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : Fist,
+            });
+          addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red", icon: Heart });
           break;
       }
     } catch (e) {
@@ -238,50 +252,53 @@ export default function Decision() {
           w="full"
         />
 
-        <VStack flex={[0, 1]} w="full" minH="80%">
+        <VStack flex={[0, 1]} w="full" h="100%" position="relative">
           <Inventory />
 
-          <VStack w="full" alignItems="flex-start">
-            <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
-              Combat Log
-            </Text>
-            <Card w="full" alignItems="flex-start" px="16px" py="8px">
-              <Text color="red" mb="10px">
-               <Heart /> You lost {healthLoss} HP!
+          <VStack w="full" h="100%" overflowY="scroll">
+            <VStack w="full" alignItems="flex-start">
+              <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
+                Combat Log
               </Text>
+              <Card w="full" maxH="calc( 100vh - 400px)" overflowY="scroll" alignItems="flex-start" px="16px" py="8px">
+                <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
+                  <Heart /> You lost {healthLoss} HP!
+                </Text>
 
-              <VStack w="full" alignItems="flex-start">
-                {combatLogs &&
-                  combatLogs.map((i, key) => (
-                    <HStack key={`log-${key}`} color={i.color} _last={{marginBottom:0}}>
-                      {i.icon &&
-                        i.icon({
-                          boxSize: "26",
-                        })}
-                      <Text>{i.text}</Text>
-                    </HStack>
-                  ))}
-              </VStack>
-            </Card>
+                <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
+                  {combatLogs &&
+                    combatLogs.map((i, key) => (
+                      <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
+                        {i.icon &&
+                          i.icon({
+                            boxSize: "26",
+                          })}
+                        <Text>{i.text}</Text>
+                      </HStack>
+                    ))}
+                </VStack>
+              </Card>
+            </VStack>
           </VStack>
+          <Box minH="60px" />
 
-          <Footer position={["relative", "relative"]}>
-            {attackItem && (
-              <Button
-                w="full"
-                isDisabled={isRunning || isPaying}
-                isLoading={isFigthing}
-                onClick={() => {
-                  setIsFigthing(true);
-                  onDecision(Action.Fight);
-                }}
-              >
-                {getShopItem(attackItem.id, attackItem.level).icon({
+          <Footer w="full" position={["relative", "absolute"]}>
+            {/* {attackItem && ( */}
+            <Button
+              w="full"
+              isDisabled={isRunning || isPaying}
+              isLoading={isFigthing}
+              onClick={() => {
+                setIsFigthing(true);
+                onDecision(Action.Fight);
+              }}
+            >
+              {/* {getShopItem(attackItem.id, attackItem.level).icon({
                   boxSize: "26",
-                })}
-                Fight
-              </Button>
-            )}
+                })} */}
+              Fight
+            </Button>
+            {/* )} */}
 
             <Button
               w="full"
@@ -292,10 +309,10 @@ export default function Decision() {
                 onDecision(Action.Run);
               }}
             >
-              {speedItem &&
+              {/* {speedItem &&
                 getShopItem(speedItem.id, speedItem.level).icon({
                   boxSize: "26",
-                })}
+                })} */}
               Run
             </Button>
             <Button
@@ -342,57 +359,59 @@ const Encounter = ({
           {title}
         </Heading>
       </VStack>
-      <VStack w="full" flexDir={["row", "column"]} justifyContent="center">
+      <VStack
+        w="full"
+        flexDir={["row", "column"]}
+        justifyContent="center"
+        alignItems={["flex-start", "center"]}
+        position="relative"
+      >
         {!IsMobile() && sentence && (
           <>
-            <Box top="150px" position="absolute" w="280px" fontSize="14px" p="10px" color="neon.500" textAlign="center">
-              {sentence}
+            <Box top="0" position="absolute" w="280px">
+              <Card fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
+                {sentence}
+              </Card>
+              <Card marginLeft="160px" w="10px" fontSize="12px" p="8px"></Card>
+              <Card marginLeft="180px" w="10px" fontSize="12px" p="6px"></Card>
             </Box>
-            {/* <Card
-              top="260px"
-              marginLeft="80px"
-              position="absolute"
-              w="10px"
-              fontSize="12px"
-              p="8px"
-              textAlign="justify"
-            ></Card>
-            <Card
-              top="280px"
-              marginLeft="100px"
-              position="absolute"
-              w="10px"
-              fontSize="12px"
-              p="6px"
-              textAlign="justify"
-            ></Card> */}
           </>
         )}
 
-        <Image src={imageSrc} alt="adverse event" mt="10px" w={[150, 400]} h={[150, 400]} />
+        <Image src={imageSrc} alt="adverse event" mt={[0, "10px"]} w={[160, 400]} h={[160, 400]} />
 
-        <Card alignItems="center" justify="center" mt={["20px", "50px"]}>
-          <HStack px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-            <HStack>
-              <Siren /> <Text> LVL {encounter.level}</Text>
+        <VStack w="full">
+          <Card alignItems="center" w={["full","auto"]} justify="center" mt={["20px", "50px"]}>
+            <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
+              <HStack>
+                <Siren /> <Text> LVL {encounter.level}</Text>
+              </HStack>
+              {IsMobile() ? (
+                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+              ) : (
+                <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+              )}
+              <CashIndicator cash={encounter.payout} />
+              {IsMobile() ? (
+                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+              ) : (
+                <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+              )}
+              <HealthIndicator health={encounter.health} />
             </HStack>
-            {IsMobile() ? (
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-            ) : (
-              <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-            )}
-            <CashIndicator cash={encounter.payout} />
-            {IsMobile() ? (
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-            ) : (
-              <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-            )}
-            <HealthIndicator health={encounter.health} />
-          </HStack>
-        </Card>
-
-        <Text color="yellow.400">{demand}</Text>
+          </Card>
+          {!IsMobile() && (
+            <Text color="yellow.400" textAlign="center">
+              {demand}
+            </Text>
+          )}
+        </VStack>
       </VStack>
+      {IsMobile() && (
+        <Text color="yellow.400" textAlign="center">
+          {demand}
+        </Text>
+      )}
     </VStack>
   );
 };

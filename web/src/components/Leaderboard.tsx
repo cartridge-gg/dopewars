@@ -58,13 +58,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           variant="dotted"
           h="auto"
           maxH="calc(100% - 50px)"
-          overflowY="auto"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
+          overflowY= "scroll"
           ref={listRef}
         >
           {scores ? (
@@ -87,11 +81,11 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                       {index + 1}.
                     </Text>
                     <Box flexShrink={0} style={{ marginTop: "-8px" }}>
-                      {score.dead ? (
+                      {/* {score.dead ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
-                      ) : (
-                        <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
-                      )}
+                      ) : ( */}
+                      <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                      {/* )} */}
                     </Box>
 
                     <HStack>
@@ -105,6 +99,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                         {displayName}
                       </Text>
                     </HStack>
+                  
                     <Text
                       backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
                       backgroundSize="10px 10px"

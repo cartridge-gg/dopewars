@@ -15,7 +15,11 @@ export const styles = {
       color: "neon.200",
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
+
     },
+    "&::-webkit-scrollbar": {
+      display: "none",
+    }
   },
 };
 

@@ -1,4 +1,4 @@
-import { Player, Drug as DrugType, usePlayerEntityQuery, EntityEdge, Item as ItemType, Encounter } from "@/generated/graphql";
+import { Player, Drug as DrugType, usePlayerEntityQuery, World__EntityEdge, Item as ItemType, Encounter } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
@@ -123,15 +123,41 @@ export class PlayerEntity {
     return this;
   }
 
+  getAttack(): number {
+    const item = this.items.find((i) => i.id === ItemTextEnum.Attack);
+    if (item) {
+      return this.attack + item.value;
+    }
+    return this.attack;
+  }
+
+  getDefense(): number {
+    const item = this.items.find((i) => i.id === ItemTextEnum.Defense);
+    if (item) {
+      return this.defense + item.value;
+    }
+    return this.defense;
+  }
+
   getTransport(): number {
-    const transportItem = this.items.find((i) => i.id === ItemTextEnum.Transport);
-    if (transportItem) {
-      return this.transport + transportItem.value;
+    const item = this.items.find((i) => i.id === ItemTextEnum.Transport);
+    if (item) {
+      return this.transport + item.value;
     }
     return this.transport;
   }
 
-  static create(edges: EntityEdge[]): PlayerEntity | undefined {
+  getSpeed(): number {
+    const item = this.items.find((i) => i.id === ItemTextEnum.Speed);
+    if (item) {
+      return this.speed + item.value;
+    }
+    return this.speed;
+  }
+
+
+
+  static create(edges: World__EntityEdge[]): PlayerEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
     // player model
     const playerModel = edges.find((edge) => {
@@ -198,7 +224,7 @@ export const usePlayerEntity = ({ gameId, address }: { gameId?: string; address?
   );
 
   const player = useMemo(() => {
-    return PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
+    return PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
   }, [data]);
 
   return {

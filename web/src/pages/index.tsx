@@ -30,8 +30,10 @@ import { play } from "@/hooks/media";
 export default function Home() {
   const router = useRouter();
 
-  const { account } = useDojoContext();
-  // const { scores } = useGlobalScores();
+  const {
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
   const { resetAll } = usePlayerStore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,14 +45,22 @@ export default function Home() {
   //   [],
   // );
 
-  const disableAutoPlay =
-    process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
+  const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
-  const onHustle = () => {
-    if (!disableAutoPlay) { play(); }
+  const onHustle = async () => {
+    if (!disableAutoPlay) {
+      play();
+    }
+
+    setIsSubmitting(true);
+    if (!account) {
+      // create burner account
+      await createBurner();
+    }
+
     router.push(`/create/new`);
-  }
+  };
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel}>
@@ -63,24 +73,16 @@ export default function Home() {
                   <Alert />
                   <Text align="center">Under Construction</Text>
                 </HStack>
-                <Text align="center">
-                  Get ready hustlers... Season II starts in September
-                </Text>
+                <Text align="center">Get ready hustlers... Season II starts in September</Text>
               </VStack>
             ) : (
               <>
                 <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
                   Tutorial
                 </Button>
-                <Button
-                  flex="1"
-                  isDisabled={!account}
-                  onClick={()=> onHustle()}
-                >
+                <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
                   Hustle
                 </Button>
-
-              
               </>
             )}
           </HStack>
@@ -94,9 +96,6 @@ export default function Home() {
               gap="20px"
               sx={{
                 overflowY: "scroll",
-                "&::-webkit-scrollbar": {
-                  display: "none",
-                },
               }}
             >
               <Leaderboard />
@@ -105,14 +104,12 @@ export default function Home() {
         )}
       </VStack>
 
-      <Tutorial
-        isOpen={isTutorialOpen}
-        close={() => setIsTutorialOpen(false)}
-      />
+      <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
     </Layout>
   );
 }
 
+// unused
 const Game = ({
   name,
   startTime,

@@ -46,6 +46,7 @@ struct MarketSettings {
     market_event_max: usize,
     liq_scaling_initial_rate: usize,
     liq_scaling_fading_rate: usize,
+    liq_scaling_flat: usize,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -127,17 +128,16 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         let mut player_settings = PlayerSettings {
             health: 100_u8,
-            cash: 1000_u128 * SCALING_FACTOR,
+            cash: 1420_u128 * SCALING_FACTOR,
             wanted: 39,
-            attack: 0,
-            defense: 0,
-            transport: 100,
-            speed: 0
+            attack: 1,
+            defense: 1,
+            transport: 70,
+            speed: 1
         };
 
         if game_mode == GameMode::Test {
             player_settings.wanted = 100;
-            player_settings.cash = 1500_u128 * SCALING_FACTOR;
         }
 
         player_settings
@@ -197,6 +197,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             market_event_max: 80, //   up 80%  | down 40%
             liq_scaling_initial_rate: 150, // 0.015
             liq_scaling_fading_rate: 360,
+            liq_scaling_flat: 10200 // 2%
         };
 
         if game_mode == GameMode::Test {
@@ -230,38 +231,38 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
         let item_settings = match item_id {
             ItemEnum::Attack => {
                 if level == 1 {
-                    ItemSettings { name: 'Knife', cost: 450 * SCALING_FACTOR, value: 10 }
+                    ItemSettings { name: 'Knife', cost: 450 * SCALING_FACTOR, value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Glock', cost: 9900 * SCALING_FACTOR, value: 25 }
+                    ItemSettings { name: 'Glock', cost: 9900 * SCALING_FACTOR, value: 24 }
                 } else {
-                    ItemSettings { name: 'Uzi', cost: 89000 * SCALING_FACTOR, value: 50 }
+                    ItemSettings { name: 'Uzi', cost: 89000 * SCALING_FACTOR, value: 49 }
                 }
             },
             ItemEnum::Defense => {
                 if level == 1 {
-                    ItemSettings { name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 25 }
+                    ItemSettings { name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 24 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Leather Jacket', cost: 6900 * SCALING_FACTOR, value: 40 }
+                    ItemSettings { name: 'Leather Jacket', cost: 6900 * SCALING_FACTOR, value: 39 }
                 } else {
-                    ItemSettings { name: 'Kevlar', cost: 49000 * SCALING_FACTOR, value: 60 }
+                    ItemSettings { name: 'Kevlar', cost: 49000 * SCALING_FACTOR, value: 59 }
                 }
             },
             ItemEnum::Transport => {
                 if level == 1 {
-                    ItemSettings { name: 'Fanny pack', cost: 500 * SCALING_FACTOR, value: 20 }
+                    ItemSettings { name: 'Fanny pack', cost: 500 * SCALING_FACTOR, value: 30 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Backpack', cost: 12000 * SCALING_FACTOR, value: 50 }
+                    ItemSettings { name: 'Backpack', cost: 12000 * SCALING_FACTOR, value: 60 }
                 } else {
-                    ItemSettings { name: 'Duffle Bag', cost: 85000 * SCALING_FACTOR, value: 100 }
+                    ItemSettings { name: 'Duffle Bag', cost: 85000 * SCALING_FACTOR, value: 99 }
                 }
             },
             ItemEnum::Speed => {
                 if level == 1 {
-                    ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 10 }
+                    ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Skateboard', cost: 8000 * SCALING_FACTOR, value: 25 }
+                    ItemSettings { name: 'Skateboard', cost: 8000 * SCALING_FACTOR, value: 24 }
                 } else {
-                    ItemSettings { name: 'Bicycle', cost: 42000 * SCALING_FACTOR, value: 40 }
+                    ItemSettings { name: 'Bicycle', cost: 42000 * SCALING_FACTOR, value: 39 }
                 }
             },
         };
@@ -298,7 +299,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
         match game_mode {
-            GameMode::Test => { pricing_clicksave(drug_id) },
+            GameMode::Test => { pricing_notme(drug_id) },
             GameMode::Unlimited => { pricing_notme(drug_id) },
         }
     }

@@ -52,7 +52,7 @@ export default function Location() {
 
       setIsLastDay(playerEntity.maxTurns > 0 && playerEntity.turn >= playerEntity.maxTurns);
     }
-  }, [locationId, playerEntity,playerEntity?.locationId, router, gameId]);
+  }, [locationId, playerEntity, playerEntity?.locationId, router, gameId]);
 
   if (!playerEntity || !locationEntity) {
     return <></>;
@@ -71,18 +71,7 @@ export default function Location() {
       }}
     >
       <Inventory />
-      <VStack
-        w="full"
-        pt={["0px", "20px"]}
-        align="flex-start"
-        gap="12px"
-        sx={{
-          overflowY: "scroll",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
+      <VStack w="full" pt={["0px", "20px"]} align="flex-start" gap="12px" overflowY="scroll">
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>

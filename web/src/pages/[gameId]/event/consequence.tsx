@@ -1,8 +1,7 @@
-import Image from "next/image";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { getLocationById, getOutcomeInfo } from "@/dojo/helpers";
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Image } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -48,22 +47,25 @@ export default function Consequence() {
   return (
     <>
       <Layout isSinglePanel>
-        <VStack>
-          <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-            {outcome.title}
-          </Text>
-          <Heading fontSize={["40px", "48px"]} fontWeight="400" textAlign="center">
-            {outcome.name}
-          </Heading>
-        </VStack>
-        <Image alt={outcome.name} src={outcome.imageSrc} width={500} height={500} />
-        <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-          <VStack textAlign="center">
-            <Text>{response}</Text>
-            <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
-            <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
+        <VStack h="full" overflowY="scroll">
+          <VStack>
+            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+              {outcome.title}
+            </Text>
+            <Heading fontSize={["40px", "48px"]} fontWeight="400" textAlign="center">
+              {outcome.name}
+            </Heading>
           </VStack>
-          <Footer position={["relative", "relative"]}>
+          <Image alt={outcome.name} src={outcome.imageSrc} maxH="50vh" height="500px" />
+          <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
+            <VStack textAlign="center">
+              <Text>{response}</Text>
+              <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
+              <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
+            </VStack>
+          </VStack>
+          <Box minH="60px" />
+          <Footer position={["relative", "absolute"]}>
             {!isDead ? (
               <Button
                 w={["full", "auto"]}

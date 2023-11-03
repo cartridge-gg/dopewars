@@ -14,6 +14,7 @@ export type Score = {
   avatarId: number;
   cash: number;
   dead: boolean;
+  health: number;
 };
 
 export class GlobalScores {
@@ -37,6 +38,7 @@ export class GlobalScores {
           Number(BigInt(edge.node?.cash) / BigInt(SCALING_FACTOR)),
         ),
         dead: Number(edge.node?.health) === 0,
+        health: Number(edge.node?.health),
       };
     });
   }

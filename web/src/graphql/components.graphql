@@ -1,25 +1,25 @@
-query AvailableGames {
-  gameModels(first: 10) {
-    total_count
-    edges {
-      node {
-        creator
-        num_players
-        max_players
-        max_turns
-        start_time
-      }
-      cursor
-    }
-  }
-}
+# query AvailableGames {
+#   gameModels(first: 10) {
+#     total_count
+#     edges {
+#       node {
+#         creator
+#         num_players
+#         max_players
+#         max_turns
+#         start_time
+#       }
+#       cursor
+#     }
+#   }
+# }
 
 query GlobalScores($limit: Int, $cursor: Cursor) {
   playerModels(
+    where: { health: 0 }
+    order: { direction: DESC, field: CASH }
     first: $limit
     after: $cursor
-    # where: { turns_remaining: 0 }
-    order: { direction: DESC, field: CASH }
   ) {
     total_count
     edges {

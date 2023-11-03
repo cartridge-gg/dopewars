@@ -28,7 +28,7 @@ export type Scalars = {
 export type Drug = {
   __typename?: 'Drug';
   drug_id?: Maybe<Scalars['Enum']>;
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   quantity?: Maybe<Scalars['usize']>;
@@ -86,7 +86,7 @@ export type DrugWhereInput = {
 export type Encounter = {
   __typename?: 'Encounter';
   encounter_id?: Maybe<Scalars['Enum']>;
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
   level?: Maybe<Scalars['u8']>;
@@ -159,54 +159,10 @@ export type EncounterWhereInput = {
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
 };
 
-export type Entity = {
-  __typename?: 'Entity';
-  created_at?: Maybe<Scalars['DateTime']>;
-  event_id?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
-  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
-  model_names?: Maybe<Scalars['String']>;
-  models?: Maybe<Array<Maybe<ModelUnion>>>;
-  updated_at?: Maybe<Scalars['DateTime']>;
-};
-
-export type EntityConnection = {
-  __typename?: 'EntityConnection';
-  edges?: Maybe<Array<Maybe<EntityEdge>>>;
-  total_count: Scalars['Int'];
-};
-
-export type EntityEdge = {
-  __typename?: 'EntityEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Entity>;
-};
-
-export type Event = {
-  __typename?: 'Event';
-  created_at?: Maybe<Scalars['DateTime']>;
-  data?: Maybe<Array<Maybe<Scalars['String']>>>;
-  id?: Maybe<Scalars['ID']>;
-  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
-  transaction_hash?: Maybe<Scalars['String']>;
-};
-
-export type EventConnection = {
-  __typename?: 'EventConnection';
-  edges?: Maybe<Array<Maybe<EventEdge>>>;
-  total_count: Scalars['Int'];
-};
-
-export type EventEdge = {
-  __typename?: 'EventEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Event>;
-};
-
 export type Game = {
   __typename?: 'Game';
   creator?: Maybe<Scalars['ContractAddress']>;
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   is_finished?: Maybe<Scalars['bool']>;
@@ -299,7 +255,7 @@ export type GameWhereInput = {
 
 export type Item = {
   __typename?: 'Item';
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   item_id?: Maybe<Scalars['Enum']>;
   level?: Maybe<Scalars['u8']>;
@@ -377,7 +333,7 @@ export type Market = {
   __typename?: 'Market';
   cash?: Maybe<Scalars['u128']>;
   drug_id?: Maybe<Scalars['Enum']>;
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   location_id?: Maybe<Scalars['Enum']>;
   quantity?: Maybe<Scalars['usize']>;
@@ -434,45 +390,6 @@ export type MarketWhereInput = {
   quantityNEQ?: InputMaybe<Scalars['usize']>;
 };
 
-export type Metadata = {
-  __typename?: 'Metadata';
-  id?: Maybe<Scalars['ID']>;
-  uri?: Maybe<Scalars['String']>;
-};
-
-export type MetadataConnection = {
-  __typename?: 'MetadataConnection';
-  edges?: Maybe<Array<Maybe<MetadataEdge>>>;
-  total_count: Scalars['Int'];
-};
-
-export type MetadataEdge = {
-  __typename?: 'MetadataEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Metadata>;
-};
-
-export type Model = {
-  __typename?: 'Model';
-  class_hash?: Maybe<Scalars['felt252']>;
-  created_at?: Maybe<Scalars['DateTime']>;
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  transaction_hash?: Maybe<Scalars['felt252']>;
-};
-
-export type ModelConnection = {
-  __typename?: 'ModelConnection';
-  edges?: Maybe<Array<Maybe<ModelEdge>>>;
-  total_count: Scalars['Int'];
-};
-
-export type ModelEdge = {
-  __typename?: 'ModelEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Model>;
-};
-
 export type ModelUnion = Drug | Encounter | Game | Item | Market | Player;
 
 export enum OrderDirection {
@@ -487,7 +404,7 @@ export type Player = {
   cash?: Maybe<Scalars['u128']>;
   defense?: Maybe<Scalars['usize']>;
   drug_count?: Maybe<Scalars['usize']>;
-  entity?: Maybe<Entity>;
+  entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
   location_id?: Maybe<Scalars['Enum']>;
@@ -652,27 +569,124 @@ export type PlayerWhereInput = {
   wantedNEQ?: InputMaybe<Scalars['u8']>;
 };
 
-export type Query = {
-  __typename?: 'Query';
+export type World__Content = {
+  __typename?: 'World__Content';
+  cover_uri?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  icon_uri?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  socials?: Maybe<Array<Maybe<World__Social>>>;
+  website?: Maybe<Scalars['String']>;
+};
+
+export type World__Entity = {
+  __typename?: 'World__Entity';
+  created_at?: Maybe<Scalars['DateTime']>;
+  event_id?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
+  model_names?: Maybe<Scalars['String']>;
+  models?: Maybe<Array<Maybe<ModelUnion>>>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+};
+
+export type World__EntityConnection = {
+  __typename?: 'World__EntityConnection';
+  edges?: Maybe<Array<Maybe<World__EntityEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type World__EntityEdge = {
+  __typename?: 'World__EntityEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<World__Entity>;
+};
+
+export type World__Event = {
+  __typename?: 'World__Event';
+  created_at?: Maybe<Scalars['DateTime']>;
+  data?: Maybe<Array<Maybe<Scalars['String']>>>;
+  id?: Maybe<Scalars['ID']>;
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
+  transaction_hash?: Maybe<Scalars['String']>;
+};
+
+export type World__EventConnection = {
+  __typename?: 'World__EventConnection';
+  edges?: Maybe<Array<Maybe<World__EventEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type World__EventEdge = {
+  __typename?: 'World__EventEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<World__Event>;
+};
+
+export type World__Metadata = {
+  __typename?: 'World__Metadata';
+  content?: Maybe<World__Content>;
+  cover_img?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  icon_img?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  uri?: Maybe<Scalars['String']>;
+};
+
+export type World__MetadataConnection = {
+  __typename?: 'World__MetadataConnection';
+  edges?: Maybe<Array<Maybe<World__MetadataEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type World__MetadataEdge = {
+  __typename?: 'World__MetadataEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<World__Metadata>;
+};
+
+export type World__Model = {
+  __typename?: 'World__Model';
+  class_hash?: Maybe<Scalars['felt252']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  transaction_hash?: Maybe<Scalars['felt252']>;
+};
+
+export type World__ModelConnection = {
+  __typename?: 'World__ModelConnection';
+  edges?: Maybe<Array<Maybe<World__ModelEdge>>>;
+  total_count: Scalars['Int'];
+};
+
+export type World__ModelEdge = {
+  __typename?: 'World__ModelEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<World__Model>;
+};
+
+export type World__Query = {
+  __typename?: 'World__Query';
   drugModels?: Maybe<DrugConnection>;
   encounterModels?: Maybe<EncounterConnection>;
-  entities?: Maybe<EntityConnection>;
-  entity: Entity;
-  events?: Maybe<EventConnection>;
+  entities?: Maybe<World__EntityConnection>;
+  entity: World__Entity;
+  events?: Maybe<World__EventConnection>;
   gameModels?: Maybe<GameConnection>;
   itemModels?: Maybe<ItemConnection>;
   marketModels?: Maybe<MarketConnection>;
-  metadata: Metadata;
-  metadatas?: Maybe<MetadataConnection>;
-  model: Model;
-  models?: Maybe<ModelConnection>;
+  metadatas?: Maybe<World__MetadataConnection>;
+  model: World__Model;
+  models?: Maybe<World__ModelConnection>;
   playerModels?: Maybe<PlayerConnection>;
-  transaction: Transaction;
-  transactions?: Maybe<TransactionConnection>;
+  transaction: World__Transaction;
+  transactions?: Maybe<World__TransactionConnection>;
 };
 
 
-export type QueryDrugModelsArgs = {
+export type World__QueryDrugModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -684,7 +698,7 @@ export type QueryDrugModelsArgs = {
 };
 
 
-export type QueryEncounterModelsArgs = {
+export type World__QueryEncounterModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -696,7 +710,7 @@ export type QueryEncounterModelsArgs = {
 };
 
 
-export type QueryEntitiesArgs = {
+export type World__QueryEntitiesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -707,12 +721,12 @@ export type QueryEntitiesArgs = {
 };
 
 
-export type QueryEntityArgs = {
+export type World__QueryEntityArgs = {
   id: Scalars['ID'];
 };
 
 
-export type QueryEventsArgs = {
+export type World__QueryEventsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -723,7 +737,7 @@ export type QueryEventsArgs = {
 };
 
 
-export type QueryGameModelsArgs = {
+export type World__QueryGameModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -735,7 +749,7 @@ export type QueryGameModelsArgs = {
 };
 
 
-export type QueryItemModelsArgs = {
+export type World__QueryItemModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -747,7 +761,7 @@ export type QueryItemModelsArgs = {
 };
 
 
-export type QueryMarketModelsArgs = {
+export type World__QueryMarketModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -759,12 +773,7 @@ export type QueryMarketModelsArgs = {
 };
 
 
-export type QueryMetadataArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryMetadatasArgs = {
+export type World__QueryMetadatasArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -774,12 +783,12 @@ export type QueryMetadatasArgs = {
 };
 
 
-export type QueryModelArgs = {
+export type World__QueryModelArgs = {
   id: Scalars['ID'];
 };
 
 
-export type QueryModelsArgs = {
+export type World__QueryModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -789,7 +798,7 @@ export type QueryModelsArgs = {
 };
 
 
-export type QueryPlayerModelsArgs = {
+export type World__QueryPlayerModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -801,12 +810,12 @@ export type QueryPlayerModelsArgs = {
 };
 
 
-export type QueryTransactionArgs = {
+export type World__QueryTransactionArgs = {
   id: Scalars['ID'];
 };
 
 
-export type QueryTransactionsArgs = {
+export type World__QueryTransactionsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -815,24 +824,30 @@ export type QueryTransactionsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
 };
 
-export type Subscription = {
-  __typename?: 'Subscription';
-  entityUpdated: Entity;
-  modelRegistered: Model;
+export type World__Social = {
+  __typename?: 'World__Social';
+  name?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+};
+
+export type World__Subscription = {
+  __typename?: 'World__Subscription';
+  entityUpdated: World__Entity;
+  modelRegistered: World__Model;
 };
 
 
-export type SubscriptionEntityUpdatedArgs = {
+export type World__SubscriptionEntityUpdatedArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
 
-export type SubscriptionModelRegisteredArgs = {
+export type World__SubscriptionModelRegisteredArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-export type Transaction = {
-  __typename?: 'Transaction';
+export type World__Transaction = {
+  __typename?: 'World__Transaction';
   calldata?: Maybe<Array<Maybe<Scalars['felt252']>>>;
   created_at?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
@@ -843,22 +858,17 @@ export type Transaction = {
   transaction_hash?: Maybe<Scalars['felt252']>;
 };
 
-export type TransactionConnection = {
-  __typename?: 'TransactionConnection';
-  edges?: Maybe<Array<Maybe<TransactionEdge>>>;
+export type World__TransactionConnection = {
+  __typename?: 'World__TransactionConnection';
+  edges?: Maybe<Array<Maybe<World__TransactionEdge>>>;
   total_count: Scalars['Int'];
 };
 
-export type TransactionEdge = {
-  __typename?: 'TransactionEdge';
+export type World__TransactionEdge = {
+  __typename?: 'World__TransactionEdge';
   cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Transaction>;
+  node?: Maybe<World__Transaction>;
 };
-
-export type AvailableGamesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AvailableGamesQuery = { __typename?: 'Query', gameModels?: { __typename?: 'GameConnection', total_count: number, edges?: Array<{ __typename?: 'GameEdge', cursor?: any | null, node?: { __typename?: 'Game', creator?: any | null, num_players?: any | null, max_players?: any | null, max_turns?: any | null, start_time?: any | null } | null } | null> | null } | null };
 
 export type GlobalScoresQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -866,14 +876,14 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, avatar_id?: any | null, cash?: any | null, health?: any | null, turn?: any | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'World__Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, avatar_id?: any | null, cash?: any | null, health?: any | null, turn?: any | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
 }>;
 
 
-export type MarketPricesQuery = { __typename?: 'Query', marketModels?: { __typename?: 'MarketConnection', edges?: Array<{ __typename?: 'MarketEdge', node?: { __typename?: 'Market', drug_id?: any | null, location_id?: any | null, quantity?: any | null, cash?: any | null } | null } | null> | null } | null };
+export type MarketPricesQuery = { __typename?: 'World__Query', marketModels?: { __typename?: 'MarketConnection', edges?: Array<{ __typename?: 'MarketEdge', node?: { __typename?: 'Market', drug_id?: any | null, location_id?: any | null, quantity?: any | null, cash?: any | null } | null } | null> | null } | null };
 
 export type PlayerPropsFragment = { __typename?: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null };
 
@@ -883,21 +893,21 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', total_count: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } | null } | null> | null } | null };
 
 export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntitySubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null } | null> | null } };
 
 export type PlayerEntityRelatedDataSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'Subscription', entityUpdated: { __typename?: 'Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player' } | null> | null } };
+export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, model_names?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Market' } | { __typename: 'Player' } | null> | null } };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -905,7 +915,7 @@ export type LocationEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type LocationEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', total_count: number, edges?: Array<{ __typename?: 'EntityEdge', cursor?: any | null, node?: { __typename?: 'Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
+export type LocationEntitiesQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', total_count: number, edges?: Array<{ __typename?: 'World__EntityEdge', cursor?: any | null, node?: { __typename?: 'World__Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
 
 export const PlayerPropsFragmentDoc = `
     fragment PlayerProps on Player {
@@ -926,63 +936,13 @@ export const PlayerPropsFragmentDoc = `
   wanted
 }
     `;
-export const AvailableGamesDocument = `
-    query AvailableGames {
-  gameModels(first: 10) {
-    total_count
-    edges {
-      node {
-        creator
-        num_players
-        max_players
-        max_turns
-        start_time
-      }
-      cursor
-    }
-  }
-}
-    `;
-export const useAvailableGamesQuery = <
-      TData = AvailableGamesQuery,
-      TError = unknown
-    >(
-      variables?: AvailableGamesQueryVariables,
-      options?: UseQueryOptions<AvailableGamesQuery, TError, TData>
-    ) =>
-    useQuery<AvailableGamesQuery, TError, TData>(
-      variables === undefined ? ['AvailableGames'] : ['AvailableGames', variables],
-      useFetchData<AvailableGamesQuery, AvailableGamesQueryVariables>(AvailableGamesDocument).bind(null, variables),
-      options
-    );
-
-useAvailableGamesQuery.getKey = (variables?: AvailableGamesQueryVariables) => variables === undefined ? ['AvailableGames'] : ['AvailableGames', variables];
-;
-
-export const useInfiniteAvailableGamesQuery = <
-      TData = AvailableGamesQuery,
-      TError = unknown
-    >(
-      variables?: AvailableGamesQueryVariables,
-      options?: UseInfiniteQueryOptions<AvailableGamesQuery, TError, TData>
-    ) =>{
-    const query = useFetchData<AvailableGamesQuery, AvailableGamesQueryVariables>(AvailableGamesDocument)
-    return useInfiniteQuery<AvailableGamesQuery, TError, TData>(
-      variables === undefined ? ['AvailableGames.infinite'] : ['AvailableGames.infinite', variables],
-      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
-      options
-    )};
-
-
-useInfiniteAvailableGamesQuery.getKey = (variables?: AvailableGamesQueryVariables) => variables === undefined ? ['AvailableGames.infinite'] : ['AvailableGames.infinite', variables];
-;
-
 export const GlobalScoresDocument = `
     query GlobalScores($limit: Int, $cursor: Cursor) {
   playerModels(
+    where: {health: 0}
+    order: {direction: DESC, field: CASH}
     first: $limit
     after: $cursor
-    order: {direction: DESC, field: CASH}
   ) {
     total_count
     edges {

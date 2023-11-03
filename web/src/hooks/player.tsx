@@ -5,7 +5,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import {
-  EntityEdge,
+  World__EntityEdge,
   Player,
   Drug,
   Item,
@@ -13,7 +13,7 @@ import {
   PlayerEntityRelatedDataSubscriptionDocument,
   PlayerEntityQuery,
   PlayerEntitySubscriptionDocument,
-  Subscription,
+  World__Subscription,
   Encounter,
 } from "@/generated/graphql";
 import { SCALING_FACTOR } from "@/dojo/constants";
@@ -116,15 +116,15 @@ const executeQuery = async (gameId: string, playerId: string) => {
     playerId: playerId,
   })) as PlayerEntityQuery;
 
-  const edges = data!.entities!.edges as EntityEdge[];
+  const edges = data!.entities!.edges as World__EntityEdge[];
 
   if (edges && edges[0] && edges[0].node) {
-    const player = PlayerEntity.create(data?.entities?.edges as EntityEdge[]);
+    const player = PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
     usePlayerEntityStore.setState({ playerEntity: player });
   }
 };
 
-const onPlayerEntityData = ({ data }: { data: Subscription }) => {
+const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   // update player
@@ -136,7 +136,7 @@ const onPlayerEntityData = ({ data }: { data: Subscription }) => {
   console.log("updated : Player");
 };
 
-const onPlayerEntityRelatedData = ({ data }: { data: Subscription }) => {
+const onPlayerEntityRelatedData = ({ data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {
