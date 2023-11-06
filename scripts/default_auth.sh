@@ -2,11 +2,10 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-if [ $# -ge 1 ] && [ $1 == "local" ]
-then
-    export RPC_URL="http://localhost:5050";
+if [ $# -ge 1 ] && [ $1 == "local" ]; then
+    export RPC_URL="http://localhost:5050"
 else
-    export RPC_URL="https://api.cartridge.gg/x/ryo/katana";
+    export RPC_URL="https://api.cartridge.gg/x/ryo/katana"
 fi
 
 export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
@@ -18,14 +17,14 @@ export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | se
 export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
 
 echo "---------------------------------------------------------------------------"
-echo rpc : $RPC_URL 
-echo world : $WORLD_ADDRESS 
+echo rpc : $RPC_URL
+echo world : $WORLD_ADDRESS
 echo " "
 echo lobby : $LOBBY_ADDRESS
 echo travel: $TRAVEL_ADDRESS
 echo decide: $DECIDE_ADDRESS
 echo trade : $TRADE_ADDRESS
-echo shop  : $SHOP_ADDRESS
+echo shop : $SHOP_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations

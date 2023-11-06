@@ -2,6 +2,7 @@ use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::location::LocationEnum;
 
+
 #[starknet::interface]
 trait ITravel<TContractState> {
     fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
@@ -19,14 +20,14 @@ mod travel {
     use rollyourown::models::market::{Market, MarketTrait};
     use rollyourown::models::encounter::{Encounter, EncounterType};
 
-
-    use rollyourown::utils::random;
     use rollyourown::utils::market;
     use rollyourown::utils::settings::{
         RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl, EncounterSettings,
         EncounterSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+    use rollyourown::utils::math::{MathTrait, MathImplU8};
+    use rollyourown::utils::random::{Random, RandomImpl};
 
     use super::ITravel;
     use super::on_turn_end;
@@ -99,15 +100,16 @@ mod travel {
             assert(next_location_id != LocationEnum::Home, 'cannot travel to Home');
             assert(player.location_id != next_location_id, 'already at location');
 
+            let mut randomizer = RandomImpl::new(world);
+
             // save next_location_id
             player.next_location_id = next_location_id;
 
             // initial travel when game starts has no risk or events
             if player.turn > 0 {
-                let mut seed = random::seed();
                 let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
-                let encounter_option = risk_settings.travel(world, seed, @player);
+                let encounter_option = risk_settings.travel(world, ref randomizer, @player);
 
                 match encounter_option {
                     Option::Some(encounter) => {
@@ -118,16 +120,13 @@ mod travel {
                         };
 
                         let encounter_settings = EncounterSettingsImpl::get(
-                           game.game_mode, @player, encounter.level
+                            game.game_mode, @player, encounter.level
                         );
 
-                        //player lose some HP
-                        let mut health_loss = if (encounter_settings.dmg / 2) >= player.health {
-                            player.health - 1
-                        } else {
-                            encounter_settings.dmg / 2
-                        };
-                        player.health -= health_loss;
+                        // player lose some HP, but can't die
+                        let new_health = player.health.sub_capped(encounter_settings.dmg / 2, 1);
+                        let health_loss = player.health - new_health;
+                        player.health = new_health;
 
                         set!(world, (player));
                         emit!(
@@ -142,9 +141,9 @@ mod travel {
                     Option::None => {}
                 }
 
-                on_turn_end(world, @game, ref player);
+                on_turn_end(world, ref randomizer, @game, ref player);
             } else {
-                on_turn_end(world, @game, ref player);
+                on_turn_end(world, ref randomizer, @game, ref player);
             }
 
             set!(world, (player));
@@ -161,9 +160,15 @@ use rollyourown::utils::settings::{ShopSettings, ShopSettingsImpl};
 use rollyourown::utils::shop::ShopImpl;
 use rollyourown::utils::risk::{RiskTrait, RiskImpl};
 use rollyourown::utils::market;
+use rollyourown::utils::math::{MathTrait, MathImpl, MathImplU8};
+use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
+use rollyourown::utils::random::{Random};
+
 use super::travel::travel::MarketEvent;
 
-fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool {
+fn on_turn_end(
+    world: IWorldDispatcher, ref randomizer: Random, game: @Game, ref player: Player
+) -> bool {
     let shop_settings = ShopSettingsImpl::get(*game.game_mode);
 
     // check if can access pawnshop
@@ -174,13 +179,11 @@ fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool
         } else {
             // force pawnshop
             player.status = PlayerStatus::AtPawnshop;
-
-            // emit raw event
-            let mut keys = array![selector!("AtPawnshop")];
-            let mut values: Array<felt252> = array![
-                (*game.game_id).into(), player.player_id.into()
-            ];
-            world.emit(keys, values.span());
+            // emit raw event AtPawnshop
+            world
+                .emit_raw(
+                    selector!("AtPawnshop"), array![(*game.game_id).into(), player.player_id.into()]
+                );
 
             return false;
         };
@@ -189,35 +192,33 @@ fn on_turn_end(world: IWorldDispatcher, game: @Game, ref player: Player) -> bool
     // update location
     player.location_id = player.next_location_id;
 
-    //  emit!(
-    //             world,
-    //             Traveled {
-    //                 game_id,
-    //                 player_id,
-    //                 from_location: player.location_id,
-    //                 to_location: next_location_id
-    //             }
-    //         );
-
     let risk_settings = RiskSettingsImpl::get(*game.game_mode, @player);
 
     // market price variations
-    market::market_variations(world, *game.game_id, player.player_id);
+    market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
 
     // update wanted
     risk_settings.update_wanted(ref player);
 
-    // update HP if not dead
+    //update HP if not dead
     if player.health > 0 {
-        if player.health + risk_settings.health_increase_by_turn >= 100 {
-            player.health = 100;
-        } else {
-            player.health += risk_settings.health_increase_by_turn;
-        }
+        player.health = player.health.add_capped(risk_settings.health_increase_by_turn, 100);
     }
 
     // update turn
     player.turn += 1;
+
+    // emit raw event Traveled
+    world
+        .emit_raw(
+            selector!("Traveled"),
+            array![
+                (*game.game_id).into(),
+                player.player_id.into(),
+                player.location_id.into(),
+                player.next_location_id.into()
+            ]
+        );
 
     true
 }

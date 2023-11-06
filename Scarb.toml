@@ -17,6 +17,7 @@ dojo = {git = "https://github.com/dojoengine/dojo.git"}
 [[target.dojo]]
 
 [scripts]
+katana = "katana --disable-fee --invoke-max-steps 999999999"
 build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
 auth = "./scripts/default_auth.sh local"

@@ -7,7 +7,6 @@ trait ILobby<TContractState> {
         self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
     ) -> (u32, ContractAddress);
 
-    //fn join_game(self: @TContractState,  game_id: u32) -> ContractAddress;
     fn set_name(self: @TContractState, game_id: u32, player_name: felt252);
 }
 
@@ -25,15 +24,15 @@ mod lobby {
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
-    use rollyourown::utils::random;
+
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
         ShopSettingsImpl
     };
     use rollyourown::utils::market;
+    use rollyourown::utils::random::{Random, RandomImpl};
 
     use super::ILobby;
-    use debug::PrintTrait;
 
 
     #[starknet::interface]
@@ -88,6 +87,8 @@ mod lobby {
             let player_settings = PlayerSettingsImpl::get(game_mode);
             let shop_settings = ShopSettingsImpl::get(game_mode);
 
+            let mut randomizer = RandomImpl::new(self.world());
+
             let player = Player {
                 game_id,
                 player_id: caller,
@@ -126,15 +127,14 @@ mod lobby {
             loop {
                 match locations.pop_front() {
                     Option::Some(location_id) => {
-                        let mut seed = random::seed();
-                        seed = pedersen::pedersen(seed, (*location_id).into());
-
                         // initialize markets for location
                         market::initialize_markets(
-                            self.world(), ref seed, game_id, game_mode, *location_id
+                            self.world(), ref randomizer, game_id, game_mode, *location_id
                         );
                     },
-                    Option::None(_) => { break (); }
+                    Option::None(_) => {
+                        break ();
+                    }
                 };
             };
 
@@ -168,7 +168,7 @@ mod lobby {
         }
     }
 
-    fn assert_valid_chain(game_mode: GameMode) {//if game_mode == GameMode::Test {
+    fn assert_valid_chain(game_mode: GameMode) { //if game_mode == GameMode::Test {
     // let chain_id = get_tx_info().unbox().chain_id;
     // assert(chain_id != 'KATANA', 'wrong chain_id');
     // }

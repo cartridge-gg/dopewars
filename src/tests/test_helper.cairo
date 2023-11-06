@@ -13,6 +13,8 @@ use rollyourown::models::game::{game, Game};
 use rollyourown::models::item::{item, Item};
 use rollyourown::models::market::{market, Market};
 use rollyourown::models::player::{player, Player};
+use rollyourown::models::encounter::{encounter, Encounter};
+
 
 use rollyourown::systems::decide::{decide, IDecideDispatcher, IDecideDispatcherTrait};
 use rollyourown::systems::lobby::{lobby, ILobbyDispatcher, ILobbyDispatcherTrait};
@@ -47,6 +49,7 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
         item::TEST_CLASS_HASH,
         market::TEST_CLASS_HASH,
         player::TEST_CLASS_HASH,
+        encounter::TEST_CLASS_HASH,
     ];
 
     let world = spawn_test_world(models);

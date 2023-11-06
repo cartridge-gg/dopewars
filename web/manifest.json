@@ -862,7 +862,7 @@
     {
       "name": "decide",
       "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
-      "class_hash": "0x41dfb5869e5ef89fbd7e8b2a8d33077956afcaf6ef54358e82531647ba3167c",
+      "class_hash": "0x1e9b729bd6bfb0ce80405addeb0d2cbd9e4d463d44eb9b43b7206b5c4ecd68f",
       "abi": [
         {
           "type": "impl",
@@ -1069,7 +1069,7 @@
     {
       "name": "devtools",
       "address": "0x73206b1b6f40059698fce0af853293d9da3809309530f6cbb7065594980d28f",
-      "class_hash": "0x2fc6496b25ff2f77efcfc765de03b8797425c91b7dd12ffc2a85c91beef5871",
+      "class_hash": "0x131c19afc6e1bea8cbb62757851f40aeb0d8dd68c9af4220e24dc01c38ec1db",
       "abi": [
         {
           "type": "impl",
@@ -1148,7 +1148,7 @@
     {
       "name": "lobby",
       "address": "0x24658d9efcc9b88af349c1143528a403831163178ccf5e3ef228947a8ba18c7",
-      "class_hash": "0x2002f568d426496fa2b94eb39fba10675987102b6cf7f0ecb31f8be9dd52ffd",
+      "class_hash": "0x3824e4446fab4fec8ba9e7ff78e2ff5367082b225ff0c93f0742072d7a4acd8",
       "abi": [
         {
           "type": "impl",
@@ -1337,7 +1337,7 @@
     {
       "name": "shop",
       "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
-      "class_hash": "0xc685d2a3564465d6c2db5df41813a863ef68343182a0cc1e43a726b79d6f0f",
+      "class_hash": "0x5c78ce297ff090eeea05b503ce70f77ffd6df7c4aa8cd52d362be7b1035c7ce",
       "abi": [
         {
           "type": "impl",
@@ -1482,22 +1482,6 @@
             {
               "type": "function",
               "name": "buy_item",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "item_id",
-                  "type": "rollyourown::models::item::ItemEnum"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "drop_item",
               "inputs": [
                 {
                   "name": "game_id",
@@ -1880,7 +1864,7 @@
     {
       "name": "travel",
       "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
-      "class_hash": "0xffb968c2059a7723a46fc2d0f9bcfcb8db697397e2d37446eba80e0df64e16",
+      "class_hash": "0x7e95fdd1832fc99ee324c38b0ef0a1afe4e67ed5a91a7b96f3bbdb5ada89d16",
       "abi": [
         {
           "type": "impl",

@@ -127,7 +127,7 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
 impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         let mut player_settings = PlayerSettings {
-            health: 100_u8,
+            health: 100,
             cash: 1420_u128 * SCALING_FACTOR,
             wanted: 39,
             attack: 1,
@@ -138,6 +138,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
 
         if game_mode == GameMode::Test {
             player_settings.wanted = 100;
+            player_settings.health = 69;
         }
 
         player_settings
@@ -147,16 +148,16 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
 
 impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
     fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
-        let travel = (35
-            + (*player).wanted / 2); // 35% chance of travel encounter + 0.5 wanted (max 50)
+        let travel = (40
+            + (*player).wanted / 2); // 40% chance of travel encounter + 0.5 wanted (max 50)
         let capture = (45 + (*player).wanted / 4); // 45% chance of capture + 0.25 wanted (max 25)
 
         let mut risk_settings = RiskSettings {
             travel,
             capture,
             encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-            cops_drug_threshold: 10, // cops encounter threshold
-            gangs_cash_threshold: 1000_0000, // gangs encounter threshold
+            cops_drug_threshold: 8, // cops encounter threshold
+            gangs_cash_threshold: 200_0000, // gangs encounter threshold
             health_increase_by_turn: 0,
             wanted_decrease_by_turn: 1,
             wanted_decrease_zero_drug: 10,
@@ -164,7 +165,7 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
         };
 
         if game_mode == GameMode::Test {
-            risk_settings.health_increase_by_turn = 2;
+            risk_settings.health_increase_by_turn = 0;
             risk_settings.wanted_decrease_by_turn = 0;
         };
 
@@ -299,8 +300,12 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
         match game_mode {
-            GameMode::Test => { pricing_notme(drug_id) },
-            GameMode::Unlimited => { pricing_notme(drug_id) },
+            GameMode::Test => {
+                pricing_notme(drug_id)
+            },
+            GameMode::Unlimited => {
+                pricing_notme(drug_id)
+            },
         }
     }
 }

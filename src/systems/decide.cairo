@@ -35,13 +35,15 @@ mod decide {
     use rollyourown::models::location::{LocationEnum, LocationImpl};
     use rollyourown::models::item::{Item, ItemEnum};
     use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
+    use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
 
-    use rollyourown::utils::random;
     use rollyourown::utils::settings::{
         DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl, EncounterSettings,
         EncounterSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+    use rollyourown::utils::math::{MathTrait, MathImplU8, MathImplU128};
+
     use rollyourown::systems::travel::on_turn_end;
 
 
@@ -97,17 +99,20 @@ mod decide {
             let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
             let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
+            let mut randomizer = RandomImpl::new(world);
+
             let (mut outcome, cash_loss, drug_loss, health_loss, cash_earnt, dmg_dealt) =
                 match action {
                 Action::Run => {
-                    if player.wanted + decide_settings.wanted_impact_run <= 100 {
-                        player.wanted += decide_settings.wanted_impact_run;
-                    } else {
-                        player.wanted = 100;
-                    }
+                    player
+                        .wanted = player
+                        .wanted
+                        .add_capped(decide_settings.wanted_impact_run, 100);
 
                     let encounter_dmg = match player.status {
-                        PlayerStatus::Normal => { 0 },
+                        PlayerStatus::Normal => {
+                            0
+                        },
                         PlayerStatus::BeingMugged => {
                             let mut encounter = EncounterImpl::get_or_spawn(
                                 world, @player, EncounterType::Gang
@@ -126,27 +131,29 @@ mod decide {
                             );
                             encounter_settings.dmg
                         },
-                        PlayerStatus::AtPawnshop => { 0 },
+                        PlayerStatus::AtPawnshop => {
+                            0
+                        },
                     };
 
-                    let seed = random::seed();
-                    match risk_settings.run(world, seed, @player) {
+                    match risk_settings.run(world, ref randomizer, @player) {
                         bool::False => (Outcome::Escaped, 0, 0, 0, 0, 0),
                         bool::True => {
-                            let random_loss: u8 = random::random(seed + 1, 0, encounter_dmg.into())
-                                .try_into()
-                                .unwrap();
+                            let random_loss: u8 = randomizer.between::<u8>(0, encounter_dmg.into());
+
                             let health_loss: u128 = (encounter_dmg + random_loss).into();
                             let defense_item = get!(
                                 world, (game_id, player_id, ItemEnum::Defense), Item
                             );
 
                             // reduce dmgs by defense_item.value %
-                            let health_saved: u128 = ((health_loss
-                                * defense_item.value.into()
-                                * SCALING_FACTOR)
-                                / 100)
-                                / SCALING_FACTOR;
+                            // let health_saved: u128 = ((health_loss
+                            //     * defense_item.value.into()
+                            //     * SCALING_FACTOR)
+                            //     / 100)
+                            //     / SCALING_FACTOR;
+                            let health_saved: u128 = health_loss.pct(defense_item.value.into());
+
                             let final_health_loss: u8 = (health_loss - health_saved)
                                 .try_into()
                                 .unwrap();
@@ -163,9 +170,12 @@ mod decide {
                             player.wanted = player.wanted / 2;
 
                             // using same name cash_loss makes LS crash
-                            let cash_loss_ = (player.cash
-                                * decide_settings.gangs_payment_cash_pct.into())
-                                / 100;
+                            // let cash_loss_ = (player.cash
+                            //     * decide_settings.gangs_payment_cash_pct.into())
+                            //     / 100;
+                            let cash_loss_ = player
+                                .cash
+                                .pct(decide_settings.gangs_payment_cash_pct.into());
 
                             (Outcome::Paid, cash_loss_, 0, 0, 0, 0)
                         },
@@ -185,159 +195,18 @@ mod decide {
                     }
                 },
                 Action::Fight => {
-                    if player.wanted + decide_settings.wanted_impact_fight <= 100 {
-                        player.wanted += decide_settings.wanted_impact_fight;
-                    } else {
-                        player.wanted = 100;
-                    };
-
-                    let seed = random::seed();
+                    player
+                        .wanted = player
+                        .wanted
+                        .add_capped(decide_settings.wanted_impact_run, 100);
 
                     match player.status {
                         PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                         PlayerStatus::BeingMugged => {
-                            let mut encounter = EncounterImpl::get_or_spawn(
-                                world, @player, EncounterType::Gang
-                            );
-                            let encounter_settings = EncounterSettingsImpl::get(
-                                game.game_mode, @player, encounter.level
-                            );
-
-                            // calc player dmg
-                            let mut attack = player.get_attack(world);
-                            let random_attack: usize = random::random(
-                                seed + 1, 0, (attack / 5).into()
-                            )
-                                .try_into()
-                                .unwrap();
-
-                            let random_dir = random::random(seed + 2, 0, 2);
-                            if random_dir == 0 {
-                                attack -= random_attack;
-                            } else {
-                                attack += random_attack;
-                            };
-
-                            // player deals dmg
-                            if attack >= encounter.health.into() {
-                                // encounter is dead
-                                encounter.health = 0;
-                                set!(world, (encounter));
-
-                                // player wins payout
-                                (Outcome::Victorious, 0, 0, 0, encounter.payout, attack)
-                            } else {
-                                // encounter lose health
-                                encounter.health -= attack.try_into().unwrap();
-                                set!(world, (encounter));
-
-                                // encounter replies
-
-                                // calc encounter dmg
-                                let mut encounter_dmg = encounter_settings.dmg;
-                                let random_dmg: u8 = random::random(
-                                    seed + 3, 0, (encounter_dmg / 5).into()
-                                )
-                                    .try_into()
-                                    .unwrap();
-
-                                let random_dir = random::random(seed + 2, 0, 2);
-                                if random_dir == 0 {
-                                    encounter_dmg -= random_dmg;
-                                } else {
-                                    encounter_dmg += random_dmg;
-                                };
-
-                                let defense_item = get!(
-                                    world, (game_id, player_id, ItemEnum::Defense), Item
-                                );
-
-                                // reduce dmgs by defense_item.value %
-                                let health_saved: u128 = ((SCALING_FACTOR
-                                    * defense_item.value.into()
-                                    * encounter_dmg.into())
-                                    / 100)
-                                    / SCALING_FACTOR;
-                                let final_health_loss: u8 = (encounter_dmg
-                                    - health_saved.try_into().unwrap())
-                                    .try_into()
-                                    .unwrap();
-
-                                (Outcome::Captured, 0, 0, final_health_loss, 0, attack)
-                            }
+                            self.fight(ref randomizer, @game, @player, EncounterType::Gang)
                         },
                         PlayerStatus::BeingArrested => {
-                            //TODO: create fn, thsi is copy pasta from BeingMugged
-
-                            let mut encounter = EncounterImpl::get_or_spawn(
-                                world, @player, EncounterType::Cops
-                            );
-                            let encounter_settings = EncounterSettingsImpl::get(
-                                game.game_mode, @player, encounter.level
-                            );
-
-                            // calc player dmg
-                            let mut attack = player.get_attack(world);
-                            let random_attack: usize = random::random(
-                                seed + 1, 0, (attack / 5).into()
-                            )
-                                .try_into()
-                                .unwrap();
-
-                            let random_dir = random::random(seed + 2, 0, 2);
-                            if random_dir == 0 {
-                                attack -= random_attack;
-                            } else {
-                                attack += random_attack;
-                            };
-
-                            // player deals dmg
-                            if attack >= encounter.health.into() {
-                                // encounter is dead
-                                encounter.health = 0;
-                                set!(world, (encounter));
-
-                                // player wins payout
-                                (Outcome::Victorious, 0, 0, 0, encounter.payout, attack)
-                            } else {
-                                // encounter lose health
-                                encounter.health -= attack.try_into().unwrap();
-                                set!(world, (encounter));
-
-                                // encounter replies
-
-                                // calc encounter dmg
-                                let mut encounter_dmg = encounter_settings.dmg;
-                                let random_dmg: u8 = random::random(
-                                    seed + 3, 0, (encounter_dmg / 5).into()
-                                )
-                                    .try_into()
-                                    .unwrap();
-
-                                let random_dir = random::random(seed + 2, 0, 2);
-                                if random_dir == 0 {
-                                    encounter_dmg -= random_dmg;
-                                } else {
-                                    encounter_dmg += random_dmg;
-                                };
-
-                                let defense_item = get!(
-                                    world, (game_id, player_id, ItemEnum::Defense), Item
-                                );
-
-                                // reduce dmgs by defense_item.value %
-                                let health_saved: u128 = ((SCALING_FACTOR
-                                    * defense_item.value.into()
-                                    * encounter_dmg.into())
-                                    / 100)
-                                    / SCALING_FACTOR;
-                                let final_health_loss: u8 = (encounter_dmg
-                                    - health_saved.try_into().unwrap())
-                                    .try_into()
-                                    .unwrap();
-
-                                (Outcome::Captured, 0, 0, final_health_loss, 0, attack)
-                            }
+                            self.fight(ref randomizer, @game, @player, EncounterType::Cops)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
@@ -358,10 +227,10 @@ mod decide {
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
 
-                on_turn_end(world, @game, ref player);
+                on_turn_end(world, ref randomizer, @game, ref player);
 
                 if action == Action::Run {
-                    player.location_id = LocationImpl::random();
+                    player.location_id = LocationImpl::random(ref randomizer);
                 }
             }
 
@@ -390,7 +259,7 @@ mod decide {
                     Option::Some(drug_id) => {
                         let mut drug = get!(world, (game_id, player_id, *drug_id), Drug);
                         if (drug.quantity != 0) {
-                            let mut drug_loss = (drug.quantity * percentage) / 100;
+                            let mut drug_loss = drug.quantity.pct(percentage.into()).into();
                             drug_loss = if drug_loss == 0 {
                                 1
                             } else {
@@ -402,10 +271,82 @@ mod decide {
                             set!(world, (drug));
                         }
                     },
-                    Option::None => { break; }
+                    Option::None => {
+                        break;
+                    }
                 };
             };
             total_drug_loss
+        }
+
+
+        fn fight(
+            self: @ContractState,
+            ref randomizer: Random,
+            game: @Game,
+            player: @Player,
+            encounter_type: EncounterType,
+        ) -> (Outcome, u128, u32, u8, u128, u32) {
+            let world = self.world();
+
+            let mut encounter = EncounterImpl::get_or_spawn(world, player, encounter_type);
+            let encounter_settings = EncounterSettingsImpl::get(
+                (*game).game_mode, player, encounter.level
+            );
+
+            // calc player dmg
+            let mut attack = (*player).get_attack(world);
+            let random_attack: usize = randomizer.between::<usize>(0, (attack / 5).into());
+
+            let random_dir = randomizer.bool();
+            if random_dir {
+                attack -= random_attack;
+            } else {
+                attack += random_attack;
+            };
+
+            // player deals dmg
+            if attack >= encounter.health.into() {
+                // encounter is dead
+                encounter.health = 0;
+                set!(world, (encounter));
+
+                // player wins payout
+                (Outcome::Victorious, 0_u128, 0_u32, 0_u8, encounter.payout, attack)
+            } else {
+                // encounter lose health
+                encounter.health -= attack.try_into().unwrap();
+                set!(world, (encounter));
+
+                // encounter replies
+
+                // calc encounter dmg
+                let mut encounter_dmg = encounter_settings.dmg;
+                let random_dmg: u8 = randomizer.between::<u8>(0, (encounter_dmg / 5).into());
+
+                let random_dir = randomizer.bool();
+                if random_dir {
+                    encounter_dmg -= random_dmg;
+                } else {
+                    encounter_dmg += random_dmg;
+                };
+
+                let defense_item = get!(
+                    world, ((*game).game_id, (*player).player_id, ItemEnum::Defense), Item
+                );
+
+                // reduce dmgs by defense_item.value %
+                let health_saved: u128 = ((SCALING_FACTOR
+                    * defense_item.value.into()
+                    * encounter_dmg.into())
+                    / 100)
+                    / SCALING_FACTOR;
+                let final_health_loss: u8 = (encounter_dmg - health_saved.try_into().unwrap())
+                    .try_into()
+                    .unwrap();
+
+                (Outcome::Captured, 0_u128, 0_u32, final_health_loss, 0_u128, attack)
+            }
         }
     }
 }

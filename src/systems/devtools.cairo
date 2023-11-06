@@ -21,9 +21,9 @@ mod devtools {
 
     use rollyourown::constants::SCALING_FACTOR;
 
-    use rollyourown::utils::random;
     use rollyourown::models::player::{Player, PlayerStatus};
     use rollyourown::models::location::{LocationEnum};
+    use rollyourown::utils::random::{RandomImpl};
 
 
     #[starknet::interface]
@@ -43,6 +43,8 @@ mod devtools {
         fn feed_leaderboard(self: @ContractState, count: u32) {
             self.check_chain();
 
+            let mut randomizer = RandomImpl::new(self.world());
+
             let mut i = 0;
             loop {
                 if i == count {
@@ -51,18 +53,11 @@ mod devtools {
 
                 let uuid = self.world().uuid();
                 let uuid_f: felt252 = uuid.into();
-                let rand = random::random((random::seed() + uuid_f), 0, 100000000);
-                let rand_100: u8 = random::random((random::seed() + uuid_f), 0, 100)
-                    .try_into()
-                    .unwrap();
 
-                let rand_10: u8 = random::random((random::seed() + uuid_f), 0, 10)
-                    .try_into()
-                    .unwrap();
-
-                let rand_2: u8 = random::random((random::seed() + uuid_f), 0, 2)
-                    .try_into()
-                    .unwrap();
+                let rand: u128 = randomizer.between::<u128>(0, 100000000);
+                let rand_100: u8 = randomizer.between::<u8>(0, 100);
+                let rand_10: u8 = randomizer.between::<u8>(0, 10);
+                let rand_2: u8 = randomizer.between::<u8>(0, 2);
 
                 let player = Player {
                     game_id: uuid,
@@ -100,9 +95,8 @@ mod devtools {
 
     #[generate_trait]
     impl DevtoolsInternalImpl of DevtoolsInternalTrait {
-        fn check_chain(self: @ContractState) {
-            // let chain_id = get_tx_info().unbox().chain_id;
-            // assert(chain_id != 'KATANA', 'wrong chain_id');
+        fn check_chain(self: @ContractState) { // let chain_id = get_tx_info().unbox().chain_id;
+        // assert(chain_id != 'KATANA', 'wrong chain_id');
         }
     }
 }

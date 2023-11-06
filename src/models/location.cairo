@@ -1,9 +1,10 @@
 use starknet::ContractAddress;
+use dojo::world::IWorldDispatcher;
 use dojo::database::schema::{
     Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
 };
 
-use rollyourown::utils::random;
+use rollyourown::utils::random::{Random, RandomImpl};
 
 struct Location {}
 
@@ -96,11 +97,10 @@ impl LocationImpl of LocationTrait {
         locations.span()
     }
 
-    fn random() -> LocationEnum {
-        let seed = random::seed();
-
+    fn random(ref randomizer: Random) -> LocationEnum {
         let locations = LocationImpl::all();
-        let index = random::random(seed, 0, locations.len().into());
+
+        let index = randomizer.between::<u32>(0, locations.len().into());
 
         *locations.at(index.try_into().unwrap())
     }
