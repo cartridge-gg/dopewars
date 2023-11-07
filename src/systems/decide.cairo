@@ -71,14 +71,18 @@ mod decide {
 
     #[derive(Drop, starknet::Event)]
     struct Decision {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         action: Action
     }
 
     #[derive(Drop, starknet::Event)]
     struct Consequence {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         outcome: Outcome,
         health_loss: u8,
@@ -142,12 +146,6 @@ mod decide {
                                 world, (game_id, player_id, ItemEnum::Defense), Item
                             );
 
-                            // reduce dmgs by defense_item.value %
-                            // let health_saved: u128 = ((health_loss
-                            //     * defense_item.value.into()
-                            //     * SCALING_FACTOR)
-                            //     / 100)
-                            //     / SCALING_FACTOR;
                             let health_saved: u128 = health_loss.pct(defense_item.value.into());
 
                             let final_health_loss: u8 = (health_loss - health_saved)
@@ -166,9 +164,6 @@ mod decide {
                             player.wanted = player.wanted / 2;
 
                             // using same name cash_loss makes LS crash
-                            // let cash_loss_ = (player.cash
-                            //     * decide_settings.gangs_payment_cash_pct.into())
-                            //     / 100;
                             let cash_loss_ = player
                                 .cash
                                 .pct(decide_settings.gangs_payment_cash_pct.into());

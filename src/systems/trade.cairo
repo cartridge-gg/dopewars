@@ -57,7 +57,9 @@ mod trade {
 
     #[derive(Drop, starknet::Event)]
     struct Bought {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         drug_id: DrugEnum,
         quantity: usize,
@@ -66,7 +68,9 @@ mod trade {
 
     #[derive(Drop, starknet::Event)]
     struct Sold {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         drug_id: DrugEnum,
         quantity: usize,

@@ -109,7 +109,7 @@ fn market_variations(
 
                                 world
                                     .emit_raw(
-                                        selector!("MarketEvent"),
+                                        array![selector!("MarketEvent")],
                                         array![
                                             game_id.into(),
                                             location_id_u8.into(),
@@ -129,7 +129,7 @@ fn market_variations(
                                 let drug_id_u8: u8 = (*drug_id).into();
                                 world
                                     .emit_raw(
-                                        selector!("MarketEvent"),
+                                        array![selector!("MarketEvent")],
                                         array![
                                             game_id.into(),
                                             location_id_u8.into(),

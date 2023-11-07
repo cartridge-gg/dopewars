@@ -59,8 +59,6 @@ mod lobby {
         game_mode: GameMode,
         creator: ContractAddress,
         start_time: u64,
-        max_turns: usize,
-        max_players: usize,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -140,17 +138,7 @@ mod lobby {
             emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });
 
             // emit game created
-            emit!(
-                self.world(),
-                GameCreated {
-                    game_id,
-                    game_mode,
-                    creator: caller,
-                    start_time,
-                    max_players: game_settings.max_players,
-                    max_turns: game_settings.max_turns
-                }
-            );
+            emit!(self.world(), GameCreated { game_id, game_mode, creator: caller, start_time, });
 
             (game_id, caller)
         }

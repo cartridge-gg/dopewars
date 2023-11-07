@@ -63,7 +63,9 @@ mod shop {
 
     #[derive(Drop, starknet::Event)]
     struct BoughtItem {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         item_id: ItemEnum,
         level: u8,
@@ -71,7 +73,9 @@ mod shop {
 
     #[derive(Drop, starknet::Event)]
     struct DroppedItem {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         item_id: ItemEnum,
     }

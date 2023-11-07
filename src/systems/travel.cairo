@@ -54,7 +54,9 @@ mod travel {
 
     #[derive(Drop, starknet::Event)]
     struct Traveled {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         from_location: LocationEnum,
         to_location: LocationEnum,
@@ -62,7 +64,9 @@ mod travel {
 
     #[derive(Drop, starknet::Event)]
     struct AdverseEvent {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         player_status: PlayerStatus,
         health_loss: u8,
@@ -70,7 +74,9 @@ mod travel {
 
     #[derive(Drop, starknet::Event)]
     struct AtPawnshop {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
     }
 
@@ -182,7 +188,10 @@ fn on_turn_end(
             // emit raw event AtPawnshop
             world
                 .emit_raw(
-                    selector!("AtPawnshop"), array![(*game.game_id).into(), player.player_id.into()]
+                    array![
+                        selector!("AtPawnshop"), (*game.game_id).into(), player.player_id.into()
+                    ],
+                    array![(*game.game_id).into(), player.player_id.into()]
                 );
 
             return false;
@@ -211,7 +220,7 @@ fn on_turn_end(
     // emit raw event Traveled
     world
         .emit_raw(
-            selector!("Traveled"),
+            array![selector!("Traveled"), (*game.game_id).into(), player.player_id.into()],
             array![
                 (*game.game_id).into(),
                 player.player_id.into(),
