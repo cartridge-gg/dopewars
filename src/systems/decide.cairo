@@ -110,9 +110,7 @@ mod decide {
                         .add_capped(decide_settings.wanted_impact_run, 100);
 
                     let encounter_dmg = match player.status {
-                        PlayerStatus::Normal => {
-                            0
-                        },
+                        PlayerStatus::Normal => { 0 },
                         PlayerStatus::BeingMugged => {
                             let mut encounter = EncounterImpl::get_or_spawn(
                                 world, @player, EncounterType::Gang
@@ -131,9 +129,7 @@ mod decide {
                             );
                             encounter_settings.dmg
                         },
-                        PlayerStatus::AtPawnshop => {
-                            0
-                        },
+                        PlayerStatus::AtPawnshop => { 0 },
                     };
 
                     match risk_settings.run(world, ref randomizer, @player) {
@@ -271,9 +267,7 @@ mod decide {
                             set!(world, (drug));
                         }
                     },
-                    Option::None => {
-                        break;
-                    }
+                    Option::None => { break; }
                 };
             };
             total_drug_loss

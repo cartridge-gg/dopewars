@@ -300,12 +300,8 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
     fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
         match game_mode {
-            GameMode::Test => {
-                pricing_notme(drug_id)
-            },
-            GameMode::Unlimited => {
-                pricing_notme(drug_id)
-            },
+            GameMode::Test => { pricing_notme(drug_id) },
+            GameMode::Unlimited => { pricing_notme(drug_id) },
         }
     }
 }

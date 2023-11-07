@@ -218,9 +218,7 @@ mod shop {
                                 );
                         };
                     },
-                    Option::None => {
-                        break;
-                    },
+                    Option::None => { break; },
                 };
             };
 

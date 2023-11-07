@@ -132,9 +132,7 @@ mod lobby {
                             self.world(), ref randomizer, game_id, game_mode, *location_id
                         );
                     },
-                    Option::None(_) => {
-                        break ();
-                    }
+                    Option::None(_) => { break (); }
                 };
             };
 

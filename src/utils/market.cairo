@@ -55,9 +55,7 @@ fn initialize_markets(
                     })
                 );
             },
-            Option::None(()) => {
-                break ();
-            }
+            Option::None(()) => { break (); }
         };
     };
 }
@@ -144,15 +142,11 @@ fn market_variations(
                             // update market
                             set!(world, (market));
                         },
-                        Option::None(()) => {
-                            break;
-                        }
+                        Option::None(()) => { break; }
                     };
                 };
             },
-            Option::None(_) => {
-                break;
-            }
+            Option::None(_) => { break; }
         };
     };
 }
@@ -162,9 +156,9 @@ fn price_variation_with_cash(
     ref randomizer: Random, ref market: Market, market_settings: MarketSettings, increase: bool
 ) {
     let percent = randomizer
-        .between::<u128>(
-            market_settings.price_var_min.into(), market_settings.price_var_max.into()
-        );
+        .between::<
+            u128
+        >(market_settings.price_var_min.into(), market_settings.price_var_max.into());
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
     let target_price = if increase {
@@ -184,9 +178,9 @@ fn price_variation_with_drug(
     ref randomizer: Random, ref market: Market, market_settings: MarketSettings, increase: bool
 ) {
     let percent = randomizer
-        .between::<u128>(
-            market_settings.market_event_min.into(), market_settings.market_event_max.into()
-        );
+        .between::<
+            u128
+        >(market_settings.market_event_min.into(), market_settings.market_event_max.into());
 
     let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
     let target_price = if increase {
