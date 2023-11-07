@@ -1,19 +1,3 @@
-# query AvailableGames {
-#   gameModels(first: 10) {
-#     total_count
-#     edges {
-#       node {
-#         creator
-#         num_players
-#         max_players
-#         max_turns
-#         start_time
-#       }
-#       cursor
-#     }
-#   }
-# }
-
 query GlobalScores($limit: Int, $cursor: Cursor) {
   playerModels(
     where: { health: 0 }

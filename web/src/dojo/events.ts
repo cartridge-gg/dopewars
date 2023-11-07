@@ -14,7 +14,8 @@ import { ToastType } from "@/hooks/toast";
 
 export interface BaseEventData {
   gameId: string;
-  eventType: WorldEvents
+  eventType: WorldEvents;
+  eventName: string;
 }
 
 export interface AdverseEventData extends BaseEventData {
@@ -35,7 +36,6 @@ export interface CreateEventData extends BaseEventData {
 }
 
 export interface JoinedEventData extends BaseEventData {
-  gameId: string;
   playerId: string;
   playerName: string;
 }
@@ -44,14 +44,14 @@ export interface BoughtEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
-  price: number;
+  cost: number;
 }
 
 export interface SoldEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
-  price: number;
+  payout: number;
 }
 
 export interface DecisionEventData extends BaseEventData {
@@ -69,10 +69,30 @@ export interface ConsequenceEventData extends BaseEventData {
 }
 
 export interface MarketEventData extends BaseEventData {
-  gameId: string;
   locationId: string;
   drugId: string;
   increase: boolean;
+}
+
+export interface TraveledEventData extends BaseEventData {
+  playerId: string;
+  turn: number;
+  increase: boolean;
+  fromLocation: string;
+  toLocation: string;
+}
+
+export interface BoughtItemEventData extends BaseEventData {
+  playerId: string;
+  itemId: string;
+  level: number;
+}
+
+export interface GameOverEventData extends BaseEventData {
+  playerId: string;
+  playerName: string;
+  turn: number;
+  cash: number;
 }
 
 
@@ -84,51 +104,57 @@ export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
     throw new Error(`transaction REVERTED`);
   }
 
-  const allEvents = []
-  for (let eventType of Object.values(WorldEvents)) {
-    allEvents.push(parseEvents((receipt as SuccessfulTransactionReceiptResponse), eventType))
-  }
-
-  return allEvents.flat()
+  const flatEvents = parseEvents(receipt as SuccessfulTransactionReceiptResponse)
+  return flatEvents
 }
 
-export const parseEvents = (receipt: SuccessfulTransactionReceiptResponse, eventType: WorldEvents) => {
+export const parseEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
+  const parsed = receipt.events.map(e => parseEvent(e))
+  return parsed
+}
+
+export const parseEventsByEventType = (receipt: SuccessfulTransactionReceiptResponse, eventType: WorldEvents) => {
   const events = receipt.events.filter(e => e.keys[0] === eventType)
-  return events.map(e => parseEvent(e, eventType))
+  const parsed = events.map(e => parseEvent(e))
+  return parsed
 }
 
-export const parseEvent = (raw: any, eventType: WorldEvents) => {
+export type ParseEventResult = ReturnType<typeof parseEvent>;
 
-  switch (eventType) {
+export const parseEvent = (raw: any) => {
+
+  switch (raw.keys[0]) {
     case WorldEvents.GameCreated:
       return {
-        eventType,
+        eventType: WorldEvents.GameCreated,
+        eventName: "GameCreated",
         gameId: num.toHexString(raw.data[0]),
         creator: num.toHexString(raw.data[1]),
         startTime: Number(raw.data[2]),
-        maxTurns: Number(raw.data[3]),
-        maxPlayers: Number(raw.data[4]),
       } as CreateEventData;
 
     case WorldEvents.AdverseEvent:
       return {
-        eventType,
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        playerStatus: shortString.decodeShortString(raw.data[2]),
-        healthLoss: Number(raw.data[3]),
+        eventType: WorldEvents.AdverseEvent,
+        eventName: "AdverseEvent",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerStatus: shortString.decodeShortString(raw.data[0]),
+        healthLoss: Number(raw.data[1]),
       } as AdverseEventData;
 
     case WorldEvents.AtPawnshop:
       return {
-        eventType,
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
+        eventType: WorldEvents.AtPawnshop,
+        eventName: "AtPawnshop",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
       } as AtPawnshopEventData;
 
     case WorldEvents.PlayerJoined:
       return {
-        eventType,
+        eventType: WorldEvents.PlayerJoined,
+        eventName: "PlayerJoined",
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         playerName: shortString.decodeShortString(raw.data[1]),
@@ -136,27 +162,30 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
 
     case WorldEvents.Decision:
       return {
-        eventType,
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        action: Number(raw.data[2]),
+        eventType: WorldEvents.Decision,
+        eventName: "Decision",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        action: Number(raw.data[0]),
       } as DecisionEventData;
 
     case WorldEvents.Consequence:
       return {
-        eventType,
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        outcome: Number(raw.data[2]),
-        healthLoss: Number(raw.data[3]),
-        drugLoss: Number(raw.data[4]),
-        cashLoss: Number(raw.data[5]),
-        dmgDealt: Number(raw.data[6]),
+        eventType: WorldEvents.Consequence,
+        eventName: "Consequence",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        outcome: Number(raw.data[0]),
+        healthLoss: Number(raw.data[1]),
+        drugLoss: Number(raw.data[2]),
+        cashLoss: Number(raw.data[3]),
+        dmgDealt: Number(raw.data[4]),
       } as ConsequenceEventData;
 
     case WorldEvents.MarketEvent:
       return {
-        eventType,
+        eventType: WorldEvents.MarketEvent,
+        eventName: "MarketEvent",
         gameId: num.toHexString(raw.data[0]),
         locationId: num.toHexString(raw.data[1]),
         drugId: num.toHexString(raw.data[2]),
@@ -164,13 +193,68 @@ export const parseEvent = (raw: any, eventType: WorldEvents) => {
       } as MarketEventData;
 
     case WorldEvents.Traveled:
+      return {
+        eventType: WorldEvents.Traveled,
+        eventName: "Traveled",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        turn: Number(raw.data[0]),
+        fromLocation: shortString.decodeShortString(raw.data[1]),
+        toLocation: shortString.decodeShortString(raw.data[2]),
+      } as TraveledEventData;
+
     case WorldEvents.Bought:
+      return {
+        eventType: WorldEvents.Bought,
+        eventName: "Bought",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        drugId: num.toHexString(raw.data[0]),
+        quantity: Number(raw.data[1]),
+        cost: Number(raw.data[2]),
+      } as BoughtEventData;
+
     case WorldEvents.Sold:
+      return {
+        eventType: WorldEvents.Sold,
+        eventName: "Sold",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        drugId: num.toHexString(raw.data[0]),
+        quantity: Number(raw.data[1]),
+        payout: Number(raw.data[2]),
+      } as SoldEventData;
+
+    case WorldEvents.BoughtItem:
+      return {
+        eventType: WorldEvents.BoughtItem,
+        eventName: "BoughtItem",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        itemId: num.toHexString(raw.data[0]),
+        level: Number(raw.data[1]),
+      } as BoughtItemEventData;
+
+    case WorldEvents.GameOver:
+      return {
+        eventType: WorldEvents.GameOver,
+        eventName: "GameOver",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerName: shortString.decodeShortString(raw.data[0]),
+        playerStatus: shortString.decodeShortString(raw.data[1]),
+        turn: Number(raw.data[2]),
+        cash: Number(raw.data[3]),
+      } as GameOverEventData;
+
+
     default:
-      console.log(`event parse not implemented: ${eventType}`)
+      console.log(`event parse not implemented: ${raw.keys[0]}`)
       //throw new Error(`event parse not implemented: ${eventType}`);
       return {
-        eventType,
+        gameId: undefined,
+        eventType: raw.keys[0],
+        eventName: raw.keys[0],
       }
       break;
   }

@@ -395,6 +395,14 @@ export function getShopItem(id: ItemTextEnum, level: number): ShopItemInfo {
   return item;
 }
 
+export function getShopItemByType(type: ItemEnum, level: number): ShopItemInfo {
+  const item = shopItemInfos.find(i => i.type == type && i.level === level);
+  if (!item) {
+    throw Error('item not found!');
+  }
+  return item;
+}
+
 export function getShopItemStatname(typ: ItemTextEnum): string {
   switch (typ) {
     case ItemTextEnum.Attack:

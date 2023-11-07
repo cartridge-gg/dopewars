@@ -58,6 +58,7 @@ mod travel {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
+        turn: u32,
         from_location: LocationEnum,
         to_location: LocationEnum,
     }
@@ -191,7 +192,7 @@ fn on_turn_end(
                     array![
                         selector!("AtPawnshop"), (*game.game_id).into(), player.player_id.into()
                     ],
-                    array![(*game.game_id).into(), player.player_id.into()]
+                    array![]
                 );
 
             return false;
@@ -222,8 +223,7 @@ fn on_turn_end(
         .emit_raw(
             array![selector!("Traveled"), (*game.game_id).into(), player.player_id.into()],
             array![
-                (*game.game_id).into(),
-                player.player_id.into(),
+                player.turn.into(),
                 player.location_id.into(),
                 player.next_location_id.into()
             ]

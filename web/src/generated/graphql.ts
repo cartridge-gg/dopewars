@@ -917,6 +917,14 @@ export type LocationEntitiesQueryVariables = Exact<{
 
 export type LocationEntitiesQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', total_count: number, edges?: Array<{ __typename?: 'World__EntityEdge', cursor?: any | null, node?: { __typename?: 'World__Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | null> | null } | null } | null> | null } | null };
 
+export type PlayerLogsQueryVariables = Exact<{
+  game_id: Scalars['String'];
+  player_id: Scalars['String'];
+}>;
+
+
+export type PlayerLogsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', total_count: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', keys?: Array<string | null> | null, data?: Array<string | null> | null, created_at?: any | null } | null } | null> | null } | null };
+
 export const PlayerPropsFragmentDoc = `
     fragment PlayerProps on Player {
   name
@@ -1207,4 +1215,52 @@ export const useInfiniteLocationEntitiesQuery = <
 
 
 useInfiniteLocationEntitiesQuery.getKey = (variables: LocationEntitiesQueryVariables) => ['LocationEntities.infinite', variables];
+;
+
+export const PlayerLogsDocument = `
+    query PlayerLogs($game_id: String!, $player_id: String!) {
+  events(limit: 1000, keys: ["*", $game_id, $player_id]) {
+    total_count
+    edges {
+      node {
+        keys
+        data
+        created_at
+      }
+    }
+  }
+}
+    `;
+export const usePlayerLogsQuery = <
+      TData = PlayerLogsQuery,
+      TError = unknown
+    >(
+      variables: PlayerLogsQueryVariables,
+      options?: UseQueryOptions<PlayerLogsQuery, TError, TData>
+    ) =>
+    useQuery<PlayerLogsQuery, TError, TData>(
+      ['PlayerLogs', variables],
+      useFetchData<PlayerLogsQuery, PlayerLogsQueryVariables>(PlayerLogsDocument).bind(null, variables),
+      options
+    );
+
+usePlayerLogsQuery.getKey = (variables: PlayerLogsQueryVariables) => ['PlayerLogs', variables];
+;
+
+export const useInfinitePlayerLogsQuery = <
+      TData = PlayerLogsQuery,
+      TError = unknown
+    >(
+      variables: PlayerLogsQueryVariables,
+      options?: UseInfiniteQueryOptions<PlayerLogsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<PlayerLogsQuery, PlayerLogsQueryVariables>(PlayerLogsDocument)
+    return useInfiniteQuery<PlayerLogsQuery, TError, TData>(
+      ['PlayerLogs.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfinitePlayerLogsQuery.getKey = (variables: PlayerLogsQueryVariables) => ['PlayerLogs.infinite', variables];
 ;

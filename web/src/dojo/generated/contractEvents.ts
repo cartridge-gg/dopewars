@@ -6,6 +6,7 @@ import { GetTransactionReceiptResponse, Contract } from "starknet";
 export enum WorldEvents {
   Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
   Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
+  GameOver = "0x165460ded86991fa560a0d331810f83651da90c5df6d4b61357c3b3807ff41c",
   GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
   PlayerJoined = "0x214916ce0265d355fd91110809ffba7b5e672b108a8beea3dd235818431264b",
   BoughtItem = "0x96f1e086de05db8162b5bf8e95b3ff061eeb8a5a88750a793a297379dd74ea",
@@ -34,13 +35,20 @@ export interface ConsequenceData {
   dmg_dealt: RecsType.Number;
 }
 
+export interface GameOverData {
+  game_id: RecsType.Number;
+  player_id: RecsType.String;
+  player_name: RecsType.BigInt;
+  player_status: RecsType.String;
+  turn: RecsType.Number;
+  cash: RecsType.BigInt;
+}
+
 export interface GameCreatedData {
   game_id: RecsType.Number;
   game_mode: RecsType.String;
   creator: RecsType.String;
   start_time: RecsType.Number;
-  max_turns: RecsType.Number;
-  max_players: RecsType.Number;
 }
 
 export interface PlayerJoinedData {
@@ -81,6 +89,7 @@ export interface SoldData {
 export interface TraveledData {
   game_id: RecsType.Number;
   player_id: RecsType.String;
+  turn: RecsType.Number;
   from_location: RecsType.String;
   to_location: RecsType.String;
 }

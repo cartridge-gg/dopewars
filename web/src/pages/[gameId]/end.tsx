@@ -152,7 +152,7 @@ export default function End() {
             </HStack>
           </VStack>
           <VStack flex="1" my="auto" justify="space-between">
-            <Image display={["none", "flex"]} src="/images/sunset.png" />
+            <Image display={["none", "flex"]} src="/images/sunset.png" alt="sunset" />
             <Button
               mt="20px"
               onClick={() => {

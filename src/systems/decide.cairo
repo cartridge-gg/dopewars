@@ -67,6 +67,7 @@ mod decide {
     enum Event {
         Decision: Decision,
         Consequence: Consequence,
+        GameOver: GameOver
     }
 
     #[derive(Drop, starknet::Event)]
@@ -90,6 +91,19 @@ mod decide {
         cash_loss: u128,
         dmg_dealt: u32,
     }
+
+    #[derive(Drop, starknet::Event)]
+    struct GameOver {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        player_name: felt252,
+        player_status: PlayerStatus,
+        turn: u32,
+        cash: u128,
+    }
+
 
     #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
@@ -211,6 +225,16 @@ mod decide {
             if health_loss >= player.health {
                 player.health = 0;
                 outcome = Outcome::Died;
+
+                let game_over = GameOver {
+                    game_id,
+                    player_id,
+                    player_name: player.name,
+                    player_status: player.status,
+                    turn: player.turn,
+                    cash: player.cash / SCALING_FACTOR,
+                };
+                emit!(world, game_over);
             } else {
                 player.health -= health_loss
             }

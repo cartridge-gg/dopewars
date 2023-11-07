@@ -208,27 +208,27 @@ export class PlayerEntity {
   }
 }
 
-export interface PlayerInterface {
-  player?: PlayerEntity;
-  isFetched: boolean;
-}
+// export interface PlayerInterface {
+//   player?: PlayerEntity;
+//   isFetched: boolean;
+// }
 
-export const usePlayerEntity = ({ gameId, address }: { gameId?: string; address?: string }): PlayerInterface => {
-  // TODO: remove leading zeros in address, maybe implemented in torii
-  const { data, isFetched } = usePlayerEntityQuery(
-    { gameId: gameId || "", playerId: address || "" },
-    {
-      enabled: !!gameId && !!address,
-      refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
-    },
-  );
+// export const usePlayerEntity = ({ gameId, address }: { gameId?: string; address?: string }): PlayerInterface => {
+//   // TODO: remove leading zeros in address, maybe implemented in torii
+//   const { data, isFetched } = usePlayerEntityQuery(
+//     { gameId: gameId || "", playerId: address || "" },
+//     {
+//       enabled: !!gameId && !!address,
+//       refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
+//     },
+//   );
 
-  const player = useMemo(() => {
-    return PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
-  }, [data]);
+//   const player = useMemo(() => {
+//     return PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
+//   }, [data]);
 
-  return {
-    player,
-    isFetched,
-  };
-};
+//   return {
+//     player,
+//     isFetched,
+//   };
+// };

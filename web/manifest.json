@@ -862,7 +862,7 @@
     {
       "name": "decide",
       "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
-      "class_hash": "0x1e9b729bd6bfb0ce80405addeb0d2cbd9e4d463d44eb9b43b7206b5c4ecd68f",
+      "class_hash": "0x5b92e5dc91d838a48f78c048595ec7e7418619f6d2c4c7b3d66a4cbb4e112e7",
       "abi": [
         {
           "type": "impl",
@@ -951,12 +951,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "action",
@@ -1003,12 +1003,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "outcome",
@@ -1038,6 +1038,65 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::player::PlayerStatus",
+          "variants": [
+            {
+              "name": "Normal",
+              "type": "()"
+            },
+            {
+              "name": "BeingMugged",
+              "type": "()"
+            },
+            {
+              "name": "BeingArrested",
+              "type": "()"
+            },
+            {
+              "name": "AtPawnshop",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::decide::decide::GameOver",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "player_status",
+              "type": "rollyourown::models::player::PlayerStatus",
+              "kind": "data"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u128",
+              "kind": "data"
+            }
+          ]
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::decide::decide::Event",
           "kind": "enum",
@@ -1050,6 +1109,11 @@
             {
               "name": "Consequence",
               "type": "rollyourown::systems::decide::decide::Consequence",
+              "kind": "nested"
+            },
+            {
+              "name": "GameOver",
+              "type": "rollyourown::systems::decide::decide::GameOver",
               "kind": "nested"
             }
           ]
@@ -1148,7 +1212,7 @@
     {
       "name": "lobby",
       "address": "0x24658d9efcc9b88af349c1143528a403831163178ccf5e3ef228947a8ba18c7",
-      "class_hash": "0x3824e4446fab4fec8ba9e7ff78e2ff5367082b225ff0c93f0742072d7a4acd8",
+      "class_hash": "0x78ff615047b581139ba8be07a410153d3b84e78379a0f1f5570d9901c69d50a",
       "abi": [
         {
           "type": "impl",
@@ -1273,16 +1337,6 @@
               "name": "start_time",
               "type": "core::integer::u64",
               "kind": "data"
-            },
-            {
-              "name": "max_turns",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "max_players",
-              "type": "core::integer::u32",
-              "kind": "data"
             }
           ]
         },
@@ -1337,7 +1391,7 @@
     {
       "name": "shop",
       "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
-      "class_hash": "0x5c78ce297ff090eeea05b503ce70f77ffd6df7c4aa8cd52d362be7b1035c7ce",
+      "class_hash": "0x3b9cbc26f6c05604f3c98d2e61a4f69071bf2a8a6f8be70641744d8f505c810",
       "abi": [
         {
           "type": "impl",
@@ -1536,12 +1590,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "item_id",
@@ -1563,12 +1617,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "item_id",
@@ -1608,7 +1662,7 @@
     {
       "name": "trade",
       "address": "0x7a511bfccd30f580a2b2f0e246177f681033fb24259fcc014de29b4c260c502",
-      "class_hash": "0x5cbb4a9648ef076dbccfb84c44a12d8534d3117380327bb458179759f17eb5f",
+      "class_hash": "0x71922b886300579e1ea8c41e1b6b4874baaf6eacbd558d82c5407a2637c9831",
       "abi": [
         {
           "type": "impl",
@@ -1775,12 +1829,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "drug_id",
@@ -1807,12 +1861,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "drug_id",
@@ -1864,7 +1918,7 @@
     {
       "name": "travel",
       "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
-      "class_hash": "0x7e95fdd1832fc99ee324c38b0ef0a1afe4e67ed5a91a7b96f3bbdb5ada89d16",
+      "class_hash": "0x27179f9bdaea93b75600e31226e2352bea287b2b739c77853100b9348d36f6e",
       "abi": [
         {
           "type": "impl",
@@ -1987,11 +2041,16 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u32",
               "kind": "data"
             },
             {
@@ -2036,12 +2095,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_status",
@@ -2120,12 +2179,12 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             }
           ]
         },

@@ -111,39 +111,15 @@ query LocationEntities($gameId: String!, $locationId: String!) {
   }
 }
 
-# TODO: Query entire game state per gameId in one query
-# query GameState($gameId: String!) {
-#   entities (first: 100, keys: [$gameId]]) {
-#     total_count
-#     edges {
-#       node {
-#         componentNames
-#         components {
-#           __typename
-#           ... on Game {
-#             creator
-#             is_finished
-#             max_players
-#             max_turns
-#             num_players
-#             start_time
-#           }
-#           ... on Player {
-#             cash
-#             health
-#             turns_remaining
-#           }
-#           ... on Drug {
-#             quantity
-#           }
-#           ... on Market {
-#             drug_id
-#             location_id
-#             cash
-#             quantity
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
+query PlayerLogs($game_id: String!, $player_id: String!) {
+  events(limit: 1000, keys: ["*", $game_id, $player_id]) {
+    total_count
+    edges {
+      node {
+        keys
+        data
+        created_at
+      }
+    }
+  }
+}

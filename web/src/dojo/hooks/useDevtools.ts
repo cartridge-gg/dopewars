@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
-// import { BaseEventData, parseEvent, parseEvents, WorldEvents } from "../events";
 import { Action, GameMode, Location, ItemEnum } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";

@@ -7,7 +7,6 @@ import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatCash } from "@/utils/ui";
 import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";

@@ -58,12 +58,12 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           variant="dotted"
           h="auto"
           maxH="calc(100% - 50px)"
-          overflowY= "scroll"
+          overflowY="scroll"
           ref={listRef}
         >
           {scores ? (
             scores.map((score, index) => {
-              const isOwn = score.address === account?.address;
+              const isOwn = score.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
               const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
@@ -84,7 +84,13 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                       {/* {score.dead ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
                       ) : ( */}
-                      <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                      <Avatar
+                        name={genAvatarFromId(score.avatarId)}
+                        color={avatarColor}
+                        hasCrown={index === 0}
+                        cursor="pointer"
+                        onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
+                      />
                       {/* )} */}
                     </Box>
 
@@ -99,7 +105,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                         {displayName}
                       </Text>
                     </HStack>
-                  
+
                     <Text
                       backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
                       backgroundSize="10px 10px"

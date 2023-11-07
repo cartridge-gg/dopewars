@@ -226,7 +226,7 @@ const ProfileButton = () => {
 
   return (
     <>
-      <Button h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
+      <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
         <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
       </Button>
       <Profile isOpen={isOpen} close={() => setIsOpen(false)} />
