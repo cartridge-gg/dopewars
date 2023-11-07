@@ -46,26 +46,10 @@ export default function Consequence() {
 
   return (
     <>
-      <Layout isSinglePanel>
-        <VStack h="full" overflowY="scroll">
-          <VStack>
-            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-              {outcome.title}
-            </Text>
-            <Heading fontSize={["40px", "48px"]} fontWeight="400" textAlign="center">
-              {outcome.name}
-            </Heading>
-          </VStack>
-          <Image alt={outcome.name} src={outcome.imageSrc} maxH="50vh" height="500px" />
-          <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-            <VStack textAlign="center">
-              <Text>{response}</Text>
-              <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
-              <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
-            </VStack>
-          </VStack>
-          <Box minH="60px" />
-          <Footer position={["relative", "absolute"]}>
+      <Layout
+        isSinglePanel
+        footer={
+          <Footer>
             {!isDead ? (
               <Button
                 w={["full", "auto"]}
@@ -97,6 +81,26 @@ export default function Consequence() {
               </Button>
             )}
           </Footer>
+        }
+      >
+        <VStack h="full">
+          <VStack>
+            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+              {outcome.title}
+            </Text>
+            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+              {outcome.name}
+            </Heading>
+          </VStack>
+          <Image alt={outcome.name} src={outcome.imageSrc} maxH="50vh" height="500px" />
+          <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
+            <VStack textAlign="center">
+              <Text>{response}</Text>
+              <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
+              <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
+            </VStack>
+          </VStack>
+          <Box display="block" minH="70px" h="70px" w="full" />
         </VStack>
       </Layout>
     </>

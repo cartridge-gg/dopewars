@@ -96,7 +96,7 @@ export default function End() {
               </Text>
             )}
 
-            <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+            <Heading fontSize={["36px", "48px"]} fontWeight="normal">
               Game Over
             </Heading>
             <HStack w="full">

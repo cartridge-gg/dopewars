@@ -57,64 +57,7 @@ export default function New() {
         title: "New Game",
         imageSrc: "/images/will-smith-with-attitude.png",
       }}
-    >
-      <>
-        <VStack h="80%" w={["full", "400px"]} alignItems="center" justifyContent="center">
-          <VStack w="full">
-            <Text textStyle="subheading" fontSize="13px">
-              Name Entry
-            </Text>
-            <HStack color="neon.500">
-              <Text> What&apos;s your name playa ?</Text>
-            </HStack>
-
-            <HStack my="30px" align="center" justify="center">
-              <Arrow
-                style="outline"
-                direction="left"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={() => (avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount()))}
-              />
-
-              <Card mx="20px">
-                <Avatar name={genAvatarFromId(avatarId)} w="96px" h="96px" />
-              </Card>
-
-              <Arrow
-                style="outline"
-                direction="right"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={() => setAvatarId((avatarId + 1) % getAvatarCount())}
-              />
-            </HStack>
-            <Input
-              display="flex"
-              mx="auto"
-              maxW="260px"
-              maxLength={20}
-              placeholder="Enter your name"
-              autoFocus={true}
-              value={name}
-              onChange={(e) => {
-                setError("");
-                setName(e.target.value);
-              }}
-            />
-            <VStack w="full" h="80px">
-              <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
-                Max 20 characters
-              </Text>
-              <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
-                {error}
-              </Text>
-            </VStack>
-          </VStack>
-        </VStack>
-
+      footer={
         <Footer>
           <Button w={["full", "auto"]} onClick={() => router.push("/")}>
             Back
@@ -126,7 +69,63 @@ export default function New() {
             Create New Test Game
           </Button>
         </Footer>
-      </>
+      }
+    >
+      <VStack w={["full", "400px"]} margin="auto">
+        <VStack w="full">
+          <Text textStyle="subheading" fontSize="13px">
+            Name Entry
+          </Text>
+          <HStack color="neon.500">
+            <Text> What&apos;s your name playa ?</Text>
+          </HStack>
+
+          <HStack my="30px" align="center" justify="center">
+            <Arrow
+              style="outline"
+              direction="left"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={() => (avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount()))}
+            />
+
+            <Card mx="20px">
+              <Avatar name={genAvatarFromId(avatarId)} w="96px" h="96px" />
+            </Card>
+
+            <Arrow
+              style="outline"
+              direction="right"
+              boxSize="48px"
+              userSelect="none"
+              cursor="pointer"
+              onClick={() => setAvatarId((avatarId + 1) % getAvatarCount())}
+            />
+          </HStack>
+          <Input
+            display="flex"
+            mx="auto"
+            maxW="260px"
+            maxLength={20}
+            placeholder="Enter your name"
+            autoFocus={true}
+            value={name}
+            onChange={(e) => {
+              setError("");
+              setName(e.target.value);
+            }}
+          />
+          <VStack w="full" h="80px">
+            <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
+              Max 20 characters
+            </Text>
+            <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
+              {error}
+            </Text>
+          </VStack>
+        </VStack>
+      </VStack>
     </Layout>
   );
 }

@@ -69,9 +69,28 @@ export default function Location() {
         prefixTitle: prefixTitle,
         imageSrc: `/images/locations/${getLocationById(locationEntity.id)?.slug}.png`,
       }}
+      footer={
+        <Footer>
+          <Button
+            w={["full", "auto"]}
+            onClick={() => {
+              if (isLastDay) {
+                router.push(`/${gameId}/end`);
+              } else {
+                router.push(`/${gameId}/travel`);
+              }
+            }}
+          >
+            {isLastDay ? "End Game" : "Continue"}
+          </Button>
+        </Footer>
+      }
     >
-      <Inventory />
-      <VStack w="full" pt={["0px", "20px"]} align="flex-start" gap="12px" overflowY="scroll">
+      <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={["8px", "16px"]}>
+        <Inventory />
+      </Box>
+
+      <VStack w="full" align="flex-start" gap="10px">
         <Text textStyle="subheading" fontSize="10px" color="neon.500">
           Market
         </Text>
@@ -124,22 +143,7 @@ export default function Location() {
             );
           })}
         </SimpleGrid>
-        <Box minH="60px" />
       </VStack>
-      <Footer>
-        <Button
-          w={["full", "auto"]}
-          onClick={() => {
-            if (isLastDay) {
-              router.push(`/${gameId}/end`);
-            } else {
-              router.push(`/${gameId}/travel`);
-            }
-          }}
-        >
-          {isLastDay ? "End Game" : "Continue"}
-        </Button>
-      </Footer>
     </Layout>
   );
 }

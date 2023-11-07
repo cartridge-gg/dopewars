@@ -239,7 +239,7 @@ export default function Decision() {
 
   return (
     <Layout isSinglePanel>
-      <HStack w="full" h="full" flexDir={["column", "row"]}>
+      <HStack w="full" h={["calc(100vh - 70px)", "calc(100vh - 120px)"]} overflowY="scroll" flexDir={["column", "row"]}>
         <Encounter
           prefixTitle={prefixTitle}
           title={title}
@@ -248,42 +248,49 @@ export default function Decision() {
           encounter={encounter!}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
           flex={[0, 1]}
-          mb={["20px", "0"]}
+          mb={0}
           w="full"
         />
 
-        <VStack flex={[0, 1]} w="full" h="100%" position="relative">
-          <Inventory />
-
-          <VStack w="full" h="100%" overflowY="scroll">
-            <VStack w="full" alignItems="flex-start">
-              <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
-                Combat Log
-              </Text>
-              <Card w="full" maxH="calc( 100vh - 400px)" overflowY="scroll" alignItems="flex-start" px="16px" py="8px">
-                <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
-                  <Heart /> You lost {healthLoss} HP!
+        <VStack w="full" h={["auto", "90%"]} flex={[0, 1]} position="relative">
+          <VStack w="full" h={["100%"]}>
+            <Inventory />
+            <VStack w="full" h="100%">
+              <VStack w="full" alignItems="flex-start">
+                <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
+                  Combat Log
                 </Text>
+                <Card
+                  w="full"
+                  maxH="calc( 100vh - 340px)"
+                  overflowY="scroll"
+                  alignItems="flex-start"
+                  px="16px"
+                  py="8px"
+                >
+                  <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
+                    <Heart /> You lost {healthLoss} HP!
+                  </Text>
 
-                <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
-                  {combatLogs &&
-                    combatLogs.map((i, key) => (
-                      <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
-                        {i.icon &&
-                          i.icon({
-                            boxSize: "26",
-                          })}
-                        <Text>{i.text}</Text>
-                      </HStack>
-                    ))}
-                </VStack>
-              </Card>
+                  <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
+                    {combatLogs &&
+                      combatLogs.map((i, key) => (
+                        <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
+                          {i.icon &&
+                            i.icon({
+                              boxSize: "26",
+                            })}
+                          <Text>{i.text}</Text>
+                        </HStack>
+                      ))}
+                  </VStack>
+                </Card>
+              </VStack>
             </VStack>
           </VStack>
-          <Box minH="60px" />
 
-          <Footer w="full" position={["relative", "absolute"]}>
-            {/* {attackItem && ( */}
+          <Box minH="60px" />
+          <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
             <Button
               w="full"
               isDisabled={isRunning || isPaying}
@@ -293,12 +300,8 @@ export default function Decision() {
                 onDecision(Action.Fight);
               }}
             >
-              {/* {getShopItem(attackItem.id, attackItem.level).icon({
-                  boxSize: "26",
-                })} */}
               Fight
             </Button>
-            {/* )} */}
 
             <Button
               w="full"
@@ -309,10 +312,6 @@ export default function Decision() {
                 onDecision(Action.Run);
               }}
             >
-              {/* {speedItem &&
-                getShopItem(speedItem.id, speedItem.level).icon({
-                  boxSize: "26",
-                })} */}
               Run
             </Button>
             <Button
@@ -355,7 +354,7 @@ const Encounter = ({
         <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
         </Text>
-        <Heading fontSize={["40px", "48px"]} fontWeight="400">
+        <Heading fontSize={["36px", "48px"]} fontWeight="400">
           {title}
         </Heading>
       </VStack>
@@ -369,48 +368,60 @@ const Encounter = ({
         {!IsMobile() && sentence && (
           <>
             <Box top="0" position="absolute" w="280px">
-              <Card fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
+              <Box fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
                 {sentence}
-              </Card>
+              </Box>
               <Card marginLeft="160px" w="10px" fontSize="12px" p="8px"></Card>
               <Card marginLeft="180px" w="10px" fontSize="12px" p="6px"></Card>
             </Box>
           </>
         )}
 
-        <Image src={imageSrc} alt="adverse event" mt={[0, "10px"]} w={[160, 400]} h={[160, 400]} />
+        <Image
+          src={imageSrc}
+          alt="adverse event"
+          mt={[0, "10px"]}
+          maxH={["auto", "calc(100vh - 400px)"]}
+          w={[160, "auto"]}
+          h={[160, 400]}
+        />
 
         <VStack w="full">
-          <Card alignItems="center" w={["full","auto"]} justify="center" mt={["20px", "50px"]}>
-            <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-              <HStack>
-                <Siren /> <Text> LVL {encounter.level}</Text>
+          <Card alignItems="center" w={["full", "auto"]} justify="center" mt={["20px", "40px"]}>
+            <VStack w="full" gap="0">
+              <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
+                <HStack>
+                  <Siren /> <Text> LVL {encounter.level}</Text>
+                </HStack>
+                {IsMobile() ? (
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                ) : (
+                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+                )}
+                <CashIndicator cash={encounter.payout} />
+                {IsMobile() ? (
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                ) : (
+                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+                )}
+                <HealthIndicator health={encounter.health} />
               </HStack>
-              {IsMobile() ? (
-                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-              ) : (
-                <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+              {!IsMobile() && (
+                <Box w="full" px="10px">
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                  <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
+                    {demand}
+                  </Text>
+                </Box>
               )}
-              <CashIndicator cash={encounter.payout} />
-              {IsMobile() ? (
-                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-              ) : (
-                <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-              )}
-              <HealthIndicator health={encounter.health} />
-            </HStack>
+            </VStack>
           </Card>
-          {!IsMobile() && (
-            <Text color="yellow.400" textAlign="center">
-              {demand}
-            </Text>
-          )}
         </VStack>
       </VStack>
       {IsMobile() && (
-        <Text color="yellow.400" textAlign="center">
+        <Card w="full" color="yellow.400" textAlign="center" p="10px" mb="10px">
           {demand}
-        </Text>
+        </Card>
       )}
     </VStack>
   );

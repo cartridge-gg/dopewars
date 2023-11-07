@@ -198,7 +198,6 @@ export default function Travel() {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices prices={prices} />
-        <Spacer minH="100px" />
         <HStack w={["auto !important", "full"]} position={["relative", "absolute"]} bottom={0} pointerEvents="all">
           {playerEntity.turn > 0 && (
             <Button isDisabled={isPending} w={["full", "auto"]} onClick={() => router.back()}>
@@ -233,9 +232,11 @@ export default function Travel() {
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} />
         <HStack w="full" pointerEvents="all">
-          <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
-            Back
-          </Button>
+          {playerEntity.turn > 0 && (
+            <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
+              Back
+            </Button>
+          )}
           <Button
             w={["full", "auto"]}
             isDisabled={!targetId || targetId === currentLocationId}

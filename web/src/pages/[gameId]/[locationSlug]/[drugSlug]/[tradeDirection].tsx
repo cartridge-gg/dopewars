@@ -112,14 +112,37 @@ export default function Market() {
         prefixTitle: "The market",
         imageSrc: "/images/dealer.png",
       }}
+      footer={
+        <Footer>
+          <Button w={["full", "auto"]} onClick={() => router.back()}>
+            Back
+          </Button>
+
+          {tradeDirection == TradeDirection.Buy && canBuy && (
+            <Button
+              w={["full", "auto"]}
+              isLoading={isPending /* && !txError*/}
+              isDisabled={quantityBuy === 0}
+              onClick={onTrade}
+            >
+              Buy ({quantityBuy})
+            </Button>
+          )}
+
+          {tradeDirection == TradeDirection.Sell && canSell && (
+            <Button
+              w={["full", "auto"]}
+              isLoading={isPending /*&& !txError*/}
+              isDisabled={quantitySell === 0}
+              onClick={onTrade}
+            >
+              Sell ({quantitySell})
+            </Button>
+          )}
+        </Footer>
+      }
     >
-      <VStack
-        boxSize="full"
-        // justify={["normal", "center"]}
-        h="full"
-        mt={["0", "50px"]}
-        overflowY={["auto", "scroll"]}
-      >
+      <Box w="full" margin="auto">
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
           <Image src={`/images/drugs/${drug.slug}.png`} alt={drug.name} h={[140, 300]} maxH="40vh" />
           <HStack w="100%" justifyContent="space-between" fontSize="16px">
@@ -154,36 +177,7 @@ export default function Market() {
         {tradeDirection == TradeDirection.Sell && !canSell && (
           <AlertMessage message={`You have no ${drug.name} to sell`} />
         )}
-      </VStack>
-      <Box minH="60px" display="flex" />
-
-      <Footer w={["full"]}>
-        <Button w={["full", "auto"]} onClick={() => router.back()}>
-          Back
-        </Button>
-
-        {tradeDirection == TradeDirection.Buy && canBuy && (
-          <Button
-            w={["full", "auto"]}
-            isLoading={isPending /* && !txError*/}
-            isDisabled={quantityBuy === 0}
-            onClick={onTrade}
-          >
-            Buy ({quantityBuy})
-          </Button>
-        )}
-
-        {tradeDirection == TradeDirection.Sell && canSell && (
-          <Button
-            w={["full", "auto"]}
-            isLoading={isPending /*&& !txError*/}
-            isDisabled={quantitySell === 0}
-            onClick={onTrade}
-          >
-            Sell ({quantitySell})
-          </Button>
-        )}
-      </Footer>
+      </Box>
     </Layout>
   );
 }

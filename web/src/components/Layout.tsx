@@ -1,9 +1,10 @@
-import { VStack, Heading, Text, Flex, Image, StyleProps, Container, Box } from "@chakra-ui/react";
+import { VStack, Heading, Text, Flex, Image, StyleProps, Container, Box, Button, Spacer } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
 import CrtEffect from "./CrtEffect";
+import { Footer } from "./Footer";
 
 export interface LayoutProps {
   CustomLeftPanel?: React.FC;
@@ -12,6 +13,7 @@ export interface LayoutProps {
   actions?: ReactNode;
   children: ReactNode;
   isSinglePanel?: boolean;
+  footer?: ReactNode;
 }
 
 export interface LeftPanelProps {
@@ -21,7 +23,14 @@ export interface LeftPanelProps {
   map?: ReactNode;
 }
 
-const Layout = ({ CustomLeftPanel, leftPanelProps, showBack, children, isSinglePanel = false }: LayoutProps) => {
+const Layout = ({
+  CustomLeftPanel,
+  leftPanelProps,
+  showBack,
+  children,
+  isSinglePanel = false,
+  footer,
+}: LayoutProps) => {
   return (
     <>
       <Flex
@@ -33,11 +42,14 @@ const Layout = ({ CustomLeftPanel, leftPanelProps, showBack, children, isSingleP
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container position="relative">
+        <Container position="relative" p={["8px", "16px"]}>
           {!isSinglePanel && (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel />)}
-          <RightPanel flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}>{children}</RightPanel>
+          <RightPanel flex={[!!leftPanelProps?.map ? "0" : "1", "1"]} footer={footer} isSinglePanel={isSinglePanel}>
+            {children}
+          </RightPanel>
         </Container>
-        <Box maxH="40px" h="full" display={["none", "block"]} />
+
+        <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
       </Flex>
       <CrtEffect />
     </>
@@ -64,10 +76,26 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
   );
 };
 
-const RightPanel = ({ children, ...props }: { children: ReactNode } & StyleProps) => {
+const RightPanel = ({
+  children,
+  footer,
+  isSinglePanel,
+  ...props
+}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean } & StyleProps) => {
   return (
-    <VStack position="relative" flex="1" overflowY="scroll" {...props}>
-      {children}
+    <VStack position="relative" w="full" {...props}>
+      <VStack
+        position="relative"
+        flex="1"
+        // overflowY={isSinglePanel ? "" : "scroll"}
+        overflowY={"scroll"}
+        w="full"
+        maxH={isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 140px)"}
+      >
+        {children}
+        {!isSinglePanel && <Box display="block" minH="70px" h="70px" w="full" />}
+      </VStack>
+      {footer}
     </VStack>
   );
 };

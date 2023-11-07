@@ -11,9 +11,10 @@ export const Footer = ({
   return (
     <HStack
       w="full"
-      minH="80px"
+      minH="60px"
       p="2px"
-      position={["relative", "absolute"]}
+     // position={["relative", "absolute"]}
+      position={"absolute"}
       bottom="0"
       justify="center"
       align="flex-end"

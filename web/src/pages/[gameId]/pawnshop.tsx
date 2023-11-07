@@ -84,7 +84,7 @@ export default function PawnShop() {
 
     try {
       const icon = selectedShopItem.icon;
-      playSound(Sounds.Trade)
+      playSound(Sounds.Trade);
       const { hash, events } = await buyItem(gameId, selectedShopItem.type);
 
       toaster.toast({
@@ -116,29 +116,38 @@ export default function PawnShop() {
         title: "Pawn Shop",
         imageSrc: "/images/pawnshop.png",
       }}
+      footer={
+        <Footer>
+          <Button w="full" isLoading={isSkipping} isDisabled={isPending} onClick={onSkip}>
+            Skip
+          </Button>
+          <Button
+            w="full"
+            isLoading={isBuying}
+            isDisabled={
+              isPending ||
+              !selectedShopItem ||
+              selectedShopItem.cost > playerEntity.cash ||
+              (playerEntity?.items.length === playerEntity?.maxItems &&
+                playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
+            }
+            onClick={buy}
+          >
+            Buy
+          </Button>
+        </Footer>
+      }
     >
-      <VStack
-        w="full"
-        pt={["0px", "20px"]}
-        gap="20px"
-        sx={{
-          overflowY: "scroll",
-        
-        }}
-        margin="auto"
-      >
+      <VStack w="full" pt={["0px", "20px"]} gap="20px" margin="auto">
         <Inventory />
 
         <VStack w="full" alignItems="flex-start" mt="10px">
           <Text textStyle="subheading" fontSize="10px" color="neon.500">
             For sale - choose one
           </Text>
-          {/* <VStack w="full">
-            <Text fontSize="12px">Max items : {playerEntity && playerEntity.maxItems}</Text>
-          </VStack> */}
         </VStack>
 
-        <SimpleGrid columns={[1,2]} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
+        <SimpleGrid columns={[1, 2]} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
           {availableShopItems &&
             availableShopItems.map((shopItem, index) => {
               return (
@@ -160,13 +169,13 @@ export default function PawnShop() {
                 >
                   <VStack w="full" gap="10px">
                     <HStack w="full" justify="space-between">
-                      <Text textStyle="heading" textTransform="uppercase" fontSize={["16px", "20px"]}>
+                      <Text textStyle="heading" textTransform="uppercase" fontSize={["18px", "20px"]}>
                         {shopItem.name}
                       </Text>
                       {shopItem.icon({ width: "40px", height: "40px" })}
                     </HStack>
                     <HStack w="full" justifyContent="space-between">
-                      <Text fontSize={["16px", "20px"]}>${shopItem.cost}</Text>
+                      <Text fontSize={["18px", "20px"]}>${shopItem.cost}</Text>
                       <Text fontSize={["14px", "16px"]} opacity="0.5">
                         {getShopItemStatname(shopItem.typeText)} +{shopItem.value}
                       </Text>
@@ -176,28 +185,7 @@ export default function PawnShop() {
               );
             })}
         </SimpleGrid>
-        <Box minH="60px" />
       </VStack>
-
-      <Footer>
-        <Button w={["full", "full"]} isLoading={isSkipping} isDisabled={isPending} onClick={onSkip}>
-          Skip
-        </Button>
-        <Button
-          w={["full", "full"]}
-          isLoading={isBuying}
-          isDisabled={
-            isPending ||
-            !selectedShopItem ||
-            selectedShopItem.cost > playerEntity.cash ||
-            (playerEntity?.items.length === playerEntity?.maxItems &&
-              playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
-          }
-          onClick={buy}
-        >
-          Buy
-        </Button>
-      </Footer>
     </Layout>
   );
 }

@@ -14,7 +14,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const { playerEntity } = playerEntityStore;
 
   return (
-    <VStack {...props} w="full" align="flex-start" pb="0">
+    <VStack {...props} w="full" align="flex-start" pb="0" gap={[0,"6px"]}>
       {/* <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
         Inventory
       </Text> */}
@@ -35,12 +35,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
       </HStack>
 
       <HStack w="full" flexWrap={"wrap"} justify="space-between">
-        <Card
-          // w="full"
-          h="40px"
-          px="20px"
-          justify="center"
-        >
+        <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
             {playerEntity?.items.map((item, key) => {
               return (
@@ -70,12 +65,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
           </HStack>
         </Card>
 
-        <Card
-          // w="full"
-          h="40px"
-          px="20px"
-          justify="center"
-        >
+        <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-start">
             {playerEntity?.drugCount === 0 ? (
               <Text color="neon.500">Bag is empty</Text>
