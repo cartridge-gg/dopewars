@@ -10,10 +10,10 @@ export interface LayoutProps {
   CustomLeftPanel?: React.FC;
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
-  actions?: ReactNode;
   children: ReactNode;
   isSinglePanel?: boolean;
   footer?: ReactNode;
+  rigthPanelMaxH?: string;
 }
 
 export interface LeftPanelProps {
@@ -21,6 +21,7 @@ export interface LeftPanelProps {
   prefixTitle?: string;
   imageSrc?: string;
   map?: ReactNode;
+  flex: string;
 }
 
 const Layout = ({
@@ -29,6 +30,7 @@ const Layout = ({
   showBack,
   children,
   isSinglePanel = false,
+  rigthPanelMaxH,
   footer,
 }: LayoutProps) => {
   return (
@@ -42,9 +44,15 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container position="relative" p={["8px", "16px"]}>
-          {!isSinglePanel && (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel />)}
-          <RightPanel flex={[!!leftPanelProps?.map ? "0" : "1", "1"]} footer={footer} isSinglePanel={isSinglePanel}>
+        <Container position="relative" px={["8px", "16px"]} py="16px">
+          {!isSinglePanel &&
+            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel {...leftPanelProps} />)}
+          <RightPanel
+            flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
+            footer={footer}
+            isSinglePanel={isSinglePanel}
+            rigthPanelMaxH={rigthPanelMaxH}
+          >
             {children}
           </RightPanel>
         </Container>
@@ -80,17 +88,17 @@ const RightPanel = ({
   children,
   footer,
   isSinglePanel,
+  rigthPanelMaxH,
   ...props
-}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean } & StyleProps) => {
+}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH: string } & StyleProps) => {
   return (
     <VStack position="relative" w="full" {...props}>
       <VStack
         position="relative"
         flex="1"
-        // overflowY={isSinglePanel ? "" : "scroll"}
         overflowY={"scroll"}
         w="full"
-        maxH={isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 140px)"}
+        maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 140px)")}
       >
         {children}
         {!isSinglePanel && <Box display="block" minH="70px" h="70px" w="full" />}

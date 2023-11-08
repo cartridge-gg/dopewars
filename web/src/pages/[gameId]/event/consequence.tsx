@@ -54,7 +54,7 @@ export default function Consequence() {
               <Button
                 w={["full", "auto"]}
                 onClick={() => {
-                  console.log(outcome);
+                 // console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
                     return router.push(`/${gameId}/event/decision`);
                   }

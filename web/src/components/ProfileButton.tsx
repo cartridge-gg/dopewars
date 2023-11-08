@@ -29,16 +29,35 @@ import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, Twitter } from "./icons";
-import { formatCash } from "@/utils/ui";
+import { Dots, Gem, Twitter } from "./icons";
+import { IsMobile, formatCash } from "@/utils/ui";
 import Link from "next/link";
 import { SCALING_FACTOR } from "@/dojo/constants";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
 import CashIndicator from "./player/CashIndicator";
 import ShareButton from "./ShareButton";
+import { useRouter } from "next/router";
+import { Glock } from "./icons/items";
 
-const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
+const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
+  return (
+    <Modal isOpen={isOpen} onClose={close} isCentered>
+      <ModalOverlay />
+      <ModalContent maxH="90vh" maxWidth={"420px"}>
+        <VStack w="full" px="16px">
+          <Profile close={close} />
+        </VStack>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+export const Profile = ({ close, ...props }: { close: () => void }) => {
+  const router = useRouter();
+  const gameId = router.query.gameId as string;
+  const playerId = router.query.playerId as string;
+
   const { account, playerEntityStore } = useDojoContext();
   const { playerEntity } = playerEntityStore;
 
@@ -46,6 +65,8 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(undefined);
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
   const [transportItem, setTransportItem] = useState<ShopItem | undefined>(undefined);
+
+  const isMobile = IsMobile();
 
   useEffect(() => {
     if (!playerEntity) return;
@@ -58,37 +79,43 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   if (!account || !playerEntity) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={close} isCentered>
-      <ModalOverlay />
-      <ModalContent maxH="90vh" maxWidth={"420px"}>
-        <ModalHeader pt="30px">
-          <VStack w="full">
-            <Heading fontFamily="dos-vga" fontWeight="normal" fontSize="24px">
-              {playerEntity.name}
-            </Heading>
-            <HStack color="neon.500">
-              <Calendar /> <Text>DAY {playerEntity.turn}</Text>
-            </HStack>
-          </VStack>
-        </ModalHeader>
-        <ModalBody justifyContent="center">
+    <VStack w="full" {...props}>
+      <VStack w="full" maxW="420px" my="auto" pb={[0, "30px"]}>
+        <Box w="full" justifyContent="center">
           <VStack w="full">
             <HStack w="full" fontSize="14px">
-              <Card flex={1}>
-              <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
+              <Card flex={1} alignItems="center">
+                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
               </Card>
-              <Card flex={3}>
-                <HStack w="full" gap="0">
+              <Card flex={2}>
+                <HStack h="40px" px="10px">
+                  <Heading fontFamily="dos-vga" fontWeight="normal" fontSize="20px">
+                    <Gem /> {playerEntity.name}
+                  </Heading>
+                </HStack>
+
+                <Divider
+                  orientation="horizontal"
+                  w="full"
+                  borderTopWidth="1px"
+                  borderBottomWidth="1px"
+                  borderColor="neon.600"
+                />
+                <HStack h="40px" px="10px">
+                  <Calendar /> <Text>DAY {playerEntity.turn}</Text>
+                </HStack>
+
+                {/* <HStack w="full" gap="0">
                   <VStack w="full" align="flex-start" gap="0">
                     <CashIndicator cash={playerEntity?.cash} h="40px" w="full" ml="8px" />
-                    <Divider
+                     <Divider
                       orientation="horizontal"
                       borderTopWidth="1px"
                       borderBottomWidth="1px"
                       borderColor="neon.600"
                     />
-                    <CashIndicator cash={420} h="40px" w="full" ml="8px" />
                   </VStack>
+                  
                   <Divider orientation="vertical" h="80px" borderWidth="1px" borderColor="neon.600" />
 
                   <VStack w="110px" align="flex-start" gap="0">
@@ -102,7 +129,7 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
                     />
                     <WantedIndicator wanted={playerEntity?.wanted} h="40px" w="full" ml="8px" />
                   </VStack>
-                </HStack>
+                </HStack> */}
               </Card>
             </HStack>
 
@@ -170,17 +197,32 @@ const Profile = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
               </Card>
             </HStack>
           </VStack>
-        </ModalBody>
-        <ModalFooter justifyContent="center" w="full" pb="30px" pt="30px">
+        </Box>
+        <Box w="full" justifyContent="center" w="full" py={["10px", "30px"]}>
           <HStack w="full">
-            <Button w="full" onClick={close}>
-              Close
-            </Button>
+            {close && (
+              <Button w="full" onClick={close}>
+                Close
+              </Button>
+            )}
+            {!playerId && (
+              <ChakraLink
+                href={`${window.location.origin}/${gameId}/logs?playerId=${account.address}`}
+                target="_blank"
+                w="full"
+                textDecoration="none"
+                _hover={{
+                  textDecoration: "none",
+                }}
+              >
+                <Button w="full">Game Link</Button>
+              </ChakraLink>
+            )}
             <ShareButton />
           </HStack>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </Box>
+      </VStack>
+    </VStack>
   );
 };
 
@@ -212,12 +254,12 @@ export const ProfileButtonMobile = () => {
       <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
         <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
       </MenuItem>
-      <Profile isOpen={isOpen} close={() => setIsOpen(false)} />
+      <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
   );
 };
 
-const ProfileButton = () => {
+export const ProfileButton = () => {
   const { account, playerEntityStore } = useDojoContext();
   const { playerEntity } = playerEntityStore;
   const [isOpen, setIsOpen] = useState(false);
@@ -229,9 +271,54 @@ const ProfileButton = () => {
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
         <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
       </Button>
-      <Profile isOpen={isOpen} close={() => setIsOpen(false)} />
+      <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
   );
 };
 
-export default ProfileButton;
+export const ProfileLink = () => {
+  const router = useRouter();
+  const gameId = router.query.gameId as string;
+
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClick = () => {
+    console.log(router.pathname);
+    if (router.pathname === "/[gameId]/logs") {
+      router.back();
+    } else {
+      router.push(`/${gameId}/logs`);
+    }
+  };
+
+  if (!account || !playerEntity) return null;
+
+  return (
+    <>
+      <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
+        <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
+      </Button>
+    </>
+  );
+};
+
+export const ProfileLinkMobile = () => {
+  const router = useRouter();
+  const gameId = router.query.gameId as string;
+
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!account || !playerEntity) return null;
+
+  return (
+    <>
+      <MenuItem h="48px" borderRadius={0} onClick={() => router.push(`/${gameId}/logs`)}>
+        <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
+      </MenuItem>
+    </>
+  );
+};

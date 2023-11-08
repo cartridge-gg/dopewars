@@ -136,7 +136,7 @@ mod decide {
                             let encounter_settings = EncounterSettingsImpl::get(
                                 game.game_mode, @player, encounter.level
                             );
-                            encounter_settings.dmg
+                            encounter_settings.dmg.pct(60)
                         },
                         PlayerStatus::BeingArrested => {
                             let mut encounter = EncounterImpl::get_or_spawn(
@@ -145,7 +145,7 @@ mod decide {
                             let encounter_settings = EncounterSettingsImpl::get(
                                 game.game_mode, @player, encounter.level
                             );
-                            encounter_settings.dmg
+                            encounter_settings.dmg.pct(80)
                         },
                         PlayerStatus::AtPawnshop => { 0 },
                     };

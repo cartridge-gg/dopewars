@@ -17,6 +17,7 @@ import {
 } from "@/components/icons/drugs";
 
 import {
+  Action,
   Drug,
   DrugInfo,
   DrugMarket,
@@ -239,7 +240,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 1,
     icon: Knife,
     value: 0,
-    name: "",
+    name: "Knife",
     cost: 0,
   },
   {
@@ -249,7 +250,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 2,
     icon: Glock,
     value: 0,
-    name: "",
+    name: "Glock",
     cost: 0,
   },
   {
@@ -259,7 +260,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 3,
     icon: Uzi,
     value: 0,
-    name: "",
+    name: "Uzi",
     cost: 0,
   },
 
@@ -271,7 +272,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 1,
     icon: Fannypack,
     value: 0,
-    name: "",
+    name: "Fanny Pack",
     cost: 0,
   },
   {
@@ -281,7 +282,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 2,
     icon: Backpack,
     value: 0,
-    name: "",
+    name: "Backpack",
     cost: 0,
   },
   {
@@ -291,7 +292,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 3,
     icon: Dufflebag,
     value: 0,
-    name: "",
+    name: "Duffle Bag",
     cost: 0,
   },
 
@@ -303,7 +304,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 1,
     icon: Kneepads,
     value: 0,
-    name: "",
+    name: "Knee Pads",
     cost: 0,
   },
   {
@@ -313,7 +314,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 2,
     icon: Leatherjacket,
     value: 0,
-    name: "",
+    name: "Leather Jacket",
     cost: 0,
   },
   {
@@ -323,7 +324,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 3,
     icon: Kevlar,
     value: 0,
-    name: "",
+    name: "Kevlar",
     cost: 0,
   },
   // speed 
@@ -334,7 +335,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 1,
     icon: Shoes,
     value: 0,
-    name: "",
+    name: "Shoes",
     cost: 0,
   },
   {
@@ -344,7 +345,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 2,
     icon: Skateboard,
     value: 0,
-    name: "",
+    name: "Skateboard",
     cost: 0,
   },
   {
@@ -354,7 +355,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     level: 3,
     icon: Bicycle,
     value: 0,
-    name: "",
+    name: "Bicycle",
     cost: 0,
   },
 ]
@@ -402,6 +403,38 @@ export function getShopItemByType(type: ItemEnum, level: number): ShopItemInfo {
   }
   return item;
 }
+
+export function getActionName(action: Action): string {
+  switch (action) {
+    case Action.Fight:
+      return "Fight";
+    case Action.Pay:
+      return "Pay";
+    case Action.Run:
+      return "Run";
+    default:
+      "?"
+  }
+}
+
+
+export function getOutcomeName(outcome: Outcome): string {
+  switch (outcome) {
+    case Outcome.Captured:
+      return "Captured";
+    case Outcome.Died:
+      return "Died";
+    case Outcome.Escaped:
+      return "Escaped";
+    case Outcome.Paid:
+      return "Paid";
+    case Outcome.Victorious:
+      return "Victorious";
+    default:
+      "?"
+  }
+}
+
 
 export function getShopItemStatname(typ: ItemTextEnum): string {
   switch (typ) {

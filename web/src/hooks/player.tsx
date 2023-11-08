@@ -133,7 +133,7 @@ const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
     playerEntity: state.playerEntity?.update(playerUpdate),
   }));
 
-  console.log("updated : Player");
+  //console.log("updated : Player");
 };
 
 const onPlayerEntityRelatedData = ({ data }: { data: World__Subscription }) => {
@@ -144,21 +144,21 @@ const onPlayerEntityRelatedData = ({ data }: { data: World__Subscription }) => {
       usePlayerEntityStore.setState((state) => ({
         playerEntity: state.playerEntity?.updateDrug(model as unknown as Drug),
       }));
-      console.log(`updated : Drug`);
+      // console.log(`updated : Drug`);
     }
 
     if (model && model.__typename === "Item") {
       usePlayerEntityStore.setState((state) => ({
         playerEntity: state.playerEntity?.updateItem(model as unknown as Item),
       }));
-      console.log(`updated : Item`);
+      // console.log(`updated : Item`);
     }
 
     if (model && model.__typename === "Encounter") {
       usePlayerEntityStore.setState((state) => ({
         playerEntity: state.playerEntity?.updateEncounter(model as unknown as Encounter),
       }));
-      console.log(`updated : Encounter`);
+      // console.log(`updated : Encounter`);
     }
   }
 };

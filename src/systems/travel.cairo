@@ -218,16 +218,17 @@ fn on_turn_end(
     // update turn
     player.turn += 1;
 
-    // emit raw event Traveled
-    world
-        .emit_raw(
-            array![selector!("Traveled"), (*game.game_id).into(), player.player_id.into()],
-            array![
-                player.turn.into(),
-                player.location_id.into(),
-                player.next_location_id.into()
-            ]
-        );
-
+    // emit raw event Traveled if stil alive
+    if player.health > 0 {
+        world
+            .emit_raw(
+                array![selector!("Traveled"), (*game.game_id).into(), player.player_id.into()],
+                array![
+                    (player.turn - 1).into(),
+                    player.location_id.into(),
+                    player.next_location_id.into()
+                ]
+            );
+    }
     true
 }

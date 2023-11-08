@@ -156,8 +156,8 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
             travel,
             capture,
             encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-            cops_drug_threshold: 8, // cops encounter threshold
-            gangs_cash_threshold: 200_0000, // gangs encounter threshold
+            cops_drug_threshold: 7, // cops encounter threshold
+            gangs_cash_threshold: 500_0000, // gangs encounter threshold
             health_increase_by_turn: 0,
             wanted_decrease_by_turn: 1,
             wanted_decrease_zero_drug: 10,
@@ -216,7 +216,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
 impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
         let mut shop_settings = ShopSettings {
-            max_item_allowed: 3, max_item_level: 3, opening_freq: 5
+            max_item_allowed: 3, max_item_level: 3, opening_freq: 4
         };
 
         if game_mode == GameMode::Test {

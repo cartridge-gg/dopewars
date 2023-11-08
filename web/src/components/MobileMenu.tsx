@@ -15,7 +15,7 @@ import MediaPlayer from "./MediaPlayer";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatAddress } from "@/utils/contract";
-import { ProfileButtonMobile } from "./ProfileButton";
+import { ProfileLinkMobile } from "./ProfileButton";
 
 const MobileMenu = ({ ...props }: StyleProps) => {
   const router = useRouter();
@@ -34,7 +34,7 @@ const MobileMenu = ({ ...props }: StyleProps) => {
               <MenuItem _hover={{ bg: "transarent" }}>
                 <MediaPlayer />
               </MenuItem>
-              <ProfileButtonMobile />
+              <ProfileLinkMobile />
             </Menu>
           </PopoverBody>
         </PopoverContent>

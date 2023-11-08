@@ -63,7 +63,9 @@ mod lobby {
 
     #[derive(Drop, starknet::Event)]
     struct PlayerJoined {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         player_name: felt252
     }

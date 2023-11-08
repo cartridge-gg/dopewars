@@ -69,6 +69,7 @@ mod shop {
         player_id: ContractAddress,
         item_id: ItemEnum,
         level: u8,
+        cost: u32
     }
 
     #[derive(Drop, starknet::Event)]
@@ -156,7 +157,16 @@ mod shop {
             set!(world, (player));
 
             // emit event
-            emit!(self.world(), BoughtItem { game_id, player_id, item_id, level: item.level });
+            emit!(
+                self.world(),
+                BoughtItem {
+                    game_id,
+                    player_id,
+                    item_id,
+                    level: item.level,
+                    cost: (item_settings.cost / SCALING_FACTOR).try_into().unwrap()
+                }
+            );
         }
 
         // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {

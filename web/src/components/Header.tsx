@@ -12,7 +12,7 @@ import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
 import colors from "@/theme/colors";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import ProfileButton from "./ProfileButton";
+import {ProfileLink} from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
@@ -93,7 +93,7 @@ const Header = ({ back }: HeaderProps) => {
           </Button>
         )} */}
 
-        {!isMobile && account && playerEntity && <ProfileButton />}
+        {!isMobile && account && playerEntity && <ProfileLink />}
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

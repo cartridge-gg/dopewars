@@ -44,7 +44,7 @@ export const usePlayerLogs = ({ gameId, playerId }: { gameId?: string; playerId?
     { game_id: gameId || "", player_id: playerId || "" },
     {
       enabled: !!gameId && !!playerId,
-      refetchInterval: 5 * REFETCH_INTERVAL, // TODO: long polling,
+      refetchInterval: 3 * REFETCH_INTERVAL, 
     },
   );
 

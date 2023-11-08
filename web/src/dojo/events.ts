@@ -86,6 +86,7 @@ export interface BoughtItemEventData extends BaseEventData {
   playerId: string;
   itemId: string;
   level: number;
+  cost: number;
 }
 
 export interface GameOverEventData extends BaseEventData {
@@ -155,9 +156,9 @@ export const parseEvent = (raw: any) => {
       return {
         eventType: WorldEvents.PlayerJoined,
         eventName: "PlayerJoined",
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        playerName: shortString.decodeShortString(raw.data[1]),
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerName: shortString.decodeShortString(raw.data[0]),
       } as JoinedEventData;
 
     case WorldEvents.Decision:
@@ -233,6 +234,7 @@ export const parseEvent = (raw: any) => {
         playerId: num.toHexString(raw.keys[2]),
         itemId: num.toHexString(raw.data[0]),
         level: Number(raw.data[1]),
+        cost: Number(raw.data[2]),
       } as BoughtItemEventData;
 
     case WorldEvents.GameOver:

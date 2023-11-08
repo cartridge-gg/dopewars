@@ -62,6 +62,7 @@ export interface BoughtItemData {
   player_id: RecsType.String;
   item_id: RecsType.String;
   level: RecsType.Number;
+  cost: RecsType.Number;
 }
 
 export interface DroppedItemData {
