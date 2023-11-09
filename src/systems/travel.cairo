@@ -131,8 +131,13 @@ mod travel {
                             game.game_mode, @player, encounter.level
                         );
 
-                        // player lose some HP, but can't die
-                        let new_health = player.health.sub_capped(encounter_settings.dmg / 2, 1);
+                        // player lose max(encounter_settings.dmg / 3,1)  HP, but can't die
+                        let mut encounter_dmg = if encounter_settings.dmg < 3 {
+                            1
+                        } else {
+                            encounter_settings.dmg / 3
+                        };
+                        let new_health = player.health.sub_capped(encounter_dmg, 1);
                         let health_loss = player.health - new_health;
                         player.health = new_health;
 

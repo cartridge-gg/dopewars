@@ -194,7 +194,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             liq_scaling_initial_rate: 150, // 0.015
             liq_scaling_fading_rate: 360,
             liq_scaling_flat: 10200, // 2%
-            price_scaling_flat: 10100, // 1%
+            price_scaling_flat: 10200, // 2%
         };
 
         if game_mode == GameMode::Test {
