@@ -1,85 +1,37 @@
-import {
-  Spacer,
-  Text,
-  HStack,
-  Divider,
-  UnorderedList,
-  ListItem,
-  OrderedList,
-} from "@chakra-ui/react";
+import { Text, HStack, Divider, Image } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Link } from "@/components/icons";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useEffect } from "react";
+import { Location, PlayerStatus } from "@/dojo/types";
+import { getLocationByType } from "@/dojo/helpers";
 
-export default function Join() {
+export default function Redirector() {
   const router = useRouter();
-  return (
-    <Layout
-      leftPanelProps={{
-        title: "The Lobby",
-        prefixTitle: "Welcome to",
-        imageSrc: "/images/will-smith-with-attitude.png",
-      }}
-    >
-      <UnorderedList w="100%" variant="underline">
-        <ListItem>
-          <HStack>
-            <Text>GAME NAME</Text>
-            <Spacer />
-            <Text>GANGSTARS</Text>
-          </HStack>
-        </ListItem>
-        <ListItem>
-          <HStack>
-            <Text>NO. OF TURNS</Text>
-            <Spacer />
-            <Text>30</Text>
-          </HStack>
-        </ListItem>
-        <ListItem>
-          <HStack>
-            <Text>LOBBY</Text>
-            <Spacer />
-            <Text>5 Players</Text>
-          </HStack>
-        </ListItem>
-      </UnorderedList>
-      <Button
-        textTransform="none"
-        w="full"
-        onClick={() => router.push("/0x12131/brooklyn")}
-      >
-        <>
-          <Link /> ryo.gg/invite/h12
-        </>
-      </Button>
-      <OrderedList>
-        <ListItem>Shinobi</ListItem>
-        <ListItem>Click_Save</ListItem>
-        <ListItem>0x4b1...3312</ListItem>
-        <ListItem>0x523...ccde</ListItem>
-        <ListItem>0xabe...49bd</ListItem>
-      </OrderedList>
+  const gameId = router.query.gameId as string;
 
-      <HStack w="full" gap="10px">
-        <Text whiteSpace="nowrap">MATCH BEGINS IN</Text>
-        <Divider borderColor="neon.500" borderStyle="dotted" />
-        <Text>15m35s</Text>
-      </HStack>
-      {/* <Footer>
-        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
-          Leave Lobby
-        </Button>
-        <Button
-          w={["full", "auto"]}
-          onClick={() => {
-            router.push("/0x12341/travel");
-          }}
-        >
-          Start
-        </Button>
-      </Footer> */}
+  const { playerEntityStore, account } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
+
+  useEffect(() => {
+    if (playerEntity?.status === PlayerStatus.Normal) {
+      router.push(`/${gameId}/${getLocationByType(Number(playerEntity!.locationId))?.slug}`);
+    } else if (playerEntity?.status === PlayerStatus.AtPawnshop) {
+      router.push(`/${gameId}/pawnshop`);
+    } else if (
+      playerEntity?.status === PlayerStatus.BeingArrested ||
+      playerEntity?.status === PlayerStatus.BeingMugged
+    ) {
+      //
+      router.push(`/${gameId}/decision`);
+    }
+  }, [playerEntity, playerEntity?.status, playerEntity?.locationId, router, gameId]);
+
+  return (
+    <Layout isSinglePanel>
+      <Image src="images/loading.gif" alt="loading" width="60px" height="60px" margin="auto" />
     </Layout>
   );
 }

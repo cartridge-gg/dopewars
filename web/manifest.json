@@ -862,7 +862,7 @@
     {
       "name": "decide",
       "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
-      "class_hash": "0x29426d0ffe98b8154fd0561a5e9ef4f0cb9d927deb2b7256379276d52ee5548",
+      "class_hash": "0x5e930bd0c9dd9357df9ff8e8392b1d1243ba7470af05732946502d46c1d6eec",
       "abi": [
         {
           "type": "impl",
@@ -1033,6 +1033,11 @@
             {
               "name": "dmg_dealt",
               "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash_earnt",
+              "type": "core::integer::u128",
               "kind": "data"
             }
           ]
@@ -1212,7 +1217,7 @@
     {
       "name": "lobby",
       "address": "0x24658d9efcc9b88af349c1143528a403831163178ccf5e3ef228947a8ba18c7",
-      "class_hash": "0x245d7381fd11cbb11f66a9ab37e62c76a1512ae8bd9a079d8cf3afde03389a0",
+      "class_hash": "0x2d823dbf5bd1be0f5c9917d1e3f2a6745e4b4687c6e148f4f98b784891a1742",
       "abi": [
         {
           "type": "impl",
@@ -1391,7 +1396,7 @@
     {
       "name": "shop",
       "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
-      "class_hash": "0x503e815841e2badc5419222c9c8e06d133ddc81bb6f9e0a3987dc0d4c68ddea",
+      "class_hash": "0x68084c1fb0066e0ea54b689b0f2d44dbae4a68f4f88580f9fd398260ed11c60",
       "abi": [
         {
           "type": "impl",
@@ -1660,8 +1665,7 @@
         "Player"
       ],
       "writes": [
-        "Item",
-        "Player"
+        "Item"
       ]
     },
     {
@@ -1923,7 +1927,7 @@
     {
       "name": "travel",
       "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
-      "class_hash": "0x16cc20738477bde9e5bde3e3aa7bcf9577ee44cc0b379e40bef2e1fc8f70c00",
+      "class_hash": "0x56bda781b68fef4502971ea02c74313e6828976a5718fd073d719ecba0173e0",
       "abi": [
         {
           "type": "impl",

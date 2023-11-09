@@ -152,13 +152,9 @@ mod travel {
                     },
                     Option::None => {}
                 }
-
-                on_turn_end(world, ref randomizer, @game, ref player);
-            } else {
-                on_turn_end(world, ref randomizer, @game, ref player);
             }
 
-            set!(world, (player));
+            on_turn_end(world, ref randomizer, @game, ref player);
 
             false
         }
@@ -200,6 +196,8 @@ fn on_turn_end(
                     array![]
                 );
 
+            // save player
+            set!(world, (player));
             return false;
         };
     }
@@ -208,9 +206,6 @@ fn on_turn_end(
     player.location_id = player.next_location_id;
 
     let risk_settings = RiskSettingsImpl::get(*game.game_mode, @player);
-
-    // market price variations
-    market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
 
     // update wanted
     risk_settings.update_wanted(ref player);
@@ -222,6 +217,9 @@ fn on_turn_end(
 
     // update turn
     player.turn += 1;
+
+    // save player
+    set!(world, (player));
 
     // emit raw event Traveled if stil alive
     if player.health > 0 {
@@ -235,5 +233,10 @@ fn on_turn_end(
                 ]
             );
     }
+
+    // create lots of events
+    // market price variations
+    market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
+
     true
 }

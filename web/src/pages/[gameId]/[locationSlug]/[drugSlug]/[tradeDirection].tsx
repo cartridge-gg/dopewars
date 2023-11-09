@@ -6,7 +6,7 @@ import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
-import { TradeDirection, TradeType, usePlayerStore } from "@/hooks/state";
+import { TradeDirection, TradeType } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
 import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
@@ -31,7 +31,6 @@ export default function Market() {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
-  const { addTrade } = usePlayerStore();
   const { account, playerEntityStore } = useDojoContext();
   const { buy, sell, isPending } = useSystems();
 
@@ -93,15 +92,11 @@ export default function Market() {
         link: `http://amazing_explorer/${hash}`,
       });
 
-      addTrade(drug!.type, {
-        direction: tradeDirection,
-        quantity,
-        total: total,
-      } as TradeType);
+      
     } catch (e) {
       console.log(e);
     }
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, toast, addTrade]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, toast,  market]);
 
   if (!router.isReady || !playerEntity || !drug || !market) return <></>;
 

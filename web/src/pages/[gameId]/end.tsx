@@ -52,7 +52,7 @@ export default function End() {
   const { playerEntity } = playerEntityStore;
 
   useEffect(() => {
-    playSound(Sounds.Death);
+    playSound(Sounds.Death, 0.3);
   }, []);
 
   useEffect(() => {
@@ -108,10 +108,11 @@ export default function End() {
                 <Divider borderColor="neon.600" /> */}
 
                 <StatsItem text={name} icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />} />
-
+                <Divider borderColor="neon.600" />
+                <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`${formatCash(playerEntity?.cash || 0)}`} icon={<DollarBag />} />
-                <Divider borderColor="neon.600" />
+
                 {/* <StatsItem
                   text={`${playerEntity?.health} Health`}
                   icon={isDead ? <Skull color="green" /> : <Heart />}
@@ -119,7 +120,6 @@ export default function End() {
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`${playerEntity?.wanted}% Wanted`} icon={<Siren color="red" />} />
                 <Divider borderColor="neon.600" /> */}
-                <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 {/* 
                 <Divider borderColor="neon.600" />
                 <StatsItem text="X Muggings" icon={<Pistol />} />

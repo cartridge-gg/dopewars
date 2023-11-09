@@ -16,9 +16,15 @@ import { Glock } from "@/components/icons/items";
 import { Clock } from "@/components/icons";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 
 export default function New() {
   const router = useRouter();
+
+  const {
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
 
   const { createGame, isPending } = useSystems();
 
@@ -36,6 +42,11 @@ export default function New() {
     }
 
     try {
+      if (!account) {
+        // create burner account
+        await createBurner();
+      }
+
       const { hash, gameId } = await createGame(gameMode, name, avatarId);
 
       toast({
@@ -87,7 +98,10 @@ export default function New() {
               boxSize="48px"
               userSelect="none"
               cursor="pointer"
-              onClick={() => (avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount()))}
+              onClick={() => {
+                playSound(Sounds.HoverClick, 0.3);
+                avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount());
+              }}
             />
 
             <Card mx="20px">
@@ -100,7 +114,10 @@ export default function New() {
               boxSize="48px"
               userSelect="none"
               cursor="pointer"
-              onClick={() => setAvatarId((avatarId + 1) % getAvatarCount())}
+              onClick={() => {
+                playSound(Sounds.HoverClick, 0.3);
+                setAvatarId((avatarId + 1) % getAvatarCount());
+              }}
             />
           </HStack>
           <Input

@@ -12,7 +12,6 @@ import {
   getShopItem,
   getShopItemByType,
 } from "@/dojo/helpers";
-import { TradeDirection, usePlayerStore } from "@/hooks/state";
 import { useSystems } from "@/dojo/hooks/useSystems";
 
 import { HStack, Heading, ListItem, Text, UnorderedList, VStack, Box, Tooltip, Image } from "@chakra-ui/react";
@@ -37,7 +36,7 @@ import {
   SoldEventData,
   TraveledEventData,
 } from "@/dojo/events";
-import { Action, PlayerStatus } from "@/dojo/types";
+import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import { SCALING_FACTOR } from "@/dojo/constants";
 import { Profile } from "@/components/ProfileButton";
 
@@ -55,7 +54,7 @@ export default function Logs() {
   const { account, playerEntityStore } = useDojoContext();
   const { playerEntity } = playerEntityStore;
 
-  const { playerLogs } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
+  const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
@@ -67,7 +66,7 @@ export default function Logs() {
 
     const logsByDay = [];
 
-    let dayLogs = {
+    let dayLogs: LogByDay = {
       day: 0,
       location: "Hood",
       logs: [],
@@ -93,9 +92,10 @@ export default function Logs() {
     }
     logsByDay.push(dayLogs);
 
-    setLogs(logsByDay
+    setLogs(
+      logsByDay,
       // .sort((a, b) => a.day - b.day)
-      );
+    );
   }, [playerLogs]);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function Logs() {
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
-  if (!logs) {
+  if (!isFetched || !logs) {
     return <></>;
   }
 
@@ -115,12 +115,21 @@ export default function Logs() {
         prefixTitle: "",
         title: `Hustler Logs`,
         imageSrc: "/images/will-smith-with-attitude.png",
-        flex: 1,
       }}
       CustomLeftPanel={!playerId ? Profile : undefined}
       footer={
         <Footer>
-          <Button onClick={() => router.back()}>Back</Button>
+          <Button
+            onClick={() => {
+              if (playerId && playerId !== "") {
+                router.push("/");
+              } else {
+                router.back();
+              }
+            }}
+          >
+            Back
+          </Button>
         </Footer>
       }
       rigthPanelMaxH={isMobile ? "calc(100vh - 400px)" : "auto"}
@@ -222,7 +231,16 @@ function renderAtPawnshop(log: GameOverEventData, key: string) {
 
 function renderBoughtItem(log: BoughtItemEventData, key: string) {
   const item = getShopItemByType(Number(log.itemId), Number(log.level));
-  return <Line key={key} icon={item.icon} text={`Bought ${item.name}`} total={`- ${formatCash(log.cost)}`} />;
+  return (
+    <Line
+      key={key}
+      icon={item.icon}
+      text={`Bought ${item.name}`}
+      total={`- ${formatCash(log.cost)}`}
+      color="yellow.400"
+      iconColor="yellow.400"
+    />
+  );
 }
 
 function renderBought(log: BoughtEventData, key: string) {
@@ -230,8 +248,8 @@ function renderBought(log: BoughtEventData, key: string) {
   return (
     <Line
       key={key}
-      icon={drug.icon}
-      text={`Bought ${drug.name}`}
+      icon={drug!.icon}
+      text={`Bought ${drug!.name}`}
       quantity={log.quantity}
       total={`- ${formatCash(log.cost / SCALING_FACTOR)}`}
     />
@@ -243,8 +261,8 @@ function renderSold(log: SoldEventData, key: string) {
   return (
     <Line
       key={key}
-      icon={drug.icon}
-      text={`Sold ${drug.name}`}
+      icon={drug!.icon}
+      text={`Sold ${drug!.name}`}
       quantity={log.quantity}
       total={`+ ${formatCash(log.payout / SCALING_FACTOR)}`}
     />
@@ -293,15 +311,15 @@ function renderAdverse(log: AdverseEventData, dayLog: LogByDay, key: string) {
   );
 }
 
-function renderDecision(log: DecisionEventData, key: string) {
-  const action = getActionName(log.action);
-  return <Line key={key} icon={Event} text={` ${action}`} />;
-}
+// function renderDecision(log: DecisionEventData, key: string) {
+//   const action = getActionName(log.action);
+//   return <Line key={key} icon={Event} text={` ${action}`} />;
+// }
 
-function renderConsequence(log: ConsequenceEventData, key: string) {
-  const action = "consequence";
-  return <Line key={key} icon={Event} text={` ${action}`} />;
-}
+// function renderConsequence(log: ConsequenceEventData, key: string) {
+//   const action = "consequence";
+//   return <Line key={key} icon={Event} text={` ${action}`} />;
+// }
 
 /*************************************************************** */
 
@@ -312,19 +330,21 @@ const Line = ({
   total,
   key,
   color = "neon.400",
+  iconColor = "neon.400",
 }: {
-  icon: React.FC | undefined;
-  text: string;
-  quantity: number | string;
-  total: number | string;
+  icon?: React.FC;
+  text?: string;
+  quantity?: number | string;
+  total?: number | string;
   key: string;
-  color: string;
+  color?: string;
+  iconColor?: string;
 }) => {
   return (
     <ListItem w="full" key={key} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
         <HStack flex="4" color={color}>
-          <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
+          <Box w="30px">{icon && icon({ boxSize: "24px", color: iconColor })}</Box>
           <Text>{text}</Text>
         </HStack>
 
@@ -347,15 +367,33 @@ const FightLine = ({
   consequence,
   decisions,
   key,
+  color,
 }: {
-  icon: React.FC | undefined;
-  text: string;
-  result: string;
-  resultInfos: ConsequenceEventData;
-  consequence: string;
-  decisions: string;
+  icon?: React.FC;
+  text?: string;
+  result?: string;
+  resultInfos?: ConsequenceEventData;
+  consequence?: string;
+  decisions?: string;
   key: string;
+  color?: string;
 }) => {
+  const [resultTooltip, setResultTooltip] = useState("");
+
+  useEffect(() => {
+    if (resultInfos && resultInfos.outcome === Outcome.Victorious) {
+      setResultTooltip(`+ ${formatCash(resultInfos.cashEarnt)}`);
+    } else if (resultInfos && resultInfos.outcome === Outcome.Paid) {
+      if (resultInfos.cashLoss > 0) {
+        setResultTooltip(`- ${formatCash(resultInfos.cashLoss)}`);
+      } else {
+        setResultTooltip(`- ${resultInfos.drugLoss} Drugs`);
+      }
+    } else {
+      setResultTooltip("");
+    }
+  }, [resultInfos, result]);
+
   return (
     <ListItem w="full" key={key} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
@@ -370,9 +408,11 @@ const FightLine = ({
           <Text> {consequence}</Text>
         </HStack>
 
-        <Text flex="3" textAlign="right" color={result === "Died" ? "red" : "neon.400"}>
-          <Text>{result}</Text>
-        </Text>
+        <HStack flex="3" justifyContent="flex-end" color={result === "Died" ? "red" : "neon.400"}>
+          <Tooltip placement="left" label={resultTooltip}>
+            <Text>{result}</Text>
+          </Tooltip>
+        </HStack>
       </HStack>
     </ListItem>
   );

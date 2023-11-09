@@ -172,7 +172,7 @@ export default function Travel() {
         console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel, locationName, toaster]);
+  }, [targetId, router, gameId, travel, locationName, toaster, playerEntity]);
 
   if (!playerEntity || !locationPrices) return <></>;
 

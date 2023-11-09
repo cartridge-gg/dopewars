@@ -413,7 +413,7 @@ export function getActionName(action: Action): string {
     case Action.Run:
       return "Run";
     default:
-      "?"
+      return "?"
   }
 }
 
@@ -431,7 +431,7 @@ export function getOutcomeName(outcome: Outcome): string {
     case Outcome.Victorious:
       return "Victorious";
     default:
-      "?"
+      return  "?"
   }
 }
 

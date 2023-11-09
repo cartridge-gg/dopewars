@@ -90,6 +90,7 @@ mod decide {
         drug_loss: usize,
         cash_loss: u128,
         dmg_dealt: u32,
+        cash_earnt: u128,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -184,7 +185,7 @@ mod decide {
                             // using same name cash_loss makes LS crash
                             let cash_loss_ = player.cash.pct(encounter.demand_pct.into());
 
-                            (Outcome::Paid, cash_loss_, 0, 0, 0, 0)
+                            (Outcome::Paid, cash_loss_, 0, 1, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
                             // paying cops divide wanted by 3
@@ -198,7 +199,7 @@ mod decide {
                             let drug_loss_ = self
                                 .take_drugs(game_id, player_id, encounter.demand_pct.into());
 
-                            (Outcome::Paid, 0, drug_loss_, 0, 0, 0)
+                            (Outcome::Paid, 0, drug_loss_, 1, 0, 0)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
@@ -246,7 +247,14 @@ mod decide {
             emit!(
                 world,
                 Consequence {
-                    game_id, player_id, outcome, health_loss, drug_loss, cash_loss, dmg_dealt
+                    game_id,
+                    player_id,
+                    outcome,
+                    health_loss,
+                    drug_loss,
+                    cash_loss: cash_loss / SCALING_FACTOR,
+                    dmg_dealt,
+                    cash_earnt: cash_earnt / SCALING_FACTOR
                 }
             );
             emit!(world, Decision { game_id, player_id, action });
@@ -254,14 +262,14 @@ mod decide {
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
 
-                on_turn_end(world, ref randomizer, @game, ref player);
-
                 if action == Action::Run {
                     player.location_id = LocationImpl::random(ref randomizer);
                 }
-            }
 
-            set!(world, (player));
+                on_turn_end(world, ref randomizer, @game, ref player);
+            } else {
+                set!(world, (player));
+            }
         }
     }
 

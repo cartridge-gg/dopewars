@@ -17,11 +17,9 @@ import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import Leaderboard from "@/components/Leaderboard";
-// import { useGlobalScores } from "@/dojo/queries/useGlobalScores";
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getLocationById } from "@/dojo/helpers";
-import { usePlayerStore } from "@/hooks/state";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
@@ -34,7 +32,7 @@ export default function Home() {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
-  const { resetAll } = usePlayerStore();
+  
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);

@@ -82,6 +82,7 @@ fn market_variations(
                             let mut market = get!(
                                 world, (game_id, *location_id, *drug_id).into(), Market
                             );
+
                             // flat 2%
                             scale_market(ref market, market_settings.liq_scaling_flat.into());
                             //scale_market(ref market, scaling_factor);

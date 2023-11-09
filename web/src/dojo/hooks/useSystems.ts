@@ -123,7 +123,7 @@ export const useSystems = (): SystemsInterface => {
       const parsedEvents = parseAllEvents(receipt);
 
       //torii too slow indexing...
-      await sleep(2_000);
+      await sleep(1_000);
 
       setIsPending(false)
 
@@ -137,7 +137,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [execute, account!, toast],
+    [execute, account, toast],
   );
 
   const createGame = useCallback(

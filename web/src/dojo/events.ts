@@ -22,6 +22,7 @@ export interface AdverseEventData extends BaseEventData {
   playerId: string;
   playerStatus: PlayerStatus;
   healthLoss: number;
+  demandPct: number;
 }
 
 export interface AtPawnshopEventData extends BaseEventData {
@@ -66,6 +67,7 @@ export interface ConsequenceEventData extends BaseEventData {
   drugLoss: number;
   cashLoss: number;
   dmgDealt: number;
+  cashEarnt: number;
 }
 
 export interface MarketEventData extends BaseEventData {
@@ -182,6 +184,7 @@ export const parseEvent = (raw: any) => {
         drugLoss: Number(raw.data[2]),
         cashLoss: Number(raw.data[3]),
         dmgDealt: Number(raw.data[4]),
+        cashEarnt: Number(raw.data[5]),
       } as ConsequenceEventData;
 
     case WorldEvents.MarketEvent:

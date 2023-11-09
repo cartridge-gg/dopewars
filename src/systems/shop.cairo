@@ -104,7 +104,6 @@ mod shop {
             assert(self.is_open(game_id, player_id), 'pawnshop not open !');
 
             on_turn_end(world, ref randomizer, @game, ref player);
-            set!(world, (player));
         }
 
 
@@ -166,7 +165,6 @@ mod shop {
             );
 
             on_turn_end(world, ref randomizer, @game, ref player);
-            set!(world, (player));
         }
 
         // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {

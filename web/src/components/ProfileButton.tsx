@@ -53,7 +53,7 @@ const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void })
   );
 };
 
-export const Profile = ({ close, ...props }: { close: () => void }) => {
+export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const playerId = router.query.playerId as string;
@@ -79,7 +79,7 @@ export const Profile = ({ close, ...props }: { close: () => void }) => {
   if (!account || !playerEntity) return null;
 
   return (
-    <VStack w="full" {...props}>
+    <VStack w="full" flex="1" {...props}>
       <VStack w="full" maxW="380px" my="auto" pb={[0, "30px"]}>
         <Box w="full" justifyContent="center">
           <VStack w="full">
@@ -198,7 +198,7 @@ export const Profile = ({ close, ...props }: { close: () => void }) => {
             </HStack>
           </VStack>
         </Box>
-        <Box w="full" justifyContent="center" w="full" py={["10px", "30px"]}>
+        <Box w="full" justifyContent="center" py={["10px", "30px"]}>
           <HStack w="full">
             {close && (
               <Button w="full" onClick={close}>

@@ -21,7 +21,6 @@ export interface LeftPanelProps {
   prefixTitle?: string;
   imageSrc?: string;
   map?: ReactNode;
-  flex: string;
 }
 
 const Layout = ({
@@ -46,7 +45,7 @@ const Layout = ({
         <Header back={showBack} />
         <Container position="relative" px={["8px", "16px"]} py="16px">
           {!isSinglePanel &&
-            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel {...leftPanelProps} />)}
+            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
           <RightPanel
             flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
             footer={footer}
@@ -90,7 +89,7 @@ const RightPanel = ({
   isSinglePanel,
   rigthPanelMaxH,
   ...props
-}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH: string } & StyleProps) => {
+}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH?: string } & StyleProps) => {
   return (
     <VStack position="relative" w="full" {...props}>
       <VStack

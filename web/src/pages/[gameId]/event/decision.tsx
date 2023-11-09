@@ -3,7 +3,6 @@ import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
-import { usePlayerStore } from "@/hooks/state";
 import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -54,7 +53,6 @@ export default function Decision() {
 
   const toaster = useToast();
   const { decide, isPending } = useSystems();
-  const { addEncounter } = usePlayerStore();
 
   const { playerEntity } = playerEntityStore;
 
@@ -79,7 +77,7 @@ export default function Decision() {
 
       setStatus(playerEntity.status);
     }
-  }, [playerEntity, isPending]);
+  }, [playerEntity, isPending, demandPct]);
 
   useEffect(() => {
     if (status == PlayerStatus.BeingArrested) {
@@ -95,7 +93,7 @@ export default function Decision() {
       setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
       setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
     }
-  }, [playerEntity?.items]);
+  }, [playerEntity, playerEntity?.items]);
 
   useEffect(() => {
     if (playerEntity && playerEntity.encounters && !isPending) {
@@ -106,7 +104,7 @@ export default function Decision() {
         setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
       }
     }
-  }, [playerEntity?.encounters, status, isPending]);
+  }, [playerEntity, playerEntity?.encounters, status, isPending]);
 
   useEffect(() => {
     if (!isPending) {
@@ -179,7 +177,6 @@ export default function Decision() {
       }
 
       const consequenceEvent = event as ConsequenceEventData;
-      addEncounter(playerStatus!, consequenceEvent.outcome);
 
       switch (consequenceEvent.outcome) {
         case Outcome.Died:

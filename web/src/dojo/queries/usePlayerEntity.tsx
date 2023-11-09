@@ -25,7 +25,7 @@ export class PlayerEntity {
   maxTurns: number;
   maxItems: number;
   drugCount: number;
-  locationId?: string;
+  locationId: string;
   nextLocationId?: string;
   status: PlayerStatus;
 
