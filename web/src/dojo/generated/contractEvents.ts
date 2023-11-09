@@ -100,6 +100,7 @@ export interface AdverseEventData {
   player_id: RecsType.String;
   player_status: RecsType.String;
   health_loss: RecsType.Number;
+  demand_pct: RecsType.Number;
 }
 
 export interface MarketEventData {

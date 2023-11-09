@@ -71,6 +71,7 @@ mod travel {
         player_id: ContractAddress,
         player_status: PlayerStatus,
         health_loss: u8,
+        demand_pct: u8,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -139,7 +140,11 @@ mod travel {
                         emit!(
                             world,
                             AdverseEvent {
-                                game_id, player_id, player_status: player.status, health_loss
+                                game_id,
+                                player_id,
+                                player_status: player.status,
+                                health_loss,
+                                demand_pct: encounter.demand_pct
                             }
                         );
 

@@ -74,11 +74,12 @@ export default function Logs() {
     };
 
     for (let log of playerLogs?.parsedLogs) {
+      //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
       if (log.parsed.eventType === WorldEvents.Traveled) {
         // create new day
         logsByDay.push(dayLogs);
 
-        let travelEvent = log.parsed as TraveledEventData;
+        const travelEvent = log.parsed as TraveledEventData;
 
         dayLogs = {
           day: travelEvent.turn,
@@ -90,11 +91,11 @@ export default function Logs() {
         dayLogs.logs.push(log.parsed);
       }
     }
-    // if (dayLogs.logs.length > 0) {
     logsByDay.push(dayLogs);
-    // }
 
-    setLogs(logsByDay.sort((a, b) => a.day - b.day));
+    setLogs(logsByDay
+      // .sort((a, b) => a.day - b.day)
+      );
   }, [playerLogs]);
 
   useEffect(() => {
@@ -125,7 +126,7 @@ export default function Logs() {
       rigthPanelMaxH={isMobile ? "calc(100vh - 400px)" : "auto"}
     >
       <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => log.logs.length > 0 && renderDay(log))}
+        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(log))}
       </VStack>
     </Layout>
   );
@@ -198,7 +199,7 @@ function renderPlayerJoined(log: JoinedEventData, key: string) {
         my="20px"
         textAlign="center"
       >
-        {log.playerName}'s' life
+        {log.playerName}&apos;s life
       </Text>
     </ListItem>
   );

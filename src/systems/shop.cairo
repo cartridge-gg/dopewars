@@ -153,9 +153,6 @@ mod shop {
             item.value = item_settings.value;
             set!(world, (item));
 
-            on_turn_end(world, ref randomizer, @game, ref player);
-            set!(world, (player));
-
             // emit event
             emit!(
                 self.world(),
@@ -167,6 +164,9 @@ mod shop {
                     cost: (item_settings.cost / SCALING_FACTOR).try_into().unwrap()
                 }
             );
+
+            on_turn_end(world, ref randomizer, @game, ref player);
+            set!(world, (player));
         }
 
         // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {

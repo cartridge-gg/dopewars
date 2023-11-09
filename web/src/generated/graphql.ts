@@ -85,6 +85,7 @@ export type DrugWhereInput = {
 
 export type Encounter = {
   __typename?: 'Encounter';
+  demand_pct?: Maybe<Scalars['u8']>;
   encounter_id?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
@@ -112,6 +113,7 @@ export type EncounterOrder = {
 };
 
 export enum EncounterOrderField {
+  DemandPct = 'DEMAND_PCT',
   EncounterId = 'ENCOUNTER_ID',
   GameId = 'GAME_ID',
   Health = 'HEALTH',
@@ -121,6 +123,13 @@ export enum EncounterOrderField {
 }
 
 export type EncounterWhereInput = {
+  demand_pct?: InputMaybe<Scalars['u8']>;
+  demand_pctEQ?: InputMaybe<Scalars['u8']>;
+  demand_pctGT?: InputMaybe<Scalars['u8']>;
+  demand_pctGTE?: InputMaybe<Scalars['u8']>;
+  demand_pctLT?: InputMaybe<Scalars['u8']>;
+  demand_pctLTE?: InputMaybe<Scalars['u8']>;
+  demand_pctNEQ?: InputMaybe<Scalars['u8']>;
   encounter_id?: InputMaybe<Scalars['Enum']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
@@ -923,7 +932,7 @@ export type PlayerLogsQueryVariables = Exact<{
 }>;
 
 
-export type PlayerLogsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', total_count: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', keys?: Array<string | null> | null, data?: Array<string | null> | null, created_at?: any | null } | null } | null> | null } | null };
+export type PlayerLogsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', total_count: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, created_at?: any | null } | null } | null> | null } | null };
 
 export const PlayerPropsFragmentDoc = `
     fragment PlayerProps on Player {
@@ -1219,10 +1228,11 @@ useInfiniteLocationEntitiesQuery.getKey = (variables: LocationEntitiesQueryVaria
 
 export const PlayerLogsDocument = `
     query PlayerLogs($game_id: String!, $player_id: String!) {
-  events(limit: 1000, keys: ["*", $game_id, $player_id]) {
+  events(last: 1000, keys: ["*", $game_id, $player_id]) {
     total_count
     edges {
       node {
+        id
         keys
         data
         created_at

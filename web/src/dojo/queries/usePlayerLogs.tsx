@@ -20,12 +20,17 @@ export class PlayerLogs {
     this.logs = logs || [];
     this.parsedLogs = this.logs
       .map((e: World__EventEdge) => {
+        const id = e.node.id.split(":");
         return {
+          idx : id[0] * 1_000 + id[2],
+          blocknumber: id[0],
+          event_idx: id[2],
           log: e,
           parsed: parseEvent(e.node),
         };
       })
-      .sort((a, b) => Date.parse(a.log?.node?.created_at) - Date.parse(b.log?.node?.created_at));
+      //.sort((a,b) => a.idx - b.idx)
+      //.reverse();
   }
 
   static create(edges: World__EventEdge[]): PlayerLogs | undefined {
@@ -44,7 +49,7 @@ export const usePlayerLogs = ({ gameId, playerId }: { gameId?: string; playerId?
     { game_id: gameId || "", player_id: playerId || "" },
     {
       enabled: !!gameId && !!playerId,
-      refetchInterval: 3 * REFETCH_INTERVAL, 
+      refetchInterval: 3 * REFETCH_INTERVAL,
     },
   );
 

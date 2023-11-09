@@ -131,7 +131,7 @@ mod decide {
                         PlayerStatus::Normal => { 0 },
                         PlayerStatus::BeingMugged => {
                             let mut encounter = EncounterImpl::get_or_spawn(
-                                world, @player, EncounterType::Gang
+                                world, @player, ref randomizer, EncounterType::Gang
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
                                 game.game_mode, @player, encounter.level
@@ -140,7 +140,7 @@ mod decide {
                         },
                         PlayerStatus::BeingArrested => {
                             let mut encounter = EncounterImpl::get_or_spawn(
-                                world, @player, EncounterType::Cops
+                                world, @player, ref randomizer, EncounterType::Cops
                             );
                             let encounter_settings = EncounterSettingsImpl::get(
                                 game.game_mode, @player, encounter.level
@@ -177,10 +177,12 @@ mod decide {
                             // paying gangs divide wanted by 2
                             player.wanted = player.wanted / 2;
 
+                            let mut encounter = EncounterImpl::get_or_spawn(
+                                world, @player, ref randomizer, EncounterType::Gang
+                            );
+
                             // using same name cash_loss makes LS crash
-                            let cash_loss_ = player
-                                .cash
-                                .pct(decide_settings.gangs_payment_cash_pct.into());
+                            let cash_loss_ = player.cash.pct(encounter.demand_pct.into());
 
                             (Outcome::Paid, cash_loss_, 0, 0, 0, 0)
                         },
@@ -188,11 +190,13 @@ mod decide {
                             // paying cops divide wanted by 3
                             player.wanted = player.wanted / 3;
 
+                            let mut encounter = EncounterImpl::get_or_spawn(
+                                world, @player, ref randomizer, EncounterType::Cops
+                            );
+
                             // using same name drug_loss makes LS crash
                             let drug_loss_ = self
-                                .take_drugs(
-                                    game_id, player_id, decide_settings.gangs_payment_cash_pct
-                                );
+                                .take_drugs(game_id, player_id, encounter.demand_pct.into());
 
                             (Outcome::Paid, 0, drug_loss_, 0, 0, 0)
                         },
@@ -239,6 +243,14 @@ mod decide {
                 player.health -= health_loss
             }
 
+            emit!(
+                world,
+                Consequence {
+                    game_id, player_id, outcome, health_loss, drug_loss, cash_loss, dmg_dealt
+                }
+            );
+            emit!(world, Decision { game_id, player_id, action });
+
             if outcome != Outcome::Captured {
                 player.status = PlayerStatus::Normal;
 
@@ -250,13 +262,6 @@ mod decide {
             }
 
             set!(world, (player));
-            emit!(world, Decision { game_id, player_id, action });
-
-            // makes LS crash if inlined in emit! ( outcome / enum issue ?)
-            let consequence_event = Consequence {
-                game_id, player_id, outcome, health_loss, drug_loss, cash_loss, dmg_dealt
-            };
-            emit!(world, consequence_event);
         }
     }
 
@@ -302,7 +307,9 @@ mod decide {
         ) -> (Outcome, u128, u32, u8, u128, u32) {
             let world = self.world();
 
-            let mut encounter = EncounterImpl::get_or_spawn(world, player, encounter_type);
+            let mut encounter = EncounterImpl::get_or_spawn(
+                world, player, ref randomizer, encounter_type
+            );
             let encounter_settings = EncounterSettingsImpl::get(
                 (*game).game_mode, player, encounter.level
             );

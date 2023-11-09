@@ -112,10 +112,11 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 }
 
 query PlayerLogs($game_id: String!, $player_id: String!) {
-  events(limit: 1000, keys: ["*", $game_id, $player_id]) {
+  events(last: 1000, keys: ["*", $game_id, $player_id]) {
     total_count
     edges {
       node {
+        id
         keys
         data
         created_at

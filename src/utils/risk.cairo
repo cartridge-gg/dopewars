@@ -32,7 +32,7 @@ impl RiskImpl of RiskTrait<RiskSettings> {
                         Option::None
                     } else {
                         Option::Some(
-                            EncounterImpl::get_or_spawn(world, player, EncounterType::Cops)
+                            EncounterImpl::get_or_spawn(world, player,ref randomizer, EncounterType::Cops)
                         )
                     }
                 },
@@ -41,7 +41,7 @@ impl RiskImpl of RiskTrait<RiskSettings> {
                         Option::None
                     } else {
                         Option::Some(
-                            EncounterImpl::get_or_spawn(world, player, EncounterType::Gang)
+                            EncounterImpl::get_or_spawn(world, player, ref randomizer,EncounterType::Gang)
                         )
                     }
                 }

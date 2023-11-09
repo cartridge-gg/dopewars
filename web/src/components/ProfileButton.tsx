@@ -80,7 +80,7 @@ export const Profile = ({ close, ...props }: { close: () => void }) => {
 
   return (
     <VStack w="full" {...props}>
-      <VStack w="full" maxW="420px" my="auto" pb={[0, "30px"]}>
+      <VStack w="full" maxW="380px" my="auto" pb={[0, "30px"]}>
         <Box w="full" justifyContent="center">
           <VStack w="full">
             <HStack w="full" fontSize="14px">

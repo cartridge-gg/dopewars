@@ -31,6 +31,7 @@ export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const healthLoss = router.query.healthLoss as string;
+  const demandPct = router.query.demandPct as string;
 
   const { account, playerEntityStore } = useDojoContext();
 
@@ -65,13 +66,13 @@ export default function Decision() {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want 20% of your $PAPER!`);
+          setDemand(`They want ${demandPct}% of your $PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`They want 20% of your DRUGS!`);
+          setDemand(`They want ${demandPct}% of your DRUGS!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
           break;
       }

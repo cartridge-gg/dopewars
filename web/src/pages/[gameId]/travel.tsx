@@ -146,7 +146,10 @@ export default function Travel() {
 
         if (event) {
           if (event.eventType === WorldEvents.AdverseEvent) {
-            return router.push(`/${gameId}/event/decision?healthLoss=${(event as AdverseEventData).healthLoss}`);
+            const advEvent = event as AdverseEventData;
+            return router.push(
+              `/${gameId}/event/decision?healthLoss=${advEvent.healthLoss}&demandPct=${advEvent.demandPct}`,
+            );
           }
           if (event.eventType === WorldEvents.AtPawnshop) {
             return router.push(`/${gameId}/pawnshop`);

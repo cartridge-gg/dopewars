@@ -27,11 +27,12 @@ export function defineContractComponents(world: World) {
           level: RecsType.Number,
           health: RecsType.Number,
           payout: RecsType.BigInt,
+          demand_pct: RecsType.Number,
         },
         {
           metadata: {
             name: name,
-            types: ["u8", "u8", "u128"],
+            types: ["u8", "u8", "u128", "u8"],
           },
         },
       );

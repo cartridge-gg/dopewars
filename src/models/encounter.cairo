@@ -7,6 +7,7 @@ use dojo::database::schema::{
 use rollyourown::models::player::Player;
 use rollyourown::models::game::Game;
 use rollyourown::utils::settings::{EncounterSettings, EncounterSettingsImpl};
+use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Encounter {
@@ -19,12 +20,16 @@ struct Encounter {
     level: u8,
     health: u8,
     payout: u128,
+    demand_pct: u8,
 }
 
 #[generate_trait]
 impl EncounterImpl of EncounterTrait {
     fn get_or_spawn(
-        world: IWorldDispatcher, player: @Player, encounter_id: EncounterType
+        world: IWorldDispatcher,
+        player: @Player,
+        ref randomizer: Random,
+        encounter_id: EncounterType
     ) -> Encounter {
         let mut encounter = get!(
             world, (*player.game_id, *player.player_id, encounter_id), (Encounter)
@@ -44,6 +49,7 @@ impl EncounterImpl of EncounterTrait {
                     level: encounter_settings.level,
                     health: encounter_settings.health,
                     payout: encounter_settings.payout,
+                    demand_pct: RandomDemandTrait::random(ref randomizer)
                 };
             set!(world, (encounter));
         } else if encounter.health == 0 {
@@ -56,10 +62,29 @@ impl EncounterImpl of EncounterTrait {
                     level: encounter_settings.level,
                     health: encounter_settings.health,
                     payout: encounter_settings.payout,
+                    demand_pct: RandomDemandTrait::random(ref randomizer)
                 };
             set!(world, (encounter));
         }
         encounter
+    }
+}
+
+struct RandomDemand {}
+
+#[generate_trait]
+impl RandomDemandImpl of RandomDemandTrait {
+    fn random(ref randomizer: Random) -> u8 {
+        let mut rand = randomizer.between::<u8>(0, 100);
+        if rand < 2 {
+            69
+        } else if rand < 20 {
+            50
+        } else if rand < 50 {
+            30
+        } else {
+            20
+        }
     }
 }
 

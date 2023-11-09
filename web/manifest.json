@@ -862,7 +862,7 @@
     {
       "name": "decide",
       "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
-      "class_hash": "0x313f47d14c95f0e87e6c893f29c9bb0a4865e9364303852dd27cadc2ac99d6a",
+      "class_hash": "0x29426d0ffe98b8154fd0561a5e9ef4f0cb9d927deb2b7256379276d52ee5548",
       "abi": [
         {
           "type": "impl",
@@ -1391,7 +1391,7 @@
     {
       "name": "shop",
       "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
-      "class_hash": "0x29c553ab2bc753d5456a4da65c1d564d9c5a5fe7e3237de8be8e97ab4e0a91d",
+      "class_hash": "0x503e815841e2badc5419222c9c8e06d133ddc81bb6f9e0a3987dc0d4c68ddea",
       "abi": [
         {
           "type": "impl",
@@ -1923,7 +1923,7 @@
     {
       "name": "travel",
       "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
-      "class_hash": "0x253fa630e0df1fe16c1c6d371bd112725d453bc6df56e87c2c91558f14e7a6",
+      "class_hash": "0x16cc20738477bde9e5bde3e3aa7bcf9577ee44cc0b379e40bef2e1fc8f70c00",
       "abi": [
         {
           "type": "impl",
@@ -2114,6 +2114,11 @@
             },
             {
               "name": "health_loss",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "demand_pct",
               "type": "core::integer::u8",
               "kind": "data"
             }
@@ -2450,9 +2455,14 @@
           "name": "payout",
           "type": "u128",
           "key": false
+        },
+        {
+          "name": "demand_pct",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x3b469fe9890ba45cd7b7f0a79c01ddf010fa4b75c922b3806a14529b6b2b5cc",
+      "class_hash": "0x7455ec7f630d065ce6839ecc4cf8b9df329eef58bb16e30e30b560e2f10552a",
       "abi": [
         {
           "type": "function",

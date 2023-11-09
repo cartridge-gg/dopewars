@@ -156,7 +156,7 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
             travel,
             capture,
             encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-            cops_drug_threshold: 7, // cops encounter threshold
+            cops_drug_threshold: 5, // cops encounter threshold
             gangs_cash_threshold: 500_0000, // gangs encounter threshold
             health_increase_by_turn: 0,
             wanted_decrease_by_turn: 1,

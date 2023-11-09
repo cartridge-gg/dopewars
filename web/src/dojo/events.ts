@@ -142,6 +142,7 @@ export const parseEvent = (raw: any) => {
         playerId: num.toHexString(raw.keys[2]),
         playerStatus: shortString.decodeShortString(raw.data[0]),
         healthLoss: Number(raw.data[1]),
+        demandPct: Number(raw.data[2]),
       } as AdverseEventData;
 
     case WorldEvents.AtPawnshop:
