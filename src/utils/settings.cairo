@@ -47,13 +47,11 @@ struct MarketSettings {
     liq_scaling_initial_rate: usize,
     liq_scaling_fading_rate: usize,
     liq_scaling_flat: usize,
+    price_scaling_flat: usize,
 }
 
 #[derive(Copy, Drop, Serde)]
 struct DecideSettings {
-    gangs_payment_cash_pct: usize,
-    cops_payment_drug_pct: usize,
-    health_impact: u8,
     wanted_impact_run: u8,
     wanted_impact_fight: u8,
 }
@@ -177,11 +175,8 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
 impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
     fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
         let decide_settings = DecideSettings {
-            gangs_payment_cash_pct: 20, //% of cash
-            cops_payment_drug_pct: 20, //% of drug
-            health_impact: (8 + ((*player).turn / 5)).try_into().unwrap(), // 10 + (1 each 5 turn)
-            wanted_impact_run: 4,
-            wanted_impact_fight: 10,
+            wanted_impact_run: 6,
+            wanted_impact_fight: 12,
         };
         decide_settings
     }
@@ -191,14 +186,15 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
     fn get(game_mode: GameMode) -> MarketSettings {
         let mut market_settings = MarketSettings {
             price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
-            price_var_min: 1, // 1%  
-            price_var_max: 5, // 5%  
-            market_event_chance: 7, // on 1000 : 1.4% = 0.7% up / 0.7% down  
+            price_var_min: 2, // 2%  
+            price_var_max: 6, // 6%  
+            market_event_chance: 8, // on 1000 : 1.6% = 0.8% up / 0.8% down  
             market_event_min: 40, //   up 40%  | down 20%
             market_event_max: 80, //   up 80%  | down 40%
             liq_scaling_initial_rate: 150, // 0.015
             liq_scaling_fading_rate: 360,
-            liq_scaling_flat: 10200 // 2%
+            liq_scaling_flat: 10200, // 2%
+            price_scaling_flat: 10100, // 1%
         };
 
         if game_mode == GameMode::Test {
@@ -279,7 +275,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
     fn get(game_mode: GameMode, player: @Player, level: u8) -> EncounterSettings {
         // game should not exceed 100 turns
         let turn: u8 = (*player.turn).try_into().unwrap();
-        let mut health = level * 10 + turn;
+        let mut health = level * 8 + turn;
         let mut health = if health > 100 {
             100
         } else {

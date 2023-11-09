@@ -84,8 +84,11 @@ fn market_variations(
                             );
 
                             // flat 2%
-                            scale_market(ref market, market_settings.liq_scaling_flat.into());
-                            //scale_market(ref market, scaling_factor);
+                            scale_market_liq(ref market, market_settings.liq_scaling_flat.into());
+                            //scale_market_liq(ref market, scaling_factor);
+                            scale_market_price(
+                                ref market, market_settings.price_scaling_flat.into()
+                            );
 
                             if rand < market_settings.price_var_chance.into() {
                                 // increase price
@@ -221,10 +224,15 @@ fn get_liquidity_scaling_factor(market_settings: MarketSettings, turn: usize) ->
 }
 
 
-fn scale_market(ref market: Market, scaling_factor: u128) {
+fn scale_market_liq(ref market: Market, scaling_factor: u128) {
     market.quantity = market.quantity * scaling_factor.try_into().unwrap() / 10000;
     market.cash = market.cash * scaling_factor.into() / 10000;
 }
+
+fn scale_market_price(ref market: Market, scaling_factor: u128) {
+    market.cash = market.cash * scaling_factor / 10000;
+}
+
 //
 //
 //
