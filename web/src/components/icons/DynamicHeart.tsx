@@ -1,9 +1,9 @@
 import { background } from "@chakra-ui/react";
 import { Icon, IconProps } from ".";
 
-export const DynamicHeart = (props: IconProps & { health: number; color: string }) => {
+export const DynamicHeart = (props: IconProps & { health: number; maxHealth: number; color: string }) => {
   // Assuming the SVG viewBox is 24 units wide, scale the health to fit this range.
-  const healthWidth = ((props.health * 4) / 100) * 24;
+  const healthWidth = ((props.health * 4) / props.maxHealth) * 24;
   const gradientId = `health-gradient-${props.health}`;
 
   return (

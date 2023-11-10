@@ -69,7 +69,7 @@ const Header = ({ back }: HeaderProps) => {
               <HStack>
                 <CashIndicator cash={formatCashHeader(playerEntity.cash)} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <HealthIndicator health={playerEntity.health} />
+                <HealthIndicator health={playerEntity.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <WantedIndicator wanted={playerEntity.wanted} />
               </HStack>
