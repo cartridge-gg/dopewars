@@ -37,6 +37,7 @@ import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/e
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { useMarketPrices } from "@/dojo/queries/useMarkets";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
+import { Footer } from "@/components/Footer";
 
 interface MarketPriceInfo {
   id: string;
@@ -191,8 +192,27 @@ export default function Travel() {
           />
         ),
       }}
+      footer={
+          
+            <Footer >
+          {playerEntity.turn > 0 && (
+            <Button isDisabled={isPending} w={["full", "auto"]}   px={["auto","20px"]} onClick={() => router.back()}>
+              Back
+            </Button>
+          )}
+          <Button
+            w={["full", "auto"]}
+            px={["auto","20px"]}
+            isDisabled={!targetId || targetId === currentLocationId}
+            isLoading={isPending /*&& !txError*/}
+            onClick={onContinue}
+          >
+            Travel
+          </Button>
+        </Footer>
+      }
     >
-      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px">
+      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
         <VStack w="full" align="flex-start">
           <Inventory />
           <Text textStyle="subheading" pt={["0px", "20px"]} fontSize="11px" color="neon.500">
@@ -201,27 +221,12 @@ export default function Travel() {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices prices={prices} />
-        <HStack w={["auto !important", "full"]} position={["relative", "absolute"]} bottom={0} pointerEvents="all">
-          {playerEntity.turn > 0 && (
-            <Button isDisabled={isPending} w={["full", "auto"]} onClick={() => router.back()}>
-              Back
-            </Button>
-          )}
-          <Button
-            w={["full", "auto"]}
-            isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isPending /*&& !txError*/}
-            onClick={onContinue}
-          >
-            Travel
-          </Button>
-        </HStack>
       </VStack>
       <VStack
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="60px 16px 16px 16px"
+        p="60px 16px 86px 16px"
         position="fixed"
         bottom="0"
         right="0"
@@ -230,25 +235,11 @@ export default function Travel() {
         justify="flex-end"
         background="linear-gradient(transparent, 10%, #172217, 25%, #172217)"
         gap="14px"
+        overflow={"visible"}
       >
         <Inventory />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} />
-        <HStack w="full" pointerEvents="all" pb="6px">
-          {playerEntity.turn > 0 && (
-            <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
-              Back
-            </Button>
-          )}
-          <Button
-            w={["full", "auto"]}
-            isDisabled={!targetId || targetId === currentLocationId}
-            isLoading={isPending /*&& !txError*/}
-            onClick={onContinue}
-          >
-            Travel
-          </Button>
-        </HStack>
       </VStack>
     </Layout>
   );

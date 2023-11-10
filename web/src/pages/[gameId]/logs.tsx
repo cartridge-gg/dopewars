@@ -21,7 +21,7 @@ import { useEffect, useRef, useState } from "react";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Bag, DollarBag, Event } from "@/components/icons";
 import { usePlayerLogs } from "@/dojo/queries/usePlayerLogs";
-import { GameCreatedData, WorldEvents } from "@/dojo/generated/contractEvents";
+import { GameCreatedData, PlayerJoinedData, WorldEvents } from "@/dojo/generated/contractEvents";
 import {
   AdverseEventData,
   AtPawnshopEventData,
@@ -56,6 +56,7 @@ export default function Logs() {
 
   const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 
+  const [ playerName, setPlayerName] = useState("");
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
@@ -74,6 +75,9 @@ export default function Logs() {
 
     for (let log of playerLogs?.parsedLogs) {
       //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
+      if (log.parsed.eventType === WorldEvents.PlayerJoined){
+        setPlayerName((log.parsed as JoinedEventData).playerName)
+      }
       if (log.parsed.eventType === WorldEvents.Traveled) {
         // create new day
         logsByDay.push(dayLogs);
@@ -114,6 +118,8 @@ export default function Logs() {
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
+  const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
+
   if (!isFetched || !logs) {
     return <></>;
   }
@@ -122,13 +128,15 @@ export default function Logs() {
     <Layout
       leftPanelProps={{
         prefixTitle: "",
-        title: `Hustler Log`,
+        title: `${playerName} Log `,
         imageSrc: "/images/will-smith-with-attitude.png",
       }}
       CustomLeftPanel={!playerId ? CustomLeftPanel : undefined}
       footer={
         <Footer>
           <Button
+            w={["full", "auto"]}
+            px={["auto","20px"]}
             onClick={() => {
               if (playerId && playerId !== "") {
                 router.push("/");
@@ -141,7 +149,7 @@ export default function Logs() {
           </Button>
         </Footer>
       }
-      rigthPanelMaxH={isMobile ? "calc(100vh - 400px)" : "auto"}
+      rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" ref={listRef}>
         {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(log))}
@@ -153,7 +161,7 @@ export default function Logs() {
 const CustomLeftPanel = () => {
   return (
     <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1">
-      <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px","20px"]}>
+      <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         Hustler Log
       </Heading>
       <Profile />

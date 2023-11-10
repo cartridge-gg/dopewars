@@ -53,8 +53,9 @@ export default function Consequence() {
             {!isDead ? (
               <Button
                 w={["full", "auto"]}
+                px={["auto", "20px"]}
                 onClick={() => {
-                 // console.log(outcome);
+                  // console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
                     return router.push(`/${gameId}/event/decision`);
                   }
@@ -73,6 +74,7 @@ export default function Consequence() {
             ) : (
               <Button
                 w="full"
+                px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/end`);
                 }}

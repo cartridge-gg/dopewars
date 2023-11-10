@@ -11,14 +11,14 @@ export const Footer = ({
   return (
     <HStack
       w="full"
-      minH="80px"
+      minH="100px"
       p="2px"
       position={["fixed", "absolute"]}
       bottom="0"
       justify="center"
       align="flex-end"
       flexGrow={1}
-      background="linear-gradient(transparent, #172217, #172217)"
+      background="linear-gradient(transparent, #172217,  #172217, #172217, #172217)"
       pointerEvents="none"
       {...props}
     >

@@ -91,12 +91,10 @@ export default function Market() {
       //   icon: Cart,
       //   link: `http://amazing_explorer/${hash}`,
       // });
-
-      
     } catch (e) {
       console.log(e);
     }
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, toast,  market]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, toast, market]);
 
   if (!router.isReady || !playerEntity || !drug || !market) return <></>;
 
@@ -109,13 +107,14 @@ export default function Market() {
       }}
       footer={
         <Footer>
-          <Button w={["full", "auto"]} onClick={() => router.back()}>
+          <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
             Back
           </Button>
 
           {tradeDirection == TradeDirection.Buy && canBuy && (
             <Button
               w={["full", "auto"]}
+              px={["auto", "20px"]}
               isLoading={isPending /* && !txError*/}
               isDisabled={quantityBuy === 0}
               onClick={onTrade}
@@ -127,6 +126,7 @@ export default function Market() {
           {tradeDirection == TradeDirection.Sell && canSell && (
             <Button
               w={["full", "auto"]}
+              px={["auto", "20px"]}
               isLoading={isPending /*&& !txError*/}
               isDisabled={quantitySell === 0}
               onClick={onTrade}

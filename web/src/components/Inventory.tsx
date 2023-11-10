@@ -15,9 +15,6 @@ export const Inventory = ({ ...props }: StyleProps) => {
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
-      {/* <Text textStyle="subheading" fontSize="10px" display={["none", "flex"]} color="neon.500">
-        Inventory
-      </Text> */}
       <HStack w="full" justify={"space-between"}>
         <HStack color={playerEntity?.items.length === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Ring />
@@ -34,7 +31,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
         </HStack>
       </HStack>
 
-      <HStack w="full" flexWrap={"wrap"} justify="space-between">
+      <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
             {playerEntity?.items.map((item, key) => {

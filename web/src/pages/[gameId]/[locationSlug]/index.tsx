@@ -73,6 +73,8 @@ export default function Location() {
         <Footer>
           <Button
             w={["full", "auto"]}
+            px={["auto","20px"]}
+
             onClick={() => {
               if (isLastDay) {
                 router.push(`/${gameId}/end`);
@@ -86,14 +88,11 @@ export default function Location() {
         </Footer>
       }
     >
-      <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={["8px", "16px"]}>
+      <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={"8px"}>
         <Inventory />
       </Box>
 
       <VStack w="full" align="flex-start" gap="10px">
-        <Text textStyle="subheading" fontSize="10px" color="neon.500">
-          Market
-        </Text>
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
           {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id)!;

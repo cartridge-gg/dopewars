@@ -70,7 +70,12 @@ export default function New() {
       }}
       footer={
         <Footer>
-          <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Unlimited)}>
+          <Button
+            w={["full", "auto"]}
+            px={["auto", "20px"]}
+            isLoading={isPending}
+            onClick={() => create(GameMode.Unlimited)}
+          >
             Play
           </Button>
           {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>

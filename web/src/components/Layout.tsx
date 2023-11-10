@@ -71,10 +71,10 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
   return (
     <VStack flex={["0", "1"]} my={["none", "auto"]} {...props}>
       <VStack zIndex="1" position={map ? "absolute" : "unset"} pointerEvents="none" spacing="0">
-        <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+        <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["36px", "48px"]} fontWeight="normal">
+        <Heading fontSize={["36px", "48px"]}  textAlign="center" fontWeight="normal">
           {title}
         </Heading>
       </VStack>
@@ -108,7 +108,7 @@ const RightPanel = ({
         maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)")}
       >
         {children}
-        {!isSinglePanel && <Box display="block" minH="70px" h="70px" w="full" />}
+        {!isSinglePanel && <Box display="block" minH="70px" h="90px" w="full" />}
       </VStack>
       {footer}
     </VStack>

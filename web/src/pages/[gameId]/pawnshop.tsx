@@ -41,7 +41,7 @@ export default function PawnShop() {
   const { availableShopItems } = useAvailableShopItems(gameId);
 
   const { playerEntity } = playerEntityStore;
- 
+
   const [isBuying, setIsBuying] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
 
@@ -115,11 +115,12 @@ export default function PawnShop() {
       }}
       footer={
         <Footer>
-          <Button w="full" isLoading={isSkipping} isDisabled={isPending} onClick={onSkip}>
+          <Button w="full" px={["auto", "20px"]} isLoading={isSkipping} isDisabled={isPending} onClick={onSkip}>
             Skip
           </Button>
           <Button
             w="full"
+            px={["auto", "20px"]}
             isLoading={isBuying}
             isDisabled={
               isPending ||

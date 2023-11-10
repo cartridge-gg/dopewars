@@ -92,8 +92,9 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">
+                  <User />
                   <Heading fontFamily="dos-vga" fontWeight="normal" fontSize={"16px"}>
-                    <User /> {playerEntity.name}
+                    <Text>{playerEntity.name}</Text>
                   </Heading>
                 </HStack>
 

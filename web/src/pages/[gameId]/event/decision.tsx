@@ -13,7 +13,7 @@ import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
 import { playSound, Sounds } from "@/hooks/sound";
 import { Inventory } from "@/components/Inventory";
-import { IsMobile } from "@/utils/ui";
+import { IsMobile, formatCash } from "@/utils/ui";
 import { getSentence } from "@/responses";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
@@ -303,6 +303,7 @@ export default function Decision() {
           <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
             <Button
               w="full"
+              px={["auto","20px"]}
               isDisabled={isRunning || isPaying}
               isLoading={isFigthing}
               onClick={() => {
@@ -315,6 +316,7 @@ export default function Decision() {
 
             <Button
               w="full"
+              px={["auto","20px"]}
               isDisabled={isPaying || isFigthing}
               isLoading={isRunning}
               onClick={() => {
@@ -326,6 +328,7 @@ export default function Decision() {
             </Button>
             <Button
               w="full"
+              px={["auto","20px"]}
               isDisabled={isRunning || isFigthing}
               isLoading={isPaying}
               onClick={() => {
@@ -408,7 +411,7 @@ const Encounter = ({
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                <CashIndicator cash={encounter.payout} />
+                <CashIndicator cash={formatCash(encounter.payout)} />
                 {IsMobile() ? (
                   <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
                 ) : (

@@ -125,6 +125,7 @@ export default function Turn() {
                   onClick={() => {
                     router.push(`/${gameId}/pawnshop`);
                   }}
+                  px={["auto","20px"]}
                   h="100px"
                   display="flex"
                   alignItems="center"
@@ -140,6 +141,7 @@ export default function Turn() {
             <HStack gap="20px">
               <Button
                 w={["full", "auto"]}
+                px={["auto","20px"]}
                 onClick={() => {
                   resetTurn();
                   router.push(

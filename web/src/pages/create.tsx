@@ -44,21 +44,13 @@ export default function Create() {
         <ListItem>
           <HStack>
             <Label name="Turns" />
-            <InputNumber
-              value={numTurns}
-              min={MIN_TURNS}
-              onChange={handleNumTurns}
-            />
+            <InputNumber value={numTurns} min={MIN_TURNS} onChange={handleNumTurns} />
           </HStack>
         </ListItem>
         <ListItem>
           <HStack>
             <Label name="Players" />
-            <InputNumber
-              value={numPlayers}
-              min={MIN_PLAYERS}
-              onChange={handleNumPlayer}
-            />
+            <InputNumber value={numPlayers} min={MIN_PLAYERS} onChange={handleNumPlayer} />
           </HStack>
         </ListItem>
         <ListItem>
@@ -78,11 +70,12 @@ export default function Create() {
         </ListItem>
       </UnorderedList>
       <Footer>
-        <Button w={["full", "auto"]} onClick={() => router.push("/")}>
+        <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.push("/")}>
           Cancel
         </Button>
         <Button
           w={["full", "auto"]}
+          px={["auto", "20px"]}
           onClick={() => router.push("/pending/0x123")}
           clickSound={Sounds.Magnum357}
         >

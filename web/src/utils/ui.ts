@@ -193,3 +193,30 @@ export function formatCash(cash: number): string {
     maximumFractionDigits: 0,
   }).format(cash);
 }
+
+
+export function formatCashHeader(cash: number): string {
+  if (cash < 10_000) {
+    return Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(cash);
+  }
+  if (cash < 1_000_000) {
+    return `${Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 1,
+    }).format(cash / 1_000)}k`;
+  }
+  else if (cash < 1_000_000_000) {
+    return `${Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 1,
+    }).format(cash / 1_000_000)}M`;
+  }
+  return "ElonMusk"
+
+}

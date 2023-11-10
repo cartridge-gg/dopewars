@@ -1,6 +1,6 @@
 import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
+import { IsMobile, formatCashHeader, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
 import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
@@ -53,7 +53,7 @@ const Header = ({ back }: HeaderProps) => {
   }, [playerEntity]);
 
   return (
-    <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]}>
+    <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]} fontSize={["14px", "16px"]}>
       <HStack flex="1" justify={["left", "right"]}></HStack>
       {playerEntity && playerEntity.health > 0 && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
@@ -67,7 +67,7 @@ const Header = ({ back }: HeaderProps) => {
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
-                <CashIndicator cash={playerEntity.cash} />
+                <CashIndicator cash={formatCashHeader(playerEntity.cash)} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={playerEntity.health} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
