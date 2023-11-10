@@ -61,7 +61,7 @@ export default function Home() {
   };
 
   return (
-    <Layout CustomLeftPanel={HomeLeftPanel}>
+    <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 170px)">
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
@@ -94,6 +94,9 @@ export default function Home() {
               gap="20px"
               sx={{
                 overflowY: "scroll",
+              }}
+              __css={{
+                "scrollbar-width": "none"
               }}
             >
               <Leaderboard />

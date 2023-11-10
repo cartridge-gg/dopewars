@@ -2,11 +2,6 @@
 version = 1
 
 [[package]]
-name = "cubit"
-version = "1.2.0"
-source = "git+https://github.com/influenceth/cubit.git#b4590530d5aeae9aabd36740cc2a3d9e6adc5fde"
-
-[[package]]
 name = "dojo"
 version = "0.3.6"
 source = "git+https://github.com/dojoengine/dojo.git#1526f3088d6dcddf626c207af7b3769e2182c5c0"
@@ -16,12 +11,11 @@ dependencies = [
 
 [[package]]
 name = "dojo_plugin"
-version = "0.3.6"
+version = "0.3.9"
 
 [[package]]
 name = "rollyourown"
 version = "0.1.0"
 dependencies = [
- "cubit",
  "dojo",
 ]

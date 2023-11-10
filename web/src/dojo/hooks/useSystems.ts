@@ -63,6 +63,21 @@ const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const tryBetterErrorMsg = (msg: string): string => {
+
+  const failureReasonIndex = msg.indexOf("Failure reason")
+  if (failureReasonIndex > 0) {
+    let betterMsg = msg.substring(failureReasonIndex)
+    const cairoTracebackIndex = betterMsg.indexOf("Cairo traceback")
+    betterMsg = betterMsg.substring(0, cairoTracebackIndex)
+    return betterMsg
+  }
+
+  return msg;
+
+}
+
+
 export const useSystems = (): SystemsInterface => {
   const {
     account,
@@ -100,7 +115,7 @@ export const useSystems = (): SystemsInterface => {
         setError("Transaction Rejected")
         setIsPending(false)
         toast({
-          message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message,
+          message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
           duration: 20_000,
           isError: true
         })
@@ -112,7 +127,7 @@ export const useSystems = (): SystemsInterface => {
         setIsPending(false)
 
         toast({
-          message: (receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted',
+          message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
           duration: 20_000,
           isError: true
         })

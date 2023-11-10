@@ -12,7 +12,7 @@ import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
 import colors from "@/theme/colors";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import {ProfileLink} from "./ProfileButton";
+import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
@@ -56,8 +56,15 @@ const Header = ({ back }: HeaderProps) => {
     <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]}>
       <HStack flex="1" justify={["left", "right"]}></HStack>
       {playerEntity && playerEntity.health > 0 && (
-        <HStack flex="1" justify="center">
-          <HStack h="48px" w="auto" px="20px" spacing={["10px", "30px"]} bg="neon.700" sx={{ ...headerStyles }}>
+        <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
+          <HStack
+            h="48px"
+            width={["100%", "auto"]}
+            px="20px"
+            spacing={["10px", "30px"]}
+            bg="neon.700"
+            sx={{ ...headerStyles }}
+          >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
                 <CashIndicator cash={playerEntity.cash} />

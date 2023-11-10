@@ -14,6 +14,7 @@ export interface LayoutProps {
   isSinglePanel?: boolean;
   footer?: ReactNode;
   rigthPanelMaxH?: string;
+  rigthPanelScrollable?: boolean;
 }
 
 export interface LeftPanelProps {
@@ -30,8 +31,10 @@ const Layout = ({
   children,
   isSinglePanel = false,
   rigthPanelMaxH,
+  rigthPanelScrollable = true,
   footer,
 }: LayoutProps) => {
+
   return (
     <>
       <Flex
@@ -43,7 +46,7 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container position="relative" px={["8px", "16px"]} py="16px">
+        <Container position="relative" px={["10px", "16px"]} py="16px">
           {!isSinglePanel &&
             (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
           <RightPanel
@@ -51,6 +54,7 @@ const Layout = ({
             footer={footer}
             isSinglePanel={isSinglePanel}
             rigthPanelMaxH={rigthPanelMaxH}
+            rigthPanelScrollable={rigthPanelScrollable}
           >
             {children}
           </RightPanel>
@@ -88,16 +92,20 @@ const RightPanel = ({
   footer,
   isSinglePanel,
   rigthPanelMaxH,
+  rigthPanelScrollable,
   ...props
-}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH?: string } & StyleProps) => {
+}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH?: string, rigthPanelScrollable: boolean } & StyleProps) => {
   return (
     <VStack position="relative" w="full" {...props}>
       <VStack
         position="relative"
         flex="1"
-        overflowY={"scroll"}
+        overflowY={rigthPanelScrollable ? "scroll" : "hidden"}
+        __css={{
+          "scrollbar-width": "none"
+        }}
         w="full"
-        maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 140px)")}
+        maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)")}
       >
         {children}
         {!isSinglePanel && <Box display="block" minH="70px" h="70px" w="full" />}

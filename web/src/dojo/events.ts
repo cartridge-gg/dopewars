@@ -255,7 +255,7 @@ export const parseEvent = (raw: any) => {
 
 
     default:
-      console.log(`event parse not implemented: ${raw.keys[0]}`)
+      // console.log(`event parse not implemented: ${raw.keys[0]}`)
       //throw new Error(`event parse not implemented: ${eventType}`);
       return {
         gameId: undefined,

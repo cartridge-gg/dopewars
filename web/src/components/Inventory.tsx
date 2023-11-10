@@ -19,14 +19,14 @@ export const Inventory = ({ ...props }: StyleProps) => {
         Inventory
       </Text> */}
       <HStack w="full" justify={"space-between"}>
-        <HStack color="yellow.400" justify="center">
+        <HStack color={playerEntity?.items.length === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Ring />
           <Text>
             {playerEntity?.items.length || 0}/{playerEntity?.maxItems}
           </Text>
         </HStack>
 
-        <HStack color="yellow.400" justify="center">
+        <HStack color={playerEntity?.drugCount === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />
           <Text>
             {playerEntity?.drugCount}/{playerEntity?.getTransport()}
@@ -62,14 +62,14 @@ export const Inventory = ({ ...props }: StyleProps) => {
                 </>
               );
             })}
-            {playerEntity?.items.length === 0 && <Text color="neon.500">No item</Text>}
+            {playerEntity?.items.length === 0 && <Text color="neon.500">No gear</Text>}
           </HStack>
         </Card>
 
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-start">
             {playerEntity?.drugCount === 0 ? (
-              <Text color="neon.500">Bag is empty</Text>
+              <Text color="neon.500">No product</Text>
             ) : (
               playerEntity?.drugs.map((drug, key) => {
                 return (
