@@ -1,5 +1,6 @@
 import { StyleProps, HStack, Text, keyframes } from "@chakra-ui/react";
 import { DynamicHeart } from "../icons";
+import colors from "@/theme/colors";
 
 export const blinkAnim = keyframes`  
   0% {opacity: 1;}   
@@ -9,17 +10,13 @@ export const blinkAnim = keyframes`
 `;
 
 const HealthIndicator = ({ health, ...props }: { health: number } & StyleProps) => {
-  const healthColor = health > 59 ? "neon.400" : health > 29 ? "yellow.400" : "red";
+  const healthColor =
+    health > 59 ? colors.neon["200"].toString() : health > 29 ? colors.yellow["400"].toString() : colors.red.toString();
   return (
-    <HStack
-      color={healthColor}
-      animation={health <= 20 ? `${blinkAnim} infinite 1.4s linear` : "none"}
-      {...props}
-    >
-      <DynamicHeart health={health} /> <Text>{health}</Text>
+    <HStack color={healthColor} animation={health <= 20 ? `${blinkAnim} infinite 1.4s linear` : "none"} {...props}>
+      <DynamicHeart health={health} color={healthColor} /> <Text>{health}</Text>
     </HStack>
   );
 };
 
 export default HealthIndicator;
-
