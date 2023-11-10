@@ -57,7 +57,7 @@ export default function Decision() {
   const { playerEntity } = playerEntityStore;
 
   const combatsListRef = useRef(null);
-  const isMobile = IsMobile()
+  const isMobile = IsMobile();
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -270,7 +270,7 @@ export default function Decision() {
                 </Text>
                 <Card
                   w="full"
-                  maxH={isMobile ? "calc( 100vh - 560px)" :  "calc( 100vh - 380px)"}
+                  maxH={isMobile ? "calc( 100vh - 560px)" : "calc( 100vh - 380px)"}
                   overflowY="scroll"
                   sx={{
                     "scrollbar-width": "none",
@@ -361,7 +361,6 @@ const Encounter = ({
   playerEntity: PlayerEntity;
   encounter: Encounter;
 } & StyleProps) => {
-  console.log(encounter);
   return (
     <VStack {...props}>
       <VStack>
