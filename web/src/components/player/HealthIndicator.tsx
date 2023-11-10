@@ -11,7 +11,7 @@ export const blinkAnim = keyframes`
 
 const HealthIndicator = ({ health, ...props }: { health: number } & StyleProps) => {
   const healthColor =
-    health > 59 ? colors.neon["200"].toString() : health > 29 ? colors.yellow["400"].toString() : colors.red.toString();
+    health > 59 ? colors.neon["400"].toString() : health > 29 ? colors.yellow["400"].toString() : colors.red.toString();
   return (
     <HStack color={healthColor} animation={health <= 20 ? `${blinkAnim} infinite 1.4s linear` : "none"} {...props}>
       <DynamicHeart health={health} color={healthColor} /> <Text>{health}</Text>
