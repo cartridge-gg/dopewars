@@ -221,7 +221,7 @@ export default function Travel() {
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="60px 24px 24px 24px"
+        p="60px 16px 16px 16px"
         position="fixed"
         bottom="0"
         right="0"
@@ -234,7 +234,7 @@ export default function Travel() {
         <Inventory />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} />
-        <HStack w="full" pointerEvents="all">
+        <HStack w="full" pointerEvents="all" pb="6px">
           {playerEntity.turn > 0 && (
             <Button isDisabled={isPending} w="full" onClick={() => router.back()}>
               Back

@@ -39,6 +39,8 @@ import CashIndicator from "./player/CashIndicator";
 import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
+import { useToast } from "@/hooks/toast";
+
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -66,6 +68,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
   const [transportItem, setTransportItem] = useState<ShopItem | undefined>(undefined);
 
+  const {toast} = useToast()
+
   const isMobile = IsMobile();
 
   useEffect(() => {
@@ -79,16 +83,16 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   if (!account || !playerEntity) return null;
 
   return (
-    <VStack w="full" flex="1" {...props}>
+    <VStack w="full"  {...props}>
       <VStack w="full" maxW="380px" my="auto" pb={[0, "30px"]}>
         <Box w="full" justifyContent="center">
           <VStack w="full">
             <HStack w="full" fontSize="14px">
-              <Card flex={1} alignItems="center">
-                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="80px" h="80px" />
+              <Card w="100px" alignItems="center">
+                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="100px" h="100px" />
               </Card>
               <Card flex={2}>
-                <HStack h="40px" px="10px">
+                <HStack h="50px" px="10px">
                   <Heading fontFamily="dos-vga" fontWeight="normal" fontSize="20px">
                     <Gem /> {playerEntity.name}
                   </Heading>
@@ -101,7 +105,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                   borderBottomWidth="1px"
                   borderColor="neon.600"
                 />
-                <HStack h="40px" px="10px">
+                <HStack h="50px" px="10px">
                   <Calendar /> <Text>DAY {playerEntity.turn}</Text>
                 </HStack>
 
@@ -206,17 +210,26 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
               </Button>
             )}
             {!playerId && (
-              <ChakraLink
-                href={`${window.location.origin}/${gameId}/logs?playerId=${account.address}`}
-                target="_blank"
-                w="full"
-                textDecoration="none"
-                _hover={{
-                  textDecoration: "none",
-                }}
-              >
-                <Button w="full">Game Link</Button>
-              </ChakraLink>
+              // <ChakraLink
+              //   href={`${window.location.origin}/${gameId}/logs?playerId=${account.address}`}
+              //   target="_blank"
+              //   w="full"
+              //   textDecoration="none"
+              //   _hover={{
+              //     textDecoration: "none",
+              //   }}
+                
+              // >
+                <Button w="full" onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs?playerId=${account.address}`)
+
+                  toast({
+                   // icon: Car,
+                    message: "Copied to clipboard"
+                  })
+
+                }}>Game Link</Button>
+            //  : </ChakraLink>
             )}
             <ShareButton />
           </HStack>

@@ -68,7 +68,7 @@ fn market_variations(
     let game = get!(world, game_id, Game);
     let player = get!(world, (game_id, player_id), Player);
     let market_settings = MarketSettingsImpl::get(game.game_mode);
-    let scaling_factor = get_liquidity_scaling_factor(market_settings, player.turn);
+    //let scaling_factor = get_liquidity_scaling_factor(market_settings, player.turn);
 
     loop {
         match locations.pop_front() {
@@ -200,28 +200,28 @@ fn price_variation_with_drug(
 }
 
 
-use cubit::f128::types::fixed::{Fixed, FixedTrait};
+// use cubit::f128::types::fixed::{Fixed, FixedTrait};
 
 // formula : 1 + ( initial_rate - (sqrt(x/100) / fading_rate ) )
 // initial_rate : 0.009
 // fading_rate : 350
 // result is x10_000
-fn get_liquidity_scaling_factor(market_settings: MarketSettings, turn: usize) -> u128 {
-    let initial_rate = FixedTrait::from_unscaled_felt(
-        market_settings.liq_scaling_initial_rate.into()
-    )
-        / FixedTrait::from_unscaled_felt(10000);
-    let fading_rate = FixedTrait::from_unscaled_felt(
-        market_settings.liq_scaling_fading_rate.into()
-    );
-    let x_div_100 = FixedTrait::from_unscaled_felt(turn.into())
-        / FixedTrait::from_unscaled_felt(100);
+// fn get_liquidity_scaling_factor(market_settings: MarketSettings, turn: usize) -> u128 {
+//     let initial_rate = FixedTrait::from_unscaled_felt(
+//         market_settings.liq_scaling_initial_rate.into()
+//     )
+//         / FixedTrait::from_unscaled_felt(10000);
+//     let fading_rate = FixedTrait::from_unscaled_felt(
+//         market_settings.liq_scaling_fading_rate.into()
+//     );
+//     let x_div_100 = FixedTrait::from_unscaled_felt(turn.into())
+//         / FixedTrait::from_unscaled_felt(100);
 
-    let factor = FixedTrait::ONE() + (initial_rate - (FixedTrait::sqrt(x_div_100) / fading_rate));
-    let scaled = factor * FixedTrait::from_unscaled_felt(10000);
+//     let factor = FixedTrait::ONE() + (initial_rate - (FixedTrait::sqrt(x_div_100) / fading_rate));
+//     let scaled = factor * FixedTrait::from_unscaled_felt(10000);
 
-    scaled.try_into().unwrap()
-}
+//     scaled.try_into().unwrap()
+// }
 
 
 fn scale_market_liq(ref market: Market, scaling_factor: u128) {

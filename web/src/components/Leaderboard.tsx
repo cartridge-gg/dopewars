@@ -59,6 +59,9 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           h="auto"
           maxH="calc(100% - 50px)"
           overflowY="scroll"
+          __css={{
+            "scrollbar-width": "none"
+          }}
           ref={listRef}
         >
           {scores ? (
@@ -130,7 +133,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           )}
         </UnorderedList>
         {hasNextPage && (
-          <Button variant="pixelated" onClick={() => fetchNextPage()}>
+          <Button minH="40px" variant="pixelated" onClick={() => fetchNextPage()}>
             Load More
           </Button>
         )}

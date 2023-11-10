@@ -1,4 +1,4 @@
-import { HStack, ButtonProps, StyleProps } from "@chakra-ui/react";
+import { HStack, ButtonProps, StyleProps, Box } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import { ReactNode } from "react";
 
@@ -11,18 +11,20 @@ export const Footer = ({
   return (
     <HStack
       w="full"
-      minH="60px"
+      minH="80px"
       p="2px"
-     // position={["relative", "absolute"]}
-      position={"absolute"}
+      position={["fixed", "absolute"]}
       bottom="0"
       justify="center"
       align="flex-end"
       flexGrow={1}
       background="linear-gradient(transparent, #172217, #172217)"
+      pointerEvents="none"
       {...props}
     >
-      {children}
+      <HStack w="full" mb={["20px","0px"]} px={["10px","0px"]} justify="center" align="flex-end" pointerEvents="all">
+        {children}
+      </HStack>
     </HStack>
   );
 };

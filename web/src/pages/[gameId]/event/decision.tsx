@@ -57,6 +57,7 @@ export default function Decision() {
   const { playerEntity } = playerEntityStore;
 
   const combatsListRef = useRef(null);
+  const isMobile = IsMobile()
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -237,7 +238,15 @@ export default function Decision() {
 
   return (
     <Layout isSinglePanel>
-      <HStack w="full" h={["calc(100vh - 70px)", "calc(100vh - 120px)"]} overflowY="scroll" flexDir={["column", "row"]}>
+      <HStack
+        w="full"
+        h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+        overflowY="scroll"
+        sx={{
+          "scrollbar-width": "none",
+        }}
+        flexDir={["column", "row"]}
+      >
         <Encounter
           prefixTitle={prefixTitle}
           title={title}
@@ -251,7 +260,7 @@ export default function Decision() {
           w="full"
         />
 
-        <VStack w="full" h={["auto", "90%"]} flex={[0, 1]} position="relative">
+        <VStack w="full" h={["auto", "100%"]} flex={[0, 1]} position="relative">
           <VStack w="full" h={["100%"]}>
             <Inventory />
             <VStack w="full" h="100%">
@@ -261,8 +270,11 @@ export default function Decision() {
                 </Text>
                 <Card
                   w="full"
-                  maxH="calc( 100vh - 340px)"
+                  maxH={isMobile ? "calc( 100vh - 560px)" :  "calc( 100vh - 380px)"}
                   overflowY="scroll"
+                  sx={{
+                    "scrollbar-width": "none",
+                  }}
                   alignItems="flex-start"
                   px="16px"
                   py="8px"

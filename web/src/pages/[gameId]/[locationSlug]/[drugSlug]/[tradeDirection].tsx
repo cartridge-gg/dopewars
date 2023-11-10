@@ -86,11 +86,11 @@ export default function Market() {
         total = slippage.newPrice * quantity;
       }
 
-      toast({
-        message: toastMessage,
-        icon: Cart,
-        link: `http://amazing_explorer/${hash}`,
-      });
+      // toast({
+      //   message: toastMessage,
+      //   icon: Cart,
+      //   link: `http://amazing_explorer/${hash}`,
+      // });
 
       
     } catch (e) {

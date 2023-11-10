@@ -92,10 +92,19 @@ export default function Logs() {
     }
     logsByDay.push(dayLogs);
 
-    setLogs(
-      logsByDay,
-      // .sort((a, b) => a.day - b.day)
-    );
+    // move day 0 hood events to day 0 location events
+    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.location === "Hood");
+    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location !== "Hood");
+    if (day0HoodIndex > -1 && day0Index > -1) {
+      const day0Hood = logsByDay[day0HoodIndex];
+      const day0 = logsByDay[day0Index];
+      day0.logs.unshift(...day0Hood.logs);
+      day0Hood.logs = [];
+      logsByDay[day0HoodIndex] = day0Hood;
+      logsByDay[day0Index] = day0;
+    }
+
+    setLogs(logsByDay);
   }, [playerLogs]);
 
   useEffect(() => {
@@ -113,10 +122,10 @@ export default function Logs() {
     <Layout
       leftPanelProps={{
         prefixTitle: "",
-        title: `Hustler Logs`,
+        title: `Hustler Log`,
         imageSrc: "/images/will-smith-with-attitude.png",
       }}
-      CustomLeftPanel={!playerId ? Profile : undefined}
+      CustomLeftPanel={!playerId ? CustomLeftPanel : undefined}
       footer={
         <Footer>
           <Button
@@ -140,6 +149,17 @@ export default function Logs() {
     </Layout>
   );
 }
+
+const CustomLeftPanel = () => {
+  return (
+    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1">
+      <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px","20px"]}>
+        Hustler Log
+      </Heading>
+      <Profile />
+    </VStack>
+  );
+};
 
 function renderDay(log: LogByDay) {
   return (
@@ -175,7 +195,7 @@ function renderDay(log: LogByDay) {
               break;
 
             case WorldEvents.PlayerJoined:
-              return renderPlayerJoined(i as JoinedEventData, key);
+              // return renderPlayerJoined(i as JoinedEventData, key);
               break;
 
             case WorldEvents.GameOver:

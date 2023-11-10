@@ -130,7 +130,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
             wanted: 39,
             attack: 1,
             defense: 1,
-            transport: 70,
+            transport: 60,
             speed: 1
         };
 
@@ -174,10 +174,7 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
 
 impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
     fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
-        let decide_settings = DecideSettings {
-            wanted_impact_run: 6,
-            wanted_impact_fight: 12,
-        };
+        let decide_settings = DecideSettings { wanted_impact_run: 6, wanted_impact_fight: 12, };
         decide_settings
     }
 }
@@ -194,7 +191,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             liq_scaling_initial_rate: 150, // 0.015
             liq_scaling_fading_rate: 360,
             liq_scaling_flat: 10200, // 2%
-            price_scaling_flat: 10100, // 1%
+            price_scaling_flat: 10150, // 1.5%
         };
 
         if game_mode == GameMode::Test {
@@ -230,36 +227,36 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
                 if level == 1 {
                     ItemSettings { name: 'Knife', cost: 450 * SCALING_FACTOR, value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Glock', cost: 9900 * SCALING_FACTOR, value: 24 }
+                    ItemSettings { name: 'Glock', cost: 12000 * SCALING_FACTOR, value: 24 }
                 } else {
-                    ItemSettings { name: 'Uzi', cost: 89000 * SCALING_FACTOR, value: 49 }
+                    ItemSettings { name: 'Uzi', cost: 99000 * SCALING_FACTOR, value: 49 }
                 }
             },
             ItemEnum::Defense => {
                 if level == 1 {
                     ItemSettings { name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 24 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Leather Jacket', cost: 6900 * SCALING_FACTOR, value: 39 }
+                    ItemSettings { name: 'Leather Jacket', cost: 8900 * SCALING_FACTOR, value: 39 }
                 } else {
-                    ItemSettings { name: 'Kevlar', cost: 49000 * SCALING_FACTOR, value: 59 }
+                    ItemSettings { name: 'Kevlar', cost: 69000 * SCALING_FACTOR, value: 59 }
                 }
             },
             ItemEnum::Transport => {
                 if level == 1 {
                     ItemSettings { name: 'Fanny pack', cost: 500 * SCALING_FACTOR, value: 30 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Backpack', cost: 12000 * SCALING_FACTOR, value: 60 }
+                    ItemSettings { name: 'Backpack', cost: 15000 * SCALING_FACTOR, value: 60 }
                 } else {
-                    ItemSettings { name: 'Duffle Bag', cost: 85000 * SCALING_FACTOR, value: 99 }
+                    ItemSettings { name: 'Duffle Bag', cost: 99000 * SCALING_FACTOR, value: 100 }
                 }
             },
             ItemEnum::Speed => {
                 if level == 1 {
                     ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Skateboard', cost: 8000 * SCALING_FACTOR, value: 24 }
+                    ItemSettings { name: 'Skateboard', cost: 9900 * SCALING_FACTOR, value: 24 }
                 } else {
-                    ItemSettings { name: 'Bicycle', cost: 42000 * SCALING_FACTOR, value: 39 }
+                    ItemSettings { name: 'Bicycle', cost: 79000 * SCALING_FACTOR, value: 39 }
                 }
             },
         };
@@ -281,8 +278,8 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
         } else {
             health
         };
-        let dmg = health / 4;
-        let payout: u128 = SCALING_FACTOR * level.into() * (8000 + (1000 * turn.into()));
+        let dmg = level * 2 + (turn / 5);
+        let payout: u128 = SCALING_FACTOR * level.into() * (5000 + (1500 * turn.into()));
 
         EncounterSettings { level, health, dmg, payout }
     }

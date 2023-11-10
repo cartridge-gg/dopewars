@@ -74,7 +74,7 @@ export default function New() {
             Back
           </Button>
           <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Unlimited)}>
-            Create New Game
+            Play
           </Button>
           {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
             Create New Test Game
@@ -84,10 +84,10 @@ export default function New() {
     >
       <VStack w={["full", "400px"]} margin="auto">
         <VStack w="full">
-          <Text textStyle="subheading" fontSize="13px">
+          {/* <Text textStyle="subheading" fontSize="13px">
             Name Entry
-          </Text>
-          <HStack color="neon.500">
+          </Text> */}
+          <HStack /*color="neon.500"*/>
             <Text> What&apos;s your name playa ?</Text>
           </HStack>
 
