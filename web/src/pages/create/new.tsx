@@ -49,11 +49,11 @@ export default function New() {
 
       const { hash, gameId } = await createGame(gameMode, name, avatarId);
 
-      toast({
-        message: "Game Created!",
-        icon: Alert,
-        link: `http://amazing_explorer/${hash}`,
-      });
+      // toast({
+      //   message: "Game Created!",
+      //   icon: Alert,
+      //   link: `http://amazing_explorer/${hash}`,
+      // });
 
       router.push(`/${gameId}/travel`);
     } catch (e) {

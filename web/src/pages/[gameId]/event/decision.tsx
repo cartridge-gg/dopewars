@@ -361,7 +361,7 @@ const Encounter = ({
   return (
     <VStack {...props}>
       <VStack>
-        <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+        <Text textStyle="subheading" textAlign="center" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
         </Text>
         <Heading fontSize={["36px", "48px"]} fontWeight="400">

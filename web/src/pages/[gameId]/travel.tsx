@@ -160,11 +160,11 @@ export default function Travel() {
           displayMarketEvents(events as MarketEventData[], toaster);
         }
 
-        toaster.toast({
-          message: `You've traveled to ${locationName}`,
-          icon: Car,
-          link: `http://amazing_explorer/${hash}`,
-        });
+        // toaster.toast({
+        //   message: `You've traveled to ${locationName}`,
+        //   icon: Car,
+        //   link: `http://amazing_explorer/${hash}`,
+        // });
 
         const locationSlug = getLocationById(targetId)!.slug;
         router.push(`/${gameId}/${locationSlug}`);
