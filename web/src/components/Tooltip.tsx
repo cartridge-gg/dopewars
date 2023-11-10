@@ -1,5 +1,6 @@
 import { Tooltip as ChakraTooltip } from "@chakra-ui/react";
 import { VStack, Text } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 export default function Tooltip({
   children,
