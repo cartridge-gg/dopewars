@@ -263,7 +263,7 @@ mod decide {
                 player.status = PlayerStatus::Normal;
 
                 if action == Action::Run {
-                    player.location_id = LocationImpl::random(ref randomizer);
+                    player.next_location_id = LocationImpl::random(ref randomizer);
                 }
 
                 on_turn_end(world, ref randomizer, @game, ref player);

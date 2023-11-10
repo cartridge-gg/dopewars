@@ -29,7 +29,7 @@ import { Calendar } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, Gem, Twitter } from "./icons";
+import { Dots, Gem, Twitter, User } from "./icons";
 import { IsMobile, formatCash } from "@/utils/ui";
 import Link from "next/link";
 import { SCALING_FACTOR } from "@/dojo/constants";
@@ -40,7 +40,6 @@ import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
 import { useToast } from "@/hooks/toast";
-
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -68,7 +67,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
   const [transportItem, setTransportItem] = useState<ShopItem | undefined>(undefined);
 
-  const {toast} = useToast()
+  const { toast } = useToast();
 
   const isMobile = IsMobile();
 
@@ -83,7 +82,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   if (!account || !playerEntity) return null;
 
   return (
-    <VStack w="full"  {...props}>
+    <VStack w="full" {...props}>
       <VStack w="full" maxW="380px" my="auto" pb={[0, "30px"]}>
         <Box w="full" justifyContent="center">
           <VStack w="full">
@@ -93,8 +92,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">
-                  <Heading fontFamily="dos-vga" fontWeight="normal" fontSize="20px">
-                    <Gem /> {playerEntity.name}
+                  <Heading fontFamily="dos-vga" fontWeight="normal" fontSize={"16px"}>
+                    <User /> {playerEntity.name}
                   </Heading>
                 </HStack>
 
@@ -210,28 +209,21 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
               </Button>
             )}
             {!playerId && (
-              // <ChakraLink
-              //   href={`${window.location.origin}/${gameId}/logs?playerId=${account.address}`}
-              //   target="_blank"
-              //   w="full"
-              //   textDecoration="none"
-              //   _hover={{
-              //     textDecoration: "none",
-              //   }}
-                
-              // >
-                <Button w="full" onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs?playerId=${account.address}`)
+              <Button
+                variant="pixelated"
+                w="full"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs?playerId=${account.address}`);
 
                   toast({
-                   // icon: Car,
-                    message: "Copied to clipboard"
-                  })
-
-                }}>Game Link</Button>
-            //  : </ChakraLink>
+                    message: "Copied to clipboard",
+                  });
+                }}
+              >
+                Game Link
+              </Button>
             )}
-            <ShareButton />
+            <ShareButton variant="pixelated" />
           </HStack>
         </Box>
       </VStack>
@@ -298,7 +290,6 @@ export const ProfileLink = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
-    console.log(router.pathname);
     if (router.pathname === "/[gameId]/logs") {
       router.back();
     } else {
@@ -325,11 +316,19 @@ export const ProfileLinkMobile = () => {
   const { playerEntity } = playerEntityStore;
   const [isOpen, setIsOpen] = useState(false);
 
+  const onClick = () => {
+    if (router.pathname === "/[gameId]/logs") {
+      router.back();
+    } else {
+      router.push(`/${gameId}/logs`);
+    }
+  };
+
   if (!account || !playerEntity) return null;
 
   return (
     <>
-      <MenuItem h="48px" borderRadius={0} onClick={() => router.push(`/${gameId}/logs`)}>
+      <MenuItem h="48px" borderRadius={0} onClick={onClick}>
         <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
       </MenuItem>
     </>

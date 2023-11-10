@@ -70,9 +70,6 @@ export default function New() {
       }}
       footer={
         <Footer>
-          <Button w={["full", "auto"]} onClick={() => router.push("/")}>
-            Back
-          </Button>
           <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Unlimited)}>
             Play
           </Button>
@@ -84,13 +81,6 @@ export default function New() {
     >
       <VStack w={["full", "400px"]} margin="auto">
         <VStack w="full">
-          {/* <Text textStyle="subheading" fontSize="13px">
-            Name Entry
-          </Text> */}
-          <HStack /*color="neon.500"*/>
-            <Text> What&apos;s your name playa ?</Text>
-          </HStack>
-
           <HStack my="30px" align="center" justify="center">
             <Arrow
               style="outline"
