@@ -735,7 +735,8 @@
       }
     ],
     "reads": [],
-    "writes": []
+    "writes": [],
+    "computed": []
   },
   "executor": {
     "name": "executor",
@@ -795,7 +796,8 @@
       }
     ],
     "reads": [],
-    "writes": []
+    "writes": [],
+    "computed": []
   },
   "base": {
     "name": "base",
@@ -862,7 +864,7 @@
     {
       "name": "decide",
       "address": "0x10b96960b3ea861d1a3f70752cbde59beb06fed693c35d59898279690fb1a4f",
-      "class_hash": "0x5e930bd0c9dd9357df9ff8e8392b1d1243ba7470af05732946502d46c1d6eec",
+      "class_hash": "0x55eefc65dc6e7d70fd6ad0bfed46518a9b68546be4d7e15cf4938aeec3b3c40",
       "abi": [
         {
           "type": "impl",
@@ -934,7 +936,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -1133,12 +1135,13 @@
       "writes": [
         "Encounter",
         "Player"
-      ]
+      ],
+      "computed": []
     },
     {
       "name": "devtools",
       "address": "0x73206b1b6f40059698fce0af853293d9da3809309530f6cbb7065594980d28f",
-      "class_hash": "0x131c19afc6e1bea8cbb62757851f40aeb0d8dd68c9af4220e24dc01c38ec1db",
+      "class_hash": "0x45c66d796ccb23c78b0ba7d65bb385311da8b477cb2aca8fe66ff6984000b9e",
       "abi": [
         {
           "type": "impl",
@@ -1195,7 +1198,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -1212,12 +1215,13 @@
         }
       ],
       "reads": [],
-      "writes": []
+      "writes": [],
+      "computed": []
     },
     {
       "name": "lobby",
       "address": "0x24658d9efcc9b88af349c1143528a403831163178ccf5e3ef228947a8ba18c7",
-      "class_hash": "0x2d823dbf5bd1be0f5c9917d1e3f2a6745e4b4687c6e148f4f98b784891a1742",
+      "class_hash": "0x5093c207d93adab771ee0e00cc95c4a77709fb3a0b203460a8c770309d13fc1",
       "abi": [
         {
           "type": "impl",
@@ -1309,7 +1313,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -1391,12 +1395,13 @@
       "writes": [
         "Game",
         "Player"
-      ]
+      ],
+      "computed": []
     },
     {
       "name": "shop",
       "address": "0x7e64b47207a034a21fb92ea263df0787662650b8003875662a69fc47696a43",
-      "class_hash": "0x68084c1fb0066e0ea54b689b0f2d44dbae4a68f4f88580f9fd398260ed11c60",
+      "class_hash": "0x340ee153625e9fe3ddf693fd79259c43e64ee8d06128687fc272607f79c096c",
       "abi": [
         {
           "type": "impl",
@@ -1578,7 +1583,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -1666,12 +1671,13 @@
       ],
       "writes": [
         "Item"
-      ]
+      ],
+      "computed": []
     },
     {
       "name": "trade",
       "address": "0x7a511bfccd30f580a2b2f0e246177f681033fb24259fcc014de29b4c260c502",
-      "class_hash": "0x71922b886300579e1ea8c41e1b6b4874baaf6eacbd558d82c5407a2637c9831",
+      "class_hash": "0x3775d2d4d93dcd1846f7090986320e8e1d29f8ab9c2afaf45a242da7066c59e",
       "abi": [
         {
           "type": "impl",
@@ -1821,7 +1827,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -1922,12 +1928,13 @@
         "Drug",
         "Market",
         "Player"
-      ]
+      ],
+      "computed": []
     },
     {
       "name": "travel",
       "address": "0x6fa85e78c9b4c70978ddd21aa39d25dab064d9d32db1852c103e22c4e82c171",
-      "class_hash": "0x56bda781b68fef4502971ea02c74313e6828976a5718fd073d719ecba0173e0",
+      "class_hash": "0xe4c960eb27d555a90eb070c394418d85c65f572de362ef4e081f9712782bbc",
       "abi": [
         {
           "type": "impl",
@@ -2033,7 +2040,7 @@
         },
         {
           "type": "function",
-          "name": "name",
+          "name": "dojo_resource",
           "inputs": [],
           "outputs": [
             {
@@ -2236,7 +2243,8 @@
       ],
       "writes": [
         "Player"
-      ]
+      ],
+      "computed": []
     }
   ],
   "models": [
