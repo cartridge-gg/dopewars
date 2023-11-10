@@ -45,6 +45,7 @@ export * from "./Roll";
 export * from "./Close";
 export * from "./ExternalLink";
 export * from "./Heart";
+export * from "./DynamicHeart";
 export * from "./Skull";
 export * from "./Siren";
 export * from "./Truck";
