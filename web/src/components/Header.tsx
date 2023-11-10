@@ -12,7 +12,7 @@ import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
 import colors from "@/theme/colors";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import {ProfileLink} from "./ProfileButton";
+import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
@@ -62,7 +62,7 @@ const Header = ({ back }: HeaderProps) => {
               <HStack>
                 <CashIndicator cash={playerEntity.cash} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <HealthIndicator health={playerEntity.health} />
+                <HealthIndicator health={playerEntity.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <WantedIndicator wanted={playerEntity.wanted} />
               </HStack>

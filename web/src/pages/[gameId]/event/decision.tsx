@@ -244,6 +244,7 @@ export default function Decision() {
           demand={demand}
           sentence={sentence}
           encounter={encounter!}
+          playerEntity={playerEntity}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
           flex={[0, 1]}
           mb={0}
@@ -337,6 +338,7 @@ const Encounter = ({
   imageSrc,
   sentence,
   encounter,
+  playerEntity,
   ...props
 }: {
   prefixTitle?: string;
@@ -344,8 +346,10 @@ const Encounter = ({
   demand?: string;
   imageSrc: string;
   sentence: string;
+  playerEntity: PlayerEntity;
   encounter: Encounter;
 } & StyleProps) => {
+  console.log(encounter);
   return (
     <VStack {...props}>
       <VStack>
@@ -402,7 +406,10 @@ const Encounter = ({
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                <HealthIndicator health={encounter.health} />
+                <HealthIndicator
+                  health={encounter.health}
+                  maxHealth={getEncounterNPCMaxHealth(encounter.level, playerEntity.turn)}
+                />
               </HStack>
               {!IsMobile() && (
                 <Box w="full" px="10px">
@@ -424,3 +431,13 @@ const Encounter = ({
     </VStack>
   );
 };
+
+/// TODO: move this in a relevant place
+function getEncounterNPCMaxHealth(level: number, turn: number) {
+  // Calculate initial health based on level and turn.
+  let health = level * 8 + turn;
+  // Ensure health does not exceed 100.
+  health = Math.min(health, 100);
+
+  return health;
+}
