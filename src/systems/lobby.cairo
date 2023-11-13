@@ -156,7 +156,9 @@ mod lobby {
         }
     }
 
-    fn assert_valid_chain(game_mode: GameMode) { //if game_mode == GameMode::Test {
+    fn assert_valid_chain(game_mode: GameMode) {
+        assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
+    //if game_mode == GameMode::Test {
     // let chain_id = get_tx_info().unbox().chain_id;
     // assert(chain_id != 'KATANA', 'wrong chain_id');
     // }
