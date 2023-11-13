@@ -22,7 +22,7 @@ gendojo = "./scripts/gen.sh"
 auth = "./scripts/default_auth.sh local"
 auth_dev = "./scripts/default_auth.sh"
 migrate = "sozo migrate && scarb run gendojo && scarb run auth"
-migrate_dev = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryo/katana --account-address 0x32eb2f153e5812dc8c0ad1a49b74d058f65631ddac5b2b31b347666c0cdffa --private-key 0x230d17156789df0f4e6a117b9255383a90f948b5bcddba4abd3e9a283331204"
+migrate_dev = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryo/katana --account-address 0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6 --private-key 0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
 
 [tool.dojo.env]
 # Katana
