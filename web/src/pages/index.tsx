@@ -37,11 +37,12 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
-  // useEffect(
-  //   () =>
-  //     setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
-  //   [],
-  // );
+  useEffect(
+    () =>
+    //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
+    setIsGated(false),
+    [],
+  );
 
   const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
@@ -71,7 +72,9 @@ export default function Home() {
                   <Alert />
                   <Text align="center">Under Construction</Text>
                 </HStack>
-                <Text align="center">Get ready hustlers... Season II starts in September</Text>
+                <Text align="center">
+                  Get ready hustlers... Season III starts in November
+                </Text>
               </VStack>
             ) : (
               <>

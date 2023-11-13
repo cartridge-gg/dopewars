@@ -266,7 +266,16 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
           ({!isPercentage ? "#" : "%"})
         </Text>
       </HStack>
-      <Card w="full" p="5px" pointerEvents="all">
+      <Card
+        w="full"
+        p="5px"
+        pointerEvents="all"
+        sx={{
+          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+            color: colors.neon["700"].toString(),
+          })}")`,
+        }}
+      >
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box position="absolute" boxSize="full" border="2px" borderColor="neon.900" />
           {prices.map((drug, index) => {

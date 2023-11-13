@@ -1,5 +1,8 @@
 import { Divider, HStack, StyleProps, Text, VStack, Card, Tooltip, Spacer } from "@chakra-ui/react";
 
+import BorderImage from "@/components/icons/BorderImage";
+import colors from "@/theme/colors";
+
 import React from "react";
 import { useRouter } from "next/router";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
