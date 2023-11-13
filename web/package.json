@@ -2,39 +2,56 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ./src",
-    "gen": "graphql-codegen --config codegen.yaml"
+    "gen": "graphql-codegen --config codegen.yaml",
+    "gen:dojo": "yarn gen:models & yarn gen:events",
+    "gen:models": "npx create-models ./manifest.json ./src/dojo/generated/contractModels.ts",
+    "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
+  },
+  "bin": {
+    "create-models": "./bin/generateModels.cjs",
+    "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
-    "@chakra-ui/react": "^2.5.1",
+    "@chakra-ui/react": "^2.8.1",
+    "@dojoengine/core": "^0.1.30",
+    "@dojoengine/create-burner": "0.1.30",
+    "@dojoengine/utils": "0.1.30",
+    "@dojoengine/torii": "link:../../dojo-packages/packages/torii",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@latticexyz/recs": "2.0.0-next.9",
+    "@latticexyz/utils": "2.0.0-next.9",
     "@vercel/analytics": "^1.0.2",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
-    "formik": "^2.2.9",
+    "ethers": "^5.7.2",
     "framer-motion": "^10.5.0",
     "graphql": "^16.3.0",
     "graphql-request": "^5.0.0",
+    "graphql-ws": "^5.14.1",
     "howler": "^2.2.3",
     "js-cookie": "^3.0.5",
-    "next": "13.2.4",
+    "mobx": "^6.10.2",
+    "next": "^13.5.3",
     "next-pwa": "^5.6.0",
+    "proxy-deep": "^3.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.2",
-    "starknet": "^5.19.6",
+    "starknet": "^5.19.5",
     "use-caret-position": "^0.0.2",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/fragment-matcher": "^3.2.1",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/schema-ast": "^2.4.1",
@@ -48,6 +65,6 @@
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "prettier": "^2.8.8",
-    "typescript": "^4.8.4"
+    "typescript": "5.2.2"
   }
 }

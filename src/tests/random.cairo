@@ -1,46 +1,65 @@
-#[system]
-mod random {
-    use array::ArrayTrait;
-    use traits::Into;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-    use dojo::world::Context;
-    use rollyourown::components::game::Game;
-    use rollyourown::components::name::Name;
+use rollyourown::tests::test_helper::{spawn_world, SystemDispatchers};
+use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        Random: Random
-    }
+use debug::PrintTrait;
 
-    #[derive(Drop, starknet::Event)]
-    struct Random {
-        likelihood: u8,
-        iterations: u32,
-        num_occured: u32,
-    }
 
-    fn execute(ctx: Context, likelihood: u8, iterations: u32) {
-        let mut seed = starknet::get_tx_info().unbox().transaction_hash;
+#[test]
+#[available_gas(100000000)]
+fn test_random_between_0_2() {
+    let (world, contracts) = spawn_world();
 
-        let mut i = 0;
-        let mut num_occured = 0;
+    starknet::testing::set_contract_address(111.try_into().unwrap());
+    let mut randomizer = RandomImpl::new(world);
+    let mut i = 0;
+    loop {
+        if i == 10 {
+            break;
+        }
 
-        loop {
-            if i == iterations {
-                break ();
-            }
+        let rand = randomizer.between::<u8>(0, 2);
+        rand.print();
 
-            seed = pedersen::pedersen(seed, seed);
-            let entropy: u256 = seed.into();
-            let result: u128 = entropy.low % 100;
+        i += 1;
+    };
+}
 
-            if result <= likelihood.into() {
-                num_occured += 1;
-            };
-            i += 1;
-        };
+#[test]
+#[available_gas(100000000)]
+fn test_random_u8() {
+    let (world, contracts) = spawn_world();
 
-        emit!(ctx.world, Random { likelihood, iterations, num_occured })
-    }
+    starknet::testing::set_contract_address(111.try_into().unwrap());
+    let mut randomizer = RandomImpl::new(world);
+    let mut i = 0;
+    loop {
+        if i == 3 {
+            break;
+        }
+
+        let rand = randomizer.between::<u8>(0, 100);
+
+        '1-----------'.print();
+        rand.print();
+
+        i += 1;
+    };
+
+    starknet::testing::set_contract_address(222.try_into().unwrap());
+    let mut randomizer2 = RandomImpl::new(world);
+    let mut i = 0;
+    loop {
+        if i == 3 {
+            break;
+        }
+
+        let rand = randomizer2.between::<u8>(0, 100);
+
+        '2-----------'.print();
+        rand.print();
+
+        i += 1;
+    };
 }

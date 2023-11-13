@@ -6,6 +6,7 @@ const colors: ColorsType = {
   neon: {
     200: "#11ED83",
     300: "#16C973",
+    400: "#11ED83",
     500: "#157342",
     600: "#1F422A",
     700: "#202F20",
@@ -15,6 +16,7 @@ const colors: ColorsType = {
   neon900Alpha: "#424b42DD",
   yellow: {
     400: "#FBCB4A",
+    500: "#8a7830",
   },
   red: "#FB744A",
   black: "#000000",

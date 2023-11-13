@@ -1,11 +1,10 @@
 import { Footer } from "@/components/Footer";
 import { Bag, Event } from "@/components/icons";
 import Layout from "@/components/Layout";
-import { useDojo } from "@/dojo";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
+import { useSystems } from "@/dojo/hooks/useSystems";
 
 import {
   HStack,
@@ -16,38 +15,25 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
+import { formatCash } from "@/utils/ui";
+import Image from "next/image";
 
 export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { account } = useDojo();
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+  const { account, playerEntityStore } = useDojoContext();
+ 
+  const { playerEntity } = playerEntityStore
 
+  const { availableShopItems } = useAvailableShopItems(gameId);
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
 
-  useEffect(() => {
-    if (gameEntity && playerEntity) {
-      // initial move, just forward user to location
-      if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
-        router.push(
-          `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
-        );
-      }
-    }
-  }, [gameEntity, playerEntity]);
-
-  if (!playerEntity || !gameEntity) {
-    return <></>;
-  }
-
-  if (gameEntity.maxTurns - playerEntity.turnsRemaining === 0) {
+  if (
+    !playerEntity ||
+    playerEntity.turn === playerEntity.maxTurns
+  ) {
     return <></>;
   }
 
@@ -55,7 +41,7 @@ export default function Turn() {
     <Layout
       leftPanelProps={{
         prefixTitle: "End of",
-        title: `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining}`,
+        title: `Day ${playerEntity.turn}`,
         imageSrc: "/images/sunset.png",
       }}
     >
@@ -65,7 +51,7 @@ export default function Turn() {
             <Product
               product="Product"
               quantity="Qty"
-              cost="Value"
+              total="Value"
               icon={undefined}
               isHeader
             />
@@ -80,7 +66,7 @@ export default function Turn() {
                       icon={drugInfo.icon}
                       product={drugInfo.name}
                       quantity={`${change}${trade.quantity}`}
-                      cost={"$$$"}
+                      total={formatCash(Math.abs(trade.total))}
                     />
                   </ListItem>
                 );
@@ -132,17 +118,43 @@ export default function Turn() {
           </UnorderedList>
         </VStack>
         <Footer position={["absolute", "relative"]}>
-          <Button
-            w={["full", "auto"]}
-            onClick={() => {
-              resetTurn();
-              router.push(
-                `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
-              );
-            }}
-          >
-            Continue
-          </Button>
+          <VStack w="full" mt="20px">
+            <HStack mb="20px">
+              {availableShopItems && availableShopItems.length > 0 && (
+                <Button
+                  onClick={() => {
+                    router.push(`/${gameId}/pawnshop`);
+                  }}
+                  px={["auto","20px"]}
+                  h="100px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  leftIcon={
+                    <Image src="/images/pawnshop.png" width={60} height={60} alt="pawnshop"/>
+                  }
+                >
+                  <Text>Visit Pawnshop</Text>
+                </Button>
+              )}
+            </HStack>
+            <HStack gap="20px">
+              <Button
+                w={["full", "auto"]}
+                px={["auto","20px"]}
+                onClick={() => {
+                  resetTurn();
+                  router.push(
+                    `/${gameId}/${
+                      getLocationById(playerEntity.locationId)?.slug
+                    }`,
+                  );
+                }}
+              >
+                Continue
+              </Button>
+            </HStack>
+          </VStack>
         </Footer>
       </VStack>
     </Layout>
@@ -153,13 +165,13 @@ const Product = ({
   icon,
   product,
   quantity,
-  cost,
+  total,
   isHeader,
 }: {
   icon: React.FC | undefined;
   product: string;
   quantity: number | string;
-  cost: number | string;
+  total: number | string;
   isHeader?: boolean;
 }) => {
   const header = isHeader && {
@@ -174,13 +186,14 @@ const Product = ({
         {icon && icon({ boxSize: "24px" })}
         <Text>{product}</Text>
       </HStack>
-      <Text flex="3" textAlign="right">
-        {cost}
-      </Text>
+
       <HStack flex="3" justify="right">
-        <Bag />
         <Text>{quantity}</Text>
       </HStack>
+
+      <Text flex="3" textAlign="right">
+        {total}
+      </Text>
     </HStack>
   );
 };

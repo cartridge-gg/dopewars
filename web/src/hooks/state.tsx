@@ -15,6 +15,7 @@ export enum TradeDirection {
 export type TradeType = {
   quantity: number;
   direction: TradeDirection;
+  total: number;
 };
 
 export type Encounter = {
@@ -54,13 +55,16 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
 
       let quantity = existingTrade.quantity;
       let direction = existingTrade.direction;
+      let total = existingTrade.total;
 
       // if the existing trade has the same direction, add quantities
       if (quantity === trade.direction) {
         quantity += trade.quantity;
+        total += trade.total;
       } else {
         // if the existing trade has the opposite direction, subtract quantities
         quantity -= trade.quantity;
+        total -= trade.total;
 
         // if negative quantity, reverse the direction and make the quantity positive
         if (quantity < 0) {
@@ -74,7 +78,7 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
         }
       }
 
-      state.trades.set(drug, { quantity, direction });
+      state.trades.set(drug, { quantity, direction, total });
       return { trades: new Map(state.trades) };
     }),
   resetTurn: () => {

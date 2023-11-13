@@ -7,10 +7,12 @@ import Fonts from "@/theme/fonts";
 
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
-import { useEffect } from "react";
-import { DojoProvider } from "@/dojo";
+import { useEffect, useState } from "react";
+import { DojoProvider } from "@/dojo/context/DojoContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Analytics } from '@vercel/analytics/react';
+import { SetupResult, setup } from "@/dojo/setup/setup";
+import RegisterEntities from "@/components/RegisterEntities";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,10 +36,23 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
+  const [setupResult, setSetupResult] = useState<SetupResult|undefined>(undefined)
+  
+
+  useEffect( () => {
+    const init = async () => {
+      const setupResult = await setup();
+      setSetupResult(setupResult)
+    }
+
+    init();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <DojoProvider>
-        <ChakraProvider theme={theme}>
+      {setupResult && <DojoProvider value={setupResult}>
+          <RegisterEntities />
+          <ChakraProvider theme={theme}>
           <Fonts />
           <NextHead>
             <title>Roll your Own</title>
@@ -50,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Analytics />
         </ChakraProvider>
-      </DojoProvider>
+      </DojoProvider>}
     </QueryClientProvider>
   );
 }

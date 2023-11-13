@@ -1,60 +1,84 @@
-import Image from "next/image";
-import { useDojo } from "@/dojo";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { getLocationById } from "@/dojo/helpers";
-import { useSystems } from "@/dojo/systems/useSystems";
-import { Action, Outcome, PlayerStatus } from "@/dojo/types";
-import { usePlayerStore } from "@/hooks/state";
-import { ConsequenceEventData } from "@/dojo/events";
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { getLocationById, getShopItem } from "@/dojo/helpers";
+import { useSystems } from "@/dojo/hooks/useSystems";
+import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
+import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
-import { Heart } from "@/components/icons";
 import { playSound, Sounds } from "@/hooks/sound";
+import { Inventory } from "@/components/Inventory";
+import { IsMobile, formatCash } from "@/utils/ui";
+import { getSentence } from "@/responses";
+import CashIndicator from "@/components/player/CashIndicator";
+import HealthIndicator from "@/components/player/HealthIndicator";
+import { Encounter } from "@/generated/graphql";
+import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
+
+type CombatLog = {
+  text: string;
+  color: string;
+  icon?: React.FC;
+};
 
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const nextLocation = getLocationById(router.query.nextId as string);
+  const healthLoss = router.query.healthLoss as string;
+  const demandPct = router.query.demandPct as string;
+
+  const { account, playerEntityStore } = useDojoContext();
+
   const [status, setStatus] = useState<PlayerStatus>();
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [prefixTitle, setPrefixTitle] = useState<string>();
-  const [title, setTitle] = useState<string>();
-  const [demand, setDemand] = useState<string>();
-  const [penalty, setPenalty] = useState<string>();
+  const [prefixTitle, setPrefixTitle] = useState("");
+  const [title, setTitle] = useState("");
+  const [demand, setDemand] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [encounter, setEncounter] = useState<Encounter | undefined>(undefined);
 
-  const { toast } = useToast();
-  const { account } = useDojo();
-  const { decide } = useSystems();
-  const { addEncounter } = usePlayerStore();
+  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
+  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const [isPaying, setIsPaying] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isFigthing, setIsFigthing] = useState(false);
+
+  const [combatLogs, setCombatLogs] = useState<CombatLog[]>([]);
+  const [sentence, setSentence] = useState("");
+
+  const toaster = useToast();
+  const { decide, isPending } = useSystems();
+
+  const { playerEntity } = playerEntityStore;
+
+  const combatsListRef = useRef(null);
+  const isMobile = IsMobile();
 
   useEffect(() => {
-    if (playerEntity && !isSubmitting) {
-      switch (playerEntity.status) {
+    if (playerEntity && !isPending) {
+      switch (PlayerStatus[playerEntity.status]) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want 50% of your $PAPER!`);
+          setDemand(`They want ${demandPct}% of your $PAPER!`);
+          setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`They want 20% of your DRUGS!`);
+          setDemand(`They want ${demandPct}% of your DRUGS!`);
+          setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
           break;
       }
 
       setStatus(playerEntity.status);
     }
-  }, [playerEntity, isSubmitting]);
+  }, [playerEntity, isPending, demandPct]);
 
   useEffect(() => {
     if (status == PlayerStatus.BeingArrested) {
@@ -65,75 +89,260 @@ export default function Decision() {
     }
   }, [status]);
 
-  const onDecision = useCallback(
-    async (action: Action) => {
-      setIsSubmitting(true);
-      setPenalty("");
+  useEffect(() => {
+    if (playerEntity && playerEntity.items) {
+      setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
+      setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
+    }
+  }, [playerEntity, playerEntity?.items]);
 
-      const result = await decide(gameId, action, nextLocation!.id);
-      const event = result.event! as ConsequenceEventData;
-      addEncounter(playerEntity!.status, event.outcome);
+  useEffect(() => {
+    if (playerEntity && playerEntity.encounters && !isPending) {
+      if (status === PlayerStatus.BeingMugged) {
+        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Gang"));
+      }
+      if (status === PlayerStatus.BeingArrested) {
+        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
+      }
+    }
+  }, [playerEntity, playerEntity?.encounters, status, isPending]);
 
-      switch (event.outcome) {
-        case Outcome.Captured:
-          setIsSubmitting(false);
-          setPrefixTitle("Your escape...");
-          setTitle("Failed!");
-          setPenalty(`You lost ${event.healthLoss}HP!`);
-          toast(
-            `You were captured and lost ${event.healthLoss}HP!`,
-            Heart,
-            `http://amazing_explorer/${result.hash}`,
-          );
+  useEffect(() => {
+    if (!isPending) {
+      setIsPaying(false);
+      setIsRunning(false);
+      setIsFigthing(false);
+    }
+  }, [isPending]);
+
+  useEffect(() => {
+    if (!combatsListRef.current) return;
+    const lastEl = combatsListRef.current["lastElementChild"];
+    // @ts-ignore
+    lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
+  }, [combatLogs.length]);
+
+  const addCombatLog = (log: CombatLog) => {
+    setCombatLogs((logs) => [...logs, log]);
+  };
+
+  const onDecision = async (action: Action) => {
+    try {
+      switch (action) {
+        case Action.Pay:
+          addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
+          setSentence(getSentence(playerEntity!.status, Action.Pay));
+          playSound(Sounds.Pay);
           break;
+        case Action.Run:
+          addCombatLog({
+            text: "You split without a second thought",
+            color: "neon.400",
+            icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
+          });
+          setSentence(getSentence(playerEntity!.status, Action.Run));
+          playSound(Sounds.Run);
+          break;
+        case Action.Fight:
+          //addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
+          setSentence(getSentence(playerEntity!.status, Action.Fight));
+          switch (attackItem?.level) {
+            case 1:
+              playSound(Sounds.Knife);
+              break;
+            case 2:
+              playSound(Sounds.Magnum357);
+              break;
+            case 3:
+              playSound(Sounds.Uzi);
+              break;
+            default:
+              playSound(Sounds.Punch);
+              break;
+          }
+          break;
+      }
 
+      // setIsPaying(false);
+      // setIsRunning(false);
+      // setIsFigthing(false);
+      // return;
+
+      // save player status
+      const playerStatus = playerEntity?.status;
+
+      const { event, events } = await decide(gameId, action);
+
+      if (events) {
+        displayMarketEvents(events as MarketEventData[], toaster);
+      }
+
+      const consequenceEvent = event as ConsequenceEventData;
+
+      switch (consequenceEvent.outcome) {
         case Outcome.Died:
-          toast(
-            `You too ${event.healthLoss}HP damage and died...`,
-            Heart,
-            `http://amazing_explorer/${result.hash}`,
-          );
-          return router.push(`/${gameId}/end`);
+          setIsRedirecting(true);
+          return router.replace(`/${gameId}/end`);
 
-        case Outcome.Escaped:
         case Outcome.Paid:
+        case Outcome.Escaped:
+          setIsRedirecting(true);
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({
+              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+              color: "neon.400",
+              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : undefined,
+            });
           return router.replace(
-            `/${gameId}/event/consequence?outcome=${event.outcome}&status=${
-              playerEntity!.status
+            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
+          );
+
+        case Outcome.Victorious:
+          setIsRedirecting(true);
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
+          return router.replace(
+            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${
+              encounter!.payout
             }`,
           );
-      }
-    },
-    [gameId, nextLocation, router, playerEntity, addEncounter, decide, toast],
-  );
 
-  if (!playerEntity || !router.isReady) {
+        case Outcome.Captured:
+          playSound(Sounds.Ooo);
+          consequenceEvent.dmgDealt > 0 &&
+            addCombatLog({
+              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+              color: "neon.400",
+              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : Fist,
+            });
+          addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red", icon: Heart });
+          break;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  if (!playerEntity || !router.isReady || isRedirecting) {
     return <></>;
   }
 
-  if (playerEntity.status == PlayerStatus.Normal && !isSubmitting) {
-    return router.push(
-      `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
-    );
+  // if playerEntity is too slow to update, PlayerStatus is still Normal
+  if ((playerEntity.status == PlayerStatus.Normal || !encounter) && !isPending) {
+    //router.push(`/${gameId}/turn`);
+    // router.push(
+    //   `/${gameId}/${getLocationById(playerEntity.locationId)!.slug}`,
+    // );
+    return <></>;
   }
 
   return (
-    <>
-      <Layout isSinglePanel>
+    <Layout isSinglePanel>
+      <HStack
+        w="full"
+        h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+        overflowY="scroll"
+        sx={{
+          "scrollbar-width": "none",
+        }}
+        flexDir={["column", "row"]}
+      >
         <Encounter
           prefixTitle={prefixTitle}
           title={title}
           demand={demand}
-          imageSrc={`/images/events/${
-            status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"
-          }`}
-          penalty={penalty}
-          isSubmitting={isSubmitting}
-          onRun={() => onDecision(Action.Run)}
-          onPay={() => onDecision(Action.Pay)}
+          sentence={sentence}
+          encounter={encounter!}
+          playerEntity={playerEntity}
+          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? "muggers.gif" : "cops.gif"}`}
+          flex={[0, 1]}
+          mb={0}
+          w="full"
         />
-      </Layout>
-    </>
+
+        <VStack w="full" h={["auto", "100%"]} flex={[0, 1]} position="relative">
+          <VStack w="full" h={["100%"]}>
+            <Inventory />
+            <VStack w="full" h="100%">
+              <VStack w="full" alignItems="flex-start">
+                <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
+                  Combat Log
+                </Text>
+                <Card
+                  w="full"
+                  maxH={isMobile ? "calc( 100vh - 560px)" : "calc( 100vh - 380px)"}
+                  overflowY="scroll"
+                  sx={{
+                    "scrollbar-width": "none",
+                  }}
+                  alignItems="flex-start"
+                  px="16px"
+                  py="8px"
+                >
+                  <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
+                    <Heart /> You lost {healthLoss} HP!
+                  </Text>
+
+                  <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
+                    {combatLogs &&
+                      combatLogs.map((i, key) => (
+                        <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
+                          {i.icon &&
+                            i.icon({
+                              boxSize: "26",
+                            })}
+                          <Text>{i.text}</Text>
+                        </HStack>
+                      ))}
+                  </VStack>
+                </Card>
+              </VStack>
+            </VStack>
+          </VStack>
+
+          <Box minH="60px" />
+          <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isRunning || isPaying}
+              isLoading={isFigthing}
+              onClick={() => {
+                setIsFigthing(true);
+                onDecision(Action.Fight);
+              }}
+            >
+              Fight
+            </Button>
+
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isPaying || isFigthing}
+              isLoading={isRunning}
+              onClick={() => {
+                setIsRunning(true);
+                onDecision(Action.Run);
+              }}
+            >
+              Run
+            </Button>
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isRunning || isFigthing}
+              isLoading={isPaying}
+              onClick={() => {
+                setIsPaying(true);
+                onDecision(Action.Pay);
+              }}
+            >
+              PAY
+            </Button>
+          </Footer>
+        </VStack>
+      </HStack>
+    </Layout>
   );
 }
 
@@ -142,89 +351,107 @@ const Encounter = ({
   title,
   demand,
   imageSrc,
-  penalty,
-  isSubmitting,
-  onPay,
-  onRun,
+  sentence,
+  encounter,
+  playerEntity,
+  ...props
 }: {
   prefixTitle?: string;
   title?: string;
   demand?: string;
   imageSrc: string;
-  penalty?: string;
-  isSubmitting?: boolean;
-  onPay: () => void;
-  onRun: () => void;
-}) => {
-  const [isPaying, setIsPaying] = useState<boolean>(false);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!isSubmitting) {
-      setIsPaying(false);
-      setIsRunning(false);
-    }
-  }, [isSubmitting]);
+  sentence: string;
+  playerEntity: PlayerEntity;
+  encounter: Encounter;
+} & StyleProps) => {
   return (
-    <>
+    <VStack {...props}>
       <VStack>
-        <Text
-          textStyle="subheading"
-          fontSize={["10px", "11px"]}
-          letterSpacing="0.25em"
-        >
+        <Text textStyle="subheading" textAlign="center" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
         </Text>
-        <Heading fontSize={["40px", "48px"]} fontWeight="400">
+        <Heading fontSize={["36px", "48px"]} fontWeight="400">
           {title}
         </Heading>
       </VStack>
-      <Image
-        src={imageSrc}
-        alt="adverse event"
-        width={400}
-        height={400}
-        style={{ opacity: isSubmitting ? 0.5 : 1 }}
-      />
-      <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-        <VStack h="60px" textAlign="center">
-          {isSubmitting ? (
-            <>
-              {isRunning && <Text>You split without a second thought</Text>}
-              {isPaying && <Text>You decided to pay up</Text>}
-            </>
-          ) : (
-            <>
-              <Text>{demand}</Text>
-              <Text color="red">{penalty}</Text>
-            </>
-          )}
+      <VStack
+        w="full"
+        flexDir={["row", "column"]}
+        justifyContent="center"
+        alignItems={["flex-start", "center"]}
+        position="relative"
+      >
+        {!IsMobile() && sentence && (
+          <>
+            <Box top="0" position="absolute" w="280px">
+              <Box fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
+                {sentence}
+              </Box>
+              <Card marginLeft="160px" w="10px" fontSize="12px" p="8px"></Card>
+              <Card marginLeft="180px" w="10px" fontSize="12px" p="6px"></Card>
+            </Box>
+          </>
+        )}
+
+        <Image
+          src={imageSrc}
+          alt="adverse event"
+          mt={[0, "10px"]}
+          maxH={["auto", "calc(100vh - 400px)"]}
+          w={[160, "auto"]}
+          h={[160, 400]}
+        />
+
+        <VStack w="full">
+          <Card alignItems="center" w={["full", "auto"]} justify="center" mt={["20px", "40px"]}>
+            <VStack w="full" gap="0">
+              <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
+                <HStack>
+                  <Siren /> <Text> LVL {encounter.level}</Text>
+                </HStack>
+                {IsMobile() ? (
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                ) : (
+                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+                )}
+                <CashIndicator cash={formatCash(encounter.payout)} />
+                {IsMobile() ? (
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                ) : (
+                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+                )}
+                <HealthIndicator
+                  health={encounter.health}
+                  maxHealth={getEncounterNPCMaxHealth(encounter.level, playerEntity.turn)}
+                />
+              </HStack>
+              {!IsMobile() && (
+                <Box w="full" px="10px">
+                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+                  <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
+                    {demand}
+                  </Text>
+                </Box>
+              )}
+            </VStack>
+          </Card>
         </VStack>
-        <Footer position={["relative", "relative"]}>
-          <Button
-            w="full"
-            isDisabled={isRunning || isPaying}
-            isLoading={isRunning}
-            onClick={() => {
-              setIsRunning(true);
-              onRun();
-            }}
-          >
-            Run
-          </Button>
-          <Button
-            w="full"
-            isDisabled={isPaying || isRunning}
-            isLoading={isPaying}
-            onClick={() => {
-              setIsPaying(true);
-              onPay();
-            }}
-          >
-            PAY
-          </Button>
-        </Footer>
       </VStack>
-    </>
+      {IsMobile() && (
+        <Card w="full" color="yellow.400" textAlign="center" p="10px" mb="10px">
+          {demand}
+        </Card>
+      )}
+    </VStack>
   );
 };
+
+/// TODO: move this in a relevant place
+function getEncounterNPCMaxHealth(level: number, turn: number) {
+  // Calculate initial health based on level and turn.
+  let health = level * 8 + turn;
+  // Ensure health does not exceed 100.
+  health = Math.min(health, 100);
+
+  return health;
+}

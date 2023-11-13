@@ -2,61 +2,60 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-if [ $# -ge 1 ] && [ $1 == "local" ]
-then
-    export RPC_URL="http://localhost:5050";
+if [ $# -ge 1 ] && [ $1 == "local" ]; then
+    export RPC_URL="http://localhost:5050"
 else
-    export RPC_URL="https://api.cartridge.gg/x/rollyourown/katana";
+    export RPC_URL="https://api.cartridge.gg/x/ryo/katana"
 fi
 
-export WORLD_ADDRESS="0x3c3dfeb374720dfd73554dc2b9e0583cb9668efb3055d07d1533afa5d219fd5";
+export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
+
+export LOBBY_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "lobby" ).address')
+export TRAVEL_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "travel" ).address')
+export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "decide" ).address')
+export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "trade" ).address')
+export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
+
+echo "---------------------------------------------------------------------------"
+echo rpc : $RPC_URL
+echo world : $WORLD_ADDRESS
+echo " "
+echo lobby : $LOBBY_ADDRESS
+echo travel: $TRAVEL_ADDRESS
+echo decide: $DECIDE_ADDRESS
+echo trade : $TRADE_ADDRESS
+echo shop : $SHOP_ADDRESS
+echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-CREATE_GAME_COMPONENTS=("Game" "Market" "Name" "Player" "Risks")
-JOIN_GAME_COMPONENTS=("Game" "Player")
-SET_NAME_COMPONENTS=("Name")
-BUY_COMPONENTS=("Drug" "Market" "Name" "Player")
-SELL_COMPONENTS=("Drug" "Market" "Name" "Player")
-TRAVEL_COMPONENTS=("Player" "Market")
-DECIDE_COMPONENTS=("Player" "Drug")
+LOBBY_COMPONENTS=("Game" "Market" "Player" )
+TRAVEL_COMPONENTS=("Player" "Market" "Encounter")
+DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter")
+TRADE_COMPONENTS=("Drug" "Market" "Player")
+SHOP_COMPONENTS=("Player" "Item" "Market")
 
-for component in ${CREATE_GAME_COMPONENTS[@]}; do
-    sozo auth writer $component create_game --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    sleep 0.1
-done
-
-for component in ${JOIN_GAME_COMPONENTS[@]}; do
-    sozo auth writer $component join_game --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    sleep 0.1
-done
-
-for component in ${SET_NAME_COMPONENTS[@]}; do
-    sozo auth writer $component set_name --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    sleep 0.1
-done
-
-for component in ${BUY_COMPONENTS[@]}; do
-    sozo auth writer $component buy --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    sleep 0.1
-done
-
-for component in ${SELL_COMPONENTS[@]}; do
-    sozo auth writer $component sell --world $WORLD_ADDRESS --rpc-url $RPC_URL
+for component in ${LOBBY_COMPONENTS[@]}; do
+    sozo auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
     sleep 0.1
 done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
-    sozo auth writer $component travel --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    sleep 0.1
-done
-
-for component in ${TRAVEL_COMPONENTS[@]}; do
-    sozo auth writer $component decide --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    sozo auth writer $component $TRAVEL_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
     sleep 0.1
 done
 
 for component in ${DECIDE_COMPONENTS[@]}; do
-    sozo auth writer $component decide --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    sozo auth writer $component $DECIDE_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    sleep 0.1
+done
+
+for component in ${TRADE_COMPONENTS[@]}; do
+    sozo auth writer $component $TRADE_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    sleep 0.1
+done
+
+for component in ${SHOP_COMPONENTS[@]}; do
+    sozo auth writer $component $SHOP_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
     sleep 0.1
 done
 

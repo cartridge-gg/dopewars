@@ -1,63 +1,108 @@
-query GameEntity($id: ID!) {
-  entity(id: $id) {
-    components {
-      __typename
-      ... on Game {
-        creator
-        is_finished
-        max_players
-        max_turns
-        num_players
-        start_time
-      }
-    }
-  }
+fragment PlayerProps on Player {
+  name
+  avatar_id
+  cash
+  status
+  location_id
+  drug_count
+  health
+  turn
+  max_turns
+  max_items
+  attack
+  defense
+  transport
+  speed
+  wanted
 }
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
-    totalCount
+    total_count
     edges {
       node {
-        keys
-        components {
+        id
+        models {
           __typename
           ... on Player {
-            cash
-            status
-            health
-            drug_count
-            bag_limit
-            location_id
-            turns_remaining
-            turns_remaining_on_death
+            ...PlayerProps
           }
           ... on Drug {
             drug_id
             quantity
           }
+          ... on Item {
+            item_id
+            level
+            name
+            value
+          }
+          ... on Encounter {
+            encounter_id
+            level
+            health
+            payout
+          }
         }
       }
-      cursor
+    }
+  }
+}
+
+subscription PlayerEntitySubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Player {
+        ...PlayerProps
+      }
+    }
+  }
+}
+
+subscription PlayerEntityRelatedDataSubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    model_names
+    models {
+      __typename
+      ... on Drug {
+        drug_id
+        quantity
+      }
+      ... on Item {
+        item_id
+        level
+        name
+        value
+      }
+      ... on Encounter {
+        encounter_id
+        level
+        health
+        payout
+      }
     }
   }
 }
 
 query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {
-    totalCount
+    total_count
     edges {
       node {
         keys
-        components {
+        models {
           __typename
           ... on Market {
             cash
             quantity
-          }
-          ... on Risks {
-            travel
-            #capture
+            location_id
+            drug_id
           }
         }
       }
@@ -66,45 +111,16 @@ query LocationEntities($gameId: String!, $locationId: String!) {
   }
 }
 
-# TODO: Query entire game state per gameId in one query
-# query GameState($gameId: String!) {
-#   entities (first: 100, keys: [$gameId]]) {
-#     totalCount
-#     edges {
-#       node {
-#         componentNames
-#         components {
-#           __typename
-#           ... on Game {
-#             creator
-#             is_finished
-#             max_players
-#             max_turns
-#             num_players
-#             start_time
-#           }
-#           ... on Player {
-#             cash
-#             health
-#             turns_remaining
-#           }
-#           ... on Drug {
-#             quantity
-#           }
-#           ... on Market {
-#             drug_id
-#             location_id
-#             cash
-#             quantity
-#           }
-#           ... on Risks {
-#             arrested
-#             hurt
-#             mugged
-#             travel
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
+query PlayerLogs($game_id: String!, $player_id: String!) {
+  events(last: 1000, keys: ["*", $game_id, $player_id]) {
+    total_count
+    edges {
+      node {
+        id
+        keys
+        data
+        created_at
+      }
+    }
+  }
+}

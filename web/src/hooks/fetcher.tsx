@@ -2,6 +2,7 @@ export const useFetchData = <TData, TVariables>(
   query: string,
 ): ((variables?: TVariables) => Promise<TData>) => {
   return async (variables?: TVariables) => {
+
     const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!, {
       method: "POST",
       headers: {
@@ -12,6 +13,7 @@ export const useFetchData = <TData, TVariables>(
         variables,
       }),
     });
+
 
     const json = await res.json();
 

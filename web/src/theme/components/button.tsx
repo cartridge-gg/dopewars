@@ -49,6 +49,27 @@ export const Button: ComponentStyleConfig = {
         })}")`,
       },
     },
+    selectable: {
+      color: "neon.200",
+      borderImageSource: `url("data:image/svg+xml,${BorderImage({
+        color: colors.neon["200"].toString(),
+        isPressed: false,
+      })}")`,
+      _hover: {
+        color: "neon.300",
+        borderImageSource: `url("data:image/svg+xml,${BorderImage({
+          color: colors.neon["300"].toString(),
+          isPressed: false,
+        })}")`,
+      },
+      _active: {
+        color: colors.yellow["400"].toString(),
+        borderImageSource: `url("data:image/svg+xml,${BorderImage({
+          color: colors.yellow["400"].toString(),
+          isPressed: true,
+        })}")`,
+      },
+    },
     pixelated: {
       border: 0,
       bg: "neon.700",

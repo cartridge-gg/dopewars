@@ -13,12 +13,13 @@ import { Dots, User, Roll } from "./icons";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "./MediaPlayer";
 import { useRouter } from "next/router";
-import { useDojo } from "@/dojo";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatAddress } from "@/utils/contract";
+import { ProfileLinkMobile } from "./ProfileButton";
 
-const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
+const MobileMenu = ({ ...props }: StyleProps) => {
   const router = useRouter();
-  const { account } = useDojo();
+  const { account } = useDojoContext();
   return (
     <>
       <Popover placement="bottom-end">
@@ -33,12 +34,7 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
               <MenuItem _hover={{ bg: "transarent" }}>
                 <MediaPlayer />
               </MenuItem>
-              {/* <MenuItem icon={<Roll />} onClick={() => {}}>
-                CREDITS
-              </MenuItem> */}
-              <MenuItem icon={<User />}>
-                <>{account && formatAddress(account.address.toUpperCase())}</>
-              </MenuItem>
+              <ProfileLinkMobile />
             </Menu>
           </PopoverBody>
         </PopoverContent>
@@ -48,9 +44,3 @@ const MobileMenu = ({ ...props }: StyleProps /*& ButtonProps*/) => {
 };
 
 export default MobileMenu;
-
-{
-  /* <PopoverArrow />
-      <PopoverCloseButton />
-      <PopoverHeader>Confirmation!</PopoverHeader> */
-}

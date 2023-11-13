@@ -1,15 +1,47 @@
-#[system]
+use starknet::ContractAddress;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::models::location::LocationEnum;
+
+
+#[starknet::interface]
+trait ITravel<TContractState> {
+    fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
+}
+
+#[dojo::contract]
 mod travel {
     use starknet::ContractAddress;
+    use starknet::get_caller_address;
 
-    use dojo::world::{Context};
+    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
+    use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
+    use rollyourown::models::market::{Market, MarketTrait};
+    use rollyourown::models::encounter::{Encounter, EncounterType};
 
-    use rollyourown::PlayerStatus;
-    use rollyourown::components::{game::{Game, GameTrait}, location::Location};
-    use rollyourown::components::player::{Player, PlayerTrait};
-    use rollyourown::components::risks::{Risks, RisksTrait};
+    use rollyourown::utils::market;
+    use rollyourown::utils::settings::{
+        RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl, EncounterSettings,
+        EncounterSettingsImpl
+    };
+    use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+    use rollyourown::utils::math::{MathTrait, MathImplU8};
+    use rollyourown::utils::random::{Random, RandomImpl};
 
-    use super::market_variations;
+    use super::ITravel;
+    use super::on_turn_end;
+
+    #[starknet::interface]
+    trait ISystem<TContractState> {
+        fn world(self: @TContractState) -> IWorldDispatcher;
+    }
+
+    impl ISystemImpl of ISystem<ContractState> {
+        fn world(self: @ContractState) -> IWorldDispatcher {
+            self.world_dispatcher.read()
+        }
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -17,316 +49,199 @@ mod travel {
         Traveled: Traveled,
         AdverseEvent: AdverseEvent,
         MarketEvent: MarketEvent,
+        AtPawnshop: AtPawnshop,
     }
 
     #[derive(Drop, starknet::Event)]
     struct Traveled {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
-        from_location: felt252,
-        to_location: felt252,
+        turn: u32,
+        from_location: LocationEnum,
+        to_location: LocationEnum,
     }
 
     #[derive(Drop, starknet::Event)]
     struct AdverseEvent {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         player_status: PlayerStatus,
+        health_loss: u8,
+        demand_pct: u8,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct AtPawnshop {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
     struct MarketEvent {
         game_id: u32,
-        location_id: felt252,
-        drug_id: felt252,
+        location_id: LocationEnum,
+        drug_id: DrugEnum,
         increase: bool,
     }
 
+    #[external(v0)]
+    impl TravelImpl of ITravel<ContractState> {
+        // 1. Verify the caller owns the player.
+        // 2. Determine if a random travel event occurs and apply it if necessary.
+        // 3. Update the players location to the next_location_id.
+        // 4. Update the new locations supply based on random events.
+        fn travel(self: @ContractState, game_id: u32, next_location_id: LocationEnum) -> bool {
+            let world = self.world();
+            let game = get!(world, game_id, Game);
+            assert(game.tick(), 'game cannot progress');
 
-    // 1. Verify the caller owns the player.
-    // 2. Determine if a random travel event occurs and apply it if necessary.
-    // 3. Update the players location to the next_location_id.
-    // 4. Update the new locations supply based on random events.
-    fn execute(ctx: Context, game_id: u32, next_location_id: felt252) -> bool {
-        let game = get!(ctx.world, game_id, Game);
-        assert(game.tick(), 'game cannot progress');
+            let player_id = get_caller_address();
+            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
 
-        let player_id = ctx.origin;
-        let mut player: Player = get!(ctx.world, (game_id, player_id).into(), Player);
-        assert(player.can_continue(), 'player cannot travel');
-        assert(player.location_id != next_location_id, 'already at location');
+            assert(player.can_continue(), 'player cannot travel');
+            assert(next_location_id != LocationEnum::Home, 'cannot travel to Home');
+            assert(player.location_id != next_location_id, 'already at location');
 
-        // initial travel when game starts has no risk or events
-        if player.location_id != 0 {
-            let mut risks: Risks = get!(ctx.world, (game_id, next_location_id).into(), Risks);
-            let seed = starknet::get_tx_info().unbox().transaction_hash;
-            player.status = risks.travel(seed, player.cash, player.drug_count);
-            if player.status != PlayerStatus::Normal {
-                set!(ctx.world, (player));
-                emit!(ctx.world, AdverseEvent { game_id, player_id, player_status: player.status });
+            let mut randomizer = RandomImpl::new(world);
 
-                return true;
+            // save next_location_id
+            player.next_location_id = next_location_id;
+
+            // initial travel when game starts has no risk or events
+            if player.turn > 0 {
+                let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
+
+                let encounter_option = risk_settings.travel(world, ref randomizer, @player);
+
+                match encounter_option {
+                    Option::Some(encounter) => {
+                        // update player status
+                        player.status = match encounter.encounter_id {
+                            EncounterType::Gang => PlayerStatus::BeingMugged,
+                            EncounterType::Cops => PlayerStatus::BeingArrested
+                        };
+
+                        let encounter_settings = EncounterSettingsImpl::get(
+                            game.game_mode, @player, encounter.level
+                        );
+
+                        // player lose max(encounter_settings.dmg / 3,1)  HP, but can't die
+                        let mut encounter_dmg = if encounter_settings.dmg < 3 {
+                            1
+                        } else {
+                            encounter_settings.dmg / 3
+                        };
+                        let new_health = player.health.sub_capped(encounter_dmg, 1);
+                        let health_loss = player.health - new_health;
+                        player.health = new_health;
+
+                        set!(world, (player));
+                        emit!(
+                            world,
+                            AdverseEvent {
+                                game_id,
+                                player_id,
+                                player_status: player.status,
+                                health_loss,
+                                demand_pct: encounter.demand_pct
+                            }
+                        );
+
+                        return true;
+                    },
+                    Option::None => {}
+                }
             }
 
-            //market price fluctuation
-            market_variations(ctx, game_id);
+            on_turn_end(world, ref randomizer, @game, ref player);
 
-            player.turns_remaining -= 1;
+            false
         }
-
-        player.location_id = next_location_id;
-        set!(ctx.world, (player));
-
-        emit!(
-            ctx.world,
-            Traveled {
-                game_id, player_id, from_location: player.location_id, to_location: next_location_id
-            }
-        );
-
-        false
     }
 }
 
-use dojo::world::{Context, IWorld, IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::models::game::{Game};
+use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
+use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
+use rollyourown::utils::settings::{ShopSettings, ShopSettingsImpl};
+use rollyourown::utils::shop::ShopImpl;
+use rollyourown::utils::risk::{RiskTrait, RiskImpl};
+use rollyourown::utils::market;
+use rollyourown::utils::math::{MathTrait, MathImpl, MathImplU8};
+use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
+use rollyourown::utils::random::{Random};
 
-use rollyourown::components::drug::{Drug, DrugTrait};
-use rollyourown::components::location::{Location, LocationTrait};
-use rollyourown::components::market::{Market, MarketTrait};
-use rollyourown::constants::{
-    PRICE_VAR_CHANCE, PRICE_VAR_MIN, PRICE_VAR_MAX, MARKET_EVENT_CHANCE, MARKET_EVENT_MIN,
-    MARKET_EVENT_MAX
-};
-use rollyourown::utils::random;
-use super::travel::travel::{Event, MarketEvent};
+use super::travel::travel::MarketEvent;
 
-fn market_variations(ctx: Context, game_id: u32) {
-    let mut locations = LocationTrait::all();
-    loop {
-        match locations.pop_front() {
-            Option::Some(location_id) => {
-                let mut seed = starknet::get_tx_info().unbox().transaction_hash;
-                seed = pedersen::pedersen(seed, *location_id);
+fn on_turn_end(
+    world: IWorldDispatcher, ref randomizer: Random, game: @Game, ref player: Player
+) -> bool {
+    let shop_settings = ShopSettingsImpl::get(*game.game_mode);
 
-                let mut drugs = DrugTrait::all();
-                loop {
-                    match drugs.pop_front() {
-                        Option::Some(drug_id) => {
-                            seed = pedersen::pedersen(seed, *drug_id);
-                            let rand = random(seed, 0, 1000);
+    // check if can access pawnshop
+    if shop_settings.is_open(@player) {
+        if player.status == PlayerStatus::AtPawnshop {
+            // exit pawnshop 
+            player.status = PlayerStatus::Normal;
+        } else {
+            // force pawnshop
+            player.status = PlayerStatus::AtPawnshop;
+            // emit raw event AtPawnshop
+            world
+                .emit_raw(
+                    array![
+                        selector!("AtPawnshop"), (*game.game_id).into(), player.player_id.into()
+                    ],
+                    array![]
+                );
 
-                            if rand < PRICE_VAR_CHANCE.into() {
-                                // increase price
-                                price_variation_with_cash(
-                                    ctx, game_id, *location_id, *drug_id, ref seed, true
-                                );
-                            } else if rand >= (999 - PRICE_VAR_CHANCE).into() {
-                                // decrease price
-                                price_variation_with_cash(
-                                    ctx, game_id, *location_id, *drug_id, ref seed, false
-                                );
-                            } else if rand > 500 && rand <= 500 + MARKET_EVENT_CHANCE.into() {
-                                // big move up
-                                price_variation_with_drug(
-                                    ctx, game_id, *location_id, *drug_id, ref seed, true
-                                );
-                                emit!(
-                                    ctx.world,
-                                    MarketEvent {
-                                        game_id,
-                                        location_id: *location_id,
-                                        drug_id: *drug_id,
-                                        increase: true
-                                    }
-                                );
-                            } else if rand < 500 && rand >= 500 - MARKET_EVENT_CHANCE.into() {
-                                // big move down
-                                price_variation_with_drug(
-                                    ctx, game_id, *location_id, *drug_id, ref seed, false
-                                );
-                                emit!(
-                                    ctx.world,
-                                    MarketEvent {
-                                        game_id,
-                                        location_id: *location_id,
-                                        drug_id: *drug_id,
-                                        increase: false
-                                    }
-                                );
-                            }
-                        },
-                        Option::None(()) => {
-                            break ();
-                        }
-                    };
-                };
-            },
-            Option::None(_) => {
-                break ();
-            }
+            // save player
+            set!(world, (player));
+            return false;
         };
-    };
+    }
+
+    // update location
+    player.location_id = player.next_location_id;
+
+    let risk_settings = RiskSettingsImpl::get(*game.game_mode, @player);
+
+    // update wanted
+    risk_settings.update_wanted(ref player);
+
+    //update HP if not dead
+    if player.health > 0 {
+        player.health = player.health.add_capped(risk_settings.health_increase_by_turn, 100);
+    }
+
+    // update turn
+    player.turn += 1;
+
+    // save player
+    set!(world, (player));
+
+    // emit raw event Traveled if stil alive
+    if player.health > 0 {
+        world
+            .emit_raw(
+                array![selector!("Traveled"), (*game.game_id).into(), player.player_id.into()],
+                array![
+                    (player.turn - 1).into(),
+                    player.location_id.into(),
+                    player.next_location_id.into()
+                ]
+            );
+    }
+
+    // create lots of events
+    // market price variations
+    market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
+
+    true
 }
-
-
-fn price_variation_with_cash(
-    ctx: Context,
-    game_id: u32,
-    location_id: felt252,
-    drug_id: felt252,
-    ref seed: felt252,
-    increase: bool
-) {
-    let market = get!(ctx.world, (game_id, location_id, drug_id), (Market));
-    let percent = random(seed + 1, PRICE_VAR_MIN.into(), PRICE_VAR_MAX.into());
-
-    let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
-    let target_price = if increase {
-        market_price * (100 + percent) / 100
-    } else {
-        market_price * (100 - percent) / 100
-    };
-
-    let target_cash = Into::<usize, u128>::into(market.quantity) * target_price;
-
-    // update cash in market
-    set!(
-        ctx.world,
-        (Market {
-            game_id,
-            location_id: location_id,
-            drug_id: drug_id,
-            cash: target_cash,
-            quantity: market.quantity
-        })
-    );
-}
-
-
-fn price_variation_with_drug(
-    ctx: Context,
-    game_id: u32,
-    location_id: felt252,
-    drug_id: felt252,
-    ref seed: felt252,
-    increase: bool
-) {
-    let market = get!(ctx.world, (game_id, location_id, drug_id), (Market));
-    let percent = random(seed + 1, MARKET_EVENT_MIN.into(), MARKET_EVENT_MAX.into());
-
-    let market_price = market.cash / Into::<usize, u128>::into(market.quantity);
-    let target_price = if increase {
-        market_price * (100 + percent) / 100
-    } else {
-        market_price * (100 - (percent/2)) / 100
-    };
-
-    let target_qty = market.cash / target_price;
-
-    // update quantity in market
-    set!(
-        ctx.world,
-        (Market {
-            game_id,
-            location_id: location_id,
-            drug_id: drug_id,
-            cash: market.cash,
-            quantity: target_qty.try_into().unwrap()
-        })
-    );
-}
-// fn market_events(ctx: Context, game_id: u32) {
-//     let mut locations = LocationTrait::all();
-//     loop {
-//         match locations.pop_front() {
-//             Option::Some(location_id) => {
-//                 let mut seed = starknet::get_tx_info().unbox().transaction_hash;
-//                 seed = pedersen::pedersen(seed, *location_id);
-
-//                 let mut drugs = DrugTrait::all();
-//                 loop {
-//                     match drugs.pop_front() {
-//                         Option::Some(drug_id) => {
-//                             seed = pedersen::pedersen(seed, *drug_id);
-//                             let rand = random(seed, 0, 100);
-//                             let pricing_infos = MarketTrait::get_pricing_info(*drug_id);
-//                             if rand <= PRICE_VAR.into() {
-//                                 // increase price
-//                                 let market = get!(
-//                                     ctx.world, (game_id, *location_id, *drug_id), (Market)
-//                                 );
-
-//                                 let increase_by = random(
-//                                     seed + 1, MIN_PRICE_VAR.into(), MAX_PRICE_VAR.into()
-//                                 );
-
-//                                 let market_price = market.cash
-//                                     / Into::<usize, u128>::into(market.quantity);
-//                                 let target_price = market_price * (100 + increase_by) / 100;
-//                                 if target_price < (pricing_infos.max_price
-//                                     * (100 + MAX_EXTRA_PRICE_VAR.into())
-//                                     / 100) {
-//                                     // increase price by increase_by %
-//                                     let target_cash = Into::<usize, u128>::into(market.quantity)
-//                                         * target_price;
-
-//                                     // update cash in market
-//                                     set!(
-//                                         ctx.world,
-//                                         (Market {
-//                                             game_id,
-//                                             location_id: *location_id,
-//                                             drug_id: *drug_id,
-//                                             cash: target_cash,
-//                                             quantity: market.quantity
-//                                         })
-//                                     );
-//                                 }
-//                             } else if rand >= (100 - PRICE_VAR).into() {
-//                                 // decrease price
-//                                 let market = get!(
-//                                     ctx.world, (game_id, *location_id, *drug_id), (Market)
-//                                 );
-
-//                                 let decrease_by = random(
-//                                     seed + 1, MIN_PRICE_VAR.into(), MAX_PRICE_VAR.into()
-//                                 );
-
-//                                 let market_price = market.cash
-//                                     / Into::<usize, u128>::into(market.quantity);
-//                                 let target_price = market_price * (100 - decrease_by) / 100;
-//                                 if target_price > (pricing_infos.min_price
-//                                     * (100 + MAX_EXTRA_PRICE_VAR.into())
-//                                     / 100) {
-//                                     // decrease price by decrease_by %
-//                                     let target_cash = Into::<usize, u128>::into(market.quantity)
-//                                         * target_price;
-
-//                                     // update cash in market
-//                                     set!(
-//                                         ctx.world,
-//                                         (Market {
-//                                             game_id,
-//                                             location_id: *location_id,
-//                                             drug_id: *drug_id,
-//                                             cash: target_cash,
-//                                             quantity: market.quantity
-//                                         })
-//                                     );
-//                                 }
-//                             }
-//                         },
-//                         Option::None(()) => {
-//                             break ();
-//                         }
-//                     };
-//                 };
-//             },
-//             Option::None(_) => {
-//                 break ();
-//             }
-//         };
-//     };
-// }
-
-

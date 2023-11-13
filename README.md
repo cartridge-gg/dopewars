@@ -28,7 +28,7 @@ sozo migrate
 torii --world {world_address}
 
 # Setup default authorization
-./scripts/default_auth.sh
+./scripts/default_auth.sh [local]
 
 # Start frontend, located at http://localhost:3000
 cd web
@@ -40,6 +40,26 @@ Note: If the world address your game is deployed to is different, you'll need to
 - Scarb.toml
 - script/default_auth.sh
 - web/src/constants.ts
+
+#### Any errors when doing `sozo build` ?
+
+This might be because your version of sozo is not correct.
+
+Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
+```toml
+[dependencies]
+dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
+```
+
+In this example, this is how we would install the correct version:
+```bash
+git clone https://github.com/dojoengine/dojo.git
+cd dojo
+git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
+dojoup -p .
+```
+
+This will reinstall the binaries in your `~/.dojo/bin` folder.
 
 ### With Madara
 

@@ -10,6 +10,7 @@ type CoordinateType = {
 };
 
 const coordinate: CoordinateType = {
+  [Location.Home]: { x: 0, y: 0 },
   [Location.Queens]: { x: -150, y: 150 },
   [Location.Jersey]: { x: 150, y: 150 },
   [Location.Bronx]: { x: 0, y: 300 },

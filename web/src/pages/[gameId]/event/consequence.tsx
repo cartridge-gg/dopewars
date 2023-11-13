@@ -1,86 +1,72 @@
-import Image from "next/image";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
-import { getOutcomeInfo } from "@/dojo/helpers";
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { getLocationById, getOutcomeInfo } from "@/dojo/helpers";
+import { Box, Heading, Text, VStack, Image } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useDojo } from "@/dojo";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useMemo } from "react";
-import { PlayerStatus } from "@/dojo/types";
+import { OutcomeInfo, PlayerStatus } from "@/dojo/types";
 import { Outcome } from "@/dojo/types";
 import { playSound, Sounds } from "@/hooks/sound";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { formatCash } from "@/utils/ui";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const outcome = getOutcomeInfo(
-    Number(router.query.status),
-    Number(router.query.outcome),
-  );
 
-  const { account } = useDojo();
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
 
-  const isDead = outcome.type == Outcome.Died;
-  const response = useMemo(() => outcome.getResponse(true), [outcome]);
+  const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
+  const [isDead, setIsDead] = useState<boolean>(false);
+  const [payout, setPayout] = useState<number | undefined>(undefined);
+
+  const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
   useEffect(() => {
-    if (outcome.type == Outcome.Died) {
+    const outcomeInfos = getOutcomeInfo(router.query.status as PlayerStatus, Number(router.query.outcome));
+    setOutcome(outcomeInfos);
+    if (router.query.payout) {
+      setPayout(Number(router.query.payout));
+    }
+  }, [router.query.status, router.query.outcome, router.query.payout]);
+
+  useEffect(() => {
+    if (outcome && outcome.type === Outcome.Died) {
+      setIsDead(true);
       playSound(Sounds.GameOver);
     }
   }, [outcome]);
 
-  if (!router.isReady || !playerEntity) {
+  if (!router.isReady || !playerEntity || !outcome) {
     return <></>;
   }
 
   return (
     <>
-      <Layout isSinglePanel>
-        <VStack>
-          <Text
-            textStyle="subheading"
-            fontSize={["10px", "11px"]}
-            letterSpacing="0.25em"
-          >
-            You...
-          </Text>
-          <Heading fontSize={["40px", "48px"]} fontWeight="400">
-            {outcome.name}
-          </Heading>
-        </VStack>
-        <Image
-          alt={outcome.name}
-          src={outcome.imageSrc}
-          width={400}
-          height={400}
-        />
-        <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-          <VStack textAlign="center">
-            <Text>{response}</Text>
-            <Text color="yellow.400">
-              {outcome.description && `* ${outcome.description} *`}
-            </Text>
-          </VStack>
-          <Footer position={["relative", "relative"]}>
+      <Layout
+        isSinglePanel
+        footer={
+          <Footer>
             {!isDead ? (
               <Button
-                w="full"
+                w={["full", "auto"]}
+                px={["auto", "20px"]}
                 onClick={() => {
-                  console.log(outcome);
+                  // console.log(outcome);
                   if (outcome.type == Outcome.Captured) {
-                    return router.push(
-                      `/${gameId}/event/decision?nextId=${playerEntity.locationId}`,
-                    );
+                    return router.push(`/${gameId}/event/decision`);
                   }
 
-                  router.push(`/${gameId}/turn`);
+                  if (playerEntity.status === PlayerStatus.AtPawnshop) {
+                    router.push(`/${gameId}/pawnshop`);
+                  }
+
+                  if (playerEntity.status === PlayerStatus.Normal) {
+                    router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
+                  }
                 }}
               >
                 Continue
@@ -88,6 +74,7 @@ export default function Consequence() {
             ) : (
               <Button
                 w="full"
+                px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/end`);
                 }}
@@ -96,6 +83,26 @@ export default function Consequence() {
               </Button>
             )}
           </Footer>
+        }
+      >
+        <VStack h="full">
+          <VStack>
+            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+              {outcome.title}
+            </Text>
+            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+              {outcome.name}
+            </Heading>
+          </VStack>
+          <Image alt={outcome.name} src={outcome.imageSrc} maxH="50vh" height="500px" />
+          <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
+            <VStack textAlign="center">
+              <Text>{response}</Text>
+              <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text>
+              <Text color="yellow.400">{payout && `You confiscated ${formatCash(payout)} `}</Text>
+            </VStack>
+          </VStack>
+          <Box display="block" minH="70px" h="70px" w="full" />
         </VStack>
       </Layout>
     </>

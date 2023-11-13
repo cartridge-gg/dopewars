@@ -20,59 +20,31 @@ import Input from "@/components/Input";
 
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Avatar } from "./avatar/Avatar";
-import { genAvatarFromAddress } from "./avatar/avatars";
+import { genAvatarFromId } from "./avatar/avatars";
 import colors from "@/theme/colors";
-import { Score, useGlobalScores } from "@/dojo/components/useGlobalScores";
-import { useDojo } from "@/dojo";
+import { Score, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
-import { useSystems } from "@/dojo/systems/useSystems";
 import { Skull } from "./icons";
 
-const Leaderboard = ({
-  nameEntry,
-  ...props
-}: { nameEntry?: boolean } & StyleProps & ListProps) => {
+const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { account } = useDojo();
-  // TODO : use when supported on torii
-  // const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScores();
-  const { scores, refetch } = useGlobalScores();
-  const { setName: submitSetName, isPending } = useSystems();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { account } = useDojoContext();
+  const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(undefined, 10);
 
-  const [overlayDimiss, setOverlayDismiss] = useState(true);
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
-  const pageSize = 10;
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [visibleScores, setVisibleScores] = useState(pageSize);
-
-  const listRef = useRef<null | HTMLLIElement>(null);
+  const listRef = useRef(null);
 
   useEffect(() => {
-    setHasNextPage(visibleScores < scores.length);
     if (!listRef.current) return;
     const lastEl = listRef.current["lastElementChild"];
+    // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [scores, visibleScores]);
-
-  const fetchNextPage = useCallback(() => {
-    setVisibleScores(visibleScores + pageSize);
-  }, [listRef.current, visibleScores]);
-
-  const onSubmitName = useCallback(async () => {
-    if (!name) return;
-
-    setOverlayDismiss(false);
-    await submitSetName(targetGameId, name);
-    await refetch();
-    setOverlayDismiss(true);
-
-    onClose();
-  }, [name, targetGameId, onClose, refetch, submitSetName]);
+  }, [scores]);
 
   if (!scores) {
     return <></>;
@@ -86,38 +58,21 @@ const Leaderboard = ({
           variant="dotted"
           h="auto"
           maxH="calc(100% - 50px)"
-          overflowY="auto"
-          sx={{
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
+          overflowY="scroll"
+          __css={{
+            "scrollbar-width": "none"
           }}
+          ref={listRef}
         >
           {scores ? (
-            scores.slice(0, visibleScores)?.map((score, index) => {
-              const isOwn = score.address === account?.address;
-              const color = isOwn
-                ? colors.yellow["400"].toString()
-                : colors.neon["200"].toString();
+            scores.map((score, index) => {
+              const isOwn = score.playerId === account?.address;
+              const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = score.name
-                ? `${score.name}${isOwn ? " (you)" : ""}`
-                : "Anonymous";
+              const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
 
               return (
-                <ListItem
-                  color={color}
-                  key={index}
-                  cursor={isOwn && !score.name ? "pointer" : "auto"}
-                  onClick={() => {
-                    if (!isOwn || score.name) return;
-
-                    setTargetGameId(score.gameId);
-                    onOpen();
-                  }}
-                  ref={listRef}
-                >
+                <ListItem color={color} key={index} cursor={isOwn && !score.name ? "pointer" : "auto"}>
                   <HStack mr={3}>
                     <Text
                       w={["10px", "30px"]}
@@ -129,15 +84,17 @@ const Leaderboard = ({
                       {index + 1}.
                     </Text>
                     <Box flexShrink={0} style={{ marginTop: "-8px" }}>
-                      {score.dead ? (
+                      {/* {score.dead ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
-                      ) : (
-                        <Avatar
-                          name={genAvatarFromAddress(score.address)}
-                          color={avatarColor}
-                          hasCrown={index === 0}
-                        />
-                      )}
+                      ) : ( */}
+                      <Avatar
+                        name={genAvatarFromId(score.avatarId)}
+                        color={avatarColor}
+                        hasCrown={index === 0}
+                        cursor="pointer"
+                        onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
+                      />
+                      {/* )} */}
                     </Box>
 
                     <HStack>
@@ -151,6 +108,7 @@ const Leaderboard = ({
                         {displayName}
                       </Text>
                     </HStack>
+
                     <Text
                       backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
                       backgroundSize="10px 10px"
@@ -175,55 +133,11 @@ const Leaderboard = ({
           )}
         </UnorderedList>
         {hasNextPage && (
-          <Button variant="pixelated" onClick={fetchNextPage}>
+          <Button minH="40px" variant="pixelated" onClick={() => fetchNextPage()}>
             Load More
           </Button>
         )}
       </VStack>
-
-      {/* Naming modale */}
-      <Modal
-        closeOnOverlayClick={overlayDimiss}
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader
-            display="flex"
-            justifyContent="center"
-            textTransform="uppercase"
-            fontWeight="400"
-          >
-            Name Entry
-          </ModalHeader>
-          <ModalBody py="10px">
-            <Input
-              placeholder="Enter your name"
-              px="10px"
-              border="2px"
-              borderColor="neon.500"
-              maxLength={31}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Text
-              w="full"
-              align="center"
-              color="red"
-              visibility={name.length === 31 ? "visible" : "hidden"}
-            >
-              Max 31 characters
-            </Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onSubmitName} isLoading={isPending} w="full">
-              Submit
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </>
   );
 };

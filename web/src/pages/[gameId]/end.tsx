@@ -1,9 +1,9 @@
 import Header from "@/components/Header";
-import { Gem, Trophy, Pistol, Arrest, Roll } from "@/components/icons";
+import { Skull, Heart, DollarBag, Trophy, Pistol, Arrest, Roll, Siren } from "@/components/icons";
 import Input from "@/components/Input";
 import Leaderboard from "@/components/Leaderboard";
-import { useDojo } from "@/dojo";
-import { useSystems } from "@/dojo/systems/useSystems";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useSystems } from "@/dojo/hooks/useSystems";
 import {
   Container,
   Flex,
@@ -23,52 +23,54 @@ import {
   UnorderedList,
   ListItem,
   Link,
+  Box,
 } from "@chakra-ui/react";
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { ReactNode, useCallback, useState } from "react";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { Calendar } from "@/components/icons/archive";
-import { Skull, Heart } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 import { Footer } from "@/components/Footer";
+import { genAvatarFromId } from "@/components/avatar/avatars";
+import { Avatar } from "@/components/avatar/Avatar";
+import ShareButton from "@/components/ShareButton";
+import { playSound, Sounds } from "@/hooks/sound";
 
 export default function End() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const { setName: submitSetName } = useSystems();
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState("");
+  const [avatarId, setAvatarId] = useState(0);
+  const [isDead, setIsDead] = useState(false);
+  const [day, setDay] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account } = useDojo();
+  const { account, playerEntityStore } = useDojoContext();
+  const { playerEntity } = playerEntityStore;
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
+  useEffect(() => {
+    playSound(Sounds.Death, 0.3);
+  }, []);
 
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+  useEffect(() => {
+    if (playerEntity) {
+      setName(playerEntity.name);
+      setAvatarId(playerEntity.avatarId);
+      setIsDead(playerEntity?.health === 0);
+      setDay(playerEntity.turn);
+    }
+  }, [playerEntity]);
 
-  const isDead = playerEntity?.health === 0;
+  // const onSubmitName = useCallback(async () => {
+  //   if (!name) return;
 
-  const turnRemaining = isDead
-    ? playerEntity?.turnsRemainingOnDeath
-    : playerEntity?.turnsRemaining;
-  const day = (gameEntity?.maxTurns || 1_000) - (turnRemaining || 0);
-
-  const onSubmitName = useCallback(async () => {
-    if (!name) return;
-
-    setIsSubmitting(true);
-    await submitSetName(gameId, name);
-    router.push("/");
-  }, [name, gameId, router, submitSetName]);
+  //   setIsSubmitting(true);
+  //   await submitSetName(gameId, name);
+  //   router.push("/");
+  // }, [name, gameId, router, submitSetName]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
@@ -89,16 +91,12 @@ export default function End() {
         <Container overflowY="auto">
           <VStack flex={["0", "1"]} my="auto">
             {isDead && (
-              <Text
-                fontSize="11px"
-                fontFamily="broken-console"
-                padding="0.5rem 0.5rem 0.25rem"
-              >
+              <Text fontSize="11px" fontFamily="broken-console" padding="0.5rem 0.5rem 0.25rem">
                 You died ...
               </Text>
             )}
 
-            <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+            <Heading fontSize={["36px", "48px"]} fontWeight="normal">
               Game Over
             </Heading>
             <HStack w="full">
@@ -108,17 +106,20 @@ export default function End() {
               <VStack flex="1">
                 {/* <StatsItem text="Xth place" icon={<Trophy />} />
                 <Divider borderColor="neon.600" /> */}
+
+                <StatsItem text={name} icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />} />
+                <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
-                <StatsItem
-                  text={`${formatCash(playerEntity?.cash || 0)}`}
-                  icon={<Gem />}
-                />
-                <Divider borderColor="neon.600" />
-                <StatsItem
+                <StatsItem text={`${formatCash(playerEntity?.cash || 0)}`} icon={<DollarBag />} />
+
+                {/* <StatsItem
                   text={`${playerEntity?.health} Health`}
                   icon={isDead ? <Skull color="green" /> : <Heart />}
                 />
+                <Divider borderColor="neon.600" />
+                <StatsItem text={`${playerEntity?.wanted}% Wanted`} icon={<Siren color="red" />} />
+                <Divider borderColor="neon.600" /> */}
                 {/* 
                 <Divider borderColor="neon.600" />
                 <StatsItem text="X Muggings" icon={<Pistol />} />
@@ -128,22 +129,11 @@ export default function End() {
             </HStack>
 
             <HStack gap="10px" w={["full", "auto"]}>
-              <Button
-                variant="pixelated"
-                flex="1"
-                onClick={() => setIsCreditOpen(true)}
-              >
-                <Roll /> Credits
+              <Button variant="pixelated" w="full" onClick={() => setIsCreditOpen(true)}>
+                <Roll />
               </Button>
-              {/* <Button
-                variant="pixelated"
-                flex="1"
-                onClick={() => {
-                  router.push("/");
-                }}
-              >
-                <Roll /> Home
-              </Button> */}
+
+              <ShareButton variant="pixelated" />
 
               <Link
                 href="https://docs.google.com/forms/d/e/1FAIpQLSdHXV6YWUUd2l3azgst0L6vYvLwY6abGoQu5rbf8r7h8ffCnQ/viewform"
@@ -162,44 +152,15 @@ export default function End() {
             </HStack>
           </VStack>
           <VStack flex="1" my="auto" justify="space-between">
-            <VStack w={["full", "400px"]}>
-              <Text py="20px" textStyle="subheading" fontSize="13px">
-                Name Entry
-              </Text>
-              <Input
-                px="10px"
-                border="2px"
-                borderColor="neon.500"
-                bgColor="neon.700"
-                maxLength={31}
-                placeholder="Enter your name"
-                autoFocus={true}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <Text
-                w="full"
-                align="center"
-                color="red"
-                visibility={name.length === 31 ? "visible" : "hidden"}
-              >
-                Max 31 characters
-              </Text>
-            </VStack>
-            <Footer position={["relative", "relative"]}>
-              <>
-                <Button w={["full", "auto"]} onClick={() => router.push(`/`)}>
-                  Skip
-                </Button>
-                <Button
-                  w={["full", "auto"]}
-                  onClick={onSubmitName}
-                  isLoading={isSubmitting}
-                >
-                  Submit
-                </Button>
-              </>
-            </Footer>
+            <Image display={["none", "flex"]} src="/images/sunset.png" alt="sunset" />
+            <Button
+              mt="20px"
+              onClick={() => {
+                router.push("/");
+              }}
+            >
+              Lobby
+            </Button>
           </VStack>
         </Container>
         <Spacer maxH="100px" />

@@ -17,44 +17,52 @@ import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
 import { playSound, Sounds } from "@/hooks/sound";
 import Leaderboard from "@/components/Leaderboard";
-import { useSystems } from "@/dojo/systems/useSystems";
-import { useGlobalScores } from "@/dojo/components/useGlobalScores";
 import { useToast } from "@/hooks/toast";
-import { useDojo } from "@/dojo";
-import { JoinedEventData } from "@/dojo/events";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getLocationById } from "@/dojo/helpers";
-import { usePlayerStore } from "@/hooks/state";
 import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
 
-// hardcode game params for now
-const START_TIME = 0;
-const MAX_PLAYERS = 1;
-const NUM_TURNS = 10;
-
 export default function Home() {
   const router = useRouter();
-  const { account, isBurnerDeploying, createBurner } = useDojo();
-  const { create: createGame, error: txError } = useSystems();
-  const { scores } = useGlobalScores();
-  const { resetAll } = usePlayerStore();
+
+  const {
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
+  
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
   useEffect(
     () =>
-    //setIsGated(window.location.host === "rollyourown.preview.cartridge.gg"),
-    setIsGated(true),
+    //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
+    setIsGated(false),
     [],
   );
 
+  const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
+  const onHustle = async () => {
+    if (!disableAutoPlay) {
+      play();
+    }
+
+    setIsSubmitting(true);
+    if (!account) {
+      // create burner account
+      await createBurner();
+    }
+
+    router.push(`/create/new`);
+  };
+
   return (
-    <Layout CustomLeftPanel={HomeLeftPanel}>
+    <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 170px)">
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
@@ -73,35 +81,7 @@ export default function Home() {
                 <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
                   Tutorial
                 </Button>
-                <Button
-                  flex="1"
-                  isDisabled={!account}
-                  isLoading={isSubmitting && !txError}
-                  onClick={async () => {
-                    if (
-                      process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY !==
-                      "true"
-                    ) {
-                      play();
-                    }
-                    setIsSubmitting(true);
-                    resetAll();
-                    const { event, hash } = await createGame(
-                      START_TIME,
-                      MAX_PLAYERS,
-                      NUM_TURNS,
-                    );
-
-                    const { gameId } = event as JoinedEventData;
-                    toast(
-                      "Created Game",
-                      Alert,
-                      `http://amazing_explorer/${hash}`,
-                    );
-
-                    router.push(`/${gameId}/travel`);
-                  }}
-                >
+                <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
                   Hustle
                 </Button>
               </>
@@ -117,9 +97,9 @@ export default function Home() {
               gap="20px"
               sx={{
                 overflowY: "scroll",
-                "&::-webkit-scrollbar": {
-                  display: "none",
-                },
+              }}
+              __css={{
+                "scrollbar-width": "none"
               }}
             >
               <Leaderboard />
@@ -128,14 +108,12 @@ export default function Home() {
         )}
       </VStack>
 
-      <Tutorial
-        isOpen={isTutorialOpen}
-        close={() => setIsTutorialOpen(false)}
-      />
+      <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
     </Layout>
   );
 }
 
+// unused
 const Game = ({
   name,
   startTime,

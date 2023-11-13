@@ -19,6 +19,13 @@ export enum Sounds {
   Police = "Police.mp3",
   Gang = "Gang.mp3",
   GameOver = "GameOver.mp3",
+  Knife = "Knife.wav",
+  Uzi = "Uzi.wav",
+  Run = "Run.mp3",
+  Pay = "Pay.wav",
+  Ooo = "Ooo.wav",
+  Death = "Flatline.mp3",
+  Punch = "Punch.mp3",
 }
 
 export interface SoundState {

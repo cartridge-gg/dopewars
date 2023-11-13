@@ -1,26 +1,20 @@
-import {
-  VStack,
-  Heading,
-  Text,
-  Flex,
-  Image,
-  StyleProps,
-  Container,
-  Box,
-} from "@chakra-ui/react";
+import { VStack, Heading, Text, Flex, Image, StyleProps, Container, Box, Button, Spacer } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
 import CrtEffect from "./CrtEffect";
+import { Footer } from "./Footer";
 
 export interface LayoutProps {
   CustomLeftPanel?: React.FC;
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
-  actions?: ReactNode;
   children: ReactNode;
   isSinglePanel?: boolean;
+  footer?: ReactNode;
+  rigthPanelMaxH?: string;
+  rigthPanelScrollable?: boolean;
 }
 
 export interface LeftPanelProps {
@@ -36,7 +30,11 @@ const Layout = ({
   showBack,
   children,
   isSinglePanel = false,
+  rigthPanelMaxH,
+  rigthPanelScrollable = true,
+  footer,
 }: LayoutProps) => {
+
   return (
     <>
       <Flex
@@ -48,56 +46,42 @@ const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header back={showBack} />
-        <Container position="relative">
+        <Container position="relative" px={["10px", "16px"]} py="16px">
           {!isSinglePanel &&
-            (!CustomLeftPanel ? (
-              <LeftPanel {...leftPanelProps} />
-            ) : (
-              <CustomLeftPanel />
-            ))}
-          <RightPanel flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}>
+            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
+          <RightPanel
+            flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
+            footer={footer}
+            isSinglePanel={isSinglePanel}
+            rigthPanelMaxH={rigthPanelMaxH}
+            rigthPanelScrollable={rigthPanelScrollable}
+          >
             {children}
           </RightPanel>
         </Container>
-        <Box maxH="60px" h="full" display={["none", "block"]} />
+
+        <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
       </Flex>
       <CrtEffect />
     </>
   );
 };
 
-const LeftPanel = ({
-  title,
-  prefixTitle,
-  map,
-  imageSrc,
-  ...props
-}: Partial<LeftPanelProps> & StyleProps) => {
+const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<LeftPanelProps> & StyleProps) => {
   return (
     <VStack flex={["0", "1"]} my={["none", "auto"]} {...props}>
-      <VStack
-        zIndex="1"
-        position={map ? "absolute" : "unset"}
-        pointerEvents="none"
-        spacing="0"
-      >
-        <Text textStyle="subheading" fontSize="11px">
+      <VStack zIndex="1" position={map ? "absolute" : "unset"} pointerEvents="none" spacing="0">
+        <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["40px", "48px"]} fontWeight="normal">
+        <Heading fontSize={["36px", "48px"]}  textAlign="center" fontWeight="normal">
           {title}
         </Heading>
       </VStack>
       {map ? (
         <Flex w="100%">{map}</Flex>
       ) : (
-        <Image
-          src={imageSrc}
-          maxH="500px"
-          pt="60px"
-          display={["none", "block"]}
-          alt="context"
-        />
+        <Image src={imageSrc} maxH="60vh" h="500px" pt="60px" display={["none", "block"]} alt="context" />
       )}
     </VStack>
   );
@@ -105,21 +89,28 @@ const LeftPanel = ({
 
 const RightPanel = ({
   children,
+  footer,
+  isSinglePanel,
+  rigthPanelMaxH,
+  rigthPanelScrollable,
   ...props
-}: { children: ReactNode } & StyleProps) => {
+}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH?: string, rigthPanelScrollable: boolean } & StyleProps) => {
   return (
-    <VStack
-      flex="1"
-      position="relative"
-      sx={{
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-      }}
-      {...props}
-    >
-      {children}
+    <VStack position="relative" w="full" {...props}>
+      <VStack
+        position="relative"
+        flex="1"
+        overflowY={rigthPanelScrollable ? "scroll" : "hidden"}
+        __css={{
+          "scrollbar-width": "none"
+        }}
+        w="full"
+        maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)")}
+      >
+        {children}
+        {!isSinglePanel && <Box display="block" minH="70px" h="90px" w="full" />}
+      </VStack>
+      {footer}
     </VStack>
   );
 };

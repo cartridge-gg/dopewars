@@ -20,7 +20,8 @@ import Button from "@/components/Button";
 import { useState, useEffect } from "react";
 import { playSound, Sounds } from "@/hooks/sound";
 import Dot from "./Dot";
-import { useDojo } from "@/dojo";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useRouter } from "next/router";
 
 const steps = [
   {
@@ -45,11 +46,7 @@ const steps = [
   },
 ];
 
-const TutorialStep = ({
-  step,
-}: {
-  step: { step: number; title: string; desc: string };
-}) => {
+const TutorialStep = ({ step }: { step: { step: number; title: string; desc: string } }) => {
   return (
     <>
       <VStack gap="20px" justifyContent="center">
@@ -71,21 +68,23 @@ const TutorialStep = ({
   );
 };
 
-const Tutorial = ({
-  isOpen,
-  close,
-}: {
-  isOpen: boolean;
-  close: () => void;
-}) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const { account, createBurner, isBurnerDeploying } = useDojo();
+const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
+  const router = useRouter();
 
-  const onNext = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const {
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
+
+
+  const onNext = async () => {
     if (currentStep == steps.length) {
       if (!account) {
-        createBurner();
+        await createBurner();
       }
+      router.push(`/create/new`);
+
       close();
     } else {
       setCurrentStep(currentStep + 1);
@@ -126,17 +125,10 @@ const Tutorial = ({
               onClick={onNext}
               w="full"
               hoverSound={undefined}
-              clickSound={
-                currentStep == steps.length
-                  ? Sounds.Magnum357
-                  : Sounds.HoverClick
-              }
+              isLoading={isBurnerDeploying}
+              clickSound={currentStep == steps.length ? Sounds.Magnum357 : Sounds.HoverClick}
             >
-              {currentStep == steps.length
-                ? account
-                  ? "READY TO HUSTLE"
-                  : "CREATE BURNER"
-                : "NEXT"}
+              {currentStep == steps.length ? "READY TO HUSTLE" : "NEXT"}
             </Button>
           </VStack>
         </ModalFooter>

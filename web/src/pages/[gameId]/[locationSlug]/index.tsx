@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -18,105 +18,93 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import { useLocationEntity } from "@/dojo/entities/useLocationEntity";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
+import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
-import { useDojo } from "@/dojo";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { shortString } from "starknet";
 import Button from "@/components/Button";
-import {
-  getDrugById,
-  getLocationById,
-  getLocationBySlug,
-  sortDrugMarkets,
-} from "@/dojo/helpers";
+import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from "@/dojo/helpers";
 import { motion } from "framer-motion";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
-  const { account } = useDojo();
 
+  const { account, playerEntityStore } = useDojoContext();
   const { location: locationEntity } = useLocationEntity({
     gameId,
     locationId,
   });
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+
+  const { playerEntity } = playerEntityStore;
+
+  const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-    if (playerEntity && locationId) {
+    if (playerEntity) {
       // check if player at right location
       if (locationId !== playerEntity.locationId) {
-        router.replace(
-          `/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`,
-        );
+        router.replace(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
         return;
       }
-    }
-  }, [locationId, playerEntity, router, gameId]);
 
-  if (!playerEntity || !locationEntity || !gameEntity) {
+      setIsLastDay(playerEntity.maxTurns > 0 && playerEntity.turn >= playerEntity.maxTurns);
+    }
+  }, [locationId, playerEntity, playerEntity?.locationId, router, gameId]);
+
+  if (!playerEntity || !locationEntity) {
     return <></>;
   }
 
-  const prefixTitle =
-    playerEntity.turnsRemaining === 0
-      ? "Final Day"
-      : `Day ${gameEntity.maxTurns - playerEntity.turnsRemaining + 1} / ${
-          gameEntity.maxTurns
-        }`;
+  const prefixTitle = isLastDay
+    ? "Final Day"
+    : `Day ${playerEntity.turn} ${playerEntity.maxTurns === 0 ? "" : "/ " + playerEntity.maxTurns}`;
 
   return (
     <Layout
       leftPanelProps={{
-        title: shortString.decodeShortString(locationEntity.id),
+        title: getLocationById(locationEntity.id)!.name,
         prefixTitle: prefixTitle,
-        imageSrc: `/images/locations/${
-          getLocationById(locationEntity.id)?.slug
-        }.png`,
+        imageSrc: `/images/locations/${getLocationById(locationEntity.id)?.slug}.png`,
       }}
+      footer={
+        <Footer>
+          <Button
+            w={["full", "auto"]}
+            px={["auto","20px"]}
+
+            onClick={() => {
+              if (isLastDay) {
+                router.push(`/${gameId}/end`);
+              } else {
+                router.push(`/${gameId}/travel`);
+              }
+            }}
+          >
+            {isLastDay ? "End Game" : "Continue"}
+          </Button>
+        </Footer>
+      }
     >
-      <Inventory />
-      <VStack
-        w="full"
-        pt={["0px", "20px"]}
-        align="flex-start"
-        gap="12px"
-        sx={{
-          overflowY: "scroll",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        <Text textStyle="subheading" fontSize="10px" color="neon.500">
-          Market
-        </Text>
-        <SimpleGrid columns={2} w="full" gap={["10px","16px"]} fontSize={["16px","20px"]}>
+      <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={"8px"}>
+        <Inventory />
+      </Box>
+
+      <VStack w="full" align="flex-start" gap="10px">
+        <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
           {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
             const drugInfo = getDrugById(drug.id)!;
-            const canBuy =
-              drug.price <= playerEntity.cash &&
-              playerEntity.drugCount < playerEntity.bagLimit;
-            const canSell = !!playerEntity.drugs.find(
-              (d) => d.id === drug.id && d.quantity > 0,
-            );
+            const canBuy = drug.price <= playerEntity.cash && playerEntity.drugCount < playerEntity.getTransport();
+            const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
             return (
               <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader
                   textTransform="uppercase"
-                  fontSize={["16px","20px"]}
+                  fontSize={["16px", "20px"]}
                   textAlign="left"
-                  padding={["6px 10px","10px 20px"]}
+                  padding={["6px 10px", "10px 20px"]}
                 >
                   {drugInfo.name}
                 </CardHeader>
@@ -132,87 +120,41 @@ export default function Location() {
                       position="absolute"
                       pointerEvents={["none", "auto"]}
                     >
-                      <HStack
-                        h="100px"
-                        w="full"
-                        p="20px"
-                        gap="10px"
-                        bgColor="neon.900"
-                      >
-                        <BuySellBtns
-                          canBuy={canBuy}
-                          canSell={canSell}
-                          drugSlug={drugInfo.slug}
-                        />
+                      <HStack h="100px" w="full" p="20px" gap="10px" bgColor="neon.900">
+                        <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugInfo.slug} />
                       </HStack>
                     </Flex>
                     {drugInfo.icon({})}
                   </HStack>
                 </CardBody>
-               
-                <CardFooter fontSize={["14px","16px"]} flexDirection="column" padding={["0 10px","10px 20px"]} >
+
+                <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
                   <HStack justifyContent="space-between">
                     <Text>{formatCash(drug.price)}</Text>
-                    <HStack >
+                    <HStack>
                       <Cart mb="4px" />
                       <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack>
                   </HStack>
-                  <BuySellMobileToggle
-                    canSell={canSell}
-                    canBuy={canBuy}
-                    drugSlug={drugInfo.slug}
-                  />
+                  <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugSlug={drugInfo.slug} />
                 </CardFooter>
               </Card>
             );
           })}
         </SimpleGrid>
-        <Box minH="60px"/>
       </VStack>
-      <Footer>
-        <Button
-          w={["full", "auto"]}
-          onClick={() => {
-            if (playerEntity.turnsRemaining === 0) {
-              router.push(`/${gameId}/end`);
-              return;
-            }
-
-            router.push(`/${gameId}/travel`);
-          }}
-        >
-          {playerEntity.turnsRemaining === 0 ? "End Game" : "Continue"}
-        </Button>
-      </Footer>
     </Layout>
   );
 }
 
-const BuySellBtns = ({
-  canBuy,
-  canSell,
-  drugSlug,
-}: {
-  canBuy: boolean;
-  canSell: boolean;
-  drugSlug: string;
-}) => {
+const BuySellBtns = ({ canBuy, canSell, drugSlug }: { canBuy: boolean; canSell: boolean; drugSlug: string }) => {
   const router = useRouter();
   return (
     <HStack mb="10px" w="full">
-      <Button
-        flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)}
-        isDisabled={!canBuy}
-      >
+      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)} isDisabled={!canBuy}>
         Buy
       </Button>
-      <Button
-        flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugSlug}/sell`)}
-        isDisabled={!canSell}
-      >
+      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugSlug}/sell`)} isDisabled={!canSell}>
         Sell
       </Button>
     </HStack>
@@ -234,14 +176,7 @@ const BuySellMobileToggle = ({
 
   return (
     <>
-      <Box
-        boxSize="full"
-        position="absolute"
-        top="0"
-        left="0"
-        onClick={onToggle}
-        pointerEvents={["auto", "none"]}
-      />
+      <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
       <HStack
         as={motion.div}
         initial={{ height: "0", opacity: 0 }}
@@ -254,7 +189,6 @@ const BuySellMobileToggle = ({
         overflow="hidden"
         align="flex-start"
         display={["flex", "none"]}
-
         {...props}
       >
         <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />

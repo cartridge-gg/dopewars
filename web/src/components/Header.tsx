@@ -1,23 +1,21 @@
-import { Clock, Gem, Bag, Arrow, Heart, Siren } from "./icons";
 import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { IsMobile, generatePixelBorderPath } from "@/utils/ui";
+import { IsMobile, formatCashHeader, generatePixelBorderPath } from "@/utils/ui";
 import { useRouter } from "next/router";
 import { initSoundStore } from "@/hooks/sound";
 import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { usePlayerEntity } from "@/dojo/entities/usePlayerEntity";
-import { useGameEntity } from "@/dojo/entities/useGameEntity";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatCash } from "@/utils/ui";
-import { useDojo } from "@/dojo";
 import { formatAddress } from "@/utils/contract";
 import PixelatedBorderImage from "./icons/PixelatedBorderImage";
 import colors from "@/theme/colors";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-
-// TODO: constrain this on contract side
-const MAX_INVENTORY = 100;
+import { ProfileLink } from "./ProfileButton";
+import CashIndicator from "./player/CashIndicator";
+import HealthIndicator from "./player/HealthIndicator";
+import WantedIndicator from "./player/WantedIndicator";
 
 export interface HeaderProps {
   back?: boolean;
@@ -27,15 +25,13 @@ const Header = ({ back }: HeaderProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
-  const { account, createBurner, isBurnerDeploying } = useDojo();
+  const {
+    playerEntityStore,
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
 
-  const { player: playerEntity } = usePlayerEntity({
-    gameId,
-    address: account?.address,
-  });
-  const { game: gameEntity } = useGameEntity({
-    gameId,
-  });
+  const { playerEntity } = playerEntityStore;
 
   const isMobile = IsMobile();
 
@@ -57,20 +53,13 @@ const Header = ({ back }: HeaderProps) => {
   }, [playerEntity]);
 
   return (
-    <HStack
-      w="full"
-      px="10px"
-      spacing="10px"
-      zIndex="overlay"
-      align="flex-start"
-      py={["0", "20px"]}
-    >
+    <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]} fontSize={["14px", "16px"]}>
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && gameEntity && (
-        <HStack flex="1" justify="center">
+      {playerEntity && playerEntity.health > 0 && (
+        <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
-            w="auto"
+            width={["100%", "auto"]}
             px="20px"
             spacing={["10px", "30px"]}
             bg="neon.700"
@@ -78,25 +67,11 @@ const Header = ({ back }: HeaderProps) => {
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
-                <Gem /> <Text>{formatCash(playerEntity.cash)}</Text>
-              </HStack>
-              <HStack>
-                <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                <HStack>
-                  <Heart /> <Text>{playerEntity.health}</Text>
-                </HStack>
-                {/* <Divider
-                  orientation="vertical"
-                  borderColor="neon.600"
-                  h="12px"
-                />
-                  <HStack color="red" >
-                  <Siren /> <Text>69%</Text>
-                </HStack> */}
+                <CashIndicator cash={formatCashHeader(playerEntity.cash)} />
+                <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+                <HealthIndicator health={playerEntity.health} maxHealth={100} />
+                <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+                <WantedIndicator wanted={playerEntity.wanted} />
               </HStack>
             </Flex>
           </HStack>
@@ -110,7 +85,7 @@ const Header = ({ back }: HeaderProps) => {
           </>
         )}
 
-        {/* {(!isMobile || (!account && isMobile)) && (
+        {/* {!account && (
           <Button
             h="48px"
             sx={headerButtonStyles}
@@ -121,11 +96,11 @@ const Header = ({ back }: HeaderProps) => {
               }
             }}
           >
-            {account
-              ? formatAddress(account.address.toUpperCase())
-              : "Create Burner"}
+            Create Burner
           </Button>
         )} */}
+
+        {!isMobile && account && playerEntity && <ProfileLink />}
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

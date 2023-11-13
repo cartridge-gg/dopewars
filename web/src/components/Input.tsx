@@ -1,19 +1,5 @@
-import {
-  Input as ChakraInput,
-  InputProps,
-  StyleProps,
-  Text,
-  Box,
-  keyframes,
-} from "@chakra-ui/react";
-import {
-  ReactNode,
-  useLayoutEffect,
-  useState,
-  useRef,
-  MouseEventHandler,
-  useEffect,
-} from "react";
+import { Input as ChakraInput, InputProps, StyleProps, Text, Box, keyframes } from "@chakra-ui/react";
+import { ReactNode, useLayoutEffect, useState, useRef, MouseEventHandler, useEffect } from "react";
 
 // @ts-ignore
 import useCaretPosition from "use-caret-position";
@@ -71,6 +57,7 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
         style={{
           caretColor: "transparent",
         }}
+        variant="primary"
       />
       {isFocused && (
         <Box
@@ -82,8 +69,8 @@ const Input = ({ ...props }: StyleProps & InputProps) => {
             left: `${x}px`,
             top: `${y}px`,
             zIndex: 99,
-            marginLeft: "-1.5px",
-            marginTop: "6px",
+            marginLeft: "-1px",
+            marginTop: "9px",
             transition: "none",
             backgroundColor: "var(--chakra-colors-neon-200)",
             borderRadius: "3px",

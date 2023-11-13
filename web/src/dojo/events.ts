@@ -2,29 +2,31 @@ import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import {
   GetTransactionReceiptResponse,
   InvokeTransactionReceiptResponse,
+  SuccessfulTransactionReceiptResponse,
   num,
+  shortString
 } from "starknet";
 
-// events are keyed by the hash of the event name
-export enum RyoEvents {
-  GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
-  PlayerJoined = "0x214916ce0265d355fd91110809ffba7b5e672b108a8beea3dd235818431264b",
-  Traveled = "0x2c4d9d5da873550ed167876bf0bc2ae300ce1db2eeff67927a85693680a2328",
-  Bought = "0x20cb8131637de1953a75938db3477cc6b648e5ed255f5b3fe3f0fb9299f0afc",
-  Sold = "0x123e760cef925d0b4f685db5e1ac87aadaf1ad9f8069122a5bb03353444c386",
-  AdverseEvent = "0x3605d6af5b08d01a1b42fa16a5f4dc202724f1664912948dcdbe99f5c93d0a0",
-  Decision = "0xc9315f646a66dd126a564fa76bfdc00bdb47abe0d8187e464f69215dbf432a",
-  Consequence = "0x1335a57b72e0bcb464f40bf1f140f691ec93e4147b91d0760640c19999b841d",
-  MarketEvent = "0x255825b8769ab99d6c1bd893b440a284a39d8db18c76b91e8e6a70ef5c7a8e0",
-}
+import { WorldEvents } from "./generated/contractEvents";
+import { Siren, Truck } from "@/components/icons";
+import { getLocationByType, getDrugByType } from "./helpers"
+import { ToastType } from "@/hooks/toast";
 
 export interface BaseEventData {
   gameId: string;
+  eventType: WorldEvents;
+  eventName: string;
 }
 
 export interface AdverseEventData extends BaseEventData {
   playerId: string;
   playerStatus: PlayerStatus;
+  healthLoss: number;
+  demandPct: number;
+}
+
+export interface AtPawnshopEventData extends BaseEventData {
+  playerId: string;
 }
 
 export interface CreateEventData extends BaseEventData {
@@ -36,21 +38,21 @@ export interface CreateEventData extends BaseEventData {
 
 export interface JoinedEventData extends BaseEventData {
   playerId: string;
-  locationId: string;
+  playerName: string;
 }
 
 export interface BoughtEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
-  price: number;
+  cost: number;
 }
 
 export interface SoldEventData extends BaseEventData {
   playerId: string;
   drugId: string;
   quantity: number;
-  price: number;
+  payout: number;
 }
 
 export interface DecisionEventData extends BaseEventData {
@@ -64,107 +66,223 @@ export interface ConsequenceEventData extends BaseEventData {
   healthLoss: number;
   drugLoss: number;
   cashLoss: number;
+  dmgDealt: number;
+  cashEarnt: number;
 }
 
 export interface MarketEventData extends BaseEventData {
-  gameId: string;
   locationId: string;
   drugId: string;
   increase: boolean;
 }
 
-export const parseEvent = (
-  receipt: GetTransactionReceiptResponse,
-  eventType: RyoEvents,
-): BaseEventData => {
+export interface TraveledEventData extends BaseEventData {
+  playerId: string;
+  turn: number;
+  increase: boolean;
+  fromLocation: string;
+  toLocation: string;
+}
+
+export interface BoughtItemEventData extends BaseEventData {
+  playerId: string;
+  itemId: string;
+  level: number;
+  cost: number;
+}
+
+export interface GameOverEventData extends BaseEventData {
+  playerId: string;
+  playerName: string;
+  turn: number;
+  cash: number;
+}
+
+
+export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
   if (receipt.status === "REJECTED") {
     throw new Error(`transaction REJECTED`);
   }
-
-  const raw = receipt.events?.find((e) => e.keys[0] === eventType);
-
-  if (!raw) {
-    throw new Error(`event not found`);
+  if (receipt.status === "REVERTED") {
+    throw new Error(`transaction REVERTED`);
   }
 
-  switch (eventType) {
-    case RyoEvents.GameCreated:
+  const flatEvents = parseEvents(receipt as SuccessfulTransactionReceiptResponse)
+  return flatEvents
+}
+
+export const parseEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
+  const parsed = receipt.events.map(e => parseEvent(e))
+  return parsed
+}
+
+export const parseEventsByEventType = (receipt: SuccessfulTransactionReceiptResponse, eventType: WorldEvents) => {
+  const events = receipt.events.filter(e => e.keys[0] === eventType)
+  const parsed = events.map(e => parseEvent(e))
+  return parsed
+}
+
+export type ParseEventResult = ReturnType<typeof parseEvent>;
+
+export const parseEvent = (raw: any) => {
+
+  switch (raw.keys[0]) {
+    case WorldEvents.GameCreated:
       return {
+        eventType: WorldEvents.GameCreated,
+        eventName: "GameCreated",
         gameId: num.toHexString(raw.data[0]),
         creator: num.toHexString(raw.data[1]),
         startTime: Number(raw.data[2]),
-        maxTurns: Number(raw.data[3]),
-        maxPlayers: Number(raw.data[4]),
       } as CreateEventData;
 
-    case RyoEvents.AdverseEvent:
+    case WorldEvents.AdverseEvent:
       return {
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        playerStatus: Number(raw.data[2]),
+        eventType: WorldEvents.AdverseEvent,
+        eventName: "AdverseEvent",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerStatus: shortString.decodeShortString(raw.data[0]),
+        healthLoss: Number(raw.data[1]),
+        demandPct: Number(raw.data[2]),
       } as AdverseEventData;
 
-    case RyoEvents.PlayerJoined:
+    case WorldEvents.AtPawnshop:
       return {
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
+        eventType: WorldEvents.AtPawnshop,
+        eventName: "AtPawnshop",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+      } as AtPawnshopEventData;
+
+    case WorldEvents.PlayerJoined:
+      return {
+        eventType: WorldEvents.PlayerJoined,
+        eventName: "PlayerJoined",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerName: shortString.decodeShortString(raw.data[0]),
       } as JoinedEventData;
-    case RyoEvents.Decision:
+
+    case WorldEvents.Decision:
       return {
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        action: Number(raw.data[2]),
+        eventType: WorldEvents.Decision,
+        eventName: "Decision",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        action: Number(raw.data[0]),
       } as DecisionEventData;
-    case RyoEvents.Consequence:
+
+    case WorldEvents.Consequence:
       return {
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        outcome: Number(raw.data[2]),
-        healthLoss: Number(raw.data[3]),
-        drugLoss: Number(raw.data[4]),
-        cashLoss: Number(raw.data[5]),
+        eventType: WorldEvents.Consequence,
+        eventName: "Consequence",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        outcome: Number(raw.data[0]),
+        healthLoss: Number(raw.data[1]),
+        drugLoss: Number(raw.data[2]),
+        cashLoss: Number(raw.data[3]),
+        dmgDealt: Number(raw.data[4]),
+        cashEarnt: Number(raw.data[5]),
       } as ConsequenceEventData;
-    case RyoEvents.Traveled:
-    case RyoEvents.Bought:
-    case RyoEvents.Sold:
-    case RyoEvents.MarketEvent:
-      throw new Error(`event parse not implemented: ${eventType}`);
+
+    case WorldEvents.MarketEvent:
+      return {
+        eventType: WorldEvents.MarketEvent,
+        eventName: "MarketEvent",
+        gameId: num.toHexString(raw.data[0]),
+        locationId: num.toHexString(raw.data[1]),
+        drugId: num.toHexString(raw.data[2]),
+        increase: raw.data[3] === "0x0" ? false : true,
+      } as MarketEventData;
+
+    case WorldEvents.Traveled:
+      return {
+        eventType: WorldEvents.Traveled,
+        eventName: "Traveled",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        turn: Number(raw.data[0]),
+        fromLocation: shortString.decodeShortString(raw.data[1]),
+        toLocation: shortString.decodeShortString(raw.data[2]),
+      } as TraveledEventData;
+
+    case WorldEvents.Bought:
+      return {
+        eventType: WorldEvents.Bought,
+        eventName: "Bought",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        drugId: num.toHexString(raw.data[0]),
+        quantity: Number(raw.data[1]),
+        cost: Number(raw.data[2]),
+      } as BoughtEventData;
+
+    case WorldEvents.Sold:
+      return {
+        eventType: WorldEvents.Sold,
+        eventName: "Sold",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        drugId: num.toHexString(raw.data[0]),
+        quantity: Number(raw.data[1]),
+        payout: Number(raw.data[2]),
+      } as SoldEventData;
+
+    case WorldEvents.BoughtItem:
+      return {
+        eventType: WorldEvents.BoughtItem,
+        eventName: "BoughtItem",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        itemId: num.toHexString(raw.data[0]),
+        level: Number(raw.data[1]),
+        cost: Number(raw.data[2]),
+      } as BoughtItemEventData;
+
+    case WorldEvents.GameOver:
+      return {
+        eventType: WorldEvents.GameOver,
+        eventName: "GameOver",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerName: shortString.decodeShortString(raw.data[0]),
+        playerStatus: shortString.decodeShortString(raw.data[1]),
+        turn: Number(raw.data[2]),
+        cash: Number(raw.data[3]),
+      } as GameOverEventData;
+
+
+    default:
+      // console.log(`event parse not implemented: ${raw.keys[0]}`)
+      //throw new Error(`event parse not implemented: ${eventType}`);
+      return {
+        gameId: undefined,
+        eventType: raw.keys[0],
+        eventName: raw.keys[0],
+      }
+      break;
   }
-};
+
+}
 
 
-// temps dirty solution, will change when torii index custom events
-export const parseEvents = (
-  receipt: GetTransactionReceiptResponse,
-  eventType: RyoEvents,
-): BaseEventData[] => {
-
-  if (receipt.status === "REJECTED") {
-    throw new Error(`transaction REJECTED`);
+export function displayMarketEvents(events: MarketEventData[], toaster: ToastType) {
+  // market events
+  for (let event of events) {
+    const e = event as MarketEventData;
+    const msg = e.increase
+      ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${getLocationByType(Number(e.locationId))?.name
+      }`
+      : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${getLocationByType(Number(e.locationId))?.name
+      }`;
+    const icon = e.increase ? Siren : Truck;
+    toaster.toast({
+      message: msg,
+      icon: icon,
+      // link: `http://amazing_explorer/${hash}`,
+      duration: 6000,
+    });
   }
-  const rawEvents = receipt.events?.filter((e) => e.keys[0] === eventType);
-  if (rawEvents.length === 0) {
-    throw new Error(`event not found`);
-  }
-
-  const parsed = [];
-
-  for (let raw of rawEvents) {
-    switch (eventType) {
-      case RyoEvents.MarketEvent:
-        parsed.push({
-          gameId: num.toHexString(raw.data[0]),
-          locationId: num.toHexString(raw.data[1]),
-          drugId: num.toHexString(raw.data[2]),
-          increase: raw.data[3] === "0x0" ? false : true,
-        } as MarketEventData);
-        break;
-
-      default:
-        throw new Error(`event parse not implemented: ${eventType}`);
-    }
-  }
-
-  return parsed
-
-};
+}

@@ -11,10 +11,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use dojo::test_utils::spawn_test_world;
 
-use rollyourown::PlayerStatus;
-use rollyourown::components::player::Player;
+use rollyourown::models::player::{Player, PlayerStatus};
 use rollyourown::tests::create::{spawn_game, spawn_player};
-use rollyourown::constants::{TRAVEL_RISK, COPS_DRUG_THRESHOLD};
 
 const WEED_ID: felt252 = 0x57656564; // weed
 // #[test]
