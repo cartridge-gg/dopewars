@@ -108,7 +108,7 @@ const RightPanel = ({
         maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)")}
       >
         {children}
-        {!isSinglePanel && <Box display="block" minH="70px" h="90px" w="full" />}
+        {!isSinglePanel || rigthPanelScrollable && <Box display="block" minH="70px" h="90px" w="full" />}
       </VStack>
       {footer}
     </VStack>
