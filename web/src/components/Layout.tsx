@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import CrtEffect from "./CrtEffect";
 import { Footer } from "./Footer";
+import { IsMobile } from "@/utils/ui";
 
 export interface LayoutProps {
   CustomLeftPanel?: React.FC;
@@ -100,6 +101,7 @@ const RightPanel = ({
   rigthPanelMaxH?: string;
   rigthPanelScrollable: boolean;
 } & StyleProps) => {
+  const isMobile = IsMobile();
   return (
     <VStack position="relative" w="full" {...props}>
       <VStack
@@ -113,7 +115,9 @@ const RightPanel = ({
         maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)"}
       >
         {children}
-        {!isSinglePanel && rigthPanelScrollable && <Box display="block" minH="70px" h="90px" w="full" />}
+        {!isSinglePanel && rigthPanelScrollable && (
+          <Box display="block" minH={isMobile ? "150px" : "90px"} h={isMobile ? "150px" : "90px"} w="full" />
+        )}
       </VStack>
       {footer}
     </VStack>
