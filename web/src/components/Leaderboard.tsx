@@ -57,11 +57,6 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           boxSize="full"
           variant="dotted"
           h="auto"
-          maxH="calc(100% - 100px)"
-          overflowY="scroll"
-          __css={{
-            "scrollbar-width": "none"
-          }}
           ref={listRef}
         >
           {scores ? (

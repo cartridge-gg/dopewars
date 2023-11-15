@@ -34,7 +34,6 @@ const Layout = ({
   rigthPanelScrollable = true,
   footer,
 }: LayoutProps) => {
-
   return (
     <>
       <Flex
@@ -74,7 +73,7 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
         <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["36px", "48px"]}  textAlign="center" fontWeight="normal">
+        <Heading fontSize={["36px", "48px"]} textAlign="center" fontWeight="normal">
           {title}
         </Heading>
       </VStack>
@@ -94,7 +93,13 @@ const RightPanel = ({
   rigthPanelMaxH,
   rigthPanelScrollable,
   ...props
-}: { children: ReactNode; footer: ReactNode; isSinglePanel: boolean; rigthPanelMaxH?: string, rigthPanelScrollable: boolean } & StyleProps) => {
+}: {
+  children: ReactNode;
+  footer: ReactNode;
+  isSinglePanel: boolean;
+  rigthPanelMaxH?: string;
+  rigthPanelScrollable: boolean;
+} & StyleProps) => {
   return (
     <VStack position="relative" w="full" {...props}>
       <VStack
@@ -102,13 +107,13 @@ const RightPanel = ({
         flex="1"
         overflowY={rigthPanelScrollable ? "scroll" : "hidden"}
         __css={{
-          "scrollbar-width": "none"
+          "scrollbar-width": "none",
         }}
         w="full"
-        maxH={rigthPanelMaxH ? rigthPanelMaxH : (isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)")}
+        maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)"}
       >
         {children}
-        {!isSinglePanel || rigthPanelScrollable && <Box display="block" minH="70px" h="90px" w="full" />}
+        {!isSinglePanel && rigthPanelScrollable && <Box display="block" minH="70px" h="90px" w="full" />}
       </VStack>
       {footer}
     </VStack>
