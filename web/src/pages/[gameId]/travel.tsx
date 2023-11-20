@@ -109,6 +109,7 @@ export default function Travel() {
   }, [locationPrices, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
+    console.log(e.key);
     switch (e.key) {
       case "ArrowRight":
       case "ArrowUp":
@@ -117,6 +118,9 @@ export default function Travel() {
       case "ArrowLeft":
       case "ArrowDown":
         onNext();
+        break;
+      case "Enter":
+        onContinue();
         break;
     }
   });
@@ -193,16 +197,15 @@ export default function Travel() {
         ),
       }}
       footer={
-          
-            <Footer >
+        <Footer>
           {playerEntity.turn > 0 && (
-            <Button isDisabled={isPending} w={["full", "auto"]}   px={["auto","20px"]} onClick={() => router.back()}>
+            <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
               Back
             </Button>
           )}
           <Button
             w={["full", "auto"]}
-            px={["auto","20px"]}
+            px={["auto", "20px"]}
             isDisabled={!targetId || targetId === currentLocationId}
             isLoading={isPending /*&& !txError*/}
             onClick={onContinue}
