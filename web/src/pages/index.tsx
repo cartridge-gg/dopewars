@@ -32,15 +32,15 @@ export default function Home() {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
-  
+
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
   useEffect(
     () =>
-    //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
-    setIsGated(false),
+      //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
+      setIsGated(false),
     [],
   );
 
@@ -72,15 +72,15 @@ export default function Home() {
                   <Alert />
                   <Text align="center">Under Construction</Text>
                 </HStack>
-                <Text align="center">
-                  Get ready hustlers... Season III starts in November
-                </Text>
+                <Text align="center">Get ready hustlers... Season III starts in November</Text>
               </VStack>
             ) : (
               <>
-                <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
-                  Tutorial
-                </Button>
+                {!account && (
+                  <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
+                    Tutorial
+                  </Button>
+                )}
                 <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
                   Hustle
                 </Button>
@@ -99,7 +99,7 @@ export default function Home() {
                 overflowY: "scroll",
               }}
               __css={{
-                "scrollbar-width": "none"
+                "scrollbar-width": "none",
               }}
             >
               <Leaderboard />
