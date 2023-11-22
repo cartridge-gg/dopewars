@@ -31,7 +31,7 @@ export const initMediaStore = async () => {
   const state = useMediaStore.getState();
   if (state.isInitialized) return;
 
-  state.currentIndex = Math.floor(Math.random()*mediaLibrary.length);
+  state.currentIndex = Math.floor(Math.random() * mediaLibrary.length);
 
   for (let media of mediaLibrary) {
     state.medias.push({
@@ -40,6 +40,12 @@ export const initMediaStore = async () => {
         src: `/medias/${media.filename}`,
         html5: true,
         preload: true,
+        onplay: () => {
+          navigator.mediaSession.playbackState = "playing";
+        },
+        onpause: () => {
+          navigator.mediaSession.playbackState = "paused";
+        },
         onend: () => {
           const state = useMediaStore.getState();
           useMediaStore.setState((state) => ({
@@ -55,15 +61,23 @@ export const initMediaStore = async () => {
     ...state,
     isInitialized: true,
   }));
+
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.setActionHandler("play", play);
+    navigator.mediaSession.setActionHandler("pause", pause);
+    navigator.mediaSession.setActionHandler("previoustrack", backward);
+    navigator.mediaSession.setActionHandler("nexttrack", forward);
+    navigator.mediaSession.setActionHandler("seekto", (event) => seekTo(event.seekTime || 0));
+  }
+
+  // Set initial metadata
+  updateMetadata();
 };
 
 export const play = () => {
   const state = useMediaStore.getState();
-  if (
-    !state.medias[state.currentIndex] ||
-    !state.medias[state.currentIndex]?.sound
-  )
-    return;
+  const currentMedia = state.medias[state.currentIndex];
+  if (!currentMedia || !currentMedia?.sound) return;
 
   // force all other sounds to stop
   for (let media of state.medias) {
@@ -73,9 +87,13 @@ export const play = () => {
   }
 
   // play sound
-  if (!state.medias[state.currentIndex].sound?.playing()) {
-    state.medias[state.currentIndex].sound?.play();
+  if (!currentMedia.sound?.playing()) {
+    currentMedia.sound?.play();
   }
+
+  // Update Media Session API metadata
+  updateMetadata();
+  updatePositionState();
 
   useMediaStore.setState((state) => ({
     isPlaying: true,
@@ -85,7 +103,6 @@ export const play = () => {
 export const pause = () => {
   const state = useMediaStore.getState();
   state.medias[state.currentIndex].sound?.pause();
-
   useMediaStore.setState((state) => ({
     isPlaying: false,
   }));
@@ -96,10 +113,7 @@ export const backward = () => {
   state.medias[state.currentIndex].sound?.stop();
 
   useMediaStore.setState((state) => ({
-    currentIndex:
-      state.currentIndex === 0
-        ? state.medias.length - 1
-        : (state.currentIndex - 1) % state.medias.length,
+    currentIndex: state.currentIndex === 0 ? state.medias.length - 1 : (state.currentIndex - 1) % state.medias.length,
   }));
 
   state.isPlaying && play();
@@ -114,4 +128,48 @@ export const forward = () => {
   }));
 
   state.isPlaying && play();
+};
+
+const updateMetadata = () => {
+  const state = useMediaStore.getState();
+  const currentMedia = state.medias[state.currentIndex];
+
+  if ("mediaSession" in navigator && currentMedia) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: currentMedia.name || "Roll your own",
+      artist: "Roll your own",
+      artwork: [
+        { src: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { src: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+        { src: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+        { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+        { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+        // Add more artwork sizes as needed
+      ],
+    });
+  }
+};
+
+export const seekTo = (position: number) => {
+  const state = useMediaStore.getState();
+  const currentHowl = state.medias[state.currentIndex].sound;
+  const seekTime = Math.min(Math.max(position, 0), currentHowl?.duration() || 0);
+
+  currentHowl?.seek(seekTime);
+
+  // Update Media Session API position state
+  updatePositionState();
+};
+
+export const updatePositionState = () => {
+  const state = useMediaStore.getState();
+  const currentMedia = state.medias[state.currentIndex];
+
+  if ("mediaSession" in navigator && currentMedia && currentMedia.sound) {
+    navigator.mediaSession.setPositionState({
+      duration: currentMedia.sound.duration(),
+      playbackRate: currentMedia.sound.rate(),
+      position: currentMedia.sound.seek(),
+    });
+  }
 };
