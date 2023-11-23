@@ -26,16 +26,6 @@ mod devtools {
     use rollyourown::utils::random::{RandomImpl};
 
 
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
 
 
     #[external(v0)]

@@ -3,15 +3,16 @@ version = 1
 
 [[package]]
 name = "dojo"
-version = "0.3.10"
-source = "git+https://github.com/dojoengine/dojo.git?tag=v0.3.10#be1676252c41f8188465741edcbcb381d2c12080"
+version = "0.3.12"
+source = "git+https://github.com/dojoengine/dojo.git#b3f49977fe921564725c30b912126aea57859bbd"
 dependencies = [
  "dojo_plugin",
 ]
 
 [[package]]
 name = "dojo_plugin"
-version = "0.3.10"
+version = "0.3.12"
+source = "git+https://github.com/dojoengine/dojo?tag=v0.3.12#12d58f29ec53454317f1f6d265007a053d279288"
 
 [[package]]
 name = "rollyourown"
