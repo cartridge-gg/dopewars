@@ -24,6 +24,7 @@ mod lobby {
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
+    use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
@@ -31,6 +32,8 @@ mod lobby {
     };
     use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+
 
     use super::ILobby;
 
@@ -78,6 +81,9 @@ mod lobby {
 
             let mut randomizer = RandomImpl::new(self.world());
 
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_version = leaderboard_manager.on_game_start();
+
             let player = Player {
                 game_id,
                 player_id: caller,
@@ -97,6 +103,7 @@ mod lobby {
                 defense: player_settings.defense,
                 transport: player_settings.transport,
                 speed: player_settings.speed,
+                leaderboard_version
             };
 
             let game = Game {

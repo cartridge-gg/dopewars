@@ -39,12 +39,13 @@ export class GlobalScores {
   }
 }
 
-export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
+export const useGlobalScoresIninite = (version?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
   // Gets top 10
   const { data, isFetched, refetch, hasNextPage, fetchNextPage, ...props } = useInfiniteGlobalScoresQuery(
     {
       limit: limit || 10,
+      version,
     },
     {
       getNextPageParam: (lastPage) => {
@@ -67,7 +68,7 @@ export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
     if (new_scores) {
       setScores(scores.concat(new_scores));
     }
-  }, [data?.pages]);
+  }, [data?.pages, version/*, scores*/]);
 
   return {
     scores,

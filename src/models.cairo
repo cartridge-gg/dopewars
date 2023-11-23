@@ -5,3 +5,5 @@ mod drug;
 mod location;
 mod item;
 mod encounter;
+mod leaderboard;
+mod ryo;

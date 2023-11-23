@@ -75,6 +75,22 @@ export function defineContractComponents(world: World) {
         },
       );
     })(),
+    Leaderboard: (() => {
+      const name = "Leaderboard";
+      return defineComponent(
+        world,
+        {
+          high_score: RecsType.BigInt,
+          next_version_timestamp: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u128", "u64"],
+          },
+        },
+      );
+    })(),
     Market: (() => {
       const name = "Market";
       return defineComponent(
@@ -112,6 +128,7 @@ export function defineContractComponents(world: World) {
           transport: RecsType.Number,
           speed: RecsType.Number,
           wanted: RecsType.Number,
+          leaderboard_version: RecsType.Number,
         },
         {
           metadata: {
@@ -133,7 +150,24 @@ export function defineContractComponents(world: World) {
               "usize",
               "usize",
               "u8",
+              "u32",
             ],
+          },
+        },
+      );
+    })(),
+    RyoMeta: (() => {
+      const name = "RyoMeta";
+      return defineComponent(
+        world,
+        {
+          initialized: RecsType.Boolean,
+          leaderboard_version: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["bool", "u32"],
           },
         },
       );

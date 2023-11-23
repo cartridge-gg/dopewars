@@ -23,10 +23,10 @@ mod devtools {
 
     use rollyourown::models::player::{Player, PlayerStatus};
     use rollyourown::models::location::{LocationEnum};
+    use rollyourown::models::leaderboard::{Leaderboard};
+
     use rollyourown::utils::random::{RandomImpl};
-
-
-
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     #[external(v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
@@ -34,6 +34,9 @@ mod devtools {
             self.check_chain();
 
             let mut randomizer = RandomImpl::new(self.world());
+
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_version = leaderboard_manager.get_current_version();
 
             let mut i = 0;
             loop {
@@ -68,6 +71,7 @@ mod devtools {
                     defense: 42,
                     transport: 42,
                     speed: 42,
+                    leaderboard_version,
                 };
 
                 set!(self.world(), (player));

@@ -17,7 +17,7 @@ import { useEffect } from "react";
         if(!gameId){
           playerEntityStore.reset();
         }
-      }, [gameId, account?.address])
+      }, [gameId, account?.address/*, playerEntityStore*/])
 
 
     return (<></>)

@@ -15,6 +15,7 @@ export TRAVEL_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | s
 export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "decide" ).address')
 export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "trade" ).address')
 export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
+export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "ryo" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo rpc : $RPC_URL
@@ -25,14 +26,16 @@ echo travel: $TRAVEL_ADDRESS
 echo decide: $DECIDE_ADDRESS
 echo trade : $TRADE_ADDRESS
 echo shop : $SHOP_ADDRESS
+echo ryo : $RYO_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-LOBBY_COMPONENTS=("Game" "Market" "Player" )
+LOBBY_COMPONENTS=("Game" "Market" "Player" "Leaderboard" "RyoMeta")
 TRAVEL_COMPONENTS=("Player" "Market" "Encounter")
-DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter")
+DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter" "Leaderboard" "RyoMeta")
 TRADE_COMPONENTS=("Drug" "Market" "Player")
 SHOP_COMPONENTS=("Player" "Item" "Market")
+RYO_COMPONENTS=("RyoMeta" "Leaderboard")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
@@ -59,4 +62,14 @@ for component in ${SHOP_COMPONENTS[@]}; do
     sleep 0.1
 done
 
+for component in ${RYO_COMPONENTS[@]}; do
+    sozo auth writer $component $RYO_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    sleep 0.1
+done
+
 echo "Default authorizations have been successfully set."
+
+echo "Initializing..."
+sozo execute $RYO_ADDRESS initialize
+echo "Initialized!"
+

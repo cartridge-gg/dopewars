@@ -35,14 +35,16 @@ mod decide {
     use rollyourown::models::location::{LocationEnum, LocationImpl};
     use rollyourown::models::item::{Item, ItemEnum};
     use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
+    use rollyourown::models::leaderboard::{Leaderboard};
+   
     use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
-
     use rollyourown::utils::settings::{
         DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl, EncounterSettings,
         EncounterSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
     use rollyourown::utils::math::{MathTrait, MathImplU8, MathImplU128};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     use rollyourown::systems::travel::on_turn_end;
 
@@ -218,6 +220,12 @@ mod decide {
             if health_loss >= player.health {
                 player.health = 0;
                 outcome = Outcome::Died;
+
+                let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+                leaderboard_manager.on_game_end(player.cash);
+
+                // in case player starts game in version v & end game in version v+1
+                player.leaderboard_version = leaderboard_manager.get_current_version();
 
                 let game_over = GameOver {
                     game_id,

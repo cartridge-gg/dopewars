@@ -27,17 +27,54 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
 import { Skull } from "./icons";
+import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
+import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
+import Countdown from "react-countdown";
+
+const renderer = ({
+  days,
+  hours,
+  minutes,
+  seconds,
+  completed,
+}: {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  completed: boolean;
+}) => {
+  if (completed) {
+    return <Text>RESETS NEXT GAME</Text>;
+  } else {
+    return (
+      <HStack>
+        <Text color="neon.500">RESETS IN:</Text> {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H{" "}
+        <Text>
+          {minutes.toString().padStart(2, "0")}m {seconds.toString().padStart(2, "0")}s
+        </Text>
+      </HStack>
+    );
+  }
+};
 
 const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const { account } = useDojoContext();
-  const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(undefined, 10);
+  const { ryoMetas } = useRyoMetas();
+  const {  leaderboardMetas } = useLeaderboardMetas(ryoMetas?.leaderboard_version);
+  const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(ryoMetas?.leaderboard_version, 10);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
   const listRef = useRef(null);
+
+  useEffect(() => {
+    console.log(ryoMetas);
+    console.log(leaderboardMetas);
+  }, [ryoMetas, leaderboardMetas]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -51,15 +88,24 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   }
 
   return (
-    <>
-      <VStack w="full" h="100%">
-        <UnorderedList
-          boxSize="full"
-          variant="dotted"
-          h="auto"
-          ref={listRef}
-        >
-          {scores ? (
+    <VStack w="full" h="100%">
+      <HStack>
+        <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+        <Text fontSize="12px">(v{leaderboardMetas?.version})</Text>
+      </HStack>
+
+      <VStack
+        boxSize="full"
+        gap="20px"
+        sx={{
+          overflowY: "scroll",
+        }}
+        __css={{
+          "scrollbar-width": "none",
+        }}
+      >
+        <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
+          {scores && scores.length > 0 ? (
             scores.map((score, index) => {
               const isOwn = score.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
@@ -78,18 +124,17 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                     >
                       {index + 1}.
                     </Text>
-                    <Box flexShrink={0} style={{ marginTop: "-8px" }}>
-                      {/* {score.dead ? (
+                    <Box
+                      flexShrink={0}
+                      style={{ marginTop: "-8px" }}
+                      cursor="pointer"
+                      onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
+                    >
+                      {score.dead ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
-                      ) : ( */}
-                      <Avatar
-                        name={genAvatarFromId(score.avatarId)}
-                        color={avatarColor}
-                        hasCrown={index === 0}
-                        cursor="pointer"
-                        onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
-                      />
-                      {/* )} */}
+                      ) : (
+                        <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                      )}
                     </Box>
 
                     <HStack>
@@ -127,13 +172,14 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
             </Text>
           )}
         </UnorderedList>
-        {hasNextPage && (
-          <Button minH="40px" variant="pixelated" onClick={() => fetchNextPage()}>
-            Load More
-          </Button>
-        )}
       </VStack>
-    </>
+
+      {hasNextPage && (
+        <Button minH="40px" variant="pixelated" onClick={() => fetchNextPage()}>
+          Load More
+        </Button>
+      )}
+    </VStack>
   );
 };
 

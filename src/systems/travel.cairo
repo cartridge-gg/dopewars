@@ -215,7 +215,7 @@ fn on_turn_end(
     // save player
     set!(world, (player));
 
-    // emit raw event Traveled if stil alive
+    // emit raw event Traveled if still alive
     if player.health > 0 {
         world
             .emit_raw(

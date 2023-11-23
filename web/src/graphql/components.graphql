@@ -1,6 +1,6 @@
-query GlobalScores($limit: Int, $cursor: Cursor) {
+query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
   playerModels(
-    where: { health: 0 }
+    where: { health: 0, leaderboard_version: $version }
     order: { direction: DESC, field: CASH }
     first: $limit
     after: $cursor
@@ -29,6 +29,30 @@ query MarketPrices($gameId: u32) {
         location_id
         quantity
         cash
+      }
+    }
+  }
+}
+
+query RyoMetas {
+  ryometaModels(limit: 1) {
+    edges {
+      node {
+        id
+        initialized
+        leaderboard_version
+      }
+    }
+  }
+}
+
+query LeaderboardMetas($version: u32) {
+  leaderboardModels(where: { version: $version }) {
+    edges {
+      node {
+        version
+        high_score
+        next_version_timestamp
       }
     }
   }

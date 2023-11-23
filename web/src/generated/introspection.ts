@@ -11,8 +11,10 @@
       "Encounter",
       "Game",
       "Item",
+      "Leaderboard",
       "Market",
-      "Player"
+      "Player",
+      "RyoMeta"
     ]
   }
 };
