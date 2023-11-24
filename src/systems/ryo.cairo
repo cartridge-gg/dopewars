@@ -1,3 +1,12 @@
+use starknet::ContractAddress;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+use rollyourown::constants::SCALING_FACTOR;
+use rollyourown::models::player::{Player, PlayerStatus};
+use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
+
+
 #[starknet::interface]
 trait IRyo<TContractState> {
     fn initialize(self: @TContractState);
@@ -16,6 +25,7 @@ mod ryo {
 
     use rollyourown::utils::random::{RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+
 
     use super::IRyo;
 
@@ -48,3 +58,38 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {}
 }
 
+
+#[derive(Drop, starknet::Event)]
+struct GameOver {
+    #[key]
+    game_id: u32,
+    #[key]
+    player_id: ContractAddress,
+    player_name: felt252,
+    player_status: PlayerStatus,
+    turn: u32,
+    cash: u128,
+}
+
+
+fn game_over(world: IWorldDispatcher, ref player: Player) {
+    player.game_over = true;
+
+    let leaderboard_manager = LeaderboardManagerTrait::new(world);
+    // reset leaderboard timer if new highscore
+    leaderboard_manager.on_game_end(player.cash);
+
+    // in case player starts game in version v & end game in version v+1
+    player.leaderboard_version = leaderboard_manager.get_current_version();
+
+    world
+        .emit_raw(
+            array![selector!("GameOver"), player.game_id.into(), player.player_id.into()],
+            array![
+                player.name.into(),
+                player.status.into(),
+                player.turn.into(),
+                (player.cash / SCALING_FACTOR).into(),
+            ]
+        );
+}

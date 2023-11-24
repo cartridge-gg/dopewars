@@ -141,7 +141,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
 
         if game_mode == GameMode::Test {
             player_settings.wanted = 100;
-            player_settings.health = 9;
+            player_settings.health = 10;
         }
 
         player_settings

@@ -147,7 +147,11 @@ export default function Travel() {
     if (targetId && playerEntity) {
       try {
         const locationId = getLocationById(targetId)!.type;
-        const { event, events, hash } = await travel(gameId, locationId);
+        const { event, events, hash, isGameOver } = await travel(gameId, locationId);
+
+        if (isGameOver) {
+          return router.replace(`/${gameId}/end`);
+        }
 
         if (event) {
           if (event.eventType === WorldEvents.AdverseEvent) {

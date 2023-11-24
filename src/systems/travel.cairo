@@ -31,6 +31,8 @@ mod travel {
     use rollyourown::utils::random::{Random, RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
+    use rollyourown::systems::ryo;
+
     use super::ITravel;
     use super::on_turn_end;
 
@@ -122,17 +124,16 @@ mod travel {
                             game.game_mode, @player, encounter.level
                         );
 
-                        // player lose max(encounter_settings.dmg / 3,1)  HP, but can't die
+                        // player lose max(encounter_settings.dmg / 3,1)  HP
                         let mut encounter_dmg = if encounter_settings.dmg < 3 {
                             1
                         } else {
                             encounter_settings.dmg / 3
                         };
-                        let new_health = player.health.sub_capped(encounter_dmg, 1);
+                        let new_health = player.health.sub_capped(encounter_dmg, 0);
                         let health_loss = player.health - new_health;
                         player.health = new_health;
 
-                        set!(world, (player));
                         emit!(
                             world,
                             AdverseEvent {
@@ -143,6 +144,12 @@ mod travel {
                                 demand_pct: encounter.demand_pct
                             }
                         );
+
+                        if player.health == 0 {
+                            ryo::game_over(world, ref player);
+                        }
+
+                        set!(world, (player));
 
                         return true;
                     },
@@ -162,11 +169,9 @@ mod travel {
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);
             assert(player.game_over == false, 'already game_over');
             
-            player.game_over = true;
-            set!(world, (player));
+            ryo::game_over(self.world(), ref player);
 
-            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
-            leaderboard_manager.on_game_end(player.cash);
+            set!(world, (player));
         }
 
     }

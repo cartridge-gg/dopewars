@@ -38,6 +38,9 @@ struct Player {
 impl PlayerImpl of PlayerTrait {
     #[inline(always)]
     fn can_continue(self: Player) -> bool {
+        if self.game_over {
+            return false;
+        }
         if self.health == 0 {
             return false;
         }
@@ -136,3 +139,14 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     }
 }
 
+
+impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
+    fn into(self: PlayerStatus) -> felt252 {
+        match self {
+            PlayerStatus::Normal => 'Normal',
+            PlayerStatus::BeingMugged => 'BeingMugged',
+            PlayerStatus::BeingArrested => 'BeingArrested',
+            PlayerStatus::AtPawnshop => 'AtPawnshop',
+        }
+    }
+}

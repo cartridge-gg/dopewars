@@ -48,7 +48,7 @@ const renderer = ({
     return <Text>RESETS NEXT GAME</Text>;
   } else {
     return (
-      <HStack>
+      <HStack textStyle="subheading" fontSize="12px">
         <Text color="neon.500">RESETS IN:</Text> {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H{" "}
         <Text>
           {minutes.toString().padStart(2, "0")}m {seconds.toString().padStart(2, "0")}s
@@ -63,7 +63,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const gameId = router.query.gameId as string;
   const { account } = useDojoContext();
   const { ryoMetas } = useRyoMetas();
-  const {  leaderboardMetas } = useLeaderboardMetas(ryoMetas?.leaderboard_version);
+  const { leaderboardMetas } = useLeaderboardMetas(ryoMetas?.leaderboard_version);
   const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(ryoMetas?.leaderboard_version, 10);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
@@ -89,10 +89,10 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
 
   return (
     <VStack w="full" h="100%">
-      <HStack>
-        <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
-        <Text fontSize="12px">(v{leaderboardMetas?.version})</Text>
-      </HStack>
+      <Text textStyle="subheading" fontSize="12px">
+        HALL OF FAME <small>(v{leaderboardMetas?.version})</small>
+      </Text>
+      <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
 
       <VStack
         boxSize="full"

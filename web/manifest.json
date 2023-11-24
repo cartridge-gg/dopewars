@@ -909,7 +909,7 @@
     {
       "name": "decide",
       "address": "0x59fed3332e583eb4ff6c0ff52a45c08b823025f2bc2d1b148e14a3e089ce271",
-      "class_hash": "0x4f0237ac51e1fbf4e312ad9034fc7f2efe9d100233894cf336b8e62f8f86025",
+      "class_hash": "0xa3dffb167731889584bc4b47b626ef2fd860891ca10037a29425060f1041df",
       "abi": [
         {
           "type": "impl",
@@ -1169,7 +1169,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::systems::decide::decide::GameOver",
+          "name": "rollyourown::systems::ryo::GameOver",
           "kind": "struct",
           "members": [
             {
@@ -1226,7 +1226,7 @@
             },
             {
               "name": "GameOver",
-              "type": "rollyourown::systems::decide::decide::GameOver",
+              "type": "rollyourown::systems::ryo::GameOver",
               "kind": "nested"
             }
           ]
@@ -1389,7 +1389,7 @@
     {
       "name": "lobby",
       "address": "0x4c03b718b8cda385d9ba4cf9eedec6588fffe053fbc9a5de3840226c981f00d",
-      "class_hash": "0x4225ba28a49bf788d2eba0757c1a12dacefd2b0ea1c3e4ac26e8e9e634f205b",
+      "class_hash": "0x62c7117972c98834e4456a8d0df9aad20944b80bdcf27c72981c179079257d1",
       "abi": [
         {
           "type": "impl",
@@ -2099,7 +2099,7 @@
     {
       "name": "trade",
       "address": "0x5decbe746e8199f7162d9cfbf3cb84fff20712e4fec76c729a4e0a8725fbc4",
-      "class_hash": "0x26e9a1222efc369cf91f0026c81f39fb2b2ad80f72a3eaf8728d0f9efd4a7bb",
+      "class_hash": "0x49ca3563e448da5e40dcfb3853f606d03e788cb9f76a3ed251e487e7604dbfa",
       "abi": [
         {
           "type": "impl",
@@ -2417,7 +2417,7 @@
     {
       "name": "travel",
       "address": "0x2ec3dd5ae820ac90b7a95af30b9d62c2b13d3f26c948750d9d3f38a1a7a9fbd",
-      "class_hash": "0x6518aa200bbb25603ef9e047fb131f2fde40411e379c10f34ab501f5e8bca41",
+      "class_hash": "0x4502811bcc9b6ba03b4260f6f4ac460b3b52d53237557d2cf1cb43c53e78555",
       "abi": [
         {
           "type": "impl",

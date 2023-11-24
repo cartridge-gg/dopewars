@@ -56,7 +56,7 @@ export default function Logs() {
 
   const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 
-  const [ playerName, setPlayerName] = useState("");
+  const [playerName, setPlayerName] = useState("");
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
@@ -75,8 +75,8 @@ export default function Logs() {
 
     for (let log of playerLogs?.parsedLogs) {
       //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
-      if (log.parsed.eventType === WorldEvents.PlayerJoined){
-        setPlayerName((log.parsed as JoinedEventData).playerName)
+      if (log.parsed.eventType === WorldEvents.PlayerJoined) {
+        setPlayerName((log.parsed as JoinedEventData).playerName);
       }
       if (log.parsed.eventType === WorldEvents.Traveled) {
         // create new day
@@ -136,7 +136,7 @@ export default function Logs() {
         <Footer>
           <Button
             w={["full", "auto"]}
-            px={["auto","20px"]}
+            px={["auto", "20px"]}
             onClick={() => {
               if (playerId && playerId !== "") {
                 router.push("/");

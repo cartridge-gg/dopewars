@@ -54,6 +54,7 @@ export interface SystemsInterface {
 
 export interface SystemExecuteResult {
   hash: string;
+  isGameOver?: BaseEventData;
   event?: BaseEventData;
   events?: BaseEventData[];
   [key: string]: any;
@@ -184,6 +185,9 @@ export const useSystems = (): SystemsInterface => {
         [gameId, locationId],
       );
 
+      const isGameOver = parsedEvents
+        .find((e) => e.eventType === WorldEvents.GameOver)
+
       const adverseEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.AdverseEvent,
       ) as AdverseEventData
@@ -192,9 +196,9 @@ export const useSystems = (): SystemsInterface => {
         (e) => e.eventType === WorldEvents.AtPawnshop,
       ) as AtPawnshopEventData
 
-
       return {
         hash,
+        isGameOver,
         event: adverseEvent || atPawnshopEvent,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.MarketEvent)
@@ -214,8 +218,6 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
-        event: [],
-        events: [],
       };
     },
     [executeAndReceipt],
@@ -272,12 +274,16 @@ export const useSystems = (): SystemsInterface => {
         [gameId, action],
       );
 
+      const isGameOver = parsedEvents
+        .find((e) => e.eventType === WorldEvents.GameOver)
+
       const consequenceEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.Consequence,
       ) as ConsequenceEventData
 
       return {
         hash,
+        isGameOver,
         event: parsedEvents.find(
           (e) => e.eventType === WorldEvents.Consequence,
         ) as ConsequenceEventData,

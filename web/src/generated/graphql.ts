@@ -1058,7 +1058,7 @@ export type GlobalScoresQueryVariables = Exact<{
 }>;
 
 
-export type GlobalScoresQuery = { __typename?: 'World__Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, avatar_id?: any | null, cash?: any | null, health?: any | null, turn?: any | null } | null } | null> | null } | null };
+export type GlobalScoresQuery = { __typename?: 'World__Query', playerModels?: { __typename?: 'PlayerConnection', total_count: number, edges?: Array<{ __typename?: 'PlayerEdge', cursor?: any | null, node?: { __typename?: 'Player', game_id?: any | null, player_id?: any | null, name?: any | null, avatar_id?: any | null, cash?: any | null, health?: any | null, turn?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
 export type MarketPricesQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
@@ -1142,7 +1142,7 @@ export const PlayerPropsFragmentDoc = `
 export const GlobalScoresDocument = `
     query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
   playerModels(
-    where: {game_over: true, leaderboard_version: $version}
+    where: {game_over: 1, leaderboard_version: $version}
     order: {direction: DESC, field: CASH}
     first: $limit
     after: $cursor
@@ -1157,6 +1157,7 @@ export const GlobalScoresDocument = `
         cash
         health
         turn
+        game_over
       }
       cursor
     }

@@ -30,7 +30,7 @@ export default function Home() {
 
   const {
     account,
-    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
   const { toast } = useToast();
@@ -53,7 +53,20 @@ export default function Home() {
     }
 
     setIsSubmitting(true);
-    if (!account) {
+    if (account) {
+      // check if burner still valid
+      try {
+        const nonce = await account?.getNonce();
+      } catch (e: any) {
+        console.log(e);
+
+        await clearBurner();
+        console.log("Burner cleared!");
+
+        await createBurner();
+        console.log("Burner created!");
+      }
+    } else {
       // create burner account
       await createBurner();
     }
@@ -91,13 +104,12 @@ export default function Home() {
 
         {!isGated && (
           <>
-            <Text>HALL OF FAME</Text>
             <VStack
               boxSize="full"
               gap="20px"
-              sx={{
-                overflowY: "scroll",
-              }}
+              // sx={{
+              //   overflowY: "scroll",
+              // }}
               __css={{
                 "scrollbar-width": "none",
               }}
