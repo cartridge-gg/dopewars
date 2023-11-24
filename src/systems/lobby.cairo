@@ -103,7 +103,8 @@ mod lobby {
                 defense: player_settings.defense,
                 transport: player_settings.transport,
                 speed: player_settings.speed,
-                leaderboard_version
+                leaderboard_version,
+                game_over: false,
             };
 
             let game = Game {
@@ -113,7 +114,6 @@ mod lobby {
                 max_players: game_settings.max_players,
                 num_players: 1, // caller auto joins
                 max_turns: game_settings.max_turns,
-                is_finished: false,
                 creator: caller,
             };
 
@@ -153,7 +153,8 @@ mod lobby {
     }
 
     fn assert_valid_chain(game_mode: GameMode) {
-        assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
+       // assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
+
     //if game_mode == GameMode::Test {
     // let chain_id = get_tx_info().unbox().chain_id;
     // assert(chain_id != 'KATANA', 'wrong chain_id');

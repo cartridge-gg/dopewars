@@ -72,6 +72,7 @@ mod devtools {
                     transport: 42,
                     speed: 42,
                     leaderboard_version,
+                    game_over: true,
                 };
 
                 set!(self.world(), (player));

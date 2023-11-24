@@ -117,7 +117,12 @@ trait EncounterSettingsTrait<T> {
 
 impl GameSettingsImpl of SettingsTrait<GameSettings> {
     fn get(game_mode: GameMode) -> GameSettings {
-        let game_settings = GameSettings { max_players: 1, max_turns: 0 };
+        let mut game_settings = GameSettings { max_players: 1, max_turns: 42 };
+
+        if game_mode == GameMode::Test {
+            game_settings.max_turns = 5;
+        }
+
         game_settings
     }
 }

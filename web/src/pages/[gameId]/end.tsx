@@ -52,8 +52,10 @@ export default function End() {
   const { playerEntity } = playerEntityStore;
 
   useEffect(() => {
-    playSound(Sounds.Death, 0.3);
-  }, []);
+    if (isDead) {
+      playSound(Sounds.Death, 0.3);
+    }
+  }, [isDead]);
 
   useEffect(() => {
     if (playerEntity) {

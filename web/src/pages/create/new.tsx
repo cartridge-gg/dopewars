@@ -78,9 +78,9 @@ export default function New() {
           >
             Play
           </Button>
-          {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
-            Create New Test Game
-          </Button> */}
+          <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
+           Ninja Test 
+          </Button>
         </Footer>
       }
     >

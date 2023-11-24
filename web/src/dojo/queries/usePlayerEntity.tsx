@@ -39,6 +39,7 @@ export class PlayerEntity {
   speed: number;
 
   wanted: number;
+  gameOver: boolean;
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[]) {
     this.name = shortString.decodeShortString(player.name);
@@ -61,10 +62,13 @@ export class PlayerEntity {
     this.speed = player.speed;
 
     this.wanted = player.wanted;
+    this.gameOver = player.game_over;
+
 
     this.drugs = drugs;
     this.items = items;
     this.encounters = encounters;
+
   }
 
   update(player: Player) {
@@ -75,6 +79,7 @@ export class PlayerEntity {
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
     this.wanted = player.wanted;
+    this.gameOver = player.game_over;
     return this;
   }
 

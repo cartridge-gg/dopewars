@@ -47,13 +47,12 @@ export function defineContractComponents(world: World) {
           max_players: RecsType.Number,
           num_players: RecsType.Number,
           max_turns: RecsType.Number,
-          is_finished: RecsType.Boolean,
           creator: RecsType.String,
         },
         {
           metadata: {
             name: name,
-            types: ["GameMode", "u64", "usize", "usize", "usize", "bool", "ContractAddress"],
+            types: ["GameMode", "u64", "usize", "usize", "usize", "ContractAddress"],
           },
         },
       );
@@ -129,6 +128,7 @@ export function defineContractComponents(world: World) {
           speed: RecsType.Number,
           wanted: RecsType.Number,
           leaderboard_version: RecsType.Number,
+          game_over: RecsType.Boolean,
         },
         {
           metadata: {
@@ -151,6 +151,7 @@ export function defineContractComponents(world: World) {
               "usize",
               "u8",
               "u32",
+              "bool",
             ],
           },
         },

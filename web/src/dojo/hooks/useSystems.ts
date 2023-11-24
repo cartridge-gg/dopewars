@@ -17,6 +17,7 @@ export interface SystemsInterface {
     avatarId: number
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
+  endGame: (gameId: string) => Promise<SystemExecuteResult>;
   // join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
@@ -203,6 +204,25 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  const endGame = useCallback(
+    async (gameId: string) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "travel",
+        "end_game",
+        [gameId],
+      );
+
+      return {
+        hash,
+        event: [],
+        events: [],
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
+
   const buy = useCallback(
     async (
       gameId: string,
@@ -359,6 +379,7 @@ export const useSystems = (): SystemsInterface => {
     createGame,
     // join,
     travel,
+    endGame,
     buy,
     sell,
     //setName,

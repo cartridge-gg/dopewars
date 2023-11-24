@@ -6,6 +6,7 @@ use rollyourown::models::location::LocationEnum;
 #[starknet::interface]
 trait ITravel<TContractState> {
     fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
+    fn end_game(self: @TContractState, game_id: u32);
 }
 
 #[dojo::contract]
@@ -28,6 +29,7 @@ mod travel {
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
     use rollyourown::utils::math::{MathTrait, MathImplU8};
     use rollyourown::utils::random::{Random, RandomImpl};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     use super::ITravel;
     use super::on_turn_end;
@@ -152,6 +154,21 @@ mod travel {
 
             false
         }
+
+        fn end_game(self: @ContractState, game_id: u32) {
+            let world = self.world();
+            let player_id = get_caller_address();
+
+            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+            assert(player.game_over == false, 'already game_over');
+            
+            player.game_over = true;
+            set!(world, (player));
+
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            leaderboard_manager.on_game_end(player.cash);
+        }
+
     }
 }
 

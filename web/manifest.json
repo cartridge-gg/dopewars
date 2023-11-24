@@ -909,7 +909,7 @@
     {
       "name": "decide",
       "address": "0x59fed3332e583eb4ff6c0ff52a45c08b823025f2bc2d1b148e14a3e089ce271",
-      "class_hash": "0xbc1cd02cccc564f4a34c8ee1d3dd20829b6b9e6a9db44fdb0b691ecc71976f",
+      "class_hash": "0x4f0237ac51e1fbf4e312ad9034fc7f2efe9d100233894cf336b8e62f8f86025",
       "abi": [
         {
           "type": "impl",
@@ -1247,7 +1247,7 @@
     {
       "name": "devtools",
       "address": "0x3e76834b68cd7aa2ec3da8ad4022bace3d9a0ff9f5568e5c4e5f8435474f2b5",
-      "class_hash": "0x4a5d1613cc8cfb562d3fc0d0552f464f8313bbe1aff617a4147573962bbc9da",
+      "class_hash": "0x31ea04e15d7b101247898b533edbcd9c224e42118ed01b920874e0b0dfb7d8e",
       "abi": [
         {
           "type": "impl",
@@ -1389,7 +1389,7 @@
     {
       "name": "lobby",
       "address": "0x4c03b718b8cda385d9ba4cf9eedec6588fffe053fbc9a5de3840226c981f00d",
-      "class_hash": "0x284167a7b42a1a01b580f04b8e067cc69d3643fdbd38f05844933f9ba9b3f86",
+      "class_hash": "0x4225ba28a49bf788d2eba0757c1a12dacefd2b0ea1c3e4ac26e8e9e634f205b",
       "abi": [
         {
           "type": "impl",
@@ -1762,7 +1762,7 @@
     {
       "name": "shop",
       "address": "0x49666a158f5d130c9efebd24aaa99b0c52796439fab687cef3d089a35d97e31",
-      "class_hash": "0xd93571e6279c44d980a7bb751e89519ae54903122e8eded0e4def7f728010e",
+      "class_hash": "0xeff9452fe41f5dddf8b9e81b999fad03bac852352797ec94aaf34c09b8549d",
       "abi": [
         {
           "type": "impl",
@@ -2099,7 +2099,7 @@
     {
       "name": "trade",
       "address": "0x5decbe746e8199f7162d9cfbf3cb84fff20712e4fec76c729a4e0a8725fbc4",
-      "class_hash": "0x55c5b19899758fd0385948cf61728c77bb7511fdf1f88346219dbf68e1309a7",
+      "class_hash": "0x26e9a1222efc369cf91f0026c81f39fb2b2ad80f72a3eaf8728d0f9efd4a7bb",
       "abi": [
         {
           "type": "impl",
@@ -2417,7 +2417,7 @@
     {
       "name": "travel",
       "address": "0x2ec3dd5ae820ac90b7a95af30b9d62c2b13d3f26c948750d9d3f38a1a7a9fbd",
-      "class_hash": "0x350787165207d8dc9acb4e96726bca3b30f830fa4812dcc21427e13802033b3",
+      "class_hash": "0x6518aa200bbb25603ef9e047fb131f2fde40411e379c10f34ab501f5e8bca41",
       "abi": [
         {
           "type": "impl",
@@ -2526,6 +2526,18 @@
                   "type": "core::bool"
                 }
               ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "end_game",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
               "state_mutability": "view"
             }
           ]
@@ -3215,17 +3227,12 @@
           "key": false
         },
         {
-          "name": "is_finished",
-          "type": "bool",
-          "key": false
-        },
-        {
           "name": "creator",
           "type": "ContractAddress",
           "key": false
         }
       ],
-      "class_hash": "0x23b1befabb6193697bfeef78eae927b62224e1924ee405f9b8e60052a7bfe3a",
+      "class_hash": "0x5a281cfdf88fa6fd701345c663480c71f9bbe7462902b54a7245e09f25ea2fa",
       "abi": [
         {
           "type": "function",
@@ -4056,9 +4063,14 @@
           "name": "leaderboard_version",
           "type": "u32",
           "key": false
+        },
+        {
+          "name": "game_over",
+          "type": "bool",
+          "key": false
         }
       ],
-      "class_hash": "0x7f44c9585e56584edbb490fbc7a7cc6636f078d66086b1f776358eb518baa98",
+      "class_hash": "0x2ebd2ef65f9a3a8f9da19a1353a1904d846a5213ee63d7340402f955efaa84d",
       "abi": [
         {
           "type": "function",

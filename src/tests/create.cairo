@@ -69,7 +69,6 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     assert(game.start_time == START_TIME, 'start time mismatch');
     assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
-    assert(game.is_finished == false, 'game is finished mismatch');
 
     (world.contract_address, game_id, player_id)
 }

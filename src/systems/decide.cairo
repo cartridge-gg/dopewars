@@ -219,6 +219,7 @@ mod decide {
 
             if health_loss >= player.health {
                 player.health = 0;
+                player.game_over = true;
                 outcome = Outcome::Died;
 
                 let leaderboard_manager = LeaderboardManagerTrait::new(self.world());

@@ -30,7 +30,8 @@ struct Player {
     transport: usize,
     speed: usize,
     wanted: u8,
-    leaderboard_version: u32
+    leaderboard_version: u32,
+    game_over: bool,
 }
 
 #[generate_trait]
