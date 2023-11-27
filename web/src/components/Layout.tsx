@@ -81,7 +81,7 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
       {map ? (
         <Flex w="100%">{map}</Flex>
       ) : (
-        <Image src={imageSrc} maxH="60vh" h="500px" pt="60px" display={["none", "block"]} alt="context" />
+        <Image src={imageSrc} maxH="60vh" h="500px" objectFit="contain" pt="60px" display={["none", "block"]} alt="context" />
       )}
     </VStack>
   );

@@ -1389,7 +1389,7 @@
     {
       "name": "lobby",
       "address": "0x4c03b718b8cda385d9ba4cf9eedec6588fffe053fbc9a5de3840226c981f00d",
-      "class_hash": "0x62c7117972c98834e4456a8d0df9aad20944b80bdcf27c72981c179079257d1",
+      "class_hash": "0x21f78c7464c4be327092a3c9f12406015e9eb15c425606c3f5835cfec950e55",
       "abi": [
         {
           "type": "impl",

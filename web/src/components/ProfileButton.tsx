@@ -40,6 +40,7 @@ import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
 import { useToast } from "@/hooks/toast";
+import { usePlayerEntityStore } from "@/hooks/player";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -72,6 +73,13 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const isMobile = IsMobile();
 
   useEffect(() => {
+    if (playerId) {
+      // spectator
+      playerEntityStore.initPlayerEntity(gameId, playerId);
+    }
+  }, [gameId, playerId, playerEntityStore]);
+
+  useEffect(() => {
     if (!playerEntity) return;
     setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
     setDefenseItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Defense));
@@ -79,7 +87,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
     setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
   }, [playerEntity]);
 
-  if (!account || !playerEntity) return null;
+  
+  if (/*!account &&*/ !playerEntity) return null;
 
   return (
     <VStack w="full" {...props}>
@@ -210,21 +219,25 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
               </Button>
             )}
             {!playerId && (
-              <Button
-                variant="pixelated"
-                w="full"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs?playerId=${account.address}`);
+              <>
+                <Button
+                  variant="pixelated"
+                  w="full"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/${gameId}/logs?playerId=${account.address}`,
+                    );
 
-                  toast({
-                    message: "Copied to clipboard",
-                  });
-                }}
-              >
-                Game Link
-              </Button>
+                    toast({
+                      message: "Copied to clipboard",
+                    });
+                  }}
+                >
+                  Game Link
+                </Button>
+                <ShareButton variant="pixelated" />
+              </>
             )}
-            <ShareButton variant="pixelated" />
           </HStack>
         </Box>
       </VStack>

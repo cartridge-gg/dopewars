@@ -126,12 +126,13 @@ export default function Logs() {
 
   return (
     <Layout
-      leftPanelProps={{
-        prefixTitle: "",
-        title: `${playerName} Log `,
-        imageSrc: "/images/will-smith-with-attitude.png",
-      }}
-      CustomLeftPanel={!playerId ? CustomLeftPanel : undefined}
+      // leftPanelProps={{
+      //   prefixTitle: "",
+      //   title: `${playerName} Log `,
+      //   imageSrc: "/images/will-smith-with-attitude.png",
+      // }}
+      // CustomLeftPanel={!playerId ? CustomLeftPanel : undefined}
+      CustomLeftPanel={CustomLeftPanel}
       footer={
         <Footer>
           <Button

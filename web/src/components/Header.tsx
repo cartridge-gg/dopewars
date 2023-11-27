@@ -55,7 +55,7 @@ const Header = ({ back }: HeaderProps) => {
   return (
     <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]} fontSize={["14px", "16px"]}>
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && playerEntity.health > 0 && !playerEntity.gameOver && (
+      {playerEntity && /*playerEntity.health > 0 &&*/ (!playerEntity.gameOver || router.asPath.includes("logs")  ) && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"

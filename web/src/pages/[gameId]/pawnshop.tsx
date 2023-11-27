@@ -24,7 +24,6 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { usePlayerEntityStore } from "@/hooks/player";
 
 import { Truck } from "@/components/icons/Truck";
 import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } from "@/dojo/helpers";
