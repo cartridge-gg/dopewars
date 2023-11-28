@@ -1,6 +1,6 @@
 query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
   playerModels(
-    where: { game_over: 1, leaderboard_version: $version }
+    where: { game_over: true, leaderboard_version: $version }
     order: { direction: DESC, field: CASH }
     first: $limit
     after: $cursor

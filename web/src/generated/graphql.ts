@@ -568,12 +568,6 @@ export type PlayerWhereInput = {
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
   game_over?: InputMaybe<Scalars['bool']>;
-  game_overEQ?: InputMaybe<Scalars['bool']>;
-  game_overGT?: InputMaybe<Scalars['bool']>;
-  game_overGTE?: InputMaybe<Scalars['bool']>;
-  game_overLT?: InputMaybe<Scalars['bool']>;
-  game_overLTE?: InputMaybe<Scalars['bool']>;
-  game_overNEQ?: InputMaybe<Scalars['bool']>;
   health?: InputMaybe<Scalars['u8']>;
   healthEQ?: InputMaybe<Scalars['u8']>;
   healthGT?: InputMaybe<Scalars['u8']>;
@@ -690,12 +684,6 @@ export type RyoMetaWhereInput = {
   idLTE?: InputMaybe<Scalars['u32']>;
   idNEQ?: InputMaybe<Scalars['u32']>;
   initialized?: InputMaybe<Scalars['bool']>;
-  initializedEQ?: InputMaybe<Scalars['bool']>;
-  initializedGT?: InputMaybe<Scalars['bool']>;
-  initializedGTE?: InputMaybe<Scalars['bool']>;
-  initializedLT?: InputMaybe<Scalars['bool']>;
-  initializedLTE?: InputMaybe<Scalars['bool']>;
-  initializedNEQ?: InputMaybe<Scalars['bool']>;
   leaderboard_version?: InputMaybe<Scalars['u32']>;
   leaderboard_versionEQ?: InputMaybe<Scalars['u32']>;
   leaderboard_versionGT?: InputMaybe<Scalars['u32']>;
@@ -1142,7 +1130,7 @@ export const PlayerPropsFragmentDoc = `
 export const GlobalScoresDocument = `
     query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
   playerModels(
-    where: {game_over: 1, leaderboard_version: $version}
+    where: {game_over: true, leaderboard_version: $version}
     order: {direction: DESC, field: CASH}
     first: $limit
     after: $cursor
