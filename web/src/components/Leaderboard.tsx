@@ -93,7 +93,6 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
         HALL OF FAME <small>(v{leaderboardMetas?.version})</small>
       </Text>
       <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
-
       <VStack
         boxSize="full"
         gap="20px"

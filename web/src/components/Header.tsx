@@ -16,6 +16,7 @@ import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
+import DayIndicator from "./player/DayIndicator";
 
 export interface HeaderProps {
   back?: boolean;
@@ -79,7 +80,7 @@ const Header = ({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={playerEntity.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <WantedIndicator wanted={playerEntity.wanted} />
+                <DayIndicator day={playerEntity.turn} />
               </HStack>
             </Flex>
           </HStack>
