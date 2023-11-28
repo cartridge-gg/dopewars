@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use dojo::world::IWorldDispatcher;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 
 use rollyourown::utils::random::{Random, RandomImpl};
@@ -50,7 +50,7 @@ impl LocationEnumIntoU8 of Into<LocationEnum, u8> {
 }
 
 
-impl LocationEnumIntrospectionImpl of SchemaIntrospection<LocationEnum> {
+impl LocationEnumIntrospectionImpl of Introspect<LocationEnum> {
     #[inline(always)]
     fn size() -> usize {
         1

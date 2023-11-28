@@ -34,12 +34,11 @@ impl GameImpl of GameTrait {
 }
 
 
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 
-
-impl GameModeIntrospectionImpl of SchemaIntrospection<GameMode> {
+impl GameModeIntrospectionImpl of Introspect<GameMode> {
     #[inline(always)]
     fn size() -> usize {
         1

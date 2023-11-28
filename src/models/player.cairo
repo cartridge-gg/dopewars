@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
@@ -110,7 +110,7 @@ enum PlayerStatus {
     AtPawnshop: (),
 }
 
-impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
+impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
     #[inline(always)]
     fn size() -> usize {
         1

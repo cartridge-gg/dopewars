@@ -1,7 +1,4 @@
 use starknet::ContractAddress;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
-};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 const RYO_META_KEY: u32 = 420;
