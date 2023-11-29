@@ -10,7 +10,7 @@ Roll Your Own is an onchain adaptation of the original Drug Wars game, built on 
 
 ## Development
 
-Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/dojo/releases) or follow the [installation guide](https://book.dojoengine.org/getting-started/installation.html)
+Install the latest Dojo toolchain from [releases](https://github.com/dojoengine/dojo/releases) or follow the [installation guide](https://book.dojoengine.org/getting-started/quick-start.html)
 
 ### With Katana
 
