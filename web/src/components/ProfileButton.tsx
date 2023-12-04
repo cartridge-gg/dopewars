@@ -25,10 +25,10 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress, genAvatarFromId } from "./avatar/avatars";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import { Calendar } from "./icons/archive";
+import { Calendar, Cigarette } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
-import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
+import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Dots, Gem, Twitter, User } from "./icons";
 import { IsMobile, formatCash } from "@/utils/ui";
 import Link from "next/link";
@@ -87,7 +87,6 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
     setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
   }, [playerEntity]);
 
-  
   if (/*!account &&*/ !playerEntity) return null;
 
   return (
@@ -115,7 +114,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                   borderColor="neon.600"
                 />
                 <HStack h="50px" px="10px">
-                  <Calendar /> <Text>DAY {playerEntity.turn}</Text>
+                  {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
+                  <Cigarette /> <Text>{getLocationById(playerEntity.hoodId)?.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">
@@ -218,7 +218,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                 Close
               </Button>
             )}
-            {!playerId && (
+            {!playerId && account && (
               <>
                 <Button
                   variant="pixelated"

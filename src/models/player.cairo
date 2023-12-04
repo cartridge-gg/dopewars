@@ -17,6 +17,7 @@ struct Player {
     name: felt252,
     avatar_id: u8,
     status: PlayerStatus,
+    hood_id: LocationEnum,
     location_id: LocationEnum,
     next_location_id: LocationEnum,
     turn: usize,

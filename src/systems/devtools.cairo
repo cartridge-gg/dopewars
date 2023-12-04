@@ -58,6 +58,7 @@ mod devtools {
                     name: uuid_f,
                     avatar_id: rand_10,
                     status: PlayerStatus::Normal,
+                    hood_id: LocationEnum::Home,
                     location_id: LocationEnum::Home,
                     next_location_id: LocationEnum::Home,
                     cash: rand * SCALING_FACTOR,

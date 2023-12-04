@@ -155,6 +155,9 @@ mod travel {
                     },
                     Option::None => {}
                 }
+            } else {
+                // set hood
+                player.hood_id = player.next_location_id;
             }
 
             on_turn_end(world, ref randomizer, @game, ref player);

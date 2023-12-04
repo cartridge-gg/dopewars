@@ -1,4 +1,4 @@
-import { Icon, IconProps } from ".";
+import { Icon, IconProps } from "./archive";
 
 export const Cigarette = (props: IconProps) => {
   return (

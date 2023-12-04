@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "world",
-    "address": "0x57c04384a7b0033a821202cc465110bc07a219cf7c720fedbd2d7f3f14c1965",
-    "class_hash": "0xb3e374b8087dca92601afbb9881fed855ac0d568e3bf878a876fca5ffcb479",
+    "address": "0x3c877dbe4454125201bdc0c5c6dcafc5a9b3a2fc78417702a6cd5ebaf143cc3",
+    "class_hash": "0x99b08b2ff33750916e36b5e241b5d4a63e8d48862bf90a68fec2ff58a8de6",
     "abi": [
       {
         "type": "impl",
@@ -467,6 +467,29 @@
         ]
       },
       {
+        "type": "impl",
+        "name": "UpgradeableWorld",
+        "interface_name": "dojo::world::IUpgradeableWorld"
+      },
+      {
+        "type": "interface",
+        "name": "dojo::world::IUpgradeableWorld",
+        "items": [
+          {
+            "type": "function",
+            "name": "upgrade",
+            "inputs": [
+              {
+                "name": "new_class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          }
+        ]
+      },
+      {
         "type": "constructor",
         "name": "constructor",
         "inputs": [
@@ -532,6 +555,18 @@
           {
             "name": "address",
             "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world::WorldUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
             "kind": "data"
           }
         ]
@@ -698,6 +733,11 @@
           {
             "name": "ContractUpgraded",
             "type": "dojo::world::world::ContractUpgraded",
+            "kind": "nested"
+          },
+          {
+            "name": "WorldUpgraded",
+            "type": "dojo::world::world::WorldUpgraded",
             "kind": "nested"
           },
           {
@@ -908,8 +948,8 @@
   "contracts": [
     {
       "name": "decide",
-      "address": "0x59fed3332e583eb4ff6c0ff52a45c08b823025f2bc2d1b148e14a3e089ce271",
-      "class_hash": "0xa3dffb167731889584bc4b47b626ef2fd860891ca10037a29425060f1041df",
+      "address": "0x260e5299f82c57b6e88b41b83a0f09fc3b9b5fedf13f5f2859f6eee7150928e",
+      "class_hash": "0x1475cd4b23ebfb6f7f40415092f1afcbf8f98d64a2288dfdd54c0a248ffb4c2",
       "abi": [
         {
           "type": "impl",
@@ -1246,8 +1286,8 @@
     },
     {
       "name": "devtools",
-      "address": "0x3e76834b68cd7aa2ec3da8ad4022bace3d9a0ff9f5568e5c4e5f8435474f2b5",
-      "class_hash": "0x31ea04e15d7b101247898b533edbcd9c224e42118ed01b920874e0b0dfb7d8e",
+      "address": "0x51f0d70df903904f41c08cef0610e383dea4cc9a070d6042b871b1e6f97b91a",
+      "class_hash": "0x2ed87e1d4117ef9fc6cb9cce066671bdf8ea4dbf232343a546d3a90e3e67a5",
       "abi": [
         {
           "type": "impl",
@@ -1388,8 +1428,8 @@
     },
     {
       "name": "lobby",
-      "address": "0x4c03b718b8cda385d9ba4cf9eedec6588fffe053fbc9a5de3840226c981f00d",
-      "class_hash": "0x21f78c7464c4be327092a3c9f12406015e9eb15c425606c3f5835cfec950e55",
+      "address": "0x226160a3c18a596a3ec1905f13d8ad25955ae27311fd0ef10b182b21812a0cb",
+      "class_hash": "0x5f2c6028f75f9d84f62236627d513404ff9d2a142f8073cb27dae11d405b6c1",
       "abi": [
         {
           "type": "impl",
@@ -1629,7 +1669,7 @@
     },
     {
       "name": "ryo",
-      "address": "0x6764ebebd018ba8e70dec1eb835b8c731e11d6a6c1275da35cb6ed3ed364d3",
+      "address": "0x442d71805e2f98dd2fd7c91d4578e019513f2848ec71236ae3aea9749ebed9",
       "class_hash": "0x37981604fe7eeb4da5c262aba38557007db4345a8f564bed50616f6d8549861",
       "abi": [
         {
@@ -1761,8 +1801,8 @@
     },
     {
       "name": "shop",
-      "address": "0x49666a158f5d130c9efebd24aaa99b0c52796439fab687cef3d089a35d97e31",
-      "class_hash": "0xeff9452fe41f5dddf8b9e81b999fad03bac852352797ec94aaf34c09b8549d",
+      "address": "0x4273123f2ce39a3ea67518cc2d28969bd014284637e8a5f876ca463aea45089",
+      "class_hash": "0x57b53774c26b7712b15144da44741c267906f582d22e1fdcdaa4297f8742273",
       "abi": [
         {
           "type": "impl",
@@ -2098,8 +2138,8 @@
     },
     {
       "name": "trade",
-      "address": "0x5decbe746e8199f7162d9cfbf3cb84fff20712e4fec76c729a4e0a8725fbc4",
-      "class_hash": "0x49ca3563e448da5e40dcfb3853f606d03e788cb9f76a3ed251e487e7604dbfa",
+      "address": "0x33e7623715493a8b1bf3a0eb0938e28dcbca0ac1459594d6d662181ae5ed701",
+      "class_hash": "0x7b8613948a96b0b42aa882d8480daf990646021e3621a90efaba978e1d5c66e",
       "abi": [
         {
           "type": "impl",
@@ -2416,8 +2456,8 @@
     },
     {
       "name": "travel",
-      "address": "0x2ec3dd5ae820ac90b7a95af30b9d62c2b13d3f26c948750d9d3f38a1a7a9fbd",
-      "class_hash": "0x4502811bcc9b6ba03b4260f6f4ac460b3b52d53237557d2cf1cb43c53e78555",
+      "address": "0x21f6ceaba4583a3ff5d3a21ed34c6b269282d59a79cedb782c9c1d72b5537dc",
+      "class_hash": "0x611e1ea2f9c502aca23f4479d426b74b363d410494a65383db2755a783647a7",
       "abi": [
         {
           "type": "impl",
@@ -3995,6 +4035,11 @@
           "key": false
         },
         {
+          "name": "hood_id",
+          "type": "LocationEnum",
+          "key": false
+        },
+        {
           "name": "location_id",
           "type": "LocationEnum",
           "key": false
@@ -4070,7 +4115,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x2000594ab766442e0b9b7b027e9378139f32abdff886e0ac884d51d9bd39165",
+      "class_hash": "0x12487d8a601098399df7afcd69a58a55fd1781603d8a663076ec5eb7fbeacc3",
       "abi": [
         {
           "type": "function",

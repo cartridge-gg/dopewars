@@ -3,7 +3,7 @@ import { StyleProps, HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Calendar } from "../icons/archive";
 
-const DayIndicator = ({ day, ...props }: { wanted: number } & StyleProps) => {
+const DayIndicator = ({ day, ...props }: { day: number } & StyleProps) => {
   return (
       <HStack
       

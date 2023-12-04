@@ -80,7 +80,8 @@ const Header = ({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={playerEntity.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <DayIndicator day={playerEntity.turn} />
+                {/* <DayIndicator day={playerEntity.turn} /> */}
+                <WantedIndicator wanted={playerEntity.wanted} />
               </HStack>
             </Flex>
           </HStack>

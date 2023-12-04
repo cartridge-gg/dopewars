@@ -3,6 +3,7 @@ fragment PlayerProps on Player {
   avatar_id
   cash
   status
+  hood_id
   location_id
   drug_count
   health
@@ -54,7 +55,6 @@ subscription PlayerEntitySubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
-    model_names
     models {
       __typename
       ... on Player {
@@ -68,7 +68,6 @@ subscription PlayerEntityRelatedDataSubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
-    model_names
     models {
       __typename
       ... on Drug {

@@ -8,9 +8,8 @@ sierra-replace-ids = true
 
 [dependencies]
 # cubit = {git = "https://github.com/influenceth/cubit.git"}
-dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.13"}
+dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.15"}
 # dojo = {git = "https://github.com/dojoengine/dojo.git", rev = "d7f46502cba3d6462b68a4dfb07336377bca2678"}
-# dojo = {git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.12"}
 
 [[target.dojo]]
 
