@@ -17,6 +17,7 @@ import { Clock } from "@/components/icons";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { validateAndParseAddress } from "starknet";
 
 export default function New() {
   const router = useRouter();
@@ -34,11 +35,22 @@ export default function New() {
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
   const [mainnetAddress, setMainnetAddress] = useState("");
+  const [mainnetAddressValue, setMainnetAddressValue] = useState(BigInt(0));
+
   
   const create = async (gameMode: GameMode) => {
     setError("");
     if (name === "" || name.length > 20 || name.length < 3) {
       setError("Invalid name, at least 3 chars, max 20!");
+      return;
+    }
+
+    try{
+      let value = validateAndParseAddress(mainnetAddress)
+      setMainnetAddressValue(value)
+      setError("")
+    } catch(e){
+      setError("Invalid address !")
       return;
     }
 
@@ -48,7 +60,7 @@ export default function New() {
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, avatarId, mainnetAddress);
+      const { hash, gameId } = await createGame(gameMode, name, avatarId, mainnetAddressValue);
 
       // toast({
       //   message: "Game Created!",
@@ -130,8 +142,7 @@ export default function New() {
             }}
           />
      
-
-          <VStack w="full" h="80px">
+          <VStack w="full" h="30px">
             <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
               Max 20 characters
             </Text>
@@ -146,7 +157,7 @@ export default function New() {
             mt="0px"
             maxW="440px"
             fontSize="11px"
-            placeholder="Your Starknet Mainnet Address..."
+            placeholder="Your may enter your Starknet Mainnet Address..."
             autoFocus={true}
             value={mainnetAddress}
             onChange={(e) => {

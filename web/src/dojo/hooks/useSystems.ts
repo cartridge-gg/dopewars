@@ -109,51 +109,59 @@ export const useSystems = (): SystemsInterface => {
       setError(undefined)
       setIsPending(true)
 
-      const tx = await execute(account!, contract, system, callData);
-      const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      });
+      try {
 
-      if (receipt.status === "REJECTED") {
-        setError("Transaction Rejected")
+        const tx = await execute(account!, contract, system, callData);
+        const receipt = await account!.waitForTransaction(tx.transaction_hash, {
+          retryInterval: 100,
+        });
+
+        if (receipt.status === "REJECTED") {
+          setError("Transaction Rejected")
+          setIsPending(false)
+          toast({
+            message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
+            duration: 20_000,
+            isError: true
+          })
+          throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
+        }
+
+        if (receipt.execution_status === "REVERTED") {
+          setError("Transaction Reverted")
+          setIsPending(false)
+
+          toast({
+            message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
+            duration: 20_000,
+            isError: true
+          })
+          throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
+        }
+
+        const events = getEvents(receipt);
+        const parsedEvents = parseAllEvents(receipt);
+
+        //torii too slow indexing...
+        await sleep(1_000);
+
         setIsPending(false)
-        toast({
-          message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
-          duration: 20_000,
-          isError: true
-        })
-        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
-      }
 
-      if (receipt.execution_status === "REVERTED") {
-        setError("Transaction Reverted")
+        // useless
+        // setComponentsFromEvents(contractComponents, events);
+
+        return {
+          hash: tx?.transaction_hash,
+          receipt,
+          events,
+          parsedEvents,
+        };
+      }
+      catch (e) {
+        console.log(e)
         setIsPending(false)
-
-        toast({
-          message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
-          duration: 20_000,
-          isError: true
-        })
-        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
+        setError(e)
       }
-
-      const events = getEvents(receipt);
-      const parsedEvents = parseAllEvents(receipt);
-
-      //torii too slow indexing...
-      await sleep(1_000);
-
-      setIsPending(false)
-
-      // useless
-      // setComponentsFromEvents(contractComponents, events);
-
-      return {
-        hash: tx?.transaction_hash,
-        receipt,
-        events,
-        parsedEvents,
-      };
     },
     [execute, account, toast],
   );
