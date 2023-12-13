@@ -158,7 +158,6 @@ export default function New() {
             maxW="440px"
             fontSize="11px"
             placeholder="Your may enter your Starknet Mainnet Address..."
-            autoFocus={true}
             value={mainnetAddress}
             onChange={(e) => {
               setMainnetAddress(e.target.value);

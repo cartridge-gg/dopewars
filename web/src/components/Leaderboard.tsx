@@ -26,7 +26,7 @@ import { Score, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { formatCash } from "@/utils/ui";
-import { Skull } from "./icons";
+import { Arrow, Skull } from "./icons";
 import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
 import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
 import Countdown from "react-countdown";
@@ -63,13 +63,37 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const gameId = router.query.gameId as string;
   const { account } = useDojoContext();
   const { ryoMetas } = useRyoMetas();
-  const { leaderboardMetas } = useLeaderboardMetas(ryoMetas?.leaderboard_version);
-  const { scores, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(ryoMetas?.leaderboard_version, 10);
+
+  const [currentVersion, setCurrentVersion] = useState(ryoMetas?.leaderboard_version);
+  const [selectedVersion, setSelectedVersion] = useState(ryoMetas?.leaderboard_version);
+
+  const { leaderboardMetas } = useLeaderboardMetas(selectedVersion);
+  const { scores, resetQuery, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(selectedVersion, 10);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
 
   const listRef = useRef(null);
+
+  const onPrev = async () => {
+    if (selectedVersion > 1) {
+      setSelectedVersion(selectedVersion - 1);
+      await resetQuery()
+    }
+  };
+
+  const onNext = async() => {
+    if (selectedVersion < currentVersion) {
+      setSelectedVersion(selectedVersion + 1);
+      await resetQuery()
+    }
+  };
+
+  useEffect( () => {
+    resetQuery()
+    setCurrentVersion(ryoMetas?.leaderboard_version);
+    setSelectedVersion(ryoMetas?.leaderboard_version);
+  }, [ryoMetas]);
 
   useEffect(() => {
     console.log(ryoMetas);
@@ -89,13 +113,22 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
 
   return (
     <VStack w="full" h="100%">
-      <Text textStyle="subheading" fontSize="12px">
-        HALL OF FAME <small>(v{leaderboardMetas?.version})</small>
-      </Text>
-      <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+      <VStack my="15px">
+        <HStack>
+          <Arrow direction="left" cursor="pointer" opacity={selectedVersion>1 ? "1" : "0.25"} onClick={onPrev}></Arrow>
+          <Text textStyle="subheading" fontSize="12px">
+            LEADERBOARD <small>(v{leaderboardMetas?.version})</small>
+          </Text>
+          <Arrow direction="right" cursor="pointer"  opacity={selectedVersion < currentVersion? "1" : "0.25"} onClick={onNext}></Arrow>
+        </HStack>
+       {selectedVersion === currentVersion && (
+        <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+        )} 
+      </VStack>
       <VStack
         boxSize="full"
         gap="20px"
+        maxH={["calc(100vh - 460px)", "calc(100vh - 480px)"]}
         sx={{
           overflowY: "scroll",
         }}
@@ -110,9 +143,9 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
               const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
-
+              
               return (
-                <ListItem color={color} key={index} cursor={isOwn && !score.name ? "pointer" : "auto"}>
+                <ListItem color={color} key={score.gameId} cursor={isOwn && !score.name ? "pointer" : "auto"}>
                   <HStack mr={3}>
                     <Text
                       w={["10px", "30px"]}

@@ -107,9 +107,6 @@ export default function Home() {
             <VStack
               boxSize="full"
               gap="20px"
-              // sx={{
-              //   overflowY: "scroll",
-              // }}
               __css={{
                 "scrollbar-width": "none",
               }}

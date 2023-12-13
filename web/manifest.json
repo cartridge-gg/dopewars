@@ -949,7 +949,7 @@
     {
       "name": "decide",
       "address": "0x260e5299f82c57b6e88b41b83a0f09fc3b9b5fedf13f5f2859f6eee7150928e",
-      "class_hash": "0xe7d1919f7c451301671772cd624b54dc6f5310f9d80020aa53deb4cdd8f3d0",
+      "class_hash": "0x1846de317c1c1bdac67ef7533535cb9160ec703d0d89604feb6f338f682d66b",
       "abi": [
         {
           "type": "impl",
@@ -1429,7 +1429,7 @@
     {
       "name": "lobby",
       "address": "0x226160a3c18a596a3ec1905f13d8ad25955ae27311fd0ef10b182b21812a0cb",
-      "class_hash": "0x5f25479a75315717da692bbbdba6541f426e3bfb6bfe45354b6e44523f62f5d",
+      "class_hash": "0xe173022bac77254f80112ebca082317773942dbfc31b111c8a56e627bbd0e0",
       "abi": [
         {
           "type": "impl",
@@ -1672,7 +1672,7 @@
     {
       "name": "ryo",
       "address": "0x442d71805e2f98dd2fd7c91d4578e019513f2848ec71236ae3aea9749ebed9",
-      "class_hash": "0x8b951fce321d1e580c30d645eb2ac15dabac899c647146da9c8d564a0c291c",
+      "class_hash": "0x34dcc333591566e813a74410ba353be0543c619d4fb1479f3dc534ac44fd135",
       "abi": [
         {
           "type": "impl",
@@ -2459,7 +2459,7 @@
     {
       "name": "travel",
       "address": "0x21f6ceaba4583a3ff5d3a21ed34c6b269282d59a79cedb782c9c1d72b5537dc",
-      "class_hash": "0x45c34a219e3d1ba58489c5014ff3cbe21944c17e80cc1d935867219cb092ba2",
+      "class_hash": "0x1973f9fa6095b19faa38fdfc28ffcac8f66d6f1a188c8db93dee2bd67dc0758",
       "abi": [
         {
           "type": "impl",

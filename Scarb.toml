@@ -43,7 +43,7 @@ private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 [tool.dojo.world]
 name = "Roll Your Own"
-description = "An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
+description = "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
 website = "https://rollyourown.preview.cartridge.gg/"
 icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"
