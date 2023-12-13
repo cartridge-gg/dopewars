@@ -55,6 +55,7 @@ mod devtools {
                 let player = Player {
                     game_id: uuid,
                     player_id: uuid_f.try_into().unwrap(),
+                    mainnet_address: 0.try_into().unwrap(),
                     name: uuid_f,
                     avatar_id: rand_10,
                     status: PlayerStatus::Normal,

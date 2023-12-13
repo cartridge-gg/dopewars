@@ -33,7 +33,8 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
-
+  const [mainnetAddress, setMainnetAddress] = useState("");
+  
   const create = async (gameMode: GameMode) => {
     setError("");
     if (name === "" || name.length > 20 || name.length < 3) {
@@ -47,7 +48,7 @@ export default function New() {
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, avatarId);
+      const { hash, gameId } = await createGame(gameMode, name, avatarId, mainnetAddress);
 
       // toast({
       //   message: "Game Created!",
@@ -84,7 +85,7 @@ export default function New() {
         </Footer>
       }
     >
-      <VStack w={["full", "400px"]} margin="auto">
+      <VStack w={["full", "440px"]} margin="auto">
         <VStack w="full">
           <HStack my="30px" align="center" justify="center">
             <Arrow
@@ -128,6 +129,8 @@ export default function New() {
               setName(e.target.value);
             }}
           />
+     
+
           <VStack w="full" h="80px">
             <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
               Max 20 characters
@@ -136,6 +139,21 @@ export default function New() {
               {error}
             </Text>
           </VStack>
+
+          <Input
+            display="flex"
+            mx="auto"
+            mt="0px"
+            maxW="440px"
+            fontSize="11px"
+            placeholder="Your Starknet Mainnet Address..."
+            autoFocus={true}
+            value={mainnetAddress}
+            onChange={(e) => {
+              setMainnetAddress(e.target.value);
+            }}
+          />
+
         </VStack>
       </VStack>
     </Layout>

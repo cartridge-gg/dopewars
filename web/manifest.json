@@ -949,7 +949,7 @@
     {
       "name": "decide",
       "address": "0x260e5299f82c57b6e88b41b83a0f09fc3b9b5fedf13f5f2859f6eee7150928e",
-      "class_hash": "0x1475cd4b23ebfb6f7f40415092f1afcbf8f98d64a2288dfdd54c0a248ffb4c2",
+      "class_hash": "0xe7d1919f7c451301671772cd624b54dc6f5310f9d80020aa53deb4cdd8f3d0",
       "abi": [
         {
           "type": "impl",
@@ -1287,7 +1287,7 @@
     {
       "name": "devtools",
       "address": "0x51f0d70df903904f41c08cef0610e383dea4cc9a070d6042b871b1e6f97b91a",
-      "class_hash": "0x2ed87e1d4117ef9fc6cb9cce066671bdf8ea4dbf232343a546d3a90e3e67a5",
+      "class_hash": "0x5e7dca0d2579463e25de101aa33d62e674eda3c16161e20b4ce471abf1afd69",
       "abi": [
         {
           "type": "impl",
@@ -1429,7 +1429,7 @@
     {
       "name": "lobby",
       "address": "0x226160a3c18a596a3ec1905f13d8ad25955ae27311fd0ef10b182b21812a0cb",
-      "class_hash": "0x5f2c6028f75f9d84f62236627d513404ff9d2a142f8073cb27dae11d405b6c1",
+      "class_hash": "0x5f25479a75315717da692bbbdba6541f426e3bfb6bfe45354b6e44523f62f5d",
       "abi": [
         {
           "type": "impl",
@@ -1501,6 +1501,10 @@
                 {
                   "name": "avatar_id",
                   "type": "core::integer::u8"
+                },
+                {
+                  "name": "mainnet_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [
@@ -1658,9 +1662,7 @@
           ]
         }
       ],
-      "reads": [
-        "Player"
-      ],
+      "reads": [],
       "writes": [
         "Game",
         "Player"
@@ -1670,7 +1672,7 @@
     {
       "name": "ryo",
       "address": "0x442d71805e2f98dd2fd7c91d4578e019513f2848ec71236ae3aea9749ebed9",
-      "class_hash": "0x37981604fe7eeb4da5c262aba38557007db4345a8f564bed50616f6d8549861",
+      "class_hash": "0x8b951fce321d1e580c30d645eb2ac15dabac899c647146da9c8d564a0c291c",
       "abi": [
         {
           "type": "impl",
@@ -1802,7 +1804,7 @@
     {
       "name": "shop",
       "address": "0x4273123f2ce39a3ea67518cc2d28969bd014284637e8a5f876ca463aea45089",
-      "class_hash": "0x57b53774c26b7712b15144da44741c267906f582d22e1fdcdaa4297f8742273",
+      "class_hash": "0x420680df5b0c86a7873ccc970e01bdb8b925df82781c1005bdcad05893bcf88",
       "abi": [
         {
           "type": "impl",
@@ -2139,7 +2141,7 @@
     {
       "name": "trade",
       "address": "0x33e7623715493a8b1bf3a0eb0938e28dcbca0ac1459594d6d662181ae5ed701",
-      "class_hash": "0x7b8613948a96b0b42aa882d8480daf990646021e3621a90efaba978e1d5c66e",
+      "class_hash": "0x68de3213af8522d382e9e12627847f4ffada31a78ee617ab3be6d16c062bd17",
       "abi": [
         {
           "type": "impl",
@@ -2457,7 +2459,7 @@
     {
       "name": "travel",
       "address": "0x21f6ceaba4583a3ff5d3a21ed34c6b269282d59a79cedb782c9c1d72b5537dc",
-      "class_hash": "0x611e1ea2f9c502aca23f4479d426b74b363d410494a65383db2755a783647a7",
+      "class_hash": "0x45c34a219e3d1ba58489c5014ff3cbe21944c17e80cc1d935867219cb092ba2",
       "abi": [
         {
           "type": "impl",
@@ -4020,6 +4022,11 @@
           "key": true
         },
         {
+          "name": "mainnet_address",
+          "type": "ContractAddress",
+          "key": false
+        },
+        {
           "name": "name",
           "type": "felt252",
           "key": false
@@ -4115,7 +4122,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x12487d8a601098399df7afcd69a58a55fd1781603d8a663076ec5eb7fbeacc3",
+      "class_hash": "0x109a09b8c547c4b751288359256c06d92f5b4abeb36ecc9d0a1c1f5d4769887",
       "abi": [
         {
           "type": "function",

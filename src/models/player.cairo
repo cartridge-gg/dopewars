@@ -14,6 +14,7 @@ struct Player {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    mainnet_address: ContractAddress,
     name: felt252,
     avatar_id: u8,
     status: PlayerStatus,

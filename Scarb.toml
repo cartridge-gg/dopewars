@@ -21,19 +21,19 @@ auth = "./scripts/default_auth.sh dev"
 auth_staging = "./scripts/default_auth.sh staging"
 auth_prod = "./scripts/default_auth.sh prod"
 migrate = "sozo -P dev migrate && scarb run gendojo && scarb run auth"
-# migrate_staging = "sozo -P staging migrate"
-migrate_staging = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryodev/katana --account-address 0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6 --private-key 0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
+migrate_staging = "sozo -P staging migrate"
+# migrate_staging = "sozo migrate --rpc-url https://api.cartridge.gg/x/ryodev/katana --account-address 0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6 --private-key 0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
 migrate_prod = "sozo -P prod migrate"
 
-# [profile.dev.tool.dojo.env]
-# rpc_url = "http://localhost:5050"
-# account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"
-# private_key = "0x1800000000300000180000000000030000000000003006001800006600"
+[profile.dev.tool.dojo.env]
+rpc_url = "http://localhost:5050"
+account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"
+private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
-[profile.staging.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/ryodev/katana"
-account_address = "0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6"
-private_key = "0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
+# [profile.staging.tool.dojo.env]
+# rpc_url = "https://api.cartridge.gg/x/ryodev/katana"
+# account_address = "0x6e857786bbd1652857d673836c41e0544d9d5ecd3e7a1bbde744e328b8cc2f6"
+# private_key = "0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc"
 
 # seed 420
 # [profile.prod.tool.dojo.env]
@@ -43,7 +43,7 @@ private_key = "0x5e9d85de083b7ddd3029c44de2997ceba8384074bbebb66696a1b507f0466fc
 
 [tool.dojo.world]
 name = "Roll Your Own"
-description = "example world"
+description = "An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
 website = "https://rollyourown.preview.cartridge.gg/"
 icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"

@@ -14,7 +14,8 @@ export interface SystemsInterface {
   createGame: (
     gameMode: number,
     playerName: string,
-    avatarId: number
+    avatarId: number,
+    mainnetAddress: string
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
@@ -158,11 +159,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number) => {
+    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [gameMode, shortString.encodeShortString(playerName), avatarId],
+        [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
       );
 
       const joinedEvent = parsedEvents.find(

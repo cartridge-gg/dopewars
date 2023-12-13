@@ -1,6 +1,7 @@
 fragment PlayerProps on Player {
   name
   avatar_id
+  mainnet_address
   cash
   status
   hood_id

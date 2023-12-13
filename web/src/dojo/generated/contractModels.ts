@@ -111,6 +111,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          mainnet_address: RecsType.String,
           name: RecsType.BigInt,
           avatar_id: RecsType.Number,
           status: RecsType.Number,
@@ -135,6 +136,7 @@ export function defineContractComponents(world: World) {
           metadata: {
             name: name,
             types: [
+              "ContractAddress",
               "felt252",
               "u8",
               "PlayerStatus",

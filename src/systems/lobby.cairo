@@ -4,7 +4,7 @@ use rollyourown::models::game::{GameMode};
 #[starknet::interface]
 trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
+        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress
     ) -> (u32, ContractAddress);
 
     fn set_name(self: @TContractState, game_id: u32, player_name: felt252);
@@ -65,7 +65,7 @@ mod lobby {
     #[external(v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
+            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress,
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
             assert_valid_chain(game_mode);
@@ -87,6 +87,7 @@ mod lobby {
             let player = Player {
                 game_id,
                 player_id: caller,
+                mainnet_address, 
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
@@ -143,13 +144,13 @@ mod lobby {
         }
 
         fn set_name(self: @ContractState, game_id: u32, player_name: felt252) {
-            assert_valid_name(player_name);
+            // assert_valid_name(player_name);
 
-            let player_id = get_caller_address();
-            let mut player = get!(self.world(), (game_id, player_id), Player);
-            player.name = player_name;
+            // let player_id = get_caller_address();
+            // let mut player = get!(self.world(), (game_id, player_id), Player);
+            // player.name = player_name;
 
-            set!(self.world(), (player))
+            // set!(self.world(), (player))
         }
     }
 
