@@ -15,7 +15,7 @@ export interface SystemsInterface {
     gameMode: number,
     playerName: string,
     avatarId: number,
-    mainnetAddress: string
+    mainnetAddress: BigNumberish
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
@@ -109,65 +109,72 @@ export const useSystems = (): SystemsInterface => {
       setError(undefined)
       setIsPending(true)
 
+      let tx, receipt;
       try {
-
-        const tx = await execute(account!, contract, system, callData);
-        const receipt = await account!.waitForTransaction(tx.transaction_hash, {
+        tx = await execute(account!, contract, system, callData);
+        receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 100,
         });
+      } catch (e: any) {
+        setIsPending(false)
+        setError(e.toString())
+        toast({
+          message: tryBetterErrorMsg(e.toString()),
+          duration: 20_000,
+          isError: true
+        })
+        throw Error(e.toString())
+      }
 
-        if (receipt.status === "REJECTED") {
-          setError("Transaction Rejected")
-          setIsPending(false)
-          toast({
-            message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
-            duration: 20_000,
-            isError: true
-          })
-          throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
-        }
 
-        if (receipt.execution_status === "REVERTED") {
-          setError("Transaction Reverted")
-          setIsPending(false)
+      if (receipt.status === "REJECTED") {
+        setError("Transaction Rejected")
+        setIsPending(false)
+        toast({
+          message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
+          duration: 20_000,
+          isError: true
+        })
+        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
+      }
 
-          toast({
-            message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
-            duration: 20_000,
-            isError: true
-          })
-          throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
-        }
-
-        const events = getEvents(receipt);
-        const parsedEvents = parseAllEvents(receipt);
-
-        //torii too slow indexing...
-        await sleep(1_000);
-
+      if (receipt.execution_status === "REVERTED") {
+        setError("Transaction Reverted")
         setIsPending(false)
 
-        // useless
-        // setComponentsFromEvents(contractComponents, events);
+        toast({
+          message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
+          duration: 20_000,
+          isError: true
+        })
+        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
+      }
 
-        return {
-          hash: tx?.transaction_hash,
-          receipt,
-          events,
-          parsedEvents,
-        };
-      }
-      catch (e) {
-        console.log(e)
-        setIsPending(false)
-        setError(e)
-      }
+      const events = getEvents(receipt);
+      const parsedEvents = parseAllEvents(receipt);
+
+      //torii too slow indexing...
+      await sleep(1_000);
+
+      setIsPending(false)
+
+      // useless
+      // setComponentsFromEvents(contractComponents, events);
+
+      return {
+        hash: tx?.transaction_hash,
+        receipt,
+        events,
+        parsedEvents,
+      };
+
+
     },
     [execute, account, toast],
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: string) => {
+    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: BigNumberish) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",

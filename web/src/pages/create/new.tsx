@@ -47,7 +47,7 @@ export default function New() {
 
     try{
       let value = validateAndParseAddress(mainnetAddress)
-      setMainnetAddressValue(value)
+      setMainnetAddressValue(BigInt(value))
       setError("")
     } catch(e){
       setError("Invalid address !")

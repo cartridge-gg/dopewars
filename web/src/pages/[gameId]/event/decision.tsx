@@ -255,8 +255,8 @@ export default function Decision() {
           encounter={encounter!}
           playerEntity={playerEntity}
           imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? 
-            `muggers${encounter.level <= 3 ? encounter.level : 3}.gif` : 
-            `cops${encounter.level <= 3 ? encounter.level : 3}.gif`
+            `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif` : 
+            `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
             }`}
           flex={[0, 1]}
           mb={0}
