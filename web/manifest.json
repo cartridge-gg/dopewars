@@ -949,7 +949,7 @@
     {
       "name": "decide",
       "address": "0x260e5299f82c57b6e88b41b83a0f09fc3b9b5fedf13f5f2859f6eee7150928e",
-      "class_hash": "0x1846de317c1c1bdac67ef7533535cb9160ec703d0d89604feb6f338f682d66b",
+      "class_hash": "0x2300344f672926c742e78d27d5ef197c63dc33911f4cf577281c59426131a74",
       "abi": [
         {
           "type": "impl",
@@ -1282,148 +1282,6 @@
         "Encounter",
         "Player"
       ],
-      "computed": []
-    },
-    {
-      "name": "devtools",
-      "address": "0x51f0d70df903904f41c08cef0610e383dea4cc9a070d6042b871b1e6f97b91a",
-      "class_hash": "0x5e7dca0d2579463e25de101aa33d62e674eda3c16161e20b4ce471abf1afd69",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "WorldProviderImpl",
-          "interface_name": "dojo::world::IWorldProvider"
-        },
-        {
-          "type": "struct",
-          "name": "dojo::world::IWorldDispatcher",
-          "members": [
-            {
-              "name": "contract_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::world::IWorldProvider",
-          "items": [
-            {
-              "type": "function",
-              "name": "world",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::world::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "DevtoolsImpl",
-          "interface_name": "rollyourown::systems::devtools::IDevtools"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::devtools::IDevtools",
-          "items": [
-            {
-              "type": "function",
-              "name": "failing_tx",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "feed_leaderboard",
-              "inputs": [
-                {
-                  "name": "count",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "UpgradableImpl",
-          "interface_name": "dojo::components::upgradeable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::components::upgradeable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "dojo_resource",
-          "inputs": [],
-          "outputs": [
-            {
-              "type": "core::felt252"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
-          "type": "event",
-          "name": "dojo::components::upgradeable::upgradeable::Upgraded",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "class_hash",
-              "type": "core::starknet::class_hash::ClassHash",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::components::upgradeable::upgradeable::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Upgraded",
-              "type": "dojo::components::upgradeable::upgradeable::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::devtools::devtools::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "UpgradeableEvent",
-              "type": "dojo::components::upgradeable::upgradeable::Event",
-              "kind": "nested"
-            }
-          ]
-        }
-      ],
-      "reads": [],
-      "writes": [],
       "computed": []
     },
     {
@@ -1804,7 +1662,7 @@
     {
       "name": "shop",
       "address": "0x4273123f2ce39a3ea67518cc2d28969bd014284637e8a5f876ca463aea45089",
-      "class_hash": "0x420680df5b0c86a7873ccc970e01bdb8b925df82781c1005bdcad05893bcf88",
+      "class_hash": "0x45e6d0243bf394cd9d5c673f7f3b8e1fe6c8f92827f29bd3da33cb45a45372f",
       "abi": [
         {
           "type": "impl",
@@ -2459,7 +2317,7 @@
     {
       "name": "travel",
       "address": "0x21f6ceaba4583a3ff5d3a21ed34c6b269282d59a79cedb782c9c1d72b5537dc",
-      "class_hash": "0x1973f9fa6095b19faa38fdfc28ffcac8f66d6f1a188c8db93dee2bd67dc0758",
+      "class_hash": "0x703d32de12143e83ba9b6c71edd0b6edb9ef52103c01589a26c224f18e88904",
       "abi": [
         {
           "type": "impl",

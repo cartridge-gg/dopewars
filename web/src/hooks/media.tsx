@@ -11,6 +11,18 @@ const mediaLibrary: MediaItem[] = [
   { name: "MRYO G Funk", filename: "5_MRYO_G_Funk.mp3" },
   { name: "Hacked Trap", filename: "6_Hacked_Trap.mp3" },
   { name: "Dark Moody", filename: "7_Dark_Moody.mp3" },
+
+  { name: "2 of Amerika's Most Wanted", filename: "C1_2 of Amerika_s Most Wanted.mp3" },
+  { name: "Ain't Nuthin But a G Thang", filename: "C2_Ain_t Nuthin But a G Thang.mp3" },
+  { name: "Big Poppa", filename: "C3_Big Poppa.mp3" },
+  { name: "Big Pimpin", filename: "C4_Big Pimpin_.mp3" },
+  { name: "C.R.E.A.M.", filename: "C5_C.R.E.A.M..mp3" },
+  { name: "Can't Knock The Hustle", filename: "C6_Can_t Knock The Hustle.mp3" },
+  { name: "Shook Ones Pt 2", filename: "C7_Shook Ones Pt 2.mp3" },
+  { name: "Gangsta's Paradise", filename: "C8_Gangsta_s Paradise.mp3" },
+  { name: "I Got 5 On It", filename: "C9_I Got 5 On It.mp3" },
+  { name: "Regulate", filename: "C10_Regulate.mp3" },
+
 ];
 
 export interface MediaState {

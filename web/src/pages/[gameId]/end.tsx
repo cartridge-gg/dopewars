@@ -103,7 +103,7 @@ export default function End() {
             </Heading>
             <HStack w="full">
               <VStack flex="1">
-                <Image src="/images/trophy.gif" alt="winner" />
+                <Image src="/images/trophy1.gif" alt="winner" />
               </VStack>
               <VStack flex="1">
                 {/* <StatsItem text="Xth place" icon={<Trophy />} />

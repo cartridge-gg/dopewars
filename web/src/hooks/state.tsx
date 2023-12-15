@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { Drug, Outcome, PlayerStatus } from "../dojo/types";
 
+// Mostly unused
+
 export type DrugType = {
   [key in Drug]: {
     quantity: number;

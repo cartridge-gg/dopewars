@@ -35,7 +35,7 @@ impl MathImpl<
     }
 
     fn pct(self: T, p: u128) -> T {
-        ((10000 * self.into() * p / 100) / 10000).try_into().unwrap()
+        (self.into() * p / 100).try_into().unwrap()
     }
 }
 

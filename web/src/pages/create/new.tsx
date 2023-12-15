@@ -37,7 +37,6 @@ export default function New() {
   const [mainnetAddress, setMainnetAddress] = useState("");
   const [mainnetAddressValue, setMainnetAddressValue] = useState(BigInt(0));
 
-  
   const create = async (gameMode: GameMode) => {
     setError("");
     if (name === "" || name.length > 20 || name.length < 3) {
@@ -45,12 +44,12 @@ export default function New() {
       return;
     }
 
-    try{
-      let value = validateAndParseAddress(mainnetAddress)
-      setMainnetAddressValue(BigInt(value))
-      setError("")
-    } catch(e){
-      setError("Invalid address !")
+    try {
+      let value = validateAndParseAddress(mainnetAddress);
+      setMainnetAddressValue(BigInt(value));
+      setError("");
+    } catch (e) {
+      setError("Invalid address !");
       return;
     }
 
@@ -91,8 +90,9 @@ export default function New() {
           >
             Play
           </Button>
+
           <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
-           Ninja Test 
+            Ninja Test
           </Button>
         </Footer>
       }
@@ -141,7 +141,7 @@ export default function New() {
               setName(e.target.value);
             }}
           />
-     
+
           <VStack w="full" h="30px">
             <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
               Max 20 characters
@@ -163,7 +163,6 @@ export default function New() {
               setMainnetAddress(e.target.value);
             }}
           />
-
         </VStack>
       </VStack>
     </Layout>
