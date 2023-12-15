@@ -47,11 +47,18 @@ const renderer = ({
   if (completed) {
     return <Text>RESETS NEXT GAME</Text>;
   } else {
+    if (Number.isNaN(days)) {
+      days = 4
+      hours = 20
+      minutes = 4
+      seconds = 20
+    }
     return (
       <HStack textStyle="subheading" fontSize="12px">
-        <Text color="neon.500">RESETS IN:</Text> {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H{" "}
+        <Text color="neon.500">RESETS IN:</Text>
         <Text>
-          {minutes.toString().padStart(2, "0")}m {seconds.toString().padStart(2, "0")}s
+          {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H {minutes.toString().padStart(2, "0")}m{" "}
+          {seconds.toString().padStart(2, "0")}s
         </Text>
       </HStack>
     );
@@ -78,27 +85,22 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const onPrev = async () => {
     if (selectedVersion > 1) {
       setSelectedVersion(selectedVersion - 1);
-      await resetQuery()
+      await resetQuery();
     }
   };
 
-  const onNext = async() => {
+  const onNext = async () => {
     if (selectedVersion < currentVersion) {
       setSelectedVersion(selectedVersion + 1);
-      await resetQuery()
+      await resetQuery();
     }
   };
 
-  useEffect( () => {
-    resetQuery()
+  useEffect(() => {
+    resetQuery();
     setCurrentVersion(ryoMetas?.leaderboard_version);
     setSelectedVersion(ryoMetas?.leaderboard_version);
   }, [ryoMetas]);
-
-  useEffect(() => {
-    console.log(ryoMetas);
-    console.log(leaderboardMetas);
-  }, [ryoMetas, leaderboardMetas]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -115,15 +117,25 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
     <VStack w="full" h="100%">
       <VStack my="15px">
         <HStack>
-          <Arrow direction="left" cursor="pointer" opacity={selectedVersion>1 ? "1" : "0.25"} onClick={onPrev}></Arrow>
+          <Arrow
+            direction="left"
+            cursor="pointer"
+            opacity={selectedVersion > 1 ? "1" : "0.25"}
+            onClick={onPrev}
+          ></Arrow>
           <Text textStyle="subheading" fontSize="12px">
             LEADERBOARD <small>(v{leaderboardMetas?.version})</small>
           </Text>
-          <Arrow direction="right" cursor="pointer"  opacity={selectedVersion < currentVersion? "1" : "0.25"} onClick={onNext}></Arrow>
+          <Arrow
+            direction="right"
+            cursor="pointer"
+            opacity={selectedVersion < currentVersion ? "1" : "0.25"}
+            onClick={onNext}
+          ></Arrow>
         </HStack>
-       {selectedVersion === currentVersion && (
-        <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
-        )} 
+        {selectedVersion === currentVersion && (
+          <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+        )}
       </VStack>
       <VStack
         boxSize="full"
@@ -143,7 +155,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
               const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
-              
+
               return (
                 <ListItem color={color} key={score.gameId} cursor={isOwn && !score.name ? "pointer" : "auto"}>
                   <HStack mr={3}>

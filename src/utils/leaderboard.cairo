@@ -33,7 +33,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
 
     fn get_next_version_timestamp() -> u64 {
         let current_timestamp = starknet::info::get_block_timestamp();
-        current_timestamp + (7 * ONE_DAY)
+        current_timestamp + ONE_WEEK
     }
 
     fn on_game_start(self: LeaderboardManager) -> u32 {

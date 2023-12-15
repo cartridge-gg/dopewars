@@ -91,9 +91,9 @@ export default function New() {
             Play
           </Button>
 
-          <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
+          {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
             Ninja Test
-          </Button>
+          </Button> */}
         </Footer>
       }
     >
@@ -151,7 +151,7 @@ export default function New() {
             </Text>
           </VStack>
 
-          <Input
+          {/* <Input
             display="flex"
             mx="auto"
             mt="0px"
@@ -162,7 +162,7 @@ export default function New() {
             onChange={(e) => {
               setMainnetAddress(e.target.value);
             }}
-          />
+          /> */}
         </VStack>
       </VStack>
     </Layout>
