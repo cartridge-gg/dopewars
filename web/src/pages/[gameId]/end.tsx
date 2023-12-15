@@ -201,6 +201,10 @@ export default function End() {
                   Music and SFX by{" "}
                   <Link href="https://twitter.com/CaseyWescott" target="_blank">
                     Casey Wescott
+                  </Link>{" "}
+                  &{" "}
+                  <Link href="https://twitter.com/SheckyGreen" target="_blank">
+                    SheckyGreen
                   </Link>
                 </ListItem>
               </UnorderedList>
