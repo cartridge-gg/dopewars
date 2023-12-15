@@ -34,7 +34,7 @@ export * from "./Avatar";
 export * from "./Connect";
 export * from "./Sparkle"; // has mirrored variant
 export * from "./Calendar";
-export * from "./Cigarette";
+export * from "../Cigarette";
 export * from "../branding/Cartridge";
 export * from "./Disconnect";
 

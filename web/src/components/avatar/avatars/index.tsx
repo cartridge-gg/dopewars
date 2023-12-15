@@ -10,6 +10,15 @@ import { PersonI } from "./PersonI";
 import { PersonJ } from "./PersonJ";
 import { PersonK } from "./PersonK";
 import { PersonL } from "./PersonL";
+import { PersonM } from "./PersonM";
+import { PersonN } from "./PersonN";
+import { PersonO } from "./PersonO";
+import { PersonP } from "./PersonP";
+import { PersonQ } from "./PersonQ";
+import { PersonR } from "./PersonR";
+import { PersonS } from "./PersonS";
+import { PersonT } from "./PersonT";
+
 
 export const avatars = {
   PersonA: PersonA,
@@ -24,6 +33,15 @@ export const avatars = {
   PersonJ: PersonJ,
   PersonK: PersonK,
   PersonL: PersonL,
+  PersonM: PersonM,
+  PersonN: PersonN,
+  PersonO: PersonO,
+  PersonP: PersonP,
+  PersonQ: PersonQ,
+  PersonR: PersonR,
+  PersonS: PersonS,
+  PersonT: PersonT
+
 };
 
 export type AvatarName = keyof typeof avatars;

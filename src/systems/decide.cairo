@@ -35,32 +35,25 @@ mod decide {
     use rollyourown::models::location::{LocationEnum, LocationImpl};
     use rollyourown::models::item::{Item, ItemEnum};
     use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
-    use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
+    use rollyourown::models::leaderboard::{Leaderboard};
 
+    use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
     use rollyourown::utils::settings::{
         DecideSettings, DecideSettingsImpl, RiskSettings, RiskSettingsImpl, EncounterSettings,
         EncounterSettingsImpl
     };
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
     use rollyourown::utils::math::{MathTrait, MathImplU8, MathImplU128};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     use rollyourown::systems::travel::on_turn_end;
+    use rollyourown::systems::ryo;
+
+    use rollyourown::systems::ryo::GameOver;
 
 
     use super::IDecide;
     use super::{Action, Outcome};
-
-
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -92,19 +85,6 @@ mod decide {
         dmg_dealt: u32,
         cash_earnt: u128,
     }
-
-    #[derive(Drop, starknet::Event)]
-    struct GameOver {
-        #[key]
-        game_id: u32,
-        #[key]
-        player_id: ContractAddress,
-        player_name: felt252,
-        player_status: PlayerStatus,
-        turn: u32,
-        cash: u128,
-    }
-
 
     #[external(v0)]
     impl DecideImpl of IDecide<ContractState> {
@@ -185,7 +165,7 @@ mod decide {
                             // using same name cash_loss makes LS crash
                             let cash_loss_ = player.cash.pct(encounter.demand_pct.into());
 
-                            (Outcome::Paid, cash_loss_, 0, 1, 0, 0)
+                            (Outcome::Paid, cash_loss_, 0, 0, 0, 0)
                         },
                         PlayerStatus::BeingArrested => {
                             // paying cops divide wanted by 3
@@ -199,7 +179,7 @@ mod decide {
                             let drug_loss_ = self
                                 .take_drugs(game_id, player_id, encounter.demand_pct.into());
 
-                            (Outcome::Paid, 0, drug_loss_, 1, 0, 0)
+                            (Outcome::Paid, 0, drug_loss_, 0, 0, 0)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
@@ -231,15 +211,7 @@ mod decide {
                 player.health = 0;
                 outcome = Outcome::Died;
 
-                let game_over = GameOver {
-                    game_id,
-                    player_id,
-                    player_name: player.name,
-                    player_status: player.status,
-                    turn: player.turn,
-                    cash: player.cash / SCALING_FACTOR,
-                };
-                emit!(world, game_over);
+                ryo::game_over(self.world(), ref player);
             } else {
                 player.health -= health_loss
             }

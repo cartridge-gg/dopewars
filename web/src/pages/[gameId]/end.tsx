@@ -52,8 +52,10 @@ export default function End() {
   const { playerEntity } = playerEntityStore;
 
   useEffect(() => {
-    playSound(Sounds.Death, 0.3);
-  }, []);
+    if (isDead) {
+      playSound(Sounds.Death, 0.3);
+    }
+  }, [isDead]);
 
   useEffect(() => {
     if (playerEntity) {
@@ -101,7 +103,7 @@ export default function End() {
             </Heading>
             <HStack w="full">
               <VStack flex="1">
-                <Image src="/images/trophy.gif" alt="winner" />
+                <Image src="/images/trophy1.gif" alt="winner" />
               </VStack>
               <VStack flex="1">
                 {/* <StatsItem text="Xth place" icon={<Trophy />} />
@@ -199,6 +201,10 @@ export default function End() {
                   Music and SFX by{" "}
                   <Link href="https://twitter.com/CaseyWescott" target="_blank">
                     Casey Wescott
+                  </Link>{" "}
+                  &{" "}
+                  <Link href="https://twitter.com/SheckyGreen" target="_blank">
+                    SheckyGreen
                   </Link>
                 </ListItem>
               </UnorderedList>

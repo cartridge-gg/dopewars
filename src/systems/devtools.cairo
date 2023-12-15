@@ -23,20 +23,10 @@ mod devtools {
 
     use rollyourown::models::player::{Player, PlayerStatus};
     use rollyourown::models::location::{LocationEnum};
+    use rollyourown::models::leaderboard::{Leaderboard};
+
     use rollyourown::utils::random::{RandomImpl};
-
-
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
-
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     #[external(v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
@@ -44,6 +34,9 @@ mod devtools {
             self.check_chain();
 
             let mut randomizer = RandomImpl::new(self.world());
+
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_version = leaderboard_manager.get_current_version();
 
             let mut i = 0;
             loop {
@@ -62,9 +55,11 @@ mod devtools {
                 let player = Player {
                     game_id: uuid,
                     player_id: uuid_f.try_into().unwrap(),
+                    mainnet_address: 0.try_into().unwrap(),
                     name: uuid_f,
                     avatar_id: rand_10,
                     status: PlayerStatus::Normal,
+                    hood_id: LocationEnum::Home,
                     location_id: LocationEnum::Home,
                     next_location_id: LocationEnum::Home,
                     cash: rand * SCALING_FACTOR,
@@ -78,6 +73,8 @@ mod devtools {
                     defense: 42,
                     transport: 42,
                     speed: 42,
+                    leaderboard_version,
+                    game_over: true,
                 };
 
                 set!(self.world(), (player));

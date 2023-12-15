@@ -4,7 +4,7 @@ use rollyourown::models::game::{GameMode};
 #[starknet::interface]
 trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
+        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress
     ) -> (u32, ContractAddress);
 
     fn set_name(self: @TContractState, game_id: u32, player_name: felt252);
@@ -24,6 +24,7 @@ mod lobby {
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
+    use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
@@ -31,21 +32,12 @@ mod lobby {
     };
     use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+
 
     use super::ILobby;
 
-
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
-
+   
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -73,7 +65,7 @@ mod lobby {
     #[external(v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
+            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress,
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
             assert_valid_chain(game_mode);
@@ -89,12 +81,17 @@ mod lobby {
 
             let mut randomizer = RandomImpl::new(self.world());
 
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_version = leaderboard_manager.on_game_start();
+
             let player = Player {
                 game_id,
                 player_id: caller,
+                mainnet_address, 
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
+                hood_id: LocationEnum::Home,
                 location_id: LocationEnum::Home,
                 next_location_id: LocationEnum::Home,
                 cash: player_settings.cash,
@@ -108,6 +105,8 @@ mod lobby {
                 defense: player_settings.defense,
                 transport: player_settings.transport,
                 speed: player_settings.speed,
+                leaderboard_version,
+                game_over: false,
             };
 
             let game = Game {
@@ -117,7 +116,6 @@ mod lobby {
                 max_players: game_settings.max_players,
                 num_players: 1, // caller auto joins
                 max_turns: game_settings.max_turns,
-                is_finished: false,
                 creator: caller,
             };
 
@@ -146,18 +144,19 @@ mod lobby {
         }
 
         fn set_name(self: @ContractState, game_id: u32, player_name: felt252) {
-            assert_valid_name(player_name);
+            // assert_valid_name(player_name);
 
-            let player_id = get_caller_address();
-            let mut player = get!(self.world(), (game_id, player_id), Player);
-            player.name = player_name;
+            // let player_id = get_caller_address();
+            // let mut player = get!(self.world(), (game_id, player_id), Player);
+            // player.name = player_name;
 
-            set!(self.world(), (player))
+            // set!(self.world(), (player))
         }
     }
 
     fn assert_valid_chain(game_mode: GameMode) {
-        assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
+       // assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
+
     //if game_mode == GameMode::Test {
     // let chain_id = get_tx_info().unbox().chain_id;
     // assert(chain_id != 'KATANA', 'wrong chain_id');

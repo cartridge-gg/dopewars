@@ -94,7 +94,7 @@ export default function Market() {
     } catch (e) {
       console.log(e);
     }
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, toast, market]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, market]);
 
   if (!router.isReady || !playerEntity || !drug || !market) return <></>;
 

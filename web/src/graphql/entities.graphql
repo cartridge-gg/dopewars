@@ -1,8 +1,10 @@
 fragment PlayerProps on Player {
   name
   avatar_id
+  mainnet_address
   cash
   status
+  hood_id
   location_id
   drug_count
   health
@@ -14,6 +16,7 @@ fragment PlayerProps on Player {
   transport
   speed
   wanted
+  game_over
 }
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
@@ -53,7 +56,6 @@ subscription PlayerEntitySubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
-    model_names
     models {
       __typename
       ... on Player {
@@ -67,7 +69,6 @@ subscription PlayerEntityRelatedDataSubscription($id: ID) {
   entityUpdated(id: $id) {
     id
     keys
-    model_names
     models {
       __typename
       ... on Drug {

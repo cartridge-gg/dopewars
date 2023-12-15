@@ -1,8 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
-};
+use dojo::database::introspect::{  Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type};
 
 use rollyourown::models::player::Player;
 use rollyourown::models::game::Game;
@@ -114,7 +112,7 @@ impl EncounterTypeIntoU8 of Into<EncounterType, u8> {
 }
 
 
-impl EncounterTypeIntrospectionImpl of SchemaIntrospection<EncounterType> {
+impl EncounterTypeIntrospectionImpl of Introspect<EncounterType> {
     #[inline(always)]
     fn size() -> usize {
         1

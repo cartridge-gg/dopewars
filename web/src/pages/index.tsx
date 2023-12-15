@@ -30,17 +30,17 @@ export default function Home() {
 
   const {
     account,
-    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
-  
+
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
   useEffect(
     () =>
-    //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
-    setIsGated(false),
+      //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
+      setIsGated(false),
     [],
   );
 
@@ -53,7 +53,20 @@ export default function Home() {
     }
 
     setIsSubmitting(true);
-    if (!account) {
+    if (account) {
+      // check if burner still valid
+      try {
+        const nonce = await account?.getNonce();
+      } catch (e: any) {
+        console.log(e);
+
+        await clearBurner();
+        console.log("Burner cleared!");
+
+        await createBurner();
+        console.log("Burner created!");
+      }
+    } else {
       // create burner account
       await createBurner();
     }
@@ -62,7 +75,7 @@ export default function Home() {
   };
 
   return (
-    <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 250px)">
+    <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 230px)">
       <VStack boxSize="full" gap="10px" justify="center">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
@@ -72,15 +85,15 @@ export default function Home() {
                   <Alert />
                   <Text align="center">Under Construction</Text>
                 </HStack>
-                <Text align="center">
-                  Get ready hustlers... Season III starts in November
-                </Text>
+                <Text align="center">Get ready hustlers... Season III starts in November</Text>
               </VStack>
             ) : (
               <>
-                <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
-                  Tutorial
-                </Button>
+                {!account && (
+                  <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
+                    Tutorial
+                  </Button>
+                )}
                 <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
                   Hustle
                 </Button>
@@ -91,15 +104,11 @@ export default function Home() {
 
         {!isGated && (
           <>
-            <Text>HALL OF FAME</Text>
             <VStack
               boxSize="full"
               gap="20px"
-              sx={{
-                overflowY: "scroll",
-              }}
               __css={{
-                "scrollbar-width": "none"
+                "scrollbar-width": "none",
               }}
             >
               <Leaderboard />

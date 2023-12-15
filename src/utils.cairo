@@ -5,3 +5,4 @@ mod risk;
 mod shop;
 mod math;
 mod events;
+mod leaderboard;

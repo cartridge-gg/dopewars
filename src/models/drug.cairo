@@ -1,9 +1,9 @@
 use starknet::ContractAddress;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde )]
 struct Drug {
     #[key]
     game_id: u32,
@@ -67,7 +67,7 @@ impl DrugImpl of DrugTrait {
 }
 
 
-impl DrugEnumIntrospectionImpl of SchemaIntrospection<DrugEnum> {
+impl DrugEnumIntrospectionImpl of Introspect<DrugEnum> {
     #[inline(always)]
     fn size() -> usize {
         1

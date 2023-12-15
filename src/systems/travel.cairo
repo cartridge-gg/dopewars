@@ -6,6 +6,7 @@ use rollyourown::models::location::LocationEnum;
 #[starknet::interface]
 trait ITravel<TContractState> {
     fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
+    fn end_game(self: @TContractState, game_id: u32);
 }
 
 #[dojo::contract]
@@ -28,20 +29,12 @@ mod travel {
     use rollyourown::utils::risk::{RiskTrait, RiskImpl};
     use rollyourown::utils::math::{MathTrait, MathImplU8};
     use rollyourown::utils::random::{Random, RandomImpl};
+    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+
+    use rollyourown::systems::ryo;
 
     use super::ITravel;
     use super::on_turn_end;
-
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -131,17 +124,16 @@ mod travel {
                             game.game_mode, @player, encounter.level
                         );
 
-                        // player lose max(encounter_settings.dmg / 3,1)  HP, but can't die
+                        // player lose max(encounter_settings.dmg / 3,1)  HP
                         let mut encounter_dmg = if encounter_settings.dmg < 3 {
                             1
                         } else {
                             encounter_settings.dmg / 3
                         };
-                        let new_health = player.health.sub_capped(encounter_dmg, 1);
+                        let new_health = player.health.sub_capped(encounter_dmg, 0);
                         let health_loss = player.health - new_health;
                         player.health = new_health;
 
-                        set!(world, (player));
                         emit!(
                             world,
                             AdverseEvent {
@@ -153,16 +145,38 @@ mod travel {
                             }
                         );
 
+                        if player.health == 0 {
+                            ryo::game_over(world, ref player);
+                        }
+
+                        set!(world, (player));
+
                         return true;
                     },
                     Option::None => {}
                 }
+            } else {
+                // set hood
+                player.hood_id = player.next_location_id;
             }
 
             on_turn_end(world, ref randomizer, @game, ref player);
 
             false
         }
+
+        fn end_game(self: @ContractState, game_id: u32) {
+            let world = self.world();
+            let player_id = get_caller_address();
+
+            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+            assert(player.game_over == false, 'already game_over');
+            
+            ryo::game_over(self.world(), ref player);
+
+            set!(world, (player));
+        }
+
     }
 }
 
@@ -226,7 +240,7 @@ fn on_turn_end(
     // save player
     set!(world, (player));
 
-    // emit raw event Traveled if stil alive
+    // emit raw event Traveled if still alive
     if player.health > 0 {
         world
             .emit_raw(

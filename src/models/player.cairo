@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
@@ -14,9 +14,11 @@ struct Player {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    mainnet_address: ContractAddress,
     name: felt252,
     avatar_id: u8,
     status: PlayerStatus,
+    hood_id: LocationEnum,
     location_id: LocationEnum,
     next_location_id: LocationEnum,
     turn: usize,
@@ -30,12 +32,17 @@ struct Player {
     transport: usize,
     speed: usize,
     wanted: u8,
+    leaderboard_version: u32,
+    game_over: bool,
 }
 
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
     #[inline(always)]
     fn can_continue(self: Player) -> bool {
+        if self.game_over {
+            return false;
+        }
         if self.health == 0 {
             return false;
         }
@@ -105,7 +112,7 @@ enum PlayerStatus {
     AtPawnshop: (),
 }
 
-impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
+impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
     #[inline(always)]
     fn size() -> usize {
         1
@@ -134,3 +141,14 @@ impl PlayerStatusIntrospectionImpl of SchemaIntrospection<PlayerStatus> {
     }
 }
 
+
+impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
+    fn into(self: PlayerStatus) -> felt252 {
+        match self {
+            PlayerStatus::Normal => 'Normal',
+            PlayerStatus::BeingMugged => 'BeingMugged',
+            PlayerStatus::BeingArrested => 'BeingArrested',
+            PlayerStatus::AtPawnshop => 'AtPawnshop',
+        }
+    }
+}

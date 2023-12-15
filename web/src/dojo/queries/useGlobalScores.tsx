@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 
 import { shortString } from "starknet";
 import { SCALING_FACTOR } from "../constants";
+import { useQueryClient } from "react-query";
 
 export type Score = {
   gameId: string;
@@ -39,15 +40,22 @@ export class GlobalScores {
   }
 }
 
-export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
+export const useGlobalScoresIninite = (version?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  
+
+  const queryClient = useQueryClient();
   // Gets top 10
-  const { data, isFetched, refetch, hasNextPage, fetchNextPage, ...props } = useInfiniteGlobalScoresQuery(
+  const { data, isFetched, refetch,/* hasNextPage,*/ fetchNextPage, ...props } = useInfiniteGlobalScoresQuery(
     {
       limit: limit || 10,
+      version: version || 1,
     },
     {
+      
       getNextPageParam: (lastPage) => {
+        if(!lastPage) return {}
         const edgesCount = lastPage.playerModels?.edges?.length || 0;
         if (edgesCount === 0) return undefined;
         const lastItem = lastPage.playerModels?.edges![edgesCount - 1];
@@ -59,6 +67,14 @@ export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
     },
   );
 
+  const resetQuery = async () => {
+    setHasNextPage(false)
+    setScores([]);
+    queryClient.invalidateQueries({ queryKey: ["GlobalScores.infinite"] })
+    queryClient.resetQueries({ queryKey: ["GlobalScores.infinite"] })
+    queryClient.removeQueries({ queryKey: ["GlobalScores.infinite"] })
+  };
+
   useEffect(() => {
     if (data?.pages.length == 0) return;
     const pageCount = data?.pages.length || 0;
@@ -67,10 +83,19 @@ export const useGlobalScoresIninite = (offset?: number, limit?: number) => {
     if (new_scores) {
       setScores(scores.concat(new_scores));
     }
-  }, [data?.pages]);
+   
+  }, [data?.pages, version /*, scores*/]);
+
+  useEffect(() => {
+    if (data?.pages.length == 0) return;
+    const pageCount = data?.pages.length || 0;
+    const hasNext = scores.length < (data?.pages[pageCount-1].playerModels?.total_count || 0)
+    setHasNextPage(hasNext)
+  }, [ scores]);
 
   return {
     scores,
+    resetQuery,
     isFetched,
     refetch,
     hasNextPage,

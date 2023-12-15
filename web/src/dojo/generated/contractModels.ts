@@ -47,13 +47,12 @@ export function defineContractComponents(world: World) {
           max_players: RecsType.Number,
           num_players: RecsType.Number,
           max_turns: RecsType.Number,
-          is_finished: RecsType.Boolean,
           creator: RecsType.String,
         },
         {
           metadata: {
             name: name,
-            types: ["GameMode", "u64", "usize", "usize", "usize", "bool", "ContractAddress"],
+            types: ["GameMode", "u64", "usize", "usize", "usize", "ContractAddress"],
           },
         },
       );
@@ -71,6 +70,22 @@ export function defineContractComponents(world: World) {
           metadata: {
             name: name,
             types: ["u8", "felt252", "usize"],
+          },
+        },
+      );
+    })(),
+    Leaderboard: (() => {
+      const name = "Leaderboard";
+      return defineComponent(
+        world,
+        {
+          high_score: RecsType.BigInt,
+          next_version_timestamp: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["u128", "u64"],
           },
         },
       );
@@ -96,9 +111,11 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          mainnet_address: RecsType.String,
           name: RecsType.BigInt,
           avatar_id: RecsType.Number,
           status: RecsType.Number,
+          hood_id: RecsType.Number,
           location_id: RecsType.Number,
           next_location_id: RecsType.Number,
           turn: RecsType.Number,
@@ -112,14 +129,18 @@ export function defineContractComponents(world: World) {
           transport: RecsType.Number,
           speed: RecsType.Number,
           wanted: RecsType.Number,
+          leaderboard_version: RecsType.Number,
+          game_over: RecsType.Boolean,
         },
         {
           metadata: {
             name: name,
             types: [
+              "ContractAddress",
               "felt252",
               "u8",
               "PlayerStatus",
+              "LocationEnum",
               "LocationEnum",
               "LocationEnum",
               "usize",
@@ -133,7 +154,25 @@ export function defineContractComponents(world: World) {
               "usize",
               "usize",
               "u8",
+              "u32",
+              "bool",
             ],
+          },
+        },
+      );
+    })(),
+    RyoMeta: (() => {
+      const name = "RyoMeta";
+      return defineComponent(
+        world,
+        {
+          initialized: RecsType.Boolean,
+          leaderboard_version: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+            types: ["bool", "u32"],
           },
         },
       );

@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -48,7 +48,7 @@ impl ItemEnumIntoU32 of Into<ItemEnum, u32> {
 }
 
 
-impl LocationEnumIntrospectionImpl of SchemaIntrospection<ItemEnum> {
+impl LocationEnumIntrospectionImpl of Introspect<ItemEnum> {
     #[inline(always)]
     fn size() -> usize {
         1

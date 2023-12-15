@@ -42,7 +42,7 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
 
   try {
     const data = JSON.parse(jsonString);
-    
+
     let eventsMeta = []
 
     for (let contract of data.contracts) {
@@ -61,11 +61,15 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
           }
         })
 
-        eventsMeta.push({
-          name: shortName,
-          selector,
-          members
-        })
+        if (eventsMeta.find(i => i.name === shortName)) {
+          console.log(`duplicate eventName : ${shortName}`);
+        } else {
+          eventsMeta.push({
+            name: shortName,
+            selector,
+            members
+          })
+        }
 
         // console.log(shortName)
         // console.log(selector)

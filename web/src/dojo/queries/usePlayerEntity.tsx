@@ -25,6 +25,7 @@ export class PlayerEntity {
   maxTurns: number;
   maxItems: number;
   drugCount: number;
+  hoodId: string;
   locationId: string;
   nextLocationId?: string;
   status: PlayerStatus;
@@ -39,6 +40,7 @@ export class PlayerEntity {
   speed: number;
 
   wanted: number;
+  gameOver: boolean;
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[]) {
     this.name = shortString.decodeShortString(player.name);
@@ -51,6 +53,7 @@ export class PlayerEntity {
 
     this.drugCount = player.drug_count;
 
+    this.hoodId = player.hood_id === "Home" ? undefined : player.hood_id;
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.nextLocationId = player.next_location_id === "Home" ? undefined : player.next_location_id;
     this.status = player.status;
@@ -61,10 +64,12 @@ export class PlayerEntity {
     this.speed = player.speed;
 
     this.wanted = player.wanted;
+    this.gameOver = player.game_over;
 
     this.drugs = drugs;
     this.items = items;
     this.encounters = encounters;
+
   }
 
   update(player: Player) {
@@ -72,9 +77,12 @@ export class PlayerEntity {
     this.health = player.health;
     this.turn = player.turn;
     this.drugCount = player.drug_count;
+   
+    this.hoodId = player.hood_id;
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.status = player.status;
     this.wanted = player.wanted;
+    this.gameOver = player.game_over;
     return this;
   }
 
@@ -208,27 +216,3 @@ export class PlayerEntity {
   }
 }
 
-// export interface PlayerInterface {
-//   player?: PlayerEntity;
-//   isFetched: boolean;
-// }
-
-// export const usePlayerEntity = ({ gameId, address }: { gameId?: string; address?: string }): PlayerInterface => {
-//   // TODO: remove leading zeros in address, maybe implemented in torii
-//   const { data, isFetched } = usePlayerEntityQuery(
-//     { gameId: gameId || "", playerId: address || "" },
-//     {
-//       enabled: !!gameId && !!address,
-//       refetchInterval: REFETCH_INTERVAL, // TODO: long polling,
-//     },
-//   );
-
-//   const player = useMemo(() => {
-//     return PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
-//   }, [data]);
-
-//   return {
-//     player,
-//     isFetched,
-//   };
-// };

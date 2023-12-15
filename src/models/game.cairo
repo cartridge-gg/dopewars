@@ -9,7 +9,6 @@ struct Game {
     max_players: usize,
     num_players: usize,
     max_turns: usize,
-    is_finished: bool,
     creator: ContractAddress,
 }
 
@@ -29,21 +28,17 @@ impl GameImpl of GameTrait {
         if info.block_timestamp < self.start_time {
             return false;
         }
-        if self.is_finished {
-            return false;
-        }
 
         true
     }
 }
 
 
-use dojo::database::schema::{
-    Enum, Member, Ty, Struct, SchemaIntrospection, serialize_member, serialize_member_type
+use dojo::database::introspect::{
+    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
 };
 
-
-impl GameModeIntrospectionImpl of SchemaIntrospection<GameMode> {
+impl GameModeIntrospectionImpl of Introspect<GameMode> {
     #[inline(always)]
     fn size() -> usize {
         1

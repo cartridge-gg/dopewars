@@ -17,6 +17,7 @@ import { Clock } from "@/components/icons";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { validateAndParseAddress } from "starknet";
 
 export default function New() {
   const router = useRouter();
@@ -33,6 +34,8 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
+  const [mainnetAddress, setMainnetAddress] = useState("");
+  const [mainnetAddressValue, setMainnetAddressValue] = useState(BigInt(0));
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -42,12 +45,21 @@ export default function New() {
     }
 
     try {
+      let value = validateAndParseAddress(mainnetAddress);
+      setMainnetAddressValue(BigInt(value));
+      setError("");
+    } catch (e) {
+      setError("Invalid address !");
+      return;
+    }
+
+    try {
       if (!account) {
         // create burner account
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, avatarId);
+      const { hash, gameId } = await createGame(gameMode, name, avatarId, mainnetAddressValue);
 
       // toast({
       //   message: "Game Created!",
@@ -78,13 +90,14 @@ export default function New() {
           >
             Play
           </Button>
+
           {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
-            Create New Test Game
+            Ninja Test
           </Button> */}
         </Footer>
       }
     >
-      <VStack w={["full", "400px"]} margin="auto">
+      <VStack w={["full", "440px"]} margin="auto">
         <VStack w="full">
           <HStack my="30px" align="center" justify="center">
             <Arrow
@@ -128,7 +141,8 @@ export default function New() {
               setName(e.target.value);
             }}
           />
-          <VStack w="full" h="80px">
+
+          <VStack w="full" h="30px">
             <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
               Max 20 characters
             </Text>
@@ -136,6 +150,19 @@ export default function New() {
               {error}
             </Text>
           </VStack>
+
+          {/* <Input
+            display="flex"
+            mx="auto"
+            mt="0px"
+            maxW="440px"
+            fontSize="11px"
+            placeholder="Your may enter your Starknet Mainnet Address..."
+            value={mainnetAddress}
+            onChange={(e) => {
+              setMainnetAddress(e.target.value);
+            }}
+          /> */}
         </VStack>
       </VStack>
     </Layout>

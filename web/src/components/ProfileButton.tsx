@@ -25,10 +25,10 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromAddress, genAvatarFromId } from "./avatar/avatars";
 import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import { Calendar } from "./icons/archive";
+import { Calendar, Cigarette } from "./icons/archive";
 import { ItemTextEnum } from "@/dojo/types";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
-import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
+import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Dots, Gem, Twitter, User } from "./icons";
 import { IsMobile, formatCash } from "@/utils/ui";
 import Link from "next/link";
@@ -40,6 +40,7 @@ import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
 import { useToast } from "@/hooks/toast";
+import { usePlayerEntityStore } from "@/hooks/player";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -72,6 +73,13 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const isMobile = IsMobile();
 
   useEffect(() => {
+    if (playerId) {
+      // spectator
+      playerEntityStore.initPlayerEntity(gameId, playerId);
+    }
+  }, [gameId, playerId, playerEntityStore]);
+
+  useEffect(() => {
     if (!playerEntity) return;
     setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
     setDefenseItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Defense));
@@ -79,7 +87,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
     setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
   }, [playerEntity]);
 
-  if (!account || !playerEntity) return null;
+  if (/*!account &&*/ !playerEntity) return null;
 
   return (
     <VStack w="full" {...props}>
@@ -106,7 +114,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                   borderColor="neon.600"
                 />
                 <HStack h="50px" px="10px">
-                  <Calendar /> <Text>DAY {playerEntity.turn}</Text>
+                  {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
+                  <Cigarette /> <Text>{getLocationById(playerEntity.hoodId)?.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">
@@ -209,22 +218,26 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                 Close
               </Button>
             )}
-            {!playerId && (
-              <Button
-                variant="pixelated"
-                w="full"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs?playerId=${account.address}`);
+            {!playerId && account && (
+              <>
+                <Button
+                  variant="pixelated"
+                  w="full"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/${gameId}/logs?playerId=${account.address}`,
+                    );
 
-                  toast({
-                    message: "Copied to clipboard",
-                  });
-                }}
-              >
-                Game Link
-              </Button>
+                    toast({
+                      message: "Copied to clipboard",
+                    });
+                  }}
+                >
+                  Game Link
+                </Button>
+                <ShareButton variant="pixelated" />
+              </>
             )}
-            <ShareButton variant="pixelated" />
           </HStack>
         </Box>
       </VStack>

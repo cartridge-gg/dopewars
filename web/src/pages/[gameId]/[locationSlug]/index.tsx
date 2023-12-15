@@ -26,6 +26,7 @@ import { shortString } from "starknet";
 import Button from "@/components/Button";
 import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from "@/dojo/helpers";
 import { motion } from "framer-motion";
+import { useSystems } from "@/dojo/hooks/useSystems";
 
 export default function Location() {
   const router = useRouter();
@@ -37,6 +38,8 @@ export default function Location() {
     gameId,
     locationId,
   });
+
+  const { endGame, isPending } = useSystems();
 
   const { playerEntity } = playerEntityStore;
 
@@ -74,9 +77,10 @@ export default function Location() {
           <Button
             w={["full", "auto"]}
             px={["auto","20px"]}
-
-            onClick={() => {
+            isLoading={isPending}
+            onClick={async () => {
               if (isLastDay) {
+                await endGame(gameId);
                 router.push(`/${gameId}/end`);
               } else {
                 router.push(`/${gameId}/travel`);

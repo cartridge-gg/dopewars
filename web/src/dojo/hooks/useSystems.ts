@@ -14,9 +14,11 @@ export interface SystemsInterface {
   createGame: (
     gameMode: number,
     playerName: string,
-    avatarId: number
+    avatarId: number,
+    mainnetAddress: BigNumberish
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
+  endGame: (gameId: string) => Promise<SystemExecuteResult>;
   // join: (gameId: string) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
@@ -53,6 +55,7 @@ export interface SystemsInterface {
 
 export interface SystemExecuteResult {
   hash: string;
+  isGameOver?: BaseEventData;
   event?: BaseEventData;
   events?: BaseEventData[];
   [key: string]: any;
@@ -106,10 +109,23 @@ export const useSystems = (): SystemsInterface => {
       setError(undefined)
       setIsPending(true)
 
-      const tx = await execute(account!, contract, system, callData);
-      const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      });
+      let tx, receipt;
+      try {
+        tx = await execute(account!, contract, system, callData);
+        receipt = await account!.waitForTransaction(tx.transaction_hash, {
+          retryInterval: 100,
+        });
+      } catch (e: any) {
+        setIsPending(false)
+        setError(e.toString())
+        toast({
+          message: tryBetterErrorMsg(e.toString()),
+          duration: 20_000,
+          isError: true
+        })
+        throw Error(e.toString())
+      }
+
 
       if (receipt.status === "REJECTED") {
         setError("Transaction Rejected")
@@ -151,16 +167,18 @@ export const useSystems = (): SystemsInterface => {
         events,
         parsedEvents,
       };
+
+
     },
     [execute, account, toast],
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number) => {
+    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: BigNumberish) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "lobby",
         "create_game",
-        [gameMode, shortString.encodeShortString(playerName), avatarId],
+        [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
       );
 
       const joinedEvent = parsedEvents.find(
@@ -183,6 +201,9 @@ export const useSystems = (): SystemsInterface => {
         [gameId, locationId],
       );
 
+      const isGameOver = parsedEvents
+        .find((e) => e.eventType === WorldEvents.GameOver)
+
       const adverseEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.AdverseEvent,
       ) as AdverseEventData
@@ -191,9 +212,9 @@ export const useSystems = (): SystemsInterface => {
         (e) => e.eventType === WorldEvents.AtPawnshop,
       ) as AtPawnshopEventData
 
-
       return {
         hash,
+        isGameOver,
         event: adverseEvent || atPawnshopEvent,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.MarketEvent)
@@ -202,6 +223,23 @@ export const useSystems = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
+
+  const endGame = useCallback(
+    async (gameId: string) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "travel",
+        "end_game",
+        [gameId],
+      );
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
 
   const buy = useCallback(
     async (
@@ -252,12 +290,16 @@ export const useSystems = (): SystemsInterface => {
         [gameId, action],
       );
 
+      const isGameOver = parsedEvents
+        .find((e) => e.eventType === WorldEvents.GameOver)
+
       const consequenceEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.Consequence,
       ) as ConsequenceEventData
 
       return {
         hash,
+        isGameOver,
         event: parsedEvents.find(
           (e) => e.eventType === WorldEvents.Consequence,
         ) as ConsequenceEventData,
@@ -359,6 +401,7 @@ export const useSystems = (): SystemsInterface => {
     createGame,
     // join,
     travel,
+    endGame,
     buy,
     sell,
     //setName,

@@ -36,18 +36,6 @@ mod trade {
 
     use super::ITrade;
 
-
-    #[starknet::interface]
-    trait ISystem<TContractState> {
-        fn world(self: @TContractState) -> IWorldDispatcher;
-    }
-
-    impl ISystemImpl of ISystem<ContractState> {
-        fn world(self: @ContractState) -> IWorldDispatcher {
-            self.world_dispatcher.read()
-        }
-    }
-
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {

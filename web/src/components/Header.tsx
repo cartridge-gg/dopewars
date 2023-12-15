@@ -16,6 +16,7 @@ import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
+import DayIndicator from "./player/DayIndicator";
 
 export interface HeaderProps {
   back?: boolean;
@@ -53,9 +54,17 @@ const Header = ({ back }: HeaderProps) => {
   }, [playerEntity]);
 
   return (
-    <HStack w="full" px="10px" spacing="10px" zIndex="overlay" align="flex-start" py={["0", "20px"]} fontSize={["14px", "16px"]}>
+    <HStack
+      w="full"
+      px="10px"
+      spacing="10px"
+      zIndex="overlay"
+      align="flex-start"
+      py={["0", "20px"]}
+      fontSize={["14px", "16px"]}
+    >
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && playerEntity.health > 0 && (
+      {playerEntity && /*playerEntity.health > 0 &&*/ (!playerEntity.gameOver || router.asPath.includes("logs")) && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
@@ -71,6 +80,7 @@ const Header = ({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={playerEntity.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+                {/* <DayIndicator day={playerEntity.turn} /> */}
                 <WantedIndicator wanted={playerEntity.wanted} />
               </HStack>
             </Flex>

@@ -27,36 +27,47 @@ sozo migrate
 # Start indexer, graphql endpoint at http://localhost:8080
 torii --world {world_address}
 
-# Setup default authorization
+# Setup default authorization & initialization
 ./scripts/default_auth.sh [local]
+
+# Copy manifest.json into web directory & do graphql/ts codegen
+./scripts/gen.sh
 
 # Start frontend, located at http://localhost:3000
 cd web
 yarn install && yarn dev
 ```
 
-Note: If the world address your game is deployed to is different, you'll need to update it in three places currently
+In Scarb.toml, there is various shortcut defined using scripts.
+For exemple `scarb run migrate` will execute `sozo migrate` then gen.sh / default_auth.sh
 
-- Scarb.toml
-- script/default_auth.sh
-- web/src/constants.ts
+```bash
+sozo build && scarb run migrate
+```
 
 #### Any errors when doing `sozo build` ?
 
 This might be because your version of sozo is not correct.
 
-Check the `Scarb.toml` file and get the `rev` tag from the `dojo` dependency:
+Check the `Scarb.toml` file and get the `rev` or `tag` from the `dojo` dependency:
 ```toml
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo.git", rev = "ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8" }
+# or
+dojo = { git = "https://github.com/dojoengine/dojo.git", tag = "v0.3.15"}
 ```
 
-In this example, this is how we would install the correct version:
+In this example, this is how we would install the correct `rev` version:
 ```bash
 git clone https://github.com/dojoengine/dojo.git
 cd dojo
 git checkout ca2d2e6dd1ef0fe311310ba0728be8743b1d5cc8
 dojoup -p .
+```
+
+For tagged version, you can use dojoup:
+```bash
+dojoup -v v0.3.15
 ```
 
 This will reinstall the binaries in your `~/.dojo/bin` folder.
