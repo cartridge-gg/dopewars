@@ -20,6 +20,14 @@ import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
+// DoperGanger imports
+import dynamic from 'next/dynamic';
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import('@/phaser/Index'),
+  { ssr: false }
+)
+
 type CombatLog = {
   text: string;
   color: string;
@@ -33,6 +41,12 @@ export default function Decision() {
   const demandPct = router.query.demandPct as string;
 
   const { account, playerEntityStore } = useDojoContext();
+
+  // DoperGanger states
+  const [phaserloading, setPhaserLoading] = useState(false);
+  useEffect(() => {
+    setPhaserLoading(true)
+  }, []);
 
   const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState("");
@@ -238,7 +252,18 @@ export default function Decision() {
 
   return (
     <Layout isSinglePanel>
-      <HStack
+      <Box
+      w="full"
+      h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+      overflow="hidden"
+      border='4px' 
+      borderColor='neon.600'
+      borderRadius='10px'
+      id="dopergangers"
+      />
+      {phaserloading ? <DynamicComponentWithNoSSR /> : null}
+
+      {/* <HStack
         w="full"
         h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
         overflowY="scroll"
@@ -344,7 +369,7 @@ export default function Decision() {
             </Button>
           </Footer>
         </VStack>
-      </HStack>
+      </HStack> */}
     </Layout>
   );
 }
