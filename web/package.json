@@ -10,8 +10,8 @@
     "lint": "next lint",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:dojo": "yarn gen:models & yarn gen:events",
-    "gen:models": "npx create-models ./manifest.json ./src/dojo/generated/contractModels.ts",
+    "gen:dojo": "yarn gen:events",
+    "gen:models": "#npx create-models ./manifest.json ./src/dojo/generated/contractModels.ts",
     "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {

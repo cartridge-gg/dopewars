@@ -19,7 +19,7 @@ export const useAvailableShopItems = (gameId: string) => {
             try {
                 const items = await call(
                     account!,
-                    "shop",
+                    "rollyourown::systems::shop::shop",
                     "available_items",
                     [Number(gameId), account!.address],
                 ) as any[];
