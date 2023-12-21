@@ -176,7 +176,7 @@ export const useSystems = (): SystemsInterface => {
   const createGame = useCallback(
     async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: BigNumberish) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "lobby",
+        "rollyourown::systems::lobby::lobby",
         "create_game",
         [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
       );
@@ -196,7 +196,7 @@ export const useSystems = (): SystemsInterface => {
   const travel = useCallback(
     async (gameId: string, locationId: Location) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "travel",
+        "rollyourown::systems::travel::travel",
         "travel",
         [gameId, locationId],
       );
@@ -227,7 +227,7 @@ export const useSystems = (): SystemsInterface => {
   const endGame = useCallback(
     async (gameId: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "travel",
+        "rollyourown::systems::travel::travel",
         "end_game",
         [gameId],
       );
@@ -250,7 +250,7 @@ export const useSystems = (): SystemsInterface => {
     ) => {
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "trade",
+        "rollyourown::systems::trade::trade",
         "buy",
         [gameId, locationId, drugId, quantity],
       );
@@ -270,7 +270,7 @@ export const useSystems = (): SystemsInterface => {
       quantity: number,
     ) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "trade",
+        "rollyourown::systems::trade::trade",
         "sell",
         [gameId, locationId, drugId, quantity],
       );
@@ -285,7 +285,7 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: Action) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "decide",
+        "rollyourown::systems::decide::decide",
         "decide",
         [gameId, action],
       );
@@ -314,7 +314,7 @@ export const useSystems = (): SystemsInterface => {
   const buyItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "shop",
+        "rollyourown::systems::shop::shop",
         "buy_item",
         [gameId, itemId],
       );
@@ -332,7 +332,7 @@ export const useSystems = (): SystemsInterface => {
   const dropItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "shop",
+        "rollyourown::systems::shop::shop",
         "drop_item",
         [gameId, itemId],
       );
@@ -347,7 +347,7 @@ export const useSystems = (): SystemsInterface => {
   const skipShop = useCallback(
     async (gameId: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "shop",
+        "rollyourown::systems::shop::shop",
         "skip",
         [gameId],
       );
@@ -368,7 +368,7 @@ export const useSystems = (): SystemsInterface => {
   const failingTx = useCallback(
     async () => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "devtools",
+        "rollyourown::systems::devtools::devtools",
         "failing_tx",
         [],
       );

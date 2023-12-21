@@ -5,7 +5,7 @@ query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
     first: $limit
     after: $cursor
   ) {
-    total_count
+    totalCount
     edges {
       node {
         game_id

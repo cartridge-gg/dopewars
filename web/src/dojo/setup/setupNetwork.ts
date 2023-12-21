@@ -1,10 +1,7 @@
-import { defineContractComponents } from "../generated/contractModels";
 import { world } from "./world";
 import { RPCProvider, Query, } from "@dojoengine/core";
 import { Account, Contract, TypedContract, num, shortString } from "starknet";
 import { GraphQLClient } from 'graphql-request';
-// import { getSdk } from '../generated/graphql';
-// import { createClientContracts } from "./createClientContracts";
 
 export type ManifestContract = {
     name: string;
@@ -35,9 +32,6 @@ export async function setupNetwork(manifest: any) {
         manifest,
         provider,
         world,
-
-        // Define contract components for the world.
-        contractComponents: defineContractComponents(world),
 
         // Create client contracts based on the network setup.
         //contracts: createClientContracts(provider.provider, manifest),

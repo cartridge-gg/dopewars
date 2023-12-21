@@ -254,15 +254,15 @@ export const parseEvent = (raw: any) => {
       } as GameOverEventData;
 
 
-    default:
-      // console.log(`event parse not implemented: ${raw.keys[0]}`)
-      //throw new Error(`event parse not implemented: ${eventType}`);
-      return {
-        gameId: undefined,
-        eventType: raw.keys[0],
-        eventName: raw.keys[0],
-      }
-      break;
+      default:
+        // console.log(`event parse not implemented: ${raw.keys[0]}`)
+        //throw new Error(`event parse not implemented: ${eventType}`);
+        return {
+          gameId: undefined,
+          eventType: raw.keys[0],
+          eventName: raw.keys[0],
+        }
+        break;
   }
 
 }
