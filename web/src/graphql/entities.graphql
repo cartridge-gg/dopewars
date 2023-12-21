@@ -21,7 +21,7 @@ fragment PlayerProps on Player {
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
-    total_count
+    totalCount
     edges {
       node {
         id
@@ -93,7 +93,7 @@ subscription PlayerEntityRelatedDataSubscription($id: ID) {
 
 query LocationEntities($gameId: String!, $locationId: String!) {
   entities(keys: [$gameId, $locationId]) {
-    total_count
+    totalCount
     edges {
       node {
         keys
@@ -114,13 +114,13 @@ query LocationEntities($gameId: String!, $locationId: String!) {
 
 query PlayerLogs($game_id: String!, $player_id: String!) {
   events(last: 1000, keys: ["*", $game_id, $player_id]) {
-    total_count
+    totalCount
     edges {
       node {
         id
         keys
         data
-        created_at
+        createdAt
       }
     }
   }

@@ -23,7 +23,7 @@ export class MarketPrices {
       const drugId = node?.drug_id;
       const drugType = getDrugById(drugId)!.type;
       const price =
-        Number(node?.cash) / Number(node?.quantity) / SCALING_FACTOR;
+      Number(node?.cash) / Number(node?.quantity) / SCALING_FACTOR;
 
       const drugMarket: DrugMarket = {
         id: drugId,
