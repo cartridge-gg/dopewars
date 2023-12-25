@@ -7,3 +7,5 @@ mod item;
 mod encounter;
 mod leaderboard;
 mod ryo;
+mod tile;
+mod map;
