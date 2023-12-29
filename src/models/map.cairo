@@ -1,66 +1,46 @@
+use core::clone::Clone;
+use core::box::BoxTrait;
+use core::traits::Into;
 use core::traits::TryInto;
 use core::option::OptionTrait;
+use rollyourown::models::tile::{Tile, TileTrait};
 use array::{ArrayTrait, SpanTrait, Span};
 
 struct Map {
-    horizontal: Span<u32>, //20
-    vertical: Span<u32>, //20
+    map: Span<Tile>,
 }
 
 trait MapTrait {
     fn new() -> Map;
-    fn get_horizontal(self: Map) -> Span<u32>;
-    fn get_horizontal_index(self: Map, index: u32) -> u32;
-    fn get_vertical(self: Map) -> Span<u32>;
-    fn get_vertical_index(self: Map, index: u32) -> u32;
+    fn get_coordinate(ref self: Map, index: u32) -> (u32, u32);
 }
 
 impl MapImpl of MapTrait {
     fn new() -> Map {
-        Map {
-            horizontal: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].span(),
-            vertical: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].span(),
-        }
-    }
+        let mut i: u32 = 0;
+        let mut map = array![];
+        loop {
+            if i == 400 {
+                break;
+            }
+            if (i >= 1 || i <= 20) {
+                map.append(TileTrait::new(i % 20, i / 20, 1));
+            } else if (i % 20 == 0) {
+                map.append(TileTrait::new(i % 20, i / 20, 1));
+            } else {
+                map.append(TileTrait::new(i % 20, i / 20, 0));
+            }
 
-    fn get_horizontal(self: Map) -> Span<u32> {
-        self.horizontal
-    }
-
-    fn get_horizontal_index(self: Map, index: u32) -> u32 {
-        *self.horizontal.at(index)
-    }
-
-    fn get_vertical(self: Map) -> Span<u32> {
-        self.vertical
-    }
-
-    fn get_vertical_index(self: Map, index: u32) -> u32 {
-        *self.vertical.at(index)
-    }
-}
-
-#[cfg(test)]
-mod map_test {
-    use core::array::SpanTrait;
-    use super::{Map, MapTrait};
-    #[test]
-    #[available_gas(1000000)]
-    fn test_create_map_horizontal() {
-        let map = Map {
-            horizontal: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].span(),
-            vertical: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,].span(),
+            i += 1;
         };
-        assert(map.get_horizontal().len() == 20, 'Horizontal length is not 20');
+
+        Map { map: map.span() }
     }
 
-    #[test]
-    #[available_gas(1000000)]
-    fn test_create_map_vertical() {
-        let map = Map {
-            horizontal: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].span(),
-            vertical: array![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,].span(),
-        };
-        assert(map.get_vertical().len() == 20, 'Vertical length is not 20');
+    fn get_coordinate(ref self: Map, index: u32) -> (u32, u32) {
+        let mut point = self.map.at(index);
+        let point_x = point.x.clone();
+        let point_y = point.y.clone();
+        (point_x, point_y)
     }
 }
