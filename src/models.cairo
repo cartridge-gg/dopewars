@@ -9,3 +9,5 @@ mod leaderboard;
 mod ryo;
 mod tile;
 mod map;
+mod cop;
+mod gangster;
