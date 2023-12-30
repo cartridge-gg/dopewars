@@ -1,9 +1,4 @@
-const STREET_TYPE: u8 = 0;
-const WALL_TYPE: u8 = 1;
-const PLAYER_TYPE: u8 = 2;
-const COP_TYPE: u8 = 3;
-const GANGSTER_TYPE: u8 = 4;
-
+use rollyourown::constants::{STREET_TYPE, WALL_TYPE, PLAYER_TYPE, COP_TYPE, GANGSTER_TYPE};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Tile {
@@ -27,6 +22,7 @@ trait TileTrait {
     fn is_equal(self: Tile, b: Tile) -> bool;
     fn is_close(self: Tile, b: Tile) -> bool;
     fn distance(self: Tile, b: Tile) -> u32;
+    fn calculate_index(self: Tile) -> u32;
 }
 
 impl TileImpl of TileTrait {
@@ -81,5 +77,9 @@ impl TileImpl of TileTrait {
             dy = b.y - self.y;
         };
         dx * dx + dy * dy
+    }
+
+    fn calculate_index(self: Tile) -> u32 {
+        self.y * 20 + self.x
     }
 }

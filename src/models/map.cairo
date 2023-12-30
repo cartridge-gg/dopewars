@@ -1,3 +1,4 @@
+use core::traits::IndexView;
 use core::clone::Clone;
 use core::box::BoxTrait;
 use core::traits::Into;
@@ -5,42 +6,79 @@ use core::traits::TryInto;
 use core::option::OptionTrait;
 use rollyourown::models::tile::{Tile, TileTrait};
 use array::{ArrayTrait, SpanTrait, Span};
+use rollyourown::constants::{STREET_TYPE, WALL_TYPE, PLAYER_TYPE, COP_TYPE, GANGSTER_TYPE};
+use rollyourown::models::encounter::EncounterType;
 
-struct Map {
-    map: Span<Tile>,
-}
 
-trait MapTrait {
-    fn new() -> Map;
-    fn get_coordinate(ref self: Map, index: u32) -> (u32, u32);
-}
+struct Map {}
 
+#[generate_trait]
 impl MapImpl of MapTrait {
-    fn new() -> Map {
+    fn new(player_position: u8, enemy_type: EncounterType, enemy_position: u32) -> Span<Tile> {
         let mut i: u32 = 0;
         let mut map = array![];
         loop {
             if i == 400 {
                 break;
             }
-            if (i >= 1 || i <= 20) {
-                map.append(TileTrait::new(i % 20, i / 20, 1));
+            if (i >= 0 || i <= 20) {
+                map.append(TileTrait::new(i % 20, i / 20, WALL_TYPE));
             } else if (i % 20 == 0) {
-                map.append(TileTrait::new(i % 20, i / 20, 1));
+                map.append(TileTrait::new(i % 20, i / 20, WALL_TYPE));
             } else {
-                map.append(TileTrait::new(i % 20, i / 20, 0));
+                if (i == player_position.into()) {
+                    map.append(TileTrait::new(i % 20, i / 20, PLAYER_TYPE));
+                } else if (i == enemy_position) {
+                    match enemy_type {
+                        EncounterType::Gang => {
+                            map.append(TileTrait::new(i % 20, i / 20, GANGSTER_TYPE));
+                        },
+                        EncounterType::Cops => {
+                            map.append(TileTrait::new(i % 20, i / 20, COP_TYPE));
+                        },
+                    }
+                } else {
+                    map.append(TileTrait::new(i % 20, i / 20, STREET_TYPE));
+                }
             }
 
             i += 1;
         };
 
-        Map { map: map.span() }
+        map.span()
     }
+// fn replace_tile(ref self: Map, index: u32, _type: u8) {
+//     let mut new_tiles = array![]; // Assuming this creates a new Array<Tile>
+//     let mut i: u32 = 0;
 
-    fn get_coordinate(ref self: Map, index: u32) -> (u32, u32) {
-        let mut point = self.map.at(index);
-        let point_x = point.x.clone();
-        let point_y = point.y.clone();
-        (point_x, point_y)
-    }
+//     // Copy tiles from the old map to the new one, replacing the specified tile
+//     loop {
+//         if i == 400 {
+//             break;
+//         }
+//         if (i >= 1 || i <= 20) {
+//             new_tiles.append(TileTrait::new(i % 20, i / 20, 1));
+//         } else if (i % 20 == 0) {
+//             new_tiles.append(TileTrait::new(i % 20, i / 20, 1));
+//         } else {
+//             if (i == index) {
+//                 new_tiles.append(TileTrait::new(i % 20, i / 20, _type));
+//             } else {
+//                 new_tiles.append(TileTrait::new(i % 20, i / 20, 0));
+//             }
+//         }
+
+//         i += 1;
+//     };
+
+//     self.map = new_tiles.span(); // Update the map with the new Span<Tile>
+// }
+
+// fn get_coordinate(ref self: Map, index: u32) -> (u32, u32) {
+//     let mut point = self.map.at(index);
+//     let point_x = point.x.clone();
+//     let point_y = point.y.clone();
+//     (point_x, point_y)
+// }
 }
+
