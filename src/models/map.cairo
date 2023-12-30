@@ -10,11 +10,26 @@ use rollyourown::constants::{STREET_TYPE, WALL_TYPE, PLAYER_TYPE, COP_TYPE, GANG
 use rollyourown::models::encounter::EncounterType;
 
 
-struct Map {}
+#[derive(Model, Copy, Drop, Serde)]
+struct Map {
+    #[key]
+    map_id: u32,
+    level: u32,
+}
+
+#[derive(Serde, Copy, Drop, PartialEq)]
+enum Type {
+    Street: (),
+    Wall: (),
+    Player: (),
+    Cop: (),
+    Gangster: (),
+}
+
 
 #[generate_trait]
 impl MapImpl of MapTrait {
-    fn new(player_position: u8, enemy_type: EncounterType, enemy_position: u32) -> Span<Tile> {
+    fn new(player_position: u32, enemy_type: EncounterType, enemy_position: u32) -> Span<Tile> {
         let mut i: u32 = 0;
         let mut map = array![];
         loop {
@@ -46,6 +61,21 @@ impl MapImpl of MapTrait {
         };
 
         map.span()
+    }
+
+    fn get_type(tile: Tile, raw_type: u8) -> Type {
+        if raw_type == STREET_TYPE {
+            return Type::Street(());
+        } else if raw_type == WALL_TYPE {
+            return Type::Wall(());
+        } else if raw_type == PLAYER_TYPE {
+            return Type::Player(());
+        } else if raw_type == COP_TYPE {
+            return Type::Cop(());
+        } else if raw_type == GANGSTER_TYPE {
+            return Type::Gangster(());
+        }
+        Type::Street(())
     }
 // fn replace_tile(ref self: Map, index: u32, _type: u8) {
 //     let mut new_tiles = array![]; // Assuming this creates a new Array<Tile>

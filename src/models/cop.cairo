@@ -1,5 +1,6 @@
 use rollyourown::models::tile::Tile;
 
+#[derive(Model, Copy, Drop, Serde)]
 struct Cop {
     #[key]
     game_id: u32,

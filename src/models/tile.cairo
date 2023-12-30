@@ -11,8 +11,10 @@ struct Tile {
     y: u32
 }
 
+
 trait TileTrait {
     fn new(x: u32, y: u32, _type: u8) -> Tile;
+    fn get_tile(self: Tile) -> u8;
     fn is_street(self: Tile) -> bool;
     fn is_wall(self: Tile) -> bool;
     fn is_player(self: Tile) -> bool;
@@ -28,6 +30,22 @@ trait TileTrait {
 impl TileImpl of TileTrait {
     fn new(x: u32, y: u32, _type: u8) -> Tile {
         Tile { game_id: 0, index: 0, x: x, y: y, _type: _type }
+    }
+
+    fn get_tile(self: Tile) -> u8 {
+        if self._type == STREET_TYPE {
+            return STREET_TYPE;
+        } else if self._type == WALL_TYPE {
+            return WALL_TYPE;
+        } else if self._type == PLAYER_TYPE {
+            return PLAYER_TYPE;
+        } else if self._type == COP_TYPE {
+            return COP_TYPE;
+        } else if self._type == GANGSTER_TYPE {
+            return GANGSTER_TYPE;
+        } else {
+            return STREET_TYPE;
+        }
     }
 
     fn is_street(self: Tile) -> bool {
