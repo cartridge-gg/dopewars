@@ -16,6 +16,7 @@ export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | s
 export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "trade" ).address')
 export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
 export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "ryo" ).address')
+export MINI_GAME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "minigame" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE
@@ -28,6 +29,7 @@ echo decide: $DECIDE_ADDRESS
 echo trade : $TRADE_ADDRESS
 echo shop : $SHOP_ADDRESS
 echo ryo : $RYO_ADDRESS
+echo minigame : $MINI_GAME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
@@ -37,6 +39,7 @@ DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter" "Leaderboard" "RyoMeta")
 TRADE_COMPONENTS=("Drug" "Market" "Player")
 SHOP_COMPONENTS=("Player" "Item" "Market")
 RYO_COMPONENTS=("RyoMeta" "Leaderboard")
+MINI_GAME_COMPONENTS=("Player" "Game" "Map" "Cop" "Gangster" "PlayerMiniGame" "Tile" "Encounter")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS 
@@ -65,6 +68,11 @@ done
 
 for component in ${RYO_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $RYO_ADDRESS --world $WORLD_ADDRESS 
+    sleep 0.1
+done
+
+for component in ${MINI_GAME_COMPONENTS[@]}; do
+    sozo -P $PROFILE auth writer $component $MINI_GAME_ADDRESS --world $WORLD_ADDRESS 
     sleep 0.1
 done
 
