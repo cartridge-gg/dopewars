@@ -6,6 +6,7 @@ import {
   battleMenuOptions,
   direction,
 } from "@/phaser/assets/asset-keys";
+import { CurrentState } from "@/phaser/types/type";
 import Phaser from "phaser";
 
 export class BattleMenu {
@@ -15,11 +16,11 @@ export class BattleMenu {
   #battleTextGameObjectLine2!: Phaser.GameObjects.Text;
   #mainBattleMenuCursorPhaserImageGameObject!: Phaser.GameObjects.Image;
   #selectedBattleMenuOption!: battleMenuOptions;
-  #selectedAttackIndex!: number; //#
+  #selectedAttackIndex!: number; // attack index
 
   // Attack state
-  public attackState!: boolean;
-
+  public currentState!: CurrentState;
+  
   // Callback declare
   #queuedInfoPanelMessages!: string[];
   #queuedInfoPanelCallback?: () => void | undefined;
@@ -33,7 +34,7 @@ export class BattleMenu {
     this.#waitingForPlayerInput = false;
     this.#createMainInfoPane();
     this.#createMainBattlemenu();
-    this.attackState = false;
+    this.currentState = CurrentState.MENU; // reset attack state
   }
 
   get selectedAttack(): number {
@@ -49,7 +50,7 @@ export class BattleMenu {
     this.#selectedBattleMenuOption = BATTLE_MENU_OPTIONS.FIGHT;
     this.#mainBattleMenuCursorPhaserImageGameObject.setPosition(ASSET_KEYS.CURSOR_X, ASSET_KEYS.CURSOR_Y);
 
-    this.attackState = false; // Attack state
+    this.currentState = CurrentState.MENU; // Attack state
     this.#selectedAttackIndex = -1; // Reset attack index
   }
 

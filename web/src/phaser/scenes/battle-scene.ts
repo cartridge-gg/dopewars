@@ -5,6 +5,7 @@ import { EnemyBattleCharacter } from "../battle/characters/enemy-battle-characte
 import { PlayerBattleCharacter } from "../battle/characters/player-battle-character";
 import { SCENE_KEYS } from "./scene-keys";
 import { ASSET_KEYS, DIRECTION, direction } from "../assets/asset-keys";
+import { CurrentState } from "../types/type";
 
 export default class BattleScene extends Phaser.Scene {
   #battleMenu!: BattleMenu;
@@ -71,16 +72,14 @@ export default class BattleScene extends Phaser.Scene {
   update() {
     console.log(this.#battleMenu.selectedAttack);
 
-    const wasSpaceKeyPressed = Phaser.Input.Keyboard.JustDown(
-      this.#cursorKeys.space
-    );
+    const wasSpaceKeyPressed = Phaser.Input.Keyboard.JustDown(this.#cursorKeys.space);
 
     if (wasSpaceKeyPressed) {
       this.#battleMenu.handlePlayerInput("OK");
       this.#activePlayerAttackIndex = this.#battleMenu.selectedAttack;
 
-      if (this.#battleMenu.attackState === false) {
-        this.#battleMenu.attackState = true;
+      if (this.#battleMenu.currentState === CurrentState.MENU) {
+        this.#battleMenu.currentState = CurrentState.ATTACK;
         this.handleBattleSequence();
       }
     }
@@ -121,8 +120,7 @@ export default class BattleScene extends Phaser.Scene {
     this.#battleMenu.updateInfoPaneMessagesAndWaitForInput(
       [
         `${this.#activePlayerCharacter.name} attempt to ${
-          this.#activePlayerCharacter.attacks[this.#activePlayerAttackIndex]
-            .name
+          this.#activePlayerCharacter.attacks[this.#activePlayerAttackIndex].name
         }`,
       ],
       () => {
@@ -132,7 +130,7 @@ export default class BattleScene extends Phaser.Scene {
             this.#enemyAttack();
           });
         });
-      }
+      },
     );
   }
 
@@ -146,7 +144,7 @@ export default class BattleScene extends Phaser.Scene {
             this.#battleMenu.showMainBattleMenu();
           });
         });
-      }
+      },
     );
   }
 }
