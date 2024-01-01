@@ -6,17 +6,30 @@ import {
     subscribePhaserEvent,
     unsubscribePhaserEvent,
 } from "./events/gameEventCenter";
+import { useSystems } from "@/dojo/hooks/useSystems";
+import { useRouter } from "next/router";
+import { Direction} from "@/dojo/types";
 
 export default function Index() {
+    const router = useRouter();
+    const gameId = router.query.gameId as string;
+    const { move } = useSystems();
+
     useEffect(() => {
         loadGame();
-        subscribePhaserEvent("move", handleCustomEvent);
-        return () => unsubscribePhaserEvent("move", handleCustomEvent);
+        subscribePhaserEvent("move", handleMoveTxn);
+        return () => unsubscribePhaserEvent("move", handleMoveTxn);
     }, []);
 
     const handleCustomEvent = (event: any) => {
         console.log("Received data:", event.detail);
     };
+
+    const handleMoveTxn = async (event: any) => {
+        console.log("move event: ", event.detail);
+        const res = await move(gameId, Direction.Down);
+        console.log("move res: ", res);
+    }
 
     const loadGame = async () => {
         if (typeof window !== 'object') {
