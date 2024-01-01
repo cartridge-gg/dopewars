@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Fight",
+        "animationName": "FIGHT"
+    },
+    {
+        "id": 2,
+        "name": "Pay",
+        "animationName": "PAY"
+    },
+    {
+        "id": 3,
+        "name": "Run",
+        "animationName": "RUN"
+    },
+    {
+        "id": 4,
+        "name": "Enemy",
+        "animationName": "ENEMY"
+    }
+]
