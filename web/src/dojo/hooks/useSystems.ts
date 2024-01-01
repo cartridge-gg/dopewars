@@ -107,7 +107,7 @@ export const useSystems = (): SystemsInterface => {
         tx = await execute(account!, contract, system, callData);
         console.log("tx", tx);
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 100,
+          retryInterval: 1000,
         });
       } catch (e: any) {
         setIsPending(false);

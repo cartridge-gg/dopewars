@@ -21,11 +21,8 @@ import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
 // DoperGanger imports
-import dynamic from 'next/dynamic';
-import {
-  subscribePhaserEvent,
-  unsubscribePhaserEvent,
-} from "../../../phaser/events/gameEventCenter";
+import dynamic from "next/dynamic";
+import { subscribePhaserEvent, unsubscribePhaserEvent } from "@/phaser/events/gameEventCenter";
 
 const DynamicComponentWithNoSSR = dynamic(() => import("@/phaser/Index"), { ssr: false });
 
@@ -142,18 +139,18 @@ export default function Decision() {
     setCombatLogs((logs) => [...logs, log]);
   };
 
-  // useEffect(() => {
-  //   subscribePhaserEvent("move", async (event: any) => {
-  //     console.log("move event: ", event.detail);
-  //     const res = await move(gameId, Direction.Down);
-  //     console.log("move res: ", res);
-  //   });
+  useEffect(() => {
+    subscribePhaserEvent("move", async (event: any) => {
+      console.log("move event: ", event.detail);
+      const res = await move(gameId, Direction.Down);
+      console.log("move res: ", res);
+    });
 
-  //   // Cleanup
-  //   return () => {
-  //     unsubscribePhaserEvent("move", (event: any) => {});
-  //   };
-  // }, []);
+    // Cleanup
+    return () => {
+      unsubscribePhaserEvent("move", (event: any) => {});
+    };
+  }, []);
 
   const onDecision = async (action: Action) => {
     try {
