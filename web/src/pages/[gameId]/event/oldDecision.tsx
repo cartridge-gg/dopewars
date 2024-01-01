@@ -20,13 +20,13 @@ import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
-// DoperGanger imports
-import dynamic from 'next/dynamic';
+// // DoperGanger imports
+// import dynamic from 'next/dynamic';
 
-const DynamicComponentWithNoSSR = dynamic(
-  () => import('@/phaser/Index'),
-  { ssr: false }
-)
+// const DynamicComponentWithNoSSR = dynamic(
+//   () => import('@/phaser/Index'),
+//   { ssr: false }
+// )
 
 type CombatLog = {
   text: string;
@@ -34,7 +34,7 @@ type CombatLog = {
   icon?: React.FC;
 };
 
-export default function Decision() {
+export default function OldDecision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const healthLoss = router.query.healthLoss as string;
@@ -42,11 +42,11 @@ export default function Decision() {
 
   const { account, playerEntityStore } = useDojoContext();
 
-  // DoperGanger states
-  const [phaserloading, setPhaserLoading] = useState(false);
-  useEffect(() => {
-    setPhaserLoading(true)
-  }, []);
+  // // DoperGanger states
+  // const [phaserloading, setPhaserLoading] = useState(false);
+  // useEffect(() => {
+  //   setPhaserLoading(true)
+  // }, []);
 
   const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState("");
@@ -261,7 +261,115 @@ export default function Decision() {
       borderRadius='10px'
       id="dopergangers"
       />
-      {phaserloading ? <DynamicComponentWithNoSSR /> : null}
+      {/* {phaserloading ? <DynamicComponentWithNoSSR /> : null} */}
+
+      <HStack
+        w="full"
+        h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+        overflowY="scroll"
+        sx={{
+          "scrollbar-width": "none",
+        }}
+        flexDir={["column", "row"]}
+      >
+        <Encounter
+          prefixTitle={prefixTitle}
+          title={title}
+          demand={demand}
+          sentence={sentence}
+          encounter={encounter!}
+          playerEntity={playerEntity}
+          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? 
+            `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif` : 
+            `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+            }`}
+          flex={[0, 1]}
+          mb={0}
+          w="full"
+        />
+
+        <VStack w="full" h={["auto", "100%"]} flex={[0, 1]} position="relative">
+          <VStack w="full" h={["100%"]}>
+            <Inventory />
+            <VStack w="full" h="100%">
+              <VStack w="full" alignItems="flex-start">
+                <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
+                  Combat Log
+                </Text>
+                <Card
+                  w="full"
+                  maxH={isMobile ? "calc( 100vh - 560px)" : "calc( 100vh - 380px)"}
+                  overflowY="scroll"
+                  sx={{
+                    "scrollbar-width": "none",
+                  }}
+                  alignItems="flex-start"
+                  px="16px"
+                  py="8px"
+                >
+                  <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
+                    <Heart /> You lost {healthLoss} HP!
+                  </Text>
+
+                  <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
+                    {combatLogs &&
+                      combatLogs.map((i, key) => (
+                        <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
+                          {i.icon &&
+                            i.icon({
+                              boxSize: "26",
+                            })}
+                          <Text>{i.text}</Text>
+                        </HStack>
+                      ))}
+                  </VStack>
+                </Card>
+              </VStack>
+            </VStack>
+          </VStack>
+
+          <Box minH="60px" />
+          <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isRunning || isPaying}
+              isLoading={isFigthing}
+              onClick={() => {
+                setIsFigthing(true);
+                onDecision(Action.Fight);
+              }}
+            >
+              Fight
+            </Button>
+
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isPaying || isFigthing}
+              isLoading={isRunning}
+              onClick={() => {
+                setIsRunning(true);
+                onDecision(Action.Run);
+              }}
+            >
+              Run
+            </Button>
+            <Button
+              w="full"
+              px={["auto","20px"]}
+              isDisabled={isRunning || isFigthing}
+              isLoading={isPaying}
+              onClick={() => {
+                setIsPaying(true);
+                onDecision(Action.Pay);
+              }}
+            >
+              PAY
+            </Button>
+          </Footer>
+        </VStack>
+      </HStack>
     </Layout>
   );
 }

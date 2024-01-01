@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import 'phaser';
-import { PreloadScene } from './scenes/preload-scene';
-import { WorldScene } from './scenes/world-scene';
+import TestScene from './scenes/TestScene';
+import { GridEngine } from "grid-engine";
 
-export default function Index() {
+export default function OldIndex() {
     useEffect(() => {
         loadGame();
     }, []);
@@ -15,28 +15,35 @@ export default function Index() {
 
         var config = {
             type: Phaser.AUTO,
-            pixelArt: false,
-            parent: "dopergangers",
+            parent: 'dopergangers',
+            backgroundColor: '#4eb3e7',
             physics: {
                 default: 'arcade',
                 arcade: {
                 gravity: { y: 0 },
                 },
             },
+            render: {
+                antialias: false,
+            },
             scale: {
-                // width: 320,
-                // height: 320,
-                //mode: Phaser.Scale.FIT,
-                //autoCenter: Phaser.Scale.CENTER_BOTH,
-
-                // previous
                 width: '100%',
                 // height: '100%',
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
             },
-            backgroundColor: '#4eb3e7',
-            scene: [PreloadScene, WorldScene],
+
+            plugins: {
+                scene: [
+                    {
+                        key: "gridEngine",
+                        plugin: GridEngine,
+                        mapping: "gridEngine",
+                    },
+                ],
+            },
+
+            scene:[TestScene]
         };
 
         var game = new Phaser.Game(config);
