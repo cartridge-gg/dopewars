@@ -37,8 +37,8 @@ export default class BattleScene extends Phaser.Scene {
         assetFrame: 0,
         currentHp: 25,
         maxHp: 25,
-        attackIds: [1, 2, 3, 4], // Choose attack
-        baseAttack: 5,
+        attackIds: [1, 2, 3], // Choose attack
+        baseAttack: 20,
         currentLevel: 6,
       },
       scaleHealthBarBackgroundImageByY: 1, // Default value
@@ -79,8 +79,22 @@ export default class BattleScene extends Phaser.Scene {
       this.#activePlayerAttackIndex = this.#battleMenu.selectedAttack;
 
       if (this.#battleMenu.currentState === CurrentState.MENU) {
-        this.#battleMenu.currentState = CurrentState.ATTACK;
-        this.handleBattleSequence();
+        if (this.#activePlayerAttackIndex === 0) {
+          this.#battleMenu.currentState = CurrentState.ATTACK;
+          this.handleBattleSequence();
+        }
+        if (this.#activePlayerAttackIndex === 1) {
+          this.#battleMenu.currentState = CurrentState.PAY;
+          this.#battleMenu.updateInfoPaneMessagesAndWaitForInput([`You Paid ! `], () => {
+            this.#handlePay();
+          });
+        }
+        if (this.#activePlayerAttackIndex === 2) {
+          this.#battleMenu.currentState = CurrentState.RUN;
+          this.#battleMenu.updateInfoPaneMessagesAndWaitForInput([`You Run ! `], () => {
+            this.#handleRun();
+          });
+        }
       }
     }
 
@@ -118,15 +132,11 @@ export default class BattleScene extends Phaser.Scene {
 
   #playerAttack() {
     this.#battleMenu.updateInfoPaneMessagesAndWaitForInput(
-      [
-        `${this.#activePlayerCharacter.name} attempt to ${
-          this.#activePlayerCharacter.attacks[this.#activePlayerAttackIndex].name
-        }`,
-      ],
+      [`${this.#activePlayerCharacter.name} attempt to ${this.#activePlayerCharacter.attacks[0].name}`],
       () => {
         this.time.delayedCall(500, () => {
           // Characters attacking alternately
-          this.#activeEnemyCharacter.takeDamage(20, () => {
+          this.#activeEnemyCharacter.takeDamage(this.#activePlayerCharacter.baseAttack, () => {
             this.#enemyAttack();
           });
         });
@@ -135,16 +145,61 @@ export default class BattleScene extends Phaser.Scene {
   }
 
   #enemyAttack() {
+    if (this.#activeEnemyCharacter.isFainted) {
+      this.#posBattleSequenceCheck();
+      return;
+    }
     this.#battleMenu.updateInfoPaneMessagesAndWaitForInput(
       [` ${this.#activeEnemyCharacter.attacks[0].name} attack you back`],
       () => {
         this.time.delayedCall(500, () => {
           // Characters attacking alternately
-          this.#activePlayerCharacter.takeDamage(20, () => {
-            this.#battleMenu.showMainBattleMenu();
+          this.#activePlayerCharacter.takeDamage(this.#activeEnemyCharacter.baseAttack, () => {
+            this.#posBattleSequenceCheck();
           });
         });
       },
     );
+  }
+
+  #posBattleSequenceCheck() {
+    if (this.#activePlayerCharacter.isFainted) {
+      this.#battleMenu.updateInfoPaneMessagesAndWaitForInput([`You died! `], () => {
+        this.#transitionToNextScene();
+      });
+      return;
+    }
+
+    if (this.#activeEnemyCharacter.isFainted) {
+      this.#battleMenu.updateInfoPaneMessagesAndWaitForInput(
+        [`You beat the ${this.#activeEnemyCharacter.name} `],
+        () => {
+          this.#transitionToNextScene();
+        },
+      );
+      return;
+    }
+
+    this.#battleMenu.showMainBattleMenu();
+  }
+
+  #transitionToNextScene() {
+    this.cameras.main.fadeOut(2600, 0, 0, 0);
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.scene.start(SCENE_KEYS.BATTLE_SCENE);
+    });
+  }
+
+  #handlePay() {
+    this.cameras.main.fadeOut(2600, 0, 0, 0);
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.scene.start(SCENE_KEYS.BATTLE_SCENE);
+    });
+  }
+  #handleRun() {
+    this.cameras.main.fadeOut(2600, 0, 0, 0);
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.scene.start(SCENE_KEYS.BATTLE_SCENE);
+    });
   }
 }
