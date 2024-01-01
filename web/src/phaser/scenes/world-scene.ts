@@ -8,13 +8,17 @@ import { Controls } from "../utils/controls";
 import { DIRECTION } from "../common/direction";
 import { NPC } from "../world/characters/npc";
 import { publishPhaserEvent } from "../events/gameEventCenter";
+import catcherQtable from "../assets/catcherQtable.json";
 
 const PLAYER_POSITION = Object.freeze({ x: 0 * TILE_SIZE, y: 0 * TILE_SIZE });
-const NPC_POSITION = Object.freeze({ x: 1 * TILE_SIZE, y: 0 * TILE_SIZE });
+const NPC_POSITION = Object.freeze({ x: 11 * TILE_SIZE, y: 1 * TILE_SIZE });
+const NPC_POSITION2 = Object.freeze({ x: 5 * TILE_SIZE, y: 9 * TILE_SIZE });
 
 export class WorldScene extends Phaser.Scene {
   protected player: any;
-  protected npc: any;
+  protected npc: NPC;
+  protected npc2: NPC;
+  protected npc3: NPC;
   controls: any;
   mapScale = 4;
 
@@ -23,7 +27,7 @@ export class WorldScene extends Phaser.Scene {
   }
   create() {
     console.log(`[${WorldScene.name}:create] invoked`);
-
+    //console.log(23%20, Math.floor(23/20));
     const x = 6 * TILE_SIZE;
     const y = 22 * TILE_SIZE;
 
@@ -76,6 +80,22 @@ export class WorldScene extends Phaser.Scene {
       collisionLayer: collisionLayer,
     });
 
+    this.npc2 = new NPC({
+      scene: this,
+      position: NPC_POSITION2,
+      scale: 0.9,
+      direction: DIRECTION.DOWN,
+      collisionLayer: collisionLayer,
+    });
+
+    this.npc3 = new NPC({
+      scene: this,
+      position: { x: 17 * TILE_SIZE, y: 8 * TILE_SIZE},
+      scale: 0.9,
+      direction: DIRECTION.DOWN,
+      collisionLayer: collisionLayer,
+    });
+
     this.cameras.main.startFollow(this.player.sprite);
 
     const foreground= this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_FOREGROUND, 0).setOrigin(0);
@@ -84,6 +104,29 @@ export class WorldScene extends Phaser.Scene {
     this.controls = new Controls(this);
 
     this.cameras.main.fadeIn(1000, 0, 0, 0);
+
+    //console.log(catcherQtable);
+  }
+
+  convertAIInputToDirection(npc: NPC) {
+    const ai_vision_input = `(${this.player.getIndex()}, ${this.npc.getIndex()}, ${219})`
+    const moveNumber = catcherQtable[ai_vision_input] ? 
+      catcherQtable[ai_vision_input].indexOf(Math.max.apply(Math, catcherQtable[ai_vision_input]))
+      : Math.floor(Math.random()*4);
+
+    switch(moveNumber) {
+      case 0:
+        return DIRECTION.LEFT;
+      case 1:
+        return DIRECTION.RIGHT;
+      case 2:
+        return DIRECTION.UP;
+      case 3:
+        return DIRECTION.DOWN;
+      default:
+        return DIRECTION.NONE;
+    }
+
   }
 
   update(time: any) {
@@ -93,11 +136,26 @@ export class WorldScene extends Phaser.Scene {
     if (selectedDirection !== DIRECTION.NONE) {
       publishPhaserEvent("move", selectedDirection);
       this.player.moveCharacter(selectedDirection);
+      // console.log(this.player.getIndex()); // player coords
+      // console.log(this.npc.getIndex()); // npc coords
+      // console.log(199) // door coords
+      //const ai_vision_input = `(${this.player.getIndex()}, ${this.npc.getIndex()}, ${219})`
+      // console.log(ai_vision_input)
+      // console.log(catcherQtable[ai_vision_input])
+      // console.log(Math.max.apply(Math, catcherQtable[ai_vision_input]))
+      //console.log(catcherQtable[ai_vision_input].indexOf(Math.max.apply(Math, catcherQtable[ai_vision_input])))
+      // 0=LEFT, 1=RIGHT, 2=UP, 3=DOWN
+
+      //console.log(this.convertAIInputToDirection(ai_vision_input))
       //MOVE NPC
-      this.npc.moveCharacter(npcMove);
+      this.npc.moveCharacter(this.convertAIInputToDirection(this.npc));
+      this.npc2.moveCharacter(this.convertAIInputToDirection(this.npc2));
+      this.npc3.moveCharacter(this.convertAIInputToDirection(this.npc3));
     }
     this.player.update(time);
     this.npc.update(time);
+    this.npc2.update(time);
+    this.npc3.update(time);
 
     if (
       this.player.getPosition().x === this.npc.getPosition().x &&

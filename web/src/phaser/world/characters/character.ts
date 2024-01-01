@@ -63,6 +63,7 @@ export class Character {
     const idleFrame =
       this._phaserGameObject.anims.currentAnim?.frames[1].frame.name;
     this.moveSprite(direction);
+
     //check npc caught
 
     if (!idleFrame) {
@@ -151,6 +152,9 @@ export class Character {
         if (this._spriteGridMovementFinishedCallback) {
           this._spriteGridMovementFinishedCallback();
         }
+        // console.log("player position.")
+        // console.log(this.getPosition()); //this is pixel coords
+        // console.log(this.getIndex()); //this is tile index
       },
     });
   }
