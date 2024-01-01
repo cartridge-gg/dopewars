@@ -149,8 +149,15 @@ export class Character {
       return false;
     }
     const { x, y } = position;
+    console.log(x, y);
+
+    console.log(x / 16 + (y / 16) * 20);
+    const tileIndex = x / 16 + (y / 16) * 20;
     const tile = this._collisionLayer.getTileAtWorldXY(x, y, true);
 
+    if (x < 0 || y < 0 || x >= 320 || y >= 320) {
+      return true;
+    }
     return tile.index !== -1;
   }
 }

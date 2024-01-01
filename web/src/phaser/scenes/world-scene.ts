@@ -6,13 +6,16 @@ import { Player } from "../world/characters/player";
 import { TILE_SIZE, TILED_COLLISION_LAYER_ALPHA } from "../world/config";
 import { Controls } from "../utils/controls";
 import { DIRECTION } from "../common/direction";
+import { NPC } from "../world/characters/npc";
 
 const PLAYER_POSITION = Object.freeze({ x: 0 * TILE_SIZE, y: 0 * TILE_SIZE });
+const NPC_POSITION = Object.freeze({ x: 1 * TILE_SIZE, y: 0 * TILE_SIZE });
 
 export class WorldScene extends Phaser.Scene {
   protected player: any;
+  protected npc: any;
   controls: any;
-  mapScale = 3;
+  mapScale = 4;
 
   constructor() {
     super({ key: SCENE_KEYS.WORLD_SCENE });
@@ -24,7 +27,7 @@ export class WorldScene extends Phaser.Scene {
     const y = 22 * TILE_SIZE;
 
     this.cameras.main.setBounds(0, 0, 320, 320);
-    // this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(this.mapScale);
     this.cameras.main.centerOn(x, y);
 
     const map = this.make.tilemap({ key: WORLD_ASSET_KEYS.WORLD_MAIN_LEVEL });
@@ -48,25 +51,34 @@ export class WorldScene extends Phaser.Scene {
     }
 
     collisionLayer.setAlpha(TILED_COLLISION_LAYER_ALPHA).setDepth(2);
-    collisionLayer.scale = this.mapScale;
+    //collisionLayer.scale = this.mapScale;
 
     const mapImage = this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_BACKGROUND, 0).setOrigin(0);
     // this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_BACKGROUND).setOrigin(0, 0);
-    mapImage.scale = this.mapScale;
+    //mapImage.scale = this.mapScale;
 
     this.player = new Player({
       scene: this,
       position: PLAYER_POSITION,
       //scale: this.mapScale,
+      scale: 0.2,
       direction: DIRECTION.DOWN,
       collisionLayer: collisionLayer,
     });
-    this.player.scale = this.mapScale;
+    //this.player.scale = this.mapScale;
+
+    this.npc = new NPC({
+      scene: this,
+      position: NPC_POSITION,
+      scale: 0.9,
+      direction: DIRECTION.DOWN,
+      collisionLayer: collisionLayer,
+    });
 
     this.cameras.main.startFollow(this.player.sprite);
 
     const foreground= this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_FOREGROUND, 0).setOrigin(0);
-    foreground.scale = this.mapScale;
+    //foreground.scale = this.mapScale;
 
     this.controls = new Controls(this);
 
@@ -75,9 +87,14 @@ export class WorldScene extends Phaser.Scene {
 
   update(time: any) {
     const selectedDirection = this.controls.getDirectionKeyJustPressed();
+    const npcMove = DIRECTION.RIGHT; //GET FROM CONTRACT.
+
     if (selectedDirection !== DIRECTION.NONE) {
       this.player.moveCharacter(selectedDirection);
+      //MOVE NPC
+      this.npc.moveCharacter(npcMove);
     }
     this.player.update(time);
+    this.npc.update(time);
   }
 }

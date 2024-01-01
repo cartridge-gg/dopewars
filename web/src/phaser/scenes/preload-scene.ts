@@ -50,10 +50,10 @@ export class PreloadScene extends Phaser.Scene {
       }
     );
     //NPC
-    // this.load.spritesheet(CHARACTER_ASSET_KEYS.NPC, ``, {
-    //   frameWidth: 16,
-    //   frameHeight: 16,
-    // });
+    this.load.spritesheet(CHARACTER_ASSET_KEYS.NPC, `/phaser/gameMap/images/npc.png`, {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {

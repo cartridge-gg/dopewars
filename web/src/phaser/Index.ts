@@ -16,6 +16,9 @@ export default function Index() {
         var config = {
             type: Phaser.AUTO,
             pixelArt: false,
+            render: {
+                antialias: false,
+            },
             parent: "dopergangers",
             physics: {
                 default: 'arcade',
