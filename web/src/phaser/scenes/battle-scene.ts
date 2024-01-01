@@ -37,7 +37,7 @@ export default class BattleScene extends Phaser.Scene {
         assetFrame: 0,
         currentHp: 25,
         maxHp: 25,
-        attackIds: [1, 2, 3], // Choose attack
+        attackIds: [1], // Choose attack
         baseAttack: 20,
         currentLevel: 6,
       },

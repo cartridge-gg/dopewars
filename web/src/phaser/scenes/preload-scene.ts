@@ -36,9 +36,9 @@ export class PreloadScene extends Phaser.Scene {
     });
 
     //// Batlle Assets
-    this.load.image(ASSET_KEYS.CITY, "/phaser/battle/main-ui/city.png");
-    this.load.image(ASSET_KEYS.MAFIA, "/phaser/battle/main-ui/mafia.png");
-    this.load.image(ASSET_KEYS.POLICE, "/phaser/battle/main-ui/police.png");
+    this.load.image(ASSET_KEYS.CITY, "/phaser/battle/main-ui/Background.png");
+    this.load.image(ASSET_KEYS.MAFIA, "/phaser/battle/main-ui/player.png");
+    this.load.image(ASSET_KEYS.POLICE, "/phaser/battle/main-ui/e-police.png");
 
     // Health
     this.load.image(ASSET_KEYS.HEALTH_BAR_BACKGROUND, "/phaser/battle/health/custom-ui.png");
