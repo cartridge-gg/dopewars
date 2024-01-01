@@ -1,4 +1,5 @@
 import { DIRECTION } from "../../common/direction";
+import eventsCenter from "../../events/gameEventCenter";
 import { getTargetPositionFromGameObjectPositionAndDirection } from "../../utils/grid-utils";
 import { exhaustiveGuard } from "../../utils/guard";
 
@@ -62,6 +63,8 @@ export class Character {
     const idleFrame =
       this._phaserGameObject.anims.currentAnim?.frames[1].frame.name;
     this.moveSprite(direction);
+    //check npc caught
+
     if (!idleFrame) {
       return;
     }
@@ -74,7 +77,9 @@ export class Character {
     // stop current animation and show idle frame
     const idleFrame =
       this._phaserGameObject.anims.currentAnim?.frames[1].frame.name;
+
     this._phaserGameObject.anims.stop();
+
     if (!idleFrame) {
       return;
     }
@@ -94,6 +99,9 @@ export class Character {
   }
 
   protected moveSprite(direction: DIRECTION): void {
+    //call contract to move sprite on chain
+    //call event
+
     this._direction = direction;
     if (this.isBlockingTile()) {
       return;
@@ -126,7 +134,9 @@ export class Character {
       this._targetPosition,
       this._direction
     );
+
     this._previousTargetPosition = { ...this._targetPosition };
+    
     this._targetPosition = updatedPosition;
 
     this._scene.add.tween({
@@ -135,6 +145,7 @@ export class Character {
       y: { from: this._phaserGameObject.y, to: updatedPosition.y },
       x: { from: this._phaserGameObject.x, to: updatedPosition.x },
       targets: this._phaserGameObject,
+      
       onComplete: () => {
         this._isMoving = false;
         if (this._spriteGridMovementFinishedCallback) {
@@ -160,4 +171,18 @@ export class Character {
     }
     return tile.index !== -1;
   }
+
+  getPosition() {
+    return {
+      x: this._phaserGameObject.x,
+      y: this._phaserGameObject.y,
+    };
+  }
+
+  getIndex() {
+    const x = this._phaserGameObject.x;
+    const y = this._phaserGameObject.y;
+    return x / 16 + (y / 16) * 20;
+  }
+  
 }

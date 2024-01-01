@@ -7,6 +7,7 @@ import { TILE_SIZE, TILED_COLLISION_LAYER_ALPHA } from "../world/config";
 import { Controls } from "../utils/controls";
 import { DIRECTION } from "../common/direction";
 import { NPC } from "../world/characters/npc";
+import { publishPhaserEvent } from "../events/gameEventCenter";
 
 const PLAYER_POSITION = Object.freeze({ x: 0 * TILE_SIZE, y: 0 * TILE_SIZE });
 const NPC_POSITION = Object.freeze({ x: 1 * TILE_SIZE, y: 0 * TILE_SIZE });
@@ -90,11 +91,22 @@ export class WorldScene extends Phaser.Scene {
     const npcMove = DIRECTION.RIGHT; //GET FROM CONTRACT.
 
     if (selectedDirection !== DIRECTION.NONE) {
+      publishPhaserEvent("move", selectedDirection);
       this.player.moveCharacter(selectedDirection);
       //MOVE NPC
       this.npc.moveCharacter(npcMove);
     }
     this.player.update(time);
     this.npc.update(time);
+
+    if (
+      this.player.getPosition().x === this.npc.getPosition().x &&
+      this.player.getPosition().y === this.npc.getPosition().y
+    ) {
+      console.log("Player and NPC are on the same tile!");
+      return;
+      //START GAME
+    }
+    
   }
 }

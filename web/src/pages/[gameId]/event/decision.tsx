@@ -22,6 +22,10 @@ import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
 // DoperGanger imports
 import dynamic from 'next/dynamic';
+import {
+  subscribePhaserEvent,
+  unsubscribePhaserEvent,
+} from "../../../phaser/events/gameEventCenter";
 
 const DynamicComponentWithNoSSR = dynamic(
   () => import('@/phaser/Index'),
