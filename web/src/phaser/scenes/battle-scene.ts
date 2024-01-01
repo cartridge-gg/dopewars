@@ -23,7 +23,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create() {
-    
+    this.scene.remove(SCENE_KEYS.WORLD_SCENE);
     // Create background
     const background = new Background(this);
     background.showCity();

@@ -20,7 +20,7 @@ export class WorldScene extends Phaser.Scene {
   protected npc2: NPC;
   protected npc3: NPC;
   controls: any;
-  mapScale = 4;
+  mapScale = 3.2;
 
   constructor() {
     super({ key: SCENE_KEYS.WORLD_SCENE });
@@ -162,8 +162,10 @@ export class WorldScene extends Phaser.Scene {
       this.player.getPosition().y === this.npc.getPosition().y
     ) {
       console.log("Player and NPC are on the same tile!");
-      return;
+      //return;
       //START GAME
+      this.scene.remove(SCENE_KEYS.WORLD_SCENE);
+      this.scene.start(SCENE_KEYS.BATTLE_SCENE);
     }
     
   }
