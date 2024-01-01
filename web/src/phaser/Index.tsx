@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import 'phaser';
 import { PreloadScene } from './scenes/preload-scene';
 import { WorldScene } from './scenes/world-scene';
+import { BattleScene } from './scenes/battle-scene';
 import {
     subscribePhaserEvent,
     unsubscribePhaserEvent,
@@ -37,8 +38,8 @@ export default function Index() {
                 },
             },
             scale: {
-                // width: 320,
-                // height: 320,
+                // width: 1024,
+                // height: 576,
                 //mode: Phaser.Scale.FIT,
                 //autoCenter: Phaser.Scale.CENTER_BOTH,
 
@@ -49,7 +50,8 @@ export default function Index() {
                 autoCenter: Phaser.Scale.CENTER_BOTH,
             },
             backgroundColor: '#4eb3e7',
-            scene: [PreloadScene, WorldScene],
+            scene: [PreloadScene, WorldScene, BattleScene],
+            //scene: [PreloadScene, WorldScene],
         };
 
         var game = new Phaser.Game(config);
