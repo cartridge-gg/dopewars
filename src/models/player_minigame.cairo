@@ -8,7 +8,8 @@ struct PlayerMiniGame {
     #[key]
     player_id: ContractAddress,
     _player: Player,
-    position: u32,
+    x: u32,
+    y: u32,
 }
 
 #[generate_trait]

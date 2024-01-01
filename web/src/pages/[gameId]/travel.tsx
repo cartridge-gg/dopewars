@@ -55,6 +55,7 @@ export default function Travel() {
   const toaster = useToast();
   const { account, playerEntityStore } = useDojoContext();
   const { travel, isPending } = useSystems();
+  const { create, isPending: isPending2 } = useSystems();
 
   const { playerEntity } = playerEntityStore;
 

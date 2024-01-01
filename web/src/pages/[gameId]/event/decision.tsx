@@ -2,7 +2,7 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById, getShopItem } from "@/dojo/helpers";
 import { useSystems } from "@/dojo/hooks/useSystems";
-import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
+import { Action, Direction, EncounterType, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -21,12 +21,9 @@ import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 
 // DoperGanger imports
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const DynamicComponentWithNoSSR = dynamic(
-  () => import('@/phaser/Index'),
-  { ssr: false }
-)
+const DynamicComponentWithNoSSR = dynamic(() => import("@/phaser/Index"), { ssr: false });
 
 type CombatLog = {
   text: string;
@@ -45,7 +42,7 @@ export default function Decision() {
   // DoperGanger states
   const [phaserloading, setPhaserLoading] = useState(false);
   useEffect(() => {
-    setPhaserLoading(true)
+    setPhaserLoading(true);
   }, []);
 
   const [status, setStatus] = useState<PlayerStatus>();
@@ -67,6 +64,7 @@ export default function Decision() {
 
   const toaster = useToast();
   const { decide, isPending } = useSystems();
+  const { createT, move } = useSystems();
 
   const { playerEntity } = playerEntityStore;
 
@@ -139,6 +137,27 @@ export default function Decision() {
   const addCombatLog = (log: CombatLog) => {
     setCombatLogs((logs) => [...logs, log]);
   };
+
+  const subscribePhaserEvent = (eventName: string, listener: EventListenerOrEventListenerObject) => {
+    document.addEventListener(eventName, listener);
+  };
+
+  const unsubscribePhaserEvent = (eventName: string, listener: EventListenerOrEventListenerObject) => {
+    document.removeEventListener(eventName, listener);
+  };
+
+  useEffect(() => {
+    subscribePhaserEvent("move", async (event: any) => {
+      console.log("move event: ", event.detail);
+      const res = await move(gameId, Direction.Down);
+      console.log("move res: ", res);
+    });
+
+    // Cleanup
+    return () => {
+      unsubscribePhaserEvent("move", (event: any) => {});
+    };
+  }, []);
 
   const onDecision = async (action: Action) => {
     try {
@@ -253,13 +272,13 @@ export default function Decision() {
   return (
     <Layout isSinglePanel>
       <Box
-      w="full"
-      h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
-      overflow="hidden"
-      border='4px' 
-      borderColor='neon.600'
-      borderRadius='10px'
-      id="dopergangers"
+        w="full"
+        h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+        overflow="hidden"
+        border="4px"
+        borderColor="neon.600"
+        borderRadius="10px"
+        id="dopergangers"
       />
       {phaserloading ? <DynamicComponentWithNoSSR /> : null}
     </Layout>

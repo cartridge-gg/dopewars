@@ -1530,7 +1530,7 @@
     {
       "name": "minigame",
       "address": "0x44e56f8b0b447ee0d699bf0fb4687389eaff620ddf83fabbbcd68ec23972ca8",
-      "class_hash": "0x3f804c8bb4c86b52490bb27d57d572cc3a428e63d5305a2d0f2f1fe15831e91",
+      "class_hash": "0x90305381c9732bb92145682be59f1018c6d15a82448d0d3ac0934b5e77f507",
       "abi": [
         {
           "type": "impl",
@@ -1571,170 +1571,6 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::player::PlayerStatus",
-          "variants": [
-            {
-              "name": "Normal",
-              "type": "()"
-            },
-            {
-              "name": "BeingMugged",
-              "type": "()"
-            },
-            {
-              "name": "BeingArrested",
-              "type": "()"
-            },
-            {
-              "name": "AtPawnshop",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::models::location::LocationEnum",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::models::player::Player",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "mainnet_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "avatar_id",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "status",
-              "type": "rollyourown::models::player::PlayerStatus"
-            },
-            {
-              "name": "hood_id",
-              "type": "rollyourown::models::location::LocationEnum"
-            },
-            {
-              "name": "location_id",
-              "type": "rollyourown::models::location::LocationEnum"
-            },
-            {
-              "name": "next_location_id",
-              "type": "rollyourown::models::location::LocationEnum"
-            },
-            {
-              "name": "turn",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "max_turns",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "max_items",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u128"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "drug_count",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "attack",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "defense",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "transport",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "speed",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "wanted",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "leaderboard_version",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "game_over",
-              "type": "core::bool"
-            }
-          ]
-        },
-        {
-          "type": "enum",
           "name": "rollyourown::models::encounter::EncounterType",
           "variants": [
             {
@@ -1748,6 +1584,32 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::direction::Direction",
+          "variants": [
+            {
+              "name": "None",
+              "type": "()"
+            },
+            {
+              "name": "Left",
+              "type": "()"
+            },
+            {
+              "name": "Right",
+              "type": "()"
+            },
+            {
+              "name": "Up",
+              "type": "()"
+            },
+            {
+              "name": "Down",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::minigame::IMiniGame",
           "items": [
@@ -1756,16 +1618,24 @@
               "name": "create",
               "inputs": [
                 {
+                  "name": "encounter_id",
+                  "type": "rollyourown::models::encounter::EncounterType"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "move",
+              "inputs": [
+                {
                   "name": "game_id",
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "player",
-                  "type": "rollyourown::models::player::Player"
-                },
-                {
-                  "name": "encounter_id",
-                  "type": "rollyourown::models::encounter::EncounterType"
+                  "name": "direction",
+                  "type": "rollyourown::models::direction::Direction"
                 }
               ],
               "outputs": [],
@@ -1833,6 +1703,38 @@
         },
         {
           "type": "event",
+          "name": "rollyourown::systems::minigame::minigame::MapCreated",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_x",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "player_y",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "enemy_x",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "enemy_y",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::minigame::minigame::Event",
           "kind": "enum",
           "variants": [
@@ -1840,16 +1742,23 @@
               "name": "UpgradeableEvent",
               "type": "dojo::components::upgradeable::upgradeable::Event",
               "kind": "nested"
+            },
+            {
+              "name": "MapCreated",
+              "type": "rollyourown::systems::minigame::minigame::MapCreated",
+              "kind": "nested"
             }
           ]
         }
       ],
       "reads": [
         "Game",
-        "Player"
+        "Player",
+        "PlayerMiniGame"
       ],
       "writes": [
-        "Map"
+        "Map",
+        "PlayerMiniGame"
       ],
       "computed": []
     },
@@ -5049,12 +4958,17 @@
           "key": false
         },
         {
-          "name": "position",
+          "name": "x",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "y",
           "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x31759218546f85d6d851459c8c16e044608f62c0121a0c11f5d9bdd00142722",
+      "class_hash": "0x42354bb4a7d12588ef689d658abe9eb6caf1755d92fd17f62cb94541e1247e4",
       "abi": [
         {
           "type": "function",

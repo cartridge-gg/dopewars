@@ -7,6 +7,9 @@ import { TILE_SIZE, TILED_COLLISION_LAYER_ALPHA } from "../world/config";
 import { Controls } from "../utils/controls";
 import { DIRECTION } from "../common/direction";
 import { NPC } from "../world/characters/npc";
+import { useSystems } from "@/dojo/hooks/useSystems";
+import { useCallback } from "react";
+import { publishPhaserEvent } from "../events/gameEventCenter";
 
 const PLAYER_POSITION = Object.freeze({ x: 0 * TILE_SIZE, y: 0 * TILE_SIZE });
 const NPC_POSITION = Object.freeze({ x: 1 * TILE_SIZE, y: 0 * TILE_SIZE });
@@ -32,21 +35,14 @@ export class WorldScene extends Phaser.Scene {
 
     const map = this.make.tilemap({ key: WORLD_ASSET_KEYS.WORLD_MAIN_LEVEL });
 
-    const collisionTiles = map.addTilesetImage(
-      "collision",
-      WORLD_ASSET_KEYS.WORLD_COLLISION
-    );
+    const collisionTiles = map.addTilesetImage("collision", WORLD_ASSET_KEYS.WORLD_COLLISION);
     if (!collisionTiles) {
-      console.log(
-        `[${WorldScene.name}:create] error while creating collision tileset`
-      );
+      console.log(`[${WorldScene.name}:create] error while creating collision tileset`);
       return;
     }
     const collisionLayer = map.createLayer("Collision", collisionTiles, 0, 0);
     if (!collisionLayer) {
-      console.log(
-        `[${WorldScene.name}:create] error while creating collision layer`
-      );
+      console.log(`[${WorldScene.name}:create] error while creating collision layer`);
       return;
     }
 
@@ -77,7 +73,7 @@ export class WorldScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.player.sprite);
 
-    const foreground= this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_FOREGROUND, 0).setOrigin(0);
+    const foreground = this.add.image(0, 0, WORLD_ASSET_KEYS.WORLD_FOREGROUND, 0).setOrigin(0);
     //foreground.scale = this.mapScale;
 
     this.controls = new Controls(this);
@@ -90,6 +86,7 @@ export class WorldScene extends Phaser.Scene {
     const npcMove = DIRECTION.RIGHT; //GET FROM CONTRACT.
 
     if (selectedDirection !== DIRECTION.NONE) {
+      publishPhaserEvent("move", selectedDirection);
       this.player.moveCharacter(selectedDirection);
       //MOVE NPC
       this.npc.moveCharacter(npcMove);

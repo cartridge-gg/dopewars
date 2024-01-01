@@ -197,12 +197,13 @@ export function defineContractComponents(world: World) {
         world,
         {
           _player: RecsType.Number,
-          position: RecsType.Number,
+          x: RecsType.Number,
+          y: RecsType.Number,
         },
         {
           metadata: {
             name: name,
-            types: ["Player","u32"],
+            types: ["Player","u32","u32"],
           },
         }
       );
