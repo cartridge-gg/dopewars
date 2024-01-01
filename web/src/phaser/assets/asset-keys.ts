@@ -50,7 +50,7 @@ export const BATTLE_MENU_OPTIONS = Object.freeze({
 export type battleMenuOptions = keyof typeof BATTLE_MENU_OPTIONS;
 
 export const BATTLE_UI_TEXT_STYLE = Object.freeze({
-  color: "black",
+  color: "#FF52A2",
   fontSize: "30px",
 });
 

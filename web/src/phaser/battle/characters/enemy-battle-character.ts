@@ -3,7 +3,7 @@ import { BattleCharacter } from "./battle-character";
 
 
 const ENEMY_POSITION = Object.freeze({
-    x: 768,
+    x: 738,
     y: 316,
   });
   

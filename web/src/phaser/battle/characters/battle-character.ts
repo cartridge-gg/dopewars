@@ -80,7 +80,7 @@ export class BattleCharacter {
     this._healthBar = new HealthBar(this._scene, 34, 34);
 
     const characterNameGameText = this._scene.add.text(30, 20, this.name, {
-      color: "#7E3D3F",
+      color: "#FCE700",
       fontSize: "32px",
     });
 

@@ -123,7 +123,7 @@ export class BattleMenu {
     graphics.lineStyle(8, 0xaad7d9, 1);
 
     // Set fill style for the rectangle
-    graphics.fillStyle(0xffffec, 1);
+    graphics.fillStyle(0x38419D, 1);
 
     // Draw a rounded rectangle
     graphics.fillRoundedRect(
@@ -177,7 +177,7 @@ export class BattleMenu {
     graphics.lineStyle(8, 0x905ac2, 1);
 
     // Set fill style for the rectangle
-    graphics.fillStyle(0xede4f3, 1);
+    graphics.fillStyle(0xFFE4A7, 1);
 
     // Draw a rounded rectangle
     graphics.fillRoundedRect(0, 0, rectWidth, rectHeight, borderRadius);
