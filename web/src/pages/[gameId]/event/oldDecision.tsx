@@ -34,7 +34,7 @@ type CombatLog = {
   icon?: React.FC;
 };
 
-export default function OldDecision() {
+export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const healthLoss = router.query.healthLoss as string;
@@ -252,7 +252,7 @@ export default function OldDecision() {
 
   return (
     <Layout isSinglePanel>
-      <Box
+      {/* <Box
       w="full"
       h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
       overflow="hidden"
@@ -260,7 +260,7 @@ export default function OldDecision() {
       borderColor='neon.600'
       borderRadius='10px'
       id="dopergangers"
-      />
+      /> */}
       {/* {phaserloading ? <DynamicComponentWithNoSSR /> : null} */}
 
       <HStack
