@@ -1,13 +1,14 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::player::Player;
+use rollyourown::models::player_minigame::PlayerMiniGame;
 use rollyourown::models::encounter::EncounterType;
+use rollyourown::models::direction::Direction;
 
 #[starknet::interface]
 trait IMiniGame<TContractState> {
-    fn create(
-        self: @TContractState, game_id: u32, player: Player, encounter_id: EncounterType
-    ) -> ();
+    fn create(self: @TContractState, encounter_id: EncounterType) -> ();
+    fn move(self: @TContractState, game_id: u32, direction: Direction) -> ();
 // fn move(self: @TContractState, game_id: u32, player: Player, index: u32) -> ();
 }
 
@@ -24,22 +25,38 @@ mod minigame {
     use rollyourown::models::player_minigame::PlayerMiniGame;
     use rollyourown::models::gangster::{Gangster, GangsterTrait};
     use rollyourown::models::cop::{Cop, CopTrait};
+    use rollyourown::models::direction::Direction;
+    use rollyourown::utils::next_position_player;
 
     use super::IMiniGame;
     use rollyourown::models::map::{Map, MapTrait, Type};
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        MapCreated: MapCreated,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct MapCreated {
+        game_id: u32,
+        player_x: u32,
+        player_y: u32,
+        enemy_x: u32,
+        enemy_y: u32,
+    }
     #[external(v0)]
     impl MiniGameImpl of IMiniGame<ContractState> {
-        fn create(
-            self: @ContractState, game_id: u32, player: Player, encounter_id: EncounterType
-        ) -> () {
+        fn create(self: @ContractState, encounter_id: EncounterType) -> () {
             let world = self.world();
+            let game_id = self.world().uuid();
             // let game_id = self.world().uuid();
             let game = get!(world, game_id, Game);
             assert(game.tick(), 'game cannot progress');
             let mut randomizer = RandomImpl::new(world);
 
             let player_id = get_caller_address();
-            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+            let mut player: Player = get!(world, (game_id, player_id), Player);
 
             let mut map: Map = Map { map_id: game_id, level: 1 };
 
@@ -64,7 +81,7 @@ mod minigame {
                     Type::Player => {
                         set!(world, (tile));
                         let mut player_mini: PlayerMiniGame = PlayerMiniGame {
-                            game_id: game_id, player_id: player_id, _player: player, position: 5,
+                            game_id: game_id, player_id: player_id, _player: player, x: 5, y: 5
                         };
                         set!(world, (player_mini));
                     },
@@ -73,16 +90,51 @@ mod minigame {
                         let mut cop: Cop = CopTrait::new(game_id, 1, x, y);
 
                         set!(world, (cop));
+                        emit!(
+                            self.world(),
+                            MapCreated {
+                                game_id: game_id, player_x: 5, player_y: 5, enemy_x: x, enemy_y: y,
+                            }
+                        )
                     },
                     Type::Gangster => {
                         set!(world, (tile));
                         let mut gangster: Gangster = GangsterTrait::new(game_id, 1, x, y);
 
                         set!(world, (gangster));
+                        emit!(
+                            self.world(),
+                            MapCreated {
+                                game_id: game_id, player_x: 5, player_y: 5, enemy_x: x, enemy_y: y,
+                            }
+                        )
                     },
                 }
                 index += 1;
             }
         }
+
+
+        fn move(self: @ContractState, game_id: u32, direction: Direction) -> () {
+            let world = self.world();
+
+            let player_id = get_caller_address();
+            let mut player: Player = get!(world, (game_id, player_id).into(), Player);
+
+            let player_mini: PlayerMiniGame = get!(
+                world, (game_id, player_id).into(), PlayerMiniGame
+            );
+
+            // self.clear_player_at_position(world, player_mini, player_mini.x, player_mini.y);
+
+            let player_new_position = next_position_player(player_mini, direction);
+
+            set!(world, (player_new_position));
+        }
+    // fn clear_player_at_position(
+    //     self: @ContractState, world: IWorldDispatcher, player: PlayerMiniGame, x: u32, y: u32
+    // ) {
+    //     set!(world, (player));
+    // }
     }
 }

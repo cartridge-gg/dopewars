@@ -12,3 +12,4 @@ mod map;
 mod player_minigame;
 mod cop;
 mod gangster;
+mod direction;
