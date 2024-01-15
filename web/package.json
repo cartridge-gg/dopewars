@@ -23,7 +23,6 @@
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "^0.1.30",
     "@dojoengine/create-burner": "0.1.30",
-    "@dojoengine/torii": "link:../../dojo-packages/packages/torii",
     "@dojoengine/utils": "0.1.30",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",

@@ -7,7 +7,7 @@ trait ILobby<TContractState> {
         self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress
     ) -> (u32, ContractAddress);
 
-    fn set_name(self: @TContractState, game_id: u32, player_name: felt252);
+    fn set_name(self: @TContractState, game_id: u32, player_id: ContractAddress, player_name: felt252);
 }
 
 
@@ -15,6 +15,7 @@ trait ILobby<TContractState> {
 mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
+    use starknet::get_contract_address;
     use starknet::get_block_timestamp;
     use starknet::info::get_tx_info;
 
@@ -143,14 +144,18 @@ mod lobby {
             (game_id, caller)
         }
 
-        fn set_name(self: @ContractState, game_id: u32, player_name: felt252) {
-            // assert_valid_name(player_name);
+        fn set_name(self: @ContractState, game_id: u32, player_id: ContractAddress, player_name: felt252) {
+            assert_valid_name(player_name);
 
-            // let player_id = get_caller_address();
-            // let mut player = get!(self.world(), (game_id, player_id), Player);
-            // player.name = player_name;
+            assert(
+                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                'CALLER_IS_NOT_OWNER'
+            );
 
-            // set!(self.world(), (player))
+            let mut player = get!(self.world(), (game_id, player_id), Player);
+            player.name = player_name;
+
+            set!(self.world(), (player))
         }
     }
 
