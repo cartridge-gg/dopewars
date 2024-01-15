@@ -2250,9 +2250,6 @@
     get-starknet-core "^3.2.0"
     js-cookie "^3.0.5"
 
-"@dojoengine/torii@link:../../dojo-packages/packages/torii":
-  version "0.0.0"
-  uid ""
 
 "@dojoengine/utils@0.1.30":
   version "0.1.30"

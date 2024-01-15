@@ -208,7 +208,7 @@ function renderDay(log: LogByDay) {
               break;
 
             case WorldEvents.GameOver:
-              return renderGameOver(i as GameOverEventData, key);
+             // return renderGameOver(i as GameOverEventData, key);
               break;
 
             case WorldEvents.AtPawnshop:
