@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@2toad/profanity@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@2toad/profanity/-/profanity-2.2.0.tgz#bb3232c1dbdd31d7f3bf0a5ff3b69437f9e5cbaf"
+  integrity sha512-EDoqDFFkw3g11xIHMQI4L91G+PT6OHrAHvwi+oxbYBH06G7EFrWVva+r604uscEPDZR4h+GrvVqkTD0g8JzZgg==
+
 "@adraffy/ens-normalize@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.9.0.tgz#223572538f6bea336750039bb43a4016dcc8182d"
@@ -2249,7 +2254,6 @@
     encoding "^0.1.13"
     get-starknet-core "^3.2.0"
     js-cookie "^3.0.5"
-
 
 "@dojoengine/utils@0.1.30":
   version "0.1.30"
