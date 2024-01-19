@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { Action, GameMode, Location, ItemEnum } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish } from "starknet";
-import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { SystemExecuteResult } from "./useSystems";

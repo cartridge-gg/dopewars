@@ -7,9 +7,7 @@ import { getShopItem } from "../helpers";
 export const useAvailableShopItems = (gameId: string) => {
     const {
         account,
-        setup: {
-            network: { provider, call },
-        },
+        dojoProvider,
     } = useDojoContext();
 
     const [availableShopItems, setAvailableShopItems] = useState<ShopItemInfo[]>([]);
@@ -17,8 +15,7 @@ export const useAvailableShopItems = (gameId: string) => {
     useEffect(() => {
         const update = async () => {
             try {
-                const items = await call(
-                    account!,
+                const items = await dojoProvider.callContract(
                     "rollyourown::systems::shop::shop",
                     "available_items",
                     [Number(gameId), account!.address],
@@ -27,7 +24,7 @@ export const useAvailableShopItems = (gameId: string) => {
                 const shopItems = items.map(i => {
                     const itemInfos = getShopItem(shortString.decodeShortString(i.item_type) as ItemTextEnum, Number(i.level));
                     return {
-                        id:i.item_id,
+                        id: i.item_id,
                         type: itemInfos.type,
                         typeText: itemInfos.id,
                         name: shortString.decodeShortString(i.name),
@@ -51,7 +48,7 @@ export const useAvailableShopItems = (gameId: string) => {
         if (gameId) {
             update();
         }
-    }, [gameId, account, call])
+    }, [gameId, account, dojoProvider])
 
     return { availableShopItems }
 

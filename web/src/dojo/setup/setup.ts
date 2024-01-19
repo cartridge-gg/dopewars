@@ -1,19 +1,44 @@
+import { DojoProvider } from "@dojoengine/core";
+// import { createClient } from "@dojoengine/torii-client";
+import { Config } from "./config";
 import { setupNetwork } from "./setupNetwork";
-import manifest from "../../../manifest.json";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
-/**
- * Sets up the necessary components and network utilities.
- *
- * @returns An object containing network configurations, client components, and system calls.
- */
-export async function setup() {
+
+export async function setup(config: Config) {
+
+    // // torii client  issues with webpack 5
+    // const toriiClient = await createClient([], {
+    //     rpcUrl: config.rpcUrl,
+    //     toriiUrl: config.toriiUrl,
+    //     worldAddress: config.manifest.world.address || "",
+    // });
+
+
+    const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl)
+
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                staleTime: 1000 * 20,
+            },
+        },
+    });
+
     // Initialize the network configuration.
-    const network = await setupNetwork(manifest);
+    //const network = await setupNetwork(config);
 
     return {
-        network,
+        //network,
+        config,
+        dojoProvider,
+        queryClient
     };
 }
+
+
 

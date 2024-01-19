@@ -807,6 +807,16 @@ export type World__ModelEdge = {
   node?: Maybe<World__Model>;
 };
 
+export type World__ModelOrder = {
+  direction: OrderDirection;
+  field: World__ModelOrderField;
+};
+
+export enum World__ModelOrderField {
+  ClassHash = 'CLASS_HASH',
+  Name = 'NAME'
+}
+
 export type World__PageInfo = {
   __typename?: 'World__PageInfo';
   endCursor?: Maybe<Scalars['Cursor']>;
@@ -830,7 +840,7 @@ export type World__Query = {
   model: World__Model;
   models?: Maybe<World__ModelConnection>;
   playerModels?: Maybe<PlayerConnection>;
-  ryometaModels?: Maybe<RyoMetaConnection>;
+  ryoMetaModels?: Maybe<RyoMetaConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
 };
@@ -957,6 +967,7 @@ export type World__QueryModelsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<World__ModelOrder>;
 };
 
 
@@ -972,7 +983,7 @@ export type World__QueryPlayerModelsArgs = {
 };
 
 
-export type World__QueryRyometaModelsArgs = {
+export type World__QueryRyoMetaModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1070,7 +1081,7 @@ export type MarketPricesQuery = { __typename?: 'World__Query', marketModels?: { 
 export type RyoMetasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RyoMetasQuery = { __typename?: 'World__Query', ryometaModels?: { __typename?: 'RyoMetaConnection', edges?: Array<{ __typename?: 'RyoMetaEdge', node?: { __typename?: 'RyoMeta', id?: any | null, initialized?: any | null, leaderboard_version?: any | null } | null } | null> | null } | null };
+export type RyoMetasQuery = { __typename?: 'World__Query', ryoMetaModels?: { __typename?: 'RyoMetaConnection', edges?: Array<{ __typename?: 'RyoMetaEdge', node?: { __typename?: 'RyoMeta', id?: any | null, initialized?: any | null, leaderboard_version?: any | null } | null } | null> | null } | null };
 
 export type LeaderboardMetasQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u32']>;
@@ -1250,7 +1261,7 @@ useInfiniteMarketPricesQuery.getKey = (variables?: MarketPricesQueryVariables) =
 
 export const RyoMetasDocument = `
     query RyoMetas {
-  ryometaModels(limit: 1) {
+  ryoMetaModels(limit: 1) {
     edges {
       node {
         id

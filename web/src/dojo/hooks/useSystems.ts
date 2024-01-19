@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { Action, Drug, GameMode, ShopItemInfo } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
-import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
+import { getEvents } from "@dojoengine/utils";
 import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
@@ -84,9 +84,7 @@ const tryBetterErrorMsg = (msg: string): string => {
 export const useSystems = (): SystemsInterface => {
   const {
     account,
-    setup: {
-      network: { provider, execute, call },
-    },
+    dojoProvider
   } = useDojoContext();
 
   const { toast } = useToast();
@@ -111,7 +109,7 @@ export const useSystems = (): SystemsInterface => {
 
       let tx, receipt;
       try {
-        tx = await execute(account!, contract, system, callData);
+        tx = await dojoProvider.execute(account!, contract, system, callData);
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 100,
         });
@@ -158,9 +156,6 @@ export const useSystems = (): SystemsInterface => {
 
       setIsPending(false)
 
-      // useless
-      // setComponentsFromEvents(contractComponents, events);
-
       return {
         hash: tx?.transaction_hash,
         receipt,
@@ -170,7 +165,7 @@ export const useSystems = (): SystemsInterface => {
 
 
     },
-    [execute, account, toast],
+    [dojoProvider, account, toast],
   );
 
   const createGame = useCallback(

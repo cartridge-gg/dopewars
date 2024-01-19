@@ -1,7 +1,7 @@
-import { world } from "./world";
 import { RPCProvider, Query, } from "@dojoengine/core";
 import { Account, Contract, TypedContract, num, shortString } from "starknet";
 import { GraphQLClient } from 'graphql-request';
+import { Config } from "./config";
 
 export type ManifestContract = {
     name: string;
@@ -19,29 +19,18 @@ export const getWorldAddress = (manifest: any) => {
     return manifest.world.address
 }
 
-export async function setupNetwork(manifest: any) {
+export async function setupNetwork(config: Config) {
 
     // Create a new RPCProvider instance.
-    const provider = new RPCProvider(getWorldAddress(manifest), manifest, process.env.NEXT_PUBLIC_RPC_ENDPOINT);
-
-    // // Utility function to get the SDK.
-    // const createGraphSdk = () => getSdk(new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT));
+    const provider = new RPCProvider(getWorldAddress(config.manifest), config.manifest, config.rpcUrl);
 
     // Return the setup object.
     return {
-        manifest,
+        manifest: config.manifest,
         provider,
-        world,
-
-        // Create client contracts based on the network setup.
-        //contracts: createClientContracts(provider.provider, manifest),
-
-        // // Define the graph SDK instance.
-        // graphSdk: createGraphSdk(),
 
         // Execute function.
         execute: async (signer: Account, contract_name: string, system: string, call_data: num.BigNumberish[]) => {
-           // return provider.execute(signer, getContractByName(contract, manifest)?.address || "", system, call_data);
             return provider.execute(signer, contract_name, system, call_data);
         },
 

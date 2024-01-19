@@ -36,7 +36,7 @@ query MarketPrices($gameId: u32) {
 }
 
 query RyoMetas {
-  ryometaModels(limit: 1) {
+  ryoMetaModels(limit: 1) {
     edges {
       node {
         id
