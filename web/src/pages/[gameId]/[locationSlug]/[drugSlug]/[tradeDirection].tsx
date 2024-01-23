@@ -41,7 +41,7 @@ export default function Market() {
   useEffect(() => {
     if (!playerEntity || isPending) return;
 
-    const markets = playerEntity.markets.get(location.id)
+    const markets = playerEntity.markets.get(location!.id) || [];
     const market = markets.find((d) => d.id === drug?.id);
     if (!market) return;
 
@@ -52,7 +52,7 @@ export default function Market() {
 
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
-  }, [ playerEntity, drug, isPending]);
+  }, [location, playerEntity, drug, isPending]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
@@ -69,14 +69,10 @@ export default function Market() {
         ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy));
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
-
-      
       } else if (tradeDirection === TradeDirection.Sell) {
         ({ hash } = await sell(gameId, location!.type, drug!.type, quantitySell));
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
-
-      
       }
 
       // toast({
@@ -87,7 +83,7 @@ export default function Market() {
     } catch (e) {
       console.log(e);
     }
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell, market]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell]);
 
   if (!router.isReady || !playerEntity || !drug || !market) return <></>;
 

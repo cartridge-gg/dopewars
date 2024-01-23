@@ -2,10 +2,12 @@ import {
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
 } from "@chakra-ui/react";
-import { ThemingProps } from "@chakra-ui/styled-system";
+import { ThemingProps } from "@chakra-ui/react";
 import React from "react";
 
-export interface IconProps extends ChakraIconProps, ThemingProps {}
+export interface IconProps extends ChakraIconProps, ThemingProps {
+  size?: string
+}
 
 export const Icon = ({
   children,

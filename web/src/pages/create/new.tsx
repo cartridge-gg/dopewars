@@ -34,8 +34,6 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
-  const [mainnetAddress, setMainnetAddress] = useState("");
-  const [mainnetAddressValue, setMainnetAddressValue] = useState(BigInt(0));
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -45,21 +43,12 @@ export default function New() {
     }
 
     try {
-      let value = validateAndParseAddress(mainnetAddress);
-      setMainnetAddressValue(BigInt(value));
-      setError("");
-    } catch (e) {
-      setError("Invalid address !");
-      return;
-    }
-
-    try {
       if (!account) {
         // create burner account
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, avatarId, mainnetAddressValue);
+      const { hash, gameId } = await createGame(gameMode, name, avatarId);
 
       // toast({
       //   message: "Game Created!",
@@ -150,19 +139,6 @@ export default function New() {
               {error}
             </Text>
           </VStack>
-
-          {/* <Input
-            display="flex"
-            mx="auto"
-            mt="0px"
-            maxW="440px"
-            fontSize="11px"
-            placeholder="Your may enter your Starknet Mainnet Address..."
-            value={mainnetAddress}
-            onChange={(e) => {
-              setMainnetAddress(e.target.value);
-            }}
-          /> */}
         </VStack>
       </VStack>
     </Layout>

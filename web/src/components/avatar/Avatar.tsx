@@ -3,10 +3,11 @@ import {
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
 } from "@chakra-ui/react";
-import { ThemingProps } from "@chakra-ui/styled-system";
+import { ThemingProps } from "@chakra-ui/react";
 import { AvatarName, avatars } from "./avatars";
 
 export interface AvatarProps extends ChakraIconProps, ThemingProps {
+  size?: string;
   color?: "green" | "yellow";
   hasCrown?: boolean;
   name: AvatarName;

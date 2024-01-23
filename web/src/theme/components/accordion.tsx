@@ -1,4 +1,4 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
+import { ComponentMultiStyleConfig } from "@chakra-ui/react";
 
 export const Accordion: ComponentMultiStyleConfig = {
   parts: ["root", "container", "button", "panel", "icon"],

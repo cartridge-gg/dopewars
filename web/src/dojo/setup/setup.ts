@@ -1,13 +1,9 @@
 import { DojoProvider } from "@dojoengine/core";
 // import { createClient } from "@dojoengine/torii-client";
 import { Config } from "./config";
-import { setupNetwork } from "./setupNetwork";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-
-
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
-
 
 export async function setup(config: Config) {
 
@@ -29,8 +25,6 @@ export async function setup(config: Config) {
         },
     });
 
-    // Initialize the network configuration.
-    //const network = await setupNetwork(config);
 
     return {
         //network,

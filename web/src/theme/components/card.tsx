@@ -1,4 +1,4 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
+import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
 import BorderImage from "@/components/icons/PressableBorderImage";
 import { cardStyle, cardPixelatedStyle } from "../styles";
 import colors from "../colors";

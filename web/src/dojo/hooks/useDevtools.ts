@@ -18,12 +18,10 @@ export interface SystemsInterface {
 
 export const useDevtools = (): SystemsInterface => {
   const {
-    burner: {
-      masterAccount
-    },
-    setup: {
-      network: { provider, execute, call },
-    },
+    masterAccount,
+    dojoProvider: {
+      execute
+    }
   } = useDojoContext();
 
   const executeAndReceipt = useCallback(

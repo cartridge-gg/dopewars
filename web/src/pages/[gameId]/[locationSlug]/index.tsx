@@ -27,21 +27,22 @@ import Button from "@/components/Button";
 import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from "@/dojo/helpers";
 import { motion } from "framer-motion";
 import { useSystems } from "@/dojo/hooks/useSystems";
+import { DrugMarket } from "@/dojo/types";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
-  const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
+  const locationId = getLocationBySlug(router.query.locationSlug as string)?.id || "";
 
   const { account, playerEntityStore } = useDojoContext();
   const { playerEntity } = playerEntityStore;
   
-  const [prices, setPrices] = useState([])
+  const [prices, setPrices] = useState<DrugMarket[]>([])
   useEffect(() => {
     if(playerEntity && playerEntity.markets){
-      setPrices(playerEntity.markets.get(locationId))
+      setPrices(playerEntity.markets.get(locationId) || [])
     }
-  }, [playerEntity, playerEntity?.markets])
+  }, [locationId, playerEntity, playerEntity?.markets])
 
   const { endGame, isPending } = useSystems();
 

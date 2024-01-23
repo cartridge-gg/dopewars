@@ -9,7 +9,7 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
-import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
+import { PlayerStatus, ItemEnum, ItemTextEnum, DrugMarket } from "../types";
 import { shortString } from "starknet";
 import { MarketPrices } from "./useMarkets";
 
@@ -50,6 +50,8 @@ export class PlayerEntity {
 
   wanted: number;
   gameOver: boolean;
+
+  markets: Map<string,DrugMarket[]>;
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[], marketPacked: MarketPacked) {
     this.name = shortString.decodeShortString(player.name);

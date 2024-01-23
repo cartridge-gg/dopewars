@@ -1,33 +1,25 @@
-import { Market, MarketPackedEdge, useMarketPricesQuery } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { num } from "starknet";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { LocationPrices, DrugMarket, Location, Drug } from "../types";
 import { getDrugById, getDrugByType, getLocationByType } from "../helpers";
 
+
 // todo load config from contracts
 const get_drug_price_config = (drug: Drug) => {
-  // match drug {
-  //     DrugEnum::Ludes => DrugPriceConfig { base: 15, step: 1 },
-  //     DrugEnum::Speed => DrugPriceConfig { base: 85, step: 5 },
-  //     DrugEnum::Weed => DrugPriceConfig { base: 420, step: 22 },
-  //     DrugEnum::Acid => DrugPriceConfig { base: 1400, step: 64 },
-  //     DrugEnum::Heroin => DrugPriceConfig { base: 5500, step: 185 },
-  //     DrugEnum::Cocaine => DrugPriceConfig { base: 9500, step: 260 },
-  // }
   switch (drug) {
     case Drug.Ludes:
-      return { base: 15n, step: 1n };
+      return { base: 18n, step: 1n };
     case Drug.Speed:
-      return { base: 85n, step: 5n };
+      return { base: 85n, step: 6n };
     case Drug.Weed:
-      return { base: 420n, step: 22n };
+      return { base: 420n, step: 23n };
     case Drug.Acid:
-      return { base: 1400n, step: 64n };
+      return { base: 1590n, step: 69n };
     case Drug.Heroin:
-      return { base: 5500n, step: 185n };
+      return { base: 5720n, step: 169n };
     case Drug.Cocaine:
-      return { base: 9500n, step: 260n };
+      return { base: 12200n, step: 242n };
     default:
       return { base: 1n, step: 1n };
   }
@@ -51,7 +43,7 @@ class MarketPackedHelper {
     return shifted & mask;
   }
 
-  get_drug_price_by_tick(drug_id: Drug, tick: number) {
+  get_drug_price_by_tick(drug_id: Drug, tick: bigint) {
     const drug_price = get_drug_price_config(drug_id);
     return tick * drug_price.step + drug_price.base;
   }
@@ -69,7 +61,7 @@ export class MarketPrices {
     this.locationPrices = locationMarkets;
   }
 
-  static create(packed: string): LocationPrices | undefined {
+  static create(packed: string): LocationPrices {
     console.log(`MarketPrices.create`);
    
     const market = new MarketPackedHelper(packed);
@@ -103,31 +95,3 @@ export class MarketPrices {
     return locationPrices;
   }
 }
-
-export interface MarketsInterface {
-  locationPrices?: LocationPrices;
-}
-
-export const useMarketPrices = ({ gameId }: { gameId?: string }): MarketsInterface => {
-  const { data } = useMarketPricesQuery(
-    { gameId: Number(gameId) },
-
-    {
-      enabled: !!gameId,
-      refetchInterval: REFETCH_INTERVAL,
-    },
-  );
-
-  const locationPrices = useMemo(() => {
-    const edges = data?.marketPackedModels?.edges as MarketPackedEdge[]
-    if (!edges || edges.length === 0) return undefined;
-
-    const packed = edges[0].node!.packed || 0;
-
-    return MarketPrices.create(packed);
-  }, [data]);
-
-  return {
-    locationPrices,
-  };
-};

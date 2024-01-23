@@ -20,12 +20,12 @@ use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait};
 
 fn get_drug_price_config(drug: DrugEnum) -> DrugPriceConfig {
     match drug {
-        DrugEnum::Ludes => DrugPriceConfig { base: 15, step: 1 },
-        DrugEnum::Speed => DrugPriceConfig { base: 85, step: 5 },
-        DrugEnum::Weed => DrugPriceConfig { base: 420, step: 22 },
-        DrugEnum::Acid => DrugPriceConfig { base: 1400, step: 64 },
-        DrugEnum::Heroin => DrugPriceConfig { base: 5500, step: 185 },
-        DrugEnum::Cocaine => DrugPriceConfig { base: 9500, step: 260 },
+        DrugEnum::Ludes => DrugPriceConfig { base: 18, step: 1 },
+        DrugEnum::Speed => DrugPriceConfig { base: 85, step: 9 },
+        DrugEnum::Weed => DrugPriceConfig { base: 420, step: 23 },
+        DrugEnum::Acid => DrugPriceConfig { base: 1590, step: 69 },
+        DrugEnum::Heroin => DrugPriceConfig { base: 5720, step: 169 },
+        DrugEnum::Cocaine => DrugPriceConfig { base: 12200, step: 242 },
     }
 }
 
