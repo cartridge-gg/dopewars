@@ -31,11 +31,11 @@ echo ryo : $RYO_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-LOBBY_COMPONENTS=("Game" "Market" "Player" "Leaderboard" "RyoMeta")
-TRAVEL_COMPONENTS=("Player" "Market" "Encounter" "Leaderboard" "RyoMeta")
-DECIDE_COMPONENTS=("Player" "Drug" "Market" "Encounter" "Leaderboard" "RyoMeta")
-TRADE_COMPONENTS=("Drug" "Market" "Player")
-SHOP_COMPONENTS=("Player" "Item" "Market")
+LOBBY_COMPONENTS=("Game" "Player" "Leaderboard" "RyoMeta" "MarketPacked")
+TRAVEL_COMPONENTS=("Player" "Encounter" "Leaderboard" "RyoMeta" "MarketPacked")
+DECIDE_COMPONENTS=("Player" "Drug" "Encounter" "Leaderboard" "RyoMeta" "MarketPacked")
+TRADE_COMPONENTS=("Drug" "Player" "MarketPacked")
+SHOP_COMPONENTS=("Player" "Item" "MarketPacked")
 RYO_COMPONENTS=("RyoMeta" "Leaderboard")
 
 for component in ${LOBBY_COMPONENTS[@]}; do

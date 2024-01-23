@@ -1,8 +1,17 @@
-import { Player, Drug as DrugType, usePlayerEntityQuery, World__EntityEdge, Item as ItemType, Encounter } from "@/generated/graphql";
+import {
+  Player,
+  Drug as DrugType,
+  usePlayerEntityQuery,
+  World__EntityEdge,
+  Item as ItemType,
+  Encounter,
+  MarketPacked,
+} from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
 import { shortString } from "starknet";
+import { MarketPrices } from "./useMarkets";
 
 type Drug = {
   id: string;
@@ -42,7 +51,7 @@ export class PlayerEntity {
   wanted: number;
   gameOver: boolean;
 
-  constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[]) {
+  constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[], marketPacked: MarketPacked) {
     this.name = shortString.decodeShortString(player.name);
     this.avatarId = player.avatar_id;
     this.cash = Number(player.cash) / SCALING_FACTOR;
@@ -70,6 +79,7 @@ export class PlayerEntity {
     this.items = items;
     this.encounters = encounters;
 
+    this.markets = MarketPrices.create(marketPacked.packed);
   }
 
   update(player: Player) {
@@ -77,12 +87,18 @@ export class PlayerEntity {
     this.health = player.health;
     this.turn = player.turn;
     this.drugCount = player.drug_count;
-   
+
     this.hoodId = player.hood_id;
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
+    this.nextLocationId = player.next_location_id === "Home" ? undefined : player.next_location_id;
     this.status = player.status;
     this.wanted = player.wanted;
     this.gameOver = player.game_over;
+    return this;
+  }
+
+  updateMarkets(marketPacked: MarketPacked) {
+    this.markets = MarketPrices.create(marketPacked.packed);
     return this;
   }
 
@@ -125,7 +141,7 @@ export class PlayerEntity {
     } else {
       this.encounters.push({
         ...newEncounter,
-        payout:Number(newEncounter.payout) / SCALING_FACTOR,
+        payout: Number(newEncounter.payout) / SCALING_FACTOR,
       });
     }
     return this;
@@ -163,16 +179,25 @@ export class PlayerEntity {
     return this.speed;
   }
 
-
-
   static create(edges: World__EntityEdge[]): PlayerEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
-    // player model
-    const playerModel = edges.find((edge) => {
-      return edge.node?.models?.some((model) => model?.__typename === "Player");
-    })?.node?.models?.[0] as Player;
 
-    // TODO: create helpers
+    // player model
+    const playerEdges = edges.find((edge) => {
+      return edge.node?.models?.some((model) => model?.__typename === "Player");
+    });
+
+    const playerModel = playerEdges?.node?.models?.find((model) => model?.__typename === "Player") as Player;
+
+    // market model
+    const marketEdges = edges.find((edge) => {
+      return edge.node?.models?.some((model) => model?.__typename === "MarketPacked");
+    });
+
+    const marketModel = playerEdges?.node?.models?.find(
+      (model) => model?.__typename === "MarketPacked",
+    ) as MarketPacked;
+
     // drug entities
     const drugEdges = edges.filter((edge) => edge.node?.models?.find((model) => model?.__typename === "Drug"));
 
@@ -200,19 +225,20 @@ export class PlayerEntity {
     });
 
     // encounters
-    const encounterEdges = edges.filter((edge) => edge.node?.models?.find((model) => model?.__typename === "Encounter"));
+    const encounterEdges = edges.filter((edge) =>
+      edge.node?.models?.find((model) => model?.__typename === "Encounter"),
+    );
 
     const encounters: Encounter[] = encounterEdges.map((edge) => {
       const encounterModel = edge.node?.models?.find((model) => model?.__typename === "Encounter") as Encounter;
       return {
         ...encounterModel,
-        payout:Number(encounterModel.payout) / SCALING_FACTOR,
-      }
+        payout: Number(encounterModel.payout) / SCALING_FACTOR,
+      };
     });
 
     if (!playerModel) return undefined;
 
-    return new PlayerEntity(playerModel, drugs, items, encounters);
+    return new PlayerEntity(playerModel, drugs, items, encounters, marketModel);
   }
 }
-

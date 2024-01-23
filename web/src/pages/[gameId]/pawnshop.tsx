@@ -92,7 +92,6 @@ export default function PawnShop() {
       if (events) {
         displayMarketEvents(events as MarketEventData[], toaster);
       }
-
       router.push(`/${gameId}/${getLocationById(playerEntity?.nextLocationId)?.slug}`);
     } catch (e) {
       console.log(e);

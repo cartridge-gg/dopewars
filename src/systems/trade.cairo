@@ -32,7 +32,11 @@ mod trade {
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game, GameTrait};
-    use rollyourown::models::market::{Market, MarketTrait};
+    // use rollyourown::models::market::{Market, MarketTrait};
+
+    use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
+
+    use rollyourown::utils::math::{MathTrait, MathImplU8};
 
     use super::ITrade;
 
@@ -51,7 +55,7 @@ mod trade {
         player_id: ContractAddress,
         drug_id: DrugEnum,
         quantity: usize,
-        cost: u128
+        cost: u32
     }
 
     #[derive(Drop, starknet::Event)]
@@ -62,7 +66,7 @@ mod trade {
         player_id: ContractAddress,
         drug_id: DrugEnum,
         quantity: usize,
-        payout: u128
+        payout: u32
     }
 
 
@@ -92,19 +96,25 @@ mod trade {
             assert(player.can_continue(), 'player cannot trade');
             assert(player.drug_count + quantity <= player.get_transport(world), 'no bag space');
 
-            let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
+            // let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
+            let mut market = MarketImpl::get(world, game_id, player_id);
 
-            let cost = market.buy(quantity);
-            assert(cost < player.cash, 'not enough cash');
+            let cost = market.quote_buy(location_id,drug_id, quantity);
+            assert(cost.into() < player.cash, 'not enough cash');
 
             let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
 
-            // update market
-            market.cash += cost;
-            market.quantity -= quantity;
+            // todo: calc tick shift 
+            let tick = market.get_tick(location_id,drug_id);
+            let new_tick = tick.add_capped(1,63);
+            market.set_tick(location_id, drug_id, new_tick);
+
+            // // update market
+            // market.cash += cost;
+            // market.quantity -= quantity;
 
             // update player
-            player.cash -= cost;
+            player.cash -= cost.into();
             player.drug_count += quantity;
 
             // update drug
@@ -134,15 +144,22 @@ mod trade {
             let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
             assert(drug.quantity >= quantity, 'not enough drugs to sell');
 
-            let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
-            let payout = market.sell(quantity);
+           // let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
+            let mut market = MarketImpl::get(world, game_id, player_id);
 
-            // update market
-            market.quantity += quantity;
-            market.cash -= payout;
+            let payout = market.quote_sell(location_id,drug_id,quantity);
+
+            // todo: calc tick shift
+            let tick = market.get_tick(location_id,drug_id);
+            let new_tick = tick.sub_capped(1,0);
+            market.set_tick(location_id, drug_id, new_tick);
+
+            // // update market
+            // market.quantity += quantity;
+            // market.cash -= payout;
 
             // update player
-            player.cash += payout;
+            player.cash += payout.into();
             player.drug_count -= quantity;
 
             // update drug

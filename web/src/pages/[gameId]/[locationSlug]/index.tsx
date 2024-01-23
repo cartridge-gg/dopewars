@@ -18,7 +18,7 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
-import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
+
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { Inventory } from "@/components/Inventory";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -34,14 +34,17 @@ export default function Location() {
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id;
 
   const { account, playerEntityStore } = useDojoContext();
-  const { location: locationEntity } = useLocationEntity({
-    gameId,
-    locationId,
-  });
+  const { playerEntity } = playerEntityStore;
+  
+  const [prices, setPrices] = useState([])
+  useEffect(() => {
+    if(playerEntity && playerEntity.markets){
+      setPrices(playerEntity.markets.get(locationId))
+    }
+  }, [playerEntity, playerEntity?.markets])
 
   const { endGame, isPending } = useSystems();
 
-  const { playerEntity } = playerEntityStore;
 
   const [isLastDay, setIsLastDay] = useState(false);
 
@@ -57,7 +60,7 @@ export default function Location() {
     }
   }, [locationId, playerEntity, playerEntity?.locationId, router, gameId]);
 
-  if (!playerEntity || !locationEntity) {
+  if (!playerEntity || !prices) {
     return <></>;
   }
 
@@ -68,9 +71,9 @@ export default function Location() {
   return (
     <Layout
       leftPanelProps={{
-        title: getLocationById(locationEntity.id)!.name,
+        title: getLocationById(locationId)!.name,
         prefixTitle: prefixTitle,
-        imageSrc: `/images/locations/${getLocationById(locationEntity.id)?.slug}.png`,
+        imageSrc: `/images/locations/${getLocationById(locationId)?.slug}.png`,
       }}
       footer={
         <Footer>
@@ -98,7 +101,8 @@ export default function Location() {
 
       <VStack w="full" align="flex-start" gap="10px">
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
-          {sortDrugMarkets(locationEntity.drugMarkets).map((drug, index) => {
+          {sortDrugMarkets(prices).map((drug, index) => {
+
             const drugInfo = getDrugById(drug.id)!;
             const canBuy = drug.price <= playerEntity.cash && playerEntity.drugCount < playerEntity.getTransport();
             const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
@@ -135,10 +139,10 @@ export default function Location() {
                 <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
                   <HStack justifyContent="space-between">
                     <Text>{formatCash(drug.price)}</Text>
-                    <HStack>
+                    {/* <HStack>
                       <Cart mb="4px" />
                       <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
-                    </HStack>
+                    </HStack> */}
                   </HStack>
                   <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugSlug={drugInfo.slug} />
                 </CardFooter>

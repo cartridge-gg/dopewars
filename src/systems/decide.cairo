@@ -224,9 +224,9 @@ mod decide {
                     outcome,
                     health_loss,
                     drug_loss,
-                    cash_loss: cash_loss / SCALING_FACTOR,
+                    cash_loss,
                     dmg_dealt,
-                    cash_earnt: cash_earnt / SCALING_FACTOR
+                    cash_earnt
                 }
             );
             emit!(world, Decision { game_id, player_id, action });

@@ -180,6 +180,7 @@ mod travel {
     }
 }
 
+use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
 use rollyourown::models::game::{Game};
 use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
 use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
@@ -190,6 +191,7 @@ use rollyourown::utils::market;
 use rollyourown::utils::math::{MathTrait, MathImpl, MathImplU8};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
 use rollyourown::utils::random::{Random};
+
 
 use super::travel::travel::MarketEvent;
 
@@ -255,7 +257,11 @@ fn on_turn_end(
 
     // create lots of events
     // market price variations
-    market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
+    //market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
+
+    let mut market = MarketImpl::get(world, *game.game_id, player.player_id);
+    market.market_variations(world, ref randomizer);
+    // TODO market_variations
 
     true
 }

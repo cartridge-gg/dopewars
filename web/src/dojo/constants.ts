@@ -1,2 +1,2 @@
-export const SCALING_FACTOR = 10_000;
+export const SCALING_FACTOR = 1;
 export const REFETCH_INTERVAL = 1_000; // really need graphql subscriptions...

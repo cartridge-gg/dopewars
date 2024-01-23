@@ -15,8 +15,10 @@ import {
   PlayerEntitySubscriptionDocument,
   World__Subscription,
   Encounter,
+  MarketPacked,
 } from "@/generated/graphql";
 import { SCALING_FACTOR } from "@/dojo/constants";
+import { isUint16Array } from "util/types";
 
 export interface PlayerEntityStore {
   client: GraphQLClient | null;
@@ -69,7 +71,7 @@ const subscribe = async (gameId: string, playerId: string) => {
   //load playerEntity
   await executeQuery(gameId, playerId);
 
-  //subscribe to playerEntity changes
+  //subscribe to playerEntity changes / Markets changes
   unsubscribers.push(
     usePlayerEntityStore.getState().wsClient!.subscribe(
       {
@@ -86,7 +88,7 @@ const subscribe = async (gameId: string, playerId: string) => {
     ),
   );
 
-  //subscribe to player Drug / Items / Encounter changes
+  //subscribe to player Drug / Items / Encounter 
   for (let drugId of [0, 1, 2, 3, 4, 5]) {
     const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
 
@@ -126,12 +128,21 @@ const executeQuery = async (gameId: string, playerId: string) => {
 
 const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
-
   // update player
-  let playerUpdate = data?.entityUpdated?.models[0] as Player;
-  usePlayerEntityStore.setState((state) => ({
-    playerEntity: state.playerEntity?.update(playerUpdate),
-  }));
+  let playerUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "Player") as Player;
+  if (playerUpdate) {
+    usePlayerEntityStore.setState((state) => ({
+      playerEntity: state.playerEntity?.update(playerUpdate),
+    }));
+  }
+
+  // update markets
+  let marketUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "MarketPacked") as MarketPacked;
+  if (marketUpdate && marketUpdate.packed) {
+    usePlayerEntityStore.setState((state) => ({
+      playerEntity: state.playerEntity?.updateMarkets(marketUpdate),
+    }));
+  }
 
   //console.log("updated : Player");
 };

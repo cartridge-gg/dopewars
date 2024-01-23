@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::systems::decide::decide",
       "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
-      "class_hash": "0x76171d991668cc42024555df0816a1f1dd05f51c8c1311eccb10ac123f4474f",
+      "class_hash": "0x417436386a0a365f63b725c8153b71a414f301f38059b06874540e3aaccdb58",
       "abi": [
         {
           "type": "impl",
@@ -1279,7 +1279,7 @@
     {
       "name": "rollyourown::systems::lobby::lobby",
       "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
-      "class_hash": "0x5e332543f2df8b9a15572cc766d4dbcaa09be4163131abdac39f7cd40c1199a",
+      "class_hash": "0x1f5e4dcf2dc9dc76d823bc7560688b6d1d8a7f05c2ed57f7185c469cbad852d",
       "abi": [
         {
           "type": "impl",
@@ -1351,10 +1351,6 @@
                 {
                   "name": "avatar_id",
                   "type": "core::integer::u8"
-                },
-                {
-                  "name": "mainnet_address",
-                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [
@@ -1653,7 +1649,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x2fbd507fbb0009cc7678870b4ce472b2fe4c9090e3064ef37025844f200b60f",
+      "class_hash": "0x164d1619bb3b3cf246bf0b3f43acddd6e3fcab0b2b16cfd61f6925898b91bbb",
       "abi": [
         {
           "type": "impl",
@@ -1984,7 +1980,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0x4e6e6a3c41c4cec54d7c35d9775bab86f8a2eabe671b67fa789b0a0c1f5baa3",
+      "class_hash": "0xee3446572f2cce376307a85b0b7d66a55ecfc16f001f6401f8f6ae69d33a89",
       "abi": [
         {
           "type": "impl",
@@ -2226,7 +2222,7 @@
             },
             {
               "name": "cost",
-              "type": "core::integer::u128",
+              "type": "core::integer::u32",
               "kind": "data"
             }
           ]
@@ -2258,7 +2254,7 @@
             },
             {
               "name": "payout",
-              "type": "core::integer::u128",
+              "type": "core::integer::u32",
               "kind": "data"
             }
           ]
@@ -2293,7 +2289,7 @@
     {
       "name": "rollyourown::systems::travel::travel",
       "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
-      "class_hash": "0x1f50c06a569b05ec3b20b97ee23dfb6b50ad320d30c5d98667d22ad915e6bc8",
+      "class_hash": "0x6dd1a1a3930cc5dd05462d19c7aae27eb8946ecb113e8515a69225063095632",
       "abi": [
         {
           "type": "impl",
@@ -3838,7 +3834,7 @@
       ]
     },
     {
-      "name": "rollyourown::models::player::player",
+      "name": "rollyourown::models::market_packed::market_packed",
       "members": [
         {
           "name": "game_id",
@@ -3851,9 +3847,186 @@
           "key": true
         },
         {
-          "name": "mainnet_address",
-          "type": "ContractAddress",
+          "name": "packed",
+          "type": "felt252",
           "key": false
+        }
+      ],
+      "class_hash": "0x4f970619628df9d1ed4cf2f1994b944c533c1d64a5587349585cdd46550f7af",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::models::market_packed::market_packed::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::models::player::player",
+      "members": [
+        {
+          "name": "game_id",
+          "type": "u32",
+          "key": true
+        },
+        {
+          "name": "player_id",
+          "type": "ContractAddress",
+          "key": true
         },
         {
           "name": "name",
@@ -3951,7 +4124,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x602d8c98eed6ebb9b1993489b0794a7518c6c2a62dc79dde21178cdf92f8cc6",
+      "class_hash": "0x352750be70c19451eee10106523fb71e8b0443c86f66f422696e074622c5a8f",
       "abi": [
         {
           "type": "function",

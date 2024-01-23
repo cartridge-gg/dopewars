@@ -1,11 +1,11 @@
 fragment PlayerProps on Player {
   name
   avatar_id
-  mainnet_address
   cash
   status
   hood_id
   location_id
+  next_location_id
   drug_count
   health
   turn
@@ -46,6 +46,10 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             health
             payout
           }
+          ... on MarketPacked {
+            game_id
+            packed
+          }
         }
       }
     }
@@ -60,6 +64,10 @@ subscription PlayerEntitySubscription($id: ID) {
       __typename
       ... on Player {
         ...PlayerProps
+      }
+      ... on MarketPacked {
+        game_id
+        packed
       }
     }
   }
@@ -87,27 +95,6 @@ subscription PlayerEntityRelatedDataSubscription($id: ID) {
         health
         payout
       }
-    }
-  }
-}
-
-query LocationEntities($gameId: String!, $locationId: String!) {
-  entities(keys: [$gameId, $locationId]) {
-    totalCount
-    edges {
-      node {
-        keys
-        models {
-          __typename
-          ... on Market {
-            cash
-            quantity
-            location_id
-            drug_id
-          }
-        }
-      }
-      cursor
     }
   }
 }

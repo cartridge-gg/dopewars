@@ -1,1 +1,1 @@
-const SCALING_FACTOR: u128 = 10_000;
+const SCALING_FACTOR: u128 = 1;

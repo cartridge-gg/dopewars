@@ -14,27 +14,27 @@ struct Player {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    mainnet_address: ContractAddress,
-    name: felt252,
-    avatar_id: u8,
-    status: PlayerStatus,
-    hood_id: LocationEnum,
-    location_id: LocationEnum,
-    next_location_id: LocationEnum,
-    turn: usize,
-    max_turns: usize,
-    max_items: u8,
-    cash: u128,
-    health: u8,
-    drug_count: usize,
-    attack: usize,
-    defense: usize,
-    transport: usize,
-    speed: usize,
-    wanted: u8,
-    leaderboard_version: u32,
-    game_over: bool,
+    name: felt252,                        // name registry or event
+    avatar_id: u8,                        // 2 bits = 4
+    status: PlayerStatus,                 // 2 bits = 4 ( + ?)
+    hood_id: LocationEnum,                // 3 bits = 8 or remove
+    location_id: LocationEnum,            // 3 bits = 8 
+    next_location_id: LocationEnum,       // 3 bits  = 8 ( maybe can remove)
+    turn: usize,                          // 6 bits = 64 ( max 64 turn looks fine ?)  
+    max_turns: usize,                     // hardcoded or turn limit
+    max_items: u8,                        // remove
+    cash: u128,                           // 30 bits = 1.xxx.xxx.xxx
+    health: u8,                           // 7 bits = 128
+    drug_count: usize,                    // probly remove
+    attack: usize,                        // computed
+    defense: usize,                       // computed
+    transport: usize,                     // computed
+    speed: usize,                         // computed
+    wanted: u8,                           // 7 bits = 128
+    leaderboard_version: u32,             // probly remove
+    game_over: bool,                      // 1 bit
 }
+
 
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {

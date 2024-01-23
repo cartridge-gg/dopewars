@@ -4,7 +4,7 @@ use rollyourown::models::game::{GameMode};
 #[starknet::interface]
 trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress
+        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8
     ) -> (u32, ContractAddress);
 
     fn set_name(self: @TContractState, game_id: u32, player_id: ContractAddress, player_name: felt252);
@@ -24,7 +24,7 @@ mod lobby {
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
-    use rollyourown::models::market::{MarketTrait};
+    // use rollyourown::models::market::{MarketTrait};
     use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::utils::settings::{
@@ -34,6 +34,8 @@ mod lobby {
     use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
+
+    use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
 
 
     use super::ILobby;
@@ -66,7 +68,7 @@ mod lobby {
     #[external(v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress,
+            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8,
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
             assert_valid_chain(game_mode);
@@ -88,7 +90,6 @@ mod lobby {
             let player = Player {
                 game_id,
                 player_id: caller,
-                mainnet_address, 
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
@@ -122,18 +123,22 @@ mod lobby {
 
             set!(self.world(), (game, player));
 
-            let mut locations = LocationTrait::all();
-            loop {
-                match locations.pop_front() {
-                    Option::Some(location_id) => {
-                        // initialize markets for location
-                        market::initialize_markets(
-                            self.world(), ref randomizer, game_id, game_mode, *location_id
-                        );
-                    },
-                    Option::None(_) => { break (); }
-                };
-            };
+            // markets 
+            let markets = MarketImpl::new(game_id, caller);
+            set!(self.world(), (markets));
+
+            // let mut locations = LocationTrait::all();
+            // loop {
+            //     match locations.pop_front() {
+            //         Option::Some(location_id) => {
+            //             // initialize markets for location
+            //             market::initialize_markets(
+            //                 self.world(), ref randomizer, game_id, game_mode, *location_id
+            //             );
+            //         },
+            //         Option::None(_) => { break (); }
+            //     };
+            // };
 
             // emit player joined
             emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });

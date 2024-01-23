@@ -1,12 +1,22 @@
+use starknet::{get_caller_address, ContractAddress};
+
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
 use rollyourown::constants::SCALING_FACTOR;
 
-use rollyourown::models::location::LocationEnum;
-use rollyourown::models::drug::DrugEnum;
+use rollyourown::models::game::{Game, GameMode};
+use rollyourown::models::player::Player;
+use rollyourown::models::drug::{DrugEnum, Drug, DrugTrait};
+use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
 
-struct DrugPriceConfig {
-    base: usize,
-    step: usize,
-}
+use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
+use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
+use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
+
+
+use rollyourown::utils::math::{MathTrait, MathImplU8};
+use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait};
+
 
 fn get_drug_price_config(drug: DrugEnum) -> DrugPriceConfig {
     match drug {
@@ -19,128 +29,210 @@ fn get_drug_price_config(drug: DrugEnum) -> DrugPriceConfig {
     }
 }
 
-fn get_drug_price_by_tick(drug: DrugEnum, tick: usize) -> usize {
-    let config = get_drug_price_config(drug);
-    config.base + tick * config.step
-}
-
 //
 //
 //
-
-
-
 
 #[derive(Model, Copy, Drop, Serde)]
 struct MarketPacked {
     #[key]
     game_id: u32,
+    #[key]
+    player_id: ContractAddress,
     packed: felt252
 }
 
-// packed layout
-// [0..5]     Location 0 | Drug 0
-// [6..11]    Location 0 | Drug 1
-// [12..17]   Location 0 | Drug 2
-// [18..23]   Location 0 | Drug 3
-// [24..29]   Location 0 | Drug 4
-// [30..35]   Location 0 | Drug 5
-// ...
-// [203..208] Location 5 | Drug 4
-// [209..215] Location 5 | Drug 5
+//
+//
+//
 
-
-// 6 bit mask = 2^6 - 1 = 63 = 0x3F
-
-const MASK_6_BITS: felt252 = 0x3F;
-
-#[generate_trait]
-impl MarketPackedImpl of MarketPackedTrait {
-    fn new(game_id: u32) -> MarketPacked {
-        let packed = core::pedersen::pedersen(0,game_id.into());
-        MarketPacked {
-            game_id,
-            packed
-        }
-    } 
-
-    fn get_drug_price(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum) -> usize {
-        let location_idx :u8 = location.into();
-        let drug_idx :u8 = location.into();
-        0
-    }
-
-    fn get_at(ref self: MarketPacked, start_idx: u8, mask: felt252) -> felt252 {
-      //  let shifted = ( self.packed >> start_idx ) && mask;
-        0
-    }
-
-
-    fn quote_buy(ref self: MarketPacked, quantity: usize) -> u128 {
-        0
-    }
-
-    fn quote_sell(ref self: MarketPacked, quantity: usize) -> u128 {
-        0
-    }
-
-
-  
+#[derive(Copy, Drop, Serde)]
+struct DrugPriceConfig {
+    base: usize,
+    step: usize,
 }
 
-// #[generate_trait]
-// impl MarketImpl of MarketTrait {
-//     #[inline(always)]
-//     fn buy(ref self: Market, quantity: usize) -> u128 {
-//         assert(quantity < self.quantity, 'not enough liquidity');
-//         let (amount, available, cash) = normalize(quantity, self);
-//         let k = cash * available;
-//         let cost = (k / (available - amount)) - cash;
-//         cost
-//     }
+#[derive(Copy, Drop, Serde)]
+struct DrugPrice {
+    drug: DrugEnum,
+    config: DrugPriceConfig,
+}
 
-//     #[inline(always)]
-//     fn sell(ref self: Market, quantity: usize) -> u128 {
-//         let (amount, available, cash) = normalize(quantity, self);
-//         let k = cash * available;
-//         let payout = cash - (k / (available + amount));
-//         payout
-//     }
-// }
+//
+//
+//
 
-// fn normalize(amount: usize, market: Market) -> (u128, u128, u128) {
-//     let amount: u128 = amount.into() * SCALING_FACTOR;
-//     let available: u128 = (market.quantity).into() * SCALING_FACTOR;
-//     (amount, available, market.cash)
-// }
+#[generate_trait]
+impl DrugPriceImpl of DrugPriceTrait {
+    #[inline(always)]
+    fn new(drug: DrugEnum) -> DrugPrice {
+        DrugPrice { drug, config: get_drug_price_config(drug) }
+    }
 
-// #[test]
-// #[should_panic(expected: ('not enough liquidity',))]
-// fn test_not_enough_quantity() {
-//     let mut market = Market {
-//         game_id: 0, location_id: 0, drug_id: 0, cash: SCALING_FACTOR * 1, quantity: 1
-//     }; // pool 1:1
-//     let cost = market.buy(10);
-// }
+    #[inline(always)]
+    fn get_drug_price_by_tick(self: @DrugPrice, tick: usize) -> usize {
+        tick * (*self.config.step) + (*self.config.base)
+    }
+}
 
-// #[test]
-// #[available_gas(100000)]
-// fn test_market_buy() {
-//     let mut market = Market {
-//         game_id: 0, location_id: 0, drug_id: 0, cash: SCALING_FACTOR * 1, quantity: 10
-//     }; // pool 1:10
-//     let cost = market.buy(5);
-//     assert(cost == SCALING_FACTOR * 1, 'wrong cost');
-// }
 
-// #[test]
-// #[available_gas(100000)]
-// fn test_market_sell() {
-//     let mut market = Market {
-//         game_id: 0, location_id: 0, drug_id: 0, cash: SCALING_FACTOR * 1, quantity: 10
-//     }; // pool 1:10
-//     let payout = market.sell(5);
-//     assert(payout == 3334, 'wrong payout');
-// }
+//
+//
+//
 
+#[generate_trait]
+impl MarketImpl of MarketTrait {
+    fn new(game_id: u32, player_id: ContractAddress) -> MarketPacked {
+        let packed = core::pedersen::pedersen(0, game_id.into());
+        MarketPacked { game_id, player_id, packed }
+    }
+
+    fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketPacked {
+        get!(world, (game_id, player_id), (MarketPacked))
+    }
+
+    fn get_tick(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum) -> usize {
+        let bits = BitsImpl::from(self.packed);
+
+        let location_idx: u8 = location.into() - 1;
+        let drug_idx: u8 = drug.into();
+
+        let size: u8 = 6; // 6 bits
+        let start: u8 = (location_idx * 6 + drug_idx) * size;
+
+        bits.extract_into::<usize>(start, size)
+    }
+
+
+    fn get_drug_price(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum) -> usize {
+        let drug_price = DrugPriceImpl::new(drug);
+        let tick = self.get_tick(location, drug);
+
+        drug_price.get_drug_price_by_tick(tick)
+    }
+
+    //
+    //
+    //
+
+    fn quote_buy(
+        ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, quantity: usize
+    ) -> usize {
+        let drug_price = self.get_drug_price(location, drug);
+        let cost = drug_price * quantity;
+        cost
+    }
+
+    fn quote_sell(
+        ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, quantity: usize
+    ) -> usize {
+        let drug_price = self.get_drug_price(location, drug);
+        let payout = drug_price * quantity;
+        payout
+    }
+
+    //
+    //
+    //
+
+    fn set_tick(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, value: usize) {
+        let mut bits = BitsImpl::from(self.packed);
+
+        let location_idx: u8 = location.into() - 1;
+        let drug_idx: u8 = drug.into();
+
+        let size: u8 = 6; // 6 bits
+        let start: u8 = (location_idx * 6 + drug_idx) * size;
+
+        bits.replace::<usize>(start, size, value);
+        self.packed = bits.into_felt();
+    }
+
+    //
+    //
+    //
+
+    fn market_variations(ref self: MarketPacked, world: IWorldDispatcher, ref randomizer: Random) {
+        let mut locations = LocationTrait::all();
+        let game = get!(world, self.game_id, Game);
+        let player = get!(world, (self.game_id, self.player_id), Player);
+        let market_settings = MarketSettingsImpl::get(game.game_mode);
+
+        loop {
+            match locations.pop_front() {
+                Option::Some(location_id) => {
+                    let mut drugs = DrugTrait::all();
+                    loop {
+                        match drugs.pop_front() {
+                            Option::Some(drug_id) => {
+                                let rand = randomizer.between::<u32>(0, 1000);
+
+                                if rand < market_settings.price_var_chance.into() {
+                                    // increase price
+                                    let tick = self.get_tick(*location_id, *drug_id);
+                                    let new_tick = tick.add_capped(2, 63);
+                                    self.set_tick(*location_id, *drug_id, new_tick);
+                                } else if rand >= (999 - market_settings.price_var_chance)
+                                    .into() { 
+                                        // decrease price
+                                    let tick = self.get_tick(*location_id, *drug_id);
+                                    let new_tick = tick.sub_capped(2, 63);
+                                    self.set_tick(*location_id, *drug_id, new_tick);
+                                } else if rand > 500 && rand <= 500
+                                    + market_settings.market_event_chance.into() {
+                                    // big move up
+                                    let tick = self.get_tick(*location_id, *drug_id);
+                                    let new_tick = tick.add_capped(7, 63);
+                                    self.set_tick(*location_id, *drug_id, new_tick);
+
+                                    // emit raw event
+                                    let location_id_u8: u8 = (*location_id).into();
+                                    let drug_id_u8: u8 = (*drug_id).into();
+
+                                    world
+                                        .emit_raw(
+                                            array![selector!("MarketEvent")],
+                                            array![
+                                                self.game_id.into(),
+                                                location_id_u8.into(),
+                                                drug_id_u8.into(),
+                                                true.into()
+                                            ]
+                                        );
+                                } else if rand < 500 && rand >= 500
+                                    - market_settings.market_event_chance.into() {
+                                    // big move down
+
+                                    let tick = self.get_tick(*location_id, *drug_id);
+                                    let new_tick = tick.sub_capped(7, 63);
+                                    self.set_tick(*location_id, *drug_id, new_tick);
+
+                                    // emit raw event
+                                    let location_id_u8: u8 = (*location_id).into();
+                                    let drug_id_u8: u8 = (*drug_id).into();
+                                    world
+                                        .emit_raw(
+                                            array![selector!("MarketEvent")],
+                                            array![
+                                                self.game_id.into(),
+                                                location_id_u8.into(),
+                                                drug_id_u8.into(),
+                                                false.into()
+                                            ]
+                                        );
+                                }
+ 
+                            },
+                            Option::None(()) => { break; }
+                        };
+                    };
+                },
+                Option::None(_) => { break; }
+            };
+        };
+
+        // update market
+        set!(world, (self));
+    }
+}
 

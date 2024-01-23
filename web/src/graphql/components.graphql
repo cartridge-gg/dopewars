@@ -22,18 +22,6 @@ query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
   }
 }
 
-query MarketPrices($gameId: u32) {
-  marketModels(first: 36, where: { game_id: $gameId }) {
-    edges {
-      node {
-        drug_id
-        location_id
-        quantity
-        cash
-      }
-    }
-  }
-}
 
 query RyoMetas {
   ryoMetaModels(limit: 1) {

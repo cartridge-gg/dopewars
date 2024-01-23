@@ -8,7 +8,6 @@ import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
 import { TradeDirection, TradeType } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
-import { useLocationEntity } from "@/dojo/queries/useLocationEntity";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
 import { useSystems } from "@/dojo/hooks/useSystems";
@@ -36,18 +35,14 @@ export default function Market() {
 
   const { playerEntity } = playerEntityStore;
 
-  const { location: locationEntity } = useLocationEntity({
-    gameId,
-    locationId: location?.id,
-  });
-
   const { toast } = useToast();
 
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    if (!locationEntity || !playerEntity || isPending) return;
+    if (!playerEntity || isPending) return;
 
-    const market = locationEntity.drugMarkets.find((d) => d.id === drug?.id);
+    const markets = playerEntity.markets.get(location.id)
+    const market = markets.find((d) => d.id === drug?.id);
     if (!market) return;
 
     const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.id);
@@ -57,7 +52,7 @@ export default function Market() {
 
     setCanBuy(playerEntity.cash > market.price);
     setMarket(market);
-  }, [locationEntity, playerEntity, drug, isPending]);
+  }, [ playerEntity, drug, isPending]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
@@ -75,15 +70,13 @@ export default function Market() {
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
 
-        const slippage = calculateSlippage(market!.marketPool, quantity, tradeDirection);
-        total = slippage.newPrice * quantity;
+      
       } else if (tradeDirection === TradeDirection.Sell) {
         ({ hash } = await sell(gameId, location!.type, drug!.type, quantitySell));
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
 
-        const slippage = calculateSlippage(market!.marketPool, quantity, tradeDirection);
-        total = slippage.newPrice * quantity;
+      
       }
 
       // toast({
@@ -145,10 +138,6 @@ export default function Market() {
               {drug.icon({ boxSize: "36px" })}
               <Text>{formatCash(market.price)}</Text>
             </HStack>
-            <HStack>
-              <Cart mr={1} size="lg" />
-              <Text>{formatQuantity(market.marketPool.quantity)}</Text>
-            </HStack>
           </HStack>
         </Card>
         {((tradeDirection == TradeDirection.Buy && canBuy) || (tradeDirection == TradeDirection.Sell && canSell)) && (
@@ -198,7 +187,8 @@ const QuantitySelector = ({
 
   useEffect(() => {
     if (type === TradeDirection.Buy) {
-      let max_buyable = calculateMaxQuantity(market.marketPool, player.cash);
+      //let max_buyable = calculateMaxQuantity(market, player.cash);
+      let max_buyable = Math.floor(player.cash / market.price);
       let bag_space = player.getTransport() - player.drugCount;
       setMax(Math.min(max_buyable, bag_space));
     } else if (type === TradeDirection.Sell) {
@@ -209,21 +199,21 @@ const QuantitySelector = ({
   }, [type, drug, player, market]);
 
   useEffect(() => {
-    const slippage = calculateSlippage(market.marketPool, quantity, type);
+    // const slippage = calculateSlippage(market.marketPool, quantity, type);
 
-    if (slippage.priceImpact > 0.2) {
-      // >20%
-      setAlertColor("red");
-    } else if (slippage.priceImpact > 0.05) {
-      // >5%
-      setAlertColor("neon.200");
-    } else {
-      setAlertColor("neon.500");
-    }
+    // if (slippage.priceImpact > 0.2) {
+    //   // >20%
+    //   setAlertColor("red");
+    // } else if (slippage.priceImpact > 0.05) {
+    //   // >5%
+    //   setAlertColor("neon.200");
+    // } else {
+    //   setAlertColor("neon.500");
+    // }
 
-    setPriceImpact(slippage.priceImpact);
-    setTotalPrice(quantity * slippage.newPrice);
-    onChange(quantity, slippage.newPrice);
+    // setPriceImpact(slippage.priceImpact);
+    setTotalPrice(quantity * market.price);
+    onChange(quantity, market.price);
   }, [quantity, market, type, onChange]);
 
   const onDown = useCallback(() => {
@@ -245,10 +235,10 @@ const QuantitySelector = ({
   return (
     <VStack opacity={max === 0 ? "0.2" : "1"} pointerEvents={max === 0 ? "none" : "all"} w="full">
       <Flex w="100%" direction={["column", "row"]} justifyContent="space-between" align="center" gap={["10px", "20px"]}>
-        <Text color={alertColor}>
+        {/* <Text color={alertColor}>
           <Alert size="sm" /> {priceImpact ? (priceImpact * 100).toFixed(2) : "0"}% slippage ($
           {totalPrice ? (totalPrice / quantity).toFixed(0) : market.price.toFixed(0)} per)
-        </Text>
+        </Text> */}
         <HStack fontSize="13px">
           <Text textStyle="subheading" color="neon.500">
             Total:

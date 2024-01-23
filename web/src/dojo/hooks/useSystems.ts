@@ -15,7 +15,6 @@ export interface SystemsInterface {
     gameMode: number,
     playerName: string,
     avatarId: number,
-    mainnetAddress: BigNumberish
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
@@ -169,11 +168,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: BigNumberish) => {
+    async (gameMode: GameMode, playerName: string, avatarId: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::lobby::lobby",
         "create_game",
-        [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
+        [gameMode, shortString.encodeShortString(playerName), avatarId],
       );
 
       const joinedEvent = parsedEvents.find(

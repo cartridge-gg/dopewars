@@ -27,7 +27,7 @@ import {
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
-import { Map } from "@/components/map";
+import { Map as MapSvg } from "@/components/map";
 
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
@@ -35,7 +35,6 @@ import { Location } from "@/dojo/types";
 import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 
 import { useSystems } from "@/dojo/hooks/useSystems";
-import { useMarketPrices } from "@/dojo/queries/useMarkets";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { Footer } from "@/components/Footer";
 
@@ -58,10 +57,6 @@ export default function Travel() {
 
   const { playerEntity } = playerEntityStore;
 
-  const { locationPrices } = useMarketPrices({
-    gameId,
-  });
-
   const locationName = useMemo(() => {
     if (targetId) {
       return getLocationById(targetId)?.name;
@@ -80,10 +75,10 @@ export default function Travel() {
   }, [playerEntity, isPending]);
 
   const prices = useMemo(() => {
-    if (locationPrices && targetId) {
-      const current = sortDrugMarkets(locationPrices.get(currentLocationId || ""));
+    if (playerEntity && playerEntity.markets && targetId) {
+      const current = sortDrugMarkets(playerEntity.markets.get(currentLocationId || ""));
 
-      const target = sortDrugMarkets(locationPrices.get(targetId));
+      const target = sortDrugMarkets(playerEntity.markets.get(targetId));
 
       return target.map((drug, index) => {
         if (currentLocationId) {
@@ -106,7 +101,7 @@ export default function Travel() {
     }
 
     return [];
-  }, [locationPrices, targetId, currentLocationId]);
+  }, [playerEntity, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
     console.log(e.key);
@@ -183,7 +178,7 @@ export default function Travel() {
     }
   }, [targetId, router, gameId, travel, toaster, playerEntity]);
 
-  if (!playerEntity || !locationPrices) return <></>;
+  if (!playerEntity ) return <></>;
 
   return (
     <Layout
@@ -191,7 +186,7 @@ export default function Travel() {
         title: "Destination",
         prefixTitle: "Select Your",
         map: (
-          <Map
+          <MapSvg
             target={getLocationById(targetId)?.type}
             current={getLocationById(currentLocationId)?.type}
             onSelect={(selected) => {

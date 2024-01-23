@@ -131,7 +131,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         let mut player_settings = PlayerSettings {
             health: 100,
-            cash: 1420_u128 * SCALING_FACTOR,
+            cash: 1420_u128,
             wanted: 39,
             attack: 1,
             defense: 1,
@@ -190,7 +190,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
             price_var_min: 2, // 2%  
             price_var_max: 6, // 6%  
-            market_event_chance: 8, // on 1000 : 1.6% = 0.8% up / 0.8% down  
+            market_event_chance: 68, // on 1000 : 1.6% = 0.8% up / 0.8% down  
             market_event_min: 40, //   up 40%  | down 20%
             market_event_max: 80, //   up 80%  | down 40%
             liq_scaling_initial_rate: 150, // 0.015

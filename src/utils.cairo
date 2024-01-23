@@ -6,3 +6,4 @@ mod shop;
 mod math;
 mod events;
 mod leaderboard;
+mod bits;

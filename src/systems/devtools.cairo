@@ -47,7 +47,7 @@ mod devtools {
                 let uuid = self.world().uuid();
                 let uuid_f: felt252 = uuid.into();
 
-                let rand: u128 = randomizer.between::<u128>(0, 100000000);
+                let rand: u32 = randomizer.between::<u32>(0, 100000000);
                 let rand_100: u8 = randomizer.between::<u8>(0, 100);
                 let rand_10: u8 = randomizer.between::<u8>(0, 10);
                 let rand_2: u8 = randomizer.between::<u8>(0, 2);
@@ -55,14 +55,13 @@ mod devtools {
                 let player = Player {
                     game_id: uuid,
                     player_id: uuid_f.try_into().unwrap(),
-                    mainnet_address: 0.try_into().unwrap(),
                     name: uuid_f,
                     avatar_id: rand_10,
                     status: PlayerStatus::Normal,
                     hood_id: LocationEnum::Home,
                     location_id: LocationEnum::Home,
                     next_location_id: LocationEnum::Home,
-                    cash: rand * SCALING_FACTOR,
+                    cash: rand ,
                     health: rand_2,
                     drug_count: 0,
                     turn: rand_100.into(),
