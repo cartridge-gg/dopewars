@@ -14,7 +14,7 @@ mod travel {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::game::{Game};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
@@ -92,7 +92,7 @@ mod travel {
         fn travel(self: @ContractState, game_id: u32, next_location_id: LocationEnum) -> bool {
             let world = self.world();
             let game = get!(world, game_id, Game);
-            assert(game.tick(), 'game cannot progress');
+            //assert(game.tick(), 'game cannot progress');
 
             let player_id = get_caller_address();
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);

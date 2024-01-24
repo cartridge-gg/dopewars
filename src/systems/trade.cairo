@@ -31,7 +31,7 @@ mod trade {
     use rollyourown::models::drug::{Drug, DrugEnum};
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::{Location, LocationEnum};
-    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::game::{Game};
     // use rollyourown::models::market::{Market, MarketTrait};
 
     use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
@@ -89,7 +89,7 @@ mod trade {
             let player_id = get_caller_address();
 
             let game = get!(world, game_id, (Game));
-            assert(game.tick(), 'cannot progress');
+            //assert(game.tick(), 'cannot progress');
 
             let mut player = get!(world, (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');
@@ -136,7 +136,7 @@ mod trade {
             let player_id = get_caller_address();
 
             let game = get!(world, game_id, Game);
-            assert(game.tick(), 'cannot progress');
+            //assert(game.tick(), 'cannot progress');
 
             let mut player = get!(world, (game_id, player_id).into(), Player);
             assert(player.location_id == location_id, 'player is not at location');

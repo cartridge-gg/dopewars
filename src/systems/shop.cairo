@@ -32,7 +32,7 @@ mod shop {
     use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::location::{Location, LocationEnum};
-    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::game::{Game};
     use rollyourown::models::item::{Item, ItemTrait, ItemEnum};
     use rollyourown::utils::settings::{
         ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
@@ -76,7 +76,6 @@ mod shop {
         fn assert_can_access_shop(self: @ContractState, game: @Game, player: @Player) {
             assert(self.is_open((*game).game_id, (*player).player_id), 'shop is closed!');
             assert((*player).status == PlayerStatus::AtPawnshop, 'not at shop!');
-            assert((*game).tick(), 'cannot progress');
         }
     }
 

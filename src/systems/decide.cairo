@@ -29,7 +29,7 @@ mod decide {
     use starknet::get_caller_address;
 
     use rollyourown::constants::SCALING_FACTOR;
-    use rollyourown::models::game::{Game, GameTrait};
+    use rollyourown::models::game::{Game};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugEnum, DrugTrait};
     use rollyourown::models::location::{LocationEnum, LocationImpl};
