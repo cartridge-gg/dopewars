@@ -27,6 +27,11 @@ export const NameInputModal = ({ isOpen, close, onSubmit }: NameInputModalProps)
             onChange={(e) => {
               setName(e.target.value);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && name) {
+                onSubmit(name);
+              }
+            }}
           />
           {name.length === 20 && (
             <Text w="full" align="center" color="red">
