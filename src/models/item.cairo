@@ -55,6 +55,7 @@ enum ItemName {
 trait ItemMeta {
     fn initial_tier(self: ItemName) -> ItemTier;
     fn impacting_stat(self: ItemName) -> ItemEnum;
+    fn name(self: ItemName) -> felt252;
 }
 
 impl ItemMetaImpl of ItemMeta {
@@ -85,6 +86,21 @@ impl ItemMetaImpl of ItemMeta {
             ItemName::AthleticTrainers => ItemEnum::Speed,
             ItemName::WorkBoots => ItemEnum::Speed,
             ItemName::PlasticBag => ItemEnum::Transport,
+        }
+    }
+
+    fn name(self: ItemName) -> felt252 {
+        match self {
+            ItemName::Chain => 'Chain',
+            ItemName::BaseballBat => 'Baseball Bat',
+            ItemName::AK47 => 'AK 47',
+            ItemName::BloodStainedShirt => 'Blood Stained Shirt',
+            ItemName::TrenchCoat => 'Trench Coat',
+            ItemName::BulletProofVest => 'Bullet Proof Vest',
+            ItemName::AllBlackSneakers => 'All-Black Sneakers',
+            ItemName::AthleticTrainers => 'Athletic Trainers',
+            ItemName::WorkBoots => 'Work Boots',
+            ItemName::PlasticBag => 'Plastic Bag',
         }
     }
 }

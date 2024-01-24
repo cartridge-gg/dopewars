@@ -6,62 +6,41 @@ import Button from "@/components/Button";
 import { Hustler } from "@/components/hustler";
 import { Arrow } from "@/components/icons";
 import { PowerMeter } from "@/components/PowerMeter";
-import React, { useState } from "react";
-import { GameMode } from "@/dojo/types";
+import React, { useEffect, useState } from "react";
+import { GameMode, PlayerClass } from "@/dojo/types";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { validateAndParseAddress } from "starknet";
-
-const PLACEHOLDER_STATS = [
-  {
-    equipment: "Weapon",
-    name: "AK 47",
-    stat: "ATK",
-    basePower: 1,
-    power: 4,
-    maxPower: 4,
-    displayedPower: 6,
-  },
-  {
-    equipment: "Shirt",
-    name: "Blood Stained Shirt",
-    stat: "DEF",
-    basePower: 3,
-
-    power: 6,
-    maxPower: 6,
-    displayedPower: 6,
-  },
-  {
-    equipment: "Shoes",
-    name: "All-Black Sneakers",
-    stat: "SPD",
-    basePower: 2,
-    power: 5,
-    maxPower: 5,
-    displayedPower: 6,
-  },
-  {
-    equipment: "Bag",
-    name: "Plastic Bag",
-    stat: "INV",
-    basePower: 1,
-    power: 3,
-    maxPower: 4,
-    displayedPower: 6,
-  },
-];
+import { shortString } from "starknet";
 
 export default function HustlerPage() {
   const router = useRouter();
   const name = router.query.name as string;
   const [error, setError] = useState("");
+  const [availableHustlers, setAvailableHustlers] = useState<any[]>([]);
+  const [selectedHustlerIndex, setSelectedHustlerIndex] = useState(0);
 
   const {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
+
+    setup: {
+      network: { call },
+    },
   } = useDojoContext();
   const { createGame, isPending } = useSystems();
+
+  useEffect(() => {
+    const getStuff = async () => {
+      const classes = (await call(account!, "lobby", "get_available_classes", [])) as any[];
+
+      setAvailableHustlers(classes);
+    };
+
+    if (account) {
+      getStuff();
+    }
+  }, [account]);
 
   const start = async (gameMode: GameMode) => {
     let address: bigint;
@@ -88,7 +67,12 @@ export default function HustlerPage() {
         await createBurner();
       }
 
-      const { gameId } = await createGame(gameMode, name, avatarId, address);
+      const selectedHustler = availableHustlers[selectedHustlerIndex];
+
+      const selectedClass: string = selectedHustler.class.activeVariant();
+
+      // @ts-ignore
+      const { gameId } = await createGame(gameMode, name, PlayerClass[selectedClass], avatarId, address);
 
       router.push(`/${gameId}/travel`);
     } catch (e) {
@@ -127,31 +111,91 @@ export default function HustlerPage() {
           <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
             Hustler...
           </Heading>
-          <HStack spacing={8}>
-            <Arrow direction="left" cursor="pointer" style="outline" boxSize={10}></Arrow>
-            <HStack spacing={12}>
-              <Hustler hustler="monkey" w={100} h={270} />
-              <Grid gridTemplateColumns="repeat(2, max-content)" columnGap={8} rowGap={4} alignItems="center">
-                {PLACEHOLDER_STATS.map((singleStat) => {
-                  const { name, equipment, stat, ...stats } = singleStat;
-                  return (
-                    <React.Fragment key={name}>
-                      <VStack spacing="px" alignItems="flex-start">
-                        <Text fontFamily="broken-console" fontSize="10px" color="neon.500" lineHeight={1}>
-                          {equipment}
-                        </Text>
-                        <Text fontSize="14px" lineHeight={1}>
-                          {name}
-                        </Text>
-                      </VStack>
-                      <PowerMeter text={stat} {...stats} />
-                    </React.Fragment>
-                  );
-                })}
-              </Grid>
-            </HStack>
-            <Arrow direction="right" cursor="pointer" style="outline" boxSize={10}></Arrow>
-          </HStack>
+          {(() => {
+            if (availableHustlers.length === 0) {
+              return (
+                <Text fontSize="14px" textAlign="center">
+                  Loading...
+                </Text>
+              );
+            }
+
+            const stats = [
+              {
+                name: "attack",
+                stat: "ATK",
+                slot: "weapon",
+              },
+              {
+                name: "defense",
+                stat: "DEF",
+                slot: "shirt",
+              },
+              {
+                name: "speed",
+                stat: "SPD",
+                slot: "shoes",
+              },
+              {
+                name: "transport",
+                stat: "INV",
+                slot: "bag",
+              },
+            ];
+
+            const selectedHustler = availableHustlers[selectedHustlerIndex];
+
+            const selectedClass: string = selectedHustler.class.activeVariant();
+
+            return (
+              <HStack spacing={8}>
+                <Arrow
+                  direction="left"
+                  cursor="pointer"
+                  style="outline"
+                  boxSize={10}
+                  onClick={() => {
+                    setSelectedHustlerIndex((selectedHustlerIndex - 1) % availableHustlers.length);
+                  }}
+                ></Arrow>
+                <HStack spacing={12}>
+                  <Hustler hustler={selectedClass.toLowerCase() as Hustler} w={100} h={270} />
+                  <Grid gridTemplateColumns="165px max-content" columnGap={8} rowGap={4} alignItems="center">
+                    {stats.map((singleStat) => {
+                      const { name, stat, slot } = singleStat;
+
+                      const itemName = shortString.decodeShortString(selectedHustler.items[`${name}Item`]);
+                      const initialTier = selectedHustler.initialTiers[`${name}Tier`].activeVariant();
+                      const initialPower = parseInt(initialTier.match(/[+-]?\d+/));
+
+                      return (
+                        <React.Fragment key={name}>
+                          <VStack spacing="px" alignItems="flex-start">
+                            <Text fontFamily="broken-console" fontSize="10px" color="neon.500" lineHeight={1}>
+                              {slot}
+                            </Text>
+                            <Text fontSize="14px" lineHeight={1}>
+                              {itemName}
+                            </Text>
+                          </VStack>
+                          <PowerMeter text={stat} basePower={initialPower} maxPower={6} />
+                        </React.Fragment>
+                      );
+                    })}
+                  </Grid>
+                </HStack>
+                <Arrow
+                  direction="right"
+                  cursor="pointer"
+                  style="outline"
+                  boxSize={10}
+                  onClick={() => {
+                    setSelectedHustlerIndex((selectedHustlerIndex + 1) % availableHustlers.length);
+                  }}
+                ></Arrow>
+              </HStack>
+            );
+          })()}
         </VStack>
       </Layout>
     </>

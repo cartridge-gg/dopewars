@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
-import { Action, Drug, GameMode, ShopItemInfo } from "../types";
+import { Action, Drug, GameMode, PlayerClass, ShopItemInfo } from "../types";
 import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { getEvents, setComponentsFromEvents } from "@dojoengine/utils";
 import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
@@ -14,6 +14,7 @@ export interface SystemsInterface {
   createGame: (
     gameMode: number,
     playerName: string,
+    playerClass: PlayerClass,
     avatarId: number,
     mainnetAddress: BigNumberish
   ) => Promise<SystemExecuteResult>;
@@ -174,12 +175,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number, mainnetAddress: BigNumberish) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "lobby",
-        "create_game",
-        [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
-      );
+    async (gameMode: GameMode, playerName: string, playerClass: PlayerClass, avatarId: number, mainnetAddress: BigNumberish) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt("lobby", "create_game", [
+        gameMode,
+        shortString.encodeShortString(playerName),
+        playerClass,
+        avatarId,
+        BigInt(mainnetAddress || 0),
+      ]);
 
       const joinedEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.PlayerJoined,

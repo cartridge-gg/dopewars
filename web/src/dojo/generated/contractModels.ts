@@ -16,7 +16,7 @@ export function defineContractComponents(world: World) {
             name: name,
             types: ["usize"],
           },
-        },
+        }
       );
     })(),
     Encounter: (() => {
@@ -32,9 +32,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u8", "u8", "u128", "u8"],
+            types: ["u8","u8","u128","u8"],
           },
-        },
+        }
       );
     })(),
     Game: (() => {
@@ -52,9 +52,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["GameMode", "u64", "usize", "usize", "usize", "ContractAddress"],
+            types: ["GameMode","u64","usize","usize","usize","ContractAddress"],
           },
-        },
+        }
       );
     })(),
     Item: (() => {
@@ -65,13 +65,16 @@ export function defineContractComponents(world: World) {
           level: RecsType.Number,
           name: RecsType.BigInt,
           value: RecsType.Number,
+          tier: RecsType.Number,
+          stat: RecsType.Number,
+          newName: RecsType.Number,
         },
         {
           metadata: {
             name: name,
-            types: ["u8", "felt252", "usize"],
+            types: ["u8","felt252","usize","ItemTier","ItemEnum","ItemName"],
           },
-        },
+        }
       );
     })(),
     Leaderboard: (() => {
@@ -85,9 +88,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u128", "u64"],
+            types: ["u128","u64"],
           },
-        },
+        }
       );
     })(),
     Market: (() => {
@@ -101,9 +104,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["u128", "usize"],
+            types: ["u128","usize"],
           },
-        },
+        }
       );
     })(),
     Player: (() => {
@@ -131,34 +134,14 @@ export function defineContractComponents(world: World) {
           wanted: RecsType.Number,
           leaderboard_version: RecsType.Number,
           game_over: RecsType.Boolean,
+          class: RecsType.Number,
         },
         {
           metadata: {
             name: name,
-            types: [
-              "ContractAddress",
-              "felt252",
-              "u8",
-              "PlayerStatus",
-              "LocationEnum",
-              "LocationEnum",
-              "LocationEnum",
-              "usize",
-              "usize",
-              "u8",
-              "u128",
-              "u8",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "usize",
-              "u8",
-              "u32",
-              "bool",
-            ],
+            types: ["ContractAddress","felt252","u8","PlayerStatus","LocationEnum","LocationEnum","LocationEnum","usize","usize","u8","u128","u8","usize","usize","usize","usize","usize","u8","u32","bool","PlayerClass"],
           },
-        },
+        }
       );
     })(),
     RyoMeta: (() => {
@@ -172,9 +155,9 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: name,
-            types: ["bool", "u32"],
+            types: ["bool","u32"],
           },
-        },
+        }
       );
     })(),
   };

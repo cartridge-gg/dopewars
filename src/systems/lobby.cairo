@@ -1,6 +1,30 @@
 use starknet::ContractAddress;
 use rollyourown::models::game::{GameMode};
 use rollyourown::models::player::PlayerClass;
+use rollyourown::models::item::{ItemTier};
+
+#[derive(Copy, Drop, Serde)]
+struct Items {
+    attackItem: felt252,
+    defenseItem: felt252,
+    transportItem: felt252,
+    speedItem: felt252,
+}
+
+#[derive(Copy, Drop, Serde)]
+struct InitialTiers {
+    attackTier: ItemTier,
+    defenseTier: ItemTier,
+    transportTier: ItemTier,
+    speedTier: ItemTier,
+}
+
+#[derive(Copy, Drop, Serde)]
+struct AvailableClasses {
+    class: PlayerClass,
+    items: Items,
+    initialTiers: InitialTiers,
+}
 
 #[starknet::interface]
 trait ILobby<TContractState> {
@@ -16,6 +40,8 @@ trait ILobby<TContractState> {
     fn set_name(
         self: @TContractState, game_id: u32, player_id: ContractAddress, player_name: felt252
     );
+
+    fn get_available_classes(self: @TContractState) -> Span<AvailableClasses>;
 }
 
 
@@ -34,17 +60,18 @@ mod lobby {
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::market::{MarketTrait};
     use rollyourown::models::leaderboard::{Leaderboard};
+    use rollyourown::models::item::{ItemMetaImpl};
 
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
-        ShopSettingsImpl
+        ShopSettingsImpl, ClassImplementation
     };
     use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
 
-    use super::ILobby;
+    use super::{ILobby, AvailableClasses, Items, InitialTiers};
 
 
     #[event]
@@ -172,6 +199,43 @@ mod lobby {
             player.name = player_name;
 
             set!(self.world(), (player))
+        }
+
+        fn get_available_classes(self: @ContractState) -> Span<AvailableClasses> {
+            let mut classes = array![
+                PlayerClass::Dragon, PlayerClass::Monkey, PlayerClass::Rabbit,
+            ];
+
+            let mut available: Array<AvailableClasses> = array![];
+
+            loop {
+                match classes.pop_front() {
+                    Option::Some(class) => {
+                        let initialItems = class.get_initial_items();
+                        let attackItem = initialItems.Attack.name();
+                        let defenseItem = initialItems.Defense.name();
+                        let transportItem = initialItems.Transport.name();
+                        let speedItem = initialItems.Speed.name();
+                        let attackTier = initialItems.Attack.initial_tier();
+                        let defenseTier = initialItems.Defense.initial_tier();
+                        let transportTier = initialItems.Transport.initial_tier();
+                        let speedTier = initialItems.Speed.initial_tier();
+
+                        let available_class = AvailableClasses {
+                            class,
+                            items: Items { attackItem, defenseItem, transportItem, speedItem, },
+                            initialTiers: InitialTiers {
+                                attackTier, defenseTier, transportTier, speedTier,
+                            },
+                        };
+
+                        available.append(available_class);
+                    },
+                    Option::None => { break; },
+                };
+            };
+
+            available.span()
         }
     }
 
