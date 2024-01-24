@@ -9,6 +9,7 @@ import {
   Box,
   Link as ChakraLink,
   keyframes,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
@@ -24,6 +25,7 @@ import HomeLeftPanel from "@/components/HomeLeftPanel";
 import Tutorial from "@/components/Tutorial";
 import { useEffect, useState } from "react";
 import { play } from "@/hooks/media";
+import { NameInputModal } from "@/components/NameInputModal";
 
 export default function Home() {
   const router = useRouter();
@@ -46,8 +48,9 @@ export default function Home() {
 
   const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const { isOpen: isNameSelectionOpen, onOpen: openNameSelection, onClose: closeNameSelection } = useDisclosure();
 
-  const onHustle = async () => {
+  const onHustle = async (name: string) => {
     if (!disableAutoPlay) {
       play();
     }
@@ -71,7 +74,7 @@ export default function Home() {
       await createBurner();
     }
 
-    router.push(`/create/hustler`);
+    router.push({ pathname: "/create/hustler", query: { name } });
   };
 
   return (
@@ -94,7 +97,7 @@ export default function Home() {
                     Tutorial
                   </Button>
                 )}
-                <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
+                <Button flex="1" isLoading={isSubmitting} onClick={openNameSelection}>
                   Hustle
                 </Button>
               </>
@@ -118,6 +121,7 @@ export default function Home() {
       </VStack>
 
       <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
+      <NameInputModal isOpen={isNameSelectionOpen} close={closeNameSelection} onSubmit={onHustle} />
     </Layout>
   );
 }
