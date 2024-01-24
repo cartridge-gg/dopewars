@@ -3,7 +3,6 @@ fragment PlayerProps on Player {
   avatar_id
   cash
   status
-  hood_id
   location_id
   next_location_id
   drug_count

@@ -9,6 +9,35 @@ use rollyourown::models::item::{Item, ItemEnum};
 
 
 #[derive(Model, Copy, Drop, Serde)]
+struct ProfileRegistry {
+    #[key]
+    player_id: ContractAddress,
+    profile_id: u32,
+    name: felt252,
+
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct GamePacked {
+  #[key]
+  game_id: u32,
+  profile_id: u32,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct PlayerPacked {
+    #[key]
+    game_id: u32,
+    #[key]
+    profile_id: u32, // ? player_id: ContractAddress,
+    cash: u32,
+    health: u8,   
+}
+
+
+
+
+#[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
     game_id: u32,
@@ -17,7 +46,6 @@ struct Player {
     name: felt252,                        // name registry or event
     avatar_id: u8,                        // 2 bits = 4
     status: PlayerStatus,                 // 2 bits = 4 ( + ?)
-    hood_id: LocationEnum,                // 3 bits = 8 or remove
     location_id: LocationEnum,            // 3 bits = 8 
     next_location_id: LocationEnum,       // 3 bits  = 8 ( maybe can remove)
     turn: usize,                          // 6 bits = 64 ( max 64 turn looks fine ?)  

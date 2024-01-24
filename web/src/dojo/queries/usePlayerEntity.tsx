@@ -64,7 +64,6 @@ export class PlayerEntity {
 
     this.drugCount = player.drug_count;
 
-    this.hoodId = player.hood_id === "Home" ? undefined : player.hood_id;
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.nextLocationId = player.next_location_id === "Home" ? undefined : player.next_location_id;
     this.status = player.status;
@@ -90,7 +89,6 @@ export class PlayerEntity {
     this.turn = player.turn;
     this.drugCount = player.drug_count;
 
-    this.hoodId = player.hood_id;
     this.locationId = player.location_id === "Home" ? undefined : player.location_id;
     this.nextLocationId = player.next_location_id === "Home" ? undefined : player.next_location_id;
     this.status = player.status;

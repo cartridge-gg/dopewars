@@ -210,6 +210,53 @@ export enum GameOrderField {
   StartTime = 'START_TIME'
 }
 
+export type GamePacked = {
+  __typename?: 'GamePacked';
+  entity?: Maybe<World__Entity>;
+  game_id?: Maybe<Scalars['u32']>;
+  profile_id?: Maybe<Scalars['u32']>;
+};
+
+export type GamePackedConnection = {
+  __typename?: 'GamePackedConnection';
+  edges?: Maybe<Array<Maybe<GamePackedEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type GamePackedEdge = {
+  __typename?: 'GamePackedEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<GamePacked>;
+};
+
+export type GamePackedOrder = {
+  direction: OrderDirection;
+  field: GamePackedOrderField;
+};
+
+export enum GamePackedOrderField {
+  GameId = 'GAME_ID',
+  ProfileId = 'PROFILE_ID'
+}
+
+export type GamePackedWhereInput = {
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  profile_id?: InputMaybe<Scalars['u32']>;
+  profile_idEQ?: InputMaybe<Scalars['u32']>;
+  profile_idGT?: InputMaybe<Scalars['u32']>;
+  profile_idGTE?: InputMaybe<Scalars['u32']>;
+  profile_idLT?: InputMaybe<Scalars['u32']>;
+  profile_idLTE?: InputMaybe<Scalars['u32']>;
+  profile_idNEQ?: InputMaybe<Scalars['u32']>;
+};
+
 export type GameWhereInput = {
   creator?: InputMaybe<Scalars['ContractAddress']>;
   creatorEQ?: InputMaybe<Scalars['ContractAddress']>;
@@ -507,7 +554,7 @@ export type MarketWhereInput = {
   quantityNEQ?: InputMaybe<Scalars['usize']>;
 };
 
-export type ModelUnion = Drug | Encounter | Game | Item | Leaderboard | Market | MarketPacked | Player | RyoMeta;
+export type ModelUnion = Drug | Encounter | Game | GamePacked | Item | Leaderboard | Market | MarketPacked | Player | PlayerPacked | ProfileRegistry | RyoMeta;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -581,6 +628,71 @@ export enum PlayerOrderField {
   Turn = 'TURN',
   Wanted = 'WANTED'
 }
+
+export type PlayerPacked = {
+  __typename?: 'PlayerPacked';
+  cash?: Maybe<Scalars['u32']>;
+  entity?: Maybe<World__Entity>;
+  game_id?: Maybe<Scalars['u32']>;
+  health?: Maybe<Scalars['u8']>;
+  profile_id?: Maybe<Scalars['u32']>;
+};
+
+export type PlayerPackedConnection = {
+  __typename?: 'PlayerPackedConnection';
+  edges?: Maybe<Array<Maybe<PlayerPackedEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type PlayerPackedEdge = {
+  __typename?: 'PlayerPackedEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<PlayerPacked>;
+};
+
+export type PlayerPackedOrder = {
+  direction: OrderDirection;
+  field: PlayerPackedOrderField;
+};
+
+export enum PlayerPackedOrderField {
+  Cash = 'CASH',
+  GameId = 'GAME_ID',
+  Health = 'HEALTH',
+  ProfileId = 'PROFILE_ID'
+}
+
+export type PlayerPackedWhereInput = {
+  cash?: InputMaybe<Scalars['u32']>;
+  cashEQ?: InputMaybe<Scalars['u32']>;
+  cashGT?: InputMaybe<Scalars['u32']>;
+  cashGTE?: InputMaybe<Scalars['u32']>;
+  cashLT?: InputMaybe<Scalars['u32']>;
+  cashLTE?: InputMaybe<Scalars['u32']>;
+  cashNEQ?: InputMaybe<Scalars['u32']>;
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  health?: InputMaybe<Scalars['u8']>;
+  healthEQ?: InputMaybe<Scalars['u8']>;
+  healthGT?: InputMaybe<Scalars['u8']>;
+  healthGTE?: InputMaybe<Scalars['u8']>;
+  healthLT?: InputMaybe<Scalars['u8']>;
+  healthLTE?: InputMaybe<Scalars['u8']>;
+  healthNEQ?: InputMaybe<Scalars['u8']>;
+  profile_id?: InputMaybe<Scalars['u32']>;
+  profile_idEQ?: InputMaybe<Scalars['u32']>;
+  profile_idGT?: InputMaybe<Scalars['u32']>;
+  profile_idGTE?: InputMaybe<Scalars['u32']>;
+  profile_idLT?: InputMaybe<Scalars['u32']>;
+  profile_idLTE?: InputMaybe<Scalars['u32']>;
+  profile_idNEQ?: InputMaybe<Scalars['u32']>;
+};
 
 export type PlayerWhereInput = {
   attack?: InputMaybe<Scalars['usize']>;
@@ -700,6 +812,62 @@ export type PlayerWhereInput = {
   wantedLT?: InputMaybe<Scalars['u8']>;
   wantedLTE?: InputMaybe<Scalars['u8']>;
   wantedNEQ?: InputMaybe<Scalars['u8']>;
+};
+
+export type ProfileRegistry = {
+  __typename?: 'ProfileRegistry';
+  entity?: Maybe<World__Entity>;
+  name?: Maybe<Scalars['felt252']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
+  profile_id?: Maybe<Scalars['u32']>;
+};
+
+export type ProfileRegistryConnection = {
+  __typename?: 'ProfileRegistryConnection';
+  edges?: Maybe<Array<Maybe<ProfileRegistryEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type ProfileRegistryEdge = {
+  __typename?: 'ProfileRegistryEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<ProfileRegistry>;
+};
+
+export type ProfileRegistryOrder = {
+  direction: OrderDirection;
+  field: ProfileRegistryOrderField;
+};
+
+export enum ProfileRegistryOrderField {
+  Name = 'NAME',
+  PlayerId = 'PLAYER_ID',
+  ProfileId = 'PROFILE_ID'
+}
+
+export type ProfileRegistryWhereInput = {
+  name?: InputMaybe<Scalars['felt252']>;
+  nameEQ?: InputMaybe<Scalars['felt252']>;
+  nameGT?: InputMaybe<Scalars['felt252']>;
+  nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameLT?: InputMaybe<Scalars['felt252']>;
+  nameLTE?: InputMaybe<Scalars['felt252']>;
+  nameNEQ?: InputMaybe<Scalars['felt252']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  profile_id?: InputMaybe<Scalars['u32']>;
+  profile_idEQ?: InputMaybe<Scalars['u32']>;
+  profile_idGT?: InputMaybe<Scalars['u32']>;
+  profile_idGTE?: InputMaybe<Scalars['u32']>;
+  profile_idLT?: InputMaybe<Scalars['u32']>;
+  profile_idLTE?: InputMaybe<Scalars['u32']>;
+  profile_idNEQ?: InputMaybe<Scalars['u32']>;
 };
 
 export type RyoMeta = {
@@ -880,6 +1048,7 @@ export type World__Query = {
   entity: World__Entity;
   events?: Maybe<World__EventConnection>;
   gameModels?: Maybe<GameConnection>;
+  gamePackedModels?: Maybe<GamePackedConnection>;
   itemModels?: Maybe<ItemConnection>;
   leaderboardModels?: Maybe<LeaderboardConnection>;
   marketModels?: Maybe<MarketConnection>;
@@ -888,6 +1057,8 @@ export type World__Query = {
   model: World__Model;
   models?: Maybe<World__ModelConnection>;
   playerModels?: Maybe<PlayerConnection>;
+  playerPackedModels?: Maybe<PlayerPackedConnection>;
+  profileRegistryModels?: Maybe<ProfileRegistryConnection>;
   ryoMetaModels?: Maybe<RyoMetaConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
@@ -954,6 +1125,18 @@ export type World__QueryGameModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<GameOrder>;
   where?: InputMaybe<GameWhereInput>;
+};
+
+
+export type World__QueryGamePackedModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<GamePackedOrder>;
+  where?: InputMaybe<GamePackedWhereInput>;
 };
 
 
@@ -1040,6 +1223,30 @@ export type World__QueryPlayerModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<PlayerOrder>;
   where?: InputMaybe<PlayerWhereInput>;
+};
+
+
+export type World__QueryPlayerPackedModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<PlayerPackedOrder>;
+  where?: InputMaybe<PlayerPackedWhereInput>;
+};
+
+
+export type World__QueryProfileRegistryModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ProfileRegistryOrder>;
+  where?: InputMaybe<ProfileRegistryWhereInput>;
 };
 
 
@@ -1151,21 +1358,21 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'GamePacked' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'PlayerPacked' } | { __typename: 'ProfileRegistry' } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
 
 export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'GamePacked' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'PlayerPacked' } | { __typename: 'ProfileRegistry' } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type PlayerEntityRelatedDataSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked' } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'GamePacked' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'MarketPacked' } | { __typename: 'Player' } | { __typename: 'PlayerPacked' } | { __typename: 'ProfileRegistry' } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type PlayerLogsQueryVariables = Exact<{
   game_id: Scalars['String'];

@@ -8,6 +8,8 @@ else
     export PROFILE="dev"
 fi
 
+TX_SLEEP=0.5
+
 export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
 
 export LOBBY_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::lobby::lobby" ).address')
@@ -40,32 +42,32 @@ RYO_COMPONENTS=("RyoMeta" "Leaderboard")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 for component in ${TRAVEL_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $TRAVEL_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 for component in ${DECIDE_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $DECIDE_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 for component in ${TRADE_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $TRADE_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 for component in ${SHOP_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $SHOP_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 for component in ${RYO_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $RYO_ADDRESS --world $WORLD_ADDRESS 
-    sleep 0.1
+    sleep $TX_SLEEP
 done
 
 echo "Default authorizations have been successfully set."

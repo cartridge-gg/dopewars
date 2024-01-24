@@ -155,10 +155,7 @@ mod travel {
                     },
                     Option::None => {}
                 }
-            } else {
-                // set hood
-                player.hood_id = player.next_location_id;
-            }
+            } 
 
             on_turn_end(world, ref randomizer, @game, ref player);
 
@@ -255,13 +252,9 @@ fn on_turn_end(
             );
     }
 
-    // create lots of events
-    // market price variations
-    //market::market_variations(world, ref randomizer, *game.game_id, player.player_id);
 
     let mut market = MarketImpl::get(world, *game.game_id, player.player_id);
     market.market_variations(world, ref randomizer);
-    // TODO market_variations
 
     true
 }

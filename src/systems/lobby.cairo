@@ -93,7 +93,6 @@ mod lobby {
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
-                hood_id: LocationEnum::Home,
                 location_id: LocationEnum::Home,
                 next_location_id: LocationEnum::Home,
                 cash: player_settings.cash,
