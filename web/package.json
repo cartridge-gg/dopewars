@@ -21,7 +21,7 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "file:node_modules/@dojoengine/core",
+    "@dojoengine/core": "file:../../dojo-packages/packages/core",
     "@dojoengine/create-burner": "file:../../dojo-packages/packages/create-burner",
     "@dojoengine/utils": "0.3.4",
     "@dojoengine/torii-client": "0.3.4",

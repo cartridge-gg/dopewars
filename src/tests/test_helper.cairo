@@ -11,7 +11,6 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::drug::{drug, Drug};
 use rollyourown::models::game::{game, Game};
 use rollyourown::models::item::{item, Item};
-use rollyourown::models::market::{market, Market};
 use rollyourown::models::player::{player, Player};
 use rollyourown::models::encounter::{encounter, Encounter};
 

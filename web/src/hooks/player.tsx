@@ -17,7 +17,6 @@ import {
   Encounter,
   MarketPacked,
 } from "@/generated/graphql";
-import { SCALING_FACTOR } from "@/dojo/constants";
 import { isUint16Array } from "util/types";
 
 export interface PlayerEntityStore {

@@ -32,7 +32,6 @@ import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helper
 import { Dots, Gem, Twitter, User } from "./icons";
 import { IsMobile, formatCash } from "@/utils/ui";
 import Link from "next/link";
-import { SCALING_FACTOR } from "@/dojo/constants";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
 import CashIndicator from "./player/CashIndicator";

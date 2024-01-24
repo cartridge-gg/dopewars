@@ -2,7 +2,6 @@ import { PlayerEdge, useGlobalScoresQuery, useInfiniteGlobalScoresQuery } from "
 import { useCallback, useEffect, useState, useMemo } from "react";
 
 import { shortString } from "starknet";
-import { SCALING_FACTOR } from "../constants";
 import { useQueryClient } from "react-query";
 
 export type Score = {
@@ -32,7 +31,7 @@ export class GlobalScores {
         playerId: playerModel?.player_id,
         name: shortString.decodeShortString(playerModel?.name),
         avatarId: playerModel?.avatar_id,
-        cash: Math.floor(Number(BigInt(edge.node?.cash) / BigInt(SCALING_FACTOR))),
+        cash: Number(edge.node?.cash),
         dead: Number(edge.node?.health) === 0,
         health: Number(edge.node?.health),
       };

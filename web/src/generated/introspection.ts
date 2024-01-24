@@ -10,14 +10,11 @@
       "Drug",
       "Encounter",
       "Game",
-      "GamePacked",
       "Item",
       "Leaderboard",
       "Market",
       "MarketPacked",
       "Player",
-      "PlayerPacked",
-      "ProfileRegistry",
       "RyoMeta"
     ]
   }

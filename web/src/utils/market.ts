@@ -1,5 +1,4 @@
 import { TradeDirection } from "@/hooks/state";
-import { SCALING_FACTOR } from "@/dojo/constants";
 import { Market } from "@/generated/graphql";
 
 export const calculateSlippage = (
@@ -20,13 +19,13 @@ export const calculateSlippage = (
   const newPrice = diff / tradeAmount;
   const priceImpact = Math.abs(newPrice - currentPrice) / currentPrice;
 
-  return { priceImpact, newPrice: newPrice / SCALING_FACTOR };
+  return { priceImpact, newPrice };
 };
 
 export const calculateMaxQuantity = (market: Market, maxCash: number) => {
   const k = market.cash * market.quantity;
   const maxQuantity =
-    market.quantity - k / (Number(market.cash) + maxCash * SCALING_FACTOR);
+    market.quantity - k / (Number(market.cash) + maxCash );
 
   return Math.floor(maxQuantity);
 };

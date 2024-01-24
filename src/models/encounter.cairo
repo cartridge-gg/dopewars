@@ -17,7 +17,7 @@ struct Encounter {
     encounter_id: EncounterType,
     level: u8,
     health: u8,
-    payout: u128,
+    payout: u32,
     demand_pct: u8,
 }
 

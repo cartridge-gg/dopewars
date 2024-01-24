@@ -8,35 +8,36 @@ use rollyourown::models::location::LocationEnum;
 use rollyourown::models::item::{Item, ItemEnum};
 
 
-#[derive(Model, Copy, Drop, Serde)]
-struct ProfileRegistry {
-    #[key]
-    player_id: ContractAddress,
-    profile_id: u32,
-    name: felt252,
+// #[derive(Model, Copy, Drop, Serde)]
+// struct ProfileRegistry {
+//     #[key]
+//     player_id: ContractAddress,
+//     profile_id: u32,
+//     name: felt252,
 
-}
+// }
 
-#[derive(Model, Copy, Drop, Serde)]
-struct GamePacked {
-  #[key]
-  game_id: u32,
-  profile_id: u32,
-}
+// #[derive(Model, Copy, Drop, Serde)]
+// struct GamePacked {
+//   #[key]
+//   game_id: u32,
+//   profile_id: u32,
+// }
 
-#[derive(Model, Copy, Drop, Serde)]
-struct PlayerPacked {
-    #[key]
-    game_id: u32,
-    #[key]
-    profile_id: u32, // ? player_id: ContractAddress,
-    cash: u32,
-    health: u8,   
-}
-
-
+// #[derive(Model, Copy, Drop, Serde)]
+// struct PlayerPacked {
+//     #[key]
+//     game_id: u32,
+//     #[key]
+//     profile_id: u32, // ? player_id: ContractAddress,
+//     cash: u32,
+//     health: u8,   
+// }
 
 
+
+
+// rename GameState
 #[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
@@ -48,10 +49,8 @@ struct Player {
     status: PlayerStatus,                 // 2 bits = 4 ( + ?)
     location_id: LocationEnum,            // 3 bits = 8 
     next_location_id: LocationEnum,       // 3 bits  = 8 ( maybe can remove)
-    turn: usize,                          // 6 bits = 64 ( max 64 turn looks fine ?)  
-    max_turns: usize,                     // hardcoded or turn limit
-    max_items: u8,                        // remove
-    cash: u128,                           // 30 bits = 1.xxx.xxx.xxx
+    turn: u8,                          // 6 bits = 64 ( max 64 turn looks fine ?)  
+    cash: u32,                           // 30 bits = 1.xxx.xxx.xxx
     health: u8,                           // 7 bits = 128
     drug_count: usize,                    // probly remove
     attack: usize,                        // computed
@@ -74,10 +73,17 @@ impl PlayerImpl of PlayerTrait {
         if self.health == 0 {
             return false;
         }
-        if self.max_turns != 0 && self.turn == self.max_turns {
+        if self.status != PlayerStatus::Normal {
             return false;
         }
-        if self.status != PlayerStatus::Normal {
+
+
+        // TODO
+        // let game = get!()
+        // let max_turns = game.max_turns
+        let max_turns = 30;
+
+        if self.turn == max_turns {
             return false;
         }
 

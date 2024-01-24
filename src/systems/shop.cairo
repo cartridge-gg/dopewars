@@ -8,7 +8,7 @@ struct AvailableItem {
     item_type: felt252,
     name: felt252,
     level: u8,
-    cost: u128,
+    cost: u32,
     value: usize
 }
 
@@ -29,7 +29,6 @@ mod shop {
     use starknet::get_caller_address;
     use starknet::get_contract_address;
 
-    use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game};
@@ -148,7 +147,7 @@ mod shop {
                     player_id,
                     item_id,
                     level: item.level,
-                    cost: (item_settings.cost / SCALING_FACTOR).try_into().unwrap()
+                    cost: item_settings.cost
                 }
             );
 
@@ -212,7 +211,7 @@ mod shop {
                                         item_type: (*item_id).into(),
                                         level: player_item.level + 1,
                                         name: item_settings.name,
-                                        cost: item_settings.cost / SCALING_FACTOR,
+                                        cost: item_settings.cost,
                                         value: item_settings.value,
                                     }
                                 );

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { num } from "starknet";
-import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
+import { REFETCH_INTERVAL } from "../constants";
 import { LocationPrices, DrugMarket, Location, Drug } from "../types";
 import { getDrugById, getDrugByType, getLocationByType } from "../helpers";
 

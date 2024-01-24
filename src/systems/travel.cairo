@@ -18,10 +18,8 @@ mod travel {
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
-    use rollyourown::models::market::{Market, MarketTrait};
     use rollyourown::models::encounter::{Encounter, EncounterType};
 
-    use rollyourown::utils::market;
     use rollyourown::utils::settings::{
         RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl, EncounterSettings,
         EncounterSettingsImpl
@@ -184,7 +182,6 @@ use rollyourown::utils::settings::{RiskSettings, RiskSettingsImpl};
 use rollyourown::utils::settings::{ShopSettings, ShopSettingsImpl};
 use rollyourown::utils::shop::ShopImpl;
 use rollyourown::utils::risk::{RiskTrait, RiskImpl};
-use rollyourown::utils::market;
 use rollyourown::utils::math::{MathTrait, MathImpl, MathImplU8};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
 use rollyourown::utils::random::{Random};

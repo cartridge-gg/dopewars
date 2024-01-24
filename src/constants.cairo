@@ -1,1 +1,0 @@
-const SCALING_FACTOR: u128 = 1;

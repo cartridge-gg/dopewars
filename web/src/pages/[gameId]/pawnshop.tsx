@@ -123,9 +123,9 @@ export default function PawnShop() {
             isDisabled={
               isPending ||
               !selectedShopItem ||
-              selectedShopItem.cost > playerEntity.cash ||
-              (playerEntity?.items.length === playerEntity?.maxItems &&
-                playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
+              selectedShopItem.cost > playerEntity.cash 
+              // ||(playerEntity?.items.length === playerEntity?.maxItems &&
+              //   playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
             }
             onClick={buy}
           >
@@ -158,9 +158,9 @@ export default function PawnShop() {
                   isActive={shopItem === selectedShopItem}
                   justifyContent="stretch"
                   isDisabled={
-                    shopItem.cost > playerEntity.cash ||
-                    (playerEntity?.items.length === playerEntity?.maxItems &&
-                      playerEntity?.items.find((i) => i.id === shopItem?.typeText) === undefined)
+                    shopItem.cost > playerEntity.cash 
+                    // || (playerEntity?.items.length === playerEntity?.maxItems &&
+                    //   playerEntity?.items.find((i) => i.id === shopItem?.typeText) === undefined)
                   }
                 >
                   <VStack w="full" gap="10px">

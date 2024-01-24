@@ -28,7 +28,6 @@ mod decide {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::constants::SCALING_FACTOR;
     use rollyourown::models::game::{Game};
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::{Drug, DrugEnum, DrugTrait};
@@ -81,9 +80,9 @@ mod decide {
         outcome: Outcome,
         health_loss: u8,
         drug_loss: usize,
-        cash_loss: u128,
+        cash_loss: u32,
         dmg_dealt: u32,
-        cash_earnt: u128,
+        cash_earnt: u32,
     }
 
     #[external(v0)]
@@ -284,7 +283,7 @@ mod decide {
             game: @Game,
             player: @Player,
             encounter_type: EncounterType,
-        ) -> (Outcome, u128, u32, u8, u128, u32) {
+        ) -> (Outcome, u32, u32, u8, u32, u32) {
             let world = self.world();
 
             let mut encounter = EncounterImpl::get_or_spawn(
@@ -312,7 +311,7 @@ mod decide {
                 set!(world, (encounter));
 
                 // player wins payout
-                (Outcome::Victorious, 0_u128, 0_u32, 0_u8, encounter.payout, attack)
+                (Outcome::Victorious, 0_u32, 0_u32, 0_u8, encounter.payout, attack)
             } else {
                 // encounter lose health
                 encounter.health -= attack.try_into().unwrap();
@@ -336,16 +335,16 @@ mod decide {
                 );
 
                 // reduce dmgs by defense_item.value %
-                let health_saved: u128 = ((SCALING_FACTOR
+                let health_saved: u128 = ((10000
                     * defense_item.value.into()
                     * encounter_dmg.into())
                     / 100)
-                    / SCALING_FACTOR;
+                    / 10000;
                 let final_health_loss: u8 = (encounter_dmg - health_saved.try_into().unwrap())
                     .try_into()
                     .unwrap();
 
-                (Outcome::Captured, 0_u128, 0_u32, final_health_loss, 0_u128, attack)
+                (Outcome::Captured, 0_u32, 0_u32, final_health_loss, 0_u32, attack)
             }
         }
     }

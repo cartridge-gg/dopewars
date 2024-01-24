@@ -19,12 +19,12 @@ export const Inventory = ({ ...props }: StyleProps) => {
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
       <HStack w="full" justify={"space-between"}>
-        <HStack color={playerEntity?.items.length === 0 ? "neon.500" : "yellow.400"} justify="center">
+        {/* <HStack color={playerEntity?.items.length === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Ring />
           <Text>
             {playerEntity?.items.length || 0}/{playerEntity?.maxItems}
           </Text>
-        </HStack>
+        </HStack> */}
 
         <HStack color={playerEntity?.drugCount === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />

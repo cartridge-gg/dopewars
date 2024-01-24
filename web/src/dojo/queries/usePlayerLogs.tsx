@@ -1,6 +1,6 @@
 import { shortString } from "starknet";
 import { useEffect, useMemo, useState } from "react";
-import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
+import { REFETCH_INTERVAL } from "../constants";
 import {
   Player,
   Drug as DrugType,

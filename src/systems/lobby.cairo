@@ -21,17 +21,14 @@ mod lobby {
 
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::game::{Game, GameMode};
-    use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
     use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
-    // use rollyourown::models::market::{MarketTrait};
     use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
         ShopSettingsImpl
     };
-    use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
@@ -97,8 +94,6 @@ mod lobby {
                 health: player_settings.health,
                 drug_count: 0,
                 turn: 0,
-                max_turns: game_settings.max_turns,
-                max_items: shop_settings.max_item_allowed,
                 wanted: player_settings.wanted,
                 attack: player_settings.attack,
                 defense: player_settings.defense,

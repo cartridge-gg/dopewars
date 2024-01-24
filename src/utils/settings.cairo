@@ -1,4 +1,3 @@
-use rollyourown::constants::SCALING_FACTOR;
 use rollyourown::models::game::GameMode;
 use rollyourown::models::drug::DrugEnum;
 use rollyourown::models::item::ItemEnum;
@@ -7,13 +6,13 @@ use rollyourown::models::player::Player;
 
 #[derive(Copy, Drop, Serde)]
 struct GameSettings {
-    max_turns: usize,
+    max_turns: u8,
 }
 
 #[derive(Copy, Drop, Serde)]
 struct PlayerSettings {
     health: u8,
-    cash: u128,
+    cash: u32,
     wanted: u8,
     attack: usize,
     defense: usize,
@@ -28,7 +27,7 @@ struct RiskSettings {
     capture: u8,
     encounter_bias_gangs: u128,
     cops_drug_threshold: usize,
-    gangs_cash_threshold: u128,
+    gangs_cash_threshold: u32,
     health_increase_by_turn: u8,
     wanted_decrease_by_turn: u8,
     wanted_decrease_zero_drug: u8,
@@ -43,10 +42,6 @@ struct MarketSettings {
     market_event_chance: usize,
     market_event_min: usize,
     market_event_max: usize,
-    liq_scaling_initial_rate: usize,
-    liq_scaling_fading_rate: usize,
-    liq_scaling_flat: usize,
-    price_scaling_flat: usize,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -57,8 +52,8 @@ struct DecideSettings {
 
 #[derive(Copy, Drop, Serde)]
 struct PriceSettings {
-    min_price: u128,
-    max_price: u128,
+    min_price: u32,
+    max_price: u32,
     min_qty: u128,
     max_qty: u128,
 }
@@ -66,7 +61,7 @@ struct PriceSettings {
 #[derive(Copy, Drop, Serde)]
 struct ItemSettings {
     name: felt252,
-    cost: u128,
+    cost: u32,
     value: usize
 }
 
@@ -74,7 +69,7 @@ struct ItemSettings {
 struct ShopSettings {
     max_item_allowed: u8,
     max_item_level: u8,
-    opening_freq: u32
+    opening_freq: u8
 }
 
 
@@ -83,7 +78,7 @@ struct EncounterSettings {
     level: u8,
     health: u8,
     dmg: u8,
-    payout: u128,
+    payout: u32,
 }
 
 //
@@ -130,7 +125,7 @@ impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         let mut player_settings = PlayerSettings {
             health: 100,
-            cash: 1420_u128,
+            cash: 1420,
             wanted: 39,
             attack: 1,
             defense: 1,
@@ -192,10 +187,6 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             market_event_chance: 68, // on 1000 : 1.6% = 0.8% up / 0.8% down  
             market_event_min: 40, //   up 40%  | down 20%
             market_event_max: 80, //   up 80%  | down 40%
-            liq_scaling_initial_rate: 150, // 0.015
-            liq_scaling_fading_rate: 360,
-            liq_scaling_flat: 10200, // 2%
-            price_scaling_flat: 10150, // 1.5%
         };
 
         if game_mode == GameMode::Test {
@@ -229,38 +220,38 @@ impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
         let item_settings = match item_id {
             ItemEnum::Attack => {
                 if level == 1 {
-                    ItemSettings { name: 'Knife', cost: 450 * SCALING_FACTOR, value: 9 }
+                    ItemSettings { name: 'Knife', cost: 450 , value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Glock', cost: 12000 * SCALING_FACTOR, value: 24 }
+                    ItemSettings { name: 'Glock', cost: 12000 , value: 24 }
                 } else {
-                    ItemSettings { name: 'Uzi', cost: 99000 * SCALING_FACTOR, value: 49 }
+                    ItemSettings { name: 'Uzi', cost: 99000 , value: 49 }
                 }
             },
             ItemEnum::Defense => {
                 if level == 1 {
-                    ItemSettings { name: 'Knee pads', cost: 350 * SCALING_FACTOR, value: 24 }
+                    ItemSettings { name: 'Knee pads', cost: 350 , value: 24 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Leather Jacket', cost: 8900 * SCALING_FACTOR, value: 39 }
+                    ItemSettings { name: 'Leather Jacket', cost: 8900 , value: 39 }
                 } else {
-                    ItemSettings { name: 'Kevlar', cost: 69000 * SCALING_FACTOR, value: 59 }
+                    ItemSettings { name: 'Kevlar', cost: 69000 , value: 59 }
                 }
             },
             ItemEnum::Transport => {
                 if level == 1 {
-                    ItemSettings { name: 'Fanny pack', cost: 500 * SCALING_FACTOR, value: 30 }
+                    ItemSettings { name: 'Fanny pack', cost: 500 , value: 30 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Backpack', cost: 15000 * SCALING_FACTOR, value: 60 }
+                    ItemSettings { name: 'Backpack', cost: 15000 , value: 60 }
                 } else {
-                    ItemSettings { name: 'Duffle Bag', cost: 99000 * SCALING_FACTOR, value: 100 }
+                    ItemSettings { name: 'Duffle Bag', cost: 99000 , value: 100 }
                 }
             },
             ItemEnum::Speed => {
                 if level == 1 {
-                    ItemSettings { name: 'Shoes', cost: 250 * SCALING_FACTOR, value: 9 }
+                    ItemSettings { name: 'Shoes', cost: 250 , value: 9 }
                 } else if level == 2 {
-                    ItemSettings { name: 'Skateboard', cost: 9900 * SCALING_FACTOR, value: 24 }
+                    ItemSettings { name: 'Skateboard', cost: 9900 , value: 24 }
                 } else {
-                    ItemSettings { name: 'Bicycle', cost: 79000 * SCALING_FACTOR, value: 39 }
+                    ItemSettings { name: 'Bicycle', cost: 79000 , value: 39 }
                 }
             },
         };
@@ -283,7 +274,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
             health
         };
         let dmg = level * 2 + (turn / 5);
-        let payout: u128 = SCALING_FACTOR * level.into() * (5000 + (1500 * turn.into()));
+        let payout: u32 =  level.into() * (5000 + (1500 * turn.into()));
 
         EncounterSettings { level, health, dmg, payout }
     }
@@ -308,48 +299,48 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
     match drug_id {
         DrugEnum::Ludes => {
             PriceSettings {
-                min_price: 30 * SCALING_FACTOR,
-                max_price: 140 * SCALING_FACTOR,
+                min_price: 30 ,
+                max_price: 140 ,
                 min_qty: 1800,
                 max_qty: 3600,
             }
         },
         DrugEnum::Speed => {
             PriceSettings {
-                min_price: 120 * SCALING_FACTOR,
-                max_price: 480 * SCALING_FACTOR,
+                min_price: 120 ,
+                max_price: 480 ,
                 min_qty: 1500,
                 max_qty: 3000,
             }
         },
         DrugEnum::Weed => {
             PriceSettings {
-                min_price: 420 * SCALING_FACTOR,
-                max_price: 1600 * SCALING_FACTOR,
+                min_price: 420 ,
+                max_price: 1600 ,
                 min_qty: 1300,
                 max_qty: 2600,
             }
         },
         DrugEnum::Acid => {
             PriceSettings {
-                min_price: 1200 * SCALING_FACTOR,
-                max_price: 4000 * SCALING_FACTOR,
+                min_price: 1200 ,
+                max_price: 4000 ,
                 min_qty: 1200,
                 max_qty: 2400,
             }
         },
         DrugEnum::Heroin => {
             PriceSettings {
-                min_price: 3800 * SCALING_FACTOR,
-                max_price: 10500 * SCALING_FACTOR,
+                min_price: 3800 ,
+                max_price: 10500 ,
                 min_qty: 1100,
                 max_qty: 2200,
             }
         },
         DrugEnum::Cocaine => {
             PriceSettings {
-                min_price: 8800 * SCALING_FACTOR,
-                max_price: 20500 * SCALING_FACTOR,
+                min_price: 8800 ,
+                max_price: 20500 ,
                 min_qty: 900,
                 max_qty: 1800,
             }
@@ -357,56 +348,3 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
     }
 }
 
-
-fn pricing_clicksave(drug_id: DrugEnum) -> PriceSettings {
-    match drug_id {
-        DrugEnum::Ludes => {
-            PriceSettings {
-                min_price: 15 * SCALING_FACTOR,
-                max_price: 105 * SCALING_FACTOR,
-                min_qty: 1500,
-                max_qty: 3000,
-            }
-        },
-        DrugEnum::Speed => {
-            PriceSettings {
-                min_price: 90 * SCALING_FACTOR,
-                max_price: 540 * SCALING_FACTOR,
-                min_qty: 1200,
-                max_qty: 2400,
-            }
-        },
-        DrugEnum::Weed => {
-            PriceSettings {
-                min_price: 450 * SCALING_FACTOR,
-                max_price: 2250 * SCALING_FACTOR,
-                min_qty: 1000,
-                max_qty: 2000,
-            }
-        },
-        DrugEnum::Acid => {
-            PriceSettings {
-                min_price: 1800 * SCALING_FACTOR,
-                max_price: 7200 * SCALING_FACTOR,
-                min_qty: 800,
-                max_qty: 1600,
-            }
-        },
-        DrugEnum::Heroin => {
-            PriceSettings {
-                min_price: 5400 * SCALING_FACTOR,
-                max_price: 16200 * SCALING_FACTOR,
-                min_qty: 600,
-                max_qty: 1200,
-            }
-        },
-        DrugEnum::Cocaine => {
-            PriceSettings {
-                min_price: 10800 * SCALING_FACTOR,
-                max_price: 21600 * SCALING_FACTOR,
-                min_qty: 500,
-                max_qty: 1000,
-            }
-        },
-    }
-}

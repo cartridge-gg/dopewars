@@ -32,7 +32,6 @@ mod trade {
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game};
-    // use rollyourown::models::market::{Market, MarketTrait};
 
     use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
 

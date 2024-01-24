@@ -5,7 +5,7 @@ struct Game {
     #[key]
     game_id: u32,
     game_mode: GameMode,
-    max_turns: usize,
+    max_turns: u8,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]

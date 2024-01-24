@@ -2,8 +2,6 @@ use starknet::{get_caller_address, ContractAddress};
 
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::constants::SCALING_FACTOR;
-
 use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::player::Player;
 use rollyourown::models::drug::{DrugEnum, Drug, DrugTrait};
@@ -21,7 +19,7 @@ use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait};
 fn get_drug_price_config(drug: DrugEnum) -> DrugPriceConfig {
     match drug {
         DrugEnum::Ludes => DrugPriceConfig { base: 18, step: 1 },
-        DrugEnum::Speed => DrugPriceConfig { base: 85, step: 9 },
+        DrugEnum::Speed => DrugPriceConfig { base: 85, step: 6 },
         DrugEnum::Weed => DrugPriceConfig { base: 420, step: 23 },
         DrugEnum::Acid => DrugPriceConfig { base: 1590, step: 69 },
         DrugEnum::Heroin => DrugPriceConfig { base: 5720, step: 169 },

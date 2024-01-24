@@ -59,8 +59,8 @@ export interface GameOverData extends BaseEventData {
 
 export interface GameCreatedData extends BaseEventData {
   game_id: number;
+  player_id: string;
   game_mode: String;
-  creator: string;
 }
 
 export interface PlayerJoinedData extends BaseEventData {
@@ -188,8 +188,8 @@ export const parseEvent = (raw: any) => {
         event_type: WorldEvents.GameCreated,
         event_name: "GameCreated",
         game_id: Number(raw.data[0]),
-        game_mode: num.toHexString(raw.data[1]),
-        creator: num.toHexString(raw.data[2]),
+        player_id: num.toHexString(raw.data[1]),
+        game_mode: num.toHexString(raw.data[2]),
       } as GameCreatedData;
 
     case WorldEvents.PlayerJoined:

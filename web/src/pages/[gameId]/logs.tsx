@@ -36,7 +36,6 @@ import {
   TraveledEventData,
 } from "@/dojo/events";
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
-import { SCALING_FACTOR } from "@/dojo/constants";
 import { Profile } from "@/components/ProfileButton";
 
 type LogByDay = {
@@ -279,7 +278,7 @@ function renderBought(log: BoughtEventData, key: string) {
       icon={drug!.icon}
       text={`Bought ${drug!.name}`}
       quantity={log.quantity}
-      total={`- ${formatCash(log.cost / SCALING_FACTOR)}`}
+      total={`- ${formatCash(log.cost)}`}
     />
   );
 }
@@ -292,7 +291,7 @@ function renderSold(log: SoldEventData, key: string) {
       icon={drug!.icon}
       text={`Sold ${drug!.name}`}
       quantity={log.quantity}
-      total={`+ ${formatCash(log.payout / SCALING_FACTOR)}`}
+      total={`+ ${formatCash(log.payout)}`}
     />
   );
 }

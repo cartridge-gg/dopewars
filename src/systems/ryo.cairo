@@ -1,7 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::constants::SCALING_FACTOR;
 use rollyourown::models::player::{Player, PlayerStatus};
 use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
@@ -90,7 +89,7 @@ fn game_over(world: IWorldDispatcher, ref player: Player) {
                 player.name.into(),
                 player.status.into(),
                 player.turn.into(),
-                (player.cash / SCALING_FACTOR).into(),
+                player.cash.into(),
             ]
         );
 }

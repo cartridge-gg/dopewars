@@ -8,7 +8,7 @@ import {
   MarketPacked,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
-import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
+import { REFETCH_INTERVAL } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum, DrugMarket } from "../types";
 import { shortString } from "starknet";
 import { MarketPrices } from "./useMarkets";
@@ -32,7 +32,6 @@ export class PlayerEntity {
   health: number;
   turn: number;
   maxTurns: number;
-  maxItems: number;
   drugCount: number;
   hoodId: string;
   locationId: string;
@@ -56,11 +55,11 @@ export class PlayerEntity {
   constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[], marketPacked: MarketPacked) {
     this.name = shortString.decodeShortString(player.name);
     this.avatarId = player.avatar_id;
-    this.cash = Number(player.cash) / SCALING_FACTOR;
+    this.cash = Number(player.cash) ;
     this.health = player.health;
     this.turn = player.turn;
-    this.maxTurns = player.max_turns;
-    this.maxItems = player.max_items;
+    //this.maxTurns = player.max_turns;
+    this.maxTurns = 69;
 
     this.drugCount = player.drug_count;
 
@@ -84,7 +83,7 @@ export class PlayerEntity {
   }
 
   update(player: Player) {
-    this.cash = Number(player.cash) / SCALING_FACTOR;
+    this.cash = Number(player.cash) ;
     this.health = player.health;
     this.turn = player.turn;
     this.drugCount = player.drug_count;
@@ -137,11 +136,11 @@ export class PlayerEntity {
     if (encounter) {
       encounter.level = newEncounter.level;
       encounter.health = newEncounter.health;
-      encounter.payout = Number(newEncounter.payout) / SCALING_FACTOR;
+      encounter.payout = Number(newEncounter.payout) ;
     } else {
       this.encounters.push({
         ...newEncounter,
-        payout: Number(newEncounter.payout) / SCALING_FACTOR,
+        payout: Number(newEncounter.payout) ,
       });
     }
     return this;
@@ -233,7 +232,7 @@ export class PlayerEntity {
       const encounterModel = edge.node?.models?.find((model) => model?.__typename === "Encounter") as Encounter;
       return {
         ...encounterModel,
-        payout: Number(encounterModel.payout) / SCALING_FACTOR,
+        payout: Number(encounterModel.payout) ,
       };
     });
 

@@ -17,7 +17,7 @@ trait LeaderboardManagerTrait {
     fn get_current_version(self: LeaderboardManager) -> u32;
     fn get_next_version_timestamp() -> u64;
     fn on_game_start(self: LeaderboardManager) -> u32;
-    fn on_game_end(self: LeaderboardManager, score: u128) -> bool;
+    fn on_game_end(self: LeaderboardManager, score: u32) -> bool;
 }
 
 impl LeaderboardManagerImpl of LeaderboardManagerTrait {
@@ -65,7 +65,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
     }
 
     fn on_game_end(
-        self: LeaderboardManager, score: u128
+        self: LeaderboardManager, score: u32
     ) -> bool { // check if new high_score & update high_score & next_version_timestamp if necessary
         let current_version = self.get_current_version();
         let mut leaderboard = get!(self.world, (current_version), Leaderboard);

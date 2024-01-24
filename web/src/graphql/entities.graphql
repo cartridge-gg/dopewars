@@ -8,8 +8,6 @@ fragment PlayerProps on Player {
   drug_count
   health
   turn
-  max_turns
-  max_items
   attack
   defense
   transport
@@ -17,6 +15,19 @@ fragment PlayerProps on Player {
   wanted
   game_over
 }
+
+query GameById($gameId: u32) {
+  gameModels(where: { game_id: $gameId }) {
+    edges {
+      node {
+        game_id
+        game_mode
+        max_turns
+      }
+    }
+  }
+}
+
 
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {

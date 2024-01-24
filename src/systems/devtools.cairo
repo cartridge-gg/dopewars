@@ -19,8 +19,6 @@ mod devtools {
 
     use super::IDevtools;
 
-    use rollyourown::constants::SCALING_FACTOR;
-
     use rollyourown::models::player::{Player, PlayerStatus};
     use rollyourown::models::location::{LocationEnum};
     use rollyourown::models::leaderboard::{Leaderboard};
@@ -64,8 +62,6 @@ mod devtools {
                     health: rand_2,
                     drug_count: 0,
                     turn: rand_100.into(),
-                    max_turns: rand_100.into(),
-                    max_items: 2,
                     wanted: 69,
                     attack: 42,
                     defense: 42,
