@@ -5,7 +5,6 @@ struct Game {
     #[key]
     game_id: u32,
     game_mode: GameMode,
-    start_time: u64,
     max_players: usize,
     num_players: usize,
     max_turns: usize,
@@ -17,22 +16,6 @@ enum GameMode {
     Test,
     Unlimited
 }
-
-
-#[generate_trait]
-impl GameImpl of GameTrait {
-    #[inline(always)]
-    fn tick(self: Game) -> bool {
-        let info = starknet::get_block_info().unbox();
-
-        if info.block_timestamp < self.start_time {
-            return false;
-        }
-
-        true
-    }
-}
-
 
 use dojo::database::introspect::{
     Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type

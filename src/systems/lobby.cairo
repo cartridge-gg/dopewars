@@ -53,7 +53,6 @@ mod lobby {
         game_id: u32,
         game_mode: GameMode,
         creator: ContractAddress,
-        start_time: u64,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -76,7 +75,6 @@ mod lobby {
             let game_id = self.world().uuid();
             let caller = get_caller_address();
 
-            let start_time = get_block_timestamp();
 
             let game_settings = GameSettingsImpl::get(game_mode);
             let player_settings = PlayerSettingsImpl::get(game_mode);
@@ -113,7 +111,6 @@ mod lobby {
             let game = Game {
                 game_id,
                 game_mode,
-                start_time: start_time,
                 max_players: game_settings.max_players,
                 num_players: 1, // caller auto joins
                 max_turns: game_settings.max_turns,
@@ -143,7 +140,7 @@ mod lobby {
             emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });
 
             // emit game created
-            emit!(self.world(), GameCreated { game_id, game_mode, creator: caller, start_time, });
+            emit!(self.world(), GameCreated { game_id, game_mode, creator: caller, });
 
             (game_id, caller)
         }
