@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 use rollyourown::models::game::{GameMode};
-use rollyourown::models::player::{PlayerClass};
+use rollyourown::models::player::PlayerClass;
 
 #[starknet::interface]
 trait ILobby<TContractState> {
@@ -27,7 +27,7 @@ mod lobby {
     use starknet::get_block_timestamp;
     use starknet::info::get_tx_info;
 
-    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
+    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus, PlayerClass};
     use rollyourown::models::game::{Game, GameMode};
     use rollyourown::models::market::Market;
     use rollyourown::models::drug::{Drug, DrugTrait};
