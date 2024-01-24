@@ -71,7 +71,7 @@ export default function Home() {
       await createBurner();
     }
 
-    router.push(`/create/new`);
+    router.push(`/create/hustler`);
   };
 
   return (
