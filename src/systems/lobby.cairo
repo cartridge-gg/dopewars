@@ -51,8 +51,8 @@ mod lobby {
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
         game_id: u32,
+        player_id: ContractAddress,
         game_mode: GameMode,
-        creator: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -112,7 +112,6 @@ mod lobby {
                 game_id,
                 game_mode,
                 max_turns: game_settings.max_turns,
-                creator: caller,
             };
 
             set!(self.world(), (game, player));
@@ -138,7 +137,7 @@ mod lobby {
             emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });
 
             // emit game created
-            emit!(self.world(), GameCreated { game_id, game_mode, creator: caller, });
+            emit!(self.world(), GameCreated { game_id, player_id: caller, game_mode });
 
             (game_id, caller)
         }

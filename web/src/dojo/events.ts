@@ -30,10 +30,8 @@ export interface AtPawnshopEventData extends BaseEventData {
 }
 
 export interface CreateEventData extends BaseEventData {
-  creator: string;
-  startTime: number;
-  maxTurns: number;
-  maxPlayers: number;
+  playerId: string;
+  gameMode: Number;
 }
 
 export interface JoinedEventData extends BaseEventData {
@@ -132,8 +130,8 @@ export const parseEvent = (raw: any) => {
         eventType: WorldEvents.GameCreated,
         eventName: "GameCreated",
         gameId: num.toHexString(raw.data[0]),
-        creator: num.toHexString(raw.data[1]),
-        startTime: Number(raw.data[2]),
+        playerId: num.toHexString(raw.data[1]),
+        gameMode: Number(raw.data[2]),
       } as CreateEventData;
 
     case WorldEvents.AdverseEvent:

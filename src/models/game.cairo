@@ -6,7 +6,6 @@ struct Game {
     game_id: u32,
     game_mode: GameMode,
     max_turns: usize,
-    creator: ContractAddress,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]

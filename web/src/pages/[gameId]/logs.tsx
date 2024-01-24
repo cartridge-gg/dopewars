@@ -28,7 +28,6 @@ import {
   BoughtEventData,
   BoughtItemEventData,
   ConsequenceEventData,
-  CreateEventData,
   DecisionEventData,
   GameOverEventData,
   JoinedEventData,
