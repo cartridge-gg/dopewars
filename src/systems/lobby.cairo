@@ -111,7 +111,6 @@ mod lobby {
             let game = Game {
                 game_id,
                 game_mode,
-                num_players: 1, // caller auto joins
                 max_turns: game_settings.max_turns,
                 creator: caller,
             };
