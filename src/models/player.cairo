@@ -5,7 +5,7 @@ use dojo::database::introspect::{
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::location::LocationEnum;
-use rollyourown::models::item::{Item, ItemEnum};
+use rollyourown::models::item::{Item, ItemEnum, ItemName};
 
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -34,6 +34,7 @@ struct Player {
     wanted: u8,
     leaderboard_version: u32,
     game_over: bool,
+    class: PlayerClass,
 }
 
 #[generate_trait]
@@ -110,6 +111,13 @@ enum PlayerStatus {
     BeingMugged: (),
     BeingArrested: (),
     AtPawnshop: (),
+}
+
+#[derive(Copy, Drop, Serde, Introspect, PartialEq)]
+enum PlayerClass {
+    Dragon: (),
+    Monkey: (),
+    Rabbit: (),
 }
 
 impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {

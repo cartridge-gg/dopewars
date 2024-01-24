@@ -1,8 +1,9 @@
+use rollyourown::models::item::ItemMeta;
 use rollyourown::constants::SCALING_FACTOR;
 use rollyourown::models::game::GameMode;
 use rollyourown::models::drug::DrugEnum;
-use rollyourown::models::item::ItemEnum;
-use rollyourown::models::player::Player;
+use rollyourown::models::item::{ItemEnum, ItemTier, ItemName};
+use rollyourown::models::player::{Player, PlayerClass};
 
 
 #[derive(Copy, Drop, Serde)]
@@ -103,6 +104,10 @@ trait PlayerSettingsTrait<T> {
     fn get(game_mode: GameMode, player: @Player) -> T;
 }
 
+trait ClassSettingsTrait<T> {
+    fn get(game_mode: GameMode, class: PlayerClass) -> T;
+}
+
 trait ItemSettingsTrait<T> {
     fn get(game_mode: GameMode, item_id: ItemEnum, level: u8) -> T;
 }
@@ -127,16 +132,18 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
     }
 }
 
-impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
-    fn get(game_mode: GameMode) -> PlayerSettings {
+impl PlayerSettingsImpl of ClassSettingsTrait<PlayerSettings> {
+    fn get(game_mode: GameMode, class: PlayerClass) -> PlayerSettings {
+        let initialStats: InitialStats = class.get_initial_stats();
+
         let mut player_settings = PlayerSettings {
             health: 100,
             cash: 1420_u128 * SCALING_FACTOR,
             wanted: 39,
-            attack: 1,
-            defense: 1,
-            transport: 60,
-            speed: 1
+            attack: initialStats.Attack,
+            defense: initialStats.Defense,
+            transport: initialStats.Transport,
+            speed: initialStats.Speed,
         };
 
         if game_mode == GameMode::Test {
@@ -411,3 +418,128 @@ fn pricing_clicksave(drug_id: DrugEnum) -> PriceSettings {
         },
     }
 }
+
+fn getStatValueAndCost(stat: ItemEnum, tier: ItemTier) -> (usize, u128) {
+    let (statValue, unscaledCost) = match stat {
+        ItemEnum::Attack => {
+            match tier {
+                ItemTier::Tier1 => (8, 0),
+                ItemTier::Tier2 => (12, 400),
+                ItemTier::Tier3 => (18, 2500),
+                ItemTier::Tier4 => (27, 12000),
+                ItemTier::Tier5 => (40, 75000),
+                ItemTier::Tier6 => (60, 420000),
+            }
+        },
+        ItemEnum::Defense => {
+            match tier {
+                ItemTier::Tier1 => (10, 0),
+                ItemTier::Tier2 => (14, 300),
+                ItemTier::Tier3 => (22, 1800),
+                ItemTier::Tier4 => (33, 10800),
+                ItemTier::Tier5 => (50, 64800),
+                ItemTier::Tier6 => (75, 388000),
+            }
+        },
+        ItemEnum::Transport => {
+            match tier {
+                ItemTier::Tier1 => (0, 0),
+                ItemTier::Tier2 => (60, 0),
+                ItemTier::Tier3 => (90, 2000),
+                ItemTier::Tier4 => (130, 24000),
+                ItemTier::Tier5 => (200, 288000),
+                ItemTier::Tier6 => (200, 0),
+            }
+        },
+        ItemEnum::Speed => {
+            match tier {
+                ItemTier::Tier1 => (8, 0),
+                ItemTier::Tier2 => (12, 275),
+                ItemTier::Tier3 => (18, 1600),
+                ItemTier::Tier4 => (27, 9600),
+                ItemTier::Tier5 => (40, 57600),
+                ItemTier::Tier6 => (60, 345600),
+            }
+        },
+    };
+
+    (statValue, unscaledCost * SCALING_FACTOR)
+}
+
+#[derive(Copy, Drop)]
+struct InitialItems {
+    Attack: ItemName,
+    Defense: ItemName,
+    Transport: ItemName,
+    Speed: ItemName,
+}
+
+#[derive(Copy, Drop)]
+struct InitialStats {
+    Attack: usize,
+    Defense: usize,
+    Transport: usize,
+    Speed: usize,
+}
+
+trait ClassTrait {
+    fn get_initial_items(self: PlayerClass) -> InitialItems;
+    fn get_initial_stats(self: PlayerClass) -> InitialStats;
+}
+
+impl ClassImplementation of ClassTrait {
+    fn get_initial_items(self: PlayerClass) -> InitialItems {
+        match self {
+            PlayerClass::Dragon => InitialItems {
+                Attack: ItemName::AK47,
+                Defense: ItemName::BloodStainedShirt,
+                Transport: ItemName::PlasticBag,
+                Speed: ItemName::AllBlackSneakers,
+            },
+            PlayerClass::Monkey => InitialItems {
+                Attack: ItemName::Chain,
+                Defense: ItemName::BulletProofVest,
+                Transport: ItemName::PlasticBag,
+                Speed: ItemName::AthleticTrainers,
+            },
+            PlayerClass::Rabbit => InitialItems {
+                Attack: ItemName::BaseballBat,
+                Defense: ItemName::TrenchCoat,
+                Transport: ItemName::PlasticBag,
+                Speed: ItemName::WorkBoots,
+            },
+        }
+    }
+
+    fn get_initial_stats(self: PlayerClass) -> InitialStats {
+        let initialItems: InitialItems = self.get_initial_items();
+
+        let initialAttackItem = initialItems.Attack;
+        let (initialAttack, _) = getStatValueAndCost(
+            initialAttackItem.impacting_stat(), initialAttackItem.initial_tier()
+        );
+
+        let initialDefenseItem = initialItems.Defense;
+        let (initialDefense, _) = getStatValueAndCost(
+            initialDefenseItem.impacting_stat(), initialDefenseItem.initial_tier()
+        );
+
+        let initialTransportItem = initialItems.Transport;
+        let (initialTransport, _) = getStatValueAndCost(
+            initialTransportItem.impacting_stat(), initialTransportItem.initial_tier()
+        );
+
+        let initialSpeedItem = initialItems.Speed;
+        let (initialSpeed, _) = getStatValueAndCost(
+            initialSpeedItem.impacting_stat(), initialSpeedItem.initial_tier()
+        );
+
+        InitialStats {
+            Attack: initialAttack,
+            Defense: initialDefense,
+            Transport: initialTransport,
+            Speed: initialSpeed,
+        }
+    }
+}
+

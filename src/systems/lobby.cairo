@@ -1,13 +1,21 @@
 use starknet::ContractAddress;
 use rollyourown::models::game::{GameMode};
+use rollyourown::models::player::{PlayerClass};
 
 #[starknet::interface]
 trait ILobby<TContractState> {
     fn create_game(
-        self: @TContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress
+        self: @TContractState,
+        game_mode: GameMode,
+        player_name: felt252,
+        class: PlayerClass,
+        avatar_id: u8,
+        mainnet_address: ContractAddress
     ) -> (u32, ContractAddress);
 
-    fn set_name(self: @TContractState, game_id: u32, player_id: ContractAddress, player_name: felt252);
+    fn set_name(
+        self: @TContractState, game_id: u32, player_id: ContractAddress, player_name: felt252
+    );
 }
 
 
@@ -38,7 +46,7 @@ mod lobby {
 
     use super::ILobby;
 
-   
+
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -66,7 +74,12 @@ mod lobby {
     #[external(v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8, mainnet_address: ContractAddress,
+            self: @ContractState,
+            game_mode: GameMode,
+            player_name: felt252,
+            class: PlayerClass,
+            avatar_id: u8,
+            mainnet_address: ContractAddress,
         ) -> (u32, ContractAddress) {
             assert_valid_name(player_name);
             assert_valid_chain(game_mode);
@@ -77,7 +90,7 @@ mod lobby {
             let start_time = get_block_timestamp();
 
             let game_settings = GameSettingsImpl::get(game_mode);
-            let player_settings = PlayerSettingsImpl::get(game_mode);
+            let player_settings = PlayerSettingsImpl::get(game_mode, class);
             let shop_settings = ShopSettingsImpl::get(game_mode);
 
             let mut randomizer = RandomImpl::new(self.world());
@@ -88,7 +101,7 @@ mod lobby {
             let player = Player {
                 game_id,
                 player_id: caller,
-                mainnet_address, 
+                mainnet_address,
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
@@ -108,6 +121,7 @@ mod lobby {
                 speed: player_settings.speed,
                 leaderboard_version,
                 game_over: false,
+                class,
             };
 
             let game = Game {
@@ -144,7 +158,9 @@ mod lobby {
             (game_id, caller)
         }
 
-        fn set_name(self: @ContractState, game_id: u32, player_id: ContractAddress, player_name: felt252) {
+        fn set_name(
+            self: @ContractState, game_id: u32, player_id: ContractAddress, player_name: felt252
+        ) {
             assert_valid_name(player_name);
 
             assert(
@@ -159,9 +175,9 @@ mod lobby {
         }
     }
 
-    fn assert_valid_chain(game_mode: GameMode) {
-       // assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
-
+    fn assert_valid_chain(
+        game_mode: GameMode
+    ) { // assert(game_mode == GameMode::Unlimited, 'invalid game_mode');
     //if game_mode == GameMode::Test {
     // let chain_id = get_tx_info().unbox().chain_id;
     // assert(chain_id != 'KATANA', 'wrong chain_id');

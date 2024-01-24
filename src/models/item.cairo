@@ -14,6 +14,9 @@ struct Item {
     level: u8,
     name: felt252,
     value: usize,
+    tier: ItemTier,
+    stat: ItemEnum,
+    newName: ItemName,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -23,6 +26,67 @@ enum ItemEnum {
     Transport, // increase drug nb transportable
     Speed, // increase run away chances by %
 // Style
+}
+
+#[derive(Copy, Drop, Serde, Introspect)]
+enum ItemTier {
+    Tier1,
+    Tier2,
+    Tier3,
+    Tier4,
+    Tier5,
+    Tier6,
+}
+
+#[derive(Copy, Drop, Serde, Introspect)]
+enum ItemName {
+    Chain,
+    BaseballBat,
+    AK47,
+    BloodStainedShirt,
+    TrenchCoat,
+    BulletProofVest,
+    AllBlackSneakers,
+    AthleticTrainers,
+    WorkBoots,
+    PlasticBag,
+}
+
+trait ItemMeta {
+    fn initial_tier(self: ItemName) -> ItemTier;
+    fn impacting_stat(self: ItemName) -> ItemEnum;
+}
+
+impl ItemMetaImpl of ItemMeta {
+    fn initial_tier(self: ItemName) -> ItemTier {
+        match self {
+            ItemName::Chain => ItemTier::Tier1,
+            ItemName::BaseballBat => ItemTier::Tier2,
+            ItemName::AK47 => ItemTier::Tier3,
+            ItemName::BloodStainedShirt => ItemTier::Tier1,
+            ItemName::TrenchCoat => ItemTier::Tier2,
+            ItemName::BulletProofVest => ItemTier::Tier3,
+            ItemName::AllBlackSneakers => ItemTier::Tier2,
+            ItemName::AthleticTrainers => ItemTier::Tier2,
+            ItemName::WorkBoots => ItemTier::Tier2,
+            ItemName::PlasticBag => ItemTier::Tier2,
+        }
+    }
+
+    fn impacting_stat(self: ItemName) -> ItemEnum {
+        match self {
+            ItemName::Chain => ItemEnum::Attack,
+            ItemName::BaseballBat => ItemEnum::Attack,
+            ItemName::AK47 => ItemEnum::Attack,
+            ItemName::BloodStainedShirt => ItemEnum::Defense,
+            ItemName::TrenchCoat => ItemEnum::Defense,
+            ItemName::BulletProofVest => ItemEnum::Defense,
+            ItemName::AllBlackSneakers => ItemEnum::Speed,
+            ItemName::AthleticTrainers => ItemEnum::Speed,
+            ItemName::WorkBoots => ItemEnum::Speed,
+            ItemName::PlasticBag => ItemEnum::Transport,
+        }
+    }
 }
 
 impl ItemEnumIntoFelt252 of Into<ItemEnum, felt252> {
