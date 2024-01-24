@@ -27,7 +27,6 @@ use rollyourown::systems::create::create_game;
 use rollyourown::systems::set_name::set_name;
 use rollyourown::constants::SCALING_FACTOR;
 
-const MAX_PLAYERS: usize = 2;
 const MAX_TURNS: usize = 10;
 const TRAVEL_RISK: u8 = 10;
 const HURT_RISK: u8 = 9;
@@ -55,7 +54,6 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
     let world = spawn_test_world(components, systems);
 
     let mut spawn_game_calldata = array::ArrayTrait::<felt252>::new();
-    spawn_game_calldata.append(MAX_PLAYERS.into());
     spawn_game_calldata.append(MAX_TURNS.into());
     let mut res = world.execute('create_game', spawn_game_calldata);
     assert(res.len() > 0, 'did not spawn');
@@ -64,7 +62,6 @@ fn spawn_game() -> (ContractAddress, u32, felt252) {
         .expect('spawn deserialization failed');
 
     let game = get!(world, game_id, (Game));
-    assert(game.max_players == MAX_PLAYERS, 'max players mismatch');
     assert(game.max_turns == MAX_TURNS, 'max turns mismatch');
 
     (world.contract_address, game_id, player_id)

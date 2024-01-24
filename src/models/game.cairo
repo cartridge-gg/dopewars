@@ -5,7 +5,6 @@ struct Game {
     #[key]
     game_id: u32,
     game_mode: GameMode,
-    max_players: usize,
     num_players: usize,
     max_turns: usize,
     creator: ContractAddress,

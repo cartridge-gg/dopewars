@@ -7,7 +7,6 @@ use rollyourown::models::player::Player;
 
 #[derive(Copy, Drop, Serde)]
 struct GameSettings {
-    max_players: usize,
     max_turns: usize,
 }
 
@@ -117,7 +116,7 @@ trait EncounterSettingsTrait<T> {
 
 impl GameSettingsImpl of SettingsTrait<GameSettings> {
     fn get(game_mode: GameMode) -> GameSettings {
-        let mut game_settings = GameSettings { max_players: 1, max_turns: 30 };
+        let mut game_settings = GameSettings {  max_turns: 30 };
 
         if game_mode == GameMode::Test {
             game_settings.max_turns = 7;
