@@ -100,7 +100,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
     resetQuery();
     setCurrentVersion(ryoMetas?.leaderboard_version);
     setSelectedVersion(ryoMetas?.leaderboard_version);
-  }, [ryoMetas, resetQuery]);
+  }, [ryoMetas, /*resetQuery inifinte load if included !*/]);
 
   useEffect(() => {
     if (!listRef.current) return;
