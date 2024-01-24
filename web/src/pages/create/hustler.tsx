@@ -6,7 +6,11 @@ import Button from "@/components/Button";
 import { Hustler } from "@/components/hustler";
 import { Arrow } from "@/components/icons";
 import { PowerMeter } from "@/components/PowerMeter";
-import React from "react";
+import React, { useState } from "react";
+import { GameMode } from "@/dojo/types";
+import { useSystems } from "@/dojo/hooks/useSystems";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { validateAndParseAddress } from "starknet";
 
 const PLACEHOLDER_STATS = [
   {
@@ -50,7 +54,47 @@ const PLACEHOLDER_STATS = [
 
 export default function HustlerPage() {
   const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const name = router.query.name as string;
+  const [error, setError] = useState("");
+
+  const {
+    account,
+    burner: { create: createBurner, isDeploying: isBurnerDeploying },
+  } = useDojoContext();
+  const { createGame, isPending } = useSystems();
+
+  const start = async (gameMode: GameMode) => {
+    let address: bigint;
+    const avatarId = 0;
+
+    setError("");
+    if (name === "" || name.length > 20 || name.length < 3) {
+      setError("Invalid name, at least 3 chars, max 20!");
+      return;
+    }
+
+    try {
+      let value = validateAndParseAddress("");
+      address = BigInt(value);
+      setError("");
+    } catch (e) {
+      setError("Invalid address !");
+      return;
+    }
+
+    try {
+      if (!account) {
+        // create burner account
+        await createBurner();
+      }
+
+      const { gameId } = await createGame(gameMode, name, avatarId, address);
+
+      router.push(`/${gameId}/travel`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -58,12 +102,18 @@ export default function HustlerPage() {
         isSinglePanel
         footer={
           <Footer>
+            {error && (
+              <Text w="full" align="center" color="red">
+                {error}
+              </Text>
+            )}
             <Button
               w={["full", "auto"]}
               px={["auto", "60px"]}
               onClick={() => {
-                router.push(`/${gameId}/end`);
+                start(GameMode.Unlimited);
               }}
+              isLoading={isPending}
             >
               Play
             </Button>
