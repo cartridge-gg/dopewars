@@ -28,15 +28,16 @@ import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from
 import { motion } from "framer-motion";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { DrugMarket } from "@/dojo/types";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function Location() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id || "";
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
-  
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
+
   const [prices, setPrices] = useState<DrugMarket[]>([])
   useEffect(() => {
     if(playerEntity && playerEntity.markets){
@@ -50,6 +51,7 @@ export default function Location() {
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
+
     if (playerEntity) {
       // check if player at right location
       if (locationId !== playerEntity.locationId) {

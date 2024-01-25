@@ -37,6 +37,7 @@ import {
 } from "@/dojo/events";
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import { Profile } from "@/components/ProfileButton";
+import { usePlayerStore } from "@/hooks/player";
 
 type LogByDay = {
   day: number;
@@ -49,8 +50,8 @@ export default function Logs() {
   const gameId = router.query.gameId as string;
   const playerId = router.query.playerId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 

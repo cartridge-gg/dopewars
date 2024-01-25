@@ -43,9 +43,9 @@ export interface ConsequenceData extends BaseEventData {
   outcome: String;
   health_loss: number;
   drug_loss: number;
-  cash_loss: bigint;
+  cash_loss: number;
   dmg_dealt: number;
-  cash_earnt: bigint;
+  cash_earnt: number;
 }
 
 export interface GameOverData extends BaseEventData {
@@ -166,9 +166,9 @@ export const parseEvent = (raw: any) => {
         outcome: num.toHexString(raw.data[0]),
         health_loss: Number(raw.data[1]),
         drug_loss: Number(raw.data[2]),
-        cash_loss: BigInt(raw.data[3]),
+        cash_loss: Number(raw.data[3]),
         dmg_dealt: Number(raw.data[4]),
-        cash_earnt: BigInt(raw.data[5]),
+        cash_earnt: Number(raw.data[5]),
       } as ConsequenceData;
 
     case WorldEvents.GameOver:

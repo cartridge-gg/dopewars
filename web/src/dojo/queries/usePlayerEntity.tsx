@@ -33,7 +33,6 @@ export class PlayerEntity {
   turn: number;
   maxTurns: number;
   drugCount: number;
-  hoodId: string;
   locationId: string;
   nextLocationId?: string;
   status: PlayerStatus;

@@ -39,7 +39,7 @@ import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
 import { useToast } from "@/hooks/toast";
-import { usePlayerEntityStore } from "@/hooks/player";
+import { usePlayerStore } from "@/hooks/player";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -59,8 +59,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const gameId = router.query.gameId as string;
   const playerId = router.query.playerId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(undefined);
@@ -74,9 +74,9 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   useEffect(() => {
     if (playerId) {
       // spectator
-      playerEntityStore.initPlayerEntity(gameId, playerId);
+      playerStore.initPlayerEntity(gameId, playerId);
     }
-  }, [gameId, playerId, playerEntityStore]);
+  }, [gameId, playerId, playerStore]);
 
   useEffect(() => {
     if (!playerEntity) return;
@@ -114,7 +114,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                 />
                 <HStack h="50px" px="10px">
                   {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
-                  <Cigarette /> <Text>{getLocationById(playerEntity.hoodId)?.name}</Text>
+                  <Cigarette /> <Text>{getLocationById(playerEntity.locationId)?.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">
@@ -261,8 +261,8 @@ const getShareText = (playerEntity: PlayerEntity): string => {
 };
 
 export const ProfileButtonMobile = () => {
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
   const [isOpen, setIsOpen] = useState(false);
 
   if (!account || !playerEntity) return null;
@@ -278,8 +278,8 @@ export const ProfileButtonMobile = () => {
 };
 
 export const ProfileButton = () => {
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
   const [isOpen, setIsOpen] = useState(false);
 
   if (!account || !playerEntity) return null;
@@ -298,8 +298,8 @@ export const ProfileLink = () => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
@@ -325,8 +325,8 @@ export const ProfileLinkMobile = () => {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {

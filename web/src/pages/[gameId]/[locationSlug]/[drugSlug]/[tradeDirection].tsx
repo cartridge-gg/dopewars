@@ -6,7 +6,6 @@ import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
 import { Footer } from "@/components/Footer";
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 import { Sounds, playSound } from "@/hooks/sound";
-import { TradeDirection, TradeType } from "@/hooks/state";
 import AlertMessage from "@/components/AlertMessage";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import { formatQuantity, formatCash } from "@/utils/ui";
@@ -14,8 +13,9 @@ import { useSystems } from "@/dojo/hooks/useSystems";
 import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
 import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
-import { DrugInfo, DrugMarket } from "@/dojo/types";
+import { DrugInfo, DrugMarket, TradeDirection } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function Market() {
   const router = useRouter();
@@ -30,10 +30,10 @@ export default function Market() {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
-  const { account, playerEntityStore } = useDojoContext();
+  const { account } = useDojoContext();
   const { buy, sell, isPending } = useSystems();
 
-  const { playerEntity } = playerEntityStore;
+  const { playerEntity }= usePlayerStore()
 
   const { toast } = useToast();
 

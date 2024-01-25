@@ -11,13 +11,14 @@ import { Outcome } from "@/dojo/types";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useEffect, useState } from "react";
 import { formatCash } from "@/utils/ui";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function Consequence() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
   const [isDead, setIsDead] = useState<boolean>(false);

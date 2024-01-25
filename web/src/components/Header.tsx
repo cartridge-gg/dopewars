@@ -17,6 +17,7 @@ import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
 import DayIndicator from "./player/DayIndicator";
+import { usePlayerStore } from "@/hooks/player";
 
 export interface HeaderProps {
   back?: boolean;
@@ -27,12 +28,11 @@ const Header = ({ back }: HeaderProps) => {
   const { gameId } = router.query as { gameId: string };
   const [inventory, setInventory] = useState(0);
   const {
-    playerEntityStore,
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-  const { playerEntity } = playerEntityStore;
+  const { playerEntity } = usePlayerStore();
 
   const isMobile = IsMobile();
 

@@ -5,10 +5,11 @@ import { Twitter } from "./icons";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatCash } from "@/utils/ui";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { usePlayerStore } from "@/hooks/player";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   if (!account || !playerEntity) return null;
 

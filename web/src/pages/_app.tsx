@@ -14,6 +14,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SetupResult, setup } from "@/dojo/setup/setup";
 import { dojoConfig } from "@/dojo/setup/config";
 import RegisterEntities from "@/components/RegisterEntities";
+import { PlayerStoreProvider } from "@/hooks/player";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
@@ -44,20 +45,22 @@ export default function App({ Component, pageProps }: AppProps) {
       {setupResult && (
         <QueryClientProvider client={setupResult.queryClient}>
           <DojoProvider value={setupResult}>
-            <RegisterEntities />
-            <ChakraProvider theme={theme}>
-              <Fonts />
-              <NextHead>
-                <title>Roll your Own</title>
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                />
-              </NextHead>
-              {isRightSequence && <MakeItRain />}
-              <Component {...pageProps} />
-              <Analytics />
-            </ChakraProvider>
+            <PlayerStoreProvider client={setupResult.graphqlClient} wsClient={setupResult.graphqlWsClient}>
+              <RegisterEntities />
+              <ChakraProvider theme={theme}>
+                <Fonts />
+                <NextHead>
+                  <title>Roll your Own</title>
+                  <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                  />
+                </NextHead>
+                {isRightSequence && <MakeItRain />}
+                <Component {...pageProps} />
+                <Analytics />
+              </ChakraProvider>
+            </PlayerStoreProvider>
           </DojoProvider>
         </QueryClientProvider>
       )}

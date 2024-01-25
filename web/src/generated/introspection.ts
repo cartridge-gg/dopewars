@@ -12,7 +12,6 @@
       "Game",
       "Item",
       "Leaderboard",
-      "Market",
       "MarketPacked",
       "Player",
       "RyoMeta"

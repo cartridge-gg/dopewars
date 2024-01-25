@@ -37,6 +37,7 @@ import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/e
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { Footer } from "@/components/Footer";
+import { usePlayerStore } from "@/hooks/player";
 
 interface MarketPriceInfo {
   id: string;
@@ -52,10 +53,10 @@ export default function Travel() {
   const [currentLocationId, setCurrentLocationId] = useState<string>();
 
   const toaster = useToast();
-  const { account, playerEntityStore } = useDojoContext();
   const { travel, isPending } = useSystems();
 
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   const locationName = useMemo(() => {
     if (targetId) {

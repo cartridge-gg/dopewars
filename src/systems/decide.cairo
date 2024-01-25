@@ -3,19 +3,19 @@ use rollyourown::models::location::LocationEnum;
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum Action {
-    Run: (),
-    Pay: (),
-    Fight: (),
+    Run,
+    Pay,
+    Fight,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum Outcome {
-    Died: (),
-    Paid: (),
-    Escaped: (),
-    Captured: (),
-    Victorious: (),
-    Unsupported: (),
+    Died,
+    Paid,
+    Escaped,
+    Captured,
+    Victorious,
+    Unsupported,
 }
 
 #[starknet::interface]
@@ -335,9 +335,7 @@ mod decide {
                 );
 
                 // reduce dmgs by defense_item.value %
-                let health_saved: u128 = ((10000
-                    * defense_item.value.into()
-                    * encounter_dmg.into())
+                let health_saved: u128 = ((10000 * defense_item.value.into() * encounter_dmg.into())
                     / 100)
                     / 10000;
                 let final_health_loss: u8 = (encounter_dmg - health_saved.try_into().unwrap())

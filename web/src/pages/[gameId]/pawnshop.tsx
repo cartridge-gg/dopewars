@@ -30,16 +30,17 @@ import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } 
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 import { Inventory } from "@/components/Inventory";
 import { MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function PawnShop() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { account, playerEntityStore } = useDojoContext();
+  const { account } = useDojoContext();
   const { buyItem, dropItem, skipShop, isPending } = useSystems();
   const { availableShopItems } = useAvailableShopItems(gameId);
 
-  const { playerEntity } = playerEntityStore;
+  const { playerEntity }= usePlayerStore()
 
   const [isBuying, setIsBuying] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);

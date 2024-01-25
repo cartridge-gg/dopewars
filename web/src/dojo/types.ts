@@ -1,5 +1,3 @@
-import { Market } from "@/generated/graphql";
-
 
 // must have same order than cairo enum
 export enum Location {
@@ -104,7 +102,12 @@ export type DrugMarket = {
   id: string; // id is hex encoded drug name
   type: Drug;
   price: number;
-  // marketPool: Market | undefined;
 };
 
 export type LocationPrices = Map<string, DrugMarket[]>;
+
+
+export enum TradeDirection {
+  Buy,
+  Sell,
+}

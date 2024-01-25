@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from "graphql-request";
-import { Client, createClient } from "graphql-ws";
-import { create } from "zustand";
+import { Client } from "graphql-ws";
+import { createStore, useStore } from "zustand";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
@@ -18,119 +18,142 @@ import {
   MarketPacked,
 } from "@/generated/graphql";
 import { isUint16Array } from "util/types";
+import { useRef, createContext, useContext } from "react";
 
-export interface PlayerEntityStore {
-  client: GraphQLClient | null;
-  wsClient: Client | null;
+export const PlayerContext = createContext<PlayerStore | null>(null);
+
+///////////////////////////////////////
+
+type PlayerStoreProviderProps = React.PropsWithChildren<BearProps>;
+
+export const PlayerStoreProvider = ({ children, ...props }: PlayerStoreProviderProps) => {
+  const storeRef = useRef<PlayerStore>();
+  if (!storeRef.current) {
+    storeRef.current = createPlayerStore(props);
+  }
+  return <PlayerContext.Provider value={storeRef.current}>{children}</PlayerContext.Provider>;
+};
+
+///////////////////////////////////////
+
+export const usePlayerStore = () : PlayerStore => {
+  const store = useContext(PlayerContext);
+  if (!store) throw new Error("Missing PlayerContext.Provider in the tree");
+  return useStore<PlayerStore>(store);
+};
+
+///////////////////////////////////////
+
+export interface PlayerStore {
+  client: GraphQLClient;
+  wsClient: Client;
   id: string | null;
+  unsubscribers: Array<() => void>;
   playerEntity: PlayerEntity | null;
   initPlayerEntity: (gameId: string, playerId: string) => void;
-  unsubscribers: Array<() => void>;
+  subscribe: (gameId: string, playerId: string) => void;
+  executeQuery: (gameId: string, playerId: string) => void;
   reset: () => void;
 }
 
-export const usePlayerEntityStore = create<PlayerEntityStore>((set, get) => ({
-  client: null,
-  wsClient: null,
-  id: null,
-  playerEntity: null,
-  initPlayerEntity: (gameId: string, playerId: string) => {
-    if (!get().client) {
-      set({
-        client: new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!),
-      });
-    }
-    if (!get().wsClient) {
-      set({
-        wsClient: createClient({
-          url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS!,
-        }),
-      });
-    }
+type PlayerStoreProps = {
+  client: GraphQLClient;
+  wsClient: Client;
+};
 
-    if (get().id === null) {
-      subscribe(gameId, playerId);
-    }
-  },
-  unsubscribers: [],
-  reset: () => {
-    for (let unsubscribe of get().unsubscribers) {
-      unsubscribe();
-    }
-    const wsClient = get().wsClient;
-    wsClient && wsClient.dispose();
-    set({ client: null, wsClient: null, id: null, playerEntity: null, unsubscribers: [] });
-  },
-}));
+export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
+  return createStore<PlayerStore>((set, get) => ({
+    client,
+    wsClient,
+    id: null,
+    playerEntity: null,
+    unsubscribers: [],
+    initPlayerEntity: (gameId: string, playerId: string) => {
+      if (get().id === null) {
+        get().subscribe(gameId, playerId);
+      }
+    },
+    reset: () => {
+      for (let unsubscribe of get().unsubscribers) {
+        unsubscribe();
+      }
+      const wsClient = get().wsClient;
+      wsClient && wsClient.dispose();
+      set({ id: null, playerEntity: null, unsubscribers: [] });
+    },
+    subscribe: async (gameId: string, playerId: string) => {
+      const { wsClient, unsubscribers } = get();
+      const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
 
-const subscribe = async (gameId: string, playerId: string) => {
-  const { wsClient, unsubscribers } = usePlayerEntityStore.getState();
-  const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
+      //load playerEntity
+      await get().executeQuery(gameId, playerId);
 
-  //load playerEntity
-  await executeQuery(gameId, playerId);
-
-  //subscribe to playerEntity changes / Markets changes
-  unsubscribers.push(
-    usePlayerEntityStore.getState().wsClient!.subscribe(
-      {
-        query: PlayerEntitySubscriptionDocument,
-        variables: {
-          id,
-        },
-      },
-      {
-        next: onPlayerEntityData,
-        error: (error) => console.log({ error }),
-        complete: () => console.log("complete"),
-      },
-    ),
-  );
-
-  //subscribe to player Drug / Items / Encounter 
-  for (let drugId of [0, 1, 2, 3, 4, 5]) {
-    const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
-
-    unsubscribers.push(
-      usePlayerEntityStore.getState().wsClient!.subscribe(
-        {
-          query: PlayerEntityRelatedDataSubscriptionDocument,
-          variables: {
-            id,
+      //subscribe to playerEntity changes / Markets changes
+      unsubscribers.push(
+        wsClient.subscribe(
+          {
+            query: PlayerEntitySubscriptionDocument,
+            variables: {
+              id,
+            },
           },
-        },
-        {
-          next: onPlayerEntityRelatedData,
-          error: (error) => console.log({ error }),
-          complete: () => console.log("complete"),
-        },
-      ),
-    );
-  }
+          {
+            next: ({ data }) => {
+              return onPlayerEntityData({ set, data });
+            },
+            error: (error) => console.log({ error }),
+            complete: () => console.log("complete"),
+          },
+        ),
+      );
 
-  usePlayerEntityStore.setState({ id: id, unsubscribers: unsubscribers });
+      //subscribe to player Drug / Items / Encounter
+      for (let drugId of [0, 1, 2, 3, 4, 5]) {
+        const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
+
+        unsubscribers.push(
+          wsClient.subscribe(
+            {
+              query: PlayerEntityRelatedDataSubscriptionDocument,
+              variables: {
+                id,
+              },
+            },
+            {
+              next: ({ data }) => {
+                return onPlayerEntityRelatedData({  set, data });
+              },
+              error: (error) => console.log({ error }),
+              complete: () => console.log("complete"),
+            },
+          ),
+        );
+      }
+      
+      set({ id: id, unsubscribers: unsubscribers });
+    },
+    executeQuery: async (gameId: string, playerId: string) => {
+      const data = (await client.request(PlayerEntityDocument, {
+        gameId: gameId,
+        playerId: playerId,
+      })) as PlayerEntityQuery;
+
+      const edges = data!.entities!.edges as World__EntityEdge[];
+
+      if (edges && edges[0] && edges[0].node) {
+        const player = PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
+        set({ playerEntity: player });
+      }
+    },
+  }));
 };
 
-const executeQuery = async (gameId: string, playerId: string) => {
-  const data = (await usePlayerEntityStore.getState().client!.request(PlayerEntityDocument, {
-    gameId: gameId,
-    playerId: playerId,
-  })) as PlayerEntityQuery;
-
-  const edges = data!.entities!.edges as World__EntityEdge[];
-
-  if (edges && edges[0] && edges[0].node) {
-    const player = PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
-    usePlayerEntityStore.setState({ playerEntity: player });
-  }
-};
-
-const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
+const onPlayerEntityData = ({  set, data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
   // update player
   let playerUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "Player") as Player;
   if (playerUpdate) {
-    usePlayerEntityStore.setState((state) => ({
+    set((state) => ({
       playerEntity: state.playerEntity?.update(playerUpdate),
     }));
   }
@@ -138,7 +161,7 @@ const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
   // update markets
   let marketUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "MarketPacked") as MarketPacked;
   if (marketUpdate && marketUpdate.packed) {
-    usePlayerEntityStore.setState((state) => ({
+    set((state) => ({
       playerEntity: state.playerEntity?.updateMarkets(marketUpdate),
     }));
   }
@@ -146,26 +169,26 @@ const onPlayerEntityData = ({ data }: { data: World__Subscription }) => {
   //console.log("updated : Player");
 };
 
-const onPlayerEntityRelatedData = ({ data }: { data: World__Subscription }) => {
+const onPlayerEntityRelatedData = ({  set, data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {
     if (model && model.__typename === "Drug") {
-      usePlayerEntityStore.setState((state) => ({
+      set((state) => ({
         playerEntity: state.playerEntity?.updateDrug(model as unknown as Drug),
       }));
       // console.log(`updated : Drug`);
     }
 
     if (model && model.__typename === "Item") {
-      usePlayerEntityStore.setState((state) => ({
+      set((state) => ({
         playerEntity: state.playerEntity?.updateItem(model as unknown as Item),
       }));
       // console.log(`updated : Item`);
     }
 
     if (model && model.__typename === "Encounter") {
-      usePlayerEntityStore.setState((state) => ({
+      set((state) => ({
         playerEntity: state.playerEntity?.updateEncounter(model as unknown as Encounter),
       }));
       // console.log(`updated : Encounter`);

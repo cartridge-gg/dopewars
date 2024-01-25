@@ -19,6 +19,7 @@ import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
+import { usePlayerStore } from "@/hooks/player";
 
 type CombatLog = {
   text: string;
@@ -32,7 +33,8 @@ export default function Decision() {
   const healthLoss = router.query.healthLoss as string;
   const demandPct = router.query.demandPct as string;
 
-  const { account, playerEntityStore } = useDojoContext();
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState("");
@@ -53,8 +55,6 @@ export default function Decision() {
 
   const toaster = useToast();
   const { decide, isPending } = useSystems();
-
-  const { playerEntity } = playerEntityStore;
 
   const combatsListRef = useRef(null);
   const isMobile = IsMobile();

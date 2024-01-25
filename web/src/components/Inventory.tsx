@@ -9,12 +9,14 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Bag } from "./icons";
 import { Ring } from "./icons/Ring";
+import { usePlayerStore } from "@/hooks/player";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();
   const { gameId } = router.query as { gameId: string };
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+
+  const { playerEntity }= usePlayerStore()
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>

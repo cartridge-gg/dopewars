@@ -2,6 +2,8 @@ import { DojoProvider } from "@dojoengine/core";
 // import { createClient } from "@dojoengine/torii-client";
 import { Config } from "./config";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Client, createClient } from "graphql-ws";
+import { GraphQLClient } from "graphql-request";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -14,7 +16,6 @@ export async function setup(config: Config) {
     //     worldAddress: config.manifest.world.address || "",
     // });
 
-
     const dojoProvider = new DojoProvider(config.manifest, config.rpcUrl)
 
     const queryClient = new QueryClient({
@@ -25,12 +26,19 @@ export async function setup(config: Config) {
         },
     });
 
+    const graphqlClient = new GraphQLClient(config.toriiUrl)
+
+    const graphqlWsClient = createClient({
+        url: config.toriiWsUrl,
+    })
+
 
     return {
-        //network,
         config,
         dojoProvider,
-        queryClient
+        queryClient,
+        graphqlClient,
+        graphqlWsClient
     };
 }
 

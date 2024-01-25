@@ -7,13 +7,14 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useEffect } from "react";
 import { Location, PlayerStatus } from "@/dojo/types";
 import { getLocationByType } from "@/dojo/helpers";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function Redirector() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
 
-  const { playerEntityStore, account } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   useEffect(() => {
     if (playerEntity?.status === PlayerStatus.Normal) {

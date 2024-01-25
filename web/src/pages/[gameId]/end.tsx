@@ -37,6 +37,7 @@ import { genAvatarFromId } from "@/components/avatar/avatars";
 import { Avatar } from "@/components/avatar/Avatar";
 import ShareButton from "@/components/ShareButton";
 import { playSound, Sounds } from "@/hooks/sound";
+import { usePlayerStore } from "@/hooks/player";
 
 export default function End() {
   const router = useRouter();
@@ -48,8 +49,8 @@ export default function End() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account, playerEntityStore } = useDojoContext();
-  const { playerEntity } = playerEntityStore;
+  const { account } = useDojoContext();
+  const { playerEntity }= usePlayerStore()
 
   useEffect(() => {
     if (isDead) {

@@ -40,8 +40,6 @@ struct MarketSettings {
     price_var_min: u8,
     price_var_max: u8,
     market_event_chance: usize,
-    market_event_min: usize,
-    market_event_max: usize,
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -184,9 +182,7 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
             price_var_chance: 250, // on 1000 : 50% chance = 25% up / 25% down
             price_var_min: 2, // 2%  
             price_var_max: 6, // 6%  
-            market_event_chance: 68, // on 1000 : 1.6% = 0.8% up / 0.8% down  
-            market_event_min: 40, //   up 40%  | down 20%
-            market_event_max: 80, //   up 80%  | down 40%
+            market_event_chance: 8, // on 1000 : 2% = 0.8% up / 0.8% down  
         };
 
         if game_mode == GameMode::Test {
