@@ -1,5 +1,0 @@
-// export const RYO_WORLD_ADDRESS =
-//   "0x51d1bf777ddb43361a746029303fdd2fd45f4b898243c2769b5cd70a5fa7c19";
-
-// export const ETH_CONTRACT_ADDRESS =
-//   "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";

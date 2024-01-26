@@ -63,7 +63,7 @@ mod lobby {
         player_name: felt252
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl LobbyImpl of ILobby<ContractState> {
         fn create_game(
             self: @ContractState, game_mode: GameMode, player_name: felt252, avatar_id: u8,

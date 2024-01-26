@@ -86,7 +86,7 @@ mod travel {
         increase: bool,
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl TravelImpl of ITravel<ContractState> {
         // 1. Verify the caller owns the player.
         // 2. Determine if a random travel event occurs and apply it if necessary.

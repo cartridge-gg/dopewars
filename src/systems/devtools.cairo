@@ -26,7 +26,7 @@ mod devtools {
     use rollyourown::utils::random::{RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
         fn feed_leaderboard(self: @ContractState, count: u32) {
             self.check_chain();

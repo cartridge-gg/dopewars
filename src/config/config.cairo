@@ -15,7 +15,7 @@ trait IConfig<T> {
     fn get_items(self: @T) -> Span<ItemConfig>;
 }
 
-
+// USE MODELS or not ?
 #[dojo::contract]
 mod config {
     use super::Config;

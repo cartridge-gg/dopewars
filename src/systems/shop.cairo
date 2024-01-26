@@ -77,7 +77,7 @@ mod shop {
         }
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ShopExternalImpl of IShop<ContractState> {
         fn skip(self: @ContractState, game_id: u32) {
             let world = self.world();

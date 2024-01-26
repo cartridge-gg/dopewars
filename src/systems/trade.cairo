@@ -77,7 +77,7 @@ mod trade {
     }
 
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl GameImpl of ITrade<ContractState> {
         // 1. Verify the caller owns the player.
         // 2. Get current price for location for quantity.

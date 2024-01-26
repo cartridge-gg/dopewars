@@ -89,7 +89,7 @@ mod decide {
         cash_earnt: u32,
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl DecideImpl of IDecide<ContractState> {
         fn decide(self: @ContractState, game_id: u32, action: Action) {
             let world = self.world();

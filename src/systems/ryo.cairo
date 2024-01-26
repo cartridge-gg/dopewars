@@ -28,7 +28,7 @@ mod ryo {
 
     use super::IRyo;
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl RyoExternalImpl of IRyo<ContractState> {
         fn initialize(self: @ContractState) {
             //todo check caller is world owner
