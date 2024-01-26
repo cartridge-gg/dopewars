@@ -8,18 +8,20 @@ use dojo::test_utils::{spawn_test_world};
 
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::models::drug::{drug, Drug};
-use rollyourown::models::game::{game, Game};
-use rollyourown::models::item::{item, Item};
-use rollyourown::models::player::{player, Player};
-use rollyourown::models::encounter::{encounter, Encounter};
+use rollyourown::models::{
+    game::{game, Game}, player::{player, Player}, drug::{drug, Drug},
+    encounter::{encounter, Encounter}, item::{item, Item},
+    market_packed::{market_packed, MarketPacked}
+};
 
 
-use rollyourown::systems::decide::{decide, IDecideDispatcher, IDecideDispatcherTrait};
-use rollyourown::systems::lobby::{lobby, ILobbyDispatcher, ILobbyDispatcherTrait};
-use rollyourown::systems::shop::{shop, IShopDispatcher, IShopDispatcherTrait};
-use rollyourown::systems::trade::{trade, ITradeDispatcher, ITradeDispatcherTrait};
-use rollyourown::systems::travel::{travel, ITravelDispatcher, ITravelDispatcherTrait};
+use rollyourown::systems::{
+    decide::{decide, IDecideDispatcher, IDecideDispatcherTrait},
+    lobby::{lobby, ILobbyDispatcher, ILobbyDispatcherTrait},
+    shop::{shop, IShopDispatcher, IShopDispatcherTrait},
+    trade::{trade, ITradeDispatcher, ITradeDispatcherTrait},
+    travel::{travel, ITravelDispatcher, ITravelDispatcherTrait}
+};
 
 
 fn ZERO() -> ContractAddress {
@@ -46,7 +48,7 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
         drug::TEST_CLASS_HASH,
         game::TEST_CLASS_HASH,
         item::TEST_CLASS_HASH,
-        market::TEST_CLASS_HASH,
+        market_packed::TEST_CLASS_HASH,
         player::TEST_CLASS_HASH,
         encounter::TEST_CLASS_HASH,
     ];

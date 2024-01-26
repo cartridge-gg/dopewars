@@ -20,7 +20,7 @@ mod devtools {
     use super::IDevtools;
 
     use rollyourown::models::player::{Player, PlayerStatus};
-    use rollyourown::models::location::{LocationEnum};
+    use rollyourown::models::location::{Locations};
     use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::utils::random::{RandomImpl};
@@ -56,8 +56,8 @@ mod devtools {
                     name: uuid_f,
                     avatar_id: rand_10,
                     status: PlayerStatus::Normal,
-                    location_id: LocationEnum::Home,
-                    next_location_id: LocationEnum::Home,
+                    location_id: Locations::Home,
+                    next_location_id: Locations::Home,
                     cash: rand ,
                     health: rand_2,
                     drug_count: 0,

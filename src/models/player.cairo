@@ -4,9 +4,10 @@ use dojo::database::introspect::{
 };
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::models::location::LocationEnum;
+
 use rollyourown::models::item::{Item, ItemEnum};
 
+use rollyourown::config::locations::Locations;
 
 // #[derive(Model, Copy, Drop, Serde)]
 // struct ProfileRegistry {
@@ -47,8 +48,8 @@ struct Player {
     name: felt252,                        // name registry or event
     avatar_id: u8,                        // 2 bits = 4
     status: PlayerStatus,                 // 2 bits = 4 ( + ?)
-    location_id: LocationEnum,            // 3 bits = 8 
-    next_location_id: LocationEnum,       // 3 bits  = 8 ( maybe can remove)
+    location_id: Locations,            // 3 bits = 8 
+    next_location_id: Locations,       // 3 bits  = 8 ( maybe can remove)
     turn: u8,                          // 6 bits = 64 ( max 64 turn looks fine ?)  
     cash: u32,                           // 30 bits = 1.xxx.xxx.xxx
     health: u8,                           // 7 bits = 128

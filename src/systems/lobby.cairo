@@ -16,15 +16,17 @@ mod lobby {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::get_contract_address;
-    use starknet::get_block_timestamp;
     use starknet::info::get_tx_info;
 
-    use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::game::{Game, GameMode};
-    use rollyourown::models::drug::{Drug, DrugTrait};
-    use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
-    use rollyourown::models::leaderboard::{Leaderboard};
+    use rollyourown::config::locations::Locations;
 
+    use rollyourown::models::{
+        game::{Game, GameMode},
+        player::{Player, PlayerTrait, PlayerStatus},
+        drug::{Drug},
+        leaderboard::{Leaderboard}
+    };
+  
     use rollyourown::utils::settings::{
         GameSettings, GameSettingsImpl, PlayerSettings, PlayerSettingsImpl, ShopSettings,
         ShopSettingsImpl
@@ -88,8 +90,8 @@ mod lobby {
                 name: player_name,
                 avatar_id: avatar_id,
                 status: PlayerStatus::Normal,
-                location_id: LocationEnum::Home,
-                next_location_id: LocationEnum::Home,
+                location_id: Locations::Home,
+                next_location_id: Locations::Home,
                 cash: player_settings.cash,
                 health: player_settings.health,
                 drug_count: 0,
@@ -114,19 +116,6 @@ mod lobby {
             // markets 
             let markets = MarketImpl::new(game_id, caller);
             set!(self.world(), (markets));
-
-            // let mut locations = LocationTrait::all();
-            // loop {
-            //     match locations.pop_front() {
-            //         Option::Some(location_id) => {
-            //             // initialize markets for location
-            //             market::initialize_markets(
-            //                 self.world(), ref randomizer, game_id, game_mode, *location_id
-            //             );
-            //         },
-            //         Option::None(_) => { break (); }
-            //     };
-            // };
 
             // emit player joined
             emit!(self.world(), PlayerJoined { game_id, player_id: caller, player_name });

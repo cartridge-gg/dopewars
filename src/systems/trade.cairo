@@ -1,6 +1,9 @@
 use starknet::ContractAddress;
-use rollyourown::models::location::{LocationEnum};
-use rollyourown::models::drug::{DrugEnum};
+
+use rollyourown::config::{
+    drugs::Drugs,
+    locations::Locations
+    };
 
 
 #[starknet::interface]
@@ -8,16 +11,16 @@ trait ITrade<TContractState> {
     fn buy(
         self: @TContractState,
         game_id: u32,
-        location_id: LocationEnum,
-        drug_id: DrugEnum,
+        location_id: Locations,
+        drug_id: Drugs,
         quantity: usize
     );
 
     fn sell(
         self: @TContractState,
         game_id: u32,
-        location_id: LocationEnum,
-        drug_id: DrugEnum,
+        location_id: Locations,
+        drug_id: Drugs,
         quantity: usize
     );
 }
@@ -28,10 +31,15 @@ mod trade {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::models::drug::{Drug, DrugEnum};
+    use rollyourown::models::drug::{Drug};
     use rollyourown::models::player::{Player, PlayerTrait};
-    use rollyourown::models::location::{Location, LocationEnum};
+
     use rollyourown::models::game::{Game};
+
+    use rollyourown::config::{
+        drugs::Drugs,
+        locations::Locations
+    };
 
     use rollyourown::models::market_packed::{MarketImpl, MarketTrait};
 
@@ -52,7 +60,7 @@ mod trade {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        drug_id: DrugEnum,
+        drug_id: Drugs,
         quantity: usize,
         cost: u32
     }
@@ -63,7 +71,7 @@ mod trade {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        drug_id: DrugEnum,
+        drug_id: Drugs,
         quantity: usize,
         payout: u32
     }
@@ -80,8 +88,8 @@ mod trade {
         fn buy(
             self: @ContractState,
             game_id: u32,
-            location_id: LocationEnum,
-            drug_id: DrugEnum,
+            location_id: Locations,
+            drug_id: Drugs,
             quantity: usize
         ) {
             let world = self.world();
@@ -127,8 +135,8 @@ mod trade {
         fn sell(
             self: @ContractState,
             game_id: u32,
-            location_id: LocationEnum,
-            drug_id: DrugEnum,
+            location_id: Locations,
+            drug_id: Drugs,
             quantity: usize
         ) {
             let world = self.world();

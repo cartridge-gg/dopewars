@@ -4,8 +4,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::player::Player;
-use rollyourown::models::drug::{DrugEnum, Drug, DrugTrait};
-use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
+use rollyourown::models::drug::{ Drug};
 
 use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
@@ -15,17 +14,10 @@ use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 use rollyourown::utils::math::{MathTrait, MathImplU8};
 use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait};
 
-
-fn get_drug_price_config(drug: DrugEnum) -> DrugPriceConfig {
-    match drug {
-        DrugEnum::Ludes => DrugPriceConfig { base: 18, step: 1 },
-        DrugEnum::Speed => DrugPriceConfig { base: 85, step: 6 },
-        DrugEnum::Weed => DrugPriceConfig { base: 420, step: 23 },
-        DrugEnum::Acid => DrugPriceConfig { base: 1590, step: 69 },
-        DrugEnum::Heroin => DrugPriceConfig { base: 5720, step: 169 },
-        DrugEnum::Cocaine => DrugPriceConfig { base: 12200, step: 242 },
-    }
-}
+use rollyourown::config::{
+    drugs::{Drugs,DrugsEnumerableImpl, DrugConfig, DrugConfigImpl},
+    locations::{Locations,LocationsEnumerableImpl}
+};
 
 //
 //
@@ -44,16 +36,12 @@ struct MarketPacked {
 //
 //
 
-#[derive(Copy, Drop, Serde)]
-struct DrugPriceConfig {
-    base: usize,
-    step: usize,
-}
+
 
 #[derive(Copy, Drop, Serde)]
 struct DrugPrice {
-    drug: DrugEnum,
-    config: DrugPriceConfig,
+    drug: Drugs,
+    config: DrugConfig,
 }
 
 //
@@ -63,8 +51,8 @@ struct DrugPrice {
 #[generate_trait]
 impl DrugPriceImpl of DrugPriceTrait {
     #[inline(always)]
-    fn new(drug: DrugEnum) -> DrugPrice {
-        DrugPrice { drug, config: get_drug_price_config(drug) }
+    fn new(drug: Drugs) -> DrugPrice {
+        DrugPrice { drug, config: DrugConfigImpl::get(drug) }
     }
 
     #[inline(always)]
@@ -89,7 +77,7 @@ impl MarketImpl of MarketTrait {
         get!(world, (game_id, player_id), (MarketPacked))
     }
 
-    fn get_tick(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum) -> usize {
+    fn get_tick(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
         let bits = BitsImpl::from(self.packed);
 
         let location_idx: u8 = location.into() - 1;
@@ -102,7 +90,7 @@ impl MarketImpl of MarketTrait {
     }
 
 
-    fn get_drug_price(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum) -> usize {
+    fn get_drug_price(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
         let drug_price = DrugPriceImpl::new(drug);
         let tick = self.get_tick(location, drug);
 
@@ -114,7 +102,7 @@ impl MarketImpl of MarketTrait {
     //
 
     fn quote_buy(
-        ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, quantity: usize
+        ref self: MarketPacked, location: Locations, drug: Drugs, quantity: usize
     ) -> usize {
         let drug_price = self.get_drug_price(location, drug);
         let cost = drug_price * quantity;
@@ -122,7 +110,7 @@ impl MarketImpl of MarketTrait {
     }
 
     fn quote_sell(
-        ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, quantity: usize
+        ref self: MarketPacked, location: Locations, drug: Drugs, quantity: usize
     ) -> usize {
         let drug_price = self.get_drug_price(location, drug);
         let payout = drug_price * quantity;
@@ -133,7 +121,7 @@ impl MarketImpl of MarketTrait {
     //
     //
 
-    fn set_tick(ref self: MarketPacked, location: LocationEnum, drug: DrugEnum, value: usize) {
+    fn set_tick(ref self: MarketPacked, location: Locations, drug: Drugs, value: usize) {
         let mut bits = BitsImpl::from(self.packed);
 
         let location_idx: u8 = location.into() - 1;
@@ -151,7 +139,7 @@ impl MarketImpl of MarketTrait {
     //
 
     fn market_variations(ref self: MarketPacked, world: IWorldDispatcher, ref randomizer: Random) {
-        let mut locations = LocationTrait::all();
+        let mut locations = LocationsEnumerableImpl::all();
         let game = get!(world, self.game_id, Game);
         let player = get!(world, (self.game_id, self.player_id), Player);
         let market_settings = MarketSettingsImpl::get(game.game_mode);
@@ -159,7 +147,7 @@ impl MarketImpl of MarketTrait {
         loop {
             match locations.pop_front() {
                 Option::Some(location_id) => {
-                    let mut drugs = DrugTrait::all();
+                    let mut drugs = DrugsEnumerableImpl::all();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {

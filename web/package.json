@@ -11,20 +11,18 @@
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
     "gen:dojo": "pnpm gen & pnpm gen:events",
-    "gen:models": "#npx create-models ./manifest.json ./src/dojo/generated/contractModels.ts",
     "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {
-    "create-models": "./bin/generateModels.cjs",
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "file:../../dojo-packages/packages/core",
-    "@dojoengine/create-burner": "file:../../dojo-packages/packages/create-burner",
-    "@dojoengine/utils": "0.3.4",
-    "@dojoengine/torii-client": "0.3.4",
+    "@dojoengine/core": "0.3.5",
+    "@dojoengine/create-burner": "0.3.5",
+    "@dojoengine/utils": "0.3.5",
+    "@dojoengine/torii-client": "0.3.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@latticexyz/recs": "2.0.0-next.9",

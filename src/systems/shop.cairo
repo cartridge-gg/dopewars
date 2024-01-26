@@ -30,7 +30,6 @@ mod shop {
     use starknet::get_contract_address;
 
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::location::{Location, LocationEnum};
     use rollyourown::models::game::{Game};
     use rollyourown::models::item::{Item, ItemTrait, ItemEnum};
     use rollyourown::utils::settings::{

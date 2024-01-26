@@ -60,7 +60,8 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const playerId = router.query.playerId as string;
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const playerStore = usePlayerStore();
+  const { playerEntity } = playerStore;
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(undefined);
@@ -262,7 +263,7 @@ const getShareText = (playerEntity: PlayerEntity): string => {
 
 export const ProfileButtonMobile = () => {
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!account || !playerEntity) return null;
@@ -279,7 +280,7 @@ export const ProfileButtonMobile = () => {
 
 export const ProfileButton = () => {
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!account || !playerEntity) return null;
@@ -299,7 +300,7 @@ export const ProfileLink = () => {
   const gameId = router.query.gameId as string;
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
@@ -326,7 +327,7 @@ export const ProfileLinkMobile = () => {
   const gameId = router.query.gameId as string;
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {

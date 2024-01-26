@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x72be2309329356e6fd2236c76fbbe5411077b6a2a86e4dfcf110579a6b3ae12",
+      "class_hash": "0x3533613d303a70efc45bcc7286b3cbf9cacd65072782bdb6e5c20e9241d5af2",
       "abi": [
         {
           "type": "impl",
@@ -1020,11 +1020,45 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<rollyourown::config::drugs::Drugs>",
+          "name": "rollyourown::config::drugs::DrugConfig",
+          "members": [
+            {
+              "name": "drug",
+              "type": "rollyourown::config::drugs::Drugs"
+            },
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "base",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "step",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "weight",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "from_turn",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "to_turn",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::drugs::DrugConfig>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::config::drugs::Drugs>"
+              "type": "@core::array::Array::<rollyourown::config::drugs::DrugConfig>"
             }
           ]
         },
@@ -1032,6 +1066,10 @@
           "type": "enum",
           "name": "rollyourown::config::locations::Locations",
           "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
             {
               "name": "Queens",
               "type": "()"
@@ -1154,7 +1192,7 @@
           "members": [
             {
               "name": "drugs",
-              "type": "core::array::Span::<rollyourown::config::drugs::Drugs>"
+              "type": "core::array::Span::<rollyourown::config::drugs::DrugConfig>"
             },
             {
               "name": "locations",
@@ -1187,7 +1225,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<rollyourown::config::drugs::Drugs>"
+                  "type": "core::array::Span::<rollyourown::config::drugs::DrugConfig>"
                 }
               ],
               "state_mutability": "view"
@@ -1294,7 +1332,7 @@
     {
       "name": "rollyourown::systems::decide::decide",
       "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
-      "class_hash": "0x2da91d94072079f701a316293388016cc4f328667776cdb28807108890e97e5",
+      "class_hash": "0x7929ccd76cf73bf56a70fd7ed8061a211dc91802b24cda2629d08c869f48657",
       "abi": [
         {
           "type": "impl",
@@ -1624,7 +1662,7 @@
     {
       "name": "rollyourown::systems::lobby::lobby",
       "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
-      "class_hash": "0x6d533c7a78cd5b1bb9d20d5fb1208fac4d048fd18876b2d4945774ea3091d9a",
+      "class_hash": "0x440dac5a974965d101d912dbdb2d9c29794ec075611798728d27b1d7c604ac4",
       "abi": [
         {
           "type": "impl",
@@ -1989,7 +2027,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x75cf12210843a15bdbeb5e99731cb58416349b8631e0a608b5b7e15f06d2fde",
+      "class_hash": "0x417a2559951d881f7a2b4fe77ffdc77d7e265157778d282734d836450244bfe",
       "abi": [
         {
           "type": "impl",
@@ -2320,7 +2358,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0x78ac5d535890562a24c97f5403ed9028c9fbdfa06212dddf63902a13dfadb16",
+      "class_hash": "0x52aee54dc321c85022271d75b5af5da030d769deb44f3308f8ed61de7f8d3d9",
       "abi": [
         {
           "type": "impl",
@@ -2361,7 +2399,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::location::LocationEnum",
+          "name": "rollyourown::config::locations::Locations",
           "variants": [
             {
               "name": "Home",
@@ -2395,7 +2433,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::drug::DrugEnum",
+          "name": "rollyourown::config::drugs::Drugs",
           "variants": [
             {
               "name": "Ludes",
@@ -2437,11 +2475,11 @@
                 },
                 {
                   "name": "location_id",
-                  "type": "rollyourown::models::location::LocationEnum"
+                  "type": "rollyourown::config::locations::Locations"
                 },
                 {
                   "name": "drug_id",
-                  "type": "rollyourown::models::drug::DrugEnum"
+                  "type": "rollyourown::config::drugs::Drugs"
                 },
                 {
                   "name": "quantity",
@@ -2461,11 +2499,11 @@
                 },
                 {
                   "name": "location_id",
-                  "type": "rollyourown::models::location::LocationEnum"
+                  "type": "rollyourown::config::locations::Locations"
                 },
                 {
                   "name": "drug_id",
-                  "type": "rollyourown::models::drug::DrugEnum"
+                  "type": "rollyourown::config::drugs::Drugs"
                 },
                 {
                   "name": "quantity",
@@ -2552,7 +2590,7 @@
             },
             {
               "name": "drug_id",
-              "type": "rollyourown::models::drug::DrugEnum",
+              "type": "rollyourown::config::drugs::Drugs",
               "kind": "data"
             },
             {
@@ -2584,7 +2622,7 @@
             },
             {
               "name": "drug_id",
-              "type": "rollyourown::models::drug::DrugEnum",
+              "type": "rollyourown::config::drugs::Drugs",
               "kind": "data"
             },
             {
@@ -2629,7 +2667,7 @@
     {
       "name": "rollyourown::systems::travel::travel",
       "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
-      "class_hash": "0x5e8546f51f7f7a800d0680e5dd629782394fec70528c8721faed408b8c43f8b",
+      "class_hash": "0x5c74d771bc0966c392e4952c201f9a746bb16127d2fef305611e358626141c8",
       "abi": [
         {
           "type": "impl",
@@ -2670,7 +2708,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::location::LocationEnum",
+          "name": "rollyourown::config::locations::Locations",
           "variants": [
             {
               "name": "Home",
@@ -2730,7 +2768,7 @@
                 },
                 {
                   "name": "next_location_id",
-                  "type": "rollyourown::models::location::LocationEnum"
+                  "type": "rollyourown::config::locations::Locations"
                 }
               ],
               "outputs": [
@@ -2834,12 +2872,12 @@
             },
             {
               "name": "from_location",
-              "type": "rollyourown::models::location::LocationEnum",
+              "type": "rollyourown::config::locations::Locations",
               "kind": "data"
             },
             {
               "name": "to_location",
-              "type": "rollyourown::models::location::LocationEnum",
+              "type": "rollyourown::config::locations::Locations",
               "kind": "data"
             }
           ]
@@ -2900,7 +2938,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::drug::DrugEnum",
+          "name": "rollyourown::config::drugs::Drugs",
           "variants": [
             {
               "name": "Ludes",
@@ -2940,12 +2978,12 @@
             },
             {
               "name": "location_id",
-              "type": "rollyourown::models::location::LocationEnum",
+              "type": "rollyourown::config::locations::Locations",
               "kind": "data"
             },
             {
               "name": "drug_id",
-              "type": "rollyourown::models::drug::DrugEnum",
+              "type": "rollyourown::config::drugs::Drugs",
               "kind": "data"
             },
             {
@@ -3026,7 +3064,7 @@
         },
         {
           "name": "drug_id",
-          "type": "DrugEnum",
+          "type": "Drugs",
           "key": true
         },
         {
@@ -3035,7 +3073,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x4392812ea3d896d2f269eda722d9746d01fa58c947b8cc6ef02e691bf03b345",
+      "class_hash": "0xd538f5c725ffb8b92c8a6644bcdd0c0b1b867d861c3dc55a72f6450731eb11",
       "abi": [
         {
           "type": "function",
@@ -4173,12 +4211,12 @@
         },
         {
           "name": "location_id",
-          "type": "LocationEnum",
+          "type": "Locations",
           "key": false
         },
         {
           "name": "next_location_id",
-          "type": "LocationEnum",
+          "type": "Locations",
           "key": false
         },
         {
@@ -4237,7 +4275,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x6aaea0bc51a85dad7f2575a69abcad4a0a005e7e4579ef606edfa8d7d7e43b0",
+      "class_hash": "0x61ba5071bc982c1bf40889773c69279d6e9fb38dd5ddd970c44ecb7f6a89ef6",
       "abi": [
         {
           "type": "function",

@@ -1,6 +1,13 @@
 use rollyourown::traits::{Enumerable};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
+// // use when available
+// impl ItemSlotBitSize of core::num::traits::BitSize<ItemSlot> {
+//     fn bits() -> usize {
+//         2
+//     }
+// }
+
 #[derive(Copy, Drop, Serde)]
 struct ItemConfig {
     name: bytes31,

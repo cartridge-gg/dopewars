@@ -1,11 +1,11 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::models::location::LocationEnum;
+use rollyourown::config::locations::Locations;
 
 
 #[starknet::interface]
 trait ITravel<TContractState> {
-    fn travel(self: @TContractState, game_id: u32, next_location_id: LocationEnum) -> bool;
+    fn travel(self: @TContractState, game_id: u32, next_location_id: Locations) -> bool;
     fn end_game(self: @TContractState, game_id: u32);
 }
 
@@ -14,11 +14,16 @@ mod travel {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::models::game::{Game};
-    use rollyourown::models::location::{Location, LocationTrait, LocationEnum};
+    use rollyourown::models::game::Game;
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::drug::{Drug, DrugTrait, DrugEnum};
+    use rollyourown::models::drug::Drug;
     use rollyourown::models::encounter::{Encounter, EncounterType};
+
+    use rollyourown::config::{
+        drugs::Drugs,
+        locations::{Locations}
+    };
+
 
     use rollyourown::utils::settings::{
         RiskSettings, RiskSettingsImpl, DecideSettings, DecideSettingsImpl, EncounterSettings,
@@ -50,8 +55,8 @@ mod travel {
         #[key]
         player_id: ContractAddress,
         turn: u32,
-        from_location: LocationEnum,
-        to_location: LocationEnum,
+        from_location: Locations,
+        to_location: Locations,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -76,8 +81,8 @@ mod travel {
     #[derive(Drop, starknet::Event)]
     struct MarketEvent {
         game_id: u32,
-        location_id: LocationEnum,
-        drug_id: DrugEnum,
+        location_id: Locations,
+        drug_id: Drugs,
         increase: bool,
     }
 
@@ -87,7 +92,7 @@ mod travel {
         // 2. Determine if a random travel event occurs and apply it if necessary.
         // 3. Update the players location to the next_location_id.
         // 4. Update the new locations supply based on random events.
-        fn travel(self: @ContractState, game_id: u32, next_location_id: LocationEnum) -> bool {
+        fn travel(self: @ContractState, game_id: u32, next_location_id: Locations) -> bool {
             let world = self.world();
             let game = get!(world, game_id, Game);
             //assert(game.tick(), 'game cannot progress');
@@ -96,7 +101,7 @@ mod travel {
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);
 
             assert(player.can_continue(), 'player cannot travel');
-            assert(next_location_id != LocationEnum::Home, 'cannot travel to Home');
+            assert(next_location_id != Locations::Home, 'cannot travel to Home');
             assert(player.location_id != next_location_id, 'already at location');
 
             let mut randomizer = RandomImpl::new(world);
@@ -153,7 +158,7 @@ mod travel {
                     },
                     Option::None => {}
                 }
-            } 
+            }
 
             on_turn_end(world, ref randomizer, @game, ref player);
 
@@ -166,12 +171,11 @@ mod travel {
 
             let mut player: Player = get!(world, (game_id, player_id).into(), Player);
             assert(player.game_over == false, 'already game_over');
-            
+
             ryo::game_over(self.world(), ref player);
 
             set!(world, (player));
         }
-
     }
 }
 
@@ -248,7 +252,6 @@ fn on_turn_end(
                 ]
             );
     }
-
 
     let mut market = MarketImpl::get(world, *game.game_id, player.player_id);
     market.market_variations(world, ref randomizer);

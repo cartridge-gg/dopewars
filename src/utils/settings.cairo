@@ -1,7 +1,8 @@
 use rollyourown::models::game::GameMode;
-use rollyourown::models::drug::DrugEnum;
 use rollyourown::models::item::ItemEnum;
 use rollyourown::models::player::Player;
+
+use rollyourown::config::drugs::Drugs;
 
 
 #[derive(Copy, Drop, Serde)]
@@ -88,7 +89,7 @@ trait SettingsTrait<T> {
 }
 
 trait DrugSettingsTrait<T> {
-    fn get(game_mode: GameMode, drug_id: DrugEnum) -> T;
+    fn get(game_mode: GameMode, drug_id: Drugs) -> T;
 }
 
 trait PlayerSettingsTrait<T> {
@@ -282,7 +283,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 //
 
 impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
-    fn get(game_mode: GameMode, drug_id: DrugEnum) -> PriceSettings {
+    fn get(game_mode: GameMode, drug_id: Drugs) -> PriceSettings {
         match game_mode {
             GameMode::Test => { pricing_notme(drug_id) },
             GameMode::Unlimited => { pricing_notme(drug_id) },
@@ -291,9 +292,9 @@ impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
 }
 
 
-fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
+fn pricing_notme(drug_id: Drugs) -> PriceSettings {
     match drug_id {
-        DrugEnum::Ludes => {
+        Drugs::Ludes => {
             PriceSettings {
                 min_price: 30 ,
                 max_price: 140 ,
@@ -301,7 +302,7 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
                 max_qty: 3600,
             }
         },
-        DrugEnum::Speed => {
+        Drugs::Speed => {
             PriceSettings {
                 min_price: 120 ,
                 max_price: 480 ,
@@ -309,7 +310,7 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
                 max_qty: 3000,
             }
         },
-        DrugEnum::Weed => {
+        Drugs::Weed => {
             PriceSettings {
                 min_price: 420 ,
                 max_price: 1600 ,
@@ -317,7 +318,7 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
                 max_qty: 2600,
             }
         },
-        DrugEnum::Acid => {
+        Drugs::Acid => {
             PriceSettings {
                 min_price: 1200 ,
                 max_price: 4000 ,
@@ -325,7 +326,7 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
                 max_qty: 2400,
             }
         },
-        DrugEnum::Heroin => {
+        Drugs::Heroin => {
             PriceSettings {
                 min_price: 3800 ,
                 max_price: 10500 ,
@@ -333,7 +334,7 @@ fn pricing_notme(drug_id: DrugEnum) -> PriceSettings {
                 max_qty: 2200,
             }
         },
-        DrugEnum::Cocaine => {
+        Drugs::Cocaine => {
             PriceSettings {
                 min_price: 8800 ,
                 max_price: 20500 ,

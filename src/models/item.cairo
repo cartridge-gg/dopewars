@@ -48,7 +48,7 @@ impl ItemEnumIntoU32 of Into<ItemEnum, u32> {
 }
 
 
-impl LocationEnumIntrospectionImpl of Introspect<ItemEnum> {
+impl LocationsIntrospectionImpl of Introspect<ItemEnum> {
     #[inline(always)]
     fn size() -> usize {
         1

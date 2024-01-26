@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-use rollyourown::models::location::LocationEnum;
+use rollyourown::config::locations::Locations;
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum Action {
@@ -28,13 +28,17 @@ mod decide {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
 
-    use rollyourown::models::game::{Game};
+    use rollyourown::models::game::Game;
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
-    use rollyourown::models::drug::{Drug, DrugEnum, DrugTrait};
-    use rollyourown::models::location::{LocationEnum, LocationImpl};
+    use rollyourown::models::drug::Drug;
     use rollyourown::models::item::{Item, ItemEnum};
     use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
     use rollyourown::models::leaderboard::{Leaderboard};
+
+    use rollyourown::config::{
+        drugs::{Drugs, DrugsEnumerableImpl},
+        locations::{Locations, LocationsRandomizableImpl}
+    };
 
     use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
     use rollyourown::utils::settings::{
@@ -234,7 +238,7 @@ mod decide {
                 player.status = PlayerStatus::Normal;
 
                 if action == Action::Run {
-                    player.next_location_id = LocationImpl::random(ref randomizer);
+                    player.next_location_id = LocationsRandomizableImpl::random(ref randomizer);
                 }
 
                 on_turn_end(world, ref randomizer, @game, ref player);
@@ -251,7 +255,7 @@ mod decide {
             self: @ContractState, game_id: u32, player_id: ContractAddress, percentage: usize
         ) -> usize {
             let world = self.world();
-            let mut drugs = DrugTrait::all();
+            let mut drugs = DrugsEnumerableImpl::all();
             let mut total_drug_loss = 0;
             loop {
                 match drugs.pop_front() {
