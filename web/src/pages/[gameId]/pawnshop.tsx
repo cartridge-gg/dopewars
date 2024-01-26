@@ -30,7 +30,7 @@ import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } 
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 import { Inventory } from "@/components/Inventory";
 import { MarketEventData, displayMarketEvents } from "@/dojo/events";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export default function PawnShop() {
   const router = useRouter();

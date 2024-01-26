@@ -28,7 +28,8 @@ import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from
 import { motion } from "framer-motion";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { DrugMarket } from "@/dojo/types";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useConfigStore } from "@/dojo/hooks/useConfigStore";
 
 export default function Location() {
   const router = useRouter();
@@ -36,22 +37,21 @@ export default function Location() {
   const locationId = getLocationBySlug(router.query.locationSlug as string)?.id || "";
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
+  const { config } = useConfigStore()
 
-  const [prices, setPrices] = useState<DrugMarket[]>([])
+  const [prices, setPrices] = useState<DrugMarket[]>([]);
   useEffect(() => {
-    if(playerEntity && playerEntity.markets){
-      setPrices(playerEntity.markets.get(locationId) || [])
+    if (playerEntity && playerEntity.markets) {
+      setPrices(playerEntity.markets.get(locationId) || []);
     }
-  }, [locationId, playerEntity, playerEntity?.markets])
+  }, [locationId, playerEntity, playerEntity?.markets]);
 
   const { endGame, isPending } = useSystems();
-
 
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-
     if (playerEntity) {
       // check if player at right location
       if (locationId !== playerEntity.locationId) {
@@ -82,7 +82,7 @@ export default function Location() {
         <Footer>
           <Button
             w={["full", "auto"]}
-            px={["auto","20px"]}
+            px={["auto", "20px"]}
             isLoading={isPending}
             onClick={async () => {
               if (isLastDay) {
@@ -105,7 +105,6 @@ export default function Location() {
       <VStack w="full" align="flex-start" gap="10px">
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
           {sortDrugMarkets(prices).map((drug, index) => {
-
             const drugInfo = getDrugById(drug.id)!;
             const canBuy = drug.price <= playerEntity.cash && playerEntity.drugCount < playerEntity.getTransport();
             const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);

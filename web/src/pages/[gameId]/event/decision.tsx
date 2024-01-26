@@ -19,7 +19,7 @@ import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { Encounter } from "@/generated/graphql";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 type CombatLog = {
   text: string;

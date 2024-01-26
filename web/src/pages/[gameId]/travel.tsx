@@ -37,7 +37,7 @@ import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/e
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { Footer } from "@/components/Footer";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 interface MarketPriceInfo {
   id: string;

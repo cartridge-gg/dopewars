@@ -17,7 +17,7 @@ import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
 import DayIndicator from "./player/DayIndicator";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export interface HeaderProps {
   back?: boolean;

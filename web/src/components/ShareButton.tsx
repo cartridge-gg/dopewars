@@ -5,7 +5,7 @@ import { Twitter } from "./icons";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatCash } from "@/utils/ui";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   const { account } = useDojoContext();

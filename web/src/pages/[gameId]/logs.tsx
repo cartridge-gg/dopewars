@@ -37,7 +37,7 @@ import {
 } from "@/dojo/events";
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import { Profile } from "@/components/ProfileButton";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 type LogByDay = {
   day: number;

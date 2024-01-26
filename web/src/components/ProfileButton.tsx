@@ -39,7 +39,7 @@ import ShareButton from "./ShareButton";
 import { useRouter } from "next/router";
 import { Glock } from "./icons/items";
 import { useToast } from "@/hooks/toast";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (

@@ -9,7 +9,7 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
 import { Bag } from "./icons";
 import { Ring } from "./icons/Ring";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();

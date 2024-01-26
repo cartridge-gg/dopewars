@@ -1,16 +1,18 @@
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
-import { ReactNode, createContext, useContext, useMemo } from "react";
+import { ReactNode, createContext, useContext, useMemo, useRef } from "react";
 import { Account, Contract, RpcProvider, TypedContractV2 } from "starknet";
 import { SetupResult } from "../setup/setup";
 import { useConfigStore, ConfigStore } from "@/hooks/config";
 import { getContractByName } from "@dojoengine/core";
 import { configAbi } from "./configAbi";
+import { PlayerStore, createPlayerStore } from "../stores/player";
+import { createConfigStore } from "../stores/config";
 
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
   account: Account | null;
   burner: BurnerAccount;
-  //   playerStore: PlayerStore;
+  playerStore: PlayerStore;
   //   configStore: ConfigStore;
 }
 
@@ -46,20 +48,21 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
       }),
     });
 
-  // const load = async () => {
-  //   const contractInfos = manifest.contracts.find((i) => i.name === "rollyourown::config::config::config")!;
-  //   const contract = new Contract(
-  //     configAbi,
-  //     contractInfos.address,
-  //     rpcProvider,
-  //   ).typedv2(configAbi);
-  //   // const contractTyped = contract
-  //   const res = await contract.get_config()
-  //   // value.dojoProvider.callContract("config", "get_config", []).then((res) => {
+  const playerStoreRef = useRef<PlayerStore>();
+  if (!playerStoreRef.current) {
+    playerStoreRef.current = createPlayerStore({
+      client: value.graphqlClient,
+      wsClient: value.graphqlWsClient,
+    })
+  }
 
-  //   console.log(res);
-  // };
-  // load();
+  const configStoreRef = useRef<ConfigStore>();
+  if (!configStoreRef.current) {
+    configStoreRef.current = createConfigStore({
+      dojoProvider: value.dojoProvider,
+      manifest: value.config.manifest
+    })
+  }
 
   return (
     <DojoContext.Provider
@@ -78,6 +81,8 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
           applyFromClipboard,
         },
         account,
+        playerStore: playerStoreRef.current,
+        configStore: configStoreRef.current,
       }}
     >
       {children}

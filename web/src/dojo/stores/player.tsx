@@ -20,27 +20,27 @@ import {
 import { isUint16Array } from "util/types";
 import { useRef, createContext, useContext } from "react";
 
-export const PlayerContext = createContext<PlayerStore | null>(null);
+// export const PlayerContext = createContext<PlayerStore | null>(null);
 
-///////////////////////////////////////
+// ///////////////////////////////////////
 
-type PlayerStoreProviderProps = React.PropsWithChildren<BearProps>;
+// type PlayerStoreProviderProps = React.PropsWithChildren<BearProps>;
 
-export const PlayerStoreProvider = ({ children, ...props }: PlayerStoreProviderProps) => {
-  const storeRef = useRef<PlayerStore>();
-  if (!storeRef.current) {
-    storeRef.current = createPlayerStore(props);
-  }
-  return <PlayerContext.Provider value={storeRef.current}>{children}</PlayerContext.Provider>;
-};
+// export const PlayerStoreProvider = ({ children, ...props }: PlayerStoreProviderProps) => {
+//   const storeRef = useRef<PlayerStore>();
+//   if (!storeRef.current) {
+//     storeRef.current = createPlayerStore(props);
+//   }
+//   return <PlayerContext.Provider value={storeRef.current}>{children}</PlayerContext.Provider>;
+// };
 
-///////////////////////////////////////
+// ///////////////////////////////////////
 
-export const usePlayerStore = () : PlayerStore => {
-  const store = useContext(PlayerContext);
-  if (!store) throw new Error("Missing PlayerContext.Provider in the tree");
-  return useStore<PlayerStore>(store);
-};
+// export const usePlayerStore = () : PlayerStore => {
+//   const store = useContext(PlayerContext);
+//   if (!store) throw new Error("Missing PlayerContext.Provider in the tree");
+//   return useStore<PlayerStore>(store);
+// };
 
 ///////////////////////////////////////
 
@@ -48,8 +48,8 @@ export interface PlayerStore {
   client: GraphQLClient;
   wsClient: Client;
   id: string | null;
-  unsubscribers: Array<() => void>;
   playerEntity: PlayerEntity | null;
+  handles: Array<() => void>;
   initPlayerEntity: (gameId: string, playerId: string) => void;
   subscribe: (gameId: string, playerId: string) => void;
   executeQuery: (gameId: string, playerId: string) => void;
@@ -67,29 +67,29 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
     wsClient,
     id: null,
     playerEntity: null,
-    unsubscribers: [],
+    handles: [],
     initPlayerEntity: (gameId: string, playerId: string) => {
       if (get().id === null) {
         get().subscribe(gameId, playerId);
       }
     },
     reset: () => {
-      for (let unsubscribe of get().unsubscribers) {
+      for (let unsubscribe of get().handles) {
         unsubscribe();
       }
-      const wsClient = get().wsClient;
-      wsClient && wsClient.dispose();
-      set({ id: null, playerEntity: null, unsubscribers: [] });
+      // const wsClient = get().wsClient;
+      // wsClient && wsClient.dispose();
+      set({ id: null, playerEntity: null, handles: [] });
     },
     subscribe: async (gameId: string, playerId: string) => {
-      const { wsClient, unsubscribers } = get();
+      const { wsClient, handles } = get();
       const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
 
       //load playerEntity
       await get().executeQuery(gameId, playerId);
 
       //subscribe to playerEntity changes / Markets changes
-      unsubscribers.push(
+      handles.push(
         wsClient.subscribe(
           {
             query: PlayerEntitySubscriptionDocument,
@@ -111,7 +111,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
       for (let drugId of [0, 1, 2, 3, 4, 5]) {
         const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId), BigInt(drugId)]);
 
-        unsubscribers.push(
+        handles.push(
           wsClient.subscribe(
             {
               query: PlayerEntityRelatedDataSubscriptionDocument,
@@ -130,7 +130,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
         );
       }
       
-      set({ id: id, unsubscribers: unsubscribers });
+      set({ id: id, handles: handles });
     },
     executeQuery: async (gameId: string, playerId: string) => {
       const data = (await client.request(PlayerEntityDocument, {
@@ -150,7 +150,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
 
 const onPlayerEntityData = ({  set, data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
-  // update player
+
   let playerUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "Player") as Player;
   if (playerUpdate) {
     set((state) => ({
@@ -158,15 +158,12 @@ const onPlayerEntityData = ({  set, data }: { data: World__Subscription }) => {
     }));
   }
 
-  // update markets
   let marketUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "MarketPacked") as MarketPacked;
   if (marketUpdate && marketUpdate.packed) {
     set((state) => ({
       playerEntity: state.playerEntity?.updateMarkets(marketUpdate),
     }));
   }
-
-  //console.log("updated : Player");
 };
 
 const onPlayerEntityRelatedData = ({  set, data }: { data: World__Subscription }) => {
@@ -177,21 +174,18 @@ const onPlayerEntityRelatedData = ({  set, data }: { data: World__Subscription }
       set((state) => ({
         playerEntity: state.playerEntity?.updateDrug(model as unknown as Drug),
       }));
-      // console.log(`updated : Drug`);
     }
 
     if (model && model.__typename === "Item") {
       set((state) => ({
         playerEntity: state.playerEntity?.updateItem(model as unknown as Item),
       }));
-      // console.log(`updated : Item`);
     }
 
     if (model && model.__typename === "Encounter") {
       set((state) => ({
         playerEntity: state.playerEntity?.updateEncounter(model as unknown as Encounter),
       }));
-      // console.log(`updated : Encounter`);
     }
   }
 };

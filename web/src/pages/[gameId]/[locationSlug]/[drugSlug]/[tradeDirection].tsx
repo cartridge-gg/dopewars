@@ -15,7 +15,7 @@ import { useToast } from "@/hooks/toast";
 import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo, DrugMarket, TradeDirection } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export default function Market() {
   const router = useRouter();

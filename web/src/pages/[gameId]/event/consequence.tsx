@@ -11,7 +11,7 @@ import { Outcome } from "@/dojo/types";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useEffect, useState } from "react";
 import { formatCash } from "@/utils/ui";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export default function Consequence() {
   const router = useRouter();

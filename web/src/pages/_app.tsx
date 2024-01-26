@@ -14,7 +14,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { SetupResult, setup } from "@/dojo/setup/setup";
 import { dojoConfig } from "@/dojo/setup/config";
 import RegisterEntities from "@/components/RegisterEntities";
-import { PlayerStoreProvider } from "@/hooks/player";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
@@ -39,13 +38,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
     init();
   }, []);
-
+ 
   return (
     <>
       {setupResult && (
         <QueryClientProvider client={setupResult.queryClient}>
           <DojoProvider value={setupResult}>
-            <PlayerStoreProvider client={setupResult.graphqlClient} wsClient={setupResult.graphqlWsClient}>
               <RegisterEntities />
               <ChakraProvider theme={theme}>
                 <Fonts />
@@ -60,7 +58,6 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Component {...pageProps} />
                 <Analytics />
               </ChakraProvider>
-            </PlayerStoreProvider>
           </DojoProvider>
         </QueryClientProvider>
       )}

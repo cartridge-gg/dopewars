@@ -37,7 +37,7 @@ import { genAvatarFromId } from "@/components/avatar/avatars";
 import { Avatar } from "@/components/avatar/Avatar";
 import ShareButton from "@/components/ShareButton";
 import { playSound, Sounds } from "@/hooks/sound";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export default function End() {
   const router = useRouter();

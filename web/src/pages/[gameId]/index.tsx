@@ -7,7 +7,7 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useEffect } from "react";
 import { Location, PlayerStatus } from "@/dojo/types";
 import { getLocationByType } from "@/dojo/helpers";
-import { usePlayerStore } from "@/hooks/player";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export default function Redirector() {
   const router = useRouter();
