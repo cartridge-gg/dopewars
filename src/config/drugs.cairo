@@ -1,6 +1,11 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable};
 
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
+
+use rollyourown::config::introspect::{
+    DrugsIntrospectionImpl, Bytes31IntrospectionImpl 
+};
 
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -14,10 +19,11 @@ enum Drugs {
 }
 
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct DrugConfig {
+    #[key]
     drug: Drugs,
-    name: bytes31,
+    drug_id: u8,
     base: usize,
     step: usize,
     weight: usize,
@@ -25,65 +31,24 @@ struct DrugConfig {
     to_turn: u8,
 }
 
+#[derive(Model, Copy, Drop, Serde)]
+struct DrugConfigMeta {
+    #[key]
+    drug: Drugs,
+    name: bytes31,
+}
+
+//
+//
+//
+
+
+
 #[generate_trait]
 impl DrugConfigImpl of DrugConfigTrait {
-    fn get(drug: Drugs) -> DrugConfig {
-        match drug {
-            Drugs::Ludes => DrugConfig {
-                drug: Drugs::Ludes,
-                name: 'Ludes'.try_into().unwrap(),
-                base: 18,
-                step: 1,
-                weight: 2,
-                from_turn: 0,
-                to_turn: 7
-            },
-            Drugs::Speed => DrugConfig {
-                drug: Drugs::Speed,
-                name: 'Speed'.try_into().unwrap(),
-                base: 85,
-                step: 6,
-                weight: 5,
-                from_turn: 0,
-                to_turn: 14
-            },
-            Drugs::Weed => DrugConfig {
-                drug: Drugs::Weed,
-                name: 'Weed'.try_into().unwrap(),
-                base: 420,
-                step: 23,
-                weight: 14,
-                from_turn: 0,
-                to_turn: 255
-            },
-            Drugs::Acid => DrugConfig {
-                drug: Drugs::Acid,
-                name: 'Acid'.try_into().unwrap(),
-                base: 1590,
-                step: 69,
-                weight: 30,
-                from_turn: 0,
-                to_turn: 255
-            },
-            Drugs::Heroin => DrugConfig {
-                drug: Drugs::Heroin,
-                name: 'Heroin'.try_into().unwrap(),
-                base: 5720,
-                step: 169,
-                weight: 65,
-                from_turn: 8,
-                to_turn: 255
-            },
-            Drugs::Cocaine => DrugConfig {
-                drug: Drugs::Cocaine,
-                name: 'Cocaine'.try_into().unwrap(),
-                base: 12200,
-                step: 242,
-                weight: 100,
-                from_turn: 15,
-                to_turn: 255
-            },
-        }
+    #[inline(always)]
+    fn get(world: IWorldDispatcher, drug: Drugs) -> DrugConfig {
+        get!(world, (drug), DrugConfig)
     }
 }
 
@@ -92,6 +57,7 @@ impl DrugConfigImpl of DrugConfigTrait {
 //
 
 impl DrugsEnumerableImpl of Enumerable<Drugs> {
+    #[inline(always)]
     fn all() -> Span<Drugs> {
         let mut items = array![
             Drugs::Ludes, Drugs::Speed, Drugs::Weed, Drugs::Acid, Drugs::Heroin, Drugs::Cocaine
@@ -131,41 +97,93 @@ impl DrugsIntoU8 of Into<Drugs, u8> {
 }
 
 
+//
+//
+//
 
 
-// TODO: remove when removing Drugs from model
+fn initialize_drug_config(world: IWorldDispatcher) {
+    set!(world, DrugConfigMeta { drug: Drugs::Ludes, name: 'Ludes'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Ludes,
+            drug_id: Drugs::Ludes.into(),
+            base: 18,
+            step: 1,
+            weight: 2,
+            from_turn: 0,
+            to_turn: 7
+        }
+    );
 
-use dojo::database::introspect::{
-    Enum, Member, Ty, Struct, Introspect, serialize_member, serialize_member_type
-};
-impl DrugsIntrospectionImpl of Introspect<Drugs> {
-    #[inline(always)]
-    fn size() -> usize {
-        1
-    }
+    set!(world, DrugConfigMeta { drug: Drugs::Speed, name: 'Speed'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Speed,
+            drug_id: Drugs::Speed.into(),
+            base: 85,
+            step: 6,
+            weight: 5,
+            from_turn: 0,
+            to_turn: 14
+        }
+    );
 
-    #[inline(always)]
-    fn layout(ref layout: Array<u8>) {
-        layout.append(8);
-    }
+    set!(world, DrugConfigMeta { drug: Drugs::Weed, name: 'Weed'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Weed,
+            drug_id: Drugs::Weed.into(),
+            base: 420,
+            step: 23,
+            weight: 14,
+            from_turn: 0,
+            to_turn: 255
+        }
+    );
 
-    #[inline(always)]
-    fn ty() -> Ty {
-        Ty::Enum(
-            Enum {
-                name: 'Drugs',
-                attrs: array![].span(),
-                children: array![
-                    ('Ludes', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('Speed', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('Weed', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('Acid', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('Heroin', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('Cocaine', serialize_member_type(@Ty::Tuple(array![].span()))),
-                ]
-                    .span()
-            }
-        )
-    }
+    set!(world, DrugConfigMeta { drug: Drugs::Acid, name: 'Acid'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Acid,
+            drug_id: Drugs::Acid.into(),
+            base: 1590,
+            step: 69,
+            weight: 30,
+            from_turn: 0,
+            to_turn: 255
+        }
+    );
+
+    set!(world, DrugConfigMeta { drug: Drugs::Heroin, name: 'Heroin'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Heroin,
+            drug_id: Drugs::Heroin.into(),
+            base: 5720,
+            step: 169,
+            weight: 65,
+            from_turn: 8,
+            to_turn: 255
+        }
+    );
+
+    set!(world, DrugConfigMeta { drug: Drugs::Cocaine, name: 'Cocaine'.try_into().unwrap(), });
+    set!(
+        world,
+        DrugConfig {
+            drug: Drugs::Cocaine,
+            drug_id: Drugs::Cocaine.into(),
+            base: 12200,
+            step: 242,
+            weight: 100,
+            from_turn: 15,
+            to_turn: 255
+        }
+    );
 }
-

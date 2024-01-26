@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x3533613d303a70efc45bcc7286b3cbf9cacd65072782bdb6e5c20e9241d5af2",
+      "class_hash": "0x6973679e20a19c1d1354aeb15130ff6573b3c053b052d1bade2031b4ec44580",
       "abi": [
         {
           "type": "impl",
@@ -989,268 +989,15 @@
           "interface_name": "rollyourown::config::config::IConfig"
         },
         {
-          "type": "enum",
-          "name": "rollyourown::config::drugs::Drugs",
-          "variants": [
-            {
-              "name": "Ludes",
-              "type": "()"
-            },
-            {
-              "name": "Speed",
-              "type": "()"
-            },
-            {
-              "name": "Weed",
-              "type": "()"
-            },
-            {
-              "name": "Acid",
-              "type": "()"
-            },
-            {
-              "name": "Heroin",
-              "type": "()"
-            },
-            {
-              "name": "Cocaine",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::drugs::DrugConfig",
-          "members": [
-            {
-              "name": "drug",
-              "type": "rollyourown::config::drugs::Drugs"
-            },
-            {
-              "name": "name",
-              "type": "core::bytes_31::bytes31"
-            },
-            {
-              "name": "base",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "step",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "weight",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "from_turn",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "to_turn",
-              "type": "core::integer::u8"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::config::drugs::DrugConfig>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::config::drugs::DrugConfig>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::locations::Locations",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::config::locations::Locations>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::config::locations::Locations>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::items::ItemSlot",
-          "variants": [
-            {
-              "name": "Attack",
-              "type": "()"
-            },
-            {
-              "name": "Defense",
-              "type": "()"
-            },
-            {
-              "name": "Speed",
-              "type": "()"
-            },
-            {
-              "name": "Transport",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::items::ItemLevel",
-          "variants": [
-            {
-              "name": "Level0",
-              "type": "()"
-            },
-            {
-              "name": "Level1",
-              "type": "()"
-            },
-            {
-              "name": "Level2",
-              "type": "()"
-            },
-            {
-              "name": "Level3",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::items::ItemConfig",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::bytes_31::bytes31"
-            },
-            {
-              "name": "slot",
-              "type": "rollyourown::config::items::ItemSlot"
-            },
-            {
-              "name": "level",
-              "type": "rollyourown::config::items::ItemLevel"
-            },
-            {
-              "name": "stat",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "cost",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::config::items::ItemConfig>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::config::items::ItemConfig>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::config::Config",
-          "members": [
-            {
-              "name": "drugs",
-              "type": "core::array::Span::<rollyourown::config::drugs::DrugConfig>"
-            },
-            {
-              "name": "locations",
-              "type": "core::array::Span::<rollyourown::config::locations::Locations>"
-            },
-            {
-              "name": "items",
-              "type": "core::array::Span::<rollyourown::config::items::ItemConfig>"
-            }
-          ]
-        },
-        {
           "type": "interface",
           "name": "rollyourown::config::config::IConfig",
           "items": [
             {
               "type": "function",
-              "name": "get_config",
+              "name": "initialize",
               "inputs": [],
-              "outputs": [
-                {
-                  "type": "rollyourown::config::config::Config"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_drugs",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<rollyourown::config::drugs::DrugConfig>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_locations",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<rollyourown::config::locations::Locations>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_items",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<rollyourown::config::items::ItemConfig>"
-                }
-              ],
-              "state_mutability": "view"
+              "outputs": [],
+              "state_mutability": "external"
             }
           ]
         },
@@ -1332,7 +1079,7 @@
     {
       "name": "rollyourown::systems::decide::decide",
       "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
-      "class_hash": "0x7929ccd76cf73bf56a70fd7ed8061a211dc91802b24cda2629d08c869f48657",
+      "class_hash": "0x10655072f413782fe8c76dfd07b0d054103f541d5e3e676eb870bb38ef931ec",
       "abi": [
         {
           "type": "impl",
@@ -1662,7 +1409,7 @@
     {
       "name": "rollyourown::systems::lobby::lobby",
       "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
-      "class_hash": "0x440dac5a974965d101d912dbdb2d9c29794ec075611798728d27b1d7c604ac4",
+      "class_hash": "0x5d74d126b2b0ee82bfc583326ee28000eb38905b92eeaef2eb2b34c47c7b8bf",
       "abi": [
         {
           "type": "impl",
@@ -2027,7 +1774,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x417a2559951d881f7a2b4fe77ffdc77d7e265157778d282734d836450244bfe",
+      "class_hash": "0x2af11c8eb328936ab513704ec60e366d3ab2ace89a211146676e2de438a6619",
       "abi": [
         {
           "type": "impl",
@@ -2358,7 +2105,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0x52aee54dc321c85022271d75b5af5da030d769deb44f3308f8ed61de7f8d3d9",
+      "class_hash": "0x4ff3ee451133d14549050ee828be375c7019a80d127f48d19d479ddaefdafb5",
       "abi": [
         {
           "type": "impl",
@@ -2667,7 +2414,7 @@
     {
       "name": "rollyourown::systems::travel::travel",
       "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
-      "class_hash": "0x5c74d771bc0966c392e4952c201f9a746bb16127d2fef305611e358626141c8",
+      "class_hash": "0x769b4e76691beb9a581fe81ee87cc5adaccc90e90ee8899f6cee49c78bea71b",
       "abi": [
         {
           "type": "impl",
@@ -3049,6 +2796,739 @@
     }
   ],
   "models": [
+    {
+      "name": "rollyourown::config::drugs::drug_config",
+      "members": [
+        {
+          "name": "drug",
+          "type": "Drugs",
+          "key": true
+        },
+        {
+          "name": "drug_id",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "base",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "step",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "weight",
+          "type": "usize",
+          "key": false
+        },
+        {
+          "name": "from_turn",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "to_turn",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x25fc54bbcd1202ddb63b16426175fe6f1b47841792873cb2df52ea2013fa5eb",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::drugs::drug_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::drugs::drug_config_meta",
+      "members": [
+        {
+          "name": "drug",
+          "type": "Drugs",
+          "key": true
+        },
+        {
+          "name": "name",
+          "type": "bytes31",
+          "key": false
+        }
+      ],
+      "class_hash": "0xc1d80a31add6c41febaf29a1970647fd4ed3c5f02b29cc02a452162d420c61",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::drugs::drug_config_meta::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::locations::location_config",
+      "members": [
+        {
+          "name": "location",
+          "type": "Locations",
+          "key": true
+        },
+        {
+          "name": "location_id",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0xa77c2c5119977c76c821d80c24909f8d97a1ccca75302d1cc7fcf8c2a30d68",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::locations::location_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::locations::location_config_meta",
+      "members": [
+        {
+          "name": "location",
+          "type": "Locations",
+          "key": true
+        },
+        {
+          "name": "name",
+          "type": "bytes31",
+          "key": false
+        }
+      ],
+      "class_hash": "0xebd3813e59bf97918dc8b25aa74d3f279e0a62e05e7e472ee6dce67c5eb9d6",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::locations::location_config_meta::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
     {
       "name": "rollyourown::models::drug::drug",
       "members": [

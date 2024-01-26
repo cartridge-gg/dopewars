@@ -8,10 +8,14 @@
   "possibleTypes": {
     "ModelUnion": [
       "Drug",
+      "DrugConfig",
+      "DrugConfigMeta",
       "Encounter",
       "Game",
       "Item",
       "Leaderboard",
+      "LocationConfig",
+      "LocationConfigMeta",
       "MarketPacked",
       "Player",
       "RyoMeta"

@@ -1,84 +1,29 @@
-use super::{items::{ItemConfig}, drugs::{DrugConfig}, locations::{Locations}};
-
-#[derive(Copy, Drop, Serde)]
-struct Config {
-    drugs: Span<DrugConfig>,
-    locations: Span<Locations>,
-    items: Span<ItemConfig>,
-}
-
 #[starknet::interface]
 trait IConfig<T> {
-    fn get_config(self: @T) -> Config;
-    fn get_drugs(self: @T) -> Span<DrugConfig>;
-    fn get_locations(self: @T) -> Span<Locations>;
-    fn get_items(self: @T) -> Span<ItemConfig>;
+    fn initialize(ref self: T);
+// fn update_drug_config(ref self: T);
+// fn update_drug_config_meta(ref self: T);
 }
 
-// USE MODELS or not ?
+// USE MODELS !
 #[dojo::contract]
 mod config {
-    use super::Config;
+    use rollyourown::config::{
+        drugs::initialize_drug_config,
+        locations::initialize_location_config
+    // items::initialize_item_config,
 
-    use super::super::{
-        items::{
-            ItemConfig, ItemConfigImpl, ItemSlot, ItemLevel, ItemSlotEnumerableImpl,
-            ItemLevelEnumerableImpl
-        },
-        drugs::{Drugs, DrugsEnumerableImpl, DrugConfig, DrugConfigImpl},
-        locations::{Locations, LocationsEnumerableImpl}
     };
 
     #[abi(embed_v0)]
-    impl ConfigImpl<ContractState> of super::IConfig<ContractState> {
-        fn get_config(self: @ContractState) -> Config {
-            Config {
-                drugs: self.get_drugs(), locations: self.get_locations(), items: self.get_items(),
-            }
-        }
+    impl ConfigImpl of super::IConfig<ContractState> {
+        fn initialize(ref self: ContractState) {
+            // TODO checks
 
-        fn get_drugs(self: @ContractState) -> Span<DrugConfig> {
-            let mut drugs = DrugsEnumerableImpl::all();
-            let mut items = array![];
+            initialize_drug_config(self.world());
+            initialize_location_config(self.world());
+       
 
-            loop {
-                match drugs.pop_front() {
-                    Option::Some(drug) => {
-                        let config = DrugConfigImpl::get(*drug);
-                        items.append(config);
-                    },
-                    Option::None => { break; }
-                }
-            };
-            items.span()
-        }
-
-        fn get_locations(self: @ContractState) -> Span<Locations> {
-            LocationsEnumerableImpl::all()
-        }
-
-        fn get_items(self: @ContractState) -> Span<ItemConfig> {
-            let mut slots = ItemSlotEnumerableImpl::all();
-            let mut items = array![];
-
-            loop {
-                match slots.pop_front() {
-                    Option::Some(slot) => {
-                        let mut levels = ItemLevelEnumerableImpl::all();
-                        loop {
-                            match levels.pop_front() {
-                                Option::Some(level) => {
-                                    let config = ItemConfigImpl::get(*slot, *level);
-                                    items.append(config);
-                                },
-                                Option::None => { break; }
-                            }
-                        };
-                    },
-                    Option::None => { break; }
-                }
-            };
-            items.span()
         }
     }
 }

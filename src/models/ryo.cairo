@@ -9,6 +9,7 @@ struct RyoMeta {
     id: u32,
     initialized: bool,
     leaderboard_version: u32,
+    // TODO: paused: bool 
 }
 
 #[derive(Copy, Drop)]

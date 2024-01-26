@@ -37,44 +37,22 @@ struct MarketPacked {
 //
 
 
-
-#[derive(Copy, Drop, Serde)]
-struct DrugPrice {
-    drug: Drugs,
-    config: DrugConfig,
-}
-
-//
-//
-//
-
-#[generate_trait]
-impl DrugPriceImpl of DrugPriceTrait {
-    #[inline(always)]
-    fn new(drug: Drugs) -> DrugPrice {
-        DrugPrice { drug, config: DrugConfigImpl::get(drug) }
-    }
-
-    #[inline(always)]
-    fn get_drug_price_by_tick(self: @DrugPrice, tick: usize) -> usize {
-        tick * (*self.config.step) + (*self.config.base)
-    }
-}
-
-
-//
-//
-//
-
 #[generate_trait]
 impl MarketImpl of MarketTrait {
+    #[inline(always)]
     fn new(game_id: u32, player_id: ContractAddress) -> MarketPacked {
         let packed = core::pedersen::pedersen(0, game_id.into());
         MarketPacked { game_id, player_id, packed }
     }
 
+    #[inline(always)]
     fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketPacked {
         get!(world, (game_id, player_id), (MarketPacked))
+    }
+
+    #[inline(always)]
+    fn get_drug_config(world: IWorldDispatcher, drug: Drugs) -> DrugConfig {
+        get!(world, (drug), (DrugConfig))
     }
 
     fn get_tick(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
@@ -90,29 +68,30 @@ impl MarketImpl of MarketTrait {
     }
 
 
-    fn get_drug_price(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
-        let drug_price = DrugPriceImpl::new(drug);
+    fn get_drug_price(ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs) -> usize {
+        let drug_config = MarketTrait::get_drug_config(world,drug);
         let tick = self.get_tick(location, drug);
 
-        drug_price.get_drug_price_by_tick(tick)
+        tick * drug_config.step + (drug_config.base)
     }
+   
 
     //
     //
     //
 
     fn quote_buy(
-        ref self: MarketPacked, location: Locations, drug: Drugs, quantity: usize
+        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: usize
     ) -> usize {
-        let drug_price = self.get_drug_price(location, drug);
+        let drug_price = self.get_drug_price(world,location, drug);
         let cost = drug_price * quantity;
         cost
     }
 
     fn quote_sell(
-        ref self: MarketPacked, location: Locations, drug: Drugs, quantity: usize
+        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: usize
     ) -> usize {
-        let drug_price = self.get_drug_price(location, drug);
+        let drug_price = self.get_drug_price(world,location, drug);
         let payout = drug_price * quantity;
         payout
     }

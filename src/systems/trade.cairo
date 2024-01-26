@@ -106,7 +106,7 @@ mod trade {
             // let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
             let mut market = MarketImpl::get(world, game_id, player_id);
 
-            let cost = market.quote_buy(location_id,drug_id, quantity);
+            let cost = market.quote_buy(world,location_id,drug_id, quantity);
             assert(cost.into() < player.cash, 'not enough cash');
 
             let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
@@ -154,7 +154,7 @@ mod trade {
            // let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
             let mut market = MarketImpl::get(world, game_id, player_id);
 
-            let payout = market.quote_sell(location_id,drug_id,quantity);
+            let payout = market.quote_sell(world, location_id,drug_id,quantity);
 
             // todo: calc tick shift
             let tick = market.get_tick(location_id,drug_id);

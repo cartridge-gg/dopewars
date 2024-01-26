@@ -18,6 +18,7 @@ export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | s
 export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::trade::trade" ).address')
 export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::shop::shop" ).address')
 export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::ryo::ryo" ).address')
+export CONFIG_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::config::config::config" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE
@@ -30,6 +31,7 @@ echo decide: $DECIDE_ADDRESS
 echo trade : $TRADE_ADDRESS
 echo shop : $SHOP_ADDRESS
 echo ryo : $RYO_ADDRESS
+echo config : $CONFIG_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
@@ -39,6 +41,7 @@ DECIDE_COMPONENTS=("Player" "Drug" "Encounter" "Leaderboard" "RyoMeta" "MarketPa
 TRADE_COMPONENTS=("Drug" "Player" "MarketPacked")
 SHOP_COMPONENTS=("Player" "Item" "MarketPacked")
 RYO_COMPONENTS=("RyoMeta" "Leaderboard")
+CONFIG_COMPONENTS=("DrugConfig" "DrugConfigMeta" "LocationConfig" "LocationConfigMeta" "ItemConfig" "ItemConfigMeta")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS 
@@ -70,9 +73,21 @@ for component in ${RYO_COMPONENTS[@]}; do
     sleep $TX_SLEEP
 done
 
+for component in ${CONFIG_COMPONENTS[@]}; do
+    sozo -P $PROFILE auth writer $component $CONFIG_ADDRESS --world $WORLD_ADDRESS 
+    sleep $TX_SLEEP
+done
+
+
+
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
 sozo -P $PROFILE execute $RYO_ADDRESS initialize
-echo "Initialized!"
+echo "Initialized RYO!"
+sleep $TX_SLEEP
+
+sozo -P $PROFILE execute $CONFIG_ADDRESS initialize
+echo "Initialized CONFIG!"
+sleep $TX_SLEEP
 

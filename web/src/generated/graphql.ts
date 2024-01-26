@@ -33,6 +33,133 @@ export type Drug = {
   quantity?: Maybe<Scalars['usize']>;
 };
 
+export type DrugConfig = {
+  __typename?: 'DrugConfig';
+  base?: Maybe<Scalars['usize']>;
+  drug?: Maybe<Scalars['Enum']>;
+  drug_id?: Maybe<Scalars['u8']>;
+  entity?: Maybe<World__Entity>;
+  from_turn?: Maybe<Scalars['u8']>;
+  step?: Maybe<Scalars['usize']>;
+  to_turn?: Maybe<Scalars['u8']>;
+  weight?: Maybe<Scalars['usize']>;
+};
+
+export type DrugConfigConnection = {
+  __typename?: 'DrugConfigConnection';
+  edges?: Maybe<Array<Maybe<DrugConfigEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type DrugConfigEdge = {
+  __typename?: 'DrugConfigEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<DrugConfig>;
+};
+
+export type DrugConfigMeta = {
+  __typename?: 'DrugConfigMeta';
+  drug?: Maybe<Scalars['Enum']>;
+  entity?: Maybe<World__Entity>;
+  name?: Maybe<Scalars['felt252']>;
+};
+
+export type DrugConfigMetaConnection = {
+  __typename?: 'DrugConfigMetaConnection';
+  edges?: Maybe<Array<Maybe<DrugConfigMetaEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type DrugConfigMetaEdge = {
+  __typename?: 'DrugConfigMetaEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<DrugConfigMeta>;
+};
+
+export type DrugConfigMetaOrder = {
+  direction: OrderDirection;
+  field: DrugConfigMetaOrderField;
+};
+
+export enum DrugConfigMetaOrderField {
+  Drug = 'DRUG',
+  Name = 'NAME'
+}
+
+export type DrugConfigMetaWhereInput = {
+  drug?: InputMaybe<Scalars['Enum']>;
+  name?: InputMaybe<Scalars['felt252']>;
+  nameEQ?: InputMaybe<Scalars['felt252']>;
+  nameGT?: InputMaybe<Scalars['felt252']>;
+  nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameLT?: InputMaybe<Scalars['felt252']>;
+  nameLTE?: InputMaybe<Scalars['felt252']>;
+  nameNEQ?: InputMaybe<Scalars['felt252']>;
+};
+
+export type DrugConfigOrder = {
+  direction: OrderDirection;
+  field: DrugConfigOrderField;
+};
+
+export enum DrugConfigOrderField {
+  Base = 'BASE',
+  Drug = 'DRUG',
+  DrugId = 'DRUG_ID',
+  FromTurn = 'FROM_TURN',
+  Step = 'STEP',
+  ToTurn = 'TO_TURN',
+  Weight = 'WEIGHT'
+}
+
+export type DrugConfigWhereInput = {
+  base?: InputMaybe<Scalars['usize']>;
+  baseEQ?: InputMaybe<Scalars['usize']>;
+  baseGT?: InputMaybe<Scalars['usize']>;
+  baseGTE?: InputMaybe<Scalars['usize']>;
+  baseLT?: InputMaybe<Scalars['usize']>;
+  baseLTE?: InputMaybe<Scalars['usize']>;
+  baseNEQ?: InputMaybe<Scalars['usize']>;
+  drug?: InputMaybe<Scalars['Enum']>;
+  drug_id?: InputMaybe<Scalars['u8']>;
+  drug_idEQ?: InputMaybe<Scalars['u8']>;
+  drug_idGT?: InputMaybe<Scalars['u8']>;
+  drug_idGTE?: InputMaybe<Scalars['u8']>;
+  drug_idLT?: InputMaybe<Scalars['u8']>;
+  drug_idLTE?: InputMaybe<Scalars['u8']>;
+  drug_idNEQ?: InputMaybe<Scalars['u8']>;
+  from_turn?: InputMaybe<Scalars['u8']>;
+  from_turnEQ?: InputMaybe<Scalars['u8']>;
+  from_turnGT?: InputMaybe<Scalars['u8']>;
+  from_turnGTE?: InputMaybe<Scalars['u8']>;
+  from_turnLT?: InputMaybe<Scalars['u8']>;
+  from_turnLTE?: InputMaybe<Scalars['u8']>;
+  from_turnNEQ?: InputMaybe<Scalars['u8']>;
+  step?: InputMaybe<Scalars['usize']>;
+  stepEQ?: InputMaybe<Scalars['usize']>;
+  stepGT?: InputMaybe<Scalars['usize']>;
+  stepGTE?: InputMaybe<Scalars['usize']>;
+  stepLT?: InputMaybe<Scalars['usize']>;
+  stepLTE?: InputMaybe<Scalars['usize']>;
+  stepNEQ?: InputMaybe<Scalars['usize']>;
+  to_turn?: InputMaybe<Scalars['u8']>;
+  to_turnEQ?: InputMaybe<Scalars['u8']>;
+  to_turnGT?: InputMaybe<Scalars['u8']>;
+  to_turnGTE?: InputMaybe<Scalars['u8']>;
+  to_turnLT?: InputMaybe<Scalars['u8']>;
+  to_turnLTE?: InputMaybe<Scalars['u8']>;
+  to_turnNEQ?: InputMaybe<Scalars['u8']>;
+  weight?: InputMaybe<Scalars['usize']>;
+  weightEQ?: InputMaybe<Scalars['usize']>;
+  weightGT?: InputMaybe<Scalars['usize']>;
+  weightGTE?: InputMaybe<Scalars['usize']>;
+  weightLT?: InputMaybe<Scalars['usize']>;
+  weightLTE?: InputMaybe<Scalars['usize']>;
+  weightNEQ?: InputMaybe<Scalars['usize']>;
+};
+
 export type DrugConnection = {
   __typename?: 'DrugConnection';
   edges?: Maybe<Array<Maybe<DrugEdge>>>;
@@ -352,6 +479,88 @@ export type LeaderboardWhereInput = {
   versionNEQ?: InputMaybe<Scalars['u32']>;
 };
 
+export type LocationConfig = {
+  __typename?: 'LocationConfig';
+  entity?: Maybe<World__Entity>;
+  location?: Maybe<Scalars['Enum']>;
+  location_id?: Maybe<Scalars['u8']>;
+};
+
+export type LocationConfigConnection = {
+  __typename?: 'LocationConfigConnection';
+  edges?: Maybe<Array<Maybe<LocationConfigEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type LocationConfigEdge = {
+  __typename?: 'LocationConfigEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<LocationConfig>;
+};
+
+export type LocationConfigMeta = {
+  __typename?: 'LocationConfigMeta';
+  entity?: Maybe<World__Entity>;
+  location?: Maybe<Scalars['Enum']>;
+  name?: Maybe<Scalars['felt252']>;
+};
+
+export type LocationConfigMetaConnection = {
+  __typename?: 'LocationConfigMetaConnection';
+  edges?: Maybe<Array<Maybe<LocationConfigMetaEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type LocationConfigMetaEdge = {
+  __typename?: 'LocationConfigMetaEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<LocationConfigMeta>;
+};
+
+export type LocationConfigMetaOrder = {
+  direction: OrderDirection;
+  field: LocationConfigMetaOrderField;
+};
+
+export enum LocationConfigMetaOrderField {
+  Location = 'LOCATION',
+  Name = 'NAME'
+}
+
+export type LocationConfigMetaWhereInput = {
+  location?: InputMaybe<Scalars['Enum']>;
+  name?: InputMaybe<Scalars['felt252']>;
+  nameEQ?: InputMaybe<Scalars['felt252']>;
+  nameGT?: InputMaybe<Scalars['felt252']>;
+  nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameLT?: InputMaybe<Scalars['felt252']>;
+  nameLTE?: InputMaybe<Scalars['felt252']>;
+  nameNEQ?: InputMaybe<Scalars['felt252']>;
+};
+
+export type LocationConfigOrder = {
+  direction: OrderDirection;
+  field: LocationConfigOrderField;
+};
+
+export enum LocationConfigOrderField {
+  Location = 'LOCATION',
+  LocationId = 'LOCATION_ID'
+}
+
+export type LocationConfigWhereInput = {
+  location?: InputMaybe<Scalars['Enum']>;
+  location_id?: InputMaybe<Scalars['u8']>;
+  location_idEQ?: InputMaybe<Scalars['u8']>;
+  location_idGT?: InputMaybe<Scalars['u8']>;
+  location_idGTE?: InputMaybe<Scalars['u8']>;
+  location_idLT?: InputMaybe<Scalars['u8']>;
+  location_idLTE?: InputMaybe<Scalars['u8']>;
+  location_idNEQ?: InputMaybe<Scalars['u8']>;
+};
+
 export type MarketPacked = {
   __typename?: 'MarketPacked';
   entity?: Maybe<World__Entity>;
@@ -408,7 +617,7 @@ export type MarketPackedWhereInput = {
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
 };
 
-export type ModelUnion = Drug | Encounter | Game | Item | Leaderboard | MarketPacked | Player | RyoMeta;
+export type ModelUnion = Drug | DrugConfig | DrugConfigMeta | Encounter | Game | Item | Leaderboard | LocationConfig | LocationConfigMeta | MarketPacked | Player | RyoMeta;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -754,6 +963,8 @@ export type World__PageInfo = {
 
 export type World__Query = {
   __typename?: 'World__Query';
+  drugConfigMetaModels?: Maybe<DrugConfigMetaConnection>;
+  drugConfigModels?: Maybe<DrugConfigConnection>;
   drugModels?: Maybe<DrugConnection>;
   encounterModels?: Maybe<EncounterConnection>;
   entities?: Maybe<World__EntityConnection>;
@@ -762,6 +973,8 @@ export type World__Query = {
   gameModels?: Maybe<GameConnection>;
   itemModels?: Maybe<ItemConnection>;
   leaderboardModels?: Maybe<LeaderboardConnection>;
+  locationConfigMetaModels?: Maybe<LocationConfigMetaConnection>;
+  locationConfigModels?: Maybe<LocationConfigConnection>;
   marketPackedModels?: Maybe<MarketPackedConnection>;
   metadatas?: Maybe<World__MetadataConnection>;
   model: World__Model;
@@ -770,6 +983,30 @@ export type World__Query = {
   ryoMetaModels?: Maybe<RyoMetaConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
+};
+
+
+export type World__QueryDrugConfigMetaModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<DrugConfigMetaOrder>;
+  where?: InputMaybe<DrugConfigMetaWhereInput>;
+};
+
+
+export type World__QueryDrugConfigModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<DrugConfigOrder>;
+  where?: InputMaybe<DrugConfigWhereInput>;
 };
 
 
@@ -857,6 +1094,30 @@ export type World__QueryLeaderboardModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<LeaderboardOrder>;
   where?: InputMaybe<LeaderboardWhereInput>;
+};
+
+
+export type World__QueryLocationConfigMetaModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<LocationConfigMetaOrder>;
+  where?: InputMaybe<LocationConfigMetaWhereInput>;
+};
+
+
+export type World__QueryLocationConfigModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<LocationConfigOrder>;
+  where?: InputMaybe<LocationConfigWhereInput>;
 };
 
 
@@ -1010,6 +1271,26 @@ export type LeaderboardMetasQueryVariables = Exact<{
 
 export type LeaderboardMetasQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, high_score?: any | null, next_version_timestamp?: any | null } | null } | null> | null } | null };
 
+export type DrugConfigQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DrugConfigQuery = { __typename?: 'World__Query', drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, from_turn?: any | null, to_turn?: any | null } | null } | null> | null } | null };
+
+export type DrugConfigMetaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DrugConfigMetaQuery = { __typename?: 'World__Query', drugConfigMetaModels?: { __typename?: 'DrugConfigMetaConnection', edges?: Array<{ __typename?: 'DrugConfigMetaEdge', node?: { __typename?: 'DrugConfigMeta', drug?: any | null, name?: any | null } | null } | null> | null } | null };
+
+export type LocationConfigQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LocationConfigQuery = { __typename?: 'World__Query', locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null } | null } | null> | null } | null };
+
+export type LocationConfigMetaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LocationConfigMetaQuery = { __typename?: 'World__Query', locationConfigMetaModels?: { __typename?: 'LocationConfigMetaConnection', edges?: Array<{ __typename?: 'LocationConfigMetaEdge', node?: { __typename?: 'LocationConfigMeta', location?: any | null, name?: any | null } | null } | null> | null } | null };
+
 export type PlayerPropsFragment = { __typename?: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null };
 
 export type GameByIdQueryVariables = Exact<{
@@ -1025,21 +1306,21 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
 
 export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'MarketPacked', game_id?: any | null, packed?: any | null } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, cash?: any | null, status?: any | null, location_id?: any | null, next_location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type PlayerEntityRelatedDataSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'MarketPacked' } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'MarketPacked' } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type PlayerLogsQueryVariables = Exact<{
   game_id: Scalars['String'];
@@ -1219,6 +1500,195 @@ export const useInfiniteLeaderboardMetasQuery = <
 
 
 useInfiniteLeaderboardMetasQuery.getKey = (variables?: LeaderboardMetasQueryVariables) => variables === undefined ? ['LeaderboardMetas.infinite'] : ['LeaderboardMetas.infinite', variables];
+;
+
+export const DrugConfigDocument = `
+    query DrugConfig {
+  drugConfigModels {
+    edges {
+      node {
+        drug
+        drug_id
+        base
+        step
+        weight
+        from_turn
+        to_turn
+      }
+    }
+  }
+}
+    `;
+export const useDrugConfigQuery = <
+      TData = DrugConfigQuery,
+      TError = unknown
+    >(
+      variables?: DrugConfigQueryVariables,
+      options?: UseQueryOptions<DrugConfigQuery, TError, TData>
+    ) =>
+    useQuery<DrugConfigQuery, TError, TData>(
+      variables === undefined ? ['DrugConfig'] : ['DrugConfig', variables],
+      useFetchData<DrugConfigQuery, DrugConfigQueryVariables>(DrugConfigDocument).bind(null, variables),
+      options
+    );
+
+useDrugConfigQuery.getKey = (variables?: DrugConfigQueryVariables) => variables === undefined ? ['DrugConfig'] : ['DrugConfig', variables];
+;
+
+export const useInfiniteDrugConfigQuery = <
+      TData = DrugConfigQuery,
+      TError = unknown
+    >(
+      variables?: DrugConfigQueryVariables,
+      options?: UseInfiniteQueryOptions<DrugConfigQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<DrugConfigQuery, DrugConfigQueryVariables>(DrugConfigDocument)
+    return useInfiniteQuery<DrugConfigQuery, TError, TData>(
+      variables === undefined ? ['DrugConfig.infinite'] : ['DrugConfig.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteDrugConfigQuery.getKey = (variables?: DrugConfigQueryVariables) => variables === undefined ? ['DrugConfig.infinite'] : ['DrugConfig.infinite', variables];
+;
+
+export const DrugConfigMetaDocument = `
+    query DrugConfigMeta {
+  drugConfigMetaModels {
+    edges {
+      node {
+        drug
+        name
+      }
+    }
+  }
+}
+    `;
+export const useDrugConfigMetaQuery = <
+      TData = DrugConfigMetaQuery,
+      TError = unknown
+    >(
+      variables?: DrugConfigMetaQueryVariables,
+      options?: UseQueryOptions<DrugConfigMetaQuery, TError, TData>
+    ) =>
+    useQuery<DrugConfigMetaQuery, TError, TData>(
+      variables === undefined ? ['DrugConfigMeta'] : ['DrugConfigMeta', variables],
+      useFetchData<DrugConfigMetaQuery, DrugConfigMetaQueryVariables>(DrugConfigMetaDocument).bind(null, variables),
+      options
+    );
+
+useDrugConfigMetaQuery.getKey = (variables?: DrugConfigMetaQueryVariables) => variables === undefined ? ['DrugConfigMeta'] : ['DrugConfigMeta', variables];
+;
+
+export const useInfiniteDrugConfigMetaQuery = <
+      TData = DrugConfigMetaQuery,
+      TError = unknown
+    >(
+      variables?: DrugConfigMetaQueryVariables,
+      options?: UseInfiniteQueryOptions<DrugConfigMetaQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<DrugConfigMetaQuery, DrugConfigMetaQueryVariables>(DrugConfigMetaDocument)
+    return useInfiniteQuery<DrugConfigMetaQuery, TError, TData>(
+      variables === undefined ? ['DrugConfigMeta.infinite'] : ['DrugConfigMeta.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteDrugConfigMetaQuery.getKey = (variables?: DrugConfigMetaQueryVariables) => variables === undefined ? ['DrugConfigMeta.infinite'] : ['DrugConfigMeta.infinite', variables];
+;
+
+export const LocationConfigDocument = `
+    query LocationConfig {
+  locationConfigModels {
+    edges {
+      node {
+        location
+        location_id
+      }
+    }
+  }
+}
+    `;
+export const useLocationConfigQuery = <
+      TData = LocationConfigQuery,
+      TError = unknown
+    >(
+      variables?: LocationConfigQueryVariables,
+      options?: UseQueryOptions<LocationConfigQuery, TError, TData>
+    ) =>
+    useQuery<LocationConfigQuery, TError, TData>(
+      variables === undefined ? ['LocationConfig'] : ['LocationConfig', variables],
+      useFetchData<LocationConfigQuery, LocationConfigQueryVariables>(LocationConfigDocument).bind(null, variables),
+      options
+    );
+
+useLocationConfigQuery.getKey = (variables?: LocationConfigQueryVariables) => variables === undefined ? ['LocationConfig'] : ['LocationConfig', variables];
+;
+
+export const useInfiniteLocationConfigQuery = <
+      TData = LocationConfigQuery,
+      TError = unknown
+    >(
+      variables?: LocationConfigQueryVariables,
+      options?: UseInfiniteQueryOptions<LocationConfigQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<LocationConfigQuery, LocationConfigQueryVariables>(LocationConfigDocument)
+    return useInfiniteQuery<LocationConfigQuery, TError, TData>(
+      variables === undefined ? ['LocationConfig.infinite'] : ['LocationConfig.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteLocationConfigQuery.getKey = (variables?: LocationConfigQueryVariables) => variables === undefined ? ['LocationConfig.infinite'] : ['LocationConfig.infinite', variables];
+;
+
+export const LocationConfigMetaDocument = `
+    query LocationConfigMeta {
+  locationConfigMetaModels {
+    edges {
+      node {
+        location
+        name
+      }
+    }
+  }
+}
+    `;
+export const useLocationConfigMetaQuery = <
+      TData = LocationConfigMetaQuery,
+      TError = unknown
+    >(
+      variables?: LocationConfigMetaQueryVariables,
+      options?: UseQueryOptions<LocationConfigMetaQuery, TError, TData>
+    ) =>
+    useQuery<LocationConfigMetaQuery, TError, TData>(
+      variables === undefined ? ['LocationConfigMeta'] : ['LocationConfigMeta', variables],
+      useFetchData<LocationConfigMetaQuery, LocationConfigMetaQueryVariables>(LocationConfigMetaDocument).bind(null, variables),
+      options
+    );
+
+useLocationConfigMetaQuery.getKey = (variables?: LocationConfigMetaQueryVariables) => variables === undefined ? ['LocationConfigMeta'] : ['LocationConfigMeta', variables];
+;
+
+export const useInfiniteLocationConfigMetaQuery = <
+      TData = LocationConfigMetaQuery,
+      TError = unknown
+    >(
+      variables?: LocationConfigMetaQueryVariables,
+      options?: UseInfiniteQueryOptions<LocationConfigMetaQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<LocationConfigMetaQuery, LocationConfigMetaQueryVariables>(LocationConfigMetaDocument)
+    return useInfiniteQuery<LocationConfigMetaQuery, TError, TData>(
+      variables === undefined ? ['LocationConfigMeta.infinite'] : ['LocationConfigMeta.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteLocationConfigMetaQuery.getKey = (variables?: LocationConfigMetaQueryVariables) => variables === undefined ? ['LocationConfigMeta.infinite'] : ['LocationConfigMeta.infinite', variables];
 ;
 
 export const GameByIdDocument = `

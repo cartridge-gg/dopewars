@@ -1,0 +1,48 @@
+query DrugConfig {
+  drugConfigModels {
+    edges {
+      node {
+        drug
+        drug_id
+        base
+        step
+        weight
+        from_turn
+        to_turn
+      }
+    }
+  }
+}
+
+query DrugConfigMeta {
+  drugConfigMetaModels {
+    edges {
+      node {
+        drug
+        name
+      }
+    }
+  }
+}
+
+query LocationConfig {
+  locationConfigModels {
+    edges {
+      node {
+        location
+        location_id
+      }
+    }
+  }
+}
+
+query LocationConfigMeta {
+  locationConfigMetaModels {
+    edges {
+      node {
+        location
+        name
+      }
+    }
+  }
+}
