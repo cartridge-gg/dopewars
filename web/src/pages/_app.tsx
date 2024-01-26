@@ -1,19 +1,18 @@
-import NextHead from "next/head";
-import { ChakraProvider } from "@chakra-ui/react";
-import { RpcProvider, Account } from "starknet";
-import type { AppProps } from "next/app";
-import theme from "../theme";
 import Fonts from "@/theme/fonts";
+import { ChakraProvider } from "@chakra-ui/react";
+import type { AppProps } from "next/app";
+import NextHead from "next/head";
+import theme from "../theme";
 
-import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
-import { useEffect, useState } from "react";
-import { DojoProvider } from "@/dojo/context/DojoContext";
-import { QueryClientProvider } from "react-query";
-import { Analytics } from "@vercel/analytics/react";
-import { SetupResult, setup } from "@/dojo/setup/setup";
-import { dojoConfig } from "@/dojo/setup/config";
 import RegisterEntities from "@/components/RegisterEntities";
+import { DojoProvider } from "@/dojo/context/DojoContext";
+import { dojoConfig } from "@/dojo/setup/config";
+import { SetupResult, setup } from "@/dojo/setup/setup";
+import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
+import { Analytics } from "@vercel/analytics/react";
+import { useEffect, useState } from "react";
+import { QueryClientProvider } from "react-query";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);

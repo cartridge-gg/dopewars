@@ -1,23 +1,17 @@
-import { Button, Divider, Flex, HStack, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { IsMobile, formatCashHeader, generatePixelBorderPath } from "@/utils/ui";
-import { useRouter } from "next/router";
-import { initSoundStore } from "@/hooks/sound";
-import HeaderButton from "@/components/HeaderButton";
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { formatCash } from "@/utils/ui";
-import { formatAddress } from "@/utils/contract";
-import PixelatedBorderImage from "./icons/PixelatedBorderImage";
-import colors from "@/theme/colors";
-import { headerStyles, headerButtonStyles } from "@/theme/styles";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { initSoundStore } from "@/hooks/sound";
+import { headerStyles } from "@/theme/styles";
+import { IsMobile, formatCashHeader } from "@/utils/ui";
+import { Divider, Flex, HStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 import WantedIndicator from "./player/WantedIndicator";
-import DayIndicator from "./player/DayIndicator";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 
 export interface HeaderProps {
   back?: boolean;

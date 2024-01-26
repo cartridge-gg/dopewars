@@ -1,15 +1,9 @@
-import { Divider, HStack, StyleProps, Text, VStack, Card, Tooltip, Spacer } from "@chakra-ui/react";
-
-import BorderImage from "@/components/icons/BorderImage";
-import colors from "@/theme/colors";
-
-import React from "react";
-import { useRouter } from "next/router";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Bag } from "./icons";
-import { Ring } from "./icons/Ring";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { Bag } from "./icons";
 
 export const Inventory = ({ ...props }: StyleProps) => {
   const router = useRouter();

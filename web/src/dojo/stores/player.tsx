@@ -1,48 +1,22 @@
-import { GraphQLClient, gql } from "graphql-request";
-import { Client } from "graphql-ws";
-import { createStore, useStore } from "zustand";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { GraphQLClient } from "graphql-request";
+import { Client } from "graphql-ws";
+import { createStore } from "zustand";
 
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import {
-  World__EntityEdge,
-  Player,
   Drug,
-  Item,
-  PlayerEntityDocument,
-  PlayerEntityRelatedDataSubscriptionDocument,
-  PlayerEntityQuery,
-  PlayerEntitySubscriptionDocument,
-  World__Subscription,
   Encounter,
+  Item,
   MarketPacked,
+  Player,
+  PlayerEntityDocument,
+  PlayerEntityQuery,
+  PlayerEntityRelatedDataSubscriptionDocument,
+  PlayerEntitySubscriptionDocument,
+  World__EntityEdge,
+  World__Subscription,
 } from "@/generated/graphql";
-import { isUint16Array } from "util/types";
-import { useRef, createContext, useContext } from "react";
-
-// export const PlayerContext = createContext<PlayerStore | null>(null);
-
-// ///////////////////////////////////////
-
-// type PlayerStoreProviderProps = React.PropsWithChildren<BearProps>;
-
-// export const PlayerStoreProvider = ({ children, ...props }: PlayerStoreProviderProps) => {
-//   const storeRef = useRef<PlayerStore>();
-//   if (!storeRef.current) {
-//     storeRef.current = createPlayerStore(props);
-//   }
-//   return <PlayerContext.Provider value={storeRef.current}>{children}</PlayerContext.Provider>;
-// };
-
-// ///////////////////////////////////////
-
-// export const usePlayerStore = () : PlayerStore => {
-//   const store = useContext(PlayerContext);
-//   if (!store) throw new Error("Missing PlayerContext.Provider in the tree");
-//   return useStore<PlayerStore>(store);
-// };
-
-///////////////////////////////////////
 
 export interface PlayerStore {
   client: GraphQLClient;

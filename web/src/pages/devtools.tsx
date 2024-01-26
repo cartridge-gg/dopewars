@@ -1,12 +1,9 @@
-import Header from "@/components/Header";
-import { Arrow, ArrowEnclosed } from "@/components/icons";
 import Layout from "@/components/Layout";
-import { Button, Container, HStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { ReactNode, useState } from "react";
 import { useDevtools } from "@/dojo/hooks/useDevtools";
-import { useToast } from "@/hooks/toast";
 import { useSystems } from "@/dojo/hooks/useSystems";
+import { useToast } from "@/hooks/toast";
+import { Button, HStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 export default function LeaderboardPage() {
   const router = useRouter();

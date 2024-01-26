@@ -9,7 +9,6 @@ const RegisterEntities = () => {
   const gameId = router.query.gameId as string;
 
   const { account } = useDojoContext();
-
   const playerStore = usePlayerStore();
   const configStore = useConfigStore();
 

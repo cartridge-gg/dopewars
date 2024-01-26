@@ -1,35 +1,32 @@
-import { useEffect, useState } from "react";
+import { Footer } from "@/components/Footer";
+import Layout from "@/components/Layout";
 import {
   Box,
-  Text,
-  VStack,
-  HStack,
-  Spacer,
   Card,
   CardBody,
-  CardHeader,
   CardFooter,
+  CardHeader,
+  Flex,
+  HStack,
   SimpleGrid,
   StyleProps,
-  useDisclosure,
-  Flex,
+  Text,
+  VStack,
+  useDisclosure
 } from "@chakra-ui/react";
-import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import { Cart } from "@/components/icons";
-import { Footer } from "@/components/Footer";
+import { useEffect, useState } from "react";
 
-import { formatQuantity, formatCash } from "@/utils/ui";
-import { Inventory } from "@/components/Inventory";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { shortString } from "starknet";
 import Button from "@/components/Button";
+import { Inventory } from "@/components/Inventory";
 import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from "@/dojo/helpers";
-import { motion } from "framer-motion";
+import { useConfigStore } from "@/dojo/hooks/useConfigStore";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
 import { useSystems } from "@/dojo/hooks/useSystems";
 import { DrugMarket } from "@/dojo/types";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
-import { useConfigStore } from "@/dojo/hooks/useConfigStore";
+import { formatCash } from "@/utils/ui";
+import { motion } from "framer-motion";
 
 export default function Location() {
   const router = useRouter();

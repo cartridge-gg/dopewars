@@ -1,45 +1,32 @@
-import {
-  Text,
-  VStack,
-  HStack,
-  Divider,
-  Card,
-  Heading,
-  Image,
-  Box,
-  Link as ChakraLink,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  MenuItem,
-} from "@chakra-ui/react";
-import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { useState, useEffect } from "react";
-import { playSound, Sounds } from "@/hooks/sound";
-import Dot from "./Dot";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { Avatar } from "./avatar/Avatar";
-import { genAvatarFromAddress, genAvatarFromId } from "./avatar/avatars";
-import { headerStyles, headerButtonStyles } from "@/theme/styles";
-import { Calendar, Cigarette } from "./icons/archive";
-import { ItemTextEnum } from "@/dojo/types";
-import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { Dots, Gem, Twitter, User } from "./icons";
-import { IsMobile, formatCash } from "@/utils/ui";
-import Link from "next/link";
-import HealthIndicator from "./player/HealthIndicator";
-import WantedIndicator from "./player/WantedIndicator";
-import CashIndicator from "./player/CashIndicator";
-import ShareButton from "./ShareButton";
-import { useRouter } from "next/router";
-import { Glock } from "./icons/items";
-import { useToast } from "@/hooks/toast";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
+import { ItemTextEnum } from "@/dojo/types";
+import { useToast } from "@/hooks/toast";
+import { headerButtonStyles } from "@/theme/styles";
+import { IsMobile, formatCash } from "@/utils/ui";
+import {
+  Box,
+  Card,
+  Divider,
+  HStack,
+  Heading,
+  MenuItem,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  Text,
+  VStack
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import ShareButton from "./ShareButton";
+import { Avatar } from "./avatar/Avatar";
+import { genAvatarFromId } from "./avatar/avatars";
+import { Dots, User } from "./icons";
+import { Cigarette } from "./icons/archive";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (

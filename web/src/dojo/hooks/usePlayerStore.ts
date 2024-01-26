@@ -1,8 +1,8 @@
 
-import { DojoContext } from "../context/DojoContext";
 import { useContext } from "react";
-import { PlayerStore } from "../stores/player";
 import { useStore } from "zustand";
+import { DojoContext } from "../context/DojoContext";
+import { PlayerStore } from "../stores/player";
 
 export const usePlayerStore = () : PlayerStore => {
   const value = useContext(DojoContext);
