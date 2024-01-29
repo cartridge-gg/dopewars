@@ -4,10 +4,12 @@ use dojo::database::introspect::{
 };
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
+use rollyourown::models::item::{Item};
 
-use rollyourown::models::item::{Item, ItemEnum};
-
-use rollyourown::config::locations::Locations;
+use rollyourown::config::{
+    locations::Locations,
+    items::{ItemSlot, ItemLevel}
+};
 
 // #[derive(Model, Copy, Drop, Serde)]
 // struct ProfileRegistry {
@@ -53,11 +55,11 @@ struct Player {
     turn: u8,                          // 6 bits = 64 ( max 64 turn looks fine ?)  
     cash: u32,                           // 30 bits = 1.xxx.xxx.xxx
     health: u8,                           // 7 bits = 128
-    drug_count: usize,                    // probly remove
-    attack: usize,                        // computed
-    defense: usize,                       // computed
-    transport: usize,                     // computed
-    speed: usize,                         // computed
+    drug_count: u8,                    // probly remove
+    attack: u8,                        // computed
+    defense: u8,                       // computed
+    transport: u8,                     // computed
+    speed: u8,                         // computed
     wanted: u8,                           // 7 bits = 128
     leaderboard_version: u32,             // probly remove
     game_over: bool,                      // 1 bit
@@ -92,12 +94,12 @@ impl PlayerImpl of PlayerTrait {
     }
 
     fn get_item_count(self: Player, world: IWorldDispatcher) -> u8 {
-        let attack_item = get!(world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
-        let defense_item = get!(world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+        let attack_item = get!(world, (self.game_id, self.player_id, ItemSlot::Attack), (Item));
+        let defense_item = get!(world, (self.game_id, self.player_id, ItemSlot::Defense), (Item));
         let transport_item = get!(
-            world, (self.game_id, self.player_id, ItemEnum::Transport), (Item)
+            world, (self.game_id, self.player_id, ItemSlot::Transport), (Item)
         );
-        let speed_item = get!(world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+        let speed_item = get!(world, (self.game_id, self.player_id, ItemSlot::Speed), (Item));
 
         let mut total: u8 = if attack_item.level > 0 {
             1
@@ -117,23 +119,23 @@ impl PlayerImpl of PlayerTrait {
         total
     }
 
-    fn get_attack(self: Player, world: IWorldDispatcher) -> usize {
-        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Attack), (Item));
+    fn get_attack(self: Player, world: IWorldDispatcher) -> u8 {
+        let item = get!(world, (self.game_id, self.player_id, ItemSlot::Attack), (Item));
         self.attack + item.value
     }
 
-    fn get_defense(self: Player, world: IWorldDispatcher) -> usize {
-        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Defense), (Item));
+    fn get_defense(self: Player, world: IWorldDispatcher) -> u8 {
+        let item = get!(world, (self.game_id, self.player_id, ItemSlot::Defense), (Item));
         self.defense + item.value
     }
 
-    fn get_transport(self: Player, world: IWorldDispatcher) -> usize {
-        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Transport), (Item));
+    fn get_transport(self: Player, world: IWorldDispatcher) -> u8 {
+        let item = get!(world, (self.game_id, self.player_id, ItemSlot::Transport), (Item));
         self.transport + item.value
     }
 
-    fn get_speed(self: Player, world: IWorldDispatcher) -> usize {
-        let item = get!(world, (self.game_id, self.player_id, ItemEnum::Speed), (Item));
+    fn get_speed(self: Player, world: IWorldDispatcher) -> u8 {
+        let item = get!(world, (self.game_id, self.player_id, ItemSlot::Speed), (Item));
         self.speed + item.value
     }
 }

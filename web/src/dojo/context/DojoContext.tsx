@@ -1,12 +1,10 @@
+import { ConfigStore } from "@/hooks/config";
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo, useRef } from "react";
-import { Account, Contract, RpcProvider, TypedContractV2 } from "starknet";
+import { Account, RpcProvider } from "starknet";
 import { SetupResult } from "../setup/setup";
-import { useConfigStore, ConfigStore } from "@/hooks/config";
-import { getContractByName } from "@dojoengine/core";
-import { configAbi } from "./configAbi";
-import { PlayerStore, createPlayerStore } from "../stores/player";
 import { createConfigStore } from "../stores/config";
+import { PlayerStore, createPlayerStore } from "../stores/player";
 
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
@@ -59,8 +57,7 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
   const configStoreRef = useRef<ConfigStore>();
   if (!configStoreRef.current) {
     configStoreRef.current = createConfigStore({
-      dojoProvider: value.dojoProvider,
-      manifest: value.config.manifest
+      client: value.graphqlClient,
     })
   }
 

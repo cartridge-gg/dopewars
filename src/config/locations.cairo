@@ -3,8 +3,10 @@ use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
 use rollyourown::config::introspect::{
-    LocationsIntrospectionImpl, Bytes31IntrospectionImpl 
+    Bytes31IntrospectionImpl 
 };
+
+// LocationsIntrospectionImpl
 
 #[derive(Model, Copy, Drop, Serde)]
 struct LocationConfig {
@@ -21,7 +23,7 @@ struct LocationConfigMeta {
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Locations {
     Home,
     Queens,
@@ -120,7 +122,6 @@ fn initialize_location_config(world: IWorldDispatcher) {
 
     set!(world, LocationConfigMeta { location: Locations::Coney, name: 'Coney Island'.try_into().unwrap(), });
     set!(world, LocationConfig { location: Locations::Coney, location_id: Locations::Coney.into(), });
-
 }
 
 

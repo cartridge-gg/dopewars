@@ -1,21 +1,22 @@
 import {
+  Bronx,
   Brooklyn,
   CentralPark,
   ConeyIsland,
   Manhattan,
   Queens,
-  Bronx,
 } from "@/components/icons/locations";
 
 import {
-  Ludes,
-  Weed,
   Acid,
-  Speed,
-  Heroin,
   Cocaine,
+  Heroin,
+  Ludes,
+  Speed,
+  Weed,
 } from "@/components/icons/drugs";
 
+import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
   Action,
   Drug,
@@ -30,25 +31,40 @@ import {
   PlayerStatus,
   ShopItemInfo
 } from "./types";
-import { getMuggerResponses, getCopResponses } from "@/responses";
 
 import {
-  Trenchcoat,
-  Kevlar,
-  Shoes,
-  Glock,
-  Knife,
-  Uzi,
   Backpack,
   Bicycle,
   Dufflebag,
   Fannypack,
+  Glock,
+  Kevlar,
   Kneepads,
+  Knife,
   Leatherjacket,
+  Shoes,
   Skateboard,
+  Uzi
 } from "@/components/icons/items";
-import { Siren, Truck } from "@/components/icons";
-import { ToastType } from "@/hooks/toast";
+
+
+export const locationIcons = {
+  "Queens": Queens,
+  "Bronx": Bronx,
+  "Brooklyn": Brooklyn,
+  "Jersey": Manhattan,
+  "Central": CentralPark,
+  "Coney": ConeyIsland,
+}
+
+export const drugIcons = {
+  "Ludes": Ludes,
+  "Speed": Speed,
+  "Weed": Weed,
+  "Acid": Acid,
+  "Heroin": Heroin,
+  "Cocaine": Cocaine,
+}
 
 export const locations: LocationInfo[] = [
   {

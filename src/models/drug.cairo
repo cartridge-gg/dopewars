@@ -9,6 +9,6 @@ struct Drug {
     player_id: ContractAddress,
     #[key]
     drug_id: Drugs,
-    quantity: usize,
+    quantity: u8,
 }
 

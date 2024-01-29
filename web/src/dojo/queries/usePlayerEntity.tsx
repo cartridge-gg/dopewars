@@ -1,16 +1,13 @@
 import {
-  Player,
   Drug as DrugType,
-  usePlayerEntityQuery,
-  World__EntityEdge,
-  Item as ItemType,
   Encounter,
+  Item as ItemType,
   MarketPacked,
+  Player,
+  World__EntityEdge
 } from "@/generated/graphql";
-import { useEffect, useMemo, useState } from "react";
-import { REFETCH_INTERVAL } from "../constants";
-import { PlayerStatus, ItemEnum, ItemTextEnum, DrugMarket } from "../types";
 import { shortString } from "starknet";
+import { DrugMarket, ItemTextEnum, PlayerStatus } from "../types";
 import { MarketPrices } from "./useMarkets";
 
 type Drug = {
@@ -114,16 +111,16 @@ export class PlayerEntity {
   }
 
   updateItem(newItem: ItemType) {
-    const item = this.items.find((i) => i.id === newItem.item_id);
+    const item = this.items.find((i) => i.id === newItem.item);
     if (item) {
       item.level = newItem.level;
       item.value = newItem.value;
-      item.name = shortString.decodeShortString(newItem.name);
+     // item.name = shortString.decodeShortString(newItem.name);
     } else {
       this.items.push({
-        id: newItem.item_id as ItemTextEnum,
+        id: newItem.item as ItemTextEnum,
         level: newItem.level,
-        name: shortString.decodeShortString(newItem.name),
+      //  name: shortString.decodeShortString(newItem.name),
         value: newItem.value,
       });
     }
@@ -215,9 +212,9 @@ export class PlayerEntity {
       const itemModel = edge.node?.models?.find((model) => model?.__typename === "Item") as ItemType;
 
       return {
-        id: itemModel.item_id as ItemTextEnum,
+        id: itemModel.item as ItemTextEnum,
         level: itemModel.level,
-        name: shortString.decodeShortString(itemModel.name),
+        //name: shortString.decodeShortString(itemModel.name),
         value: itemModel.value,
       };
     });

@@ -31,13 +31,14 @@ mod decide {
     use rollyourown::models::game::Game;
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::drug::Drug;
-    use rollyourown::models::item::{Item, ItemEnum};
+    use rollyourown::models::item::{Item};
     use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
     use rollyourown::models::leaderboard::{Leaderboard};
 
     use rollyourown::config::{
         drugs::{Drugs, DrugsEnumerableImpl},
-        locations::{Locations, LocationsRandomizableImpl}
+        locations::{Locations, LocationsRandomizableImpl},
+        items::{ItemSlot, ItemLevel},
     };
 
     use rollyourown::utils::random::{Random, RandomTrait, RandomImpl};
@@ -83,9 +84,9 @@ mod decide {
         player_id: ContractAddress,
         outcome: Outcome,
         health_loss: u8,
-        drug_loss: usize,
+        drug_loss: u8,
         cash_loss: u32,
-        dmg_dealt: u32,
+        dmg_dealt: u8,
         cash_earnt: u32,
     }
 
@@ -141,7 +142,7 @@ mod decide {
 
                             let health_loss: u128 = (encounter_dmg + random_loss).into();
                             let defense_item = get!(
-                                world, (game_id, player_id, ItemEnum::Defense), Item
+                                world, (game_id, player_id, ItemSlot::Defense), Item
                             );
 
                             let health_saved: u128 = health_loss.pct(defense_item.value.into());
@@ -252,8 +253,8 @@ mod decide {
     #[generate_trait]
     impl InternalImpl of DecideInternalImpl {
         fn take_drugs(
-            self: @ContractState, game_id: u32, player_id: ContractAddress, percentage: usize
-        ) -> usize {
+            self: @ContractState, game_id: u32, player_id: ContractAddress, percentage: u8
+        ) -> u8 {
             let world = self.world();
             let mut drugs = DrugsEnumerableImpl::all();
             let mut total_drug_loss = 0;
@@ -287,7 +288,7 @@ mod decide {
             game: @Game,
             player: @Player,
             encounter_type: EncounterType,
-        ) -> (Outcome, u32, u32, u8, u32, u32) {
+        ) -> (Outcome, u32, u8, u8, u32, u8) {
             let world = self.world();
 
             let mut encounter = EncounterImpl::get_or_spawn(
@@ -299,7 +300,7 @@ mod decide {
 
             // calc player dmg
             let mut attack = (*player).get_attack(world);
-            let random_attack: usize = randomizer.between::<usize>(0, (attack / 5).into());
+            let random_attack: u8 = randomizer.between::<u8>(0, (attack / 5).into());
 
             let random_dir = randomizer.bool();
             if random_dir {
@@ -315,7 +316,7 @@ mod decide {
                 set!(world, (encounter));
 
                 // player wins payout
-                (Outcome::Victorious, 0_u32, 0_u32, 0_u8, encounter.payout, attack)
+                (Outcome::Victorious, 0, 0, 0, encounter.payout, attack)
             } else {
                 // encounter lose health
                 encounter.health -= attack.try_into().unwrap();
@@ -335,7 +336,7 @@ mod decide {
                 };
 
                 let defense_item = get!(
-                    world, ((*game).game_id, (*player).player_id, ItemEnum::Defense), Item
+                    world, ((*game).game_id, (*player).player_id, ItemSlot::Defense), Item
                 );
 
                 // reduce dmgs by defense_item.value %
@@ -346,7 +347,7 @@ mod decide {
                     .try_into()
                     .unwrap();
 
-                (Outcome::Captured, 0_u32, 0_u32, final_health_loss, 0_u32, attack)
+                (Outcome::Captured, 0_u32, 0_u8, final_health_loss, 0_u32, attack)
             }
         }
     }

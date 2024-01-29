@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x6973679e20a19c1d1354aeb15130ff6573b3c053b052d1bade2031b4ec44580",
+      "class_hash": "0x4a123b939fc32f2eb4b521d7770e0097c5f230b767a98e0cb80d2151397e005",
       "abi": [
         {
           "type": "impl",
@@ -1079,7 +1079,7 @@
     {
       "name": "rollyourown::systems::decide::decide",
       "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
-      "class_hash": "0x10655072f413782fe8c76dfd07b0d054103f541d5e3e676eb870bb38ef931ec",
+      "class_hash": "0x1937aee3ba12f0b0deaf079ff271edeae5c112af4ec314e9adf58db0321fae",
       "abi": [
         {
           "type": "impl",
@@ -1295,7 +1295,7 @@
             },
             {
               "name": "drug_loss",
-              "type": "core::integer::u32",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -1305,7 +1305,7 @@
             },
             {
               "name": "dmg_dealt",
-              "type": "core::integer::u32",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -1409,7 +1409,7 @@
     {
       "name": "rollyourown::systems::lobby::lobby",
       "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
-      "class_hash": "0x5d74d126b2b0ee82bfc583326ee28000eb38905b92eeaef2eb2b34c47c7b8bf",
+      "class_hash": "0x13d60ed58683fbb726f3a04e2ac2d1ab16c8784322e8dfc6fbbeed9d225ae0f",
       "abi": [
         {
           "type": "impl",
@@ -1644,7 +1644,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x5b9d8d94a201bd82b8dc10f393a4187c9a513aba1d105d6b3b4a75c3e8299ad",
-      "class_hash": "0x15589acf91f24f294ffdf206581891d0c6563b331e7c21ec4a26ceb14baea02",
+      "class_hash": "0x39a154484a566a12c52f19a2446555949e1eb93f8ef047083a7cff51bfc1985",
       "abi": [
         {
           "type": "impl",
@@ -1672,6 +1672,181 @@
               "outputs": [
                 {
                   "type": "dojo::world::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "ComputedImpl",
+          "interface_name": "rollyourown::systems::ryo::IComputed"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::player::PlayerStatus",
+          "variants": [
+            {
+              "name": "Normal",
+              "type": "()"
+            },
+            {
+              "name": "BeingMugged",
+              "type": "()"
+            },
+            {
+              "name": "BeingArrested",
+              "type": "()"
+            },
+            {
+              "name": "AtPawnshop",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::locations::Locations",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::player::Player",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "avatar_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "status",
+              "type": "rollyourown::models::player::PlayerStatus"
+            },
+            {
+              "name": "location_id",
+              "type": "rollyourown::config::locations::Locations"
+            },
+            {
+              "name": "next_location_id",
+              "type": "rollyourown::config::locations::Locations"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "drug_count",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "attack",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "defense",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "transport",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "speed",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "wanted",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "leaderboard_version",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "game_over",
+              "type": "core::bool"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::ryo::IComputed",
+          "items": [
+            {
+              "type": "function",
+              "name": "swag",
+              "inputs": [
+                {
+                  "name": "player",
+                  "type": "rollyourown::models::player::Player"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::felt252"
                 }
               ],
               "state_mutability": "view"
@@ -1774,7 +1949,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x2af11c8eb328936ab513704ec60e366d3ab2ace89a211146676e2de438a6619",
+      "class_hash": "0x6273b8cce2367a1c576473ab1f0a429a0d9cf4f187ed95da6c074e9b97bb620",
       "abi": [
         {
           "type": "impl",
@@ -1829,7 +2004,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::models::item::ItemEnum",
+          "name": "rollyourown::config::items::ItemSlot",
           "variants": [
             {
               "name": "Attack",
@@ -1840,11 +2015,11 @@
               "type": "()"
             },
             {
-              "name": "Transport",
+              "name": "Speed",
               "type": "()"
             },
             {
-              "name": "Speed",
+              "name": "Transport",
               "type": "()"
             }
           ]
@@ -1855,14 +2030,10 @@
           "members": [
             {
               "name": "item_id",
-              "type": "core::integer::u32"
+              "type": "core::integer::u8"
             },
             {
               "name": "item_type",
-              "type": "core::felt252"
-            },
-            {
-              "name": "name",
               "type": "core::felt252"
             },
             {
@@ -1875,7 +2046,7 @@
             },
             {
               "name": "value",
-              "type": "core::integer::u32"
+              "type": "core::integer::u8"
             }
           ]
         },
@@ -1935,7 +2106,7 @@
                 },
                 {
                   "name": "item_id",
-                  "type": "rollyourown::models::item::ItemEnum"
+                  "type": "rollyourown::config::items::ItemSlot"
                 }
               ],
               "outputs": [],
@@ -2038,7 +2209,7 @@
             },
             {
               "name": "item_id",
-              "type": "rollyourown::models::item::ItemEnum",
+              "type": "rollyourown::config::items::ItemSlot",
               "kind": "data"
             },
             {
@@ -2070,7 +2241,7 @@
             },
             {
               "name": "item_id",
-              "type": "rollyourown::models::item::ItemEnum",
+              "type": "rollyourown::config::items::ItemSlot",
               "kind": "data"
             }
           ]
@@ -2105,7 +2276,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0x4ff3ee451133d14549050ee828be375c7019a80d127f48d19d479ddaefdafb5",
+      "class_hash": "0x32d7ea9630dba22c0026942abaad35539311b814f3d90143885667e35119c54",
       "abi": [
         {
           "type": "impl",
@@ -2230,7 +2401,7 @@
                 },
                 {
                   "name": "quantity",
-                  "type": "core::integer::u32"
+                  "type": "core::integer::u8"
                 }
               ],
               "outputs": [],
@@ -2254,7 +2425,7 @@
                 },
                 {
                   "name": "quantity",
-                  "type": "core::integer::u32"
+                  "type": "core::integer::u8"
                 }
               ],
               "outputs": [],
@@ -2342,7 +2513,7 @@
             },
             {
               "name": "quantity",
-              "type": "core::integer::u32",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -2374,7 +2545,7 @@
             },
             {
               "name": "quantity",
-              "type": "core::integer::u32",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -2414,7 +2585,7 @@
     {
       "name": "rollyourown::systems::travel::travel",
       "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
-      "class_hash": "0x769b4e76691beb9a581fe81ee87cc5adaccc90e90ee8899f6cee49c78bea71b",
+      "class_hash": "0x72ceb1707a63b859d68969a1b4f1d0fab2ce957ad54d01277d1ae5b0adcb6a1",
       "abi": [
         {
           "type": "impl",
@@ -3176,6 +3347,395 @@
       ]
     },
     {
+      "name": "rollyourown::config::items::item_config",
+      "members": [
+        {
+          "name": "slot",
+          "type": "ItemSlot",
+          "key": true
+        },
+        {
+          "name": "level",
+          "type": "ItemLevel",
+          "key": true
+        },
+        {
+          "name": "slot_id",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "level_id",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "cost",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "stat",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x20eae86a04ca78b59d92ae955a018d52a97b1be7c01342a7d37c48853ed3daf",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::items::item_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::items::item_config_meta",
+      "members": [
+        {
+          "name": "slot",
+          "type": "ItemSlot",
+          "key": true
+        },
+        {
+          "name": "level",
+          "type": "ItemLevel",
+          "key": true
+        },
+        {
+          "name": "slot_id",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "level_id",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "name",
+          "type": "bytes31",
+          "key": false
+        }
+      ],
+      "class_hash": "0x3ef2ea1f4812f77ce15852e51bd6d3539294f933620a41d9443bc980c9844a4",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::introspect::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::items::item_config_meta::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
       "name": "rollyourown::config::locations::location_config",
       "members": [
         {
@@ -3549,11 +4109,11 @@
         },
         {
           "name": "quantity",
-          "type": "usize",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0xd538f5c725ffb8b92c8a6644bcdd0c0b1b867d861c3dc55a72f6450731eb11",
+      "class_hash": "0x7b12e951401b89e48b0dbdb2f381a5843082275e29bbaab79469456aa568d44",
       "abi": [
         {
           "type": "function",
@@ -3937,7 +4497,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x73be5d6a7b562a822d0019facd5ec1005d29f01870605456a679fc425b917b0",
+      "class_hash": "0x2986be47256fa1a80e19619de4d014513b07f40ab5b3cc3f887d01606610a9a",
       "abi": [
         {
           "type": "function",
@@ -4114,8 +4674,8 @@
           "key": true
         },
         {
-          "name": "item_id",
-          "type": "ItemEnum",
+          "name": "item",
+          "type": "ItemSlot",
           "key": true
         },
         {
@@ -4130,11 +4690,11 @@
         },
         {
           "name": "value",
-          "type": "usize",
+          "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x64c49434010fda4508ca33f5f39d66c7cb86225a6a2f36ff0a34fc8141e83b7",
+      "class_hash": "0x262ec5af87e8bb47384489744bc8b44a4c3feaeac5ca56b48269befec4cfe6d",
       "abi": [
         {
           "type": "function",
@@ -4716,27 +5276,27 @@
         },
         {
           "name": "drug_count",
-          "type": "usize",
+          "type": "u8",
           "key": false
         },
         {
           "name": "attack",
-          "type": "usize",
+          "type": "u8",
           "key": false
         },
         {
           "name": "defense",
-          "type": "usize",
+          "type": "u8",
           "key": false
         },
         {
           "name": "transport",
-          "type": "usize",
+          "type": "u8",
           "key": false
         },
         {
           "name": "speed",
-          "type": "usize",
+          "type": "u8",
           "key": false
         },
         {
@@ -4755,7 +5315,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x61ba5071bc982c1bf40889773c69279d6e9fb38dd5ddd970c44ecb7f6a89ef6",
+      "class_hash": "0x6fd0e15d685185f57111ff42bb923f88cf8b66570fd606cea37cee985091ea0",
       "abi": [
         {
           "type": "function",

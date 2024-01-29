@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useDojoContext } from "./useDojoContext";
-import { ItemTextEnum, ShopItemInfo } from "../types";
+import { useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { getShopItem } from "../helpers";
+import { ItemTextEnum, ShopItemInfo } from "../types";
+import { useDojoContext } from "./useDojoContext";
 
 export const useAvailableShopItems = (gameId: string) => {
     const {
@@ -27,7 +27,7 @@ export const useAvailableShopItems = (gameId: string) => {
                         id: i.item_id,
                         type: itemInfos.type,
                         typeText: itemInfos.id,
-                        name: shortString.decodeShortString(i.name),
+                       // name: shortString.decodeShortString(i.name),
                         level: Number(i.level),
                         cost: Number(i.cost),
                         value: Number(i.value),

@@ -1,6 +1,8 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
+use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
 // // use when available
 // impl ItemSlotBitSize of core::num::traits::BitSize<ItemSlot> {
 //     fn bits() -> usize {
@@ -8,26 +10,66 @@ use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 //     }
 // }
 
-#[derive(Copy, Drop, Serde)]
-struct ItemConfig {
-    name: bytes31,
-    slot: ItemSlot,
-    level: ItemLevel,
-    stat: u8,
-    cost: u32,
-}
-
-//
-//
-//
-
-#[derive(Copy, Drop, Serde, PartialEq)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum ItemSlot {
     Attack,
     Defense,
     Speed,
     Transport,
 }
+
+
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+enum ItemLevel {
+    Level0,
+    Level1,
+    Level2,
+    Level3,
+}
+
+//
+//
+//
+
+#[derive(Model, Copy, Drop, Serde)]
+struct ItemConfig {
+    #[key]
+    slot: ItemSlot,
+    #[key]
+    level: ItemLevel,
+    slot_id: u8,
+    level_id: u8,
+    cost: u32,
+    stat: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct ItemConfigMeta {
+    #[key]
+    slot: ItemSlot,
+    #[key]
+    level: ItemLevel,
+    slot_id: u8,
+    level_id: u8,
+    name: bytes31,
+}
+
+
+//
+//
+//
+
+#[generate_trait]
+impl ItemConfigImpl of ItemConfigTrait{
+    fn get(world: IWorldDispatcher, item: ItemSlot, level: ItemLevel) -> ItemConfig {
+        get!(world, (item,level), ItemConfig)
+    }
+}
+
+
+//
+//
+//
 
 
 impl ItemSlotEnumerableImpl of Enumerable<ItemSlot> {
@@ -43,161 +85,12 @@ impl ItemSlotEnumerableImpl of Enumerable<ItemSlot> {
 //
 //
 
-#[derive(Copy, Drop, Serde, PartialEq)]
-enum ItemLevel {
-    Level0,
-    Level1,
-    Level2,
-    Level3,
-}
-
 impl ItemLevelEnumerableImpl of Enumerable<ItemLevel> {
     fn all() -> Span<ItemLevel> {
         let mut items = array![
             ItemLevel::Level0, ItemLevel::Level1, ItemLevel::Level2, ItemLevel::Level3,
         ];
         items.span()
-    }
-}
-
-//
-//
-//
-
-#[generate_trait]
-impl ItemConfigImpl of ItemConfigTrait {
-    fn get(slot: ItemSlot, level: ItemLevel) -> ItemConfig {
-        let item_config = match slot {
-            ItemSlot::Attack => {
-                match level {
-                    ItemLevel::Level0 => ItemConfig {
-                        name: ''.try_into().unwrap(),
-                        slot: ItemSlot::Attack,
-                        level: ItemLevel::Level0,
-                        cost: 0,
-                        stat: 0
-                    },
-                    ItemLevel::Level1 => ItemConfig {
-                        name: 'Knife'.try_into().unwrap(),
-                        slot: ItemSlot::Attack,
-                        level: ItemLevel::Level1,
-                        cost: 450,
-                        stat: 9
-                    },
-                    ItemLevel::Level2 => ItemConfig {
-                        name: 'Glock'.try_into().unwrap(),
-                        slot: ItemSlot::Attack,
-                        level: ItemLevel::Level2,
-                        cost: 12000,
-                        stat: 24
-                    },
-                    ItemLevel::Level3 => ItemConfig {
-                        name: 'Uzi'.try_into().unwrap(),
-                        slot: ItemSlot::Attack,
-                        level: ItemLevel::Level3,
-                        cost: 99000,
-                        stat: 49
-                    },
-                }
-            },
-            ItemSlot::Defense => {
-                match level {
-                    ItemLevel::Level0 => ItemConfig {
-                        name: ''.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level0,
-                        cost: 0,
-                        stat: 0
-                    },
-                    ItemLevel::Level1 => ItemConfig {
-                        name: 'Knee pads'.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level1,
-                        cost: 350,
-                        stat: 24
-                    },
-                    ItemLevel::Level2 => ItemConfig {
-                        name: 'Leather Jacket'.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level2,
-                        cost: 8900,
-                        stat: 39
-                    },
-                    ItemLevel::Level3 => ItemConfig {
-                        name: 'Kevlar'.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level3,
-                        cost: 69000,
-                        stat: 59
-                    },
-                }
-            },
-            ItemSlot::Speed => {
-                match level {
-                    ItemLevel::Level0 => ItemConfig {
-                        name: ''.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level0,
-                        cost: 0,
-                        stat: 0
-                    },
-                    ItemLevel::Level1 => ItemConfig {
-                        name: 'Shoes'.try_into().unwrap(),
-                        slot: ItemSlot::Speed,
-                        level: ItemLevel::Level1,
-                        cost: 250,
-                        stat: 9
-                    },
-                    ItemLevel::Level2 => ItemConfig {
-                        name: 'Skateboard'.try_into().unwrap(),
-                        slot: ItemSlot::Speed,
-                        level: ItemLevel::Level2,
-                        cost: 9900,
-                        stat: 24
-                    },
-                    ItemLevel::Level3 => ItemConfig {
-                        name: 'Bicycle'.try_into().unwrap(),
-                        slot: ItemSlot::Speed,
-                        level: ItemLevel::Level3,
-                        cost: 79000,
-                        stat: 39
-                    }
-                }
-            },
-            ItemSlot::Transport => {
-                match level {
-                    ItemLevel::Level0 => ItemConfig {
-                        name: ''.try_into().unwrap(),
-                        slot: ItemSlot::Defense,
-                        level: ItemLevel::Level0,
-                        cost: 0,
-                        stat: 0
-                    },
-                    ItemLevel::Level1 => ItemConfig {
-                        name: 'Fanny pack'.try_into().unwrap(),
-                        slot: ItemSlot::Transport,
-                        level: ItemLevel::Level1,
-                        cost: 500,
-                        stat: 30
-                    },
-                    ItemLevel::Level2 => ItemConfig {
-                        name: 'Backpack'.try_into().unwrap(),
-                        slot: ItemSlot::Transport,
-                        level: ItemLevel::Level2,
-                        cost: 15000,
-                        stat: 60
-                    },
-                    ItemLevel::Level3 => ItemConfig {
-                        name: 'Duffle Bag'.try_into().unwrap(),
-                        slot: ItemSlot::Transport,
-                        level: ItemLevel::Level3,
-                        cost: 99000,
-                        stat: 100
-                    },
-                }
-            },
-        };
-        item_config
     }
 }
 
@@ -226,4 +119,480 @@ impl ItemSlotIntoU8 of Into<ItemSlot, u8> {
             ItemSlot::Transport => 2,
         }
     }
+}
+
+
+//
+//
+//
+
+impl ItemLevelIntoFelt252 of Into<ItemLevel, felt252> {
+    fn into(self: ItemLevel) -> felt252 {
+        match self {
+            ItemLevel::Level0 => 'Level0',
+            ItemLevel::Level1 => 'Level1',
+            ItemLevel::Level2 => 'Level2',
+            ItemLevel::Level3 => 'Level3',
+        }
+    }
+}
+
+impl ItemLevelIntoU8 of Into<ItemLevel, u8> {
+    fn into(self: ItemLevel) -> u8 {
+        match self {
+            ItemLevel::Level0 => 0,
+            ItemLevel::Level1 => 1,
+            ItemLevel::Level2 => 3,
+            ItemLevel::Level3 => 2,
+        }
+    }
+}
+
+impl U8IntoItemLevel of Into<u8, ItemLevel> {
+    fn into(self: u8) -> ItemLevel {
+        if self == 1 {
+            ItemLevel::Level1
+        } else if self == 2 {
+            ItemLevel::Level2
+        } else if self == 3 {
+            ItemLevel::Level3
+        } else {
+            ItemLevel::Level0
+        }
+        
+        // match self {
+        //     _ => ItemLevel::Level0,
+        //     1 => ItemLevel::Level1,
+        //     2 => ItemLevel::Level2,
+        //     3 => ItemLevel::Level2,
+        // }
+    }
+}
+
+// #[generate_trait]
+// impl ItemConfigImpl of ItemConfigTrait {
+//     fn get(slot: ItemSlot, level: ItemLevel) -> ItemConfig {
+//  }
+//}
+
+fn initialize_item_config(world: IWorldDispatcher) {
+    // Attack - Level0
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level0.into(),
+            name: 'Naked'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level0.into(),
+            cost: 0,
+            stat: 0
+        }
+    );
+
+    // Attack - Level1
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level1.into(),
+            name: 'Knife'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level1.into(),
+            cost: 450,
+            stat: 9
+        }
+    );
+
+    // Attack - Level1
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level1.into(),
+            name: 'Knife'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level1.into(),
+            cost: 450,
+            stat: 9
+        }
+    );
+
+    // Attack - Level2
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level2.into(),
+            name: 'Glock'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level2.into(),
+            cost: 12000,
+            stat: 24
+        }
+    );
+
+    // Attack - Level3
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level3.into(),
+            name: 'Uzi'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Attack,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Attack.into(),
+            level_id: ItemLevel::Level3.into(),
+            cost: 99000,
+            stat: 49
+        }
+    );
+
+    //
+    //
+    //
+
+    // Defense - Level0
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level0.into(),
+            name: 'Naked'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level0.into(),
+            cost: 0,
+            stat: 0
+        }
+    );
+
+    // Defense - Level1
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level1.into(),
+            name: 'Knee pads'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level1.into(),
+            cost: 350,
+            stat: 24
+        }
+    );
+
+    // Defense - Level2
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level2.into(),
+            name: 'Leather Jacket'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level2.into(),
+            cost: 8900,
+            stat: 39
+        }
+    );
+
+    // Defense - Level3
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level3.into(),
+            name: 'Kevlar'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Defense,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Defense.into(),
+            level_id: ItemLevel::Level3.into(),
+            cost: 69000,
+            stat: 59
+        }
+    );
+
+    //
+    //
+    //
+
+    // Speed - Level0
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level0.into(),
+            name: 'Naked'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level0.into(),
+            cost: 0,
+            stat: 0
+        }
+    );
+
+    // Speed - Level1
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level1.into(),
+            name: 'Shoes'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level1.into(),
+            cost: 250,
+            stat: 9
+        }
+    );
+
+    // Speed - Level2
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level2.into(),
+            name: 'Skateboard'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level2.into(),
+            cost: 9900,
+            stat: 24
+        }
+    );
+
+    // Speed - Level3
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level3.into(),
+            name: 'Bicycle'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Speed,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Speed.into(),
+            level_id: ItemLevel::Level3.into(),
+            cost: 79000,
+            stat: 39
+        }
+    );
+
+    //
+    //
+    //
+
+    // Transport - Level0
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level0.into(),
+            name: 'Naked'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level0,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level0.into(),
+            cost: 0,
+            stat: 0
+        }
+    );
+
+    // Transport - Level1
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level1.into(),
+            name: 'Fanny pack'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level1,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level1.into(),
+            cost: 500,
+            stat: 30
+        }
+    );
+
+    // Transport - Level2
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level2.into(),
+            name: 'Backpack'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level2,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level2.into(),
+            cost: 15000,
+            stat: 60
+        }
+    );
+
+    // Transport - Level3
+    set!(
+        world,
+        ItemConfigMeta {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level3.into(),
+            name: 'Duffle Bag'.try_into().unwrap()
+        }
+    );
+
+    set!(
+        world,
+        ItemConfig {
+            slot: ItemSlot::Transport,
+            level: ItemLevel::Level3,
+            slot_id: ItemSlot::Transport.into(),
+            level_id: ItemLevel::Level3.into(),
+            cost: 99000,
+            stat: 100
+        }
+    );
 }

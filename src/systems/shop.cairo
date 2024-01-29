@@ -1,23 +1,22 @@
 use starknet::ContractAddress;
 use rollyourown::models::player::{Player};
-use rollyourown::models::item::{ItemEnum};
+use rollyourown::config::items::{ItemSlot, ItemLevel};
 
 #[derive(Copy, Drop, Serde)]
 struct AvailableItem {
-    item_id: u32,
+    item_id: u8,
     item_type: felt252,
-    name: felt252,
     level: u8,
     cost: u32,
-    value: usize
+    value: u8
 }
 
 #[starknet::interface]
 trait IShop<TContractState> {
     fn is_open(self: @TContractState, game_id: u32, player_id: ContractAddress) -> bool;
     fn skip(self: @TContractState, game_id: u32);
-    fn buy_item(self: @TContractState, game_id: u32, item_id: ItemEnum);
-    //fn drop_item(self: @TContractState, game_id: u32, item_id: ItemEnum,);
+    fn buy_item(self: @TContractState, game_id: u32, item_id: ItemSlot);
+    //fn drop_item(self: @TContractState, game_id: u32, item_id: ItemSlot,);
     fn available_items(
         self: @TContractState, game_id: u32, player_id: ContractAddress
     ) -> Span<AvailableItem>;
@@ -31,13 +30,15 @@ mod shop {
 
     use rollyourown::models::player::{Player, PlayerTrait, PlayerStatus};
     use rollyourown::models::game::{Game};
-    use rollyourown::models::item::{Item, ItemTrait, ItemEnum};
-    use rollyourown::utils::settings::{
-        ItemSettings, ItemSettingsImpl, ShopSettings, ShopSettingsImpl
-    };
+    use rollyourown::models::item::{Item};
+    use rollyourown::utils::settings::{ShopSettings, ShopSettingsImpl};
     use rollyourown::utils::shop::{ShopImpl, ShopTrait};
     use rollyourown::utils::random::{RandomImpl};
     use rollyourown::systems::travel::on_turn_end;
+
+    use rollyourown::config::items::{
+        ItemSlot, ItemLevel, ItemSlotEnumerableImpl, ItemConfig, ItemConfigImpl
+    };
 
     use super::{IShop, AvailableItem};
 
@@ -54,7 +55,7 @@ mod shop {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        item_id: ItemEnum,
+        item_id: ItemSlot,
         level: u8,
         cost: u32
     }
@@ -65,7 +66,7 @@ mod shop {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        item_id: ItemEnum,
+        item_id: ItemSlot,
     }
 
 
@@ -102,7 +103,7 @@ mod shop {
             shop_settings.is_open(@player)
         }
 
-        fn buy_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
+        fn buy_item(self: @ContractState, game_id: u32, item_id: ItemSlot,) {
             let world = self.world();
             let game = get!(world, game_id, (Game));
             let player_id = get_caller_address();
@@ -123,37 +124,31 @@ mod shop {
                 )
             }
 
-            let item_settings = ItemSettingsImpl::get(
-                game.game_mode, item_id, level: item.level + 1
-            );
+            let item_config = ItemConfigImpl::get(world, item_id, level: (item.level + 1).into());
 
-            assert(player.cash >= item_settings.cost, 'too poor');
+            assert(player.cash >= item_config.cost, 'too poor');
 
             // pay item
-            player.cash -= item_settings.cost;
+            player.cash -= item_config.cost;
 
             // update item
             item.level += 1;
-            item.name = item_settings.name;
-            item.value = item_settings.value;
+            // item.name = item_settings.name;
+            item.value = item_config.stat;
             set!(world, (item));
 
             // emit event
             emit!(
                 self.world(),
                 BoughtItem {
-                    game_id,
-                    player_id,
-                    item_id,
-                    level: item.level,
-                    cost: item_settings.cost
+                    game_id, player_id, item_id, level: item.level, cost: item_config.cost
                 }
             );
 
             on_turn_end(world, ref randomizer, @game, ref player);
         }
 
-        // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemEnum,) {
+        // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemSlot,) {
         //     let world = self.world();
         //     let game = get!(world, game_id, (Game));
         //     let player_id = get_caller_address();
@@ -191,16 +186,14 @@ mod shop {
             };
 
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
-            let mut items = ItemTrait::all();
+            let mut items = ItemSlotEnumerableImpl::all();
 
             loop {
                 match items.pop_front() {
                     Option::Some(item_id) => {
                         let player_item = get!(world, (game_id, player_id, *item_id), (Item));
 
-                        let item_settings = ItemSettingsImpl::get(
-                            game.game_mode, *item_id, player_item.level + 1
-                        );
+                        let item_config = ItemConfigImpl::get(world,*item_id, (player_item.level + 1).into());
 
                         if player_item.level < shop_settings.max_item_level {
                             available
@@ -209,9 +202,8 @@ mod shop {
                                         item_id: (*item_id).into(),
                                         item_type: (*item_id).into(),
                                         level: player_item.level + 1,
-                                        name: item_settings.name,
-                                        cost: item_settings.cost,
-                                        value: item_settings.value,
+                                        cost: item_config.cost,
+                                        value: item_config.stat,
                                     }
                                 );
                         };

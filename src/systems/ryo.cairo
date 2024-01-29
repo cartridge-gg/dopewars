@@ -11,6 +11,14 @@ trait IRyo<TContractState> {
     fn initialize(self: @TContractState);
 }
 
+#[starknet::interface]
+trait IComputed<TContractState> {
+    fn swag(self: @TContractState, player: Player) -> felt252;
+}
+
+
+
+
 #[dojo::contract]
 mod ryo {
     use core::traits::Into;
@@ -19,14 +27,25 @@ mod ryo {
     use starknet::contract_address::Felt252TryIntoContractAddress;
     use starknet::info::get_tx_info;
 
-    use rollyourown::models::ryo::{RyoMeta, RyoMetaManager, RyoMetaManagerTrait};
-    use rollyourown::models::leaderboard::{Leaderboard};
+    use rollyourown::models::{
+        ryo::{RyoMeta, RyoMetaManager, RyoMetaManagerTrait}, leaderboard::Leaderboard,
+        player::Player
+    };
+
 
     use rollyourown::utils::random::{RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
 
-    use super::IRyo;
+    use super::{IRyo, IComputed};
+
+    #[abi(embed_v0)]
+    impl ComputedImpl of IComputed<ContractState> {
+        #[computed(Player)]
+        fn swag(self: @ContractState, player: Player) -> felt252 {
+            'over 9000'
+        }
+    }
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of IRyo<ContractState> {
@@ -86,10 +105,7 @@ fn game_over(world: IWorldDispatcher, ref player: Player) {
         .emit_raw(
             array![selector!("GameOver"), player.game_id.into(), player.player_id.into()],
             array![
-                player.name.into(),
-                player.status.into(),
-                player.turn.into(),
-                player.cash.into(),
+                player.name.into(), player.status.into(), player.turn.into(), player.cash.into(),
             ]
         );
 }

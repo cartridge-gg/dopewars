@@ -81,18 +81,18 @@ impl MarketImpl of MarketTrait {
     //
 
     fn quote_buy(
-        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: usize
+        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: u8
     ) -> usize {
         let drug_price = self.get_drug_price(world,location, drug);
-        let cost = drug_price * quantity;
+        let cost = drug_price * quantity.into();
         cost
     }
 
     fn quote_sell(
-        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: usize
+        ref self: MarketPacked,world: IWorldDispatcher, location: Locations, drug: Drugs, quantity: u8
     ) -> usize {
         let drug_price = self.get_drug_price(world,location, drug);
-        let payout = drug_price * quantity;
+        let payout = drug_price * quantity.into();
         payout
     }
 

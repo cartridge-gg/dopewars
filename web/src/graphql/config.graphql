@@ -1,5 +1,6 @@
-query DrugConfig {
-  drugConfigModels {
+query Config {
+  # Drugs
+  drugConfigModels(order: { field: DRUG_ID, direction: ASC }) {
     edges {
       node {
         drug
@@ -12,9 +13,6 @@ query DrugConfig {
       }
     }
   }
-}
-
-query DrugConfigMeta {
   drugConfigMetaModels {
     edges {
       node {
@@ -23,10 +21,9 @@ query DrugConfigMeta {
       }
     }
   }
-}
 
-query LocationConfig {
-  locationConfigModels {
+  # Locations
+  locationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
     edges {
       node {
         location
@@ -34,13 +31,33 @@ query LocationConfig {
       }
     }
   }
-}
-
-query LocationConfigMeta {
   locationConfigMetaModels {
     edges {
       node {
         location
+        name
+      }
+    }
+  }
+
+  # Items
+  itemConfigModels(limit:16) {
+    edges {
+      node {
+        slot
+        level
+        slot_id
+        level_id
+        cost
+        stat
+      }
+    }
+  }
+  itemConfigMetaModels(limit:16) {
+    edges {
+      node {
+        slot
+        level
         name
       }
     }

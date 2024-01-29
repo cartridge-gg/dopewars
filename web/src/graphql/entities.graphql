@@ -28,7 +28,6 @@ query GameById($gameId: u32) {
   }
 }
 
-
 query PlayerEntity($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
     totalCount
@@ -45,7 +44,7 @@ query PlayerEntity($gameId: String!, $playerId: String!) {
             quantity
           }
           ... on Item {
-            item_id
+            item
             level
             name
             value
@@ -94,7 +93,7 @@ subscription PlayerEntityRelatedDataSubscription($id: ID) {
         quantity
       }
       ... on Item {
-        item_id
+        item
         level
         name
         value

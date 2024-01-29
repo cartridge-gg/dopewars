@@ -13,7 +13,7 @@ trait ITrade<TContractState> {
         game_id: u32,
         location_id: Locations,
         drug_id: Drugs,
-        quantity: usize
+        quantity: u8
     );
 
     fn sell(
@@ -21,7 +21,7 @@ trait ITrade<TContractState> {
         game_id: u32,
         location_id: Locations,
         drug_id: Drugs,
-        quantity: usize
+        quantity: u8
     );
 }
 
@@ -61,7 +61,7 @@ mod trade {
         #[key]
         player_id: ContractAddress,
         drug_id: Drugs,
-        quantity: usize,
+        quantity: u8,
         cost: u32
     }
 
@@ -72,7 +72,7 @@ mod trade {
         #[key]
         player_id: ContractAddress,
         drug_id: Drugs,
-        quantity: usize,
+        quantity: u8,
         payout: u32
     }
 
@@ -90,7 +90,7 @@ mod trade {
             game_id: u32,
             location_id: Locations,
             drug_id: Drugs,
-            quantity: usize
+            quantity: u8
         ) {
             let world = self.world();
             let player_id = get_caller_address();
@@ -137,7 +137,7 @@ mod trade {
             game_id: u32,
             location_id: Locations,
             drug_id: Drugs,
-            quantity: usize
+            quantity: u8
         ) {
             let world = self.world();
             let player_id = get_caller_address();

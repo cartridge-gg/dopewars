@@ -13,6 +13,8 @@
       "Encounter",
       "Game",
       "Item",
+      "ItemConfig",
+      "ItemConfigMeta",
       "Leaderboard",
       "LocationConfig",
       "LocationConfigMeta",

@@ -4,11 +4,11 @@ use rollyourown::traits::{Enumerable};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
 use rollyourown::config::introspect::{
-    DrugsIntrospectionImpl, Bytes31IntrospectionImpl 
+    Bytes31IntrospectionImpl 
 };
+// DrugsIntrospectionImpl,
 
-
-#[derive(Copy, Drop, Serde, PartialEq)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Drugs {
     Ludes,
     Speed,
