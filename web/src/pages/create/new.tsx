@@ -1,26 +1,19 @@
+import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
-import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
-import Button from "@/components/Button";
-import { Alert, Arrow, ArrowInput } from "@/components/icons";
-import { InputNumber } from "@/components/InputNumber";
-import { VStack, HStack, Text, Card } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { ReactNode, useState } from "react";
-import { GameMode } from "@/dojo/types";
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { playSound, Sounds } from "@/hooks/sound";
-import { useToast } from "@/hooks/toast";
-import { Glock } from "@/components/icons/items";
-import { Clock } from "@/components/icons";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { validateAndParseAddress } from "starknet";
+import { Arrow } from "@/components/icons";
+import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { GameMode } from "@/dojo/types";
+import { Sounds, playSound } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { Card, HStack, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 
 export default function New() {
-  const router = useRouter();
+  const { router } = useRouterContext();
 
   const {
     account,

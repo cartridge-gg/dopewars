@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
 import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { ItemTextEnum } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
@@ -20,7 +19,6 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 import { Avatar } from "./avatar/Avatar";
@@ -42,9 +40,7 @@ const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void })
 };
 
 export const Profile = ({ close, ...props }: { close?: () => void }) => {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-  const playerId = router.query.playerId as string;
+  const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
   const playerStore = usePlayerStore();
@@ -60,7 +56,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const isMobile = IsMobile();
 
   useEffect(() => {
-    if (playerId) {
+    if (gameId && playerId) {
       // spectator
       playerStore.initPlayerEntity(gameId, playerId);
     }
@@ -283,8 +279,7 @@ export const ProfileButton = () => {
 };
 
 export const ProfileLink = () => {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
@@ -310,8 +305,7 @@ export const ProfileLink = () => {
 };
 
 export const ProfileLinkMobile = () => {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();

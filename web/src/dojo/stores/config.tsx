@@ -14,13 +14,14 @@ import {
   LocationConfigMeta,
   LocationConfigMetaEdge,
 } from "@/generated/graphql";
+import { GraphQLClient } from "graphql-request";
 import { shortString } from "starknet";
 import { createStore } from "zustand";
 import { drugIcons, locationIcons } from "../helpers";
 
-export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, { __typename }> & { icon: JSX.Element };
-export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, { __typename }> & { icon: JSX.Element };
-export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, { __typename }> & { icon: JSX.Element };
+export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: JSX.Element };
+export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: JSX.Element };
+export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: JSX.Element };
 
 export type Config = {
   drug: DrugConfigFull[];
@@ -29,9 +30,15 @@ export type Config = {
 };
 
 export interface ConfigStore {
-  config: Config;
+  config: Config | undefined;
+  isLoading: boolean;
+
   init: () => void;
-  // getConfig: () => void;
+  //
+  getDrug: (drug: string) => DrugConfigFull;
+  getDrugById: (drug_id: number) => DrugConfigFull;
+  getLocation: (location: string) => LocationConfigFull;
+  getLocationById: (location_id: number) => LocationConfigFull;
 }
 
 type ConfigStoreProps = {
@@ -45,7 +52,7 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
 
     init: async () => {
       const init_async = async () => {
-        set({ isLoading: true });
+        set({ ...get(), isLoading: true });
 
         try {
           const data = (await client.request(ConfigDocument, {})) as ConfigQuery;
@@ -118,15 +125,16 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
           };
 
           set({
+            ...get(),
             config,
+            isLoading: false,
           });
 
           console.log(config);
         } catch (e: any) {
           console.log(e);
+          set({ isLoading: false });
         }
-
-        set({ isLoading: false });
       };
 
       if (!get().config && !get().isLoading) {

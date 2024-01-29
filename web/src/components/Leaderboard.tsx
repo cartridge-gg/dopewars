@@ -1,35 +1,26 @@
 import {
-  StyleProps,
-  Text,
-  HStack,
-  UnorderedList,
   Box,
   Button,
+  HStack,
   ListItem,
   ListProps,
-  Modal,
-  ModalOverlay,
-  useDisclosure,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  VStack,
+  StyleProps,
+  Text,
+  UnorderedList,
+  VStack
 } from "@chakra-ui/react";
-import Input from "@/components/Input";
 
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
+import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
+import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
+import colors from "@/theme/colors";
+import { formatCash } from "@/utils/ui";
+import { useEffect, useRef, useState } from "react";
+import Countdown from "react-countdown";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromId } from "./avatar/avatars";
-import colors from "@/theme/colors";
-import { Score, useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useRouter } from "next/router";
-import { formatCash } from "@/utils/ui";
 import { Arrow, Skull } from "./icons";
-import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
-import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
-import Countdown from "react-countdown";
 
 const renderer = ({
   days,
@@ -48,10 +39,10 @@ const renderer = ({
     return <Text>RESETS NEXT GAME</Text>;
   } else {
     if (Number.isNaN(days)) {
-      days = 4
-      hours = 20
-      minutes = 4
-      seconds = 20
+      days = 4;
+      hours = 20;
+      minutes = 4;
+      seconds = 20;
     }
     return (
       <HStack textStyle="subheading" fontSize="12px">
@@ -66,8 +57,8 @@ const renderer = ({
 };
 
 const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
+
   const { account } = useDojoContext();
   const { ryoMetas } = useRyoMetas();
 
@@ -100,7 +91,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
     resetQuery();
     setCurrentVersion(ryoMetas?.leaderboard_version);
     setSelectedVersion(ryoMetas?.leaderboard_version);
-  }, [ryoMetas, /*resetQuery inifinte load if included !*/]);
+  }, [ryoMetas /*resetQuery inifinte load if included !*/]);
 
   useEffect(() => {
     if (!listRef.current) return;

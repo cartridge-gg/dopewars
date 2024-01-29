@@ -1,5 +1,11 @@
+import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
+import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
+import { getDrugById, sortDrugMarkets } from "@/dojo/helpers";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { DrugMarket } from "@/dojo/types";
+import { formatCash } from "@/utils/ui";
 import {
   Box,
   Card,
@@ -12,55 +18,42 @@ import {
   StyleProps,
   Text,
   VStack,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-import Button from "@/components/Button";
-import { Inventory } from "@/components/Inventory";
-import { getDrugById, getLocationById, getLocationBySlug, sortDrugMarkets } from "@/dojo/helpers";
-import { useConfigStore } from "@/dojo/hooks/useConfigStore";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { DrugMarket } from "@/dojo/types";
-import { formatCash } from "@/utils/ui";
-import { motion } from "framer-motion";
-
 export default function Location() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-  const locationId = getLocationBySlug(router.query.locationSlug as string)?.id || "";
+  const { router, gameId, location } = useRouterContext();
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
-  const { config } = useConfigStore()
+  const { config } = useConfigStore();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
   useEffect(() => {
-    if (playerEntity && playerEntity.markets) {
-      setPrices(playerEntity.markets.get(locationId) || []);
+    if (playerEntity && playerEntity.markets && location) {
+      setPrices(playerEntity.markets.get(location.location) || []);
     }
-  }, [locationId, playerEntity, playerEntity?.markets]);
+  }, [location, playerEntity, playerEntity?.markets]);
 
   const { endGame, isPending } = useSystems();
 
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-    if (playerEntity) {
+    if (playerEntity && location) {
       // check if player at right location
-      if (locationId !== playerEntity.locationId) {
-        router.replace(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
+      if (location?.location !== playerEntity.locationId) {
+        router.replace(`/${gameId}/${playerEntity.locationId}`);
         return;
       }
 
       setIsLastDay(playerEntity.maxTurns > 0 && playerEntity.turn >= playerEntity.maxTurns);
     }
-  }, [locationId, playerEntity, playerEntity?.locationId, router, gameId]);
+  }, [location, playerEntity, playerEntity?.locationId, router, gameId]);
 
-  if (!playerEntity || !prices) {
+  if (!playerEntity || !prices || !location) {
     return <></>;
   }
 
@@ -71,9 +64,9 @@ export default function Location() {
   return (
     <Layout
       leftPanelProps={{
-        title: getLocationById(locationId)!.name,
+        title: location.name,
         prefixTitle: prefixTitle,
-        imageSrc: `/images/locations/${getLocationById(locationId)?.slug}.png`,
+        imageSrc: `/images/locations/${location?.location.toLowerCase()}.png`,
       }}
       footer={
         <Footer>
@@ -155,7 +148,7 @@ export default function Location() {
 }
 
 const BuySellBtns = ({ canBuy, canSell, drugSlug }: { canBuy: boolean; canSell: boolean; drugSlug: string }) => {
-  const router = useRouter();
+  const { router } = useRouterContext();
   return (
     <HStack mb="10px" w="full">
       <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)} isDisabled={!canBuy}>
@@ -178,7 +171,6 @@ const BuySellMobileToggle = ({
   canSell: boolean;
   drugSlug: string;
 } & StyleProps) => {
-  const router = useRouter();
   const { isOpen, onToggle } = useDisclosure();
 
   return (

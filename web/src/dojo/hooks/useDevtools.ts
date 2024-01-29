@@ -1,12 +1,9 @@
 import { useCallback } from "react";
+import { BigNumberish, GetTransactionReceiptResponse } from "starknet";
 import { useDojoContext } from "./useDojoContext";
-import { Action, GameMode, Location, ItemEnum } from "../types";
-import { shortString, GetTransactionReceiptResponse, BigNumberish } from "starknet";
-import { parseAllEvents } from "../events";
-import { WorldEvents } from "../generated/contractEvents";
 import { SystemExecuteResult } from "./useSystems";
 
-export interface SystemsInterface {
+export interface DevtoolsInterface {
   feedLeaderboard: (
     count: number,
   ) => Promise<SystemExecuteResult>;
@@ -16,7 +13,7 @@ export interface SystemsInterface {
 }
 
 
-export const useDevtools = (): SystemsInterface => {
+export const useDevtools = (): DevtoolsInterface => {
   const {
     masterAccount,
     dojoProvider: {

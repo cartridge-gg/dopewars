@@ -11,10 +11,10 @@ trait IRyo<TContractState> {
     fn initialize(self: @TContractState);
 }
 
-#[starknet::interface]
-trait IComputed<TContractState> {
-    fn swag(self: @TContractState, player: Player) -> felt252;
-}
+// #[starknet::interface]
+// trait IComputed<TContractState> {
+//     fn swag(self: @TContractState, player: Player) -> felt252;
+// }
 
 
 
@@ -39,13 +39,13 @@ mod ryo {
 
     use super::{IRyo, IComputed};
 
-    #[abi(embed_v0)]
-    impl ComputedImpl of IComputed<ContractState> {
-        #[computed(Player)]
-        fn swag(self: @ContractState, player: Player) -> felt252 {
-            'over 9000'
-        }
-    }
+    // #[abi(embed_v0)]
+    // impl ComputedImpl of IComputed<ContractState> {
+    //     #[computed(Player)]
+    //     fn swag(self: @ContractState, player: Player) -> felt252 {
+    //         'over 9000'
+    //     }
+    // }
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of IRyo<ContractState> {

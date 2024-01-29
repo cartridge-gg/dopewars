@@ -1,30 +1,19 @@
-import Layout from "@/components/Layout";
 import { Footer } from "@/components/Footer";
+import Layout from "@/components/Layout";
 
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import {
   getActionName,
-  getDrugById,
   getDrugByType,
   getLocationById,
-  getOutcomeInfo,
   getOutcomeName,
-  getShopItem,
-  getShopItemByType,
+  getShopItemByType
 } from "@/dojo/helpers";
-import { useSystems } from "@/dojo/hooks/useSystems";
 
-import { HStack, Heading, ListItem, Text, UnorderedList, VStack, Box, Tooltip, Image } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import Button from "@/components/Button";
-import { useEffect, useRef, useState } from "react";
-import { IsMobile, formatCash } from "@/utils/ui";
-import { Bag, DollarBag, Event } from "@/components/icons";
-import { usePlayerLogs } from "@/dojo/queries/usePlayerLogs";
-import { GameCreatedData, PlayerJoinedData, WorldEvents } from "@/dojo/generated/contractEvents";
+import { Profile } from "@/components/ProfileButton";
+import { DollarBag, Event } from "@/components/icons";
 import {
   AdverseEventData,
-  AtPawnshopEventData,
   BoughtEventData,
   BoughtItemEventData,
   ConsequenceEventData,
@@ -33,11 +22,15 @@ import {
   JoinedEventData,
   ParseEventResult,
   SoldEventData,
-  TraveledEventData,
+  TraveledEventData
 } from "@/dojo/events";
-import { Action, Outcome, PlayerStatus } from "@/dojo/types";
-import { Profile } from "@/components/ProfileButton";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { WorldEvents } from "@/dojo/generated/contractEvents";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { usePlayerLogs } from "@/dojo/queries/usePlayerLogs";
+import { Outcome } from "@/dojo/types";
+import { IsMobile, formatCash } from "@/utils/ui";
+import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 
 type LogByDay = {
   day: number;
@@ -46,12 +39,10 @@ type LogByDay = {
 };
 
 export default function Logs() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-  const playerId = router.query.playerId as string;
+  const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 
@@ -207,7 +198,7 @@ function renderDay(log: LogByDay) {
               break;
 
             case WorldEvents.GameOver:
-             // return renderGameOver(i as GameOverEventData, key);
+              // return renderGameOver(i as GameOverEventData, key);
               break;
 
             case WorldEvents.AtPawnshop:

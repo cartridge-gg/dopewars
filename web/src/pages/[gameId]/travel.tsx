@@ -1,43 +1,36 @@
-import { Arrow, Car, Siren, Truck } from "@/components/icons";
-import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
-import colors from "@/theme/colors";
+import Layout from "@/components/Layout";
+import { Arrow } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
-import {
-  Box,
-  HStack,
-  VStack,
-  Text,
-  useEventListener,
-  Card,
-  Grid,
-  GridItem,
-  Spacer,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Map as MapSvg } from "@/components/map";
+import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { WorldEvents } from "@/dojo/generated/contractEvents";
 import {
   getDrugById,
-  getDrugByType,
   getLocationById,
   getLocationByType,
   locations,
-  sortDrugMarkets,
+  sortDrugMarkets
 } from "@/dojo/helpers";
-import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { formatCash, generatePixelBorderPath } from "@/utils/ui";
-import { Map as MapSvg } from "@/components/map";
-
-import { useToast } from "@/hooks/toast";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Location } from "@/dojo/types";
-import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
-
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { Footer } from "@/components/Footer";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useToast } from "@/hooks/toast";
+import colors from "@/theme/colors";
+import { formatCash, generatePixelBorderPath } from "@/utils/ui";
+import {
+  Box,
+  Card,
+  Grid,
+  GridItem,
+  HStack,
+  Text,
+  VStack,
+  useDisclosure,
+  useEventListener
+} from "@chakra-ui/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface MarketPriceInfo {
   id: string;
@@ -47,8 +40,8 @@ interface MarketPriceInfo {
 }
 
 export default function Travel() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
+
   const [targetId, setTargetId] = useState<string>();
   const [currentLocationId, setCurrentLocationId] = useState<string>();
 
@@ -56,7 +49,7 @@ export default function Travel() {
   const { travel, isPending } = useSystems();
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const locationName = useMemo(() => {
     if (targetId) {
@@ -179,7 +172,7 @@ export default function Travel() {
     }
   }, [targetId, router, gameId, travel, toaster, playerEntity]);
 
-  if (!playerEntity ) return <></>;
+  if (!playerEntity) return <></>;
 
   return (
     <Layout

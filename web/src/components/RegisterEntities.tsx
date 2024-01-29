@@ -1,12 +1,8 @@
-import { useConfigStore } from "@/dojo/hooks/useConfigStore";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
-import { useRouter } from "next/router";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { useEffect } from "react";
 
 const RegisterEntities = () => {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { gameId } = useRouterContext();
 
   const { account } = useDojoContext();
   const playerStore = usePlayerStore();

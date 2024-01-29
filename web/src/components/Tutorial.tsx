@@ -1,27 +1,22 @@
+import Button from "@/components/Button";
+import { useRouterContext } from "@/dojo/hooks";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { Sounds } from "@/hooks/sound";
 import {
-  Text,
-  VStack,
+  Box,
   HStack,
-  Divider,
-  Card,
   Heading,
   Image,
-  Box,
-  Link as ChakraLink,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalOverlay,
+  Text,
+  VStack
 } from "@chakra-ui/react";
-import Layout from "@/components/Layout";
-import Button from "@/components/Button";
-import { useState, useEffect } from "react";
-import { playSound, Sounds } from "@/hooks/sound";
+import { useEffect, useState } from "react";
 import Dot from "./Dot";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useRouter } from "next/router";
 
 const steps = [
   {
@@ -69,7 +64,7 @@ const TutorialStep = ({ step }: { step: { step: number; title: string; desc: str
 };
 
 const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
-  const router = useRouter();
+  const { router } = useRouterContext();
 
   const [currentStep, setCurrentStep] = useState(1);
   const {

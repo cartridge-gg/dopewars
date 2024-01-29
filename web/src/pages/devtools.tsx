@@ -1,13 +1,9 @@
 import Layout from "@/components/Layout";
-import { useDevtools } from "@/dojo/hooks/useDevtools";
-import { useSystems } from "@/dojo/hooks/useSystems";
+import { useDevtools, useSystems } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { Button, HStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 
 export default function LeaderboardPage() {
-  const router = useRouter();
-
   const { toast } = useToast();
 
   const { feedLeaderboard } = useDevtools();

@@ -1,12 +1,10 @@
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Divider, Flex, HStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
@@ -18,8 +16,8 @@ export interface HeaderProps {
 }
 
 const Header = ({ back }: HeaderProps) => {
-  const router = useRouter();
-  const { gameId } = router.query as { gameId: string };
+  const { router, gameId } = useRouterContext();
+  
   const [inventory, setInventory] = useState(0);
   const {
     account,

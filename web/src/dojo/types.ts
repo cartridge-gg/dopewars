@@ -102,6 +102,7 @@ export type DrugMarket = {
   id: string; // id is hex encoded drug name
   type: Drug;
   price: number;
+  weight: number;
 };
 
 export type LocationPrices = Map<string, DrugMarket[]>;

@@ -1,16 +1,12 @@
 import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { Bag } from "./icons";
 
 export const Inventory = ({ ...props }: StyleProps) => {
-  const router = useRouter();
-  const { gameId } = router.query as { gameId: string };
+  const { gameId } = useRouterContext();
   const { account } = useDojoContext();
-
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>

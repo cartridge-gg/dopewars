@@ -1,17 +1,17 @@
-import { ConfigStore } from "@/hooks/config";
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo, useRef } from "react";
 import { Account, RpcProvider } from "starknet";
+import { StoreApi } from "zustand";
 import { SetupResult } from "../setup/setup";
-import { createConfigStore } from "../stores/config";
+import { ConfigStore, createConfigStore } from "../stores/config";
 import { PlayerStore, createPlayerStore } from "../stores/player";
 
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
   account: Account | null;
   burner: BurnerAccount;
-  playerStore: PlayerStore;
-  //   configStore: ConfigStore;
+  playerStore: StoreApi<PlayerStore>;
+  configStore: StoreApi<ConfigStore>;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -46,19 +46,19 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
       }),
     });
 
-  const playerStoreRef = useRef<PlayerStore>();
+  const playerStoreRef = useRef<StoreApi<PlayerStore>>();
   if (!playerStoreRef.current) {
     playerStoreRef.current = createPlayerStore({
       client: value.graphqlClient,
       wsClient: value.graphqlWsClient,
-    })
+    });
   }
 
-  const configStoreRef = useRef<ConfigStore>();
+  const configStoreRef = useRef<StoreApi<ConfigStore>>();
   if (!configStoreRef.current) {
     configStoreRef.current = createConfigStore({
       client: value.graphqlClient,
-    })
+    });
   }
 
   return (

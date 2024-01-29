@@ -1,28 +1,30 @@
-import { useCallback, useEffect, useState } from "react";
-import { Box, Text, VStack, HStack, Card, Button, Flex, Image } from "@chakra-ui/react";
-import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
-import { Alert, ArrowEnclosed, Cart } from "@/components/icons";
-import { Footer } from "@/components/Footer";
-import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
-import { Sounds, playSound } from "@/hooks/sound";
 import AlertMessage from "@/components/AlertMessage";
+import { Footer } from "@/components/Footer";
+import Layout from "@/components/Layout";
+import { ArrowEnclosed } from "@/components/icons";
+import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { formatQuantity, formatCash } from "@/utils/ui";
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { calculateMaxQuantity, calculateSlippage } from "@/utils/market";
-import { useToast } from "@/hooks/toast";
-import { getDrugBySlug, getLocationBySlug } from "@/dojo/helpers";
 import { DrugInfo, DrugMarket, TradeDirection } from "@/dojo/types";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { Sounds, playSound } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { formatCash } from "@/utils/ui";
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  HStack,
+  Image,
+  Slider,
+  SliderFilledTrack,
+  SliderTrack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Market() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-  const tradeDirection = (router.query.tradeDirection as string) === "buy" ? TradeDirection.Buy : TradeDirection.Sell;
-  const location = getLocationBySlug(router.query.locationSlug as string);
-  const drug = getDrugBySlug(router.query.drugSlug as string);
+  const { router, gameId, location, drug, tradeDirection } = useRouterContext();
 
   const [market, setMarket] = useState<DrugMarket>();
   const [quantityBuy, setQuantityBuy] = useState(0);
@@ -33,19 +35,19 @@ export default function Market() {
   const { account } = useDojoContext();
   const { buy, sell, isPending } = useSystems();
 
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const { toast } = useToast();
 
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    if (!playerEntity || isPending) return;
+    if (!playerEntity || isPending || !location) return;
 
-    const markets = playerEntity.markets.get(location!.id) || [];
-    const market = markets.find((d) => d.id === drug?.id);
+    const markets = playerEntity.markets.get(location!.location) || [];
+    const market = markets.find((d) => d.id === drug?.drug);
     if (!market) return;
 
-    const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.id);
+    const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.drug);
     if (playerDrug) {
       setCanSell(playerDrug.quantity > 0);
     }
@@ -57,8 +59,6 @@ export default function Market() {
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
 
-    router.push(`/${gameId}/${location!.slug}`);
-
     let toastMessage = "",
       hash = "",
       quantity,
@@ -66,11 +66,11 @@ export default function Market() {
 
     try {
       if (tradeDirection === TradeDirection.Buy) {
-        ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy));
+        ({ hash } = await buy(gameId, location!.location_id, drug!.drug_id, quantityBuy));
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
       } else if (tradeDirection === TradeDirection.Sell) {
-        ({ hash } = await sell(gameId, location!.type, drug!.type, quantitySell));
+        ({ hash } = await sell(gameId, location!.location_id, drug!.drug_id, quantitySell));
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
       }
@@ -83,6 +83,8 @@ export default function Market() {
     } catch (e) {
       console.log(e);
     }
+
+    router.push(`/${gameId}/${location!.location.toLowerCase()}`);
   }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell]);
 
   if (!router.isReady || !playerEntity || !drug || !market) return <></>;
@@ -128,11 +130,14 @@ export default function Market() {
     >
       <Box w="full" margin="auto">
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Image src={`/images/drugs/${drug.slug}.png`} alt={drug.name} h={[140, 300]} maxH="40vh" />
+          <Image src={`/images/drugs/${drug.drug.toLowerCase()}.png`} alt={drug.name} h={[140, 300]} maxH="40vh" />
           <HStack w="100%" justifyContent="space-between" fontSize="16px">
             <HStack>
               {drug.icon({ boxSize: "36px" })}
               <Text>{formatCash(market.price)}</Text>
+            </HStack>
+            <HStack>
+              <Text>{market.weight} LBS</Text>
             </HStack>
           </HStack>
         </Card>
@@ -141,7 +146,7 @@ export default function Market() {
             drug={drug}
             player={playerEntity}
             market={market}
-            type={tradeDirection}
+            tradeDirection={tradeDirection}
             onChange={(quantity, _) => {
               if (tradeDirection == TradeDirection.Buy) {
                 setQuantityBuy(quantity);
@@ -163,39 +168,39 @@ export default function Market() {
 }
 
 const QuantitySelector = ({
-  type,
+  tradeDirection,
   player,
   drug,
   market,
   onChange,
 }: {
-  type: TradeDirection;
+  tradeDirection: TradeDirection;
   drug: DrugInfo;
   player: PlayerEntity;
   market: DrugMarket;
   onChange: (quantity: number, newPrice: number) => void;
 }) => {
-  const [totalPrice, setTotalPrice] = useState<number>(market.price);
-  const [priceImpact, setPriceImpact] = useState<number>(0);
-  const [alertColor, setAlertColor] = useState<string>("neon.500");
+  const [totalPrice, setTotalPrice] = useState(market.price);
+  const [priceImpact, setPriceImpact] = useState(0);
+  const [alertColor, setAlertColor] = useState("neon.500");
   const [quantity, setQuantity] = useState(0);
   const [max, setMax] = useState(0);
 
   useEffect(() => {
-    if (type === TradeDirection.Buy) {
+    if (tradeDirection === TradeDirection.Buy) {
       //let max_buyable = calculateMaxQuantity(market, player.cash);
       let max_buyable = Math.floor(player.cash / market.price);
       let bag_space = player.getTransport() - player.drugCount;
       setMax(Math.min(max_buyable, bag_space));
-    } else if (type === TradeDirection.Sell) {
-      const playerQuantity = player.drugs.find((d) => d.id === drug.id)?.quantity;
+    } else if (tradeDirection === TradeDirection.Sell) {
+      const playerQuantity = player.drugs.find((d) => d.id === drug.drug)?.quantity;
       setMax(playerQuantity || 0);
       setQuantity(playerQuantity || 0);
     }
-  }, [type, drug, player, market]);
+  }, [tradeDirection, drug, player, market]);
 
   useEffect(() => {
-    // const slippage = calculateSlippage(market.marketPool, quantity, type);
+    // const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
 
     // if (slippage.priceImpact > 0.2) {
     //   // >20%
@@ -210,7 +215,7 @@ const QuantitySelector = ({
     // setPriceImpact(slippage.priceImpact);
     setTotalPrice(quantity * market.price);
     onChange(quantity, market.price);
-  }, [quantity, market, type, onChange]);
+  }, [quantity, market, tradeDirection, onChange]);
 
   const onDown = useCallback(() => {
     if (quantity > 1) {
@@ -240,6 +245,12 @@ const QuantitySelector = ({
             Total:
           </Text>
           <Text textStyle="subheading">{totalPrice ? formatCash(totalPrice) : "$0"}</Text>
+        </HStack>
+        <HStack fontSize="13px">
+          <Text textStyle="subheading" color="neon.500">
+            Weight:
+          </Text>
+          <Text textStyle="subheading">{Number(quantity * market.weight).toFixed(2)} LBS</Text>
         </HStack>
       </Flex>
 

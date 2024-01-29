@@ -1,32 +1,25 @@
-import {
-  Text,
-  VStack,
-  HStack,
-  Divider,
-  Card,
-  Heading,
-  Image,
-  Box,
-  Link as ChakraLink,
-  keyframes,
-} from "@chakra-ui/react";
-import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { useRouter } from "next/router";
+import HomeLeftPanel from "@/components/HomeLeftPanel";
+import Layout from "@/components/Layout";
+import Leaderboard from "@/components/Leaderboard";
+import Tutorial from "@/components/Tutorial";
 import { Alert, Clock } from "@/components/icons";
 import { User } from "@/components/icons/archive";
-import { playSound, Sounds } from "@/hooks/sound";
-import Leaderboard from "@/components/Leaderboard";
-import { useToast } from "@/hooks/toast";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { getLocationById } from "@/dojo/helpers";
-import HomeLeftPanel from "@/components/HomeLeftPanel";
-import Tutorial from "@/components/Tutorial";
-import { useEffect, useState } from "react";
+import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
+import { Sounds, playSound } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import {
+  Card,
+  Divider,
+  HStack,
+  Text,
+  VStack
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const router = useRouter();
+  const { router } = useRouterContext();
 
   const {
     account,

@@ -1,20 +1,15 @@
-import { Text, HStack, Divider, Image } from "@chakra-ui/react";
-import Button from "@/components/Button";
 import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
-import { Link } from "@/components/icons";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useEffect } from "react";
-import { Location, PlayerStatus } from "@/dojo/types";
 import { getLocationByType } from "@/dojo/helpers";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { PlayerStatus } from "@/dojo/types";
+import { Image } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 export default function Redirector() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   useEffect(() => {
     if (playerEntity?.status === PlayerStatus.Normal) {

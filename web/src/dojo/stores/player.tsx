@@ -95,7 +95,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
             },
             {
               next: ({ data }) => {
-                return onPlayerEntityRelatedData({  set, data });
+                return onPlayerEntityRelatedData({ set, data });
               },
               error: (error) => console.log({ error }),
               complete: () => console.log("complete"),
@@ -103,7 +103,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
           ),
         );
       }
-      
+
       set({ id: id, handles: handles });
     },
     executeQuery: async (gameId: string, playerId: string) => {
@@ -122,7 +122,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
   }));
 };
 
-const onPlayerEntityData = ({  set, data }: { data: World__Subscription }) => {
+const onPlayerEntityData = ({ set, data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   let playerUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "Player") as Player;
@@ -140,7 +140,7 @@ const onPlayerEntityData = ({  set, data }: { data: World__Subscription }) => {
   }
 };
 
-const onPlayerEntityRelatedData = ({  set, data }: { data: World__Subscription }) => {
+const onPlayerEntityRelatedData = ({ set, data }: { data: World__Subscription }) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {

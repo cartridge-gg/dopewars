@@ -1,24 +1,18 @@
+import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { getLocationById, getOutcomeInfo } from "@/dojo/helpers";
-import { Box, Heading, Text, VStack, Image } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import Button from "@/components/Button";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useMemo } from "react";
-import { OutcomeInfo, PlayerStatus } from "@/dojo/types";
-import { Outcome } from "@/dojo/types";
-import { playSound, Sounds } from "@/hooks/sound";
-import { useEffect, useState } from "react";
+import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { Outcome, OutcomeInfo, PlayerStatus } from "@/dojo/types";
+import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Consequence() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-
+  const { router, gameId } = useRouterContext();
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
   const [isDead, setIsDead] = useState<boolean>(false);

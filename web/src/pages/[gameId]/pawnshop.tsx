@@ -1,46 +1,25 @@
-import { Footer } from "@/components/Footer";
-import Header from "@/components/Header";
-import Input from "@/components/Input";
-import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { Alert } from "@/components/icons";
-import { InputNumber } from "@/components/InputNumber";
-import {
-  VStack,
-  HStack,
-  Text,
-  Card,
-  CardFooter,
-  CardBody,
-  CardHeader,
-  SimpleGrid,
-  Box,
-  Heading,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { ReactNode, useState, useEffect } from "react";
-import { GameMode, ShopItemInfo, ItemEnum, ItemTextEnum } from "@/dojo/types";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { playSound, Sounds } from "@/hooks/sound";
-import { useToast } from "@/hooks/toast";
-
-import { Truck } from "@/components/icons/Truck";
-import { getLocationById, getLocationByType, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
+import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
+import Layout from "@/components/Layout";
 import { MarketEventData, displayMarketEvents } from "@/dojo/events";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { getLocationById, getShopItemStatname } from "@/dojo/helpers";
+import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
+import { ShopItemInfo } from "@/dojo/types";
+import { Sounds, playSound } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 
 export default function PawnShop() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
+  const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
   const { buyItem, dropItem, skipShop, isPending } = useSystems();
   const { availableShopItems } = useAvailableShopItems(gameId);
 
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const [isBuying, setIsBuying] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
@@ -122,9 +101,7 @@ export default function PawnShop() {
             px={["auto", "20px"]}
             isLoading={isBuying}
             isDisabled={
-              isPending ||
-              !selectedShopItem ||
-              selectedShopItem.cost > playerEntity.cash 
+              isPending || !selectedShopItem || selectedShopItem.cost > playerEntity.cash
               // ||(playerEntity?.items.length === playerEntity?.maxItems &&
               //   playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
             }
@@ -159,7 +136,7 @@ export default function PawnShop() {
                   isActive={shopItem === selectedShopItem}
                   justifyContent="stretch"
                   isDisabled={
-                    shopItem.cost > playerEntity.cash 
+                    shopItem.cost > playerEntity.cash
                     // || (playerEntity?.items.length === playerEntity?.maxItems &&
                     //   playerEntity?.items.find((i) => i.id === shopItem?.typeText) === undefined)
                   }

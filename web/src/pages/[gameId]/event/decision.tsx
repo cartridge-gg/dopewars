@@ -1,25 +1,22 @@
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
-import { ShopItem, PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { getLocationById, getShopItem } from "@/dojo/helpers";
-import { useSystems } from "@/dojo/hooks/useSystems";
-import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
-import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
-import { Card, Divider, HStack, Heading, Text, VStack, Image, StyleProps, Box } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import Layout from "@/components/Layout";
-import { Footer } from "@/components/Footer";
 import Button from "@/components/Button";
-import { useToast } from "@/hooks/toast";
-import { playSound, Sounds } from "@/hooks/sound";
+import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
-import { IsMobile, formatCash } from "@/utils/ui";
-import { getSentence } from "@/responses";
+import Layout from "@/components/Layout";
+import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
+import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { getShopItem } from "@/dojo/helpers";
+import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
+import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
 import { Encounter } from "@/generated/graphql";
-import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { Sounds, playSound } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { getSentence } from "@/responses";
+import { IsMobile, formatCash } from "@/utils/ui";
+import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 
 type CombatLog = {
   text: string;
@@ -28,13 +25,9 @@ type CombatLog = {
 };
 
 export default function Decision() {
-  const router = useRouter();
-  const gameId = router.query.gameId as string;
-  const healthLoss = router.query.healthLoss as string;
-  const demandPct = router.query.demandPct as string;
-
+  const { router, gameId, healthLoss, demandPct } = useRouterContext();
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { playerEntity } = usePlayerStore();
 
   const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState("");
@@ -254,10 +247,11 @@ export default function Decision() {
           sentence={sentence}
           encounter={encounter!}
           playerEntity={playerEntity}
-          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? 
-            `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif` : 
-            `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
-            }`}
+          imageSrc={`/images/events/${
+            status == PlayerStatus.BeingMugged
+              ? `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+              : `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+          }`}
           flex={[0, 1]}
           mb={0}
           w="full"
@@ -307,7 +301,7 @@ export default function Decision() {
           <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isRunning || isPaying}
               isLoading={isFigthing}
               onClick={() => {
@@ -320,7 +314,7 @@ export default function Decision() {
 
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isPaying || isFigthing}
               isLoading={isRunning}
               onClick={() => {
@@ -332,7 +326,7 @@ export default function Decision() {
             </Button>
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isRunning || isFigthing}
               isLoading={isPaying}
               onClick={() => {

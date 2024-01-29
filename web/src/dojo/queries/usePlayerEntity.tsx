@@ -120,7 +120,7 @@ export class PlayerEntity {
       this.items.push({
         id: newItem.item as ItemTextEnum,
         level: newItem.level,
-      //  name: shortString.decodeShortString(newItem.name),
+        name: 'TODO', //shortString.decodeShortString(newItem.name),
         value: newItem.value,
       });
     }
@@ -214,6 +214,7 @@ export class PlayerEntity {
       return {
         id: itemModel.item as ItemTextEnum,
         level: itemModel.level,
+        name:"TODO",
         //name: shortString.decodeShortString(itemModel.name),
         value: itemModel.value,
       };
