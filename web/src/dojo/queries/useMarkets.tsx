@@ -1,5 +1,5 @@
-import { getDrugByType, getLocationByType } from "../helpers";
-import { Drug, DrugMarket, Location, LocationPrices } from "../types";
+import { ConfigStore } from "../stores/config";
+import { Drug, DrugMarket, LocationPrices } from "../types";
 
 
 // todo load config from contracts
@@ -29,7 +29,7 @@ class MarketPackedHelper {
     this.packed = BigInt(packed);
   }
 
-  get_tick(location_id: Location, drug_id: Drug) {
+  get_tick(location_id: number, drug_id: Drug) {
     const location_count = 6n;
     const size = 6n;
     const start = BigInt((BigInt(location_id) * location_count + BigInt(drug_id)) * size);
@@ -45,8 +45,8 @@ class MarketPackedHelper {
     return tick * drug_price.step + drug_price.base;
   }
 
-  get_drug_price(location: Location, drug: Drug) {
-    const tick = this.get_tick(location, drug);
+  get_drug_price(location_id: number, drug: Drug) {
+    const tick = this.get_tick(location_id, drug);
     return this.get_drug_price_by_tick(drug, tick);
   }
 }
@@ -58,33 +58,32 @@ export class MarketPrices {
     this.locationPrices = locationMarkets;
   }
 
-  static create(packed: string): LocationPrices {
+  static create(configStore: ConfigStore,packed: string): LocationPrices {
     console.log(`MarketPrices.create`);
    
     const market = new MarketPackedHelper(packed);
 
     const locationPrices: LocationPrices = new Map();
 
-    for (let location of [0, 1, 2, 3, 4, 5]) {
+    for (let locationId of [ 1, 2, 3, 4, 5, 6]) {
 
-      for (let drug of [0, 1, 2, 3, 4, 5]) {
-        const price = market.get_drug_price(location as Location, drug as Drug);
-
-        const drugType = drug;
-        const drugId = getDrugByType(drug)!.id;
-        const locationId = getLocationByType(location + 1)!.id;
+      for (let drugId of [0, 1, 2, 3, 4, 5]) {
+        const price = market.get_drug_price(locationId-1, drugId as Drug);
+       
+        const drug = configStore.getDrugById(drugId)!;
+        const location = configStore.getLocationById(locationId)!;
 
         const drugMarket: DrugMarket = {
-          id: drugId,
-          type: drugType,
+          drug: drug.drug,
+          drugId: drug.drug_id,
           price: Number(price),
-          weight: 0.69
+          weight: drug.weight / 100
         };
 
-        if (locationPrices.has(locationId)) {
-          locationPrices.get(locationId)?.push(drugMarket);
+        if (locationPrices.has(location.location)) {
+          locationPrices.get(location.location)?.push(drugMarket);
         } else {
-          locationPrices.set(locationId, [drugMarket]);
+          locationPrices.set(location.location, [drugMarket]);
         }
       }
     }

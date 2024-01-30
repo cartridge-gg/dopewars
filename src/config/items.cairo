@@ -224,30 +224,6 @@ fn initialize_item_config(world: IWorldDispatcher) {
         }
     );
 
-    // Attack - Level1
-    set!(
-        world,
-        ItemConfigMeta {
-            slot: ItemSlot::Attack,
-            level: ItemLevel::Level1,
-            slot_id: ItemSlot::Attack.into(),
-            level_id: ItemLevel::Level1.into(),
-            name: 'Knife'.try_into().unwrap()
-        }
-    );
-
-    set!(
-        world,
-        ItemConfig {
-            slot: ItemSlot::Attack,
-            level: ItemLevel::Level1,
-            slot_id: ItemSlot::Attack.into(),
-            level_id: ItemLevel::Level1.into(),
-            cost: 450,
-            stat: 9
-        }
-    );
-
     // Attack - Level2
     set!(
         world,
@@ -332,7 +308,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             level: ItemLevel::Level1,
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level1.into(),
-            name: 'Knee pads'.try_into().unwrap()
+            name: 'Knee Pads'.try_into().unwrap()
         }
     );
 
@@ -532,7 +508,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             level: ItemLevel::Level1,
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level1.into(),
-            name: 'Fanny pack'.try_into().unwrap()
+            name: 'Fanny Pack'.try_into().unwrap()
         }
     );
 

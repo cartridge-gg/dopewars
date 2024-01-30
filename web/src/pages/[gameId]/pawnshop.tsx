@@ -3,10 +3,9 @@ import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
 import { MarketEventData, displayMarketEvents } from "@/dojo/events";
-import { getLocationById, getShopItemStatname } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
-import { ShopItemInfo } from "@/dojo/types";
+import { ItemConfigFull } from "@/dojo/stores/config";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
@@ -16,19 +15,20 @@ export default function PawnShop() {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { buyItem, dropItem, skipShop, isPending } = useSystems();
-  const { availableShopItems } = useAvailableShopItems(gameId);
+  const { buyItem, skipShop, isPending } = useSystems();
+  const { availableShopItems } = useAvailableShopItems();
 
   const { playerEntity } = usePlayerStore();
+  const configStore = useConfigStore()
 
   const [isBuying, setIsBuying] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
 
   const toaster = useToast();
 
-  const [selectedShopItem, setSelectedShopItem] = useState<ShopItemInfo | undefined>(undefined);
+  const [selectedShopItem, setSelectedShopItem] = useState<ItemConfigFull | undefined>(undefined);
 
-  const selectItem = (shopItem: ShopItemInfo) => {
+  const selectItem = (shopItem: ItemConfigFull) => {
     // do checks
     if (selectedShopItem === shopItem) {
       setSelectedShopItem(undefined);
@@ -46,7 +46,7 @@ export default function PawnShop() {
         displayMarketEvents(events as MarketEventData[], toaster);
       }
 
-      router.push(`/${gameId}/${getLocationById(playerEntity?.nextLocationId)?.slug}`);
+      router.push(`/${gameId}/${configStore.getLocationById(playerEntity?.nextLocationId)?.location.toLowerCase()}`);
     } catch (e) {
       console.log(e);
     }
@@ -61,7 +61,7 @@ export default function PawnShop() {
     try {
       const icon = selectedShopItem.icon;
       playSound(Sounds.Trade);
-      const { hash, events } = await buyItem(gameId, selectedShopItem.type);
+      const { hash, events } = await buyItem(gameId, selectedShopItem.slot_id);
 
       toaster.toast({
         message: `${selectedShopItem.name} equiped!`,
@@ -72,7 +72,7 @@ export default function PawnShop() {
       if (events) {
         displayMarketEvents(events as MarketEventData[], toaster);
       }
-      router.push(`/${gameId}/${getLocationById(playerEntity?.nextLocationId)?.slug}`);
+      router.push(`/${gameId}/${configStore.getLocation(playerEntity?.nextLocationId)?.location.toLowerCase()}`);
     } catch (e) {
       console.log(e);
     }
@@ -102,8 +102,7 @@ export default function PawnShop() {
             isLoading={isBuying}
             isDisabled={
               isPending || !selectedShopItem || selectedShopItem.cost > playerEntity.cash
-              // ||(playerEntity?.items.length === playerEntity?.maxItems &&
-              //   playerEntity?.items.find((i) => i.id === selectedShopItem?.typeText) === undefined)
+       
             }
             onClick={buy}
           >
@@ -135,11 +134,7 @@ export default function PawnShop() {
                   variant="selectable"
                   isActive={shopItem === selectedShopItem}
                   justifyContent="stretch"
-                  isDisabled={
-                    shopItem.cost > playerEntity.cash
-                    // || (playerEntity?.items.length === playerEntity?.maxItems &&
-                    //   playerEntity?.items.find((i) => i.id === shopItem?.typeText) === undefined)
-                  }
+                  isDisabled={shopItem.cost > playerEntity.cash}
                 >
                   <VStack w="full" gap="10px">
                     <HStack w="full" justify="space-between">
@@ -151,7 +146,7 @@ export default function PawnShop() {
                     <HStack w="full" justifyContent="space-between">
                       <Text fontSize={["18px", "20px"]}>${shopItem.cost}</Text>
                       <Text fontSize={["14px", "16px"]} opacity="0.5">
-                        {getShopItemStatname(shopItem.typeText)} +{shopItem.value}
+                        {/*getShopItemStatname(shopItem.typeText)*/}TODO +{shopItem.stat}
                       </Text>
                     </HStack>
                   </VStack>

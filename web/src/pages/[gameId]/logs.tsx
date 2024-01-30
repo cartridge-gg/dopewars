@@ -1,13 +1,7 @@
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 
-import {
-  getActionName,
-  getDrugByType,
-  getLocationById,
-  getOutcomeName,
-  getShopItemByType
-} from "@/dojo/helpers";
+import { getActionName, getOutcomeName, getShopItemByType } from "@/dojo/helpers";
 
 import Button from "@/components/Button";
 import { Profile } from "@/components/ProfileButton";
@@ -22,11 +16,12 @@ import {
   JoinedEventData,
   ParseEventResult,
   SoldEventData,
-  TraveledEventData
+  TraveledEventData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { usePlayerLogs } from "@/dojo/queries/usePlayerLogs";
+import { ConfigStore } from "@/dojo/stores/config";
 import { Outcome } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
@@ -43,6 +38,7 @@ export default function Logs() {
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
+  const configStore = useConfigStore();
 
   const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
 
@@ -143,7 +139,7 @@ export default function Logs() {
       rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(log))}
+        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, log))}
       </VStack>
     </Layout>
   );
@@ -160,12 +156,12 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(log: LogByDay) {
+function renderDay(configStore: ConfigStore, log: LogByDay) {
   return (
     <>
       {log.location !== "Hood" && (
         <HStack w="full" mt={["20px", "30px"]}>
-          {getLocationById(log.location)?.icon({ color: "neon.500" })}
+          {configStore.getLocationById(log.location)?.icon({ color: "neon.500" })}
           <Text fontSize={["10px", "12px"]} w="full" textStyle="subheading" color="neon.500">
             DAY {log.day + 1} - {log.location}
           </Text>
@@ -178,15 +174,15 @@ function renderDay(log: LogByDay) {
 
           switch (i.eventType) {
             case WorldEvents.BoughtItem:
-              return renderBoughtItem(i as BoughtItemEventData, key);
+              return renderBoughtItem( i as BoughtItemEventData, key);
               break;
 
             case WorldEvents.Bought:
-              return renderBought(i as BoughtEventData, key);
+              return renderBought(configStore, i as BoughtEventData, key);
               break;
 
             case WorldEvents.Sold:
-              return renderSold(i as SoldEventData, key);
+              return renderSold(configStore, i as SoldEventData, key);
               break;
 
             case WorldEvents.AdverseEvent:
@@ -262,26 +258,26 @@ function renderBoughtItem(log: BoughtItemEventData, key: string) {
   );
 }
 
-function renderBought(log: BoughtEventData, key: string) {
-  const drug = getDrugByType(Number(log.drugId));
+function renderBought(configStore: ConfigStore, log: BoughtEventData, key: string) {
+  const drug = configStore.getDrugById(Number(log.drugId))!;
   return (
     <Line
       key={key}
-      icon={drug!.icon}
-      text={`Bought ${drug!.name}`}
+      icon={drug.icon}
+      text={`Bought ${drug.name}`}
       quantity={log.quantity}
       total={`- ${formatCash(log.cost)}`}
     />
   );
 }
 
-function renderSold(log: SoldEventData, key: string) {
-  const drug = getDrugByType(Number(log.drugId));
+function renderSold(configStore: ConfigStore, log: SoldEventData, key: string) {
+  const drug = configStore.getDrugById(Number(log.drugId))!;
   return (
     <Line
       key={key}
-      icon={drug!.icon}
-      text={`Sold ${drug!.name}`}
+      icon={drug.icon}
+      text={`Sold ${drug.name}`}
       quantity={log.quantity}
       total={`+ ${formatCash(log.payout)}`}
     />

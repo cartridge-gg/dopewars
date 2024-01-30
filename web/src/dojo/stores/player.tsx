@@ -1,7 +1,7 @@
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { GraphQLClient } from "graphql-request";
 import { Client } from "graphql-ws";
-import { createStore } from "zustand";
+import { StoreApi, createStore } from "zustand";
 
 import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
 import {
@@ -17,10 +17,12 @@ import {
   World__EntityEdge,
   World__Subscription,
 } from "@/generated/graphql";
+import { ConfigStore } from "./config";
 
 export interface PlayerStore {
   client: GraphQLClient;
   wsClient: Client;
+  configStore: StoreApi<ConfigStore>;
   id: string | null;
   playerEntity: PlayerEntity | null;
   handles: Array<() => void>;
@@ -33,12 +35,14 @@ export interface PlayerStore {
 type PlayerStoreProps = {
   client: GraphQLClient;
   wsClient: Client;
+  configStore: StoreApi<ConfigStore>;
 };
 
-export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
+export const createPlayerStore = ({ client, wsClient, configStore }: PlayerStoreProps) => {
   return createStore<PlayerStore>((set, get) => ({
     client,
     wsClient,
+    configStore,
     id: null,
     playerEntity: null,
     handles: [],
@@ -73,7 +77,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
           },
           {
             next: ({ data }) => {
-              return onPlayerEntityData({ set, data });
+              return onPlayerEntityData({ set, data, configStore: configStore.getState() });
             },
             error: (error) => console.log({ error }),
             complete: () => console.log("complete"),
@@ -95,7 +99,7 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
             },
             {
               next: ({ data }) => {
-                return onPlayerEntityRelatedData({ set, data });
+                return onPlayerEntityRelatedData({ set, data, configStore: configStore.getState() });
               },
               error: (error) => console.log({ error }),
               complete: () => console.log("complete"),
@@ -115,14 +119,14 @@ export const createPlayerStore = ({ client, wsClient }: PlayerStoreProps) => {
       const edges = data!.entities!.edges as World__EntityEdge[];
 
       if (edges && edges[0] && edges[0].node) {
-        const player = PlayerEntity.create(data?.entities?.edges as World__EntityEdge[]);
+        const player = PlayerEntity.create(configStore.getState(), data?.entities?.edges as World__EntityEdge[]);
         set({ playerEntity: player });
       }
     },
   }));
 };
 
-const onPlayerEntityData = ({ set, data }: { data: World__Subscription }) => {
+const onPlayerEntityData = ({ set, data, configStore }: { data: World__Subscription; configStore: ConfigStore }) => {
   if (!data?.entityUpdated?.models) return;
 
   let playerUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "Player") as Player;
@@ -135,12 +139,19 @@ const onPlayerEntityData = ({ set, data }: { data: World__Subscription }) => {
   let marketUpdate = data?.entityUpdated?.models.find((i) => i?.__typename === "MarketPacked") as MarketPacked;
   if (marketUpdate && marketUpdate.packed) {
     set((state) => ({
-      playerEntity: state.playerEntity?.updateMarkets(marketUpdate),
+      playerEntity: state.playerEntity?.updateMarkets(configStore, marketUpdate),
     }));
   }
 };
 
-const onPlayerEntityRelatedData = ({ set, data }: { data: World__Subscription }) => {
+const onPlayerEntityRelatedData = ({
+  set,
+  data,
+  configStore,
+}: {
+  data: World__Subscription;
+  configStore: ConfigStore;
+}) => {
   if (!data?.entityUpdated?.models) return;
 
   for (let model of data?.entityUpdated?.models) {

@@ -2,8 +2,8 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { getDrugById, sortDrugMarkets } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
 import { formatCash } from "@/utils/ui";
 import {
@@ -28,7 +28,7 @@ export default function Location() {
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
-  const { config } = useConfigStore();
+  const configStore = useConfigStore();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Location() {
     }
   }, [location, playerEntity, playerEntity?.locationId, router, gameId]);
 
-  if (!playerEntity || !prices || !location) {
+  if (!playerEntity || !prices || !location || !configStore) {
     return <></>;
   }
 
@@ -94,8 +94,8 @@ export default function Location() {
 
       <VStack w="full" align="flex-start" gap="10px">
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
-          {sortDrugMarkets(prices).map((drug, index) => {
-            const drugInfo = getDrugById(drug.id)!;
+          {prices.map((drug, index) => {
+            const drugConfig = configStore.getDrug(drug.drug)!;
             const canBuy = drug.price <= playerEntity.cash && playerEntity.drugCount < playerEntity.getTransport();
             const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
             return (
@@ -106,7 +106,7 @@ export default function Location() {
                   textAlign="left"
                   padding={["6px 10px", "10px 20px"]}
                 >
-                  {drugInfo.name}
+                  {drugConfig.name}
                 </CardHeader>
                 <CardBody>
                   <HStack w="full" justify="center">
@@ -121,10 +121,10 @@ export default function Location() {
                       pointerEvents={["none", "auto"]}
                     >
                       <HStack h="100px" w="full" p="20px" gap="10px" bgColor="neon.900">
-                        <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugInfo.slug} />
+                        <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
                       </HStack>
                     </Flex>
-                    {drugInfo.icon({})}
+                    {drugConfig.icon({})}
                   </HStack>
                 </CardBody>
 
@@ -136,7 +136,7 @@ export default function Location() {
                       <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
                     </HStack> */}
                   </HStack>
-                  <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugSlug={drugInfo.slug} />
+                  <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
                 </CardFooter>
               </Card>
             );
@@ -147,14 +147,31 @@ export default function Location() {
   );
 }
 
-const BuySellBtns = ({ canBuy, canSell, drugSlug }: { canBuy: boolean; canSell: boolean; drugSlug: string }) => {
+const BuySellBtns = ({
+  canBuy,
+  canSell,
+  drugSlug,
+  drugConfig,
+}: {
+  canBuy: boolean;
+  canSell: boolean;
+  drugConfig: DrugConfigFull;
+}) => {
   const { router } = useRouterContext();
   return (
     <HStack mb="10px" w="full">
-      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugSlug}/buy`)} isDisabled={!canBuy}>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugConfig.drug.toLowerCase()}/buy`)}
+        isDisabled={!canBuy}
+      >
         Buy
       </Button>
-      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugSlug}/sell`)} isDisabled={!canSell}>
+      <Button
+        flex="1"
+        onClick={() => router.push(`${router.asPath}/${drugConfig.drug.toLowerCase()}/sell`)}
+        isDisabled={!canSell}
+      >
         Sell
       </Button>
     </HStack>
@@ -164,12 +181,12 @@ const BuySellBtns = ({ canBuy, canSell, drugSlug }: { canBuy: boolean; canSell: 
 const BuySellMobileToggle = ({
   canBuy,
   canSell,
-  drugSlug,
+  drugConfig,
   ...props
 }: {
   canBuy: boolean;
   canSell: boolean;
-  drugSlug: string;
+  drugConfig: DrugConfigFull;
 } & StyleProps) => {
   const { isOpen, onToggle } = useDisclosure();
 
@@ -190,7 +207,7 @@ const BuySellMobileToggle = ({
         display={["flex", "none"]}
         {...props}
       >
-        <BuySellBtns canBuy={canBuy} canSell={canSell} drugSlug={drugSlug} />
+        <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
       </HStack>
     </>
   );

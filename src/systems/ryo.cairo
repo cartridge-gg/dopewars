@@ -11,14 +11,6 @@ trait IRyo<TContractState> {
     fn initialize(self: @TContractState);
 }
 
-// #[starknet::interface]
-// trait IComputed<TContractState> {
-//     fn swag(self: @TContractState, player: Player) -> felt252;
-// }
-
-
-
-
 #[dojo::contract]
 mod ryo {
     use core::traits::Into;
@@ -32,23 +24,11 @@ mod ryo {
         player::Player
     };
 
-
     use rollyourown::utils::random::{RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
-
-    use super::{IRyo, IComputed};
-
-    // #[abi(embed_v0)]
-    // impl ComputedImpl of IComputed<ContractState> {
-    //     #[computed(Player)]
-    //     fn swag(self: @ContractState, player: Player) -> felt252 {
-    //         'over 9000'
-    //     }
-    // }
-
     #[abi(embed_v0)]
-    impl RyoExternalImpl of IRyo<ContractState> {
+    impl RyoExternalImpl of super::IRyo<ContractState> {
         fn initialize(self: @ContractState) {
             //todo check caller is world owner
             let meta_manager = RyoMetaManagerTrait::new(self.world());

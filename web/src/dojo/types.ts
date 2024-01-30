@@ -99,8 +99,8 @@ export interface OutcomeInfo {
 }
 
 export type DrugMarket = {
-  id: string; // id is hex encoded drug name
-  type: Drug;
+  drug: string;
+  drugId: number;
   price: number;
   weight: number;
 };

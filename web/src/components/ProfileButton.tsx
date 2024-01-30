@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { getLocationById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { ItemTextEnum } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
@@ -45,6 +45,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const { account } = useDojoContext();
   const playerStore = usePlayerStore();
   const { playerEntity } = playerStore;
+  const configStore = useConfigStore()
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(undefined);
@@ -98,7 +99,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                 />
                 <HStack h="50px" px="10px">
                   {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
-                  <Cigarette /> <Text>{getLocationById(playerEntity.locationId)?.name}</Text>
+                  <Cigarette /> <Text>{configStore.getLocationById(playerEntity.locationId)?.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">

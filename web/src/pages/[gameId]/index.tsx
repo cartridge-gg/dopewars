@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
-import { getLocationByType } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
 import { Image } from "@chakra-ui/react";
 import { useEffect } from "react";
@@ -10,10 +9,11 @@ export default function Redirector() {
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
+  const configStore = useConfigStore()
 
   useEffect(() => {
     if (playerEntity?.status === PlayerStatus.Normal) {
-      router.push(`/${gameId}/${getLocationByType(Number(playerEntity!.locationId))?.slug}`);
+      router.push(`/${gameId}/${configStore.getLocation(playerEntity!.locationId)?.location.toLowerCase()}`);
     } else if (playerEntity?.status === PlayerStatus.AtPawnshop) {
       router.push(`/${gameId}/pawnshop`);
     } else if (

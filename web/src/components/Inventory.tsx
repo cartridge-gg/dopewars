@@ -1,5 +1,5 @@
-import { getDrugById, getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
 import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
 import { Bag } from "./icons";
 
@@ -7,6 +7,7 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const { gameId } = useRouterContext();
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
+  const configStore = useConfigStore();
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
@@ -64,22 +65,23 @@ export const Inventory = ({ ...props }: StyleProps) => {
               <Text color="neon.500">No product</Text>
             ) : (
               playerEntity?.drugs.map((drug, key) => {
+                const drugConfig = configStore.getDrug(drug.id)!;
                 return (
                   drug.quantity > 0 && (
                     <>
                       <HStack gap="10px" key={`item-${key * 2}`}>
                         <HStack color="yellow.400">
-                          {getDrugById(drug.id)?.icon({ boxSize: "26" })}
+                          {drugConfig.icon({ boxSize: "26" })}
                           <Text>{drug.quantity}</Text>
                         </HStack>
                       </HStack>
                       <Divider
                         key={`item-${key * 2 + 1}`}
-                        _last={{ display: "none" }}
                         h="10px"
                         orientation="vertical"
                         borderWidth="1px"
                         borderColor="neon.600"
+                        _last={{ display: "none" }}
                       />
                     </>
                   )

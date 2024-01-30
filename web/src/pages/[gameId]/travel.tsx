@@ -8,14 +8,10 @@ import { Map as MapSvg } from "@/components/map";
 import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import {
-  getDrugById,
-  getLocationById,
-  getLocationByType,
   locations,
   sortDrugMarkets
 } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { Location } from "@/dojo/types";
+import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
@@ -33,7 +29,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface MarketPriceInfo {
-  id: string;
+  drug: string;
   price: number;
   diff?: number;
   percentage?: number;
@@ -50,10 +46,11 @@ export default function Travel() {
 
   const { account } = useDojoContext();
   const { playerEntity } = usePlayerStore();
+  const configStore = useConfigStore()
 
   const locationName = useMemo(() => {
     if (targetId) {
-      return getLocationById(targetId)?.name;
+      return configStore.getLocation(targetId)?.name;
     }
   }, [targetId]);
 
@@ -63,7 +60,7 @@ export default function Travel() {
         setCurrentLocationId(playerEntity.locationId);
         setTargetId(playerEntity.locationId);
       } else {
-        setTargetId(getLocationByType(Location.Central)?.id);
+        setTargetId("Queens");
       }
     }
   }, [playerEntity, isPending]);
@@ -80,7 +77,7 @@ export default function Travel() {
           const percentage = (Math.abs(drug.price - current[index].price) / current[index].price) * 100;
 
           return {
-            id: drug.id,
+            drug: drug.drug,
             price: drug.price,
             diff,
             percentage,
@@ -88,7 +85,7 @@ export default function Travel() {
         }
 
         return {
-          id: drug.id,
+          drug: drug.drug,
           price: drug.price,
         } as MarketPriceInfo;
       });
@@ -135,7 +132,7 @@ export default function Travel() {
   const onContinue = useCallback(async () => {
     if (targetId && playerEntity) {
       try {
-        const locationId = getLocationById(targetId)!.type;
+        const locationId = configStore.getLocation(targetId).location_id
         const { event, events, hash, isGameOver } = await travel(gameId, locationId);
 
         if (isGameOver) {
@@ -164,8 +161,7 @@ export default function Travel() {
         //   link: `http://amazing_explorer/${hash}`,
         // });
 
-        const locationSlug = getLocationById(targetId)!.slug;
-        router.push(`/${gameId}/${locationSlug}`);
+        router.push(`/${gameId}/${configStore.getLocation(targetId)!.location.toLowerCase()}`);
       } catch (e) {
         console.log(e);
       }
@@ -181,10 +177,10 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <MapSvg
-            target={getLocationById(targetId)?.type}
-            current={getLocationById(currentLocationId)?.type}
+            target={targetId}
+            current={currentLocationId}
             onSelect={(selected) => {
-              setTargetId(getLocationByType(selected)!.id);
+              setTargetId(selected);
             }}
           />
         ),
@@ -243,6 +239,7 @@ export default function Travel() {
 
 const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
+  const configStore = useConfigStore()
 
   return (
     <VStack w="full">
@@ -275,10 +272,11 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box position="absolute" boxSize="full" border="2px" borderColor="neon.900" />
           {prices.map((drug, index) => {
+            const drugConfig = configStore.getDrug(drug.drug)!;
             return (
               <GridItem key={index} colSpan={1} border="1px" p="6px" borderColor="neon.600">
                 <HStack gap="8px">
-                  {getDrugById(drug.id)?.icon({
+                  {drugConfig.icon({
                     boxSize: "24px",
                   })}
                   <Text display={isCurrentLocation ? "block" : ["none", "block"]}>${drug.price.toFixed(0)}</Text>

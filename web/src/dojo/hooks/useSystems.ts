@@ -1,14 +1,11 @@
-import { useCallback } from "react";
-import { useDojoContext } from "./useDojoContext";
-import { Action, Drug, GameMode, ShopItemInfo } from "../types";
-import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
-import { getEvents } from "@dojoengine/utils";
-import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
-import { WorldEvents } from "../generated/contractEvents";
-import { Location, ItemEnum } from "../types";
-import { useState } from "react";
 import { useToast } from "@/hooks/toast";
-import { ShopItem } from "../queries/usePlayerEntity";
+import { getEvents } from "@dojoengine/utils";
+import { useCallback, useState } from "react";
+import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse, shortString } from "starknet";
+import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, JoinedEventData, MarketEventData, parseAllEvents } from "../events";
+import { WorldEvents } from "../generated/contractEvents";
+import { Action, Drug, GameMode, Location } from "../types";
+import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
   createGame: (
@@ -37,10 +34,7 @@ export interface SystemsInterface {
     action: Action,
   ) => Promise<SystemExecuteResult>;
   buyItem: (
-    gameId: string, itemId: ItemEnum
-  ) => Promise<SystemExecuteResult>;
-  dropItem: (
-    gameId: string, itemId: ItemEnum
+    gameId: string, itemId: number
   ) => Promise<SystemExecuteResult>;
   skipShop: (
     gameId: string,
@@ -306,7 +300,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const buyItem = useCallback(
-    async (gameId: string, itemId: ItemEnum) => {
+    async (gameId: string, itemId: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::shop::shop",
         "buy_item",
@@ -318,21 +312,6 @@ export const useSystems = (): SystemsInterface => {
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.MarketEvent)
           .map((e) => e as MarketEventData),
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const dropItem = useCallback(
-    async (gameId: string, itemId: ItemEnum) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "drop_item",
-        [gameId, itemId],
-      );
-
-      return {
-        hash,
       };
     },
     [executeAndReceipt],
@@ -401,7 +380,6 @@ export const useSystems = (): SystemsInterface => {
     //setName,
     decide,
     buyItem,
-    dropItem,
     skipShop,
 
     // devtool

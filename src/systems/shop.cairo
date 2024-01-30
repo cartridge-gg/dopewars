@@ -4,11 +4,8 @@ use rollyourown::config::items::{ItemSlot, ItemLevel};
 
 #[derive(Copy, Drop, Serde)]
 struct AvailableItem {
-    item_id: u8,
-    item_type: felt252,
-    level: u8,
-    cost: u32,
-    value: u8
+    slot_id: u8,
+    level_id: u8,
 }
 
 #[starknet::interface]
@@ -186,24 +183,21 @@ mod shop {
             };
 
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
-            let mut items = ItemSlotEnumerableImpl::all();
+            let mut item_slots = ItemSlotEnumerableImpl::all();
 
             loop {
-                match items.pop_front() {
-                    Option::Some(item_id) => {
-                        let player_item = get!(world, (game_id, player_id, *item_id), (Item));
+                match item_slots.pop_front() {
+                    Option::Some(slot) => {
+                        let player_item = get!(world, (game_id, player_id, *slot), (Item));
 
-                        let item_config = ItemConfigImpl::get(world,*item_id, (player_item.level + 1).into());
+                        let item_config = ItemConfigImpl::get(world,*slot, (player_item.level + 1).into());
 
                         if player_item.level < shop_settings.max_item_level {
                             available
                                 .append(
                                     AvailableItem {
-                                        item_id: (*item_id).into(),
-                                        item_type: (*item_id).into(),
-                                        level: player_item.level + 1,
-                                        cost: item_config.cost,
-                                        value: item_config.stat,
+                                        slot_id: (*slot).into(),
+                                        level_id: player_item.level + 1,
                                     }
                                 );
                         };

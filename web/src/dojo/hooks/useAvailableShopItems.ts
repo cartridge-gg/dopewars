@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { shortString } from "starknet";
-import { getShopItem } from "../helpers";
-import { ItemTextEnum, ShopItemInfo } from "../types";
+import { ItemConfigFull } from "../stores/config";
+import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
+import { useRouterContext } from "./useRouterContext";
 
-export const useAvailableShopItems = (gameId: string) => {
+export const useAvailableShopItems = () => {
+    const { gameId } = useRouterContext()
     const {
         account,
         dojoProvider,
     } = useDojoContext();
+    const configStore = useConfigStore()
 
-    const [availableShopItems, setAvailableShopItems] = useState<ShopItemInfo[]>([]);
+    const [availableShopItems, setAvailableShopItems] = useState<ItemConfigFull[]>([]);
 
     useEffect(() => {
         const update = async () => {
@@ -22,17 +24,8 @@ export const useAvailableShopItems = (gameId: string) => {
                 ) as any[];
 
                 const shopItems = items.map(i => {
-                    const itemInfos = getShopItem(shortString.decodeShortString(i.item_type) as ItemTextEnum, Number(i.level));
-                    return {
-                        id: i.item_id,
-                        type: itemInfos.type,
-                        typeText: itemInfos.id,
-                       // name: shortString.decodeShortString(i.name),
-                        level: Number(i.level),
-                        cost: Number(i.cost),
-                        value: Number(i.value),
-                        icon: itemInfos.icon,
-                    } as ShopItemInfo
+                    const itemConfig = configStore.getItemByIds(Number(i.slot_id), Number(i.level_id))!
+                    return itemConfig
                 })
 
                 setAvailableShopItems(shopItems)

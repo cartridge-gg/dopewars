@@ -17,7 +17,7 @@ import {
 import { GraphQLClient } from "graphql-request";
 import { shortString } from "starknet";
 import { createStore } from "zustand";
-import { drugIcons, locationIcons } from "../helpers";
+import { drugIcons, locationIcons, itemIcons } from "../helpers";
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: JSX.Element };
 export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: JSX.Element };
@@ -39,6 +39,7 @@ export interface ConfigStore {
   getDrugById: (drug_id: number) => DrugConfigFull;
   getLocation: (location: string) => LocationConfigFull;
   getLocationById: (location_id: number) => LocationConfigFull;
+  getItemByIds: (slot_id: number, level_id: number) => ItemConfigFull;
 }
 
 type ConfigStoreProps = {
@@ -109,10 +110,12 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
 
           const itemConfigFull = itemConfig.map((i) => {
             const meta = itemConfigMeta.find((m) => m.slot === i.slot && m.level === i.level);
+            const name = shortString.decodeShortString(meta?.name); // todo: remove when bytes31 is supported
             return {
               ...i,
               ...meta,
-              name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
+              name,
+              icon: itemIcons[name],
             } as LocationConfigFull;
           });
 
@@ -156,5 +159,8 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
       return get().config.location.find((i) => i.location_id === location_id);
     },
     /****************************************************/
+    getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
+      return get().config.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id);
+    },
   }));
 };

@@ -66,6 +66,24 @@ export const drugIcons = {
   "Cocaine": Cocaine,
 }
 
+export const itemIcons = {
+  "Knife": Knife,
+  "Glock": Glock,
+  "Uzi": Uzi,
+  //
+  "Fanny Pack": Fannypack,
+  "Backpack": Backpack,
+  "Duffle Bag": Dufflebag,
+  //
+  "Knee Pads": Kneepads,
+  "Leather Jacket": Leatherjacket,
+  "Kevlar": Kevlar,
+  //
+  "Shoes": Shoes,
+  "Skateboard": Skateboard,
+  "Bicycle": Bicycle,
+}
+
 export const locations: LocationInfo[] = [
   {
     type: Location.Queens,
@@ -384,21 +402,21 @@ export function getLocationByType(type: Location) {
   return findBy<LocationInfo>(locations, "type", type);
 }
 
-export function getLocationById(id?: string) {
-  return findBy<LocationInfo>(locations, "id", id);
-}
+// export function getLocationById(id?: string) {
+//   return findBy<LocationInfo>(locations, "id", id);
+// }
 
-export function getLocationBySlug(slug: string) {
-  return findBy<LocationInfo>(locations, "slug", slug);
-}
+// export function getLocationBySlug(slug: string) {
+//   return findBy<LocationInfo>(locations, "slug", slug);
+// }
 
-export function getDrugById(id: string) {
-  return findBy<DrugInfo>(drugs, "id", id);
-}
+// export function getDrugById(id: string) {
+//   return findBy<DrugInfo>(drugs, "id", id);
+// }
 
-export function getDrugBySlug(slug: string) {
-  return findBy<DrugInfo>(drugs, "slug", slug);
-}
+// export function getDrugBySlug(slug: string) {
+//   return findBy<DrugInfo>(drugs, "slug", slug);
+// }
 
 export function getDrugByType(type: Drug) {
   return findBy<DrugInfo>(drugs, "type", type);
@@ -447,7 +465,7 @@ export function getOutcomeName(outcome: Outcome): string {
     case Outcome.Victorious:
       return "Victorious";
     default:
-      return  "?"
+      return "?"
   }
 }
 
@@ -480,12 +498,17 @@ export function getOutcomeInfo(
   return found || outcomes[0];
 }
 
-export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
-  if (!drugMarkets) {
-    return [];
-  }
+// export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
+//   if (!drugMarkets) {
+//     return [];
+//   }
 
-  return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
+//   return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
+// }
+
+
+export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
+  return drugMarkets
 }
 
 

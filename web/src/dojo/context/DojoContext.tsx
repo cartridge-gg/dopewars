@@ -46,18 +46,19 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
       }),
     });
 
+  const configStoreRef = useRef<StoreApi<ConfigStore>>();
+  if (!configStoreRef.current) {
+    configStoreRef.current = createConfigStore({
+      client: value.graphqlClient,
+    });
+  }
+
   const playerStoreRef = useRef<StoreApi<PlayerStore>>();
   if (!playerStoreRef.current) {
     playerStoreRef.current = createPlayerStore({
       client: value.graphqlClient,
       wsClient: value.graphqlWsClient,
-    });
-  }
-
-  const configStoreRef = useRef<StoreApi<ConfigStore>>();
-  if (!configStoreRef.current) {
-    configStoreRef.current = createConfigStore({
-      client: value.graphqlClient,
+      configStore: configStoreRef.current
     });
   }
 

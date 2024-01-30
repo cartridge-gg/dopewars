@@ -7,6 +7,7 @@ import {
   World__EntityEdge
 } from "@/generated/graphql";
 import { shortString } from "starknet";
+import { ConfigStore } from "../stores/config";
 import { DrugMarket, ItemTextEnum, PlayerStatus } from "../types";
 import { MarketPrices } from "./useMarkets";
 
@@ -48,7 +49,7 @@ export class PlayerEntity {
 
   markets: Map<string,DrugMarket[]>;
 
-  constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[], marketPacked: MarketPacked) {
+  constructor(configStore: ConfigStore, player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[], marketPacked: MarketPacked) {
     this.name = shortString.decodeShortString(player.name);
     this.avatarId = player.avatar_id;
     this.cash = Number(player.cash) ;
@@ -75,7 +76,7 @@ export class PlayerEntity {
     this.items = items;
     this.encounters = encounters;
 
-    this.markets = MarketPrices.create(marketPacked.packed);
+    this.markets = MarketPrices.create(configStore, marketPacked.packed);
   }
 
   update(player: Player) {
@@ -92,8 +93,8 @@ export class PlayerEntity {
     return this;
   }
 
-  updateMarkets(marketPacked: MarketPacked) {
-    this.markets = MarketPrices.create(marketPacked.packed);
+  updateMarkets(configStore:ConfigStore, marketPacked: MarketPacked) {
+    this.markets = MarketPrices.create(configStore, marketPacked.packed);
     return this;
   }
 
@@ -174,7 +175,7 @@ export class PlayerEntity {
     return this.speed;
   }
 
-  static create(edges: World__EntityEdge[]): PlayerEntity | undefined {
+  static create(configStore: ConfigStore, edges: World__EntityEdge[]): PlayerEntity | undefined {
     if (!edges || edges.length === 0) return undefined;
 
     // player model
@@ -235,6 +236,6 @@ export class PlayerEntity {
 
     if (!playerModel) return undefined;
 
-    return new PlayerEntity(playerModel, drugs, items, encounters, marketModel);
+    return new PlayerEntity(configStore, playerModel, drugs, items, encounters, marketModel);
   }
 }

@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x4a123b939fc32f2eb4b521d7770e0097c5f230b767a98e0cb80d2151397e005",
+      "class_hash": "0x26abaeb6ba08dfedc0385ff86b2fb556a27e52c1e6fef4b894a60884f4b4",
       "abi": [
         {
           "type": "impl",
@@ -1644,7 +1644,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x5b9d8d94a201bd82b8dc10f393a4187c9a513aba1d105d6b3b4a75c3e8299ad",
-      "class_hash": "0x39a154484a566a12c52f19a2446555949e1eb93f8ef047083a7cff51bfc1985",
+      "class_hash": "0x15589acf91f24f294ffdf206581891d0c6563b331e7c21ec4a26ceb14baea02",
       "abi": [
         {
           "type": "impl",
@@ -1672,181 +1672,6 @@
               "outputs": [
                 {
                   "type": "dojo::world::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "ComputedImpl",
-          "interface_name": "rollyourown::systems::ryo::IComputed"
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::models::player::PlayerStatus",
-          "variants": [
-            {
-              "name": "Normal",
-              "type": "()"
-            },
-            {
-              "name": "BeingMugged",
-              "type": "()"
-            },
-            {
-              "name": "BeingArrested",
-              "type": "()"
-            },
-            {
-              "name": "AtPawnshop",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::locations::Locations",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::models::player::Player",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "avatar_id",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "status",
-              "type": "rollyourown::models::player::PlayerStatus"
-            },
-            {
-              "name": "location_id",
-              "type": "rollyourown::config::locations::Locations"
-            },
-            {
-              "name": "next_location_id",
-              "type": "rollyourown::config::locations::Locations"
-            },
-            {
-              "name": "turn",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "drug_count",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "attack",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "defense",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "transport",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "speed",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "wanted",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "leaderboard_version",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "game_over",
-              "type": "core::bool"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::ryo::IComputed",
-          "items": [
-            {
-              "type": "function",
-              "name": "swag",
-              "inputs": [
-                {
-                  "name": "player",
-                  "type": "rollyourown::models::player::Player"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::felt252"
                 }
               ],
               "state_mutability": "view"
@@ -1949,7 +1774,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x6273b8cce2367a1c576473ab1f0a429a0d9cf4f187ed95da6c074e9b97bb620",
+      "class_hash": "0x44e6c57304c6ef7472eec3c24e4fb9d2e157bd9128ad70ebe797d6ed385e628",
       "abi": [
         {
           "type": "impl",
@@ -2029,23 +1854,11 @@
           "name": "rollyourown::systems::shop::AvailableItem",
           "members": [
             {
-              "name": "item_id",
+              "name": "slot_id",
               "type": "core::integer::u8"
             },
             {
-              "name": "item_type",
-              "type": "core::felt252"
-            },
-            {
-              "name": "level",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "cost",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "value",
+              "name": "level_id",
               "type": "core::integer::u8"
             }
           ]
