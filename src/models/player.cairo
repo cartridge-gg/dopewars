@@ -141,7 +141,7 @@ impl PlayerImpl of PlayerTrait {
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum PlayerStatus {
     Normal: (),
     BeingMugged: (),
@@ -149,34 +149,34 @@ enum PlayerStatus {
     AtPawnshop: (),
 }
 
-impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
-    #[inline(always)]
-    fn size() -> usize {
-        1
-    }
+// impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
+//     #[inline(always)]
+//     fn size() -> usize {
+//         1
+//     }
 
-    #[inline(always)]
-    fn layout(ref layout: Array<u8>) {
-        layout.append(8);
-    }
+//     #[inline(always)]
+//     fn layout(ref layout: Array<u8>) {
+//         layout.append(8);
+//     }
 
-    #[inline(always)]
-    fn ty() -> Ty {
-        Ty::Enum(
-            Enum {
-                name: 'PlayerStatus',
-                attrs: array![].span(),
-                children: array![
-                    ('Normal', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
-                    ('AtPawnshop', serialize_member_type(@Ty::Tuple(array![].span()))),
-                ]
-                    .span()
-            }
-        )
-    }
-}
+//     #[inline(always)]
+//     fn ty() -> Ty {
+//         Ty::Enum(
+//             Enum {
+//                 name: 'PlayerStatus',
+//                 attrs: array![].span(),
+//                 children: array![
+//                     ('Normal', serialize_member_type(@Ty::Tuple(array![].span()))),
+//                     ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
+//                     ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
+//                     ('AtPawnshop', serialize_member_type(@Ty::Tuple(array![].span()))),
+//                 ]
+//                     .span()
+//             }
+//         )
+//     }
+// }
 
 
 impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {

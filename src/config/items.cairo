@@ -169,11 +169,6 @@ impl U8IntoItemLevel of Into<u8, ItemLevel> {
     }
 }
 
-// #[generate_trait]
-// impl ItemConfigImpl of ItemConfigTrait {
-//     fn get(slot: ItemSlot, level: ItemLevel) -> ItemConfig {
-//  }
-//}
 
 fn initialize_item_config(world: IWorldDispatcher) {
     // Attack - Level0

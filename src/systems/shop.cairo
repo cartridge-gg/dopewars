@@ -114,13 +114,6 @@ mod shop {
 
             assert(item.level < shop_settings.max_item_level, 'item max level');
 
-            // buyin a new item, not upgrading
-            if item.level == 0 {
-                assert(
-                    player.get_item_count(world) < shop_settings.max_item_allowed, 'max item count'
-                )
-            }
-
             let item_config = ItemConfigImpl::get(world, item_id, level: (item.level + 1).into());
 
             assert(player.cash >= item_config.cost, 'too poor');

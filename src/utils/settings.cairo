@@ -51,7 +51,6 @@ struct DecideSettings {
 
 #[derive(Copy, Drop, Serde)]
 struct ShopSettings {
-    max_item_allowed: u8,
     max_item_level: u8,
     opening_freq: u8
 }
@@ -88,7 +87,7 @@ trait EncounterSettingsTrait<T> {
 
 impl GameSettingsImpl of SettingsTrait<GameSettings> {
     fn get(game_mode: GameMode) -> GameSettings {
-        let mut game_settings = GameSettings {  max_turns: 30 };
+        let mut game_settings = GameSettings { max_turns: 30 };
 
         if game_mode == GameMode::Test {
             game_settings.max_turns = 7;
@@ -101,13 +100,7 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
 impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
     fn get(game_mode: GameMode) -> PlayerSettings {
         let mut player_settings = PlayerSettings {
-            health: 100,
-            cash: 1420,
-            wanted: 39,
-            attack: 1,
-            defense: 1,
-            transport: 60,
-            speed: 1
+            health: 100, cash: 1420, wanted: 39, attack: 1, defense: 1, transport: 60, speed: 1
         };
 
         if game_mode == GameMode::Test {
@@ -187,7 +180,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
             health
         };
         let dmg = level * 2 + (turn / 5);
-        let payout: u32 =  level.into() * (5000 + (1500 * turn.into()));
+        let payout: u32 = level.into() * (5000 + (1500 * turn.into()));
 
         EncounterSettings { level, health, dmg, payout }
     }
@@ -200,9 +193,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 
 impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
-        let mut shop_settings = ShopSettings {
-            max_item_allowed: 3, max_item_level: 3, opening_freq: 4
-        };
+        let mut shop_settings = ShopSettings { max_item_level: 3, opening_freq: 4 };
 
         if game_mode == GameMode::Test {
             shop_settings.opening_freq = 2;
@@ -211,118 +202,3 @@ impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
         shop_settings
     }
 }
-
-
-// impl ItemSettingsImpl of ItemSettingsTrait<ItemSettings> {
-//     fn get(game_mode: GameMode, item_id: ItemEnum, level: u8) -> ItemSettings {
-//         let item_settings = match item_id {
-//             ItemEnum::Attack => {
-//                 if level == 1 {
-//                     ItemSettings { name: 'Knife', cost: 450 , value: 9 }
-//                 } else if level == 2 {
-//                     ItemSettings { name: 'Glock', cost: 12000 , value: 24 }
-//                 } else {
-//                     ItemSettings { name: 'Uzi', cost: 99000 , value: 49 }
-//                 }
-//             },
-//             ItemEnum::Defense => {
-//                 if level == 1 {
-//                     ItemSettings { name: 'Knee pads', cost: 350 , value: 24 }
-//                 } else if level == 2 {
-//                     ItemSettings { name: 'Leather Jacket', cost: 8900 , value: 39 }
-//                 } else {
-//                     ItemSettings { name: 'Kevlar', cost: 69000 , value: 59 }
-//                 }
-//             },
-//             ItemEnum::Transport => {
-//                 if level == 1 {
-//                     ItemSettings { name: 'Fanny pack', cost: 500 , value: 30 }
-//                 } else if level == 2 {
-//                     ItemSettings { name: 'Backpack', cost: 15000 , value: 60 }
-//                 } else {
-//                     ItemSettings { name: 'Duffle Bag', cost: 99000 , value: 100 }
-//                 }
-//             },
-//             ItemEnum::Speed => {
-//                 if level == 1 {
-//                     ItemSettings { name: 'Shoes', cost: 250 , value: 9 }
-//                 } else if level == 2 {
-//                     ItemSettings { name: 'Skateboard', cost: 9900 , value: 24 }
-//                 } else {
-//                     ItemSettings { name: 'Bicycle', cost: 79000 , value: 39 }
-//                 }
-//             },
-//         };
-//         item_settings
-//     }
-// }
-
-
-
-//
-//
-//
-
-// impl PriceSettingsImpl of DrugSettingsTrait<PriceSettings> {
-//     fn get(game_mode: GameMode, drug_id: Drugs) -> PriceSettings {
-//         match game_mode {
-//             GameMode::Test => { pricing_notme(drug_id) },
-//             GameMode::Unlimited => { pricing_notme(drug_id) },
-//         }
-//     }
-// }
-
-
-// fn pricing_notme(drug_id: Drugs) -> PriceSettings {
-//     match drug_id {
-//         Drugs::Ludes => {
-//             PriceSettings {
-//                 min_price: 30 ,
-//                 max_price: 140 ,
-//                 min_qty: 1800,
-//                 max_qty: 3600,
-//             }
-//         },
-//         Drugs::Speed => {
-//             PriceSettings {
-//                 min_price: 120 ,
-//                 max_price: 480 ,
-//                 min_qty: 1500,
-//                 max_qty: 3000,
-//             }
-//         },
-//         Drugs::Weed => {
-//             PriceSettings {
-//                 min_price: 420 ,
-//                 max_price: 1600 ,
-//                 min_qty: 1300,
-//                 max_qty: 2600,
-//             }
-//         },
-//         Drugs::Acid => {
-//             PriceSettings {
-//                 min_price: 1200 ,
-//                 max_price: 4000 ,
-//                 min_qty: 1200,
-//                 max_qty: 2400,
-//             }
-//         },
-//         Drugs::Heroin => {
-//             PriceSettings {
-//                 min_price: 3800 ,
-//                 max_price: 10500 ,
-//                 min_qty: 1100,
-//                 max_qty: 2200,
-//             }
-//         },
-//         Drugs::Cocaine => {
-//             PriceSettings {
-//                 min_price: 8800 ,
-//                 max_price: 20500 ,
-//                 min_qty: 900,
-//                 max_qty: 1800,
-//             }
-//         },
-//     }
-// }
-
