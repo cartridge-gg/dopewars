@@ -9,6 +9,14 @@ struct Bits {
     bits: u256,
 }
 
+impl BitsDefaultImpl of Default<Bits> {
+    fn default() -> Bits {
+        Bits {
+            bits: 0
+        }
+    }
+}
+
 #[generate_trait]
 impl BitsImpl of BitsTrait {
     fn from(bits: felt252) -> Bits {
@@ -16,17 +24,17 @@ impl BitsImpl of BitsTrait {
     }
 
     fn into_felt(self: @Bits) -> felt252 {
-        // todo
         (*self).bits.try_into().unwrap()
     }
 
     fn extract(self: @Bits, from: u8, size: u8) -> u256 {
-        // shift right 'from'
+        // shift right with from
         let shifted = shr(*self.bits, from);
 
-        // mask with size
+        // create mask with size
         let mask = fpow(2, size) - 1;
 
+        // return masked value
         shifted & mask
     }
 
@@ -53,7 +61,7 @@ impl BitsImpl of BitsTrait {
 //
 //
 
-// use binary search + constants
+// use binary search + constants ?
 fn fpow(x: u256, n: u8) -> u256 {
     let y = x;
     if n == 0 {

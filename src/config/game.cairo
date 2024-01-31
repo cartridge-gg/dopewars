@@ -1,0 +1,34 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+const GAME_CONFIG_KEY:u8 = 0;
+
+#[derive(Model, Copy, Drop, Serde)]
+struct GameConfig {
+    #[key]
+    key: u8,
+    max_turns: u8,
+    cash: u32,
+    health: u8,
+}
+
+
+#[generate_trait]
+impl GameConfigImpl of GameConfigTrait {
+    #[inline(always)]
+    fn get(world: IWorldDispatcher) -> GameConfig {
+        get!(world, (GAME_CONFIG_KEY), GameConfig)
+    }
+}
+
+
+fn initialize_game_config(world: IWorldDispatcher) {
+    set!(
+        world, GameConfig { 
+            key: GAME_CONFIG_KEY,
+            max_turns: 30,
+            cash: 1420,
+            health: 100
+         }
+    );
+}
+

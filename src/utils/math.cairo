@@ -1,4 +1,3 @@
-// #[generate_trait]
 trait MathTrait<T> {
     fn add_capped(self: T, value: T, cap: T) -> T;
     fn sub_capped(self: T, value: T, cap: T) -> T;

@@ -1,8 +1,8 @@
-use starknet::{get_caller_address, ContractAddress};
-
+use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::packing::game_store::GameMode;
 
-use rollyourown::models::game::{Game, GameMode};
+use rollyourown::models::game::{Game};
 use rollyourown::models::player::Player;
 use rollyourown::models::drug::{Drug};
 
@@ -18,42 +18,42 @@ use rollyourown::config::{
     locations::{Locations, LocationsEnumerableImpl}
 };
 
-//
-//
-//
-
-#[derive(Model, Copy, Drop, Serde)]
-struct MarketPacked {
-    #[key]
+#[derive(Copy, Drop)]
+struct MarketsPacked {
+    world: IWorldDispatcher,
     game_id: u32,
-    #[key]
     player_id: ContractAddress,
+    //
     packed: felt252
 }
 
-//
-//
-//
+impl MarketsPackedDefaultImpl of Default<MarketsPacked> {
+    fn default() -> MarketsPacked {
+        MarketsPacked {
+            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
+            game_id: 0,
+            player_id: 0.try_into().unwrap(),
+            //
+            packed: 0
+        }
+    }
+}
+
 
 #[generate_trait]
-impl MarketImpl of MarketTrait {
+impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
-    fn new(game_id: u32, player_id: ContractAddress) -> MarketPacked {
-        let packed = core::pedersen::pedersen(0, game_id.into());
-        MarketPacked { game_id, player_id, packed }
+    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketsPacked {
+        let packed = core::pedersen::pedersen(game_id.into(), player_id.into());
+        MarketsPacked { world, game_id, player_id, packed }
     }
 
     #[inline(always)]
-    fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketPacked {
-        get!(world, (game_id, player_id), (MarketPacked))
+    fn get_drug_config(ref self: MarketsPacked, drug: Drugs) -> DrugConfig {
+        get!(self.world, (drug), (DrugConfig))
     }
 
-    #[inline(always)]
-    fn get_drug_config(world: IWorldDispatcher, drug: Drugs) -> DrugConfig {
-        get!(world, (drug), (DrugConfig))
-    }
-
-    fn get_tick(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
+    fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
         let bits = BitsImpl::from(self.packed);
 
         let location_idx: u8 = location.into() - 1;
@@ -66,40 +66,37 @@ impl MarketImpl of MarketTrait {
     }
 
 
-    fn get_drug_price(
-        ref self: MarketPacked, world: IWorldDispatcher, location: Locations, drug: Drugs
-    ) -> usize {
-        let drug_config = MarketTrait::get_drug_config(world, drug);
+    fn get_drug_price(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
+        let drug_config = self.get_drug_config(drug);
         let tick = self.get_tick(location, drug);
 
         tick * drug_config.step + (drug_config.base)
     }
-
 
     //
     //
     //
 
     fn quote_buy(
-        ref self: MarketPacked,
+        ref self: MarketsPacked,
         world: IWorldDispatcher,
         location: Locations,
         drug: Drugs,
         quantity: u8
     ) -> usize {
-        let drug_price = self.get_drug_price(world, location, drug);
+        let drug_price = self.get_drug_price(location, drug);
         let cost = drug_price * quantity.into();
         cost
     }
 
     fn quote_sell(
-        ref self: MarketPacked,
+        ref self: MarketsPacked,
         world: IWorldDispatcher,
         location: Locations,
         drug: Drugs,
         quantity: u8
     ) -> usize {
-        let drug_price = self.get_drug_price(world, location, drug);
+        let drug_price = self.get_drug_price(location, drug);
         let payout = drug_price * quantity.into();
         payout
     }
@@ -108,7 +105,7 @@ impl MarketImpl of MarketTrait {
     //
     //
 
-    fn set_tick(ref self: MarketPacked, location: Locations, drug: Drugs, value: usize) {
+    fn set_tick(ref self: MarketsPacked, location: Locations, drug: Drugs, value: usize) {
         let mut bits = BitsImpl::from(self.packed);
 
         let location_idx: u8 = location.into() - 1;
@@ -125,10 +122,11 @@ impl MarketImpl of MarketTrait {
     //
     //
 
-    fn market_variations(ref self: MarketPacked, world: IWorldDispatcher, ref randomizer: Random) {
+    fn market_variations(ref self: MarketsPacked, ref randomizer: Random) {
         let mut locations = LocationsEnumerableImpl::all();
-        let game = get!(world, self.game_id, Game);
-        let player = get!(world, (self.game_id, self.player_id), Player);
+        // TODO: clean up
+        let game = get!(self.world, self.game_id, Game);
+        let player = get!(self.world, (self.game_id, self.player_id), Player);
         let market_settings = MarketSettingsImpl::get(game.game_mode);
 
         loop {
@@ -161,7 +159,8 @@ impl MarketImpl of MarketTrait {
                                     let location_id_u8: u8 = (*location_id).into();
                                     let drug_id_u8: u8 = (*drug_id).into();
 
-                                    world
+                                    self
+                                        .world
                                         .emit_raw(
                                             array![selector!("MarketEvent")],
                                             array![
@@ -182,7 +181,8 @@ impl MarketImpl of MarketTrait {
                                     // emit raw event
                                     let location_id_u8: u8 = (*location_id).into();
                                     let drug_id_u8: u8 = (*drug_id).into();
-                                    world
+                                    self
+                                        .world
                                         .emit_raw(
                                             array![selector!("MarketEvent")],
                                             array![
@@ -201,9 +201,5 @@ impl MarketImpl of MarketTrait {
                 Option::None(_) => { break; }
             };
         };
-
-        // update market
-        set!(world, (self));
     }
 }
-

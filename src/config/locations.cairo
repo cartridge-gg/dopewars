@@ -2,11 +2,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
-use rollyourown::config::introspect::{
-    Bytes31IntrospectionImpl 
-};
+use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
 
-// LocationsIntrospectionImpl
 
 #[derive(Model, Copy, Drop, Serde)]
 struct LocationConfig {
@@ -102,27 +99,63 @@ impl LocationsIntoU8 of Into<Locations, u8> {
 //
 
 fn initialize_location_config(world: IWorldDispatcher) {
-    set!(world, LocationConfigMeta { location: Locations::Home, name: 'Home'.try_into().unwrap(), });
+    set!(
+        world, LocationConfigMeta { location: Locations::Home, name: 'Home'.try_into().unwrap(), }
+    );
     set!(world, LocationConfig { location: Locations::Home, location_id: Locations::Home.into(), });
 
-    set!(world, LocationConfigMeta { location: Locations::Queens, name: 'Queens'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Queens, location_id: Locations::Queens.into(), });
+    set!(
+        world,
+        LocationConfigMeta { location: Locations::Queens, name: 'Queens'.try_into().unwrap(), }
+    );
+    set!(
+        world,
+        LocationConfig { location: Locations::Queens, location_id: Locations::Queens.into(), }
+    );
 
-    set!(world, LocationConfigMeta { location: Locations::Bronx, name: 'The Bronx'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Bronx, location_id: Locations::Bronx.into(), });
+    set!(
+        world,
+        LocationConfigMeta { location: Locations::Bronx, name: 'The Bronx'.try_into().unwrap(), }
+    );
+    set!(
+        world, LocationConfig { location: Locations::Bronx, location_id: Locations::Bronx.into(), }
+    );
 
-    set!(world, LocationConfigMeta { location: Locations::Brooklyn, name: 'Brooklyn'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Brooklyn, location_id: Locations::Brooklyn.into(), });
+    set!(
+        world,
+        LocationConfigMeta { location: Locations::Brooklyn, name: 'Brooklyn'.try_into().unwrap(), }
+    );
+    set!(
+        world,
+        LocationConfig { location: Locations::Brooklyn, location_id: Locations::Brooklyn.into(), }
+    );
 
-    set!(world, LocationConfigMeta { location: Locations::Jersey, name: 'Jersey City'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Jersey, location_id: Locations::Jersey.into(), });
+    set!(
+        world,
+        LocationConfigMeta { location: Locations::Jersey, name: 'Jersey City'.try_into().unwrap(), }
+    );
+    set!(
+        world,
+        LocationConfig { location: Locations::Jersey, location_id: Locations::Jersey.into(), }
+    );
 
-    set!(world, LocationConfigMeta { location: Locations::Central, name: 'Central Park'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Central, location_id: Locations::Central.into(), });
+    set!(
+        world,
+        LocationConfigMeta {
+            location: Locations::Central, name: 'Central Park'.try_into().unwrap(),
+        }
+    );
+    set!(
+        world,
+        LocationConfig { location: Locations::Central, location_id: Locations::Central.into(), }
+    );
 
-    set!(world, LocationConfigMeta { location: Locations::Coney, name: 'Coney Island'.try_into().unwrap(), });
-    set!(world, LocationConfig { location: Locations::Coney, location_id: Locations::Coney.into(), });
+    set!(
+        world,
+        LocationConfigMeta { location: Locations::Coney, name: 'Coney Island'.try_into().unwrap(), }
+    );
+    set!(
+        world, LocationConfig { location: Locations::Coney, location_id: Locations::Coney.into(), }
+    );
 }
-
-
 

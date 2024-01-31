@@ -1,14 +1,9 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::traits::{Enumerable};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
+use rollyourown::traits::{Enumerable};
 use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
-// // use when available
-// impl ItemSlotBitSize of core::num::traits::BitSize<ItemSlot> {
-//     fn bits() -> usize {
-//         2
-//     }
-// }
+
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum ItemSlot {
@@ -66,11 +61,9 @@ impl ItemConfigImpl of ItemConfigTrait{
     }
 }
 
-
 //
 //
 //
-
 
 impl ItemSlotEnumerableImpl of Enumerable<ItemSlot> {
     fn all() -> Span<ItemSlot> {
@@ -191,7 +184,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 0
+            stat: 1
         }
     );
 
@@ -215,7 +208,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 450,
-            stat: 9
+            stat: 10
         }
     );
 
@@ -239,7 +232,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 12000,
-            stat: 24
+            stat: 25
         }
     );
 
@@ -263,7 +256,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 99000,
-            stat: 49
+            stat: 50
         }
     );
 
@@ -291,7 +284,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 0
+            stat: 1
         }
     );
 
@@ -315,7 +308,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 350,
-            stat: 24
+            stat: 25
         }
     );
 
@@ -339,7 +332,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 8900,
-            stat: 39
+            stat: 40
         }
     );
 
@@ -363,7 +356,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 69000,
-            stat: 59
+            stat: 60
         }
     );
 
@@ -391,7 +384,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 0
+            stat: 1
         }
     );
 
@@ -415,7 +408,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 250,
-            stat: 9
+            stat: 10
         }
     );
 
@@ -439,7 +432,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 9900,
-            stat: 24
+            stat: 25
         }
     );
 
@@ -463,7 +456,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 79000,
-            stat: 39
+            stat: 40
         }
     );
 
@@ -491,7 +484,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 0
+            stat: 60
         }
     );
 
@@ -515,7 +508,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 500,
-            stat: 30
+            stat: 90
         }
     );
 
@@ -539,7 +532,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 15000,
-            stat: 60
+            stat: 120
         }
     );
 
@@ -563,7 +556,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 99000,
-            stat: 100
+            stat: 160
         }
     );
 }

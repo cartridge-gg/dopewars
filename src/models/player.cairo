@@ -32,9 +32,8 @@ use rollyourown::config::{
 //     #[key]
 //     game_id: u32,
 //     #[key]
-//     profile_id: u32, // ? player_id: ContractAddress,
-//     cash: u32,
-//     health: u8,   
+//     player_id: ContractAddress,
+//     packed: felt252  
 // }
 
 
@@ -66,6 +65,25 @@ struct Player {
 }
 
 
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+enum PlayerStatus {
+    Normal: (),
+    BeingMugged: (),
+    BeingArrested: (),
+    AtPawnshop: (),
+}
+
+impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
+    fn into(self: PlayerStatus) -> felt252 {
+        match self {
+            PlayerStatus::Normal => 'Normal',
+            PlayerStatus::BeingMugged => 'BeingMugged',
+            PlayerStatus::BeingArrested => 'BeingArrested',
+            PlayerStatus::AtPawnshop => 'AtPawnshop',
+        }
+    }
+}
+
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
     #[inline(always)]
@@ -93,31 +111,6 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
-    fn get_item_count(self: Player, world: IWorldDispatcher) -> u8 {
-        let attack_item = get!(world, (self.game_id, self.player_id, ItemSlot::Attack), (Item));
-        let defense_item = get!(world, (self.game_id, self.player_id, ItemSlot::Defense), (Item));
-        let transport_item = get!(
-            world, (self.game_id, self.player_id, ItemSlot::Transport), (Item)
-        );
-        let speed_item = get!(world, (self.game_id, self.player_id, ItemSlot::Speed), (Item));
-
-        let mut total: u8 = if attack_item.level > 0 {
-            1
-        } else {
-            0
-        };
-        if defense_item.level > 0 {
-            total += 1;
-        }
-        if transport_item.level > 0 {
-            total += 1;
-        }
-        if speed_item.level > 0 {
-            total += 1;
-        }
-
-        total
-    }
 
     fn get_attack(self: Player, world: IWorldDispatcher) -> u8 {
         let item = get!(world, (self.game_id, self.player_id, ItemSlot::Attack), (Item));
@@ -140,14 +133,6 @@ impl PlayerImpl of PlayerTrait {
     }
 }
 
-
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
-enum PlayerStatus {
-    Normal: (),
-    BeingMugged: (),
-    BeingArrested: (),
-    AtPawnshop: (),
-}
 
 // impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
 //     #[inline(always)]
@@ -179,13 +164,3 @@ enum PlayerStatus {
 // }
 
 
-impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
-    fn into(self: PlayerStatus) -> felt252 {
-        match self {
-            PlayerStatus::Normal => 'Normal',
-            PlayerStatus::BeingMugged => 'BeingMugged',
-            PlayerStatus::BeingArrested => 'BeingArrested',
-            PlayerStatus::AtPawnshop => 'AtPawnshop',
-        }
-    }
-}

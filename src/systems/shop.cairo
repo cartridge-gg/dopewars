@@ -112,10 +112,9 @@ mod shop {
             let mut item = get!(world, (game_id, player_id, item_id), Item);
             let shop_settings = ShopSettingsImpl::get(game.game_mode);
 
-            assert(item.level < shop_settings.max_item_level, 'item max level');
-
             let item_config = ItemConfigImpl::get(world, item_id, level: (item.level + 1).into());
 
+            assert(item_config.level_id > 0, 'item max level');
             assert(player.cash >= item_config.cost, 'too poor');
 
             // pay item
@@ -138,29 +137,6 @@ mod shop {
             on_turn_end(world, ref randomizer, @game, ref player);
         }
 
-        // fn drop_item(self: @ContractState, game_id: u32, item_id: ItemSlot,) {
-        //     let world = self.world();
-        //     let game = get!(world, game_id, (Game));
-        //     let player_id = get_caller_address();
-        //     let mut player = get!(world, (game_id, player_id), Player);
-
-        //     self.assert_can_access_shop(@game, @player);
-
-        //     let mut item = get!(world, (game_id, player_id, item_id), Item);
-        //     assert(item.level > 0, '404 item not found');
-
-        //     // update item
-        //     item.level = 0;
-        //     item.name = '';
-        //     item.value = 0;
-        //     set!(world, (item));
-
-        //     on_turn_end(world, @game, ref player);
-        //     set!(world, (player));
-
-        //     // emit event
-        //     emit!(world, DroppedItem { game_id, player_id, item_id });
-        // }
 
         fn available_items(
             self: @ContractState, game_id: u32, player_id: ContractAddress
@@ -183,14 +159,15 @@ mod shop {
                     Option::Some(slot) => {
                         let player_item = get!(world, (game_id, player_id, *slot), (Item));
 
-                        let item_config = ItemConfigImpl::get(world,*slot, (player_item.level + 1).into());
+                        let item_config = ItemConfigImpl::get(
+                            world, *slot, (player_item.level + 1).into()
+                        );
 
-                        if player_item.level < shop_settings.max_item_level {
+                        if item_config.level_id > 0 {
                             available
                                 .append(
                                     AvailableItem {
-                                        slot_id: (*slot).into(),
-                                        level_id: player_item.level + 1,
+                                        slot_id: (*slot).into(), level_id: player_item.level + 1,
                                     }
                                 );
                         };

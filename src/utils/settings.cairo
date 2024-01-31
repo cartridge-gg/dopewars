@@ -51,7 +51,6 @@ struct DecideSettings {
 
 #[derive(Copy, Drop, Serde)]
 struct ShopSettings {
-    max_item_level: u8,
     opening_freq: u8
 }
 
@@ -193,7 +192,7 @@ impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
 
 impl ShopSettingsImpl of SettingsTrait<ShopSettings> {
     fn get(game_mode: GameMode) -> ShopSettings {
-        let mut shop_settings = ShopSettings { max_item_level: 3, opening_freq: 4 };
+        let mut shop_settings = ShopSettings {  opening_freq: 4 };
 
         if game_mode == GameMode::Test {
             shop_settings.opening_freq = 2;

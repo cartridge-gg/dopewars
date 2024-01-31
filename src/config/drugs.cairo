@@ -6,7 +6,6 @@ use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 use rollyourown::config::introspect::{
     Bytes31IntrospectionImpl 
 };
-// DrugsIntrospectionImpl,
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Drugs {

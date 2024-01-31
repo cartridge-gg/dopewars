@@ -13,6 +13,7 @@ mod config {
         drugs::initialize_drug_config,
         locations::initialize_location_config,
         items::initialize_item_config,
+        game::initialize_game_config,
     };
 
     #[abi(embed_v0)]
@@ -26,6 +27,8 @@ mod config {
             initialize_drug_config(self.world());
             initialize_location_config(self.world());
             initialize_item_config(self.world());
+
+            initialize_game_config(self.world());
         }
     }
 }
