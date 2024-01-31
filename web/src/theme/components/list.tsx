@@ -1,4 +1,4 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
+import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
 
 export const List: ComponentMultiStyleConfig = {
   parts: ["container", "item", "icon"],

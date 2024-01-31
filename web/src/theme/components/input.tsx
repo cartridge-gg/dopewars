@@ -1,5 +1,3 @@
-import type { ComponentStyleConfig } from "@chakra-ui/theme";
-import { StyleFunctionProps } from "@chakra-ui/theme-tools";
 import { cardStyle } from "../styles";
 
 import { inputAnatomy } from "@chakra-ui/anatomy";

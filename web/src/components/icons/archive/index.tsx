@@ -1,8 +1,8 @@
 import {
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
+  ThemingProps,
 } from "@chakra-ui/react";
-import { ThemingProps } from "@chakra-ui/styled-system";
 import React from "react";
 
 export interface IconProps extends ChakraIconProps, ThemingProps {}
@@ -19,24 +19,24 @@ export const Icon = ({
 };
 
 // icons from old design
-export * from "./City";
-export * from "./Chat";
-export * from "./Cart";
-export * from "./Road";
-export * from "./User";
-export * from "./Check";
-export * from "./Users";
-export * from "./Clock";
-export * from "./Arrow"; // up, down, right, left variant
-export * from "./Wallet";
-export * from "./Argent";
-export * from "./Avatar";
-export * from "./Connect";
-export * from "./Sparkle"; // has mirrored variant
-export * from "./Calendar";
 export * from "../Cigarette";
 export * from "../branding/Cartridge";
+export * from "./Argent";
+export * from "./Arrow"; // up, down, right, left variant
+export * from "./Avatar";
+export * from "./Calendar";
+export * from "./Cart";
+export * from "./Chat";
+export * from "./Check";
+export * from "./City";
+export * from "./Clock";
+export * from "./Connect";
 export * from "./Disconnect";
+export * from "./Road";
+export * from "./Sparkle"; // has mirrored variant
+export * from "./User";
+export * from "./Users";
+export * from "./Wallet";
 
 // Template for adding new icons. When copying svg from figma, make sure to
 // select parent bounding box so dimension is 24x24

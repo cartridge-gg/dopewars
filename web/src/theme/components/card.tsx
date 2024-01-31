@@ -1,7 +1,5 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
-import BorderImage from "@/components/icons/PressableBorderImage";
-import { cardStyle, cardPixelatedStyle } from "../styles";
-import colors from "../colors";
+import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
+import { cardPixelatedStyle, cardStyle } from "../styles";
 
 export const Card: ComponentMultiStyleConfig = {
   parts: ["container", "header", "body", "footer"],

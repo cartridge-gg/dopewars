@@ -1,3 +1,4 @@
+import { PlayerEntityStore, usePlayerEntityStore } from "@/hooks/player";
 import {
     BurnerAccount,
     BurnerManager,
@@ -5,12 +6,13 @@ import {
 } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { Account, RpcProvider } from "starknet";
-import { SetupResult } from "./generated/setup";
-import { usePlayerEntityStore } from "@/hooks/player";
+import { SetupResult } from "../setup/setup";
 
 interface DojoContextType extends SetupResult {
     masterAccount: Account;
-    account: BurnerAccount;
+    account: Account | null;
+    playerEntityStore: PlayerEntityStore;
+    burner:BurnerAccount;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);

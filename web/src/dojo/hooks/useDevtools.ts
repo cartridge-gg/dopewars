@@ -1,9 +1,6 @@
 import { useCallback } from "react";
+import { BigNumberish, GetTransactionReceiptResponse } from "starknet";
 import { useDojoContext } from "./useDojoContext";
-import { Action, GameMode, Location, ItemEnum } from "../types";
-import { shortString, GetTransactionReceiptResponse, BigNumberish } from "starknet";
-import { parseAllEvents } from "../events";
-import { WorldEvents } from "../generated/contractEvents";
 import { SystemExecuteResult } from "./useSystems";
 
 export interface SystemsInterface {
@@ -18,12 +15,10 @@ export interface SystemsInterface {
 
 export const useDevtools = (): SystemsInterface => {
   const {
-    burner: {
-      masterAccount
-    },
-    setup: {
-      network: { provider, execute, call },
-    },
+    masterAccount,
+    dojoProvider: {
+      execute
+    }
   } = useDojoContext();
 
   const executeAndReceipt = useCallback(
