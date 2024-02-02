@@ -60,7 +60,8 @@ impl MarketImpl of MarketTrait {
         let drug_idx: u8 = drug.into();
 
         let size: u8 = 6; // 6 bits
-        let start: u8 = (location_idx * 6 + drug_idx) * size;
+        let drugs_by_location: u8 = 4;
+        let start: u8 = (location_idx * drugs_by_location + drug_idx) * size;
 
         bits.extract_into::<usize>(start, size)
     }

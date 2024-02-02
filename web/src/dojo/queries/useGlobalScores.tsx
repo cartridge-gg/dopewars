@@ -1,8 +1,8 @@
-import { PlayerEdge, useGlobalScoresQuery, useInfiniteGlobalScoresQuery } from "@/generated/graphql";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { PlayerEdge } from "@/generated/graphql";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 
 import { shortString } from "starknet";
-import { useQueryClient } from "react-query";
 
 export type Score = {
   gameId: string;
@@ -42,29 +42,35 @@ export class GlobalScores {
 export const useGlobalScoresIninite = (version?: number, limit?: number) => {
   const [scores, setScores] = useState<Score[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
-  
 
   const queryClient = useQueryClient();
-  // Gets top 10
-  const { data, isFetched, refetch,/* hasNextPage,*/ fetchNextPage, ...props } = useInfiniteGlobalScoresQuery(
-    {
-      limit: limit || 10,
-      version: version || 1,
-    },
-    {
+  
+  const data = undefined
+  const isFetched = false
+  const refetch = () => {}
+  const fetchNextPage = () => {}
+
+
+  // // Gets top 10
+  // const { data, isFetched, refetch,/* hasNextPage,*/ fetchNextPage, ...props } = useInfiniteGlobalScoresQuery(
+  //   {
+  //     limit: limit || 10,
+  //     version: version || 1,
+  //   },
+  //   {
       
-      getNextPageParam: (lastPage) => {
-        if(!lastPage) return {}
-        const edgesCount = lastPage.playerModels?.edges?.length || 0;
-        if (edgesCount === 0) return undefined;
-        const lastItem = lastPage.playerModels?.edges![edgesCount - 1];
-        return {
-          limit: 10,
-          cursor: lastItem && lastItem.cursor,
-        };
-      },
-    },
-  );
+  //     getNextPageParam: (lastPage) => {
+  //       if(!lastPage) return {}
+  //       const edgesCount = lastPage.playerModels?.edges?.length || 0;
+  //       if (edgesCount === 0) return undefined;
+  //       const lastItem = lastPage.playerModels?.edges![edgesCount - 1];
+  //       return {
+  //         limit: 10,
+  //         cursor: lastItem && lastItem.cursor,
+  //       };
+  //     },
+  //   },
+  // );
 
   const resetQuery = async () => {
     setHasNextPage(false)

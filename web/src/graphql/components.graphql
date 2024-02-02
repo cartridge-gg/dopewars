@@ -1,28 +1,3 @@
-query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
-  playerModels(
-    where: { game_over: true, leaderboard_version: $version }
-    order: { direction: DESC, field: CASH }
-    first: $limit
-    after: $cursor
-  ) {
-    totalCount
-    edges {
-      node {
-        game_id
-        player_id
-        name
-        avatar_id
-        cash
-        health
-        turn
-        game_over
-      }
-      cursor
-    }
-  }
-}
-
-
 query RyoMetas {
   ryoMetaModels(limit: 1) {
     edges {
@@ -46,3 +21,159 @@ query LeaderboardMetas($version: u32) {
     }
   }
 }
+
+
+
+
+# query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
+#   playerModels(
+#     where: { game_over: true, leaderboard_version: $version }
+#     order: { direction: DESC, field: CASH }
+#     first: $limit
+#     after: $cursor
+#   ) {
+#     totalCount
+#     edges {
+#       node {
+#         game_id
+#         player_id
+#         name
+#         avatar_id
+#         cash
+#         health
+#         turn
+#         game_over
+#       }
+#       cursor
+#     }
+#   }
+# }
+
+
+
+# fragment PlayerProps on Player {
+#   name
+#   avatar_id
+#   cash
+#   status
+#   location_id
+#   next_location_id
+#   drug_count
+#   health
+#   turn
+#   attack
+#   defense
+#   transport
+#   speed
+#   wanted
+#   game_over
+# }
+
+# query GameById($gameId: u32) {
+#   gameModels(where: { game_id: $gameId }) {
+#     edges {
+#       node {
+#         game_id
+#         game_mode
+#         max_turns
+#       }
+#     }
+#   }
+# }
+
+# query PlayerEntity($gameId: String!, $playerId: String!) {
+#   entities(keys: [$gameId, $playerId]) {
+#     totalCount
+#     edges {
+#       node {
+#         id
+#         models {
+#           __typename
+#           ... on Player {
+#             ...PlayerProps
+#           }
+#           ... on Drug {
+#             drug_id
+#             quantity
+#           }
+#           ... on Item {
+#             item
+#             level
+#             name
+#             value
+#           }
+#           ... on Encounter {
+#             encounter_id
+#             level
+#             health
+#             payout
+#           }
+#           ... on MarketPacked {
+#             game_id
+#             packed
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
+
+# subscription PlayerEntitySubscription($id: ID) {
+#   entityUpdated(id: $id) {
+#     id
+#     keys
+#     models {
+#       __typename
+#       ... on Player {
+#         ...PlayerProps
+#       }
+#       ... on MarketPacked {
+#         game_id
+#         packed
+#       }
+#     }
+#   }
+# }
+
+# subscription PlayerEntityRelatedDataSubscription($id: ID) {
+#   entityUpdated(id: $id) {
+#     id
+#     keys
+#     models {
+#       __typename
+#       ... on Drug {
+#         drug_id
+#         quantity
+#       }
+#       ... on Item {
+#         item
+#         level
+#         name
+#         value
+#       }
+#       ... on Encounter {
+#         encounter_id
+#         level
+#         health
+#         payout
+#       }
+#     }
+#   }
+# }
+
+# query PlayerLogs($game_id: String!, $player_id: String!) {
+#   events(last: 1000, keys: ["*", $game_id, $player_id]) {
+#     totalCount
+#     edges {
+#       node {
+#         id
+#         keys
+#         data
+#         createdAt
+#       }
+#     }
+#   }
+# }
+
+
+

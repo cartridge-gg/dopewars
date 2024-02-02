@@ -1,6 +1,9 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::models::game_store_packed::{GameStorePacked};
+use rollyourown::models::{
+    game_store_packed::{GameStorePacked},
+    game::{GameMode}
+};
 use rollyourown::packing::{
     game_store_layout::{
         GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl
@@ -13,12 +16,6 @@ use rollyourown::packing::{
 use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl};
 use rollyourown::traits::{Packable, Packer, Unpacker};
 
-
-#[derive(Copy, Drop, Serde, PartialEq)]
-enum GameMode {
-    Test,
-    Unlimited
-}
 
 
 #[derive(Copy, Drop)]
@@ -58,6 +55,22 @@ impl GameStoreImpl of GameStoreTrait {
         player_id: ContractAddress,
         game_mode: GameMode,
         avatar_id: u8,
+    ) -> GameStore {
+        GameStore {
+            world,
+            game_id,
+            player_id,
+            markets: MarketsPackedImpl::new(world, game_id, player_id),
+            items: ItemsPackedImpl::new(world, game_id, player_id),
+            player: PlayerImpl::new(world, game_id, player_id),
+            // freespace: 0
+        }
+    }
+
+    fn from(
+        world: IWorldDispatcher,
+        game_id: u32,
+        player_id: ContractAddress,
     ) -> GameStore {
         GameStore {
             world,
@@ -120,7 +133,7 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
     fn unpack(
         self: GameStorePacked, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,
     ) -> GameStore {
-        let mut game_store = GameStoreDefaultImpl::default();
+        let mut game_store = GameStoreImpl::from(world, game_id, player_id);
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self.packed);
 
@@ -152,8 +165,9 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                         },
                         // GameStoreLayout::Drugs => {},
                         // GameStoreLayout::Wanted => {},
-                        GameStoreLayout::Player => { // unpack packed into Player
-                          //  game_store.player = packed.unpack(world, self.game_id, self.player_id);
+                        GameStoreLayout::Player => { 
+                            // unpack packed into Player
+                            game_store.player = packed.unpack(world, self.game_id, self.player_id);
                         },
                         //  GameStoreLayout::FreeSpace => { 
                         //     game_store.player = packed.unpack(world, self.game_id, self.player_id);

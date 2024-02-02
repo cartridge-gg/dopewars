@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
 import { formatCash } from "@/utils/ui";
@@ -25,41 +25,42 @@ import { useEffect, useState } from "react";
 
 export default function Location() {
   const { router, gameId, location } = useRouterContext();
-
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+
   const configStore = useConfigStore();
+  const { game, gameInfos } = useGameStore();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
   useEffect(() => {
-    if (playerEntity && playerEntity.markets && location) {
-      setPrices(playerEntity.markets.get(location.location) || []);
+    if (game && game.markets.marketsByLocation && location) {
+      setPrices(game.markets.marketsByLocation.get(location.location) || []);
     }
-  }, [location, playerEntity, playerEntity?.markets]);
+  }, [location, game]);
 
   const { endGame, isPending } = useSystems();
 
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-    if (playerEntity && location) {
+    if (game && location) {
       // check if player at right location
-      if (location?.location !== playerEntity.locationId) {
-        router.replace(`/${gameId}/${playerEntity.locationId}`);
+      if (location?.location !== game.player.location?.location) {
+        router.replace(`/${gameId}/${game.player.location?.location}`);
         return;
       }
 
-      setIsLastDay(playerEntity.maxTurns > 0 && playerEntity.turn >= playerEntity.maxTurns);
+      // TODO : get max turns form game
+      setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
-  }, [location, playerEntity, playerEntity?.locationId, router, gameId]);
+  }, [location, game, router, gameId]);
 
-  if (!playerEntity || !prices || !location || !configStore) {
+  if (!game || !prices || !location || !configStore) {
     return <></>;
   }
 
   const prefixTitle = isLastDay
     ? "Final Day"
-    : `Day ${playerEntity.turn} ${playerEntity.maxTurns === 0 ? "" : "/ " + playerEntity.maxTurns}`;
+    : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
 
   return (
     <Layout
@@ -96,8 +97,13 @@ export default function Location() {
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
           {prices.map((drug, index) => {
             const drugConfig = configStore.getDrug(drug.drug)!;
-            const canBuy = drug.price <= playerEntity.cash && playerEntity.drugCount < playerEntity.getTransport();
-            const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
+            // TODO: update
+            // const canBuy = drug.price <= game.player.cash && playerEntity.drugCount < playerEntity.getTransport();
+            // const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
+
+            const canBuy = true;
+            const canSell = true;
+
             return (
               <Card h={["auto", "180px"]} key={index} position="relative">
                 <CardHeader

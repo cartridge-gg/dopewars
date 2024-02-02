@@ -1,9 +1,8 @@
 use core::traits::TryInto;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::packing::game_store::GameMode;
 
-use rollyourown::models::game::{Game};
+use rollyourown::models::game::{Game, GameMode};
 
 use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};

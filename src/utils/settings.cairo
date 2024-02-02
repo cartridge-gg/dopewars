@@ -1,5 +1,5 @@
 use rollyourown::models::game::GameMode;
-use rollyourown::models::player::Player;
+// use rollyourown::models::player::Player;
 
 use rollyourown::config::drugs::Drugs;
 
@@ -72,13 +72,13 @@ trait SettingsTrait<T> {
 }
 
 
-trait PlayerSettingsTrait<T> {
-    fn get(game_mode: GameMode, player: @Player) -> T;
-}
+// trait PlayerSettingsTrait<T> {
+//     fn get(game_mode: GameMode, player: @Player) -> T;
+// }
 
-trait EncounterSettingsTrait<T> {
-    fn get(game_mode: GameMode, player: @Player, level: u8) -> T;
-}
+// trait EncounterSettingsTrait<T> {
+//     fn get(game_mode: GameMode, player: @Player, level: u8) -> T;
+// }
 
 //
 //
@@ -96,56 +96,56 @@ impl GameSettingsImpl of SettingsTrait<GameSettings> {
     }
 }
 
-impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
-    fn get(game_mode: GameMode) -> PlayerSettings {
-        let mut player_settings = PlayerSettings {
-            health: 100, cash: 1420, wanted: 39, attack: 1, defense: 1, transport: 60, speed: 1
-        };
+// impl PlayerSettingsImpl of SettingsTrait<PlayerSettings> {
+//     fn get(game_mode: GameMode) -> PlayerSettings {
+//         let mut player_settings = PlayerSettings {
+//             health: 100, cash: 1420, wanted: 39, attack: 1, defense: 1, transport: 60, speed: 1
+//         };
 
-        if game_mode == GameMode::Test {
-            player_settings.wanted = 100;
-            player_settings.health = 10;
-        }
+//         if game_mode == GameMode::Test {
+//             player_settings.wanted = 100;
+//             player_settings.health = 10;
+//         }
 
-        player_settings
-    }
-}
-
-
-impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
-    fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
-        let travel = (40
-            + (*player).wanted / 2); // 40% chance of travel encounter + 0.5 wanted (max 50)
-        let capture = (45 + (*player).wanted / 4); // 45% chance of capture + 0.25 wanted (max 25)
-
-        let mut risk_settings = RiskSettings {
-            travel,
-            capture,
-            encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
-            cops_drug_threshold: 5, // cops encounter threshold
-            gangs_cash_threshold: 500_0000, // gangs encounter threshold
-            health_increase_by_turn: 0,
-            wanted_decrease_by_turn: 1,
-            wanted_decrease_zero_drug: 10,
-            wanted_increase_by_drug: ((*player).drug_count / 6).try_into().unwrap()
-        };
-
-        if game_mode == GameMode::Test {
-            risk_settings.health_increase_by_turn = 0;
-            risk_settings.wanted_decrease_by_turn = 0;
-        };
-
-        risk_settings
-    }
-}
+//         player_settings
+//     }
+// }
 
 
-impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
-    fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
-        let decide_settings = DecideSettings { wanted_impact_run: 6, wanted_impact_fight: 12, };
-        decide_settings
-    }
-}
+// impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
+//     fn get(game_mode: GameMode, player: @Player) -> RiskSettings {
+//         let travel = (40
+//             + (*player).wanted / 2); // 40% chance of travel encounter + 0.5 wanted (max 50)
+//         let capture = (45 + (*player).wanted / 4); // 45% chance of capture + 0.25 wanted (max 25)
+
+//         let mut risk_settings = RiskSettings {
+//             travel,
+//             capture,
+//             encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
+//             cops_drug_threshold: 5, // cops encounter threshold
+//             gangs_cash_threshold: 500_0000, // gangs encounter threshold
+//             health_increase_by_turn: 0,
+//             wanted_decrease_by_turn: 1,
+//             wanted_decrease_zero_drug: 10,
+//             wanted_increase_by_drug: ((*player).drug_count / 6).try_into().unwrap()
+//         };
+
+//         if game_mode == GameMode::Test {
+//             risk_settings.health_increase_by_turn = 0;
+//             risk_settings.wanted_decrease_by_turn = 0;
+//         };
+
+//         risk_settings
+//     }
+// }
+
+
+// impl DecideSettingsImpl of PlayerSettingsTrait<DecideSettings> {
+//     fn get(game_mode: GameMode, player: @Player) -> DecideSettings {
+//         let decide_settings = DecideSettings { wanted_impact_run: 6, wanted_impact_fight: 12, };
+//         decide_settings
+//     }
+// }
 
 impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
     fn get(game_mode: GameMode) -> MarketSettings {
@@ -168,22 +168,22 @@ impl MarketSettingsImpl of SettingsTrait<MarketSettings> {
 //
 //
 
-impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
-    fn get(game_mode: GameMode, player: @Player, level: u8) -> EncounterSettings {
-        // game should not exceed 100 turns
-        let turn: u8 = (*player.turn).try_into().unwrap();
-        let mut health = level * 8 + turn;
-        let mut health = if health > 100 {
-            100
-        } else {
-            health
-        };
-        let dmg = level * 2 + (turn / 5);
-        let payout: u32 = level.into() * (5000 + (1500 * turn.into()));
+// impl EncounterSettingsImpl of EncounterSettingsTrait<EncounterSettings> {
+//     fn get(game_mode: GameMode, player: @Player, level: u8) -> EncounterSettings {
+//         // game should not exceed 100 turns
+//         let turn: u8 = (*player.turn).try_into().unwrap();
+//         let mut health = level * 8 + turn;
+//         let mut health = if health > 100 {
+//             100
+//         } else {
+//             health
+//         };
+//         let dmg = level * 2 + (turn / 5);
+//         let payout: u32 = level.into() * (5000 + (1500 * turn.into()));
 
-        EncounterSettings { level, health, dmg, payout }
-    }
-}
+//         EncounterSettings { level, health, dmg, payout }
+//     }
+// }
 
 
 //

@@ -12,6 +12,17 @@ enum GameStoreLayout {
     // FreeSpace,
 }
 
+impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
+    fn into(self: GameStoreLayout) -> bytes31 {
+        let value = match self {
+            GameStoreLayout::Markets => 'Markets',
+            GameStoreLayout::Items => 'Items',
+            GameStoreLayout::Player => 'Player',
+        };
+        value.try_into().unwrap()
+    }
+}
+
 
 // Enumerable
 
@@ -38,7 +49,7 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
             GameStoreLayout::Items => 8,
             // GameStoreLayout::Drugs => 16,
             // GameStoreLayout::Wanted => 18,
-            GameStoreLayout::Player => 44,
+            GameStoreLayout::Player => 51,
             // GameStoreLayout::FreeSpace => 55,
         }
     }

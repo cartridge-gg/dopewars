@@ -1,9 +1,9 @@
+import { Location } from "@/dojo/types";
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
-import { Location } from "@/dojo/types";
 
 type CoordinateType = {
   [key in Location]: { x: number; y: number };
@@ -22,11 +22,11 @@ const coordinate: CoordinateType = {
 const yOffset = -150;
 
 export const Map = ({
-  target,
+  targetId,
   current,
   onSelect,
 }: {
-  target?: Location;
+  targetId?: Location;
   current?: Location;
   onSelect: (selected: Location) => void;
 }) => {
@@ -34,12 +34,13 @@ export const Map = ({
   const isMobile = useBreakpointValue([true, false]);
 
   useEffect(() => {
-    if (target !== undefined) {
+    if (targetId !== undefined) {
+      const point = coordinate[targetId] ? coordinate[targetId] : {x:0,y:0}
       const animation = isMobile
         ? {
             scale: 1.5,
-            x: coordinate[target].x,
-            y: coordinate[target].y + yOffset,
+            x: point.x,
+            y: point.y + yOffset,
           }
         : { scale: 1, x: 0, y: 0 };
       animate(
@@ -51,7 +52,7 @@ export const Map = ({
         },
       );
     }
-  }, [target, isMobile, animate, scope]);
+  }, [targetId, isMobile, animate, scope]);
 
   return (
     <Flex
@@ -77,7 +78,7 @@ export const Map = ({
         alt="ryo map"
       />
 
-      <Outline target={target} current={current} />
+      <Outline targetId={targetId} current={current} />
       <HitBox onSelect={onSelect} />
     </Flex>
   );

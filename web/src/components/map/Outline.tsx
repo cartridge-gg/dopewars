@@ -1,6 +1,6 @@
 import { Location } from "@/dojo/types";
 import { Icon, chakra, shouldForwardProp } from "@chakra-ui/react";
-import { motion, isValidMotionProp } from "framer-motion";
+import { isValidMotionProp, motion } from "framer-motion";
 import { Callout } from "./Callout";
 
 const ChakraBox = chakra(motion.div, {
@@ -9,17 +9,17 @@ const ChakraBox = chakra(motion.div, {
 });
 
 export const Outline = ({
-  target,
+  targetId,
   current,
 }: {
-  target?: Location;
+  targetId?: Location;
   current?: Location;
 }) => {
-  if (target === undefined) {
+  if (targetId === undefined) {
     return <></>;
   }
 
-  const selfSelected = target === current;
+  const selfSelected = targetId === current;
 
   const transition = {
     repeat: Infinity,
@@ -36,7 +36,7 @@ export const Outline = ({
           // @ts-ignore
           transition={transition}
         >
-          <SvgHighlight location={target} fill="#11ED83" />
+          <SvgHighlight location={targetId} fill="#11ED83" />
         </ChakraBox>
       )}
       <ChakraBox layerStyle="fill" opacity="0.5">

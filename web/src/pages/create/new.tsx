@@ -2,14 +2,14 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
-import { Avatar } from "@/components/avatar/Avatar";
-import { genAvatarFromId, getAvatarCount } from "@/components/avatar/avatars";
+import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
+
 import { Arrow } from "@/components/icons";
 import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { Card, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function New() {
@@ -26,7 +26,7 @@ export default function New() {
 
   const [error, setError] = useState("");
   const [name, setName] = useState("");
-  const [avatarId, setAvatarId] = useState(0);
+  const [hustlerId, setHustlerId] = useState(0);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -41,7 +41,7 @@ export default function New() {
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, avatarId);
+      const { hash, gameId } = await createGame(gameMode, name, hustlerId);
 
       // toast({
       //   message: "Game Created!",
@@ -90,13 +90,13 @@ export default function New() {
               cursor="pointer"
               onClick={() => {
                 playSound(Sounds.HoverClick, 0.3);
-                avatarId > 1 ? setAvatarId(avatarId - 1) : setAvatarId(getAvatarCount());
+                hustlerId > 1 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount);
               }}
             />
 
-            <Card mx="20px">
-              <Avatar name={genAvatarFromId(avatarId)} w="96px" h="96px" />
-            </Card>
+            <Box p="20px">
+              <Hustler hustler={hustlerId as Hustlers} w="300px" h="300px" />
+            </Box>
 
             <Arrow
               style="outline"
@@ -106,7 +106,7 @@ export default function New() {
               cursor="pointer"
               onClick={() => {
                 playSound(Sounds.HoverClick, 0.3);
-                setAvatarId((avatarId + 1) % getAvatarCount());
+                setHustlerId((hustlerId + 1) % hustlersCount);
               }}
             />
           </HStack>

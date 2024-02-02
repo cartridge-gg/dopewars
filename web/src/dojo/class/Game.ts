@@ -3,40 +3,38 @@ import { ConfigStore, ItemConfigFull, LocationConfigFull } from "../stores/confi
 import { Drug } from "../types";
 import Bits from "./Bits";
 
-
 export type DrugMarket = {
     drug: string;
     drugId: number;
     price: number;
     weight: number;
-  };
-  
+};
+
 export type MarketsByLocation = Map<string, DrugMarket[]>;
-  
+
+
 export class Game {
     packed: bigint;
 
-    marketsPacked: bigint;
     markets: Markets;
-
-    itemsPacked: bigint;
     items: Items;
-
-    playerPacked: bigint;
     player: Player;
 
 
     constructor(configStore: ConfigStore, gameStorePacked: GameStorePacked) {
         this.packed = gameStorePacked.packed;
         //
-        this.marketsPacked = Bits.extract(this.packed, 0n, 144n);
-        this.markets = new Markets(configStore, this.marketsPacked)
+        const markets = configStore.getGameStoreLayoutItem("Markets")
+        const marketsPacked = Bits.extract(this.packed, markets.idx, markets.bits);
+        this.markets = new Markets(configStore, marketsPacked)
 
-        this.itemsPacked = Bits.extract(this.packed, 144n, 8n);
-        this.items = new Items(configStore, this.itemsPacked)
+        const items = configStore.getGameStoreLayoutItem("Items")
+        const itemsPacked = Bits.extract(this.packed, items.idx, items.bits);
+        this.items = new Items(configStore, itemsPacked)
 
-        this.playerPacked = Bits.extract(this.packed, 144n + 8n, 44n)
-        this.player = new Player(configStore, this.playerPacked);
+        const player = configStore.getGameStoreLayoutItem("Player")
+        const playerPacked = Bits.extract(this.packed, player.idx, player.bits)
+        this.player = new Player(configStore, playerPacked);
 
         console.log("Game", this)
     }
@@ -57,14 +55,22 @@ export class Player {
     constructor(configStore: ConfigStore, playerPacked: bigint) {
         this.packed = playerPacked;
 
-        this.cash = Bits.extract(this.packed, 0n, 28n)
-        this.health = Bits.extract(this.packed, 28n, 7n)
-        this.turn = Bits.extract(this.packed, 28n + 7n, 5n)
-        this.status = Bits.extract(this.packed, 28n + 7n + 5n, 2n)
+        const cash = configStore.getPlayerLayoutItem("Cash")
+        const health = configStore.getPlayerLayoutItem("Health")
+        const turn = configStore.getPlayerLayoutItem("Turn")
+        const status = configStore.getPlayerLayoutItem("Status")
+        const prevLocation = configStore.getPlayerLayoutItem("PrevLocation")
+        const location = configStore.getPlayerLayoutItem("Location")
+        const nextLocation = configStore.getPlayerLayoutItem("NextLocation")
 
-        const prevLocationId = Bits.extract(this.packed, 28n + 7n + 5n + 2n, 3n);
-        const locationId = Bits.extract(this.packed, 28n + 7n + 5n + 2n + 3n, 3n);
-        const nextLocationId = Bits.extract(this.packed, 28n + 7n + 5n + 2n + 3n + 3n, 3n);
+        this.cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
+        this.health = Number(Bits.extract(this.packed, health.idx, health.bits))
+        this.turn = Number(Bits.extract(this.packed, turn.idx, turn.bits))
+        this.status = Number(Bits.extract(this.packed, status.idx, status.bits))
+
+        const prevLocationId = Bits.extract(this.packed, prevLocation.idx, prevLocation.bits);
+        const locationId = Bits.extract(this.packed, location.idx, location.bits);
+        const nextLocationId = Bits.extract(this.packed, nextLocation.idx, nextLocation.bits);
 
         this.prevLocation = configStore.getLocationById(prevLocationId)
         this.location = configStore.getLocationById(locationId)
@@ -76,6 +82,8 @@ export class Player {
 
 
 export class Items {
+    bitsSize = 2n;
+    //
     packed: bigint;
     //
     attack: ItemConfigFull;
@@ -86,10 +94,10 @@ export class Items {
     constructor(configStore: ConfigStore, packed: bigint) {
         this.packed = packed
 
-        const attackLevel = Number(Bits.extract(this.packed, 0n, 2n));
-        const defenseLevel = Number(Bits.extract(this.packed, 2n, 2n));
-        const speedLevel = Number(Bits.extract(this.packed, 4n, 2n));
-        const transportLevel = Number(Bits.extract(this.packed, 6n, 2n));
+        const attackLevel = Number(Bits.extract(this.packed, 0n * this.bitsSize, this.bitsSize));
+        const defenseLevel = Number(Bits.extract(this.packed, 1n * this.bitsSize, this.bitsSize));
+        const speedLevel = Number(Bits.extract(this.packed, 2n * this.bitsSize, this.bitsSize));
+        const transportLevel = Number(Bits.extract(this.packed, 3n * this.bitsSize, this.bitsSize));
 
         this.attack = configStore.getItemByIds(0, attackLevel)
         this.defense = configStore.getItemByIds(1, defenseLevel)
@@ -101,7 +109,7 @@ export class Items {
 
 export class Markets {
     //
-    locationCount = 6n;
+    drugCountByLocation = 4n;
     bitsSize = 6n;
     //
     configStore: ConfigStore;
@@ -117,9 +125,10 @@ export class Markets {
         //const availableDrugs =  TODO: filter available drugs by turn
 
         for (let locationId of [1, 2, 3, 4, 5, 6]) {
-            for (let drugId of [0, 1, 2, 3, 4, 5]) {
+            const location = configStore.getLocationById(locationId)!;
+
+            for (let drugId of [0, 1, 2, 3, /*4, 5*/]) {
                 const drug = configStore.getDrugById(drugId)!;
-                const location = configStore.getLocationById(locationId)!;
                 const price = this.getDrugPrice(locationId - 1, drugId as Drug);
 
                 const drugMarket: DrugMarket = {
@@ -135,11 +144,12 @@ export class Markets {
                     this.marketsByLocation.set(location.location, [drugMarket]);
                 }
             }
+            
         }
     }
 
     getTick(locationId: number, drugId: Drug) {
-        const start = BigInt((BigInt(locationId) * this.locationCount + BigInt(drugId)) * this.bitsSize);
+        const start = BigInt((BigInt(locationId) * this.drugCountByLocation  +  BigInt(drugId)) * this.bitsSize);
         return Bits.extract(this.packed, start, this.bitsSize)
     }
 

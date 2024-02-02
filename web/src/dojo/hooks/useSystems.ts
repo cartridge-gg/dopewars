@@ -164,12 +164,6 @@ export const useSystems = (): SystemsInterface => {
   const createGame = useCallback(
     async (gameMode: GameMode, playerName: string, avatarId: number) => {
 
-      // const { hash, events, parsedEvents } = await executeAndReceipt(
-      //   "rollyourown::systems::lobby::lobby",
-      //   "create_game",
-      //   [gameMode, shortString.encodeShortString(playerName), avatarId],
-      // );
-
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "create_game",
@@ -189,19 +183,13 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, locationId: Location) => {
-      // const { hash, events, parsedEvents } = await executeAndReceipt(
-      //   "rollyourown::systems::travel::travel",
-      //   "travel",
-      //   [gameId, locationId],
-      // );
-
+    async (gameId: string, location: Location) => {
+     
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
-        [gameId, locationId],
+        [gameId, location],
       );
-
 
       const isGameOver = parsedEvents
         .find((e) => e.eventType === WorldEvents.GameOver)

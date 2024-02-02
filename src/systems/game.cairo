@@ -1,13 +1,11 @@
 use starknet::ContractAddress;
-use rollyourown::{
-    config::locations::{Locations},
-    packing::game_store::{GameMode}
-};
+use rollyourown::{config::locations::{Locations}, packing::game_store::{GameMode}};
 
 #[starknet::interface]
 trait IGame<T> {
     fn create_game(self: @T, game_mode: GameMode, avatar_id: u8);
-    fn travel(self: @T, game_id: u32, location: Locations);
+    fn end_game(self: @T, game_id: u32);
+    fn travel(self: @T, game_id: u32, next_location: Locations);
 }
 
 #[dojo::contract]
@@ -15,16 +13,19 @@ mod game {
     use starknet::{ContractAddress, get_caller_address};
 
     use rollyourown::{
-        config::locations::{Locations},
-        models::game_store_packed::GameStorePacked,
-        packing::game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode}
+        config::locations::{Locations}, models::{game_store_packed::GameStorePacked, game::{Game}},
+        packing::{
+            game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
+            player::{Player, PlayerImpl}
+        },
+        utils::random::{Random, RandomImpl}, systems::game_loop
     };
 
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
         GameCreated: GameCreated,
-        Traveled:Traveled,
+        Traveled: Traveled,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -55,6 +56,13 @@ mod game {
             // let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
             // let leaderboard_version = leaderboard_manager.on_game_start();
 
+            // create Game TODO: max_turns configurable
+            let game = Game { game_id, game_mode, max_turns: 5, avatar_id };
+
+            // save Game
+            set!(self.world(), (game));
+
+            // create GameStorePacked
             let game_store = GameStoreImpl::new(
                 self.world(), game_id, player_id, game_mode, avatar_id
             );
@@ -67,29 +75,29 @@ mod game {
             emit!(self.world(), GameCreated { game_id, player_id, game_mode });
         }
 
-        fn travel(self: @ContractState, game_id: u32, location: Locations) {
+        fn end_game(self: @ContractState, game_id: u32) { // TODO
+        }
+
+        fn travel(self: @ContractState, game_id: u32, next_location: Locations) {
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
 
-            game_store.player.prev_location = game_store.player.location;
-            game_store.player.location = location;
-            game_store.player.turn += 1;
-            game_store.player.health -= 1;
+            assert(game_store.player.can_continue(), 'player cannot travel');
+            assert(next_location != Locations::Home, 'cannot travel to Home');
+            assert(game_store.player.location != next_location, 'already at location');
 
-            let game_store_packed = game_store.pack();
+            let mut randomizer = RandomImpl::new(self.world());
 
-            // save GameStorePacked
-            set!(self.world(), (game_store_packed));
+            // save next_location
+            game_store.player.next_location = next_location;
 
-            // emit Traveled
-            emit!(self.world(), Traveled {
-                game_id,
-                player_id,
-                turn: game_store.player.turn, 
-                from_location:game_store.player.prev_location,
-                to_location:game_store.player.location
-            });
+            //on_turn_end
+            game_loop::on_turn_end(self.world(), ref randomizer, ref game_store);
+
+            // // save here ?
+            // let game_store_packed = game_store.pack();
+            // set!(self.world(), (game_store_packed));
         }
     }
 }

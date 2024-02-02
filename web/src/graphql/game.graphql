@@ -1,3 +1,18 @@
+query GameById($gameId: u32) {
+  gameModels(where: { game_id: $gameId }) {
+    edges {
+      node {
+        game_id
+        game_mode
+        max_turns
+        avatar_id
+      }
+    }
+  }
+}
+
+
+
 query GameStorePacked($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
     totalCount

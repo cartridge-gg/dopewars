@@ -14,19 +14,35 @@ import {
   LocationConfigMeta,
   LocationConfigMetaEdge,
 } from "@/generated/graphql";
+import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
-import { shortString } from "starknet";
+import { Contract, TypedContract, shortString } from "starknet";
 import { createStore } from "zustand";
-import { drugIcons, locationIcons, itemIcons } from "../helpers";
+import { ABI as configAbi } from "../abis/configAbi";
+import { drugIcons, itemIcons, locationIcons, statName } from "../helpers";
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: JSX.Element };
 export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: JSX.Element };
-export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: JSX.Element };
+export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: JSX.Element, statName: string };
+
+export type LayoutItem = {
+  name: string;
+  bits: bigint;
+  idx: bigint;
+};
+
+export type GetConfig = {
+  layouts: {
+    game_store: Array<LayoutItem>;
+    player: Array<LayoutItem>;
+  };
+};
 
 export type Config = {
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
   item: ItemConfigFull[];
+  config: GetConfig;
 };
 
 export interface ConfigStore {
@@ -44,9 +60,11 @@ export interface ConfigStore {
 
 type ConfigStoreProps = {
   client: GraphQLClient;
+  dojoProvider: DojoProvider;
+  manifest: any;
 };
 
-export const createConfigStore = ({ client }: ConfigStoreProps) => {
+export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStoreProps) => {
   return createStore<ConfigStore>((set, get) => ({
     isLoading: false,
     config: undefined,
@@ -116,8 +134,21 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
               ...meta,
               name,
               icon: itemIcons[name],
-            } as LocationConfigFull;
+              statName: statName[i.slot],
+            } as ItemConfigFull;
           });
+
+          /*************************************************** */
+
+          // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
+          const contractInfos = manifest.contracts.find((i) => i.name === "rollyourown::config::config::config")!;
+          const contract: TypedContract<typeof configAbi> = new Contract(
+            contractInfos.abi,
+            contractInfos.address,
+            dojoProvider.provider,
+          ).typedv2(configAbi);
+
+          const getConfig = await contract.get_config();
 
           /*************************************************** */
 
@@ -125,6 +156,7 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
             drug: drugConfigFull,
             location: locationConfigFull,
             item: itemConfigFull,
+            config: getConfig as GetConfig,
           };
 
           set({
@@ -149,18 +181,25 @@ export const createConfigStore = ({ client }: ConfigStoreProps) => {
       return get().config.drug.find((i) => i.drug.toLowerCase() === drug.toLowerCase());
     },
     getDrugById: (drug_id: number): DrugConfigFull => {
-      return get().config.drug.find((i) => i.drug_id === drug_id);
+      return get().config.drug.find((i) => Number(i.drug_id) === Number(drug_id));
     },
     /****************************************************/
     getLocation: (location: string): LocationConfigFull => {
       return get().config.location.find((i) => i.location.toLowerCase() === location.toLowerCase());
     },
     getLocationById: (location_id: number): LocationConfigFull => {
-      return get().config.location.find((i) => i.location_id === location_id);
+      return get().config.location.find((i) => Number(i.location_id) === Number(location_id));
     },
     /****************************************************/
     getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
       return get().config.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id);
+    },
+    /****************************************************/
+    getGameStoreLayoutItem: (name: string): LayoutItem => {
+      return get().config.config.layouts.game_store.find((i) => i.name === name)!;
+    },
+    getPlayerLayoutItem: (name: string): LayoutItem => {
+      return get().config.config.layouts.player.find((i) => i.name === name)!;
     },
   }));
 };

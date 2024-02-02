@@ -19,7 +19,6 @@ export const Icon = ({
 };
 
 // icons from old design
-export * from "../Cigarette";
 export * from "./Argent";
 export * from "./Arrow"; // up, down, right, left variant
 export * from "./Avatar";

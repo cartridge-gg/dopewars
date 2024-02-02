@@ -52,6 +52,8 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
   if (!configStoreRef.current) {
     configStoreRef.current = createConfigStore({
       client: value.graphqlClient,
+      dojoProvider: value.dojoProvider,
+      manifest: value.config.manifest,
     });
   }
 

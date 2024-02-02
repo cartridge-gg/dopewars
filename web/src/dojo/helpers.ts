@@ -32,6 +32,7 @@ import {
   ShopItemInfo
 } from "./types";
 
+import { Cigarette } from "@/components/icons";
 import {
   Backpack,
   Bicycle,
@@ -47,6 +48,14 @@ import {
   Uzi
 } from "@/components/icons/items";
 
+
+
+export const statName = {
+  "Attack": "ATK",
+  "Defense": "DEF",
+  "Speed": "SPD",
+  "Transport": "INV",
+}
 
 export const locationIcons = {
   "Queens": Queens,
@@ -67,6 +76,8 @@ export const drugIcons = {
 }
 
 export const itemIcons = {
+  "Naked" : Cigarette,
+  //
   "Knife": Knife,
   "Glock": Glock,
   "Uzi": Uzi,
@@ -470,20 +481,7 @@ export function getOutcomeName(outcome: Outcome): string {
 }
 
 
-export function getShopItemStatname(typ: ItemTextEnum): string {
-  switch (typ) {
-    case ItemTextEnum.Attack:
-      return "ATK"
-    case ItemTextEnum.Defense:
-      return "DEF"
-    case ItemTextEnum.Transport:
-      return "INV"
-    case ItemTextEnum.Speed:
-      return "SPD"
-    default:
-      return "?"
-  }
-}
+
 
 export function getOutcomeInfo(
   status: PlayerStatus,

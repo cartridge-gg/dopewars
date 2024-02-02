@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::config::items::{ItemConfig, ItemSlot};
-use rollyourown::packing::game_store::GameMode;
+use rollyourown::models::game::GameMode;
 
 #[derive(Copy, Drop)]
 struct ItemsPacked {

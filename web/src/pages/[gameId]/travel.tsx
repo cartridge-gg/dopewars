@@ -7,25 +7,13 @@ import BorderImage from "@/components/icons/BorderImage";
 import { Map as MapSvg } from "@/components/map";
 import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import {
-  locations
-} from "@/dojo/helpers";
+import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
-import {
-  Box,
-  Card,
-  Grid,
-  GridItem,
-  HStack,
-  Text,
-  VStack,
-  useDisclosure,
-  useEventListener
-} from "@chakra-ui/react";
+import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface MarketPriceInfo {
@@ -38,41 +26,40 @@ interface MarketPriceInfo {
 export default function Travel() {
   const { router, gameId } = useRouterContext();
 
-  const [targetId, setTargetId] = useState<string>();
-  const [currentLocationId, setCurrentLocationId] = useState<string>();
+  const [targetLocation, setTargetLocation] = useState<string>("");
+  const [currentLocation, setCurrentLocation] = useState<string>();
 
   const toaster = useToast();
   const { travel, isPending } = useSystems();
 
   const { account } = useDojoContext();
-  // const { playerEntity } = usePlayerStore();
-  const { game } = useGameStore()
-  const configStore = useConfigStore()
+  const { game } = useGameStore();
+  const configStore = useConfigStore();
 
   const locationName = useMemo(() => {
-    if (targetId) {
-      return configStore.getLocation(targetId)?.name;
+    if (targetLocation) {
+      return configStore.getLocation(targetLocation)?.name;
     }
-  }, [targetId]);
+  }, [targetLocation]);
 
   useEffect(() => {
     if (game && !isPending) {
       if (game.player.location) {
-        setCurrentLocationId(game.player.location.location);
-        setTargetId(game.player.location.location);
+        setCurrentLocation(game.player.location.location);
+        setTargetLocation(game.player.location.location);
       } else {
-        setTargetId("Queens");
+        setTargetLocation("Queens");
       }
     }
   }, [game, isPending]);
 
   const prices = useMemo(() => {
-    if (game && game.markets && game.markets.marketsByLocation && targetId) {
-      const current = game.markets.marketsByLocation.get(currentLocationId || "");
-      const target = game.markets.marketsByLocation.get(targetId);
+    if (game && game.markets && game.markets.marketsByLocation && targetLocation) {
+      const current = game.markets.marketsByLocation.get(currentLocation || "");
+      const target = game.markets.marketsByLocation.get(targetLocation);
 
       return target.map((drug, index) => {
-        if (currentLocationId) {
+        if (currentLocation) {
           const diff = drug.price - current[index].price;
           const percentage = (Math.abs(drug.price - current[index].price) / current[index].price) * 100;
 
@@ -92,10 +79,9 @@ export default function Travel() {
     }
 
     return [];
-  }, [game, targetId, currentLocationId]);
+  }, [game, targetLocation, currentLocation]);
 
   useEventListener("keydown", (e) => {
-    console.log(e.key);
     switch (e.key) {
       case "ArrowRight":
       case "ArrowUp":
@@ -112,27 +98,27 @@ export default function Travel() {
   });
 
   const onNext = useCallback(() => {
-    const idx = locations.findIndex((location) => location.id === targetId);
+    const idx = locations.findIndex((location) => location.id === targetLocation);
     if (idx < locations.length - 1) {
-      setTargetId(locations[idx + 1].id);
+      setTargetLocation(locations[idx + 1].id);
     } else {
-      setTargetId(locations[0].id);
+      setTargetLocation(locations[0].id);
     }
-  }, [targetId]);
+  }, [targetLocation]);
 
   const onBack = useCallback(() => {
-    const idx = locations.findIndex((location) => location.id === targetId);
+    const idx = locations.findIndex((location) => location.id === targetLocation);
     if (idx > 0) {
-      setTargetId(locations[idx - 1].id);
+      setTargetLocation(locations[idx - 1].id);
     } else {
-      setTargetId(locations[locations.length - 1].id);
+      setTargetLocation(locations[locations.length - 1].id);
     }
-  }, [targetId]);
+  }, [targetLocation]);
 
   const onContinue = useCallback(async () => {
-    if (targetId && game) {
+    if (targetLocation && game) {
       try {
-        const locationId = configStore.getLocation(targetId).location_id
+        const locationId = configStore.getLocation(targetLocation).location_id;
         const { event, events, hash, isGameOver } = await travel(gameId, locationId);
 
         if (isGameOver) {
@@ -161,12 +147,12 @@ export default function Travel() {
         //   link: `http://amazing_explorer/${hash}`,
         // });
 
-        router.push(`/${gameId}/${configStore.getLocation(targetId)!.location.toLowerCase()}`);
+        router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
         console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel, toaster, game]);
+  }, [targetLocation, router, gameId, travel, toaster, game]);
 
   if (!game) return <></>;
 
@@ -177,10 +163,10 @@ export default function Travel() {
         prefixTitle: "Select Your",
         map: (
           <MapSvg
-            target={targetId}
-            current={currentLocationId}
-            onSelect={(selected) => {
-              setTargetId(selected);
+            targetId={configStore.getLocation(targetLocation)?.location_id || 0}
+            current={currentLocation}
+            onSelect={(selectedId) => {
+              setTargetLocation(configStore.getLocationById(selectedId)?.location);
             }}
           />
         ),
@@ -195,7 +181,7 @@ export default function Travel() {
           <Button
             w={["full", "auto"]}
             px={["auto", "20px"]}
-            isDisabled={!targetId || targetId === currentLocationId}
+            isDisabled={!targetLocation || targetLocation === currentLocation}
             isLoading={isPending /*&& !txError*/}
             onClick={onContinue}
           >
@@ -231,7 +217,10 @@ export default function Travel() {
       >
         <Inventory />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
-        <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} />
+        <LocationPrices
+          prices={prices}
+          isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
+        />
       </VStack>
     </Layout>
   );
@@ -239,7 +228,7 @@ export default function Travel() {
 
 const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
-  const configStore = useConfigStore()
+  const configStore = useConfigStore();
 
   return (
     <VStack w="full">

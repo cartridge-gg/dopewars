@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    traits::{Enumerable, Packable, Packer, Unpacker}, models::item::{Item},
+    models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
     config::{locations::Locations, items::{ItemSlot, ItemLevel}, game::GameConfigImpl},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
     packing::{player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl}}
@@ -115,7 +115,7 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
-     fn with(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+    fn with(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
         // create initial player state with world, game_id, player_id
         Player {
             world,
@@ -130,6 +130,26 @@ impl PlayerImpl of PlayerTrait {
             location: Locations::Home,
             next_location: Locations::Home,
         }
+    }
+
+    fn can_continue(self: Player) -> bool {
+        // if self.game_over {
+        //     return false;
+        // }
+
+        if self.health == 0 {
+            return false;
+        }
+        if self.status != PlayerStatus::Normal {
+            return false;
+        }
+
+        let game = get!(self.world, (self.game_id), (Game));
+        if self.turn == game.max_turns {
+            return false;
+        }
+
+        true
     }
 }
 
@@ -180,7 +200,9 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 
 // unpack 
 impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
-    fn unpack(self: felt252, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+    fn unpack(
+        self: felt252, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,
+    ) -> Player {
         let mut player = PlayerImpl::with(world, game_id, player_id);
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);
@@ -201,14 +223,23 @@ impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
                         PlayerLayout::Status => {
                             player.status = bits.extract_into::<u8>(item.idx(), item.bits()).into();
                         },
-                         PlayerLayout::PrevLocation => {
-                            player.prev_location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        PlayerLayout::PrevLocation => {
+                            player
+                                .prev_location = bits
+                                .extract_into::<u8>(item.idx(), item.bits())
+                                .into();
                         },
-                         PlayerLayout::Location => {
-                            player.location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        PlayerLayout::Location => {
+                            player
+                                .location = bits
+                                .extract_into::<u8>(item.idx(), item.bits())
+                                .into();
                         },
-                         PlayerLayout::NextLocation => {
-                            player.next_location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        PlayerLayout::NextLocation => {
+                            player
+                                .next_location = bits
+                                .extract_into::<u8>(item.idx(), item.bits())
+                                .into();
                         },
                     };
                 },

@@ -1,32 +1,31 @@
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Divider, Flex, HStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
+import DayIndicator from "./player/DayIndicator";
 import HealthIndicator from "./player/HealthIndicator";
-import WantedIndicator from "./player/WantedIndicator";
 
 export interface HeaderProps {
   back?: boolean;
 }
 
 const Header = ({ back }: HeaderProps) => {
+  const isMobile = IsMobile();
+
   const { router, gameId } = useRouterContext();
   
-  const [inventory, setInventory] = useState(0);
   const {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-  const { playerEntity } = usePlayerStore();
-
-  const isMobile = IsMobile();
+  const { game } = useGameStore();
 
   useEffect(() => {
     const init = async () => {
@@ -35,15 +34,6 @@ const Header = ({ back }: HeaderProps) => {
     init();
   }, []);
 
-  useEffect(() => {
-    if (!playerEntity) return;
-
-    const inventory = playerEntity.drugs.reduce((acc, drug) => {
-      return acc + drug.quantity;
-    }, 0);
-
-    setInventory(inventory);
-  }, [playerEntity]);
 
   return (
     <HStack
@@ -56,7 +46,7 @@ const Header = ({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {playerEntity && /*playerEntity.health > 0 &&*/ (!playerEntity.gameOver || router.asPath.includes("logs")) && (
+      {game && (/*!game.gameOver ||*/ true || router.asPath.includes("logs")) && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
@@ -68,12 +58,12 @@ const Header = ({ back }: HeaderProps) => {
           >
             <Flex w="full" align="center" justify="center" gap="10px">
               <HStack>
-                <CashIndicator cash={formatCashHeader(playerEntity.cash)} />
+                <CashIndicator cash={formatCashHeader(game.player.cash)} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <HealthIndicator health={playerEntity.health} maxHealth={100} />
+                <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                {/* <DayIndicator day={playerEntity.turn} /> */}
-                <WantedIndicator wanted={playerEntity.wanted} />
+                <DayIndicator day={game.player.turn} />
+                {/* <WantedIndicator wanted={playerEntity.wanted} /> */}
               </HStack>
             </Flex>
           </HStack>
@@ -102,7 +92,7 @@ const Header = ({ back }: HeaderProps) => {
           </Button>
         )} */}
 
-        {!isMobile && account && playerEntity && <ProfileLink />}
+        {!isMobile && account && game && <ProfileLink />}
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

@@ -55,9 +55,9 @@ struct ItemConfigMeta {
 //
 
 #[generate_trait]
-impl ItemConfigImpl of ItemConfigTrait{
+impl ItemConfigImpl of ItemConfigTrait {
     fn get(world: IWorldDispatcher, item: ItemSlot, level: ItemLevel) -> ItemConfig {
-        get!(world, (item,level), ItemConfig)
+        get!(world, (item, level), ItemConfig)
     }
 }
 
@@ -108,8 +108,8 @@ impl ItemSlotIntoU8 of Into<ItemSlot, u8> {
         match self {
             ItemSlot::Attack => 0,
             ItemSlot::Defense => 1,
-            ItemSlot::Speed => 3,
-            ItemSlot::Transport => 2,
+            ItemSlot::Speed => 2,
+            ItemSlot::Transport => 3,
         }
     }
 }
@@ -135,30 +135,22 @@ impl ItemLevelIntoU8 of Into<ItemLevel, u8> {
         match self {
             ItemLevel::Level0 => 0,
             ItemLevel::Level1 => 1,
-            ItemLevel::Level2 => 3,
-            ItemLevel::Level3 => 2,
+            ItemLevel::Level2 => 2,
+            ItemLevel::Level3 => 3,
         }
     }
 }
 
 impl U8IntoItemLevel of Into<u8, ItemLevel> {
     fn into(self: u8) -> ItemLevel {
-        if self == 1 {
-            ItemLevel::Level1
-        } else if self == 2 {
-            ItemLevel::Level2
-        } else if self == 3 {
-            ItemLevel::Level3
-        } else {
-            ItemLevel::Level0
+        let self252: felt252 = self.into();
+        match self252 {
+            0 => ItemLevel::Level0,
+            1 => ItemLevel::Level1,
+            2 => ItemLevel::Level2,
+            3 => ItemLevel::Level3,
+            _ => ItemLevel::Level0,
         }
-        
-        // match self {
-        //     _ => ItemLevel::Level0,
-        //     1 => ItemLevel::Level1,
-        //     2 => ItemLevel::Level2,
-        //     3 => ItemLevel::Level2,
-        // }
     }
 }
 

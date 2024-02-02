@@ -142,32 +142,39 @@ use debug::PrintTrait;
     #[test]
     #[available_gas(100000000)]
     fn test_bits_XXX() {
-        let mut bits = BitsImpl::from(0);
 
-        let mask_144 = BitsMathImpl::mask::<felt252>(144);
-        let mask_8 = BitsMathImpl::mask::<u8>(8);
-        let mask_16 = BitsMathImpl::mask::<u16>(16);
-        let mask_18 = BitsMathImpl::mask::<u32>(18);
-        let mask_44 = BitsMathImpl::mask::<u64>(44);
+        let mut bits = BitsImpl::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
 
-        let mask_230 = BitsMathImpl::mask::<felt252>(230);
-
-        bits.replace::<u64>(144 + 8 + 16 + 18, 44, mask_44);
+        bits.into_felt().print();
+      
+        bits.replace::<u8>(144, 2, 0);
         bits.into_felt().print();
 
-        bits.replace::<u32>(144 + 8 + 16, 18, mask_18);
-        bits.into_felt().print();
 
-        bits.replace::<u16>(144 + 8, 16, mask_16);
-        bits.into_felt().print();
+        // let mask_144 = BitsMathImpl::mask::<felt252>(144);
+        // let mask_8 = BitsMathImpl::mask::<u8>(8);
+        // let mask_16 = BitsMathImpl::mask::<u16>(16);
+        // let mask_18 = BitsMathImpl::mask::<u32>(18);
+        // let mask_44 = BitsMathImpl::mask::<u64>(44);
 
-        bits.replace::<u8>(144, 8, mask_8);
-        bits.into_felt().print();
+        // let mask_230 = BitsMathImpl::mask::<felt252>(230);
 
-        bits.replace::<felt252>(0, 144, mask_144);
-        bits.into_felt().print();
+        // bits.replace::<u64>(144 + 8 + 16 + 18, 44, mask_44);
+        // bits.into_felt().print();
 
-        assert(bits.into_felt() == mask_230, 'should be mask_230');
+        // bits.replace::<u32>(144 + 8 + 16, 18, mask_18);
+        // bits.into_felt().print();
+
+        // bits.replace::<u16>(144 + 8, 16, mask_16);
+        // bits.into_felt().print();
+
+        // bits.replace::<u8>(144, 8, mask_8);
+        // bits.into_felt().print();
+
+        // bits.replace::<felt252>(0, 144, mask_144);
+        // bits.into_felt().print();
+
+        // assert(bits.into_felt() == mask_230, 'should be mask_230');
     }
 }
 

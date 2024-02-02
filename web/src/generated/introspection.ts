@@ -7,21 +7,16 @@
       const result: PossibleTypesResultData = {
   "possibleTypes": {
     "ModelUnion": [
-      "Drug",
       "DrugConfig",
       "DrugConfigMeta",
-      "Encounter",
       "Game",
       "GameConfig",
       "GameStorePacked",
-      "Item",
       "ItemConfig",
       "ItemConfigMeta",
       "Leaderboard",
       "LocationConfig",
       "LocationConfigMeta",
-      "MarketPacked",
-      "Player",
       "RyoMeta"
     ]
   }

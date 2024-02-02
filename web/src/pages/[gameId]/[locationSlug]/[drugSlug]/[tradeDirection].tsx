@@ -2,8 +2,8 @@ import AlertMessage from "@/components/AlertMessage";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { ArrowEnclosed } from "@/components/icons";
-import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
+import { Player } from "@/dojo/class/Game";
+import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugInfo, DrugMarket, TradeDirection } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -35,26 +35,26 @@ export default function Market() {
   const { account } = useDojoContext();
   const { buy, sell, isPending } = useSystems();
 
-  const { playerEntity } = usePlayerStore();
+  const { game } = useGameStore()
 
   const { toast } = useToast();
 
   // market price and quantity can fluctuate as players trade
   useEffect(() => {
-    if (!playerEntity || isPending || !location) return;
+    if (!game || isPending || !location) return;
 
-    const markets = playerEntity.markets.get(location!.location) || [];
-    const market = markets.find((d) => d.id === drug?.drug);
+    const markets = game.markets.marketsByLocation.get(location!.location) || [];
+    const market = markets.find((d) => d.drug === drug?.drug);
     if (!market) return;
 
-    const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.drug);
-    if (playerDrug) {
-      setCanSell(playerDrug.quantity > 0);
-    }
+    // const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.drug);
+    // if (playerDrug) {
+    //   setCanSell(playerDrug.quantity > 0);
+    // }
 
-    setCanBuy(playerEntity.cash > market.price);
+    setCanBuy(game.player.cash > market.price);
     setMarket(market);
-  }, [location, playerEntity, drug, isPending]);
+  }, [location, game, drug, isPending]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
@@ -87,7 +87,7 @@ export default function Market() {
     router.push(`/${gameId}/${location!.location.toLowerCase()}`);
   }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell]);
 
-  if (!router.isReady || !playerEntity || !drug || !market) return <></>;
+  if (!router.isReady || !game || !drug || !market) return <></>;
 
   return (
     <Layout
@@ -144,7 +144,7 @@ export default function Market() {
         {((tradeDirection == TradeDirection.Buy && canBuy) || (tradeDirection == TradeDirection.Sell && canSell)) && (
           <QuantitySelector
             drug={drug}
-            player={playerEntity}
+            player={game.player}
             market={market}
             tradeDirection={tradeDirection}
             onChange={(quantity, _) => {
@@ -176,7 +176,7 @@ const QuantitySelector = ({
 }: {
   tradeDirection: TradeDirection;
   drug: DrugInfo;
-  player: PlayerEntity;
+  player: Player;
   market: DrugMarket;
   onChange: (quantity: number, newPrice: number) => void;
 }) => {
@@ -190,30 +190,17 @@ const QuantitySelector = ({
     if (tradeDirection === TradeDirection.Buy) {
       //let max_buyable = calculateMaxQuantity(market, player.cash);
       let max_buyable = Math.floor(player.cash / market.price);
-      let bag_space = player.getTransport() - player.drugCount;
-      setMax(Math.min(max_buyable, bag_space));
+      //let bag_space = player.getTransport() - player.drugCount;
+      //setMax(Math.min(max_buyable, bag_space));
     } else if (tradeDirection === TradeDirection.Sell) {
-      const playerQuantity = player.drugs.find((d) => d.id === drug.drug)?.quantity;
-      setMax(playerQuantity || 0);
-      setQuantity(playerQuantity || 0);
+      // const playerQuantity = player.drugs.find((d) => d.id === drug.drug)?.quantity;
+      // setMax(playerQuantity || 0);
+      // setQuantity(playerQuantity || 0);
     }
   }, [tradeDirection, drug, player, market]);
 
   useEffect(() => {
-    // const slippage = calculateSlippage(market.marketPool, quantity, tradeDirection);
-
-    // if (slippage.priceImpact > 0.2) {
-    //   // >20%
-    //   setAlertColor("red");
-    // } else if (slippage.priceImpact > 0.05) {
-    //   // >5%
-    //   setAlertColor("neon.200");
-    // } else {
-    //   setAlertColor("neon.500");
-    // }
-
-    // setPriceImpact(slippage.priceImpact);
-    setTotalPrice(quantity * market.price);
+       setTotalPrice(quantity * market.price);
     onChange(quantity, market.price);
   }, [quantity, market, tradeDirection, onChange]);
 

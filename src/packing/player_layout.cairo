@@ -1,6 +1,4 @@
-use rollyourown::{
-    traits::{Enumerable, Packable},
-};
+use rollyourown::{traits::{Enumerable, Packable},};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum PlayerLayout {
@@ -11,6 +9,21 @@ enum PlayerLayout {
     PrevLocation,
     Location,
     NextLocation,
+}
+
+impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
+    fn into(self: PlayerLayout) -> bytes31 {
+        let value = match self {
+            PlayerLayout::Cash => 'Cash',
+            PlayerLayout::Health => 'Health',
+            PlayerLayout::Turn => 'Turn',
+            PlayerLayout::Status => 'Status',
+            PlayerLayout::PrevLocation => 'PrevLocation',
+            PlayerLayout::Location => 'Location',
+            PlayerLayout::NextLocation => 'NextLocation',
+        };
+        value.try_into().unwrap()
+    }
 }
 
 
