@@ -8,10 +8,10 @@ import { Map as MapSvg } from "@/components/map";
 import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import {
-  locations,
-  sortDrugMarkets
+  locations
 } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
@@ -45,7 +45,8 @@ export default function Travel() {
   const { travel, isPending } = useSystems();
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  // const { playerEntity } = usePlayerStore();
+  const { game } = useGameStore()
   const configStore = useConfigStore()
 
   const locationName = useMemo(() => {
@@ -55,21 +56,20 @@ export default function Travel() {
   }, [targetId]);
 
   useEffect(() => {
-    if (playerEntity && !isPending) {
-      if (playerEntity.locationId) {
-        setCurrentLocationId(playerEntity.locationId);
-        setTargetId(playerEntity.locationId);
+    if (game && !isPending) {
+      if (game.player.location) {
+        setCurrentLocationId(game.player.location.location);
+        setTargetId(game.player.location.location);
       } else {
         setTargetId("Queens");
       }
     }
-  }, [playerEntity, isPending]);
+  }, [game, isPending]);
 
   const prices = useMemo(() => {
-    if (playerEntity && playerEntity.markets && targetId) {
-      const current = sortDrugMarkets(playerEntity.markets.get(currentLocationId || ""));
-
-      const target = sortDrugMarkets(playerEntity.markets.get(targetId));
+    if (game && game.markets && game.markets.marketsByLocation && targetId) {
+      const current = game.markets.marketsByLocation.get(currentLocationId || "");
+      const target = game.markets.marketsByLocation.get(targetId);
 
       return target.map((drug, index) => {
         if (currentLocationId) {
@@ -92,7 +92,7 @@ export default function Travel() {
     }
 
     return [];
-  }, [playerEntity, targetId, currentLocationId]);
+  }, [game, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
     console.log(e.key);
@@ -130,7 +130,7 @@ export default function Travel() {
   }, [targetId]);
 
   const onContinue = useCallback(async () => {
-    if (targetId && playerEntity) {
+    if (targetId && game) {
       try {
         const locationId = configStore.getLocation(targetId).location_id
         const { event, events, hash, isGameOver } = await travel(gameId, locationId);
@@ -166,9 +166,9 @@ export default function Travel() {
         console.log(e);
       }
     }
-  }, [targetId, router, gameId, travel, toaster, playerEntity]);
+  }, [targetId, router, gameId, travel, toaster, game]);
 
-  if (!playerEntity) return <></>;
+  if (!game) return <></>;
 
   return (
     <Layout
@@ -187,7 +187,7 @@ export default function Travel() {
       }}
       footer={
         <Footer>
-          {playerEntity.turn > 0 && (
+          {game.player.turn > 0 && (
             <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
               Back
             </Button>

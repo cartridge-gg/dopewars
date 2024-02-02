@@ -94,6 +94,23 @@ impl LocationsIntoU8 of Into<Locations, u8> {
 }
 
 
+impl U8IntoLocations of Into<u8, Locations> {
+    fn into(self: u8) -> Locations {
+        let self252: felt252 = self.into();
+        match self252 {
+            0 => Locations::Home,
+            1 => Locations::Queens,
+            2 => Locations::Bronx,
+            3 => Locations::Brooklyn,
+            4 => Locations::Jersey,
+            5 => Locations::Central,
+            6 => Locations::Coney,
+            _ => Locations::Home,
+        }
+    }
+}
+
+
 //
 //
 //

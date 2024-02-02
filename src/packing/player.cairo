@@ -3,10 +3,60 @@ use starknet::ContractAddress;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    traits::{Enumerable}, models::item::{Item},
-    config::{locations::Locations, items::{ItemSlot, ItemLevel}, game::GameConfigImpl}
+    traits::{Enumerable, Packable, Packer, Unpacker}, models::item::{Item},
+    config::{locations::Locations, items::{ItemSlot, ItemLevel}, game::GameConfigImpl},
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
+    packing::{player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl}}
 };
 
+
+// TODO : move 
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+enum PlayerStatus {
+    Normal,
+    BeingMugged,
+    BeingArrested,
+    AtPawnshop,
+}
+
+impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
+    fn into(self: PlayerStatus) -> felt252 {
+        match self {
+            PlayerStatus::Normal => 'Normal',
+            PlayerStatus::BeingMugged => 'BeingMugged',
+            PlayerStatus::BeingArrested => 'BeingArrested',
+            PlayerStatus::AtPawnshop => 'AtPawnshop',
+        }
+    }
+}
+
+impl PlayerStatusIntoU8 of Into<PlayerStatus, u8> {
+    fn into(self: PlayerStatus) -> u8 {
+        match self {
+            PlayerStatus::Normal => 0,
+            PlayerStatus::BeingMugged => 1,
+            PlayerStatus::BeingArrested => 2,
+            PlayerStatus::AtPawnshop => 3,
+        }
+    }
+}
+
+impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
+    fn into(self: u8) -> PlayerStatus {
+        let self252: felt252 = self.into();
+        match self252 {
+            0 => PlayerStatus::Normal,
+            1 => PlayerStatus::BeingMugged,
+            2 => PlayerStatus::BeingArrested,
+            3 => PlayerStatus::AtPawnshop,
+            _ => PlayerStatus::Normal,
+        }
+    }
+}
+
+//
+//
+//
 
 #[derive(Copy, Drop, Serde)]
 struct Player {
@@ -64,27 +114,109 @@ impl PlayerImpl of PlayerTrait {
             next_location: Locations::Home,
         }
     }
-}
 
-//
-//
-//
-
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
-enum PlayerStatus {
-    Normal,
-    BeingMugged,
-    BeingArrested,
-    AtPawnshop,
-}
-
-impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
-    fn into(self: PlayerStatus) -> felt252 {
-        match self {
-            PlayerStatus::Normal => 'Normal',
-            PlayerStatus::BeingMugged => 'BeingMugged',
-            PlayerStatus::BeingArrested => 'BeingArrested',
-            PlayerStatus::AtPawnshop => 'AtPawnshop',
+     fn with(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+        // create initial player state with world, game_id, player_id
+        Player {
+            world,
+            game_id,
+            player_id,
+            //
+            cash: 0,
+            health: 0,
+            turn: 0,
+            status: PlayerStatus::Normal,
+            prev_location: Locations::Home,
+            location: Locations::Home,
+            next_location: Locations::Home,
         }
     }
 }
+
+//
+//
+//
+
+// pack 
+impl PlayerPackerImpl of Packer<Player, felt252> {
+    fn pack(self: Player) -> felt252 {
+        let mut bits = BitsDefaultImpl::default();
+        let mut layout = PlayerLayoutEnumerableImpl::all();
+
+        loop {
+            match layout.pop_front() {
+                Option::Some(item) => {
+                    match *item {
+                        PlayerLayout::Cash => {
+                            bits.replace::<u32>(item.idx(), item.bits(), self.cash);
+                        },
+                        PlayerLayout::Health => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.health);
+                        },
+                        PlayerLayout::Turn => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.turn);
+                        },
+                        PlayerLayout::Status => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.status.into());
+                        },
+                        PlayerLayout::PrevLocation => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.prev_location.into());
+                        },
+                        PlayerLayout::Location => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.location.into());
+                        },
+                        PlayerLayout::NextLocation => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.next_location.into());
+                        },
+                    };
+                },
+                Option::None => { break; },
+            };
+        };
+
+        bits.into_felt()
+    }
+}
+
+// unpack 
+impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
+    fn unpack(self: felt252, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+        let mut player = PlayerImpl::with(world, game_id, player_id);
+        let mut layout = PlayerLayoutEnumerableImpl::all();
+        let bits = BitsImpl::from_felt(self);
+
+        loop {
+            match layout.pop_front() {
+                Option::Some(item) => {
+                    match *item {
+                        PlayerLayout::Cash => {
+                            player.cash = bits.extract_into::<u32>(item.idx(), item.bits());
+                        },
+                        PlayerLayout::Health => {
+                            player.health = bits.extract_into::<u8>(item.idx(), item.bits());
+                        },
+                        PlayerLayout::Turn => {
+                            player.turn = bits.extract_into::<u8>(item.idx(), item.bits());
+                        },
+                        PlayerLayout::Status => {
+                            player.status = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        },
+                         PlayerLayout::PrevLocation => {
+                            player.prev_location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        },
+                         PlayerLayout::Location => {
+                            player.location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        },
+                         PlayerLayout::NextLocation => {
+                            player.next_location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                        },
+                    };
+                },
+                Option::None => { break; },
+            };
+        };
+
+        player
+    }
+}
+

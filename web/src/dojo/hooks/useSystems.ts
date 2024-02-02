@@ -1,8 +1,8 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse, shortString } from "starknet";
-import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, JoinedEventData, MarketEventData, parseAllEvents } from "../events";
+import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
+import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, MarketEventData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Action, Drug, GameMode, Location } from "../types";
 import { useDojoContext } from "./useDojoContext";
@@ -163,19 +163,26 @@ export const useSystems = (): SystemsInterface => {
 
   const createGame = useCallback(
     async (gameMode: GameMode, playerName: string, avatarId: number) => {
+
+      // const { hash, events, parsedEvents } = await executeAndReceipt(
+      //   "rollyourown::systems::lobby::lobby",
+      //   "create_game",
+      //   [gameMode, shortString.encodeShortString(playerName), avatarId],
+      // );
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::lobby::lobby",
+        "rollyourown::systems::game::game",
         "create_game",
-        [gameMode, shortString.encodeShortString(playerName), avatarId],
+        [gameMode, avatarId],
       );
 
-      const joinedEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.PlayerJoined,
-      ) as JoinedEventData;
+      const gameCreated = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.GameCreated,
+      ) as GameCreatedEventData;
 
       return {
         hash,
-        gameId: joinedEvent.gameId,
+        gameId: gameCreated.gameId,
       };
     },
     [executeAndReceipt],
@@ -183,11 +190,18 @@ export const useSystems = (): SystemsInterface => {
 
   const travel = useCallback(
     async (gameId: string, locationId: Location) => {
+      // const { hash, events, parsedEvents } = await executeAndReceipt(
+      //   "rollyourown::systems::travel::travel",
+      //   "travel",
+      //   [gameId, locationId],
+      // );
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::travel::travel",
+        "rollyourown::systems::game::game",
         "travel",
         [gameId, locationId],
       );
+
 
       const isGameOver = parsedEvents
         .find((e) => e.eventType === WorldEvents.GameOver)
@@ -372,7 +386,6 @@ export const useSystems = (): SystemsInterface => {
 
   return {
     createGame,
-    // join,
     travel,
     endGame,
     buy,

@@ -1,22 +1,23 @@
+use core::traits::TryInto;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::packing::game_store::GameMode;
 
 use rollyourown::models::game::{Game};
-use rollyourown::models::player::Player;
-use rollyourown::models::drug::{Drug};
 
 use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
 use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 
 use rollyourown::utils::math::{MathTrait, MathImplU8};
-use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait};
+use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl};
 
 use rollyourown::config::{
     drugs::{Drugs, DrugsEnumerableImpl, DrugConfig, DrugConfigImpl},
     locations::{Locations, LocationsEnumerableImpl}
 };
+
+use rollyourown::packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl};
 
 #[derive(Copy, Drop)]
 struct MarketsPacked {
@@ -44,8 +45,10 @@ impl MarketsPackedDefaultImpl of Default<MarketsPacked> {
 impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
     fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketsPacked {
-        let packed = core::pedersen::pedersen(game_id.into(), player_id.into());
-        MarketsPacked { world, game_id, player_id, packed }
+        let packed: u256 = core::pedersen::pedersen(game_id.into(), player_id.into()).into();
+        let mask = BitsMathImpl::mask::<u256>(GameStoreLayout::Markets.bits());
+        let safe_packed: felt252 = (packed & mask).try_into().unwrap();
+        MarketsPacked { world, game_id, player_id, packed: safe_packed }
     }
 
     #[inline(always)]
@@ -54,7 +57,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     }
 
     fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
-        let bits = BitsImpl::from(self.packed);
+        let bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();
@@ -106,7 +109,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     //
 
     fn set_tick(ref self: MarketsPacked, location: Locations, drug: Drugs, value: usize) {
-        let mut bits = BitsImpl::from(self.packed);
+        let mut bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();
@@ -126,7 +129,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let mut locations = LocationsEnumerableImpl::all();
         // TODO: clean up
         let game = get!(self.world, self.game_id, Game);
-        let player = get!(self.world, (self.game_id, self.player_id), Player);
+        // let player = get!(self.world, (self.game_id, self.player_id), Player);
         let market_settings = MarketSettingsImpl::get(game.game_mode);
 
         loop {

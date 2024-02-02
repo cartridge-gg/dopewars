@@ -4,6 +4,7 @@ import { Account, RpcProvider } from "starknet";
 import { StoreApi } from "zustand";
 import { SetupResult } from "../setup/setup";
 import { ConfigStore, createConfigStore } from "../stores/config";
+import { GameStore, createGameStore } from "../stores/game";
 import { PlayerStore, createPlayerStore } from "../stores/player";
 
 interface DojoContextType extends SetupResult {
@@ -12,6 +13,7 @@ interface DojoContextType extends SetupResult {
   burner: BurnerAccount;
   playerStore: StoreApi<PlayerStore>;
   configStore: StoreApi<ConfigStore>;
+  gameStore: StoreApi<GameStore>;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -62,6 +64,16 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     });
   }
 
+  
+  const gameStoreRef = useRef<StoreApi<GameStore>>();
+  if (!gameStoreRef.current) {
+    gameStoreRef.current = createGameStore({
+      client: value.graphqlClient,
+      wsClient: value.graphqlWsClient,
+      configStore: configStoreRef.current
+    });
+  }
+
   return (
     <DojoContext.Provider
       value={{
@@ -81,6 +93,7 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
         account,
         playerStore: playerStoreRef.current,
         configStore: configStoreRef.current,
+        gameStore: gameStoreRef.current,
       }}
     >
       {children}

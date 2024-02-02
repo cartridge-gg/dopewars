@@ -11,15 +11,17 @@ struct Bits {
 
 impl BitsDefaultImpl of Default<Bits> {
     fn default() -> Bits {
-        Bits {
-            bits: 0
-        }
+        Bits { bits: 0 }
     }
 }
 
 #[generate_trait]
 impl BitsImpl of BitsTrait {
-    fn from(bits: felt252) -> Bits {
+    fn from(bits: u256) -> Bits {
+        Bits { bits }
+    }
+
+    fn from_felt(bits: felt252) -> Bits {
         Bits { bits: bits.into() }
     }
 
@@ -29,10 +31,10 @@ impl BitsImpl of BitsTrait {
 
     fn extract(self: @Bits, from: u8, size: u8) -> u256 {
         // shift right with from
-        let shifted = shr(*self.bits, from);
+        let shifted = BitsMathImpl::shr(*self.bits, from);
 
         // create mask with size
-        let mask = fpow(2, size) - 1;
+        let mask = BitsMathImpl::mask(size);
 
         // return masked value
         shifted & mask
@@ -44,13 +46,14 @@ impl BitsImpl of BitsTrait {
     }
 
 
+    // !! value MUST fit into size of bit otherwise it overflow !!
     fn replace<T, +Into<T, u256>, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(
         ref self: Bits, from: u8, size: u8, value: T
     ) {
         let prev_value = self.extract_into::<T>(from, size);
 
-        let shifted_prev_value = shl(prev_value.into(), from);
-        let shifted_new_value = shl(value.into(), from);
+        let shifted_prev_value = BitsMathImpl::shl(prev_value.into(), from);
+        let shifted_new_value = BitsMathImpl::shl(value.into(), from);
 
         self.bits -= shifted_prev_value;
         self.bits += shifted_new_value;
@@ -61,100 +64,110 @@ impl BitsImpl of BitsTrait {
 //
 //
 
-// use binary search + constants ?
-fn fpow(x: u256, n: u8) -> u256 {
-    let y = x;
-    if n == 0 {
-        return 1;
+#[generate_trait]
+impl BitsMathImpl of BitsMathTrait {
+    // use binary search + constants ?
+    fn fpow(x: u256, n: u8) -> u256 {
+        let y = x;
+        if n == 0 {
+            return 1;
+        }
+        if n == 1 {
+            return x;
+        }
+        let double = BitsMathImpl::fpow(y * x, n / 2);
+        if (n % 2) == 1 {
+            return x * double;
+        }
+        return double;
     }
-    if n == 1 {
-        return x;
+
+    fn mask<T, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(size: u8) -> T {
+       let mask = BitsMathImpl::fpow(2, size) - 1;
+       mask.try_into().unwrap()
     }
-    let double = fpow(y * x, n / 2);
-    if (n % 2) == 1 {
-        return x * double;
+
+    fn shl(x: u256, n: u8) -> u256 {
+        x * BitsMathImpl::fpow(2, n)
     }
-    return double;
+
+    fn shr(x: u256, n: u8) -> u256 {
+        x / BitsMathImpl::fpow(2, n)
+    }
 }
 
-fn shl(x: u256, n: u8) -> u256 {
-    x * fpow(2, n)
+//
+//
+//
+
+#[cfg(test)]
+mod tests {
+    use core::traits::TryInto;
+use debug::PrintTrait;
+    use rollyourown::utils::bits::BitsTrait;
+    use super::{Bits, BitsDefaultImpl, BitsImpl, FELT252_PRIME, BitsMathImpl};
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_bits_default() {
+        let mut bits = BitsDefaultImpl::default();
+        assert(bits.into_felt() == 0, 'should be 0');
+    }
+
+
+    #[test]
+    #[should_panic]
+    #[available_gas(100000000)]
+    fn test_bits_from_prime() {
+        let mut bits = BitsImpl::from(FELT252_PRIME);
+        let fail = bits.into_felt();
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_bits_from_prime_minus_1() {
+        let mut bits = BitsImpl::from(FELT252_PRIME - 1);
+        let max = bits.into_felt();
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_bits_max_251() {
+        let max_251 = BitsMathImpl::fpow(2, 251) - 1;
+        let mut bits = BitsImpl::from(max_251);
+        let max = bits.into_felt();
+    }
+
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_bits_XXX() {
+        let mut bits = BitsImpl::from(0);
+
+        let mask_144 = BitsMathImpl::mask::<felt252>(144);
+        let mask_8 = BitsMathImpl::mask::<u8>(8);
+        let mask_16 = BitsMathImpl::mask::<u16>(16);
+        let mask_18 = BitsMathImpl::mask::<u32>(18);
+        let mask_44 = BitsMathImpl::mask::<u64>(44);
+
+        let mask_230 = BitsMathImpl::mask::<felt252>(230);
+
+        bits.replace::<u64>(144 + 8 + 16 + 18, 44, mask_44);
+        bits.into_felt().print();
+
+        bits.replace::<u32>(144 + 8 + 16, 18, mask_18);
+        bits.into_felt().print();
+
+        bits.replace::<u16>(144 + 8, 16, mask_16);
+        bits.into_felt().print();
+
+        bits.replace::<u8>(144, 8, mask_8);
+        bits.into_felt().print();
+
+        bits.replace::<felt252>(0, 144, mask_144);
+        bits.into_felt().print();
+
+        assert(bits.into_felt() == mask_230, 'should be mask_230');
+    }
 }
 
-fn shr(x: u256, n: u8) -> u256 {
-    x / fpow(2, n)
-}
-
-//
-//
-//
-
-const POW_2_0: u128 = 0x1;
-const POW_2_1: u128 = 0x2;
-const POW_2_2: u128 = 0x4;
-const POW_2_3: u128 = 0x8;
-const POW_2_4: u128 = 0x10;
-const POW_2_5: u128 = 0x20;
-const POW_2_6: u128 = 0x40;
-const POW_2_7: u128 = 0x80;
-const POW_2_8: u128 = 0x100;
-const POW_2_9: u128 = 0x200;
-const POW_2_10: u128 = 0x400;
-const POW_2_11: u128 = 0x800;
-const POW_2_12: u128 = 0x1000;
-const POW_2_13: u128 = 0x2000;
-const POW_2_14: u128 = 0x4000;
-const POW_2_15: u128 = 0x8000;
-const POW_2_16: u128 = 0x10000;
-const POW_2_17: u128 = 0x20000;
-const POW_2_18: u128 = 0x40000;
-const POW_2_19: u128 = 0x80000;
-const POW_2_20: u128 = 0x100000;
-const POW_2_21: u128 = 0x200000;
-const POW_2_22: u128 = 0x400000;
-const POW_2_23: u128 = 0x800000;
-const POW_2_24: u128 = 0x1000000;
-const POW_2_25: u128 = 0x2000000;
-const POW_2_26: u128 = 0x4000000;
-const POW_2_27: u128 = 0x8000000;
-const POW_2_28: u128 = 0x10000000;
-const POW_2_29: u128 = 0x20000000;
-const POW_2_30: u128 = 0x40000000;
-const POW_2_31: u128 = 0x80000000;
-
-//
-//
-//
-
-const MASK_2_0: u128 = 0x0;
-const MASK_2_1: u128 = 0x1;
-const MASK_2_2: u128 = 0x3;
-const MASK_2_3: u128 = 0x7;
-const MASK_2_4: u128 = 0xf;
-const MASK_2_5: u128 = 0x1f;
-const MASK_2_6: u128 = 0x3f;
-const MASK_2_7: u128 = 0x7f;
-const MASK_2_8: u128 = 0xff;
-const MASK_2_9: u128 = 0x1ff;
-const MASK_2_10: u128 = 0x3ff;
-const MASK_2_11: u128 = 0x7ff;
-const MASK_2_12: u128 = 0xfff;
-const MASK_2_13: u128 = 0x1fff;
-const MASK_2_14: u128 = 0x3fff;
-const MASK_2_15: u128 = 0x7fff;
-const MASK_2_16: u128 = 0xffff;
-const MASK_2_17: u128 = 0x1ffff;
-const MASK_2_18: u128 = 0x3ffff;
-const MASK_2_19: u128 = 0x7ffff;
-const MASK_2_20: u128 = 0xfffff;
-const MASK_2_21: u128 = 0x1fffff;
-const MASK_2_22: u128 = 0x3fffff;
-const MASK_2_23: u128 = 0x7fffff;
-const MASK_2_24: u128 = 0xffffff;
-const MASK_2_25: u128 = 0x1ffffff;
-const MASK_2_26: u128 = 0x3ffffff;
-const MASK_2_27: u128 = 0x7ffffff;
-const MASK_2_28: u128 = 0xfffffff;
-const MASK_2_29: u128 = 0x1fffffff;
-const MASK_2_30: u128 = 0x3fffffff;
-const MASK_2_31: u128 = 0x7fffffff;

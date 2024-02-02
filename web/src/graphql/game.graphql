@@ -1,0 +1,33 @@
+query GameStorePacked($gameId: String!, $playerId: String!) {
+  entities(keys: [$gameId, $playerId]) {
+    totalCount
+    edges {
+      node {
+        id
+        models {
+          __typename
+          ... on GameStorePacked {
+            game_id
+            player_id
+            packed
+          }
+        }
+      }
+    }
+  }
+}
+
+subscription GameStorePackedSubscription($id: ID) {
+  entityUpdated(id: $id) {
+    id
+    keys
+    models {
+      __typename
+      ... on GameStorePacked {
+        game_id
+        player_id
+        packed
+      }
+    }
+  }
+}

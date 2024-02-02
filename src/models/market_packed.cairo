@@ -54,7 +54,7 @@ impl MarketImpl of MarketTrait {
     }
 
     fn get_tick(ref self: MarketPacked, location: Locations, drug: Drugs) -> usize {
-        let bits = BitsImpl::from(self.packed);
+        let bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();
@@ -109,7 +109,7 @@ impl MarketImpl of MarketTrait {
     //
 
     fn set_tick(ref self: MarketPacked, location: Locations, drug: Drugs, value: usize) {
-        let mut bits = BitsImpl::from(self.packed);
+        let mut bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();

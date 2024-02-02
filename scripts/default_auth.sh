@@ -44,7 +44,7 @@ TRADE_COMPONENTS=("Drug" "Player" "MarketPacked")
 SHOP_COMPONENTS=("Player" "Item" "MarketPacked")
 RYO_COMPONENTS=("RyoMeta" "Leaderboard")
 CONFIG_COMPONENTS=("DrugConfig" "DrugConfigMeta" "LocationConfig" "LocationConfigMeta" "ItemConfig" "ItemConfigMeta" "GameConfig")
-GAME_COMPONENTS=("GameStatePacked" "Leaderboard" "RyoMeta")
+GAME_COMPONENTS=("GameStorePacked" "Leaderboard" "RyoMeta")
 
 for component in ${LOBBY_COMPONENTS[@]}; do
     sozo -P $PROFILE auth writer $component $LOBBY_ADDRESS --world $WORLD_ADDRESS

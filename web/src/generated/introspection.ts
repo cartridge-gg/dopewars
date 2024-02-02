@@ -12,6 +12,8 @@
       "DrugConfigMeta",
       "Encounter",
       "Game",
+      "GameConfig",
+      "GameStorePacked",
       "Item",
       "ItemConfig",
       "ItemConfigMeta",

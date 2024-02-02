@@ -9,6 +9,7 @@ enum GameStoreLayout {
     // Drugs,
     // Wanted,
     Player,
+    // FreeSpace,
 }
 
 
@@ -22,6 +23,7 @@ impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
             // GameStoreLayout::Drugs,
             // GameStoreLayout::Wanted,
             GameStoreLayout::Player,
+            // GameStoreLayout::FreeSpace,
         ];
         items.span()
     }
@@ -37,6 +39,7 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
             // GameStoreLayout::Drugs => 16,
             // GameStoreLayout::Wanted => 18,
             GameStoreLayout::Player => 44,
+            // GameStoreLayout::FreeSpace => 55,
         }
     }
 

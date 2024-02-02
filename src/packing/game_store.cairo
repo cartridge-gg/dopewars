@@ -7,7 +7,7 @@ use rollyourown::packing::{
     },
     markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedDefaultImpl},
     items_packed::{ItemsPacked, ItemsPackedImpl, ItemsPackedDefaultImpl},
-    player::{Player, PlayerImpl, PlayerDefaultImpl},
+    player::{Player, PlayerImpl, PlayerDefaultImpl, PlayerPackerImpl, PlayerUnpackerImpl},
 };
 
 use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl};
@@ -30,6 +30,7 @@ struct GameStore {
     markets: MarketsPacked,
     items: ItemsPacked,
     player: Player,
+    // freespace: felt252,
 }
 
 // all to zero
@@ -43,6 +44,7 @@ impl GameStoreDefaultImpl of Default<GameStore> {
             markets: MarketsPackedDefaultImpl::default(),
             items: ItemsPackedDefaultImpl::default(),
             player: PlayerDefaultImpl::default(),
+            // freespace:0,
         }
     }
 }
@@ -64,7 +66,13 @@ impl GameStoreImpl of GameStoreTrait {
             markets: MarketsPackedImpl::new(world, game_id, player_id),
             items: ItemsPackedImpl::new(world, game_id, player_id),
             player: PlayerImpl::new(world, game_id, player_id),
+            // freespace: 0
         }
+    }
+
+    fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> GameStore {
+        let game_store_packed = get!(world, (game_id, player_id), (GameStorePacked));
+        game_store_packed.unpack(world, game_id, player_id)
     }
 }
 
@@ -83,15 +91,17 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
                             bits.replace::<felt252>(item.idx(), item.bits(), self.markets.packed);
                         },
                         GameStoreLayout::Items => {
-                            bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
+                           bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
                         },
                         // GameStoreLayout::Drugs => {},
                         // GameStoreLayout::Wanted => {},
                         GameStoreLayout::Player => {
-                            let player_packed = 0; //  self.player
-
+                            let player_packed: felt252 = self.player.pack();
                             bits.replace::<felt252>(item.idx(), item.bits(), player_packed);
                         },
+                        // GameStoreLayout::FreeSpace => {
+                        //     bits.replace::<felt252>(item.idx(), item.bits(), 0);
+                        // }
                     };
                 },
                 Option::None => { break; },
@@ -106,10 +116,13 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 
 // unpack 
 impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
-    fn unpack(self: GameStorePacked, world: IWorldDispatcher) -> GameStore {
+    // game_id & player_id params ignored here
+    fn unpack(
+        self: GameStorePacked, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,
+    ) -> GameStore {
         let mut game_store = GameStoreDefaultImpl::default();
         let mut layout = GameStoreLayoutEnumerableImpl::all();
-        let bits = BitsImpl::from(self.packed);
+        let bits = BitsImpl::from_felt(self.packed);
 
         loop {
             match layout.pop_front() {
@@ -139,7 +152,12 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                         },
                         // GameStoreLayout::Drugs => {},
                         // GameStoreLayout::Wanted => {},
-                        GameStoreLayout::Player => {},
+                        GameStoreLayout::Player => { // unpack packed into Player
+                          //  game_store.player = packed.unpack(world, self.game_id, self.player_id);
+                        },
+                        //  GameStoreLayout::FreeSpace => { 
+                        //     game_store.player = packed.unpack(world, self.game_id, self.player_id);
+                        // },
                     };
                 },
                 Option::None => { break; },
@@ -149,4 +167,27 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
         game_store
     }
 }
+
+
+
+
+
+
+
+#[cfg(test)]
+mod tests {
+    use rollyourown::models::game_store_packed::GameStorePacked;
+    use super::{GameStoreDefaultImpl, GameStorePackerImpl};
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_game_store_pack() {
+       let mut game_store = GameStoreDefaultImpl::default();
+       let game_store_packed: GameStorePacked = game_store.pack();
+       assert(game_store_packed.packed == 0, 'should be 0');
+    }
+
+   
+}
+
 

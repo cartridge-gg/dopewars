@@ -6,9 +6,9 @@ const GAME_CONFIG_KEY:u8 = 0;
 struct GameConfig {
     #[key]
     key: u8,
-    max_turns: u8,
     cash: u32,
     health: u8,
+    max_turns: u8,
 }
 
 
@@ -25,9 +25,9 @@ fn initialize_game_config(world: IWorldDispatcher) {
     set!(
         world, GameConfig { 
             key: GAME_CONFIG_KEY,
-            max_turns: 30,
             cash: 1420,
-            health: 100
+            health: 100,
+            max_turns: 30,
          }
     );
 }

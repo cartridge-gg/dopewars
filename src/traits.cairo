@@ -1,3 +1,4 @@
+use starknet::ContractAddress;
 use dojo::world::IWorldDispatcher;
 use rollyourown::utils::random::{Random, RandomImpl};
 
@@ -23,7 +24,7 @@ trait Packer<Unpacked, Packed> {
 }
 
 trait Unpacker<Packed, Unpacked> {
-    fn unpack(self: Packed, world: IWorldDispatcher) -> Unpacked;
+    fn unpack(self: Packed, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> Unpacked;
 }
 
  

@@ -1,16 +1,15 @@
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import {
   GetTransactionReceiptResponse,
-  InvokeTransactionReceiptResponse,
   SuccessfulTransactionReceiptResponse,
   num,
   shortString
 } from "starknet";
 
-import { WorldEvents } from "./generated/contractEvents";
 import { Siren, Truck } from "@/components/icons";
-import { getLocationByType, getDrugByType } from "./helpers"
 import { ToastType } from "@/hooks/toast";
+import { WorldEvents } from "./generated/contractEvents";
+import { getDrugByType, getLocationByType } from "./helpers";
 
 export interface BaseEventData {
   gameId: string;
@@ -29,7 +28,7 @@ export interface AtPawnshopEventData extends BaseEventData {
   playerId: string;
 }
 
-export interface CreateEventData extends BaseEventData {
+export interface GameCreatedEventData extends BaseEventData {
   playerId: string;
   gameMode: Number;
 }
@@ -132,7 +131,7 @@ export const parseEvent = (raw: any) => {
         gameId: num.toHexString(raw.data[0]),
         playerId: num.toHexString(raw.data[1]),
         gameMode: Number(raw.data[2]),
-      } as CreateEventData;
+      } as GameCreatedEventData;
 
     case WorldEvents.AdverseEvent:
       return {
