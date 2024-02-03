@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0xa7ca7a7bdb987dc10aacc79d181e82cc8c97dbd2b99b735ec119d8f18b6106",
+      "class_hash": "0x31c89a2e29504049f6bb378eb695e45a80a87607bb087f6318a6c7143dc6f9f",
       "abi": [
         {
           "type": "impl",
