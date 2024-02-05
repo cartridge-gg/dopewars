@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, MarketEventData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
-import { Action, Drug, GameMode, Location } from "../types";
+import { Action, Drug, GameMode, Location, Trade } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
@@ -16,6 +16,7 @@ export interface SystemsInterface {
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
   // join: (gameId: string) => Promise<SystemExecuteResult>;
+  trade:(gameId: string,trades: Array<Trade>) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
     locationId: Location,
@@ -214,6 +215,28 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  const trade = useCallback(
+    async (gameId: string,trades: Array<Trade>) => {
+     
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "rollyourown::systems::game::game",
+        "trade",
+        [gameId, trades],
+      );
+
+      return {
+        hash,
+        events: parsedEvents
+          .filter((e) => e.eventType === WorldEvents.MarketEvent)
+          .map((e) => e as MarketEventData),
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  
+
+
   const endGame = useCallback(
     async (gameId: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -230,47 +253,46 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
+  // const buy = useCallback(
+  //   async (
+  //     gameId: string,
+  //     locationId: Location,
+  //     drugId: Drug,
+  //     quantity: number,
+  //   ) => {
 
-  const buy = useCallback(
-    async (
-      gameId: string,
-      locationId: Location,
-      drugId: Drug,
-      quantity: number,
-    ) => {
+  //     const { hash, events, parsedEvents } = await executeAndReceipt(
+  //       "rollyourown::systems::trade::trade",
+  //       "buy",
+  //       [gameId, locationId, drugId, quantity],
+  //     );
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::trade::trade",
-        "buy",
-        [gameId, locationId, drugId, quantity],
-      );
+  //     return {
+  //       hash,
+  //     };
+  //   },
+  //   [executeAndReceipt],
+  // );
 
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
+  // const sell = useCallback(
+  //   async (
+  //     gameId: string,
+  //     locationId: Location,
+  //     drugId: Drug,
+  //     quantity: number,
+  //   ) => {
+  //     const { hash, events, parsedEvents } = await executeAndReceipt(
+  //       "rollyourown::systems::trade::trade",
+  //       "sell",
+  //       [gameId, locationId, drugId, quantity],
+  //     );
 
-  const sell = useCallback(
-    async (
-      gameId: string,
-      locationId: Location,
-      drugId: Drug,
-      quantity: number,
-    ) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::trade::trade",
-        "sell",
-        [gameId, locationId, drugId, quantity],
-      );
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
+  //     return {
+  //       hash,
+  //     };
+  //   },
+  //   [executeAndReceipt],
+  // );
 
   const decide = useCallback(
     async (gameId: string, action: Action) => {
@@ -375,9 +397,10 @@ export const useSystems = (): SystemsInterface => {
   return {
     createGame,
     travel,
+    trade,
     endGame,
-    buy,
-    sell,
+    // buy,
+    // sell,
     //setName,
     decide,
     buyItem,

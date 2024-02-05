@@ -1,16 +1,16 @@
 import { DojoProvider } from "@dojoengine/core";
-// import { createClient } from "@dojoengine/torii-client";
-import { Config } from "./config";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Client, createClient } from "graphql-ws";
+// import { createClient as createToriiClient } from "@dojoengine/torii-client";
 import { GraphQLClient } from "graphql-request";
+import { createClient } from "graphql-ws";
+import { QueryClient } from "react-query";
+import { Config } from "./config";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup(config: Config) {
 
     // // torii client  issues with webpack 5
-    // const toriiClient = await createClient([], {
+    // const toriiClient = await createToriiClient([], {
     //     rpcUrl: config.rpcUrl,
     //     toriiUrl: config.toriiUrl,
     //     worldAddress: config.manifest.world.address || "",
@@ -31,7 +31,6 @@ export async function setup(config: Config) {
     const graphqlWsClient = createClient({
         url: config.toriiWsUrl,
     })
-
 
     return {
         config,

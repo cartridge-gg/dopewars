@@ -6,7 +6,6 @@ use rollyourown::{
     config::locations::{Locations}, packing::game_store::{GameStore, GameStorePackerImpl}
 };
 
-
 fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: GameStore) -> bool {
     // let shop_settings = ShopSettingsImpl::get(*game.game_mode);
 
@@ -69,7 +68,7 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
     // markets variations
     game_store.markets.market_variations(ref randomizer);
 
-    // save here ?
+    // save 
     let game_store_packed = game_store.pack();
     set!(world, (game_store_packed));
 

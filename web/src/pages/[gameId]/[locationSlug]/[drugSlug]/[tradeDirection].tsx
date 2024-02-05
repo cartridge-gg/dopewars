@@ -2,9 +2,9 @@ import AlertMessage from "@/components/AlertMessage";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { ArrowEnclosed } from "@/components/icons";
-import { Player } from "@/dojo/class/Game";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { DrugInfo, DrugMarket, TradeDirection } from "@/dojo/types";
+import { DrugConfigFull } from "@/dojo/stores/config";
+import { DrugMarket, TradeDirection } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
@@ -33,13 +33,12 @@ export default function Market() {
   const [canBuy, setCanBuy] = useState(false);
 
   const { account } = useDojoContext();
-  const { buy, sell, isPending } = useSystems();
+  const { trade, isPending } = useSystems();
 
-  const { game } = useGameStore()
+  const { game } = useGameStore();
 
   const { toast } = useToast();
 
-  // market price and quantity can fluctuate as players trade
   useEffect(() => {
     if (!game || isPending || !location) return;
 
@@ -47,45 +46,38 @@ export default function Market() {
     const market = markets.find((d) => d.drug === drug?.drug);
     if (!market) return;
 
-    // const playerDrug = playerEntity.drugs.find((d) => d.id === drug?.drug);
-    // if (playerDrug) {
-    //   setCanSell(playerDrug.quantity > 0);
-    // }
+    setCanSell(game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug?.drug);
+    setCanBuy(game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug?.drug);
 
-    setCanBuy(game.player.cash > market.price);
     setMarket(market);
   }, [location, game, drug, isPending]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
 
-    let toastMessage = "",
-      hash = "",
-      quantity,
-      total;
-
     try {
-      if (tradeDirection === TradeDirection.Buy) {
-        ({ hash } = await buy(gameId, location!.location_id, drug!.drug_id, quantityBuy));
-        toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
-        quantity = quantityBuy;
-      } else if (tradeDirection === TradeDirection.Sell) {
-        ({ hash } = await sell(gameId, location!.location_id, drug!.drug_id, quantitySell));
-        toastMessage = `You sold ${quantitySell} ${drug!.name}`;
-        quantity = quantitySell;
-      }
-
-      // toast({
-      //   message: toastMessage,
-      //   icon: Cart,
-      //   link: `http://amazing_explorer/${hash}`,
-      // });
+      const quantity = tradeDirection === TradeDirection.Buy ? quantityBuy : quantitySell;
+      const { hash } = await trade(gameId, [{ direction: tradeDirection, drug: drug?.drug_id, quantity }]);
     } catch (e) {
       console.log(e);
     }
 
+    // try {
+    //   if (tradeDirection === TradeDirection.Buy) {
+    //     ({ hash } = await buy(gameId, location!.location_id, drug!.drug_id, quantityBuy));
+    //     toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
+    //     quantity = quantityBuy;
+    //   } else if (tradeDirection === TradeDirection.Sell) {
+    //     ({ hash } = await sell(gameId, location!.location_id, drug!.drug_id, quantitySell));
+    //     toastMessage = `You sold ${quantitySell} ${drug!.name}`;
+    //     quantity = quantitySell;
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
+
     router.push(`/${gameId}/${location!.location.toLowerCase()}`);
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, buy, sell]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router]);
 
   if (!router.isReady || !game || !drug || !market) return <></>;
 
@@ -141,10 +133,11 @@ export default function Market() {
             </HStack>
           </HStack>
         </Card>
+
         {((tradeDirection == TradeDirection.Buy && canBuy) || (tradeDirection == TradeDirection.Sell && canSell)) && (
           <QuantitySelector
             drug={drug}
-            player={game.player}
+            game={game}
             market={market}
             tradeDirection={tradeDirection}
             onChange={(quantity, _) => {
@@ -169,14 +162,14 @@ export default function Market() {
 
 const QuantitySelector = ({
   tradeDirection,
-  player,
+  game,
   drug,
   market,
   onChange,
 }: {
   tradeDirection: TradeDirection;
-  drug: DrugInfo;
-  player: Player;
+  game: GameClass;
+  drug: DrugConfigFull;
   market: DrugMarket;
   onChange: (quantity: number, newPrice: number) => void;
 }) => {
@@ -188,19 +181,37 @@ const QuantitySelector = ({
 
   useEffect(() => {
     if (tradeDirection === TradeDirection.Buy) {
-      //let max_buyable = calculateMaxQuantity(market, player.cash);
-      let max_buyable = Math.floor(player.cash / market.price);
-      //let bag_space = player.getTransport() - player.drugCount;
-      //setMax(Math.min(max_buyable, bag_space));
+      const canTrade = game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug?.drug;
+      if (!canTrade) {
+        // TODO: add alert msg?
+        setMax(0);
+        setQuantity(0);
+        return;
+      }
+
+      const maxBuyable = Math.floor(game.player.cash / market.price);
+
+      // free space
+      const freeSpace = game.items.transport.stat - game.drugs.quantity;
+      const maxCarryable = Math.floor(freeSpace / drug.weight);
+
+      setMax(Math.min(maxBuyable, maxCarryable));
     } else if (tradeDirection === TradeDirection.Sell) {
-      // const playerQuantity = player.drugs.find((d) => d.id === drug.drug)?.quantity;
-      // setMax(playerQuantity || 0);
-      // setQuantity(playerQuantity || 0);
+      const canTrade = game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug?.drug;
+
+      if (!canTrade) {
+        // TODO: add alert msg?
+        setMax(0);
+        setQuantity(0);
+        return;
+      }
+      setMax(game.drugs.quantity || 0);
+      setQuantity(game.drugs.quantity || 0);
     }
-  }, [tradeDirection, drug, player, market]);
+  }, [tradeDirection, drug, game, market]);
 
   useEffect(() => {
-       setTotalPrice(quantity * market.price);
+    setTotalPrice(quantity * market.price);
     onChange(quantity, market.price);
   }, [quantity, market, tradeDirection, onChange]);
 

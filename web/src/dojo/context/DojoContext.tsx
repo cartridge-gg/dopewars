@@ -7,6 +7,8 @@ import { ConfigStore, createConfigStore } from "../stores/config";
 import { GameStore, createGameStore } from "../stores/game";
 import { PlayerStore, createPlayerStore } from "../stores/player";
 
+
+
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
   account: Account | null;
@@ -23,8 +25,10 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
   const {
-    config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash, manifest },
+    config: { rpcUrl,toriiUrl, masterAddress, masterPrivateKey, accountClassHash, manifest },
   } = value;
+
+
 
   const rpcProvider = useMemo(
     () =>
@@ -62,17 +66,16 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     playerStoreRef.current = createPlayerStore({
       client: value.graphqlClient,
       wsClient: value.graphqlWsClient,
-      configStore: configStoreRef.current
+      configStore: configStoreRef.current,
     });
   }
 
-  
   const gameStoreRef = useRef<StoreApi<GameStore>>();
   if (!gameStoreRef.current) {
     gameStoreRef.current = createGameStore({
       client: value.graphqlClient,
       wsClient: value.graphqlWsClient,
-      configStore: configStoreRef.current
+      configStore: configStoreRef.current,
     });
   }
 

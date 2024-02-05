@@ -52,7 +52,12 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 
     #[inline(always)]
     fn get_drug_config(ref self: MarketsPacked, drug: Drugs) -> DrugConfig {
-        get!(self.world, (drug), (DrugConfig))
+        get!(self.world, (drug), DrugConfig)
+    }
+
+    #[inline(always)]
+    fn get_drugs_by_location(ref self: MarketsPacked) -> u8 {
+        4
     }
 
     fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
@@ -62,7 +67,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let drug_idx: u8 = drug.into();
 
         let size: u8 = 6; // 6 bits
-        let start: u8 = (location_idx * 6 + drug_idx) * size;
+        let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
 
         bits.extract_into::<usize>(start, size)
     }
@@ -79,34 +84,6 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     //
     //
 
-    fn quote_buy(
-        ref self: MarketsPacked,
-        world: IWorldDispatcher,
-        location: Locations,
-        drug: Drugs,
-        quantity: u8
-    ) -> usize {
-        let drug_price = self.get_drug_price(location, drug);
-        let cost = drug_price * quantity.into();
-        cost
-    }
-
-    fn quote_sell(
-        ref self: MarketsPacked,
-        world: IWorldDispatcher,
-        location: Locations,
-        drug: Drugs,
-        quantity: u8
-    ) -> usize {
-        let drug_price = self.get_drug_price(location, drug);
-        let payout = drug_price * quantity.into();
-        payout
-    }
-
-    //
-    //
-    //
-
     fn set_tick(ref self: MarketsPacked, location: Locations, drug: Drugs, value: usize) {
         let mut bits = BitsImpl::from_felt(self.packed);
 
@@ -114,7 +91,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let drug_idx: u8 = drug.into();
 
         let size: u8 = 6; // 6 bits
-        let start: u8 = (location_idx * 6 + drug_idx) * size;
+        let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
 
         bits.replace::<usize>(start, size, value);
         self.packed = bits.into_felt();
@@ -128,13 +105,15 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let mut locations = LocationsEnumerableImpl::all();
         // TODO: clean up
         let game = get!(self.world, self.game_id, Game);
-        // let player = get!(self.world, (self.game_id, self.player_id), Player);
         let market_settings = MarketSettingsImpl::get(game.game_mode);
 
         loop {
             match locations.pop_front() {
                 Option::Some(location_id) => {
                     let mut drugs = DrugsEnumerableImpl::all();
+                    // TODO : limit to 4 drugs !!!
+                    let _ = drugs.pop_back();
+                    let _ = drugs.pop_back();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {

@@ -3,9 +3,7 @@ use rollyourown::traits::{Enumerable};
 
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
-use rollyourown::config::introspect::{
-    Bytes31IntrospectionImpl 
-};
+use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Drugs {
@@ -40,8 +38,6 @@ struct DrugConfigMeta {
 //
 //
 //
-
-
 
 #[generate_trait]
 impl DrugConfigImpl of DrugConfigTrait {
@@ -95,11 +91,25 @@ impl DrugsIntoU8 of Into<Drugs, u8> {
     }
 }
 
+impl U8IntoDrugs of Into<u8, Drugs> {
+    fn into(self: u8) -> Drugs {
+        let self252: felt252 = self.into();
+        match self252 {
+            0 => Drugs::Ludes,
+            1 => Drugs::Speed,
+            2 => Drugs::Weed,
+            3 => Drugs::Acid,
+            4 => Drugs::Heroin,
+            5 => Drugs::Cocaine,
+            _ => Drugs::Ludes,
+        }
+    }
+}
+
 
 //
 //
 //
-
 
 fn initialize_drug_config(world: IWorldDispatcher) {
     set!(world, DrugConfigMeta { drug: Drugs::Ludes, name: 'Ludes'.try_into().unwrap(), });

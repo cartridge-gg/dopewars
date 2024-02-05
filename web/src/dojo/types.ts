@@ -108,7 +108,14 @@ export type DrugMarket = {
 export type LocationPrices = Map<string, DrugMarket[]>;
 
 
+
 export enum TradeDirection {
   Buy,
   Sell,
+}
+
+export type Trade = {
+  direction: TradeDirection,
+  drug:Drug,
+  quantity: number
 }

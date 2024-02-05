@@ -6,10 +6,9 @@ use rollyourown::{
 enum GameStoreLayout {
     Markets,
     Items,
-    // Drugs,
-    // Wanted,
+    Drugs,
+    Wanted,
     Player,
-    // FreeSpace,
 }
 
 impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
@@ -17,6 +16,8 @@ impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
         let value = match self {
             GameStoreLayout::Markets => 'Markets',
             GameStoreLayout::Items => 'Items',
+            GameStoreLayout::Drugs => 'Drugs',
+            GameStoreLayout::Wanted => 'Wanted',
             GameStoreLayout::Player => 'Player',
         };
         value.try_into().unwrap()
@@ -31,10 +32,9 @@ impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
         let items = array![
             GameStoreLayout::Markets,
             GameStoreLayout::Items,
-            // GameStoreLayout::Drugs,
-            // GameStoreLayout::Wanted,
+            GameStoreLayout::Drugs,
+            GameStoreLayout::Wanted,
             GameStoreLayout::Player,
-            // GameStoreLayout::FreeSpace,
         ];
         items.span()
     }
@@ -47,10 +47,9 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
         match *self {
             GameStoreLayout::Markets => 144,
             GameStoreLayout::Items => 8,
-            // GameStoreLayout::Drugs => 16,
-            // GameStoreLayout::Wanted => 18,
+            GameStoreLayout::Drugs => 16,
+            GameStoreLayout::Wanted => 18,
             GameStoreLayout::Player => 51,
-            // GameStoreLayout::FreeSpace => 55,
         }
     }
 

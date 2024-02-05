@@ -1,7 +1,10 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::config::items::{ItemConfig, ItemSlot};
-use rollyourown::models::game::GameMode;
+use rollyourown::{
+    config::items::{ItemConfig, ItemConfigImpl, ItemSlot, ItemLevel}, models::game::GameMode,
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
+};
+
 
 #[derive(Copy, Drop)]
 struct ItemsPacked {
@@ -29,6 +32,16 @@ impl ItemsPackedDefaultImpl of Default<ItemsPacked> {
 impl ItemsPackedImpl of ItemsPackedTrait {
     fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> ItemsPacked {
         ItemsPackedDefaultImpl::default()
+    }
+
+    fn get_item(self: ItemsPacked, slot: ItemSlot) -> ItemConfig {
+        let bits = BitsImpl::from_felt(self.packed);
+
+        let size: u8 = 3;
+        let index: u8 = slot.into() * size;
+        let level: ItemLevel = bits.extract_into::<u8>(index, size).into();
+
+        ItemConfigImpl::get(self.world, slot, level)
     }
 }
 

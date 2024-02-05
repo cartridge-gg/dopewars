@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x3e7bc5200c583644e30169b1b608213eea33538901da983e3a934fdd3ef067e",
+      "class_hash": "0x10a66088e089e396b75512e6d38b2de0b2b974f21d70a0a3e6826822d4839f1",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x31c89a2e29504049f6bb378eb695e45a80a87607bb087f6318a6c7143dc6f9f",
+      "class_hash": "0x36417acac1e1b6172f3185320cf3026c6e23ff3316ad5df06b5e8a16d1691b4",
       "abi": [
         {
           "type": "impl",
@@ -1220,6 +1220,78 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::systems::trading::TradeDirection",
+          "variants": [
+            {
+              "name": "Buy",
+              "type": "()"
+            },
+            {
+              "name": "Sell",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::drugs::Drugs",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::trading::Trade",
+          "members": [
+            {
+              "name": "direction",
+              "type": "rollyourown::systems::trading::TradeDirection"
+            },
+            {
+              "name": "drug",
+              "type": "rollyourown::config::drugs::Drugs"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::trading::Trade>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::trading::Trade>"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::game::IGame",
           "items": [
@@ -1262,6 +1334,22 @@
                 {
                   "name": "next_location",
                   "type": "rollyourown::config::locations::Locations"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "trade",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "trades",
+                  "type": "core::array::Span::<rollyourown::systems::trading::Trade>"
                 }
               ],
               "outputs": [],
@@ -2302,11 +2390,11 @@
         },
         {
           "name": "stat",
-          "type": "u8",
+          "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x1be1f3b46ddc7232264cf94f7568feb831d1dd56476a5b238eeac2f55b0368d",
+      "class_hash": "0x6b180a0d8e1168144f2af2558381759eda1d1e6cef69d331f42e22469f37ed",
       "abi": [
         {
           "type": "function",
@@ -2531,7 +2619,7 @@
             },
             {
               "name": "stat",
-              "type": "core::integer::u8"
+              "type": "core::integer::u32"
             }
           ]
         },

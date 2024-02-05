@@ -144,7 +144,7 @@ impl PlayerImpl of PlayerTrait {
             return false;
         }
 
-        let game = get!(self.world, (self.game_id), (Game));
+        let game = get!(self.world, (self.game_id), Game);
         if self.turn == game.max_turns {
             return false;
         }

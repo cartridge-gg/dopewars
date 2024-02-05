@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Arrow } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
 import { Map as MapSvg } from "@/components/map";
+import WantedIndicator from "@/components/player/WantedIndicator";
 import { AdverseEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { locations } from "@/dojo/helpers";
@@ -141,12 +142,6 @@ export default function Travel() {
           displayMarketEvents(events as MarketEventData[], toaster);
         }
 
-        // toaster.toast({
-        //   message: `You've traveled to ${locationName}`,
-        //   icon: Car,
-        //   link: `http://amazing_explorer/${hash}`,
-        // });
-
         router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
         console.log(e);
@@ -164,7 +159,9 @@ export default function Travel() {
         map: (
           <MapSvg
             targetId={configStore.getLocation(targetLocation)?.location_id || 0}
-            current={currentLocation}
+            current={configStore.getLocation(currentLocation || "")?.location_id || 0}
+            game={game}
+            configStore={configStore}
             onSelect={(selectedId) => {
               setTargetLocation(configStore.getLocationById(selectedId)?.location);
             }}
@@ -190,16 +187,21 @@ export default function Travel() {
         </Footer>
       }
     >
+      {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
         <VStack w="full" align="flex-start">
           <Inventory />
-          <Text textStyle="subheading" pt={["0px", "20px"]} fontSize="11px" color="neon.500">
-            Location
-          </Text>
+          <HStack w="full" justify="space-between" pt={["0px", "20px"]}>
+            <Text textStyle="subheading" fontSize="11px" color="neon.500">
+              Location
+            </Text>
+            <WantedIndicator wanted={game.wanted.wantedByLocation.get(targetLocation)} />
+          </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices prices={prices} />
       </VStack>
+      {/* Mobile  */}
       <VStack
         display={["flex", "none"]}
         w="full"

@@ -4,9 +4,9 @@ import { Client } from "graphql-ws";
 import { StoreApi, createStore } from "zustand";
 
 import {
+  Game,
   GameByIdDocument,
   GameByIdQuery,
-  Game as GameModel,
   GameStorePacked,
   GameStorePackedDocument,
   GameStorePackedQuery,
@@ -15,7 +15,7 @@ import {
   World__ModelEdge,
   World__Subscription,
 } from "@/generated/graphql";
-import { Game } from "../class/Game";
+import { GameClass } from "../class/Game";
 import { ConfigStore } from "./config";
 
 export interface GameStore {
@@ -23,8 +23,8 @@ export interface GameStore {
   wsClient: Client;
   configStore: StoreApi<ConfigStore>;
   id: string | null;
-  game: Game | null;
-  gameInfos: GameModel | null;
+  game: GameClass | null;
+  gameInfos: Game | null;
   handles: Array<() => void>;
   init: (gameId: string, playerId: string) => void;
   subscribe: (gameId: string, playerId: string) => void;
@@ -98,7 +98,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       // parse gameInfosData
       const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge;
       if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
-      let gameInfos = gameEdges[0].node as GameModel;
+      let gameInfos = gameEdges[0].node as Game;
       if (!gameInfos) return;
 
       // parse gameData
@@ -108,7 +108,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
       if (!gameStorePacked) return;
 
-      const game = new Game(configStore.getState(), gameStorePacked);
+      const game = new GameClass(configStore.getState(), gameStorePacked);
       set({ game, gameInfos });
     },
   }));
@@ -127,7 +127,7 @@ const onGameStorePacked = ({
   let gameStorePacked = data?.entityUpdated?.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
   if (gameStorePacked) {
     set((state) => ({
-      game: new Game(configStore.getState(), gameStorePacked),
+      game: new GameClass(configStore.getState(), gameStorePacked),
     }));
   }
 };

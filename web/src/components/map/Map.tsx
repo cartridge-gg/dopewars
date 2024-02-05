@@ -1,3 +1,5 @@
+import { GameClass } from "@/dojo/class/Game";
+import { ConfigStore } from "@/dojo/stores/config";
 import { Location } from "@/dojo/types";
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
@@ -22,10 +24,14 @@ const coordinate: CoordinateType = {
 const yOffset = -150;
 
 export const Map = ({
+  game,
+  configStore,
   targetId,
   current,
   onSelect,
 }: {
+  game: GameClass;
+  configStore: ConfigStore;
   targetId?: Location;
   current?: Location;
   onSelect: (selected: Location) => void;
@@ -35,7 +41,7 @@ export const Map = ({
 
   useEffect(() => {
     if (targetId !== undefined) {
-      const point = coordinate[targetId] ? coordinate[targetId] : {x:0,y:0}
+      const point = coordinate[targetId] ? coordinate[targetId] : { x: 0, y: 0 };
       const animation = isMobile
         ? {
             scale: 1.5,
@@ -68,17 +74,16 @@ export const Map = ({
         top: -150,
         bottom: 300,
       }}
+      mt={12}
     >
-      <Image
-        src="/images/map/basemap.svg"
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
-        alt="ryo map"
-      />
+      <Image src="/images/map/basemap.svg" position="absolute" top="0" left="0" boxSize="full" alt="ryo map" />
 
-      <Outline targetId={targetId} current={current} />
+      {/* <Markers location={targetId} /> */}
+      <Outline
+        targetId={targetId}
+        current={current}
+        wanted={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location)}
+      />
       <HitBox onSelect={onSelect} />
     </Flex>
   );

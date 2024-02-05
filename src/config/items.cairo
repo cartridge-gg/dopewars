@@ -35,7 +35,7 @@ struct ItemConfig {
     slot_id: u8,
     level_id: u8,
     cost: u32,
-    stat: u8,
+    stat: u32,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -476,7 +476,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 60
+            stat: 10 * 100
         }
     );
 
@@ -500,7 +500,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 500,
-            stat: 90
+            stat: 25 * 100
         }
     );
 
@@ -524,7 +524,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 15000,
-            stat: 120
+            stat: 50 * 100
         }
     );
 
@@ -548,7 +548,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 99000,
-            stat: 160
+            stat: 100 * 100
         }
     );
 }

@@ -1,13 +1,12 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::models::{
-    game_store_packed::{GameStorePacked},
-    game::{GameMode}
-};
+use rollyourown::models::{game_store_packed::{GameStorePacked}, game::{GameMode}};
 use rollyourown::packing::{
     game_store_layout::{
         GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl
     },
+    drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsPackedDefaultImpl},
+    wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedDefaultImpl},
     markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedDefaultImpl},
     items_packed::{ItemsPacked, ItemsPackedImpl, ItemsPackedDefaultImpl},
     player::{Player, PlayerImpl, PlayerDefaultImpl, PlayerPackerImpl, PlayerUnpackerImpl},
@@ -15,7 +14,6 @@ use rollyourown::packing::{
 
 use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl};
 use rollyourown::traits::{Packable, Packer, Unpacker};
-
 
 
 #[derive(Copy, Drop)]
@@ -26,8 +24,9 @@ struct GameStore {
     //
     markets: MarketsPacked,
     items: ItemsPacked,
+    drugs: DrugsPacked,
+    wanted: WantedPacked,
     player: Player,
-    // freespace: felt252,
 }
 
 // all to zero
@@ -40,8 +39,9 @@ impl GameStoreDefaultImpl of Default<GameStore> {
             //
             markets: MarketsPackedDefaultImpl::default(),
             items: ItemsPackedDefaultImpl::default(),
+            drugs: DrugsPackedDefaultImpl::default(),
+            wanted: WantedPackedDefaultImpl::default(),
             player: PlayerDefaultImpl::default(),
-            // freespace:0,
         }
     }
 }
@@ -62,29 +62,27 @@ impl GameStoreImpl of GameStoreTrait {
             player_id,
             markets: MarketsPackedImpl::new(world, game_id, player_id),
             items: ItemsPackedImpl::new(world, game_id, player_id),
+            drugs: DrugsPackedImpl::new(world, game_id, player_id),
+            wanted: WantedPackedImpl::new(world, game_id, player_id),
             player: PlayerImpl::new(world, game_id, player_id),
-            // freespace: 0
         }
     }
 
-    fn from(
-        world: IWorldDispatcher,
-        game_id: u32,
-        player_id: ContractAddress,
-    ) -> GameStore {
+    fn from(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> GameStore {
         GameStore {
             world,
             game_id,
             player_id,
             markets: MarketsPackedImpl::new(world, game_id, player_id),
             items: ItemsPackedImpl::new(world, game_id, player_id),
+            drugs: DrugsPackedImpl::new(world, game_id, player_id),
+            wanted: WantedPackedImpl::new(world, game_id, player_id),
             player: PlayerImpl::new(world, game_id, player_id),
-            // freespace: 0
         }
     }
 
     fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> GameStore {
-        let game_store_packed = get!(world, (game_id, player_id), (GameStorePacked));
+        let game_store_packed = get!(world, (game_id, player_id), GameStorePacked);
         game_store_packed.unpack(world, game_id, player_id)
     }
 }
@@ -104,17 +102,18 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
                             bits.replace::<felt252>(item.idx(), item.bits(), self.markets.packed);
                         },
                         GameStoreLayout::Items => {
-                           bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
+                            bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
                         },
-                        // GameStoreLayout::Drugs => {},
-                        // GameStoreLayout::Wanted => {},
+                        GameStoreLayout::Drugs => {
+                            bits.replace::<felt252>(item.idx(), item.bits(), self.drugs.packed);
+                        },
+                        GameStoreLayout::Wanted => {
+                            bits.replace::<felt252>(item.idx(), item.bits(), self.wanted.packed);
+                        },
                         GameStoreLayout::Player => {
                             let player_packed: felt252 = self.player.pack();
                             bits.replace::<felt252>(item.idx(), item.bits(), player_packed);
                         },
-                        // GameStoreLayout::FreeSpace => {
-                        //     bits.replace::<felt252>(item.idx(), item.bits(), 0);
-                        // }
                     };
                 },
                 Option::None => { break; },
@@ -129,7 +128,6 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 
 // unpack 
 impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
-    // game_id & player_id params ignored here
     fn unpack(
         self: GameStorePacked, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,
     ) -> GameStore {
@@ -145,33 +143,21 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                     match *item {
                         GameStoreLayout::Markets => {
                             game_store
-                                .markets =
-                                    MarketsPacked {
-                                        world,
-                                        game_id: self.game_id,
-                                        player_id: self.player_id,
-                                        packed
-                                    };
+                                .markets = MarketsPacked { world, game_id, player_id, packed };
                         },
                         GameStoreLayout::Items => {
-                            game_store
-                                .items =
-                                    ItemsPacked {
-                                        world,
-                                        game_id: self.game_id,
-                                        player_id: self.player_id,
-                                        packed
-                                    };
+                            game_store.items = ItemsPacked { world, game_id, player_id, packed };
                         },
-                        // GameStoreLayout::Drugs => {},
-                        // GameStoreLayout::Wanted => {},
-                        GameStoreLayout::Player => { 
+                        GameStoreLayout::Drugs => {
+                            game_store.drugs = DrugsPacked { world, game_id, player_id, packed };
+                        },
+                        GameStoreLayout::Wanted => {
+                            game_store.wanted = WantedPacked { world, game_id, player_id, packed };
+                        },
+                        GameStoreLayout::Player => {
                             // unpack packed into Player
-                            game_store.player = packed.unpack(world, self.game_id, self.player_id);
+                            game_store.player = packed.unpack(world, game_id, player_id);
                         },
-                        //  GameStoreLayout::FreeSpace => { 
-                        //     game_store.player = packed.unpack(world, self.game_id, self.player_id);
-                        // },
                     };
                 },
                 Option::None => { break; },
@@ -183,11 +169,6 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
 }
 
 
-
-
-
-
-
 #[cfg(test)]
 mod tests {
     use rollyourown::models::game_store_packed::GameStorePacked;
@@ -196,12 +177,9 @@ mod tests {
     #[test]
     #[available_gas(100000000)]
     fn test_game_store_pack() {
-       let mut game_store = GameStoreDefaultImpl::default();
-       let game_store_packed: GameStorePacked = game_store.pack();
-       assert(game_store_packed.packed == 0, 'should be 0');
+        let mut game_store = GameStoreDefaultImpl::default();
+        let game_store_packed: GameStorePacked = game_store.pack();
+        assert(game_store_packed.packed == 0, 'should be 0');
     }
-
-   
 }
-
 

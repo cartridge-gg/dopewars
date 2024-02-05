@@ -339,7 +339,7 @@ export type ItemConfig = {
   level_id?: Maybe<Scalars['u8']>;
   slot?: Maybe<Scalars['Enum']>;
   slot_id?: Maybe<Scalars['u8']>;
-  stat?: Maybe<Scalars['u8']>;
+  stat?: Maybe<Scalars['u32']>;
 };
 
 export type ItemConfigConnection = {
@@ -455,13 +455,13 @@ export type ItemConfigWhereInput = {
   slot_idLT?: InputMaybe<Scalars['u8']>;
   slot_idLTE?: InputMaybe<Scalars['u8']>;
   slot_idNEQ?: InputMaybe<Scalars['u8']>;
-  stat?: InputMaybe<Scalars['u8']>;
-  statEQ?: InputMaybe<Scalars['u8']>;
-  statGT?: InputMaybe<Scalars['u8']>;
-  statGTE?: InputMaybe<Scalars['u8']>;
-  statLT?: InputMaybe<Scalars['u8']>;
-  statLTE?: InputMaybe<Scalars['u8']>;
-  statNEQ?: InputMaybe<Scalars['u8']>;
+  stat?: InputMaybe<Scalars['u32']>;
+  statEQ?: InputMaybe<Scalars['u32']>;
+  statGT?: InputMaybe<Scalars['u32']>;
+  statGTE?: InputMaybe<Scalars['u32']>;
+  statLT?: InputMaybe<Scalars['u32']>;
+  statLTE?: InputMaybe<Scalars['u32']>;
+  statNEQ?: InputMaybe<Scalars['u32']>;
 };
 
 export type Leaderboard = {
