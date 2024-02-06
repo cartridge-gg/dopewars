@@ -29,7 +29,7 @@ export enum ItemEnum {
 
 export enum ItemTextEnum {
   Attack = "Attack",
-  Defense= "Defense",
+  Defense = "Defense",
   Transport = "Transport",
   Speed = "Speed",
 }
@@ -78,7 +78,7 @@ export interface DrugInfo {
 
 export interface ShopItemInfo {
   type: ItemEnum;
-  typeText : ItemTextEnum;
+  typeText: ItemTextEnum;
   name: string;
   cost: number;
   value: number;
@@ -116,6 +116,13 @@ export enum TradeDirection {
 
 export type Trade = {
   direction: TradeDirection,
-  drug:Drug,
+  drug: Drug,
   quantity: number
 }
+
+
+export type ShopAction = {
+  slotId: number
+}
+
+

@@ -49,7 +49,6 @@ export default function Location() {
         return;
       }
 
-      // TODO : get max turns form game
       setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
   }, [location, game, router, gameId]);
@@ -97,12 +96,12 @@ export default function Location() {
         <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
           {prices.map((drug, index) => {
             const drugConfig = configStore.getDrug(drug.drug)!;
-            // TODO: update
-            // const canBuy = drug.price <= game.player.cash && playerEntity.drugCount < playerEntity.getTransport();
-            // const canSell = !!playerEntity.drugs.find((d) => d.id === drug.id && d.quantity > 0);
 
-            const canBuy = true;
-            const canSell = true;
+            const canBuy =
+              game.drugs.quantity === 0 ||
+              !game.drugs?.drug ||
+              (game.drugs?.drug?.drug === drug?.drug && game.player.cash > drug.price);
+            const canSell = game.drugs.quantity > 0 && game.drugs?.drug?.drug === drug.drug;
 
             return (
               <Card h={["auto", "180px"]} key={index} position="relative">

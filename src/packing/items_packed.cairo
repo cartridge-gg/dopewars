@@ -34,14 +34,34 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         ItemsPackedDefaultImpl::default()
     }
 
+    #[inline(always)]
+    fn get_slot_size(self: ItemsPacked) -> u8 {
+        2
+    }
+
     fn get_item(self: ItemsPacked, slot: ItemSlot) -> ItemConfig {
         let bits = BitsImpl::from_felt(self.packed);
 
-        let size: u8 = 3;
+        let size: u8 = self.get_slot_size();
         let index: u8 = slot.into() * size;
         let level: ItemLevel = bits.extract_into::<u8>(index, size).into();
 
         ItemConfigImpl::get(self.world, slot, level)
     }
+
+    // assume you checked its possible or overflow crack boom OD
+    fn upgrade_item(ref self: ItemsPacked, slot: ItemSlot) {
+        let mut bits = BitsImpl::from_felt(self.packed);
+
+        let size: u8 = self.get_slot_size();
+        let index: u8 = slot.into() * size;
+        let level = bits.extract_into::<u8>(index, size);
+
+        bits.replace::<u8>(index, size,level+1);
+
+        self.packed = bits.into_felt();
+    }
+
+    
 }
 

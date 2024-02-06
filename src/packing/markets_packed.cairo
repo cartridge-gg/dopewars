@@ -51,13 +51,18 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     }
 
     #[inline(always)]
-    fn get_drug_config(ref self: MarketsPacked, drug: Drugs) -> DrugConfig {
-        get!(self.world, (drug), DrugConfig)
+    fn get_drugs_by_location(self: MarketsPacked) -> u8 {
+        4
     }
 
     #[inline(always)]
-    fn get_drugs_by_location(ref self: MarketsPacked) -> u8 {
-        4
+    fn get_slot_size(self: MarketsPacked) -> u8 {
+        6
+    }
+
+    #[inline(always)]
+    fn get_drug_config(ref self: MarketsPacked, drug: Drugs) -> DrugConfig {
+        get!(self.world, (drug), DrugConfig)
     }
 
     fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
@@ -66,7 +71,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();
 
-        let size: u8 = 6; // 6 bits
+        let size: u8 = self.get_slot_size();
         let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
 
         bits.extract_into::<usize>(start, size)
@@ -90,7 +95,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let location_idx: u8 = location.into() - 1;
         let drug_idx: u8 = drug.into();
 
-        let size: u8 = 6; // 6 bits
+        let size: u8 = self.get_slot_size();
         let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
 
         bits.replace::<usize>(start, size, value);
@@ -103,39 +108,43 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 
     fn market_variations(ref self: MarketsPacked, ref randomizer: Random) {
         let mut locations = LocationsEnumerableImpl::all();
-        // TODO: clean up
-        let game = get!(self.world, self.game_id, Game);
-        let market_settings = MarketSettingsImpl::get(game.game_mode);
 
         loop {
             match locations.pop_front() {
                 Option::Some(location_id) => {
                     let mut drugs = DrugsEnumerableImpl::all();
-                    // TODO : limit to 4 drugs !!!
+                    // limit to 4 drugs slots
                     let _ = drugs.pop_back();
                     let _ = drugs.pop_back();
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug_id) => {
-                                let rand = randomizer.between::<u32>(0, 1000);
+                                let rand: u16 = randomizer.between::<u16>(1, 1000).into();
+                                let tick = self.get_tick(*location_id, *drug_id);
+                                let direction = rand > 500;
 
-                                if rand < market_settings.price_var_chance.into() {
-                                    // increase price
-                                    let tick = self.get_tick(*location_id, *drug_id);
-                                    let new_tick = tick.add_capped(2, 63);
-                                    self.set_tick(*location_id, *drug_id, new_tick);
-                                } else if rand >= (999 - market_settings.price_var_chance).into() {
-                                    // decrease price
-                                    let tick = self.get_tick(*location_id, *drug_id);
-                                    let new_tick = tick.sub_capped(2, 63);
-                                    self.set_tick(*location_id, *drug_id, new_tick);
-                                } else if rand > 500 && rand <= 500
-                                    + market_settings.market_event_chance.into() {
-                                    // big move up
-                                    let tick = self.get_tick(*location_id, *drug_id);
-                                    let new_tick = tick.add_capped(7, 63);
-                                    self.set_tick(*location_id, *drug_id, new_tick);
+                                // kind of dopessian distribution
+                                let variation = if rand <= 200 || rand >= 799 {
+                                    1_u32
+                                } else if rand <= 350 || rand >= 649 {
+                                    2_u32
+                                } else if rand <= 475 || rand >= 524 {
+                                    4_u32
+                                } else if rand <= 496 || rand >= 503 {
+                                    6_u32
+                                } else {
+                                    12_u32
+                                };
 
+                                let new_tick = if direction {
+                                    tick.add_capped(variation, 63)
+                                } else {
+                                    tick.sub_capped(variation, 0)
+                                };
+
+                                self.set_tick(*location_id, *drug_id, new_tick);
+
+                                if variation == 12_u32 {
                                     // emit raw event
                                     let location_id_u8: u8 = (*location_id).into();
                                     let drug_id_u8: u8 = (*drug_id).into();
@@ -143,44 +152,42 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                     self
                                         .world
                                         .emit_raw(
-                                            array![selector!("MarketEvent")],
+                                            array![selector!("HighVolatility")],
                                             array![
                                                 self.game_id.into(),
                                                 location_id_u8.into(),
                                                 drug_id_u8.into(),
-                                                true.into()
-                                            ]
-                                        );
-                                } else if rand < 500 && rand >= 500
-                                    - market_settings.market_event_chance.into() {
-                                    // big move down
-
-                                    let tick = self.get_tick(*location_id, *drug_id);
-                                    let new_tick = tick.sub_capped(7, 63);
-                                    self.set_tick(*location_id, *drug_id, new_tick);
-
-                                    // emit raw event
-                                    let location_id_u8: u8 = (*location_id).into();
-                                    let drug_id_u8: u8 = (*drug_id).into();
-                                    self
-                                        .world
-                                        .emit_raw(
-                                            array![selector!("MarketEvent")],
-                                            array![
-                                                self.game_id.into(),
-                                                location_id_u8.into(),
-                                                drug_id_u8.into(),
-                                                false.into()
+                                                direction.into()
                                             ]
                                         );
                                 }
                             },
-                            Option::None(()) => { break; }
+                            Option::None => { break; }
                         };
                     };
                 },
                 Option::None(_) => { break; }
             };
         };
+    }
+}
+
+//
+//
+//
+
+#[cfg(test)]
+mod tests {
+    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+    use super::{MarketsPacked, MarketsPackedImpl, RandomImpl};
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_markets_variations_v1() {
+        let world = dojo::test_utils::spawn_test_world(array![]);
+
+        let mut market_packed = MarketsPackedImpl::new(world, 0, 0.try_into().unwrap());
+        let mut randomizer = RandomImpl::new(world);
+        market_packed.market_variations(ref randomizer);
     }
 }

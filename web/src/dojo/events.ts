@@ -67,7 +67,7 @@ export interface ConsequenceEventData extends BaseEventData {
   cashEarnt: number;
 }
 
-export interface MarketEventData extends BaseEventData {
+export interface HighVolatilityData extends BaseEventData {
   locationId: string;
   drugId: string;
   increase: boolean;
@@ -184,15 +184,15 @@ export const parseEvent = (raw: any) => {
         cashEarnt: Number(raw.data[5]),
       } as ConsequenceEventData;
 
-    case WorldEvents.MarketEvent:
+    case WorldEvents.HighVolatility:
       return {
-        eventType: WorldEvents.MarketEvent,
-        eventName: "MarketEvent",
+        eventType: WorldEvents.HighVolatility,
+        eventName: "HighVolatility",
         gameId: num.toHexString(raw.data[0]),
         locationId: num.toHexString(raw.data[1]),
         drugId: num.toHexString(raw.data[2]),
         increase: raw.data[3] === "0x0" ? false : true,
-      } as MarketEventData;
+      } as HighVolatilityData;
 
     case WorldEvents.Traveled:
       return {
@@ -265,10 +265,10 @@ export const parseEvent = (raw: any) => {
 }
 
 
-export function displayMarketEvents(events: MarketEventData[], toaster: ToastType) {
+export function displayMarketEvents(events: HighVolatilityData[], toaster: ToastType) {
   // market events
   for (let event of events) {
-    const e = event as MarketEventData;
+    const e = event as HighVolatilityData;
     const msg = e.increase
       ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${getLocationByType(Number(e.locationId))?.name
       }`

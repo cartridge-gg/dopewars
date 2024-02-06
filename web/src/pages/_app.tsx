@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import NextHead from "next/head";
 import theme from "../theme";
 
+import Debug from "@/components/Debug";
 import MakeItRain from "@/components/MakeItRain";
 import RegisterEntities from "@/components/RegisterEntities";
 import { DojoProvider } from "@/dojo/context/DojoContext";
@@ -56,6 +57,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 {isRightSequence && <MakeItRain />}
                 <Component {...pageProps} />
                 <Analytics />
+                <Debug />
               </ChakraProvider>
           </DojoProvider>
         </QueryClientProvider>

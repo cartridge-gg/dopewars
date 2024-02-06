@@ -1,9 +1,18 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::config::{items::{ItemConfig, ItemSlot}, drugs::{Drugs}, locations::{Locations}};
-use rollyourown::models::{game::GameMode,};
+use rollyourown::{
+    models::{game::GameMode,},
+    config::{
+        items::{ItemConfig, ItemSlot}, drugs::{Drugs},
+        locations::{Locations, LocationsEnumerableImpl}
+    },
+    utils::{
+        math::{MathTrait, MathImplU8},
+        bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl}
+    },
+    packing::game_store::{GameStore}
+};
 
-use rollyourown::utils::bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl};
 
 // 18 bits : 3 bits x 6 locations
 #[derive(Copy, Drop)]
@@ -56,5 +65,37 @@ impl WantedPackedImpl of WantedPackedTrait {
 
         self.packed = bits.into_felt();
     }
+
+
+    fn on_turn_end(ref self: WantedPacked, game_store: GameStore) {
+        let mut locations = LocationsEnumerableImpl::all();
+
+        loop {
+            match locations.pop_front() {
+                Option::Some(location) => {
+                    let mut value = self.get(*location);
+
+                    if game_store.player.next_location == *location {
+                        if game_store.player.next_location == game_store.player.prev_location {
+                            // travel back to same location : +3
+                            self.set(*location, value.add_capped(3, 7))
+                        } else {
+                            // travel to location : +1
+                            self.set(*location, value.add_capped(1, 7));
+                        }
+                    } else {
+                        //not current location
+                        if game_store.player.location != *location {
+                            // nothin at location : -1
+                            self.set(*location,  value.sub_capped(1, 0));
+                        }
+                    }
+                },
+                Option::None => { break; }
+            }
+        }
+    }
+// fn on_trade(ref self: WantedPacked, game_store: GameStore) { }
+// fn on_encounter(ref self: WantedPacked, game_store: GameStore) { }
 }
 

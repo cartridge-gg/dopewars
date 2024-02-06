@@ -157,7 +157,9 @@ export type Game = {
   entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
+  game_over?: Maybe<Scalars['bool']>;
   max_turns?: Maybe<Scalars['u8']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
 };
 
 export type GameConfig = {
@@ -247,7 +249,9 @@ export enum GameOrderField {
   AvatarId = 'AVATAR_ID',
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
-  MaxTurns = 'MAX_TURNS'
+  GameOver = 'GAME_OVER',
+  MaxTurns = 'MAX_TURNS',
+  PlayerId = 'PLAYER_ID'
 }
 
 export type GameStorePacked = {
@@ -322,6 +326,7 @@ export type GameWhereInput = {
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
+  game_over?: InputMaybe<Scalars['bool']>;
   max_turns?: InputMaybe<Scalars['u8']>;
   max_turnsEQ?: InputMaybe<Scalars['u8']>;
   max_turnsGT?: InputMaybe<Scalars['u8']>;
@@ -329,6 +334,13 @@ export type GameWhereInput = {
   max_turnsLT?: InputMaybe<Scalars['u8']>;
   max_turnsLTE?: InputMaybe<Scalars['u8']>;
   max_turnsNEQ?: InputMaybe<Scalars['u8']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type ItemConfig = {

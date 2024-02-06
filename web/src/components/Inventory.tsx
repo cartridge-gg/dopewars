@@ -1,4 +1,4 @@
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
 import { Hustler, Hustlers } from "./hustlers";
 import { Bag } from "./icons";
@@ -9,6 +9,17 @@ export const Inventory = ({ ...props }: StyleProps) => {
   const { game, gameInfos } = useGameStore();
   const configStore = useConfigStore();
 
+  const { shop } = useSystems();
+
+  const onUpgrade = async (item: ItemConfigFull) => {
+    const actions = [{ slot: item.slot_id }];
+    try {
+      await shop(gameInfos?.game_id, actions);
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+  
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
       <HStack w="full" justify="flex-end">
@@ -24,13 +35,13 @@ export const Inventory = ({ ...props }: StyleProps) => {
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
-            <PlayerItem item={game?.items.attack} />
+            <PlayerItem item={game?.items.attack} onClick={() => onUpgrade(game?.items.attack)} />
             <VerticalDivider />
-            <PlayerItem item={game?.items.defense} />
+            <PlayerItem item={game?.items.defense} onClick={() => onUpgrade(game?.items.defense)} />
             <VerticalDivider />
-            <PlayerItem item={game?.items.speed} />
+            <PlayerItem item={game?.items.speed} onClick={() => onUpgrade(game?.items.speed)} />
             <VerticalDivider />
-            <PlayerItem item={game?.items.transport} />
+            <PlayerItem item={game?.items.transport} onClick={() => onUpgrade(game?.items.transport)} />
           </HStack>
         </Card>
 
@@ -54,12 +65,12 @@ export const Inventory = ({ ...props }: StyleProps) => {
   );
 };
 
-const PlayerItem = ({ item }: { item: ItemConfigFull }) => {
+const PlayerItem = ({ item, ...props }: { item: ItemConfigFull }) => {
   if (!item) return null;
 
   const stat = item.statName === "INV" ? item.stat / 100 : item.stat;
   return (
-    <HStack gap="10px" key={`item-${item.item_id}`}>
+    <HStack gap="10px" cursor="pointer" {...props}>
       <Tooltip label={`${item.name} (+${stat} ${item.statName})`}>
         <HStack color="yellow.400">
           <>

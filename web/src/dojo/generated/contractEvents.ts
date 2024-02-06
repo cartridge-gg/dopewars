@@ -12,6 +12,7 @@ export enum WorldEvents {
   Upgraded = "0x2db340e6c609371026731f47050d3976552c89b4fbb012941663841c59d1af3",
   GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
   Traveled = "0x2c4d9d5da873550ed167876bf0bc2ae300ce1db2eeff67927a85693680a2328",
+  HighVolatility = "0x5745fc04eae9463f95a8fd2efc3a0ce995c72189f48fc4afcaee0648773f24",
 }
 
 export interface BaseEventData {
@@ -32,6 +33,13 @@ export interface TraveledData extends BaseEventData {
   turn: number;
   from_location: String;
   to_location: String;
+}
+
+export interface HighVolatilityData extends BaseEventData {
+  game_id: number;
+  location_id: String;
+  drug_id: String;
+  increase: boolean;
 }
 
 export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
@@ -74,6 +82,16 @@ export const parseEvent = (raw: any) => {
         from_location: num.toHexString(raw.data[1]),
         to_location: num.toHexString(raw.data[2]),
       } as TraveledData;
+
+    case WorldEvents.HighVolatility:
+      return {
+        event_type: WorldEvents.HighVolatility,
+        event_name: "HighVolatility",
+        game_id: Number(raw.keys[1]),
+        location_id: num.toHexString(raw.data[0]),
+        drug_id: num.toHexString(raw.data[1]),
+        increase: raw.data[2] === "0x0" ? false : true,
+      } as HighVolatilityData;
 
     default:
       return {

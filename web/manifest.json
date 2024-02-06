@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x10a66088e089e396b75512e6d38b2de0b2b974f21d70a0a3e6826822d4839f1",
+      "class_hash": "0x498b3d44e1071fe5ccfef864748e2920ee5ac4285c1531e982648d4df69280e",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x36417acac1e1b6172f3185320cf3026c6e23ff3316ad5df06b5e8a16d1691b4",
+      "class_hash": "0x6a6eb81307c9714d15926c85eef84c806136ad62854f57df7d38a884cc62d2d",
       "abi": [
         {
           "type": "impl",
@@ -1292,6 +1292,48 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::items::ItemSlot",
+          "variants": [
+            {
+              "name": "Attack",
+              "type": "()"
+            },
+            {
+              "name": "Defense",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::shopping::Action",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::items::ItemSlot"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::shopping::Action>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::shopping::Action>"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::game::IGame",
           "items": [
@@ -1350,6 +1392,22 @@
                 {
                   "name": "trades",
                   "type": "core::array::Span::<rollyourown::systems::trading::Trade>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "shop",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "actions",
+                  "type": "core::array::Span::<rollyourown::systems::shopping::Action>"
                 }
               ],
               "outputs": [],
@@ -1470,6 +1528,47 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::HighVolatility",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "location_id",
+              "type": "rollyourown::config::locations::Locations",
+              "kind": "data"
+            },
+            {
+              "name": "drug_id",
+              "type": "rollyourown::config::drugs::Drugs",
+              "kind": "data"
+            },
+            {
+              "name": "increase",
+              "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::game::game::Event",
           "kind": "enum",
@@ -1487,6 +1586,11 @@
             {
               "name": "Traveled",
               "type": "rollyourown::systems::game::game::Traveled",
+              "kind": "nested"
+            },
+            {
+              "name": "HighVolatility",
+              "type": "rollyourown::systems::game::game::HighVolatility",
               "kind": "nested"
             }
           ]
@@ -3400,6 +3504,11 @@
           "key": true
         },
         {
+          "name": "player_id",
+          "type": "ContractAddress",
+          "key": true
+        },
+        {
           "name": "game_mode",
           "type": "GameMode",
           "key": false
@@ -3413,9 +3522,14 @@
           "name": "avatar_id",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "game_over",
+          "type": "bool",
+          "key": false
         }
       ],
-      "class_hash": "0x6fd666f5a91eac5661f62d91f9a803a1d55bfab7838b3018817db85d0166115",
+      "class_hash": "0x330fd356736e7a5d8a5147822adb41eaaa55824207e0da6063d5e498c055869",
       "abi": [
         {
           "type": "function",
@@ -3585,12 +3699,30 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::models::game::Game",
           "members": [
             {
               "name": "game_id",
               "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
             },
             {
               "name": "game_mode",
@@ -3603,6 +3735,10 @@
             {
               "name": "avatar_id",
               "type": "core::integer::u8"
+            },
+            {
+              "name": "game_over",
+              "type": "core::bool"
             }
           ]
         },

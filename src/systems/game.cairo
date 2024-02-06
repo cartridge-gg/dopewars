@@ -1,6 +1,8 @@
 use starknet::ContractAddress;
-use rollyourown::{config::locations::{Locations}, packing::game_store::{GameMode}};
-use rollyourown::systems::trading::{Trade};
+use rollyourown::{
+    config::{locations::{Locations}, items::{ItemSlot}}, packing::game_store::{GameMode}
+};
+use rollyourown::systems::{trading::Trade, shopping::Action,};
 
 #[starknet::interface]
 trait IGame<T> {
@@ -8,6 +10,7 @@ trait IGame<T> {
     fn end_game(self: @T, game_id: u32);
     fn travel(self: @T, game_id: u32, next_location: Locations);
     fn trade(self: @T, game_id: u32, trades: Span<Trade>);
+    fn shop(self: @T, game_id: u32, actions: Span<Action>);
 }
 
 #[dojo::contract]
@@ -15,17 +18,13 @@ mod game {
     use starknet::{ContractAddress, get_caller_address};
 
     use rollyourown::{
-        config::{
-            locations::{Locations},
-            game::{GameConfig, GameConfigImpl}
-        },
+        config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}},
         models::{game_store_packed::GameStorePacked, game::{Game}},
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             player::{Player, PlayerImpl}
         },
-        systems::trading,
-        utils::random::{Random, RandomImpl}, systems::game_loop
+        systems::{trading, shopping, game_loop}, utils::random::{Random, RandomImpl},
     };
 
 
@@ -34,6 +33,7 @@ mod game {
     enum Event {
         GameCreated: GameCreated,
         Traveled: Traveled,
+        HighVolatility: HighVolatility,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -54,6 +54,15 @@ mod game {
         to_location: Locations,
     }
 
+    #[derive(Drop, starknet::Event)]
+    struct HighVolatility {
+        #[key]
+        game_id: u32,
+        location_id: Locations,
+        drug_id: Drugs,
+        increase: bool,
+    }
+
     #[abi(embed_v0)]
     impl GameImpl of super::IGame<ContractState> {
         fn create_game(self: @ContractState, game_mode: GameMode, avatar_id: u8,) {
@@ -65,7 +74,10 @@ mod game {
             // let leaderboard_version = leaderboard_manager.on_game_start();
 
             let game_config = GameConfigImpl::get(self.world());
-            let game = Game { game_id, game_mode, max_turns: game_config.max_turns, avatar_id };
+            // let game = Game { game_id, game_mode, max_turns: game_config.max_turns, avatar_id };
+            let game = Game {
+                game_id, player_id, game_mode, max_turns: 7, avatar_id, game_over: false
+            };
 
             // save Game
             set!(self.world(), (game));
@@ -83,7 +95,11 @@ mod game {
             emit!(self.world(), GameCreated { game_id, player_id, game_mode });
         }
 
-        fn end_game(self: @ContractState, game_id: u32) { // TODO
+        fn end_game(self: @ContractState, game_id: u32) {
+            let player_id = get_caller_address();
+
+            //on_game_end
+            game_loop::on_game_end(self.world(), game_id, player_id);
         }
 
         fn travel(self: @ContractState, game_id: u32, next_location: Locations) {
@@ -102,12 +118,11 @@ mod game {
 
             //on_turn_end
             game_loop::on_turn_end(self.world(), ref randomizer, ref game_store);
-           
         }
 
 
         // TODO: move trade execution before travel wen possible
-        fn trade(self: @ContractState, game_id: u32, trades: Span<trading::Trade>){
+        fn trade(self: @ContractState, game_id: u32, trades: Span<trading::Trade>) {
             let mut trades = trades;
             let player_id = get_caller_address();
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -118,5 +133,16 @@ mod game {
             set!(self.world(), (game_store_packed));
         }
 
+        // TODO: upgrade_item execution before travel wen possible
+        fn shop(self: @ContractState, game_id: u32, actions: Span<shopping::Action>) {
+            let mut actions = actions;
+            let player_id = get_caller_address();
+            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+
+            shopping::execute_actions(ref game_store, ref actions);
+
+            let game_store_packed = game_store.pack();
+            set!(self.world(), (game_store_packed));
+        }
     }
 }

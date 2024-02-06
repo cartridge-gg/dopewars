@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { HighVolatilityData, displayMarketEvents } from "@/dojo/events";
 import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useAvailableShopItems } from "@/dojo/hooks/useAvailableShopItems";
 import { ItemConfigFull } from "@/dojo/stores/config";
@@ -43,7 +43,7 @@ export default function PawnShop() {
       const { hash, events } = await skipShop(gameId);
 
       if (events) {
-        displayMarketEvents(events as MarketEventData[], toaster);
+        displayMarketEvents(events as HighVolatilityData[], toaster);
       }
 
       router.push(`/${gameId}/${configStore.getLocationById(playerEntity?.nextLocationId)?.location.toLowerCase()}`);
@@ -70,7 +70,7 @@ export default function PawnShop() {
       });
 
       if (events) {
-        displayMarketEvents(events as MarketEventData[], toaster);
+        displayMarketEvents(events as HighVolatilityData[], toaster);
       }
       router.push(`/${gameId}/${configStore.getLocation(playerEntity?.nextLocationId)?.location.toLowerCase()}`);
     } catch (e) {

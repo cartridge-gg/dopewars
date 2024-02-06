@@ -1,9 +1,14 @@
+use starknet::ContractAddress;
 use rollyourown::packing::markets_packed::MarketsPackedTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
+    models::game::{Game},
     utils::{random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl}},
-    config::locations::{Locations}, packing::game_store::{GameStore, GameStorePackerImpl}
+    config::locations::{Locations}, packing::{
+        game_store::{GameStore, GameStorePackerImpl},
+        wanted_packed::{WantedPacked, WantedPackedImpl}
+    }
 };
 
 fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: GameStore) -> bool {
@@ -32,14 +37,15 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
     //     };
     // }
 
+    // update wanted
+    game_store.wanted.on_turn_end(game_store);
+   
+
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
     game_store.player.next_location = Locations::Home;
 
-    // // update wanted
-    // let risk_settings = RiskSettingsImpl::get(*game.game_mode, @player);
-    // risk_settings.update_wanted(ref player);
 
     //update HP if not dead
     if game_store.player.health > 0 {
@@ -76,5 +82,15 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
 }
 
 
-fn on_game_end(world: IWorldDispatcher, ref game_store: GameStore) {}
+fn on_game_end(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) {
+    let mut game = get!(world, (game_id, player_id), (Game));
+    assert(game.game_over == false, 'already game_over');
+
+    // set game_over on game 
+    game.game_over = true;
+    set!(world, (game));
+
+// TODO
+//ryo::game_over(self.world(), ref player);
+}
 

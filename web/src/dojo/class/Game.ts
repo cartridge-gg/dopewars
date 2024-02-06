@@ -72,7 +72,7 @@ export class MarketsClass {
 
             for (let drugId of [0, 1, 2, 3, /*4, 5*/]) {
                 const drug = configStore.getDrugById(drugId)!;
-                const price = this.getDrugPrice(locationId , drugId as Drug);
+                const price = this.getDrugPrice(locationId, drugId as Drug);
 
                 const drugMarket: DrugMarket = {
                     drug: drug.drug,
@@ -92,8 +92,8 @@ export class MarketsClass {
     }
 
     getTick(locationId: number, drugId: Drug) {
-        const start = BigInt((BigInt(locationId-1) * this.drugCountByLocation + BigInt(drugId)) * this.bitsSize);
-         return Bits.extract(this.packed, start, this.bitsSize)
+        const start = BigInt((BigInt(locationId - 1) * this.drugCountByLocation + BigInt(drugId)) * this.bitsSize);
+        return Bits.extract(this.packed, start, this.bitsSize)
     }
 
     getDrugPriceByTick(drugId: Drug, tick: bigint) {
@@ -161,6 +161,7 @@ export class WantedClass {
     //
     packed: bigint;
     //
+    wanted = {}
     wantedByLocation: WantedByLocation = new Map()
 
     constructor(configStore: ConfigStore, packed: bigint) {
@@ -174,12 +175,13 @@ export class WantedClass {
             const wantedValue = this.getValueByTick(wantedTick)
 
             this.wantedByLocation.set(location.location, wantedValue);
+            this.wanted[location.location] = wantedTick
         }
     }
 
     getValueByTick(tick: number) {
-        const totalValues = Number(this.bitsSize) ** 2
-        const step = 100 / totalValues
+        const totalValues = 2 ** Number(this.bitsSize)
+        const step = 100 / (totalValues-1)
         return Math.floor(tick * step)
     }
 }

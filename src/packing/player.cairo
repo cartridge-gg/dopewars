@@ -133,10 +133,6 @@ impl PlayerImpl of PlayerTrait {
     }
 
     fn can_continue(self: Player) -> bool {
-        // if self.game_over {
-        //     return false;
-        // }
-
         if self.health == 0 {
             return false;
         }
@@ -144,8 +140,28 @@ impl PlayerImpl of PlayerTrait {
             return false;
         }
 
-        let game = get!(self.world, (self.game_id), Game);
+        let game = get!(self.world, (self.game_id, self.player_id), Game);
+       
         if self.turn == game.max_turns {
+            return false;
+        }
+        if game.game_over {
+            return false;
+        }
+
+        true
+    }
+
+     fn can_trade(self: Player) -> bool {
+        if self.health == 0 {
+            return false;
+        }
+        if self.status != PlayerStatus::Normal {
+            return false;
+        }
+
+        let game = get!(self.world, (self.game_id, self.player_id), Game);
+        if game.game_over {
             return false;
         }
 

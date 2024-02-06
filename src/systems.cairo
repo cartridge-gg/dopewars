@@ -5,10 +5,12 @@
 // mod shop;
 
 mod ryo;
-mod game;
 
+mod game;
 mod game_loop;
+
 mod trading;
+mod shopping;
 
 // mod devtools;
 

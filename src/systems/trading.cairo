@@ -33,7 +33,7 @@ struct Trade {
 
 fn execute_trades(ref game_store: GameStore, ref trades: Span<Trade>) {
     // check if can trade TODO: change !
-    assert(game_store.player.can_continue(), 'player cannot trade');
+    assert(game_store.player.can_trade(), 'player cannot trade');
 
     let mut trades_clone = trades.clone();
 
@@ -63,7 +63,7 @@ fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
 
     let new_tick = match trade.direction {
         TradeDirection::Buy => { tick.add_capped(2, 63) },
-        TradeDirection::Sell => { tick.sub_capped(2, 63) },
+        TradeDirection::Sell => { tick.sub_capped(2, 0) },
     };
 
     game_store.markets.set_tick(game_store.player.location, trade.drug, new_tick);

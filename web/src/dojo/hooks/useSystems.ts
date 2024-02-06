@@ -2,9 +2,9 @@ import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
 import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
-import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, MarketEventData, parseAllEvents } from "../events";
+import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, HighVolatilityData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
-import { Action, Drug, GameMode, Location, Trade } from "../types";
+import { Action, Drug, GameMode, Location, ShopAction, Trade } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
@@ -16,7 +16,8 @@ export interface SystemsInterface {
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
   // join: (gameId: string) => Promise<SystemExecuteResult>;
-  trade:(gameId: string,trades: Array<Trade>) => Promise<SystemExecuteResult>;
+  trade: (gameId: string, trades: Array<Trade>) => Promise<SystemExecuteResult>;
+  shop: (gameId: string, actions: Array<ShopAction>) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
     locationId: Location,
@@ -185,7 +186,7 @@ export const useSystems = (): SystemsInterface => {
 
   const travel = useCallback(
     async (gameId: string, location: Location) => {
-     
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
@@ -208,16 +209,16 @@ export const useSystems = (): SystemsInterface => {
         isGameOver,
         event: adverseEvent || atPawnshopEvent,
         events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+          .filter((e) => e.eventType === WorldEvents.HighVolatility)
+          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt],
   );
 
   const trade = useCallback(
-    async (gameId: string,trades: Array<Trade>) => {
-     
+    async (gameId: string, trades: Array<Trade>) => {
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "trade",
@@ -226,21 +227,34 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+        events: []
       };
     },
     [executeAndReceipt],
   );
 
-  
+  const shop = useCallback(
+    async (gameId: string, actions: Array<ShopAction>) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "rollyourown::systems::game::game",
+        "shop",
+        [gameId, actions],
+      );
+
+      return {
+        hash,
+        events: []
+      }
+    },
+    [executeAndReceipt],
+  );
 
 
   const endGame = useCallback(
     async (gameId: string) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::travel::travel",
+        "rollyourown::systems::game::game",
         "end_game",
         [gameId],
       );
@@ -253,46 +267,6 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
-  // const buy = useCallback(
-  //   async (
-  //     gameId: string,
-  //     locationId: Location,
-  //     drugId: Drug,
-  //     quantity: number,
-  //   ) => {
-
-  //     const { hash, events, parsedEvents } = await executeAndReceipt(
-  //       "rollyourown::systems::trade::trade",
-  //       "buy",
-  //       [gameId, locationId, drugId, quantity],
-  //     );
-
-  //     return {
-  //       hash,
-  //     };
-  //   },
-  //   [executeAndReceipt],
-  // );
-
-  // const sell = useCallback(
-  //   async (
-  //     gameId: string,
-  //     locationId: Location,
-  //     drugId: Drug,
-  //     quantity: number,
-  //   ) => {
-  //     const { hash, events, parsedEvents } = await executeAndReceipt(
-  //       "rollyourown::systems::trade::trade",
-  //       "sell",
-  //       [gameId, locationId, drugId, quantity],
-  //     );
-
-  //     return {
-  //       hash,
-  //     };
-  //   },
-  //   [executeAndReceipt],
-  // );
 
   const decide = useCallback(
     async (gameId: string, action: Action) => {
@@ -316,8 +290,8 @@ export const useSystems = (): SystemsInterface => {
           (e) => e.eventType === WorldEvents.Consequence,
         ) as ConsequenceEventData,
         events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+          .filter((e) => e.eventType === WorldEvents.HighVolatility)
+          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt],
@@ -334,8 +308,8 @@ export const useSystems = (): SystemsInterface => {
       return {
         hash,
         events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+          .filter((e) => e.eventType === WorldEvents.HighVolatility)
+          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt],
@@ -352,14 +326,12 @@ export const useSystems = (): SystemsInterface => {
       return {
         hash,
         events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+          .filter((e) => e.eventType === WorldEvents.HighVolatility)
+          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt],
   );
-
-
 
 
   const failingTx = useCallback(
@@ -399,6 +371,7 @@ export const useSystems = (): SystemsInterface => {
     travel,
     trade,
     endGame,
+    shop,
     // buy,
     // sell,
     //setName,

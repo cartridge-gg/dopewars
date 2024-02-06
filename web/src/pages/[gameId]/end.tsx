@@ -27,7 +27,7 @@ import { genAvatarFromId } from "@/components/avatar/avatars";
 import Button from "@/components/Button";
 import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/ShareButton";
-import { usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { playSound, Sounds } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { motion } from "framer-motion";
@@ -43,7 +43,7 @@ export default function End() {
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { game, gameInfos } = useGameStore()
 
   useEffect(() => {
     if (isDead) {
@@ -52,13 +52,13 @@ export default function End() {
   }, [isDead]);
 
   useEffect(() => {
-    if (playerEntity) {
-      setName(playerEntity.name);
-      setAvatarId(playerEntity.avatarId);
-      setIsDead(playerEntity?.health === 0);
-      setDay(playerEntity.turn);
+    if (game) {
+      setName("noname");
+      setAvatarId(gameInfos?.avatar_id);
+      setIsDead(game.player?.health === 0);
+      setDay(game.player.turn);
     }
-  }, [playerEntity]);
+  }, [game]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
@@ -99,7 +99,7 @@ export default function End() {
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
-                <StatsItem text={`${formatCash(playerEntity?.cash || 0)}`} icon={<DollarBag />} />
+                <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<DollarBag />} />
 
                 {/* <StatsItem
                   text={`${playerEntity?.health} Health`}

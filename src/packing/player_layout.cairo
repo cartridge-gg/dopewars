@@ -49,9 +49,9 @@ impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
 impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
     fn bits(self: @PlayerLayout) -> u8 {
         match *self {
-            PlayerLayout::Cash => 28,
+            PlayerLayout::Cash => 29,
             PlayerLayout::Health => 7,
-            PlayerLayout::Turn => 5,
+            PlayerLayout::Turn => 6,
             PlayerLayout::Status => 2,
             PlayerLayout::PrevLocation => 3,
             PlayerLayout::Location => 3,

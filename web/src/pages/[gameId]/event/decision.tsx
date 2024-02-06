@@ -5,7 +5,7 @@ import Layout from "@/components/Layout";
 import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
-import { ConsequenceEventData, MarketEventData, displayMarketEvents } from "@/dojo/events";
+import { ConsequenceEventData, HighVolatilityData, displayMarketEvents } from "@/dojo/events";
 import { getShopItem } from "@/dojo/helpers";
 import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
@@ -167,7 +167,7 @@ export default function Decision() {
       const { event, events } = await decide(gameId, action);
 
       if (events) {
-        displayMarketEvents(events as MarketEventData[], toaster);
+        displayMarketEvents(events as HighVolatilityData[], toaster);
       }
 
       const consequenceEvent = event as ConsequenceEventData;
