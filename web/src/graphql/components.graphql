@@ -5,7 +5,7 @@ query GlobalScores($version: u32, $limit: Int, $cursor: Cursor) {
     first: $limit
     after: $cursor
   ) {
-    total_count
+    totalCount
     edges {
       node {
         game_id
@@ -36,7 +36,7 @@ query MarketPrices($gameId: u32) {
 }
 
 query RyoMetas {
-  ryometaModels(limit: 1) {
+  ryoMetaModels(limit: 1) {
     edges {
       node {
         id

@@ -1,8 +1,8 @@
 import {
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
+  ThemingProps,
 } from "@chakra-ui/react";
-import { ThemingProps } from "@chakra-ui/styled-system";
 import React from "react";
 
 export interface IconProps extends ChakraIconProps, ThemingProps {}
@@ -18,41 +18,41 @@ export const Icon = ({
   );
 };
 
-export * from "./Car";
-export * from "./Bag";
-export * from "./Gem";
-export * from "./Chat";
-export * from "./Home";
-export * from "./Link";
-export * from "./Event";
+export * from "./Alert";
+export * from "./Arrest";
 export * from "./Arrow";
 export * from "./ArrowEnclosed";
 export * from "./ArrowInput";
-export * from "./Clock";
-export * from "./Sound";
-export * from "./Music";
-export * from "./Dots";
-export * from "./SendMessage";
-export * from "./Sparkles";
-export * from "./Trophy";
-export * from "./User";
-export * from "./Warning";
+export * from "./Bag";
+export * from "./Car";
 export * from "./Cart";
-export * from "./Alert";
-export * from "./Pistol";
-export * from "./Arrest";
-export * from "./Roll";
+export * from "./Chat";
+export * from "./Clock";
 export * from "./Close";
-export * from "./ExternalLink";
-export * from "./Heart";
-export * from "./DynamicHeart";
-export * from "./Skull";
-export * from "./Siren";
-export * from "./Truck";
 export * from "./DollarBag";
-export * from "./Twitter";
+export * from "./Dots";
+export * from "./DynamicHeart";
+export * from "./Event";
+export * from "./ExternalLink";
 export * from "./Fist";
 export * from "./Flipflop";
+export * from "./Gem";
+export * from "./Heart";
+export * from "./Home";
+export * from "./Link";
+export * from "./Music";
+export * from "./Pistol";
+export * from "./Roll";
+export * from "./SendMessage";
+export * from "./Siren";
+export * from "./Skull";
+export * from "./Sound";
+export * from "./Sparkles";
+export * from "./Trophy";
+export * from "./Truck";
+export * from "./Twitter";
+export * from "./User";
+export * from "./Warning";
 
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed

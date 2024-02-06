@@ -1,5 +1,5 @@
-import { Flex, Text } from "@chakra-ui/layout";
-import React, { useState, useEffect } from "react";
+import { Flex, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
 interface TimerProps {
   startInSeconds: number;

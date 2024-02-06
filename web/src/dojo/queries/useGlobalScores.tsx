@@ -89,7 +89,7 @@ export const useGlobalScoresIninite = (version?: number, limit?: number) => {
   useEffect(() => {
     if (data?.pages.length == 0) return;
     const pageCount = data?.pages.length || 0;
-    const hasNext = scores.length < (data?.pages[pageCount-1].playerModels?.total_count || 0)
+    const hasNext = scores.length < (data?.pages[pageCount-1].playerModels?.totalCount || 0)
     setHasNextPage(hasNext)
   }, [ scores]);
 

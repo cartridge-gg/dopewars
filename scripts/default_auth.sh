@@ -10,12 +10,12 @@ fi
 
 export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
 
-export LOBBY_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "lobby" ).address')
-export TRAVEL_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "travel" ).address')
-export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "decide" ).address')
-export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "trade" ).address')
-export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "shop" ).address')
-export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "ryo" ).address')
+export LOBBY_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::lobby::lobby" ).address')
+export TRAVEL_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::travel::travel" ).address')
+export DECIDE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::decide::decide" ).address')
+export TRADE_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::trade::trade" ).address')
+export SHOP_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::shop::shop" ).address')
+export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::ryo::ryo" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE

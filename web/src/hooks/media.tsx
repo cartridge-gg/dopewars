@@ -1,4 +1,4 @@
-import { Howl, Howler } from "howler";
+import { Howl } from "howler";
 import { create } from "zustand";
 
 type MediaItem = { name: string; filename: string; sound?: Howl };

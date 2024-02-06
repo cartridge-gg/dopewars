@@ -1,5 +1,5 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/theme";
-import { cardStyle, cardPixelatedStyle } from "../styles";
+import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
+import { cardPixelatedStyle } from "../styles";
 
 export const Modal: ComponentMultiStyleConfig = {
   parts: [

@@ -24,7 +24,7 @@ export const useRyoMetas = (): RyoMetasInterface => {
   );
 
   const ryoMetas = useMemo(() => {
-    return RyoMetas.create(data?.ryometaModels?.edges as RyoMetaEdge[]);
+    return RyoMetas.create(data?.ryoMetaModels?.edges as RyoMetaEdge[]);
   }, [data]);
 
   return {

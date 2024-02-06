@@ -9,22 +9,14 @@ import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import MakeItRain from "@/components/MakeItRain";
 import { useEffect, useState } from "react";
 import { DojoProvider } from "@/dojo/context/DojoContext";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Analytics } from '@vercel/analytics/react';
+import { QueryClientProvider } from "react-query";
+import { Analytics } from "@vercel/analytics/react";
 import { SetupResult, setup } from "@/dojo/setup/setup";
+import { dojoConfig } from "@/dojo/setup/config";
 import RegisterEntities from "@/components/RegisterEntities";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 20,
-    },
-  },
-});
-
 export default function App({ Component, pageProps }: AppProps) {
-  const { setSequence, isRightSequence, setIsRightSequence } =
-    useKonamiCode(starkpimpSequence);
+  const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
 
   useEffect(() => {
     if (isRightSequence) {
@@ -36,36 +28,39 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  const [setupResult, setSetupResult] = useState<SetupResult|undefined>(undefined)
-  
+  const [setupResult, setSetupResult] = useState<SetupResult | undefined>(undefined);
 
-  useEffect( () => {
+  useEffect(() => {
     const init = async () => {
-      const setupResult = await setup();
-      setSetupResult(setupResult)
-    }
+      const setupResult = await setup(dojoConfig());
+      setSetupResult(setupResult);
+    };
 
     init();
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {setupResult && <DojoProvider value={setupResult}>
-          <RegisterEntities />
-          <ChakraProvider theme={theme}>
-          <Fonts />
-          <NextHead>
-            <title>Roll your Own</title>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-            />
-          </NextHead>
-          {isRightSequence && <MakeItRain />}
-          <Component {...pageProps} />
-          <Analytics />
-        </ChakraProvider>
-      </DojoProvider>}
-    </QueryClientProvider>
+    <>
+      {setupResult && (
+        <QueryClientProvider client={setupResult.queryClient}>
+          <DojoProvider value={setupResult}>
+            <RegisterEntities />
+            <ChakraProvider theme={theme}>
+              <Fonts />
+              <NextHead>
+                <title>Roll your Own</title>
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                />
+              </NextHead>
+              {isRightSequence && <MakeItRain />}
+              <Component {...pageProps} />
+              <Analytics />
+            </ChakraProvider>
+          </DojoProvider>
+        </QueryClientProvider>
+      )}
+    </>
   );
 }

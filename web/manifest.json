@@ -1,8 +1,11 @@
 {
   "world": {
-    "name": "world",
-    "address": "0x3c877dbe4454125201bdc0c5c6dcafc5a9b3a2fc78417702a6cd5ebaf143cc3",
-    "class_hash": "0x99b08b2ff33750916e36b5e241b5d4a63e8d48862bf90a68fec2ff58a8de6",
+    "name": "dojo::world::world",
+    "address": "0x3387eb395eec4ace2db0a97192940c05cd644f0abee17122579605eeeaacb8a",
+    "class_hash": "0x5ac623f0c96059936bd2d0904bdd31799e430fe08a0caff7a5f497260b16497",
+    "name": "dojo::world::world",
+    "address": "0x3387eb395eec4ace2db0a97192940c05cd644f0abee17122579605eeeaacb8a",
+    "class_hash": "0x5ac623f0c96059936bd2d0904bdd31799e430fe08a0caff7a5f497260b16497",
     "abi": [
       {
         "type": "impl",
@@ -783,9 +786,11 @@
     "computed": []
   },
   "executor": {
-    "name": "executor",
+    "name": "dojo::executor::executor",
+    "name": "dojo::executor::executor",
     "address": null,
-    "class_hash": "0x54ee9d99457d82d53e21030920f7e6f43509b98ea62282b5c2520050264a28c",
+    "class_hash": "0x585507fa2818fe78e66da6ea4c5915376739f4abf509d41153f60a16cb1f68d",
+    "class_hash": "0x585507fa2818fe78e66da6ea4c5915376739f4abf509d41153f60a16cb1f68d",
     "abi": [
       {
         "type": "impl",
@@ -844,8 +849,10 @@
     "computed": []
   },
   "base": {
-    "name": "base",
-    "class_hash": "0x77638e9a645209ac1e32e143bfdbfe9caf723c4f7645fcf465c38967545ea2f",
+    "name": "dojo::base::base",
+    "class_hash": "0x6c458453d35753703ad25632deec20a29faf8531942ec109e6eb0650316a2bc",
+    "name": "dojo::base::base",
+    "class_hash": "0x6c458453d35753703ad25632deec20a29faf8531942ec109e6eb0650316a2bc",
     "abi": [
       {
         "type": "impl",
@@ -947,9 +954,9 @@
   },
   "contracts": [
     {
-      "name": "decide",
-      "address": "0x260e5299f82c57b6e88b41b83a0f09fc3b9b5fedf13f5f2859f6eee7150928e",
-      "class_hash": "0x57a88cdfee38bf11a1d79a89f0a2d0eb24bc92135d69f816e2798ff4ca34753",
+      "name": "rollyourown::systems::decide::decide",
+      "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
+      "class_hash": "0x2a74adec6934b19df782fc2bf4fbe5819c531250c1889fab1874015f0ec2374",
       "abi": [
         {
           "type": "impl",
@@ -1272,22 +1279,16 @@
           ]
         }
       ],
-      "reads": [
-        "Drug",
-        "Game",
-        "Item",
-        "Player"
-      ],
-      "writes": [
-        "Encounter",
-        "Player"
-      ],
+      "reads": [],
+      "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     },
     {
-      "name": "lobby",
-      "address": "0x226160a3c18a596a3ec1905f13d8ad25955ae27311fd0ef10b182b21812a0cb",
-      "class_hash": "0x4bc569cac7de50fc9936a9fe008822edec56740ff24fba8a5e629eb06bc89db",
+      "name": "rollyourown::systems::lobby::lobby",
+      "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
+      "class_hash": "0x29b5ac498dfca87e6bd2730be1a3445ae986a532e7236cd7782dcf39dce22fe",
       "abi": [
         {
           "type": "impl",
@@ -1379,6 +1380,10 @@
                 {
                   "name": "game_id",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 },
                 {
                   "name": "player_name",
@@ -1521,16 +1526,14 @@
         }
       ],
       "reads": [],
-      "writes": [
-        "Game",
-        "Player"
-      ],
+      "writes": [],
+      "writes": [],
       "computed": []
     },
     {
-      "name": "ryo",
-      "address": "0x442d71805e2f98dd2fd7c91d4578e019513f2848ec71236ae3aea9749ebed9",
-      "class_hash": "0x82e0861472ccbde2de0e89d122c183b8865844b1e832ba45686d003b32fc7e",
+      "name": "rollyourown::systems::ryo::ryo",
+      "address": "0x5b9d8d94a201bd82b8dc10f393a4187c9a513aba1d105d6b3b4a75c3e8299ad",
+      "class_hash": "0x743ecc58990bb5ece3cccec3b63b10b5f59afaf8689fa6658333f8bea2f6ae9",
       "abi": [
         {
           "type": "impl",
@@ -1654,15 +1657,14 @@
         }
       ],
       "reads": [],
-      "writes": [
-        "Leaderboard"
-      ],
+      "writes": [],
+      "writes": [],
       "computed": []
     },
     {
-      "name": "shop",
-      "address": "0x4273123f2ce39a3ea67518cc2d28969bd014284637e8a5f876ca463aea45089",
-      "class_hash": "0x45e6d0243bf394cd9d5c673f7f3b8e1fe6c8f92827f29bd3da33cb45a45372f",
+      "name": "rollyourown::systems::shop::shop",
+      "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
+      "class_hash": "0x776bec270173572a3c6fe5e753c8362e77189f7febd230ce79c15c04698b081",
       "abi": [
         {
           "type": "impl",
@@ -1986,20 +1988,16 @@
           ]
         }
       ],
-      "reads": [
-        "Game",
-        "Item",
-        "Player"
-      ],
-      "writes": [
-        "Item"
-      ],
+      "reads": [],
+      "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     },
     {
-      "name": "trade",
-      "address": "0x33e7623715493a8b1bf3a0eb0938e28dcbca0ac1459594d6d662181ae5ed701",
-      "class_hash": "0x68de3213af8522d382e9e12627847f4ffada31a78ee617ab3be6d16c062bd17",
+      "name": "rollyourown::systems::trade::trade",
+      "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
+      "class_hash": "0x777335e4715213ae00feb29a8484941e826ebf2260b7ffe46e3012163a76411",
       "abi": [
         {
           "type": "impl",
@@ -2301,23 +2299,16 @@
           ]
         }
       ],
-      "reads": [
-        "Drug",
-        "Game",
-        "Market",
-        "Player"
-      ],
-      "writes": [
-        "Drug",
-        "Market",
-        "Player"
-      ],
+      "reads": [],
+      "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     },
     {
-      "name": "travel",
-      "address": "0x21f6ceaba4583a3ff5d3a21ed34c6b269282d59a79cedb782c9c1d72b5537dc",
-      "class_hash": "0xfd2b360d22c8a3f799a1bae60f87ea1c37ad2becf89f40dc5819e988af24aa",
+      "name": "rollyourown::systems::travel::travel",
+      "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
+      "class_hash": "0x3bed522d3293f28df2d00c0027ebeffdd7fe2c95224fc9c69ffb0430a4a1426",
       "abi": [
         {
           "type": "impl",
@@ -2693,19 +2684,17 @@
           ]
         }
       ],
-      "reads": [
-        "Game",
-        "Player"
-      ],
-      "writes": [
-        "Player"
-      ],
+      "reads": [],
+      "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     }
   ],
   "models": [
     {
-      "name": "Drug",
+      "name": "rollyourown::models::drug::drug",
+      "name": "rollyourown::models::drug::drug",
       "members": [
         {
           "name": "game_id",
@@ -2728,7 +2717,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x1ac7fc72c0f587033f33bfa06139622daa3498b7e3b1b2b06f51a15da1ec277",
+      "class_hash": "0x7cf1c0f1b36648b1daeb76037080e754874d6021a563bbbb5e90a44c670be28",
       "abi": [
         {
           "type": "function",
@@ -2884,6 +2873,70 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::drug::DrugEnum",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::drug::Drug",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "drug_id",
+              "type": "rollyourown::models::drug::DrugEnum"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::drug::Drug"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::drug::drug::Event",
           "kind": "enum",
@@ -2892,7 +2945,8 @@
       ]
     },
     {
-      "name": "Encounter",
+      "name": "rollyourown::models::encounter::encounter",
+      "name": "rollyourown::models::encounter::encounter",
       "members": [
         {
           "name": "game_id",
@@ -2930,7 +2984,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x31062043240b6b2b8e980841ee1f4df7136bb969748086cc0be030158889b10",
+      "class_hash": "0x692afb3e7468bb88d9ef0193d0c0be3f4a903f844d3bd2622a4a940481d241f",
       "abi": [
         {
           "type": "function",
@@ -3086,6 +3140,66 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::encounter::EncounterType",
+          "variants": [
+            {
+              "name": "Gang",
+              "type": "()"
+            },
+            {
+              "name": "Cops",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::encounter::Encounter",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "encounter_id",
+              "type": "rollyourown::models::encounter::EncounterType"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "demand_pct",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::encounter::Encounter"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::encounter::encounter::Event",
           "kind": "enum",
@@ -3094,7 +3208,8 @@
       ]
     },
     {
-      "name": "Game",
+      "name": "rollyourown::models::game::game",
+      "name": "rollyourown::models::game::game",
       "members": [
         {
           "name": "game_id",
@@ -3132,7 +3247,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x5e6ab12b244ddf419d01bf81e74ed839afcfb86c8fe4b5c6d642747b72c160c",
+      "class_hash": "0x75ce977b9b03564cd2ee0ae7aa193d7179bc9eabf7e89e828e7f5a0d8eb5444",
       "abi": [
         {
           "type": "function",
@@ -3288,6 +3403,66 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::game::GameMode",
+          "variants": [
+            {
+              "name": "Test",
+              "type": "()"
+            },
+            {
+              "name": "Unlimited",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::game::Game",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "game_mode",
+              "type": "rollyourown::models::game::GameMode"
+            },
+            {
+              "name": "start_time",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "max_players",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "num_players",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "max_turns",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "creator",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::game::Game"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::game::game::Event",
           "kind": "enum",
@@ -3296,7 +3471,8 @@
       ]
     },
     {
-      "name": "Item",
+      "name": "rollyourown::models::item::item",
+      "name": "rollyourown::models::item::item",
       "members": [
         {
           "name": "game_id",
@@ -3329,7 +3505,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x794d7848aa424f9c463608c67745a5596b16fa1d90a7b46ffbb2aeac371f8a",
+      "class_hash": "0x3d4b5abd77fcc501462c6eaa82668bbe7a05c574a6a2c825e46e7c4795d85e4",
       "abi": [
         {
           "type": "function",
@@ -3485,6 +3661,70 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::item::ItemEnum",
+          "variants": [
+            {
+              "name": "Attack",
+              "type": "()"
+            },
+            {
+              "name": "Defense",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::item::Item",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "item_id",
+              "type": "rollyourown::models::item::ItemEnum"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "value",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::item::Item"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::item::item::Event",
           "kind": "enum",
@@ -3493,7 +3733,8 @@
       ]
     },
     {
-      "name": "Leaderboard",
+      "name": "rollyourown::models::leaderboard::leaderboard",
+      "name": "rollyourown::models::leaderboard::leaderboard",
       "members": [
         {
           "name": "version",
@@ -3511,7 +3752,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x3e00fa1dc8561c929164d616957ea96e6bb97816d45364cdd5c79251af8cb2f",
+      "class_hash": "0x43cf650de2abba1fb1bf3bc06cf42b8440a6cfdabc9128cab99c3d052c5b740",
       "abi": [
         {
           "type": "function",
@@ -3667,6 +3908,36 @@
           "state_mutability": "view"
         },
         {
+          "type": "struct",
+          "name": "rollyourown::models::leaderboard::Leaderboard",
+          "members": [
+            {
+              "name": "version",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "high_score",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "next_version_timestamp",
+              "type": "core::integer::u64"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::leaderboard::Leaderboard"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::leaderboard::leaderboard::Event",
           "kind": "enum",
@@ -3675,7 +3946,8 @@
       ]
     },
     {
-      "name": "Market",
+      "name": "rollyourown::models::market::market",
+      "name": "rollyourown::models::market::market",
       "members": [
         {
           "name": "game_id",
@@ -3703,7 +3975,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x19ffd0eb9514e134043276dfb856e1bf47e439c6d84c28f5aad6a55392d3723",
+      "class_hash": "0x4f2e54ab8e2a338902958bdaffbedad6de443e73ca3582408915bc5ba427ceb",
       "abi": [
         {
           "type": "function",
@@ -3859,6 +4131,108 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::drug::DrugEnum",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::market::Market",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "location_id",
+              "type": "rollyourown::models::location::LocationEnum"
+            },
+            {
+              "name": "drug_id",
+              "type": "rollyourown::models::drug::DrugEnum"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::market::Market"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::market::market::Event",
           "kind": "enum",
@@ -3867,7 +4241,8 @@
       ]
     },
     {
-      "name": "Player",
+      "name": "rollyourown::models::player::player",
+      "name": "rollyourown::models::player::player",
       "members": [
         {
           "name": "game_id",
@@ -3980,7 +4355,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x109a09b8c547c4b751288359256c06d92f5b4abeb36ecc9d0a1c1f5d4769887",
+      "class_hash": "0x8f59656802f24c505e50eb3d0eae06968c760f1690bd8bddccf7023fb3db56",
       "abi": [
         {
           "type": "function",
@@ -4136,6 +4511,182 @@
           "state_mutability": "view"
         },
         {
+          "type": "enum",
+          "name": "rollyourown::models::player::PlayerStatus",
+          "variants": [
+            {
+              "name": "Normal",
+              "type": "()"
+            },
+            {
+              "name": "BeingMugged",
+              "type": "()"
+            },
+            {
+              "name": "BeingArrested",
+              "type": "()"
+            },
+            {
+              "name": "AtPawnshop",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::location::LocationEnum",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::player::Player",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "mainnet_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "avatar_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "status",
+              "type": "rollyourown::models::player::PlayerStatus"
+            },
+            {
+              "name": "hood_id",
+              "type": "rollyourown::models::location::LocationEnum"
+            },
+            {
+              "name": "location_id",
+              "type": "rollyourown::models::location::LocationEnum"
+            },
+            {
+              "name": "next_location_id",
+              "type": "rollyourown::models::location::LocationEnum"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "max_turns",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "max_items",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "drug_count",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "attack",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "defense",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "transport",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "speed",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "wanted",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "leaderboard_version",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "game_over",
+              "type": "core::bool"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::player::Player"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
           "type": "event",
           "name": "rollyourown::models::player::player::Event",
           "kind": "enum",
@@ -4144,7 +4695,8 @@
       ]
     },
     {
-      "name": "RyoMeta",
+      "name": "rollyourown::models::ryo::ryo_meta",
+      "name": "rollyourown::models::ryo::ryo_meta",
       "members": [
         {
           "name": "id",
@@ -4162,7 +4714,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x23b8332c167af1c19572530f27f30ef0093d001dcbe8f4726ced2da896decab",
+      "class_hash": "0x4c59d5b73a924f9633b7ceae3c575dcc3ff74aa60747d64d80bd4e5dba041e9",
       "abi": [
         {
           "type": "function",
@@ -4315,6 +4867,50 @@
               "type": "dojo::database::introspect::Ty"
             }
           ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::ryo::RyoMeta",
+          "members": [
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "initialized",
+              "type": "core::bool"
+            },
+            {
+              "name": "leaderboard_version",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "ensure_abi",
+          "inputs": [
+            {
+              "name": "model",
+              "type": "rollyourown::models::ryo::RyoMeta"
+            }
+          ],
+          "outputs": [],
           "state_mutability": "view"
         },
         {

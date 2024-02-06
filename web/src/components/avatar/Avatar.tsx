@@ -1,9 +1,9 @@
-import React from "react";
 import {
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
+  ThemingProps,
 } from "@chakra-ui/react";
-import { ThemingProps } from "@chakra-ui/styled-system";
+import React from "react";
 import { AvatarName, avatars } from "./avatars";
 
 export interface AvatarProps extends ChakraIconProps, ThemingProps {
