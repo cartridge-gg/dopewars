@@ -19,6 +19,7 @@
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
+    "@2toad/profanity": "^2.2.0",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "0.3.5",

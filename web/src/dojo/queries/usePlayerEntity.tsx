@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { REFETCH_INTERVAL, SCALING_FACTOR } from "../constants";
 import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
 import { shortString } from "starknet";
+import { profanity } from '@2toad/profanity';
 
 type Drug = {
   id: string;
@@ -43,7 +44,7 @@ export class PlayerEntity {
   gameOver: boolean;
 
   constructor(player: Player, drugs: Drug[], items: ShopItem[], encounters: Encounter[]) {
-    this.name = shortString.decodeShortString(player.name);
+    this.name = profanity.censor(shortString.decodeShortString(player.name));
     this.avatarId = player.avatar_id;
     this.cash = Number(player.cash) / SCALING_FACTOR;
     this.health = player.health;

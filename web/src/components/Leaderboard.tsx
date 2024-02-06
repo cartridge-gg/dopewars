@@ -30,6 +30,7 @@ import { Arrow, Skull } from "./icons";
 import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
 import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
 import Countdown from "react-countdown";
+import { profanity } from '@2toad/profanity';
 
 const renderer = ({
   days,
@@ -154,7 +155,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
               const isOwn = score.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
+              const displayName = score.name ? `${profanity.censor(score.name)}${isOwn ? " (you)" : ""}` : "Anonymous";
 
               return (
                 <ListItem color={color} key={score.gameId} cursor={isOwn && !score.name ? "pointer" : "auto"}>

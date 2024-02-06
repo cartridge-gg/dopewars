@@ -3,6 +3,9 @@
     "name": "dojo::world::world",
     "address": "0x3387eb395eec4ace2db0a97192940c05cd644f0abee17122579605eeeaacb8a",
     "class_hash": "0x5ac623f0c96059936bd2d0904bdd31799e430fe08a0caff7a5f497260b16497",
+    "name": "dojo::world::world",
+    "address": "0x3387eb395eec4ace2db0a97192940c05cd644f0abee17122579605eeeaacb8a",
+    "class_hash": "0x5ac623f0c96059936bd2d0904bdd31799e430fe08a0caff7a5f497260b16497",
     "abi": [
       {
         "type": "impl",
@@ -784,7 +787,9 @@
   },
   "executor": {
     "name": "dojo::executor::executor",
+    "name": "dojo::executor::executor",
     "address": null,
+    "class_hash": "0x585507fa2818fe78e66da6ea4c5915376739f4abf509d41153f60a16cb1f68d",
     "class_hash": "0x585507fa2818fe78e66da6ea4c5915376739f4abf509d41153f60a16cb1f68d",
     "abi": [
       {
@@ -844,6 +849,8 @@
     "computed": []
   },
   "base": {
+    "name": "dojo::base::base",
+    "class_hash": "0x6c458453d35753703ad25632deec20a29faf8531942ec109e6eb0650316a2bc",
     "name": "dojo::base::base",
     "class_hash": "0x6c458453d35753703ad25632deec20a29faf8531942ec109e6eb0650316a2bc",
     "abi": [
@@ -1274,6 +1281,8 @@
       ],
       "reads": [],
       "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     },
     {
@@ -1518,6 +1527,7 @@
       ],
       "reads": [],
       "writes": [],
+      "writes": [],
       "computed": []
     },
     {
@@ -1647,6 +1657,7 @@
         }
       ],
       "reads": [],
+      "writes": [],
       "writes": [],
       "computed": []
     },
@@ -1979,6 +1990,8 @@
       ],
       "reads": [],
       "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     },
     {
@@ -2286,6 +2299,8 @@
           ]
         }
       ],
+      "reads": [],
+      "writes": [],
       "reads": [],
       "writes": [],
       "computed": []
@@ -2671,11 +2686,14 @@
       ],
       "reads": [],
       "writes": [],
+      "reads": [],
+      "writes": [],
       "computed": []
     }
   ],
   "models": [
     {
+      "name": "rollyourown::models::drug::drug",
       "name": "rollyourown::models::drug::drug",
       "members": [
         {
@@ -2927,6 +2945,7 @@
       ]
     },
     {
+      "name": "rollyourown::models::encounter::encounter",
       "name": "rollyourown::models::encounter::encounter",
       "members": [
         {
@@ -3190,6 +3209,7 @@
     },
     {
       "name": "rollyourown::models::game::game",
+      "name": "rollyourown::models::game::game",
       "members": [
         {
           "name": "game_id",
@@ -3452,6 +3472,7 @@
     },
     {
       "name": "rollyourown::models::item::item",
+      "name": "rollyourown::models::item::item",
       "members": [
         {
           "name": "game_id",
@@ -3713,6 +3734,7 @@
     },
     {
       "name": "rollyourown::models::leaderboard::leaderboard",
+      "name": "rollyourown::models::leaderboard::leaderboard",
       "members": [
         {
           "name": "version",
@@ -3924,6 +3946,7 @@
       ]
     },
     {
+      "name": "rollyourown::models::market::market",
       "name": "rollyourown::models::market::market",
       "members": [
         {
@@ -4218,6 +4241,7 @@
       ]
     },
     {
+      "name": "rollyourown::models::player::player",
       "name": "rollyourown::models::player::player",
       "members": [
         {
@@ -4671,6 +4695,7 @@
       ]
     },
     {
+      "name": "rollyourown::models::ryo::ryo_meta",
       "name": "rollyourown::models::ryo::ryo_meta",
       "members": [
         {

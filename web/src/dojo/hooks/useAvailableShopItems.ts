@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useDojoContext } from "./useDojoContext";
-import { ItemTextEnum, ShopItemInfo } from "../types";
+import { useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { getShopItem } from "../helpers";
+import { ItemTextEnum, ShopItemInfo } from "../types";
+import { useDojoContext } from "./useDojoContext";
 
 export const useAvailableShopItems = (gameId: string) => {
     const {
