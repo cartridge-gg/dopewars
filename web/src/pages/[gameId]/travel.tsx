@@ -40,7 +40,7 @@ export default function Travel() {
     if (targetLocation) {
       return configStore.getLocation(targetLocation)?.name;
     }
-  }, [targetLocation]);
+  }, [targetLocation, configStore]);
 
   useEffect(() => {
     if (game && !isPending) {
@@ -147,7 +147,7 @@ export default function Travel() {
         console.log(e);
       }
     }
-  }, [targetLocation, router, gameId, travel, toaster, game]);
+  }, [targetLocation, router, gameId, travel, toaster, game, configStore]);
 
   if (!game) return <></>;
 

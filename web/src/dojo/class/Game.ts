@@ -1,7 +1,7 @@
 import { GameStorePacked } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { CairoCustomEnum } from "starknet";
-import { ConfigStore, DrugConfigFull, ItemConfigFull, LocationConfigFull } from "../stores/config";
+import { ConfigStore, DrugConfigFull, LocationConfigFull } from "../stores/config";
 import { Drug, ItemSlot, ShopAction, TradeAction, TradeDirection } from "../types";
 import Bits from "./Bits";
 
@@ -22,7 +22,7 @@ export type PendingCallWithCost = (TradeAction | ShopAction) & WithCost;
 export const isTradeAction = (i: PendingCall): i is TradeAction => "direction" in i;
 export const isShopAction = (i: PendingCall): i is ShopAction => "slot" in i;
 
-export const pendingCallToCairoEnum = (i:PendingCall) => {
+export const pendingCallToCairoEnum = (i: PendingCall) => {
     if (isTradeAction(i)) {
         return new CairoCustomEnum({ Trade: (i as TradeAction), Shop: undefined });
     } else if (isShopAction(i)) {
@@ -177,11 +177,6 @@ export class ItemsClass extends GameSubClass {
     speedLevel: number;
     transportLevel: number;
 
-    attack: ItemConfigFull;
-    defense: ItemConfigFull;
-    speed: ItemConfigFull;
-    transport: ItemConfigFull;
-
     constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
@@ -253,27 +248,19 @@ export class ItemsClass extends GameSubClass {
 
 
 export class DrugsClass extends GameSubClass {
-    _drug: DrugConfigFull | undefined;
-    _quantity: number;
+    private _drug: DrugConfigFull | undefined;
+    private _quantity: number;
 
     constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         const drugId = Number(Bits.extract(this.packed, 0n, 3n));
-        this.quantity = Number(Bits.extract(this.packed, 3n, 13n));
+        this._quantity = Number(Bits.extract(this.packed, 3n, 13n));
 
-        this.drug = this.quantity > 0 ?
+        this._drug = this.quantity > 0 ?
             configStore.getDrugById(drugId)
             : undefined
 
-    }
-
-    set drug(value: DrugConfigFull) {
-        this._drug = value
-    }
-
-    set quantity(value: number) {
-        this._quantity = value
     }
 
     get drug() {
@@ -310,7 +297,7 @@ export class DrugsClass extends GameSubClass {
             }
 
             if (trade.direction === TradeDirection.Sell) {
-                if (drug.drug_id === trade.drug) {
+                if (drug && drug.drug_id === trade.drug) {
                     quantity -= trade.quantity
                     if (quantity === 0) {
                         drug = undefined
@@ -332,21 +319,19 @@ export class DrugsClass extends GameSubClass {
 export class WantedClass extends GameSubClass {
     bitsSize = 3n;
     //
-    wanted = {}
     wantedByLocation: WantedByLocation = new Map()
 
     constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
-        for (let locationId of [1n, 2n, 3n, 4n, 5n, 6n]) {
+        for (let locationId of [1, 2, 3, 4, 5, 6]) {
             const location = configStore.getLocationById(locationId)!;
 
-            const index = (locationId - 1n) * this.bitsSize
+            const index = (BigInt(locationId) - 1n) * this.bitsSize
             const wantedTick = Number(Bits.extract(this.packed, index, this.bitsSize));
             const wantedValue = this.getValueByTick(wantedTick)
 
             this.wantedByLocation.set(location.location, wantedValue);
-            this.wanted[location.location] = wantedTick
         }
     }
 
@@ -378,7 +363,7 @@ export class PlayerClass extends GameSubClass {
         const location = configStore.getPlayerLayoutItem("Location")
         const nextLocation = configStore.getPlayerLayoutItem("NextLocation")
 
-        this.cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
+        this._cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
         this.health = Number(Bits.extract(this.packed, health.idx, health.bits))
         this.turn = Number(Bits.extract(this.packed, turn.idx, turn.bits))
         this.status = Number(Bits.extract(this.packed, status.idx, status.bits))
@@ -387,19 +372,15 @@ export class PlayerClass extends GameSubClass {
         const locationId = Bits.extract(this.packed, location.idx, location.bits);
         const nextLocationId = Bits.extract(this.packed, nextLocation.idx, nextLocation.bits);
 
-        this.prevLocation = configStore.getLocationById(prevLocationId)
-        this.location = configStore.getLocationById(locationId)
-        this.nextLocation = configStore.getLocationById(nextLocationId)
+        this.prevLocation = configStore.getLocationById(Number(prevLocationId))
+        this.location = configStore.getLocationById(Number(locationId))
+        this.nextLocation = configStore.getLocationById(Number(nextLocationId))
 
         makeObservable(this, {
             cash: computed,
             game: observable,
         })
 
-    }
-
-    set cash(value: number) {
-        this._cash = value
     }
 
     get cash() {

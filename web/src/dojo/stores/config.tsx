@@ -57,6 +57,8 @@ export interface ConfigStore {
   getLocation: (location: string) => LocationConfigFull;
   getLocationById: (location_id: number) => LocationConfigFull;
   getItemByIds: (slot_id: number, level_id: number) => ItemConfigFull;
+  getGameStoreLayoutItem: (name: string) => LayoutItem;
+  getPlayerLayoutItem: (name: string) => LayoutItem;
 }
 
 type ConfigStoreProps = {

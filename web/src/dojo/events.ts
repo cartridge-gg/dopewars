@@ -1,7 +1,7 @@
 import { Action, Outcome, PlayerStatus } from "@/dojo/types";
 import {
   GetTransactionReceiptResponse,
-  SuccessfulTransactionReceiptResponse,
+  InvokeTransactionReceiptResponse,
   num,
   shortString
 } from "starknet";
@@ -97,23 +97,23 @@ export interface GameOverEventData extends BaseEventData {
 
 
 export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
-  if (receipt.status === "REJECTED") {
-    throw new Error(`transaction REJECTED`);
-  }
-  if (receipt.status === "REVERTED") {
+  // if (receipt.status === "REJECTED") {
+  //   throw new Error(`transaction REJECTED`);
+  // }
+  if (receipt.execution_status === "REVERTED") {
     throw new Error(`transaction REVERTED`);
   }
 
-  const flatEvents = parseEvents(receipt as SuccessfulTransactionReceiptResponse)
+  const flatEvents = parseEvents(receipt as InvokeTransactionReceiptResponse)
   return flatEvents
 }
 
-export const parseEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
+export const parseEvents = (receipt: InvokeTransactionReceiptResponse) => {
   const parsed = receipt.events.map(e => parseEvent(e))
   return parsed
 }
 
-export const parseEventsByEventType = (receipt: SuccessfulTransactionReceiptResponse, eventType: WorldEvents) => {
+export const parseEventsByEventType = (receipt: InvokeTransactionReceiptResponse, eventType: WorldEvents) => {
   const events = receipt.events.filter(e => e.keys[0] === eventType)
   const parsed = events.map(e => parseEvent(e))
   return parsed
@@ -133,56 +133,40 @@ export const parseEvent = (raw: any) => {
         gameMode: Number(raw.data[2]),
       } as GameCreatedEventData;
 
-    case WorldEvents.AdverseEvent:
-      return {
-        eventType: WorldEvents.AdverseEvent,
-        eventName: "AdverseEvent",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        playerStatus: shortString.decodeShortString(raw.data[0]),
-        healthLoss: Number(raw.data[1]),
-        demandPct: Number(raw.data[2]),
-      } as AdverseEventData;
+    // case WorldEvents.AdverseEvent:
+    //   return {
+    //     eventType: WorldEvents.AdverseEvent,
+    //     eventName: "AdverseEvent",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     playerStatus: shortString.decodeShortString(raw.data[0]),
+    //     healthLoss: Number(raw.data[1]),
+    //     demandPct: Number(raw.data[2]),
+    //   } as AdverseEventData;
 
-    case WorldEvents.AtPawnshop:
-      return {
-        eventType: WorldEvents.AtPawnshop,
-        eventName: "AtPawnshop",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-      } as AtPawnshopEventData;
 
-    case WorldEvents.PlayerJoined:
-      return {
-        eventType: WorldEvents.PlayerJoined,
-        eventName: "PlayerJoined",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        playerName: shortString.decodeShortString(raw.data[0]),
-      } as JoinedEventData;
+    // case WorldEvents.Decision:
+    //   return {
+    //     eventType: WorldEvents.Decision,
+    //     eventName: "Decision",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     action: Number(raw.data[0]),
+    //   } as DecisionEventData;
 
-    case WorldEvents.Decision:
-      return {
-        eventType: WorldEvents.Decision,
-        eventName: "Decision",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        action: Number(raw.data[0]),
-      } as DecisionEventData;
-
-    case WorldEvents.Consequence:
-      return {
-        eventType: WorldEvents.Consequence,
-        eventName: "Consequence",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        outcome: Number(raw.data[0]),
-        healthLoss: Number(raw.data[1]),
-        drugLoss: Number(raw.data[2]),
-        cashLoss: Number(raw.data[3]),
-        dmgDealt: Number(raw.data[4]),
-        cashEarnt: Number(raw.data[5]),
-      } as ConsequenceEventData;
+    // case WorldEvents.Consequence:
+    //   return {
+    //     eventType: WorldEvents.Consequence,
+    //     eventName: "Consequence",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     outcome: Number(raw.data[0]),
+    //     healthLoss: Number(raw.data[1]),
+    //     drugLoss: Number(raw.data[2]),
+    //     cashLoss: Number(raw.data[3]),
+    //     dmgDealt: Number(raw.data[4]),
+    //     cashEarnt: Number(raw.data[5]),
+    //   } as ConsequenceEventData;
 
     case WorldEvents.HighVolatility:
       return {
@@ -205,50 +189,50 @@ export const parseEvent = (raw: any) => {
         toLocation: shortString.decodeShortString(raw.data[2]),
       } as TraveledEventData;
 
-    case WorldEvents.Bought:
-      return {
-        eventType: WorldEvents.Bought,
-        eventName: "Bought",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        drugId: num.toHexString(raw.data[0]),
-        quantity: Number(raw.data[1]),
-        cost: Number(raw.data[2]),
-      } as BoughtEventData;
+    // case WorldEvents.Bought:
+    //   return {
+    //     eventType: WorldEvents.Bought,
+    //     eventName: "Bought",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     drugId: num.toHexString(raw.data[0]),
+    //     quantity: Number(raw.data[1]),
+    //     cost: Number(raw.data[2]),
+    //   } as BoughtEventData;
 
-    case WorldEvents.Sold:
-      return {
-        eventType: WorldEvents.Sold,
-        eventName: "Sold",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        drugId: num.toHexString(raw.data[0]),
-        quantity: Number(raw.data[1]),
-        payout: Number(raw.data[2]),
-      } as SoldEventData;
+    // case WorldEvents.Sold:
+    //   return {
+    //     eventType: WorldEvents.Sold,
+    //     eventName: "Sold",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     drugId: num.toHexString(raw.data[0]),
+    //     quantity: Number(raw.data[1]),
+    //     payout: Number(raw.data[2]),
+    //   } as SoldEventData;
 
-    case WorldEvents.BoughtItem:
-      return {
-        eventType: WorldEvents.BoughtItem,
-        eventName: "BoughtItem",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        itemId: num.toHexString(raw.data[0]),
-        level: Number(raw.data[1]),
-        cost: Number(raw.data[2]),
-      } as BoughtItemEventData;
+    // case WorldEvents.BoughtItem:
+    //   return {
+    //     eventType: WorldEvents.BoughtItem,
+    //     eventName: "BoughtItem",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     itemId: num.toHexString(raw.data[0]),
+    //     level: Number(raw.data[1]),
+    //     cost: Number(raw.data[2]),
+    //   } as BoughtItemEventData;
 
-    case WorldEvents.GameOver:
-      return {
-        eventType: WorldEvents.GameOver,
-        eventName: "GameOver",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        playerName: shortString.decodeShortString(raw.data[0]),
-        playerStatus: shortString.decodeShortString(raw.data[1]),
-        turn: Number(raw.data[2]),
-        cash: Number(raw.data[3]),
-      } as GameOverEventData;
+    // case WorldEvents.GameOver:
+    //   return {
+    //     eventType: WorldEvents.GameOver,
+    //     eventName: "GameOver",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     playerName: shortString.decodeShortString(raw.data[0]),
+    //     playerStatus: shortString.decodeShortString(raw.data[1]),
+    //     turn: Number(raw.data[2]),
+    //     cash: Number(raw.data[3]),
+    //   } as GameOverEventData;
 
 
       default:

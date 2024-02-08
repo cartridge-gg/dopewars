@@ -21,7 +21,6 @@ import {
   Action,
   Drug,
   DrugInfo,
-  DrugMarket,
   ItemEnum,
   ItemTextEnum,
   Location,
@@ -494,19 +493,6 @@ export function getOutcomeInfo(
     console.log(`getOutcomeInfo outcome ${status} ${type} not found !`);
   }
   return found || outcomes[0];
-}
-
-// export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
-//   if (!drugMarkets) {
-//     return [];
-//   }
-
-//   return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
-// }
-
-
-export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
-  return drugMarkets
 }
 
 

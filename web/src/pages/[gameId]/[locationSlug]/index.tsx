@@ -46,7 +46,7 @@ export default function Location() {
 
       setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
-  }, [location, game, router, gameId, gameInfos?.max_turns]);
+  }, [location, game, router, gameId, gameInfos, gameInfos?.max_turns]);
 
   useEffect(() => {
     if (game && game.markets.marketsByLocation && location) {

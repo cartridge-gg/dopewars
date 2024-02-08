@@ -12,7 +12,7 @@ import CashIndicator from "./player/CashIndicator";
 import DayIndicator from "./player/DayIndicator";
 import HealthIndicator from "./player/HealthIndicator";
 
-export interface HeaderProps {
+interface HeaderProps {
   back?: boolean;
 }
 

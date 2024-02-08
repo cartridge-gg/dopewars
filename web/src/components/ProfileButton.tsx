@@ -208,7 +208,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   );
 };
 
-export const ProfileButtonMobile = () => {
+const ProfileButtonMobile = () => {
   const { account } = useDojoContext();
   const { gameInfos } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -225,7 +225,7 @@ export const ProfileButtonMobile = () => {
   );
 };
 
-export const ProfileButton = () => {
+const ProfileButton = () => {
   const { account } = useDojoContext();
   const { gameInfos } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);

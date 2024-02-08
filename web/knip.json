@@ -1,0 +1,6 @@
+{
+    "ignore": [
+        "src/generated/**",
+        "src/dojo/generated/**"
+    ]
+}

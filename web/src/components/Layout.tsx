@@ -1,13 +1,12 @@
-import { VStack, Heading, Text, Flex, Image, StyleProps, Container, Box, Button, Spacer } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import React, { ReactNode } from "react";
 import Header from "./Header";
-import { motion } from "framer-motion";
 
-import CrtEffect from "./CrtEffect";
-import { Footer } from "./Footer";
 import { IsMobile } from "@/utils/ui";
+import CrtEffect from "./CrtEffect";
 
-export interface LayoutProps {
+interface LayoutProps {
   CustomLeftPanel?: React.FC;
   leftPanelProps?: LeftPanelProps;
   showBack?: boolean;
@@ -18,7 +17,7 @@ export interface LayoutProps {
   rigthPanelScrollable?: boolean;
 }
 
-export interface LeftPanelProps {
+interface LeftPanelProps {
   title: string;
   prefixTitle?: string;
   imageSrc?: string;
@@ -81,7 +80,15 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
       {map ? (
         <Flex w="100%">{map}</Flex>
       ) : (
-        <Image src={imageSrc} maxH="60vh" h="500px" objectFit="contain" pt="60px" display={["none", "block"]} alt="context" />
+        <Image
+          src={imageSrc}
+          maxH="60vh"
+          h="500px"
+          objectFit="contain"
+          pt="60px"
+          display={["none", "block"]}
+          alt="context"
+        />
       )}
     </VStack>
   );
