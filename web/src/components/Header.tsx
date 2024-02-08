@@ -5,6 +5,7 @@ import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Divider, Flex, HStack } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
@@ -99,4 +100,4 @@ const Header = ({ back }: HeaderProps) => {
   );
 };
 
-export default Header;
+export default observer(Header);

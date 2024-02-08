@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
 import { Image } from "@chakra-ui/react";
 import { useEffect } from "react";
@@ -8,22 +8,19 @@ export default function Redirector() {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
-  const configStore = useConfigStore()
+  const { game } = useGameStore();
+  const configStore = useConfigStore();
 
   useEffect(() => {
-    if (playerEntity?.status === PlayerStatus.Normal) {
-      router.push(`/${gameId}/${configStore.getLocation(playerEntity!.locationId)?.location.toLowerCase()}`);
-    } else if (playerEntity?.status === PlayerStatus.AtPawnshop) {
+    if (game.player.status === PlayerStatus.Normal) {
+      router.push(`/${gameId}/${game.player.location.location}`);
+    } else if (game.player.status === PlayerStatus.AtPawnshop) {
       router.push(`/${gameId}/pawnshop`);
-    } else if (
-      playerEntity?.status === PlayerStatus.BeingArrested ||
-      playerEntity?.status === PlayerStatus.BeingMugged
-    ) {
+    } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
       //
       router.push(`/${gameId}/decision`);
     }
-  }, [playerEntity, playerEntity?.status, playerEntity?.locationId, router, gameId]);
+  }, [game, game?.player.status, game?.player.locationI, router, gameId]);
 
   return (
     <Layout isSinglePanel>

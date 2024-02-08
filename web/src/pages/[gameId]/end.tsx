@@ -58,7 +58,7 @@ export default function End() {
       setIsDead(game.player?.health === 0);
       setDay(game.player.turn);
     }
-  }, [game]);
+  }, [game, gameInfos?.avatar_id, ]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);

@@ -1,9 +1,11 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
+    models::game::{Game},
     config::{items::{ItemConfig, ItemSlot, ItemConfigImpl, ItemLevel}, locations::{Locations}},
     packing::{
         game_store::{GameStore}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
-    }
+    },
 };
 
 #[derive(Copy, Drop, Serde)]
@@ -13,17 +15,6 @@ struct Action {
 
 
 fn execute_actions(ref game_store: GameStore, ref actions: Span<Action>) {
-    // get wanted 
-    let wanted = if game_store.player.location == Locations::Home {
-        0
-    } else {
-        // u8 sub_overflow if location = Home = 0
-        game_store.wanted.get(game_store.player.location)
-    };
-
-    // closed for wanted max levels = 5/6/7
-    assert(wanted < 5, 'too dangerous');
-
     loop {
         match actions.pop_front() {
             Option::Some(action) => { execute_action(ref game_store, *action); },
@@ -34,6 +25,21 @@ fn execute_actions(ref game_store: GameStore, ref actions: Span<Action>) {
 
 
 fn execute_action(ref game_store: GameStore, action: Action) {
+    // get game infos
+    let game = get!(game_store.world, (game_store.game_id, game_store.player_id), Game);
+
+    // get wanted 
+    let wanted = if game_store.player.location == Locations::Home {
+        0
+    } else {
+        // u8 sub_overflow if location = Home = 0
+        game_store.wanted.get(game_store.player.location)
+    };
+
+    // closed for wanted < max_wanted_shopping
+    assert(wanted < game.max_wanted_shopping, 'too dangerous');
+
+    // get current item
     let current_item = game_store.items.get_item(action.slot);
 
     // check item max level

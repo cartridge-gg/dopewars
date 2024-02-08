@@ -23,15 +23,15 @@ export enum Drug {
 export enum ItemEnum {
   Attack,
   Defense,
-  Transport,
   Speed,
+  Transport,
 }
 
 export enum ItemTextEnum {
   Attack = "Attack",
   Defense = "Defense",
-  Transport = "Transport",
   Speed = "Speed",
+  Transport = "Transport",
 }
 
 export enum PlayerStatus {
@@ -110,11 +110,11 @@ export type LocationPrices = Map<string, DrugMarket[]>;
 
 
 export enum TradeDirection {
-  Buy,
   Sell,
+  Buy,
 }
 
-export type Trade = {
+export type TradeAction = {
   direction: TradeDirection,
   drug: Drug,
   quantity: number
@@ -122,7 +122,15 @@ export type Trade = {
 
 
 export type ShopAction = {
-  slotId: number
+  slot: number
 }
 
 
+
+
+export enum ItemSlot {
+  Attack,
+  Defense,
+  Speed,
+  Transport,
+}

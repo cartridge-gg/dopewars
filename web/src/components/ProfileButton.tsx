@@ -1,11 +1,8 @@
 import Button from "@/components/Button";
-import { getShopItem, getShopItemStatname } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
-import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
-import { ItemTextEnum } from "@/dojo/types";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { headerButtonStyles } from "@/theme/styles";
-import { IsMobile, formatCash } from "@/utils/ui";
+import { IsMobile } from "@/utils/ui";
 import {
   Box,
   Card,
@@ -17,14 +14,13 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromId } from "./avatar/avatars";
-import { Dots, User } from "./icons";
-import { Cigarette } from "./icons/archive";
+import { Cigarette, User } from "./icons";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -43,35 +39,34 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const playerStore = usePlayerStore();
-  const { playerEntity } = playerStore;
-  const configStore = useConfigStore()
+  const configStore = useConfigStore();
+  const gameStore = useGameStore();
+  const { game, gameInfos } = gameStore;
 
-  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
-  const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(undefined);
-  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
-  const [transportItem, setTransportItem] = useState<ShopItem | undefined>(undefined);
+  // const [attackItem, setAttackItem] = useState<ShopItem | undefined>(game?.items.attack)
+  // const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(game?.items.defense);
+  // const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(game?.items.speed);
+  // const [transportItem, setTransportItem] = useState<ShopItem | undefined>(game?.items.transport);
 
   const { toast } = useToast();
-
   const isMobile = IsMobile();
 
   useEffect(() => {
     if (gameId && playerId) {
       // spectator
-      playerStore.initPlayerEntity(gameId, playerId);
+      gameStore.init(gameId, playerId);
     }
-  }, [gameId, playerId, playerStore]);
+  }, [gameId, playerId, gameStore]);
 
-  useEffect(() => {
-    if (!playerEntity) return;
-    setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
-    setDefenseItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Defense));
-    setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
-    setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
-  }, [playerEntity]);
+  // useEffect(() => {
+  //   if (!playerEntity) return;
+  //   setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
+  //   setDefenseItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Defense));
+  //   setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
+  //   setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
+  // }, [playerEntity]);
 
-  if (/*!account &&*/ !playerEntity) return null;
+  if (!game || !configStore) return null;
 
   return (
     <VStack w="full" {...props}>
@@ -80,13 +75,13 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card w="100px" alignItems="center">
-                <Avatar name={genAvatarFromId(playerEntity.avatarId)} w="100px" h="100px" />
+                <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} w="100px" h="100px" />
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">
                   <User />
                   <Heading fontFamily="dos-vga" fontWeight="normal" fontSize={"16px"}>
-                    <Text>{playerEntity.name}</Text>
+                    <Text>player.name</Text>
                   </Heading>
                 </HStack>
 
@@ -99,7 +94,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                 />
                 <HStack h="50px" px="10px">
                   {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
-                  <Cigarette /> <Text>{configStore.getLocationById(playerEntity.locationId)?.name}</Text>
+                  <Cigarette /> <Text>{game.player.location.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">
@@ -132,65 +127,49 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
 
             <Card w="full">
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
-                <HStack flex="1" justify="center" color={attackItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Attack)}:</Text>
-                  <Text>{playerEntity.getAttack()}</Text>
+                <HStack flex="1" justify="center" /*color={attackItem ? "yellow.400" : "neon.400"}*/>
+                  <Text opacity={0.5}>{game.items.attack.statName}:</Text>
+                  <Text>{game.items.attack.stat}</Text>
                 </HStack>
-                <HStack flex="1" justify="center" color={defenseItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Defense)}:</Text>
-                  <Text> {playerEntity.getDefense()}</Text>
+                <HStack flex="1" justify="center" /*color={defenseItem ? "yellow.400" : "neon.400"}*/>
+                  <Text opacity={0.5}>{game.items.defense.statName}:</Text>
+                  <Text>{game.items.defense.stat}</Text>
                 </HStack>
-                <HStack flex="1" justify="center" color={speedItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Speed)}:</Text>
-                  <Text> {playerEntity.getSpeed()}</Text>
+                <HStack flex="1" justify="center" /*color={speedItem ? "yellow.400" : "neon.400"}*/>
+                  <Text opacity={0.5}>{game.items.speed.statName}:</Text>
+                  <Text>{game.items.speed.stat}</Text>
                 </HStack>
-                <HStack flex="1" justify="center" color={transportItem ? "yellow.400" : "neon.400"}>
-                  <Text opacity={0.5}>{getShopItemStatname(ItemTextEnum.Transport)}:</Text>
-                  <Text> {playerEntity?.getTransport()}</Text>
+                <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
+                  <Text opacity={0.5}>{game.items.transport.statName}:</Text>
+                  <Text>{game.items.transport.stat}</Text>
                 </HStack>
               </HStack>
             </Card>
 
             <HStack w="full">
               <Card flex="1" h="40px" alignItems="center" justify="center">
-                {attackItem ? (
-                  getShopItem(attackItem.id, attackItem.level).icon({
-                    boxSize: "26",
-                    color: "yellow.400",
-                  })
-                ) : (
-                  <Dots color="neon.600" />
-                )}
+                {game.items.attack.icon({
+                  boxSize: "26",
+                  color: "yellow.400",
+                })}
               </Card>
               <Card flex="1" h="40px" alignItems="center" justify="center">
-                {defenseItem ? (
-                  getShopItem(defenseItem.id, defenseItem.level).icon({
-                    boxSize: "26",
-                    color: "yellow.400",
-                  })
-                ) : (
-                  <Dots color="neon.600" />
-                )}
+                {game.items.defense.icon({
+                  boxSize: "26",
+                  color: "yellow.400",
+                })}
               </Card>
               <Card flex="1" h="40px" alignItems="center" justify="center">
-                {speedItem ? (
-                  getShopItem(speedItem.id, speedItem.level).icon({
-                    boxSize: "26",
-                    color: "yellow.400",
-                  })
-                ) : (
-                  <Dots color="neon.600" />
-                )}
+                {game.items.speed.icon({
+                  boxSize: "26",
+                  color: "yellow.400",
+                })}
               </Card>
               <Card flex="1" h="40px" alignItems="center" justify="center">
-                {transportItem ? (
-                  getShopItem(transportItem.id, transportItem.level).icon({
-                    boxSize: "26",
-                    color: "yellow.400",
-                  })
-                ) : (
-                  <Dots color="neon.600" />
-                )}
+                {game.items.transport.icon({
+                  boxSize: "26",
+                  color: "yellow.400",
+                })}
               </Card>
             </HStack>
           </VStack>
@@ -229,33 +208,17 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
   );
 };
 
-const getShareText = (playerEntity: PlayerEntity): string => {
-  if (playerEntity.health > 0) {
-    return encodeURIComponent(
-      `${playerEntity.name} has reached Day ${playerEntity.turn} with ${formatCash(
-        playerEntity.cash,
-      )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
-    );
-  } else {
-    return encodeURIComponent(
-      `${playerEntity.name} got dropped on Day ${playerEntity.turn} but pocketed ${formatCash(
-        playerEntity.cash,
-      )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
-    );
-  }
-};
-
 export const ProfileButtonMobile = () => {
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { gameInfos } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!account || !playerEntity) return null;
+  if (!account || !gameInfos) return null;
 
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
-        <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
+        <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} /> <Text ml="10px">player.name</Text>
       </MenuItem>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
@@ -264,15 +227,15 @@ export const ProfileButtonMobile = () => {
 
 export const ProfileButton = () => {
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { gameInfos } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!account || !playerEntity) return null;
+  if (!account || !gameInfos) return null;
 
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
-        <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
+        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} />
       </Button>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
@@ -283,7 +246,8 @@ export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { gameInfos } = useGameStore();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
@@ -294,12 +258,12 @@ export const ProfileLink = () => {
     }
   };
 
-  if (!account || !playerEntity) return null;
+  if (!account || !gameInfos) return null;
 
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
-        <Avatar name={genAvatarFromId(playerEntity.avatarId)} />
+        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} />
       </Button>
     </>
   );
@@ -309,7 +273,8 @@ export const ProfileLinkMobile = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { gameInfos } = useGameStore();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
@@ -320,12 +285,12 @@ export const ProfileLinkMobile = () => {
     }
   };
 
-  if (!account || !playerEntity) return null;
+  if (!account || !gameInfos) return null;
 
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick}>
-        <Avatar name={genAvatarFromId(playerEntity.avatarId)} /> <Text ml="10px">{playerEntity.name}</Text>
+        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} /> <Text ml="10px">player.name</Text>
       </MenuItem>
     </>
   );

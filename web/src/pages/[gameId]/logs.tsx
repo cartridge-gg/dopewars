@@ -16,11 +16,9 @@ import {
   JoinedEventData,
   ParseEventResult,
   SoldEventData,
-  TraveledEventData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
-import { usePlayerLogs } from "@/dojo/queries/usePlayerLogs";
 import { ConfigStore } from "@/dojo/stores/config";
 import { Outcome } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
@@ -40,7 +38,9 @@ export default function Logs() {
   const { playerEntity } = usePlayerStore();
   const configStore = useConfigStore();
 
-  const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
+  // const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
+  const playerLogs = [];
+  const isFetched = true;
 
   const [playerName, setPlayerName] = useState("");
   const [logs, setLogs] = useState<LogByDay[]>([]);
@@ -48,54 +48,54 @@ export default function Logs() {
 
   const isMobile = IsMobile();
 
-  useEffect(() => {
-    if (!playerLogs) return;
+  // useEffect(() => {
+  //   if (!playerLogs) return;
 
-    const logsByDay = [];
+  //   const logsByDay = [];
 
-    let dayLogs: LogByDay = {
-      day: 0,
-      location: "Hood",
-      logs: [],
-    };
+  //   let dayLogs: LogByDay = {
+  //     day: 0,
+  //     location: "Hood",
+  //     logs: [],
+  //   };
 
-    for (let log of playerLogs?.parsedLogs) {
-      //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
-      if (log.parsed.eventType === WorldEvents.PlayerJoined) {
-        setPlayerName((log.parsed as JoinedEventData).playerName);
-      }
-      if (log.parsed.eventType === WorldEvents.Traveled) {
-        // create new day
-        logsByDay.push(dayLogs);
+  //   for (let log of playerLogs?.parsedLogs) {
+  //     //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
+  //     if (log.parsed.eventType === WorldEvents.PlayerJoined) {
+  //       setPlayerName((log.parsed as JoinedEventData).playerName);
+  //     }
+  //     if (log.parsed.eventType === WorldEvents.Traveled) {
+  //       // create new day
+  //       logsByDay.push(dayLogs);
 
-        const travelEvent = log.parsed as TraveledEventData;
+  //       const travelEvent = log.parsed as TraveledEventData;
 
-        dayLogs = {
-          day: travelEvent.turn,
-          location: travelEvent.toLocation,
-          logs: [],
-        };
-      } else {
-        // push other events in dayLogs
-        dayLogs.logs.push(log.parsed);
-      }
-    }
-    logsByDay.push(dayLogs);
+  //       dayLogs = {
+  //         day: travelEvent.turn,
+  //         location: travelEvent.toLocation,
+  //         logs: [],
+  //       };
+  //     } else {
+  //       // push other events in dayLogs
+  //       dayLogs.logs.push(log.parsed);
+  //     }
+  //   }
+  //   logsByDay.push(dayLogs);
 
-    // move day 0 hood events to day 0 location events
-    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.location === "Hood");
-    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location !== "Hood");
-    if (day0HoodIndex > -1 && day0Index > -1) {
-      const day0Hood = logsByDay[day0HoodIndex];
-      const day0 = logsByDay[day0Index];
-      day0.logs.unshift(...day0Hood.logs);
-      day0Hood.logs = [];
-      logsByDay[day0HoodIndex] = day0Hood;
-      logsByDay[day0Index] = day0;
-    }
+  //   // move day 0 hood events to day 0 location events
+  //   const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.location === "Hood");
+  //   const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location !== "Hood");
+  //   if (day0HoodIndex > -1 && day0Index > -1) {
+  //     const day0Hood = logsByDay[day0HoodIndex];
+  //     const day0 = logsByDay[day0Index];
+  //     day0.logs.unshift(...day0Hood.logs);
+  //     day0Hood.logs = [];
+  //     logsByDay[day0HoodIndex] = day0Hood;
+  //     logsByDay[day0Index] = day0;
+  //   }
 
-    setLogs(logsByDay);
-  }, [playerLogs]);
+  //   setLogs(logsByDay);
+  // }, [playerLogs]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -112,12 +112,6 @@ export default function Logs() {
 
   return (
     <Layout
-      // leftPanelProps={{
-      //   prefixTitle: "",
-      //   title: `${playerName} Log `,
-      //   imageSrc: "/images/will-smith-with-attitude.png",
-      // }}
-      // CustomLeftPanel={!playerId ? CustomLeftPanel : undefined}
       CustomLeftPanel={CustomLeftPanel}
       footer={
         <Footer>
@@ -174,7 +168,7 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
 
           switch (i.eventType) {
             case WorldEvents.BoughtItem:
-              return renderBoughtItem( i as BoughtItemEventData, key);
+              return renderBoughtItem(i as BoughtItemEventData, key);
               break;
 
             case WorldEvents.Bought:

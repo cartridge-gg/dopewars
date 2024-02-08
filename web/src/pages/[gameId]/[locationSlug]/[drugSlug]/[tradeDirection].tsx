@@ -57,27 +57,20 @@ export default function Market() {
 
     try {
       const quantity = tradeDirection === TradeDirection.Buy ? quantityBuy : quantitySell;
-      const { hash } = await trade(gameId, [{ direction: tradeDirection, drug: drug?.drug_id, quantity }]);
+
+      const marketAction = {
+        direction: tradeDirection,
+        drug: drug?.drug_id,
+        quantity,
+        cost: quantity * market.price,
+      };
+      game?.pushCall(marketAction);
     } catch (e) {
       console.log(e);
     }
 
-    // try {
-    //   if (tradeDirection === TradeDirection.Buy) {
-    //     ({ hash } = await buy(gameId, location!.location_id, drug!.drug_id, quantityBuy));
-    //     toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
-    //     quantity = quantityBuy;
-    //   } else if (tradeDirection === TradeDirection.Sell) {
-    //     ({ hash } = await sell(gameId, location!.location_id, drug!.drug_id, quantitySell));
-    //     toastMessage = `You sold ${quantitySell} ${drug!.name}`;
-    //     quantity = quantitySell;
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
-
     router.push(`/${gameId}/${location!.location.toLowerCase()}`);
-  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router]);
+  }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, game, market]);
 
   if (!router.isReady || !game || !drug || !market) return <></>;
 

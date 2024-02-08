@@ -119,7 +119,7 @@ export default function Travel() {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { event, events, hash, isGameOver } = await travel(gameId, locationId);
+        const { event, events, hash, isGameOver } = await travel(gameId, locationId, game.getPendingCalls());
 
         // if (isGameOver) {
         //   return router.replace(`/${gameId}/end`);
@@ -143,6 +143,7 @@ export default function Travel() {
 
         router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
+        game.clearPendingCalls();
         console.log(e);
       }
     }

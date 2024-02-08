@@ -16,14 +16,15 @@ import {
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
+import React from "react";
 import { Contract, TypedContract, shortString } from "starknet";
 import { createStore } from "zustand";
 import { ABI as configAbi } from "../abis/configAbi";
 import { drugIcons, itemIcons, locationIcons, statName } from "../helpers";
 
-export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: JSX.Element };
-export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: JSX.Element };
-export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: JSX.Element, statName: string };
+export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
+export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: React.FC };
+export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: React.FC; statName: string };
 
 export type LayoutItem = {
   name: string;

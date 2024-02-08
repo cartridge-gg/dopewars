@@ -9,6 +9,7 @@ struct GameConfig {
     cash: u32,
     health: u8,
     max_turns: u8,
+    max_wanted_shopping: u8,
 }
 
 
@@ -28,6 +29,7 @@ fn initialize_game_config(world: IWorldDispatcher) {
             cash: 1420,
             health: 100,
             max_turns: 30,
+            max_wanted_shopping:5,
          }
     );
 }

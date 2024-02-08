@@ -1,25 +1,23 @@
-import { Text, Link as ChakraLink, StyleProps } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import Button from "@/components/Button";
-import { Twitter } from "./icons";
+import { GameClass } from "@/dojo/class/Game";
+import { useGameStore } from "@/dojo/hooks";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { formatCash } from "@/utils/ui";
-import { PlayerEntity } from "@/dojo/queries/usePlayerEntity";
-import { usePlayerStore } from "@/dojo/hooks/usePlayerStore";
+import { Link as ChakraLink, StyleProps } from "@chakra-ui/react";
+import { Twitter } from "./icons";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   const { account } = useDojoContext();
-  const { playerEntity }= usePlayerStore()
+  const { game } = useGameStore();
 
-  if (!account || !playerEntity) return null;
+  if (!account || !game) return null;
 
   return (
     <ChakraLink
       w="full"
-      href={`https://twitter.com/intent/tweet?text=${getShareText(playerEntity)}`}
+      href={`https://twitter.com/intent/tweet?text=${getShareText(game)}`}
       target="_blank"
       textDecoration="none !important"
-
       {...props}
     >
       <Button variant={props.variant ? props.variant : ""} w="full">
@@ -29,17 +27,17 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   );
 };
 
-const getShareText = (playerEntity: PlayerEntity): string => {
-  if (playerEntity.health > 0) {
+const getShareText = (game: GameClass): string => {
+  if (game.player.health > 0) {
     return encodeURIComponent(
-      `${playerEntity.name} has reached Day ${playerEntity.turn} with ${formatCash(
-        playerEntity.cash,
+      `{player.name} has reached Day ${game.player.turn} with ${formatCash(
+        game.player.cash,
       )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
     );
   } else {
     return encodeURIComponent(
-      `${playerEntity.name} got dropped on Day ${playerEntity.turn} but pocketed ${formatCash(
-        playerEntity.cash,
+      `{player.name} got dropped on Day ${game.player.turn} but pocketed ${formatCash(
+        game.player.cash,
       )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
     );
   }

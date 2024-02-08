@@ -33,11 +33,11 @@ export const Outline = ({ targetId, current, wanted }: { targetId?: Location; cu
           // @ts-ignore
           transition={transition}
         >
-          <SvgHighlight location={targetId} fill={fillColor} />
+          <SvgHighlight location={targetId} fill={fillColor as string} />
         </ChakraBox>
       {/* )} */}
       <ChakraBox layerStyle="fill" opacity="0.5">
-        <SvgHighlight location={current} fill={colors.neon[400]} />
+        <SvgHighlight location={current} fill={colors.neon[400] as string} />
       </ChakraBox>
       <ChakraBox
         layerStyle="fill"

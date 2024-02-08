@@ -79,11 +79,13 @@ export const Map = ({
       <Image src="/images/map/basemap.svg" position="absolute" top="0" left="0" boxSize="full" alt="ryo map" />
 
       {/* <Markers location={targetId} /> */}
-      <Outline
-        targetId={targetId}
-        current={current}
-        wanted={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location)}
-      />
+      {targetId && (
+        <Outline
+          targetId={targetId}
+          current={current}
+          wanted={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location) || 0}
+        />
+      )}
       <HitBox onSelect={onSelect} />
     </Flex>
   );

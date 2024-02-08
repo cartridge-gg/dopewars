@@ -82,8 +82,8 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
 }
 
 
-fn on_game_end(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) {
-    let mut game = get!(world, (game_id, player_id), (Game));
+fn on_game_end(world: IWorldDispatcher, ref game_store: GameStore) {
+    let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
     assert(game.game_over == false, 'already game_over');
 
     // set game_over on game 
@@ -92,5 +92,7 @@ fn on_game_end(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress
 
 // TODO
 //ryo::game_over(self.world(), ref player);
+
+    
 }
 

@@ -1,16 +1,22 @@
 use starknet::ContractAddress;
 use rollyourown::{
-    config::{locations::{Locations}, items::{ItemSlot}}, packing::game_store::{GameMode}
+    config::{locations::{Locations}, items::{ItemSlot}}, packing::game_store::{GameMode},
+    systems::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
 };
-use rollyourown::systems::{trading::Trade, shopping::Action,};
+
+#[derive(Copy, Drop, Serde)]
+enum Actions {
+    Trade: trading::Trade,
+    Shop: shopping::Action,
+}
 
 #[starknet::interface]
 trait IGame<T> {
     fn create_game(self: @T, game_mode: GameMode, avatar_id: u8);
-    fn end_game(self: @T, game_id: u32);
-    fn travel(self: @T, game_id: u32, next_location: Locations);
-    fn trade(self: @T, game_id: u32, trades: Span<Trade>);
-    fn shop(self: @T, game_id: u32, actions: Span<Action>);
+    fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
+    fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
+    fn trade(self: @T, game_id: u32, trades: Span<trading::Trade>);
+    fn shop(self: @T, game_id: u32, actions: Span<shopping::Action>);
 }
 
 #[dojo::contract]
@@ -74,9 +80,14 @@ mod game {
             // let leaderboard_version = leaderboard_manager.on_game_start();
 
             let game_config = GameConfigImpl::get(self.world());
-            // let game = Game { game_id, game_mode, max_turns: game_config.max_turns, avatar_id };
             let game = Game {
-                game_id, player_id, game_mode, max_turns: 7, avatar_id, game_over: false
+                game_id,
+                player_id,
+                game_mode,
+                max_turns: 7,//game_config.max_turns
+                max_wanted_shopping: game_config.max_wanted_shopping,
+                avatar_id,
+                game_over: false
             };
 
             // save Game
@@ -95,18 +106,38 @@ mod game {
             emit!(self.world(), GameCreated { game_id, player_id, game_mode });
         }
 
-        fn end_game(self: @ContractState, game_id: u32) {
-            let player_id = get_caller_address();
-
-            //on_game_end
-            game_loop::on_game_end(self.world(), game_id, player_id);
-        }
-
-        fn travel(self: @ContractState, game_id: u32, next_location: Locations) {
+        fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
 
+            // execute actions (trades & shop)
+            let mut actions = actions;
+            super::execute_actions(ref game_store, ref actions);
+
+            //on_game_end
+            game_loop::on_game_end(self.world(), ref game_store);
+
+            // save 
+            let game_store_packed = game_store.pack();
+            set!(self.world(), (game_store_packed));
+        }
+
+        fn travel(
+            self: @ContractState,
+            game_id: u32,
+            next_location: Locations,
+            actions: Span<super::Actions>
+        ) {
+            let player_id = get_caller_address();
+
+            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+
+            // execute actions (trades & shop)
+            let mut actions = actions;
+            super::execute_actions(ref game_store, ref actions);
+
+            // check if can travel
             assert(game_store.player.can_continue(), 'player cannot travel');
             assert(next_location != Locations::Home, 'cannot travel to Home');
             assert(game_store.player.location != next_location, 'already at location');
@@ -145,4 +176,24 @@ mod game {
             set!(self.world(), (game_store_packed));
         }
     }
+}
+
+
+fn execute_actions(ref game_store: GameStore, ref actions: Span<Actions>) {
+    loop {
+        match actions.pop_front() {
+            Option::Some(action) => {
+                match action {
+                    Actions::Trade(tradeAction) => {
+                        trading::execute_trade(ref game_store, *tradeAction)
+                    },
+                    Actions::Shop(shopAction) => {
+                        shopping::execute_action(ref game_store, *shopAction)
+                    },
+                };
+            },
+            Option::None => { break; },
+        };
+    };
+// TODO handle price impact
 }

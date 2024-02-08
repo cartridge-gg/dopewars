@@ -31,18 +31,13 @@ export default function Location() {
   const { game, gameInfos } = useGameStore();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
-  useEffect(() => {
-    if (game && game.markets.marketsByLocation && location) {
-      setPrices(game.markets.marketsByLocation.get(location.location) || []);
-    }
-  }, [location, game]);
 
   const { endGame, isPending } = useSystems();
 
   const [isLastDay, setIsLastDay] = useState(false);
 
   useEffect(() => {
-    if (game && location) {
+    if (game && gameInfos && location) {
       // check if player at right location
       if (location?.location !== game.player.location?.location) {
         router.replace(`/${gameId}/${game.player.location?.location}`);
@@ -51,7 +46,13 @@ export default function Location() {
 
       setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
-  }, [location, game, router, gameId]);
+  }, [location, game, router, gameId, gameInfos?.max_turns]);
+
+  useEffect(() => {
+    if (game && game.markets.marketsByLocation && location) {
+      setPrices(game.markets.marketsByLocation.get(location.location) || []);
+    }
+  }, [location, game]);
 
   if (!game || !prices || !location || !configStore) {
     return <></>;
@@ -76,7 +77,11 @@ export default function Location() {
             isLoading={isPending}
             onClick={async () => {
               if (isLastDay) {
-                await endGame(gameId);
+                try {
+                  await endGame(gameId, game.getPendingCalls());
+                } catch (e: any) {
+                  game.clearPendingCalls();
+                }
                 router.push(`/${gameId}/end`);
               } else {
                 router.push(`/${gameId}/travel`);
@@ -97,6 +102,7 @@ export default function Location() {
           {prices.map((drug, index) => {
             const drugConfig = configStore.getDrug(drug.drug)!;
 
+            // TODO : move in Player
             const canBuy =
               game.drugs.quantity === 0 ||
               !game.drugs?.drug ||

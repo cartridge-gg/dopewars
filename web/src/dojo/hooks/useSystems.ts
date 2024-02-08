@@ -2,9 +2,10 @@ import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
 import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
-import { AdverseEventData, AtPawnshopEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, HighVolatilityData, parseAllEvents } from "../events";
+import { PendingCallWithCost, pendingCallToCairoEnum } from "../class/Game";
+import { AdverseEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, HighVolatilityData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
-import { Action, Drug, GameMode, Location, ShopAction, Trade } from "../types";
+import { Action, Drug, GameMode, Location, ShopAction, TradeAction } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
@@ -13,10 +14,10 @@ export interface SystemsInterface {
     playerName: string,
     avatarId: number,
   ) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Location, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
   // join: (gameId: string) => Promise<SystemExecuteResult>;
-  trade: (gameId: string, trades: Array<Trade>) => Promise<SystemExecuteResult>;
+  trade: (gameId: string, trades: Array<TradeAction>) => Promise<SystemExecuteResult>;
   shop: (gameId: string, actions: Array<ShopAction>) => Promise<SystemExecuteResult>;
   buy: (
     gameId: string,
@@ -185,12 +186,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Location) => {
+    async (gameId: string, location: Location, calls: Array<PendingCallWithCost>) => {
 
+      const callsEnum = calls.map(pendingCallToCairoEnum)
+    
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
-        [gameId, location],
+        [gameId, location, callsEnum],
       );
 
       const isGameOver = parsedEvents
@@ -200,14 +203,11 @@ export const useSystems = (): SystemsInterface => {
         (e) => e.eventType === WorldEvents.AdverseEvent,
       ) as AdverseEventData
 
-      const atPawnshopEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.AtPawnshop,
-      ) as AtPawnshopEventData
 
       return {
         hash,
         isGameOver,
-        event: adverseEvent || atPawnshopEvent,
+        event: adverseEvent,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.HighVolatility)
           .map((e) => e as HighVolatilityData),
@@ -216,47 +216,17 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const trade = useCallback(
-    async (gameId: string, trades: Array<Trade>) => {
-
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "trade",
-        [gameId, trades],
-      );
-
-      return {
-        hash,
-        events: []
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const shop = useCallback(
-    async (gameId: string, actions: Array<ShopAction>) => {
-
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "shop",
-        [gameId, actions],
-      );
-
-      return {
-        hash,
-        events: []
-      }
-    },
-    [executeAndReceipt],
-  );
+ 
 
 
   const endGame = useCallback(
-    async (gameId: string) => {
+    async (gameId: string, calls: Array<PendingCallWithCost>) => {
+      const callsEnum = calls.map(pendingCallToCairoEnum)
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "end_game",
-        [gameId],
+        [gameId, callsEnum],
       );
 
       return {
@@ -266,6 +236,48 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+
+
+
+
+//
+//
+//
+
+
+const trade = useCallback(
+  async (gameId: string, trades: Array<TradeAction>) => {
+
+    const { hash, events, parsedEvents } = await executeAndReceipt(
+      "rollyourown::systems::game::game",
+      "trade",
+      [gameId, trades],
+    );
+
+    return {
+      hash,
+      events: []
+    };
+  },
+  [executeAndReceipt],
+);
+
+const shop = useCallback(
+  async (gameId: string, actions: Array<ShopAction>) => {
+
+    const { hash, events, parsedEvents } = await executeAndReceipt(
+      "rollyourown::systems::game::game",
+      "shop",
+      [gameId, actions],
+    );
+
+    return {
+      hash,
+      events: []
+    }
+  },
+  [executeAndReceipt],
+);
 
 
   const decide = useCallback(

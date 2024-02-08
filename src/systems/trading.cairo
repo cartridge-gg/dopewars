@@ -16,8 +16,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[derive(Copy, Drop, Serde)]
 enum TradeDirection {
+    Sell,
     Buy,
-    Sell
 }
 
 #[derive(Copy, Drop, Serde)]
@@ -32,7 +32,7 @@ struct Trade {
 //
 
 fn execute_trades(ref game_store: GameStore, ref trades: Span<Trade>) {
-    // check if can trade TODO: change !
+    // check if can trade 
     assert(game_store.player.can_trade(), 'player cannot trade');
 
     let mut trades_clone = trades.clone();
@@ -62,8 +62,8 @@ fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
     let tick = game_store.markets.get_tick(game_store.player.location, trade.drug);
 
     let new_tick = match trade.direction {
-        TradeDirection::Buy => { tick.add_capped(2, 63) },
         TradeDirection::Sell => { tick.sub_capped(2, 0) },
+        TradeDirection::Buy => { tick.add_capped(2, 63) },
     };
 
     game_store.markets.set_tick(game_store.player.location, trade.drug, new_tick);
@@ -74,9 +74,12 @@ fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
 //
 
 fn execute_trade(ref game_store: GameStore, trade: Trade) {
+    // check if can trade 
+    assert(game_store.player.can_trade(), 'player cannot trade');
+
     match trade.direction {
-        TradeDirection::Buy => buy(ref game_store, trade),
         TradeDirection::Sell => sell(ref game_store, trade),
+        TradeDirection::Buy => buy(ref game_store, trade),
     };
 }
 

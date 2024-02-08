@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x498b3d44e1071fe5ccfef864748e2920ee5ac4285c1531e982648d4df69280e",
+      "class_hash": "0x216fed6b5c56c2554548ffb922ac47d28468e9f342d2e2a111e5e2c96b3a25a",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x6a6eb81307c9714d15926c85eef84c806136ad62854f57df7d38a884cc62d2d",
+      "class_hash": "0x59d731a1db132600d6ab221173dec1155cb7929403cdb3cc6c9320854758941",
       "abi": [
         {
           "type": "impl",
@@ -1187,48 +1187,14 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::config::locations::Locations",
-          "variants": [
-            {
-              "name": "Home",
-              "type": "()"
-            },
-            {
-              "name": "Queens",
-              "type": "()"
-            },
-            {
-              "name": "Bronx",
-              "type": "()"
-            },
-            {
-              "name": "Brooklyn",
-              "type": "()"
-            },
-            {
-              "name": "Jersey",
-              "type": "()"
-            },
-            {
-              "name": "Central",
-              "type": "()"
-            },
-            {
-              "name": "Coney",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
           "name": "rollyourown::systems::trading::TradeDirection",
           "variants": [
             {
-              "name": "Buy",
+              "name": "Sell",
               "type": "()"
             },
             {
-              "name": "Sell",
+              "name": "Buy",
               "type": "()"
             }
           ]
@@ -1282,16 +1248,6 @@
           ]
         },
         {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::systems::trading::Trade>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::systems::trading::Trade>"
-            }
-          ]
-        },
-        {
           "type": "enum",
           "name": "rollyourown::config::items::ItemSlot",
           "variants": [
@@ -1320,6 +1276,74 @@
             {
               "name": "slot",
               "type": "rollyourown::config::items::ItemSlot"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::game::Actions",
+          "variants": [
+            {
+              "name": "Trade",
+              "type": "rollyourown::systems::trading::Trade"
+            },
+            {
+              "name": "Shop",
+              "type": "rollyourown::systems::shopping::Action"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::game::Actions>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::game::Actions>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::locations::Locations",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::trading::Trade>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::trading::Trade>"
             }
           ]
         },
@@ -1360,6 +1384,10 @@
                 {
                   "name": "game_id",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "actions",
+                  "type": "core::array::Span::<rollyourown::systems::game::Actions>"
                 }
               ],
               "outputs": [],
@@ -1376,6 +1404,10 @@
                 {
                   "name": "next_location",
                   "type": "rollyourown::config::locations::Locations"
+                },
+                {
+                  "name": "actions",
+                  "type": "core::array::Span::<rollyourown::systems::game::Actions>"
                 }
               ],
               "outputs": [],
@@ -2265,9 +2297,14 @@
           "name": "max_turns",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "max_wanted_shopping",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x16cf3f57ffbb5bd20dc87e9745db7b2ebd022eab2db0b6106f71db0a8e425bb",
+      "class_hash": "0x2817b9553cad5180ef4a74923b2ad911133f53cb539912594ce72dd1844c3ab",
       "abi": [
         {
           "type": "function",
@@ -2440,6 +2477,10 @@
             },
             {
               "name": "max_turns",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_wanted_shopping",
               "type": "core::integer::u8"
             }
           ]
@@ -3519,6 +3560,11 @@
           "key": false
         },
         {
+          "name": "max_wanted_shopping",
+          "type": "u8",
+          "key": false
+        },
+        {
           "name": "avatar_id",
           "type": "u8",
           "key": false
@@ -3529,7 +3575,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x330fd356736e7a5d8a5147822adb41eaaa55824207e0da6063d5e498c055869",
+      "class_hash": "0x5c55edacad544b58656d35c03428f99ec9163154ced481f795da734245ef396",
       "abi": [
         {
           "type": "function",
@@ -3730,6 +3776,10 @@
             },
             {
               "name": "max_turns",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_wanted_shopping",
               "type": "core::integer::u8"
             },
             {

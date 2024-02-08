@@ -9,6 +9,7 @@ struct Game {
     player_id: ContractAddress,
     game_mode: GameMode,
     max_turns: u8,
+    max_wanted_shopping: u8,
     avatar_id: u8,
     game_over: bool,
     // leaderboard_version: u8,

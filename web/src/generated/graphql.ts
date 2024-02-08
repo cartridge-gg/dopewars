@@ -159,6 +159,7 @@ export type Game = {
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
   max_turns?: Maybe<Scalars['u8']>;
+  max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
 };
 
@@ -169,6 +170,7 @@ export type GameConfig = {
   health?: Maybe<Scalars['u8']>;
   key?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
+  max_wanted_shopping?: Maybe<Scalars['u8']>;
 };
 
 export type GameConfigConnection = {
@@ -193,7 +195,8 @@ export enum GameConfigOrderField {
   Cash = 'CASH',
   Health = 'HEALTH',
   Key = 'KEY',
-  MaxTurns = 'MAX_TURNS'
+  MaxTurns = 'MAX_TURNS',
+  MaxWantedShopping = 'MAX_WANTED_SHOPPING'
 }
 
 export type GameConfigWhereInput = {
@@ -225,6 +228,13 @@ export type GameConfigWhereInput = {
   max_turnsLT?: InputMaybe<Scalars['u8']>;
   max_turnsLTE?: InputMaybe<Scalars['u8']>;
   max_turnsNEQ?: InputMaybe<Scalars['u8']>;
+  max_wanted_shopping?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingEQ?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingGT?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingGTE?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingLT?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingLTE?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingNEQ?: InputMaybe<Scalars['u8']>;
 };
 
 export type GameConnection = {
@@ -251,6 +261,7 @@ export enum GameOrderField {
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
   MaxTurns = 'MAX_TURNS',
+  MaxWantedShopping = 'MAX_WANTED_SHOPPING',
   PlayerId = 'PLAYER_ID'
 }
 
@@ -334,6 +345,13 @@ export type GameWhereInput = {
   max_turnsLT?: InputMaybe<Scalars['u8']>;
   max_turnsLTE?: InputMaybe<Scalars['u8']>;
   max_turnsNEQ?: InputMaybe<Scalars['u8']>;
+  max_wanted_shopping?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingEQ?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingGT?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingGTE?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingLT?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingLTE?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingNEQ?: InputMaybe<Scalars['u8']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;

@@ -21,7 +21,7 @@ const Debug = () => {
   const { game } = useGameStore();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
+  const btnRef = useRef<HTMLButtonElement|null>(null);
   
   return (
     <>
@@ -36,7 +36,7 @@ const Debug = () => {
 
           <DrawerBody fontFamily="consolas" fontSize="12px" p={0}>
             <JsonView
-              data={game}
+              data={game as Object}
               style={darkStyles}
               shouldExpandNode={(level) => {
                 return level <= 1;
