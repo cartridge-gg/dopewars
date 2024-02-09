@@ -14,8 +14,10 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 import { Avatar } from "./avatar/Avatar";
@@ -35,18 +37,13 @@ const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void })
   );
 };
 
-export const Profile = ({ close, ...props }: { close?: () => void }) => {
+export const Profile = observer(({ close, ...props }: { close?: () => void }) => {
   const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
   const configStore = useConfigStore();
   const gameStore = useGameStore();
   const { game, gameInfos } = gameStore;
-
-  // const [attackItem, setAttackItem] = useState<ShopItem | undefined>(game?.items.attack)
-  // const [defenseItem, setDefenseItem] = useState<ShopItem | undefined>(game?.items.defense);
-  // const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(game?.items.speed);
-  // const [transportItem, setTransportItem] = useState<ShopItem | undefined>(game?.items.transport);
 
   const { toast } = useToast();
   const isMobile = IsMobile();
@@ -57,14 +54,6 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
       gameStore.init(gameId, playerId);
     }
   }, [gameId, playerId, gameStore]);
-
-  // useEffect(() => {
-  //   if (!playerEntity) return;
-  //   setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
-  //   setDefenseItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Defense));
-  //   setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
-  //   setTransportItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Transport));
-  // }, [playerEntity]);
 
   if (!game || !configStore) return null;
 
@@ -131,46 +120,57 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
                   <Text opacity={0.5}>{game.items.attack.statName}:</Text>
                   <Text>{game.items.attack.stat}</Text>
                 </HStack>
+
                 <HStack flex="1" justify="center" /*color={defenseItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{game.items.defense.statName}:</Text>
                   <Text>{game.items.defense.stat}</Text>
                 </HStack>
+
                 <HStack flex="1" justify="center" /*color={speedItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{game.items.speed.statName}:</Text>
                   <Text>{game.items.speed.stat}</Text>
                 </HStack>
+
                 <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{game.items.transport.statName}:</Text>
-                  <Text>{game.items.transport.stat}</Text>
+                  <Text>{game.items.transport.stat/100}</Text>
                 </HStack>
               </HStack>
             </Card>
 
             <HStack w="full">
-              <Card flex="1" h="40px" alignItems="center" justify="center">
-                {game.items.attack.icon({
-                  boxSize: "26",
-                  color: "yellow.400",
-                })}
-              </Card>
-              <Card flex="1" h="40px" alignItems="center" justify="center">
-                {game.items.defense.icon({
-                  boxSize: "26",
-                  color: "yellow.400",
-                })}
-              </Card>
-              <Card flex="1" h="40px" alignItems="center" justify="center">
-                {game.items.speed.icon({
-                  boxSize: "26",
-                  color: "yellow.400",
-                })}
-              </Card>
-              <Card flex="1" h="40px" alignItems="center" justify="center">
-                {game.items.transport.icon({
-                  boxSize: "26",
-                  color: "yellow.400",
-                })}
-              </Card>
+              <Tooltip label={`${game.items.attack.name} - $${game.items.attack.cost}`}>
+                <Card flex="1" h="40px" alignItems="center" justify="center">
+                  {game.items.attack.icon({
+                    boxSize: "26",
+                    color: "yellow.400",
+                  })}
+                </Card>
+              </Tooltip>
+              <Tooltip label={`${game.items.defense.name} - $${game.items.defense.cost}`}>
+                <Card flex="1" h="40px" alignItems="center" justify="center">
+                  {game.items.defense.icon({
+                    boxSize: "26",
+                    color: "yellow.400",
+                  })}
+                </Card>
+              </Tooltip>
+              <Tooltip label={`${game.items.speed.name} - $${game.items.speed.cost}`}>
+                <Card flex="1" h="40px" alignItems="center" justify="center">
+                  {game.items.speed.icon({
+                    boxSize: "26",
+                    color: "yellow.400",
+                  })}
+                </Card>
+              </Tooltip>
+              <Tooltip label={`${game.items.transport.name} - $${game.items.transport.cost}`}>
+                <Card flex="1" h="40px" alignItems="center" justify="center">
+                  {game.items.transport.icon({
+                    boxSize: "26",
+                    color: "yellow.400",
+                  })}
+                </Card>
+              </Tooltip>
             </HStack>
           </VStack>
         </Box>
@@ -206,7 +206,7 @@ export const Profile = ({ close, ...props }: { close?: () => void }) => {
       </VStack>
     </VStack>
   );
-};
+});
 
 const ProfileButtonMobile = () => {
   const { account } = useDojoContext();

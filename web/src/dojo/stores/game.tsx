@@ -56,7 +56,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       for (let unsubscribe of get().handles) {
         unsubscribe();
       }
-      set({ id: null, game: null, handles: [] });
+      set({ id: null, game: null, gameInfos: null, handles: [] });
     },
     subscribe: async (gameId: string, playerId: string) => {
       const { wsClient, handles } = get();
@@ -74,7 +74,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
           },
           {
             next: ({ data }) => {
-              return onGameStorePacked({ set, data, configStore });
+              return onGameStorePacked({ set, data, configStore, gameInfos: get().gameInfos });
             },
             error: (error) => console.log({ error }),
             complete: () => console.log("complete"),
@@ -108,7 +108,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
       if (!gameStorePacked) return;
 
-      const game = new GameClass(configStore.getState(), gameStorePacked);
+      const game = new GameClass(configStore.getState(), gameInfos, gameStorePacked);
       set({ game, gameInfos });
     },
   }));
@@ -118,16 +118,18 @@ const onGameStorePacked = ({
   set,
   data,
   configStore,
+  gameInfos,
 }: {
   data: World__Subscription;
   configStore: StoreApi<ConfigStore>;
+  gameInfos: Game;
 }) => {
   if (!data?.entityUpdated?.models) return;
 
   let gameStorePacked = data?.entityUpdated?.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
   if (gameStorePacked) {
     set((state) => ({
-      game: new GameClass(configStore.getState(), gameStorePacked),
+      game: new GameClass(configStore.getState(), gameInfos, gameStorePacked),
     }));
   }
 };

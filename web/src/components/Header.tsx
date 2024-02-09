@@ -9,8 +9,8 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ProfileLink } from "./ProfileButton";
 import CashIndicator from "./player/CashIndicator";
-import DayIndicator from "./player/DayIndicator";
 import HealthIndicator from "./player/HealthIndicator";
+import WantedIndicator from "./player/WantedIndicator";
 
 interface HeaderProps {
   back?: boolean;
@@ -63,8 +63,8 @@ const Header = ({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <DayIndicator day={game.player.turn} />
-                {/* <WantedIndicator wanted={playerEntity.wanted} /> */}
+                {/* <DayIndicator day={game.player.turn} /> */}
+                <WantedIndicator wanted={game.wanted.getValueByTick(game.player.wanted)} />
               </HStack>
             </Flex>
           </HStack>

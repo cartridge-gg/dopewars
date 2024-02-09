@@ -1,34 +1,17 @@
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ItemConfigFull } from "@/dojo/stores/config";
-import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { Button, Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Hustler, Hustlers } from "./hustlers";
 import { Bag } from "./icons";
 
 export const Inventory = observer(({ ...props }: StyleProps) => {
-  const { gameId } = useRouterContext();
+  const { gameId, router } = useRouterContext();
   const { account } = useDojoContext();
   const { game, gameInfos } = useGameStore();
   const configStore = useConfigStore();
 
-  const { shop } = useSystems();
-
-  const onUpgrade = async (item: ItemConfigFull) => {
-    if(!game) return
-    // TODO: checks
-
-    // check max item level
-
-    // check if can buy at location
-
-    // check if can afford it
-    if (game.player!.cash < item.cost) return;
-
-    game.pushCall({ slot: item.slot_id, cost: 500 });
-
-  };
-
-  if(!game || !configStore) return null;
+  if (!game || !configStore) return null;
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
@@ -36,22 +19,31 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
         <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />
           <Text>
-            {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug).weight) / 100 : 0}
-            /{game.items.transport.stat / 100} LBS
+            {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug).weight) / 100 : 0}/
+            {game.items.transport.stat / 100} LBS
           </Text>
         </HStack>
       </HStack>
 
+      <Button
+        isDisabled={!game.isShopOpen}
+        onClick={() => {
+          router.push(`/${gameId}/pawnshop`);
+        }}
+      >
+        PAWNSHOP
+      </Button>
+
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
-            <PlayerItem item={game.items.attack} onClick={() => onUpgrade(game.items.attack)} />
+            <PlayerItem item={game.items.attack} />
             <VerticalDivider />
-            <PlayerItem item={game.items.defense} onClick={() => onUpgrade(game.items.defense)} />
+            <PlayerItem item={game.items.defense} />
             <VerticalDivider />
-            <PlayerItem item={game.items.speed} onClick={() => onUpgrade(game.items.speed)} />
+            <PlayerItem item={game.items.speed}  />
             <VerticalDivider />
-            <PlayerItem item={game.items.transport} onClick={() => onUpgrade(game.items.transport)} />
+            <PlayerItem item={game.items.transport}/>
           </HStack>
         </Card>
 
@@ -75,12 +67,12 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
   );
 });
 
-const PlayerItem = ({ item, ...props }: { item: ItemConfigFull, onClick: VoidFunction }) => {
+const PlayerItem = ({ item, ...props }: { item: ItemConfigFull}) => {
   if (!item) return null;
 
   const stat = item.statName === "INV" ? item.stat / 100 : item.stat;
   return (
-    <HStack gap="10px" cursor="pointer" {...props}>
+    <HStack gap="10px" {...props}>
       <Tooltip label={`${item.name} (+${stat} ${item.statName})`}>
         <HStack color="yellow.400">
           <>

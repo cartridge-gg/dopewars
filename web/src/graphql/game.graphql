@@ -5,13 +5,13 @@ query GameById($gameId: u32) {
         game_id
         game_mode
         max_turns
+        max_wanted_shopping
         avatar_id
+        game_over
       }
     }
   }
 }
-
-
 
 query GameStorePacked($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {

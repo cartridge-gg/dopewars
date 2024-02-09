@@ -12,15 +12,15 @@ export default function Redirector() {
   const configStore = useConfigStore();
 
   useEffect(() => {
-    if (game.player.status === PlayerStatus.Normal) {
+    if(!game) return
+
+    if (game.player.status === 0/*PlayerStatus.Normal*/) {
       router.push(`/${gameId}/${game.player.location.location}`);
-    } else if (game.player.status === PlayerStatus.AtPawnshop) {
-      router.push(`/${gameId}/pawnshop`);
-    } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
+    }  else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
       //
       router.push(`/${gameId}/decision`);
     }
-  }, [game, game?.player.status, game?.player.locationI, router, gameId]);
+  }, [game, game?.player.status, game?.player.location, router, gameId]);
 
   return (
     <Layout isSinglePanel>
