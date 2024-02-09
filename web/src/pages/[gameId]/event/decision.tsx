@@ -2,20 +2,17 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { DollarBag, Fist, Flipflop, Heart, Siren } from "@/components/icons";
-import CashIndicator from "@/components/player/CashIndicator";
-import HealthIndicator from "@/components/player/HealthIndicator";
-import { ConsequenceEventData, HighVolatilityData, displayMarketEvents } from "@/dojo/events";
-import { getShopItem } from "@/dojo/helpers";
-import { useDojoContext, usePlayerStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { PlayerEntity, ShopItem } from "@/dojo/queries/usePlayerEntity";
-import { Action, ItemTextEnum, Outcome, PlayerStatus } from "@/dojo/types";
+import { Heart } from "@/components/icons";
+import { GameClass } from "@/dojo/class/Game";
+import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { ShopItem } from "@/dojo/queries/usePlayerEntity";
+import { EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Encounter } from "@/generated/graphql";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { getSentence } from "@/responses";
-import { IsMobile, formatCash } from "@/utils/ui";
+import { IsMobile } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 
 type CombatLog = {
@@ -24,12 +21,12 @@ type CombatLog = {
   icon?: React.FC;
 };
 
-export default function Decision() {
+const Decision = observer(() => {
   const { router, gameId, healthLoss, demandPct } = useRouterContext();
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  const { game } = useGameStore();
+  const { decide, isPending } = useSystems();
 
-  const [status, setStatus] = useState<PlayerStatus>();
   const [prefixTitle, setPrefixTitle] = useState("");
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
@@ -47,58 +44,55 @@ export default function Decision() {
   const [sentence, setSentence] = useState("");
 
   const toaster = useToast();
-  const { decide, isPending } = useSystems();
 
   const combatsListRef = useRef(null);
   const isMobile = IsMobile();
 
   useEffect(() => {
-    if (playerEntity && !isPending) {
-      switch (PlayerStatus[playerEntity.status]) {
+    if (game && !isPending) {
+      switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
           setDemand(`They want ${demandPct}% of your $PAPER!`);
-          setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
+          //setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
           setDemand(`They want ${demandPct}% of your DRUGS!`);
-          setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
+          // setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
           break;
       }
-
-      setStatus(playerEntity.status);
     }
-  }, [playerEntity, isPending, demandPct]);
+  }, [game, game?.player.status, isPending, demandPct]);
 
   useEffect(() => {
-    if (status == PlayerStatus.BeingArrested) {
+    if (game?.player.status == PlayerStatus.BeingArrested) {
       playSound(Sounds.Police);
     }
-    if (status == PlayerStatus.BeingMugged) {
+    if (game?.player.status == PlayerStatus.BeingMugged) {
       playSound(Sounds.Gang);
     }
-  }, [status]);
+  }, [game, game?.player.status]);
 
-  useEffect(() => {
-    if (playerEntity && playerEntity.items) {
-      setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
-      setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
-    }
-  }, [playerEntity, playerEntity?.items]);
+  // useEffect(() => {
+  //   if (playerEntity && playerEntity.items) {
+  //     setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
+  //     setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
+  //   }
+  // }, [playerEntity, playerEntity?.items]);
 
-  useEffect(() => {
-    if (playerEntity && playerEntity.encounters && !isPending) {
-      if (status === PlayerStatus.BeingMugged) {
-        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Gang"));
-      }
-      if (status === PlayerStatus.BeingArrested) {
-        setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
-      }
-    }
-  }, [playerEntity, playerEntity?.encounters, status, isPending]);
+  // useEffect(() => {
+  //   if (playerEntity && playerEntity.encounters && !isPending) {
+  //     if (status === PlayerStatus.BeingMugged) {
+  //       setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Gang"));
+  //     }
+  //     if (status === PlayerStatus.BeingArrested) {
+  //       setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
+  //     }
+  //   }
+  // }, [playerEntity, playerEntity?.encounters, status, isPending]);
 
   useEffect(() => {
     if (!isPending) {
@@ -119,111 +113,109 @@ export default function Decision() {
     setCombatLogs((logs) => [...logs, log]);
   };
 
-  const onDecision = async (action: Action) => {
+  const onDecision = async (action: EncountersAction) => {
     try {
-      switch (action) {
-        case Action.Pay:
-          addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
-          setSentence(getSentence(playerEntity!.status, Action.Pay));
-          playSound(Sounds.Pay);
-          break;
-        case Action.Run:
-          addCombatLog({
-            text: "You split without a second thought",
-            color: "neon.400",
-            icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
-          });
-          setSentence(getSentence(playerEntity!.status, Action.Run));
-          playSound(Sounds.Run);
-          break;
-        case Action.Fight:
-          //addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
-          setSentence(getSentence(playerEntity!.status, Action.Fight));
-          switch (attackItem?.level) {
-            case 1:
-              playSound(Sounds.Knife);
-              break;
-            case 2:
-              playSound(Sounds.Magnum357);
-              break;
-            case 3:
-              playSound(Sounds.Uzi);
-              break;
-            default:
-              playSound(Sounds.Punch);
-              break;
-          }
-          break;
-      }
-
-      // setIsPaying(false);
-      // setIsRunning(false);
-      // setIsFigthing(false);
-      // return;
-
-      // save player status
-      const playerStatus = playerEntity?.status;
-
       const { event, events } = await decide(gameId, action);
-
-      if (events) {
-        displayMarketEvents(events as HighVolatilityData[], toaster);
-      }
-
-      const consequenceEvent = event as ConsequenceEventData;
-
-      switch (consequenceEvent.outcome) {
-        case Outcome.Died:
-          setIsRedirecting(true);
-          return router.replace(`/${gameId}/end`);
-
-        case Outcome.Paid:
-        case Outcome.Escaped:
-          setIsRedirecting(true);
-          consequenceEvent.dmgDealt > 0 &&
-            addCombatLog({
-              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
-              color: "neon.400",
-              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : undefined,
-            });
-          return router.replace(
-            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
-          );
-
-        case Outcome.Victorious:
-          setIsRedirecting(true);
-          consequenceEvent.dmgDealt > 0 &&
-            addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
-          return router.replace(
-            `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${
-              encounter!.payout
-            }`,
-          );
-
-        case Outcome.Captured:
-          playSound(Sounds.Ooo);
-          consequenceEvent.dmgDealt > 0 &&
-            addCombatLog({
-              text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
-              color: "neon.400",
-              icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : Fist,
-            });
-          addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red", icon: Heart });
-          break;
-      }
+      router.replace(`/${gameId}/`)
     } catch (e) {
       console.log(e);
     }
+
+    //try {
+    //   switch (action) {
+    //     case Action.Pay:
+    //       addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
+    //       setSentence(getSentence(playerEntity!.status, Action.Pay));
+    //       playSound(Sounds.Pay);
+    //       break;
+    //     case Action.Run:
+    //       addCombatLog({
+    //         text: "You split without a second thought",
+    //         color: "neon.400",
+    //         icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
+    //       });
+    //       setSentence(getSentence(playerEntity!.status, Action.Run));
+    //       playSound(Sounds.Run);
+    //       break;
+    //     case Action.Fight:
+    //       //addCombatLog({ text: "Bouyakaaa", color: "neon.400" });
+    //       setSentence(getSentence(playerEntity!.status, Action.Fight));
+    //       switch (attackItem?.level) {
+    //         case 1:
+    //           playSound(Sounds.Knife);
+    //           break;
+    //         case 2:
+    //           playSound(Sounds.Magnum357);
+    //           break;
+    //         case 3:
+    //           playSound(Sounds.Uzi);
+    //           break;
+    //         default:
+    //           playSound(Sounds.Punch);
+    //           break;
+    //       }
+    //       break;
+    //   }
+    //   // setIsPaying(false);
+    //   // setIsRunning(false);
+    //   // setIsFigthing(false);
+    //   // return;
+    //   // save player status
+    //   const playerStatus = playerEntity?.status;
+    // const { event, events } = await decide(gameId, action);
+    //   if (events) {
+    //     displayMarketEvents(events as HighVolatilityData[], toaster);
+    //   }
+    //   const consequenceEvent = event as ConsequenceEventData;
+    //   switch (consequenceEvent.outcome) {
+    //     case Outcome.Died:
+    //       setIsRedirecting(true);
+    //       return router.replace(`/${gameId}/end`);
+    //     case Outcome.Paid:
+    //     case Outcome.Escaped:
+    //       setIsRedirecting(true);
+    //       consequenceEvent.dmgDealt > 0 &&
+    //         addCombatLog({
+    //           text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+    //           color: "neon.400",
+    //           icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : undefined,
+    //         });
+    //       return router.replace(
+    //         `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}`,
+    //       );
+    //     case Outcome.Victorious:
+    //       setIsRedirecting(true);
+    //       consequenceEvent.dmgDealt > 0 &&
+    //         addCombatLog({ text: `You dealt ${consequenceEvent.dmgDealt}HP!`, color: "neon.400" });
+    //       return router.replace(
+    //         `/${gameId}/event/consequence?outcome=${consequenceEvent.outcome}&status=${playerStatus}&payout=${
+    //           encounter!.payout
+    //         }`,
+    //       );
+    //     case Outcome.Captured:
+    //       playSound(Sounds.Ooo);
+    //       consequenceEvent.dmgDealt > 0 &&
+    //         addCombatLog({
+    //           text: `You dealt ${consequenceEvent.dmgDealt}HP!`,
+    //           color: "neon.400",
+    //           icon: attackItem ? getShopItem(attackItem.id, attackItem.level).icon : Fist,
+    //         });
+    //       addCombatLog({ text: `You lost ${consequenceEvent.healthLoss}HP!`, color: "red", icon: Heart });
+    //       break;
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
-  if (!playerEntity || !router.isReady || isRedirecting) {
+  if (!game || !router.isReady || isRedirecting) {
     return <></>;
   }
 
-  // if playerEntity is too slow to update, PlayerStatus is still Normal
-  if ((playerEntity.status == PlayerStatus.Normal || !encounter) && !isPending) {
-    return <></>;
-  }
+  // // if playerEntity is too slow to update, PlayerStatus is still Normal
+  // if ((playerEntity.status == PlayerStatus.Normal || !encounter) && !isPending) {
+  //   return <></>;
+  // }
 
   return (
     <Layout isSinglePanel>
@@ -242,11 +234,11 @@ export default function Decision() {
           demand={demand}
           sentence={sentence}
           encounter={encounter!}
-          playerEntity={playerEntity}
+          game={game}
           imageSrc={`/images/events/${
-            status == PlayerStatus.BeingMugged
-              ? `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif`
-              : `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+            game.player.status == PlayerStatus.BeingMugged
+              ? `muggers${game.encounters!.gangLevel < 3 ? game.encounters!.gangLevel + 1 : 3}.gif`
+              : `cops${game.encounters!.copsLevel < 3 ? game.encounters!.copsLevel + 1 : 3}.gif`
           }`}
           flex={[0, 1]}
           mb={0}
@@ -302,7 +294,7 @@ export default function Decision() {
               isLoading={isFigthing}
               onClick={() => {
                 setIsFigthing(true);
-                onDecision(Action.Fight);
+                onDecision(EncountersAction.Fight);
               }}
             >
               Fight
@@ -315,7 +307,7 @@ export default function Decision() {
               isLoading={isRunning}
               onClick={() => {
                 setIsRunning(true);
-                onDecision(Action.Run);
+                onDecision(EncountersAction.Run);
               }}
             >
               Run
@@ -327,7 +319,7 @@ export default function Decision() {
               isLoading={isPaying}
               onClick={() => {
                 setIsPaying(true);
-                onDecision(Action.Pay);
+                onDecision(EncountersAction.Pay);
               }}
             >
               PAY
@@ -337,7 +329,8 @@ export default function Decision() {
       </HStack>
     </Layout>
   );
-}
+});
+export default Decision;
 
 const Encounter = ({
   prefixTitle,
@@ -346,7 +339,7 @@ const Encounter = ({
   imageSrc,
   sentence,
   encounter,
-  playerEntity,
+  game,
   ...props
 }: {
   prefixTitle?: string;
@@ -354,7 +347,7 @@ const Encounter = ({
   demand?: string;
   imageSrc: string;
   sentence: string;
-  playerEntity: PlayerEntity;
+  game: GameClass;
   encounter: Encounter;
 } & StyleProps) => {
   return (
@@ -399,24 +392,22 @@ const Encounter = ({
           <Card alignItems="center" w={["full", "auto"]} justify="center" mt={["20px", "40px"]}>
             <VStack w="full" gap="0">
               <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-                <HStack>
-                  <Siren /> <Text> LVL {encounter.level}</Text>
-                </HStack>
+                <HStack>{/* <Siren /> <Text> LVL {encounter.level}</Text> */}</HStack>
                 {IsMobile() ? (
                   <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                <CashIndicator cash={formatCash(encounter.payout)} />
+                {/* <CashIndicator cash={formatCash(encounter.payout)} /> */}
                 {IsMobile() ? (
                   <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                <HealthIndicator
+                {/* <HealthIndicator
                   health={encounter.health}
                   maxHealth={getEncounterNPCMaxHealth(encounter.level, playerEntity.turn)}
-                />
+                /> */}
               </HStack>
               {!IsMobile() && (
                 <Box w="full" px="10px">

@@ -9,6 +9,7 @@ use rollyourown::packing::{
     wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedDefaultImpl},
     markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedDefaultImpl},
     items_packed::{ItemsPacked, ItemsPackedImpl, ItemsPackedDefaultImpl},
+    encounters_packed::{EncountersPacked, EncountersPackedImpl, EncountersPackedDefaultImpl},
     player::{Player, PlayerImpl, PlayerDefaultImpl, PlayerPackerImpl, PlayerUnpackerImpl},
 };
 
@@ -26,6 +27,7 @@ struct GameStore {
     items: ItemsPacked,
     drugs: DrugsPacked,
     wanted: WantedPacked,
+    encounters: EncountersPacked,
     player: Player,
 }
 
@@ -41,6 +43,7 @@ impl GameStoreDefaultImpl of Default<GameStore> {
             items: ItemsPackedDefaultImpl::default(),
             drugs: DrugsPackedDefaultImpl::default(),
             wanted: WantedPackedDefaultImpl::default(),
+            encounters: EncountersPackedDefaultImpl::default(),
             player: PlayerDefaultImpl::default(),
         }
     }
@@ -64,6 +67,7 @@ impl GameStoreImpl of GameStoreTrait {
             items: ItemsPackedImpl::new(world, game_id, player_id),
             drugs: DrugsPackedImpl::new(world, game_id, player_id),
             wanted: WantedPackedImpl::new(world, game_id, player_id),
+            encounters: EncountersPackedImpl::new(world, game_id, player_id),
             player: PlayerImpl::new(world, game_id, player_id),
         }
     }
@@ -77,6 +81,7 @@ impl GameStoreImpl of GameStoreTrait {
             items: ItemsPackedImpl::new(world, game_id, player_id),
             drugs: DrugsPackedImpl::new(world, game_id, player_id),
             wanted: WantedPackedImpl::new(world, game_id, player_id),
+            encounters: EncountersPackedImpl::new(world, game_id, player_id),
             player: PlayerImpl::new(world, game_id, player_id),
         }
     }
@@ -109,6 +114,9 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
                         },
                         GameStoreLayout::Wanted => {
                             bits.replace::<felt252>(item.idx(), item.bits(), self.wanted.packed);
+                        },
+                        GameStoreLayout::Encounters => {
+                            bits.replace::<felt252>(item.idx(), item.bits(), self.encounters.packed);
                         },
                         GameStoreLayout::Player => {
                             let player_packed: felt252 = self.player.pack();
@@ -153,6 +161,9 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                         },
                         GameStoreLayout::Wanted => {
                             game_store.wanted = WantedPacked { world, game_id, player_id, packed };
+                        },
+                          GameStoreLayout::Encounters => {
+                            game_store.encounters = EncountersPacked { world, game_id, player_id, packed };
                         },
                         GameStoreLayout::Player => {
                             // unpack packed into Player

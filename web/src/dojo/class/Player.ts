@@ -47,6 +47,8 @@ export class PlayerClass extends GamePropertyClass {
 
     }
 
+  
+
     get cash() {
         if (!this.game?.pending || this.game?.pending?.length === 0) return this._cash
         const overrideCash = this.game.pending

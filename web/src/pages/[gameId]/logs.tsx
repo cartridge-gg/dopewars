@@ -7,7 +7,6 @@ import Button from "@/components/Button";
 import { Profile } from "@/components/ProfileButton";
 import { DollarBag, Event } from "@/components/icons";
 import {
-  AdverseEventData,
   BoughtEventData,
   BoughtItemEventData,
   ConsequenceEventData,
@@ -16,6 +15,7 @@ import {
   JoinedEventData,
   ParseEventResult,
   SoldEventData,
+  TravelEncounterData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
@@ -179,8 +179,8 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
               return renderSold(configStore, i as SoldEventData, key);
               break;
 
-            case WorldEvents.AdverseEvent:
-              return renderAdverse(i as AdverseEventData, log, key);
+            case WorldEvents.TravelEncounter:
+              return renderTravelEncounter(i as TravelEncounterData, log, key);
               break;
 
             case WorldEvents.PlayerJoined:
@@ -278,7 +278,7 @@ function renderSold(configStore: ConfigStore, log: SoldEventData, key: string) {
   );
 }
 
-function renderAdverse(log: AdverseEventData, dayLog: LogByDay, key: string) {
+function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
   const status = Number(log.playerStatus);
   const encounter = status === 1 ? "Gang" : "Cops";
 

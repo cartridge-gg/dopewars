@@ -4,6 +4,7 @@ import { CairoCustomEnum } from "starknet";
 import { ConfigStore } from "../stores/config";
 import { ShopAction, TradeAction } from "../types";
 import { DrugsClass } from "./Drugs";
+import { EncountersClass } from "./Encounters";
 import { ItemsClass } from "./Items";
 import { MarketsClass } from "./Market";
 import { PlayerClass } from "./Player";
@@ -53,11 +54,12 @@ export class GameClass {
     items: ItemsClass;
     drugs: DrugsClass;
     wanted: WantedClass;
+    encounters: EncountersClass;
     player: PlayerClass;
 
     pending: Array<PendingCallWithCost>;
 
-    constructor(configStore: ConfigStore,gameInfos: Game, gameStorePacked: GameStorePacked) {
+    constructor(configStore: ConfigStore, gameInfos: Game, gameStorePacked: GameStorePacked) {
         this.gameInfos = gameInfos;
         this.packed = gameStorePacked.packed;
         //
@@ -77,6 +79,10 @@ export class GameClass {
         const wantedPacked = Bits.extract(this.packed, wanted.idx, wanted.bits);
         this.wanted = new WantedClass(configStore, this, wantedPacked)
 
+        const encounters = configStore.getGameStoreLayoutItem("Encounters")
+        const encountersPacked = Bits.extract(this.packed, encounters.idx, encounters.bits);
+        this.encounters = new EncountersClass(configStore, this, encountersPacked)
+
         const player = configStore.getGameStoreLayoutItem("Player")
         const playerPacked = Bits.extract(this.packed, player.idx, player.bits)
         this.player = new PlayerClass(configStore, this, playerPacked);
@@ -89,9 +95,17 @@ export class GameClass {
             isShopOpen: computed
         })
 
+
+       
+
         console.log("Game", this)
     }
 
+    //
+    //
+    //
+
+   
 
     clearPendingCalls() {
         this.pending = []

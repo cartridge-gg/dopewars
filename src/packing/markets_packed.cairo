@@ -2,21 +2,21 @@ use core::traits::TryInto;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::models::game::{Game, GameMode};
-
-use rollyourown::utils::settings::{MarketSettings, MarketSettingsImpl};
-use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
-use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
-
-use rollyourown::utils::math::{MathTrait, MathImplU8};
-use rollyourown::utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl};
-
-use rollyourown::config::{
-    drugs::{Drugs, DrugsEnumerableImpl, DrugConfig, DrugConfigImpl},
-    locations::{Locations, LocationsEnumerableImpl}
+use rollyourown::{
+    models::game::{Game, GameMode,}, systems::game::game::HighVolatility,
+    utils::{
+        settings::{MarketSettings, MarketSettingsImpl},
+        events::{RawEventEmitterTrait, RawEventEmitterImpl},
+        random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
+        bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
+    },
+    config::{
+        drugs::{Drugs, DrugsEnumerableImpl, DrugConfig, DrugConfigImpl},
+        locations::{Locations, LocationsEnumerableImpl},
+    },
+    packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl},
 };
 
-use rollyourown::packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl};
 
 #[derive(Copy, Drop)]
 struct MarketsPacked {
@@ -145,20 +145,22 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                 self.set_tick(*location_id, *drug_id, new_tick);
 
                                 if variation == 12_u32 {
-                                    // emit raw event
-                                    let location_id_u8: u8 = (*location_id).into();
-                                    let drug_id_u8: u8 = (*drug_id).into();
-
+                                    // emit HighVolatility
                                     self
                                         .world
                                         .emit_raw(
-                                            array![selector!("HighVolatility")],
                                             array![
-                                                self.game_id.into(),
-                                                location_id_u8.into(),
-                                                drug_id_u8.into(),
-                                                direction.into()
-                                            ]
+                                                selector!("HighVolatility"),
+                                                Into::<u32, felt252>::into(self.game_id),
+                                                Into::<
+                                                    ContractAddress, felt252
+                                                >::into(self.player_id),
+                                            ],
+                                            array![
+                                                Into::<Locations, u8>::into(*location_id).into(),
+                                                Into::<Drugs, u8>::into(*drug_id).into(),
+                                                Into::<bool, felt252>::into(direction),
+                                            ],
                                         );
                                 }
                             },

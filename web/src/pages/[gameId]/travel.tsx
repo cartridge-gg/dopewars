@@ -7,6 +7,7 @@ import BorderImage from "@/components/icons/BorderImage";
 import { Map as MapSvg } from "@/components/map";
 import WantedIndicator from "@/components/player/WantedIndicator";
 import { HighVolatilityData, displayMarketEvents } from "@/dojo/events";
+import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
@@ -125,17 +126,14 @@ export default function Travel() {
         //   return router.replace(`/${gameId}/end`);
         // }
 
-        // if (event) {
-        //   if (event.eventType === WorldEvents.AdverseEvent) {
-        //     const advEvent = event as AdverseEventData;
-        //     return router.push(
-        //       `/${gameId}/event/decision?healthLoss=${advEvent.healthLoss}&demandPct=${advEvent.demandPct}`,
-        //     );
-        //   }
-        //   if (event.eventType === WorldEvents.AtPawnshop) {
-        //     return router.push(`/${gameId}/pawnshop`);
-        //   }
-        // }
+        if (event) {
+          if (event.eventType === WorldEvents.TravelEncounter) {
+            const advEvent = event as TravelEncounterData;
+            return router.push(
+              `/${gameId}/event/decision?healthLoss=${advEvent.healthLoss}&demandPct=${advEvent.demandPct}`,
+            );
+          }
+        }
 
         if (events) {
           displayMarketEvents(events as HighVolatilityData[], toaster);

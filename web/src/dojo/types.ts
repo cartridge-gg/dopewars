@@ -35,13 +35,12 @@ export enum ItemTextEnum {
 }
 
 export enum PlayerStatus {
-  Normal = "Normal",
-  BeingMugged = "BeingMugged",
-  BeingArrested = "BeingArrested",
-  AtPawnshop = "AtPawnshop"
+  Normal,
+  BeingMugged,
+  BeingArrested,
 }
 
-export enum Action {
+export enum EncountersAction {
   Run,
   Pay,
   Fight,

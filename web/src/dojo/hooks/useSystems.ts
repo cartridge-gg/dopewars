@@ -3,45 +3,16 @@ import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
 import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
 import { PendingCallWithCost, pendingCallToCairoEnum } from "../class/Game";
-import { AdverseEventData, BaseEventData, ConsequenceEventData, GameCreatedEventData, HighVolatilityData, parseAllEvents } from "../events";
+import { BaseEventData, GameCreatedEventData, HighVolatilityData, TravelEncounterData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
-import { Action, Drug, GameMode, Location, ShopAction, TradeAction } from "../types";
+import { EncountersAction, GameMode, Location } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
-  createGame: (
-    gameMode: number,
-    playerName: string,
-    avatarId: number,
-  ) => Promise<SystemExecuteResult>;
+  createGame: (gameMode: number, playerName: string, avatarId: number,) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
-  // join: (gameId: string) => Promise<SystemExecuteResult>;
-  trade: (gameId: string, trades: Array<TradeAction>) => Promise<SystemExecuteResult>;
-  shop: (gameId: string, actions: Array<ShopAction>) => Promise<SystemExecuteResult>;
-  buy: (
-    gameId: string,
-    locationId: Location,
-    drugId: Drug,
-    quantity: number,
-  ) => Promise<SystemExecuteResult>;
-  sell: (
-    gameId: string,
-    locationId: Location,
-    drugId: Drug,
-    quantity: number,
-  ) => Promise<SystemExecuteResult>;
-  // setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
-  decide: (
-    gameId: string,
-    action: Action,
-  ) => Promise<SystemExecuteResult>;
-  buyItem: (
-    gameId: string, itemId: number
-  ) => Promise<SystemExecuteResult>;
-  skipShop: (
-    gameId: string,
-  ) => Promise<SystemExecuteResult>;
+  decide: (gameId: string, action: EncountersAction,) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
 
@@ -76,14 +47,13 @@ const tryBetterErrorMsg = (msg: string): string => {
 
 }
 
-
 export const useSystems = (): SystemsInterface => {
   const {
     account,
     dojoProvider
   } = useDojoContext();
 
-  const { toast } = useToast();
+  const { toast, clear: clearToasts } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -106,8 +76,20 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
       try {
         tx = await dojoProvider.execute(account!, contract, system, callData);
+        toast({
+          message: `tx sent ${tx.transaction_hash}`,
+          duration: 5_000,
+          isError: false
+        })
+
+        //
+        // TODO : remove later
+        //
+        await sleep(1_500);
+        clearToasts()
+
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 100,
+          retryInterval: 200,
         });
       } catch (e: any) {
         setIsPending(false)
@@ -147,8 +129,6 @@ export const useSystems = (): SystemsInterface => {
       const events = getEvents(receipt);
       const parsedEvents = parseAllEvents(receipt);
 
-      //torii too slow indexing...
-      await sleep(1_000);
 
       setIsPending(false)
 
@@ -189,7 +169,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameId: string, location: Location, calls: Array<PendingCallWithCost>) => {
 
       const callsEnum = calls.map(pendingCallToCairoEnum)
-    
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
@@ -199,15 +179,15 @@ export const useSystems = (): SystemsInterface => {
       const isGameOver = parsedEvents
         .find((e) => e.eventType === WorldEvents.GameOver)
 
-      const adverseEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.AdverseEvent,
-      ) as AdverseEventData
+      const travelEncounter = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.TravelEncounter,
+      ) as TravelEncounterData
 
 
       return {
         hash,
         isGameOver,
-        event: adverseEvent,
+        event: travelEncounter,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.HighVolatility)
           .map((e) => e as HighVolatilityData),
@@ -215,8 +195,6 @@ export const useSystems = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
-
- 
 
 
   const endGame = useCallback(
@@ -237,113 +215,42 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
-
-
-
-//
-//
-//
-
-
-const trade = useCallback(
-  async (gameId: string, trades: Array<TradeAction>) => {
-
-    const { hash, events, parsedEvents } = await executeAndReceipt(
-      "rollyourown::systems::game::game",
-      "trade",
-      [gameId, trades],
-    );
-
-    return {
-      hash,
-      events: []
-    };
-  },
-  [executeAndReceipt],
-);
-
-const shop = useCallback(
-  async (gameId: string, actions: Array<ShopAction>) => {
-
-    const { hash, events, parsedEvents } = await executeAndReceipt(
-      "rollyourown::systems::game::game",
-      "shop",
-      [gameId, actions],
-    );
-
-    return {
-      hash,
-      events: []
-    }
-  },
-  [executeAndReceipt],
-);
-
-
   const decide = useCallback(
-    async (gameId: string, action: Action) => {
+    async (gameId: string, action: EncountersAction) => {
+
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::decide::decide",
+        "rollyourown::systems::game::game",
         "decide",
         [gameId, action],
       );
 
-      const isGameOver = parsedEvents
-        .find((e) => e.eventType === WorldEvents.GameOver)
+      //     const isGameOver = parsedEvents
+      //       .find((e) => e.eventType === WorldEvents.GameOver)
 
-      const consequenceEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.Consequence,
-      ) as ConsequenceEventData
+      //     const consequenceEvent = parsedEvents.find(
+      //       (e) => e.eventType === WorldEvents.Consequence,
+      //     ) as ConsequenceEventData
 
       return {
         hash,
-        isGameOver,
-        event: parsedEvents.find(
-          (e) => e.eventType === WorldEvents.Consequence,
-        ) as ConsequenceEventData,
+        // isGameOver,
+        // event: parsedEvents.find(
+        //   (e) => e.eventType === WorldEvents.Consequence,
+        // ) as ConsequenceEventData,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.HighVolatility)
           .map((e) => e as HighVolatilityData),
       };
+
+
     },
     [executeAndReceipt],
   );
 
-  const buyItem = useCallback(
-    async (gameId: string, itemId: number) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "buy_item",
-        [gameId, itemId],
-      );
 
-      return {
-        hash,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.HighVolatility)
-          .map((e) => e as HighVolatilityData),
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const skipShop = useCallback(
-    async (gameId: string) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "skip",
-        [gameId],
-      );
-
-      return {
-        hash,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.HighVolatility)
-          .map((e) => e as HighVolatilityData),
-      };
-    },
-    [executeAndReceipt],
-  );
+  //
+  //
+  //
 
 
   const failingTx = useCallback(
@@ -362,38 +269,16 @@ const shop = useCallback(
   );
 
 
-  // const setName = useCallback(
-  //   async (gameId: string, playerName: string) => {
-  //     const { hash,  events, parsedEvents } = await executeAndReceipt(
-  //       "lobby",
-  //       "set_name",
-  //       [gameId, shortString.encodeShortString(playerName)],
-  //     );
-
-  //     return {
-  //       hash,
-  //     };
-  //   },
-  //   [executeAndReceipt],
-  // );
 
 
   return {
     createGame,
     travel,
-    trade,
     endGame,
-    shop,
-    // buy,
-    // sell,
-    //setName,
     decide,
-    buyItem,
-    skipShop,
-
-    // devtool
+    //
     failingTx,
-
+    //
     error,
     isPending,
   };

@@ -31,33 +31,6 @@ struct Trade {
 //
 //
 
-fn execute_trades(ref game_store: GameStore, ref trades: Span<Trade>) {
-    // check if can trade 
-    assert(game_store.player.can_trade(), 'player cannot trade');
-
-    let mut trades_clone = trades.clone();
-
-    loop {
-        match trades.pop_front() {
-            Option::Some(trade) => { execute_trade(ref game_store, *trade); },
-            Option::None => { break; }
-        };
-    };
-
-    // update prices using trades_clone
-    loop {
-        match trades_clone.pop_front() {
-            Option::Some(trade) => { execute_price_impact(ref game_store, *trade); },
-            Option::None => { break; }
-        };
-    };
-}
-
-
-//
-//
-//
-
 fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
     let tick = game_store.markets.get_tick(game_store.player.location, trade.drug);
 

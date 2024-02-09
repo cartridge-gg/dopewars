@@ -18,6 +18,7 @@ import {
   SimpleGrid,
   StyleProps,
   Text,
+  Tooltip,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -143,17 +144,13 @@ export default function Location() {
                 <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
                   <HStack justifyContent="space-between">
                     <Text>{formatCash(drug.price)}</Text>
-                    {/* <HStack>
-                      <Cart mb="4px" />
-                      <Text marginInlineStart="0 !important">{formatQuantity(drug.marketPool.quantity)}</Text>
-                    </HStack> */}
                   </HStack>
                   <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
                 </CardFooter>
               </Card>
             );
           })}
-
+        <Tooltip label={game.isShopOpen ? "Welcome Ser" : "Closed for gangstas"}>
           <Card
             h={["auto", "180px"]}
             position="relative"
@@ -177,6 +174,8 @@ export default function Location() {
               <Image src="/images/pawnshop.png" width="100px" height="100px" />
             </CardBody>
           </Card>
+          </Tooltip>
+
         </SimpleGrid>
       </VStack>
     </Layout>

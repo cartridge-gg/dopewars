@@ -92,7 +92,7 @@ export const MonkeyIcon = (props: IconProps) => {
       <path d="M19.5 24V19.5H18V18H16.5V19.5H18V21H16.5V24H19.5Z" fill="#3D4543" />
       <path d="M10.5 24V18H9V24H10.5Z" fill="#3D4543" />
       <path d="M9 24H7.5V18H9V24Z" fill="#343434" />
-      <g
+      {/* <g
         style={{
           mixBlendMode: "color",
         }}
@@ -101,7 +101,7 @@ export const MonkeyIcon = (props: IconProps) => {
           d="M22.5 24H3V21H4.5V19.5H7.5V18H12V15H10.5V13.5H9V12H7.5V9H9V7.5H10.5V6H12V4.5H10.5V3H13.5V4.5H15V6H16.5V7.5H18V12H19.5V15H18V16.5H16.5V18H18V19.5H21V21H22.5V24Z"
           fill="#0A8F4F"
         />
-      </g>
+      </g> */}
     </Icon>
   );
 };

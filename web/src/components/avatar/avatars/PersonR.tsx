@@ -38,7 +38,7 @@ export const PersonR = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M38.3333 45V35H43.3333V45H38.3333Z" fill="#0FD976" />
           <path
             fillRule="evenodd"
-            clip-rule="evenodd"
+            clipRule="evenodd"
             d="M13.3333 5H48.3333V25H13.3333V5ZM43.3247 10.0075H38.3361V15.005H33.3275V10.0075H28.339V15.005H23.3304V10.0075H18.3418V19.9925H43.3247V10.0075Z"
             fill="#172217"
           />
@@ -116,7 +116,7 @@ export const PersonR = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M38.3333 45V35H43.3333V45H38.3333Z" fill="#FDE092" />
           <path
             fillRule="evenodd"
-            clip-rule="evenodd"
+            clipRule="evenodd"
             d="M13.3333 5H48.3333V25H13.3333V5ZM43.3247 10.0075H38.3361V15.005H33.3275V10.0075H28.339V15.005H23.3304V10.0075H18.3418V19.9925H43.3247V10.0075Z"
             fill="#172217"
           />

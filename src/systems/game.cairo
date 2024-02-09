@@ -10,13 +10,19 @@ enum Actions {
     Shop: shopping::Action,
 }
 
+#[derive(Copy, Drop, Serde, PartialEq)]
+enum EncounterActions {
+    Run,
+    Pay,
+    Fight,
+}
+
 #[starknet::interface]
 trait IGame<T> {
     fn create_game(self: @T, game_mode: GameMode, avatar_id: u8);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
-    fn trade(self: @T, game_id: u32, trades: Span<trading::Trade>);
-    fn shop(self: @T, game_id: u32, actions: Span<shopping::Action>);
+    fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
 
 #[dojo::contract]
@@ -28,9 +34,9 @@ mod game {
         models::{game_store_packed::GameStorePacked, game::{Game}},
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
-            player::{Player, PlayerImpl}
+            encounters_packed::{Encounters}, player::{Player, PlayerImpl},
         },
-        systems::{trading, shopping, game_loop}, utils::random::{Random, RandomImpl},
+        systems::{trading, shopping, traveling, game_loop}, utils::random::{Random, RandomImpl},
     };
 
 
@@ -40,7 +46,9 @@ mod game {
         GameCreated: GameCreated,
         Traveled: Traveled,
         HighVolatility: HighVolatility,
+        TravelEncounter: TravelEncounter,
     }
+
 
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
@@ -60,13 +68,26 @@ mod game {
         to_location: Locations,
     }
 
-    #[derive(Drop, starknet::Event)]
+    #[derive(Drop, Serde, starknet::Event)]
     struct HighVolatility {
         #[key]
         game_id: u32,
+        #[key]
+        player_id: ContractAddress,
         location_id: Locations,
         drug_id: Drugs,
         increase: bool,
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    struct TravelEncounter {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        encounter_id: Encounters,
+        health_loss: u8,
+        demand_pct: u8,
     }
 
     #[abi(embed_v0)]
@@ -84,7 +105,7 @@ mod game {
                 game_id,
                 player_id,
                 game_mode,
-                max_turns: 7,//game_config.max_turns
+                max_turns: 7, //game_config.max_turns
                 max_wanted_shopping: game_config.max_wanted_shopping,
                 avatar_id,
                 game_over: false
@@ -116,7 +137,7 @@ mod game {
             super::execute_actions(ref game_store, ref actions);
 
             //on_game_end
-            game_loop::on_game_end(self.world(), ref game_store);
+            game_loop::on_game_end(ref game_store);
 
             // save 
             let game_store_packed = game_store.pack();
@@ -133,47 +154,48 @@ mod game {
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
 
-            // execute actions (trades & shop)
-            let mut actions = actions;
-            super::execute_actions(ref game_store, ref actions);
-
             // check if can travel
             assert(game_store.player.can_continue(), 'player cannot travel');
             assert(next_location != Locations::Home, 'cannot travel to Home');
             assert(game_store.player.location != next_location, 'already at location');
+
+            // execute actions (trades & shop)
+            let mut actions = actions;
+            super::execute_actions(ref game_store, ref actions);
 
             let mut randomizer = RandomImpl::new(self.world());
 
             // save next_location
             game_store.player.next_location = next_location;
 
-            //on_turn_end
-            game_loop::on_turn_end(self.world(), ref randomizer, ref game_store);
+            // traveling
+            let has_encounter = game_loop::on_travel(ref game_store, ref randomizer);
+
+            if !has_encounter {
+                // on_turn_end & save
+                game_loop::on_turn_end(ref game_store, ref randomizer,);
+            } else {
+                // save 
+                let game_store_packed = game_store.pack();
+                set!(self.world(), (game_store_packed));
+            }
         }
 
-
-        // TODO: move trade execution before travel wen possible
-        fn trade(self: @ContractState, game_id: u32, trades: Span<trading::Trade>) {
-            let mut trades = trades;
+        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
             let player_id = get_caller_address();
+
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
 
-            trading::execute_trades(ref game_store, ref trades);
+            // check player status
+            assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let game_store_packed = game_store.pack();
-            set!(self.world(), (game_store_packed));
-        }
+            let mut randomizer = RandomImpl::new(self.world());
 
-        // TODO: upgrade_item execution before travel wen possible
-        fn shop(self: @ContractState, game_id: u32, actions: Span<shopping::Action>) {
-            let mut actions = actions;
-            let player_id = get_caller_address();
-            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+            // resolve decision
+            traveling::decide(ref game_store, ref randomizer, action);
 
-            shopping::execute_actions(ref game_store, ref actions);
-
-            let game_store_packed = game_store.pack();
-            set!(self.world(), (game_store_packed));
+            // on_turn_end & save
+            game_loop::on_turn_end(ref game_store, ref randomizer,);
         }
     }
 }

@@ -21,7 +21,6 @@ const PawnShop = observer(() => {
   const [selectedShopItem, setSelectedShopItem] = useState<ItemConfigFull | undefined>(undefined);
 
   const selectItem = (shopItem: ItemConfigFull) => {
-    // do checks
     if (selectedShopItem === shopItem) {
       setSelectedShopItem(undefined);
     } else {
@@ -45,7 +44,7 @@ const PawnShop = observer(() => {
       message: `${selectedShopItem.name} equiped!`,
       icon: selectedShopItem.icon,
     });
-    onBack();
+    // onBack();
   };
 
   if (!game) {
@@ -76,7 +75,6 @@ const PawnShop = observer(() => {
       }
     >
       <VStack w="full" pt={["0px", "20px"]} gap="20px" margin="auto">
-        {/* <Inventory />*/}
 
         <VStack w="full" alignItems="flex-start" mt="10px">
           <Text textStyle="subheading" fontSize="10px" color="neon.500">

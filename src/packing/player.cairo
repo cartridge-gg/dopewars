@@ -14,18 +14,16 @@ use rollyourown::{
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum PlayerStatus {
     Normal,
-    BeingMugged,
     BeingArrested,
-    AtPawnshop,
+    BeingMugged,
 }
 
 impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
     fn into(self: PlayerStatus) -> felt252 {
         match self {
             PlayerStatus::Normal => 'Normal',
-            PlayerStatus::BeingMugged => 'BeingMugged',
             PlayerStatus::BeingArrested => 'BeingArrested',
-            PlayerStatus::AtPawnshop => 'AtPawnshop',
+            PlayerStatus::BeingMugged => 'BeingMugged',
         }
     }
 }
@@ -34,9 +32,8 @@ impl PlayerStatusIntoU8 of Into<PlayerStatus, u8> {
     fn into(self: PlayerStatus) -> u8 {
         match self {
             PlayerStatus::Normal => 0,
-            PlayerStatus::BeingMugged => 1,
-            PlayerStatus::BeingArrested => 2,
-            PlayerStatus::AtPawnshop => 3,
+            PlayerStatus::BeingArrested => 1,
+            PlayerStatus::BeingMugged => 2,
         }
     }
 }
@@ -46,9 +43,8 @@ impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
         let self252: felt252 = self.into();
         match self252 {
             0 => PlayerStatus::Normal,
-            1 => PlayerStatus::BeingMugged,
-            2 => PlayerStatus::BeingArrested,
-            3 => PlayerStatus::AtPawnshop,
+            1 => PlayerStatus::BeingArrested,
+            2 => PlayerStatus::BeingMugged,
             _ => PlayerStatus::Normal,
         }
     }
@@ -166,6 +162,11 @@ impl PlayerImpl of PlayerTrait {
         }
 
         true
+    }
+
+    #[inline(always)]
+    fn can_decide(self: Player) -> bool {
+        self.status == PlayerStatus::BeingArrested || self.status == PlayerStatus::BeingMugged
     }
 }
 

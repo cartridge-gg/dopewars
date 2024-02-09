@@ -13,17 +13,6 @@ struct Action {
     slot: ItemSlot,
 }
 
-
-fn execute_actions(ref game_store: GameStore, ref actions: Span<Action>) {
-    loop {
-        match actions.pop_front() {
-            Option::Some(action) => { execute_action(ref game_store, *action); },
-            Option::None => { break; }
-        };
-    };
-}
-
-
 fn execute_action(ref game_store: GameStore, action: Action) {
     // get game infos
     let game = get!(game_store.world, (game_store.game_id, game_store.player_id), Game);

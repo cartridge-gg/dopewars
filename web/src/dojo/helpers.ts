@@ -1,50 +1,50 @@
 import {
-  Bronx,
-  Brooklyn,
-  CentralPark,
-  ConeyIsland,
-  Manhattan,
-  Queens,
+    Bronx,
+    Brooklyn,
+    CentralPark,
+    ConeyIsland,
+    Manhattan,
+    Queens,
 } from "@/components/icons/locations";
 
 import {
-  Acid,
-  Cocaine,
-  Heroin,
-  Ludes,
-  Speed,
-  Weed,
+    Acid,
+    Cocaine,
+    Heroin,
+    Ludes,
+    Speed,
+    Weed,
 } from "@/components/icons/drugs";
 
 import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
-  Action,
-  Drug,
-  DrugInfo,
-  ItemEnum,
-  ItemTextEnum,
-  Location,
-  LocationInfo,
-  Outcome,
-  OutcomeInfo,
-  PlayerStatus,
-  ShopItemInfo
+    Drug,
+    DrugInfo,
+    EncountersAction,
+    ItemEnum,
+    ItemTextEnum,
+    Location,
+    LocationInfo,
+    Outcome,
+    OutcomeInfo,
+    PlayerStatus,
+    ShopItemInfo
 } from "./types";
 
 import { Cigarette } from "@/components/icons";
 import {
-  Backpack,
-  Bicycle,
-  Dufflebag,
-  Fannypack,
-  Glock,
-  Kevlar,
-  Kneepads,
-  Knife,
-  Leatherjacket,
-  Shoes,
-  Skateboard,
-  Uzi
+    Backpack,
+    Bicycle,
+    Dufflebag,
+    Fannypack,
+    Glock,
+    Kevlar,
+    Kneepads,
+    Knife,
+    Leatherjacket,
+    Shoes,
+    Skateboard,
+    Uzi
 } from "@/components/icons/items";
 
 
@@ -448,13 +448,13 @@ export function getShopItemByType(type: ItemEnum, level: number): ShopItemInfo {
   return item;
 }
 
-export function getActionName(action: Action): string {
+export function getActionName(action: EncountersAction): string {
   switch (action) {
-    case Action.Fight:
+    case EncountersAction.Fight:
       return "Fight";
-    case Action.Pay:
+    case EncountersAction.Pay:
       return "Pay";
-    case Action.Run:
+    case EncountersAction.Run:
       return "Run";
     default:
       return "?"

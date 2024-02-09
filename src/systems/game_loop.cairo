@@ -1,3 +1,4 @@
+use rollyourown::packing::wanted_packed::WantedPackedTrait;
 use starknet::ContractAddress;
 use rollyourown::packing::markets_packed::MarketsPackedTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -5,47 +6,33 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
     utils::{random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl}},
-    config::locations::{Locations}, packing::{
+    config::locations::{Locations},
+    packing::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}
-    }
+    }, 
+    systems::traveling
 };
 
-fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: GameStore) -> bool {
-    // let shop_settings = ShopSettingsImpl::get(*game.game_mode);
 
-    // // check if can access pawnshop
-    // if shop_settings.is_open(@player) {
-    //     if player.status == PlayerStatus::AtPawnshop {
-    //         // exit pawnshop 
-    //         player.status = PlayerStatus::Normal;
-    //     } else {
-    //         // force pawnshop
-    //         player.status = PlayerStatus::AtPawnshop;
-    //         // emit raw event AtPawnshop
-    //         world
-    //             .emit_raw(
-    //                 array![
-    //                     selector!("AtPawnshop"), (*game.game_id).into(), player.player_id.into()
-    //                 ],
-    //                 array![]
-    //             );
+fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
+    // no encounter on first turn
+    if game_store.player.turn == 0 {
+       return false;
+    };
 
-    //         // save player
-    //         set!(world, (player));
-    //         return false;
-    //     };
-    // }
+    traveling::on_travel(ref game_store,ref randomizer)
+}
 
+
+fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     // update wanted
     game_store.wanted.on_turn_end(game_store);
-   
 
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
     game_store.player.next_location = Locations::Home;
-
 
     //update HP if not dead
     if game_store.player.health > 0 {
@@ -58,15 +45,18 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
 
     // emit raw event Traveled if still alive
     if game_store.player.health > 0 {
-        world
+        game_store
+            .world
             .emit_raw(
                 array![
-                    selector!("Traveled"), game_store.game_id.into(), game_store.player_id.into()
+                    selector!("Traveled"),
+                    Into::<u32, felt252>::into(game_store.game_id),
+                    Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
                 ],
                 array![
-                    (game_store.player.turn - 1).into(),
-                    game_store.player.prev_location.into(),
-                    game_store.player.location.into()
+                    Into::<u8, felt252>::into(game_store.player.turn - 1),
+                    Into::<Locations, u8>::into(game_store.player.prev_location).into(),
+                    Into::<Locations, u8>::into(game_store.player.location).into(),
                 ]
             );
     }
@@ -76,23 +66,21 @@ fn on_turn_end(world: IWorldDispatcher, ref randomizer: Random, ref game_store: 
 
     // save 
     let game_store_packed = game_store.pack();
-    set!(world, (game_store_packed));
+    set!(game_store.world, (game_store_packed));
 
     true
 }
 
 
-fn on_game_end(world: IWorldDispatcher, ref game_store: GameStore) {
+fn on_game_end(ref game_store: GameStore) {
     let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
     assert(game.game_over == false, 'already game_over');
 
     // set game_over on game 
     game.game_over = true;
-    set!(world, (game));
-
+    set!(game_store.world, (game));
 // TODO
 //ryo::game_over(self.world(), ref player);
 
-    
 }
 

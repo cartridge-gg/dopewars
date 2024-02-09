@@ -1,9 +1,9 @@
-import { Action, Outcome, PlayerStatus } from "@/dojo/types";
+import { EncountersAction, Outcome } from "@/dojo/types";
 import {
-  GetTransactionReceiptResponse,
-  InvokeTransactionReceiptResponse,
-  num,
-  shortString
+    GetTransactionReceiptResponse,
+    InvokeTransactionReceiptResponse,
+    num,
+    shortString
 } from "starknet";
 
 import { Siren, Truck } from "@/components/icons";
@@ -17,9 +17,9 @@ export interface BaseEventData {
   eventName: string;
 }
 
-export interface AdverseEventData extends BaseEventData {
+export interface TravelEncounterData extends BaseEventData {
   playerId: string;
-  playerStatus: PlayerStatus;
+  encounterId: number;
   healthLoss: number;
   demandPct: number;
 }
@@ -54,7 +54,7 @@ export interface SoldEventData extends BaseEventData {
 
 export interface DecisionEventData extends BaseEventData {
   playerId: string;
-  action: Action;
+  action: EncountersAction;
 }
 
 export interface ConsequenceEventData extends BaseEventData {
@@ -133,16 +133,16 @@ export const parseEvent = (raw: any) => {
         gameMode: Number(raw.data[2]),
       } as GameCreatedEventData;
 
-    // case WorldEvents.AdverseEvent:
-    //   return {
-    //     eventType: WorldEvents.AdverseEvent,
-    //     eventName: "AdverseEvent",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     playerStatus: shortString.decodeShortString(raw.data[0]),
-    //     healthLoss: Number(raw.data[1]),
-    //     demandPct: Number(raw.data[2]),
-    //   } as AdverseEventData;
+    case WorldEvents.TravelEncounter:
+      return {
+        eventType: WorldEvents.TravelEncounter,
+        eventName: "TravelEncounter",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        encounterId: Number(raw.data[0]),
+        healthLoss: Number(raw.data[1]),
+        demandPct: Number(raw.data[2]),
+      } as TravelEncounterData;
 
 
     // case WorldEvents.Decision:
@@ -172,10 +172,11 @@ export const parseEvent = (raw: any) => {
       return {
         eventType: WorldEvents.HighVolatility,
         eventName: "HighVolatility",
-        gameId: num.toHexString(raw.data[0]),
-        locationId: num.toHexString(raw.data[1]),
-        drugId: num.toHexString(raw.data[2]),
-        increase: raw.data[3] === "0x0" ? false : true,
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        locationId: num.toHexString(raw.data[0]),
+        drugId: num.toHexString(raw.data[1]),
+        increase: raw.data[2] === "0x0" ? false : true,
       } as HighVolatilityData;
 
     case WorldEvents.Traveled:

@@ -12,11 +12,14 @@ export default function Redirector() {
   const configStore = useConfigStore();
 
   useEffect(() => {
-    if(!game) return
+    if (!game) return;
 
-    if (game.player.status === 0/*PlayerStatus.Normal*/) {
+    if (game.player.status === PlayerStatus.Normal) {
       router.push(`/${gameId}/${game.player.location.location}`);
-    }  else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
+    } else if (
+      game.player.status ===PlayerStatus.BeingArrested ||
+      game.player.status === PlayerStatus.BeingMugged
+    ) {
       //
       router.push(`/${gameId}/decision`);
     }

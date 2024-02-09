@@ -1,4 +1,4 @@
-import { Action, Outcome, PlayerStatus } from "./dojo/types";
+import { EncountersAction, Outcome, PlayerStatus } from "./dojo/types";
 
 type Encounter = "initial" | "repeat";
 
@@ -147,19 +147,19 @@ export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
 
 
 
-const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
+const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]>> = {
   [PlayerStatus.Normal]: {
-    [Action.Pay]: [],
-    [Action.Run]: [],
-    [Action.Fight]: [],
+    [EncountersAction.Pay]: [],
+    [EncountersAction.Run]: [],
+    [EncountersAction.Fight]: [],
   },
   [PlayerStatus.AtPawnshop]: {
-    [Action.Pay]: [],
-    [Action.Run]: [],
-    [Action.Fight]: [],
+    [EncountersAction.Pay]: [],
+    [EncountersAction.Run]: [],
+    [EncountersAction.Fight]: [],
   },
   [PlayerStatus.BeingMugged]: {
-    [Action.Pay]: [
+    [EncountersAction.Pay]: [
       "You come on my block trying to buy me off? I'll take the cash but don't come around here again.",
       "Hell yeah, next time we see you, it'll be double.",
       "Keep paying up, and you just might wake up tomorrow. No guarantees.",
@@ -172,7 +172,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "This payment don't even begin to make up for what you owe me.",
       "This is just a down payment on the beating I still owe you."
     ],
-    [Action.Run]: [
+    [EncountersAction.Run]: [
       "Go ahead and run you slippery rat bastard!",
       "You must got some big cojones trying to run away from me!",
       "You got lucky today you little cockroach.",
@@ -190,7 +190,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "I'm gonna make you regret ever stepping foot in my territory."
 
     ],
-    [Action.Fight]: [
+    [EncountersAction.Fight]: [
       "Give me what you have before I turn yo ass to swiss cheese.",
       "Dealing on my block huh? Hand over the money. Consider it a tax for operating in my hood.",
       "Yo hustler, I don't think you belong here.",
@@ -209,7 +209,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
 
   },
   [PlayerStatus.BeingArrested]: {
-    [Action.Pay]: [
+    [EncountersAction.Pay]: [
       "It's the least you can do for your troubles. Now get out of our face.",
       "I'll let you slide for now, my snack budget's running low for the week.",
       "I ought to arrest you for bribery, but this job doesn't pay enough.",
@@ -218,7 +218,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "Is that the best those corner sales can get you? Pathetic.",
       "I've seen kids offer up more than this to stay out of trouble. Amateur.",
     ],
-    [Action.Run]: [
+    [EncountersAction.Run]: [
       "If the donut shop hadn't run out of glaze this morning, you'd be in cuffs by now.",
       "You must enjoy this game of cat and mouse. Don't get too cocky.",
       "This isn't over. You can't run forever.",
@@ -230,7 +230,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "Run all you want, but next time I'm letting the police dogs off the leash to hunt you down.",
 
     ],
-    [Action.Fight]: [
+    [EncountersAction.Fight]: [
       "You have the right to remain silent. Anything you say can and will be used against you in a court of law.",
       "Stop right there! You fit the description. You have any drugs on you?",
       "Freeze! I can't stand punks like you! Ruining our neighborhoods!",
@@ -248,7 +248,7 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
 
 export function getSentence(
   status: PlayerStatus,
-  action: Action
+  action: EncountersAction
 ): string {
 
   const sentences = encounterSentences[status][action]

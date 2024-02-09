@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x216fed6b5c56c2554548ffb922ac47d28468e9f342d2e2a111e5e2c96b3a25a",
+      "class_hash": "0x6fc7fc963c97d41d08ed38a8b6458c569d62fbe1e45aff3a0f476f9c89688a0",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x59d731a1db132600d6ab221173dec1155cb7929403cdb3cc6c9320854758941",
+      "class_hash": "0x4c271b9b854f2bd414d4534e017d3b2e8d97d6076a604a3112eec4f30950a91",
       "abi": [
         {
           "type": "impl",
@@ -1338,22 +1338,20 @@
           ]
         },
         {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::systems::trading::Trade>",
-          "members": [
+          "type": "enum",
+          "name": "rollyourown::systems::game::EncounterActions",
+          "variants": [
             {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::systems::trading::Trade>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<rollyourown::systems::shopping::Action>",
-          "members": [
+              "name": "Run",
+              "type": "()"
+            },
             {
-              "name": "snapshot",
-              "type": "@core::array::Array::<rollyourown::systems::shopping::Action>"
+              "name": "Pay",
+              "type": "()"
+            },
+            {
+              "name": "Fight",
+              "type": "()"
             }
           ]
         },
@@ -1415,31 +1413,15 @@
             },
             {
               "type": "function",
-              "name": "trade",
+              "name": "decide",
               "inputs": [
                 {
                   "name": "game_id",
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "trades",
-                  "type": "core::array::Span::<rollyourown::systems::trading::Trade>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "shop",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "actions",
-                  "type": "core::array::Span::<rollyourown::systems::shopping::Action>"
+                  "name": "action",
+                  "type": "rollyourown::systems::game::EncounterActions"
                 }
               ],
               "outputs": [],
@@ -1584,6 +1566,11 @@
               "kind": "key"
             },
             {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
               "name": "location_id",
               "type": "rollyourown::config::locations::Locations",
               "kind": "data"
@@ -1596,6 +1583,52 @@
             {
               "name": "increase",
               "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::packing::encounters_packed::Encounters",
+          "variants": [
+            {
+              "name": "Cops",
+              "type": "()"
+            },
+            {
+              "name": "Gang",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::TravelEncounter",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "encounter_id",
+              "type": "rollyourown::packing::encounters_packed::Encounters",
+              "kind": "data"
+            },
+            {
+              "name": "health_loss",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "demand_pct",
+              "type": "core::integer::u8",
               "kind": "data"
             }
           ]
@@ -1623,6 +1656,11 @@
             {
               "name": "HighVolatility",
               "type": "rollyourown::systems::game::game::HighVolatility",
+              "kind": "nested"
+            },
+            {
+              "name": "TravelEncounter",
+              "type": "rollyourown::systems::game::game::TravelEncounter",
               "kind": "nested"
             }
           ]

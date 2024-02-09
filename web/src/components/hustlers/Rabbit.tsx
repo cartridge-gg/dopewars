@@ -104,7 +104,7 @@ export const RabbitIcon = (props: IconProps) => {
       <path d="M16.5 22.5V21H18V22.5H16.5Z" fill="#FCC02E" />
       <path d="M16.5 15H13.5V16.5H16.5V15Z" fill="#FFD99C" />
       <path d="M13.5 18H15V19.5H16.5V21H15V22.5H13.5V21H12V19.5H13.5V18Z" fill="#FFD99C" />
-      <g
+      {/* <g
         style={{
           mixBlendMode: "color",
         }}
@@ -113,7 +113,7 @@ export const RabbitIcon = (props: IconProps) => {
           d="M21 24V22.5H19.5V19.5H18V18H16.5V19.5H15V16.5H16.5V15H18V13.5H19.5V10.5H18V7.5H19.5V1.5H18V3H16.5V6H12V1.5H10.5V3H9V4.5H7.5V7.5H9V16.5H12V18H10.5V19.5H9V21H7.5V22.5H6V24H21Z"
           fill="#0A8F4F"
         />
-      </g>
+      </g> */}
     </Icon>
   );
 };
