@@ -14,6 +14,7 @@ import {
   CardHeader,
   Flex,
   HStack,
+  Image,
   SimpleGrid,
   StyleProps,
   Text,
@@ -152,6 +153,30 @@ export default function Location() {
               </Card>
             );
           })}
+
+          <Card
+            h={["auto", "180px"]}
+            position="relative"
+            cursor="pointer"
+            opacity={game.isShopOpen ? 1 : 0.5}
+            onClick={() => {
+              if (game.isShopOpen) {
+                router.push(`/${gameId}/pawnshop`);
+              }
+            }}
+          >
+            <CardHeader
+              textTransform="uppercase"
+              fontSize={["16px", "20px"]}
+              textAlign="left"
+              padding={["6px 10px", "10px 20px"]}
+            >
+              PAWNSHOP {game.isShopOpen ? "OPEN" : "CLOSED"}
+            </CardHeader>
+            <CardBody>
+              <Image src="/images/pawnshop.png" width="100px" height="100px" />
+            </CardBody>
+          </Card>
         </SimpleGrid>
       </VStack>
     </Layout>

@@ -1,7 +1,7 @@
 import { IconProps } from "@chakra-ui/react";
-import { Dragon } from "./Dragon";
-import { Monkey } from "./Monkey";
-import { Rabbit } from "./Rabbit";
+import { Dragon, DragonIcon } from "./Dragon";
+import { Monkey, MonkeyIcon } from "./Monkey";
+import { Rabbit, RabbitIcon } from "./Rabbit";
 
 export enum Hustlers {
   Dragon = 0,
@@ -25,3 +25,16 @@ export const Hustler = ({ hustler, ...rest }: HustlerProps & IconProps) => {
   const SelectedHustler = hustlers[hustler];
   return <SelectedHustler {...rest} />;
 };
+
+
+const hustlersIcons = {
+  [Hustlers.Dragon]: DragonIcon,
+  [Hustlers.Monkey]: MonkeyIcon,
+  [Hustlers.Rabbit]: RabbitIcon,
+};
+
+export const HustlerIcon = ({ hustler, ...rest }: HustlerProps & IconProps) => {
+  const SelectedHustlerIcon = hustlersIcons[hustler];
+  return <SelectedHustlerIcon {...rest} />;
+};
+

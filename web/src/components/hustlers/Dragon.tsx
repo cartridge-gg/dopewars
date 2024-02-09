@@ -80,3 +80,75 @@ export const Dragon = (props: IconProps) => {
     </Icon>
   );
 };
+
+export const DragonIcon = (props: IconProps) => {
+  return (
+    <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M22.5 24V21H21V19.5H18V18H16.5V19.5H15V21H16.5V22.5H13.5V21H12V19.5H7.5V21H4.5V24H16.5V22.5H18V24H22.5ZM16.5 21V19.5H18V21H16.5Z"
+        fill="#F3EBEE"
+      />
+      <path d="M16.5 24H18V22.5H16.5V24Z" fill="#A32121" />
+      <path d="M4.5 24H3V21H4.5V24Z" fill="#C2BCBE" />
+      <path d="M7.5 19.5V21H4.5V19.5H7.5Z" fill="#C2BCBE" />
+      <path d="M7.5 19.5V18H10.5V19.5H7.5Z" fill="#C2BCBE" />
+      <path d="M15 15H13.5V16.5H15V15Z" fill="#77F8F8" />
+      <path d="M16.5 19.5V18H13.5V21H15V19.5H16.5Z" fill="#77F8F8" />
+      <rect x="10.5" y="18" width="1.5" height="1.5" fill="#DE9400" />
+      <rect x="12" y="19.5" width="1.5" height="1.5" fill="#DE9400" />
+      <rect x="13.5" y="21" width="3" height="1.5" fill="#DE9400" />
+      <rect x="16.5" y="19.5" width="1.5" height="1.5" fill="#DE9400" />
+      <path d="M12 15H13.5V16.5H15V18H13.5V19.5H12V15Z" fill="#3CCBCB" />
+      <path d="M13.5 4.5V6H15V7.5H16.5V4.5H13.5Z" fill="#DB2C2C" />
+      <path d="M16.5 9H15V10.5H16.5V12H19.5V10.5H16.5V9Z" fill="#DB2C2C" />
+      <path d="M21 10.5H22.5V13.5H21V10.5Z" fill="#DB2C2C" />
+      <path d="M9 6H7.5V7.5H6V9H9V6Z" fill="#32662E" />
+      <path d="M7.5 10.5H6V12H4.5V13.5H3V15H1.5V16.5H3V15H4.5V13.5H7.5V10.5Z" fill="#32662E" />
+      <path d="M10.5 6H9V9H7.5V13.5H4.5V15H7.5V13.5H10.5V12H9V9H10.5V6Z" fill="#254D22" />
+      <path d="M1.5 3H3V4.5H1.5V3Z" fill="#3E8039" />
+      <path d="M6 6V4.5H3V6H6Z" fill="#3E8039" />
+      <path d="M6 7.5V6H7.5V7.5H6Z" fill="#3E8039" />
+      <path d="M6 9V7.5H1.5V6H0V7.5H1.5V9H6Z" fill="#3E8039" />
+      <path d="M6 10.5H7.5V9H6V10.5Z" fill="#3E8039" />
+      <path d="M6 10.5H1.5V12H6V10.5Z" fill="#3E8039" />
+      <path d="M9 3H7.5V4.5H9V6H10.5V4.5H9V3Z" fill="#3E8039" />
+      <path d="M12 9H13.5V10.5H12V9Z" fill="#3E8039" />
+      <path d="M18 9H16.5V10.5H18V9Z" fill="#3E8039" />
+      <path d="M9 1.5H7.5V3H9V4.5H10.5V6H12V4.5H10.5V3H9V1.5Z" fill="#F2A54A" />
+      <path d="M18 1.5H19.5V4.5H18V1.5Z" fill="#F2A54A" />
+      <path d="M18 4.5V6H16.5V4.5H18Z" fill="#F2A54A" />
+      <path d="M21 9H19.5V12H21V9Z" fill="#F2A54A" />
+      <path d="M22.5 9H24V12H22.5V9Z" fill="#F2A54A" />
+      <rect x="12" y="12" width="1.5" height="1.5" fill="#F1C092" />
+      <rect x="10.5" y="10.5" width="1.5" height="1.5" fill="#F1C092" />
+      <rect x="13.5" y="12" width="1.5" height="1.5" fill="#F1C092" />
+      <path d="M10.5 6H13.5V7.5H10.5V6Z" fill="#F5E8D7" />
+      <path d="M19.5 6H16.5V7.5H15V9H16.5V7.5H19.5V6Z" fill="#F5E8D7" />
+      <path d="M10.5 7.5H13.5V9H10.5V7.5Z" fill="black" />
+      <path d="M13.5 9H15V10.5H13.5V9Z" fill="black" />
+      <path d="M15 13.5V15H19.5V13.5H15Z" fill="black" />
+      <path d="M16.5 7.5H19.5V9H16.5V7.5Z" fill="black" />
+      <path d="M13.5 4.5H12V6H13.5V9H15V6H13.5V4.5Z" fill="#A92223" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M9 9V12H10.5V13.5H12V15H15V16.5H21V15H15V13.5H21V12H16.5V10.5H12V9H9ZM12 12H15V13.5H12V12ZM12 12V10.5H10.5V12H12Z"
+        fill="#A92223"
+      />
+      <g
+        style={{
+          mixBlendMode: "color",
+        }}
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M0 6V7.5H1.5V9H6V10.5H1.5V12H4.5V13.5H3V15H1.5V16.5H3V15H7.5V13.5H12V18H7.5V19.5H4.5V21H3V24H22.5V21H21V19.5H18V18H15V16.5H21V15H19.5V13.5H22.5V12H24V9H22.5V10.5H21V9H19.5V6H18V4.5H19.5V1.5H18V4.5H10.5V3H9V1.5H7.5V4.5H9V6H6V4.5H3V3H1.5V4.5H3V6H6V7.5H1.5V6H0ZM19.5 9H18V10.5H19.5V9Z"
+          fill="#0A8F4F"
+        />
+      </g>
+    </Icon>
+  );
+};

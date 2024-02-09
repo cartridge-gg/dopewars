@@ -64,3 +64,56 @@ export const Rabbit = (props: IconProps) => {
     </Icon>
   );
 };
+
+export const RabbitIcon = (props: IconProps) => {
+  return (
+    <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
+      <path d="M9 4.5H7.5V6H9V4.5Z" fill="#3B2513" />
+      <path d="M10.5 13.5H9V16.5H10.5V13.5Z" fill="#3B2513" />
+      <path d="M9 6H7.5V7.5H9V10.5H10.5V7.5H9V6Z" fill="#21150B" />
+      <path d="M10.5 13.5H12V16.5H10.5V13.5Z" fill="#21150B" />
+      <path d="M12 3H10.5V7.5H12V3Z" fill="#F2AEDD" />
+      <path
+        d="M19.5 3H18V7.5H15V9H13.5V12H12V13.5H15V9H16.5V10.5H18V12H16.5V13.5H19.5V10.5H18V7.5H19.5V3Z"
+        fill="#F2AEDD"
+      />
+      <rect x="15" y="12" width="1.5" height="1.5" fill="#A2828D" />
+      <rect x="15" y="13.5" width="1.5" height="1.5" fill="#F5E1EB" />
+      <path d="M13.5 10.5H12V12H13.5V10.5Z" fill="#F62578" />
+      <path d="M18 10.5H16.5V12H18V10.5Z" fill="#F62578" />
+      <path d="M15 6H16.5V7.5H15V6Z" fill="#C48DB3" />
+      <path d="M15 15V13.5H12V15H15Z" fill="#C48DB3" />
+      <path d="M18 13.5H16.5V15H18V13.5Z" fill="#C48DB3" />
+      <path d="M13.5 7.5H12V9H13.5V7.5Z" fill="#C48DB3" />
+      <path d="M16.5 6H18V7.5H16.5V6Z" fill="#D79AC4" />
+      <path d="M15 7.5H13.5V9H12V10.5H10.5V13.5H12V10.5H13.5V9H15V12H16.5V9H15V7.5Z" fill="#D79AC4" />
+      <path d="M10.5 1.5H12V3H10.5V1.5Z" fill="#A87999" />
+      <path d="M10.5 7.5V3H9V7.5H10.5Z" fill="#A87999" />
+      <path d="M12 7.5H10.5V10.5H9V13.5H10.5V10.5H12V7.5Z" fill="#A87999" />
+      <path d="M12 7.5V6H15V7.5H12Z" fill="#A87999" />
+      <path d="M18 3H16.5V6H18V3Z" fill="#A87999" />
+      <path d="M18 3H19.5V1.5H18V3Z" fill="#A87999" />
+      <path d="M21 24H16.5V22.5H18V19.5H19.5V22.5H21V24Z" fill="#162232" />
+      <path d="M7.5 24H13.5V22.5H12V21H9V22.5H7.5V24Z" fill="#162232" />
+      <path d="M12 18H10.5V19.5H9V21H7.5V22.5H6V24H7.5V22.5H9V21H10.5V19.5H12V18Z" fill="#06090D" />
+      <path d="M18 18H16.5V21H15V22.5H16.5V21H18V18Z" fill="#06090D" />
+      <path d="M12 15H13.5V16.5H15V18H13.5V19.5H12V15Z" fill="#F0B482" />
+      <path d="M10.5 19.5H12V21H10.5V19.5Z" fill="#FCC02E" />
+      <path d="M13.5 22.5H12V21H13.5V22.5Z" fill="#FCC02E" />
+      <path d="M16.5 22.5H13.5V24H16.5V22.5Z" fill="#FCC02E" />
+      <path d="M16.5 22.5V21H18V22.5H16.5Z" fill="#FCC02E" />
+      <path d="M16.5 15H13.5V16.5H16.5V15Z" fill="#FFD99C" />
+      <path d="M13.5 18H15V19.5H16.5V21H15V22.5H13.5V21H12V19.5H13.5V18Z" fill="#FFD99C" />
+      <g
+        style={{
+          mixBlendMode: "color",
+        }}
+      >
+        <path
+          d="M21 24V22.5H19.5V19.5H18V18H16.5V19.5H15V16.5H16.5V15H18V13.5H19.5V10.5H18V7.5H19.5V1.5H18V3H16.5V6H12V1.5H10.5V3H9V4.5H7.5V7.5H9V16.5H12V18H10.5V19.5H9V21H7.5V22.5H6V24H21Z"
+          fill="#0A8F4F"
+        />
+      </g>
+    </Icon>
+  );
+};

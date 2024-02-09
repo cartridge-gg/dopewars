@@ -20,8 +20,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
-import { Avatar } from "./avatar/Avatar";
-import { genAvatarFromId } from "./avatar/avatars";
+import { HustlerIcon, Hustlers } from "./hustlers";
 import { Cigarette, User } from "./icons";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
@@ -64,7 +63,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card w="100px" alignItems="center">
-                <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} w="100px" h="100px" />
+                <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} w="100px" h="100px" />
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">
@@ -83,7 +82,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                 />
                 <HStack h="50px" px="10px">
                   {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
-                  <Cigarette /> <Text>{game.player.location.name}</Text>
+                  <Cigarette /> <Text>{game.player.location?.name}</Text>
                 </HStack>
 
                 {/* <HStack w="full" gap="0">
@@ -133,7 +132,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
 
                 <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{game.items.transport.statName}:</Text>
-                  <Text>{game.items.transport.stat/100}</Text>
+                  <Text>{game.items.transport.stat / 100}</Text>
                 </HStack>
               </HStack>
             </Card>
@@ -218,7 +217,9 @@ const ProfileButtonMobile = () => {
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
-        <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} /> <Text ml="10px">player.name</Text>
+        {/* <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} /> <Text ml="10px">player.name</Text> */}
+        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        <Text ml="10px">player.name</Text>
       </MenuItem>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
@@ -235,7 +236,8 @@ const ProfileButton = () => {
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
-        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} />
+        {/* <Avatar name={genAvatarFromId(gameInfos.avatar_id)} /> */}
+        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
       </Button>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
@@ -263,7 +265,7 @@ export const ProfileLink = () => {
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
-        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} />
+        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
       </Button>
     </>
   );
@@ -290,7 +292,8 @@ export const ProfileLinkMobile = () => {
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick}>
-        <Avatar name={genAvatarFromId(gameInfos.avatar_id)} /> <Text ml="10px">player.name</Text>
+        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        <Text ml="10px">player.name</Text>
       </MenuItem>
     </>
   );

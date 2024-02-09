@@ -90,7 +90,7 @@ export default function New() {
               cursor="pointer"
               onClick={() => {
                 playSound(Sounds.HoverClick, 0.3);
-                hustlerId > 1 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount-1);
+                hustlerId > 0 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount-1);
               }}
             />
 

@@ -61,3 +61,47 @@ export const Monkey = (props: IconProps) => {
     </Icon>
   );
 };
+
+export const MonkeyIcon = (props: IconProps) => {
+  return (
+    <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
+      <path d="M4.5 24H3V21H4.5V24Z" fill="#B98359" />
+      <path d="M4.5 21V19.5H7.5V21H4.5Z" fill="#B98359" />
+      <path d="M13.5 16.5H12V19.5H13.5V16.5Z" fill="#B98359" />
+      <rect x="12" y="15" width="1.5" height="1.5" fill="#2E1E06" />
+      <path d="M13.5 3H12V4.5H13.5V6H15V7.5H16.5V9H18V7.5H16.5V6H15V4.5H13.5V3Z" fill="#64402E" />
+      <path d="M19.5 13.5H18V15H15V16.5H18V15H19.5V13.5Z" fill="#64402E" />
+      <path d="M16.5 10.5H15V12H16.5V10.5Z" fill="#C88D74" />
+      <path d="M18 13.5H13.5V15H18V13.5Z" fill="#C88D74" />
+      <path d="M13.5 10.5H12V12H13.5V10.5Z" fill="black" />
+      <path d="M18 10.5H16.5V12H18V10.5Z" fill="black" />
+      <path d="M10.5 9H7.5V12H9V10.5H10.5V9Z" fill="#AD7A65" />
+      <path d="M16.5 7.5H15V9H13.5V13.5H19.5V12H15V10.5H18V9H16.5V7.5Z" fill="#E1AA90" />
+      <path d="M10.5 10.5H9V12H10.5V10.5Z" fill="#E1AA90" />
+      <path d="M13.5 7.5H12V10.5H13.5V7.5Z" fill="#C7967F" />
+      <path d="M13.5 12H12V13.5H13.5V12Z" fill="#C7967F" />
+      <path d="M10.5 3H12V4.5H10.5V3Z" fill="#4A2F22" />
+      <path
+        d="M13.5 6V4.5H12V6H10.5V7.5H9V9H10.5V12H9V13.5H10.5V15H13.5V18H16.5V16.5H15V15H13.5V13.5H12V7.5H13.5V9H15V6H13.5Z"
+        fill="#4A2F22"
+      />
+      <path d="M12 18H10.5V19.5H12V21H13.5V22.5H16.5V21H18V19.5H16.5V21H13.5V19.5H12V18Z" fill="#CCD3E0" />
+      <path d="M7.5 24H4.5V21H7.5V24Z" fill="#E6A46E" />
+      <path d="M10.5 24H16.5V22.5H13.5V21H16.5V18H13.5V21H12V19.5H10.5V24Z" fill="#E6A46E" />
+      <path d="M19.5 24V19.5H21V21H22.5V24H19.5Z" fill="#E6A46E" />
+      <path d="M19.5 24V19.5H18V18H16.5V19.5H18V21H16.5V24H19.5Z" fill="#3D4543" />
+      <path d="M10.5 24V18H9V24H10.5Z" fill="#3D4543" />
+      <path d="M9 24H7.5V18H9V24Z" fill="#343434" />
+      <g
+        style={{
+          mixBlendMode: "color",
+        }}
+      >
+        <path
+          d="M22.5 24H3V21H4.5V19.5H7.5V18H12V15H10.5V13.5H9V12H7.5V9H9V7.5H10.5V6H12V4.5H10.5V3H13.5V4.5H15V6H16.5V7.5H18V12H19.5V15H18V16.5H16.5V18H18V19.5H21V21H22.5V24Z"
+          fill="#0A8F4F"
+        />
+      </g>
+    </Icon>
+  );
+};

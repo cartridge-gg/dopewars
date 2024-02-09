@@ -1,8 +1,7 @@
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ItemConfigFull } from "@/dojo/stores/config";
-import { Button, Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { Hustler, Hustlers } from "./hustlers";
 import { Bag } from "./icons";
 
 export const Inventory = observer(({ ...props }: StyleProps) => {
@@ -25,15 +24,7 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
         </HStack>
       </HStack>
 
-      <Button
-        isDisabled={!game.isShopOpen}
-        onClick={() => {
-          router.push(`/${gameId}/pawnshop`);
-        }}
-      >
-        PAWNSHOP
-      </Button>
-
+   
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
@@ -41,13 +32,12 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
             <VerticalDivider />
             <PlayerItem item={game.items.defense} />
             <VerticalDivider />
-            <PlayerItem item={game.items.speed}  />
+            <PlayerItem item={game.items.speed} />
             <VerticalDivider />
-            <PlayerItem item={game.items.transport}/>
+            <PlayerItem item={game.items.transport} />
           </HStack>
         </Card>
 
-        <Hustler hustler={gameInfos?.avatar_id as Hustlers} width="60px" height="60px" />
 
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-start">
@@ -55,7 +45,7 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
             {game.drugs.quantity > 0 && game.drugs.drug && (
               <HStack gap="10px">
                 <HStack color="yellow.400">
-                  {configStore.getDrug(game.drugs.drug.drug)?.icon({ boxSize: "26" })}
+                  {game.drugs.drug?.icon({ boxSize: "26" })}
                   <Text>{game.drugs.quantity}</Text>
                 </HStack>
               </HStack>
@@ -67,7 +57,7 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
   );
 });
 
-const PlayerItem = ({ item, ...props }: { item: ItemConfigFull}) => {
+const PlayerItem = ({ item, ...props }: { item: ItemConfigFull }) => {
   if (!item) return null;
 
   const stat = item.statName === "INV" ? item.stat / 100 : item.stat;
