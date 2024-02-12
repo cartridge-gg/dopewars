@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { getOutcomeInfo } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { Outcome, OutcomeInfo, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 export default function Consequence() {
   const { router, gameId } = useRouterContext();
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  // const { playerEntity } = usePlayerStore();
   const configStore = useConfigStore();
 
   const [outcome, setOutcome] = useState<OutcomeInfo | undefined>(undefined);
@@ -56,15 +56,15 @@ export default function Consequence() {
                     return router.push(`/${gameId}/event/decision`);
                   }
 
-                  if (playerEntity.status === PlayerStatus.AtPawnshop) {
-                    router.push(`/${gameId}/pawnshop`);
-                  }
+                  // if (playerEntity.status === PlayerStatus.AtPawnshop) {
+                  //   router.push(`/${gameId}/pawnshop`);
+                  // }
 
-                  if (playerEntity.status === PlayerStatus.Normal) {
-                    router.push(
-                      `/${gameId}/${configStore.getLocation(playerEntity.locationId)?.location.toLowerCase()}`,
-                    );
-                  }
+                  // if (playerEntity.status === PlayerStatus.Normal) {
+                  //   router.push(
+                  //     `/${gameId}/${configStore.getLocation(playerEntity.locationId)?.location.toLowerCase()}`,
+                  //   );
+                  // }
                 }}
               >
                 Continue

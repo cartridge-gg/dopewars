@@ -9,7 +9,7 @@ import { EncountersAction, GameMode, Location } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
-  createGame: (gameMode: number, playerName: string, avatarId: number,) => Promise<SystemExecuteResult>;
+  createGame: (gameMode: number,  hustlerId: number,playerName: string) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction,) => Promise<SystemExecuteResult>;
@@ -145,12 +145,12 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, avatarId: number) => {
+    async (gameMode: GameMode, hustlerId: number, playerName: string,) => {
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "create_game",
-        [gameMode, avatarId],
+        [gameMode, hustlerId, playerName],
       );
 
       const gameCreated = parsedEvents.find(

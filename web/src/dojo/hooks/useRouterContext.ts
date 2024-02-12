@@ -13,8 +13,6 @@ type RouterContext = {
   location: LocationConfigFull | undefined,
   drug: DrugConfigFull | undefined,
   tradeDirection: TradeDirection | undefined,
-  healthLoss: string | undefined,
-  demandPct: string | undefined,
 }
 
 export const useRouterContext = (): RouterContext => {
@@ -28,8 +26,6 @@ export const useRouterContext = (): RouterContext => {
     location: undefined,
     drug: undefined,
     tradeDirection: undefined,
-    healthLoss: undefined,
-    demandPct: undefined,
   });
 
   useEffect(() => {
@@ -43,8 +39,6 @@ export const useRouterContext = (): RouterContext => {
       (router.query.tradeDirection as string) === "buy" ? TradeDirection.Buy : TradeDirection.Sell
       : undefined;
 
-    const healthLoss = router.query.healthLoss ? router.query.healthLoss as string : undefined;
-    const demandPct = router.query.demandPct ? router.query.demandPct as string : undefined;
 
     const ctx = {
       router,
@@ -53,8 +47,6 @@ export const useRouterContext = (): RouterContext => {
       location,
       drug,
       tradeDirection,
-      healthLoss,
-      demandPct
     }
 
     setContext(ctx)

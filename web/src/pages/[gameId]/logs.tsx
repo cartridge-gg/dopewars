@@ -18,7 +18,7 @@ import {
   TravelEncounterData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useConfigStore, useDojoContext, usePlayerStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore } from "@/dojo/stores/config";
 import { Outcome } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
@@ -35,7 +35,7 @@ export default function Logs() {
   const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { playerEntity } = usePlayerStore();
+  // const { playerEntity } = usePlayerStore();
   const configStore = useConfigStore();
 
   // const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });

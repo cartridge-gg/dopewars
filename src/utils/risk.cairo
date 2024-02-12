@@ -70,13 +70,6 @@ impl RiskImpl of RiskTrait<RiskSettings> {
         }
     }
 }
-// fn occurs(ref randomizer: Random, likelihood: u8) -> bool {
-//     if likelihood == 0 {
-//         return false;
-//     }
 
-//     let result: u128 = randomizer.between::<u128>(0, 100);
-//     (result <= likelihood.into())
-// }
 
 

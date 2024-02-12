@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x4c271b9b854f2bd414d4534e017d3b2e8d97d6076a604a3112eec4f30950a91",
+      "class_hash": "0x6d7c87fba0f5ce4bc14c487979101a0fea2d7e788b0485501b724b0b695d86f",
       "abi": [
         {
           "type": "impl",
@@ -1370,6 +1370,10 @@
                 {
                   "name": "avatar_id",
                   "type": "core::integer::u8"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -1495,16 +1499,21 @@
             {
               "name": "game_id",
               "type": "core::integer::u32",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
+              "kind": "key"
             },
             {
               "name": "game_mode",
               "type": "rollyourown::models::game::GameMode",
+              "kind": "data"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
               "kind": "data"
             }
           ]
@@ -1530,13 +1539,13 @@
               "kind": "data"
             },
             {
-              "name": "from_location",
-              "type": "rollyourown::config::locations::Locations",
+              "name": "from_location_id",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
-              "name": "to_location",
-              "type": "rollyourown::config::locations::Locations",
+              "name": "to_location_id",
+              "type": "core::integer::u8",
               "kind": "data"
             }
           ]
@@ -1557,6 +1566,43 @@
         },
         {
           "type": "event",
+          "name": "rollyourown::systems::game::game::TradeDrug",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "price",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "is_buy",
+              "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::game::game::HighVolatility",
           "kind": "struct",
           "members": [
@@ -1572,12 +1618,12 @@
             },
             {
               "name": "location_id",
-              "type": "rollyourown::config::locations::Locations",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
               "name": "drug_id",
-              "type": "rollyourown::config::drugs::Drugs",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -1588,16 +1634,29 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::packing::encounters_packed::Encounters",
-          "variants": [
+          "type": "event",
+          "name": "rollyourown::systems::game::game::UpgradeItem",
+          "kind": "struct",
+          "members": [
             {
-              "name": "Cops",
-              "type": "()"
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
             },
             {
-              "name": "Gang",
-              "type": "()"
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "item_slot",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "item_level",
+              "type": "core::integer::u8",
+              "kind": "data"
             }
           ]
         },
@@ -1617,8 +1676,18 @@
               "kind": "key"
             },
             {
-              "name": "encounter_id",
-              "type": "rollyourown::packing::encounters_packed::Encounters",
+              "name": "attack",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
@@ -1629,6 +1698,11 @@
             {
               "name": "demand_pct",
               "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32",
               "kind": "data"
             }
           ]
@@ -1654,8 +1728,18 @@
               "kind": "nested"
             },
             {
+              "name": "TradeDrug",
+              "type": "rollyourown::systems::game::game::TradeDrug",
+              "kind": "nested"
+            },
+            {
               "name": "HighVolatility",
               "type": "rollyourown::systems::game::game::HighVolatility",
+              "kind": "nested"
+            },
+            {
+              "name": "UpgradeItem",
+              "type": "rollyourown::systems::game::game::UpgradeItem",
               "kind": "nested"
             },
             {

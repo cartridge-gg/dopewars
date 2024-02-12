@@ -1,0 +1,22 @@
+query GameEvents($gameId: String!) {
+  events(last: 1000, keys: ["*", $gameId]) {
+    totalCount
+    edges {
+      node {
+        id
+        keys
+        data
+        createdAt
+      }
+    }
+  }
+}
+
+subscription GameEventsSubscription( $gameId: String) {
+  eventEmitted(keys: ["*", $gameId]) {
+    id
+    keys
+    data
+    createdAt
+  }
+}

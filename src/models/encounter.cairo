@@ -111,31 +111,3 @@ impl EncounterTypeIntoU8 of Into<EncounterType, u8> {
     }
 }
 
-
-// impl EncounterTypeIntrospectionImpl of Introspect<EncounterType> {
-//     #[inline(always)]
-//     fn size() -> usize {
-//         1
-//     }
-
-//     #[inline(always)]
-//     fn layout(ref layout: Array<u8>) {
-//         layout.append(8);
-//     }
-
-//     #[inline(always)]
-//     fn ty() -> Ty {
-//         Ty::Enum(
-//             Enum {
-//                 name: 'EncounterType',
-//                 attrs: array![].span(),
-//                 children: array![
-//                     ('Gang', serialize_member_type(@Ty::Tuple(array![].span()))),
-//                     ('Cops', serialize_member_type(@Ty::Tuple(array![].span()))),
-//                 ]
-//                     .span()
-//             }
-//         )
-//     }
-// }
-

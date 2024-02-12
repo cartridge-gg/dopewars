@@ -130,7 +130,7 @@ export default function Travel() {
           if (event.eventType === WorldEvents.TravelEncounter) {
             const advEvent = event as TravelEncounterData;
             return router.push(
-              `/${gameId}/event/decision?healthLoss=${advEvent.healthLoss}&demandPct=${advEvent.demandPct}`,
+              `/${gameId}/event/decision`,
             );
           }
         }

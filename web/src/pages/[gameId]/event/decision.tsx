@@ -2,15 +2,17 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { Heart } from "@/components/icons";
+import { Heart, Siren } from "@/components/icons";
+import CashIndicator from "@/components/player/CashIndicator";
+import HealthIndicator from "@/components/player/HealthIndicator";
 import { GameClass } from "@/dojo/class/Game";
+import { TravelEncounterData } from "@/dojo/events";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { EncountersAction, PlayerStatus } from "@/dojo/types";
-import { Encounter } from "@/generated/graphql";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { IsMobile } from "@/utils/ui";
+import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
@@ -22,16 +24,16 @@ type CombatLog = {
 };
 
 const Decision = observer(() => {
-  const { router, gameId, healthLoss, demandPct } = useRouterContext();
+  const { router, gameId } = useRouterContext();
   const { account } = useDojoContext();
-  const { game } = useGameStore();
+  const { game, gameEvents } = useGameStore();
   const { decide, isPending } = useSystems();
 
   const [prefixTitle, setPrefixTitle] = useState("");
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [encounter, setEncounter] = useState<Encounter | undefined>(undefined);
+  const [encounter, setEncounter] = useState<TravelEncounterData | undefined>(undefined);
 
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
@@ -49,23 +51,29 @@ const Decision = observer(() => {
   const isMobile = IsMobile();
 
   useEffect(() => {
-    if (game && !isPending) {
+    if (game && gameEvents && !isPending) {
+      
+      const lastEncounter = gameEvents.getLastEncounter();
+      lastEncounter && setEncounter(lastEncounter.parsed);
+     
+      console.log(lastEncounter)
+
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want ${demandPct}% of your $PAPER!`);
+          setDemand(`They want ${lastEncounter.parsed.demandPct}% of your $PAPER!`);
           //setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`They want ${demandPct}% of your DRUGS!`);
+          setDemand(`They want ${lastEncounter.parsed.demandPct}% of your DRUGS!`);
           // setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
           break;
       }
     }
-  }, [game, game?.player.status, isPending, demandPct]);
+  }, [game, game?.player.status, isPending, gameEvents]);
 
   useEffect(() => {
     if (game?.player.status == PlayerStatus.BeingArrested) {
@@ -116,7 +124,7 @@ const Decision = observer(() => {
   const onDecision = async (action: EncountersAction) => {
     try {
       const { event, events } = await decide(gameId, action);
-      router.replace(`/${gameId}/`)
+      router.replace(`/${gameId}/`);
     } catch (e) {
       console.log(e);
     }
@@ -208,7 +216,7 @@ const Decision = observer(() => {
     // }
   };
 
-  if (!game || !router.isReady || isRedirecting) {
+  if (!game || !router.isReady || isRedirecting || !encounter) {
     return <></>;
   }
 
@@ -265,7 +273,7 @@ const Decision = observer(() => {
                   py="8px"
                 >
                   <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
-                    <Heart /> You lost {healthLoss} HP!
+                    <Heart /> You lost {encounter?.healthLoss} HP!
                   </Text>
 
                   <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
@@ -348,7 +356,7 @@ const Encounter = ({
   imageSrc: string;
   sentence: string;
   game: GameClass;
-  encounter: Encounter;
+  encounter: TravelEncounterData;
 } & StyleProps) => {
   return (
     <VStack {...props}>
@@ -392,22 +400,22 @@ const Encounter = ({
           <Card alignItems="center" w={["full", "auto"]} justify="center" mt={["20px", "40px"]}>
             <VStack w="full" gap="0">
               <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
-                <HStack>{/* <Siren /> <Text> LVL {encounter.level}</Text> */}</HStack>
+                <HStack>
+                  {" "}
+                  <Siren /> <Text> LVL {encounter?.level}</Text>{" "}
+                </HStack>
                 {IsMobile() ? (
                   <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                {/* <CashIndicator cash={formatCash(encounter.payout)} /> */}
+                {<CashIndicator cash={formatCash(encounter?.payout)} />}
                 {IsMobile() ? (
                   <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
                 ) : (
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 )}
-                {/* <HealthIndicator
-                  health={encounter.health}
-                  maxHealth={getEncounterNPCMaxHealth(encounter.level, playerEntity.turn)}
-                /> */}
+                <HealthIndicator health={encounter?.health} maxHealth={100} />
               </HStack>
               {!IsMobile() && (
                 <Box w="full" px="10px">
@@ -430,12 +438,12 @@ const Encounter = ({
   );
 };
 
-/// TODO: move this in a relevant place
-function getEncounterNPCMaxHealth(level: number, turn: number) {
-  // Calculate initial health based on level and turn.
-  let health = level * 8 + turn;
-  // Ensure health does not exceed 100.
-  health = Math.min(health, 100);
+// /// TODO: move this in a relevant place
+// function getEncounterNPCMaxHealth(level: number, turn: number) {
+//   // Calculate initial health based on level and turn.
+//   let health = level * 8 + turn;
+//   // Ensure health does not exceed 100.
+//   health = Math.min(health, 100);
 
-  return health;
-}
+//   return health;
+// }

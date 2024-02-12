@@ -1,16 +1,10 @@
-import { shortString } from "starknet";
-import { useEffect, useMemo, useState } from "react";
-import { REFETCH_INTERVAL } from "../constants";
-import {
-  Player,
-  Drug as DrugType,
-  Item as ItemType,
-  Encounter,
-  usePlayerLogsQuery,
-  World__EventEdge,
-} from "@/generated/graphql";
-import { PlayerStatus, ItemEnum, ItemTextEnum } from "../types";
 import { ParseEventResult, parseEvent } from "@/dojo/events";
+import {
+  World__EventEdge,
+  usePlayerLogsQuery
+} from "@/generated/graphql";
+import { useMemo } from "react";
+import { REFETCH_INTERVAL } from "../constants";
 
 export class PlayerLogs {
   logs: World__EventEdge[];

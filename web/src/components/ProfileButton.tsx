@@ -42,7 +42,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
   const { account } = useDojoContext();
   const configStore = useConfigStore();
   const gameStore = useGameStore();
-  const { game, gameInfos } = gameStore;
+  const { game, gameInfos, gameEvents } = gameStore;
 
   const { toast } = useToast();
   const isMobile = IsMobile();
@@ -54,7 +54,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
     }
   }, [gameId, playerId, gameStore]);
 
-  if (!game || !configStore) return null;
+  if (!game || !gameEvents || !configStore) return null;
 
   return (
     <VStack w="full" {...props}>
@@ -69,7 +69,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                 <HStack h="50px" px="10px">
                   <User />
                   <Heading fontFamily="dos-vga" fontWeight="normal" fontSize={"16px"}>
-                    <Text>player.name</Text>
+                    <Text>{gameEvents.playerName}</Text>
                   </Heading>
                 </HStack>
 

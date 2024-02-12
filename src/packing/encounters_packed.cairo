@@ -1,11 +1,12 @@
-use rollyourown::utils::math::MathTrait;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     config::items::{ItemConfig, ItemConfigImpl, ItemSlot, ItemLevel}, models::game::GameMode,
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
+    utils::{
+        random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
+        bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
+    }
 };
-
 
 
 #[derive(Copy, Drop)]
@@ -44,9 +45,8 @@ impl EncountersPackedImpl of EncountersPackedTrait {
     fn get_encounter_level(self: EncountersPacked, slot: Encounters) -> u8 {
         let bits = BitsImpl::from_felt(self.packed);
 
-        let size: u8 = self.get_slot_size();
-        let index: u8 = slot.into() * size;
-        let level = bits.extract_into::<u8>(index, size);
+        let index: u8 = slot.into() * self.get_slot_size();
+        let level = bits.extract_into::<u8>(index, self.get_slot_size());
 
         level
     }
@@ -54,14 +54,14 @@ impl EncountersPackedImpl of EncountersPackedTrait {
     fn increase_encounter_level(ref self: EncountersPacked, slot: Encounters) {
         let mut bits = BitsImpl::from_felt(self.packed);
 
-        let size: u8 = self.get_slot_size();
-        let index: u8 = slot.into() * size;
-        let level = bits.extract_into::<u8>(index, size);
+        let index: u8 = slot.into() * self.get_slot_size();
+        let level = bits.extract_into::<u8>(index, self.get_slot_size());
 
-        bits.replace::<u8>(index, size, level.add_capped(1,7));
+        bits.replace::<u8>(index, self.get_slot_size(), level.add_capped(1, 7));
 
         self.packed = bits.into_felt();
     }
+      
 }
 
 

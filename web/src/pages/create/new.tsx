@@ -41,13 +41,7 @@ export default function New() {
         await createBurner();
       }
 
-      const { hash, gameId } = await createGame(gameMode, name, hustlerId);
-
-      // toast({
-      //   message: "Game Created!",
-      //   icon: Alert,
-      //   link: `http://amazing_explorer/${hash}`,
-      // });
+      const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 
       router.push(`/${gameId}/travel`);
     } catch (e) {
@@ -72,10 +66,6 @@ export default function New() {
           >
             Play
           </Button>
-
-          {/* <Button w={["full", "auto"]} isLoading={isPending} onClick={() => create(GameMode.Test)}>
-            Ninja Test
-          </Button> */}
         </Footer>
       }
     >

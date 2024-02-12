@@ -47,12 +47,16 @@ impl WantedPackedImpl of WantedPackedTrait {
         WantedPacked { world, game_id, player_id, packed: safe_packed }
     }
 
+    #[inline(always)]
+    fn get_slot_size(self: WantedPacked) -> u8 {
+        3
+    }
 
     fn get(self: @WantedPacked, location: Locations) -> u8 {
         let bits = BitsImpl::from_felt(*self.packed);
 
-        let index: u8 = (location.into() - 1) * 3; // location 0 = home
-        let wanted: u8 = bits.extract_into::<u8>(index, 3);
+        let index: u8 = (location.into() - 1) * (*self).get_slot_size(); // location 0 = home
+        let wanted: u8 = bits.extract_into::<u8>(index, (*self).get_slot_size());
 
         wanted
     }
@@ -60,12 +64,27 @@ impl WantedPackedImpl of WantedPackedTrait {
     fn set(ref self: WantedPacked, location: Locations, value: u8) {
         let mut bits = BitsImpl::from_felt(self.packed);
 
-        let index: u8 = (location.into() - 1) * 3; // location 0 = home
-        bits.replace::<u8>(index, 3, value.into());
+        let index: u8 = (location.into() - 1) * self.get_slot_size(); // location 0 = home
+        bits.replace::<u8>(index, self.get_slot_size(), value.into());
 
         self.packed = bits.into_felt();
     }
 
+
+    #[inline(always)]
+    fn get_wanted_risk(ref self: WantedPacked, location: Locations) -> u8 {
+        // 0	0%
+        // 1	0%
+        // 2	15%
+        // 3	30%
+        // 4	45%
+        // 5	60%
+        // 6	75%
+        // 7	90%
+
+        let wanted = self.get(location);
+        (wanted * 15).sub_capped(15, 0)
+    }
 
     fn on_turn_end(ref self: WantedPacked, game_store: GameStore) {
         let mut locations = LocationsEnumerableImpl::all();
@@ -80,14 +99,15 @@ impl WantedPackedImpl of WantedPackedTrait {
                             // travel back to same location : +3
                             self.set(*location, value.add_capped(3, 7))
                         } else {
-                            // travel to location : +1
-                            self.set(*location, value.add_capped(1, 7));
+                            // travel to location : +2
+                            self.set(*location, value.add_capped(2, 7));
                         }
                     } else {
-                        //not current location
-                        if game_store.player.location != *location {
+                        //not current location / not prev_location
+                        if game_store.player.location != *location
+                            && game_store.player.prev_location != *location {
                             // nothin at location : -1
-                            self.set(*location,  value.sub_capped(1, 0));
+                            self.set(*location, value.sub_capped(1, 0));
                         }
                     }
                 },

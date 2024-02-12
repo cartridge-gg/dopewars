@@ -17,9 +17,10 @@ enum EncounterActions {
     Fight,
 }
 
+
 #[starknet::interface]
 trait IGame<T> {
-    fn create_game(self: @T, game_mode: GameMode, avatar_id: u8);
+    fn create_game(self: @T, game_mode: GameMode, avatar_id: u8, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
@@ -45,16 +46,21 @@ mod game {
     enum Event {
         GameCreated: GameCreated,
         Traveled: Traveled,
+        TradeDrug: TradeDrug,
         HighVolatility: HighVolatility,
+        UpgradeItem: UpgradeItem,
         TravelEncounter: TravelEncounter,
     }
 
 
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
+        #[key]
         game_id: u32,
+        #[key]
         player_id: ContractAddress,
         game_mode: GameMode,
+        player_name: felt252,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -64,8 +70,20 @@ mod game {
         #[key]
         player_id: ContractAddress,
         turn: u8,
-        from_location: Locations,
-        to_location: Locations,
+        from_location_id: u8,
+        to_location_id: u8,
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    struct TradeDrug {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        drug_id: u8,
+        quantity: u32,
+        price: u32,
+        is_buy: bool,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -74,9 +92,19 @@ mod game {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        location_id: Locations,
-        drug_id: Drugs,
+        location_id: u8,
+        drug_id: u8,
         increase: bool,
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    struct UpgradeItem {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        item_slot: u8,
+        item_level: u8,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -85,14 +113,17 @@ mod game {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        encounter_id: Encounters,
+        attack: u8,
+        health: u8,
+        level: u8,
         health_loss: u8,
         demand_pct: u8,
+        payout: u32,
     }
 
     #[abi(embed_v0)]
     impl GameImpl of super::IGame<ContractState> {
-        fn create_game(self: @ContractState, game_mode: GameMode, avatar_id: u8,) {
+        fn create_game(self: @ContractState, game_mode: GameMode, avatar_id: u8,player_name:felt252) {
             let game_id = self.world().uuid();
             let player_id = get_caller_address();
 
@@ -105,7 +136,7 @@ mod game {
                 game_id,
                 player_id,
                 game_mode,
-                max_turns: 7, //game_config.max_turns
+                max_turns: game_config.max_turns,
                 max_wanted_shopping: game_config.max_wanted_shopping,
                 avatar_id,
                 game_over: false
@@ -124,7 +155,7 @@ mod game {
             set!(self.world(), (game_store_packed));
 
             // emit GameCreated
-            emit!(self.world(), GameCreated { game_id, player_id, game_mode });
+            emit!(self.world(), GameCreated { game_id, player_id, game_mode, player_name });
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
@@ -134,7 +165,7 @@ mod game {
 
             // execute actions (trades & shop)
             let mut actions = actions;
-            super::execute_actions(ref game_store, ref actions);
+            self.execute_actions(ref game_store, ref actions);
 
             //on_game_end
             game_loop::on_game_end(ref game_store);
@@ -161,7 +192,7 @@ mod game {
 
             // execute actions (trades & shop)
             let mut actions = actions;
-            super::execute_actions(ref game_store, ref actions);
+            self.execute_actions(ref game_store, ref actions);
 
             let mut randomizer = RandomImpl::new(self.world());
 
@@ -198,24 +229,30 @@ mod game {
             game_loop::on_turn_end(ref game_store, ref randomizer,);
         }
     }
-}
 
 
-fn execute_actions(ref game_store: GameStore, ref actions: Span<Actions>) {
-    loop {
-        match actions.pop_front() {
-            Option::Some(action) => {
-                match action {
-                    Actions::Trade(tradeAction) => {
-                        trading::execute_trade(ref game_store, *tradeAction)
+    #[generate_trait]
+    impl InternalImpl<ContractState> of InternalTrait<ContractState> {
+        fn execute_actions(
+            self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>
+        ) {
+            loop {
+                match actions.pop_front() {
+                    Option::Some(action) => {
+                        match action {
+                            super::Actions::Trade(tradeAction) => {
+                                trading::execute_trade(ref game_store, *tradeAction)
+                            },
+                            super::Actions::Shop(shopAction) => {
+                                shopping::execute_action(ref game_store, *shopAction)
+                            },
+                        };
                     },
-                    Actions::Shop(shopAction) => {
-                        shopping::execute_action(ref game_store, *shopAction)
-                    },
+                    Option::None => { break; },
                 };
-            },
-            Option::None => { break; },
-        };
-    };
-// TODO handle price impact
+            };
+        // TODO handle price impact
+        }
+    }
 }
+

@@ -6,6 +6,7 @@ use rollyourown::{
         game_store::{GameStore}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
     },
+    utils::events::{RawEventEmitterTrait, RawEventEmitterImpl}
 };
 
 #[derive(Copy, Drop, Serde)]
@@ -48,5 +49,20 @@ fn execute_action(ref game_store: GameStore, action: Action) {
 
     // gibe item to customer
     game_store.items.upgrade_item(action.slot);
+
+    // emit event
+    game_store
+        .world
+        .emit_raw(
+            array![
+                selector!("UpgradeItem"),
+                Into::<u32, felt252>::into(game_store.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+            ],
+            array![
+                Into::<ItemSlot, u8>::into(action.slot).into(),
+                Into::<ItemLevel, u8>::into(next_level).into(),
+            ]
+        );
 }
 

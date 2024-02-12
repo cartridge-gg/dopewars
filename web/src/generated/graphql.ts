@@ -1102,6 +1102,20 @@ export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ConfigQuery = { __typename?: 'World__Query', drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, from_turn?: any | null, to_turn?: any | null } | null } | null> | null } | null, drugConfigMetaModels?: { __typename?: 'DrugConfigMetaConnection', edges?: Array<{ __typename?: 'DrugConfigMetaEdge', node?: { __typename?: 'DrugConfigMeta', drug?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null } | null } | null> | null } | null, locationConfigMetaModels?: { __typename?: 'LocationConfigMetaConnection', edges?: Array<{ __typename?: 'LocationConfigMetaEdge', node?: { __typename?: 'LocationConfigMeta', location?: any | null, name?: any | null } | null } | null> | null } | null, itemConfigModels?: { __typename?: 'ItemConfigConnection', edges?: Array<{ __typename?: 'ItemConfigEdge', node?: { __typename?: 'ItemConfig', slot?: any | null, level?: any | null, slot_id?: any | null, level_id?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, itemConfigMetaModels?: { __typename?: 'ItemConfigMetaConnection', edges?: Array<{ __typename?: 'ItemConfigMetaEdge', node?: { __typename?: 'ItemConfigMeta', slot?: any | null, level?: any | null, name?: any | null } | null } | null> | null } | null };
 
+export type GameEventsQueryVariables = Exact<{
+  gameId: Scalars['String'];
+}>;
+
+
+export type GameEventsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } | null } | null> | null } | null };
+
+export type GameEventsSubscriptionSubscriptionVariables = Exact<{
+  gameId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GameEventsSubscriptionSubscription = { __typename?: 'World__Subscription', eventEmitted: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } };
+
 export type GameByIdQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
 }>;
@@ -1315,6 +1329,65 @@ export const useInfiniteConfigQuery = <
 useInfiniteConfigQuery.getKey = (variables?: ConfigQueryVariables) => variables === undefined ? ['Config.infinite'] : ['Config.infinite', variables];
 ;
 
+export const GameEventsDocument = `
+    query GameEvents($gameId: String!) {
+  events(last: 1000, keys: ["*", $gameId]) {
+    totalCount
+    edges {
+      node {
+        id
+        keys
+        data
+        createdAt
+      }
+    }
+  }
+}
+    `;
+export const useGameEventsQuery = <
+      TData = GameEventsQuery,
+      TError = unknown
+    >(
+      variables: GameEventsQueryVariables,
+      options?: UseQueryOptions<GameEventsQuery, TError, TData>
+    ) =>
+    useQuery<GameEventsQuery, TError, TData>(
+      ['GameEvents', variables],
+      useFetchData<GameEventsQuery, GameEventsQueryVariables>(GameEventsDocument).bind(null, variables),
+      options
+    );
+
+useGameEventsQuery.getKey = (variables: GameEventsQueryVariables) => ['GameEvents', variables];
+;
+
+export const useInfiniteGameEventsQuery = <
+      TData = GameEventsQuery,
+      TError = unknown
+    >(
+      variables: GameEventsQueryVariables,
+      options?: UseInfiniteQueryOptions<GameEventsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameEventsQuery, GameEventsQueryVariables>(GameEventsDocument)
+    return useInfiniteQuery<GameEventsQuery, TError, TData>(
+      ['GameEvents.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameEventsQuery.getKey = (variables: GameEventsQueryVariables) => ['GameEvents.infinite', variables];
+;
+
+export const GameEventsSubscriptionDocument = `
+    subscription GameEventsSubscription($gameId: String) {
+  eventEmitted(keys: ["*", $gameId]) {
+    id
+    keys
+    data
+    createdAt
+  }
+}
+    `;
 export const GameByIdDocument = `
     query GameById($gameId: u32) {
   gameModels(where: {game_id: $gameId}) {

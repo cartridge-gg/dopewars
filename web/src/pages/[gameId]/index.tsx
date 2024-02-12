@@ -21,7 +21,7 @@ export default function Redirector() {
       game.player.status === PlayerStatus.BeingMugged
     ) {
       //
-      router.push(`/${gameId}/decision`);
+      router.push(`/${gameId}/event/decision`);
     }
   }, [game, game?.player.status, game?.player.location, router, gameId]);
 

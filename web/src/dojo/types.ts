@@ -36,8 +36,8 @@ export enum ItemTextEnum {
 
 export enum PlayerStatus {
   Normal,
-  BeingMugged,
   BeingArrested,
+  BeingMugged,
 }
 
 export enum EncountersAction {

@@ -1,6 +1,4 @@
-use rollyourown::packing::wanted_packed::WantedPackedTrait;
 use starknet::ContractAddress;
-use rollyourown::packing::markets_packed::MarketsPackedTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
@@ -9,13 +7,17 @@ use rollyourown::{
     config::locations::{Locations},
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl}
+        wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
+        markets_packed::MarketsPackedTrait
     }, 
     systems::traveling
 };
 
 
 fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
+    // update wanted
+    game_store.wanted.on_turn_end(game_store);
+    
     // no encounter on first turn
     if game_store.player.turn == 0 {
        return false;
@@ -26,19 +28,17 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
 
 
 fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
-    // update wanted
-    game_store.wanted.on_turn_end(game_store);
-
+    
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
     game_store.player.next_location = Locations::Home;
 
-    //update HP if not dead
-    if game_store.player.health > 0 {
-        //player.health = player.health.add_capped(risk_settings.health_increase_by_turn, 100);
-        game_store.player.health -= 1;
-    }
+    // //update HP if not dead
+    // if game_store.player.health > 0 {
+    //     //player.health = player.health.add_capped(risk_settings.health_increase_by_turn, 100);
+    //     game_store.player.health -= 1;
+    // }
 
     // update turn
     game_store.player.turn += 1;

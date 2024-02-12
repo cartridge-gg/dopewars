@@ -1,9 +1,9 @@
 import { EncountersAction, Outcome } from "@/dojo/types";
 import {
-    GetTransactionReceiptResponse,
-    InvokeTransactionReceiptResponse,
-    num,
-    shortString
+  GetTransactionReceiptResponse,
+  InvokeTransactionReceiptResponse,
+  num,
+  shortString
 } from "starknet";
 
 import { Siren, Truck } from "@/components/icons";
@@ -17,40 +17,54 @@ export interface BaseEventData {
   eventName: string;
 }
 
-export interface TravelEncounterData extends BaseEventData {
-  playerId: string;
-  encounterId: number;
-  healthLoss: number;
-  demandPct: number;
-}
-
-export interface AtPawnshopEventData extends BaseEventData {
-  playerId: string;
-}
 
 export interface GameCreatedEventData extends BaseEventData {
   playerId: string;
-  gameMode: Number;
-}
-
-export interface JoinedEventData extends BaseEventData {
-  playerId: string;
+  gameMode: number;
   playerName: string;
 }
 
-export interface BoughtEventData extends BaseEventData {
+export interface TraveledEventData extends BaseEventData {
   playerId: string;
-  drugId: string;
-  quantity: number;
-  cost: number;
+  turn: number;
+  fromLocationId: number;
+  toLocationId: number;
 }
 
-export interface SoldEventData extends BaseEventData {
-  playerId: string;
-  drugId: string;
+export interface TradeDrugData extends BaseEventData {
+  drugDd: number;
   quantity: number;
+  price: number;
+  isBuy: boolean;
+}
+
+export interface HighVolatilityData extends BaseEventData {
+  locationId: string;
+  drugId: string;
+  increase: boolean;
+}
+
+export interface UpgradeItemData extends BaseEventData {
+  itemSlot: number;
+  itemLevel: number;
+}
+
+export interface TravelEncounterData extends BaseEventData {
+  playerId: string;
+  attack: number;
+  health: number;
+  level: number;
+  encounterId: number;
+  healthLoss: number;
+  demandPct: number;
   payout: number;
 }
+
+
+//
+//
+//
+
 
 export interface DecisionEventData extends BaseEventData {
   playerId: string;
@@ -67,26 +81,6 @@ export interface ConsequenceEventData extends BaseEventData {
   cashEarnt: number;
 }
 
-export interface HighVolatilityData extends BaseEventData {
-  locationId: string;
-  drugId: string;
-  increase: boolean;
-}
-
-export interface TraveledEventData extends BaseEventData {
-  playerId: string;
-  turn: number;
-  increase: boolean;
-  fromLocation: string;
-  toLocation: string;
-}
-
-export interface BoughtItemEventData extends BaseEventData {
-  playerId: string;
-  itemId: string;
-  level: number;
-  cost: number;
-}
 
 export interface GameOverEventData extends BaseEventData {
   playerId: string;
@@ -128,10 +122,59 @@ export const parseEvent = (raw: any) => {
       return {
         eventType: WorldEvents.GameCreated,
         eventName: "GameCreated",
-        gameId: num.toHexString(raw.data[0]),
-        playerId: num.toHexString(raw.data[1]),
-        gameMode: Number(raw.data[2]),
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        gameMode: Number(raw.data[0]),
+        playerName: shortString.decodeShortString(raw.data[1]),
       } as GameCreatedEventData;
+
+    case WorldEvents.Traveled:
+      return {
+        eventType: WorldEvents.Traveled,
+        eventName: "Traveled",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        turn: Number(raw.data[0]),
+        fromLocationId: Number(raw.data[1]),
+        toLocationId: Number(raw.data[2]),
+      } as TraveledEventData;
+
+
+    case WorldEvents.TradeDrug:
+      return {
+        eventType: WorldEvents.Traveled,
+        eventName: "Traveled",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        drugId: Number(raw.data[0]),
+        quantity: Number(raw.data[1]),
+        price: Number(raw.data[2]),
+        isBuy: raw.data[3] === "0x0" ? false : true,
+      } as TradeDrugData;
+
+
+    case WorldEvents.HighVolatility:
+      return {
+        eventType: WorldEvents.HighVolatility,
+        eventName: "HighVolatility",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        locationId: num.toHexString(raw.data[0]),
+        drugId: num.toHexString(raw.data[1]),
+        increase: raw.data[2] === "0x0" ? false : true,
+      } as HighVolatilityData;
+
+
+    case WorldEvents.UpgradeItem:
+      return {
+        eventType: WorldEvents.UpgradeItem,
+        eventName: "UpgradeItem",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        itemSlot: num.toHexString(raw.data[0]),
+        itemLevel: num.toHexString(raw.data[1]),
+      } as UpgradeItemData;
+
 
     case WorldEvents.TravelEncounter:
       return {
@@ -140,9 +183,17 @@ export const parseEvent = (raw: any) => {
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
         encounterId: Number(raw.data[0]),
-        healthLoss: Number(raw.data[1]),
-        demandPct: Number(raw.data[2]),
+        attack: Number(raw.data[1]),
+        health: Number(raw.data[2]),
+        level: Number(raw.data[3]),
+        healthLoss: Number(raw.data[4]),
+        demandPct: Number(raw.data[5]),
+        payout: Number(raw.data[6]),
       } as TravelEncounterData;
+
+
+
+
 
 
     // case WorldEvents.Decision:
@@ -168,60 +219,8 @@ export const parseEvent = (raw: any) => {
     //     cashEarnt: Number(raw.data[5]),
     //   } as ConsequenceEventData;
 
-    case WorldEvents.HighVolatility:
-      return {
-        eventType: WorldEvents.HighVolatility,
-        eventName: "HighVolatility",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        locationId: num.toHexString(raw.data[0]),
-        drugId: num.toHexString(raw.data[1]),
-        increase: raw.data[2] === "0x0" ? false : true,
-      } as HighVolatilityData;
 
-    case WorldEvents.Traveled:
-      return {
-        eventType: WorldEvents.Traveled,
-        eventName: "Traveled",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        turn: Number(raw.data[0]),
-        fromLocation: shortString.decodeShortString(raw.data[1]),
-        toLocation: shortString.decodeShortString(raw.data[2]),
-      } as TraveledEventData;
 
-    // case WorldEvents.Bought:
-    //   return {
-    //     eventType: WorldEvents.Bought,
-    //     eventName: "Bought",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     drugId: num.toHexString(raw.data[0]),
-    //     quantity: Number(raw.data[1]),
-    //     cost: Number(raw.data[2]),
-    //   } as BoughtEventData;
-
-    // case WorldEvents.Sold:
-    //   return {
-    //     eventType: WorldEvents.Sold,
-    //     eventName: "Sold",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     drugId: num.toHexString(raw.data[0]),
-    //     quantity: Number(raw.data[1]),
-    //     payout: Number(raw.data[2]),
-    //   } as SoldEventData;
-
-    // case WorldEvents.BoughtItem:
-    //   return {
-    //     eventType: WorldEvents.BoughtItem,
-    //     eventName: "BoughtItem",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     itemId: num.toHexString(raw.data[0]),
-    //     level: Number(raw.data[1]),
-    //     cost: Number(raw.data[2]),
-    //   } as BoughtItemEventData;
 
     // case WorldEvents.GameOver:
     //   return {
@@ -236,15 +235,15 @@ export const parseEvent = (raw: any) => {
     //   } as GameOverEventData;
 
 
-      default:
-        // console.log(`event parse not implemented: ${raw.keys[0]}`)
-        //throw new Error(`event parse not implemented: ${eventType}`);
-        return {
-          gameId: undefined,
-          eventType: raw.keys[0],
-          eventName: raw.keys[0],
-        }
-        break;
+    default:
+      // console.log(`event parse not implemented: ${raw.keys[0]}`)
+      //throw new Error(`event parse not implemented: ${eventType}`);
+      return {
+        gameId: undefined,
+        eventType: raw.keys[0],
+        eventName: raw.keys[0],
+      }
+      break;
   }
 
 }

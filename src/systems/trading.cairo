@@ -10,7 +10,7 @@ use rollyourown::{
         drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, items_packed::{ItemsPackedImpl},
         markets_packed::{MarketsPackedImpl}
     },
-    utils::math::{MathTrait, MathImplU8}
+    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}}
 };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
@@ -83,6 +83,23 @@ fn buy(ref game_store: GameStore, trade: Trade) {
 
     // update cash
     game_store.player.cash -= total_cost;
+
+    // emit event
+    game_store
+        .world
+        .emit_raw(
+            array![
+                selector!("TradeDrug"),
+                Into::<u32, felt252>::into(game_store.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+            ],
+            array![
+                Into::<Drugs, u8>::into(trade.drug).into(),
+                Into::<u32, felt252>::into(trade.quantity),
+                Into::<u32, felt252>::into(market_price),
+                true.into()
+            ]
+        );
 }
 
 
@@ -105,4 +122,21 @@ fn sell(ref game_store: GameStore, trade: Trade) {
 
     // update cash
     game_store.player.cash += total;
+
+    // emit event
+    game_store
+        .world
+        .emit_raw(
+            array![
+                selector!("TradeDrug"),
+                Into::<u32, felt252>::into(game_store.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+            ],
+            array![
+                Into::<Drugs, u8>::into(trade.drug).into(),
+                Into::<u32, felt252>::into(trade.quantity),
+                Into::<u32, felt252>::into(market_price),
+                false.into()
+            ]
+        );
 }
