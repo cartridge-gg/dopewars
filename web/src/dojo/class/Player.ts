@@ -1,6 +1,6 @@
 import { computed, makeObservable, observable } from "mobx";
 import { ConfigStore, LocationConfigFull } from "../stores/config";
-import { TradeDirection } from "../types";
+import { Drugs, TradeDirection } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isShopAction, isTradeAction } from "./Game";
 import Bits from "./utils/Bits";
@@ -47,7 +47,7 @@ export class PlayerClass extends GamePropertyClass {
 
     }
 
-  
+
 
     get cash() {
         if (!this.game?.pending || this.game?.pending?.length === 0) return this._cash
@@ -72,19 +72,25 @@ export class PlayerClass extends GamePropertyClass {
 
     get wanted() {
         // at home
-        if(!this.location) return 0;
+        if (!this.location) return 0;
 
-        const locationId = this.location.location_id
-        return this.game.wanted.getWantedTick(locationId)
+        // TODO: use type
+        if (this.status === 0) {
+            return this.game.wanted.getWantedTick(this.location.location_id)
+        } else {
+            // when mugged / arrested display next_location
+            return this.game.wanted.getWantedTick(this.nextLocation.location_id)
+        }
+
     }
 
 
-    canBuy(drug: Drug) {
+    canBuy(drug: Drugs) {
         return true
     }
 
 
-    canSell(drug: Drug) {
+    canSell(drug: Drugs) {
         return true
     }
 

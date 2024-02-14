@@ -6,7 +6,6 @@ import { Arrow } from "@/components/icons";
 import BorderImage from "@/components/icons/BorderImage";
 import { Map as MapSvg } from "@/components/map";
 import WantedIndicator from "@/components/player/WantedIndicator";
-import { HighVolatilityData, displayMarketEvents } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -122,9 +121,9 @@ export default function Travel() {
         const locationId = configStore.getLocation(targetLocation).location_id;
         const { event, events, hash, isGameOver } = await travel(gameId, locationId, game.getPendingCalls());
 
-        // if (isGameOver) {
-        //   return router.replace(`/${gameId}/end`);
-        // }
+        if (isGameOver) {
+          return router.replace(`/${gameId}/end`);
+        }
 
         if (event) {
           if (event.eventType === WorldEvents.TravelEncounter) {
@@ -135,11 +134,11 @@ export default function Travel() {
           }
         }
 
-        if (events) {
-          displayMarketEvents(events as HighVolatilityData[], toaster);
-        }
+        // if (events) {
+        //   displayMarketEvents(events as HighVolatilityData[], toaster);
+        // }
 
-        router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
+       router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);

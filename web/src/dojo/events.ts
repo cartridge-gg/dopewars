@@ -6,10 +6,7 @@ import {
   shortString
 } from "starknet";
 
-import { Siren, Truck } from "@/components/icons";
-import { ToastType } from "@/hooks/toast";
 import { WorldEvents } from "./generated/contractEvents";
-import { getDrugByType, getLocationByType } from "./helpers";
 
 export interface BaseEventData {
   gameId: string;
@@ -18,13 +15,13 @@ export interface BaseEventData {
 }
 
 
-export interface GameCreatedEventData extends BaseEventData {
+export interface GameCreatedData extends BaseEventData {
   playerId: string;
   gameMode: number;
   playerName: string;
 }
 
-export interface TraveledEventData extends BaseEventData {
+export interface TraveledData extends BaseEventData {
   playerId: string;
   turn: number;
   fromLocationId: number;
@@ -32,19 +29,22 @@ export interface TraveledEventData extends BaseEventData {
 }
 
 export interface TradeDrugData extends BaseEventData {
-  drugDd: number;
+  playerId: string;
+  drugId: number;
   quantity: number;
   price: number;
   isBuy: boolean;
 }
 
 export interface HighVolatilityData extends BaseEventData {
-  locationId: string;
-  drugId: string;
+  playerId: string;
+  locationId: number;
+  drugId: number;
   increase: boolean;
 }
 
 export interface UpgradeItemData extends BaseEventData {
+  playerId: string;
   itemSlot: number;
   itemLevel: number;
 }
@@ -126,7 +126,7 @@ export const parseEvent = (raw: any) => {
         playerId: num.toHexString(raw.keys[2]),
         gameMode: Number(raw.data[0]),
         playerName: shortString.decodeShortString(raw.data[1]),
-      } as GameCreatedEventData;
+      } as GameCreatedData;
 
     case WorldEvents.Traveled:
       return {
@@ -137,13 +137,13 @@ export const parseEvent = (raw: any) => {
         turn: Number(raw.data[0]),
         fromLocationId: Number(raw.data[1]),
         toLocationId: Number(raw.data[2]),
-      } as TraveledEventData;
+      } as TraveledData;
 
 
     case WorldEvents.TradeDrug:
       return {
-        eventType: WorldEvents.Traveled,
-        eventName: "Traveled",
+        eventType: WorldEvents.TradeDrug,
+        eventName: "TradeDrug",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
         drugId: Number(raw.data[0]),
@@ -159,8 +159,8 @@ export const parseEvent = (raw: any) => {
         eventName: "HighVolatility",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
-        locationId: num.toHexString(raw.data[0]),
-        drugId: num.toHexString(raw.data[1]),
+        locationId: Number(raw.data[0]),
+        drugId: Number(raw.data[1]),
         increase: raw.data[2] === "0x0" ? false : true,
       } as HighVolatilityData;
 
@@ -171,8 +171,8 @@ export const parseEvent = (raw: any) => {
         eventName: "UpgradeItem",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
-        itemSlot: num.toHexString(raw.data[0]),
-        itemLevel: num.toHexString(raw.data[1]),
+        itemSlot: Number(raw.data[0]),
+        itemLevel: Number(raw.data[1]),
       } as UpgradeItemData;
 
 
@@ -192,8 +192,22 @@ export const parseEvent = (raw: any) => {
       } as TravelEncounterData;
 
 
-
-
+    case WorldEvents.TravelEncounterResult:
+      return {
+        eventType: WorldEvents.TravelEncounterResult,
+        eventName: "TravelEncounterResult",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        action: Number(raw.data[0]),
+        outcome: Number(raw.data[1]),
+        rounds: Number(raw.data[2]),
+        dmg_dealt: Number(raw.data[3]),
+        dmg_taken: Number(raw.data[4]),
+        cash_earnt: Number(raw.data[5]),
+        cash_loss: Number(raw.data[6]),
+        drug_id: Number(raw.data[7]),
+        drug_loss: Number(raw.data[8]),
+      } as TravelEncounterResultData;
 
 
     // case WorldEvents.Decision:
@@ -248,22 +262,3 @@ export const parseEvent = (raw: any) => {
 
 }
 
-
-export function displayMarketEvents(events: HighVolatilityData[], toaster: ToastType) {
-  // market events
-  for (let event of events) {
-    const e = event as HighVolatilityData;
-    const msg = e.increase
-      ? `Pigs seized ${getDrugByType(Number(e.drugId))?.name} in ${getLocationByType(Number(e.locationId))?.name
-      }`
-      : `A shipment of ${getDrugByType(Number(e.drugId))?.name} has arrived to ${getLocationByType(Number(e.locationId))?.name
-      }`;
-    const icon = e.increase ? Siren : Truck;
-    toaster.toast({
-      message: msg,
-      icon: icon,
-      // link: `http://amazing_explorer/${hash}`,
-      duration: 6000,
-    });
-  }
-}

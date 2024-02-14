@@ -1,4 +1,3 @@
-export * from "./useAvailableShopItems"
 export * from "./useConfigStore"
 export * from "./useDevtools"
 export * from "./useDojoContext"

@@ -10,6 +10,8 @@ export enum WorldEvents {
   HighVolatility = "0x5745fc04eae9463f95a8fd2efc3a0ce995c72189f48fc4afcaee0648773f24",
   UpgradeItem = "0x3ca813365217de90cf97b15d7e7e6f0525760cdec66dd9326203e7ddc368f80",
   TravelEncounter = "0x211a1369d28745f22bfe7e3e7e8e9d671f904ea80596d1fab13bfa9c16c1c57",
+  TravelEncounterResult = "0x4c25d590d9373d60632194fce3d4237e3ccb1d31738c1f881045e495e04b35",
+  GameOver = "0x165460ded86991fa560a0d331810f83651da90c5df6d4b61357c3b3807ff41c",
 }
 
 export interface BaseEventData {
@@ -66,6 +68,28 @@ export interface TravelEncounterData extends BaseEventData {
   health_loss: number;
   demand_pct: number;
   payout: number;
+}
+
+export interface TravelEncounterResultData extends BaseEventData {
+  game_id: number;
+  player_id: string;
+  action: String;
+  outcome: String;
+  rounds: number;
+  dmg_dealt: number;
+  dmg_taken: number;
+  cash_earnt: number;
+  cash_loss: number;
+  drug_id: number;
+  drug_loss: number;
+}
+
+export interface GameOverData extends BaseEventData {
+  game_id: number;
+  player_id: string;
+  player_name: string;
+  turn: number;
+  cash: number;
 }
 
 export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
@@ -153,6 +177,34 @@ export const parseEvent = (raw: any) => {
         demand_pct: Number(raw.data[4]),
         payout: Number(raw.data[5]),
       } as TravelEncounterData;
+
+    case WorldEvents.TravelEncounterResult:
+      return {
+        event_type: WorldEvents.TravelEncounterResult,
+        event_name: "TravelEncounterResult",
+        game_id: Number(raw.keys[1]),
+        player_id: num.toHexString(raw.keys[2]),
+        action: num.toHexString(raw.data[0]),
+        outcome: num.toHexString(raw.data[1]),
+        rounds: Number(raw.data[2]),
+        dmg_dealt: Number(raw.data[3]),
+        dmg_taken: Number(raw.data[4]),
+        cash_earnt: Number(raw.data[5]),
+        cash_loss: Number(raw.data[6]),
+        drug_id: Number(raw.data[7]),
+        drug_loss: Number(raw.data[8]),
+      } as TravelEncounterResultData;
+
+    case WorldEvents.GameOver:
+      return {
+        event_type: WorldEvents.GameOver,
+        event_name: "GameOver",
+        game_id: Number(raw.keys[1]),
+        player_id: num.toHexString(raw.keys[2]),
+        player_name: num.toHexString(raw.data[0]),
+        turn: Number(raw.data[1]),
+        cash: Number(raw.data[2]),
+      } as GameOverData;
 
     default:
       return {

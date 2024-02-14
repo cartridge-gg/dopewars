@@ -1,28 +1,25 @@
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 
-import { getActionName, getOutcomeName, getShopItemByType } from "@/dojo/helpers";
-
 import Button from "@/components/Button";
 import { Profile } from "@/components/ProfileButton";
-import { DollarBag, Event } from "@/components/icons";
+import { Event as EventIcon } from "@/components/icons";
 import {
-  BoughtEventData,
-  BoughtItemEventData,
   ConsequenceEventData,
-  DecisionEventData,
+  GameCreatedData,
   GameOverEventData,
-  JoinedEventData,
   ParseEventResult,
-  SoldEventData,
+  TradeDrugData,
   TravelEncounterData,
+  UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore } from "@/dojo/stores/config";
-import { Outcome } from "@/dojo/types";
+import { Encounters, Outcome } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 
 type LogByDay = {
@@ -31,16 +28,12 @@ type LogByDay = {
   logs: ParseEventResult[];
 };
 
-export default function Logs() {
+const Logs = () => {
   const { router, gameId, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
-  // const { playerEntity } = usePlayerStore();
   const configStore = useConfigStore();
-
-  // const { playerLogs, isFetched } = usePlayerLogs({ gameId, playerId: playerId || account?.address });
-  const playerLogs = [];
-  const isFetched = true;
+  const { gameEvents } = useGameStore();
 
   const [playerName, setPlayerName] = useState("");
   const [logs, setLogs] = useState<LogByDay[]>([]);
@@ -48,54 +41,54 @@ export default function Logs() {
 
   const isMobile = IsMobile();
 
-  // useEffect(() => {
-  //   if (!playerLogs) return;
+  useEffect(() => {
+    if (!gameEvents?.sortedEvents) return;
 
-  //   const logsByDay = [];
+    const logsByDay = [];
 
-  //   let dayLogs: LogByDay = {
-  //     day: 0,
-  //     location: "Hood",
-  //     logs: [],
-  //   };
+    let dayLogs: LogByDay = {
+      day: 0,
+      location: undefined,
+      logs: [],
+    };
 
-  //   for (let log of playerLogs?.parsedLogs) {
-  //     //console.log(`${log.log.node?.id} - ${log.parsed.eventName}`)
-  //     if (log.parsed.eventType === WorldEvents.PlayerJoined) {
-  //       setPlayerName((log.parsed as JoinedEventData).playerName);
-  //     }
-  //     if (log.parsed.eventType === WorldEvents.Traveled) {
-  //       // create new day
-  //       logsByDay.push(dayLogs);
+    for (let log of gameEvents?.sortedEvents) {
+      if (log.parsed.eventType === WorldEvents.GameCreated) {
+        setPlayerName((log.parsed as GameCreatedData).playerName);
+      }
 
-  //       const travelEvent = log.parsed as TraveledEventData;
+      if (log.parsed.eventType === WorldEvents.Traveled) {
+        // create new day
+        logsByDay.push(dayLogs);
 
-  //       dayLogs = {
-  //         day: travelEvent.turn,
-  //         location: travelEvent.toLocation,
-  //         logs: [],
-  //       };
-  //     } else {
-  //       // push other events in dayLogs
-  //       dayLogs.logs.push(log.parsed);
-  //     }
-  //   }
-  //   logsByDay.push(dayLogs);
+        const travelEvent = log.parsed as TraveledEventData;
 
-  //   // move day 0 hood events to day 0 location events
-  //   const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.location === "Hood");
-  //   const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location !== "Hood");
-  //   if (day0HoodIndex > -1 && day0Index > -1) {
-  //     const day0Hood = logsByDay[day0HoodIndex];
-  //     const day0 = logsByDay[day0Index];
-  //     day0.logs.unshift(...day0Hood.logs);
-  //     day0Hood.logs = [];
-  //     logsByDay[day0HoodIndex] = day0Hood;
-  //     logsByDay[day0Index] = day0;
-  //   }
+        dayLogs = {
+          day: travelEvent.turn,
+          location: configStore.getLocationById(travelEvent.toLocationId),
+          logs: [],
+        };
+      } else {
+        // push other events in dayLogs
+        dayLogs.logs.push(log.parsed);
+      }
+    }
+    logsByDay.push(dayLogs);
 
-  //   setLogs(logsByDay);
-  // }, [playerLogs]);
+    // move day 0 hood events to day 0 location events
+    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.locationId === 0 /*"Hood"*/);
+    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.locationId !== 0 /*"Hood"*/);
+    if (day0HoodIndex > -1 && day0Index > -1) {
+      const day0Hood = logsByDay[day0HoodIndex];
+      const day0 = logsByDay[day0Index];
+      day0.logs.unshift(...day0Hood.logs);
+      day0Hood.logs = [];
+      logsByDay[day0HoodIndex] = day0Hood;
+      logsByDay[day0Index] = day0;
+    }
+
+    setLogs(logsByDay);
+  }, [gameEvents?.sortedEvents]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -106,7 +99,7 @@ export default function Logs() {
 
   const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
 
-  if (!isFetched || !logs) {
+  if (!logs) {
     return <></>;
   }
 
@@ -137,7 +130,9 @@ export default function Logs() {
       </VStack>
     </Layout>
   );
-}
+};
+
+export default observer(Logs);
 
 const CustomLeftPanel = () => {
   return (
@@ -153,11 +148,11 @@ const CustomLeftPanel = () => {
 function renderDay(configStore: ConfigStore, log: LogByDay) {
   return (
     <>
-      {log.location !== "Hood" && (
+      {log.location && (
         <HStack w="full" mt={["20px", "30px"]}>
-          {configStore.getLocationById(log.location)?.icon({ color: "neon.500" })}
+          {log.location.icon({ color: "neon.500" })}
           <Text fontSize={["10px", "12px"]} w="full" textStyle="subheading" color="neon.500">
-            DAY {log.day + 1} - {log.location}
+            DAY {log.day + 1} - {log.location.name}
           </Text>
         </HStack>
       )}
@@ -167,34 +162,20 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
           const key = `key-${log.day}-${idx}`;
 
           switch (i.eventType) {
-            case WorldEvents.BoughtItem:
-              return renderBoughtItem(i as BoughtItemEventData, key);
+            case WorldEvents.TradeDrug:
+              return renderTradeDrug(configStore, i as TradeDrugData, key);
               break;
 
-            case WorldEvents.Bought:
-              return renderBought(configStore, i as BoughtEventData, key);
-              break;
-
-            case WorldEvents.Sold:
-              return renderSold(configStore, i as SoldEventData, key);
+            case WorldEvents.UpgradeItem:
+              return renderUpgradeItem(configStore, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:
               return renderTravelEncounter(i as TravelEncounterData, log, key);
               break;
 
-            case WorldEvents.PlayerJoined:
-              // return renderPlayerJoined(i as JoinedEventData, key);
-              break;
-
             case WorldEvents.GameOver:
               // return renderGameOver(i as GameOverEventData, key);
-              break;
-
-            case WorldEvents.AtPawnshop:
-              if (log.day > 0) {
-                // return renderAtPawnshop(i as AtPawnshopEventData, key);
-              }
               break;
 
             default:
@@ -206,20 +187,82 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
   );
 }
 
-function renderPlayerJoined(log: JoinedEventData, key: string) {
+function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: string) {
+  const drug = configStore.getDrugById(Number(log.drugId))!;
+  const action = log.isBuy ? "Bought" : "Sold";
+  const sign = log.isBuy ? "-" : "+";
+  const totalPrice = log.price * log.quantity;
   return (
-    <ListItem w="full" pt="0">
-      <Text
-        w="full"
-        fontStyle="headings"
-        fontSize={["16px", "20px"]}
-        textTransform="uppercase"
-        my="20px"
-        textAlign="center"
-      >
-        {log.playerName}&apos;s life
-      </Text>
-    </ListItem>
+    <Line
+      key={key}
+      icon={drug.icon}
+      text={`${action} ${drug.name}`}
+      quantity={log.quantity}
+      total={`${sign} ${formatCash(totalPrice)}`}
+    />
+  );
+}
+
+function renderUpgradeItem(configStore: ConfigStore, log: UpgradeItemData, key: string) {
+  const item = configStore.getItemByIds(log.itemSlot, log.itemLevel);
+  return (
+    <Line
+      key={key}
+      icon={item.icon}
+      text={`Bought ${item.name}`}
+      total={`- ${formatCash(item.cost)}`}
+      color="yellow.400"
+      iconColor="yellow.400"
+    />
+  );
+}
+
+function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
+  // const status = Number(log.playerStatus);
+  // const encounter = status === 1 ? "Gang" : "Cops";
+  const encounter = log.encounterId === Encounters.Cops ? "Cops" : "Gang";
+
+  const decisions = [];
+  const totalHpLoss = log.healthLoss;
+
+  const lastConsequence = "lastConsequence";
+  const lastConsequenceName = "lastConsequenceName";
+
+  // const decisions = dayLog.logs
+  //   .filter((i) => i.eventType === WorldEvents.Decision)
+  //   .map((i) => i as DecisionEventData)
+  //   .map((i) => getActionName(i.action))
+  //   .join(", ");
+
+  // const consequences = dayLog.logs
+  //   .filter((i) => i.eventType === WorldEvents.Consequence)
+  //   .map((i) => i as ConsequenceEventData);
+
+  // const lastConsequence = consequences.length > 0 ? consequences[consequences.length - 1] : undefined;
+  // const lastConsequenceName = lastConsequence ? getOutcomeName(lastConsequence.outcome) : "";
+
+  // const totalHpLoss =
+  //   dayLog.logs.length > 0
+  //     ? dayLog.logs
+  //         .filter((i) => i.eventType === WorldEvents.Consequence)
+  //         .map((i) => i as ConsequenceEventData)
+  //         .map((i) => i.healthLoss)
+  //         .reduce((prev, curr) => {
+  //           return prev + curr;
+  //         }, log.healthLoss)
+  //     : log.healthLoss;
+
+  return (
+    <FightLine
+      key={key}
+      icon={EventIcon}
+      text={`Meet ${encounter} LVL ${log.level}`}
+      result={lastConsequenceName}
+      resultInfos={lastConsequence}
+      consequence={`-${totalHpLoss} HP`}
+      decisions={decisions}
+      color="yellow.400"
+    />
   );
 }
 
@@ -231,92 +274,6 @@ function renderGameOver(log: GameOverEventData, key: string) {
       </Text>
       <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
     </ListItem>
-  );
-}
-
-function renderAtPawnshop(log: GameOverEventData, key: string) {
-  return <Line key={key} icon={DollarBag} text={`At Pawnshop`} />;
-}
-
-function renderBoughtItem(log: BoughtItemEventData, key: string) {
-  const item = getShopItemByType(Number(log.itemId), Number(log.level));
-  return (
-    <Line
-      key={key}
-      icon={item.icon}
-      text={`Bought ${item.name}`}
-      total={`- ${formatCash(log.cost)}`}
-      color="yellow.400"
-      iconColor="yellow.400"
-    />
-  );
-}
-
-function renderBought(configStore: ConfigStore, log: BoughtEventData, key: string) {
-  const drug = configStore.getDrugById(Number(log.drugId))!;
-  return (
-    <Line
-      key={key}
-      icon={drug.icon}
-      text={`Bought ${drug.name}`}
-      quantity={log.quantity}
-      total={`- ${formatCash(log.cost)}`}
-    />
-  );
-}
-
-function renderSold(configStore: ConfigStore, log: SoldEventData, key: string) {
-  const drug = configStore.getDrugById(Number(log.drugId))!;
-  return (
-    <Line
-      key={key}
-      icon={drug.icon}
-      text={`Sold ${drug.name}`}
-      quantity={log.quantity}
-      total={`+ ${formatCash(log.payout)}`}
-    />
-  );
-}
-
-function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
-  const status = Number(log.playerStatus);
-  const encounter = status === 1 ? "Gang" : "Cops";
-
-  const decisions = dayLog.logs
-    .filter((i) => i.eventType === WorldEvents.Decision)
-    .map((i) => i as DecisionEventData)
-    .map((i) => getActionName(i.action))
-    .join(", ");
-
-  const consequences = dayLog.logs
-    .filter((i) => i.eventType === WorldEvents.Consequence)
-    .map((i) => i as ConsequenceEventData);
-
-  const lastConsequence = consequences.length > 0 ? consequences[consequences.length - 1] : undefined;
-  const lastConsequenceName = lastConsequence ? getOutcomeName(lastConsequence.outcome) : "";
-
-  const totalHpLoss =
-    dayLog.logs.length > 0
-      ? dayLog.logs
-          .filter((i) => i.eventType === WorldEvents.Consequence)
-          .map((i) => i as ConsequenceEventData)
-          .map((i) => i.healthLoss)
-          .reduce((prev, curr) => {
-            return prev + curr;
-          }, log.healthLoss)
-      : log.healthLoss;
-
-  return (
-    <FightLine
-      key={key}
-      icon={Event}
-      text={`Meet ${encounter}`}
-      result={lastConsequenceName}
-      resultInfos={lastConsequence}
-      consequence={`-${totalHpLoss} HP`}
-      decisions={decisions}
-      color="yellow.400"
-    />
   );
 }
 

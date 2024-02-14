@@ -1,6 +1,6 @@
 import { GameClass } from "@/dojo/class/Game";
 import { ConfigStore } from "@/dojo/stores/config";
-import { Location } from "@/dojo/types";
+import { Locations } from "@/dojo/types";
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
@@ -8,17 +8,17 @@ import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
 
 type CoordinateType = {
-  [key in Location]: { x: number; y: number };
+  [key in Locations]: { x: number; y: number };
 };
 
 const coordinate: CoordinateType = {
-  [Location.Home]: { x: 0, y: 0 },
-  [Location.Queens]: { x: -150, y: 150 },
-  [Location.Jersey]: { x: 150, y: 150 },
-  [Location.Bronx]: { x: 0, y: 300 },
-  [Location.Central]: { x: 0, y: 150 },
-  [Location.Coney]: { x: -150, y: -0 },
-  [Location.Brooklyn]: { x: 0, y: -0 },
+  [Locations.Home]: { x: 0, y: 0 },
+  [Locations.Queens]: { x: -150, y: 150 },
+  [Locations.Jersey]: { x: 150, y: 150 },
+  [Locations.Bronx]: { x: 0, y: 300 },
+  [Locations.Central]: { x: 0, y: 150 },
+  [Locations.Coney]: { x: -150, y: -0 },
+  [Locations.Brooklyn]: { x: 0, y: -0 },
 };
 
 const yOffset = -150;
@@ -32,9 +32,9 @@ export const Map = ({
 }: {
   game: GameClass;
   configStore: ConfigStore;
-  targetId?: Location;
-  current?: Location;
-  onSelect: (selected: Location) => void;
+  targetId?: Locations;
+  current?: Locations;
+  onSelect: (selected: Locations) => void;
 }) => {
   const [scope, animate] = useAnimate();
   const isMobile = useBreakpointValue([true, false]);

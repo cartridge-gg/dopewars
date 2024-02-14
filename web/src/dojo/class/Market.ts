@@ -19,7 +19,7 @@ export class MarketsClass extends GamePropertyClass {
 
             for (let drugId of [0, 1, 2, 3, /*4, 5*/]) {
                 const drug = configStore.getDrugById(drugId)!;
-                const price = this.getDrugPrice(locationId, drugId as Drug);
+                const price = this.getDrugPrice(locationId, drugId);
 
                 const drugMarket: DrugMarket = {
                     drug: drug.drug,
@@ -38,17 +38,17 @@ export class MarketsClass extends GamePropertyClass {
         }
     }
 
-    getTick(locationId: number, drugId: Drug) {
+    getTick(locationId: number, drugId: number) {
         const start = BigInt((BigInt(locationId - 1) * this.drugCountByLocation + BigInt(drugId)) * this.bitsSize);
         return Bits.extract(this.packed, start, this.bitsSize)
     }
 
-    getDrugPriceByTick(drugId: Drug, tick: bigint) {
+    getDrugPriceByTick(drugId: number, tick: bigint) {
         const drugConfig = this.configStore.getDrugById(drugId);
         return Number(tick) * Number(drugConfig.step) + Number(drugConfig.base);
     }
 
-    getDrugPrice(locationId: number, drugId: Drug): number {
+    getDrugPrice(locationId: number, drugId: number): number {
         const tick = this.getTick(locationId, drugId);
         return this.getDrugPriceByTick(drugId, tick);
     }

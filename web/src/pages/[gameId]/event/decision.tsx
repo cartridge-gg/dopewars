@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { Heart, Siren } from "@/components/icons";
+import { DollarBag, Flipflop, Heart, Siren } from "@/components/icons";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { GameClass } from "@/dojo/class/Game";
@@ -12,6 +12,7 @@ import { ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
+import { getSentence } from "@/responses";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
@@ -52,24 +53,21 @@ const Decision = observer(() => {
 
   useEffect(() => {
     if (game && gameEvents && !isPending) {
-      
       const lastEncounter = gameEvents.getLastEncounter();
       lastEncounter && setEncounter(lastEncounter.parsed);
-     
-      console.log(lastEncounter)
 
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
           setDemand(`They want ${lastEncounter.parsed.demandPct}% of your $PAPER!`);
-          //setSentence(getSentence(PlayerStatus.BeingMugged, Action.Fight));
+          setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
           setDemand(`They want ${lastEncounter.parsed.demandPct}% of your DRUGS!`);
-          // setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
+          setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
           break;
       }
     }
@@ -83,24 +81,6 @@ const Decision = observer(() => {
       playSound(Sounds.Gang);
     }
   }, [game, game?.player.status]);
-
-  // useEffect(() => {
-  //   if (playerEntity && playerEntity.items) {
-  //     setAttackItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Attack));
-  //     setSpeedItem(playerEntity.items.find((i) => i.id === ItemTextEnum.Speed));
-  //   }
-  // }, [playerEntity, playerEntity?.items]);
-
-  // useEffect(() => {
-  //   if (playerEntity && playerEntity.encounters && !isPending) {
-  //     if (status === PlayerStatus.BeingMugged) {
-  //       setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Gang"));
-  //     }
-  //     if (status === PlayerStatus.BeingArrested) {
-  //       setEncounter(playerEntity.encounters.find((i) => i.encounter_id === "Cops"));
-  //     }
-  //   }
-  // }, [playerEntity, playerEntity?.encounters, status, isPending]);
 
   useEffect(() => {
     if (!isPending) {
@@ -122,9 +102,49 @@ const Decision = observer(() => {
   };
 
   const onDecision = async (action: EncountersAction) => {
+    //  play sound
+
+    switch (action) {
+      case EncountersAction.Pay:
+        addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
+        // setSentence(getSentence(playerEntity!.status, EncountersAction.Pay));
+        playSound(Sounds.Pay);
+        break;
+      case EncountersAction.Run:
+        addCombatLog({
+          text: "You split without a second thought",
+          color: "neon.400",
+          icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
+        });
+        // setSentence(getSentence(playerEntity!.status, EncountersAction.Run));
+        playSound(Sounds.Run);
+        break;
+      case EncountersAction.Fight:
+        // setSentence(getSentence(playerEntity!.status, EncountersAction.Fight));
+        switch (attackItem?.level) {
+          case 1:
+            playSound(Sounds.Knife);
+            break;
+          case 2:
+            playSound(Sounds.Magnum357);
+            break;
+          case 3:
+            playSound(Sounds.Uzi);
+            break;
+          default:
+            playSound(Sounds.Punch);
+            break;
+        }
+        break;
+    }
+
     try {
-      const { event, events } = await decide(gameId, action);
-      router.replace(`/${gameId}/`);
+      const { event, events, isGameOver } = await decide(gameId, action);
+      if (isGameOver) {
+        router.replace(`/${gameId}/end`);
+      } else {
+        router.replace(`/${gameId}/event/consequence`);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -219,11 +239,6 @@ const Decision = observer(() => {
   if (!game || !router.isReady || isRedirecting || !encounter) {
     return <></>;
   }
-
-  // // if playerEntity is too slow to update, PlayerStatus is still Normal
-  // if ((playerEntity.status == PlayerStatus.Normal || !encounter) && !isPending) {
-  //   return <></>;
-  // }
 
   return (
     <Layout isSinglePanel>

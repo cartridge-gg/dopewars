@@ -37,7 +37,11 @@ mod game {
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             encounters_packed::{Encounters}, player::{Player, PlayerImpl},
         },
-        systems::{trading, shopping, traveling, game_loop}, utils::random::{Random, RandomImpl},
+        systems::{
+            trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,
+            game::EncounterActions
+        },
+        utils::random::{Random, RandomImpl},
     };
 
 
@@ -50,6 +54,8 @@ mod game {
         HighVolatility: HighVolatility,
         UpgradeItem: UpgradeItem,
         TravelEncounter: TravelEncounter,
+        TravelEncounterResult: TravelEncounterResult,
+        GameOver: GameOver,
     }
 
 
@@ -121,9 +127,44 @@ mod game {
         payout: u32,
     }
 
+    #[derive(Drop, Serde, starknet::Event)]
+    struct TravelEncounterResult {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        action: EncounterActions,
+        outcome: EncounterOutcomes,
+        rounds: u8,
+        dmg_dealt: u8,
+        dmg_taken: u8,
+        cash_earnt: u32,
+        cash_loss: u32,
+        drug_id: u8,
+        drug_loss: u32,
+    }
+
+    //
+    //
+    //
+
+    #[derive(Drop, Serde, starknet::Event)]
+    struct GameOver {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        player_name: felt252,
+        turn: u32,
+        cash: u32,
+    }
+
+
     #[abi(embed_v0)]
     impl GameImpl of super::IGame<ContractState> {
-        fn create_game(self: @ContractState, game_mode: GameMode, avatar_id: u8,player_name:felt252) {
+        fn create_game(
+            self: @ContractState, game_mode: GameMode, avatar_id: u8, player_name: felt252
+        ) {
             let game_id = self.world().uuid();
             let player_id = get_caller_address();
 
@@ -251,7 +292,7 @@ mod game {
                     Option::None => { break; },
                 };
             };
-        // TODO handle price impact
+        // TODO handle price impact ?
         }
     }
 }

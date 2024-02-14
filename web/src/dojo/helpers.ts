@@ -18,13 +18,13 @@ import {
 
 import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
-    Drug,
     DrugInfo,
+    Drugs,
     EncountersAction,
     ItemEnum,
     ItemTextEnum,
-    Location,
     LocationInfo,
+    Locations,
     Outcome,
     OutcomeInfo,
     PlayerStatus,
@@ -96,42 +96,42 @@ export const itemIcons = {
 
 export const locations: LocationInfo[] = [
   {
-    type: Location.Queens,
+    type: Locations.Queens,
     name: "Queens",
     slug: "queens",
     id: "Queens",
     icon: Queens,
   },
   {
-    type: Location.Bronx,
+    type: Locations.Bronx,
     name: "The Bronx",
     slug: "bronx",
     id: "Bronx",
     icon: Bronx,
   },
   {
-    type: Location.Brooklyn,
+    type: Locations.Brooklyn,
     name: "Brooklyn",
     slug: "brooklyn",
     id: "Brooklyn",
     icon: Brooklyn,
   },
   {
-    type: Location.Jersey,
+    type: Locations.Jersey,
     name: "Jersey City",
     slug: "jersey",
     id: "Jersey",
     icon: Manhattan,
   },
   {
-    type: Location.Central,
+    type: Locations.Central,
     name: "Central Park",
     slug: "central",
     id: "Central",
     icon: CentralPark,
   },
   {
-    type: Location.Coney,
+    type: Locations.Coney,
     name: "Coney Island",
     slug: "coney",
     id: "Coney",
@@ -141,42 +141,42 @@ export const locations: LocationInfo[] = [
 
 const drugs: DrugInfo[] = [
   {
-    type: Drug.Ludes,
+    type: Drugs.Ludes,
     name: "Ludes",
     slug: "ludes",
     id: "Ludes",
     icon: Ludes,
   },
   {
-    type: Drug.Speed,
+    type: Drugs.Speed,
     name: "Speed",
     slug: "speed",
     id: "Speed",
     icon: Speed,
   },
   {
-    type: Drug.Weed,
+    type: Drugs.Weed,
     name: "Weed",
     slug: "weed",
     id: "Weed",
     icon: Weed,
   },
   {
-    type: Drug.Acid,
+    type: Drugs.Acid,
     name: "Acid",
     slug: "acid",
     id: "Acid",
     icon: Acid,
   },
   {
-    type: Drug.Heroin,
+    type: Drugs.Heroin,
     name: "Heroin",
     slug: "heroin",
     id: "Heroin",
     icon: Heroin,
   },
   {
-    type: Drug.Cocaine,
+    type: Drugs.Cocaine,
     name: "Cocaine",
     slug: "cocaine",
     id: "Cocaine",
@@ -408,7 +408,7 @@ function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
 }
 
-export function getLocationByType(type: Location) {
+export function getLocationByType(type: Locations) {
   return findBy<LocationInfo>(locations, "type", type);
 }
 
@@ -428,7 +428,7 @@ export function getLocationByType(type: Location) {
 //   return findBy<DrugInfo>(drugs, "slug", slug);
 // }
 
-export function getDrugByType(type: Drug) {
+export function getDrugByType(type: Drugs) {
   return findBy<DrugInfo>(drugs, "type", type);
 }
 

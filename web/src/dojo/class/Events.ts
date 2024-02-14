@@ -1,6 +1,7 @@
 import { Game, World__Event } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
-import { BaseEventData, GameCreatedEventData, parseEvent } from "../events";
+import { BaseEventData, GameCreatedData, ParseEventResult, parseEvent } from "../events";
+import { WorldEvents } from "../generated/contractEvents";
 import { ConfigStore } from "../stores/config";
 
 type DojoEvent = {
@@ -8,7 +9,7 @@ type DojoEvent = {
     blocknumber: number;
     eventIdx: number;
     raw: any;
-    parsed: BaseEventData;
+    parsed: ParseEventResult;
 }
 
 //
@@ -36,7 +37,7 @@ export class EventClass {
     }
 
     public static parseWorldEvent(event: World__Event): DojoEvent {
-        const id = event.id?.split(":");
+        const id = event.id?.split(":")!;
         const blocknumber = Number(id[0])
         const eventIdx = Number(id[2])
         const idx = blocknumber * 10_000 + eventIdx
@@ -57,12 +58,12 @@ export class EventClass {
     get playerName() {
         const game_created = this
             .events
-            .find((i: DojoEvent) => i.parsed.eventName === "GameCreated")
-        return (game_created.parsed as GameCreatedEventData).playerName
+            .find((i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.GameCreated)
+        return (game_created?.parsed as GameCreatedData)?.playerName || "noname"
     }
 
     get sortedEvents() {
-        return this.events.sort((a, b) => a.idx - b.idx)
+        return this.events.slice().sort((a, b) => a.idx - b.idx)
     }
 
     //
@@ -77,8 +78,13 @@ export class EventClass {
     getLastEncounter() {
         return this
             .sortedEvents
-            .reverse()
-            .find((i: DojoEvent) => i.parsed.eventName === "TravelEncounter")
+            .findLast((i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounter)
+    }
+
+    getLastEncounterResult() {
+        return this
+            .sortedEvents
+            .findLast((i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounterResult)
     }
 
 }

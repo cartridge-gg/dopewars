@@ -54,7 +54,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
     }
   }, [gameId, playerId, gameStore]);
 
-  if (!game || !gameEvents || !configStore) return null;
+  if (!game || !gameEvents || !gameInfos || !configStore) return null;
 
   return (
     <VStack w="full" {...props}>
@@ -63,7 +63,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card w="100px" alignItems="center">
-                <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} w="100px" h="100px" />
+                <HustlerIcon hustler={gameInfos!.avatar_id as Hustlers} w="100px" h="100px" />
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">

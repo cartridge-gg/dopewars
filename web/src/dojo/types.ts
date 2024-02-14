@@ -1,6 +1,6 @@
 
 // must have same order than cairo enum
-export enum Location {
+export enum Locations {
   Home,
   Queens,
   Bronx,
@@ -11,7 +11,7 @@ export enum Location {
 }
 
 // must have same order than cairo enum
-export enum Drug {
+export enum Drugs {
   Ludes,
   Speed,
   Weed,
@@ -40,6 +40,11 @@ export enum PlayerStatus {
   BeingMugged,
 }
 
+export enum Encounters {
+  Cops,
+  Gang
+}
+
 export enum EncountersAction {
   Run,
   Pay,
@@ -60,7 +65,7 @@ export enum GameMode {
 }
 
 export interface LocationInfo {
-  type: Location;
+  type: Locations;
   name: string;
   slug: string;
   id: string;
@@ -68,7 +73,7 @@ export interface LocationInfo {
 }
 
 export interface DrugInfo {
-  type: Drug;
+  type: Drugs;
   name: string;
   slug: string;
   id: string;
@@ -115,7 +120,7 @@ export enum TradeDirection {
 
 export type TradeAction = {
   direction: TradeDirection,
-  drug: Drug,
+  drug: Drugs,
   quantity: number
 }
 

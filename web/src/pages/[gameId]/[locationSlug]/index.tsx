@@ -197,14 +197,14 @@ const BuySellBtns = ({
     <HStack mb="10px" w="full">
       <Button
         flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugConfig.drug.toLowerCase()}/buy`)}
+        onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)}
         isDisabled={!canBuy}
       >
         Buy
       </Button>
       <Button
         flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugConfig.drug.toLowerCase()}/sell`)}
+        onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)}
         isDisabled={!canSell}
       >
         Sell

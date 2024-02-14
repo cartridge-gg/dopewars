@@ -1,16 +1,16 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, GetTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
+import { BigNumberish, GetTransactionReceiptResponse } from "starknet";
 import { PendingCallWithCost, pendingCallToCairoEnum } from "../class/Game";
-import { BaseEventData, GameCreatedEventData, HighVolatilityData, TravelEncounterData, parseAllEvents } from "../events";
-import { WorldEvents } from "../generated/contractEvents";
-import { EncountersAction, GameMode, Location } from "../types";
+import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, parseAllEvents } from "../events";
+import { TravelEncounterResultData, WorldEvents } from "../generated/contractEvents";
+import { EncountersAction, GameMode, Locations } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
-  createGame: (gameMode: number,  hustlerId: number,playerName: string) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Location, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
+  createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Locations, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction,) => Promise<SystemExecuteResult>;
 
@@ -102,28 +102,27 @@ export const useSystems = (): SystemsInterface => {
         throw Error(e.toString())
       }
 
-
-      if (receipt.status === "REJECTED") {
-        setError("Transaction Rejected")
-        setIsPending(false)
-        toast({
-          message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
-          duration: 20_000,
-          isError: true
-        })
-        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
-      }
+      // if (receipt.execution_status === "REJECTED") {
+      //   setError("Transaction Rejected")
+      //   setIsPending(false)
+      //   toast({
+      //     message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
+      //     duration: 20_000,
+      //     isError: true
+      //   })
+      //   throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
+      // }
 
       if (receipt.execution_status === "REVERTED") {
         setError("Transaction Reverted")
         setIsPending(false)
 
         toast({
-          message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
+          message: tryBetterErrorMsg(receipt.revert_reason || 'Transaction Reverted'),
           duration: 20_000,
           isError: true
         })
-        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
+        throw Error(receipt.revert_reason || 'Transaction Reverted')
       }
 
       const events = getEvents(receipt);
@@ -155,7 +154,7 @@ export const useSystems = (): SystemsInterface => {
 
       const gameCreated = parsedEvents.find(
         (e) => e.eventType === WorldEvents.GameCreated,
-      ) as GameCreatedEventData;
+      ) as GameCreatedData;
 
       return {
         hash,
@@ -166,13 +165,13 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Location, calls: Array<PendingCallWithCost>) => {
+    async (gameId: string, location: Locations, calls: Array<PendingCallWithCost>) => {
 
       const callsEnum = calls.map(pendingCallToCairoEnum)
-
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
+        // @ts-ignore
         [gameId, location, callsEnum],
       );
 
@@ -204,6 +203,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "end_game",
+        // @ts-ignore
         [gameId, callsEnum],
       );
 
@@ -224,19 +224,17 @@ export const useSystems = (): SystemsInterface => {
         [gameId, action],
       );
 
-      //     const isGameOver = parsedEvents
-      //       .find((e) => e.eventType === WorldEvents.GameOver)
+      const isGameOver = parsedEvents
+        .find((e) => e.eventType === WorldEvents.GameOver)
 
-      //     const consequenceEvent = parsedEvents.find(
-      //       (e) => e.eventType === WorldEvents.Consequence,
-      //     ) as ConsequenceEventData
+      const travelEncounterResult = parsedEvents.find(
+        (e) => e.eventType === WorldEvents.TravelEncounterResult,
+      ) as TravelEncounterResultData
 
       return {
         hash,
-        // isGameOver,
-        // event: parsedEvents.find(
-        //   (e) => e.eventType === WorldEvents.Consequence,
-        // ) as ConsequenceEventData,
+        isGameOver,
+        event: travelEncounterResult,
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.HighVolatility)
           .map((e) => e as HighVolatilityData),

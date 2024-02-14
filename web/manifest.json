@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x6d7c87fba0f5ce4bc14c487979101a0fea2d7e788b0485501b724b0b695d86f",
+      "class_hash": "0x6ec99904c6eb73b19fac7fe3703111c8a7dfc2b62e4ee650ab218fb0dddc19f",
       "abi": [
         {
           "type": "impl",
@@ -1708,6 +1708,122 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::systems::traveling::EncounterOutcomes",
+          "variants": [
+            {
+              "name": "Died",
+              "type": "()"
+            },
+            {
+              "name": "Paid",
+              "type": "()"
+            },
+            {
+              "name": "Escaped",
+              "type": "()"
+            },
+            {
+              "name": "Victorious",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::TravelEncounterResult",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "action",
+              "type": "rollyourown::systems::game::EncounterActions",
+              "kind": "data"
+            },
+            {
+              "name": "outcome",
+              "type": "rollyourown::systems::traveling::EncounterOutcomes",
+              "kind": "data"
+            },
+            {
+              "name": "rounds",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "dmg_dealt",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "dmg_taken",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "cash_earnt",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash_loss",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "drug_loss",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::GameOver",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
           "type": "event",
           "name": "rollyourown::systems::game::game::Event",
           "kind": "enum",
@@ -1745,6 +1861,16 @@
             {
               "name": "TravelEncounter",
               "type": "rollyourown::systems::game::game::TravelEncounter",
+              "kind": "nested"
+            },
+            {
+              "name": "TravelEncounterResult",
+              "type": "rollyourown::systems::game::game::TravelEncounterResult",
+              "kind": "nested"
+            },
+            {
+              "name": "GameOver",
+              "type": "rollyourown::systems::game::game::GameOver",
               "kind": "nested"
             }
           ]

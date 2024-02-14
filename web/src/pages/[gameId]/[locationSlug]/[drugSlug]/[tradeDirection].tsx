@@ -69,7 +69,7 @@ export default function Market() {
       console.log(e);
     }
 
-    router.push(`/${gameId}/${location!.location.toLowerCase()}`);
+    router.push(`/${gameId}/${location!.location}`);
   }, [tradeDirection, quantityBuy, quantitySell, gameId, location, drug, router, game, market]);
 
   if (!router.isReady || !game || !drug || !market) return <></>;
