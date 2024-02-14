@@ -23,9 +23,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
-export default function Location() {
+const Location = observer(() => {
   const { router, gameId, location } = useRouterContext();
   const { account } = useDojoContext();
 
@@ -150,37 +151,38 @@ export default function Location() {
               </Card>
             );
           })}
-        <Tooltip label={game.isShopOpen ? "Welcome Ser" : "Closed for gangstas"}>
-          <Card
-            h={["auto", "180px"]}
-            position="relative"
-            cursor="pointer"
-            opacity={game.isShopOpen ? 1 : 0.5}
-            onClick={() => {
-              if (game.isShopOpen) {
-                router.push(`/${gameId}/pawnshop`);
-              }
-            }}
-          >
-            <CardHeader
-              textTransform="uppercase"
-              fontSize={["16px", "20px"]}
-              textAlign="left"
-              padding={["6px 10px", "10px 20px"]}
+          <Tooltip label={game.isShopOpen ? "Welcome Ser" : "Closed"}>
+            <Card
+              h={["auto", "180px"]}
+              position="relative"
+              cursor="pointer"
+              opacity={game.isShopOpen ? 1 : 0.5}
+              onClick={() => {
+                if (game.isShopOpen ) {
+                  router.push(`/${gameId}/pawnshop`);
+                }
+              }}
             >
-              PAWNSHOP {game.isShopOpen ? "OPEN" : "CLOSED"}
-            </CardHeader>
-            <CardBody>
-              <Image src="/images/pawnshop.png" width="100px" height="100px" />
-            </CardBody>
-          </Card>
+              <CardHeader
+                textTransform="uppercase"
+                fontSize={["16px", "20px"]}
+                textAlign="left"
+                padding={["6px 10px", "10px 20px"]}
+              >
+                PAWNSHOP {game.isShopOpen ? "OPEN" : "CLOSED"}
+              </CardHeader>
+              <CardBody>
+                <Image src="/images/pawnshop.png" width="100px" height="100px" />
+              </CardBody>
+            </Card>
           </Tooltip>
-
         </SimpleGrid>
       </VStack>
     </Layout>
   );
-}
+})
+
+export default Location;
 
 const BuySellBtns = ({
   canBuy,
@@ -195,18 +197,10 @@ const BuySellBtns = ({
   const { router } = useRouterContext();
   return (
     <HStack mb="10px" w="full">
-      <Button
-        flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)}
-        isDisabled={!canBuy}
-      >
+      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
         Buy
       </Button>
-      <Button
-        flex="1"
-        onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)}
-        isDisabled={!canSell}
-      >
+      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)} isDisabled={!canSell}>
         Sell
       </Button>
     </HStack>

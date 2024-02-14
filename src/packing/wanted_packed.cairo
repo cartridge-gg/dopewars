@@ -10,7 +10,10 @@ use rollyourown::{
         math::{MathTrait, MathImplU8},
         bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl}
     },
-    packing::game_store::{GameStore}
+    packing::{
+        game_store::{GameStore},
+        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}
+    }
 };
 
 
@@ -97,10 +100,13 @@ impl WantedPackedImpl of WantedPackedTrait {
                     if game_store.player.next_location == *location {
                         if game_store.player.next_location == game_store.player.prev_location {
                             // travel back to same location : +3
-                            self.set(*location, value.add_capped(3, 7))
+                            self.set(*location, value.add_capped(3, 7));
                         } else {
-                            // travel to location : +2
-                            self.set(*location, value.add_capped(2, 7));
+                            let drugs = game_store.drugs.get();
+                            if drugs.quantity > 0 {
+                                // travel to location with drugs : +2
+                                self.set(*location, value.add_capped(2, 7));
+                            };
                         }
                     } else {
                         //not current location / not prev_location

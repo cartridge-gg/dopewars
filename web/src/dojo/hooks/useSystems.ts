@@ -77,7 +77,7 @@ export const useSystems = (): SystemsInterface => {
       try {
         tx = await dojoProvider.execute(account!, contract, system, callData);
         toast({
-          message: `tx sent ${tx.transaction_hash}`,
+          message: `tx sent ${tx.transaction_hash.substring(0,4)}...${tx.transaction_hash.slice(-4)}`,
           duration: 5_000,
           isError: false
         })

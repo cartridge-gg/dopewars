@@ -92,11 +92,12 @@ export class GameClass {
         makeObservable(this, {
             pending: observable,
             player: observable,
-            isShopOpen: computed
+            isShopOpen: computed,
+            shopCount: computed
         })
 
 
-       
+
 
         console.log("Game", this)
     }
@@ -105,7 +106,7 @@ export class GameClass {
     //
     //
 
-   
+
 
     clearPendingCalls() {
         this.pending = []
@@ -117,7 +118,7 @@ export class GameClass {
 
     getPendingCalls(): Array<PendingCall> {
         return this.pending
-            .map(i => {
+            .map((i: PendingCall) => {
                 const {
                     cost: _,
                     ...withoutCost
@@ -135,8 +136,16 @@ export class GameClass {
         const wanted = this.player.wanted
         const maxWantedShopping = this.gameInfos.max_wanted_shopping
 
-        return wanted < maxWantedShopping
+        return wanted < maxWantedShopping && this.shopCount < 1
     }
+
+    get shopCount() {
+        const shopCount = this.pending
+            .map((i: PendingCall) => isShopAction(i) ? 1 : 0)
+            .reduce((acc, curr) => { return acc + curr }, 0)
+        return shopCount
+    }
+
 
 }
 

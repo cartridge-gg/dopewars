@@ -277,15 +277,18 @@ mod game {
         fn execute_actions(
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>
         ) {
+            let mut has_shopped = false;
             loop {
                 match actions.pop_front() {
                     Option::Some(action) => {
                         match action {
                             super::Actions::Trade(tradeAction) => {
-                                trading::execute_trade(ref game_store, *tradeAction)
+                                trading::execute_trade(ref game_store, *tradeAction);
                             },
                             super::Actions::Shop(shopAction) => {
-                                shopping::execute_action(ref game_store, *shopAction)
+                                assert(has_shopped == false, 'one upgrade by turn');
+                                shopping::execute_action(ref game_store, *shopAction);
+                                has_shopped = true;
                             },
                         };
                     },

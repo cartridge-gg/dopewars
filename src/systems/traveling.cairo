@@ -332,7 +332,7 @@ fn on_run(
             let loss_pct = drug_unpacked.quantity.pct(1);
             let loss = if loss_pct == 0 { 2 } else {loss_pct};
             drug_loss += loss;
-            drug_unpacked.quantity -= loss;
+            drug_unpacked.quantity = drug_unpacked.quantity.sub_capped(loss,0);
 
             // set drugs
             game_store.drugs.set(drug_unpacked);
@@ -345,7 +345,7 @@ fn on_run(
         } else {
             // escaped
 
-            // TODO: land to random location
+            // TODO: land to random location ?
             break;
         };
     };
