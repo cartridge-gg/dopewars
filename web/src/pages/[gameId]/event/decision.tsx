@@ -36,6 +36,7 @@ const Decision = observer(() => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [encounter, setEncounter] = useState<TravelEncounterData | undefined>(undefined);
 
+  // TODO: replace
   const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
   const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
 
@@ -107,7 +108,7 @@ const Decision = observer(() => {
     switch (action) {
       case EncountersAction.Pay:
         addCombatLog({ text: "You decided to pay up", color: "neon.400", icon: DollarBag });
-        // setSentence(getSentence(playerEntity!.status, EncountersAction.Pay));
+        setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Pay));
         playSound(Sounds.Pay);
         break;
       case EncountersAction.Run:
@@ -116,11 +117,11 @@ const Decision = observer(() => {
           color: "neon.400",
           icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
         });
-        // setSentence(getSentence(playerEntity!.status, EncountersAction.Run));
+        setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Run));
         playSound(Sounds.Run);
         break;
       case EncountersAction.Fight:
-        // setSentence(getSentence(playerEntity!.status, EncountersAction.Fight));
+        setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Fight));
         switch (attackItem?.level) {
           case 1:
             playSound(Sounds.Knife);
@@ -139,12 +140,12 @@ const Decision = observer(() => {
     }
 
     try {
-      const { event, events, isGameOver } = await decide(gameId, action);
-      if (isGameOver) {
-        router.replace(`/${gameId}/end`);
-      } else {
+      const { event, events, isGameOver } = await decide(gameId, action, gameEvents?.playerName);
+      // if (isGameOver) {
+      //   router.replace(`/${gameId}/end`);
+      // } else {
         router.replace(`/${gameId}/event/consequence`);
-      }
+      // }
     } catch (e) {
       console.log(e);
     }

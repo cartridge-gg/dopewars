@@ -1,50 +1,48 @@
 import {
-    Bronx,
-    Brooklyn,
-    CentralPark,
-    ConeyIsland,
-    Manhattan,
-    Queens,
+  Bronx,
+  Brooklyn,
+  CentralPark,
+  ConeyIsland,
+  Manhattan,
+  Queens,
 } from "@/components/icons/locations";
 
 import {
-    Acid,
-    Cocaine,
-    Heroin,
-    Ludes,
-    Speed,
-    Weed,
+  Acid,
+  Cocaine,
+  Heroin,
+  Ludes,
+  Speed,
+  Weed,
 } from "@/components/icons/drugs";
 
 import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
-    DrugInfo,
-    Drugs,
-    EncountersAction,
-    ItemEnum,
-    ItemTextEnum,
-    LocationInfo,
-    Locations,
-    Outcome,
-    OutcomeInfo,
-    PlayerStatus,
-    ShopItemInfo
+  DrugInfo,
+  Drugs,
+  EncounterOutcomes,
+  Encounters,
+  EncountersAction,
+  LocationInfo,
+  Locations,
+  OutcomeInfo,
+  PlayerStatus
 } from "./types";
 
 import { Cigarette } from "@/components/icons";
 import {
-    Backpack,
-    Bicycle,
-    Dufflebag,
-    Fannypack,
-    Glock,
-    Kevlar,
-    Kneepads,
-    Knife,
-    Leatherjacket,
-    Shoes,
-    Skateboard,
-    Uzi
+  Backpack,
+  Bicycle,
+  Dufflebag,
+  Fannypack,
+  Glock,
+  Kevlar,
+  Kneepads,
+  Knife,
+  Leatherjacket,
+  Shoes,
+  Skateboard,
+  Uzi
 } from "@/components/icons/items";
 
 
@@ -75,7 +73,7 @@ export const drugIcons = {
 }
 
 export const itemIcons = {
-  "Naked" : Cigarette,
+  "Naked": Cigarette,
   //
   "Knife": Knife,
   "Glock": Glock,
@@ -188,265 +186,99 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Paid the Cop",
-    type: Outcome.Paid,
-    status: PlayerStatus.BeingArrested,
+    type: EncounterOutcomes.Paid,
+    encounter: Encounters.Cops,
     imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
     getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Paid, isInitial),
+      getCopResponses(EncounterOutcomes.Paid, isInitial),
     color: "yellow.400",
   },
   {
     title: "You",
     name: "Paid the Gang",
-    type: Outcome.Paid,
-    status: PlayerStatus.BeingMugged,
+    type: EncounterOutcomes.Paid,
+    encounter: Encounters.Gang,
     imageSrc: "/images/events/paid.png",
     description: "You paid the gang off",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Paid, isInitial),
+      getMuggerResponses(EncounterOutcomes.Paid, isInitial),
     color: "neon.200",
   },
   {
     title: "You",
     name: "Escaped",
-    type: Outcome.Escaped,
-    status: PlayerStatus.BeingArrested,
+    type: EncounterOutcomes.Escaped,
+    encounter: Encounters.Cops,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Escaped, isInitial),
+      getCopResponses(EncounterOutcomes.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
   {
     title: "You",
     name: "Escaped",
-    type: Outcome.Escaped,
-    status: PlayerStatus.BeingMugged,
+    type: EncounterOutcomes.Escaped,
+
+    encounter: Encounters.Gang,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Escaped, isInitial),
+      getMuggerResponses(EncounterOutcomes.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
   {
     title: "You",
     name: "Got killed by the Cops",
-    type: Outcome.Died,
+    type: EncounterOutcomes.Died,
     status: PlayerStatus.BeingArrested,
+    encounter: Encounters.Cops,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Died, isInitial),
+      getCopResponses(EncounterOutcomes.Died, isInitial),
     color: "red",
   },
   {
     title: "You",
     name: "Got killed by the Gang",
-    type: Outcome.Died,
-    status: PlayerStatus.BeingMugged,
+    type: EncounterOutcomes.Died,
+    encounter: Encounters.Gang,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Died, isInitial),
+      getMuggerResponses(EncounterOutcomes.Died, isInitial),
     color: "red",
   },
   {
     title: "You are",
     name: "Victorious!",
-    type: Outcome.Victorious,
-    status: PlayerStatus.BeingArrested,
+    type: EncounterOutcomes.Victorious,
+    encounter: Encounters.Cops,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Victorious, isInitial),
+      getCopResponses(EncounterOutcomes.Victorious, isInitial),
     color: "neon.200",
   },
   {
     title: "You are",
     name: "Victorious!",
-    type: Outcome.Victorious,
-    status: PlayerStatus.BeingMugged,
+    type: EncounterOutcomes.Victorious,
+    encounter: Encounters.Gang,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Victorious, isInitial),
+      getMuggerResponses(EncounterOutcomes.Victorious, isInitial),
     color: "neon.200",
   },
-
 
 ];
 
 
 
-export const shopItemInfos: ShopItemInfo[] = [
-  // attack 
-  {
-    id: ItemTextEnum.Attack,
-    typeText: ItemTextEnum.Attack,
-    type: ItemEnum.Attack,
-    level: 1,
-    icon: Knife,
-    value: 0,
-    name: "Knife",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Attack,
-    typeText: ItemTextEnum.Attack,
-    type: ItemEnum.Attack,
-    level: 2,
-    icon: Glock,
-    value: 0,
-    name: "Glock",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Attack,
-    typeText: ItemTextEnum.Attack,
-    type: ItemEnum.Attack,
-    level: 3,
-    icon: Uzi,
-    value: 0,
-    name: "Uzi",
-    cost: 0,
-  },
-
-  // transport 
-  {
-    id: ItemTextEnum.Transport,
-    typeText: ItemTextEnum.Transport,
-    type: ItemEnum.Transport,
-    level: 1,
-    icon: Fannypack,
-    value: 0,
-    name: "Fanny Pack",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Transport,
-    typeText: ItemTextEnum.Transport,
-    type: ItemEnum.Transport,
-    level: 2,
-    icon: Backpack,
-    value: 0,
-    name: "Backpack",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Transport,
-    typeText: ItemTextEnum.Transport,
-    type: ItemEnum.Transport,
-    level: 3,
-    icon: Dufflebag,
-    value: 0,
-    name: "Duffle Bag",
-    cost: 0,
-  },
-
-  // defense 
-  {
-    id: ItemTextEnum.Defense,
-    typeText: ItemTextEnum.Defense,
-    type: ItemEnum.Defense,
-    level: 1,
-    icon: Kneepads,
-    value: 0,
-    name: "Knee Pads",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Defense,
-    typeText: ItemTextEnum.Defense,
-    type: ItemEnum.Defense,
-    level: 2,
-    icon: Leatherjacket,
-    value: 0,
-    name: "Leather Jacket",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Defense,
-    typeText: ItemTextEnum.Defense,
-    type: ItemEnum.Defense,
-    level: 3,
-    icon: Kevlar,
-    value: 0,
-    name: "Kevlar",
-    cost: 0,
-  },
-  // speed 
-  {
-    id: ItemTextEnum.Speed,
-    typeText: ItemTextEnum.Speed,
-    type: ItemEnum.Speed,
-    level: 1,
-    icon: Shoes,
-    value: 0,
-    name: "Shoes",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Speed,
-    typeText: ItemTextEnum.Speed,
-    type: ItemEnum.Speed,
-    level: 2,
-    icon: Skateboard,
-    value: 0,
-    name: "Skateboard",
-    cost: 0,
-  },
-  {
-    id: ItemTextEnum.Speed,
-    typeText: ItemTextEnum.Speed,
-    type: ItemEnum.Speed,
-    level: 3,
-    icon: Bicycle,
-    value: 0,
-    name: "Bicycle",
-    cost: 0,
-  },
-]
 
 function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
 }
 
-export function getLocationByType(type: Locations) {
-  return findBy<LocationInfo>(locations, "type", type);
-}
-
-// export function getLocationById(id?: string) {
-//   return findBy<LocationInfo>(locations, "id", id);
-// }
-
-// export function getLocationBySlug(slug: string) {
-//   return findBy<LocationInfo>(locations, "slug", slug);
-// }
-
-// export function getDrugById(id: string) {
-//   return findBy<DrugInfo>(drugs, "id", id);
-// }
-
-// export function getDrugBySlug(slug: string) {
-//   return findBy<DrugInfo>(drugs, "slug", slug);
-// }
-
-export function getDrugByType(type: Drugs) {
-  return findBy<DrugInfo>(drugs, "type", type);
-}
-
-export function getShopItem(id: ItemTextEnum, level: number): ShopItemInfo {
-  const item = shopItemInfos.find(i => i.id === id && i.level === level);
-  if (!item) {
-    throw Error('item not found!');
-  }
-  return item;
-}
-
-export function getShopItemByType(type: ItemEnum, level: number): ShopItemInfo {
-  const item = shopItemInfos.find(i => i.type == type && i.level === level);
-  if (!item) {
-    throw Error('item not found!');
-  }
-  return item;
-}
 
 export function getActionName(action: EncountersAction): string {
   switch (action) {
@@ -462,17 +294,15 @@ export function getActionName(action: EncountersAction): string {
 }
 
 
-export function getOutcomeName(outcome: Outcome): string {
+export function getOutcomeName(outcome: EncounterOutcomes): string {
   switch (outcome) {
-    case Outcome.Captured:
-      return "Captured";
-    case Outcome.Died:
+    case EncounterOutcomes.Died:
       return "Died";
-    case Outcome.Escaped:
+    case EncounterOutcomes.Escaped:
       return "Escaped";
-    case Outcome.Paid:
+    case EncounterOutcomes.Paid:
       return "Paid";
-    case Outcome.Victorious:
+    case EncounterOutcomes.Victorious:
       return "Victorious";
     default:
       return "?"
@@ -483,14 +313,14 @@ export function getOutcomeName(outcome: Outcome): string {
 
 
 export function getOutcomeInfo(
-  status: PlayerStatus,
-  type: Outcome,
+  encounter: Encounters,
+  type: EncounterOutcomes,
 ): OutcomeInfo {
   const found = outcomes.find((item) => {
-    return item.status === status && item.type === type;
+    return item.encounter === encounter && item.type === type;
   });
   if (!found) {
-    console.log(`getOutcomeInfo outcome ${status} ${type} not found !`);
+    console.log(`getOutcomeInfo outcome ${encounter} ${type} not found !`);
   }
   return found || outcomes[0];
 }

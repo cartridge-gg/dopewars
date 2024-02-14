@@ -11,12 +11,14 @@ import {
   ParseEventResult,
   TradeDrugData,
   TravelEncounterData,
+  TravelEncounterResultData,
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
+import { getOutcomeName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore } from "@/dojo/stores/config";
-import { Encounters, Outcome } from "@/dojo/types";
+import { EncounterOutcomes, Encounters, EncountersAction } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
@@ -221,46 +223,26 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
   // const status = Number(log.playerStatus);
   // const encounter = status === 1 ? "Gang" : "Cops";
   const encounter = log.encounterId === Encounters.Cops ? "Cops" : "Gang";
+  
+  const results = dayLog.logs
+    .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
+    .map((i) => i as TravelEncounterResultData);
 
-  const decisions = [];
-  const totalHpLoss = log.healthLoss;
+  const lastEncouterResult = results.length > 0 ? results[results.length - 1] : undefined;
+  const lastEncounterResultName = lastEncouterResult ? getOutcomeName(lastEncouterResult.outcome) : "";
 
-  const lastConsequence = "lastConsequence";
-  const lastConsequenceName = "lastConsequenceName";
-
-  // const decisions = dayLog.logs
-  //   .filter((i) => i.eventType === WorldEvents.Decision)
-  //   .map((i) => i as DecisionEventData)
-  //   .map((i) => getActionName(i.action))
-  //   .join(", ");
-
-  // const consequences = dayLog.logs
-  //   .filter((i) => i.eventType === WorldEvents.Consequence)
-  //   .map((i) => i as ConsequenceEventData);
-
-  // const lastConsequence = consequences.length > 0 ? consequences[consequences.length - 1] : undefined;
-  // const lastConsequenceName = lastConsequence ? getOutcomeName(lastConsequence.outcome) : "";
-
-  // const totalHpLoss =
-  //   dayLog.logs.length > 0
-  //     ? dayLog.logs
-  //         .filter((i) => i.eventType === WorldEvents.Consequence)
-  //         .map((i) => i as ConsequenceEventData)
-  //         .map((i) => i.healthLoss)
-  //         .reduce((prev, curr) => {
-  //           return prev + curr;
-  //         }, log.healthLoss)
-  //     : log.healthLoss;
+  const action = lastEncouterResult.action
+  const totalHpLoss = log.healthLoss + lastEncouterResult?.dmgTaken;
 
   return (
     <FightLine
       key={key}
       icon={EventIcon}
       text={`Meet ${encounter} LVL ${log.level}`}
-      result={lastConsequenceName}
-      resultInfos={lastConsequence}
+      result={lastEncounterResultName}
+      resultInfos={lastEncouterResult}
       consequence={`-${totalHpLoss} HP`}
-      decisions={decisions}
+      action={action}
       color="yellow.400"
     />
   );
@@ -331,7 +313,7 @@ const FightLine = ({
   result,
   resultInfos,
   consequence,
-  decisions,
+  action,
   key,
   color,
 }: {
@@ -340,16 +322,16 @@ const FightLine = ({
   result?: string;
   resultInfos?: ConsequenceEventData;
   consequence?: string;
-  decisions?: string;
+  action?: EncountersAction;
   key: string;
   color?: string;
 }) => {
   const [resultTooltip, setResultTooltip] = useState("");
 
   useEffect(() => {
-    if (resultInfos && resultInfos.outcome === Outcome.Victorious) {
+    if (resultInfos && resultInfos.outcome === EncounterOutcomes.Victorious) {
       setResultTooltip(`+ ${formatCash(resultInfos.cashEarnt)}`);
-    } else if (resultInfos && resultInfos.outcome === Outcome.Paid) {
+    } else if (resultInfos && resultInfos.outcome === EncounterOutcomes.Paid) {
       if (resultInfos.cashLoss > 0) {
         setResultTooltip(`- ${formatCash(resultInfos.cashLoss)}`);
       } else {
@@ -365,7 +347,7 @@ const FightLine = ({
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
-          <Tooltip label={decisions} placement="right-end">
+          <Tooltip label={action} placement="right-end">
             <Text>{text}</Text>
           </Tooltip>
         </HStack>

@@ -51,11 +51,10 @@ export enum EncountersAction {
   Fight,
 }
 
-export enum Outcome {
+export enum EncounterOutcomes {
   Died,
   Paid,
   Escaped,
-  Captured,
   Victorious,
 }
 

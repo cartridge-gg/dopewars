@@ -1,10 +1,10 @@
-import { EncountersAction, Outcome, PlayerStatus } from "./dojo/types";
+import { EncounterOutcomes, EncountersAction, PlayerStatus } from "./dojo/types";
 
 type Encounter = "initial" | "repeat";
 
 
-const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
-  [Outcome.Escaped]: {
+const muggerResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
+  [EncounterOutcomes.Escaped]: {
     initial: [
       "You might've outrun us this time, but the shadows talk. We'll find you.",
       "Swift move, but luck only lasts so long. The streets don't forget.",
@@ -20,7 +20,7 @@ const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
       "Fancy footwork won't save you every time. Your luck is running thin.",
     ],
   },
-  [Outcome.Captured]: {
+  [EncounterOutcomes.Paid]: {
     initial: [
       "Thought you could outrun us? Now your stash are ours.",
       "Every step you took, we were right behind. Thanks for the bonus haul.",
@@ -37,24 +37,24 @@ const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
     ],
   },
   // To be implemented
-  [Outcome.Died]: {
+  [EncounterOutcomes.Died]: {
     initial: [],
     repeat: [],
   },
   // Not needed
-  [Outcome.Paid]: {
+  [EncounterOutcomes.Paid]: {
     initial: [],
     repeat: [],
   },
   // Not needed
-  [Outcome.Victorious]: {
+  [EncounterOutcomes.Victorious]: {
     initial: ["Its about sending a message!"],
     repeat: [],
   },
 };
 
-const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
-  [Outcome.Escaped]: {
+const copResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
+  [EncounterOutcomes.Escaped]: {
     initial: [
       "You might've outrun me, but my colleagues are everywhere.",
       "Enjoy your little victory. The law is long-armed.",
@@ -70,7 +70,7 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
       "You won't be so lucky next time.",
     ],
   },
-  [Outcome.Paid]: {
+  [EncounterOutcomes.Paid]: {
     initial: [
       "This will do... for now. But remember, we're watching.",
       "The price of freedom is never cheap. Remember that.",
@@ -86,7 +86,7 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
       "Keep this up and we might just give you a loyalty card.",
     ],
   },
-  [Outcome.Captured]: {
+  [EncounterOutcomes.Died]: {
     initial: [
       "Thought you could sneak past the law? Your drugs are confiscated, and you're coming with us.",
       "All those drugs won't save you behind bars. Welcome to your new home.",
@@ -103,12 +103,12 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
     ],
   },
   // Not needed
-  [Outcome.Died]: {
+  [EncounterOutcomes.Died]: {
     initial: [],
     repeat: [],
   },
   // Not needed
-  [Outcome.Victorious]: {
+  [EncounterOutcomes.Victorious]: {
     initial: ["Its about sending a message!"],
     repeat: [],
   },
@@ -120,9 +120,9 @@ function getRandomIdx(length: number): number {
 
 // if first time, use initial response. repeat is a mix of initial and repeat
 function getResponse(
-  outcome: Outcome,
+  outcome: EncounterOutcomes,
   isInitial: boolean,
-  responses: Record<Outcome, Record<Encounter, string[]>>,
+  responses: Record<EncounterOutcomes, Record<Encounter, string[]>>,
 ): string {
   const encounterType = isInitial ? "initial" : "repeat";
   const lines = isInitial
@@ -142,8 +142,6 @@ export function getMuggerResponses(
 export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
   return getResponse(outcome, isInitial, copResponses);
 }
-
-
 
 
 

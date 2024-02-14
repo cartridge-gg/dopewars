@@ -1,4 +1,4 @@
-import { EncountersAction, Outcome } from "@/dojo/types";
+import { EncounterOutcomes, EncountersAction } from "@/dojo/types";
 import {
   GetTransactionReceiptResponse,
   InvokeTransactionReceiptResponse,
@@ -60,33 +60,27 @@ export interface TravelEncounterData extends BaseEventData {
   payout: number;
 }
 
-
-//
-//
-//
-
-
-export interface DecisionEventData extends BaseEventData {
-  playerId: string;
+export interface TravelEncounterResultData extends BaseEventData {
+  playeeId: string;
   action: EncountersAction;
-}
-
-export interface ConsequenceEventData extends BaseEventData {
-  playerId: string;
-  outcome: Outcome;
-  healthLoss: number;
-  drugLoss: number;
-  cashLoss: number;
+  outcome: EncounterOutcomes;
+  rounds: number;
   dmgDealt: number;
+  dmgTaken: number;
   cashEarnt: number;
+  cashLoss: number;
+  drugId: number;
+  drugLoss: number;
 }
 
 
 export interface GameOverEventData extends BaseEventData {
   playerId: string;
   playerName: string;
+  avatarId: number;
   turn: number;
   cash: number;
+  health: number;
 }
 
 
@@ -198,55 +192,30 @@ export const parseEvent = (raw: any) => {
         eventName: "TravelEncounterResult",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
-        action: Number(raw.data[0]),
-        outcome: Number(raw.data[1]),
+        action: Number(raw.data[0]) as EncountersAction,
+        outcome: Number(raw.data[1]) as EncounterOutcomes,
         rounds: Number(raw.data[2]),
-        dmg_dealt: Number(raw.data[3]),
-        dmg_taken: Number(raw.data[4]),
-        cash_earnt: Number(raw.data[5]),
-        cash_loss: Number(raw.data[6]),
-        drug_id: Number(raw.data[7]),
-        drug_loss: Number(raw.data[8]),
+        dmgDealt: Number(raw.data[3]),
+        dmgTaken: Number(raw.data[4]),
+        cashEarnt: Number(raw.data[5]),
+        cashLoss: Number(raw.data[6]),
+        drugId: Number(raw.data[7]),
+        drugLoss: Number(raw.data[8]),
       } as TravelEncounterResultData;
 
 
-    // case WorldEvents.Decision:
-    //   return {
-    //     eventType: WorldEvents.Decision,
-    //     eventName: "Decision",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     action: Number(raw.data[0]),
-    //   } as DecisionEventData;
-
-    // case WorldEvents.Consequence:
-    //   return {
-    //     eventType: WorldEvents.Consequence,
-    //     eventName: "Consequence",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     outcome: Number(raw.data[0]),
-    //     healthLoss: Number(raw.data[1]),
-    //     drugLoss: Number(raw.data[2]),
-    //     cashLoss: Number(raw.data[3]),
-    //     dmgDealt: Number(raw.data[4]),
-    //     cashEarnt: Number(raw.data[5]),
-    //   } as ConsequenceEventData;
-
-
-
-
-    // case WorldEvents.GameOver:
-    //   return {
-    //     eventType: WorldEvents.GameOver,
-    //     eventName: "GameOver",
-    //     gameId: num.toHexString(raw.keys[1]),
-    //     playerId: num.toHexString(raw.keys[2]),
-    //     playerName: shortString.decodeShortString(raw.data[0]),
-    //     playerStatus: shortString.decodeShortString(raw.data[1]),
-    //     turn: Number(raw.data[2]),
-    //     cash: Number(raw.data[3]),
-    //   } as GameOverEventData;
+    case WorldEvents.GameOver:
+      return {
+        eventType: WorldEvents.GameOver,
+        eventName: "GameOver",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        playerName: shortString.decodeShortString(raw.data[0]),
+        avatarId: Number(raw.data[1]),
+        turn: Number(raw.data[2]),
+        cash: Number(raw.data[3]),
+        health: Number(raw.data[4]),
+      } as GameOverEventData;
 
 
     default:

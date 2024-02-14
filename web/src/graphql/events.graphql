@@ -20,3 +20,20 @@ subscription GameEventsSubscription( $gameId: String) {
     createdAt
   }
 }
+
+
+// missing leaderboard_version: $version 
+
+query GameOverEvents( $gameOverSelector: String) {
+  events(last: 1000, keys: [$gameOverSelector]) {
+    totalCount
+    edges {
+      node {
+        id
+        keys
+        data
+        createdAt
+      }
+    }
+  }
+}

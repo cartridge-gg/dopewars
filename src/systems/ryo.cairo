@@ -57,18 +57,6 @@ mod ryo {
 }
 
 
-// #[derive(Drop, starknet::Event)]
-// struct GameOver {
-//     #[key]
-//     game_id: u32,
-//     #[key]
-//     player_id: ContractAddress,
-//     player_name: felt252,
-//     player_status: PlayerStatus,
-//     turn: u32,
-//     cash: u128,
-// }
-
 
 // fn game_over(world: IWorldDispatcher, ref player: Player) {
 //     player.game_over = true;

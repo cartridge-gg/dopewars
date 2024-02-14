@@ -10,7 +10,10 @@ use rollyourown::{
         random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
-    config::{items::{ItemConfig, ItemSlot, ItemConfigImpl, ItemLevel}, locations::{Locations}},
+    config::{
+        items::{ItemConfig, ItemSlot, ItemConfigImpl, ItemLevel},
+        locations::{Locations, LocationsRandomizableImpl}
+    },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl},
@@ -43,8 +46,8 @@ impl EncounterActionsIntoFelt252 of Into<EncounterActions, felt252> {
 impl EncounterActionsIntoU8 of Into<EncounterActions, u8> {
     fn into(self: EncounterActions) -> u8 {
         match self {
-            EncounterActions::Run => 1,
-            EncounterActions::Pay => 0,
+            EncounterActions::Run => 0,
+            EncounterActions::Pay => 1,
             EncounterActions::Fight => 2,
         }
     }
@@ -102,7 +105,7 @@ impl EncounterImpl of EncounterTrait {
 
 fn get_encounter_demand_from_game_store(game_store: GameStore) -> u8 {
     let rand_from_game_store: u256 = pedersen::pedersen(
-        game_store.markets.packed, game_store.encounters.packed
+        game_store.markets.packed, game_store.markets.packed
     )
         .into();
     let rand_0_99: u8 = (rand_from_game_store % 100).try_into().unwrap();
@@ -140,7 +143,7 @@ fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> E
 
 // fn get_encounter(ref self: EncountersPacked, ref randomizer: Random) -> Encounter {
 
-fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
+fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
     // get wanted level at destination 0-7
     let wanted_risk = game_store.wanted.get_wanted_risk(game_store.player.next_location);
 
@@ -190,14 +193,14 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
         //     ryo::game_over(ref game_store);
         // };
 
-        return true;
+        return (game_store.player.is_dead(), true);
     }
 
-    false
+    (false, false)
 }
 
 
-fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterActions) {
+fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterActions) -> bool {
     let encounter_slot = match game_store.player.status {
         PlayerStatus::Normal => Encounters::Cops, // can't happen
         PlayerStatus::BeingArrested => Encounters::Cops,
@@ -236,13 +239,16 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
             ],
         );
 
-    if game_store.player.health > 0 {
+    let is_dead = game_store.player.health == 0;
+    if !is_dead {
         // update encounter level
         game_store.encounters.increase_encounter_level(encounter_slot);
 
         // update player status
         game_store.player.status = PlayerStatus::Normal;
     }
+
+    is_dead
 }
 
 fn on_pay(
@@ -319,20 +325,24 @@ fn on_run(
 
         if is_captured {
             //encounter___attack = encounter_level * 2 + turn / 3;
-            let def = player_defense / 3;
-            let health_loss = encounter.attack.sub_capped(def, 2);
+
+            // reduce attack with defense
+            let def = player_defense / 10;
+            let health_loss = encounter.attack.sub_capped(def, 1);
 
             // take dmgs
             game_store.player.health = game_store.player.health.sub_capped(health_loss, 0);
             dmg_taken += health_loss;
 
-            // TODO: small dmg reduction ?
-
             // loss a 2 or 1% drug each round xd
             let loss_pct = drug_unpacked.quantity.pct(1);
-            let loss = if loss_pct == 0 { 2 } else {loss_pct};
+            let loss = if loss_pct == 0 {
+                2
+            } else {
+                loss_pct
+            };
             drug_loss += loss;
-            drug_unpacked.quantity = drug_unpacked.quantity.sub_capped(loss,0);
+            drug_unpacked.quantity = drug_unpacked.quantity.sub_capped(loss, 0);
 
             // set drugs
             game_store.drugs.set(drug_unpacked);
@@ -343,9 +353,8 @@ fn on_run(
                 break;
             }
         } else {
-            // escaped
-
-            // TODO: land to random location ?
+            // escaped -> land in random location
+            game_store.player.next_location = LocationsRandomizableImpl::random(ref randomizer);
             break;
         };
     };
@@ -374,17 +383,43 @@ fn on_run(
 fn on_fight(
     ref game_store: GameStore, ref randomizer: Random, encounter: Encounter
 ) -> TravelEncounterResult {
-    let player_attack: u16 = game_store.items.get_item(ItemSlot::Attack).stat.try_into().unwrap();
+    let player_attack: u8 = game_store.items.get_item(ItemSlot::Attack).stat.try_into().unwrap();
     let player_defense: u8 = game_store.items.get_item(ItemSlot::Defense).stat.try_into().unwrap();
+    let atk = player_attack / 2;
+    let def = player_defense / 10;
 
-    let mut rounds = 1;
+    let mut rounds = 0;
     let mut dmg_taken = 0;
+    let mut dmg_dealt = 0;
     let mut drug_loss = 0;
     let mut is_dead = false;
 
-    // loop{
-    // TODO
-    // }
+    let mut encounter = encounter;
+
+    // loop until resolution
+    loop {
+        rounds += 1;
+
+        // player attack 
+        encounter.health = encounter.health.sub_capped(atk, 0);
+        dmg_dealt += atk;
+
+        // check if encounter is dead
+        if encounter.health == 0 {
+            break;
+        }
+
+        // encounter attack 
+        let encounter_atk = encounter.attack - def;
+        game_store.player.health = game_store.player.health.sub_capped(encounter_atk, 0);
+        dmg_taken += encounter_atk;
+        
+        // check if player is dead
+        if game_store.player.health == 0 {
+            is_dead = true;
+            break;
+        }
+    };
 
     let cash_earnt = if is_dead {
         0
@@ -404,7 +439,7 @@ fn on_fight(
         action: EncounterActions::Fight,
         outcome,
         rounds,
-        dmg_dealt: 0,
+        dmg_dealt,
         dmg_taken,
         cash_earnt,
         cash_loss: 0,
@@ -435,4 +470,5 @@ fn on_fight(
 // Tier 4: 27 ($9,600) 
 // Tier 5: 40 ($57,600) 
 // Tier 6: 60 ($345,600)
+
 

@@ -151,6 +151,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             dojoProvider.provider,
           ).typedv2(configAbi);
 
+          // typedv2 not working zzz
           const getConfig = await contract.get_config();
 
           /*************************************************** */

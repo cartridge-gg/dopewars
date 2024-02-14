@@ -9,36 +9,29 @@ use rollyourown::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
         markets_packed::MarketsPackedTrait
-    }, 
+    },
     systems::traveling
 };
 
 
-fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> bool {
+fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
     // update wanted
     game_store.wanted.on_turn_end(game_store);
-    
+
     // no encounter on first turn
     if game_store.player.turn == 0 {
-       return false;
+        return (false, false);
     };
 
-    traveling::on_travel(ref game_store,ref randomizer)
+    traveling::on_travel(ref game_store, ref randomizer)
 }
 
 
 fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
-    
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
     game_store.player.next_location = Locations::Home;
-
-    // //update HP if not dead
-    // if game_store.player.health > 0 {
-    //     //player.health = player.health.add_capped(risk_settings.health_increase_by_turn, 100);
-    //     game_store.player.health -= 1;
-    // }
 
     // update turn
     game_store.player.turn += 1;
@@ -72,15 +65,32 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
 }
 
 
-fn on_game_end(ref game_store: GameStore) {
+fn on_game_over(ref game_store: GameStore, player_name: felt252) {
     let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
     assert(game.game_over == false, 'already game_over');
 
     // set game_over on game 
     game.game_over = true;
     set!(game_store.world, (game));
-// TODO
-//ryo::game_over(self.world(), ref player);
+
+    // emit GameOver
+    game_store
+        .world
+        .emit_raw(
+            array![
+                selector!("GameOver"),
+                Into::<u32, felt252>::into(game_store.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+            ],
+            array![
+                player_name,
+                Into::<u8, felt252>::into(game.avatar_id),
+                Into::<u8, felt252>::into(game_store.player.turn),
+                Into::<u32, felt252>::into(game_store.player.cash),
+                Into::<u8, felt252>::into(game_store.player.health),
+            ]
+        );
+    // TODO : handle leaderboard stuff
+    //ryo::game_over(self.world(), ref player);
 
 }
-

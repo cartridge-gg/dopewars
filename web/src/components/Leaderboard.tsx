@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  ListItem,
-  ListProps,
-  StyleProps,
-  Text,
-  UnorderedList,
-  VStack
-} from "@chakra-ui/react";
+import { Box, Button, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
@@ -66,7 +56,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const [selectedVersion, setSelectedVersion] = useState(ryoMetas?.leaderboard_version);
 
   const { leaderboardMetas } = useLeaderboardMetas(selectedVersion);
-  const { scores, resetQuery, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(selectedVersion, 10);
+  const { scores, resetQuery, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(selectedVersion);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -145,10 +135,10 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
               const isOwn = score.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = score.name ? `${score.name}${isOwn ? " (you)" : ""}` : "Anonymous";
+              const displayName = score.playerName ? `${score.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
 
               return (
-                <ListItem color={color} key={score.gameId} cursor={isOwn && !score.name ? "pointer" : "auto"}>
+                <ListItem color={color} key={score.gameId} cursor={isOwn && !score.playerName ? "pointer" : "auto"}>
                   <HStack mr={3}>
                     <Text
                       w={["10px", "30px"]}
@@ -165,7 +155,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                       cursor="pointer"
                       onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
                     >
-                      {score.dead ? (
+                      {score.health === 0 ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
                       ) : (
                         <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />

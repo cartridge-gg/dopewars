@@ -88,8 +88,10 @@ export interface GameOverData extends BaseEventData {
   game_id: number;
   player_id: string;
   player_name: string;
+  avatar_id: number;
   turn: number;
   cash: number;
+  health: number;
 }
 
 export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
@@ -202,8 +204,10 @@ export const parseEvent = (raw: any) => {
         game_id: Number(raw.keys[1]),
         player_id: num.toHexString(raw.keys[2]),
         player_name: num.toHexString(raw.data[0]),
-        turn: Number(raw.data[1]),
-        cash: Number(raw.data[2]),
+        avatar_id: Number(raw.data[1]),
+        turn: Number(raw.data[2]),
+        cash: Number(raw.data[3]),
+        health: Number(raw.data[4]),
       } as GameOverData;
 
     default:

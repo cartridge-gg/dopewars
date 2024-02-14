@@ -33,7 +33,7 @@ export default function Travel() {
   const { travel, isPending } = useSystems();
 
   const { account } = useDojoContext();
-  const { game } = useGameStore();
+  const { game, gameEvents } = useGameStore();
   const configStore = useConfigStore();
 
   const locationName = useMemo(() => {
@@ -119,7 +119,12 @@ export default function Travel() {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { event, events, hash, isGameOver } = await travel(gameId, locationId, game.getPendingCalls());
+        const { event, events, hash, isGameOver } = await travel(
+          gameId,
+          locationId,
+          game.getPendingCalls(),
+          gameEvents?.playerName,
+        );
 
         if (isGameOver) {
           return router.replace(`/${gameId}/end`);
@@ -128,9 +133,7 @@ export default function Travel() {
         if (event) {
           if (event.eventType === WorldEvents.TravelEncounter) {
             const advEvent = event as TravelEncounterData;
-            return router.push(
-              `/${gameId}/event/decision`,
-            );
+            return router.push(`/${gameId}/event/decision`);
           }
         }
 
@@ -138,7 +141,7 @@ export default function Travel() {
         //   displayMarketEvents(events as HighVolatilityData[], toaster);
         // }
 
-       router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
+        router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);

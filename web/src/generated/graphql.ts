@@ -1116,6 +1116,13 @@ export type GameEventsSubscriptionSubscriptionVariables = Exact<{
 
 export type GameEventsSubscriptionSubscription = { __typename?: 'World__Subscription', eventEmitted: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } };
 
+export type GameOverEventsQueryVariables = Exact<{
+  gameOverSelector?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GameOverEventsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } | null } | null> | null } | null };
+
 export type GameByIdQueryVariables = Exact<{
   gameId?: InputMaybe<Scalars['u32']>;
 }>;
@@ -1388,6 +1395,55 @@ export const GameEventsSubscriptionDocument = `
   }
 }
     `;
+export const GameOverEventsDocument = `
+    query GameOverEvents($gameOverSelector: String) {
+  events(last: 1000, keys: [$gameOverSelector]) {
+    totalCount
+    edges {
+      node {
+        id
+        keys
+        data
+        createdAt
+      }
+    }
+  }
+}
+    `;
+export const useGameOverEventsQuery = <
+      TData = GameOverEventsQuery,
+      TError = unknown
+    >(
+      variables?: GameOverEventsQueryVariables,
+      options?: UseQueryOptions<GameOverEventsQuery, TError, TData>
+    ) =>
+    useQuery<GameOverEventsQuery, TError, TData>(
+      variables === undefined ? ['GameOverEvents'] : ['GameOverEvents', variables],
+      useFetchData<GameOverEventsQuery, GameOverEventsQueryVariables>(GameOverEventsDocument).bind(null, variables),
+      options
+    );
+
+useGameOverEventsQuery.getKey = (variables?: GameOverEventsQueryVariables) => variables === undefined ? ['GameOverEvents'] : ['GameOverEvents', variables];
+;
+
+export const useInfiniteGameOverEventsQuery = <
+      TData = GameOverEventsQuery,
+      TError = unknown
+    >(
+      variables?: GameOverEventsQueryVariables,
+      options?: UseInfiniteQueryOptions<GameOverEventsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameOverEventsQuery, GameOverEventsQueryVariables>(GameOverEventsDocument)
+    return useInfiniteQuery<GameOverEventsQuery, TError, TData>(
+      variables === undefined ? ['GameOverEvents.infinite'] : ['GameOverEvents.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameOverEventsQuery.getKey = (variables?: GameOverEventsQueryVariables) => variables === undefined ? ['GameOverEvents.infinite'] : ['GameOverEvents.infinite', variables];
+;
+
 export const GameByIdDocument = `
     query GameById($gameId: u32) {
   gameModels(where: {game_id: $gameId}) {

@@ -5,8 +5,8 @@ import {
   Container,
   Divider,
   Flex,
-  Heading,
   HStack,
+  Heading,
   Image,
   Link,
   ListItem,
@@ -19,31 +19,31 @@ import {
   Spacer,
   Text,
   UnorderedList,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 
+import Button from "@/components/Button";
+import ShareButton from "@/components/ShareButton";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId } from "@/components/avatar/avatars";
-import Button from "@/components/Button";
 import { Calendar } from "@/components/icons/archive";
-import ShareButton from "@/components/ShareButton";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
-import { playSound, Sounds } from "@/hooks/sound";
+import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 
-export default function End() {
+const End = observer(() => {
   const { router, gameId } = useRouterContext();
 
-  const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState(0);
   const [isDead, setIsDead] = useState(false);
   const [day, setDay] = useState(0);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account } = useDojoContext();
-  const { game, gameInfos } = useGameStore()
+  const { game, gameInfos, gameEvents } = useGameStore();
 
   useEffect(() => {
     if (isDead) {
@@ -53,12 +53,11 @@ export default function End() {
 
   useEffect(() => {
     if (game) {
-      setName("noname");
       setAvatarId(gameInfos?.avatar_id);
       setIsDead(game.player?.health === 0);
       setDay(game.player.turn);
     }
-  }, [game, gameInfos?.avatar_id, ]);
+  }, [game, gameInfos?.avatar_id]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
@@ -95,7 +94,10 @@ export default function End() {
                 {/* <StatsItem text="Xth place" icon={<Trophy />} />
                 <Divider borderColor="neon.600" /> */}
 
-                <StatsItem text={name} icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />} />
+                <StatsItem
+                  text={gameEvents?.playerName}
+                  icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />}
+                />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
@@ -205,7 +207,9 @@ export default function End() {
       </Flex>
     </>
   );
-}
+});
+
+export default End;
 
 const StatsItem = ({ text, icon }: { text: string; icon: ReactNode }) => {
   return (

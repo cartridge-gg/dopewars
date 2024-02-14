@@ -10,9 +10,9 @@ import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Locations, trades: Array<PendingCallWithCost>) => Promise<SystemExecuteResult>;
-  endGame: (gameId: string) => Promise<SystemExecuteResult>;
-  decide: (gameId: string, action: EncountersAction,) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Locations, actions: Array<PendingCallWithCost>, playerName: string) => Promise<SystemExecuteResult>;
+  endGame: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  decide: (gameId: string, action: EncountersAction, playerName: string) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
 
@@ -77,7 +77,7 @@ export const useSystems = (): SystemsInterface => {
       try {
         tx = await dojoProvider.execute(account!, contract, system, callData);
         toast({
-          message: `tx sent ${tx.transaction_hash.substring(0,4)}...${tx.transaction_hash.slice(-4)}`,
+          message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
           duration: 5_000,
           isError: false
         })
@@ -165,14 +165,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Locations, calls: Array<PendingCallWithCost>) => {
+    async (gameId: string, location: Locations, calls: Array<PendingCallWithCost>, playerName: string) => {
 
       const callsEnum = calls.map(pendingCallToCairoEnum)
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "travel",
         // @ts-ignore
-        [gameId, location, callsEnum],
+        [gameId, location, callsEnum, playerName],
       );
 
       const isGameOver = parsedEvents
@@ -197,14 +197,14 @@ export const useSystems = (): SystemsInterface => {
 
 
   const endGame = useCallback(
-    async (gameId: string, calls: Array<PendingCallWithCost>) => {
+    async (gameId: string, calls: Array<PendingCallWithCost>, playerName: string) => {
       const callsEnum = calls.map(pendingCallToCairoEnum)
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "end_game",
         // @ts-ignore
-        [gameId, callsEnum],
+        [gameId, callsEnum, playerName],
       );
 
       return {
@@ -216,12 +216,12 @@ export const useSystems = (): SystemsInterface => {
 
 
   const decide = useCallback(
-    async (gameId: string, action: EncountersAction) => {
+    async (gameId: string, action: EncountersAction, playerName: string) => {
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::game::game",
         "decide",
-        [gameId, action],
+        [gameId, action, playerName],
       );
 
       const isGameOver = parsedEvents

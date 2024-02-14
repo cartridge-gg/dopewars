@@ -176,7 +176,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 1
+            stat: 8
         }
     );
 
@@ -200,7 +200,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 450,
-            stat: 10
+            stat: 12
         }
     );
 
@@ -224,7 +224,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 12000,
-            stat: 25
+            stat: 27
         }
     );
 
@@ -248,7 +248,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Attack.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 99000,
-            stat: 50
+            stat: 40
         }
     );
 
@@ -276,7 +276,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 1
+            stat: 10
         }
     );
 
@@ -300,7 +300,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 350,
-            stat: 25
+            stat: 20
         }
     );
 
@@ -324,7 +324,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 8900,
-            stat: 40
+            stat: 30
         }
     );
 
@@ -348,7 +348,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Defense.into(),
             level_id: ItemLevel::Level3.into(),
             cost: 69000,
-            stat: 60
+            stat: 50
         }
     );
 
@@ -376,7 +376,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level0.into(),
             cost: 0,
-            stat: 1
+            stat: 10
         }
     );
 
@@ -400,7 +400,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level1.into(),
             cost: 250,
-            stat: 10
+            stat: 20
         }
     );
 
@@ -424,7 +424,7 @@ fn initialize_item_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Speed.into(),
             level_id: ItemLevel::Level2.into(),
             cost: 9900,
-            stat: 25
+            stat: 30
         }
     );
 

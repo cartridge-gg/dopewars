@@ -31,7 +31,7 @@ const Location = observer(() => {
   const { account } = useDojoContext();
 
   const configStore = useConfigStore();
-  const { game, gameInfos } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
 
@@ -81,7 +81,7 @@ const Location = observer(() => {
             onClick={async () => {
               if (isLastDay) {
                 try {
-                  await endGame(gameId, game.getPendingCalls());
+                  await endGame(gameId, game.getPendingCalls(), gameEvents?.playerName);
                 } catch (e: any) {
                   game.clearPendingCalls();
                 }

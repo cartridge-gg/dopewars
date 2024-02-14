@@ -1,12 +1,13 @@
 import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
-import { TravelEncounterResultData } from "@/dojo/generated/contractEvents";
+import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
+import { getOutcomeInfo } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { Outcome } from "@/dojo/types";
+import { EncounterOutcomes } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function Consequence() {
@@ -17,22 +18,27 @@ export default function Consequence() {
 
   const [isDead, setIsDead] = useState(false);
   const [encounterResult, setEncounterResult] = useState<TravelEncounterResultData | undefined>(undefined);
+  const [outcomeInfos, setOutcomeInfos] = useState();
 
   //const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
   useEffect(() => {
     if (!(game && gameEvents)) return;
-    // const outcomeInfos = getOutcomeInfo(router.query.status as PlayerStatus, Number(router.query.outcome));
-    // setOutcome(outcomeInfos);
-    // if (router.query.payout) {
-    //   setPayout(Number(router.query.payout));
-    // }
+
+    const lastEncounter = gameEvents.getLastEncounter();
     const lastEncounterResult = gameEvents.getLastEncounterResult();
-    lastEncounterResult && setEncounterResult(lastEncounterResult.parsed);
+    lastEncounterResult && setEncounterResult(lastEncounterResult.parsed as TravelEncounterResultData);
+
+    const outcome = getOutcomeInfo(
+      (lastEncounter?.parsed as TravelEncounterData).encounterId as Encounters,
+      (lastEncounterResult?.parsed as TravelEncounterResultData).outcome as EncounterOutcomes,
+    );
+    console.log(outcome);
+    setOutcomeInfos(outcome);
   }, [gameEvents, gameEvents?.events]);
 
   useEffect(() => {
-    if (encounterResult && encounterResult.outcome === Outcome.Died) {
+    if (encounterResult && encounterResult.outcome === EncounterOutcomes.Died) {
       setIsDead(true);
       playSound(Sounds.GameOver);
     }
@@ -50,7 +56,7 @@ export default function Consequence() {
           <Footer>
             {!isDead ? (
               <Button
-                w={["full", "auto"]}
+              w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/${game.player.location.location}`);
@@ -60,7 +66,7 @@ export default function Consequence() {
               </Button>
             ) : (
               <Button
-                w="full"
+              w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/end`);
@@ -73,23 +79,33 @@ export default function Consequence() {
         }
       >
         <VStack h="full">
-          {/* <VStack>
+          <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-              {outcome.title}
+              {outcomeInfos.title}
             </Text>
             <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
-              {outcome.name}
+              {outcomeInfos.name}
             </Heading>
           </VStack>
-          <Image alt={outcome.name} src={outcome.imageSrc} maxH="50vh" height="500px" /> */}
+          <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="50vh" height="500px" />
           <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
-            <VStack textAlign="center">
-              <Text>{JSON.stringify(encounterResult, null, 2)}</Text>
-              {/* <Text>{response}</Text>
-              <Text color="yellow.400">{outcome.description && `* ${outcome.description} *`}</Text> */}
-              <Text color="yellow.400">
-                {encounterResult.payout > 0 && `You confiscated ${formatCash(encounterResult.payout)}`}
-              </Text>
+            <VStack textAlign="center" gap={0}>
+              {/* <Text>{response}</Text>*/}
+              <Text>After {encounterResult.rounds} round(s)</Text>
+              <Text color="yellow.400">{outcomeInfos.description && `* ${outcomeInfos.description} *`}</Text>
+              {encounterResult.cashEarnt > 0 && (
+                <Text color="yellow.400">{`You confiscated ${formatCash(encounterResult.cashEarnt)}`}</Text>
+              )}
+              {encounterResult.cashLoss > 0 && <Text color="yellow.400">Cash loss : {encounterResult.cashLoss}</Text>}
+              {encounterResult.dmgTaken > 0 && <Text color="red">Lost {encounterResult.dmgTaken} HP</Text>}
+              {encounterResult.dmgDealt > 0 && <Text color="neon.400">Dealt {encounterResult.dmgDealt} DMG</Text>}
+              {encounterResult.drugLoss > 0 && (
+                <Text color="yellow.400">
+                  Lost {encounterResult.drugLoss} {configStore.getDrugById(encounterResult.drugId).name}
+                </Text>
+              )}
+
+              {/* <Text>{JSON.stringify(encounterResult, null, 2)}</Text> */}
             </VStack>
           </VStack>
           <Box display="block" minH="70px" h="70px" w="full" />

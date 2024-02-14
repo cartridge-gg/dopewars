@@ -21,9 +21,15 @@ enum EncounterActions {
 #[starknet::interface]
 trait IGame<T> {
     fn create_game(self: @T, game_mode: GameMode, avatar_id: u8, player_name: felt252);
-    fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
-    fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
-    fn decide(self: @T, game_id: u32, action: EncounterActions);
+    fn end_game(self: @T, game_id: u32, actions: Span<Actions>, player_name: felt252);
+    fn travel(
+        self: @T,
+        game_id: u32,
+        next_location: Locations,
+        actions: Span<Actions>,
+        player_name: felt252
+    );
+    fn decide(self: @T, game_id: u32, action: EncounterActions, player_name: felt252);
 }
 
 #[dojo::contract]
@@ -155,8 +161,10 @@ mod game {
         #[key]
         player_id: ContractAddress,
         player_name: felt252,
-        turn: u32,
+        avatar_id: u8,
+        turn: u8,
         cash: u32,
+        health: u8,
     }
 
 
@@ -199,7 +207,9 @@ mod game {
             emit!(self.world(), GameCreated { game_id, player_id, game_mode, player_name });
         }
 
-        fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
+        fn end_game(
+            self: @ContractState, game_id: u32, actions: Span<super::Actions>, player_name: felt252
+        ) {
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -208,19 +218,20 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            //on_game_end
-            game_loop::on_game_end(ref game_store);
-
             // save 
             let game_store_packed = game_store.pack();
             set!(self.world(), (game_store_packed));
+
+            //on_game_over
+            game_loop::on_game_over(ref game_store, player_name);
         }
 
         fn travel(
             self: @ContractState,
             game_id: u32,
             next_location: Locations,
-            actions: Span<super::Actions>
+            actions: Span<super::Actions>,
+            player_name: felt252
         ) {
             let player_id = get_caller_address();
 
@@ -241,19 +252,30 @@ mod game {
             game_store.player.next_location = next_location;
 
             // traveling
-            let has_encounter = game_loop::on_travel(ref game_store, ref randomizer);
+            let (is_dead, has_encounter) = game_loop::on_travel(ref game_store, ref randomizer);
 
-            if !has_encounter {
-                // on_turn_end & save
-                game_loop::on_turn_end(ref game_store, ref randomizer,);
+            // check if dead
+            if is_dead {
+                // gameover RIP
+                game_loop::on_game_over(ref game_store, player_name);
             } else {
-                // save 
-                let game_store_packed = game_store.pack();
-                set!(self.world(), (game_store_packed));
+                if has_encounter {
+                    // save & no end turn
+                    let game_store_packed = game_store.pack();
+                    set!(self.world(), (game_store_packed));
+                } else {
+                    // save & on_turn_end
+                    game_loop::on_turn_end(ref game_store, ref randomizer,);
+                }
             }
         }
 
-        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
+        fn decide(
+            self: @ContractState,
+            game_id: u32,
+            action: super::EncounterActions,
+            player_name: felt252
+        ) {
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -264,14 +286,21 @@ mod game {
             let mut randomizer = RandomImpl::new(self.world());
 
             // resolve decision
-            traveling::decide(ref game_store, ref randomizer, action);
+            let is_dead = traveling::decide(ref game_store, ref randomizer, action);
 
-            // on_turn_end & save
-            game_loop::on_turn_end(ref game_store, ref randomizer,);
+            // check if dead
+            if is_dead {
+                //save game_store_packed
+                let game_store_packed = game_store.pack();
+                set!(self.world(), (game_store_packed));
+                // gameover RIP
+                game_loop::on_game_over(ref game_store, player_name);
+            } else {
+                // on_turn_end & save
+                game_loop::on_turn_end(ref game_store, ref randomizer,);
+            };
         }
     }
-
-
     #[generate_trait]
     impl InternalImpl<ContractState> of InternalTrait<ContractState> {
         fn execute_actions(
@@ -299,4 +328,3 @@ mod game {
         }
     }
 }
-

@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x6fc7fc963c97d41d08ed38a8b6458c569d62fbe1e45aff3a0f476f9c89688a0",
+      "class_hash": "0x46d3c6d666517c73ecb47e50c22880a6ec500b6b56a9472b71513a5898566e6",
       "abi": [
         {
           "type": "impl",
@@ -1132,7 +1132,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x2db10d4d8e31cdb33cafea1354be189eeb08824d821cfd3fa36c81103f0717e",
+      "class_hash": "0x1bb8c4121338b5f00fc9e7e1fc28dfb1c382908076ee8f16caf53ba04741d6f",
       "abi": [
         {
           "type": "impl",
@@ -1390,6 +1390,10 @@
                 {
                   "name": "actions",
                   "type": "core::array::Span::<rollyourown::systems::game::Actions>"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -1410,6 +1414,10 @@
                 {
                   "name": "actions",
                   "type": "core::array::Span::<rollyourown::systems::game::Actions>"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -1426,6 +1434,10 @@
                 {
                   "name": "action",
                   "type": "rollyourown::systems::game::EncounterActions"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -1812,13 +1824,23 @@
               "kind": "data"
             },
             {
+              "name": "avatar_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
               "name": "turn",
-              "type": "core::integer::u32",
+              "type": "core::integer::u8",
               "kind": "data"
             },
             {
               "name": "cash",
               "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
               "kind": "data"
             }
           ]

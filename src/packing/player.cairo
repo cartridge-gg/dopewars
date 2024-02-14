@@ -128,6 +128,10 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
+    fn is_dead(self: Player) -> bool {
+        self.health == 0 
+    }
+
     fn can_continue(self: Player) -> bool {
         if self.health == 0 {
             return false;
