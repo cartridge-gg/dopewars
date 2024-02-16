@@ -50,26 +50,29 @@ const Decision = observer(() => {
   useEffect(() => {
     if (game && gameEvents && !isPending) {
       const lastEncounter = gameEvents.getLastEncounter();
-      lastEncounter && setEncounter(lastEncounter.parsed  as TravelEncounterData);
+      const encounter = lastEncounter!.parsed as TravelEncounterData;
+      setEncounter(encounter)
+    }
+  }, [game, isPending, gameEvents]);
 
-      if (!lastEncounter) return
-
+  useEffect(() => {
+    if (game && gameEvents && encounter && !isPending) {
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
+          encounter && setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
+          encounter && setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
           break;
       }
     }
-  }, [game, game?.player.status, isPending, gameEvents]);
+  }, [game, game?.player.status, encounter]);
 
   useEffect(() => {
     if (game?.player.status == PlayerStatus.BeingArrested) {
