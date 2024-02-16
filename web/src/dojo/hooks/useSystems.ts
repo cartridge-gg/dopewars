@@ -15,6 +15,7 @@ export interface SystemsInterface {
   decide: (gameId: string, action: EncountersAction, playerName: string) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
+  feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: string;
@@ -251,6 +252,27 @@ export const useSystems = (): SystemsInterface => {
   //
 
 
+
+
+
+
+  const feedLeaderboard = useCallback(
+    async (count: number) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        "rollyourown::systems::devtools::devtools",
+        "feed_leaderboard",
+        [count],
+      );
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+
+
   const failingTx = useCallback(
     async () => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -275,6 +297,7 @@ export const useSystems = (): SystemsInterface => {
     endGame,
     decide,
     //
+    feedLeaderboard,
     failingTx,
     //
     error,

@@ -10,7 +10,7 @@ use rollyourown::{
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
         markets_packed::MarketsPackedTrait
     },
-    systems::traveling
+    systems::{traveling, leaderboard::{LeaderboardManager, LeaderboardManagerTrait}}
 };
 
 
@@ -69,9 +69,22 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
     let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
     assert(game.game_over == false, 'already game_over');
 
+    // save 
+    let game_store_packed = game_store.pack();
+    set!(self.world(), (game_store_packed));
+
     // set game_over on game 
     game.game_over = true;
+
+    let leaderboard_manager = LeaderboardManagerTrait::new(game_store.world);
+    // in case player starts game in version v & end game in version v+1
+    game.leaderboard_version = leaderboard_manager.get_current_version();
+
+    // save game
     set!(game_store.world, (game));
+
+    // handle new highscore & leaderboard version
+    leaderboard_manager.on_game_over(ref game_store);
 
     // emit GameOver
     game_store
@@ -80,7 +93,8 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
             array![
                 selector!("GameOver"),
                 Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into(),
+                Into::<u16, felt252>::into(game.leaderboard_version),
             ],
             array![
                 player_name,
@@ -90,7 +104,5 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
                 Into::<u8, felt252>::into(game_store.player.health),
             ]
         );
-    // TODO : handle leaderboard stuff
-    //ryo::game_over(self.world(), ref player);
-
 }
+

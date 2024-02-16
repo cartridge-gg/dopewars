@@ -1,8 +1,7 @@
-import { PlayerEdge, World__EventEdge, useInfiniteGameOverEventsQuery } from "@/generated/graphql";
+import { World__EventEdge, useInfiniteGameOverEventsQuery } from "@/generated/graphql";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 
-import { shortString } from "starknet";
 import { GameOverData, parseEvent } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 
@@ -16,30 +15,30 @@ export type Score = {
   health: number;
 };
 
-export class GlobalScores {
-  scores: Score[];
-  constructor(scores: Score[]) {
-    this.scores = scores;
-  }
+// export class GlobalScores {
+//   scores: Score[];
+//   constructor(scores: Score[]) {
+//     this.scores = scores;
+//   }
 
-  static create(edges: PlayerEdge[]): Score[] | undefined {
-    if (!edges || edges.length === 0) return undefined;
+//   static create(edges: PlayerEdge[]): Score[] | undefined {
+//     if (!edges || edges.length === 0) return undefined;
 
-    return edges.map((edge) => {
-      const playerModel = edge.node;
+//     return edges.map((edge) => {
+//       const playerModel = edge.node;
 
-      return {
-        gameId: `0x${playerModel?.game_id.toString(16)}`,
-        playerId: playerModel?.player_id,
-        name: shortString.decodeShortString(playerModel?.name),
-        avatarId: playerModel?.avatar_id,
-        cash: Number(edge.node?.cash),
-        dead: Number(edge.node?.health) === 0,
-        health: Number(edge.node?.health),
-      };
-    });
-  }
-}
+//       return {
+//         gameId: `0x${playerModel?.game_id.toString(16)}`,
+//         playerId: playerModel?.player_id,
+//         name: shortString.decodeShortString(playerModel?.name),
+//         avatarId: playerModel?.avatar_id,
+//         cash: Number(edge.node?.cash),
+//         dead: Number(edge.node?.health) === 0,
+//         health: Number(edge.node?.health),
+//       };
+//     });
+//   }
+// }
 
 export const useGlobalScoresIninite = (version?: number) => {
   const [scores, setScores] = useState<GameOverData[]>([]);
@@ -50,8 +49,10 @@ export const useGlobalScoresIninite = (version?: number) => {
   // Gets top 10
   const { data, isFetched, refetch, /* hasNextPage,*/ fetchNextPage, ...props } = useInfiniteGameOverEventsQuery(
     {
-      // limit: limit || 10,
+      //limit: limit || 10,
+     // limit: 10,
       gameOverSelector: WorldEvents.GameOver,
+      version: `0x${version?.toString(16)}`,
     },
     {
       getNextPageParam: (lastPage) => {
@@ -79,13 +80,15 @@ export const useGlobalScoresIninite = (version?: number) => {
   useEffect(() => {
     if (!data || data?.pages.length == 0) return;
     const pageCount = data?.pages.length || 0;
-    const new_scores = data.pages[pageCount - 1].events?.edges.map((i: World__EventEdge) => {
+    const newScores = data.pages[pageCount - 1].events?.edges.map((i: World__EventEdge) => {
       const parsed = parseEvent(i.node) as GameOverData;
       return parsed;
     });
 
-    if (new_scores) {
-      setScores(scores.concat(new_scores));
+    if (newScores) {
+      const allScores = scores.concat(newScores);
+      const sorted = allScores.sort((a: GameOverData, b: GameOverData) => b.cash - a.cash)
+      setScores(sorted);
     }
   }, [data?.pages, version /*, scores*/]);
 

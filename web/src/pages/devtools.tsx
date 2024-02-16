@@ -1,13 +1,12 @@
 import Layout from "@/components/Layout";
-import { useDevtools, useSystems } from "@/dojo/hooks";
+import { useSystems } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { Button, HStack } from "@chakra-ui/react";
 
 export default function LeaderboardPage() {
   const { toast } = useToast();
 
-  const { feedLeaderboard } = useDevtools();
-  const { failingTx } = useSystems();
+  const { feedLeaderboard, failingTx } = useSystems();
 
   const onFailingTx = async () => {
     try {

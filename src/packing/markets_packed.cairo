@@ -5,7 +5,6 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game, GameMode,}, systems::game::game::HighVolatility,
     utils::{
-        settings::{MarketSettings, MarketSettingsImpl},
         events::{RawEventEmitterTrait, RawEventEmitterImpl},
         random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
         bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},

@@ -1,11 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-// use rollyourown::models::player::{Player, PlayerStatus};
-use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
-use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
-
-
 #[starknet::interface]
 trait IRyo<TContractState> {
     fn initialize(self: @TContractState);
@@ -19,12 +14,12 @@ mod ryo {
     use starknet::contract_address::Felt252TryIntoContractAddress;
     use starknet::info::get_tx_info;
 
-    use rollyourown::models::{
-        ryo::{RyoMeta, RyoMetaManager, RyoMetaManagerTrait}, leaderboard::Leaderboard,
+    use rollyourown::{
+        models::{ryo::{RyoMeta, RyoMetaManager, RyoMetaManagerTrait}, leaderboard::Leaderboard,},
+        utils::random::{RandomImpl},
+        systems::leaderboard::{LeaderboardManager, LeaderboardManagerTrait}
     };
 
-    use rollyourown::utils::random::{RandomImpl};
-    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
@@ -41,14 +36,8 @@ mod ryo {
             meta_manager.set(metas);
 
             // Leaderboard
-            set!(
-                self.world(),
-                Leaderboard {
-                    version: metas.leaderboard_version,
-                    high_score: 0,
-                    next_version_timestamp: LeaderboardManagerTrait::get_next_version_timestamp(),
-                }
-            );
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            leaderboard_manager.new_leaderboard(metas.leaderboard_version);
         }
     }
 
@@ -56,23 +45,3 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {}
 }
 
-
-
-// fn game_over(world: IWorldDispatcher, ref player: Player) {
-//     player.game_over = true;
-
-//     let leaderboard_manager = LeaderboardManagerTrait::new(world);
-//     // reset leaderboard timer if new highscore
-//     leaderboard_manager.on_game_end(player.cash);
-
-//     // in case player starts game in version v & end game in version v+1
-//     player.leaderboard_version = leaderboard_manager.get_current_version();
-
-//     world
-//         .emit_raw(
-//             array![selector!("GameOver"), player.game_id.into(), player.player_id.into()],
-//             array![
-//                 player.name.into(), player.status.into(), player.turn.into(), player.cash.into(),
-//             ]
-//         );
-// }

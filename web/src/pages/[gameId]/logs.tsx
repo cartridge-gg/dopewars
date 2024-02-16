@@ -220,10 +220,8 @@ function renderUpgradeItem(configStore: ConfigStore, log: UpgradeItemData, key: 
 }
 
 function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
-  // const status = Number(log.playerStatus);
-  // const encounter = status === 1 ? "Gang" : "Cops";
   const encounter = log.encounterId === Encounters.Cops ? "Cops" : "Gang";
-  
+
   const results = dayLog.logs
     .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
     .map((i) => i as TravelEncounterResultData);
@@ -231,14 +229,14 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
   const lastEncouterResult = results.length > 0 ? results[results.length - 1] : undefined;
   const lastEncounterResultName = lastEncouterResult ? getOutcomeName(lastEncouterResult.outcome) : "";
 
-  const action = lastEncouterResult.action
-  const totalHpLoss = log.healthLoss + lastEncouterResult?.dmgTaken;
+  const action = lastEncouterResult?.action;
+  const totalHpLoss = lastEncouterResult ? log.healthLoss + lastEncouterResult?.dmgTaken : log.healthLoss;
 
   return (
     <FightLine
       key={key}
       icon={EventIcon}
-      text={`Meet ${encounter} LVL ${log.level}`}
+      text={`Meet ${encounter} Lvl ${log.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
       consequence={`-${totalHpLoss} HP`}
@@ -347,7 +345,7 @@ const FightLine = ({
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
-          <Tooltip label={action} placement="right-end">
+          <Tooltip label={action ? action : ""} placement="right-end">
             <Text>{text}</Text>
           </Tooltip>
         </HStack>

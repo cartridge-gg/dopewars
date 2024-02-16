@@ -4,7 +4,6 @@ use starknet::ContractAddress;
 trait IDevtools<TContractState> {
     fn failing_tx(self: @TContractState);
     fn feed_leaderboard(self: @TContractState, count: u32);
-//fn get_cash(self: @TContractState, count: u32);
 }
 
 // use with katana --chain_id != 'KATANA'
@@ -19,12 +18,17 @@ mod devtools {
 
     use super::IDevtools;
 
-    use rollyourown::models::player::{Player, PlayerStatus};
-    use rollyourown::models::location::{Locations};
-    use rollyourown::models::leaderboard::{Leaderboard};
+    use rollyourown::{
+        models::leaderboard::{Leaderboard},
+        utils::{
+            random::{RandomImpl}, 
+            events::{RawEventEmitterTrait, RawEventEmitterImpl}
+        },
+        systems::{
+            leaderboard::{LeaderboardManager, LeaderboardManagerTrait}
+        },
+    };
 
-    use rollyourown::utils::random::{RandomImpl};
-    use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 
     #[abi(embed_v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
@@ -50,28 +54,24 @@ mod devtools {
                 let rand_10: u8 = randomizer.between::<u8>(0, 10);
                 let rand_2: u8 = randomizer.between::<u8>(0, 2);
 
-                let player = Player {
-                    game_id: uuid,
-                    player_id: uuid_f.try_into().unwrap(),
-                    name: uuid_f,
-                    avatar_id: rand_10,
-                    status: PlayerStatus::Normal,
-                    location_id: Locations::Home,
-                    next_location_id: Locations::Home,
-                    cash: rand ,
-                    health: rand_2,
-                    drug_count: 0,
-                    turn: rand_100.into(),
-                    wanted: 69,
-                    attack: 42,
-                    defense: 42,
-                    transport: 42,
-                    speed: 42,
-                    leaderboard_version,
-                    game_over: true,
-                };
-
-                set!(self.world(), (player));
+                // emit GameOver / Leaderboard entry
+                self
+                    .world()
+                    .emit_raw(
+                        array![
+                            selector!("GameOver"),
+                            Into::<u32, felt252>::into(uuid),
+                            Into::<u32, felt252>::into(rand).into(),
+                            leaderboard_version.into()
+                        ],
+                        array![
+                            uuid_f,
+                            Into::<u8, felt252>::into(i.try_into().unwrap() % 3_u8),
+                            Into::<u8, felt252>::into(rand_10),
+                            Into::<u32, felt252>::into(rand),
+                            Into::<u8, felt252>::into(rand_100),
+                        ]
+                    );
 
                 i += 1;
             };

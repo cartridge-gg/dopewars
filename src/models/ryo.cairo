@@ -8,7 +8,7 @@ struct RyoMeta {
     #[key]
     id: u32,
     initialized: bool,
-    leaderboard_version: u32,
+    leaderboard_version: u16,
     // TODO: paused: bool 
 }
 

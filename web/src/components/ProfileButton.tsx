@@ -62,7 +62,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
         <Box w="full" justifyContent="center">
           <VStack w="full">
             <HStack w="full" fontSize="14px">
-              <Card w="100px" alignItems="center">
+              <Card w="100px" alignItems="center" p={1}>
                 <HustlerIcon hustler={gameInfos!.avatar_id as Hustlers} w="100px" h="100px" />
               </Card>
               <Card flex={2}>

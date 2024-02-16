@@ -45,7 +45,7 @@ mod game {
         },
         systems::{
             trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,
-            game::EncounterActions
+            game::EncounterActions, leaderboard::{LeaderboardManagerTrait}
         },
         utils::random::{Random, RandomImpl},
     };
@@ -160,6 +160,8 @@ mod game {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
+        #[key]
+        leaderboard_version: u16,
         player_name: felt252,
         avatar_id: u8,
         turn: u8,
@@ -173,17 +175,19 @@ mod game {
         fn create_game(
             self: @ContractState, game_mode: GameMode, avatar_id: u8, player_name: felt252
         ) {
+            self.assert_valid_name(player_name);
             let game_id = self.world().uuid();
             let player_id = get_caller_address();
 
-            // TODO: use leaderboard
-            // let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
-            // let leaderboard_version = leaderboard_manager.on_game_start();
+            // get leaderboard version
+            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_version = leaderboard_manager.on_game_start();
 
             let game_config = GameConfigImpl::get(self.world());
             let game = Game {
                 game_id,
                 player_id,
+                leaderboard_version,
                 game_mode,
                 max_turns: game_config.max_turns,
                 max_wanted_shopping: game_config.max_wanted_shopping,
@@ -210,6 +214,7 @@ mod game {
         fn end_game(
             self: @ContractState, game_id: u32, actions: Span<super::Actions>, player_name: felt252
         ) {
+            self.assert_valid_name(player_name);
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -218,11 +223,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            // save 
-            let game_store_packed = game_store.pack();
-            set!(self.world(), (game_store_packed));
-
-            //on_game_over
+            //save & on_game_over
             game_loop::on_game_over(ref game_store, player_name);
         }
 
@@ -233,6 +234,7 @@ mod game {
             actions: Span<super::Actions>,
             player_name: felt252
         ) {
+            self.assert_valid_name(player_name);
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -256,7 +258,7 @@ mod game {
 
             // check if dead
             if is_dead {
-                // gameover RIP
+                // save & gameover RIP
                 game_loop::on_game_over(ref game_store, player_name);
             } else {
                 if has_encounter {
@@ -276,6 +278,7 @@ mod game {
             action: super::EncounterActions,
             player_name: felt252
         ) {
+            self.assert_valid_name(player_name);
             let player_id = get_caller_address();
 
             let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
@@ -290,10 +293,7 @@ mod game {
 
             // check if dead
             if is_dead {
-                //save game_store_packed
-                let game_store_packed = game_store.pack();
-                set!(self.world(), (game_store_packed));
-                // gameover RIP
+                // save & gameover RIP
                 game_loop::on_game_over(ref game_store, player_name);
             } else {
                 // on_turn_end & save
@@ -303,6 +303,12 @@ mod game {
     }
     #[generate_trait]
     impl InternalImpl<ContractState> of InternalTrait<ContractState> {
+        fn assert_valid_name(self: @ContractState, name: felt252) {
+            let name_256: u256 = name.into();
+            assert(name_256 > 0xffff, 'Name too short');
+            assert(name_256 < 0xffffffffffffffffffffffffffffffffffffffff, 'Name too long');
+        }
+
         fn execute_actions(
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>
         ) {

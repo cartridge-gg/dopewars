@@ -1,6 +1,28 @@
 export const ABI = [
   {
     "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "WorldProviderImpl",
     "interface_name": "dojo::world::IWorldProvider"
   },
@@ -124,17 +146,6 @@ export const ABI = [
         "state_mutability": "external"
       }
     ]
-  },
-  {
-    "type": "function",
-    "name": "dojo_resource",
-    "inputs": [],
-    "outputs": [
-      {
-        "type": "core::felt252"
-      }
-    ],
-    "state_mutability": "view"
   },
   {
     "type": "event",

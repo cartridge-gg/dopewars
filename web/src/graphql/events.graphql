@@ -12,7 +12,7 @@ query GameEvents($gameId: String!) {
   }
 }
 
-subscription GameEventsSubscription( $gameId: String) {
+subscription GameEventsSubscription($gameId: String) {
   eventEmitted(keys: ["*", $gameId]) {
     id
     keys
@@ -21,11 +21,8 @@ subscription GameEventsSubscription( $gameId: String) {
   }
 }
 
-
-// missing leaderboard_version: $version 
-
-query GameOverEvents( $gameOverSelector: String) {
-  events(last: 1000, keys: [$gameOverSelector]) {
+query GameOverEvents($gameOverSelector: String, $version: String) {
+  events(last: 1000, keys: [$gameOverSelector, "*", "*", $version]) {
     totalCount
     edges {
       node {

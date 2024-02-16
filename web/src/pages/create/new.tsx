@@ -2,15 +2,37 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import Input from "@/components/Input";
 import Layout from "@/components/Layout";
+import { PowerMeter } from "@/components/PowerMeter";
 import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 
 import { Arrow } from "@/components/icons";
 import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
-import { GameMode } from "@/dojo/types";
+import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+
+const hustlerStats = {
+  [Hustlers.Dragon]: {
+    [ItemSlot.Attack]: 3,
+    [ItemSlot.Defense]: 1,
+    [ItemSlot.Speed]: 2,
+    [ItemSlot.Transport]: 1,
+  },
+  [Hustlers.Monkey]: {
+    [ItemSlot.Attack]: 1,
+    [ItemSlot.Defense]: 3,
+    [ItemSlot.Speed]: 2,
+    [ItemSlot.Transport]: 1,
+  },
+  [Hustlers.Rabbit]: {
+    [ItemSlot.Attack]: 2,
+    [ItemSlot.Defense]: 2,
+    [ItemSlot.Speed]: 2,
+    [ItemSlot.Transport]: 1,
+  },
+};
 
 export default function New() {
   const { router } = useRouterContext();
@@ -27,6 +49,12 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [hustlerId, setHustlerId] = useState(0);
+
+  const [stats, setStats] = useState(hustlerStats[0 as Hustlers]);
+
+  useEffect(() => {
+    setStats(hustlerStats[hustlerId as Hustlers]);
+  }, [hustlerId]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -51,11 +79,7 @@ export default function New() {
 
   return (
     <Layout
-      leftPanelProps={{
-        prefixTitle: "Start a",
-        title: "New Game",
-        imageSrc: "/images/will-smith-with-attitude.png",
-      }}
+      isSinglePanel
       footer={
         <Footer>
           <Button
@@ -71,6 +95,15 @@ export default function New() {
     >
       <VStack w={["full", "440px"]} margin="auto">
         <VStack w="full">
+          <VStack>
+            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+              Choose your
+            </Text>
+            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+              Hustler...
+            </Heading>
+          </VStack>
+
           <HStack my="30px" align="center" justify="center">
             <Arrow
               style="outline"
@@ -80,13 +113,46 @@ export default function New() {
               cursor="pointer"
               onClick={() => {
                 playSound(Sounds.HoverClick, 0.3);
-                hustlerId > 0 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount-1);
+                hustlerId > 0 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount - 1);
               }}
             />
 
-            <Box p="20px">
-              <Hustler hustler={hustlerId as Hustlers} w="300px" h="300px" />
-            </Box>
+            <HStack p="20px">
+              <Box>
+                <Hustler hustler={hustlerId as Hustlers} w="150px" h="300px" />
+              </Box>
+
+              <VStack gap={3}>
+                <PowerMeter
+                  basePower={stats[ItemSlot.Attack]}
+                  maxPower={6}
+                  power={stats[ItemSlot.Attack]}
+                  displayedPower={0}
+                  text="ATK"
+                />
+                <PowerMeter
+                  basePower={stats[ItemSlot.Defense]}
+                  maxPower={6}
+                  power={stats[ItemSlot.Defense]}
+                  displayedPower={0}
+                  text="DEF"
+                />
+                <PowerMeter
+                  basePower={stats[ItemSlot.Speed]}
+                  maxPower={6}
+                  power={stats[ItemSlot.Speed]}
+                  displayedPower={0}
+                  text="SPD"
+                />
+                <PowerMeter
+                  basePower={stats[ItemSlot.Transport]}
+                  maxPower={6}
+                  power={stats[ItemSlot.Transport]}
+                  displayedPower={0}
+                  text="INV"
+                />
+              </VStack>
+            </HStack>
 
             <Arrow
               style="outline"

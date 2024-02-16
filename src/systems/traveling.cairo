@@ -188,11 +188,6 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
                 ],
             );
 
-        // // todo check if dead here ?
-        // if game_store.player.health == 0 {
-        //     ryo::game_over(ref game_store);
-        // };
-
         return (game_store.player.is_dead(), true);
     }
 
@@ -239,7 +234,7 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
             ],
         );
 
-    let is_dead = game_store.player.health == 0;
+    let is_dead = game_store.player.is_dead();
     if !is_dead {
         // update encounter level
         game_store.encounters.increase_encounter_level(encounter_slot);
@@ -348,8 +343,8 @@ fn on_run(
             game_store.drugs.set(drug_unpacked);
 
             // check if dead
-            is_dead = game_store.player.health == 0;
-            if is_dead {
+            
+            if game_store.player.is_dead() {
                 break;
             }
         } else {

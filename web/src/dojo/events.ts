@@ -74,7 +74,7 @@ export interface TravelEncounterResultData extends BaseEventData {
 }
 
 
-export interface GameOverEventData extends BaseEventData {
+export interface GameOverData extends BaseEventData {
   playerId: string;
   playerName: string;
   avatarId: number;
@@ -215,7 +215,7 @@ export const parseEvent = (raw: any) => {
         turn: Number(raw.data[2]),
         cash: Number(raw.data[3]),
         health: Number(raw.data[4]),
-      } as GameOverEventData;
+      } as GameOverData;
 
 
     default:

@@ -19,6 +19,7 @@ export type Scalars = {
   bool: any;
   felt252: any;
   u8: any;
+  u16: any;
   u32: any;
   u64: any;
   usize: any;
@@ -158,6 +159,7 @@ export type Game = {
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
+  leaderboard_version?: Maybe<Scalars['u16']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
@@ -260,6 +262,7 @@ export enum GameOrderField {
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
+  LeaderboardVersion = 'LEADERBOARD_VERSION',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
   PlayerId = 'PLAYER_ID'
@@ -338,6 +341,13 @@ export type GameWhereInput = {
   game_idNEQ?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
   game_over?: InputMaybe<Scalars['bool']>;
+  leaderboard_version?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionGTE?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionLT?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionLTE?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionNEQ?: InputMaybe<Scalars['u16']>;
   max_turns?: InputMaybe<Scalars['u8']>;
   max_turnsEQ?: InputMaybe<Scalars['u8']>;
   max_turnsGT?: InputMaybe<Scalars['u8']>;
@@ -499,7 +509,8 @@ export type Leaderboard = {
   entity?: Maybe<World__Entity>;
   high_score?: Maybe<Scalars['u32']>;
   next_version_timestamp?: Maybe<Scalars['u64']>;
-  version?: Maybe<Scalars['u32']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
+  version?: Maybe<Scalars['u16']>;
 };
 
 export type LeaderboardConnection = {
@@ -523,6 +534,7 @@ export type LeaderboardOrder = {
 export enum LeaderboardOrderField {
   HighScore = 'HIGH_SCORE',
   NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
+  PlayerId = 'PLAYER_ID',
   Version = 'VERSION'
 }
 
@@ -541,13 +553,20 @@ export type LeaderboardWhereInput = {
   next_version_timestampLT?: InputMaybe<Scalars['u64']>;
   next_version_timestampLTE?: InputMaybe<Scalars['u64']>;
   next_version_timestampNEQ?: InputMaybe<Scalars['u64']>;
-  version?: InputMaybe<Scalars['u32']>;
-  versionEQ?: InputMaybe<Scalars['u32']>;
-  versionGT?: InputMaybe<Scalars['u32']>;
-  versionGTE?: InputMaybe<Scalars['u32']>;
-  versionLT?: InputMaybe<Scalars['u32']>;
-  versionLTE?: InputMaybe<Scalars['u32']>;
-  versionNEQ?: InputMaybe<Scalars['u32']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  version?: InputMaybe<Scalars['u16']>;
+  versionEQ?: InputMaybe<Scalars['u16']>;
+  versionGT?: InputMaybe<Scalars['u16']>;
+  versionGTE?: InputMaybe<Scalars['u16']>;
+  versionLT?: InputMaybe<Scalars['u16']>;
+  versionLTE?: InputMaybe<Scalars['u16']>;
+  versionNEQ?: InputMaybe<Scalars['u16']>;
 };
 
 export type LocationConfig = {
@@ -644,7 +663,7 @@ export type RyoMeta = {
   entity?: Maybe<World__Entity>;
   id?: Maybe<Scalars['u32']>;
   initialized?: Maybe<Scalars['bool']>;
-  leaderboard_version?: Maybe<Scalars['u32']>;
+  leaderboard_version?: Maybe<Scalars['u16']>;
 };
 
 export type RyoMetaConnection = {
@@ -680,13 +699,13 @@ export type RyoMetaWhereInput = {
   idLTE?: InputMaybe<Scalars['u32']>;
   idNEQ?: InputMaybe<Scalars['u32']>;
   initialized?: InputMaybe<Scalars['bool']>;
-  leaderboard_version?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionEQ?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionGT?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionGTE?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionLT?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionLTE?: InputMaybe<Scalars['u32']>;
-  leaderboard_versionNEQ?: InputMaybe<Scalars['u32']>;
+  leaderboard_version?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionGTE?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionLT?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionLTE?: InputMaybe<Scalars['u16']>;
+  leaderboard_versionNEQ?: InputMaybe<Scalars['u16']>;
 };
 
 export type World__Content = {
@@ -1019,7 +1038,7 @@ export type World__QueryRyoMetaModelsArgs = {
 
 
 export type World__QueryTransactionArgs = {
-  transactionHash: Scalars['String'];
+  transactionHash: Scalars['ID'];
 };
 
 
@@ -1091,11 +1110,11 @@ export type RyoMetasQueryVariables = Exact<{ [key: string]: never; }>;
 export type RyoMetasQuery = { __typename?: 'World__Query', ryoMetaModels?: { __typename?: 'RyoMetaConnection', edges?: Array<{ __typename?: 'RyoMetaEdge', node?: { __typename?: 'RyoMeta', id?: any | null, initialized?: any | null, leaderboard_version?: any | null } | null } | null> | null } | null };
 
 export type LeaderboardMetasQueryVariables = Exact<{
-  version?: InputMaybe<Scalars['u32']>;
+  version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type LeaderboardMetasQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, high_score?: any | null, next_version_timestamp?: any | null } | null } | null> | null } | null };
+export type LeaderboardMetasQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null } | null } | null> | null } | null };
 
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1118,6 +1137,7 @@ export type GameEventsSubscriptionSubscription = { __typename?: 'World__Subscrip
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
+  version?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1194,11 +1214,12 @@ useInfiniteRyoMetasQuery.getKey = (variables?: RyoMetasQueryVariables) => variab
 ;
 
 export const LeaderboardMetasDocument = `
-    query LeaderboardMetas($version: u32) {
+    query LeaderboardMetas($version: u16) {
   leaderboardModels(where: {version: $version}) {
     edges {
       node {
         version
+        player_id
         high_score
         next_version_timestamp
       }
@@ -1396,8 +1417,8 @@ export const GameEventsSubscriptionDocument = `
 }
     `;
 export const GameOverEventsDocument = `
-    query GameOverEvents($gameOverSelector: String) {
-  events(last: 1000, keys: [$gameOverSelector]) {
+    query GameOverEvents($gameOverSelector: String, $version: String) {
+  events(last: 1000, keys: [$gameOverSelector, "*", "*", $version]) {
     totalCount
     edges {
       node {
