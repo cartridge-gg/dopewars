@@ -71,7 +71,7 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
 
     // save 
     let game_store_packed = game_store.pack();
-    set!(self.world(), (game_store_packed));
+    set!(game_store.world, (game_store_packed));
 
     // set game_over on game 
     game.game_over = true;
