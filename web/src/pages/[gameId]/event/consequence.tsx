@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
 import { getOutcomeInfo } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { EncounterOutcomes } from "@/dojo/types";
+import { EncounterOutcomes, Encounters, OutcomeInfo } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
@@ -18,7 +18,7 @@ export default function Consequence() {
 
   const [isDead, setIsDead] = useState(false);
   const [encounterResult, setEncounterResult] = useState<TravelEncounterResultData | undefined>(undefined);
-  const [outcomeInfos, setOutcomeInfos] = useState();
+  const [outcomeInfos, setOutcomeInfos] = useState<OutcomeInfo | undefined>();
 
   //const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
@@ -33,9 +33,8 @@ export default function Consequence() {
       (lastEncounter?.parsed as TravelEncounterData).encounterId as Encounters,
       (lastEncounterResult?.parsed as TravelEncounterResultData).outcome as EncounterOutcomes,
     );
-    console.log(outcome);
     setOutcomeInfos(outcome);
-  }, [gameEvents, gameEvents?.events]);
+  }, [game, gameEvents, gameEvents?.events]);
 
   useEffect(() => {
     if (encounterResult && encounterResult.outcome === EncounterOutcomes.Died) {
@@ -44,7 +43,7 @@ export default function Consequence() {
     }
   }, [encounterResult]);
 
-  if (!router.isReady || !game || !gameEvents || !encounterResult) {
+  if (!router.isReady || !game || !gameEvents || !encounterResult || !outcomeInfos) {
     return <></>;
   }
 
@@ -56,7 +55,7 @@ export default function Consequence() {
           <Footer>
             {!isDead ? (
               <Button
-              w={["full", "auto"]}
+                w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/${game.player.location.location}`);
@@ -66,7 +65,7 @@ export default function Consequence() {
               </Button>
             ) : (
               <Button
-              w={["full", "auto"]}
+                w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
                   router.push(`/${gameId}/end`);

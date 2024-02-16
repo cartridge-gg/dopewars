@@ -57,7 +57,7 @@ const Location = observer(() => {
     }
   }, [location, game]);
 
-  if (!game || !prices || !location || !configStore) {
+  if (!game || !gameInfos || !prices || !location || !configStore || !gameId) {
     return <></>;
   }
 
@@ -81,7 +81,7 @@ const Location = observer(() => {
             onClick={async () => {
               if (isLastDay) {
                 try {
-                  await endGame(gameId, game.getPendingCalls(), gameEvents?.playerName);
+                  await endGame(gameId, game.getPendingCalls(), gameEvents!.playerName);
                 } catch (e: any) {
                   game.clearPendingCalls();
                 }
@@ -158,7 +158,7 @@ const Location = observer(() => {
               cursor="pointer"
               opacity={game.isShopOpen ? 1 : 0.5}
               onClick={() => {
-                if (game.isShopOpen ) {
+                if (game.isShopOpen) {
                   router.push(`/${gameId}/pawnshop`);
                 }
               }}
@@ -172,7 +172,7 @@ const Location = observer(() => {
                 PAWNSHOP {game.isShopOpen ? "OPEN" : "CLOSED"}
               </CardHeader>
               <CardBody>
-                <Image src="/images/pawnshop.png" width="100px" height="100px" />
+                <Image src="/images/pawnshop.png" width="100px" height="100px" alt="pawnshop" />
               </CardBody>
             </Card>
           </Tooltip>
@@ -180,14 +180,13 @@ const Location = observer(() => {
       </VStack>
     </Layout>
   );
-})
+});
 
 export default Location;
 
 const BuySellBtns = ({
   canBuy,
   canSell,
-  drugSlug,
   drugConfig,
 }: {
   canBuy: boolean;

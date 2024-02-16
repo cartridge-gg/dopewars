@@ -2,16 +2,16 @@ import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
 import { BigNumberish, GetTransactionReceiptResponse } from "starknet";
-import { PendingCallWithCost, pendingCallToCairoEnum } from "../class/Game";
-import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, parseAllEvents } from "../events";
-import { TravelEncounterResultData, WorldEvents } from "../generated/contractEvents";
+import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
+import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
+import { WorldEvents } from "../generated/contractEvents";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Locations, actions: Array<PendingCallWithCost>, playerName: string) => Promise<SystemExecuteResult>;
-  endGame: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>, playerName: string) => Promise<SystemExecuteResult>;
+  endGame: (gameId: string, actions: Array<PendingCall>, playerName: string) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction, playerName: string) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
@@ -141,7 +141,7 @@ export const useSystems = (): SystemsInterface => {
 
 
     },
-    [dojoProvider, account, toast],
+    [dojoProvider, account, toast, clearToasts],
   );
 
   const createGame = useCallback(
@@ -166,7 +166,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Locations, calls: Array<PendingCallWithCost>, playerName: string) => {
+    async (gameId: string, location: Locations, calls: Array<PendingCall>, playerName: string) => {
 
       const callsEnum = calls.map(pendingCallToCairoEnum)
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -198,7 +198,7 @@ export const useSystems = (): SystemsInterface => {
 
 
   const endGame = useCallback(
-    async (gameId: string, calls: Array<PendingCallWithCost>, playerName: string) => {
+    async (gameId: string, calls: Array<PendingCall>, playerName: string) => {
       const callsEnum = calls.map(pendingCallToCairoEnum)
 
       const { hash, events, parsedEvents } = await executeAndReceipt(

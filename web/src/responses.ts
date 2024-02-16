@@ -41,11 +41,7 @@ const muggerResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = 
     initial: [],
     repeat: [],
   },
-  // Not needed
-  [EncounterOutcomes.Paid]: {
-    initial: [],
-    repeat: [],
-  },
+
   // Not needed
   [EncounterOutcomes.Victorious]: {
     initial: ["Its about sending a message!"],
@@ -103,11 +99,6 @@ const copResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
     ],
   },
   // Not needed
-  [EncounterOutcomes.Died]: {
-    initial: [],
-    repeat: [],
-  },
-  // Not needed
   [EncounterOutcomes.Victorious]: {
     initial: ["Its about sending a message!"],
     repeat: [],
@@ -133,13 +124,13 @@ function getResponse(
 }
 
 export function getMuggerResponses(
-  outcome: Outcome,
+  outcome: EncounterOutcomes,
   isInitial: boolean,
 ): string {
   return getResponse(outcome, isInitial, muggerResponses);
 }
 
-export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
+export function getCopResponses(outcome: EncounterOutcomes, isInitial: boolean): string {
   return getResponse(outcome, isInitial, copResponses);
 }
 
@@ -147,11 +138,6 @@ export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
 
 const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]>> = {
   [PlayerStatus.Normal]: {
-    [EncountersAction.Pay]: [],
-    [EncountersAction.Run]: [],
-    [EncountersAction.Fight]: [],
-  },
-  [PlayerStatus.AtPawnshop]: {
     [EncountersAction.Pay]: [],
     [EncountersAction.Run]: [],
     [EncountersAction.Fight]: [],

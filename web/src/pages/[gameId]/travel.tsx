@@ -55,8 +55,8 @@ export default function Travel() {
 
   const prices = useMemo(() => {
     if (game && game.markets && game.markets.marketsByLocation && targetLocation) {
-      const current = game.markets.marketsByLocation.get(currentLocation || "");
-      const target = game.markets.marketsByLocation.get(targetLocation);
+      const current = game.markets.marketsByLocation.get(currentLocation || "")!;
+      const target = game.markets.marketsByLocation.get(targetLocation)!;
 
       return target.map((drug, index) => {
         if (currentLocation) {
@@ -120,10 +120,10 @@ export default function Travel() {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
         const { event, events, hash, isGameOver } = await travel(
-          gameId,
+          gameId!,
           locationId,
           game.getPendingCalls(),
-          gameEvents?.playerName,
+          gameEvents!.playerName,
         );
 
         if (isGameOver) {
@@ -132,7 +132,6 @@ export default function Travel() {
 
         if (event) {
           if (event.eventType === WorldEvents.TravelEncounter) {
-            const advEvent = event as TravelEncounterData;
             return router.push(`/${gameId}/event/decision`);
           }
         }
@@ -195,7 +194,7 @@ export default function Travel() {
             <Text textStyle="subheading" fontSize="11px" color="neon.500">
               Location
             </Text>
-            <WantedIndicator wanted={game.wanted.wantedByLocation.get(targetLocation)} />
+            <WantedIndicator wanted={game.wanted.wantedByLocation.get(targetLocation)!} />
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>

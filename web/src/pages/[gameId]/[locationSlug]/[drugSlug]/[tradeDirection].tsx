@@ -2,7 +2,8 @@ import AlertMessage from "@/components/AlertMessage";
 import { Footer } from "@/components/Footer";
 import Layout from "@/components/Layout";
 import { ArrowEnclosed } from "@/components/icons";
-import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { GameClass } from "@/dojo/class/Game";
+import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket, TradeDirection } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -33,24 +34,22 @@ export default function Market() {
   const [canBuy, setCanBuy] = useState(false);
 
   const { account } = useDojoContext();
-  const { trade, isPending } = useSystems();
-
   const { game } = useGameStore();
 
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!game || isPending || !location) return;
+    if (!game || !location) return;
 
     const markets = game.markets.marketsByLocation.get(location!.location) || [];
     const market = markets.find((d) => d.drug === drug?.drug);
     if (!market) return;
 
-    setCanSell(game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug?.drug);
-    setCanBuy(game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug?.drug);
+    setCanSell((game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) as boolean);
+    setCanBuy((game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug!.drug) as boolean);
 
     setMarket(market);
-  }, [location, game, drug, isPending]);
+  }, [location, game, drug]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);
@@ -59,10 +58,10 @@ export default function Market() {
       const quantity = tradeDirection === TradeDirection.Buy ? quantityBuy : quantitySell;
 
       const marketAction = {
-        direction: tradeDirection,
+        direction: tradeDirection!,
         drug: drug?.drug_id,
         quantity,
-        cost: quantity * market.price,
+        cost: quantity * market!.price,
       };
       game?.pushCall(marketAction);
     } catch (e) {
@@ -88,25 +87,13 @@ export default function Market() {
           </Button>
 
           {tradeDirection == TradeDirection.Buy && canBuy && (
-            <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isLoading={isPending /* && !txError*/}
-              isDisabled={quantityBuy === 0}
-              onClick={onTrade}
-            >
+            <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantityBuy === 0} onClick={onTrade}>
               Buy ({quantityBuy})
             </Button>
           )}
 
           {tradeDirection == TradeDirection.Sell && canSell && (
-            <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isLoading={isPending /*&& !txError*/}
-              isDisabled={quantitySell === 0}
-              onClick={onTrade}
-            >
+            <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantitySell === 0} onClick={onTrade}>
               Sell ({quantitySell})
             </Button>
           )}

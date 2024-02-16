@@ -2,6 +2,7 @@ import { drawerAnatomy } from "@chakra-ui/anatomy";
 import { ComponentMultiStyleConfig } from "@chakra-ui/react";
 
 export const Drawer: ComponentMultiStyleConfig = {
+  // @ts-ignore
   parts: drawerAnatomy,
   defaultProps: {
     size: "sm",
@@ -9,7 +10,7 @@ export const Drawer: ComponentMultiStyleConfig = {
   baseStyle: {
     dialog: {
       pointerEvents: "auto",
-      backgroundColor:"neon.900"
+      backgroundColor: "neon.900",
     },
     dialogContainer: {
       pointerEvents: "none",

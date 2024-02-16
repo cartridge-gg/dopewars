@@ -18,8 +18,8 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
         <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />
           <Text>
-            {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug).weight) / 100 : 0}/
-            {game.items.transport.stat / 100} LBS
+            {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
+            {game.items.transport!.stat / 100} LBS
           </Text>
         </HStack>
       </HStack>
@@ -28,13 +28,13 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
-            <PlayerItem item={game.items.attack} />
+            <PlayerItem item={game.items.attack!} />
             <VerticalDivider />
-            <PlayerItem item={game.items.defense} />
+            <PlayerItem item={game.items.defense!} />
             <VerticalDivider />
-            <PlayerItem item={game.items.speed} />
+            <PlayerItem item={game.items.speed!} />
             <VerticalDivider />
-            <PlayerItem item={game.items.transport} />
+            <PlayerItem item={game.items.transport!} />
           </HStack>
         </Card>
 

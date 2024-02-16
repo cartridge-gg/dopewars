@@ -1,7 +1,7 @@
-import { Box, Button, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
+import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { useGlobalScoresIninite } from "@/dojo/queries/useGlobalScores";
+import { GameOverData } from "@/dojo/events";
+import { useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
 import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
 import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
 import colors from "@/theme/colors";
@@ -52,11 +52,13 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const { account } = useDojoContext();
   const { ryoMetas } = useRyoMetas();
 
+  const ryoStore = useRyoStore();
+  const { leaderboard } = ryoStore;
+
   const [currentVersion, setCurrentVersion] = useState(ryoMetas?.leaderboard_version);
   const [selectedVersion, setSelectedVersion] = useState(ryoMetas?.leaderboard_version);
 
   const { leaderboardMetas } = useLeaderboardMetas(selectedVersion);
-  const { scores, resetQuery, refetch, hasNextPage, fetchNextPage } = useGlobalScoresIninite(selectedVersion);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -66,19 +68,22 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const onPrev = async () => {
     if (selectedVersion > 1) {
       setSelectedVersion(selectedVersion - 1);
-      await resetQuery();
     }
   };
 
   const onNext = async () => {
     if (selectedVersion < currentVersion) {
       setSelectedVersion(selectedVersion + 1);
-      await resetQuery();
     }
   };
 
   useEffect(() => {
-    resetQuery();
+    if (!ryoStore || !selectedVersion) return;
+    ryoStore.reset();
+    ryoStore.init(selectedVersion);
+  }, [/*ryoStore,*/ selectedVersion]);
+
+  useEffect(() => {
     setCurrentVersion(ryoMetas?.leaderboard_version);
     setSelectedVersion(ryoMetas?.leaderboard_version);
   }, [ryoMetas /*resetQuery inifinte load if included !*/]);
@@ -88,9 +93,9 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
     const lastEl = listRef.current["lastElementChild"];
     // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [scores]);
+  }, [leaderboard]);
 
-  if (!scores) {
+  if (!leaderboardMetas || !selectedVersion) {
     return <></>;
   }
 
@@ -130,15 +135,15 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
         }}
       >
         <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
-          {scores && scores.length > 0 ? (
-            scores.map((score, index) => {
-              const isOwn = score.playerId === account?.address;
+          {leaderboard && leaderboard.length > 0 ? (
+            leaderboard.map((entry: GameOverData, index: number) => {
+              const isOwn = entry.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = score.playerName ? `${score.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
+              const displayName = entry.playerName ? `${entry.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
 
               return (
-                <ListItem color={color} key={score.gameId} cursor={isOwn && !score.playerName ? "pointer" : "auto"}>
+                <ListItem color={color} key={entry.gameId} cursor={isOwn && !entry.playerName ? "pointer" : "auto"}>
                   <HStack mr={3}>
                     <Text
                       w={["10px", "30px"]}
@@ -153,12 +158,12 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                       flexShrink={0}
                       style={{ marginTop: "-8px" }}
                       cursor="pointer"
-                      onClick={() => router.push(`/${score.gameId}/logs?playerId=${score.playerId}`)}
+                      onClick={() => router.push(`/${entry.gameId}/logs?playerId=${entry.playerId}`)}
                     >
-                      {score.health === 0 ? (
+                      {entry.health === 0 ? (
                         <Skull color={avatarColor} hasCrown={index === 0} />
                       ) : (
-                        <Avatar name={genAvatarFromId(score.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                        <Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
                       )}
                     </Box>
 
@@ -185,7 +190,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
                       {"."}
                     </Text>
                     <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                      {formatCash(score.cash)}
+                      {formatCash(entry.cash)}
                     </Text>
                   </HStack>
                 </ListItem>
@@ -199,11 +204,6 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
         </UnorderedList>
       </VStack>
 
-      {hasNextPage && (
-        <Button minH="40px" variant="pixelated" onClick={() => fetchNextPage()}>
-          Load More
-        </Button>
-      )}
     </VStack>
   );
 };

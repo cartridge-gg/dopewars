@@ -5,6 +5,7 @@ import { StoreApi } from "zustand";
 import { SetupResult } from "../setup/setup";
 import { ConfigStore, createConfigStore } from "../stores/config";
 import { GameStore, createGameStore } from "../stores/game";
+import { RyoStore, createRyoStore } from "../stores/ryo";
 
 interface DojoContextType extends SetupResult {
   masterAccount: Account;
@@ -12,6 +13,7 @@ interface DojoContextType extends SetupResult {
   burner: BurnerAccount;
   configStore: StoreApi<ConfigStore>;
   gameStore: StoreApi<GameStore>;
+  ryoStore: StoreApi<RyoStore>;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -55,10 +57,18 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     });
   }
 
-
   const gameStoreRef = useRef<StoreApi<GameStore>>();
   if (!gameStoreRef.current) {
     gameStoreRef.current = createGameStore({
+      client: value.graphqlClient,
+      wsClient: value.graphqlWsClient,
+      configStore: configStoreRef.current,
+    });
+  }
+
+  const ryoStoreRef = useRef<StoreApi<RyoStore>>();
+  if (!ryoStoreRef.current) {
+    ryoStoreRef.current = createRyoStore({
       client: value.graphqlClient,
       wsClient: value.graphqlWsClient,
       configStore: configStoreRef.current,
@@ -84,6 +94,7 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
         account,
         configStore: configStoreRef.current,
         gameStore: gameStoreRef.current,
+        ryoStore: ryoStoreRef.current,
       }}
     >
       {children}

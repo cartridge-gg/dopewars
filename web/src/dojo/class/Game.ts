@@ -118,7 +118,7 @@ export class GameClass {
 
     getPendingCalls(): Array<PendingCall> {
         return this.pending
-            .map((i: PendingCall) => {
+            .map((i: PendingCallWithCost) => {
                 const {
                     cost: _,
                     ...withoutCost
@@ -142,7 +142,7 @@ export class GameClass {
     get shopCount() {
         const shopCount = this.pending
             .map((i: PendingCall) => isShopAction(i) ? 1 : 0)
-            .reduce((acc, curr) => { return acc + curr }, 0)
+            .reduce((acc:number, curr:number) => { return acc + curr }, 0)
         return shopCount
     }
 

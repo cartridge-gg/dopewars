@@ -25,8 +25,7 @@ import {
   EncountersAction,
   LocationInfo,
   Locations,
-  OutcomeInfo,
-  PlayerStatus
+  OutcomeInfo
 } from "./types";
 
 import { Cigarette } from "@/components/icons";
@@ -53,6 +52,8 @@ export const statName = {
   "Speed": "SPD",
   "Transport": "INV",
 }
+export type statNameKeys = keyof typeof statName;
+
 
 export const locationIcons = {
   "Queens": Queens,
@@ -62,6 +63,7 @@ export const locationIcons = {
   "Central": CentralPark,
   "Coney": ConeyIsland,
 }
+export type locationIconsKeys = keyof typeof locationIcons;
 
 export const drugIcons = {
   "Ludes": Ludes,
@@ -71,6 +73,7 @@ export const drugIcons = {
   "Heroin": Heroin,
   "Cocaine": Cocaine,
 }
+export type drugIconsKeys = keyof typeof drugIcons;
 
 export const itemIcons = {
   "Naked": Cigarette,
@@ -91,6 +94,8 @@ export const itemIcons = {
   "Skateboard": Skateboard,
   "Bicycle": Bicycle,
 }
+export type itemsIconsKeys = keyof typeof itemIcons;
+
 
 export const locations: LocationInfo[] = [
   {
@@ -220,7 +225,6 @@ export const outcomes: OutcomeInfo[] = [
     title: "You",
     name: "Escaped",
     type: EncounterOutcomes.Escaped,
-
     encounter: Encounters.Gang,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
@@ -232,7 +236,6 @@ export const outcomes: OutcomeInfo[] = [
     title: "You",
     name: "Got killed by the Cops",
     type: EncounterOutcomes.Died,
-    status: PlayerStatus.BeingArrested,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) =>

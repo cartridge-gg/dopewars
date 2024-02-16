@@ -2,13 +2,12 @@ import Button from "@/components/Button";
 import { Footer } from "@/components/Footer";
 import { Inventory } from "@/components/Inventory";
 import Layout from "@/components/Layout";
-import { DollarBag, Flipflop, Heart, Siren } from "@/components/icons";
+import { DollarBag, Heart, Siren } from "@/components/icons";
 import CashIndicator from "@/components/player/CashIndicator";
 import HealthIndicator from "@/components/player/HealthIndicator";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { ShopItem } from "@/dojo/queries/usePlayerEntity";
 import { EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -36,10 +35,6 @@ const Decision = observer(() => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [encounter, setEncounter] = useState<TravelEncounterData | undefined>(undefined);
 
-  // TODO: replace
-  const [attackItem, setAttackItem] = useState<ShopItem | undefined>(undefined);
-  const [speedItem, setSpeedItem] = useState<ShopItem | undefined>(undefined);
-
   const [isPaying, setIsPaying] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isFigthing, setIsFigthing] = useState(false);
@@ -55,19 +50,21 @@ const Decision = observer(() => {
   useEffect(() => {
     if (game && gameEvents && !isPending) {
       const lastEncounter = gameEvents.getLastEncounter();
-      lastEncounter && setEncounter(lastEncounter.parsed);
+      lastEncounter && setEncounter(lastEncounter.parsed  as TravelEncounterData);
+
+      if (!lastEncounter) return
 
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          setDemand(`They want ${lastEncounter.parsed.demandPct}% of your $PAPER!`);
+          setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          setDemand(`They want ${lastEncounter.parsed.demandPct}% of your DRUGS!`);
+          setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
           break;
       }
@@ -115,14 +112,14 @@ const Decision = observer(() => {
         addCombatLog({
           text: "You split without a second thought",
           color: "neon.400",
-          icon: speedItem ? getShopItem(speedItem.id, speedItem.level).icon : Flipflop,
+          icon: game?.items.attack.icon,
         });
         setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Run));
         playSound(Sounds.Run);
         break;
       case EncountersAction.Fight:
         setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Fight));
-        switch (attackItem?.level) {
+        switch (game?.items.attack.level) {
           case 1:
             playSound(Sounds.Knife);
             break;
@@ -140,11 +137,11 @@ const Decision = observer(() => {
     }
 
     try {
-      const { event, events, isGameOver } = await decide(gameId, action, gameEvents?.playerName);
+      const { event, events, isGameOver } = await decide(gameId!, action, gameEvents!.playerName);
       // if (isGameOver) {
       //   router.replace(`/${gameId}/end`);
       // } else {
-        router.replace(`/${gameId}/event/consequence`);
+      router.replace(`/${gameId}/event/consequence`);
       // }
     } catch (e) {
       console.log(e);

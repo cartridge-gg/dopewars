@@ -5,19 +5,19 @@ import Button from "@/components/Button";
 import { Profile } from "@/components/ProfileButton";
 import { Event as EventIcon } from "@/components/icons";
 import {
-  ConsequenceEventData,
   GameCreatedData,
-  GameOverEventData,
+  GameOverData,
   ParseEventResult,
   TradeDrugData,
   TravelEncounterData,
   TravelEncounterResultData,
+  TraveledData,
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { getOutcomeName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { ConfigStore } from "@/dojo/stores/config";
+import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from "react";
 
 type LogByDay = {
   day: number;
-  location: string;
+  location: LocationConfigFull | undefined;
   logs: ParseEventResult[];
 };
 
@@ -63,7 +63,7 @@ const Logs = () => {
         // create new day
         logsByDay.push(dayLogs);
 
-        const travelEvent = log.parsed as TraveledEventData;
+        const travelEvent = log.parsed as TraveledData;
 
         dayLogs = {
           day: travelEvent.turn,
@@ -78,8 +78,9 @@ const Logs = () => {
     logsByDay.push(dayLogs);
 
     // move day 0 hood events to day 0 location events
-    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && i.locationId === 0 /*"Hood"*/);
-    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.locationId !== 0 /*"Hood"*/);
+    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && !i.location);
+    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location);
+
     if (day0HoodIndex > -1 && day0Index > -1) {
       const day0Hood = logsByDay[day0HoodIndex];
       const day0 = logsByDay[day0Index];
@@ -90,7 +91,7 @@ const Logs = () => {
     }
 
     setLogs(logsByDay);
-  }, [gameEvents?.sortedEvents]);
+  }, [gameEvents?.sortedEvents, configStore]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -177,7 +178,7 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
               break;
 
             case WorldEvents.GameOver:
-              // return renderGameOver(i as GameOverEventData, key);
+              return renderGameOver(i as GameOverData, key);
               break;
 
             default:
@@ -246,11 +247,11 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
   );
 }
 
-function renderGameOver(log: GameOverEventData, key: string) {
+function renderGameOver(log: GameOverData, key: string) {
   return (
     <ListItem w="full" mt="40px">
       <Text w="full" fontStyle="headings" fontSize={["16px", "20px"]} textTransform="uppercase" textAlign="center">
-        RIP <br /> ~ {log.playerName} ~
+        WP <br /> ~ {log.playerName} ~
       </Text>
       <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
     </ListItem>
@@ -318,7 +319,7 @@ const FightLine = ({
   icon?: React.FC;
   text?: string;
   result?: string;
-  resultInfos?: ConsequenceEventData;
+  resultInfos?: TravelEncounterResultData;
   consequence?: string;
   action?: EncountersAction;
   key: string;

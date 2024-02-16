@@ -4,7 +4,7 @@ import { BaseEventData, GameCreatedData, ParseEventResult, parseEvent } from "..
 import { WorldEvents } from "../generated/contractEvents";
 import { ConfigStore } from "../stores/config";
 
-type DojoEvent = {
+export type DojoEvent = {
     idx: number;
     blocknumber: number;
     eventIdx: number;

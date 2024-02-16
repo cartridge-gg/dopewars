@@ -79,7 +79,7 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
     const eventsEnum = `export enum WorldEvents {\n ${eventsMeta.map(e => `${e.name}= "${e.selector}",\n`).join("")
       }};\n\n`
 
-    const baseEventData = `
+    const baseEventData = `/*
       export interface BaseEventData {
         game_id: number;
         event_type: WorldEvents;
@@ -158,6 +158,7 @@ fs.readFile(jsonFilePath, "utf8", (err, jsonString) => {
           ${parseEventInner}
       }
     }\n\n
+    */
     `
 
     // console.log(eventsEnum)

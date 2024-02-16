@@ -91,29 +91,29 @@ export class ItemsClass extends GamePropertyClass {
 
 
     get attackUpgrade(){
-        if (this.attack.level_id < this.maxLevel){
-            return this.configStore.getItemByIds(ItemSlot.Attack, this.attack.level_id+1)
+        if (this.attack!.level_id < this.maxLevel){
+            return this.configStore.getItemByIds(ItemSlot.Attack, this.attack!.level_id+1)
         }
         return undefined
     }
 
     get defenseUpgrade(){
-        if (this.defense.level_id < this.maxLevel){
-            return this.configStore.getItemByIds(ItemSlot.Defense, this.defense.level_id+1)
+        if (this.defense!.level_id < this.maxLevel){
+            return this.configStore.getItemByIds(ItemSlot.Defense, this.defense!.level_id+1)
         }
         return undefined
     }
 
     get speedUpgrade(){
-        if (this.speed.level_id < this.maxLevel){
-            return this.configStore.getItemByIds(ItemSlot.Speed, this.speed.level_id+1)
+        if (this.speed!.level_id < this.maxLevel){
+            return this.configStore.getItemByIds(ItemSlot.Speed, this.speed!.level_id+1)
         }
         return undefined
     }
 
     get transportUpgrade(){
-        if (this.transport.level_id < this.maxLevel){
-            return this.configStore.getItemByIds(ItemSlot.Transport, this.transport.level_id+1)
+        if (this.transport!.level_id < this.maxLevel){
+            return this.configStore.getItemByIds(ItemSlot.Transport, this.transport!.level_id+1)
         }
         return undefined
     }

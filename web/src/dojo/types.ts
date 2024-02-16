@@ -92,8 +92,8 @@ export interface ShopItemInfo {
 
 export interface OutcomeInfo {
   title: string;
-  type: Outcome;
-  status: PlayerStatus;
+  type: EncounterOutcomes;
+  encounter:Encounters;
   name: string;
   imageSrc: string;
   description?: string;
@@ -110,8 +110,6 @@ export type DrugMarket = {
 
 export type LocationPrices = Map<string, DrugMarket[]>;
 
-
-
 export enum TradeDirection {
   Sell,
   Buy,
@@ -127,9 +125,6 @@ export type TradeAction = {
 export type ShopAction = {
   slot: number
 }
-
-
-
 
 export enum ItemSlot {
   Attack,

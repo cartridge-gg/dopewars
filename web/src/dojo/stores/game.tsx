@@ -83,7 +83,12 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
           },
           {
             next: ({ data }) => {
-              return onGameStorePacked({ set, data, configStore, gameInfos: get().gameInfos });
+              return onGameStorePacked({
+                set,
+                data: data as World__Subscription,
+                configStore,
+                gameInfos: get().gameInfos!,
+              });
             },
             error: (error) => console.log({ error }),
             complete: () => console.log("complete"),
@@ -102,7 +107,13 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
           },
           {
             next: ({ data }) => {
-              return onGameEvent({get, set, data, configStore, gameInfos: get().gameInfos });
+              return onGameEvent({
+                get,
+                set,
+                data: data as World__Subscription,
+                configStore,
+                gameInfos: get().gameInfos!,
+              });
             },
             error: (error) => console.log({ error }),
             complete: () => console.log("complete"),
@@ -129,7 +140,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       })) as GameEventsQuery;
 
       // parse gameInfosData
-      const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge;
+      const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge[];
       if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
       let gameInfos = gameEdges[0].node as Game;
       if (!gameInfos) return;
@@ -160,6 +171,7 @@ const onGameStorePacked = ({
   configStore,
   gameInfos,
 }: {
+  set:any,
   data: World__Subscription;
   configStore: StoreApi<ConfigStore>;
   gameInfos: Game;
@@ -181,6 +193,8 @@ const onGameEvent = ({
   configStore,
   gameInfos,
 }: {
+  get:any,
+  set:any,
   data: World__Subscription;
   configStore: StoreApi<ConfigStore>;
   gameInfos: Game;
@@ -188,8 +202,7 @@ const onGameEvent = ({
   if (!data?.eventEmitted) return;
 
   const worldEvent = data.eventEmitted as World__Event;
-  get().gameEvents.addEvent(worldEvent)
+  get().gameEvents.addEvent(worldEvent);
 
-  console.log(get().gameEvents)
-
+  console.log(get().gameEvents);
 };

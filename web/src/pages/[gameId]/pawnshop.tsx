@@ -36,6 +36,7 @@ const PawnShop = observer(() => {
   };
 
   const buy = async () => {
+    if (!game || !selectedShopItem) return;
     if (game.player!.cash < selectedShopItem.cost) return;
 
     game.pushCall({ slot: selectedShopItem.slot_id, cost: selectedShopItem?.cost });
@@ -130,8 +131,8 @@ const ShopItem = observer(
   }: {
     item: ItemConfigFull;
     onClick: VoidFunction;
-    isActive: bool;
-    isDisabled: bool;
+    isActive: boolean;
+    isDisabled: boolean;
   }) => {
     return (
       <Button

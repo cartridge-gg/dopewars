@@ -95,7 +95,7 @@ const End = observer(() => {
                 <Divider borderColor="neon.600" /> */}
 
                 <StatsItem
-                  text={gameEvents?.playerName}
+                  text={gameEvents!.playerName}
                   icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />}
                 />
                 <Divider borderColor="neon.600" />

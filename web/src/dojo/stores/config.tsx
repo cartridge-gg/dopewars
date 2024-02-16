@@ -17,10 +17,19 @@ import {
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
 import React from "react";
-import { Contract, TypedContract, shortString } from "starknet";
+import { Contract, TypedContractV2, shortString } from "starknet";
 import { createStore } from "zustand";
 import { ABI as configAbi } from "../abis/configAbi";
-import { drugIcons, itemIcons, locationIcons, statName } from "../helpers";
+import {
+  drugIcons,
+  drugIconsKeys,
+  itemIcons,
+  itemsIconsKeys,
+  locationIcons,
+  locationIconsKeys,
+  statName,
+  statNameKeys,
+} from "../helpers";
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
 export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: React.FC };
@@ -111,7 +120,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
               ...i,
               ...meta,
               name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
-              icon: drugIcons[i.drug],
+              icon: drugIcons[i.drug as drugIconsKeys],
             } as DrugConfigFull;
           });
 
@@ -124,7 +133,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
                 ...i,
                 ...meta,
                 name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
-                icon: locationIcons[i.location],
+                icon: locationIcons[i.location as locationIconsKeys],
               },
             ] as LocationConfigFull[];
           });
@@ -136,22 +145,21 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
               ...i,
               ...meta,
               name,
-              icon: itemIcons[name],
-              statName: statName[i.slot],
+              icon: itemIcons[name as itemsIconsKeys],
+              statName: statName[i.slot as statNameKeys],
             } as ItemConfigFull;
           });
 
           /*************************************************** */
 
           // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
-          const contractInfos = manifest.contracts.find((i) => i.name === "rollyourown::config::config::config")!;
-          const contract: TypedContract<typeof configAbi> = new Contract(
+          const contractInfos = manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
+          const contract: TypedContractV2<typeof configAbi> = new Contract(
             contractInfos.abi,
             contractInfos.address,
             dojoProvider.provider,
           ).typedv2(configAbi);
 
-          // typedv2 not working zzz
           const getConfig = await contract.get_config();
 
           /*************************************************** */
@@ -182,28 +190,28 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
     },
     /****************************************************/
     getDrug: (drug: string): DrugConfigFull => {
-      return get().config.drug.find((i) => i.drug.toLowerCase() === drug.toLowerCase());
+      return get().config?.drug.find((i) => i.drug.toLowerCase() === drug.toLowerCase())!;
     },
     getDrugById: (drug_id: number): DrugConfigFull => {
-      return get().config.drug.find((i) => Number(i.drug_id) === Number(drug_id));
+      return get().config?.drug.find((i) => Number(i.drug_id) === Number(drug_id))!;
     },
     /****************************************************/
     getLocation: (location: string): LocationConfigFull => {
-      return get().config.location.find((i) => i.location.toLowerCase() === location.toLowerCase());
+      return get().config?.location.find((i) => i.location.toLowerCase() === location.toLowerCase())!;
     },
     getLocationById: (location_id: number): LocationConfigFull => {
-      return get().config.location.find((i) => Number(i.location_id) === Number(location_id));
+      return get().config?.location.find((i) => Number(i.location_id) === Number(location_id))!;
     },
     /****************************************************/
     getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
-      return get().config.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id);
+      return get().config?.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id)!;
     },
     /****************************************************/
     getGameStoreLayoutItem: (name: string): LayoutItem => {
-      return get().config.config.layouts.game_store.find((i) => i.name === name)!;
+      return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
     },
     getPlayerLayoutItem: (name: string): LayoutItem => {
-      return get().config.config.layouts.player.find((i) => i.name === name)!;
+      return get().config?.config.layouts.player.find((i) => i.name === name)!;
     },
   }));
 };

@@ -1,3 +1,4 @@
+import { DojoEvent } from "@/dojo/class/Events";
 import { HighVolatilityData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
@@ -15,7 +16,7 @@ const RegisterEntities = () => {
   const gameStore = useGameStore();
   const { game, gameEvents } = gameStore;
 
-  const [lastEvent, setLastEvent] = useState();
+  const [lastEvent, setLastEvent] = useState<DojoEvent|undefined>();
   const toaster = useToast();
 
   useEffect(() => {
@@ -81,8 +82,8 @@ const displayHighVolatility = (event: HighVolatilityData, toaster: ToastType, co
   const location = configStore.getLocationById(event.locationId);
   const drug = configStore.getDrugById(event.drugId);
   const msg = event.increase
-    ? `Pigs seized ${drug.name} in ${location.name}`
-    : `A shipment of ${drug.name} has arrived to ${location.name}`;
+    ? `Pigs seized ${drug!.name} in ${location!.name}`
+    : `A shipment of ${drug!.name} has arrived to ${location!.name}`;
   const icon = event.increase ? Siren : Truck;
   toaster.toast({
     message: msg,

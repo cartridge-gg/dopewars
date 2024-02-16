@@ -44,7 +44,7 @@ export class MarketsClass extends GamePropertyClass {
     }
 
     getDrugPriceByTick(drugId: number, tick: bigint) {
-        const drugConfig = this.configStore.getDrugById(drugId);
+        const drugConfig = this.configStore.getDrugById(drugId)!;
         return Number(tick) * Number(drugConfig.step) + Number(drugConfig.base);
     }
 

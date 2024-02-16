@@ -61,7 +61,7 @@ export interface TravelEncounterData extends BaseEventData {
 }
 
 export interface TravelEncounterResultData extends BaseEventData {
-  playeeId: string;
+  playerId: string;
   action: EncountersAction;
   outcome: EncounterOutcomes;
   rounds: number;
@@ -77,6 +77,7 @@ export interface TravelEncounterResultData extends BaseEventData {
 export interface GameOverData extends BaseEventData {
   playerId: string;
   playerName: string;
+  leaderboardVersion: string;
   avatarId: number;
   turn: number;
   cash: number;
@@ -210,6 +211,7 @@ export const parseEvent = (raw: any) => {
         eventName: "GameOver",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
+        leaderboardVersion: num.toHexString(raw.keys[3]),
         playerName: shortString.decodeShortString(raw.data[0]),
         avatarId: Number(raw.data[1]),
         turn: Number(raw.data[2]),
