@@ -52,7 +52,6 @@ mod devtools {
                 let rand: u32 = randomizer.between::<u32>(0, 100000000);
                 let rand_100: u8 = randomizer.between::<u8>(0, 100);
                 let rand_10: u8 = randomizer.between::<u8>(0, 10);
-                let rand_2: u8 = randomizer.between::<u8>(0, 2);
 
                 // emit GameOver / Leaderboard entry
                 self

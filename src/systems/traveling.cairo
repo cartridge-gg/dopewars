@@ -386,7 +386,6 @@ fn on_fight(
     let mut rounds = 0;
     let mut dmg_taken = 0;
     let mut dmg_dealt = 0;
-    let mut drug_loss = 0;
     let mut is_dead = false;
 
     let mut encounter = encounter;
