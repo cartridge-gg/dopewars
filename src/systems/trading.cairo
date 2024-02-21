@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 use rollyourown::{
     config::{
         locations::{Locations}, drugs::{Drugs, DrugConfig, DrugConfigImpl},
-        items::{ItemConfig, ItemSlot, ItemConfigImpl}
+        hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl},
@@ -68,7 +68,7 @@ fn buy(ref game_store: GameStore, trade: Trade) {
     let drug_config = DrugConfigImpl::get(game_store.world, trade.drug);
 
     // check quantity
-    let max_transport = transport.stat - (drugs.quantity * drug_config.weight);
+    let max_transport = transport.tier.stat - (drugs.quantity * drug_config.weight);
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash 
@@ -90,8 +90,8 @@ fn buy(ref game_store: GameStore, trade: Trade) {
         .emit_raw(
             array![
                 selector!("TradeDrug"),
-                Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                Into::<u32, felt252>::into(game_store.game.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
             ],
             array![
                 Into::<Drugs, u8>::into(trade.drug).into(),
@@ -129,8 +129,8 @@ fn sell(ref game_store: GameStore, trade: Trade) {
         .emit_raw(
             array![
                 selector!("TradeDrug"),
-                Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                Into::<u32, felt252>::into(game_store.game.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
             ],
             array![
                 Into::<Drugs, u8>::into(trade.drug).into(),

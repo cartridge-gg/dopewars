@@ -1,19 +1,13 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    models::{game::GameMode,},
-    config::{
-        items::{ItemConfig, ItemSlot}, drugs::{Drugs},
-        locations::{Locations, LocationsEnumerableImpl}
-    },
+    models::game::{Game, GameImpl, GameMode,},
+    config::{drugs::{Drugs}, locations::{Locations, LocationsEnumerableImpl}},
     utils::{
         math::{MathTrait, MathImplU8},
         bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl}
     },
-    packing::{
-        game_store::{GameStore},
-        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}
-    }
+    packing::{game_store::{GameStore}, drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}}
 };
 
 
@@ -21,33 +15,21 @@ use rollyourown::{
 #[derive(Copy, Drop)]
 struct WantedPacked {
     world: IWorldDispatcher,
-    game_id: u32,
-    player_id: ContractAddress,
+    game: Game,
     //
     packed: felt252
 }
 
 
-impl WantedPackedDefaultImpl of Default<WantedPacked> {
-    fn default() -> WantedPacked {
-        WantedPacked {
-            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
-            game_id: 0,
-            player_id: 0.try_into().unwrap(),
-            //
-            packed: 0
-        }
-    }
-}
-
 #[generate_trait]
 impl WantedPackedImpl of WantedPackedTrait {
-    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> WantedPacked {
-        let packed: u256 = core::pedersen::pedersen(game_id.into() + 1, player_id.into()).into();
+    fn new(world: IWorldDispatcher, game: Game) -> WantedPacked {
+        let packed: u256 = core::pedersen::pedersen(game.game_id.into() + 1, game.player_id.into())
+            .into();
         let mask = BitsMathImpl::mask::<u256>(18);
         let safe_packed: felt252 = (packed & mask).try_into().unwrap();
 
-        WantedPacked { world, game_id, player_id, packed: safe_packed }
+        WantedPacked { world, game, packed: safe_packed }
     }
 
     #[inline(always)]

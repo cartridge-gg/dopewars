@@ -63,7 +63,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
           <VStack w="full">
             <HStack w="full" fontSize="14px">
               <Card w="100px" alignItems="center" p={1}>
-                <HustlerIcon hustler={gameInfos!.avatar_id as Hustlers} w="100px" h="100px" />
+                <HustlerIcon hustler={gameInfos!.hustler_id as Hustlers} w="100px" h="100px" />
               </Card>
               <Card flex={2}>
                 <HStack h="50px" px="10px">
@@ -217,8 +217,8 @@ const ProfileButtonMobile = () => {
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
-        {/* <Avatar name={genAvatarFromId(gameInfos?.avatar_id)} /> <Text ml="10px">player.name</Text> */}
-        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        {/* <Avatar name={genAvatarFromId(gameInfos?.hustler_id)} /> <Text ml="10px">player.name</Text> */}
+        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
         <Text ml="10px">player.name</Text>
       </MenuItem>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
@@ -236,8 +236,8 @@ const ProfileButton = () => {
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
-        {/* <Avatar name={genAvatarFromId(gameInfos.avatar_id)} /> */}
-        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        {/* <Avatar name={genAvatarFromId(gameInfos.hustler_id)} /> */}
+        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
       </Button>
       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
     </>
@@ -265,7 +265,7 @@ export const ProfileLink = () => {
   return (
     <>
       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
-        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
       </Button>
     </>
   );
@@ -292,7 +292,7 @@ export const ProfileLinkMobile = () => {
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick}>
-        <HustlerIcon hustler={gameInfos.avatar_id as Hustlers} />
+        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
         <Text ml="10px">player.name</Text>
       </MenuItem>
     </>

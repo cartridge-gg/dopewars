@@ -40,25 +40,28 @@ query Config {
     }
   }
 
-  # Items
-  itemConfigModels(limit:16) {
+  # HustlerItemBaseConfig
+  hustlerItemBaseConfigModels {
     edges {
       node {
         slot
-        level
+        id
         slot_id
-        level_id
-        cost
-        stat
+        name
+        initial_tier
       }
     }
   }
-  itemConfigMetaModels(limit:16) {
+
+  # HustlerItemTiersConfig
+  hustlerItemTiersConfigModels(limit: 6) {
     edges {
       node {
         slot
-        level
-        name
+        slot_id
+        tier
+        cost
+        stat
       }
     }
   }

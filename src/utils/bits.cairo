@@ -124,14 +124,14 @@ mod tests {
     #[available_gas(100000000)]
     fn test_bits_from_prime() {
         let mut bits = BitsImpl::from(FELT252_PRIME);
-        let fail = bits.into_felt();
+        let _fail = bits.into_felt();
     }
 
     #[test]
     #[available_gas(100000000)]
     fn test_bits_from_prime_minus_1() {
         let mut bits = BitsImpl::from(FELT252_PRIME - 1);
-        let max = bits.into_felt();
+        let _max = bits.into_felt();
     }
 
     #[test]
@@ -139,7 +139,7 @@ mod tests {
     fn test_bits_max_251() {
         let max_251 = BitsMathImpl::fpow(2, 251) - 1;
         let mut bits = BitsImpl::from(max_251);
-        let max = bits.into_felt();
+        let _max = bits.into_felt();
     }
 
 

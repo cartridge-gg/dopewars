@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Game {
@@ -7,7 +7,7 @@ struct Game {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    avatar_id: u8,
+    hustler_id: u16,
     leaderboard_version: u16,
     game_mode: GameMode,
     //
@@ -23,3 +23,11 @@ enum GameMode {
     Unlimited
 }
 
+
+
+#[generate_trait]
+impl GameImpl of GameTrait {
+     fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> Game {
+        get!(world, (game_id, player_id), Game)
+     }
+}

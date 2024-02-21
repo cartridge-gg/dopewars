@@ -43,8 +43,8 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
             .emit_raw(
                 array![
                     selector!("Traveled"),
-                    Into::<u32, felt252>::into(game_store.game_id),
-                    Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                    Into::<u32, felt252>::into(game_store.game.game_id),
+                    Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
                 ],
                 array![
                     Into::<u8, felt252>::into(game_store.player.turn - 1),
@@ -66,22 +66,22 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
 
 
 fn on_game_over(ref game_store: GameStore, player_name: felt252) {
-    let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
-    assert(game.game_over == false, 'already game_over');
+    //let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
+    assert(game_store.game.game_over == false, 'already game_over');
 
     // save 
     let game_store_packed = game_store.pack();
     set!(game_store.world, (game_store_packed));
 
     // set game_over on game 
-    game.game_over = true;
+    game_store.game.game_over = true;
 
     let leaderboard_manager = LeaderboardManagerTrait::new(game_store.world);
     // in case player starts game in version v & end game in version v+1
-    game.leaderboard_version = leaderboard_manager.get_current_version();
+    game_store.game.leaderboard_version = leaderboard_manager.get_current_version();
 
     // save game
-    set!(game_store.world, (game));
+    set!(game_store.world, (game_store.game));
 
     // handle new highscore & leaderboard version
     leaderboard_manager.on_game_over(ref game_store);
@@ -92,13 +92,13 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
         .emit_raw(
             array![
                 selector!("GameOver"),
-                Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into(),
-                Into::<u16, felt252>::into(game.leaderboard_version),
+                Into::<u32, felt252>::into(game_store.game.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into(),
+                Into::<u16, felt252>::into(game_store.game.leaderboard_version),
             ],
             array![
                 player_name,
-                Into::<u8, felt252>::into(game.avatar_id),
+                Into::<u16, felt252>::into(game_store.game.hustler_id),
                 Into::<u8, felt252>::into(game_store.player.turn),
                 Into::<u32, felt252>::into(game_store.player.cash),
                 Into::<u8, felt252>::into(game_store.player.health),

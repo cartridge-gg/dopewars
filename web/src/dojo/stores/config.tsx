@@ -33,7 +33,7 @@ import {
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
 export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: React.FC };
-export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: React.FC; statName: string };
+// export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: React.FC; statName: string };
 
 export type LayoutItem = {
   name: string;
@@ -106,11 +106,11 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
 
           //
 
-          const itemConfigEdges = data.itemConfigModels!.edges as ItemConfigEdge[];
-          const itemConfig = itemConfigEdges.map((i) => i.node as ItemConfig);
+          // const itemConfigEdges = data.itemConfigModels!.edges as ItemConfigEdge[];
+          // const itemConfig = itemConfigEdges.map((i) => i.node as ItemConfig);
 
-          const itemConfigMetaEdges = data.itemConfigMetaModels!.edges as ItemConfigMetaEdge[];
-          const itemConfigMeta = itemConfigMetaEdges.map((i) => i.node as ItemConfigMeta);
+          // const itemConfigMetaEdges = data.itemConfigMetaModels!.edges as ItemConfigMetaEdge[];
+          // const itemConfigMeta = itemConfigMetaEdges.map((i) => i.node as ItemConfigMeta);
 
           /*************************************************** */
 
@@ -138,17 +138,17 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             ] as LocationConfigFull[];
           });
 
-          const itemConfigFull = itemConfig.map((i) => {
-            const meta = itemConfigMeta.find((m) => m.slot === i.slot && m.level === i.level);
-            const name = shortString.decodeShortString(meta?.name); // todo: remove when bytes31 is supported
-            return {
-              ...i,
-              ...meta,
-              name,
-              icon: itemIcons[name as itemsIconsKeys],
-              statName: statName[i.slot as statNameKeys],
-            } as ItemConfigFull;
-          });
+          // const itemConfigFull = itemConfig.map((i) => {
+          //   const meta = itemConfigMeta.find((m) => m.slot === i.slot && m.level === i.level);
+          //   const name = shortString.decodeShortString(meta?.name); // todo: remove when bytes31 is supported
+          //   return {
+          //     ...i,
+          //     ...meta,
+          //     name,
+          //     icon: itemIcons[name as itemsIconsKeys],
+          //     statName: statName[i.slot as statNameKeys],
+          //   } as ItemConfigFull;
+          // });
 
           /*************************************************** */
 
@@ -167,7 +167,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const config = {
             drug: drugConfigFull,
             location: locationConfigFull,
-            item: itemConfigFull,
+           // item: itemConfigFull,
             config: getConfig as GetConfig,
           };
 
@@ -203,9 +203,9 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
       return get().config?.location.find((i) => Number(i.location_id) === Number(location_id))!;
     },
     /****************************************************/
-    getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
-      return get().config?.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id)!;
-    },
+    // getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
+    //   return get().config?.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id)!;
+    // },
     /****************************************************/
     getGameStoreLayoutItem: (name: string): LayoutItem => {
       return get().config?.config.layouts.game_store.find((i) => i.name === name)!;

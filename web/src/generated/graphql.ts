@@ -154,11 +154,11 @@ export type DrugConfigWhereInput = {
 
 export type Game = {
   __typename?: 'Game';
-  avatar_id?: Maybe<Scalars['u8']>;
   entity?: Maybe<World__Entity>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
+  hustler_id?: Maybe<Scalars['u16']>;
   leaderboard_version?: Maybe<Scalars['u16']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
@@ -258,10 +258,10 @@ export type GameOrder = {
 };
 
 export enum GameOrderField {
-  AvatarId = 'AVATAR_ID',
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
+  HustlerId = 'HUSTLER_ID',
   LeaderboardVersion = 'LEADERBOARD_VERSION',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
@@ -325,13 +325,6 @@ export type GameStorePackedWhereInput = {
 };
 
 export type GameWhereInput = {
-  avatar_id?: InputMaybe<Scalars['u8']>;
-  avatar_idEQ?: InputMaybe<Scalars['u8']>;
-  avatar_idGT?: InputMaybe<Scalars['u8']>;
-  avatar_idGTE?: InputMaybe<Scalars['u8']>;
-  avatar_idLT?: InputMaybe<Scalars['u8']>;
-  avatar_idLTE?: InputMaybe<Scalars['u8']>;
-  avatar_idNEQ?: InputMaybe<Scalars['u8']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
@@ -341,6 +334,13 @@ export type GameWhereInput = {
   game_idNEQ?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
   game_over?: InputMaybe<Scalars['bool']>;
+  hustler_id?: InputMaybe<Scalars['u16']>;
+  hustler_idEQ?: InputMaybe<Scalars['u16']>;
+  hustler_idGT?: InputMaybe<Scalars['u16']>;
+  hustler_idGTE?: InputMaybe<Scalars['u16']>;
+  hustler_idLT?: InputMaybe<Scalars['u16']>;
+  hustler_idLTE?: InputMaybe<Scalars['u16']>;
+  hustler_idNEQ?: InputMaybe<Scalars['u16']>;
   leaderboard_version?: InputMaybe<Scalars['u16']>;
   leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
   leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
@@ -371,75 +371,57 @@ export type GameWhereInput = {
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
 };
 
-export type ItemConfig = {
-  __typename?: 'ItemConfig';
-  cost?: Maybe<Scalars['u32']>;
+export type HustlerItemBaseConfig = {
+  __typename?: 'HustlerItemBaseConfig';
   entity?: Maybe<World__Entity>;
-  level?: Maybe<Scalars['Enum']>;
-  level_id?: Maybe<Scalars['u8']>;
-  slot?: Maybe<Scalars['Enum']>;
-  slot_id?: Maybe<Scalars['u8']>;
-  stat?: Maybe<Scalars['u32']>;
-};
-
-export type ItemConfigConnection = {
-  __typename?: 'ItemConfigConnection';
-  edges?: Maybe<Array<Maybe<ItemConfigEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type ItemConfigEdge = {
-  __typename?: 'ItemConfigEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<ItemConfig>;
-};
-
-export type ItemConfigMeta = {
-  __typename?: 'ItemConfigMeta';
-  entity?: Maybe<World__Entity>;
-  level?: Maybe<Scalars['Enum']>;
-  level_id?: Maybe<Scalars['u8']>;
+  id?: Maybe<Scalars['u32']>;
+  initial_tier?: Maybe<Scalars['u8']>;
   name?: Maybe<Scalars['felt252']>;
   slot?: Maybe<Scalars['Enum']>;
   slot_id?: Maybe<Scalars['u8']>;
 };
 
-export type ItemConfigMetaConnection = {
-  __typename?: 'ItemConfigMetaConnection';
-  edges?: Maybe<Array<Maybe<ItemConfigMetaEdge>>>;
+export type HustlerItemBaseConfigConnection = {
+  __typename?: 'HustlerItemBaseConfigConnection';
+  edges?: Maybe<Array<Maybe<HustlerItemBaseConfigEdge>>>;
   pageInfo: World__PageInfo;
   totalCount: Scalars['Int'];
 };
 
-export type ItemConfigMetaEdge = {
-  __typename?: 'ItemConfigMetaEdge';
+export type HustlerItemBaseConfigEdge = {
+  __typename?: 'HustlerItemBaseConfigEdge';
   cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<ItemConfigMeta>;
+  node?: Maybe<HustlerItemBaseConfig>;
 };
 
-export type ItemConfigMetaOrder = {
+export type HustlerItemBaseConfigOrder = {
   direction: OrderDirection;
-  field: ItemConfigMetaOrderField;
+  field: HustlerItemBaseConfigOrderField;
 };
 
-export enum ItemConfigMetaOrderField {
-  Level = 'LEVEL',
-  LevelId = 'LEVEL_ID',
+export enum HustlerItemBaseConfigOrderField {
+  Id = 'ID',
+  InitialTier = 'INITIAL_TIER',
   Name = 'NAME',
   Slot = 'SLOT',
   SlotId = 'SLOT_ID'
 }
 
-export type ItemConfigMetaWhereInput = {
-  level?: InputMaybe<Scalars['Enum']>;
-  level_id?: InputMaybe<Scalars['u8']>;
-  level_idEQ?: InputMaybe<Scalars['u8']>;
-  level_idGT?: InputMaybe<Scalars['u8']>;
-  level_idGTE?: InputMaybe<Scalars['u8']>;
-  level_idLT?: InputMaybe<Scalars['u8']>;
-  level_idLTE?: InputMaybe<Scalars['u8']>;
-  level_idNEQ?: InputMaybe<Scalars['u8']>;
+export type HustlerItemBaseConfigWhereInput = {
+  id?: InputMaybe<Scalars['u32']>;
+  idEQ?: InputMaybe<Scalars['u32']>;
+  idGT?: InputMaybe<Scalars['u32']>;
+  idGTE?: InputMaybe<Scalars['u32']>;
+  idLT?: InputMaybe<Scalars['u32']>;
+  idLTE?: InputMaybe<Scalars['u32']>;
+  idNEQ?: InputMaybe<Scalars['u32']>;
+  initial_tier?: InputMaybe<Scalars['u8']>;
+  initial_tierEQ?: InputMaybe<Scalars['u8']>;
+  initial_tierGT?: InputMaybe<Scalars['u8']>;
+  initial_tierGTE?: InputMaybe<Scalars['u8']>;
+  initial_tierLT?: InputMaybe<Scalars['u8']>;
+  initial_tierLTE?: InputMaybe<Scalars['u8']>;
+  initial_tierNEQ?: InputMaybe<Scalars['u8']>;
   name?: InputMaybe<Scalars['felt252']>;
   nameEQ?: InputMaybe<Scalars['felt252']>;
   nameGT?: InputMaybe<Scalars['felt252']>;
@@ -457,21 +439,43 @@ export type ItemConfigMetaWhereInput = {
   slot_idNEQ?: InputMaybe<Scalars['u8']>;
 };
 
-export type ItemConfigOrder = {
-  direction: OrderDirection;
-  field: ItemConfigOrderField;
+export type HustlerItemTiersConfig = {
+  __typename?: 'HustlerItemTiersConfig';
+  cost?: Maybe<Scalars['u32']>;
+  entity?: Maybe<World__Entity>;
+  slot?: Maybe<Scalars['Enum']>;
+  slot_id?: Maybe<Scalars['u8']>;
+  stat?: Maybe<Scalars['u32']>;
+  tier?: Maybe<Scalars['u8']>;
 };
 
-export enum ItemConfigOrderField {
+export type HustlerItemTiersConfigConnection = {
+  __typename?: 'HustlerItemTiersConfigConnection';
+  edges?: Maybe<Array<Maybe<HustlerItemTiersConfigEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type HustlerItemTiersConfigEdge = {
+  __typename?: 'HustlerItemTiersConfigEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<HustlerItemTiersConfig>;
+};
+
+export type HustlerItemTiersConfigOrder = {
+  direction: OrderDirection;
+  field: HustlerItemTiersConfigOrderField;
+};
+
+export enum HustlerItemTiersConfigOrderField {
   Cost = 'COST',
-  Level = 'LEVEL',
-  LevelId = 'LEVEL_ID',
   Slot = 'SLOT',
   SlotId = 'SLOT_ID',
-  Stat = 'STAT'
+  Stat = 'STAT',
+  Tier = 'TIER'
 }
 
-export type ItemConfigWhereInput = {
+export type HustlerItemTiersConfigWhereInput = {
   cost?: InputMaybe<Scalars['u32']>;
   costEQ?: InputMaybe<Scalars['u32']>;
   costGT?: InputMaybe<Scalars['u32']>;
@@ -479,14 +483,6 @@ export type ItemConfigWhereInput = {
   costLT?: InputMaybe<Scalars['u32']>;
   costLTE?: InputMaybe<Scalars['u32']>;
   costNEQ?: InputMaybe<Scalars['u32']>;
-  level?: InputMaybe<Scalars['Enum']>;
-  level_id?: InputMaybe<Scalars['u8']>;
-  level_idEQ?: InputMaybe<Scalars['u8']>;
-  level_idGT?: InputMaybe<Scalars['u8']>;
-  level_idGTE?: InputMaybe<Scalars['u8']>;
-  level_idLT?: InputMaybe<Scalars['u8']>;
-  level_idLTE?: InputMaybe<Scalars['u8']>;
-  level_idNEQ?: InputMaybe<Scalars['u8']>;
   slot?: InputMaybe<Scalars['Enum']>;
   slot_id?: InputMaybe<Scalars['u8']>;
   slot_idEQ?: InputMaybe<Scalars['u8']>;
@@ -502,6 +498,13 @@ export type ItemConfigWhereInput = {
   statLT?: InputMaybe<Scalars['u32']>;
   statLTE?: InputMaybe<Scalars['u32']>;
   statNEQ?: InputMaybe<Scalars['u32']>;
+  tier?: InputMaybe<Scalars['u8']>;
+  tierEQ?: InputMaybe<Scalars['u8']>;
+  tierGT?: InputMaybe<Scalars['u8']>;
+  tierGTE?: InputMaybe<Scalars['u8']>;
+  tierLT?: InputMaybe<Scalars['u8']>;
+  tierLTE?: InputMaybe<Scalars['u8']>;
+  tierNEQ?: InputMaybe<Scalars['u8']>;
 };
 
 export type Leaderboard = {
@@ -651,7 +654,7 @@ export type LocationConfigWhereInput = {
   location_idNEQ?: InputMaybe<Scalars['u8']>;
 };
 
-export type ModelUnion = DrugConfig | DrugConfigMeta | Game | GameConfig | GameStorePacked | ItemConfig | ItemConfigMeta | Leaderboard | LocationConfig | LocationConfigMeta | RyoMeta;
+export type ModelUnion = DrugConfig | DrugConfigMeta | Game | GameConfig | GameStorePacked | HustlerItemBaseConfig | HustlerItemTiersConfig | Leaderboard | LocationConfig | LocationConfigMeta | RyoMeta;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -791,6 +794,7 @@ export type World__MetadataEdge = {
 export type World__Model = {
   __typename?: 'World__Model';
   classHash?: Maybe<Scalars['felt252']>;
+  contractAddress?: Maybe<Scalars['felt252']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
@@ -838,8 +842,8 @@ export type World__Query = {
   gameConfigModels?: Maybe<GameConfigConnection>;
   gameModels?: Maybe<GameConnection>;
   gameStorePackedModels?: Maybe<GameStorePackedConnection>;
-  itemConfigMetaModels?: Maybe<ItemConfigMetaConnection>;
-  itemConfigModels?: Maybe<ItemConfigConnection>;
+  hustlerItemBaseConfigModels?: Maybe<HustlerItemBaseConfigConnection>;
+  hustlerItemTiersConfigModels?: Maybe<HustlerItemTiersConfigConnection>;
   leaderboardModels?: Maybe<LeaderboardConnection>;
   locationConfigMetaModels?: Maybe<LocationConfigMetaConnection>;
   locationConfigModels?: Maybe<LocationConfigConnection>;
@@ -939,27 +943,27 @@ export type World__QueryGameStorePackedModelsArgs = {
 };
 
 
-export type World__QueryItemConfigMetaModelsArgs = {
+export type World__QueryHustlerItemBaseConfigModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<ItemConfigMetaOrder>;
-  where?: InputMaybe<ItemConfigMetaWhereInput>;
+  order?: InputMaybe<HustlerItemBaseConfigOrder>;
+  where?: InputMaybe<HustlerItemBaseConfigWhereInput>;
 };
 
 
-export type World__QueryItemConfigModelsArgs = {
+export type World__QueryHustlerItemTiersConfigModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<ItemConfigOrder>;
-  where?: InputMaybe<ItemConfigWhereInput>;
+  order?: InputMaybe<HustlerItemTiersConfigOrder>;
+  where?: InputMaybe<HustlerItemTiersConfigWhereInput>;
 };
 
 
@@ -1119,7 +1123,7 @@ export type LeaderboardMetasQuery = { __typename?: 'World__Query', leaderboardMo
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, from_turn?: any | null, to_turn?: any | null } | null } | null> | null } | null, drugConfigMetaModels?: { __typename?: 'DrugConfigMetaConnection', edges?: Array<{ __typename?: 'DrugConfigMetaEdge', node?: { __typename?: 'DrugConfigMeta', drug?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null } | null } | null> | null } | null, locationConfigMetaModels?: { __typename?: 'LocationConfigMetaConnection', edges?: Array<{ __typename?: 'LocationConfigMetaEdge', node?: { __typename?: 'LocationConfigMeta', location?: any | null, name?: any | null } | null } | null> | null } | null, itemConfigModels?: { __typename?: 'ItemConfigConnection', edges?: Array<{ __typename?: 'ItemConfigEdge', node?: { __typename?: 'ItemConfig', slot?: any | null, level?: any | null, slot_id?: any | null, level_id?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, itemConfigMetaModels?: { __typename?: 'ItemConfigMetaConnection', edges?: Array<{ __typename?: 'ItemConfigMetaEdge', node?: { __typename?: 'ItemConfigMeta', slot?: any | null, level?: any | null, name?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, from_turn?: any | null, to_turn?: any | null } | null } | null> | null } | null, drugConfigMetaModels?: { __typename?: 'DrugConfigMetaConnection', edges?: Array<{ __typename?: 'DrugConfigMetaEdge', node?: { __typename?: 'DrugConfigMeta', drug?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null } | null } | null> | null } | null, locationConfigMetaModels?: { __typename?: 'LocationConfigMetaConnection', edges?: Array<{ __typename?: 'LocationConfigMetaEdge', node?: { __typename?: 'LocationConfigMeta', location?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null };
 
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1148,7 +1152,7 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, avatar_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1156,14 +1160,14 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'ItemConfig' } | { __typename: 'ItemConfigMeta' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'ItemConfig' } | { __typename: 'ItemConfigMeta' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'RyoMeta' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'RyoMeta' } | null> | null } };
 
 
 export const RyoMetasDocument = `
@@ -1300,24 +1304,25 @@ export const ConfigDocument = `
       }
     }
   }
-  itemConfigModels(limit: 16) {
+  hustlerItemBaseConfigModels {
     edges {
       node {
         slot
-        level
+        id
         slot_id
-        level_id
-        cost
-        stat
+        name
+        initial_tier
       }
     }
   }
-  itemConfigMetaModels(limit: 16) {
+  hustlerItemTiersConfigModels(limit: 6) {
     edges {
       node {
         slot
-        level
-        name
+        slot_id
+        tier
+        cost
+        stat
       }
     }
   }
@@ -1474,7 +1479,7 @@ export const GameByIdDocument = `
         game_mode
         max_turns
         max_wanted_shopping
-        avatar_id
+        hustler_id
         game_over
       }
     }

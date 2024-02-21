@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::items::{ItemConfig, ItemConfigImpl, ItemSlot, ItemLevel}, models::game::GameMode,
+    models::game::{Game, GameMode},
     utils::{
         random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
         bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
@@ -12,29 +12,16 @@ use rollyourown::{
 #[derive(Copy, Drop)]
 struct EncountersPacked {
     world: IWorldDispatcher,
-    game_id: u32,
-    player_id: ContractAddress,
+    game: Game,
     //
     packed: felt252
-}
-
-impl EncountersPackedDefaultImpl of Default<EncountersPacked> {
-    fn default() -> EncountersPacked {
-        EncountersPacked {
-            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
-            game_id: 0,
-            player_id: 0.try_into().unwrap(),
-            //
-            packed: 0
-        }
-    }
 }
 
 
 #[generate_trait]
 impl EncountersPackedImpl of EncountersPackedTrait {
-    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> EncountersPacked {
-        EncountersPackedDefaultImpl::default()
+    fn new(world: IWorldDispatcher, game: Game) -> EncountersPacked {
+        EncountersPacked { world, game, packed: 0 }
     }
 
     #[inline(always)]
@@ -61,9 +48,7 @@ impl EncountersPackedImpl of EncountersPackedTrait {
 
         self.packed = bits.into_felt();
     }
-      
 }
-
 
 
 //

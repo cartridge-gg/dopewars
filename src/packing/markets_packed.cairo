@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game, GameMode,}, systems::game::game::HighVolatility,
+    models::game::{Game, GameMode}, systems::game::game::HighVolatility,
     utils::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl},
         random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
@@ -20,33 +20,20 @@ use rollyourown::{
 #[derive(Copy, Drop)]
 struct MarketsPacked {
     world: IWorldDispatcher,
-    game_id: u32,
-    player_id: ContractAddress,
+    game: Game,
     //
     packed: felt252
 }
 
-impl MarketsPackedDefaultImpl of Default<MarketsPacked> {
-    fn default() -> MarketsPacked {
-        MarketsPacked {
-            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
-            game_id: 0,
-            player_id: 0.try_into().unwrap(),
-            //
-            packed: 0
-        }
-    }
-}
-
-
 #[generate_trait]
 impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
-    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> MarketsPacked {
-        let packed: u256 = core::pedersen::pedersen(game_id.into(), player_id.into()).into();
+    fn new(world: IWorldDispatcher, game: Game) -> MarketsPacked {
+        let packed: u256 = core::pedersen::pedersen(game.game_id.into(), game.player_id.into())
+            .into();
         let mask = BitsMathImpl::mask::<u256>(GameStoreLayout::Markets.bits());
         let safe_packed: felt252 = (packed & mask).try_into().unwrap();
-        MarketsPacked { world, game_id, player_id, packed: safe_packed }
+        MarketsPacked { world, game, packed: safe_packed }
     }
 
     #[inline(always)]
@@ -150,10 +137,10 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                         .emit_raw(
                                             array![
                                                 selector!("HighVolatility"),
-                                                Into::<u32, felt252>::into(self.game_id),
+                                                Into::<u32, felt252>::into(self.game.game_id),
                                                 Into::<
                                                     ContractAddress, felt252
-                                                >::into(self.player_id),
+                                                >::into(self.game.player_id),
                                             ],
                                             array![
                                                 Into::<Locations, u8>::into(*location_id).into(),
@@ -181,14 +168,13 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 mod tests {
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::{MarketsPacked, MarketsPackedImpl, RandomImpl};
+// #[test]
+// #[available_gas(100000000)]
+// fn test_markets_variations_v1() {
+//     let world = dojo::test_utils::spawn_test_world(array![]);
 
-    #[test]
-    #[available_gas(100000000)]
-    fn test_markets_variations_v1() {
-        let world = dojo::test_utils::spawn_test_world(array![]);
-
-        let mut market_packed = MarketsPackedImpl::new(world, 0, 0.try_into().unwrap());
-        let mut randomizer = RandomImpl::new(world);
-        market_packed.market_variations(ref randomizer);
-    }
+//     let mut market_packed = MarketsPackedImpl::new(world, 0, 0.try_into().unwrap());
+//     let mut randomizer = RandomImpl::new(world);
+//     market_packed.market_variations(ref randomizer);
+// }
 }

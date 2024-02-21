@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 use rollyourown::{
-    config::{locations::{Locations}, items::{ItemSlot}}, packing::game_store::{GameMode},
+    config::{locations::{Locations}, hustlers::{ItemSlot}}, packing::game_store::{GameMode},
     systems::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
 };
 
@@ -19,8 +19,8 @@ enum EncounterActions {
 
 
 #[starknet::interface]
-trait IGame<T> {
-    fn create_game(self: @T, game_mode: GameMode, avatar_id: u8, player_name: felt252);
+trait IGameActions<T> {
+    fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>, player_name: felt252);
     fn travel(
         self: @T,
@@ -38,7 +38,7 @@ mod game {
 
     use rollyourown::{
         config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}},
-        models::{game_store_packed::GameStorePacked, game::{Game}},
+        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}},
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             encounters_packed::{Encounters}, player::{Player, PlayerImpl},
@@ -163,7 +163,7 @@ mod game {
         #[key]
         leaderboard_version: u16,
         player_name: felt252,
-        avatar_id: u8,
+        hustler_id: u16,
         turn: u8,
         cash: u32,
         health: u8,
@@ -171,53 +171,54 @@ mod game {
 
 
     #[abi(embed_v0)]
-    impl GameImpl of super::IGame<ContractState> {
+    impl GameActionsImpl of super::IGameActions<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, avatar_id: u8, player_name: felt252
+            self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
             self.assert_valid_name(player_name);
-            let game_id = self.world().uuid();
+            let world = self.world();
+            let game_id = world.uuid();
             let player_id = get_caller_address();
 
             // get leaderboard version
-            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
+            let leaderboard_manager = LeaderboardManagerTrait::new(world);
             let leaderboard_version = leaderboard_manager.on_game_start();
 
-            let game_config = GameConfigImpl::get(self.world());
+            let game_config = GameConfigImpl::get(world);
             let game = Game {
                 game_id,
                 player_id,
+                hustler_id,
                 leaderboard_version,
                 game_mode,
                 max_turns: game_config.max_turns,
                 max_wanted_shopping: game_config.max_wanted_shopping,
-                avatar_id,
                 game_over: false
             };
 
             // save Game
-            set!(self.world(), (game));
+            set!(world, (game));
 
             // create GameStorePacked
-            let game_store = GameStoreImpl::new(
-                self.world(), game_id, player_id, game_mode, avatar_id
-            );
+            let game_store = GameStoreImpl::new(world, game);
             let game_store_packed = game_store.pack();
 
             // save GameStorePacked
-            set!(self.world(), (game_store_packed));
+            set!(world, (game_store_packed));
 
             // emit GameCreated
-            emit!(self.world(), GameCreated { game_id, player_id, game_mode, player_name });
+            emit!(world, GameCreated { game_id, player_id, game_mode, player_name });
         }
 
         fn end_game(
             self: @ContractState, game_id: u32, actions: Span<super::Actions>, player_name: felt252
         ) {
             self.assert_valid_name(player_name);
+            let world = self.world();
             let player_id = get_caller_address();
-
-            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+           
+            let game = GameImpl::get(world,game_id, player_id);
+            let mut game_store = GameStoreImpl::get(world, game);
 
             // execute actions (trades & shop)
             let mut actions = actions;
@@ -235,9 +236,11 @@ mod game {
             player_name: felt252
         ) {
             self.assert_valid_name(player_name);
+            let world = self.world();
             let player_id = get_caller_address();
 
-            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+            let game = GameImpl::get(world, game_id, player_id);
+            let mut game_store = GameStoreImpl::get(world, game);
 
             // check if can travel
             assert(game_store.player.can_continue(), 'player cannot travel');
@@ -248,7 +251,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new(self.world());
+            let mut randomizer = RandomImpl::new(world);
 
             // save next_location
             game_store.player.next_location = next_location;
@@ -264,7 +267,7 @@ mod game {
                 if has_encounter {
                     // save & no end turn
                     let game_store_packed = game_store.pack();
-                    set!(self.world(), (game_store_packed));
+                    set!(world, (game_store_packed));
                 } else {
                     // save & on_turn_end
                     game_loop::on_turn_end(ref game_store, ref randomizer,);
@@ -279,14 +282,16 @@ mod game {
             player_name: felt252
         ) {
             self.assert_valid_name(player_name);
+            let world = self.world();
             let player_id = get_caller_address();
 
-            let mut game_store = GameStoreImpl::get(self.world(), game_id, player_id);
+            let game = GameImpl::get(world, game_id, player_id);
+            let mut game_store = GameStoreImpl::get(world, game);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new(self.world());
+            let mut randomizer = RandomImpl::new(world);
 
             // resolve decision
             let is_dead = traveling::decide(ref game_store, ref randomizer, action);

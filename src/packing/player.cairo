@@ -4,7 +4,7 @@ use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
-    config::{locations::Locations, items::{ItemSlot, ItemLevel}, game::GameConfigImpl},
+    config::{locations::Locations, game::GameConfigImpl},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
     packing::{player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl}}
 };
@@ -57,8 +57,7 @@ impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
 #[derive(Copy, Drop, Serde)]
 struct Player {
     world: IWorldDispatcher,
-    game_id: u32,
-    player_id: ContractAddress,
+    game: Game,
     //
     cash: u32,
     health: u8,
@@ -70,36 +69,15 @@ struct Player {
 }
 
 
-// Default
-
-impl PlayerDefaultImpl of Default<Player> {
-    fn default() -> Player {
-        Player {
-            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
-            game_id: 0,
-            player_id: 0.try_into().unwrap(),
-            //
-            cash: 0,
-            health: 0,
-            turn: 0,
-            status: PlayerStatus::Normal,
-            prev_location: Locations::Home,
-            location: Locations::Home,
-            next_location: Locations::Home,
-        }
-    }
-}
-
 
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
-    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+    fn new(world: IWorldDispatcher, game: Game) -> Player {
         // create initial player state with game_config
         let game_config = GameConfigImpl::get(world);
         Player {
             world,
-            game_id,
-            player_id,
+            game,
             //
             cash: game_config.cash,
             health: game_config.health,
@@ -111,12 +89,11 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
-    fn with(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> Player {
+    fn with(world: IWorldDispatcher, game: Game) -> Player {
         // create initial player state with world, game_id, player_id
         Player {
             world,
-            game_id,
-            player_id,
+            game,
             //
             cash: 0,
             health: 0,
@@ -140,12 +117,10 @@ impl PlayerImpl of PlayerTrait {
             return false;
         }
 
-        let game = get!(self.world, (self.game_id, self.player_id), Game);
-       
-        if self.turn == game.max_turns {
+        if self.turn == self.game.max_turns {
             return false;
         }
-        if game.game_over {
+        if self.game.game_over {
             return false;
         }
 
@@ -160,8 +135,7 @@ impl PlayerImpl of PlayerTrait {
             return false;
         }
 
-        let game = get!(self.world, (self.game_id, self.player_id), Game);
-        if game.game_over {
+        if self.game.game_over {
             return false;
         }
 
@@ -222,9 +196,9 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 // unpack 
 impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
     fn unpack(
-        self: felt252, world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,
+        self: felt252, world: IWorldDispatcher, game: Game,
     ) -> Player {
-        let mut player = PlayerImpl::with(world, game_id, player_id);
+        let mut player = PlayerImpl::with(world, game);
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);
 

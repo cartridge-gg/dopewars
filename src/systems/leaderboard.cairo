@@ -85,7 +85,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
             leaderboard.high_score = game_store.player.cash;
 
             //set player_id
-            leaderboard.player_id = game_store.player_id;
+            leaderboard.player_id = game_store.game.player_id;
 
             //reset current version timer
             leaderboard

@@ -6,7 +6,7 @@ query GameById($gameId: u32) {
         game_mode
         max_turns
         max_wanted_shopping
-        avatar_id
+        hustler_id
         game_over
       }
     }

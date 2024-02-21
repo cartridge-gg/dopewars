@@ -11,7 +11,7 @@ use rollyourown::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
     config::{
-        items::{ItemConfig, ItemSlot, ItemConfigImpl, ItemLevel},
+        hustlers::{HustlerItemConfig, ItemSlot},
         locations::{Locations, LocationsRandomizableImpl}
     },
     packing::{
@@ -174,8 +174,8 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
             .emit_raw(
                 array![
                     selector!("TravelEncounter"),
-                    Into::<u32, felt252>::into(game_store.game_id),
-                    Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                    Into::<u32, felt252>::into(game_store.game.game_id),
+                    Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
                 ],
                 array![
                     Into::<Encounters, u8>::into(encounter.encounter).into(),
@@ -218,8 +218,8 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
         .emit_raw(
             array![
                 selector!("TravelEncounterResult"),
-                Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                Into::<u32, felt252>::into(game_store.game.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
             ],
             array![
                 Into::<EncounterActions, u8>::into(result.action).into(),
@@ -279,8 +279,8 @@ fn on_pay(
     };
 
     TravelEncounterResult {
-        game_id: game_store.game_id,
-        player_id: game_store.player_id,
+        game_id: game_store.game.game_id,
+        player_id: game_store.game.player_id,
         action: EncounterActions::Pay,
         outcome: EncounterOutcomes::Paid,
         rounds: 0,
@@ -300,8 +300,8 @@ fn on_run(
     // TODO: adjust with items
     let initial_capture_rate: u8 = 75; // 75% chance of capture 
 
-    let player_defense: u8 = game_store.items.get_item(ItemSlot::Defense).stat.try_into().unwrap();
-    let player_speed: u8 = game_store.items.get_item(ItemSlot::Speed).stat.try_into().unwrap();
+    let player_defense: u8 = game_store.items.get_item(ItemSlot::Clothes).tier.stat.try_into().unwrap();
+    let player_speed: u8 = game_store.items.get_item(ItemSlot::Feet).tier.stat.try_into().unwrap();
 
     let capture_rate = initial_capture_rate.sub_capped(player_speed, 0);
 
@@ -361,8 +361,8 @@ fn on_run(
     };
 
     TravelEncounterResult {
-        game_id: game_store.game_id,
-        player_id: game_store.player_id,
+        game_id: game_store.game.game_id,
+        player_id: game_store.game.player_id,
         action: EncounterActions::Run,
         outcome,
         rounds,
@@ -378,8 +378,8 @@ fn on_run(
 fn on_fight(
     ref game_store: GameStore, ref randomizer: Random, encounter: Encounter
 ) -> TravelEncounterResult {
-    let player_attack: u8 = game_store.items.get_item(ItemSlot::Attack).stat.try_into().unwrap();
-    let player_defense: u8 = game_store.items.get_item(ItemSlot::Defense).stat.try_into().unwrap();
+    let player_attack: u8 = game_store.items.get_item(ItemSlot::Weapon).tier.stat.try_into().unwrap();
+    let player_defense: u8 = game_store.items.get_item(ItemSlot::Clothes).tier.stat.try_into().unwrap();
     let atk = player_attack / 2;
     let def = player_defense / 10;
 
@@ -428,8 +428,8 @@ fn on_fight(
     };
 
     TravelEncounterResult {
-        game_id: game_store.game_id,
-        player_id: game_store.player_id,
+        game_id: game_store.game.game_id,
+        player_id: game_store.game.player_id,
         action: EncounterActions::Fight,
         outcome,
         rounds,
@@ -441,28 +441,6 @@ fn on_fight(
         drug_loss: 0,
     }
 }
-// DMG
-// Tier 1: 8, 
-// Tier 2: 12 ($400) 
-// Tier 3: 18 ($2,500) 
-// Tier 4: 27 ($12,000) 
-// Tier 5: 40 ($75,000) 
-// Tier 6: 60 ($420,000)
 
-// DEF
-// Tier 1: 10,
-// Tier 2: 14 ($300),
-// Tier 3: 22 ($1,800),
-// Tier 4: 33 ($10,800),
-// Tier 5: 50 ($64,800), 
-// Tier 6: 75 ($388,000)
-
-// SPD
-// Tier 1: 8, 
-// Tier 2: 12 ($275) 
-// Tier 3: 18 ($1,600) 
-// Tier 4: 27 ($9,600) 
-// Tier 5: 40 ($57,600) 
-// Tier 6: 60 ($345,600)
 
 

@@ -1,9 +1,12 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::traits::{Enumerable};
 
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
-use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
+use rollyourown::{
+    traits::{Enumerable},
+    config::introspect::{Bytes31IntrospectionImpl}
+};
+
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum Drugs {

@@ -37,7 +37,7 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 const End = observer(() => {
   const { router, gameId } = useRouterContext();
 
-  const [avatarId, setAvatarId] = useState(0);
+  const [hustlerId, setHustlerId] = useState(0);
   const [isDead, setIsDead] = useState(false);
   const [day, setDay] = useState(0);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
@@ -53,11 +53,11 @@ const End = observer(() => {
 
   useEffect(() => {
     if (game) {
-      setAvatarId(gameInfos?.avatar_id);
+      setHustlerId(gameInfos?.hustler_id);
       setIsDead(game.player?.health === 0);
       setDay(game.player.turn);
     }
-  }, [game, gameInfos?.avatar_id]);
+  }, [game, gameInfos?.hustler_id]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
@@ -96,7 +96,7 @@ const End = observer(() => {
 
                 <StatsItem
                   text={gameEvents!.playerName}
-                  icon={<Avatar name={genAvatarFromId(avatarId)} w="24px" h="24px" />}
+                  icon={<Avatar name={genAvatarFromId(hustlerId)} w="24px" h="24px" />}
                 />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />

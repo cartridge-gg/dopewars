@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "dojo::world::world",
-    "address": "0x3387eb395eec4ace2db0a97192940c05cd644f0abee17122579605eeeaacb8a",
-    "class_hash": "0x5ac623f0c96059936bd2d0904bdd31799e430fe08a0caff7a5f497260b16497",
+    "address": "0x34c3229714dd632c90f5f80b6dd7af75351827a8738552341ba56a71774ba6f",
+    "class_hash": "0x6c0c550736dd694219f1a3d0a8ac95fbc8b17382f1f02dc09422451bfa30376",
     "abi": [
       {
         "type": "impl",
@@ -21,35 +21,25 @@
       },
       {
         "type": "struct",
-        "name": "core::array::Span::<core::integer::u8>",
+        "name": "dojo::resource_metadata::ResourceMetadata",
         "members": [
           {
-            "name": "snapshot",
-            "type": "@core::array::Array::<core::integer::u8>"
-          }
-        ]
-      },
-      {
-        "type": "enum",
-        "name": "core::option::Option::<core::felt252>",
-        "variants": [
-          {
-            "name": "Some",
+            "name": "resource_id",
             "type": "core::felt252"
           },
           {
-            "name": "None",
-            "type": "()"
+            "name": "metadata_uri",
+            "type": "core::array::Span::<core::felt252>"
           }
         ]
       },
       {
         "type": "struct",
-        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+        "name": "core::array::Span::<core::integer::u8>",
         "members": [
           {
             "name": "snapshot",
-            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            "type": "@core::array::Array::<core::integer::u8>"
           }
         ]
       },
@@ -73,31 +63,27 @@
         "items": [
           {
             "type": "function",
-            "name": "metadata_uri",
+            "name": "metadata",
             "inputs": [
               {
-                "name": "resource",
+                "name": "resource_id",
                 "type": "core::felt252"
               }
             ],
             "outputs": [
               {
-                "type": "core::array::Span::<core::felt252>"
+                "type": "dojo::resource_metadata::ResourceMetadata"
               }
             ],
             "state_mutability": "view"
           },
           {
             "type": "function",
-            "name": "set_metadata_uri",
+            "name": "set_metadata",
             "inputs": [
               {
-                "name": "resource",
-                "type": "core::felt252"
-              },
-              {
-                "name": "uri",
-                "type": "core::array::Span::<core::felt252>"
+                "name": "metadata",
+                "type": "dojo::resource_metadata::ResourceMetadata"
               }
             ],
             "outputs": [],
@@ -114,7 +100,7 @@
             ],
             "outputs": [
               {
-                "type": "core::starknet::class_hash::ClassHash"
+                "type": "(core::starknet::class_hash::ClassHash, core::starknet::contract_address::ContractAddress)"
               }
             ],
             "state_mutability": "view"
@@ -211,14 +197,6 @@
                 "type": "core::array::Span::<core::felt252>"
               },
               {
-                "name": "offset",
-                "type": "core::integer::u8"
-              },
-              {
-                "name": "length",
-                "type": "core::integer::u32"
-              },
-              {
                 "name": "layout",
                 "type": "core::array::Span::<core::integer::u8>"
               }
@@ -243,10 +221,6 @@
                 "type": "core::array::Span::<core::felt252>"
               },
               {
-                "name": "offset",
-                "type": "core::integer::u8"
-              },
-              {
                 "name": "values",
                 "type": "core::array::Span::<core::felt252>"
               },
@@ -257,77 +231,6 @@
             ],
             "outputs": [],
             "state_mutability": "external"
-          },
-          {
-            "type": "function",
-            "name": "entities",
-            "inputs": [
-              {
-                "name": "model",
-                "type": "core::felt252"
-              },
-              {
-                "name": "index",
-                "type": "core::option::Option::<core::felt252>"
-              },
-              {
-                "name": "values",
-                "type": "core::array::Span::<core::felt252>"
-              },
-              {
-                "name": "values_length",
-                "type": "core::integer::u32"
-              },
-              {
-                "name": "values_layout",
-                "type": "core::array::Span::<core::integer::u8>"
-              }
-            ],
-            "outputs": [
-              {
-                "type": "(core::array::Span::<core::felt252>, core::array::Span::<core::array::Span::<core::felt252>>)"
-              }
-            ],
-            "state_mutability": "view"
-          },
-          {
-            "type": "function",
-            "name": "entity_ids",
-            "inputs": [
-              {
-                "name": "model",
-                "type": "core::felt252"
-              }
-            ],
-            "outputs": [
-              {
-                "type": "core::array::Span::<core::felt252>"
-              }
-            ],
-            "state_mutability": "view"
-          },
-          {
-            "type": "function",
-            "name": "set_executor",
-            "inputs": [
-              {
-                "name": "contract_address",
-                "type": "core::starknet::contract_address::ContractAddress"
-              }
-            ],
-            "outputs": [],
-            "state_mutability": "external"
-          },
-          {
-            "type": "function",
-            "name": "executor",
-            "inputs": [],
-            "outputs": [
-              {
-                "type": "core::starknet::contract_address::ContractAddress"
-              }
-            ],
-            "state_mutability": "view"
           },
           {
             "type": "function",
@@ -494,10 +397,6 @@
         "name": "constructor",
         "inputs": [
           {
-            "name": "executor",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
             "name": "contract_base",
             "type": "core::starknet::class_hash::ClassHash"
           }
@@ -607,6 +506,16 @@
             "name": "prev_class_hash",
             "type": "core::starknet::class_hash::ClassHash",
             "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "prev_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
           }
         ]
       },
@@ -623,11 +532,6 @@
           {
             "name": "keys",
             "type": "core::array::Span::<core::felt252>",
-            "kind": "data"
-          },
-          {
-            "name": "offset",
-            "type": "core::integer::u8",
             "kind": "data"
           },
           {
@@ -700,23 +604,6 @@
       },
       {
         "type": "event",
-        "name": "dojo::world::world::ExecutorUpdated",
-        "kind": "struct",
-        "members": [
-          {
-            "name": "address",
-            "type": "core::starknet::contract_address::ContractAddress",
-            "kind": "data"
-          },
-          {
-            "name": "prev_address",
-            "type": "core::starknet::contract_address::ContractAddress",
-            "kind": "data"
-          }
-        ]
-      },
-      {
-        "type": "event",
         "name": "dojo::world::world::Event",
         "kind": "enum",
         "variants": [
@@ -769,74 +656,8 @@
             "name": "OwnerUpdated",
             "type": "dojo::world::world::OwnerUpdated",
             "kind": "nested"
-          },
-          {
-            "name": "ExecutorUpdated",
-            "type": "dojo::world::world::ExecutorUpdated",
-            "kind": "nested"
           }
         ]
-      }
-    ],
-    "reads": [],
-    "writes": [],
-    "computed": []
-  },
-  "executor": {
-    "name": "dojo::executor::executor",
-    "address": null,
-    "class_hash": "0x585507fa2818fe78e66da6ea4c5915376739f4abf509d41153f60a16cb1f68d",
-    "abi": [
-      {
-        "type": "impl",
-        "name": "Executor",
-        "interface_name": "dojo::executor::IExecutor"
-      },
-      {
-        "type": "struct",
-        "name": "core::array::Span::<core::felt252>",
-        "members": [
-          {
-            "name": "snapshot",
-            "type": "@core::array::Array::<core::felt252>"
-          }
-        ]
-      },
-      {
-        "type": "interface",
-        "name": "dojo::executor::IExecutor",
-        "items": [
-          {
-            "type": "function",
-            "name": "call",
-            "inputs": [
-              {
-                "name": "class_hash",
-                "type": "core::starknet::class_hash::ClassHash"
-              },
-              {
-                "name": "entrypoint",
-                "type": "core::felt252"
-              },
-              {
-                "name": "calldata",
-                "type": "core::array::Span::<core::felt252>"
-              }
-            ],
-            "outputs": [
-              {
-                "type": "core::array::Span::<core::felt252>"
-              }
-            ],
-            "state_mutability": "view"
-          }
-        ]
-      },
-      {
-        "type": "event",
-        "name": "dojo::executor::executor::Event",
-        "kind": "enum",
-        "variants": []
       }
     ],
     "reads": [],
@@ -845,7 +666,7 @@
   },
   "base": {
     "name": "dojo::base::base",
-    "class_hash": "0x6c458453d35753703ad25632deec20a29faf8531942ec109e6eb0650316a2bc",
+    "class_hash": "0x794d5ed2f7eb970f92e0ed9be8f73bbbdf18f7db2a9a296fa12c2d9c33e6ab3",
     "abi": [
       {
         "type": "impl",
@@ -945,11 +766,210 @@
       }
     ]
   },
+  "resource_metadata": {
+    "name": "dojo::resource_metadata::resource_metadata",
+    "address": null,
+    "class_hash": "0x6a2f06cde4aad60e0b6dd595edebe8dca1fbefe5b36cfc2f46a1d1159757df9",
+    "abi": [
+      {
+        "type": "function",
+        "name": "name",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "unpacked_size",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "packed_size",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::integer::u8>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::integer::u8>"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "layout",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::array::Span::<core::integer::u8>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::felt252>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::felt252>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::database::introspect::Struct",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::felt252"
+          },
+          {
+            "name": "attrs",
+            "type": "core::array::Span::<core::felt252>"
+          },
+          {
+            "name": "children",
+            "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::database::introspect::Enum",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::felt252"
+          },
+          {
+            "name": "attrs",
+            "type": "core::array::Span::<core::felt252>"
+          },
+          {
+            "name": "children",
+            "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::database::introspect::Ty",
+        "variants": [
+          {
+            "name": "Primitive",
+            "type": "core::felt252"
+          },
+          {
+            "name": "Struct",
+            "type": "dojo::database::introspect::Struct"
+          },
+          {
+            "name": "Enum",
+            "type": "dojo::database::introspect::Enum"
+          },
+          {
+            "name": "Tuple",
+            "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+          },
+          {
+            "name": "Array",
+            "type": "core::integer::u32"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "schema",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::database::introspect::Ty"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "struct",
+        "name": "dojo::resource_metadata::ResourceMetadata",
+        "members": [
+          {
+            "name": "resource_id",
+            "type": "core::felt252"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "core::array::Span::<core::felt252>"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "ensure_abi",
+        "inputs": [
+          {
+            "name": "model",
+            "type": "dojo::resource_metadata::ResourceMetadata"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "event",
+        "name": "dojo::resource_metadata::resource_metadata::Event",
+        "kind": "enum",
+        "variants": []
+      }
+    ],
+    "reads": [],
+    "writes": [],
+    "computed": []
+  },
   "contracts": [
     {
       "name": "rollyourown::config::config::config",
-      "address": "0x68ba36a98ee59e6aaea83590d8fd963b1804ea7973486f45a3fce2af52d8e74",
-      "class_hash": "0x5c16ec61277825ef777b48bdf915c4ce47a0e467355e65c01f616c9aa44d3fd",
+      "address": "0x7f3edda7f0f9924aa0bad9decbcfe1a19a8d5886b7e0320ae0a817b02df69cd",
+      "class_hash": "0x792bb344d5a480eaca742a9a10a8bef180f9bd167cf0d2462c73adc85ac3fa7",
       "abi": [
         {
           "type": "impl",
@@ -1043,12 +1063,138 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::hustlers::ItemSlot",
+          "variants": [
+            {
+              "name": "Weapon",
+              "type": "()"
+            },
+            {
+              "name": "Clothes",
+              "type": "()"
+            },
+            {
+              "name": "Feet",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "initial_tier",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "tier",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "stat",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "base",
+              "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
+            },
+            {
+              "name": "tier",
+              "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerConfig",
+          "members": [
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "weapon",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "clothes",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "feet",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "transport",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::config::config::Config",
           "members": [
             {
               "name": "layouts",
               "type": "rollyourown::config::config::LayoutsConfig"
+            },
+            {
+              "name": "hustlers",
+              "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
             }
           ]
         },
@@ -1142,8 +1288,8 @@
     },
     {
       "name": "rollyourown::systems::devtools::devtools",
-      "address": "0x5d9df244d87872e21d70033836ef207cf43bfecee399c1627acf7de23da394c",
-      "class_hash": "0x405e7e1d5bb399ffa9bb560486f4b95ea559d103eef9fe714cd6e8254d435ac",
+      "address": "0x3aca3a7571bf2e9a32908bf825ae5c3900504db65ea0174efac447f4500f90c",
+      "class_hash": "0x54839cda59573074baca293f852b0d6840eb0851407a5b3c7074ac04f77f074",
       "abi": [
         {
           "type": "impl",
@@ -1295,8 +1441,8 @@
     },
     {
       "name": "rollyourown::systems::game::game",
-      "address": "0x1b7eb4e0ba109bccfa6069f23e7fd2cdbeeda9982cb048ab33793db907e73d6",
-      "class_hash": "0x65f17f0961e352d397c90ea869456553f5dfac798f796b37bcba8dd3500384",
+      "address": "0xbd4f9ff6bfe5310fd4cd21b682112d46b2d1e70b2118c72cb6f37f5463352a",
+      "class_hash": "0x41080bebd8b7217993c76f61be1e208ecf58c7d4466a4af7a9f60d42abd7c4",
       "abi": [
         {
           "type": "impl",
@@ -1354,8 +1500,8 @@
         },
         {
           "type": "impl",
-          "name": "GameImpl",
-          "interface_name": "rollyourown::systems::game::IGame"
+          "name": "GameActionsImpl",
+          "interface_name": "rollyourown::systems::game::IGameActions"
         },
         {
           "type": "enum",
@@ -1435,18 +1581,18 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::config::items::ItemSlot",
+          "name": "rollyourown::config::hustlers::ItemSlot",
           "variants": [
             {
-              "name": "Attack",
+              "name": "Weapon",
               "type": "()"
             },
             {
-              "name": "Defense",
+              "name": "Clothes",
               "type": "()"
             },
             {
-              "name": "Speed",
+              "name": "Feet",
               "type": "()"
             },
             {
@@ -1461,7 +1607,7 @@
           "members": [
             {
               "name": "slot",
-              "type": "rollyourown::config::items::ItemSlot"
+              "type": "rollyourown::config::hustlers::ItemSlot"
             }
           ]
         },
@@ -1543,7 +1689,7 @@
         },
         {
           "type": "interface",
-          "name": "rollyourown::systems::game::IGame",
+          "name": "rollyourown::systems::game::IGameActions",
           "items": [
             {
               "type": "function",
@@ -1554,8 +1700,8 @@
                   "type": "rollyourown::models::game::GameMode"
                 },
                 {
-                  "name": "avatar_id",
-                  "type": "core::integer::u8"
+                  "name": "hustler_id",
+                  "type": "core::integer::u16"
                 },
                 {
                   "name": "player_name",
@@ -2004,8 +2150,8 @@
               "kind": "data"
             },
             {
-              "name": "avatar_id",
-              "type": "core::integer::u8",
+              "name": "hustler_id",
+              "type": "core::integer::u16",
               "kind": "data"
             },
             {
@@ -2084,8 +2230,8 @@
     },
     {
       "name": "rollyourown::systems::ryo::ryo",
-      "address": "0x5b9d8d94a201bd82b8dc10f393a4187c9a513aba1d105d6b3b4a75c3e8299ad",
-      "class_hash": "0x38dda3da93a5a2890258c9aeb670552ad80097263e4ef653286b7039882d229",
+      "address": "0x45a2e57ce2e94c61ed033d9145a81d39445e72e77070b627fd35913999b200",
+      "class_hash": "0x11747329b17750fb5c662354ba76f3824e7126f61a6b64d0b333a51d2f92f22",
       "abi": [
         {
           "type": "impl",
@@ -2264,7 +2410,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x33d7f8e9a9fb9555c81caf4abd04f45315a7fea1e85aef9b5bf99ffa2c88290",
+      "class_hash": "0x18e9e547411f5f2054e05567bc072c9edbcfa63fb2b1a1a81a112e97370769a",
       "abi": [
         {
           "type": "impl",
@@ -2366,6 +2512,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -2539,7 +2689,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x2a6fcd8a98c429559b30a047d27ebfc2e36c57036e32f67fff424adc622086",
+      "class_hash": "0x32cecd17a4b4424f787fe145d29d6d0eafc95eff3fd93f1395a31c663b2665b",
       "abi": [
         {
           "type": "impl",
@@ -2641,6 +2791,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -2809,7 +2963,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x3a5c04d4882e22c141f498ac6853b702b959041020e67566dbc2981e456c3b4",
+      "class_hash": "0x172d128fc0b3a7782257ec8c2e63a192aeae0cb477cdaa2c781992328e1e9fa",
       "abi": [
         {
           "type": "impl",
@@ -2911,6 +3065,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -3033,7 +3191,7 @@
       ]
     },
     {
-      "name": "rollyourown::config::items::item_config",
+      "name": "rollyourown::config::hustlers::hustler_item_base_config",
       "members": [
         {
           "name": "slot",
@@ -3041,8 +3199,8 @@
           "key": true
         },
         {
-          "name": "level",
-          "type": "ItemLevel",
+          "name": "id",
+          "type": "u32",
           "key": true
         },
         {
@@ -3051,7 +3209,280 @@
           "key": false
         },
         {
-          "name": "level_id",
+          "name": "name",
+          "type": "bytes31",
+          "key": false
+        },
+        {
+          "name": "initial_tier",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x69d17cb72c28db8b5c707914fd1af53943c08d5346f4360af36e829ca4d3e7",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::model::IDojoModel",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "unpacked_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "packed_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "layout",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<core::integer::u8>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "schema",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::database::introspect::Ty"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "hustler_item_base_configImpl",
+          "interface_name": "rollyourown::config::hustlers::Ihustler_item_base_config"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::hustlers::ItemSlot",
+          "variants": [
+            {
+              "name": "Weapon",
+              "type": "()"
+            },
+            {
+              "name": "Clothes",
+              "type": "()"
+            },
+            {
+              "name": "Feet",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "initial_tier",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::config::hustlers::Ihustler_item_base_config",
+          "items": [
+            {
+              "type": "function",
+              "name": "ensure_abi",
+              "inputs": [
+                {
+                  "name": "model",
+                  "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::hustlers::hustler_item_base_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::hustlers::hustler_item_tiers_config",
+      "members": [
+        {
+          "name": "slot",
+          "type": "ItemSlot",
+          "key": true
+        },
+        {
+          "name": "tier",
+          "type": "u8",
+          "key": true
+        },
+        {
+          "name": "slot_id",
           "type": "u8",
           "key": false
         },
@@ -3066,7 +3497,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x73cb30abd533a46477225b78479fddd39a1ffbbc09578b54d2aa28908d7ebbd",
+      "class_hash": "0x6cf3caf9b3fd9662b070d7c0975b12ae4b5dcd507ee2ba63a6baff609603e08",
       "abi": [
         {
           "type": "impl",
@@ -3168,6 +3599,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -3234,23 +3669,23 @@
         },
         {
           "type": "impl",
-          "name": "item_configImpl",
-          "interface_name": "rollyourown::config::items::Iitem_config"
+          "name": "hustler_item_tiers_configImpl",
+          "interface_name": "rollyourown::config::hustlers::Ihustler_item_tiers_config"
         },
         {
           "type": "enum",
-          "name": "rollyourown::config::items::ItemSlot",
+          "name": "rollyourown::config::hustlers::ItemSlot",
           "variants": [
             {
-              "name": "Attack",
+              "name": "Weapon",
               "type": "()"
             },
             {
-              "name": "Defense",
+              "name": "Clothes",
               "type": "()"
             },
             {
-              "name": "Speed",
+              "name": "Feet",
               "type": "()"
             },
             {
@@ -3260,45 +3695,19 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::config::items::ItemLevel",
-          "variants": [
-            {
-              "name": "Level0",
-              "type": "()"
-            },
-            {
-              "name": "Level1",
-              "type": "()"
-            },
-            {
-              "name": "Level2",
-              "type": "()"
-            },
-            {
-              "name": "Level3",
-              "type": "()"
-            }
-          ]
-        },
-        {
           "type": "struct",
-          "name": "rollyourown::config::items::ItemConfig",
+          "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
           "members": [
             {
               "name": "slot",
-              "type": "rollyourown::config::items::ItemSlot"
+              "type": "rollyourown::config::hustlers::ItemSlot"
             },
             {
-              "name": "level",
-              "type": "rollyourown::config::items::ItemLevel"
-            },
-            {
-              "name": "slot_id",
+              "name": "tier",
               "type": "core::integer::u8"
             },
             {
-              "name": "level_id",
+              "name": "slot_id",
               "type": "core::integer::u8"
             },
             {
@@ -3313,7 +3722,7 @@
         },
         {
           "type": "interface",
-          "name": "rollyourown::config::items::Iitem_config",
+          "name": "rollyourown::config::hustlers::Ihustler_item_tiers_config",
           "items": [
             {
               "type": "function",
@@ -3321,7 +3730,7 @@
               "inputs": [
                 {
                   "name": "model",
-                  "type": "rollyourown::config::items::ItemConfig"
+                  "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
                 }
               ],
               "outputs": [],
@@ -3331,303 +3740,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::config::items::item_config::Event",
-          "kind": "enum",
-          "variants": []
-        }
-      ]
-    },
-    {
-      "name": "rollyourown::config::items::item_config_meta",
-      "members": [
-        {
-          "name": "slot",
-          "type": "ItemSlot",
-          "key": true
-        },
-        {
-          "name": "level",
-          "type": "ItemLevel",
-          "key": true
-        },
-        {
-          "name": "slot_id",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "level_id",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "name",
-          "type": "bytes31",
-          "key": false
-        }
-      ],
-      "class_hash": "0x916f1b099dfb2cddeefdb635931bb49f2e4346a062fe13c6dafb4dc54001ee",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "DojoModelImpl",
-          "interface_name": "dojo::model::IDojoModel"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::integer::u8>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u8>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::introspect::Struct",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dojo::database::introspect::Enum",
-          "members": [
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "attrs",
-              "type": "core::array::Span::<core::felt252>"
-            },
-            {
-              "name": "children",
-              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "dojo::database::introspect::Ty",
-          "variants": [
-            {
-              "name": "Primitive",
-              "type": "core::felt252"
-            },
-            {
-              "name": "Struct",
-              "type": "dojo::database::introspect::Struct"
-            },
-            {
-              "name": "Enum",
-              "type": "dojo::database::introspect::Enum"
-            },
-            {
-              "name": "Tuple",
-              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::model::IDojoModel",
-          "items": [
-            {
-              "type": "function",
-              "name": "name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::felt252"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "unpacked_size",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::integer::u32"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "packed_size",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::integer::u32"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "layout",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<core::integer::u8>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "schema",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::database::introspect::Ty"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "item_config_metaImpl",
-          "interface_name": "rollyourown::config::items::Iitem_config_meta"
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::items::ItemSlot",
-          "variants": [
-            {
-              "name": "Attack",
-              "type": "()"
-            },
-            {
-              "name": "Defense",
-              "type": "()"
-            },
-            {
-              "name": "Speed",
-              "type": "()"
-            },
-            {
-              "name": "Transport",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::config::items::ItemLevel",
-          "variants": [
-            {
-              "name": "Level0",
-              "type": "()"
-            },
-            {
-              "name": "Level1",
-              "type": "()"
-            },
-            {
-              "name": "Level2",
-              "type": "()"
-            },
-            {
-              "name": "Level3",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::items::ItemConfigMeta",
-          "members": [
-            {
-              "name": "slot",
-              "type": "rollyourown::config::items::ItemSlot"
-            },
-            {
-              "name": "level",
-              "type": "rollyourown::config::items::ItemLevel"
-            },
-            {
-              "name": "slot_id",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "level_id",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "name",
-              "type": "core::bytes_31::bytes31"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::config::items::Iitem_config_meta",
-          "items": [
-            {
-              "type": "function",
-              "name": "ensure_abi",
-              "inputs": [
-                {
-                  "name": "model",
-                  "type": "rollyourown::config::items::ItemConfigMeta"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::config::items::item_config_meta::Event",
+          "name": "rollyourown::config::hustlers::hustler_item_tiers_config::Event",
           "kind": "enum",
           "variants": []
         }
@@ -3647,7 +3760,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x4717c272018d3a899c24124b574fe3b4b24fcb32fe37965191868301d219d6b",
+      "class_hash": "0x27b0bc978f184a5b977f1441323504c9e7f9adf43fa5029ebb23dcbe1ccf84d",
       "abi": [
         {
           "type": "impl",
@@ -3749,6 +3862,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -3906,7 +4023,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x57566743c7f8c090df67b6e1b376213136920f7ef19cb9106e0854312eb34c9",
+      "class_hash": "0x5ede8d6f3d146259b566827ce33ee8f389bb2bda9de8dea51d8ee92c41235ac",
       "abi": [
         {
           "type": "impl",
@@ -4008,6 +4125,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -4165,8 +4286,8 @@
           "key": true
         },
         {
-          "name": "avatar_id",
-          "type": "u8",
+          "name": "hustler_id",
+          "type": "u16",
           "key": false
         },
         {
@@ -4195,7 +4316,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x1dee614c9a6cb62c8a7533751dc9a41ba66c83a9ed41a520fc87505f8a8c292",
+      "class_hash": "0x349696ee9b2880a4c684843946218956a8034107cb4ab6d4dbc158aa0ac8ba3",
       "abi": [
         {
           "type": "impl",
@@ -4297,6 +4418,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -4407,8 +4532,8 @@
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
-              "name": "avatar_id",
-              "type": "core::integer::u8"
+              "name": "hustler_id",
+              "type": "core::integer::u16"
             },
             {
               "name": "leaderboard_version",
@@ -4477,7 +4602,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x6c1be9e6e730b319c1da6323e0d9e159213694713b2bbb129c383843b31e0ce",
+      "class_hash": "0x33ddb3679a3736f19aca4300550e309c4dfcb7022013e81a338eb5c785867ca",
       "abi": [
         {
           "type": "impl",
@@ -4579,6 +4704,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -4716,7 +4845,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x28de116ee19e3ca7c634a8469257533155347e0ffe28f88fe03dbdc818e159b",
+      "class_hash": "0x4e0d593099738db011effcc7db7cffbedac02dff146fdb918fa2687bf748eca",
       "abi": [
         {
           "type": "impl",
@@ -4818,6 +4947,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -4954,7 +5087,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x6406dcbbe7ddb1c3cf35d59627abb8b035018f1594ec71c0850c688cedc0e3a",
+      "class_hash": "0x337604af79bb93abd8efe957dfe2abd2a45aaa3db86878df5470bebadd06cd0",
       "abi": [
         {
           "type": "impl",
@@ -5056,6 +5189,10 @@
             {
               "name": "Tuple",
               "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
             }
           ]
         },

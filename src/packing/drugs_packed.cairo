@@ -1,16 +1,17 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::config::{items::{ItemConfig, ItemSlot}, drugs::{Drugs}};
-use rollyourown::models::game::GameMode;
 
-use rollyourown::utils::bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl};
+use rollyourown::{
+    config::{drugs::{Drugs}},
+    utils::bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl},
+    models::game::{Game, GameMode, GameImpl},
+};
 
 // 16 bits : 3 bits for Drugs, 13 bits for quantity
 #[derive(Copy, Drop)]
 struct DrugsPacked {
     world: IWorldDispatcher,
-    game_id: u32,
-    player_id: ContractAddress,
+    game: Game,
     //
     packed: felt252
 }
@@ -21,23 +22,11 @@ struct DrugsUnpacked {
     quantity: u32,
 }
 
-impl DrugsPackedDefaultImpl of Default<DrugsPacked> {
-    fn default() -> DrugsPacked {
-        DrugsPacked {
-            world: IWorldDispatcher { contract_address: 0.try_into().unwrap() },
-            game_id: 0,
-            player_id: 0.try_into().unwrap(),
-            //
-            packed: 0
-        }
-    }
-}
-
 
 #[generate_trait]
 impl DrugsPackedImpl of DrugsPackedTrait {
-    fn new(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress,) -> DrugsPacked {
-        DrugsPackedDefaultImpl::default()
+    fn new(world: IWorldDispatcher, game: Game) -> DrugsPacked {
+        DrugsPacked { world, game, packed: 0 }
     }
 
     fn get(self: @DrugsPacked) -> DrugsUnpacked {

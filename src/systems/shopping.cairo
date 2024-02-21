@@ -1,7 +1,7 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
-    config::{items::{ItemConfig, ItemSlot, ItemConfigImpl, ItemLevel}, locations::{Locations}},
+    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations}},
     packing::{
         game_store::{GameStore}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
@@ -16,7 +16,7 @@ struct Action {
 
 fn execute_action(ref game_store: GameStore, action: Action) {
     // get game infos
-    let game = get!(game_store.world, (game_store.game_id, game_store.player_id), Game);
+    let game = get!(game_store.world, (game_store.game.game_id, game_store.game.player_id), Game);
 
     // get wanted 
     let wanted = if game_store.player.location == Locations::Home {
@@ -33,19 +33,22 @@ fn execute_action(ref game_store: GameStore, action: Action) {
     let current_item = game_store.items.get_item(action.slot);
 
     // check item max level
-    assert(current_item.level != ItemLevel::Level3, 'max level u chad');
+    assert(current_item.level != 3, 'max level u chad');
 
     let level: u8 = current_item.level.into();
-    let next_level: ItemLevel = (level + 1).into();
+    let next_level = level + 1;
+
+    // get hustler
+    let hustler = HustlerImpl::get(game_store.world, game_store.game.hustler_id);
 
     // get next item
-    let next_item = ItemConfigImpl::get(game_store.world, action.slot, next_level);
+    let next_item = hustler.get_item_config( action.slot, next_level);
 
     // check can buy
-    assert(game_store.player.cash > next_item.cost, 'too poor');
+    assert(game_store.player.cash > next_item.tier.cost, 'too poor');
 
     // pay item
-    game_store.player.cash -= next_item.cost;
+    game_store.player.cash -= next_item.tier.cost;
 
     // gibe item to customer
     game_store.items.upgrade_item(action.slot);
@@ -56,12 +59,12 @@ fn execute_action(ref game_store: GameStore, action: Action) {
         .emit_raw(
             array![
                 selector!("UpgradeItem"),
-                Into::<u32, felt252>::into(game_store.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.player_id).into()
+                Into::<u32, felt252>::into(game_store.game.game_id),
+                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
             ],
             array![
                 Into::<ItemSlot, u8>::into(action.slot).into(),
-                Into::<ItemLevel, u8>::into(next_level).into(),
+                Into::<u8, felt252>::into(next_level),
             ]
         );
 }
