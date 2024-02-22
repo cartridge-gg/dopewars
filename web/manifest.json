@@ -969,7 +969,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x7f3edda7f0f9924aa0bad9decbcfe1a19a8d5886b7e0320ae0a817b02df69cd",
-      "class_hash": "0x2a1df28dba840f133ab5ddd978bfa52f35b3a886e73b854a6cf78514cc247fb",
+      "class_hash": "0x20f664fcc06794dab78851767733ab64b7cec0287ec24b7b900a87d208e8dbb",
       "abi": [
         {
           "type": "impl",
@@ -1442,7 +1442,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0xbd4f9ff6bfe5310fd4cd21b682112d46b2d1e70b2118c72cb6f37f5463352a",
-      "class_hash": "0x1a1dcda7a27baf31c6c3d0cb23d148017a3bb4d9bca91ce7e8d670ac29a0647",
+      "class_hash": "0x504757e486f6ea59b51c79c81e154e77c16c2e5a51c9a80aff5001c3828a5db",
       "abi": [
         {
           "type": "impl",
@@ -2064,6 +2064,14 @@
             {
               "name": "Victorious",
               "type": "()"
+            },
+            {
+              "name": "Jailed",
+              "type": "()"
+            },
+            {
+              "name": "Hospitalized",
+              "type": "()"
             }
           ]
         },
@@ -2125,6 +2133,11 @@
             {
               "name": "drug_loss",
               "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "turn_loss",
+              "type": "core::integer::u8",
               "kind": "data"
             }
           ]
@@ -2966,9 +2979,14 @@
           "name": "max_wanted_shopping",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "max_rounds",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x172d128fc0b3a7782257ec8c2e63a192aeae0cb477cdaa2c781992328e1e9fa",
+      "class_hash": "0x34bc7423f899bfebb8ab6fc3d366b5b408905758a9dadc513d432db881ccbc2",
       "abi": [
         {
           "type": "impl",
@@ -3165,6 +3183,10 @@
             },
             {
               "name": "max_wanted_shopping",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rounds",
               "type": "core::integer::u8"
             }
           ]
@@ -4316,12 +4338,17 @@
           "key": false
         },
         {
+          "name": "max_rounds",
+          "type": "u8",
+          "key": false
+        },
+        {
           "name": "game_over",
           "type": "bool",
           "key": false
         }
       ],
-      "class_hash": "0x349696ee9b2880a4c684843946218956a8034107cb4ab6d4dbc158aa0ac8ba3",
+      "class_hash": "0x3b431c96a8e8c85b89b9d05b658844ad1919d93e6783fea2c82da914aa3b55a",
       "abi": [
         {
           "type": "impl",
@@ -4554,6 +4581,10 @@
             },
             {
               "name": "max_wanted_shopping",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rounds",
               "type": "core::integer::u8"
             },
             {

@@ -85,6 +85,7 @@ cash_earnt: number;
 cash_loss: number;
 drug_id: number;
 drug_loss: number;
+turn_loss: number;
         }
 
 export interface GameOverData extends BaseEventData {
@@ -204,6 +205,7 @@ cash_earnt: Number(raw.data[5]),
 cash_loss: Number(raw.data[6]),
 drug_id: Number(raw.data[7]),
 drug_loss: Number(raw.data[8]),
+turn_loss: Number(raw.data[9]),
 } as TravelEncounterResultData;
 
 case WorldEvents.GameOver:

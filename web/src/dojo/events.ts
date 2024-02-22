@@ -72,6 +72,7 @@ export interface TravelEncounterResultData extends BaseEventData {
   cashLoss: number;
   drugId: number;
   drugLoss: number;
+  turnLoss: number;
 }
 
 
@@ -204,6 +205,7 @@ export const parseEvent = (raw: any) => {
         cashLoss: Number(raw.data[6]),
         drugId: Number(raw.data[7]),
         drugLoss: Number(raw.data[8]),
+        turnLoss: Number(raw.data[9]),
       } as TravelEncounterResultData;
 
 

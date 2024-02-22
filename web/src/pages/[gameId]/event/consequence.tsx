@@ -90,7 +90,11 @@ export default function Consequence() {
           <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
             <VStack textAlign="center" gap={0}>
               {/* <Text>{response}</Text>*/}
-              {encounterResult.rounds > 0 && <Text>After {encounterResult.rounds} round(s)</Text>}
+              {encounterResult.rounds > 0 && (
+                <Text>
+                  After {encounterResult.rounds} attempt{encounterResult.rounds > 0 ? "s" : ""}
+                </Text>
+              )}
               <Text color="yellow.400">{outcomeInfos.description && `* ${outcomeInfos.description} *`}</Text>
               {encounterResult.cashEarnt > 0 && (
                 <Text color="yellow.400">{`You confiscated ${formatCash(encounterResult.cashEarnt)}`}</Text>
@@ -101,6 +105,12 @@ export default function Consequence() {
               {encounterResult.drugLoss > 0 && (
                 <Text color="yellow.400">
                   Lost {encounterResult.drugLoss} {configStore.getDrugById(encounterResult.drugId).name}
+                </Text>
+              )}
+              {encounterResult.turnLoss > 0 && (
+                <Text color="yellow.400">
+                  You spent {encounterResult.turnLoss} day{encounterResult.turnLoss > 0 ? "s" : ""} in{" "}
+                  {outcomeInfos.encounterOutcome === EncounterOutcomes.Hospitalized ? "the hospital" : "in jail"}!
                 </Text>
               )}
 

@@ -45,60 +45,60 @@ import { Chain } from "@/components/icons/items/Chain";
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
     0: {
-      1:"Extended Mag",
-      2:"Recoil Compensator",
-      3:"Laser Sight",
-    }, 
+      1: "Extended Mag",
+      2: "Recoil Compensator",
+      3: "Laser Sight",
+    },
     1: {
-      1:"Tactical Grip",
-      2:"Reinforced Links",
-      3:"Spiked End",
+      1: "Tactical Grip",
+      2: "Reinforced Links",
+      3: "Spiked End",
     },
     2: {
-      1:"Grip Tape",
-      2:"Corked Bat",
-      3:"Aluminum Bat",
+      1: "Grip Tape",
+      2: "Corked Bat",
+      3: "Aluminum Bat",
     }
   },
-  [ItemSlot.Clothes]:  {
+  [ItemSlot.Clothes]: {
     0: {
-      1:"Reinforced Stitching",
-      2:"Polyester Blend",
-      3:"More Blood",
-    }, 
+      1: "Reinforced Stitching",
+      2: "Polyester Blend",
+      3: "More Blood",
+    },
     1: {
-      1:"Shoulder Straps",
-      2:"Thermal Ventilation",
-      3:"Ceramic Plate Inserts",
+      1: "Shoulder Straps",
+      2: "Thermal Ventilation",
+      3: "Ceramic Plate Inserts",
     },
     2: {
-      1:"Tailor Fitting",
-      2:"Treated Leather",
-      3:"Ballistic Inserts",
+      1: "Tailor Fitting",
+      2: "Treated Leather",
+      3: "Ballistic Inserts",
     }
   },
   [ItemSlot.Feet]: {
     0: {
-      1:"Fresh Laces",
-      2:"Ventilated Mesh",
-      3:"Memory Foam Insoles",
-    }, 
+      1: "Fresh Laces",
+      2: "Ventilated Mesh",
+      3: "Memory Foam Insoles",
+    },
     1: {
-      1:"Quick-Lace System",
-      2:"Anti-Slip Outsoles",
-      3:"Memory Foam Insoles",
+      1: "Quick-Lace System",
+      2: "Anti-Slip Outsoles",
+      3: "Memory Foam Insoles",
     },
     2: {
-      1:"Locking Laces",
-      2:"Shock-Absorbing Insoles",
-      3:"Steel-toed Cap",
+      1: "Locking Laces",
+      2: "Shock-Absorbing Insoles",
+      3: "Steel-toed Cap",
     }
   },
-  [ItemSlot.Transport]:  {
+  [ItemSlot.Transport]: {
     0: {
-      1:"Fanny Pack",
-      2:"Backpack",
-      3:"Duffle Bag",
+      1: "Fanny Pack",
+      2: "Backpack",
+      3: "Duffle Bag",
     }
   },
 }
@@ -246,7 +246,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Paid the Cop",
-    type: EncounterOutcomes.Paid,
+    encounterOutcome: EncounterOutcomes.Paid,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
@@ -257,18 +257,18 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Paid the Gang",
-    type: EncounterOutcomes.Paid,
+    encounterOutcome: EncounterOutcomes.Paid,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/paid.png",
     description: "You paid the gang off",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(EncounterOutcomes.Paid, isInitial),
-    color: "neon.200",
+    color: "yellow.400",
   },
   {
     title: "You",
     name: "Escaped",
-    type: EncounterOutcomes.Escaped,
+    encounterOutcome: EncounterOutcomes.Escaped,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
@@ -279,7 +279,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Escaped",
-    type: EncounterOutcomes.Escaped,
+    encounterOutcome: EncounterOutcomes.Escaped,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
@@ -290,7 +290,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Got killed by the Cops",
-    type: EncounterOutcomes.Died,
+    encounterOutcome: EncounterOutcomes.Died,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) =>
@@ -300,7 +300,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Got killed by the Gang",
-    type: EncounterOutcomes.Died,
+    encounterOutcome: EncounterOutcomes.Died,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) =>
@@ -310,7 +310,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Victorious!",
-    type: EncounterOutcomes.Victorious,
+    encounterOutcome: EncounterOutcomes.Victorious,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) =>
@@ -320,11 +320,31 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Victorious!",
-    type: EncounterOutcomes.Victorious,
+    encounterOutcome: EncounterOutcomes.Victorious,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(EncounterOutcomes.Victorious, isInitial),
+    color: "neon.200",
+  },
+  {
+    title: "You are",
+    name: "Jailed!",
+    encounterOutcome: EncounterOutcomes.Jailed,
+    encounter: Encounters.Cops,
+    imageSrc: "/images/events/police_cruiser.gif",
+    getResponse: (isInitial: boolean) =>
+      getCopResponses(EncounterOutcomes.Jailed, isInitial),
+    color: "neon.200",
+  },
+  {
+    title: "You are",
+    name: "Hospitalized!",
+    encounterOutcome: EncounterOutcomes.Hospitalized,
+    encounter: Encounters.Gang,
+    imageSrc: "/images/events/hospital.png",
+    getResponse: (isInitial: boolean) =>
+      getMuggerResponses(EncounterOutcomes.Hospitalized, isInitial),
     color: "neon.200",
   },
 
@@ -336,47 +356,29 @@ export const outcomes: OutcomeInfo[] = [
 // }
 
 
-export function getActionName(action: EncountersAction): string {
-  switch (action) {
-    case EncountersAction.Fight:
-      return "Fight";
-    case EncountersAction.Pay:
-      return "Pay";
-    case EncountersAction.Run:
-      return "Run";
-    default:
-      return "?"
-  }
-}
 
-
-export function getOutcomeName(outcome: EncounterOutcomes): string {
-  switch (outcome) {
-    case EncounterOutcomes.Died:
-      return "Died";
-    case EncounterOutcomes.Escaped:
-      return "Escaped";
-    case EncounterOutcomes.Paid:
-      return "Paid";
-    case EncounterOutcomes.Victorious:
-      return "Victorious";
-    default:
-      return "?"
-  }
+export const outcomeNames = {
+  [EncounterOutcomes.Died]: "Died",
+  [EncounterOutcomes.Escaped]: "Escaped",
+  [EncounterOutcomes.Paid]: "Paid",
+  [EncounterOutcomes.Victorious]: "Victorious",
+  [EncounterOutcomes.Jailed]: "Jailed",
+  [EncounterOutcomes.Hospitalized]: "Hospitalized",
 }
+export type outcomeNamesKeys = keyof typeof outcomeNames;
 
 
 
 
 export function getOutcomeInfo(
   encounter: Encounters,
-  type: EncounterOutcomes,
+  encounterOutcome: EncounterOutcomes,
 ): OutcomeInfo {
-  const found = outcomes.find((item) => {
-    return item.encounter === encounter && item.type === type;
+  const found = outcomes.find((i) => {
+    return i.encounter === encounter && i.encounterOutcome === encounterOutcome;
   });
   if (!found) {
-    console.log(`getOutcomeInfo outcome ${encounter} ${type} not found !`);
+    console.log(`getOutcomeInfo outcome ${encounter} ${encounterOutcome} not found !`);
   }
   return found || outcomes[0];
 }

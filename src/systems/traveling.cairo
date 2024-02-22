@@ -29,8 +29,8 @@ enum EncounterOutcomes {
     Paid,
     Escaped,
     Victorious,
-// Jailed,
-// Hospitalized,
+    Jailed,
+    Hospitalized,
 }
 
 impl EncounterActionsIntoFelt252 of Into<EncounterActions, felt252> {
@@ -61,6 +61,8 @@ impl EncounterOutcomesIntoFelt252 of Into<EncounterOutcomes, felt252> {
             EncounterOutcomes::Paid => 'Paid',
             EncounterOutcomes::Escaped => 'Escaped',
             EncounterOutcomes::Victorious => 'Victorious',
+            EncounterOutcomes::Jailed => 'Jailed',
+            EncounterOutcomes::Hospitalized => 'Hospitalized',
         }
     }
 }
@@ -72,6 +74,8 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
             EncounterOutcomes::Paid => 1,
             EncounterOutcomes::Escaped => 2,
             EncounterOutcomes::Victorious => 3,
+            EncounterOutcomes::Jailed => 4,
+            EncounterOutcomes::Hospitalized => 5,
         }
     }
 }
@@ -231,6 +235,7 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
                 Into::<u32, felt252>::into(result.cash_loss),
                 Into::<u8, felt252>::into(result.drug_id),
                 Into::<u32, felt252>::into(result.drug_loss),
+                Into::<u8, felt252>::into(result.turn_loss),
             ],
         );
 
@@ -290,6 +295,7 @@ fn on_pay(
         cash_loss,
         drug_id,
         drug_loss,
+        turn_loss:0
     }
 }
 
@@ -298,7 +304,7 @@ fn on_run(
     ref game_store: GameStore, ref randomizer: Random, encounter: Encounter
 ) -> TravelEncounterResult {
     // TODO: adjust with items
-    let initial_capture_rate: u8 = 75; // 75% chance of capture 
+    let initial_capture_rate: u8 = 82; // 82% chance of capture 
 
     let player_defense: u8 = game_store.items.get_item(ItemSlot::Clothes).tier.stat.try_into().unwrap();
     let player_speed: u8 = game_store.items.get_item(ItemSlot::Feet).tier.stat.try_into().unwrap();
@@ -311,7 +317,9 @@ fn on_run(
     let mut rounds = 0;
     let mut dmg_taken = 0;
     let mut drug_loss = 0;
+    let mut turn_loss = 0;
     let mut is_dead = false;
+    let mut is_caught = false;
 
     // loop until resolution
     loop {
@@ -345,6 +353,7 @@ fn on_run(
             // check if dead
             
             if game_store.player.is_dead() {
+                is_dead = true;
                 break;
             }
         } else {
@@ -352,12 +361,34 @@ fn on_run(
             game_store.player.next_location = LocationsRandomizableImpl::random(ref randomizer);
             break;
         };
+
+        if rounds == game_store.game.max_rounds {
+            is_caught = true;
+            break;
+        }
     };
 
     let outcome = if is_dead {
         EncounterOutcomes::Died
     } else {
-        EncounterOutcomes::Escaped
+        if !is_caught{
+            EncounterOutcomes::Escaped
+        } else {
+            match encounter.encounter {
+                Encounters::Cops => { 
+                    // Jailed for 2 days
+                    turn_loss = 2;
+                    game_store.player.turn = game_store.player.turn.add_capped(2, game_store.game.max_turns);
+                    EncounterOutcomes::Jailed
+                },
+                Encounters::Gang => { 
+                    // Hospitalized for 1 days
+                    turn_loss = 1;
+                    game_store.player.turn = game_store.player.turn.add_capped(1, game_store.game.max_turns);
+                    EncounterOutcomes::Hospitalized
+                }
+            }
+        }
     };
 
     TravelEncounterResult {
@@ -372,6 +403,7 @@ fn on_run(
         cash_loss: 0,
         drug_id,
         drug_loss,
+        turn_loss,
     }
 }
 
@@ -439,6 +471,7 @@ fn on_fight(
         cash_loss: 0,
         drug_id: 0,
         drug_loss: 0,
+        turn_loss: 0,
     }
 }
 

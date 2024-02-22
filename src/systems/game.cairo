@@ -149,6 +149,7 @@ mod game {
         cash_loss: u32,
         drug_id: u8,
         drug_loss: u32,
+        turn_loss:u8,
     }
 
     //

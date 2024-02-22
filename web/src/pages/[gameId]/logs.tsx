@@ -15,7 +15,7 @@ import {
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { getOutcomeName } from "@/dojo/helpers";
+import { outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction } from "@/dojo/types";
@@ -39,7 +39,7 @@ const Logs = () => {
 
   const [playerName, setPlayerName] = useState("");
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
-  
+
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
@@ -132,7 +132,7 @@ const Logs = () => {
       rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore,playerHustlerId, log))}
+        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, playerHustlerId, log))}
       </VStack>
     </Layout>
   );
@@ -151,7 +151,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(configStore: ConfigStore,playerHustlerId:number, log: LogByDay) {
+function renderDay(configStore: ConfigStore, playerHustlerId: number, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -173,7 +173,7 @@ function renderDay(configStore: ConfigStore,playerHustlerId:number, log: LogByDa
               break;
 
             case WorldEvents.UpgradeItem:
-              return renderUpgradeItem(configStore,playerHustlerId, i as UpgradeItemData, key);
+              return renderUpgradeItem(configStore, playerHustlerId, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:
@@ -209,8 +209,8 @@ function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: stri
   );
 }
 
-function renderUpgradeItem(configStore: ConfigStore,playerHustlerId:number, log: UpgradeItemData, key: string) {
-  const item = configStore.getHustlerItemByIds(playerHustlerId,log.itemSlot, log.itemLevel);
+function renderUpgradeItem(configStore: ConfigStore, playerHustlerId: number, log: UpgradeItemData, key: string) {
+  const item = configStore.getHustlerItemByIds(playerHustlerId, log.itemSlot, log.itemLevel);
   return (
     <Line
       key={key}
@@ -231,7 +231,9 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
     .map((i) => i as TravelEncounterResultData);
 
   const lastEncouterResult = results.length > 0 ? results[results.length - 1] : undefined;
-  const lastEncounterResultName = lastEncouterResult ? getOutcomeName(lastEncouterResult.outcome) : "";
+  const lastEncounterResultName = lastEncouterResult
+    ? outcomeNames[lastEncouterResult.outcome as outcomeNamesKeys]
+    : "";
 
   const action = lastEncouterResult?.action;
   const totalHpLoss = lastEncouterResult ? log.healthLoss + lastEncouterResult?.dmgTaken : log.healthLoss;
@@ -260,16 +262,6 @@ function renderGameOver(log: GameOverData, key: string) {
     </ListItem>
   );
 }
-
-// function renderDecision(log: DecisionEventData, key: string) {
-//   const action = getActionName(log.action);
-//   return <Line key={key} icon={Event} text={` ${action}`} />;
-// }
-
-// function renderConsequence(log: ConsequenceEventData, key: string) {
-//   const action = "consequence";
-//   return <Line key={key} icon={Event} text={` ${action}`} />;
-// }
 
 /*************************************************************** */
 

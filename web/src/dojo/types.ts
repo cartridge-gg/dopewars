@@ -56,6 +56,8 @@ export enum EncounterOutcomes {
   Paid,
   Escaped,
   Victorious,
+  Jailed,
+  Hospitalized
 }
 
 export enum GameMode {
@@ -92,7 +94,7 @@ export interface ShopItemInfo {
 
 export interface OutcomeInfo {
   title: string;
-  type: EncounterOutcomes;
+  encounterOutcome: EncounterOutcomes;
   encounter:Encounters;
   name: string;
   imageSrc: string;

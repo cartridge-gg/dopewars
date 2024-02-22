@@ -160,6 +160,7 @@ export type Game = {
   game_over?: Maybe<Scalars['bool']>;
   hustler_id?: Maybe<Scalars['u16']>;
   leaderboard_version?: Maybe<Scalars['u16']>;
+  max_rounds?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
@@ -171,6 +172,7 @@ export type GameConfig = {
   entity?: Maybe<World__Entity>;
   health?: Maybe<Scalars['u8']>;
   key?: Maybe<Scalars['u8']>;
+  max_rounds?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
 };
@@ -197,6 +199,7 @@ export enum GameConfigOrderField {
   Cash = 'CASH',
   Health = 'HEALTH',
   Key = 'KEY',
+  MaxRounds = 'MAX_ROUNDS',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING'
 }
@@ -223,6 +226,13 @@ export type GameConfigWhereInput = {
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
+  max_rounds?: InputMaybe<Scalars['u8']>;
+  max_roundsEQ?: InputMaybe<Scalars['u8']>;
+  max_roundsGT?: InputMaybe<Scalars['u8']>;
+  max_roundsGTE?: InputMaybe<Scalars['u8']>;
+  max_roundsLT?: InputMaybe<Scalars['u8']>;
+  max_roundsLTE?: InputMaybe<Scalars['u8']>;
+  max_roundsNEQ?: InputMaybe<Scalars['u8']>;
   max_turns?: InputMaybe<Scalars['u8']>;
   max_turnsEQ?: InputMaybe<Scalars['u8']>;
   max_turnsGT?: InputMaybe<Scalars['u8']>;
@@ -263,6 +273,7 @@ export enum GameOrderField {
   GameOver = 'GAME_OVER',
   HustlerId = 'HUSTLER_ID',
   LeaderboardVersion = 'LEADERBOARD_VERSION',
+  MaxRounds = 'MAX_ROUNDS',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
   PlayerId = 'PLAYER_ID'
@@ -348,6 +359,13 @@ export type GameWhereInput = {
   leaderboard_versionLT?: InputMaybe<Scalars['u16']>;
   leaderboard_versionLTE?: InputMaybe<Scalars['u16']>;
   leaderboard_versionNEQ?: InputMaybe<Scalars['u16']>;
+  max_rounds?: InputMaybe<Scalars['u8']>;
+  max_roundsEQ?: InputMaybe<Scalars['u8']>;
+  max_roundsGT?: InputMaybe<Scalars['u8']>;
+  max_roundsGTE?: InputMaybe<Scalars['u8']>;
+  max_roundsLT?: InputMaybe<Scalars['u8']>;
+  max_roundsLTE?: InputMaybe<Scalars['u8']>;
+  max_roundsNEQ?: InputMaybe<Scalars['u8']>;
   max_turns?: InputMaybe<Scalars['u8']>;
   max_turnsEQ?: InputMaybe<Scalars['u8']>;
   max_turnsGT?: InputMaybe<Scalars['u8']>;

@@ -28,10 +28,10 @@ fn initialize_game_config(world: IWorldDispatcher) {
         world, GameConfig { 
             key: GAME_CONFIG_KEY,
             cash: 1420,
-            health: 20, // 100,
+            health: 30, // 100,
             max_turns: 30,
             max_wanted_shopping:5,
-            max_rounds: 3,
+            max_rounds: 2, //3,
          }
     );
 }
