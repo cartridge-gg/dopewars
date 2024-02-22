@@ -6,33 +6,33 @@ import { PowerMeter } from "@/components/PowerMeter";
 import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 
 import { Arrow } from "@/components/icons";
-import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-const hustlerStats = {
-  [Hustlers.Dragon]: {
-    [ItemSlot.Attack]: 3,
-    [ItemSlot.Defense]: 1,
-    [ItemSlot.Speed]: 2,
-    [ItemSlot.Transport]: 1,
-  },
-  [Hustlers.Monkey]: {
-    [ItemSlot.Attack]: 1,
-    [ItemSlot.Defense]: 3,
-    [ItemSlot.Speed]: 2,
-    [ItemSlot.Transport]: 1,
-  },
-  [Hustlers.Rabbit]: {
-    [ItemSlot.Attack]: 2,
-    [ItemSlot.Defense]: 2,
-    [ItemSlot.Speed]: 2,
-    [ItemSlot.Transport]: 1,
-  },
-};
+// const hustlerStats = {
+//   [Hustlers.Dragon]: {
+//     [ItemSlot.Attack]: 3,
+//     [ItemSlot.Defense]: 1,
+//     [ItemSlot.Speed]: 2,
+//     [ItemSlot.Transport]: 1,
+//   },
+//   [Hustlers.Monkey]: {
+//     [ItemSlot.Attack]: 1,
+//     [ItemSlot.Defense]: 3,
+//     [ItemSlot.Speed]: 2,
+//     [ItemSlot.Transport]: 1,
+//   },
+//   [Hustlers.Rabbit]: {
+//     [ItemSlot.Attack]: 2,
+//     [ItemSlot.Defense]: 2,
+//     [ItemSlot.Speed]: 2,
+//     [ItemSlot.Transport]: 1,
+//   },
+// };
 
 export default function New() {
   const { router } = useRouterContext();
@@ -43,6 +43,7 @@ export default function New() {
   } = useDojoContext();
 
   const { createGame, isPending } = useSystems();
+  const config = useConfigStore();
 
   const { toast } = useToast();
 
@@ -50,11 +51,34 @@ export default function New() {
   const [name, setName] = useState("");
   const [hustlerId, setHustlerId] = useState(0);
 
-  const [stats, setStats] = useState(hustlerStats[0 as Hustlers]);
+  const [hustlerStats, setHustlerStats] = useState();
 
   useEffect(() => {
-    setStats(hustlerStats[hustlerId as Hustlers]);
-  }, [hustlerId]);
+    const hustler = config.getHustlerById(hustlerId);
+    if (!hustler) return;
+    console.log(hustler);
+
+    const stats = {
+      [ItemSlot.Weapon]: {
+        name: hustler.weapon.base.name,
+        initialTier: Number(hustler.weapon.base.initial_tier),
+      },
+      [ItemSlot.Clothes]: {
+        name: hustler.clothes.base.name,
+        initialTier: Number(hustler.clothes.base.initial_tier),
+      },
+      [ItemSlot.Feet]: {
+        name: hustler.feet.base.name,
+        initialTier: Number(hustler.feet.base.initial_tier),
+      },
+      [ItemSlot.Transport]: {
+        name: hustler.transport.base.name,
+        initialTier: Number(hustler.transport.base.initial_tier),
+      },
+    };
+
+    setHustlerStats(stats);
+  }, [hustlerId, config, config?.config, config?.config?.hustlers]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -77,6 +101,8 @@ export default function New() {
     }
   };
 
+  if (!config || !hustlerStats) return null;
+
   return (
     <Layout
       isSinglePanel
@@ -93,7 +119,7 @@ export default function New() {
         </Footer>
       }
     >
-      <VStack w={["full", "440px"]} margin="auto">
+      <VStack w={["full", "540px"]} margin="auto">
         <VStack w="full">
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
@@ -119,38 +145,84 @@ export default function New() {
 
             <HStack p="20px">
               <Box>
-                <Hustler hustler={hustlerId as Hustlers} w="150px" h="300px" />
+                <Hustler hustler={hustlerId as Hustlers} w="200px" h="300px" />
               </Box>
 
-              <VStack gap={3}>
-                <PowerMeter
-                  basePower={stats[ItemSlot.Attack]}
-                  maxPower={6}
-                  power={stats[ItemSlot.Attack]}
-                  displayedPower={0}
-                  text="ATK"
-                />
-                <PowerMeter
-                  basePower={stats[ItemSlot.Defense]}
-                  maxPower={6}
-                  power={stats[ItemSlot.Defense]}
-                  displayedPower={0}
-                  text="DEF"
-                />
-                <PowerMeter
-                  basePower={stats[ItemSlot.Speed]}
-                  maxPower={6}
-                  power={stats[ItemSlot.Speed]}
-                  displayedPower={0}
-                  text="SPD"
-                />
-                <PowerMeter
-                  basePower={stats[ItemSlot.Transport]}
-                  maxPower={6}
-                  power={stats[ItemSlot.Transport]}
-                  displayedPower={0}
-                  text="INV"
-                />
+              <VStack w="full" gap={3}>
+
+
+                <HStack w="full">
+                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                      WEAPON
+                    </Text>
+                    <Text>{hustlerStats[ItemSlot.Weapon].name}</Text>
+                  </VStack>
+
+                  <PowerMeter
+                    basePower={hustlerStats[ItemSlot.Weapon].initialTier}
+                    maxPower={6}
+                    power={hustlerStats[ItemSlot.Weapon].initialTier}
+                    displayedPower={0}
+                    text="ATK"
+                  />
+                </HStack>
+
+
+                <HStack w="full">
+                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                      CLOTHES
+                    </Text>
+                    <Text>{hustlerStats[ItemSlot.Clothes].name}</Text>
+                  </VStack>
+
+                  <PowerMeter
+                    basePower={hustlerStats[ItemSlot.Clothes].initialTier}
+                    maxPower={6}
+                    power={hustlerStats[ItemSlot.Clothes].initialTier}
+                    displayedPower={0}
+                    text="DEF"
+                  />
+                </HStack>
+
+
+                <HStack w="full">
+                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                      FEET
+                    </Text>
+                    <Text>{hustlerStats[ItemSlot.Feet].name}</Text>
+                  </VStack>
+
+                  <PowerMeter
+                    basePower={hustlerStats[ItemSlot.Feet].initialTier}
+                    maxPower={6}
+                    power={hustlerStats[ItemSlot.Feet].initialTier}
+                    displayedPower={0}
+                    text="SPD"
+                  />
+                </HStack>
+
+
+                <HStack w="full">
+                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                      BAG
+                    </Text>
+                    <Text>{hustlerStats[ItemSlot.Transport].name}</Text>
+                  </VStack>
+
+                  <PowerMeter
+                    basePower={hustlerStats[ItemSlot.Transport].initialTier}
+                    maxPower={6}
+                    power={hustlerStats[ItemSlot.Transport].initialTier}
+                    displayedPower={0}
+                    text="INV"
+                  />
+                </HStack>
+
+
               </VStack>
             </HStack>
 

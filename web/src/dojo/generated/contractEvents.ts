@@ -27,6 +27,7 @@ export interface GameCreatedData extends BaseEventData {
 player_id: string;
 game_mode: String;
 player_name: string;
+hustler_id: number;
         }
 
 export interface TraveledData extends BaseEventData {
@@ -127,6 +128,7 @@ game_id: Number(raw.keys[1]),
 player_id: num.toHexString(raw.keys[2]),
 game_mode: num.toHexString(raw.data[0]),
 player_name: num.toHexString(raw.data[1]),
+hustler_id: Number(raw.data[2]),
 } as GameCreatedData;
 
 case WorldEvents.Traveled:

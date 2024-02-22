@@ -38,6 +38,8 @@ const Logs = () => {
   const { gameEvents } = useGameStore();
 
   const [playerName, setPlayerName] = useState("");
+  const [playerHustlerId, setPlayerHustlerId] = useState(0);
+  
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
@@ -57,6 +59,7 @@ const Logs = () => {
     for (let log of gameEvents?.sortedEvents) {
       if (log.parsed.eventType === WorldEvents.GameCreated) {
         setPlayerName((log.parsed as GameCreatedData).playerName);
+        setPlayerHustlerId((log.parsed as GameCreatedData).hustlerId);
       }
 
       if (log.parsed.eventType === WorldEvents.Traveled) {
@@ -129,7 +132,7 @@ const Logs = () => {
       rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, log))}
+        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore,playerHustlerId, log))}
       </VStack>
     </Layout>
   );
@@ -148,7 +151,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(configStore: ConfigStore, log: LogByDay) {
+function renderDay(configStore: ConfigStore,playerHustlerId:number, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -170,7 +173,7 @@ function renderDay(configStore: ConfigStore, log: LogByDay) {
               break;
 
             case WorldEvents.UpgradeItem:
-              return renderUpgradeItem(configStore, i as UpgradeItemData, key);
+              return renderUpgradeItem(configStore,playerHustlerId, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:
@@ -206,14 +209,14 @@ function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: stri
   );
 }
 
-function renderUpgradeItem(configStore: ConfigStore, log: UpgradeItemData, key: string) {
-  const item = configStore.getItemByIds(log.itemSlot, log.itemLevel);
+function renderUpgradeItem(configStore: ConfigStore,playerHustlerId:number, log: UpgradeItemData, key: string) {
+  const item = configStore.getHustlerItemByIds(playerHustlerId,log.itemSlot, log.itemLevel);
   return (
     <Line
       key={key}
       icon={item.icon}
-      text={`Bought ${item.name}`}
-      total={`- ${formatCash(item.cost)}`}
+      text={`Bought ${item.base.name}`}
+      total={`- ${formatCash(item.tier.cost)}`}
       color="yellow.400"
       iconColor="yellow.400"
     />

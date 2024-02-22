@@ -90,7 +90,7 @@ export default function Consequence() {
           <VStack width="full" maxW="500px" h="100%" justifyContent="space-between">
             <VStack textAlign="center" gap={0}>
               {/* <Text>{response}</Text>*/}
-              <Text>After {encounterResult.rounds} round(s)</Text>
+              {encounterResult.rounds > 0 && <Text>After {encounterResult.rounds} round(s)</Text>}
               <Text color="yellow.400">{outcomeInfos.description && `* ${outcomeInfos.description} *`}</Text>
               {encounterResult.cashEarnt > 0 && (
                 <Text color="yellow.400">{`You confiscated ${formatCash(encounterResult.cashEarnt)}`}</Text>

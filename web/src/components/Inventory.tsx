@@ -1,7 +1,10 @@
+import { statName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { ItemConfigFull } from "@/dojo/stores/config";
-import { Card, Divider, HStack, StyleProps, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { HustlerItemConfigFull } from "@/dojo/stores/config";
+import { ItemSlot } from "@/dojo/types";
+import { Card, Divider, HStack, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
+import Tooltip from "./Tooltip";
 import { Bag } from "./icons";
 
 export const Inventory = observer(({ ...props }: StyleProps) => {
@@ -19,12 +22,11 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
           <Bag />
           <Text>
             {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
-            {game.items.transport!.stat / 100} LBS
+            {game.items.transport!.tier.stat / 100} LBS
           </Text>
         </HStack>
       </HStack>
 
-   
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-end">
@@ -37,7 +39,6 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
             <PlayerItem item={game.items.transport!} />
           </HStack>
         </Card>
-
 
         <Card h="40px" px="20px" justify="center">
           <HStack gap="10px" justify="flex-start">
@@ -57,13 +58,13 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
   );
 });
 
-const PlayerItem = ({ item, ...props }: { item: ItemConfigFull }) => {
+const PlayerItem = ({ item, ...props }: { item: HustlerItemConfigFull }) => {
   if (!item) return null;
 
-  const stat = item.statName === "INV" ? item.stat / 100 : item.stat;
+  const stat = item.slot === ItemSlot.Transport ? item.tier.stat / 100 : item.tier.stat;
   return (
     <HStack gap="10px" {...props}>
-      <Tooltip label={`${item.name} (+${stat} ${item.statName})`}>
+      <Tooltip title={`${item.base.name}`} text={`${item.upgradeName} (+${stat} ${statName[item.slot]})`}>
         <HStack color="yellow.400">
           <>
             {item.icon &&

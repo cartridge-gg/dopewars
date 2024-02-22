@@ -1315,7 +1315,7 @@ export const ConfigDocument = `
       }
     }
   }
-  hustlerItemTiersConfigModels(limit: 6) {
+  hustlerItemTiersConfigModels(limit: 24) {
     edges {
       node {
         slot

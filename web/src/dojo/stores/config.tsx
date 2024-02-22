@@ -5,10 +5,10 @@ import {
   DrugConfigEdge,
   DrugConfigMeta,
   DrugConfigMetaEdge,
-  ItemConfig,
-  ItemConfigEdge,
-  ItemConfigMeta,
-  ItemConfigMetaEdge,
+  HustlerItemBaseConfig,
+  HustlerItemBaseConfigEdge,
+  HustlerItemTiersConfig,
+  HustlerItemTiersConfigEdge,
   LocationConfig,
   LocationConfigEdge,
   LocationConfigMeta,
@@ -20,20 +20,11 @@ import React from "react";
 import { Contract, TypedContractV2, shortString } from "starknet";
 import { createStore } from "zustand";
 import { ABI as configAbi } from "../abis/configAbi";
-import {
-  drugIcons,
-  drugIconsKeys,
-  itemIcons,
-  itemsIconsKeys,
-  locationIcons,
-  locationIconsKeys,
-  statName,
-  statNameKeys,
-} from "../helpers";
+import { drugIcons, drugIconsKeys, itemIcons, itemUpgrades, itemsIconsKeys, locationIcons, locationIconsKeys } from "../helpers";
+import { ItemSlot } from "../types";
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
 export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: React.FC };
-// export type ItemConfigFull = ItemConfig & Omit<ItemConfigMeta, "__typename"> & { icon: React.FC; statName: string };
 
 export type LayoutItem = {
   name: string;
@@ -41,17 +32,39 @@ export type LayoutItem = {
   idx: bigint;
 };
 
+export type HustlerItemConfig = {
+  slot: ItemSlot;
+  level: number;
+  base: HustlerItemBaseConfig;
+  tier: HustlerItemTiersConfig;
+};
+
+export type HustlerItemConfigFull = HustlerItemConfig & {
+  icon: React.FC;
+  upgradeName: string;
+};
+
+export type HustlerConfig = {
+  hustler_id: number;
+  weapon: HustlerItemConfig;
+  clothes: HustlerItemConfig;
+  feet: HustlerItemConfig;
+  transport: HustlerItemConfig;
+};
+
 export type GetConfig = {
   layouts: {
     game_store: Array<LayoutItem>;
     player: Array<LayoutItem>;
   };
+  hustlers: Array<HustlerConfig>;
 };
 
 export type Config = {
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
-  item: ItemConfigFull[];
+  items: HustlerItemBaseConfig[];
+  tiers: HustlerItemTierConfig[];
   config: GetConfig;
 };
 
@@ -63,11 +76,16 @@ export interface ConfigStore {
   //
   getDrug: (drug: string) => DrugConfigFull;
   getDrugById: (drug_id: number) => DrugConfigFull;
+  //
   getLocation: (location: string) => LocationConfigFull;
   getLocationById: (location_id: number) => LocationConfigFull;
-  getItemByIds: (slot_id: number, level_id: number) => ItemConfigFull;
+  //
   getGameStoreLayoutItem: (name: string) => LayoutItem;
   getPlayerLayoutItem: (name: string) => LayoutItem;
+  //
+  getHustlerById: (id: number) => HustlerConfig;
+  //
+  getHustlerItemByIds: (id: number, slot_id: number, level: number) => HustlerItemConfigFull;
 }
 
 type ConfigStoreProps = {
@@ -106,11 +124,18 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
 
           //
 
-          // const itemConfigEdges = data.itemConfigModels!.edges as ItemConfigEdge[];
-          // const itemConfig = itemConfigEdges.map((i) => i.node as ItemConfig);
+          const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
+          const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
+            return {
+              ...i.node,
+              name: shortString.decodeShortString(i.node?.name),
+            } as HustlerItemBaseConfig;
+          });
 
-          // const itemConfigMetaEdges = data.itemConfigMetaModels!.edges as ItemConfigMetaEdge[];
-          // const itemConfigMeta = itemConfigMetaEdges.map((i) => i.node as ItemConfigMeta);
+          //
+
+          const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
+          const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
 
           /*************************************************** */
 
@@ -167,7 +192,8 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const config = {
             drug: drugConfigFull,
             location: locationConfigFull,
-           // item: itemConfigFull,
+            items: hustlerItemBaseConfig,
+            tiers: hustlerItemTiersConfig,
             config: getConfig as GetConfig,
           };
 
@@ -203,15 +229,32 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
       return get().config?.location.find((i) => Number(i.location_id) === Number(location_id))!;
     },
     /****************************************************/
-    // getItemByIds: (slot_id: number, level_id: number): ItemConfigFull => {
-    //   return get().config?.item.find((i) => Number(i.slot_id) === slot_id && Number(i.level_id) === level_id)!;
-    // },
-    /****************************************************/
     getGameStoreLayoutItem: (name: string): LayoutItem => {
       return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
     },
     getPlayerLayoutItem: (name: string): LayoutItem => {
       return get().config?.config.layouts.player.find((i) => i.name === name)!;
+    },
+    /****************************************************/
+    getHustlerById: (id: number): HustlerConfig => {
+      return get().config?.config.hustlers.find((i) => Number(i.hustler_id) === id)!;
+    },
+    /****************************************************/
+    getHustlerItemByIds: (id: number, slot_id: number, level: number): HustlerItemConfigFull => {
+      const base_config = get().config?.items.find(
+        (i) => Number(i.id) === Number(id) && Number(i.slot_id) === slot_id,
+      )!;
+      const tier = base_config.initial_tier + level;
+      const tier_config = get().config?.tiers.find((i) => Number(i.slot_id) === slot_id && Number(i.tier) === tier)!;
+
+      return {
+        slot: slot_id as ItemSlot,
+        level,
+        base: base_config,
+        tier: tier_config,
+        upgradeName: itemUpgrades[slot_id as ItemSlot][id][level] || "Original",
+        icon: itemIcons[base_config.name as itemsIconsKeys],
+      };
     },
   }));
 };

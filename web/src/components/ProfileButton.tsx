@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 import { HustlerIcon, Hustlers } from "./hustlers";
 import { Cigarette, User } from "./icons";
+import { statName } from "@/dojo/helpers";
+import { ItemSlot } from "@/dojo/types";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -116,22 +118,22 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
             <Card w="full">
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
                 <HStack flex="1" justify="center" /*color={attackItem ? "yellow.400" : "neon.400"}*/>
-                  <Text opacity={0.5}>{game.items.attack!.statName}:</Text>
+                  <Text opacity={0.5}>{statName[ItemSlot.Weapon]}:</Text>
                   <Text>{game.items.attack!.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={defenseItem ? "yellow.400" : "neon.400"}*/>
-                  <Text opacity={0.5}>{game.items.defense!.statName}:</Text>
+                  <Text opacity={0.5}>{statName[ItemSlot.Clothes]}:</Text>
                   <Text>{game.items.defense!.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={speedItem ? "yellow.400" : "neon.400"}*/>
-                  <Text opacity={0.5}>{game.items.speed!.statName}:</Text>
+                  <Text opacity={0.5}>{statName[ItemSlot.Feet]}:</Text>
                   <Text>{game.items.speed!.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
-                  <Text opacity={0.5}>{game.items.transport!.statName}:</Text>
+                  <Text opacity={0.5}>{statName[ItemSlot.Transport]}:</Text>
                   <Text>{game.items.transport!.stat / 100}</Text>
                 </HStack>
               </HStack>

@@ -969,7 +969,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x7f3edda7f0f9924aa0bad9decbcfe1a19a8d5886b7e0320ae0a817b02df69cd",
-      "class_hash": "0x792bb344d5a480eaca742a9a10a8bef180f9bd167cf0d2462c73adc85ac3fa7",
+      "class_hash": "0x2a1df28dba840f133ab5ddd978bfa52f35b3a886e73b854a6cf78514cc247fb",
       "abi": [
         {
           "type": "impl",
@@ -1442,7 +1442,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0xbd4f9ff6bfe5310fd4cd21b682112d46b2d1e70b2118c72cb6f37f5463352a",
-      "class_hash": "0x41080bebd8b7217993c76f61be1e208ecf58c7d4466a4af7a9f60d42abd7c4",
+      "class_hash": "0x1a1dcda7a27baf31c6c3d0cb23d148017a3bb4d9bca91ce7e8d670ac29a0647",
       "abi": [
         {
           "type": "impl",
@@ -1847,6 +1847,11 @@
             {
               "name": "player_name",
               "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16",
               "kind": "data"
             }
           ]

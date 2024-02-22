@@ -19,6 +19,7 @@ export interface GameCreatedData extends BaseEventData {
   playerId: string;
   gameMode: number;
   playerName: string;
+  hustlerId: number;
 }
 
 export interface TraveledData extends BaseEventData {
@@ -121,6 +122,7 @@ export const parseEvent = (raw: any) => {
         playerId: num.toHexString(raw.keys[2]),
         gameMode: Number(raw.data[0]),
         playerName: shortString.decodeShortString(raw.data[1]),
+        hustlerId:  Number(raw.data[2]),
       } as GameCreatedData;
 
     case WorldEvents.Traveled:

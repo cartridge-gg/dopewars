@@ -13,6 +13,7 @@ struct Game {
     //
     max_turns: u8,
     max_wanted_shopping: u8,
+    max_rounds: u8,
     // 
     game_over: bool,
 }

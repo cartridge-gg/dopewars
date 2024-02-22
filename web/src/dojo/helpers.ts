@@ -23,6 +23,7 @@ import {
   EncounterOutcomes,
   Encounters,
   EncountersAction,
+  ItemSlot,
   LocationInfo,
   Locations,
   OutcomeInfo
@@ -30,27 +31,83 @@ import {
 
 import { Cigarette } from "@/components/icons";
 import {
-  Backpack,
-  Bicycle,
-  Dufflebag,
-  Fannypack,
-  Glock,
+  AK47,
+  BaseballBat,
   Kevlar,
-  Kneepads,
-  Knife,
   Leatherjacket,
-  Shoes,
-  Skateboard,
-  Uzi
+  PlasticBag,
+  Shirt,
+  Shoes
 } from "@/components/icons/items";
+import { Chain } from "@/components/icons/items/Chain";
 
 
+export const itemUpgrades = {
+  [ItemSlot.Weapon]: {
+    0: {
+      1:"Extended Mag",
+      2:"Recoil Compensator",
+      3:"Laser Sight",
+    }, 
+    1: {
+      1:"Tactical Grip",
+      2:"Reinforced Links",
+      3:"Spiked End",
+    },
+    2: {
+      1:"Grip Tape",
+      2:"Corked Bat",
+      3:"Aluminum Bat",
+    }
+  },
+  [ItemSlot.Clothes]:  {
+    0: {
+      1:"Reinforced Stitching",
+      2:"Polyester Blend",
+      3:"More Blood",
+    }, 
+    1: {
+      1:"Shoulder Straps",
+      2:"Thermal Ventilation",
+      3:"Ceramic Plate Inserts",
+    },
+    2: {
+      1:"Tailor Fitting",
+      2:"Treated Leather",
+      3:"Ballistic Inserts",
+    }
+  },
+  [ItemSlot.Feet]: {
+    0: {
+      1:"Fresh Laces",
+      2:"Ventilated Mesh",
+      3:"Memory Foam Insoles",
+    }, 
+    1: {
+      1:"Quick-Lace System",
+      2:"Anti-Slip Outsoles",
+      3:"Memory Foam Insoles",
+    },
+    2: {
+      1:"Locking Laces",
+      2:"Shock-Absorbing Insoles",
+      3:"Steel-toed Cap",
+    }
+  },
+  [ItemSlot.Transport]:  {
+    0: {
+      1:"Fanny Pack",
+      2:"Backpack",
+      3:"Duffle Bag",
+    }
+  },
+}
 
 export const statName = {
-  "Attack": "ATK",
-  "Defense": "DEF",
-  "Speed": "SPD",
-  "Transport": "INV",
+  [ItemSlot.Weapon]: "ATK",
+  [ItemSlot.Clothes]: "DEF",
+  [ItemSlot.Feet]: "SPD",
+  [ItemSlot.Transport]: "INV",
 }
 export type statNameKeys = keyof typeof statName;
 
@@ -78,21 +135,19 @@ export type drugIconsKeys = keyof typeof drugIcons;
 export const itemIcons = {
   "Naked": Cigarette,
   //
-  "Knife": Knife,
-  "Glock": Glock,
-  "Uzi": Uzi,
+  "AK47": AK47,
+  "Chain": Chain,
+  "Baseball Bat": BaseballBat,
   //
-  "Fanny Pack": Fannypack,
-  "Backpack": Backpack,
-  "Duffle Bag": Dufflebag,
+  "Blood-Stained Shirt": Shirt,
+  "Bullet Proof Vest": Kevlar,
+  "Trench Coat": Leatherjacket,
   //
-  "Knee Pads": Kneepads,
-  "Leather Jacket": Leatherjacket,
-  "Kevlar": Kevlar,
+  "All-Black Sneakers": Shoes,
+  "Athletic Trainers": Shoes,
+  "Work Boots": Shoes,
   //
-  "Shoes": Shoes,
-  "Skateboard": Skateboard,
-  "Bicycle": Bicycle,
+  "Plastic bag": PlasticBag,
 }
 export type itemsIconsKeys = keyof typeof itemIcons;
 
@@ -276,11 +331,9 @@ export const outcomes: OutcomeInfo[] = [
 ];
 
 
-
-
-function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
-  return array.find((item) => item[key] === value);
-}
+// function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
+//   return array.find((item) => item[key] === value);
+// }
 
 
 export function getActionName(action: EncountersAction): string {

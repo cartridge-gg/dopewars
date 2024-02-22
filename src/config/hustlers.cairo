@@ -484,7 +484,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 1,
-            stat: 30,
+            stat: 500,
             cost: 0,
         }
     );
@@ -494,7 +494,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 2,
-            stat: 60,
+            stat: 1000,
             cost: 500,
         }
     );
@@ -504,7 +504,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 3,
-            stat: 90,
+            stat: 2000,
             cost: 9_500,
         }
     );
@@ -514,7 +514,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 4,
-            stat: 120,
+            stat: 3000,
             cost: 42_000,
         }
     );
@@ -524,7 +524,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 5,
-            stat: 150,
+            stat: 4000,
             cost: 169_000,
         }
     );
@@ -534,7 +534,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Transport,
             slot_id: ItemSlot::Transport.into(),
             tier: 6,
-            stat: 180,
+            stat: 5000,
             cost: 420_000,
         }
     );

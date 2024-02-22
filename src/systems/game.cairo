@@ -73,6 +73,7 @@ mod game {
         player_id: ContractAddress,
         game_mode: GameMode,
         player_name: felt252,
+        hustler_id: u16
     }
 
     #[derive(Drop, starknet::Event)]
@@ -193,6 +194,7 @@ mod game {
                 game_mode,
                 max_turns: game_config.max_turns,
                 max_wanted_shopping: game_config.max_wanted_shopping,
+                max_rounds: game_config.max_rounds,
                 game_over: false
             };
 
@@ -207,7 +209,7 @@ mod game {
             set!(world, (game_store_packed));
 
             // emit GameCreated
-            emit!(world, GameCreated { game_id, player_id, game_mode, player_name });
+            emit!(world, GameCreated { game_id, player_id, game_mode, player_name, hustler_id });
         }
 
         fn end_game(

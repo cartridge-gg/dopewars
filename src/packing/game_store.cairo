@@ -104,7 +104,7 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 // unpack 
 impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
     fn unpack(self: GameStorePacked, world: IWorldDispatcher, game: Game,) -> GameStore {
-        let mut game_store = GameStoreImpl::get(world, game);
+        let mut game_store = GameStoreImpl::new(world, game);
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self.packed);
 

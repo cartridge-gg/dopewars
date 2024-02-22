@@ -127,8 +127,8 @@ export type ShopAction = {
 }
 
 export enum ItemSlot {
-  Attack,
-  Defense,
-  Speed,
+  Weapon,
+  Clothes,
+  Feet,
   Transport,
 }

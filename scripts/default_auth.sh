@@ -29,7 +29,7 @@ echo "--------------------------------------------------------------------------
 # enable system -> component authorizations
 
 RYO_COMPONENTS=("RyoMeta" "Leaderboard")
-CONFIG_COMPONENTS=("DrugConfig" "DrugConfigMeta" "LocationConfig" "LocationConfigMeta" "ItemConfig" "ItemConfigMeta" "GameConfig")
+CONFIG_COMPONENTS=("GameConfig" "DrugConfig" "DrugConfigMeta" "LocationConfig" "LocationConfigMeta" "HustlerItemBaseConfig" "HustlerItemTiersConfig")
 GAME_COMPONENTS=("Game" "GameStorePacked" "Leaderboard" "RyoMeta")
 
 

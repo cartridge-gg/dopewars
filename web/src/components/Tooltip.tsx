@@ -1,5 +1,4 @@
-import { Tooltip as ChakraTooltip } from "@chakra-ui/react";
-import { VStack, Text } from "@chakra-ui/react";
+import { Tooltip as ChakraTooltip, Text, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export default function Tooltip({
@@ -18,8 +17,8 @@ export default function Tooltip({
 
 const TooltipContent = ({ title, text, color }: { title: string; text: string; color: string }) => {
   return (
-    <VStack w="full" alignItems="flex-start" maxW="160px" p="2px" color={color}>
-      <Text fontSize="18px">{title}</Text>
+    <VStack w="full" alignItems="flex-start" maxW="260px" p="2px" color={color} gap={0}>
+      <Text fontSize="16px">{title}</Text>
       <Text opacity={0.5}>{text}</Text>
     </VStack>
   );
