@@ -76,7 +76,15 @@ export interface TravelEncounterResultData extends BaseEventData {
 }
 
 
-export interface GameOverData extends BaseEventData {
+
+
+export interface MeetOGData extends BaseEventData {
+  playerId: string;
+  ogId: number;
+}
+
+
+export interface GameOverData extends  {
   playerId: string;
   playerName: string;
   leaderboardVersion: string;
@@ -209,19 +217,29 @@ export const parseEvent = (raw: any) => {
       } as TravelEncounterResultData;
 
 
-    case WorldEvents.GameOver:
+      case WorldEvents.GameOver:
+        return {
+          eventType: WorldEvents.GameOver,
+          eventName: "GameOver",
+          gameId: num.toHexString(raw.keys[1]),
+          playerId: num.toHexString(raw.keys[2]),
+          leaderboardVersion: num.toHexString(raw.keys[3]),
+          playerName: shortString.decodeShortString(raw.data[0]),
+          avatarId: Number(raw.data[1]),
+          turn: Number(raw.data[2]),
+          cash: Number(raw.data[3]),
+          health: Number(raw.data[4]),
+        } as GameOverData;
+
+
+    case WorldEvents.MeetOG:
       return {
-        eventType: WorldEvents.GameOver,
-        eventName: "GameOver",
+        eventType: WorldEvents.MeetOG,
+        eventName: "MeetOG",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
-        leaderboardVersion: num.toHexString(raw.keys[3]),
-        playerName: shortString.decodeShortString(raw.data[0]),
-        avatarId: Number(raw.data[1]),
-        turn: Number(raw.data[2]),
-        cash: Number(raw.data[3]),
-        health: Number(raw.data[4]),
-      } as GameOverData;
+        ogId: Number(raw.data[0]),
+      } as MeetOGData
 
 
     default:

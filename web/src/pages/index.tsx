@@ -94,6 +94,8 @@ export default function Home() {
             )}
           </HStack>
         </Card>
+    
+
 
         {!isGated && (
           <>

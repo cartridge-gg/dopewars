@@ -5,7 +5,9 @@ import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { ConfigStore } from "@/dojo/stores/config";
 import { ToastType, useToast } from "@/hooks/toast";
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { OG } from "./OG";
 import { Siren, Truck } from "./icons";
 
 const RegisterEntities = () => {
@@ -16,7 +18,8 @@ const RegisterEntities = () => {
   const gameStore = useGameStore();
   const { game, gameEvents } = gameStore;
 
-  const [lastEvent, setLastEvent] = useState<DojoEvent|undefined>();
+  const [ogId, setOgId] = useState();
+  const [lastEvent, setLastEvent] = useState<DojoEvent | undefined>();
   const toaster = useToast();
 
   useEffect(() => {
@@ -59,6 +62,14 @@ const RegisterEntities = () => {
       //   target = `/${gameId}/event/decision`;
       //   break;
 
+      case WorldEvents.MeetOG:
+        const meetOgEvent = last.parsed as MeetOGData;
+        setOgId(meetOgEvent.ogId);
+        setTimeout(() => {
+          setOgId(undefined);
+        }, 10_000);
+        break;
+
       case WorldEvents.HighVolatility:
         const volatilityEvent = last.parsed as HighVolatilityData;
         displayHighVolatility(volatilityEvent, toaster, configStore);
@@ -73,7 +84,13 @@ const RegisterEntities = () => {
     // }
   }, [configStore, gameId, gameEvents, gameEvents?.sortedEvents, router, router.isReady]);
 
-  return <></>;
+  if (!ogId) return null;
+
+  return (
+    <Box position="fixed" h="300px" w="300px" bottom="0" left="0" zIndex={99} title={`OG #${ogId}`}>
+      <OG id={ogId} />
+    </Box>
+  );
 };
 
 export default RegisterEntities;

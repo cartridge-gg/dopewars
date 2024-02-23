@@ -11,6 +11,7 @@ export enum WorldEvents {
   UpgradeItem = "0x3ca813365217de90cf97b15d7e7e6f0525760cdec66dd9326203e7ddc368f80",
   TravelEncounter = "0x211a1369d28745f22bfe7e3e7e8e9d671f904ea80596d1fab13bfa9c16c1c57",
   TravelEncounterResult = "0x4c25d590d9373d60632194fce3d4237e3ccb1d31738c1f881045e495e04b35",
+  MeetOG = "0xf8c38c7f438b31081598f251d7acc54d6a8f407da04a52ee1ee9f9ae3bb06a",
   GameOver = "0x165460ded86991fa560a0d331810f83651da90c5df6d4b61357c3b3807ff41c",
 }
 
@@ -86,6 +87,12 @@ cash_loss: number;
 drug_id: number;
 drug_loss: number;
 turn_loss: number;
+        }
+
+export interface MeetOGData extends BaseEventData {
+        game_id: number;
+player_id: string;
+og_id: number;
         }
 
 export interface GameOverData extends BaseEventData {
@@ -207,6 +214,15 @@ drug_id: Number(raw.data[7]),
 drug_loss: Number(raw.data[8]),
 turn_loss: Number(raw.data[9]),
 } as TravelEncounterResultData;
+
+case WorldEvents.MeetOG:
+return {
+event_type: WorldEvents.MeetOG,
+event_name: "MeetOG",
+game_id: Number(raw.keys[1]),
+player_id: num.toHexString(raw.keys[2]),
+og_id: Number(raw.keys[3]),
+} as MeetOGData;
 
 case WorldEvents.GameOver:
 return {

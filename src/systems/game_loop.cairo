@@ -61,6 +61,9 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     // markets variations
     game_store.markets.market_variations(ref randomizer);
 
+    // hustling
+    game_store.player.hustle(ref game_store, ref randomizer);
+
     // save 
     let game_store_packed = game_store.pack();
     set!(game_store.world, (game_store_packed));

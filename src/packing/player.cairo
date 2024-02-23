@@ -6,8 +6,13 @@ use rollyourown::{
     models::game::{Game}, 
     traits::{Enumerable, Packable, Packer, Unpacker},
     config::{locations::Locations, game::GameConfigImpl,  drugs::{Drugs}},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
+    utils::{
+        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
+        random::{Random, RandomImpl},
+        events::{RawEventEmitterTrait, RawEventEmitterImpl},
+    },
     packing::{
+        game_store::{GameStore},
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
         encounters_packed::{EncountersPacked, EncountersPackedImpl, Encounters},
@@ -168,7 +173,7 @@ impl PlayerImpl of PlayerTrait {
         let cops_level = encounters_packed.get_encounter_level(Encounters::Cops);
         let gang_level = encounters_packed.get_encounter_level(Encounters::Gang);
 
-        if self.drug_level < 1 && cops_level + gang_level > 3 {
+        if self.drug_level < 1 && cops_level + gang_level > 4 {
             // check if not carrying Ludes
             if drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 ){
                 // Ludes -> Heroin
@@ -176,7 +181,7 @@ impl PlayerImpl of PlayerTrait {
                 // gibe player some HP ?
                 self.health += 2;
             }
-        } else if self.drug_level < 2 && cops_level + gang_level > 6 {
+        } else if self.drug_level < 2 && cops_level + gang_level > 8 {
             // check if not carrying Speed or Ludes
             if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0 )) ||
                 (drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 )) {
@@ -186,6 +191,27 @@ impl PlayerImpl of PlayerTrait {
                 self.health += 5;
             }
         }
+    }
+
+    fn hustle(self: Player,ref game_store: GameStore, ref randomizer: Random) {
+
+        let og_id = randomizer.between::<u16>(0, 30_000);
+
+         // emit raw event MeetOG 
+        if og_id < 500 {
+            game_store
+                .world
+                .emit_raw(
+                    array![
+                        selector!("MeetOG"),
+                        Into::<u32, felt252>::into(game_store.game.game_id),
+                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
+                    ],
+                    array![
+                        Into::<u16, felt252>::into(og_id),
+                    ]
+                );
+        };
     }
 }
 

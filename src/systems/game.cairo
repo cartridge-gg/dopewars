@@ -61,6 +61,7 @@ mod game {
         UpgradeItem: UpgradeItem,
         TravelEncounter: TravelEncounter,
         TravelEncounterResult: TravelEncounterResult,
+        MeetOG: MeetOG,
         GameOver: GameOver,
     }
 
@@ -152,11 +153,17 @@ mod game {
         turn_loss:u8,
     }
 
-    //
-    //
-    //
-
     #[derive(Drop, Serde, starknet::Event)]
+    struct MeetOG {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        #[key]
+        og_id: u16,
+    }
+
+     #[derive(Drop, Serde, starknet::Event)]
     struct GameOver {
         #[key]
         game_id: u32,
