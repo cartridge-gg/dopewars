@@ -1,15 +1,25 @@
 import { Locations } from "@/dojo/types";
 import { Icon, chakra, shouldForwardProp } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
-import { Callout } from "./Callout";
 
 import colors from "@/theme/colors";
+import { Callout } from "./Callout";
 
 const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
 });
 
-export const Outline = ({ targetId, current, wanted }: { targetId?: Locations; current?: Locations; wanted: number }) => {
+export const Outline = ({
+  targetId,
+  current,
+  wantedTarget,
+  wantedCurrent,
+}: {
+  targetId?: Locations;
+  current?: Locations;
+  wantedTarget: number;
+  wantedCurrent: number;
+}) => {
   if (targetId === undefined) {
     return <></>;
   }
@@ -22,24 +32,28 @@ export const Outline = ({ targetId, current, wanted }: { targetId?: Locations; c
     ease: "easeInOut",
   };
 
-  const fillColor = wanted > 68 ? colors.red : wanted > 29 ? colors.yellow[400] : colors.neon[400];
+  const fillColorTarget = wantedTarget > 68 ? colors.red : wantedTarget > 29 ? colors.yellow[400] : colors.neon[400];
+  const fillColorCurrent = wantedCurrent > 68 ? colors.red : wantedCurrent > 29 ? colors.yellow[400] : colors.neon[400];
 
   return (
     <>
-      {/* {!selfSelected && ( */}
+      {!selfSelected && (
         <ChakraBox
           layerStyle="fill"
           animate={{ opacity: [0.5, 1, 0.5] }}
           // @ts-ignore
           transition={transition}
         >
-          <SvgHighlight location={targetId} fill={fillColor as string} />
+          <SvgHighlight location={targetId} fill={fillColorTarget as string} />
         </ChakraBox>
-      {/* )} */}
+      )}
+
       <ChakraBox layerStyle="fill" opacity="0.5">
-        <SvgHighlight location={current} fill={colors.neon[400] as string} />
+        <SvgHighlight location={current} fill={fillColorCurrent as string} />
       </ChakraBox>
+
       <ChakraBox
+        zIndex={9}
         layerStyle="fill"
         animate={{ y: [0, -10, 0] }}
         // @ts-ignore

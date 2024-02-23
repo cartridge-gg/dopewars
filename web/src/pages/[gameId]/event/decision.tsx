@@ -34,6 +34,7 @@ const Decision = observer(() => {
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [encounter, setEncounter] = useState<TravelEncounterData | undefined>(undefined);
+  const [encounterImg, setEncounterImg] = useState(undefined);
 
   const [isPaying, setIsPaying] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -51,7 +52,7 @@ const Decision = observer(() => {
     if (game && gameEvents && !isPending) {
       const lastEncounter = gameEvents.getLastEncounter();
       const encounter = lastEncounter!.parsed as TravelEncounterData;
-      setEncounter(encounter)
+      setEncounter(encounter);
     }
   }, [game, isPending, gameEvents]);
 
@@ -63,12 +64,19 @@ const Decision = observer(() => {
           setTitle("Gang!");
           encounter && setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
+          setEncounterImg(
+            `/images/events/muggers${game.encounters!.gangLevel < 3 ? game.encounters!.gangLevel + 1 : 3}.gif`,
+          );
+
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
           encounter && setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
+          setEncounterImg(
+            `/images/events/cops${game.encounters!.copsLevel < 3 ? game.encounters!.copsLevel + 1 : 3}.gif`,
+          );
           break;
       }
     }
@@ -259,11 +267,7 @@ const Decision = observer(() => {
           sentence={sentence}
           encounter={encounter!}
           game={game}
-          imageSrc={`/images/events/${
-            game.player.status == PlayerStatus.BeingMugged
-              ? `muggers${game.encounters!.gangLevel < 3 ? game.encounters!.gangLevel + 1 : 3}.gif`
-              : `cops${game.encounters!.copsLevel < 3 ? game.encounters!.copsLevel + 1 : 3}.gif`
-          }`}
+          imageSrc={encounterImg}
           flex={[0, 1]}
           mb={0}
           w="full"

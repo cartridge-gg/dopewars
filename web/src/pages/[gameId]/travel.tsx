@@ -159,8 +159,6 @@ export default function Travel() {
           <MapSvg
             targetId={configStore.getLocation(targetLocation)?.location_id || 0}
             current={configStore.getLocation(currentLocation || "")?.location_id || 0}
-            game={game}
-            configStore={configStore}
             onSelect={(selectedId) => {
               setTargetLocation(configStore.getLocationById(selectedId)?.location);
             }}

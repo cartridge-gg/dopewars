@@ -1,11 +1,14 @@
 import { GameClass } from "@/dojo/class/Game";
 import { ConfigStore } from "@/dojo/stores/config";
 import { Locations } from "@/dojo/types";
-import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
+import { Alert } from "../icons";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
+import { WantedMarkers } from "./WantedMarkers";
+import { useConfigStore, useGameStore } from "@/dojo/hooks";
 
 type CoordinateType = {
   [key in Locations]: { x: number; y: number };
@@ -24,20 +27,19 @@ const coordinate: CoordinateType = {
 const yOffset = -150;
 
 export const Map = ({
-  game,
-  configStore,
   targetId,
   current,
   onSelect,
 }: {
-  game: GameClass;
-  configStore: ConfigStore;
   targetId?: Locations;
   current?: Locations;
   onSelect: (selected: Locations) => void;
 }) => {
   const [scope, animate] = useAnimate();
   const isMobile = useBreakpointValue([true, false]);
+
+  const { game } = useGameStore();
+  const configStore = useConfigStore();
 
   useEffect(() => {
     if (targetId !== undefined) {
@@ -78,15 +80,17 @@ export const Map = ({
     >
       <Image src="/images/map/basemap.svg" position="absolute" top="0" left="0" boxSize="full" alt="ryo map" />
 
-      {/* <Markers location={targetId} /> */}
       {targetId && (
         <Outline
           targetId={targetId}
           current={current}
-          wanted={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location) || 0}
+          wantedTarget={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location) || 0}
+          wantedCurrent={game.wanted.wantedByLocation.get(configStore.getLocationById(current)?.location) || 0}
         />
       )}
       <HitBox onSelect={onSelect} />
+      {/* <Markers location={targetId} /> */}
+      <WantedMarkers targetId={targetId} current={current} />
     </Flex>
   );
 };

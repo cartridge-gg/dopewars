@@ -92,14 +92,14 @@ export default function Consequence() {
               {/* <Text>{response}</Text>*/}
               {encounterResult.rounds > 0 && (
                 <Text>
-                  After {encounterResult.rounds} attempt{encounterResult.rounds > 0 ? "s" : ""}
+                  After {encounterResult.rounds} attempt{encounterResult.rounds > 1 ? "s" : ""}
                 </Text>
               )}
               <Text color="yellow.400">{outcomeInfos.description && `* ${outcomeInfos.description} *`}</Text>
               {encounterResult.cashEarnt > 0 && (
                 <Text color="yellow.400">{`You confiscated ${formatCash(encounterResult.cashEarnt)}`}</Text>
               )}
-              {encounterResult.cashLoss > 0 && <Text color="yellow.400">Cash loss : {encounterResult.cashLoss}</Text>}
+              {encounterResult.cashLoss > 0 && <Text color="yellow.400">Cash loss : {formatCash(encounterResult.cashLoss)}</Text>}
               {encounterResult.dmgTaken > 0 && <Text color="red">Lost {encounterResult.dmgTaken} HP</Text>}
               {encounterResult.dmgDealt > 0 && <Text color="neon.400">Dealt {encounterResult.dmgDealt} DMG</Text>}
               {encounterResult.drugLoss > 0 && (
@@ -109,7 +109,7 @@ export default function Consequence() {
               )}
               {encounterResult.turnLoss > 0 && (
                 <Text color="yellow.400">
-                  You spent {encounterResult.turnLoss} day{encounterResult.turnLoss > 0 ? "s" : ""} in{" "}
+                  You spent {encounterResult.turnLoss} day{encounterResult.turnLoss > 1 ? "s" : ""} in{" "}
                   {outcomeInfos.encounterOutcome === EncounterOutcomes.Hospitalized ? "the hospital" : "in jail"}!
                 </Text>
               )}
