@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Profile } from "@/components/ProfileButton";
 import { Event as EventIcon } from "@/components/icons";
+import { GameClass } from "@/dojo/class/Game";
 import {
   GameCreatedData,
   GameOverData,
@@ -18,7 +19,7 @@ import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
-import { EncounterOutcomes, Encounters, EncountersAction } from "@/dojo/types";
+import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
@@ -35,7 +36,7 @@ const Logs = () => {
 
   const { account } = useDojoContext();
   const configStore = useConfigStore();
-  const { gameEvents } = useGameStore();
+  const { game, gameEvents } = useGameStore();
 
   const [playerName, setPlayerName] = useState("");
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
@@ -105,7 +106,7 @@ const Logs = () => {
 
   const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
 
-  if (!logs) {
+  if (!logs || !game) {
     return <></>;
   }
 
@@ -132,7 +133,7 @@ const Logs = () => {
       rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, playerHustlerId, log))}
+        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, game, log))}
       </VStack>
     </Layout>
   );
@@ -151,7 +152,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(configStore: ConfigStore, playerHustlerId: number, log: LogByDay) {
+function renderDay(configStore: ConfigStore, game: GameClass, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -173,7 +174,7 @@ function renderDay(configStore: ConfigStore, playerHustlerId: number, log: LogBy
               break;
 
             case WorldEvents.UpgradeItem:
-              return renderUpgradeItem(configStore, playerHustlerId, i as UpgradeItemData, key);
+              return renderUpgradeItem(configStore, game, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:
@@ -209,13 +210,33 @@ function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: stri
   );
 }
 
-function renderUpgradeItem(configStore: ConfigStore, playerHustlerId: number, log: UpgradeItemData, key: string) {
-  const item = configStore.getHustlerItemByIds(playerHustlerId, log.itemSlot, log.itemLevel);
+function renderUpgradeItem(configStore: ConfigStore, game: GameClass, log: UpgradeItemData, key: string) {
+  let item_id = 0;
+  switch (log.itemSlot) {
+    case ItemSlot.Weapon:
+      item_id = game.items.hustlerConfig.weapon.base.id;
+      break;
+    case ItemSlot.Clothes:
+      item_id = game.items.hustlerConfig.clothes.base.id;
+      break;
+    case ItemSlot.Feet:
+      item_id = game.items.hustlerConfig.feet.base.id;
+      break;
+    case ItemSlot.Transport:
+      item_id = game.items.hustlerConfig.transport.base.id;
+      break;
+    default:
+      item_id = 0;
+      break;
+  }
+
+  const item = configStore.getHustlerItemByIds(item_id, log.itemSlot, log.itemLevel);
+
   return (
     <Line
       key={key}
       icon={item.icon}
-      text={`Bought ${item.base.name}`}
+      text={`Bought ${item.upgradeName}`}
       total={`- ${formatCash(item.tier.cost)}`}
       color="yellow.400"
       iconColor="yellow.400"

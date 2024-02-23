@@ -12,14 +12,16 @@ export class MarketsClass extends GamePropertyClass {
     constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
-        //const availableDrugs =  TODO: filter available drugs by turn
+        const drugLevel = game.player?.drugLevel || 0
 
         for (let locationId of [1, 2, 3, 4, 5, 6]) {
             const location = configStore.getLocationById(locationId)!;
 
             for (let drugId of [0, 1, 2, 3, /*4, 5*/]) {
-                const drug = configStore.getDrugById(drugId)!;
-                const price = this.getDrugPrice(locationId, drugId);
+                const drugIdWithDrugLevel = drugId + drugLevel
+
+                const drug = configStore.getDrugById(drugIdWithDrugLevel)!;
+                const price = this.getDrugPrice(locationId, drugIdWithDrugLevel);
 
                 const drugMarket: DrugMarket = {
                     drug: drug.drug,
@@ -39,7 +41,7 @@ export class MarketsClass extends GamePropertyClass {
     }
 
     getTick(locationId: number, drugId: number) {
-        const start = BigInt((BigInt(locationId - 1) * this.drugCountByLocation + BigInt(drugId)) * this.bitsSize);
+        const start = BigInt((BigInt(locationId - 1) * this.drugCountByLocation + (BigInt(drugId) % this.drugCountByLocation)) * this.bitsSize);
         return Bits.extract(this.packed, start, this.bitsSize)
     }
 

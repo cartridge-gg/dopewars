@@ -204,5 +204,5 @@ const onGameEvent = ({
   const worldEvent = data.eventEmitted as World__Event;
   get().gameEvents.addEvent(worldEvent);
 
-  console.log(get().gameEvents);
+  // console.log(get().gameEvents);
 };

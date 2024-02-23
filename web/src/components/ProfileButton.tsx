@@ -1,5 +1,7 @@
 import Button from "@/components/Button";
+import { statName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { ItemSlot } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
 import { headerButtonStyles } from "@/theme/styles";
 import { IsMobile } from "@/utils/ui";
@@ -22,8 +24,6 @@ import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 import { HustlerIcon, Hustlers } from "./hustlers";
 import { Cigarette, User } from "./icons";
-import { statName } from "@/dojo/helpers";
-import { ItemSlot } from "@/dojo/types";
 
 const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
   return (
@@ -119,28 +119,28 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
                 <HStack flex="1" justify="center" /*color={attackItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{statName[ItemSlot.Weapon]}:</Text>
-                  <Text>{game.items.attack!.stat}</Text>
+                  <Text>{game.items.attack!.tier.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={defenseItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{statName[ItemSlot.Clothes]}:</Text>
-                  <Text>{game.items.defense!.stat}</Text>
+                  <Text>{game.items.defense!.tier.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={speedItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{statName[ItemSlot.Feet]}:</Text>
-                  <Text>{game.items.speed!.stat}</Text>
+                  <Text>{game.items.speed!.tier.stat}</Text>
                 </HStack>
 
                 <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
                   <Text opacity={0.5}>{statName[ItemSlot.Transport]}:</Text>
-                  <Text>{game.items.transport!.stat / 100}</Text>
+                  <Text>{game.items.transport!.tier.stat / 100}</Text>
                 </HStack>
               </HStack>
             </Card>
 
             <HStack w="full">
-              <Tooltip label={`${game.items.attack!.name} - $${game.items.attack!.cost}`}>
+              <Tooltip label={`${game.items.attack!.upgradeName} - $${game.items.attack!.tier.cost}`}>
                 <Card flex="1" h="40px" alignItems="center" justify="center">
                   {game.items.attack!.icon({
                     boxSize: "26",
@@ -148,7 +148,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                   })}
                 </Card>
               </Tooltip>
-              <Tooltip label={`${game.items.defense!.name} - $${game.items.defense!.cost}`}>
+              <Tooltip label={`${game.items.defense!.upgradeName} - $${game.items.defense!.tier.cost}`}>
                 <Card flex="1" h="40px" alignItems="center" justify="center">
                   {game.items.defense!.icon({
                     boxSize: "26",
@@ -156,7 +156,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                   })}
                 </Card>
               </Tooltip>
-              <Tooltip label={`${game.items.speed!.name} - $${game.items.speed!.cost}`}>
+              <Tooltip label={`${game.items.speed!.upgradeName} - $${game.items.speed!.tier.cost}`}>
                 <Card flex="1" h="40px" alignItems="center" justify="center">
                   {game.items.speed!.icon({
                     boxSize: "26",
@@ -164,7 +164,7 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                   })}
                 </Card>
               </Tooltip>
-              <Tooltip label={`${game.items.transport!.name} - $${game.items.transport!.cost}`}>
+              <Tooltip label={`${game.items.transport!.upgradeName} - $${game.items.transport!.tier.cost}`}>
                 <Card flex="1" h="40px" alignItems="center" justify="center">
                   {game.items.transport!.icon({
                     boxSize: "26",

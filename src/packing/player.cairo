@@ -3,10 +3,15 @@ use starknet::ContractAddress;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
-    config::{locations::Locations, game::GameConfigImpl},
+    models::game::{Game}, 
+    traits::{Enumerable, Packable, Packer, Unpacker},
+    config::{locations::Locations, game::GameConfigImpl,  drugs::{Drugs}},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
-    packing::{player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl}}
+    packing::{
+        player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
+        drugs_packed::{DrugsPacked, DrugsPackedImpl},
+        encounters_packed::{EncountersPacked, EncountersPackedImpl, Encounters},
+    },
 };
 
 
@@ -66,6 +71,7 @@ struct Player {
     prev_location: Locations,
     location: Locations,
     next_location: Locations,
+    drug_level: u8,
 }
 
 
@@ -86,11 +92,12 @@ impl PlayerImpl of PlayerTrait {
             prev_location: Locations::Home,
             location: Locations::Home,
             next_location: Locations::Home,
+            drug_level:0,
         }
     }
 
     fn with(world: IWorldDispatcher, game: Game) -> Player {
-        // create initial player state with world, game_id, player_id
+        // create initial player state with world, game
         Player {
             world,
             game,
@@ -102,6 +109,7 @@ impl PlayerImpl of PlayerTrait {
             prev_location: Locations::Home,
             location: Locations::Home,
             next_location: Locations::Home,
+            drug_level:0,
         }
     }
 
@@ -127,7 +135,7 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
-     fn can_trade(self: Player) -> bool {
+    fn can_trade(self: Player) -> bool {
         if self.health == 0 {
             return false;
         }
@@ -142,9 +150,42 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
+    fn can_trade_drug(self: Player, drug: Drugs) -> bool {
+        let drug_id: u8 = drug.into();
+        drug_id >= self.drug_level && drug_id < 4 + self.drug_level
+    }
+
     #[inline(always)]
     fn can_decide(self: Player) -> bool {
         self.status == PlayerStatus::BeingArrested || self.status == PlayerStatus::BeingMugged
+    }
+
+    fn level_up_drug(ref self: Player, drugs_packed: DrugsPacked, encounters_packed: EncountersPacked) {
+        if self.drug_level == 2 { return ;};
+
+        let drugs = drugs_packed.get();
+
+        let cops_level = encounters_packed.get_encounter_level(Encounters::Cops);
+        let gang_level = encounters_packed.get_encounter_level(Encounters::Gang);
+
+        if self.drug_level < 1 && cops_level + gang_level > 3 {
+            // check if not carrying Ludes
+            if drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 ){
+                // Ludes -> Heroin
+                self.drug_level = 1;
+                // gibe player some HP ?
+                self.health += 2;
+            }
+        } else if self.drug_level < 2 && cops_level + gang_level > 6 {
+            // check if not carrying Speed or Ludes
+            if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0 )) ||
+                (drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 )) {
+                // Speed -> Cocaine
+                self.drug_level = 2;
+                // gibe player some HP ?
+                self.health += 5;
+            }
+        }
     }
 }
 
@@ -182,6 +223,9 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
                         },
                         PlayerLayout::NextLocation => {
                             bits.replace::<u8>(item.idx(), item.bits(), self.next_location.into());
+                        },
+                        PlayerLayout::DrugLevel => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.drug_level.into());
                         },
                     };
                 },
@@ -233,6 +277,12 @@ impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
                         PlayerLayout::NextLocation => {
                             player
                                 .next_location = bits
+                                .extract_into::<u8>(item.idx(), item.bits())
+                                .into();
+                        },
+                        PlayerLayout::DrugLevel => {
+                            player
+                                .drug_level = bits
                                 .extract_into::<u8>(item.idx(), item.bits())
                                 .into();
                         },

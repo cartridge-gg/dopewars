@@ -8,7 +8,8 @@ use rollyourown::{
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
-        markets_packed::MarketsPackedTrait
+        markets_packed::MarketsPackedTrait,
+        player::{Player, PlayerImpl}
     },
     systems::{traveling, leaderboard::{LeaderboardManager, LeaderboardManagerTrait}}
 };
@@ -53,6 +54,9 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
                 ]
             );
     }
+
+    // level up drug_level if possible
+    game_store.player.level_up_drug(game_store.drugs, game_store.encounters);
 
     // markets variations
     game_store.markets.market_variations(ref randomizer);

@@ -13,6 +13,7 @@ export class PlayerClass extends GamePropertyClass {
     prevLocation: LocationConfigFull;
     location: LocationConfigFull;
     nextLocation: LocationConfigFull;
+    drugLevel: number;
 
     constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
@@ -24,6 +25,7 @@ export class PlayerClass extends GamePropertyClass {
         const prevLocation = configStore.getPlayerLayoutItem("PrevLocation")
         const location = configStore.getPlayerLayoutItem("Location")
         const nextLocation = configStore.getPlayerLayoutItem("NextLocation")
+        const drugLevel = configStore.getPlayerLayoutItem("DrugLevel")
 
         this._cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
         this.health = Number(Bits.extract(this.packed, health.idx, health.bits))
@@ -37,6 +39,8 @@ export class PlayerClass extends GamePropertyClass {
         this.prevLocation = configStore.getLocationById(Number(prevLocationId))
         this.location = configStore.getLocationById(Number(locationId))
         this.nextLocation = configStore.getLocationById(Number(nextLocationId))
+
+        this.drugLevel = Number(Bits.extract(this.packed, drugLevel.idx, drugLevel.bits))
 
         makeObservable(this, {
             cash: computed,
@@ -84,11 +88,9 @@ export class PlayerClass extends GamePropertyClass {
 
     }
 
-
     canBuy(drug: Drugs) {
         return true
     }
-
 
     canSell(drug: Drugs) {
         return true

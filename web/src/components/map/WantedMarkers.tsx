@@ -31,7 +31,7 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
       {/* Bronx */}
       {wanted.get(Locations.Bronx) > minWanted && <Alert position="absolute" top="15%" left="52%" />}
       {/* Central */}
-      {wanted.get(Locations.Central) > minWanted && <Alert position="absolute" top="44%" left="48%" />}
+      {wanted.get(Locations.Central) > minWanted && <Alert position="absolute" top="44%" left="45%" />}
       {/* Brooklyn */}
       {wanted.get(Locations.Brooklyn) > minWanted && <Alert position="absolute" top="71%" left="44%" />}
       {/* Queens */}

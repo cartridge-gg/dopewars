@@ -63,6 +63,11 @@ export class GameClass {
         this.gameInfos = gameInfos;
         this.packed = gameStorePacked.packed;
         //
+
+        const player = configStore.getGameStoreLayoutItem("Player")
+        const playerPacked = Bits.extract(this.packed, player.idx, player.bits)
+        this.player = new PlayerClass(configStore, this, playerPacked);
+
         const markets = configStore.getGameStoreLayoutItem("Markets")
         const marketsPacked = Bits.extract(this.packed, markets.idx, markets.bits);
         this.markets = new MarketsClass(configStore, this, marketsPacked)
@@ -82,10 +87,6 @@ export class GameClass {
         const encounters = configStore.getGameStoreLayoutItem("Encounters")
         const encountersPacked = Bits.extract(this.packed, encounters.idx, encounters.bits);
         this.encounters = new EncountersClass(configStore, this, encountersPacked)
-
-        const player = configStore.getGameStoreLayoutItem("Player")
-        const playerPacked = Bits.extract(this.packed, player.idx, player.bits)
-        this.player = new PlayerClass(configStore, this, playerPacked);
 
         this.pending = []
 

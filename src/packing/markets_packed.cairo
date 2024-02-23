@@ -55,7 +55,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
-        let drug_idx: u8 = drug.into();
+        let drug_idx: u8 = drug.into() % self.get_drugs_by_location();
 
         let size: u8 = self.get_slot_size();
         let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
@@ -79,7 +79,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let mut bits = BitsImpl::from_felt(self.packed);
 
         let location_idx: u8 = location.into() - 1;
-        let drug_idx: u8 = drug.into();
+        let drug_idx: u8 = drug.into() % self.get_drugs_by_location();
 
         let size: u8 = self.get_slot_size();
         let start: u8 = (location_idx * self.get_drugs_by_location() + drug_idx) * size;
@@ -97,16 +97,16 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 
         loop {
             match locations.pop_front() {
-                Option::Some(location_id) => {
+                Option::Some(location) => {
                     let mut drugs = DrugsEnumerableImpl::all();
                     // limit to 4 drugs slots
                     let _ = drugs.pop_back();
                     let _ = drugs.pop_back();
                     loop {
                         match drugs.pop_front() {
-                            Option::Some(drug_id) => {
+                            Option::Some(drug) => {
                                 let rand: u16 = randomizer.between::<u16>(1, 1000).into();
-                                let tick = self.get_tick(*location_id, *drug_id);
+                                let tick = self.get_tick(*location, *drug);
                                 let direction = rand > 500;
 
                                 // kind of dopessian distribution
@@ -116,7 +116,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                     2_u32
                                 } else if rand <= 475 || rand >= 524 {
                                     4_u32
-                                } else if rand <= 496 || rand >= 503 {
+                                } else if rand <= 495 || rand >= 504 {
                                     6_u32
                                 } else {
                                     12_u32
@@ -128,7 +128,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                     tick.sub_capped(variation, 0)
                                 };
 
-                                self.set_tick(*location_id, *drug_id, new_tick);
+                                self.set_tick(*location, *drug, new_tick);
 
                                 if variation == 12_u32 {
                                     // emit HighVolatility
@@ -143,8 +143,8 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                                 >::into(self.game.player_id),
                                             ],
                                             array![
-                                                Into::<Locations, u8>::into(*location_id).into(),
-                                                Into::<Drugs, u8>::into(*drug_id).into(),
+                                                Into::<Locations, u8>::into(*location).into(),
+                                                Into::<Drugs, u8>::into(*drug).into(),
                                                 Into::<bool, felt252>::into(direction),
                                             ],
                                         );

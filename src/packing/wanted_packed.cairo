@@ -59,16 +59,16 @@ impl WantedPackedImpl of WantedPackedTrait {
     #[inline(always)]
     fn get_wanted_risk(ref self: WantedPacked, location: Locations) -> u8 {
         // 0	0%   // cannot occurs
-        // 1	5%   // cannot occurs
-        // 2	20%  // cannot occurs
-        // 3	35%
-        // 4	50%
-        // 5	65%
-        // 6	80%
-        // 7	95%
+        // 1	0%   // cannot occurs
+        // 2	15%  // cannot occurs
+        // 3	30%
+        // 4	45%
+        // 5	60%
+        // 6	75%
+        // 7	90%
 
         let wanted = self.get(location);
-        (wanted * 15).sub_capped(10, 0)
+        (wanted * 15).sub_capped(15, 0)
     }
 
     fn on_turn_end(ref self: WantedPacked, game_store: GameStore) {

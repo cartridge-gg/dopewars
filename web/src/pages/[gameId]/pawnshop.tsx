@@ -44,7 +44,7 @@ const PawnShop = observer(() => {
     game.pushCall({ slot: selectedShopItem.slot as number, cost: selectedShopItem?.tier.cost });
 
     toaster.toast({
-      message: `${selectedShopItem.name} equiped!`,
+      message: `${selectedShopItem.upgradeName} equiped!`,
       icon: selectedShopItem.icon,
     });
     onBack();
