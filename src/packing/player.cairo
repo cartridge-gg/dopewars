@@ -179,7 +179,7 @@ impl PlayerImpl of PlayerTrait {
                 // Ludes -> Heroin
                 self.drug_level = 1;
                 // gibe player some HP ?
-                self.health += 2;
+                self.health += 5;
             }
         } else if self.drug_level < 2 && cops_level + gang_level > 8 {
             // check if not carrying Speed or Ludes
@@ -188,7 +188,7 @@ impl PlayerImpl of PlayerTrait {
                 // Speed -> Cocaine
                 self.drug_level = 2;
                 // gibe player some HP ?
-                self.health += 5;
+                self.health += 10;
             }
         }
     }

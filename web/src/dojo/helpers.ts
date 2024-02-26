@@ -22,7 +22,6 @@ import {
   Drugs,
   EncounterOutcomes,
   Encounters,
-  EncountersAction,
   ItemSlot,
   LocationInfo,
   Locations,
@@ -273,7 +272,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getCopResponses(EncounterOutcomes.Escaped, isInitial),
-    description: "You fled to a random location",
+    description: "You escaped",
     color: "neon.200",
   },
   {
@@ -284,7 +283,7 @@ export const outcomes: OutcomeInfo[] = [
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) =>
       getMuggerResponses(EncounterOutcomes.Escaped, isInitial),
-    description: "You fled to a random location",
+    description: "You escaped",
     color: "neon.200",
   },
   {

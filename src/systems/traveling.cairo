@@ -129,8 +129,9 @@ fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> E
     let turn = game_store.player.turn;
 
     let encounter_level = game_store.encounters.get_encounter_level(encounter_slot) + 1;
-    let health = encounter_level * 7 + turn;
-    let attack = encounter_level * 2 + turn / 3;
+    let health = encounter_level * 5 + turn;
+   // let attack = encounter_level * 2 + turn / 3;
+    let attack = encounter_level * 1 + turn / 3;
     let payout: u32 = (encounter_level.into() * encounter_level.into() * 6900)
         + (turn.into() * 420);
     let demand_pct = get_encounter_demand_from_game_store(game_store);
@@ -357,12 +358,12 @@ fn on_run(
                 break;
             }
         } else {
-            // escaped -> land in random location
-            game_store.player.next_location = LocationsRandomizableImpl::random(ref randomizer);
             break;
         };
 
         if rounds == game_store.game.max_rounds {
+            // didnt escaped -> land in random location
+            game_store.player.next_location = LocationsRandomizableImpl::random(ref randomizer);
             is_caught = true;
             break;
         }
@@ -436,7 +437,7 @@ fn on_fight(
         }
 
         // encounter attack 
-        let encounter_atk = encounter.attack - def;
+        let encounter_atk = encounter.attack.sub_capped(def, 1);
         game_store.player.health = game_store.player.health.sub_capped(encounter_atk, 0);
         dmg_taken += encounter_atk;
         
