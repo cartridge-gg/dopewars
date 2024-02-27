@@ -20,41 +20,36 @@ echo "--------------------------------------------------------------------------
 echo profile : $PROFILE
 echo "---------------------------------------------------------------------------"
 echo world   : $WORLD_ADDRESS
-echo " "
+echo "---------------------------------------------------------------------------"
 echo ryo     : $RYO_ADDRESS
 echo config  : $CONFIG_ADDRESS
 echo game    : $GAME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
-# enable system -> component authorizations
+# enable system -> models authorizations
+sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
+ RyoMeta,$RYO_ADDRESS \
+ Leaderboard,$RYO_ADDRESS \
+ GameConfig,$CONFIG_ADDRESS \
+ DrugConfig,$CONFIG_ADDRESS \
+ DrugConfigMeta,$CONFIG_ADDRESS \
+ LocationConfig,$CONFIG_ADDRESS \
+ LocationConfigMeta,$CONFIG_ADDRESS \
+ HustlerItemBaseConfig,$CONFIG_ADDRESS \
+ Game,$GAME_ADDRESS \
+ GameStorePacked,$GAME_ADDRESS \
+ Leaderboard,$GAME_ADDRESS \
+ RyoMeta,$GAME_ADDRESS \
+ > /dev/null
 
-RYO_COMPONENTS=("RyoMeta" "Leaderboard")
-CONFIG_COMPONENTS=("GameConfig" "DrugConfig" "DrugConfigMeta" "LocationConfig" "LocationConfigMeta" "HustlerItemBaseConfig" "HustlerItemTiersConfig")
-GAME_COMPONENTS=("Game" "GameStorePacked" "Leaderboard" "RyoMeta")
-
-
-for component in ${RYO_COMPONENTS[@]}; do
-    sozo -P $PROFILE auth writer $component $RYO_ADDRESS --world $WORLD_ADDRESS
-    sleep $TX_SLEEP
-done
-
-for component in ${CONFIG_COMPONENTS[@]}; do
-    sozo -P $PROFILE auth writer $component $CONFIG_ADDRESS --world $WORLD_ADDRESS
-    sleep $TX_SLEEP
-done
-
-for component in ${GAME_COMPONENTS[@]}; do
-    sozo -P $PROFILE auth writer $component $GAME_ADDRESS --world $WORLD_ADDRESS
-    sleep $TX_SLEEP
-done
 
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute $RYO_ADDRESS initialize
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --wait > /dev/null
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute $CONFIG_ADDRESS initialize
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait > /dev/null
 echo "Initialized CONFIG!"
 sleep $TX_SLEEP

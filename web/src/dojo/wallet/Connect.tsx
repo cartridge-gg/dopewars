@@ -68,13 +68,14 @@ export const Connect = ({ ...props }) => {
     <>
       <Box display="flex" alignItems="center" justifyContent="center" {...props}>
         {!account && (
-          <Button variant="pixelated" fontSize="14px" onClick={() => setIsConnectModalOpen(true)} w="full">
+          <Button variant="pixelated" h="48px" fontSize="14px" onClick={() => setIsConnectModalOpen(true)} w="full">
             Connect
           </Button>
         )}
         {account && (
           <Button
             variant="pixelated"
+            h="48px"
             fontSize="14px"
             onClick={() => setIsAccountModalOpen(true)}
             w="full"

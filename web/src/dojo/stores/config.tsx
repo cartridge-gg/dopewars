@@ -229,22 +229,24 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
     },
     /****************************************************/
     getHustlerById: (id: number): HustlerConfig => {
-      return get().config?.config.hustlers.find((i) => Number(i.hustler_id) === id)!;
+      return get().config?.config.hustlers.find((i) => Number(i.hustler_id) === Number(id))!;
     },
     /****************************************************/
     getHustlerItemByIds: (id: number, slot_id: number, level: number): HustlerItemConfigFull => {
       const base_config = get().config?.items.find(
-        (i) => Number(i.id) === Number(id) && Number(i.slot_id) === slot_id,
+        (i) => Number(i.id) === Number(id) && Number(i.slot_id) === Number(slot_id),
       )!;
+
+      // // TODO remove with starknet.js 6
       const tier = base_config.initial_tier + level;
-      const tier_config = get().config?.tiers.find((i) => Number(i.slot_id) === slot_id && Number(i.tier) === tier)!;
+      const tier_config = get().config?.tiers.find((i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier))!;
 
       return {
         slot: slot_id as ItemSlot,
         level,
         base: base_config,
         tier: tier_config,
-        upgradeName: itemUpgrades[slot_id as ItemSlot][id][level] || "Original",
+        upgradeName: itemUpgrades[Number(slot_id) as ItemSlot][Number(id)][Number(level)] || "Original",
         icon: itemIcons[base_config.name as itemsIconsKeys],
       };
     },

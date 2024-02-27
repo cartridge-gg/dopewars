@@ -1,8 +1,8 @@
 {
   "world": {
     "name": "dojo::world::world",
-    "address": "0x34c3229714dd632c90f5f80b6dd7af75351827a8738552341ba56a71774ba6f",
-    "class_hash": "0x6c0c550736dd694219f1a3d0a8ac95fbc8b17382f1f02dc09422451bfa30376",
+    "address": "0x8d9e00f20d1d9039e26f3cec29892c11c611314d508188d5be88019be48a7d",
+    "class_hash": "0x5ad96ceea29160aa7305bb078d1ade41f73b487363ae12778dbea6393cc00b2",
     "abi": [
       {
         "type": "impl",
@@ -968,7 +968,7 @@
   "contracts": [
     {
       "name": "rollyourown::config::config::config",
-      "address": "0x7f3edda7f0f9924aa0bad9decbcfe1a19a8d5886b7e0320ae0a817b02df69cd",
+      "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
       "class_hash": "0x5d557f2caf593a51531e1adf581e50c16460a81f44d789781e353152e66a9d2",
       "abi": [
         {
@@ -1288,7 +1288,7 @@
     },
     {
       "name": "rollyourown::systems::devtools::devtools",
-      "address": "0x3aca3a7571bf2e9a32908bf825ae5c3900504db65ea0174efac447f4500f90c",
+      "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
       "class_hash": "0x54839cda59573074baca293f852b0d6840eb0851407a5b3c7074ac04f77f074",
       "abi": [
         {
@@ -1441,7 +1441,7 @@
     },
     {
       "name": "rollyourown::systems::game::game",
-      "address": "0xbd4f9ff6bfe5310fd4cd21b682112d46b2d1e70b2118c72cb6f37f5463352a",
+      "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
       "class_hash": "0x4a93908bc1154afedb066435de7c28e4700cee000a9d99bf92e870abd08bd55",
       "abi": [
         {
@@ -2275,7 +2275,7 @@
     },
     {
       "name": "rollyourown::systems::ryo::ryo",
-      "address": "0x45a2e57ce2e94c61ed033d9145a81d39445e72e77070b627fd35913999b200",
+      "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
       "class_hash": "0x11747329b17750fb5c662354ba76f3824e7126f61a6b64d0b333a51d2f92f22",
       "abi": [
         {

@@ -12,27 +12,8 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { shortString } from "starknet";
 
-// const hustlerStats = {
-//   [Hustlers.Dragon]: {
-//     [ItemSlot.Attack]: 3,
-//     [ItemSlot.Defense]: 1,
-//     [ItemSlot.Speed]: 2,
-//     [ItemSlot.Transport]: 1,
-//   },
-//   [Hustlers.Monkey]: {
-//     [ItemSlot.Attack]: 1,
-//     [ItemSlot.Defense]: 3,
-//     [ItemSlot.Speed]: 2,
-//     [ItemSlot.Transport]: 1,
-//   },
-//   [Hustlers.Rabbit]: {
-//     [ItemSlot.Attack]: 2,
-//     [ItemSlot.Defense]: 2,
-//     [ItemSlot.Speed]: 2,
-//     [ItemSlot.Transport]: 1,
-//   },
-// };
 
 export default function New() {
   const { router } = useRouterContext();
@@ -60,19 +41,19 @@ export default function New() {
 
     const stats = {
       [ItemSlot.Weapon]: {
-        name: hustler.weapon.base.name,
+        name: shortString.decodeShortString(hustler.weapon.base.name),
         initialTier: Number(hustler.weapon.base.initial_tier),
       },
       [ItemSlot.Clothes]: {
-        name: hustler.clothes.base.name,
+        name: shortString.decodeShortString(hustler.clothes.base.name),
         initialTier: Number(hustler.clothes.base.initial_tier),
       },
       [ItemSlot.Feet]: {
-        name: hustler.feet.base.name,
+        name: shortString.decodeShortString(hustler.feet.base.name),
         initialTier: Number(hustler.feet.base.initial_tier),
       },
       [ItemSlot.Transport]: {
-        name: hustler.transport.base.name,
+        name: shortString.decodeShortString(hustler.transport.base.name),
         initialTier: Number(hustler.transport.base.initial_tier),
       },
     };
