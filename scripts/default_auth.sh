@@ -16,6 +16,8 @@ export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | sele
 export CONFIG_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::config::config::config" ).address')
 export GAME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::game::game" ).address')
 
+export PAPER_MOCK_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
+
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE
 echo "---------------------------------------------------------------------------"
@@ -24,6 +26,7 @@ echo "--------------------------------------------------------------------------
 echo ryo     : $RYO_ADDRESS
 echo config  : $CONFIG_ADDRESS
 echo game    : $GAME_ADDRESS
+echo paper   : $PAPER_MOCK_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> models authorizations
@@ -43,13 +46,26 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  > /dev/null
 
 
+# remove later
+sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
+ ERC20MetadataModel,$PAPER_MOCK_ADDRESS \
+ ERC20BalanceModel,$PAPER_MOCK_ADDRESS \
+ ERC20AllowanceModel,$PAPER_MOCK_ADDRESS \
+ ERC20BridgeableModel,$PAPER_MOCK_ADDRESS \
+ > /dev/null
+
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --wait > /dev/null
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --wait #> /dev/null
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait > /dev/null
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait #> /dev/null
 echo "Initialized CONFIG!"
+sleep $TX_SLEEP
+
+# remove later
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait #> /dev/null
+echo "Initialized PAPER_MOCK!"
 sleep $TX_SLEEP

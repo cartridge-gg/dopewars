@@ -4,7 +4,7 @@ version = 1
 [[package]]
 name = "dojo"
 version = "0.5.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.6.0-alpha.2#db0c4d783c3626a8d69d5035e2ae352595d86763"
+source = "git+https://github.com/dojoengine/dojo?tag=v0.6.0-alpha.0#afa4e93688d3c75de0cf2469d226b06ca85dbdd4"
 dependencies = [
  "dojo_plugin",
 ]
@@ -15,8 +15,8 @@ version = "0.3.11"
 source = "git+https://github.com/dojoengine/dojo?tag=v0.3.11#1e651b5d4d3b79b14a7d8aa29a92062fcb9e6659"
 
 [[package]]
-name = "rollyourown"
-version = "0.1.0"
+name = "dope_mock"
+version = "0.0.1"
 dependencies = [
  "dojo",
  "token",
@@ -25,7 +25,7 @@ dependencies = [
 [[package]]
 name = "token"
 version = "0.0.0"
-source = "git+https://github.com/dojoengine/origami?tag=v0.6.0-alpha.2#cc4029d674dd9b7d4c83d00db5b03ea6fb28c0a2"
+source = "git+https://github.com/dojoengine/origami?tag=v0.6.0-alpha.0#178cfe9257b356c37607fd06586661810a76a365"
 dependencies = [
  "dojo",
 ]
