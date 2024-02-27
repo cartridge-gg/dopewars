@@ -27,7 +27,7 @@ export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower }:
           <Box key={index} h={4} w={3} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="neon.600" />
         ))}
         {displayedPower !== undefined && displayedPower > maxPower && (
-          <Box h={4} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="neon.700" flexGrow={1} />
+          <Box h={4}  w={`${12*(displayedPower-maxPower) + 6 *(Math.min(displayedPower-maxPower,displayedPower-maxPower-1))}px`} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="neon.700" flexGrow={1} />
         )}
       </HStack>
     </HStack>

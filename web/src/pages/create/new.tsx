@@ -142,9 +142,9 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Weapon].initialTier}
-                    maxPower={6}
+                    maxPower={hustlerStats[ItemSlot.Weapon].initialTier+3}
                     power={hustlerStats[ItemSlot.Weapon].initialTier}
-                    displayedPower={0}
+                    displayedPower={6}
                     text="ATK"
                   />
                 </HStack>
@@ -160,9 +160,9 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Clothes].initialTier}
-                    maxPower={6}
+                    maxPower={hustlerStats[ItemSlot.Clothes].initialTier+3}
                     power={hustlerStats[ItemSlot.Clothes].initialTier}
-                    displayedPower={0}
+                    displayedPower={6}
                     text="DEF"
                   />
                 </HStack>
@@ -178,9 +178,9 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Feet].initialTier}
-                    maxPower={6}
+                    maxPower={hustlerStats[ItemSlot.Feet].initialTier+3}
                     power={hustlerStats[ItemSlot.Feet].initialTier}
-                    displayedPower={0}
+                    displayedPower={6}
                     text="SPD"
                   />
                 </HStack>
@@ -196,9 +196,9 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Transport].initialTier}
-                    maxPower={6}
+                    maxPower={hustlerStats[ItemSlot.Transport].initialTier+3}
                     power={hustlerStats[ItemSlot.Transport].initialTier}
-                    displayedPower={0}
+                    displayedPower={6}
                     text="INV"
                   />
                 </HStack>
