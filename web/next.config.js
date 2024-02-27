@@ -5,26 +5,12 @@ const nextConfig = {
   images: {
     domains: ["static.cartridge.gg", "static.localhost"],
   },
+
+  // "dev": "NODE_OPTIONS=--experimental-wasm-modules next dev",
   // webpack: (config, options) => {
   //   config.experiments = {
   //     asyncWebAssembly: true,
-  //     syncWebAssembly: true,
-  //     layers: true,
-  //   }
-
-  //   config.module = config.module ||{}
-  //   config.module.rules = config.module.rules || [];
-  //   config.module.rules = [
-  //     ...config.module.rules,
-  //     {
-  //       test: /\.wasm$/,
-  //       type: "webassembly/async", // for async modules
-  //       // or
-  //       //type: "webassembly/sync", // like webpack 4, but it's deprecated
-  //     },
-  //     // other ruless...
-  //   ]
-
+  //   };
   //   return config
   // },
 };

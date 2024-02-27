@@ -163,22 +163,12 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             ] as LocationConfigFull[];
           });
 
-          // const itemConfigFull = itemConfig.map((i) => {
-          //   const meta = itemConfigMeta.find((m) => m.slot === i.slot && m.level === i.level);
-          //   const name = shortString.decodeShortString(meta?.name); // todo: remove when bytes31 is supported
-          //   return {
-          //     ...i,
-          //     ...meta,
-          //     name,
-          //     icon: itemIcons[name as itemsIconsKeys],
-          //     statName: statName[i.slot as statNameKeys],
-          //   } as ItemConfigFull;
-          // });
-
+     
           /*************************************************** */
 
           // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
           const contractInfos = manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
+       
           const contract: TypedContractV2<typeof configAbi> = new Contract(
             contractInfos.abi,
             contractInfos.address,
@@ -230,10 +220,12 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
     },
     /****************************************************/
     getGameStoreLayoutItem: (name: string): LayoutItem => {
-      return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
+     return get().config?.config.layouts.game_store.find((i) => shortString.decodeShortString(i.name) === name)!;
+     // return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
     },
     getPlayerLayoutItem: (name: string): LayoutItem => {
-      return get().config?.config.layouts.player.find((i) => i.name === name)!;
+      return get().config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
+      //return get().config?.config.layouts.player.find((i) => i.name === name)!;
     },
     /****************************************************/
     getHustlerById: (id: number): HustlerConfig => {

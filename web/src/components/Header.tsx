@@ -1,6 +1,7 @@
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { Connect } from "@/dojo/wallet/Connect";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
@@ -20,7 +21,7 @@ const Header = ({ back }: HeaderProps) => {
   const isMobile = IsMobile();
 
   const { router, gameId } = useRouterContext();
-  
+
   const {
     account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
@@ -35,7 +36,6 @@ const Header = ({ back }: HeaderProps) => {
     init();
   }, []);
 
-
   return (
     <HStack
       w="full"
@@ -47,7 +47,7 @@ const Header = ({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack flex="1" justify={["left", "right"]}></HStack>
-      {game && (/*!game.gameOver ||*/ true || router.asPath.includes("logs")) && (
+      {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
@@ -72,6 +72,9 @@ const Header = ({ back }: HeaderProps) => {
       )}
 
       <HStack flex="1" justify="right">
+
+        <Connect />
+
         {!isMobile && (
           <>
             <MediaPlayer />

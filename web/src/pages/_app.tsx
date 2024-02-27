@@ -10,6 +10,7 @@ import RegisterEntities from "@/components/RegisterEntities";
 import { DojoProvider } from "@/dojo/context/DojoContext";
 import { dojoConfig } from "@/dojo/setup/config";
 import { SetupResult, setup } from "@/dojo/setup/setup";
+import StarknetProviders from "@/dojo/wallet/StarknetProviders";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import { Analytics } from "@vercel/analytics/react";
 import { useEffect, useState } from "react";
@@ -43,6 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       {setupResult && (
         <QueryClientProvider client={setupResult.queryClient}>
+          <StarknetProviders>
           <DojoProvider value={setupResult}>
               <RegisterEntities />
               <ChakraProvider theme={theme}>
@@ -60,6 +62,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Debug />
               </ChakraProvider>
           </DojoProvider>
+          </StarknetProviders>
         </QueryClientProvider>
       )}
     </>
