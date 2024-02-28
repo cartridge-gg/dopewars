@@ -20,17 +20,3 @@ subscription GameEventsSubscription($gameId: String) {
     createdAt
   }
 }
-
-query GameOverEvents($gameOverSelector: String, $version: String) {
-  events(last: 1000, keys: [$gameOverSelector, "*", "*", $version]) {
-    totalCount
-    edges {
-      node {
-        id
-        keys
-        data
-        createdAt
-      }
-    }
-  }
-}

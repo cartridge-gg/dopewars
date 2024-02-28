@@ -37,8 +37,8 @@ mod game {
     use starknet::{ContractAddress, get_caller_address};
 
     use rollyourown::{
-        config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}},
-        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}},
+        config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}, ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
+        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, },
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             encounters_packed::{Encounters}, player::{Player, PlayerImpl},
@@ -184,12 +184,14 @@ mod game {
         fn create_game(
             self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
+            self.assert_not_paused();
             self.assert_valid_name(player_name);
+            
             let world = self.world();
             let game_id = world.uuid();
             let player_id = get_caller_address();
 
-            // get leaderboard version
+            // get leaderboard version & pay paper_fee
             let leaderboard_manager = LeaderboardManagerTrait::new(world);
             let leaderboard_version = leaderboard_manager.on_game_start();
 
@@ -317,7 +319,13 @@ mod game {
         }
     }
     #[generate_trait]
-    impl InternalImpl<ContractState> of InternalTrait<ContractState> {
+    impl InternalImpl of InternalTrait {
+        fn assert_not_paused(self: @ContractState) {
+            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
+            let ryo_config = ryo_config_manager.get();
+            assert(!ryo_config.paused, 'game is paused');
+        }
+
         fn assert_valid_name(self: @ContractState, name: felt252) {
             let name_256: u256 = name.into();
             assert(name_256 > 0xffff, 'Name too short');

@@ -1,7 +1,9 @@
 import MediaPlayer from "@/components/MediaPlayer";
 import MobileMenu from "@/components/MobileMenu";
-import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { Connect } from "@/dojo/wallet/Connect";
+import { PaperFaucet } from "@/dojo/wallet/PaperFaucet";
+import { TokenBalance } from "@/dojo/wallet/TokenBalance";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
@@ -28,6 +30,7 @@ const Header = ({ back }: HeaderProps) => {
   } = useDojoContext();
 
   const { game } = useGameStore();
+  const { config } = useConfigStore();
 
   useEffect(() => {
     const init = async () => {
@@ -46,7 +49,17 @@ const Header = ({ back }: HeaderProps) => {
       py={["0", "20px"]}
       fontSize={["14px", "16px"]}
     >
-      <HStack flex="1" justify={["left", "right"]}></HStack>
+      <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
+        <Connect />
+
+        {!game && (
+          <>
+            {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
+            <PaperFaucet />
+          </>
+        )}
+      </HStack>
+
       {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
@@ -72,9 +85,6 @@ const Header = ({ back }: HeaderProps) => {
       )}
 
       <HStack flex="1" justify="right">
-
-        <Connect />
-
         {!isMobile && (
           <>
             <MediaPlayer />

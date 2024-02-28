@@ -31,7 +31,7 @@ echo "--------------------------------------------------------------------------
 
 # enable system -> models authorizations
 sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
- RyoMeta,$RYO_ADDRESS \
+ RyoConfig,$RYO_ADDRESS \
  Leaderboard,$RYO_ADDRESS \
  GameConfig,$CONFIG_ADDRESS \
  DrugConfig,$CONFIG_ADDRESS \
@@ -41,8 +41,8 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  HustlerItemBaseConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
  GameStorePacked,$GAME_ADDRESS \
+ RyoConfig,$GAME_ADDRESS \
  Leaderboard,$GAME_ADDRESS \
- RyoMeta,$GAME_ADDRESS \
  > /dev/null
 
 
@@ -57,15 +57,15 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --wait #> /dev/null
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS --wait > /dev/null
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait #> /dev/null
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait > /dev/null
 echo "Initialized CONFIG!"
 sleep $TX_SLEEP
 
 # remove later
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait #> /dev/null
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait > /dev/null
 echo "Initialized PAPER_MOCK!"
 sleep $TX_SLEEP

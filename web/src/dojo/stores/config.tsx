@@ -13,6 +13,8 @@ import {
   LocationConfigEdge,
   LocationConfigMeta,
   LocationConfigMetaEdge,
+  RyoConfig,
+  RyoConfigEdge,
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -61,6 +63,7 @@ export type GetConfig = {
 };
 
 export type Config = {
+  ryo: RyoConfig;
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
   items: HustlerItemBaseConfig[];
@@ -106,6 +109,12 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
         try {
           const data = (await client.request(ConfigDocument, {})) as ConfigQuery;
 
+          /*************************************************** */
+        
+          const ryoConfigEdges = data.ryoConfigModels.edges as RyoConfigEdge[];
+          const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
+        
+        
           /*************************************************** */
 
           const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
@@ -180,6 +189,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           /*************************************************** */
 
           const config = {
+            ryo: ryoConfig,
             drug: drugConfigFull,
             location: locationConfigFull,
             items: hustlerItemBaseConfig,

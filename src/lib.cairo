@@ -4,15 +4,14 @@ mod config {
     mod locations;
     mod game;
     mod hustlers;
+    mod ryo;
 
-    mod introspect;
 }
 
 mod models {
     mod game;
     mod game_store_packed;
 
-    mod ryo;
     mod leaderboard;
 }
 
@@ -43,15 +42,14 @@ mod systems {
 
     mod devtools;
 }
+
 mod utils {
     mod random;
     mod math;
     mod events;
     mod bits;
+    mod introspect;
 }
-
-mod traits;
-
 
 mod interfaces {
     mod paper;
@@ -60,6 +58,9 @@ mod interfaces {
 mod _mocks {
     mod paper_mock;
 }
+
+mod traits;
+mod constants;
 
 #[cfg(test)]
 mod tests;

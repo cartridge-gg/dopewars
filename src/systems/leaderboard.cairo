@@ -1,8 +1,12 @@
+use starknet::{get_caller_address,get_contract_address};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::{ryo::{RyoMeta, RyoMetaManager, RyoMetaManagerTrait}, leaderboard::{Leaderboard}},
-    packing::game_store::{GameStore}
+    config::{ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
+    models::{leaderboard::{Leaderboard}},
+    packing::game_store::{GameStore},
+    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
+    constants::{ETHER}
 };
 
 const ONE_HOUR: u64 = 3600; // 60 * 60
@@ -29,9 +33,9 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
     }
 
     fn get_current_version(self: LeaderboardManager) -> u16 {
-        let meta_manager = RyoMetaManagerTrait::new(self.world);
-        let metas = meta_manager.get();
-        metas.leaderboard_version
+        let ryo_config_manager = RyoConfigManagerTrait::new(self.world);
+        let ryo_config = ryo_config_manager.get();
+        ryo_config.leaderboard_version
     }
 
     fn get_next_version_timestamp() -> u64 {
@@ -50,28 +54,46 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
                 player_id: 0.try_into().unwrap(),
                 high_score: 0,
                 next_version_timestamp: LeaderboardManagerTrait::get_next_version_timestamp(),
+                paper_balance: 0,
+                claimed: false,
             }
         );
     }
 
     fn on_game_start(self: LeaderboardManager) -> u16 {
         // check if current leaderboard should be historized and return leaderboard version
+        let ryo_config_manager = RyoConfigManagerTrait::new(self.world);
+        let mut ryo_config = ryo_config_manager.get();
 
-        let meta_manager = RyoMetaManagerTrait::new(self.world);
-        let mut metas = meta_manager.get();
-
-        let leaderboard = get!(self.world, (metas.leaderboard_version), Leaderboard);
+        // get current leaderboard infos
+        let leaderboard = get!(self.world, (ryo_config.leaderboard_version), Leaderboard);
         let current_timestamp = starknet::info::get_block_timestamp();
 
         if current_timestamp > leaderboard.next_version_timestamp {
             // create a new Leaderboard version with high_score = 0 & player_id = 0 & next_version_timestamp
 
-            metas.leaderboard_version += 1;
-            meta_manager.set(metas);
+            ryo_config.leaderboard_version += 1;
+            ryo_config_manager.set(ryo_config);
 
-            self.new_leaderboard(metas.leaderboard_version);
+            self.new_leaderboard(ryo_config.leaderboard_version);
         }
-        metas.leaderboard_version
+
+        // get current leaderboard infos
+        let mut leaderboard = get!(self.world, (ryo_config.leaderboard_version), Leaderboard);
+
+        // calc paper_fee
+        let paper_fee:u256 = ryo_config.paper_fee.into() * ETHER;
+
+        // add paper_fee to current_leaderboard & save
+        leaderboard.paper_balance += paper_fee;
+        set!(self.world, (leaderboard));
+
+        // transfer paper_fee from user to game ( user approve ryo to spend paper before)
+        IPaperDispatcher {
+            contract_address: ryo_config.paper_address
+        }.transfer_from(get_caller_address(), get_contract_address(), paper_fee);
+
+        ryo_config.leaderboard_version
     }
 
     fn on_game_over(self: LeaderboardManager, ref game_store: GameStore) -> bool {

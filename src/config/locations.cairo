@@ -2,7 +2,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
-use rollyourown::config::introspect::{Bytes31IntrospectionImpl};
+use rollyourown::utils::introspect::{Bytes31IntrospectionImpl};
 
 
 #[derive(Model, Copy, Drop, Serde)]

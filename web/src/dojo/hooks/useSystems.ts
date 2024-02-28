@@ -1,11 +1,12 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, GetTransactionReceiptResponse } from "starknet";
+import { BigNumberish, Call, GetTransactionReceiptResponse, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { EncountersAction, GameMode, Locations } from "../types";
+import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 
 export interface SystemsInterface {
@@ -29,6 +30,13 @@ export interface SystemExecuteResult {
   [key: string]: any;
 }
 
+export type DojoCall = {
+  contractName: string;
+  functionName: string;
+  callData: BigNumberish[];
+}
+
+
 
 const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -51,8 +59,11 @@ const tryBetterErrorMsg = (msg: string): string => {
 export const useSystems = (): SystemsInterface => {
   const {
     account,
-    dojoProvider
+    dojoProvider,
+    configStore
   } = useDojoContext();
+
+  const { config } = useConfigStore();
 
   const { toast, clear: clearToasts } = useToast();
 
@@ -60,11 +71,7 @@ export const useSystems = (): SystemsInterface => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const executeAndReceipt = useCallback(
-    async (
-      contract: string,
-      system: string,
-      callData: BigNumberish[],
-    ): Promise<{
+    async (params: DojoCall | Call[]): Promise<{
       hash: string;
       receipt: GetTransactionReceiptResponse;
       events: any[];
@@ -76,7 +83,12 @@ export const useSystems = (): SystemsInterface => {
 
       let tx, receipt;
       try {
-        tx = await dojoProvider.execute(account!, contract, system, callData);
+        if (!Array.isArray(params)) {
+          tx = await dojoProvider.execute(account, params.contractName, params.functionName, params.callData);
+        } else {
+          tx = await dojoProvider.executeMulti(account, params)
+        }
+
         toast({
           message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
           duration: 5_000,
@@ -102,17 +114,6 @@ export const useSystems = (): SystemsInterface => {
         })
         throw Error(e.toString())
       }
-
-      // if (receipt.execution_status === "REJECTED") {
-      //   setError("Transaction Rejected")
-      //   setIsPending(false)
-      //   toast({
-      //     message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
-      //     duration: 20_000,
-      //     isError: true
-      //   })
-      //   throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
-      // }
 
       if (receipt.execution_status === "REVERTED") {
         setError("Transaction Reverted")
@@ -144,14 +145,29 @@ export const useSystems = (): SystemsInterface => {
     [dojoProvider, account, toast, clearToasts],
   );
 
+
+
+
   const createGame = useCallback(
     async (gameMode: GameMode, hustlerId: number, playerName: string,) => {
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "create_game",
-        [gameMode, hustlerId, playerName],
-      );
+      const paperFee = config?.ryo.paper_fee * 10 ** 18;
+      const paperAddress = config?.ryo.paper_address;
+      const gameAddress = dojoProvider.manifest.contracts.find(i => i.name === "rollyourown::systems::game::game").address;
+      // 
+      const approvalCall: Call = {
+        contractAddress: paperAddress,
+        entrypoint: "approve",
+        calldata: [gameAddress, uint256.bnToUint256(paperFee)]
+      }
+
+      const createGameCall = {
+        contractAddress: gameAddress,
+        entrypoint: "create_game",
+        calldata: [gameMode, hustlerId, playerName]
+      }
+
+      const { hash, events, parsedEvents } = await executeAndReceipt([approvalCall, createGameCall]);
 
       const gameCreated = parsedEvents.find(
         (e) => e.eventType === WorldEvents.GameCreated,
@@ -162,18 +178,22 @@ export const useSystems = (): SystemsInterface => {
         gameId: gameCreated.gameId,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, config?.ryo.paper_address],
   );
+
+
 
   const travel = useCallback(
     async (gameId: string, location: Locations, calls: Array<PendingCall>, playerName: string) => {
 
       const callsEnum = calls.map(pendingCallToCairoEnum)
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "travel",
-        // @ts-ignore
-        [gameId, location, callsEnum, playerName],
+        {
+          contractName: "rollyourown::systems::game::game",
+          functionName: "travel",
+          // @ts-ignore
+          callData: [gameId, location, callsEnum, playerName],
+        }
       );
 
       const isGameOver = parsedEvents
@@ -202,10 +222,12 @@ export const useSystems = (): SystemsInterface => {
       const callsEnum = calls.map(pendingCallToCairoEnum)
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "end_game",
-        // @ts-ignore
-        [gameId, callsEnum, playerName],
+        {
+          contractName: "rollyourown::systems::game::game",
+          functionName: "end_game",
+          // @ts-ignore
+          callData: [gameId, callsEnum, playerName],
+        }
       );
 
       return {
@@ -220,9 +242,11 @@ export const useSystems = (): SystemsInterface => {
     async (gameId: string, action: EncountersAction, playerName: string) => {
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::game::game",
-        "decide",
-        [gameId, action, playerName],
+        {
+          contractName: "rollyourown::systems::game::game",
+          functionName: "decide",
+          callData: [gameId, action, playerName],
+        }
       );
 
       const isGameOver = parsedEvents
@@ -252,16 +276,14 @@ export const useSystems = (): SystemsInterface => {
   //
 
 
-
-
-
-
   const feedLeaderboard = useCallback(
     async (count: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::devtools::devtools",
-        "feed_leaderboard",
-        [count],
+        {
+          contractName: "rollyourown::systems::devtools::devtools",
+          functionName: "feed_leaderboard",
+          callData: [count],
+        }
       );
 
       return {
@@ -272,13 +294,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
-
   const failingTx = useCallback(
     async () => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::devtools::devtools",
-        "failing_tx",
-        [],
+        {
+          contractName: "rollyourown::systems::devtools::devtools",
+          functionName: "failing_tx",
+          callData: [],
+        }
       );
 
       return {

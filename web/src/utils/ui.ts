@@ -1,4 +1,5 @@
 import { useBreakpointValue } from "@chakra-ui/react";
+import { BigNumberish } from "starknet";
 
 export const IsMobile = () => useBreakpointValue([true, false]);
 
@@ -186,6 +187,13 @@ export function formatQuantity(quantity: number): string {
   }).format(quantity);
 }
 
+
+
+export function formatEther(value: BigNumberish): number {
+  return Number(BigInt(value) / 10n ** 18n)
+
+}
+
 export function formatCash(cash: number): string {
   return Intl.NumberFormat("en-US", {
     style: "currency",
@@ -193,7 +201,6 @@ export function formatCash(cash: number): string {
     maximumFractionDigits: 0,
   }).format(cash);
 }
-
 
 export function formatCashHeader(cash: number): string {
   if (cash < 10_000) {

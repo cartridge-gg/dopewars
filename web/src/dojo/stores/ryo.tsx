@@ -12,7 +12,7 @@ export interface RyoStore {
   wsClient: Client;
   configStore: StoreApi<ConfigStore>;
   version: string | null;
-  leaderboard: GameOverData[] | null;
+  leaderboardEntries: GameOverData[] | null;
   handles: Array<() => void>;
   init: (version: string) => void;
   subscribe: (version: string) => void;
@@ -32,7 +32,7 @@ export const createRyoStore = ({ client, wsClient, configStore }: RyoStoreProps)
     wsClient,
     configStore,
     version: null,
-    leaderboard: null,
+    leaderboardEntries: null,
     handles: [],
     init: (version: string) => {
       if (get().version === null) {
@@ -43,7 +43,7 @@ export const createRyoStore = ({ client, wsClient, configStore }: RyoStoreProps)
       for (let unsubscribe of get().handles) {
         unsubscribe();
       }
-      set({ version: null, leaderboard: null, handles: [] });
+      set({ version: null, leaderboardEntries: null, handles: [] });
     },
     subscribe: async (version: string) => {
       const { wsClient, handles } = get();
@@ -85,7 +85,7 @@ export const createRyoStore = ({ client, wsClient, configStore }: RyoStoreProps)
         return parseEvent(i) as GameOverData;
       });
       const sortedEvents = parsedEvents.sort((a, b) => b.cash - a.cash);
-      set({ leaderboard: sortedEvents });
+      set({ leaderboardEntries: sortedEvents });
     },
   }));
 };

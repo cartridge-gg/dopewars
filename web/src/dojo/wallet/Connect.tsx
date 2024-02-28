@@ -1,34 +1,3 @@
-// import { Button } from "@chakra-ui/react";
-// import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
-// import { useStarknetkitConnectModal } from "starknetkit";
-
-// const Connect = () => {
-//   const { connect, connectors } = useConnect();
-//   const { disconnect} = useDisconnect()
-//   const { address } = useAccount()
-
-//   const connectWallet = async () => {
-//     const { starknetkitConnectModal } = useStarknetkitConnectModal({
-//       connectors: connectors,
-//     });
-
-//     const { connector } = await starknetkitConnectModal();
-//     await connect({ connector });
-//   };
-
-//   const onClick = () => {
-//       if (address) {
-//         disconnect()
-//       } else {
-//         connectWallet()
-//       }
-//   }
-
-//   return <Button onClick={onClick}>{address ? address : "Connect"}</Button>;
-// };
-
-// export default Connect;
-
 import { ExternalLink } from "@/components/icons";
 import {
   Box,
@@ -54,12 +23,11 @@ export const frenlyAddress = (address: string) => {
 };
 
 export const Connect = ({ ...props }) => {
-
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { account, address, status } = useAccount();
 
-  const { data: ethBalance } = useBalance({ address, });
+  const { data: ethBalance } = useBalance({ address });
 
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);

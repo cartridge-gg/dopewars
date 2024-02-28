@@ -178,13 +178,15 @@ mod paper_mock {
     // Faucet
     //
 
+    const ETHER : u256 = 1_000_000_000_000_000_000;
+
     #[abi(embed_v0)]
     impl PaperMockFaucetImpl of super::IPaperMockFaucet<ContractState> {
         fn faucet(ref self: ContractState) {
-            self.erc20_mintable.mint(get_caller_address(), 420);
+            self.erc20_mintable.mint(get_caller_address(), 420 * ETHER);
         }
         fn faucetTo(ref self: ContractState, recipient: ContractAddress) {
-            self.erc20_mintable.mint(recipient, 420);
+            self.erc20_mintable.mint(recipient, 420 * ETHER);
         }
     }
 }

@@ -1,16 +1,16 @@
 import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 
 import { GameOverData } from "@/dojo/events";
-import { useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
-import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
-import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
+import { useConfigStore, useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
+import { useLeaderboards } from "@/dojo/hooks/useLeaderboards";
 import colors from "@/theme/colors";
-import { formatCash } from "@/utils/ui";
+import { formatCash, formatEther } from "@/utils/ui";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Avatar } from "./avatar/Avatar";
 import { genAvatarFromId } from "./avatar/avatars";
 import { Arrow, Skull } from "./icons";
+import { PaperIcon } from "./icons/Paper";
 
 const renderer = ({
   days,
@@ -50,15 +50,15 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { ryoMetas } = useRyoMetas();
+  const { config } = useConfigStore();
 
   const ryoStore = useRyoStore();
-  const { leaderboard } = ryoStore;
+  const { leaderboardEntries } = ryoStore;
 
-  const [currentVersion, setCurrentVersion] = useState(ryoMetas?.leaderboard_version);
-  const [selectedVersion, setSelectedVersion] = useState(ryoMetas?.leaderboard_version);
+  const [currentVersion, setCurrentVersion] = useState(config?.ryo?.leaderboard_version);
+  const [selectedVersion, setSelectedVersion] = useState(config?.ryo?.leaderboard_version);
 
-  const { leaderboardMetas } = useLeaderboardMetas(selectedVersion);
+  const { leaderboard } = useLeaderboards(selectedVersion);
 
   const [targetGameId, setTargetGameId] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -84,9 +84,9 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
   }, [/*ryoStore,*/ selectedVersion]);
 
   useEffect(() => {
-    setCurrentVersion(ryoMetas?.leaderboard_version);
-    setSelectedVersion(ryoMetas?.leaderboard_version);
-  }, [ryoMetas /*resetQuery inifinte load if included !*/]);
+    setCurrentVersion(config?.ryo?.leaderboard_version);
+    setSelectedVersion(config?.ryo?.leaderboard_version);
+  }, [config?.ryo?.leaderboard_version /*resetQuery inifinte load if included !*/]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -95,7 +95,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [leaderboard]);
 
-  if (!leaderboardMetas || !selectedVersion) {
+  if (!leaderboard || !selectedVersion) {
     return <></>;
   }
 
@@ -110,7 +110,7 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
             onClick={onPrev}
           ></Arrow>
           <Text textStyle="subheading" fontSize="12px">
-            LEADERBOARD <small>(v{leaderboardMetas?.version})</small>
+            LEADERBOARD <small>(v{leaderboard?.version})</small>
           </Text>
           <Arrow
             direction="right"
@@ -120,8 +120,13 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           ></Arrow>
         </HStack>
         {selectedVersion === currentVersion && (
-          <Countdown date={new Date(leaderboardMetas?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+          <Countdown date={new Date(leaderboard?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
         )}
+        <HStack color="yellow.400">
+          <Text>JACKPOT</Text>
+          <PaperIcon />
+          <Text>{formatEther(leaderboard.paper_balance)}</Text>
+        </HStack>
       </VStack>
       <VStack
         boxSize="full"
@@ -135,8 +140,8 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
         }}
       >
         <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
-          {leaderboard && leaderboard.length > 0 ? (
-            leaderboard.map((entry: GameOverData, index: number) => {
+          {leaderboardEntries && leaderboardEntries.length > 0 ? (
+            leaderboardEntries.map((entry: GameOverData, index: number) => {
               const isOwn = entry.playerId === account?.address;
               const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
               const avatarColor = isOwn ? "yellow" : "green";
@@ -203,7 +208,6 @@ const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StylePro
           )}
         </UnorderedList>
       </VStack>
-
     </VStack>
   );
 };

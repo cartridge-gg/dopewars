@@ -1,4 +1,17 @@
 query Config {
+  # Ryo 
+  ryoConfigModels(limit:1){
+    edges {
+      node {
+        key,
+        initialized,
+        paused,
+        leaderboard_version,
+        paper_address,
+        paper_fee,
+      }
+    }
+  }
   # Drugs
   drugConfigModels(order: { field: DRUG_ID, direction: ASC }) {
     edges {

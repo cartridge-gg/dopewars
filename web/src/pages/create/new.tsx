@@ -37,7 +37,6 @@ export default function New() {
   useEffect(() => {
     const hustler = config.getHustlerById(hustlerId);
     if (!hustler) return;
-    console.log(hustler);
 
     const stats = {
       [ItemSlot.Weapon]: {

@@ -7,4 +7,6 @@ struct Leaderboard {
     player_id: ContractAddress,
     high_score: u32,
     next_version_timestamp: u64,
+    paper_balance: u256,
+    claimed: bool,
 }

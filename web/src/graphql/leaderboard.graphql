@@ -1,0 +1,28 @@
+query Leaderboards($version: u16) {
+  leaderboardModels(where: { version: $version }) {
+    edges {
+      node {
+        version
+        player_id
+        high_score
+        next_version_timestamp
+        paper_balance
+        claimed
+      }
+    }
+  }
+}
+
+query GameOverEvents($gameOverSelector: String, $version: String) {
+  events(last: 1000, keys: [$gameOverSelector, "*", "*", $version]) {
+    totalCount
+    edges {
+      node {
+        id
+        keys
+        data
+        createdAt
+      }
+    }
+  }
+}
