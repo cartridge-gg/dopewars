@@ -42,7 +42,7 @@ fn execute_action(ref game_store: GameStore, action: Action) {
     let hustler = HustlerImpl::get(game_store.world, game_store.game.hustler_id);
 
     // get next item
-    let next_item = hustler.get_item_config( action.slot, next_level);
+    let next_item = hustler.get_item_config(action.slot, next_level);
 
     // check can buy
     assert(game_store.player.cash > next_item.tier.cost, 'too poor');

@@ -55,7 +55,9 @@ trait IPaperMockInitializer<TState> {
 #[starknet::interface]
 trait IPaperMockFaucet<TState> {
     fn faucet(ref self: TState,);
+    fn faucetTo(ref self: TState, recipient: ContractAddress);
 }
+
 
 #[dojo::contract]
 mod paper_mock {
@@ -180,6 +182,9 @@ mod paper_mock {
     impl PaperMockFaucetImpl of super::IPaperMockFaucet<ContractState> {
         fn faucet(ref self: ContractState) {
             self.erc20_mintable.mint(get_caller_address(), 420);
+        }
+        fn faucetTo(ref self: ContractState, recipient: ContractAddress) {
+            self.erc20_mintable.mint(recipient, 420);
         }
     }
 }

@@ -1,9 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::IWorldDispatcher;
-use rollyourown::{
-    utils::random::{Random, RandomImpl},
-    models::game::{Game}
-};
+use rollyourown::{utils::random::{Random, RandomImpl}, models::game::{Game}};
 
 trait Enumerable<T> {
     fn all() -> Span<T>;
@@ -30,4 +27,3 @@ trait Unpacker<Packed, Unpacked> {
     fn unpack(self: Packed, world: IWorldDispatcher, game: Game) -> Unpacked;
 }
 
- 

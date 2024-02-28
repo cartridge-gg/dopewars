@@ -2,9 +2,7 @@ use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::{
-        game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}
-    },
+    models::{game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}},
     packing::{
         game_store_layout::{
             GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl

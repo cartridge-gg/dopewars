@@ -20,13 +20,8 @@ mod devtools {
 
     use rollyourown::{
         models::leaderboard::{Leaderboard},
-        utils::{
-            random::{RandomImpl}, 
-            events::{RawEventEmitterTrait, RawEventEmitterImpl}
-        },
-        systems::{
-            leaderboard::{LeaderboardManager, LeaderboardManagerTrait}
-        },
+        utils::{random::{RandomImpl}, events::{RawEventEmitterTrait, RawEventEmitterImpl}},
+        systems::{leaderboard::{LeaderboardManager, LeaderboardManagerTrait}},
     };
 
 

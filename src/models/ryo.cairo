@@ -8,8 +8,9 @@ struct RyoMeta {
     #[key]
     id: u32,
     initialized: bool,
+    //  paused: bool,
     leaderboard_version: u16,
-    // TODO: paused: bool 
+//  paper: IPaperDispatcher
 }
 
 #[derive(Copy, Drop)]
@@ -30,5 +31,4 @@ impl RyoMetaImpl of RyoMetaManagerTrait {
     fn set(self: RyoMetaManager, ryo_meta: RyoMeta) {
         set!(self.world, (ryo_meta));
     }
-
 }

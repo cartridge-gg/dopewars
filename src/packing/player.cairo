@@ -3,12 +3,10 @@ use starknet::ContractAddress;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game}, 
-    traits::{Enumerable, Packable, Packer, Unpacker},
-    config::{locations::Locations, game::GameConfigImpl,  drugs::{Drugs}},
+    models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
+    config::{locations::Locations, game::GameConfigImpl, drugs::{Drugs}},
     utils::{
-        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl},
-        random::{Random, RandomImpl},
+        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
         events::{RawEventEmitterTrait, RawEventEmitterImpl},
     },
     packing::{
@@ -80,7 +78,6 @@ struct Player {
 }
 
 
-
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
     fn new(world: IWorldDispatcher, game: Game) -> Player {
@@ -97,7 +94,7 @@ impl PlayerImpl of PlayerTrait {
             prev_location: Locations::Home,
             location: Locations::Home,
             next_location: Locations::Home,
-            drug_level:0,
+            drug_level: 0,
         }
     }
 
@@ -114,12 +111,12 @@ impl PlayerImpl of PlayerTrait {
             prev_location: Locations::Home,
             location: Locations::Home,
             next_location: Locations::Home,
-            drug_level:0,
+            drug_level: 0,
         }
     }
 
     fn is_dead(self: Player) -> bool {
-        self.health == 0 
+        self.health == 0
     }
 
     fn can_continue(self: Player) -> bool {
@@ -165,8 +162,12 @@ impl PlayerImpl of PlayerTrait {
         self.status == PlayerStatus::BeingArrested || self.status == PlayerStatus::BeingMugged
     }
 
-    fn level_up_drug(ref self: Player, drugs_packed: DrugsPacked, encounters_packed: EncountersPacked) {
-        if self.drug_level == 2 { return ;};
+    fn level_up_drug(
+        ref self: Player, drugs_packed: DrugsPacked, encounters_packed: EncountersPacked
+    ) {
+        if self.drug_level == 2 {
+            return;
+        };
 
         let drugs = drugs_packed.get();
 
@@ -175,7 +176,7 @@ impl PlayerImpl of PlayerTrait {
 
         if self.drug_level < 1 && cops_level + gang_level > 4 {
             // check if not carrying Ludes
-            if drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 ){
+            if drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0) {
                 // Ludes -> Heroin
                 self.drug_level = 1;
                 // gibe player some HP ?
@@ -183,8 +184,9 @@ impl PlayerImpl of PlayerTrait {
             }
         } else if self.drug_level < 2 && cops_level + gang_level > 8 {
             // check if not carrying Speed or Ludes
-            if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0 )) ||
-                (drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0 )) {
+            if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0))
+                || (drugs.drug != Drugs::Ludes
+                    || (drugs.drug == Drugs::Ludes && drugs.quantity == 0)) {
                 // Speed -> Cocaine
                 self.drug_level = 2;
                 // gibe player some HP ?
@@ -193,11 +195,10 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
-    fn hustle(self: Player,ref game_store: GameStore, ref randomizer: Random) {
-
+    fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {
         let og_id = randomizer.between::<u16>(0, 30_000);
 
-         // emit raw event MeetOG 
+        // emit raw event MeetOG 
         if og_id < 500 {
             game_store
                 .world
@@ -205,11 +206,10 @@ impl PlayerImpl of PlayerTrait {
                     array![
                         selector!("MeetOG"),
                         Into::<u32, felt252>::into(game_store.game.game_id),
-                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
+                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+                            .into()
                     ],
-                    array![
-                        Into::<u16, felt252>::into(og_id),
-                    ]
+                    array![Into::<u16, felt252>::into(og_id),]
                 );
         };
     }
@@ -265,9 +265,7 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 
 // unpack 
 impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
-    fn unpack(
-        self: felt252, world: IWorldDispatcher, game: Game,
-    ) -> Player {
+    fn unpack(self: felt252, world: IWorldDispatcher, game: Game,) -> Player {
         let mut player = PlayerImpl::with(world, game);
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);

@@ -150,7 +150,7 @@ mod game {
         cash_loss: u32,
         drug_id: u8,
         drug_loss: u32,
-        turn_loss:u8,
+        turn_loss: u8,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -163,7 +163,7 @@ mod game {
         og_id: u16,
     }
 
-     #[derive(Drop, Serde, starknet::Event)]
+    #[derive(Drop, Serde, starknet::Event)]
     struct GameOver {
         #[key]
         game_id: u32,
@@ -226,8 +226,8 @@ mod game {
             self.assert_valid_name(player_name);
             let world = self.world();
             let player_id = get_caller_address();
-           
-            let game = GameImpl::get(world,game_id, player_id);
+
+            let game = GameImpl::get(world, game_id, player_id);
             let mut game_store = GameStoreImpl::get(world, game);
 
             // execute actions (trades & shop)

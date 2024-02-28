@@ -27,10 +27,10 @@ impl RandomImpl of RandomTrait {
         let seed: u256 = self.next_seed().into();
         seed.low % 2 == 0
     }
-    
+
     fn felt(ref self: Random) -> felt252 {
         let tx_hash = starknet::get_tx_info().unbox().transaction_hash;
-        let seed= self.next_seed();
+        let seed = self.next_seed();
         pedersen::pedersen(tx_hash, seed)
     }
 

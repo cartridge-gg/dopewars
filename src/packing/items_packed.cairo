@@ -1,8 +1,7 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
-    models::game::{Game, GameMode},
+    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
 };
 
@@ -18,7 +17,7 @@ struct ItemsPacked {
 
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
-    fn new(world: IWorldDispatcher, game:Game) -> ItemsPacked {
+    fn new(world: IWorldDispatcher, game: Game) -> ItemsPacked {
         ItemsPacked { world, game, packed: 0 }
     }
 

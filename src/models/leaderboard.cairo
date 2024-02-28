@@ -1,4 +1,4 @@
-use  starknet::ContractAddress;
+use starknet::ContractAddress;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Leaderboard {

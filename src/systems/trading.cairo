@@ -58,7 +58,7 @@ fn execute_trade(ref game_store: GameStore, trade: Trade) {
 
 fn buy(ref game_store: GameStore, trade: Trade) {
     // check drug validity given player drug_level
-    assert( game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug' );
+    assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
     // get drugs
     let mut drugs = game_store.drugs.get();
@@ -108,7 +108,7 @@ fn buy(ref game_store: GameStore, trade: Trade) {
 
 fn sell(ref game_store: GameStore, trade: Trade) {
     // check drug validity given player drug_level
-    assert( game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug' );
+    assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
     // get drugs
     let mut drugs = game_store.drugs.get();

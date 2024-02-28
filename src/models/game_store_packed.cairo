@@ -9,4 +9,3 @@ struct GameStorePacked {
     packed: felt252
 }
 
-

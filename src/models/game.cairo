@@ -25,10 +25,9 @@ enum GameMode {
 }
 
 
-
 #[generate_trait]
 impl GameImpl of GameTrait {
-     fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> Game {
+    fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> Game {
         get!(world, (game_id, player_id), Game)
-     }
+    }
 }

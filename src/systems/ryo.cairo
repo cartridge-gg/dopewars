@@ -24,7 +24,7 @@ mod ryo {
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
         fn initialize(self: @ContractState) {
-            //todo check caller is world owner
+            //todo check caller is  owner
             let meta_manager = RyoMetaManagerTrait::new(self.world());
             let mut metas = meta_manager.get();
 

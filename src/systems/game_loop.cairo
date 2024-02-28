@@ -8,8 +8,7 @@ use rollyourown::{
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
-        markets_packed::MarketsPackedTrait,
-        player::{Player, PlayerImpl}
+        markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl}
     },
     systems::{traveling, leaderboard::{LeaderboardManager, LeaderboardManagerTrait}}
 };
@@ -45,7 +44,8 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
                 array![
                     selector!("Traveled"),
                     Into::<u32, felt252>::into(game_store.game.game_id),
-                    Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
+                    Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+                        .into()
                 ],
                 array![
                     Into::<u8, felt252>::into(game_store.player.turn - 1),
