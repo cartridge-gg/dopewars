@@ -1,10 +1,10 @@
-import { devnet, goerli, mainnet } from "@starknet-react/chains";
+import { Chain, devnet, goerli, mainnet } from "@starknet-react/chains";
 import {
   ExplorerFactory,
   StarknetConfig,
   argent,
   braavos,
-  publicProvider,
+  jsonRpcProvider,
   starkscan,
   useInjectedConnectors,
 } from "@starknet-react/core";
@@ -17,9 +17,15 @@ export const walletInstallLinks = {
 
 export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
-export function StarknetProviders({ children }: {children: ReactNode}) {
+function rpc(chain: Chain) {
+  return {
+    nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT,
+  };
+}
+
+export function StarknetProviders({ children }: { children: ReactNode }) {
   const chains = [devnet, goerli, mainnet];
-  const provider = publicProvider();
+  //const provider = publicProvider();
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
     recommended: [argent(), braavos()],
@@ -28,6 +34,10 @@ export function StarknetProviders({ children }: {children: ReactNode}) {
     // Randomize the order of the connectors.
     //order: "random"
   });
+
+  // TODO: remove
+
+  const provider = jsonRpcProvider({ rpc });
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
