@@ -19,6 +19,7 @@ export * from "./Arrow";
 export * from "./ArrowEnclosed";
 export * from "./ArrowInput";
 export * from "./Bag";
+export * from "./BorderImage";
 export * from "./Car";
 export * from "./Cart";
 export * from "./Chat";
@@ -37,6 +38,7 @@ export * from "./Heart";
 export * from "./Home";
 export * from "./Link";
 export * from "./Music";
+export * from "./Paper";
 export * from "./Pistol";
 export * from "./Roll";
 export * from "./SendMessage";
@@ -49,6 +51,7 @@ export * from "./Truck";
 export * from "./Twitter";
 export * from "./User";
 export * from "./Warning";
+
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed
 // to be 36x36, otherwise override within individual icons.

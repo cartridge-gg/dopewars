@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
 import { DollarBag, Roll } from "@/components/icons";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { Header } from "@/components/layout";
+
 import {
   Container,
   Divider,
@@ -22,12 +22,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import Button from "@/components/Button";
-import ShareButton from "@/components/ShareButton";
 import { Avatar } from "@/components/avatar/Avatar";
 import { genAvatarFromId } from "@/components/avatar/avatars";
+import { Button } from "@/components/common";
 import { Calendar } from "@/components/icons/archive";
-import { useGameStore, useRouterContext } from "@/dojo/hooks";
+import ShareButton from "@/components/pages/profile/ShareButton";
+import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { motion } from "framer-motion";

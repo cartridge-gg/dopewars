@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/layout";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
 import { Image } from "@chakra-ui/react";

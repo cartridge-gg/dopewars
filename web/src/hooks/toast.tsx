@@ -1,6 +1,6 @@
+import { Toast } from "@/components/common/Toast";
 import { useToast as useChakraToast } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { Toast } from "@/components/Toast";
 
 const TOAST_DURATION = 2500;
 

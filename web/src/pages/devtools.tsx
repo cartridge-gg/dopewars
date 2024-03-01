@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/layout";
 import { useSystems } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { Button, HStack } from "@chakra-ui/react";

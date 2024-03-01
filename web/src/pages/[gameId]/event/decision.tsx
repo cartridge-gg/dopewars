@@ -1,10 +1,7 @@
-import Button from "@/components/Button";
-import { Footer } from "@/components/Footer";
-import { Inventory } from "@/components/Inventory";
-import Layout from "@/components/Layout";
+import { Button } from "@/components/common";
 import { DollarBag, Heart, Siren } from "@/components/icons";
-import CashIndicator from "@/components/player/CashIndicator";
-import HealthIndicator from "@/components/player/HealthIndicator";
+import { Footer, Layout } from "@/components/layout";
+import { CashIndicator, HealthIndicator, Inventory } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -34,7 +31,7 @@ const Decision = observer(() => {
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [encounter, setEncounter] = useState<TravelEncounterData | undefined>(undefined);
-  const [encounterImg, setEncounterImg] = useState(undefined);
+  const [encounterImg, setEncounterImg] = useState<string>("");
 
   const [isPaying, setIsPaying] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -148,7 +145,7 @@ const Decision = observer(() => {
     }
 
     try {
-      const { event, events, isGameOver } = await decide(gameId!, action, gameEvents!.playerName);
+      const { event, events, isGameOver } = await decide(gameId!, action);
       // if (isGameOver) {
       //   router.replace(`/${gameId}/end`);
       // } else {

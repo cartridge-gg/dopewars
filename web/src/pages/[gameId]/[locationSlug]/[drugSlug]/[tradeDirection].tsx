@@ -1,7 +1,7 @@
-import AlertMessage from "@/components/AlertMessage";
-import { Footer } from "@/components/Footer";
-import Layout from "@/components/Layout";
+
+import { AlertMessage } from "@/components/common";
 import { ArrowEnclosed } from "@/components/icons";
+import { Footer, Layout } from "@/components/layout";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";

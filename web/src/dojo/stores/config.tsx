@@ -67,8 +67,9 @@ export type Config = {
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
   items: HustlerItemBaseConfig[];
-  tiers: HustlerItemTierConfig[];
+  tiers: HustlerItemTiersConfig[];
   config: GetConfig;
+  
 };
 
 export interface ConfigStore {
@@ -111,7 +112,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
 
           /*************************************************** */
         
-          const ryoConfigEdges = data.ryoConfigModels.edges as RyoConfigEdge[];
+          const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
           const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
         
         
@@ -194,6 +195,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             location: locationConfigFull,
             items: hustlerItemBaseConfig,
             tiers: hustlerItemTiersConfig,
+            /// @ts-ignore
             config: getConfig as GetConfig,
           };
 
@@ -256,6 +258,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
         level,
         base: base_config,
         tier: tier_config,
+        // @ts-ignore
         upgradeName: itemUpgrades[Number(slot_id) as ItemSlot][Number(id)][Number(level)] || "Original",
         icon: itemIcons[base_config.name as itemsIconsKeys],
       };

@@ -1,7 +1,7 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, Call, GetTransactionReceiptResponse, uint256 } from "starknet";
+import { BigNumberish, Call, GetTransactionReceiptResponse, SuccessfulTransactionReceiptResponse, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
@@ -84,9 +84,9 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
       try {
         if (!Array.isArray(params)) {
-          tx = await dojoProvider.execute(account, params.contractName, params.functionName, params.callData);
+          tx = await dojoProvider.execute(account!, params.contractName, params.functionName, params.callData);
         } else {
-          tx = await dojoProvider.executeMulti(account, params)
+          tx = await dojoProvider.executeMulti(account!, params)
         }
 
         toast({
@@ -115,20 +115,22 @@ export const useSystems = (): SystemsInterface => {
         throw Error(e.toString())
       }
 
-      if (receipt.execution_status === "REVERTED") {
-        setError("Transaction Reverted")
-        setIsPending(false)
+      // if (receipt && "execution_status" in receipt) {
+      //   if (["REVERTED", "REJECTED"].includes(receipt.execution_status)) {
+      //     setError(`Transaction ${receipt.execution_status}`)
+      //     setIsPending(false)
 
-        toast({
-          message: tryBetterErrorMsg(receipt.revert_reason || 'Transaction Reverted'),
-          duration: 20_000,
-          isError: true
-        })
-        throw Error(receipt.revert_reason || 'Transaction Reverted')
-      }
+      //     toast({
+      //       message: tryBetterErrorMsg(receipt.revert_reason || `Transaction ${receipt.execution_status}`),
+      //       duration: 20_000,
+      //       isError: true
+      //     })
+      //     throw Error(receipt.revert_reason || `Transaction ${receipt.execution_status}`)
+      //   }
+      // }
 
       const events = getEvents(receipt);
-      const parsedEvents = parseAllEvents(receipt);
+      const parsedEvents = parseAllEvents(receipt as SuccessfulTransactionReceiptResponse);
 
 
       setIsPending(false)
@@ -153,7 +155,7 @@ export const useSystems = (): SystemsInterface => {
 
       const paperFee = config?.ryo.paper_fee * 10 ** 18;
       const paperAddress = config?.ryo.paper_address;
-      const gameAddress = dojoProvider.manifest.contracts.find(i => i.name === "rollyourown::systems::game::game").address;
+      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.name === "rollyourown::systems::game::game").address;
       // 
       const approvalCall: Call = {
         contractAddress: paperAddress,

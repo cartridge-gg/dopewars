@@ -1,9 +1,8 @@
-import { StyleProps, HStack, Text, VStack } from "@chakra-ui/react";
+import { HStack, StyleProps, Text } from "@chakra-ui/react";
 
-import { ReactNode } from "react";
 import { Calendar } from "../icons/archive";
 
-const DayIndicator = ({ day, ...props }: { day: number } & StyleProps) => {
+export const DayIndicator = ({ day, ...props }: { day: number } & StyleProps) => {
   return (
       <HStack
       
@@ -14,4 +13,4 @@ const DayIndicator = ({ day, ...props }: { day: number } & StyleProps) => {
   );
 };
 
-export default DayIndicator;
+

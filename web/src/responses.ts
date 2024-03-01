@@ -47,6 +47,15 @@ const muggerResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = 
     initial: ["Its about sending a message!"],
     repeat: [],
   },
+  // Not needed
+  [EncounterOutcomes.Hospitalized]: {
+    initial: [],
+    repeat: [],
+  },
+  [EncounterOutcomes.Jailed]: {
+    initial: [],
+    repeat: [],
+  },
 };
 
 const copResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
@@ -101,6 +110,15 @@ const copResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
   // Not needed
   [EncounterOutcomes.Victorious]: {
     initial: ["Its about sending a message!"],
+    repeat: [],
+  },
+
+  [EncounterOutcomes.Hospitalized]: {
+    initial: [],
+    repeat: [],
+  },
+  [EncounterOutcomes.Jailed]: {
+    initial: [],
     repeat: [],
   },
 };

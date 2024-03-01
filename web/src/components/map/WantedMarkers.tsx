@@ -12,11 +12,11 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
   const minWanted = 69;
 
   useEffect(() => {
-    const locations = configStore.config?.location;
+    const locations = configStore.config?.location!;
 
     const w = new Map<number, number>();
     for (let location of locations) {
-      const wanted = game?.wanted.wantedByLocation.get(location.location);
+      const wanted = game?.wanted.wantedByLocation.get(location.location) || 0;
       w.set(location.location_id, wanted);
     }
     setWanted(w);
@@ -27,17 +27,17 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
   return (
     <Box w="100%" h="100%" position="absolute">
       {/* Jersey */}
-      {wanted.get(Locations.Jersey) > minWanted && <Alert position="absolute" top="38%" left="26%" />}
+      {wanted.get(Locations.Jersey)! > minWanted && <Alert position="absolute" top="38%" left="26%" />}
       {/* Bronx */}
-      {wanted.get(Locations.Bronx) > minWanted && <Alert position="absolute" top="16%" left="51.5%" />}
+      {wanted.get(Locations.Bronx)! > minWanted && <Alert position="absolute" top="16%" left="51.5%" />}
       {/* Central */}
-      {wanted.get(Locations.Central) > minWanted && <Alert position="absolute" top="45%" left="45.5%" />}
+      {wanted.get(Locations.Central)! > minWanted && <Alert position="absolute" top="45%" left="45.5%" />}
       {/* Brooklyn */}
-      {wanted.get(Locations.Brooklyn) > minWanted && <Alert position="absolute" top="71%" left="44%" />}
+      {wanted.get(Locations.Brooklyn)! > minWanted && <Alert position="absolute" top="71%" left="44%" />}
       {/* Queens */}
-      {wanted.get(Locations.Queens) > minWanted && <Alert position="absolute" top="52%" left="72%" />}
+      {wanted.get(Locations.Queens)! > minWanted && <Alert position="absolute" top="52%" left="72%" />}
       {/* Coney */}
-      {wanted.get(Locations.Coney) > minWanted && <Alert position="absolute" top="79%" left="73%" />}
+      {wanted.get(Locations.Coney)! > minWanted && <Alert position="absolute" top="79%" left="73%" />}
     </Box>
   );
 };

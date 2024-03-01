@@ -1,6 +1,5 @@
-import Button from "@/components/Button";
-import { Footer } from "@/components/Footer";
-import Layout from "@/components/Layout";
+import { Button } from "@/components/common";
+import { Footer, Layout } from "@/components/layout";
 import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
 import { getOutcomeInfo } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";

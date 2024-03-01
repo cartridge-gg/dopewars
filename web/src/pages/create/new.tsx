@@ -1,11 +1,8 @@
-import Button from "@/components/Button";
-import { Footer } from "@/components/Footer";
-import Input from "@/components/Input";
-import Layout from "@/components/Layout";
-import { PowerMeter } from "@/components/PowerMeter";
+import { Button, Input } from "@/components/common";
 import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
-
 import { Arrow } from "@/components/icons";
+import { Footer, Layout } from "@/components/layout";
+import { PowerMeter } from "@/components/player";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -13,7 +10,6 @@ import { useToast } from "@/hooks/toast";
 import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { shortString } from "starknet";
-
 
 export default function New() {
   const { router } = useRouterContext();
@@ -31,8 +27,7 @@ export default function New() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [hustlerId, setHustlerId] = useState(0);
-
-  const [hustlerStats, setHustlerStats] = useState();
+  const [hustlerStats, setHustlerStats] = useState<any>();
 
   useEffect(() => {
     const hustler = config.getHustlerById(hustlerId);
@@ -58,7 +53,7 @@ export default function New() {
     };
 
     setHustlerStats(stats);
-  }, [hustlerId, config, config?.config, config?.config?.hustlers]);
+  }, [hustlerId, config, config?.config, config?.config?.items,config?.config?.tiers]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -129,10 +124,8 @@ export default function New() {
               </Box>
 
               <VStack w="full" gap={3}>
-
-
                 <HStack w="full">
-                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                  <VStack alignItems="flex-start" w="200px" gap={0}>
                     <Text textStyle="subheading" fontSize="10px" color="neon.500">
                       WEAPON
                     </Text>
@@ -141,16 +134,15 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Weapon].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Weapon].initialTier+3}
+                    maxPower={hustlerStats[ItemSlot.Weapon].initialTier + 3}
                     power={hustlerStats[ItemSlot.Weapon].initialTier}
                     displayedPower={6}
                     text="ATK"
                   />
                 </HStack>
 
-
                 <HStack w="full">
-                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                  <VStack alignItems="flex-start" w="200px" gap={0}>
                     <Text textStyle="subheading" fontSize="10px" color="neon.500">
                       CLOTHES
                     </Text>
@@ -159,16 +151,15 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Clothes].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Clothes].initialTier+3}
+                    maxPower={hustlerStats[ItemSlot.Clothes].initialTier + 3}
                     power={hustlerStats[ItemSlot.Clothes].initialTier}
                     displayedPower={6}
                     text="DEF"
                   />
                 </HStack>
 
-
                 <HStack w="full">
-                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                  <VStack alignItems="flex-start" w="200px" gap={0}>
                     <Text textStyle="subheading" fontSize="10px" color="neon.500">
                       FEET
                     </Text>
@@ -177,16 +168,15 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Feet].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Feet].initialTier+3}
+                    maxPower={hustlerStats[ItemSlot.Feet].initialTier + 3}
                     power={hustlerStats[ItemSlot.Feet].initialTier}
                     displayedPower={6}
                     text="SPD"
                   />
                 </HStack>
 
-
                 <HStack w="full">
-                  <VStack w="full" alignItems="flex-start" w="200px" gap={0}>
+                  <VStack alignItems="flex-start" w="200px" gap={0}>
                     <Text textStyle="subheading" fontSize="10px" color="neon.500">
                       BAG
                     </Text>
@@ -195,14 +185,12 @@ export default function New() {
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Transport].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Transport].initialTier+3}
+                    maxPower={hustlerStats[ItemSlot.Transport].initialTier + 3}
                     power={hustlerStats[ItemSlot.Transport].initialTier}
                     displayedPower={6}
                     text="INV"
                   />
                 </HStack>
-
-
               </VStack>
             </HStack>
 

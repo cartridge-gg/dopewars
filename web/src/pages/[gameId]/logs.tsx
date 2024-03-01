@@ -1,9 +1,7 @@
-import { Footer } from "@/components/Footer";
-import Layout from "@/components/Layout";
-
-import Button from "@/components/Button";
-import { Profile } from "@/components/ProfileButton";
+import { Button } from "@/components/common";
 import { Event as EventIcon } from "@/components/icons";
+import { Footer, Layout } from "@/components/layout";
+import { Profile } from "@/components/pages/profile/Profile";
 import { GameClass } from "@/dojo/class/Game";
 import {
   GameCreatedData,

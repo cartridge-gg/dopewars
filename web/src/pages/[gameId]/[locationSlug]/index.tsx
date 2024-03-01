@@ -1,7 +1,6 @@
-import Button from "@/components/Button";
-import { Footer } from "@/components/Footer";
-import { Inventory } from "@/components/Inventory";
-import Layout from "@/components/Layout";
+import { Button } from "@/components/common";
+import { Footer, Layout } from "@/components/layout";
+import { Inventory } from "@/components/player";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
@@ -81,7 +80,7 @@ const Location = observer(() => {
             onClick={async () => {
               if (isLastDay) {
                 try {
-                  await endGame(gameId, game.getPendingCalls(), gameEvents!.playerName);
+                  await endGame(gameId, game.getPendingCalls());
                 } catch (e: any) {
                   game.clearPendingCalls();
                 }

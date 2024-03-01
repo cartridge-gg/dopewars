@@ -2,17 +2,16 @@ import { useToast } from "@/hooks/toast";
 import { useCallback, useState } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export interface FaucetInterface {
-  faucet: () => Promise<SystemExecuteResult>;
-
-  isPending: boolean;
-  error?: string;
-}
 
 export interface FaucetExecuteResult {
   hash: string;
 }
 
+export interface FaucetInterface {
+  faucet: () => Promise<FaucetExecuteResult>;
+  isPending: boolean;
+  error?: string;
+}
 
 export const useFaucet = (): FaucetInterface => {
   const {
@@ -20,7 +19,7 @@ export const useFaucet = (): FaucetInterface => {
     dojoProvider
   } = useDojoContext();
 
-  const { toast, clear: clearToasts } = useToast();
+  const { toast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -57,7 +56,7 @@ export const useFaucet = (): FaucetInterface => {
       };
 
     },
-    [dojoProvider, account, toast, clearToasts],
+    [dojoProvider, account, toast],
   );
 
   return {

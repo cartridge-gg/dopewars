@@ -1,14 +1,11 @@
-import { GameClass } from "@/dojo/class/Game";
-import { ConfigStore } from "@/dojo/stores/config";
+import { useConfigStore, useGameStore } from "@/dojo/hooks";
 import { Locations } from "@/dojo/types";
-import { Box, Flex, Image, useBreakpointValue } from "@chakra-ui/react";
+import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
-import { Alert } from "../icons";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
 import { WantedMarkers } from "./WantedMarkers";
-import { useConfigStore, useGameStore } from "@/dojo/hooks";
 
 type CoordinateType = {
   [key in Locations]: { x: number; y: number };
@@ -80,12 +77,14 @@ export const Map = ({
     >
       <Image src="/images/map/basemap.svg" position="absolute" top="0" left="0" boxSize="full" alt="ryo map" />
 
-      {targetId && (
+      {targetId && game && (
         <Outline
           targetId={targetId}
           current={current}
           wantedTarget={game.wanted.wantedByLocation.get(configStore.getLocationById(targetId)?.location) || 0}
-          wantedCurrent={game.wanted.wantedByLocation.get(configStore.getLocationById(current)?.location) || 0}
+          wantedCurrent={
+            current ? game.wanted.wantedByLocation.get(configStore.getLocationById(current)?.location) || 0 : 0
+          }
         />
       )}
       <HitBox onSelect={onSelect} />

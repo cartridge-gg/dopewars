@@ -1,6 +1,6 @@
-import { StyleProps, HStack, Text, keyframes } from "@chakra-ui/react";
-import { DynamicHeart } from "../icons";
 import colors from "@/theme/colors";
+import { HStack, StyleProps, Text, keyframes } from "@chakra-ui/react";
+import { DynamicHeart } from "../icons";
 
 export const blinkAnim = keyframes`  
   0% {opacity: 1;}   
@@ -9,7 +9,7 @@ export const blinkAnim = keyframes`
   100% {opacity: 0;}   
 `;
 
-const HealthIndicator = ({ health, maxHealth, ...props }: { health: number; maxHealth: number } & StyleProps) => {
+export const HealthIndicator = ({ health, maxHealth, ...props }: { health: number; maxHealth: number } & StyleProps) => {
   const healthColor = getHealthColor(health, maxHealth);
   return (
     <HStack color={healthColor} animation={getHealthAnimation(health, maxHealth)} {...props}>

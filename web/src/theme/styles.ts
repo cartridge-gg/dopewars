@@ -1,4 +1,4 @@
-import BorderImage from "@/components/icons/BorderImage";
+import { BorderImage } from "@/components/icons";
 import BorderImagePixelated from "@/components/icons/BorderImagePixelated";
 import PixelatedBorderImage from "@/components/icons/PixelatedBorderImage";
 

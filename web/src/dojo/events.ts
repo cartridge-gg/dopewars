@@ -1,7 +1,7 @@
 import { EncounterOutcomes, EncountersAction } from "@/dojo/types";
 import {
-  GetTransactionReceiptResponse,
   InvokeTransactionReceiptResponse,
+  SuccessfulTransactionReceiptResponse,
   num,
   shortString
 } from "starknet";
@@ -76,15 +76,13 @@ export interface TravelEncounterResultData extends BaseEventData {
 }
 
 
-
-
 export interface MeetOGData extends BaseEventData {
   playerId: string;
   ogId: number;
 }
 
 
-export interface GameOverData extends  {
+export interface GameOverData extends BaseEventData{
   playerId: string;
   playerName: string;
   leaderboardVersion: string;
@@ -95,10 +93,10 @@ export interface GameOverData extends  {
 }
 
 
-export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
-  // if (receipt.status === "REJECTED") {
-  //   throw new Error(`transaction REJECTED`);
-  // }
+export const parseAllEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
+  if (receipt.execution_status === "REJECTED") {
+    throw new Error(`transaction REJECTED`);
+  }
   if (receipt.execution_status === "REVERTED") {
     throw new Error(`transaction REVERTED`);
   }

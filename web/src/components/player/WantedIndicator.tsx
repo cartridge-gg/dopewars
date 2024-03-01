@@ -1,12 +1,12 @@
 import { HStack, StyleProps, Text } from "@chakra-ui/react";
 import { Siren } from "../icons";
 
-import Tooltip from "../Tooltip";
+import { Tooltip } from "../common";
 import { blinkAnim } from "./HealthIndicator";
 
-const WantedIndicator = ({ wanted, ...props }: { wanted: number } & StyleProps) => {
+export const WantedIndicator = ({ wanted, ...props }: { wanted: number } & StyleProps) => {
   return (
-    <Tooltip color="yellow.400" title="Wanted Level" text="Likelihood of encountering an adverse event or being caught while escaping">
+    <Tooltip color="yellow.400" title="Wanted Level" text="Likelihood of encountering Cops or Gangs">
       <HStack w="70px"
         color={wanted > 68 ? "red" : wanted > 29 ? "yellow.400" : "neon.400"}
         animation={wanted >= 85 ? `${blinkAnim} infinite 0.5s linear` : "none"}
@@ -17,5 +17,3 @@ const WantedIndicator = ({ wanted, ...props }: { wanted: number } & StyleProps) 
     </Tooltip>
   );
 };
-
-export default WantedIndicator;

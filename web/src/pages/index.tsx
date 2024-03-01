@@ -1,10 +1,7 @@
-import Button from "@/components/Button";
-import HomeLeftPanel from "@/components/HomeLeftPanel";
-import Layout from "@/components/Layout";
-import Leaderboard from "@/components/Leaderboard";
-import Tutorial from "@/components/Tutorial";
-import { Alert, Clock } from "@/components/icons";
-import { User } from "@/components/icons/archive";
+import { Button } from "@/components/common";
+import { Alert, Clock, User } from "@/components/icons";
+import { Layout } from "@/components/layout";
+import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";

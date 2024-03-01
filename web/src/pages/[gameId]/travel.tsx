@@ -1,11 +1,8 @@
-import Button from "@/components/Button";
-import { Footer } from "@/components/Footer";
-import { Inventory } from "@/components/Inventory";
-import Layout from "@/components/Layout";
-import { Arrow } from "@/components/icons";
-import BorderImage from "@/components/icons/BorderImage";
+import { Button } from "@/components/common";
+import { Arrow, BorderImage } from "@/components/icons";
+import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
-import WantedIndicator from "@/components/player/WantedIndicator";
+import { Inventory, WantedIndicator } from "@/components/player";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -119,12 +116,7 @@ export default function Travel() {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { event, events, hash, isGameOver } = await travel(
-          gameId!,
-          locationId,
-          game.getPendingCalls(),
-          gameEvents!.playerName,
-        );
+        const { event, events, hash, isGameOver } = await travel(gameId!, locationId, game.getPendingCalls());
 
         if (isGameOver) {
           return router.replace(`/${gameId}/end`);
@@ -136,17 +128,13 @@ export default function Travel() {
           }
         }
 
-        // if (events) {
-        //   displayMarketEvents(events as HighVolatilityData[], toaster);
-        // }
-
         router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);
       }
     }
-  }, [targetLocation, router, gameId, travel, toaster, game, configStore]);
+  }, [targetLocation, router, gameId, travel, game, configStore]);
 
   if (!game) return <></>;
 

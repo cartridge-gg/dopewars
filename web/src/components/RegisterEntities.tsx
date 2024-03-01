@@ -1,14 +1,13 @@
 import { DojoEvent } from "@/dojo/class/Events";
-import { HighVolatilityData } from "@/dojo/events";
+import { HighVolatilityData, MeetOGData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { useGameStore } from "@/dojo/hooks/useGameStore";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore } from "@/dojo/stores/config";
 import { ToastType, useToast } from "@/hooks/toast";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { OG } from "./OG";
 import { Siren, Truck } from "./icons";
+import { OG } from "./layout";
 
 const RegisterEntities = () => {
   const { gameId, router } = useRouterContext();
@@ -18,7 +17,7 @@ const RegisterEntities = () => {
   const gameStore = useGameStore();
   const { game, gameEvents } = gameStore;
 
-  const [ogId, setOgId] = useState();
+  const [ogId, setOgId] = useState<number | undefined>();
   const [lastEvent, setLastEvent] = useState<DojoEvent | undefined>();
   const toaster = useToast();
 

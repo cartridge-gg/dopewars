@@ -1,6 +1,6 @@
 import { ChatEvent, ChatInput } from "@/components";
-import Layout from "@/components/Layout";
 import { AvatarName } from "@/components/avatar/avatars";
+import { Layout } from "@/components/layout";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -58,8 +58,7 @@ const defaultChatMessages: ChatEventType[] = [
 ];
 
 export default function Chat() {
-  const [messages, setMessages] =
-    useState<ChatEventType[]>(defaultChatMessages);
+  const [messages, setMessages] = useState<ChatEventType[]>(defaultChatMessages);
   const [messageValue, setMessageValue] = useState<string>("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,12 +86,7 @@ export default function Chat() {
       <VStack spacing="16px">
         {messages.length > 0 ? (
           messages.map((message, index) => (
-            <ChatEvent
-              connectedUser={message.connectedUser}
-              type={message.type}
-              user={message.user}
-              key={index}
-            >
+            <ChatEvent connectedUser={message.connectedUser} type={message.type} user={message.user} key={index}>
               {message.text}
             </ChatEvent>
           ))
@@ -101,11 +95,7 @@ export default function Chat() {
         )}
       </VStack>
       <Box w="100%" p="24px">
-        <ChatInput
-          value={messageValue}
-          onChange={handleChange}
-          onSend={handleSendMessage}
-        />
+        <ChatInput value={messageValue} onChange={handleChange} onSend={handleSendMessage} />
       </Box>
     </Layout>
   );
