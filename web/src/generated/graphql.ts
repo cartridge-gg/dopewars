@@ -1482,7 +1482,7 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1626,7 +1626,7 @@ useInfiniteConfigQuery.getKey = (variables?: ConfigQueryVariables) => variables 
 
 export const GameEventsDocument = `
     query GameEvents($gameId: String!) {
-  events(last: 1000, keys: ["*", $gameId]) {
+  events(limit: 1000, keys: ["*", $gameId]) {
     totalCount
     edges {
       node {
@@ -1693,6 +1693,7 @@ export const GameByIdDocument = `
         max_turns
         max_wanted_shopping
         hustler_id
+        player_name
         game_over
       }
     }

@@ -1,7 +1,7 @@
 import { Button } from "@/components/common";
 import { Event as EventIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
-import { Profile } from "@/components/pages/profile/Profile";
+import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
 import { GameClass } from "@/dojo/class/Game";
 import {
   GameCreatedData,
@@ -22,6 +22,7 @@ import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
+import { shortString } from "starknet";
 
 type LogByDay = {
   day: number;
@@ -36,7 +37,6 @@ const Logs = () => {
   const configStore = useConfigStore();
   const { game, gameEvents } = useGameStore();
 
-  const [playerName, setPlayerName] = useState("");
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
 
   const [logs, setLogs] = useState<LogByDay[]>([]);
@@ -57,7 +57,7 @@ const Logs = () => {
 
     for (let log of gameEvents?.sortedEvents) {
       if (log.parsed.eventType === WorldEvents.GameCreated) {
-        setPlayerName((log.parsed as GameCreatedData).playerName);
+        // setPlayerName((log.parsed as GameCreatedData).playerName);
         setPlayerHustlerId((log.parsed as GameCreatedData).hustlerId);
       }
 
@@ -140,12 +140,13 @@ const Logs = () => {
 export default observer(Logs);
 
 const CustomLeftPanel = () => {
+  const { gameInfos } = useGameStore();
   return (
     <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1">
       <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
-        Hustler Log
+        {shortString.decodeShortString(gameInfos?.player_name || "")}
       </Heading>
-      <Profile />
+      <HustlerProfile />
     </VStack>
   );
 };

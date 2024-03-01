@@ -5,38 +5,12 @@ import { ItemSlot } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
 import { headerButtonStyles } from "@/theme/styles";
 import { IsMobile } from "@/utils/ui";
-import {
-  Box,
-  Card,
-  Divider,
-  HStack,
-  Heading,
-  MenuItem,
-  Modal,
-  ModalContent,
-  ModalOverlay,
-  Text,
-  Tooltip,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Card, Divider, HStack, Heading, MenuItem, Text, Tooltip, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { HustlerIcon, Hustlers } from "../../hustlers";
 import { Cigarette, User } from "../../icons";
 import ShareButton from "./ShareButton";
-
-const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
-  return (
-    <Modal isOpen={isOpen} onClose={close} isCentered>
-      <ModalOverlay />
-      <ModalContent maxH="90vh" maxWidth={"420px"}>
-        <VStack w="full" px="16px">
-          <Profile close={close} />
-        </VStack>
-      </ModalContent>
-    </Modal>
-  );
-};
 
 export const Profile = observer(({ close, ...props }: { close?: () => void }) => {
   const { router, gameId, playerId } = useRouterContext();
@@ -83,56 +57,29 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
                   borderColor="neon.600"
                 />
                 <HStack h="50px" px="10px">
-                  {/* <Calendar /> <Text>DAY {playerEntity.turn}</Text> */}
                   <Cigarette /> <Text>{game.player.location?.name}</Text>
                 </HStack>
-
-                {/* <HStack w="full" gap="0">
-                  <VStack w="full" align="flex-start" gap="0">
-                    <CashIndicator cash={playerEntity?.cash} h="40px" w="full" ml="8px" />
-                     <Divider
-                      orientation="horizontal"
-                      borderTopWidth="1px"
-                      borderBottomWidth="1px"
-                      borderColor="neon.600"
-                    />
-                  </VStack>
-                  
-                  <Divider orientation="vertical" h="80px" borderWidth="1px" borderColor="neon.600" />
-
-                  <VStack w="110px" align="flex-start" gap="0">
-                    <HealthIndicator health={playerEntity?.health} h="40px" w="full" ml="8px" />
-                    <Divider
-                      orientation="horizontal"
-                      w="full"
-                      borderTopWidth="1px"
-                      borderBottomWidth="1px"
-                      borderColor="neon.600"
-                    />
-                    <WantedIndicator wanted={playerEntity?.wanted} h="40px" w="full" ml="8px" />
-                  </VStack>
-                </HStack> */}
               </Card>
             </HStack>
 
             <Card w="full">
               <HStack w="full" alignItems="center" justify="space-evenly" h="40px" fontSize="12px">
-                <HStack flex="1" justify="center" /*color={attackItem ? "yellow.400" : "neon.400"}*/>
+                <HStack flex="1" justify="center">
                   <Text opacity={0.5}>{statName[ItemSlot.Weapon]}:</Text>
                   <Text>{game.items.attack!.tier.stat}</Text>
                 </HStack>
 
-                <HStack flex="1" justify="center" /*color={defenseItem ? "yellow.400" : "neon.400"}*/>
+                <HStack flex="1" justify="center">
                   <Text opacity={0.5}>{statName[ItemSlot.Clothes]}:</Text>
                   <Text>{game.items.defense!.tier.stat}</Text>
                 </HStack>
 
-                <HStack flex="1" justify="center" /*color={speedItem ? "yellow.400" : "neon.400"}*/>
+                <HStack flex="1" justify="center">
                   <Text opacity={0.5}>{statName[ItemSlot.Feet]}:</Text>
                   <Text>{game.items.speed!.tier.stat}</Text>
                 </HStack>
 
-                <HStack flex="1" justify="center" /*color={transportItem ? "yellow.400" : "neon.400"}*/>
+                <HStack flex="1" justify="center">
                   <Text opacity={0.5}>{statName[ItemSlot.Transport]}:</Text>
                   <Text>{game.items.transport!.tier.stat / 100}</Text>
                 </HStack>
@@ -209,43 +156,6 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
   );
 });
 
-const ProfileButtonMobile = () => {
-  const { account } = useDojoContext();
-  const { gameInfos } = useGameStore();
-  const [isOpen, setIsOpen] = useState(false);
-
-  if (!account || !gameInfos) return null;
-
-  return (
-    <>
-      <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
-        {/* <Avatar name={genAvatarFromId(gameInfos?.hustler_id)} /> <Text ml="10px">player.name</Text> */}
-        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-        <Text ml="10px">player.name</Text>
-      </MenuItem>
-      <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
-    </>
-  );
-};
-
-// export const ProfileButton = () => {
-//   const { account } = useDojoContext();
-//   const { gameInfos } = useGameStore();
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   if (!account || !gameInfos) return null;
-
-//   return (
-//     <>
-//       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
-//         {/* <Avatar name={genAvatarFromId(gameInfos.hustler_id)} /> */}
-//         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-//       </Button>
-//       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
-//     </>
-//   );
-// };
-
 export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
 
@@ -277,7 +187,7 @@ export const ProfileLinkMobile = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
-  const { gameInfos } = useGameStore();
+  const { gameEvents, gameInfos } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -289,14 +199,64 @@ export const ProfileLinkMobile = () => {
     }
   };
 
-  if (!account || !gameInfos) return null;
+  if (!account || !gameInfos || !gameEvents) return null;
 
   return (
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick}>
         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-        <Text ml="10px">player.name</Text>
+        <Text ml="10px">{gameEvents.playerName}</Text>
       </MenuItem>
     </>
   );
 };
+
+// const ProfileModal = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => {
+//   return (
+//     <Modal isOpen={isOpen} onClose={close} isCentered>
+//       <ModalOverlay />
+//       <ModalContent maxH="90vh" maxWidth={"420px"}>
+//         <VStack w="full" px="16px">
+//           <Profile close={close} />
+//         </VStack>
+//       </ModalContent>
+//     </Modal>
+//   );
+// };
+
+// const ProfileButtonMobile = () => {
+//   const { account } = useDojoContext();
+//   const { gameInfos } = useGameStore();
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   if (!account || !gameInfos) return null;
+
+//   return (
+//     <>
+//       <MenuItem h="48px" borderRadius={0} onClick={() => setIsOpen(true)}>
+//         {/* <Avatar name={genAvatarFromId(gameInfos?.hustler_id)} /> <Text ml="10px">{gameEvents.playerName}</Text> */}
+//         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+//         <Text ml="10px">{gameEvents.playerName}</Text>
+//       </MenuItem>
+//       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
+//     </>
+//   );
+// };
+
+// export const ProfileButton = () => {
+//   const { account } = useDojoContext();
+//   const { gameInfos } = useGameStore();
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   if (!account || !gameInfos) return null;
+
+//   return (
+//     <>
+//       <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={() => setIsOpen(true)}>
+//         {/* <Avatar name={genAvatarFromId(gameInfos.hustler_id)} /> */}
+//         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+//       </Button>
+//       <ProfileModal isOpen={isOpen} close={() => setIsOpen(false)} />
+//     </>
+//   );
+// };

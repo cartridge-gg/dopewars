@@ -64,7 +64,7 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
       for (let unsubscribe of get().handles) {
         unsubscribe();
       }
-      set({ id: null, game: null, gameInfos: null, handles: [] });
+      set({ id: null, game: null, gameInfos: null, gameEvents: null, handles: [] });
     },
     subscribe: async (gameId: string, playerId: string) => {
       const { wsClient, handles } = get();
@@ -136,7 +136,6 @@ export const createGameStore = ({ client, wsClient, configStore }: GameStoreProp
 
       const gameEventsData = (await client.request(GameEventsDocument, {
         gameId: gameId,
-        playerId: playerId,
       })) as GameEventsQuery;
 
       // parse gameInfosData
