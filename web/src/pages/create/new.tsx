@@ -62,8 +62,8 @@ export default function New() {
 
   const create = async (gameMode: GameMode) => {
     setError("");
-    if (name === "" || name.length > 20 || name.length < 3) {
-      setError("Invalid name, at least 3 chars, max 20!");
+    if (name === "" || name.length > 16 || name.length < 3) {
+      setError("Invalid name, at least 3 chars, max 16!");
       return;
     }
 

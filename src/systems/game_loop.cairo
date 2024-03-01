@@ -72,8 +72,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
 }
 
 
-fn on_game_over(ref game_store: GameStore, player_name: felt252) {
-    //let mut game = get!(game_store.world, (game_store.game_id, game_store.player_id), (Game));
+fn on_game_over(ref game_store: GameStore) {
     assert(game_store.game.game_over == false, 'already game_over');
 
     // save 
@@ -104,7 +103,7 @@ fn on_game_over(ref game_store: GameStore, player_name: felt252) {
                 Into::<u16, felt252>::into(game_store.game.leaderboard_version),
             ],
             array![
-                player_name,
+                game_store.game.player_name.into(),
                 Into::<u16, felt252>::into(game_store.game.hustler_id),
                 Into::<u8, felt252>::into(game_store.player.turn),
                 Into::<u32, felt252>::into(game_store.player.cash),

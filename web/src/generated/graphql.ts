@@ -22,6 +22,7 @@ export type Scalars = {
   u16: any;
   u32: any;
   u64: any;
+  u128: any;
   u256: any;
   usize: any;
 };
@@ -360,6 +361,7 @@ export type Game = {
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
+  player_name?: Maybe<Scalars['u128']>;
 };
 
 export type GameConfig = {
@@ -472,7 +474,8 @@ export enum GameOrderField {
   MaxRounds = 'MAX_ROUNDS',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
-  PlayerId = 'PLAYER_ID'
+  PlayerId = 'PLAYER_ID',
+  PlayerName = 'PLAYER_NAME'
 }
 
 export type GameStorePacked = {
@@ -583,6 +586,13 @@ export type GameWhereInput = {
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_name?: InputMaybe<Scalars['u128']>;
+  player_nameEQ?: InputMaybe<Scalars['u128']>;
+  player_nameGT?: InputMaybe<Scalars['u128']>;
+  player_nameGTE?: InputMaybe<Scalars['u128']>;
+  player_nameLT?: InputMaybe<Scalars['u128']>;
+  player_nameLTE?: InputMaybe<Scalars['u128']>;
+  player_nameNEQ?: InputMaybe<Scalars['u128']>;
 };
 
 export type HustlerItemBaseConfig = {

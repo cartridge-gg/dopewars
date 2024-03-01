@@ -44,6 +44,7 @@ mod systems {
 }
 
 mod utils {
+    mod bytes16;
     mod random;
     mod math;
     mod events;

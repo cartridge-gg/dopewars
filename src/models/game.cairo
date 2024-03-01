@@ -1,13 +1,19 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
+use rollyourown::utils::bytes16::Bytes16;
+use rollyourown::utils::introspect::Bytes16IntrospectionImpl;
+
 #[derive(Model, Copy, Drop, Serde)]
 struct Game {
     #[key]
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    //
+    player_name: Bytes16,
     hustler_id: u16,
+    //
     leaderboard_version: u16,
     game_mode: GameMode,
     //
@@ -23,7 +29,6 @@ enum GameMode {
     Test,
     Unlimited
 }
-
 
 #[generate_trait]
 impl GameImpl of GameTrait {

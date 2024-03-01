@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x5d557f2caf593a51531e1adf581e50c16460a81f44d789781e353152e66a9d2",
+      "class_hash": "0x28199941ab903cb11dbe3c36732b18fca75c3b395f95925e91d41c48d8e2309",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x2ed161e45fd595f9ae64d0c2de2e91de399f1a1b1757e8c10e429ebd4bd1e39",
+      "class_hash": "0x53b92960ad6449e9f1fefc8c32d2389ac563cff36fc02c406ecaacb1b5d358c",
       "abi": [
         {
           "type": "impl",
@@ -2304,10 +2304,6 @@
                 {
                   "name": "actions",
                   "type": "core::array::Span::<rollyourown::systems::game::Actions>"
-                },
-                {
-                  "name": "player_name",
-                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -2328,10 +2324,6 @@
                 {
                   "name": "actions",
                   "type": "core::array::Span::<rollyourown::systems::game::Actions>"
-                },
-                {
-                  "name": "player_name",
-                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -2348,10 +2340,6 @@
                 {
                   "name": "action",
                   "type": "rollyourown::systems::game::EncounterActions"
-                },
-                {
-                  "name": "player_name",
-                  "type": "core::felt252"
                 }
               ],
               "outputs": [],
@@ -2858,7 +2846,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
-      "class_hash": "0x1f62735eec0042b2f96efb38e45d9b2589d04975d87db73114db27cf7b61648",
+      "class_hash": "0x81b2fd184eb8184da5b6d1ef0b45b7260b086c628c7f9af7a85d7bb4b07f4c",
       "abi": [
         {
           "type": "impl",
@@ -5277,6 +5265,11 @@
           "key": true
         },
         {
+          "name": "player_name",
+          "type": "Bytes16",
+          "key": false
+        },
+        {
           "name": "hustler_id",
           "type": "u16",
           "key": false
@@ -5312,7 +5305,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x3b431c96a8e8c85b89b9d05b658844ad1919d93e6783fea2c82da914aa3b55a",
+      "class_hash": "0x4d666776c69c4769e22b7e60b99613a0ae43e88e36d146200b0a9fde633639d",
       "abi": [
         {
           "type": "impl",
@@ -5488,6 +5481,16 @@
           "interface_name": "rollyourown::models::game::Igame"
         },
         {
+          "type": "struct",
+          "name": "rollyourown::utils::bytes16::Bytes16",
+          "members": [
+            {
+              "name": "value",
+              "type": "core::integer::u128"
+            }
+          ]
+        },
+        {
           "type": "enum",
           "name": "rollyourown::models::game::GameMode",
           "variants": [
@@ -5526,6 +5529,10 @@
             {
               "name": "player_id",
               "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "player_name",
+              "type": "rollyourown::utils::bytes16::Bytes16"
             },
             {
               "name": "hustler_id",

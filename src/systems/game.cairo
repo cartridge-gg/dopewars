@@ -21,15 +21,14 @@ enum EncounterActions {
 #[starknet::interface]
 trait IGameActions<T> {
     fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
-    fn end_game(self: @T, game_id: u32, actions: Span<Actions>, player_name: felt252);
+    fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(
         self: @T,
         game_id: u32,
         next_location: Locations,
-        actions: Span<Actions>,
-        player_name: felt252
+        actions: Span<Actions>
     );
-    fn decide(self: @T, game_id: u32, action: EncounterActions, player_name: felt252);
+    fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
 
 #[dojo::contract]
@@ -47,7 +46,10 @@ mod game {
             trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,
             game::EncounterActions, leaderboard::{LeaderboardManagerTrait}
         },
-        utils::random::{Random, RandomImpl},
+        utils::{
+            random::{Random, RandomImpl},
+            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
+        },
     };
 
 
@@ -185,7 +187,6 @@ mod game {
             self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
             self.assert_not_paused();
-            self.assert_valid_name(player_name);
             
             let world = self.world();
             let game_id = world.uuid();
@@ -199,6 +200,7 @@ mod game {
             let game = Game {
                 game_id,
                 player_id,
+                player_name: Bytes16Impl::from(player_name),
                 hustler_id,
                 leaderboard_version,
                 game_mode,
@@ -223,9 +225,8 @@ mod game {
         }
 
         fn end_game(
-            self: @ContractState, game_id: u32, actions: Span<super::Actions>, player_name: felt252
+            self: @ContractState, game_id: u32, actions: Span<super::Actions>
         ) {
-            self.assert_valid_name(player_name);
             let world = self.world();
             let player_id = get_caller_address();
 
@@ -237,7 +238,7 @@ mod game {
             self.execute_actions(ref game_store, ref actions);
 
             //save & on_game_over
-            game_loop::on_game_over(ref game_store, player_name);
+            game_loop::on_game_over(ref game_store);
         }
 
         fn travel(
@@ -245,9 +246,8 @@ mod game {
             game_id: u32,
             next_location: Locations,
             actions: Span<super::Actions>,
-            player_name: felt252
+           
         ) {
-            self.assert_valid_name(player_name);
             let world = self.world();
             let player_id = get_caller_address();
 
@@ -274,7 +274,7 @@ mod game {
             // check if dead
             if is_dead {
                 // save & gameover RIP
-                game_loop::on_game_over(ref game_store, player_name);
+                game_loop::on_game_over(ref game_store);
             } else {
                 if has_encounter {
                     // save & no end turn
@@ -291,9 +291,8 @@ mod game {
             self: @ContractState,
             game_id: u32,
             action: super::EncounterActions,
-            player_name: felt252
+           
         ) {
-            self.assert_valid_name(player_name);
             let world = self.world();
             let player_id = get_caller_address();
 
@@ -311,7 +310,7 @@ mod game {
             // check if dead
             if is_dead {
                 // save & gameover RIP
-                game_loop::on_game_over(ref game_store, player_name);
+                game_loop::on_game_over(ref game_store);
             } else {
                 // on_turn_end & save
                 game_loop::on_turn_end(ref game_store, ref randomizer,);
@@ -324,12 +323,6 @@ mod game {
             let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
             let ryo_config = ryo_config_manager.get();
             assert(!ryo_config.paused, 'game is paused');
-        }
-
-        fn assert_valid_name(self: @ContractState, name: felt252) {
-            let name_256: u256 = name.into();
-            assert(name_256 > 0xffff, 'Name too short');
-            assert(name_256 < 0xffffffffffffffffffffffffffffffffffffffff, 'Name too long');
         }
 
         fn execute_actions(

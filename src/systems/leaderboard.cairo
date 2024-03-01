@@ -9,6 +9,7 @@ use rollyourown::{
     constants::{ETHER}
 };
 
+const TWENTY_MIN: u64 = 1200; // 20 * 60
 const ONE_HOUR: u64 = 3600; // 60 * 60
 const ONE_DAY: u64 = 86_400; // 24 * 60 * 60
 const ONE_WEEK: u64 = 604_800; // 7 * 86_400;
@@ -43,7 +44,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
 
         // TODO: revert
         //current_timestamp + ONE_WEEK
-        current_timestamp + ONE_HOUR
+        current_timestamp + TWENTY_MIN
     }
 
     fn new_leaderboard(self: LeaderboardManager, version: u16) {
