@@ -131,8 +131,8 @@ fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> E
     let health = encounter_level * 5 + turn;
     // let attack = encounter_level * 2 + turn / 3;
     let attack = encounter_level * 1 + turn / 3;
-    let payout: u32 = (encounter_level.into() * encounter_level.into() * 6900)
-        + (turn.into() * 420);
+    let payout: u32 = (encounter_level.into() * encounter_level.into() * 4_000)
+        + (turn.into() * 1_000);
     let demand_pct = get_encounter_demand_from_game_store(game_store);
 
     Encounter {
@@ -481,6 +481,9 @@ fn on_fight(
     } else {
         encounter.payout
     };
+
+    // player get money
+    game_store.player.cash += cash_earnt;
 
     let outcome = if is_dead {
         EncounterOutcomes::Died
