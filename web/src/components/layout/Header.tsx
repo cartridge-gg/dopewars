@@ -50,7 +50,7 @@ export const Header = observer(({ back }: HeaderProps) => {
         {!game && (
           <>
             {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
-            <PaperFaucet />
+            {account && <PaperFaucet />}
           </>
         )}
       </HStack>

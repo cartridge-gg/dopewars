@@ -1626,7 +1626,7 @@ useInfiniteConfigQuery.getKey = (variables?: ConfigQueryVariables) => variables 
 
 export const GameEventsDocument = `
     query GameEvents($gameId: String!) {
-  events(limit: 1000, keys: ["*", $gameId]) {
+  events(last: 1000, keys: ["*", $gameId]) {
     totalCount
     edges {
       node {

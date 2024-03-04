@@ -110,6 +110,14 @@ export const statName = {
 }
 export type statNameKeys = keyof typeof statName;
 
+export const slotName = {
+  [ItemSlot.Weapon]: "WEAPON",
+  [ItemSlot.Clothes]: "SHIRT",
+  [ItemSlot.Feet]: "SHOES",
+  [ItemSlot.Transport]: "BAG",
+}
+export type slotNameKeys = keyof typeof slotName;
+
 
 export const locationIcons = {
   "Queens": Queens,

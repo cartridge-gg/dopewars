@@ -2,6 +2,7 @@ import { Button } from "@/components/common";
 import { Event as EventIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
+import { Loadout } from "@/components/pages/profile/Loadout";
 import { GameClass } from "@/dojo/class/Game";
 import {
   GameCreatedData,
@@ -19,7 +20,22 @@ import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { Box, HStack, Heading, Image, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Heading,
+  Image,
+  ListItem,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  Tooltip,
+  UnorderedList,
+  VStack,
+} from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { shortString } from "starknet";
@@ -130,9 +146,25 @@ const Logs = () => {
       }
       rigthPanelMaxH={rigthPanelMaxH}
     >
-      <VStack w="full" ref={listRef}>
-        {logs && logs.map((log) => /*log.logs.length > 0 &&*/ renderDay(configStore, game, log))}
-      </VStack>
+      <Tabs variant="unstyled" w="full" >
+        <TabList>
+          <Tab>Loadout</Tab>
+          <Tab>Activity</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel h="calc(100vh - 360px)">
+            <Box display="flex" alignItems="center" justifyContent="center" h="100%">
+              <Loadout />
+            </Box>
+          </TabPanel>
+          <TabPanel h="calc(100vh - 360px)" overflowY="scroll">
+            <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
+              {logs && logs.map((log) => renderDay(configStore, game, log))}
+            </VStack>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Layout>
   );
 };
@@ -142,7 +174,7 @@ export default observer(Logs);
 const CustomLeftPanel = () => {
   const { gameInfos } = useGameStore();
   return (
-    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1">
+    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1" marginBottom="50px">
       <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name || "")}
       </Heading>

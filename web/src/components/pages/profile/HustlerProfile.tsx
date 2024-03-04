@@ -43,12 +43,12 @@ export const HustlerProfile = observer(() => {
 
   return (
     <VStack w="full">
-      <HStack w="full" p="20px">
+      <HStack w="full" p="20px" justifyContent="center">
         <Box alignItems="center" h="300px" w="150px" position="relative" zIndex={99}>
           <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h="300px" />
           {/* <OG id={97} /> */}
         </Box>
-        <VStack w="full" gap={3}>
+        <VStack /*w="full"*/ gap={3}>
           <PowerMeter
             basePower={hustlerStats[ItemSlot.Weapon].initialTier}
             maxPower={hustlerStats[ItemSlot.Weapon].initialTier + 3}
