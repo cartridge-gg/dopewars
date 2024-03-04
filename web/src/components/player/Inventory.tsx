@@ -5,9 +5,9 @@ import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag } from "../icons";
+import { Bag, Home } from "../icons";
 
-export const Inventory = observer(({ ...props }: StyleProps) => {
+export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProps & { hidePawnshop?: boolean }) => {
   const { gameId, router } = useRouterContext();
   const { account } = useDojoContext();
   const { game, gameInfos } = useGameStore();
@@ -16,8 +16,32 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
   if (!game || !configStore) return null;
 
   return (
-    <VStack {...props} w="full" align="flex-start" pb="0" gap={[0, "6px"]}>
-      <HStack w="full" justify="flex-end">
+    <HStack {...props} w="full" align="flex-start" pb="0">
+      {!hidePawnshop && (
+        <VStack w="full" alignItems="flex-start">
+          <Text color="neon.500">PAWNSHOP</Text>
+          <Card
+            cursor={game.isShopOpen ? "pointer" : "not-allowed"}
+            h="40px"
+            px="20px"
+            justify="center"
+            alignItems="center"
+            opacity={game.isShopOpen ? 1 : 0.5}
+            bg="neon.700"
+            flexDirection="row"
+            onClick={() => {
+              if (game.isShopOpen) {
+                router.push(`/${gameId}/pawnshop`);
+              }
+            }}
+          >
+            <Home ml={-1} />
+            <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
+          </Card>
+        </VStack>
+      )}
+
+      <VStack w="full" alignItems="flex-end">
         <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />
           <Text>
@@ -25,22 +49,8 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
             {game.items.transport!.tier.stat / 100} LBS
           </Text>
         </HStack>
-      </HStack>
 
-      <HStack w="full" flexWrap="wrap" justify="space-between">
-        <Card h="40px" px="20px" justify="center">
-          <HStack gap="10px" justify="flex-end">
-            <PlayerItem item={game.items.attack!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.defense!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.speed!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.transport!} />
-          </HStack>
-        </Card>
-
-        <Card h="40px" px="20px" justify="center">
+        <Card h="40px" px="20px" justify="center" minW="140px" alignItems="center">
           <HStack gap="10px" justify="flex-start">
             {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
             {game.drugs.quantity > 0 && game.drugs.drug && (
@@ -53,12 +63,25 @@ export const Inventory = observer(({ ...props }: StyleProps) => {
             )}
           </HStack>
         </Card>
+      </VStack>
+      {/*
+      <HStack w="full" flexWrap="wrap" justify="space-between">
+        <Card h="40px" px="20px" justify="center">
+          <HStack gap="10px" justify="flex-end">
+            <PlayerItem item={game.items.attack!} />
+            <VerticalDivider />
+            <PlayerItem item={game.items.defense!} />
+            <VerticalDivider />
+            <PlayerItem item={game.items.speed!} />
+            <VerticalDivider />
+            <PlayerItem item={game.items.transport!} />
+          </HStack>
+        </Card> 
       </HStack>
-    </VStack>
+      */}
+    </HStack>
   );
 });
-
-
 
 const PlayerItem = ({ item, ...props }: { item: HustlerItemConfigFull }) => {
   if (!item) return null;
@@ -66,8 +89,12 @@ const PlayerItem = ({ item, ...props }: { item: HustlerItemConfigFull }) => {
   const stat = item.slot === ItemSlot.Transport ? item.tier.stat / 100 : item.tier.stat;
   return (
     <HStack gap="10px" {...props}>
-      <Tooltip title={`${item.base.name}`} text={`${item.upgradeName} (+${stat} ${statName[item.slot]})`} color="yellow.400">
-        <HStack >
+      <Tooltip
+        title={`${item.base.name}`}
+        text={`${item.upgradeName} (+${stat} ${statName[item.slot]})`}
+        color="yellow.400"
+      >
+        <HStack>
           <>
             {item.icon &&
               item.icon({

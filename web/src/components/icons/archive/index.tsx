@@ -31,7 +31,6 @@ export * from "./Clock";
 export * from "./Connect";
 export * from "./Disconnect";
 export * from "./Road";
-export * from "./Sparkle"; // has mirrored variant
 export * from "./User";
 export * from "./Users";
 export * from "./Wallet";

@@ -121,7 +121,11 @@ export const Profile = observer(({ close, ...props }: { close?: () => void }) =>
               </Tooltip>
             </HStack>
           </VStack>
+
         </Box>
+
+
+
         <Box w="full" justifyContent="center" py={["10px", "30px"]}>
           <HStack w="full">
             {close && (

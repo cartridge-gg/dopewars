@@ -13,11 +13,9 @@ import {
   CardHeader,
   Flex,
   HStack,
-  Image,
   SimpleGrid,
   StyleProps,
   Text,
-  Tooltip,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -60,9 +58,10 @@ const Location = observer(() => {
     return <></>;
   }
 
-  const prefixTitle = isLastDay
-    ? "Final Day"
-    : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
+  // const prefixTitle = isLastDay
+  //   ? "Final Day"
+  //   : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
+  const prefixTitle = "Im comin'";
 
   return (
     <Layout
@@ -95,87 +94,64 @@ const Location = observer(() => {
         </Footer>
       }
     >
-      <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={"8px"}>
-        <Inventory />
-      </Box>
+      <VStack h="100%" w="100%" alignItems="center" justifyContent="center">
+        <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={"8px"}>
+          <Inventory />
+        </Box>
 
-      <VStack w="full" align="flex-start" gap="10px">
-        <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
-          {prices.map((drug, index) => {
-            const drugConfig = configStore.getDrug(drug.drug)!;
+        <VStack w="full" align="flex-start" gap="10px">
+          <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
+            {prices.map((drug, index) => {
+              const drugConfig = configStore.getDrug(drug.drug)!;
 
-            // TODO : move in Player
-            const canBuy =
-              game.drugs.quantity === 0 ||
-              !game.drugs?.drug ||
-              (game.drugs?.drug?.drug === drug?.drug && game.player.cash > drug.price);
-            const canSell = game.drugs.quantity > 0 && game.drugs?.drug?.drug === drug.drug;
+              // TODO : move in Player
+              const canBuy =
+                game.drugs.quantity === 0 ||
+                !game.drugs?.drug ||
+                (game.drugs?.drug?.drug === drug?.drug && game.player.cash > drug.price);
+              const canSell = game.drugs.quantity > 0 && game.drugs?.drug?.drug === drug.drug;
 
-            return (
-              <Card h={["auto", "180px"]} key={index} position="relative">
-                <CardHeader
-                  textTransform="uppercase"
-                  fontSize={["16px", "20px"]}
-                  textAlign="left"
-                  padding={["6px 10px", "10px 20px"]}
-                >
-                  {drugConfig.name}
-                </CardHeader>
-                <CardBody>
-                  <HStack w="full" justify="center">
-                    <Flex
-                      as={motion.div}
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      p="2px"
-                      align="center"
-                      boxSize="full"
-                      position="absolute"
-                      pointerEvents={["none", "auto"]}
-                    >
-                      <HStack h="100px" w="full" p="20px" gap="10px" bgColor="neon.900">
-                        <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-                      </HStack>
-                    </Flex>
-                    {drugConfig.icon({})}
-                  </HStack>
-                </CardBody>
+              return (
+                <Card h={["auto", "180px"]} key={index} position="relative">
+                  <CardHeader
+                    textTransform="uppercase"
+                    fontSize={["16px", "20px"]}
+                    textAlign="left"
+                    padding={["6px 10px", "10px 20px"]}
+                  >
+                    {drugConfig.name}
+                  </CardHeader>
+                  <CardBody>
+                    <HStack w="full" justify="center">
+                      <Flex
+                        as={motion.div}
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        p="2px"
+                        align="center"
+                        boxSize="full"
+                        position="absolute"
+                        pointerEvents={["none", "auto"]}
+                      >
+                        <HStack h="100px" w="full" p="20px" gap="10px" bgColor="neon.900">
+                          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
+                        </HStack>
+                      </Flex>
+                      {drugConfig.icon({})}
+                    </HStack>
+                  </CardBody>
 
-                <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
-                  <HStack justifyContent="space-between">
-                    <Text>{formatCash(drug.price)}</Text>
-                  </HStack>
-                  <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
-                </CardFooter>
-              </Card>
-            );
-          })}
-          <Tooltip label={game.isShopOpen ? "Welcome Ser" : "Closed"}>
-            <Card
-              h={["auto", "180px"]}
-              position="relative"
-              cursor="pointer"
-              opacity={game.isShopOpen ? 1 : 0.5}
-              onClick={() => {
-                if (game.isShopOpen) {
-                  router.push(`/${gameId}/pawnshop`);
-                }
-              }}
-            >
-              <CardHeader
-                textTransform="uppercase"
-                fontSize={["16px", "20px"]}
-                textAlign="left"
-                padding={["6px 10px", "10px 20px"]}
-              >
-                PAWNSHOP {game.isShopOpen ? "OPEN" : "CLOSED"}
-              </CardHeader>
-              <CardBody>
-                <Image src="/images/pawnshop.png" width="100px" height="100px" alt="pawnshop" />
-              </CardBody>
-            </Card>
-          </Tooltip>
-        </SimpleGrid>
+                  <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
+                    <HStack justifyContent="space-between">
+                      <Text>{formatCash(drug.price)}</Text>
+                    </HStack>
+                    <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </SimpleGrid>
+        </VStack>
       </VStack>
     </Layout>
   );

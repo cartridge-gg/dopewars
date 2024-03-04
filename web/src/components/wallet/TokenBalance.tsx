@@ -9,7 +9,7 @@ const iconsBySymbol = {
 type iconsBySymbolKeys = keyof typeof iconsBySymbol;
 
 export const TokenBalance = ({ address, token }: { address?: string; token?: string }) => {
-  const { data: balance } = useBalance({ address, token, watch: true });
+  const { data: balance } = useBalance({ address, token, watch: true, refetchInterval:5_000 });
 
   if (!address || !token || !balance) return null;
   return (

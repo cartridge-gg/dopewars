@@ -8,7 +8,7 @@ import { Divider, Flex, HStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ProfileLink } from "../pages/profile/Profile";
-import { CashIndicator, HealthIndicator, WantedIndicator } from "../player";
+import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 
 interface HeaderProps {
   back?: boolean;
@@ -71,8 +71,8 @@ export const Header = observer(({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                {/* <DayIndicator day={game.player.turn} /> */}
-                <WantedIndicator wanted={game.wanted.getValueByTick(game.player.wanted)} />
+                <DayIndicator day={game.player.turn} />
+                {/* <WantedIndicator wanted={game.wanted.getValueByTick(game.player.wanted)} /> */}
               </HStack>
             </Flex>
           </HStack>

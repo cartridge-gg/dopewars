@@ -1,6 +1,6 @@
 import { cardPixelatedStyle } from "@/theme/styles";
 import { HStack, Text } from "@chakra-ui/react";
-import { Alert, Close } from "../icons";
+import { Cigarette, Close } from "../icons";
 
 export const Toast = ({
   message,
@@ -31,7 +31,7 @@ export const Toast = ({
     >
       <HStack w="full">
         <>
-          {icon ? icon({ size: "lg" }) : <Alert size="lg" />}
+          {icon ? icon({ size: "lg" }) : <Cigarette size="lg" />}
           <Text>{message}</Text>
         </>
       </HStack>

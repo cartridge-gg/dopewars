@@ -43,7 +43,8 @@ export const Outline = ({
   };
 
   const fillColorTarget = wantedTarget > 68 ? colors.red : colors.neon[400];
-
+  const fillColorPath = wantedTarget > 68 ? colors.red : colors.yellow[400];
+  
   return (
     <>
       <Global
@@ -76,10 +77,10 @@ export const Outline = ({
 
       <Icon position="absolute" w="100%" h="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
-          d={getPath(current, targetId)}
-          stroke={colors.yellow["400"]}
+          d={getPath(current!, targetId!)}
+          stroke={fillColorPath as string}
           strokeWidth={0.5}
-          strokeDasharray={[2, 1]}
+          strokeDasharray={"2, 1"}
           fill="transparent"
           className="dashAnim"
         />

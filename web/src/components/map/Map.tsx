@@ -22,7 +22,7 @@ const coordinate: CoordinateType = {
 };
 
 export const coordinatePercent: CoordinateType = {
-  [Locations.Home]: { x: 52, y: 51 },
+  [Locations.Home]: { x: 35, y: 77 },
   [Locations.Queens]: { x: 74, y: 53 },
   [Locations.Jersey]: { x: 28, y: 39 },
   [Locations.Bronx]: { x: 53.5, y: 17 },
