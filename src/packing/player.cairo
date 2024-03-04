@@ -185,7 +185,7 @@ impl PlayerImpl of PlayerTrait {
         } else if self.drug_level < 2 && cops_level + gang_level > 8 {
             // check if not carrying Speed or Ludes
             if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0))
-                || (drugs.drug != Drugs::Ludes
+                && (drugs.drug != Drugs::Ludes
                     || (drugs.drug == Drugs::Ludes && drugs.quantity == 0)) {
                 // Speed -> Cocaine
                 self.drug_level = 2;
