@@ -21,6 +21,16 @@ const coordinate: CoordinateType = {
   [Locations.Brooklyn]: { x: 0, y: -0 },
 };
 
+export const coordinatePercent: CoordinateType = {
+  [Locations.Home]: { x: 52, y: 51 },
+  [Locations.Queens]: { x: 74, y: 53 },
+  [Locations.Jersey]: { x: 28, y: 39 },
+  [Locations.Bronx]: { x: 53.5, y: 17 },
+  [Locations.Central]: { x: 47.5, y: 46 },
+  [Locations.Coney]: { x: 75, y: 80 },
+  [Locations.Brooklyn]: { x: 47, y: 72 },
+};
+
 const yOffset = -150;
 
 export const Map = ({

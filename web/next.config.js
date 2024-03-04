@@ -16,15 +16,23 @@ const nextConfig = {
 };
 
 
-import withPWA from "next-pwa";
-// const withPWA = require("next-pwa")
+// "@next/bundle-analyzer": "^14.1.1",
+// import bundleAnalyzer from "@next/bundle-analyzer";
 
-const config = withPWA({
+// const withBundleAnalyzer = bundleAnalyzer({
+//   enabled: true//process.env.ANALYZE === 'true',
+// })
+
+
+import nextPWA from "next-pwa";
+
+const withPWA = nextPWA({
   dest: "public",
   register: true,
   skipWaiting: true,
   disableDevLogs: true,
   disable: process.env.NODE_ENV === 'development'
-})(nextConfig);
+})
 
-export default config
+
+export default withPWA(nextConfig)

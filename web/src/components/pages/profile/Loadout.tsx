@@ -24,12 +24,23 @@ const Item = observer(({ item }: { item: HustlerItemConfigFull }) => {
   const upgrades = itemUpgrades[item.slot][Number(item.base.id)];
 
   return (
-    <HStack w="full" gap={9} fontSize="14px">
-      {item.icon({ boxSize: "48px", marginLeft: "-20px" })}
+    <HStack
+      w="full"
+      gap={9}
+      fontSize="14px"
+      borderBottom="solid 1px"
+      borderColor="neon.800"
+      paddingBottom="20px"
+      marginLeft="-20px"
+      _last={{
+        borderBottom:"none"
+      }}
+    >
+      {item.icon({ boxSize: "48px" })}
 
-      <VStack w="260px" alignItems="flex-start" gap={0}>
+      <VStack w="250px" alignItems="flex-start" gap={0}>
         <HStack
-          w="170px"
+          w="160px"
           fontSize="12px"
           justifyContent="space-between"
           fontFamily="broken-console"

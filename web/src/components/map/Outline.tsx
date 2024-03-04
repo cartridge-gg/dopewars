@@ -3,11 +3,21 @@ import { Icon, chakra, shouldForwardProp } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
 
 import colors from "@/theme/colors";
+import { Global } from "@emotion/react";
 import { Callout } from "./Callout";
+import { coordinatePercent } from "./Map";
 
 const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
 });
+
+const getPath = (current: Locations, targetId: Locations) => {
+  if (targetId && targetId !== current) {
+    return `M${coordinatePercent[current].x} ${coordinatePercent[current].y} Q 50 50 ${coordinatePercent[targetId].x} ${coordinatePercent[targetId].y}`;
+  } else {
+    `M${coordinatePercent[current].x} ${coordinatePercent[current].y} ${coordinatePercent[targetId].x} ${coordinatePercent[targetId].y}`;
+  }
+};
 
 export const Outline = ({
   targetId,
@@ -32,11 +42,23 @@ export const Outline = ({
     ease: "easeInOut",
   };
 
-  const fillColorTarget = wantedTarget > 68 ? colors.red : wantedTarget > 29 ? colors.yellow[400] : colors.neon[400];
-  const fillColorCurrent = wantedCurrent > 68 ? colors.red : wantedCurrent > 29 ? colors.yellow[400] : colors.neon[400];
+  const fillColorTarget = wantedTarget > 68 ? colors.red : colors.neon[400];
 
   return (
     <>
+      <Global
+        styles={`
+        @keyframes dashAnim {
+          from { stroke-dashoffset:6; }   
+          to { stroke-dashoffset:0; }   
+        }
+
+        .dashAnim{
+          animation: dashAnim 0.69s linear infinite;
+        }
+        `}
+      />
+
       {!selfSelected && (
         <ChakraBox
           layerStyle="fill"
@@ -49,8 +71,19 @@ export const Outline = ({
       )}
 
       <ChakraBox layerStyle="fill" opacity="0.5">
-        <SvgHighlight location={current} fill={fillColorCurrent as string} />
+        <SvgHighlight location={current} fill={colors.yellow[400] as string} />
       </ChakraBox>
+
+      <Icon position="absolute" w="100%" h="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d={getPath(current, targetId)}
+          stroke={colors.yellow["400"]}
+          strokeWidth={0.5}
+          strokeDasharray={[2, 1]}
+          fill="transparent"
+          className="dashAnim"
+        />
+      </Icon>
 
       <ChakraBox
         zIndex={9}
@@ -59,7 +92,7 @@ export const Outline = ({
         // @ts-ignore
         transition={transition}
       >
-        <Callout location={current} />
+        <Callout location={targetId || current} />
       </ChakraBox>
     </>
   );

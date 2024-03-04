@@ -3,6 +3,7 @@ import { Locations } from "@/dojo/types";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Alert } from "../icons";
+import { coordinatePercent } from "./Map";
 
 export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; current?: Locations }) => {
   const { game } = useGameStore();
@@ -26,18 +27,54 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
 
   return (
     <Box w="100%" h="100%" position="absolute">
-      {/* Jersey */}
-      {wanted.get(Locations.Jersey)! > minWanted && <Alert position="absolute" top="38%" left="26%" />}
-      {/* Bronx */}
-      {wanted.get(Locations.Bronx)! > minWanted && <Alert position="absolute" top="16%" left="51.5%" />}
-      {/* Central */}
-      {wanted.get(Locations.Central)! > minWanted && <Alert position="absolute" top="45%" left="45.5%" />}
-      {/* Brooklyn */}
-      {wanted.get(Locations.Brooklyn)! > minWanted && <Alert position="absolute" top="71%" left="44%" />}
       {/* Queens */}
-      {wanted.get(Locations.Queens)! > minWanted && <Alert position="absolute" top="52%" left="72%" />}
+      {wanted.get(Locations.Queens)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Queens].x - 2}%`}
+          top={`${coordinatePercent[Locations.Queens].y - 1}%`}
+        />
+      )}
+      {/* Jersey */}
+      {wanted.get(Locations.Jersey)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Jersey].x - 2}%`}
+          top={`${coordinatePercent[Locations.Jersey].y - 1}%`}
+        />
+      )}
+      {/* Bronx */}
+      {wanted.get(Locations.Bronx)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Bronx].x - 2}%`}
+          top={`${coordinatePercent[Locations.Bronx].y - 1}%`}
+        />
+      )}
+      {/* Central */}
+      {wanted.get(Locations.Central)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Central].x - 2}%`}
+          top={`${coordinatePercent[Locations.Central].y - 1}%`}
+        />
+      )}
       {/* Coney */}
-      {wanted.get(Locations.Coney)! > minWanted && <Alert position="absolute" top="79%" left="73%" />}
+      {wanted.get(Locations.Coney)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Coney].x - 2}%`}
+          top={`${coordinatePercent[Locations.Coney].y - 1}%`}
+        />
+      )}
+      {/* Brooklyn */}
+      {wanted.get(Locations.Brooklyn)! > minWanted && (
+        <Alert
+          position="absolute"
+          left={`${coordinatePercent[Locations.Brooklyn].x - 2}%`}
+          top={`${coordinatePercent[Locations.Brooklyn].y - 1}%`}
+        />
+      )}
     </Box>
   );
 };
