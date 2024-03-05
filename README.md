@@ -87,23 +87,55 @@ RYO extends the core game mechanic of arbitraging drugs in different neighborhoo
 The following game loop is repeated until the end condition of the game is reached:
 
 ```mermaid
-flowchart TD
-    A[Join game lobby] -->|Deposit fee + Commit to Loadout| B[Wait for Start]
-    B --> |Markets initialized, Loadout revealed|C[Arrives at random location]
-    C --> |Buys / Sells drugs on local markets|D[Select next location to travel to]
-    D --> |Player travels without incident|END[Turn ends]
-    D --> F[Player is Mugged]
-    F --> F1[Pay]
-    F --> F2[Run]
-    F2 --> F12[Win] --> END
-    F2 --> L[Lose]
-    L --> |Player loses their stash|END
-    D --> G[Chased by Cops]
-    G --> F1[Pay]
-    G --> F2[Run]
-    F1 --> F12
-    F1 --> L
-    END --> |Market prices update|C
+graph TB
+    J{{Join game lobby}} -->|Deposit fee + Commit to Loadout| B[Wait for Start]
+    B --> |Markets initialized, Loadout revealed|TS
+    TS[Turn Sarts] --> TsN
+    TsN([Player at Location])
+    TsS([Player is in the Shop])
+
+    TsN --> Trade{{Buys / Sells drugs on local markets}}
+    Trade --> Travel{{Select next location to travel to}}
+    Travel --> Safe[/Player travels without incident/]
+    Travel --> E[/Player Encounters Gang / Cops/] --> ED
+    TsS --> Shop{{Player Can Buy an Item}}
+
+    subgraph Encounter
+        ED{{Select Pay / Run / Fight}}
+        ED --> CP[Pay] & CF[Fight\n] & CR[Run]
+
+        CP --> |Pay Them Off|Op([Paid])
+
+        CR --> |Escapes|Oe([Escaped])
+        CR --> |Gets Caught|Oc([Captured])
+
+        CF --> |Wins Fight|Ov([Victorious])
+        CF --> |Looses Fight|Oc
+        Oc --> Oc0>Loose Some Health]
+        Oc0 --> Oc1[/Has Some Health Left/]
+        Oc0 --> Oc2[/Has None Health Left/]
+        Oc1 --> ED
+        Oc2 --> Od([Dead])
+        Op --> L>Loose some drugs / money]
+        Oe --> R>Location gets Randomised]
+        Ov --> W>Gain Some Money]
+
+    end
+    Shop --> ET[End Travel]
+    Safe --> CS[Check if Shop is Open\nShop opens every nth turn]
+     
+    L --> CS
+     
+    R --> CS
+    W --> CS
+    Od --> GO[Game Over]
+
+    
+    CS --> SO[/Shop Open/] --> TsS
+    CS --> SC[/Shop Closed/]
+    SC --> ET --> MU>Markets Update] --> TE[Turn Ends] --> TS
+
+
 ```
 
 ### Future improvements
