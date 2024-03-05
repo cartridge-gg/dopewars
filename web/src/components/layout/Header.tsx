@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
+import { BuyPaper } from "../wallet/BuyPaper";
 
 interface HeaderProps {
   back?: boolean;
@@ -46,7 +47,8 @@ export const Header = observer(({ back }: HeaderProps) => {
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
-
+        <BuyPaper />
+        
         {!game && (
           <>
             {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
@@ -107,4 +109,3 @@ export const Header = observer(({ back }: HeaderProps) => {
     </HStack>
   );
 });
-

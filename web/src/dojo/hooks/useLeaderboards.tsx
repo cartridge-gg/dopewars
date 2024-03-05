@@ -1,4 +1,4 @@
-import { Leaderboard, LeaderboardEdge, useLeaderboardsQuery } from "@/generated/graphql";
+import { Leaderboard, LeaderboardEdge, useLeaderboardByVersionQuery } from "@/generated/graphql";
 import { useMemo } from "react";
 
 export interface LeaderboardsInterface {
@@ -7,7 +7,7 @@ export interface LeaderboardsInterface {
 }
 
 export const useLeaderboards = (version: number): LeaderboardsInterface => {
-  const { data, isFetched } = useLeaderboardsQuery({
+  const { data, isFetched } = useLeaderboardByVersionQuery({
     version,
   });
 

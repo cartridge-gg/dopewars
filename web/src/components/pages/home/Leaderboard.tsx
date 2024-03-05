@@ -10,7 +10,6 @@ import Countdown from "react-countdown";
 import { Avatar } from "../../avatar/Avatar";
 import { genAvatarFromId } from "../../avatar/avatars";
 import { Arrow, Skull } from "../../icons";
-import { PaperIcon } from "../../icons/Paper";
 
 const renderer = ({
   days,
@@ -101,17 +100,18 @@ export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & S
 
   return (
     <VStack w="full" h="100%">
-      <VStack my="15px">
-        <HStack>
+      <VStack my="15px" w="full">
+        <HStack w="full" justifyContent="space-between">
           <Arrow
             direction="left"
             cursor="pointer"
             opacity={selectedVersion > 1 ? "1" : "0.25"}
             onClick={onPrev}
           ></Arrow>
-          <Text textStyle="subheading" fontSize="12px">
-            LEADERBOARD <small>(v{leaderboard?.version})</small>
-          </Text>
+          <HStack textStyle="subheading" fontSize="12px">
+            <Text>SEASON {leaderboard?.version} REWARDS</Text>
+            <Text color="yellow.400">{formatCash(formatEther(leaderboard.paper_balance)).replace("$", "")} PAPER</Text>
+          </HStack>
           <Arrow
             direction="right"
             cursor="pointer"
@@ -122,11 +122,6 @@ export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & S
         {selectedVersion === currentVersion && (
           <Countdown date={new Date(leaderboard?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
         )}
-        <HStack color="yellow.400">
-          <Text>JACKPOT</Text>
-          <PaperIcon />
-          <Text>{formatEther(leaderboard.paper_balance)}</Text>
-        </HStack>
       </VStack>
       <VStack
         boxSize="full"
@@ -211,5 +206,3 @@ export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & S
     </VStack>
   );
 };
-
-

@@ -4,9 +4,11 @@ use starknet::ContractAddress;
 struct Leaderboard {
     #[key]
     version: u16,
-    player_id: ContractAddress,
+    game_id: u32,
     high_score: u32,
+    //
     next_version_timestamp: u64,
-    paper_balance: u256,
+    //
+    paper_balance: u256,   // TODO: use u32 ?
     claimed: bool,
 }

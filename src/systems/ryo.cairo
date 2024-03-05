@@ -44,13 +44,17 @@ mod ryo {
             ryo_config.paused = false;
             ryo_config.leaderboard_version = 1;
             ryo_config.paper_address = paper_address;
-            ryo_config.paper_fee = 10;
+            ryo_config.paper_fee = 1_000;
             ryo_config_manager.set(ryo_config);
 
             // Leaderboard
             let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
             leaderboard_manager.new_leaderboard(ryo_config.leaderboard_version);
         }
+
+        //
+        // TODO: test it
+        //
 
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();

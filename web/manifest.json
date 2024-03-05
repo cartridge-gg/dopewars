@@ -969,7 +969,7 @@
     {
       "name": "rollyourown::_mocks::paper_mock::paper_mock",
       "address": "0x451db652fe2b40ca838e7e42b321e18efaf85472bfdf67b41e078f04c2cd414",
-      "class_hash": "0x77573d94cb74ed4a50cd62714f303a56b39458521b435e859cf412d88b136c8",
+      "class_hash": "0x4e6f6af62953d3bc5ffa7436f02db8cf7d56bd71d1831f223c4a47fd4cb0391",
       "abi": [
         {
           "type": "impl",
@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x5d557f2caf593a51531e1adf581e50c16460a81f44d789781e353152e66a9d2",
+      "class_hash": "0x28199941ab903cb11dbe3c36732b18fca75c3b395f95925e91d41c48d8e2309",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x5a6267499dcbaa1a192c6d1e18c410a99650f5e0693d5416fd7aa522d466589",
+      "class_hash": "0x71f2379d1c9a05034f82bdd8119f65c6e8f8ef5dc517247a52b5712c2da99e6",
       "abi": [
         {
           "type": "impl",
@@ -2846,7 +2846,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
-      "class_hash": "0x81b2fd184eb8184da5b6d1ef0b45b7260b086c628c7f9af7a85d7bb4b07f4c",
+      "class_hash": "0x7efd45ea52be001f18695b5a6df8afd896059edae562a046f1a23a17fac7314",
       "abi": [
         {
           "type": "impl",
@@ -5837,8 +5837,8 @@
           "key": true
         },
         {
-          "name": "player_id",
-          "type": "ContractAddress",
+          "name": "game_id",
+          "type": "u32",
           "key": false
         },
         {
@@ -5862,7 +5862,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x32634549de7f7faab4385c9559ce86311da6e7ac3e39b7758a3c5ec546a843b",
+      "class_hash": "0x3542ddcf8b36185c54ef83f87b124fd7cfa77c55299c99333f2123bb9b7c447",
       "abi": [
         {
           "type": "impl",
@@ -6074,8 +6074,8 @@
               "type": "core::integer::u16"
             },
             {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress"
+              "name": "game_id",
+              "type": "core::integer::u32"
             },
             {
               "name": "high_score",

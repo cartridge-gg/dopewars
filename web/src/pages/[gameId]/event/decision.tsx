@@ -1,7 +1,7 @@
 import { Button } from "@/components/common";
 import { DollarBag, Heart, Siren } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
-import { CashIndicator, HealthIndicator, Inventory } from "@/components/player";
+import { CashIndicator, HealthIndicator } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -247,15 +247,58 @@ const Decision = observer(() => {
   }
 
   return (
-    <Layout isSinglePanel>
-      <HStack
+    <Layout
+      isSinglePanel
+      footer={
+        <Footer w={["100%","50%"]}>
+          <Button
+            w="full"
+            px={["auto", "20px"]}
+            isDisabled={isRunning || isPaying}
+            isLoading={isFigthing}
+            onClick={() => {
+              setIsFigthing(true);
+              onDecision(EncountersAction.Fight);
+            }}
+          >
+            Fight
+          </Button>
+
+          <Button
+            w="full"
+            px={["auto", "20px"]}
+            isDisabled={isPaying || isFigthing}
+            isLoading={isRunning}
+            onClick={() => {
+              setIsRunning(true);
+              onDecision(EncountersAction.Run);
+            }}
+          >
+            Run
+          </Button>
+
+          <Button
+            w="full"
+            px={["auto", "20px"]}
+            isDisabled={isRunning || isFigthing}
+            isLoading={isPaying}
+            onClick={() => {
+              setIsPaying(true);
+              onDecision(EncountersAction.Pay);
+            }}
+          >
+            PAY
+          </Button>
+        </Footer>
+      }
+    >
+      <VStack
         w="full"
         h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
         overflowY="scroll"
         sx={{
           "scrollbar-width": "none",
         }}
-        flexDir={["column", "row"]}
       >
         <Encounter
           prefixTitle={prefixTitle}
@@ -269,89 +312,8 @@ const Decision = observer(() => {
           mb={0}
           w="full"
         />
-
-        <VStack w="full" h={["auto", "100%"]} flex={[0, 1]} position="relative">
-          <VStack w="full" h={["100%"]}>
-            <Inventory hidePawnshop/>
-            <VStack w="full" h="100%">
-              <VStack w="full" alignItems="flex-start">
-                <Text textStyle="subheading" mt={["10px", "30px"]} fontSize="10px" color="neon.500">
-                  Combat Log
-                </Text>
-                <Card
-                  w="full"
-                  maxH={isMobile ? "calc( 100vh - 560px)" : "calc( 100vh - 380px)"}
-                  overflowY="scroll"
-                  sx={{
-                    "scrollbar-width": "none",
-                  }}
-                  alignItems="flex-start"
-                  px="16px"
-                  py="8px"
-                >
-                  <Text color="red" mb={combatLogs!.length > 0 ? "10px" : "0"}>
-                    <Heart /> You lost {encounter?.healthLoss} HP!
-                  </Text>
-
-                  <VStack w="full" alignItems="flex-start" ref={combatsListRef}>
-                    {combatLogs &&
-                      combatLogs.map((i, key) => (
-                        <HStack key={`log-${key}`} color={i.color} _last={{ marginBottom: 0 }}>
-                          {i.icon &&
-                            i.icon({
-                              boxSize: "26",
-                            })}
-                          <Text>{i.text}</Text>
-                        </HStack>
-                      ))}
-                  </VStack>
-                </Card>
-              </VStack>
-            </VStack>
-          </VStack>
-
-          <Box minH="60px" />
-          <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
-            <Button
-              w="full"
-              px={["auto", "20px"]}
-              isDisabled={isRunning || isPaying}
-              isLoading={isFigthing}
-              onClick={() => {
-                setIsFigthing(true);
-                onDecision(EncountersAction.Fight);
-              }}
-            >
-              Fight
-            </Button>
-
-            <Button
-              w="full"
-              px={["auto", "20px"]}
-              isDisabled={isPaying || isFigthing}
-              isLoading={isRunning}
-              onClick={() => {
-                setIsRunning(true);
-                onDecision(EncountersAction.Run);
-              }}
-            >
-              Run
-            </Button>
-            <Button
-              w="full"
-              px={["auto", "20px"]}
-              isDisabled={isRunning || isFigthing}
-              isLoading={isPaying}
-              onClick={() => {
-                setIsPaying(true);
-                onDecision(EncountersAction.Pay);
-              }}
-            >
-              PAY
-            </Button>
-          </Footer>
-        </VStack>
-      </HStack>
+        <Box minH="100px" />
+      </VStack>
     </Layout>
   );
 });
@@ -387,9 +349,9 @@ const Encounter = ({
       </VStack>
       <VStack
         w="full"
-        flexDir={["row", "column"]}
+        // flexDir={["row", "column"]}
         justifyContent="center"
-        alignItems={["flex-start", "center"]}
+        alignItems={"center"}
         position="relative"
       >
         {!IsMobile() && sentence && (
@@ -408,9 +370,9 @@ const Encounter = ({
           src={imageSrc}
           alt="adverse event"
           mt={[0, "10px"]}
-          maxH={["auto", "calc(100vh - 400px)"]}
+          maxH={["auto", "calc(100vh - 360px)"]}
           w={[160, "auto"]}
-          h={[160, 400]}
+          h={[160, 360]}
         />
 
         <VStack w="full">
@@ -442,15 +404,22 @@ const Encounter = ({
                   </Text>
                 </Box>
               )}
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+              <Text color="red" h="40px" lineHeight="40px">
+                <Heart /> You lost {encounter?.healthLoss} HP!
+              </Text>
             </VStack>
           </Card>
         </VStack>
+
       </VStack>
+
       {IsMobile() && (
         <Card w="full" color="yellow.400" textAlign="center" p="10px" mb="10px">
           {demand}
         </Card>
       )}
+
     </VStack>
   );
 };

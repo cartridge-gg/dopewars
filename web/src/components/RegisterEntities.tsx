@@ -10,7 +10,7 @@ import { Siren, Truck } from "./icons";
 import { OG } from "./layout";
 
 const RegisterEntities = () => {
-  const { gameId, router } = useRouterContext();
+  const { gameId, router, playerId } = useRouterContext();
 
   const { account } = useDojoContext();
   const configStore = useConfigStore();
@@ -26,14 +26,18 @@ const RegisterEntities = () => {
 
     if (gameStore) {
       if (gameId && account?.address) {
+        // init for player
         gameStore.init(gameId, account?.address);
+      } else if (gameId && playerId) {
+        // init for specatator
+        gameStore.init(gameId, playerId);
       }
 
       if (!gameId) {
         gameStore.reset();
       }
     }
-  }, [gameId, account?.address]);
+  }, [gameId, account?.address, playerId]);
 
   //
   useEffect(() => {

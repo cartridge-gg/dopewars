@@ -52,7 +52,8 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
             self.world,
             Leaderboard {
                 version,
-                player_id: 0.try_into().unwrap(),
+                // player_id: 0.try_into().unwrap(),
+                game_id: 0,
                 high_score: 0,
                 next_version_timestamp: LeaderboardManagerTrait::get_next_version_timestamp(),
                 paper_balance: 0,
@@ -107,8 +108,8 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
             //set highscore
             leaderboard.high_score = game_store.player.cash;
 
-            //set player_id
-            leaderboard.player_id = game_store.game.player_id;
+            //set  game_id
+            leaderboard.game_id = game_store.game.game_id;
 
             //reset current version timer
             leaderboard

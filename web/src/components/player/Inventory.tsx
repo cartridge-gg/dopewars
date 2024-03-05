@@ -2,10 +2,17 @@ import { statName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
-import { Card, Divider, HStack, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { Card, Divider, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
 import { Bag, Home } from "../icons";
+
+import colors from "@/theme/colors";
+
+const blinkAnim = keyframes`  
+  0% {background-color: ${colors.neon[900]} ;}   
+  50% {background-color: ${colors.neon[700]};}   
+`;
 
 export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProps & { hidePawnshop?: boolean }) => {
   const { gameId, router } = useRouterContext();
@@ -19,7 +26,10 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
     <HStack {...props} w="full" align="flex-start" pb="0">
       {!hidePawnshop && (
         <VStack w="full" alignItems="flex-start">
-          <Text color="neon.500">PAWNSHOP</Text>
+          <Text textStyle="subheading" fontSize="11px" color="neon.500" h="24px" lineHeight="24px">
+            PAWNSHOP
+          </Text>
+
           <Card
             cursor={game.isShopOpen ? "pointer" : "not-allowed"}
             h="40px"
@@ -27,8 +37,8 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             justify="center"
             alignItems="center"
             opacity={game.isShopOpen ? 1 : 0.5}
-            bg="neon.700"
             flexDirection="row"
+            animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
                 router.push(`/${gameId}/pawnshop`);
@@ -44,7 +54,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       <VStack w="full" alignItems="flex-end">
         <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center">
           <Bag />
-          <Text>
+          <Text textStyle="subheading" fontSize="11px">
             {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
             {game.items.transport!.tier.stat / 100} LBS
           </Text>

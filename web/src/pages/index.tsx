@@ -2,17 +2,12 @@ import { Button } from "@/components/common";
 import { Alert, Clock, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
+import { HallOfFame } from "@/components/pages/home/HallOfFame";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import {
-  Card,
-  Divider,
-  HStack,
-  Text,
-  VStack
-} from "@chakra-ui/react";
+import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -91,18 +86,24 @@ export default function Home() {
             )}
           </HStack>
         </Card>
-    
+
         {!isGated && (
           <>
-            <VStack
-              boxSize="full"
-              gap="20px"
-              __css={{
-                "scrollbar-width": "none",
-              }}
-            >
-              <Leaderboard />
-            </VStack>
+            <Tabs variant="unstyled" w="full">
+              <TabList pb={6}>
+                <Tab>LEADERBOARD</Tab>
+                <Tab>HALL OF FAME</Tab>
+              </TabList>
+
+              <TabPanels mt={0} h="calc(100vh - 400px)" overflowY="scroll">
+                <TabPanel p={0}>
+                  <Leaderboard />
+                </TabPanel>
+                <TabPanel p={0}>
+                  <HallOfFame />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </>
         )}
       </VStack>

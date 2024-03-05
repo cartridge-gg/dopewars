@@ -188,10 +188,10 @@ export function formatQuantity(quantity: number): string {
 }
 
 
-
 export function formatEther(value: BigNumberish): number {
-  return Number(BigInt(value) / 10n ** 18n)
-
+  return Number(
+    BigInt(value.toString()) * 10n ** 4n / 10n ** 18n
+  ) / 10 ** 4
 }
 
 export function formatCash(cash: number): string {

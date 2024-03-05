@@ -1,7 +1,7 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, Call, GetTransactionReceiptResponse, SuccessfulTransactionReceiptResponse, uint256 } from "starknet";
+import { BigNumberish, Call, GetTransactionReceiptResponse, SuccessfulTransactionReceiptResponse, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
@@ -99,7 +99,7 @@ export const useSystems = (): SystemsInterface => {
         // TODO : remove later
         //
         await sleep(1_500);
-        clearToasts()
+        // clearToasts()
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 200,
@@ -144,7 +144,7 @@ export const useSystems = (): SystemsInterface => {
 
 
     },
-    [dojoProvider, account, toast, clearToasts],
+    [dojoProvider, account, toast],
   );
 
 
@@ -166,7 +166,7 @@ export const useSystems = (): SystemsInterface => {
       const createGameCall = {
         contractAddress: gameAddress,
         entrypoint: "create_game",
-        calldata: [gameMode, hustlerId, playerName]
+        calldata: [gameMode, hustlerId, shortString.encodeShortString(playerName)]
       }
 
       const { hash, events, parsedEvents } = await executeAndReceipt([approvalCall, createGameCall]);

@@ -175,7 +175,7 @@ export default function Travel() {
       {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
         <VStack w="full" align="flex-start">
-          <Inventory />
+          <Inventory hidePawnshop/>
           <HStack w="full" justify="space-between" pt={["0px", "20px"]}>
             <Text textStyle="subheading" fontSize="11px" color="neon.500">
               Location

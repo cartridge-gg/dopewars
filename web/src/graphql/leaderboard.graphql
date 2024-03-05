@@ -1,9 +1,24 @@
-query Leaderboards($version: u16) {
+query LeaderboardByVersion($version: u16) {
   leaderboardModels(where: { version: $version }) {
     edges {
       node {
         version
-        player_id
+        game_id
+        high_score
+        next_version_timestamp
+        paper_balance
+        claimed
+      }
+    }
+  }
+}
+
+query HallOfFame {
+  leaderboardModels(limit: 420) {
+    edges {
+      node {
+        version
+        game_id
         high_score
         next_version_timestamp
         paper_balance

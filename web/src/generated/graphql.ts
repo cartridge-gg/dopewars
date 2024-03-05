@@ -776,10 +776,10 @@ export type Leaderboard = {
   __typename?: 'Leaderboard';
   claimed?: Maybe<Scalars['bool']>;
   entity?: Maybe<World__Entity>;
+  game_id?: Maybe<Scalars['u32']>;
   high_score?: Maybe<Scalars['u32']>;
   next_version_timestamp?: Maybe<Scalars['u64']>;
   paper_balance?: Maybe<Scalars['u256']>;
-  player_id?: Maybe<Scalars['ContractAddress']>;
   version?: Maybe<Scalars['u16']>;
 };
 
@@ -803,15 +803,22 @@ export type LeaderboardOrder = {
 
 export enum LeaderboardOrderField {
   Claimed = 'CLAIMED',
+  GameId = 'GAME_ID',
   HighScore = 'HIGH_SCORE',
   NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
   PaperBalance = 'PAPER_BALANCE',
-  PlayerId = 'PLAYER_ID',
   Version = 'VERSION'
 }
 
 export type LeaderboardWhereInput = {
   claimed?: InputMaybe<Scalars['bool']>;
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
   high_score?: InputMaybe<Scalars['u32']>;
   high_scoreEQ?: InputMaybe<Scalars['u32']>;
   high_scoreGT?: InputMaybe<Scalars['u32']>;
@@ -833,13 +840,6 @@ export type LeaderboardWhereInput = {
   paper_balanceLT?: InputMaybe<Scalars['u256']>;
   paper_balanceLTE?: InputMaybe<Scalars['u256']>;
   paper_balanceNEQ?: InputMaybe<Scalars['u256']>;
-  player_id?: InputMaybe<Scalars['ContractAddress']>;
-  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
   version?: InputMaybe<Scalars['u16']>;
   versionEQ?: InputMaybe<Scalars['u16']>;
   versionGT?: InputMaybe<Scalars['u16']>;
@@ -1482,7 +1482,7 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1499,12 +1499,17 @@ export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
 
 export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'DrugConfigMeta' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'LocationConfigMeta' } | { __typename: 'RyoConfig' } | null> | null } };
 
-export type LeaderboardsQueryVariables = Exact<{
+export type LeaderboardByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type LeaderboardsQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+export type LeaderboardByVersionQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+
+export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HallOfFameQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -1694,6 +1699,7 @@ export const GameByIdDocument = `
         max_wanted_shopping
         hustler_id
         player_name
+        player_id
         game_over
       }
     }
@@ -1804,13 +1810,13 @@ export const GameStorePackedSubscriptionDocument = `
   }
 }
     `;
-export const LeaderboardsDocument = `
-    query Leaderboards($version: u16) {
+export const LeaderboardByVersionDocument = `
+    query LeaderboardByVersion($version: u16) {
   leaderboardModels(where: {version: $version}) {
     edges {
       node {
         version
-        player_id
+        game_id
         high_score
         next_version_timestamp
         paper_balance
@@ -1820,38 +1826,88 @@ export const LeaderboardsDocument = `
   }
 }
     `;
-export const useLeaderboardsQuery = <
-      TData = LeaderboardsQuery,
+export const useLeaderboardByVersionQuery = <
+      TData = LeaderboardByVersionQuery,
       TError = unknown
     >(
-      variables?: LeaderboardsQueryVariables,
-      options?: UseQueryOptions<LeaderboardsQuery, TError, TData>
+      variables?: LeaderboardByVersionQueryVariables,
+      options?: UseQueryOptions<LeaderboardByVersionQuery, TError, TData>
     ) =>
-    useQuery<LeaderboardsQuery, TError, TData>(
-      variables === undefined ? ['Leaderboards'] : ['Leaderboards', variables],
-      useFetchData<LeaderboardsQuery, LeaderboardsQueryVariables>(LeaderboardsDocument).bind(null, variables),
+    useQuery<LeaderboardByVersionQuery, TError, TData>(
+      variables === undefined ? ['LeaderboardByVersion'] : ['LeaderboardByVersion', variables],
+      useFetchData<LeaderboardByVersionQuery, LeaderboardByVersionQueryVariables>(LeaderboardByVersionDocument).bind(null, variables),
       options
     );
 
-useLeaderboardsQuery.getKey = (variables?: LeaderboardsQueryVariables) => variables === undefined ? ['Leaderboards'] : ['Leaderboards', variables];
+useLeaderboardByVersionQuery.getKey = (variables?: LeaderboardByVersionQueryVariables) => variables === undefined ? ['LeaderboardByVersion'] : ['LeaderboardByVersion', variables];
 ;
 
-export const useInfiniteLeaderboardsQuery = <
-      TData = LeaderboardsQuery,
+export const useInfiniteLeaderboardByVersionQuery = <
+      TData = LeaderboardByVersionQuery,
       TError = unknown
     >(
-      variables?: LeaderboardsQueryVariables,
-      options?: UseInfiniteQueryOptions<LeaderboardsQuery, TError, TData>
+      variables?: LeaderboardByVersionQueryVariables,
+      options?: UseInfiniteQueryOptions<LeaderboardByVersionQuery, TError, TData>
     ) =>{
-    const query = useFetchData<LeaderboardsQuery, LeaderboardsQueryVariables>(LeaderboardsDocument)
-    return useInfiniteQuery<LeaderboardsQuery, TError, TData>(
-      variables === undefined ? ['Leaderboards.infinite'] : ['Leaderboards.infinite', variables],
+    const query = useFetchData<LeaderboardByVersionQuery, LeaderboardByVersionQueryVariables>(LeaderboardByVersionDocument)
+    return useInfiniteQuery<LeaderboardByVersionQuery, TError, TData>(
+      variables === undefined ? ['LeaderboardByVersion.infinite'] : ['LeaderboardByVersion.infinite', variables],
       (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
 
-useInfiniteLeaderboardsQuery.getKey = (variables?: LeaderboardsQueryVariables) => variables === undefined ? ['Leaderboards.infinite'] : ['Leaderboards.infinite', variables];
+useInfiniteLeaderboardByVersionQuery.getKey = (variables?: LeaderboardByVersionQueryVariables) => variables === undefined ? ['LeaderboardByVersion.infinite'] : ['LeaderboardByVersion.infinite', variables];
+;
+
+export const HallOfFameDocument = `
+    query HallOfFame {
+  leaderboardModels(limit: 420) {
+    edges {
+      node {
+        version
+        game_id
+        high_score
+        next_version_timestamp
+        paper_balance
+        claimed
+      }
+    }
+  }
+}
+    `;
+export const useHallOfFameQuery = <
+      TData = HallOfFameQuery,
+      TError = unknown
+    >(
+      variables?: HallOfFameQueryVariables,
+      options?: UseQueryOptions<HallOfFameQuery, TError, TData>
+    ) =>
+    useQuery<HallOfFameQuery, TError, TData>(
+      variables === undefined ? ['HallOfFame'] : ['HallOfFame', variables],
+      useFetchData<HallOfFameQuery, HallOfFameQueryVariables>(HallOfFameDocument).bind(null, variables),
+      options
+    );
+
+useHallOfFameQuery.getKey = (variables?: HallOfFameQueryVariables) => variables === undefined ? ['HallOfFame'] : ['HallOfFame', variables];
+;
+
+export const useInfiniteHallOfFameQuery = <
+      TData = HallOfFameQuery,
+      TError = unknown
+    >(
+      variables?: HallOfFameQueryVariables,
+      options?: UseInfiniteQueryOptions<HallOfFameQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<HallOfFameQuery, HallOfFameQueryVariables>(HallOfFameDocument)
+    return useInfiniteQuery<HallOfFameQuery, TError, TData>(
+      variables === undefined ? ['HallOfFame.infinite'] : ['HallOfFame.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteHallOfFameQuery.getKey = (variables?: HallOfFameQueryVariables) => variables === undefined ? ['HallOfFame.infinite'] : ['HallOfFame.infinite', variables];
 ;
 
 export const GameOverEventsDocument = `
