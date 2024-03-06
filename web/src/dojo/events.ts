@@ -95,10 +95,12 @@ export interface GameOverData extends BaseEventData{
 
 export const parseAllEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
   if (receipt.execution_status === "REJECTED") {
-    throw new Error(`transaction REJECTED`);
+    return []
+    //throw new Error(`transaction REJECTED`);
   }
   if (receipt.execution_status === "REVERTED") {
-    throw new Error(`transaction REVERTED`);
+    return []
+    //throw new Error(`transaction REVERTED`);
   }
 
   const flatEvents = parseEvents(receipt as InvokeTransactionReceiptResponse)

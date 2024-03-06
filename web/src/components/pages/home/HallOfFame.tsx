@@ -1,6 +1,6 @@
 import { HustlerIcon } from "@/components/hustlers";
 import { PaperIcon } from "@/components/icons";
-import { useConfigStore, useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext, useRyoStore, useSystems } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { Leaderboard } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
@@ -33,6 +33,8 @@ export const HallOfFame = observer(() => {
 const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account?: Account }) => {
   const { router } = useRouterContext();
   const { game, isLoading } = useGameById(entry.game_id);
+console.log(entry)
+  const { claim, isPending } = useSystems();
 
   const claimable = useMemo(() => {
     return account?.address === game?.player_id && !entry.claimed;
@@ -42,20 +44,24 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account?: Acc
     router.push(`/0x${entry.game_id.toString(16)}/logs?playerId=${game?.player_id}`);
   }, [entry.game_id, game?.player_id]);
 
+  const onClaim = useCallback(async () => {
+    await claim(entry.version);
+  }, []);
+
   return (
-    <Card position="relative" p={3} cursor="pointer" onClick={onClick}>
+    <Card position="relative" p={3} cursor="pointer">
       <VStack alignItems="flex-start" gap={0}>
         <HStack w="full" justifyContent="space-between" borderBottom="solid 1px" borderColor="neon.700" pb={2} mb={2}>
           <Text>SEASON {entry.version}</Text>
           <Text color={claimable ? "yellow.400" : "neon.400"}>
-            {formatCash(entry.paper_balance).replace("$", "")}
-            <PaperIcon width="20px" height="20px" ml={1} />
+            {formatCash(entry.paper_balance).replace("$", "")} <small>PAPER</small>
+            {/*claimable*/ true && (<PaperIcon width="20px" height="20px" ml={1} onClick={onClaim} />)}
           </Text>
         </HStack>
 
         {game && (
           <HStack w="full" gap={3}>
-            <HustlerIcon hustler={game?.hustler_id} width="48px" height="48px" />
+            <HustlerIcon hustler={game?.hustler_id} width="48px" height="48px" onClick={onClick} />
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>{shortString.decodeShortString(game?.player_name)}</Text>

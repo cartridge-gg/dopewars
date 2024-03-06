@@ -9,7 +9,7 @@ use rollyourown::{
     constants::{ETHER}
 };
 
-const TWENTY_MIN: u64 = 1200; // 20 * 60
+const FEW_MIN: u64 = 300; // 5 * 60
 const ONE_HOUR: u64 = 3600; // 60 * 60
 const ONE_DAY: u64 = 86_400; // 24 * 60 * 60
 const ONE_WEEK: u64 = 604_800; // 7 * 86_400;
@@ -44,7 +44,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
 
         // TODO: revert
         //current_timestamp + ONE_WEEK
-        current_timestamp + TWENTY_MIN
+        current_timestamp + FEW_MIN
     }
 
     fn new_leaderboard(self: LeaderboardManager, version: u16) {
@@ -52,7 +52,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
             self.world,
             Leaderboard {
                 version,
-                // player_id: 0.try_into().unwrap(),
+                player_id: 0.try_into().unwrap(),
                 game_id: 0,
                 high_score: 0,
                 next_version_timestamp: LeaderboardManagerTrait::get_next_version_timestamp(),
@@ -90,7 +90,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
         leaderboard.paper_balance += paper_fee;
         set!(self.world, (leaderboard));
 
-        // transfer paper_fee from user to game ( user approve ryo to spend paper before)
+        // transfer paper_fee from user to game ( user approved game contract to spend paper before)
         IPaperDispatcher {
             contract_address: ryo_config.paper_address
         }.transfer_from(get_caller_address(), get_contract_address(), paper_fee);
@@ -108,8 +108,9 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
             //set highscore
             leaderboard.high_score = game_store.player.cash;
 
-            //set  game_id
+            // set game_id & player_id
             leaderboard.game_id = game_store.game.game_id;
+            leaderboard.player_id = game_store.game.player_id;
 
             //reset current version timer
             leaderboard

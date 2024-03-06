@@ -47,8 +47,10 @@ export const Header = observer(({ back }: HeaderProps) => {
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
+        {/* game contract */}
+        {/* <TokenBalance address={"0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec"} token={config?.ryo.paper_address} /> */}
         <BuyPaper />
-        
+
         {!game && (
           <>
             {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}

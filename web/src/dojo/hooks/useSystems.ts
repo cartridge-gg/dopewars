@@ -14,6 +14,7 @@ export interface SystemsInterface {
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
+  claim: (season: number) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
@@ -115,19 +116,19 @@ export const useSystems = (): SystemsInterface => {
         throw Error(e.toString())
       }
 
-      // if (receipt && "execution_status" in receipt) {
-      //   if (["REVERTED", "REJECTED"].includes(receipt.execution_status)) {
-      //     setError(`Transaction ${receipt.execution_status}`)
-      //     setIsPending(false)
+      if (receipt && "execution_status" in receipt) {
+        if (["REVERTED", "REJECTED"].includes(receipt.execution_status)) {
+          setError(`Transaction ${receipt.execution_status}`)
+          setIsPending(false)
 
-      //     toast({
-      //       message: tryBetterErrorMsg(receipt.revert_reason || `Transaction ${receipt.execution_status}`),
-      //       duration: 20_000,
-      //       isError: true
-      //     })
-      //     throw Error(receipt.revert_reason || `Transaction ${receipt.execution_status}`)
-      //   }
-      // }
+          toast({
+            message: tryBetterErrorMsg(receipt.revert_reason || `Transaction ${receipt.execution_status}`),
+            duration: 20_000,
+            isError: true
+          })
+          // throw Error(receipt.revert_reason || `Transaction ${receipt.execution_status}`)
+        }
+      }
 
       const events = getEvents(receipt);
       const parsedEvents = parseAllEvents(receipt as SuccessfulTransactionReceiptResponse);
@@ -272,6 +273,26 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  const claim = useCallback(
+    async (season: number) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::game::game",
+          functionName: "claim",
+          callData: [season],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
 
   //
   //
@@ -321,6 +342,7 @@ export const useSystems = (): SystemsInterface => {
     travel,
     endGame,
     decide,
+    claim,
     //
     feedLeaderboard,
     failingTx,

@@ -29,15 +29,16 @@ trait IGameActions<T> {
         actions: Span<Actions>
     );
     fn decide(self: @T, game_id: u32, action: EncounterActions);
+    fn claim(self: @T, season: u16);
 }
 
 #[dojo::contract]
 mod game {
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}, ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
-        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, },
+        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, leaderboard::{Leaderboard} },
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             encounters_packed::{Encounters}, player::{Player, PlayerImpl},
@@ -50,6 +51,7 @@ mod game {
             random::{Random, RandomImpl},
             bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
         },
+        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
     };
 
 
@@ -316,7 +318,40 @@ mod game {
                 game_loop::on_turn_end(ref game_store, ref randomizer,);
             };
         }
+
+        fn claim(self: @ContractState, season: u16) {
+            let world = self.world();
+            let mut leaderboard = get!(world, (season),(Leaderboard));
+
+            // check not claimed
+            assert(!leaderboard.claimed, 'already claimed!');
+
+            // check if caller is winner
+            assert(leaderboard.player_id == get_caller_address(), 'you aint dat OG!');
+
+            let leaderboard_manager = LeaderboardManagerTrait::new(world);
+            let current_version = leaderboard_manager.get_current_version();
+
+            // check if season has end
+            assert(season < current_version, 'season has not ended yet!');
+
+            // any other check missing ?
+
+            // update claimed & save
+            leaderboard.claimed = true;
+            set!(world, (leaderboard));
+
+            // retrieve paper address from ryo_config
+            let ryo_config_manager = RyoConfigManagerTrait::new(world);
+            let ryo_config = ryo_config_manager.get();
+           
+            // transfer reward
+            IPaperDispatcher {
+                contract_address: ryo_config.paper_address
+            }.transfer( get_caller_address(), leaderboard.paper_balance);
+        }
     }
+
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn assert_not_paused(self: @ContractState) {

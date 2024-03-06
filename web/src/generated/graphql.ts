@@ -780,6 +780,7 @@ export type Leaderboard = {
   high_score?: Maybe<Scalars['u32']>;
   next_version_timestamp?: Maybe<Scalars['u64']>;
   paper_balance?: Maybe<Scalars['u256']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
   version?: Maybe<Scalars['u16']>;
 };
 
@@ -807,6 +808,7 @@ export enum LeaderboardOrderField {
   HighScore = 'HIGH_SCORE',
   NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
   PaperBalance = 'PAPER_BALANCE',
+  PlayerId = 'PLAYER_ID',
   Version = 'VERSION'
 }
 
@@ -840,6 +842,13 @@ export type LeaderboardWhereInput = {
   paper_balanceLT?: InputMaybe<Scalars['u256']>;
   paper_balanceLTE?: InputMaybe<Scalars['u256']>;
   paper_balanceNEQ?: InputMaybe<Scalars['u256']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
   version?: InputMaybe<Scalars['u16']>;
   versionEQ?: InputMaybe<Scalars['u16']>;
   versionGT?: InputMaybe<Scalars['u16']>;
