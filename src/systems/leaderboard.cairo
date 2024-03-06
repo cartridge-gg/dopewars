@@ -9,7 +9,7 @@ use rollyourown::{
     constants::{ETHER}
 };
 
-const FEW_MIN: u64 = 300; // 5 * 60
+const FEW_MIN: u64 = 1800; // 30 * 60
 const ONE_HOUR: u64 = 3600; // 60 * 60
 const ONE_DAY: u64 = 86_400; // 24 * 60 * 60
 const ONE_WEEK: u64 = 604_800; // 7 * 86_400;
@@ -42,7 +42,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
     fn get_next_version_timestamp() -> u64 {
         let current_timestamp = starknet::info::get_block_timestamp();
 
-        // TODO: revert
+        // TODO: make configurable
         //current_timestamp + ONE_WEEK
         current_timestamp + FEW_MIN
     }

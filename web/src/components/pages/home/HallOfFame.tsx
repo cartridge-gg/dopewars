@@ -7,7 +7,7 @@ import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
-import { shortString } from "starknet";
+import { Account, shortString } from "starknet";
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
@@ -30,10 +30,10 @@ export const HallOfFame = observer(() => {
   );
 });
 
-const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account?: Account }) => {
+const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Account | null }) => {
   const { router } = useRouterContext();
-  const { game, isLoading } = useGameById(entry.game_id);
-console.log(entry)
+  const { game, isFetched } = useGameById(entry.game_id);
+
   const { claim, isPending } = useSystems();
 
   const claimable = useMemo(() => {
@@ -48,6 +48,7 @@ console.log(entry)
     await claim(entry.version);
   }, []);
 
+  if (!isFetched) return null;
   return (
     <Card position="relative" p={3} cursor="pointer">
       <VStack alignItems="flex-start" gap={0}>
@@ -55,7 +56,7 @@ console.log(entry)
           <Text>SEASON {entry.version}</Text>
           <Text color={claimable ? "yellow.400" : "neon.400"}>
             {formatCash(entry.paper_balance).replace("$", "")} <small>PAPER</small>
-            {/*claimable*/ true && (<PaperIcon width="20px" height="20px" ml={1} onClick={onClaim} />)}
+            {/*claimable*/ true && <PaperIcon width="20px" height="20px" ml={1} onClick={onClaim} />}
           </Text>
         </HStack>
 

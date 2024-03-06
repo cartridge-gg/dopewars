@@ -1,7 +1,13 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
-import { BigNumberish, Call, GetTransactionReceiptResponse, SuccessfulTransactionReceiptResponse, shortString, uint256 } from "starknet";
+import {
+  BigNumberish, Call, GetTransactionReceiptResponse,
+  RejectedTransactionReceiptResponse,
+  RevertedTransactionReceiptResponse,
+  SuccessfulTransactionReceiptResponse,
+  shortString, uint256
+} from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
@@ -116,19 +122,34 @@ export const useSystems = (): SystemsInterface => {
         throw Error(e.toString())
       }
 
-      if (receipt && "execution_status" in receipt) {
-        if (["REVERTED", "REJECTED"].includes(receipt.execution_status)) {
-          setError(`Transaction ${receipt.execution_status}`)
-          setIsPending(false)
+      if (receipt) {
+        let receipt_error = undefined
+
+        if ("status" in receipt && receipt.status === "REJECTED") {
+          receipt_error = {
+            status: "REJECTED",
+            message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message
+          }
+        }
+
+        if ("execution_status" in receipt && receipt.execution_status === "REVERTED") {
+          receipt_error = {
+            status: "REVERTED",
+            message: (receipt as RevertedTransactionReceiptResponse).revert_reason
+          }
+        }
+
+        if (receipt_error) {
+          setError(`Transaction ${receipt_error.status}`)
 
           toast({
-            message: tryBetterErrorMsg(receipt.revert_reason || `Transaction ${receipt.execution_status}`),
+            message: tryBetterErrorMsg(receipt_error.message || ""),
             duration: 20_000,
             isError: true
           })
-          // throw Error(receipt.revert_reason || `Transaction ${receipt.execution_status}`)
         }
       }
+
 
       const events = getEvents(receipt);
       const parsedEvents = parseAllEvents(receipt as SuccessfulTransactionReceiptResponse);
