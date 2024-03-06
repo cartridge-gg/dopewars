@@ -1,7 +1,10 @@
 use starknet::ContractAddress;
+use core::poseidon::PoseidonTrait;
+use core::hash::{HashStateTrait, HashStateExTrait};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::models::market::Market;
+use rollyourown::models::market::{Market};
+use rollyourown::models::encrypted_market::{EncryptedMarket};
 use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::drug::{Drug, DrugTrait};
 use rollyourown::models::player::{Player};
@@ -43,17 +46,28 @@ fn initialize_markets(
 
                 let market_cash = market_quantity.into() * market_price;
 
+                let cash_hash = PoseidonTrait::new().update_with(market_cash).finalize();
+
+                let quantity_hash = PoseidonTrait::new().update_with(market_quantity).finalize();
+
+                
                 //set market entity
-                set!(
-                    world,
-                    (Market {
+                set !(world, (
+                    Market {
                         game_id,
                         location_id: location_id,
                         drug_id: *drug_id,
                         cash: market_cash,
                         quantity: market_quantity
-                    })
-                );
+                    },
+                    EncryptedMarket {
+                        game_id,
+                        location_id: location_id,
+                        drug_id: *drug_id,
+                        cash: cash_hash,
+                        quantity: quantity_hash
+                    },
+                ));
             },
             Option::None(()) => { break (); }
         };

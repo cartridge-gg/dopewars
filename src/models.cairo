@@ -1,5 +1,6 @@
 mod game;
 mod market;
+mod encrypted_market;
 mod player;
 mod drug;
 mod location;
