@@ -25,12 +25,12 @@ const RegisterEntities = () => {
     configStore && configStore.init();
 
     if (gameStore) {
-      if (gameId && account?.address) {
-        // init for player
-        gameStore.init(gameId, account?.address);
-      } else if (gameId && playerId) {
+      if (gameId && playerId) {
         // init for specatator
         gameStore.init(gameId, playerId);
+      } else if (gameId && account?.address) {
+        // init for player
+        gameStore.init(gameId, account?.address);
       }
 
       if (!gameId) {

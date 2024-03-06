@@ -19,7 +19,7 @@ auth = "./scripts/default_auth.sh dev"
 auth_staging = "./scripts/default_auth.sh staging"
 auth_prod = "./scripts/default_auth.sh prod"
 migrate = "sozo -P dev migrate && scarb run gendojo && scarb run auth"
-migrate_staging = "sozo -P staging migrate && scarb run auth_staging"
+migrate_staging = "sozo -P staging build && sozo -P staging migrate && scarb run auth_staging"
 migrate_prod = "sozo -P prod migrate"
 
 [profile.dev.tool.dojo.env]
