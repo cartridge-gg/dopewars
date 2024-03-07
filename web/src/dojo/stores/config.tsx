@@ -3,16 +3,14 @@ import {
   ConfigQuery,
   DrugConfig,
   DrugConfigEdge,
-  DrugConfigMeta,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
   HustlerItemTiersConfig,
   HustlerItemTiersConfigEdge,
   LocationConfig,
   LocationConfigEdge,
-  LocationConfigMeta,
   RyoConfig,
-  RyoConfigEdge
+  RyoConfigEdge,
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -31,8 +29,8 @@ import {
 } from "../helpers";
 import { ItemSlot } from "../types";
 
-export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
-export type LocationConfigFull = LocationConfig & Omit<LocationConfigMeta, "__typename"> & { icon: React.FC };
+export type DrugConfigFull = DrugConfig & { icon: React.FC };
+export type LocationConfigFull = LocationConfig & { icon: React.FC };
 
 export type LayoutItem = {
   name: string;
@@ -129,7 +127,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
 
           const locationConfigEdges = data.locationConfigModels!.edges as LocationConfigEdge[];
           const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
-       
+
           //
 
           const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
@@ -150,7 +148,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const drugConfigFull = drugConfig.map((i) => {
             return {
               ...i,
-               name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
+              name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
               icon: drugIcons[i.drug as drugIconsKeys],
             } as DrugConfigFull;
           });

@@ -8,10 +8,13 @@ trait IRyo<TContractState> {
     fn initialize(self: @TContractState, paper_address: ContractAddress);
     fn set_paused(self: @TContractState, paused: bool);
     fn set_paper_fee(self: @TContractState, fee: u16);
+    fn set_leaderboard_duration(self: @TContractState, duration_sec: u32);
+
     //
     fn paused(self: @TContractState) -> bool;
     fn paper(self: @TContractState) -> ContractAddress;
     fn paper_fee(self: @TContractState) -> u16;
+    fn leaderboard_duration(self: @TContractState) -> u32;
 }
 
 #[dojo::contract]
@@ -28,6 +31,11 @@ mod ryo {
         systems::leaderboard::{LeaderboardManager, LeaderboardManagerTrait},
     };
 
+    const FEW_MIN: u32 = 1800; // 30 * 60
+    const ONE_HOUR: u32 = 3600; // 60 * 60
+    const ONE_DAY: u32 = 86_400; // 24 * 60 * 60
+    const ONE_WEEK: u32 = 604_800; // 7 * 86_400;
+
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
         fn initialize(self: @ContractState, paper_address: ContractAddress) {
@@ -42,8 +50,10 @@ mod ryo {
             ryo_config.initialized = true;
             ryo_config.paused = false;
             ryo_config.leaderboard_version = 1;
+            ryo_config.leaderboard_duration = FEW_MIN; // ONE_WEEK
+            
             ryo_config.paper_address = paper_address;
-            ryo_config.paper_fee = 1_000;
+            ryo_config.paper_fee = 1_000; // in ether
             ryo_config_manager.set(ryo_config);
 
             // Leaderboard
@@ -75,6 +85,16 @@ mod ryo {
             ryo_config_manager.set(ryo_config);
         }
 
+        fn set_leaderboard_duration(self: @ContractState, duration_sec: u32) {
+            self.assert_caller_is_owner();
+
+            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
+            let mut ryo_config = ryo_config_manager.get();
+
+            ryo_config.leaderboard_duration = duration_sec;
+            ryo_config_manager.set(ryo_config);
+        }
+
 
         //
         // getters
@@ -94,6 +114,12 @@ mod ryo {
             let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
             ryo_config.paper_fee
         }
+
+        fn leaderboard_duration(self: @ContractState) -> u32 {
+            let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
+            ryo_config.leaderboard_duration
+        }
+
     }
 
     #[generate_trait]

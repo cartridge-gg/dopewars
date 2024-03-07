@@ -10,6 +10,7 @@ struct RyoConfig {
     initialized: bool,
     paused: bool,
     leaderboard_version: u16,
+    leaderboard_duration: u32,
     paper_address: ContractAddress,
     paper_fee: u16,
 // treasury_address: ContractAddress,

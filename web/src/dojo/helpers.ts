@@ -22,6 +22,7 @@ import {
   Drugs,
   EncounterOutcomes,
   Encounters,
+  EncountersAction,
   ItemSlot,
   LocationInfo,
   Locations,
@@ -41,10 +42,30 @@ import {
 import { Chain } from "@/components/icons/items/Chain";
 
 
+
+export const encountersActionName = {
+  [EncountersAction.Run] : "Run",
+  [EncountersAction.Pay] : "Pay",
+  [EncountersAction.Fight] : "Fight",
+}
+export type encountersActionNameKeys = keyof typeof encountersActionName;
+
+
+export const randomGreetings = {
+  0: "Welcome to",
+  1: "GM",
+  2: "Yo",
+  3: "Sup",
+  4: "Here we go again",
+  5: "Ohayo",
+}
+export type randomGreetingsKeys = keyof typeof randomGreetings;
+
+
 export const reputationRanks = {
-  0: "Rookie",
-  1: "Rookie",
-  2: "Rookie",
+  0: "Goon",
+  1: "Goon",
+  2: "Goon",
   3: "Hustler",
   4: "Hustler",
   5: "Hustler",
@@ -410,3 +431,8 @@ export function getOutcomeInfo(
 }
 
 
+
+
+export function getRandomGreeting(seed: number) {
+  return randomGreetings[seed % Object.values(randomGreetings).length as randomGreetingsKeys]
+}

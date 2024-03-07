@@ -15,7 +15,7 @@ import {
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
+import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
@@ -146,7 +146,7 @@ const Logs = () => {
       }
       rigthPanelMaxH={rigthPanelMaxH}
     >
-      <Tabs variant="unstyled" w="full" >
+      <Tabs variant="unstyled" w="full">
         <TabList>
           <Tab>Loadout</Tab>
           <Tab>Activity</Tab>
@@ -393,7 +393,7 @@ const FightLine = ({
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
-          <Tooltip label={action ? action : ""} placement="right-end">
+          <Tooltip label={action !== undefined ? encountersActionName[action as encountersActionNameKeys] : ""} placement="right-end">
             <Text>{text}</Text>
           </Tooltip>
         </HStack>

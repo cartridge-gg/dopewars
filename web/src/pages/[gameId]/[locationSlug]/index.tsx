@@ -1,6 +1,7 @@
 import { Button } from "@/components/common";
 import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
+import { getRandomGreeting } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
@@ -29,12 +30,11 @@ const Location = observer(() => {
 
   const configStore = useConfigStore();
   const { game, gameInfos, gameEvents } = useGameStore();
-
-  const [prices, setPrices] = useState<DrugMarket[]>([]);
-
   const { endGame, isPending } = useSystems();
 
+  const [prices, setPrices] = useState<DrugMarket[]>([]);
   const [isLastDay, setIsLastDay] = useState(false);
+  const [greetings, setGreetings] = useState("");
 
   useEffect(() => {
     if (game && gameInfos && location) {
@@ -44,6 +44,7 @@ const Location = observer(() => {
         return;
       }
 
+      setGreetings(getRandomGreeting(game.player.turn))
       setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
   }, [location, game, router, gameId, gameInfos, gameInfos?.max_turns]);
@@ -61,13 +62,13 @@ const Location = observer(() => {
   // const prefixTitle = isLastDay
   //   ? "Final Day"
   //   : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
-  const prefixTitle = "Welcome to";
+  
 
   return (
     <Layout
       leftPanelProps={{
         title: location.name,
-        prefixTitle: prefixTitle,
+        prefixTitle: greetings,
         imageSrc: `/images/locations/${location?.location.toLowerCase()}.png`,
       }}
       footer={
@@ -128,14 +129,13 @@ const Location = observer(() => {
                         initial={{ opacity: 0 }}
                         whileHover={{ opacity: 1 }}
                         p="2px"
-                      //  alignItems="flex-end"
                         alignItems="center"
                         boxSize="full"
                         position="absolute"
                         top={2}
                         pointerEvents={["none", "auto"]}
                       >
-                        <HStack  w="full" px={3} gap={6} /*bgColor="neon.900"*/>
+                        <HStack w="full" px={3} gap={6} /*bgColor="neon.900"*/>
                           <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
                         </HStack>
                       </Flex>

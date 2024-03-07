@@ -7,10 +7,7 @@ use rollyourown::{
     interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER}
 };
 
-const FEW_MIN: u64 = 1800; // 30 * 60
-const ONE_HOUR: u64 = 3600; // 60 * 60
-const ONE_DAY: u64 = 86_400; // 24 * 60 * 60
-const ONE_WEEK: u64 = 604_800; // 7 * 86_400;
+
 
 #[derive(Copy, Drop)]
 struct LeaderboardManager {
@@ -20,7 +17,7 @@ struct LeaderboardManager {
 trait LeaderboardManagerTrait {
     fn new(world: IWorldDispatcher) -> LeaderboardManager;
     fn get_current_version(self: LeaderboardManager) -> u16;
-    fn get_next_version_timestamp() -> u64;
+    fn get_next_version_timestamp(self: LeaderboardManager) -> u64;
     fn new_leaderboard(self: LeaderboardManager, version: u16);
     fn on_game_start(self: LeaderboardManager) -> u16;
     fn on_game_over(self: LeaderboardManager, ref game_store: GameStore) -> bool;
@@ -37,12 +34,13 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
         ryo_config.leaderboard_version
     }
 
-    fn get_next_version_timestamp() -> u64 {
+    fn get_next_version_timestamp(self: LeaderboardManager) -> u64 {
         let current_timestamp = starknet::info::get_block_timestamp();
 
-        // TODO: make configurable
-        //current_timestamp + ONE_WEEK
-        current_timestamp + FEW_MIN
+        let ryo_config_manager = RyoConfigManagerTrait::new(self.world);
+        let ryo_config = ryo_config_manager.get();
+
+        current_timestamp + ryo_config.leaderboard_duration.into()
     }
 
     fn new_leaderboard(self: LeaderboardManager, version: u16) {
@@ -53,7 +51,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
                 player_id: 0.try_into().unwrap(),
                 game_id: 0,
                 high_score: 0,
-                next_version_timestamp: LeaderboardManagerTrait::get_next_version_timestamp(),
+                next_version_timestamp: self.get_next_version_timestamp(),
                 paper_balance: 0,
                 claimed: false,
             }
@@ -111,7 +109,7 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
 
             //reset current version timer
             leaderboard
-                .next_version_timestamp = LeaderboardManagerTrait::get_next_version_timestamp();
+                .next_version_timestamp = self.get_next_version_timestamp();
 
             // save leaderboard
             set!(self.world, (leaderboard));

@@ -43,7 +43,7 @@ export const HustlerProfile = observer(() => {
     setHustlerStats(stats);
   }, [configStore]);
 
-  if (!configStore || !hustlerStats) return null;
+  if (!configStore || !hustlerStats || !game) return null;
 
   return (
     <VStack w="full">
@@ -92,7 +92,7 @@ export const HustlerProfile = observer(() => {
         <PowerMeter
           text={reputationRanks[game.encounters.level as reputationRanksKeys]}
           basePower={0}
-          power={Math.ceil(game.encounters.level / 3)}
+          power={Math.ceil((game?.encounters?.level + 1) / 3)}
           maxPower={5}
           displayedPower={5}
         />
