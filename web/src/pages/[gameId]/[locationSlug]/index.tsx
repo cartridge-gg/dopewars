@@ -94,8 +94,8 @@ const Location = observer(() => {
         </Footer>
       }
     >
-      <VStack h="100%" w="100%" alignItems="center" justifyContent="center">
-        <Box w="full" zIndex="1" position="sticky" top="0" bg="neon.900" pb={"8px"}>
+      <VStack h="100%" w="100%" alignItems="center" justifyContent="center" gap={9}>
+        <Box w="full" zIndex="1" bg="neon.900">
           <Inventory />
         </Box>
 
@@ -143,6 +143,7 @@ const Location = observer(() => {
 
                   <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
                     <HStack justifyContent="space-between">
+                      <Text>{drug.weight} lb</Text>
                       <Text>{formatCash(drug.price)}</Text>
                     </HStack>
                     <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />

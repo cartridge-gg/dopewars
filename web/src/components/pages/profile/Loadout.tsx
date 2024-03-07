@@ -36,7 +36,7 @@ const Item = observer(({ item }: { item: HustlerItemConfigFull }) => {
         borderBottom:"none"
       }}
     >
-      {item.icon({ boxSize: "48px" })}
+      {item.icon && item.icon({ boxSize: "48px" })}
 
       <VStack w="250px" alignItems="flex-start" gap={0}>
         <HStack

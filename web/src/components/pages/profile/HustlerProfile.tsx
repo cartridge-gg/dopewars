@@ -5,7 +5,6 @@ import { ItemSlot } from "@/dojo/types";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { shortString } from "starknet";
 
 export const HustlerProfile = observer(() => {
   const { game, gameInfos } = useGameStore();
@@ -19,19 +18,23 @@ export const HustlerProfile = observer(() => {
 
     const stats = {
       [ItemSlot.Weapon]: {
-        name: shortString.decodeShortString(hustler.weapon.base.name),
+        //name: shortString.decodeShortString(hustler.weapon.base.name),
+        name: hustler.weapon.base.name,
         initialTier: Number(hustler.weapon.base.initial_tier),
       },
       [ItemSlot.Clothes]: {
-        name: shortString.decodeShortString(hustler.clothes.base.name),
+        // name: shortString.decodeShortString(hustler.clothes.base.name),
+        name: hustler.clothes.base.name,
         initialTier: Number(hustler.clothes.base.initial_tier),
       },
       [ItemSlot.Feet]: {
-        name: shortString.decodeShortString(hustler.feet.base.name),
+        // name: shortString.decodeShortString(hustler.feet.base.name),
+        name: hustler.feet.base.name,
         initialTier: Number(hustler.feet.base.initial_tier),
       },
       [ItemSlot.Transport]: {
-        name: shortString.decodeShortString(hustler.transport.base.name),
+        // name: shortString.decodeShortString(hustler.transport.base.name),
+        name: hustler.transport.base.name,
         initialTier: Number(hustler.transport.base.initial_tier),
       },
     };

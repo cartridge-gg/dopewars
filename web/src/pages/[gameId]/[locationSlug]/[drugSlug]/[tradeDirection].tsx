@@ -1,4 +1,3 @@
-
 import { AlertMessage } from "@/components/common";
 import { ArrowEnclosed } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
@@ -22,9 +21,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useState } from "react";
 
-export default function Market() {
+ const  Market = observer(() => {
   const { router, gameId, location, drug, tradeDirection } = useRouterContext();
 
   const [market, setMarket] = useState<DrugMarket>();
@@ -105,11 +105,11 @@ export default function Market() {
           <Image src={`/images/drugs/${drug.drug.toLowerCase()}.png`} alt={drug.name} h={[140, 300]} maxH="40vh" />
           <HStack w="100%" justifyContent="space-between" fontSize="16px">
             <HStack>
-              {drug.icon({ boxSize: "36px" })}
-              <Text>{formatCash(market.price)}</Text>
+              <Text>{market.weight} lb</Text>
             </HStack>
             <HStack>
-              <Text>{market.weight} LBS</Text>
+              {drug.icon({ boxSize: "36px" })}
+              <Text>{formatCash(market.price)}</Text>
             </HStack>
           </HStack>
         </Card>
@@ -138,7 +138,8 @@ export default function Market() {
       </Box>
     </Layout>
   );
-}
+})
+export default Market;
 
 const QuantitySelector = ({
   tradeDirection,
@@ -213,22 +214,25 @@ const QuantitySelector = ({
 
   return (
     <VStack opacity={max === 0 ? "0.2" : "1"} pointerEvents={max === 0 ? "none" : "all"} w="full">
-      <Flex w="100%" direction={["column", "row"]} justifyContent="space-between" align="center" gap={["10px", "20px"]}>
-        {/* <Text color={alertColor}>
-          <Alert size="sm" /> {priceImpact ? (priceImpact * 100).toFixed(2) : "0"}% slippage ($
-          {totalPrice ? (totalPrice / quantity).toFixed(0) : market.price.toFixed(0)} per)
-        </Text> */}
-        <HStack fontSize="13px">
+      <Flex
+        w="100%"
+        direction={["column", "row"]}
+        justifyContent="space-between"
+        align="center"
+        gap={["10px", "20px"]}
+        fontSize="13px"
+      >
+        <HStack>
+          <Text textStyle="subheading" color="neon.500">
+            Weight:
+          </Text>
+          <Text textStyle="subheading">{Number(quantity * market.weight).toFixed(2)} lb</Text>
+        </HStack>
+        <HStack>
           <Text textStyle="subheading" color="neon.500">
             Total:
           </Text>
           <Text textStyle="subheading">{totalPrice ? formatCash(totalPrice) : "$0"}</Text>
-        </HStack>
-        <HStack fontSize="13px">
-          <Text textStyle="subheading" color="neon.500">
-            Weight:
-          </Text>
-          <Text textStyle="subheading">{Number(quantity * market.weight).toFixed(2)} LBS</Text>
         </HStack>
       </Flex>
 

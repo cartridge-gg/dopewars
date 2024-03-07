@@ -39,6 +39,7 @@ export * from "./Home";
 export * from "./Link";
 export * from "./Music";
 export * from "./Paper";
+export * from "./Pawnshop";
 export * from "./Pistol";
 export * from "./Roll";
 export * from "./SendMessage";

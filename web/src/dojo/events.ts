@@ -1,7 +1,6 @@
 import { EncounterOutcomes, EncountersAction } from "@/dojo/types";
 import {
-  InvokeTransactionReceiptResponse,
-  SuccessfulTransactionReceiptResponse,
+  GetTransactionReceiptResponse,
   num,
   shortString
 } from "starknet";
@@ -82,7 +81,7 @@ export interface MeetOGData extends BaseEventData {
 }
 
 
-export interface GameOverData extends BaseEventData{
+export interface GameOverData extends BaseEventData {
   playerId: string;
   playerName: string;
   leaderboardVersion: string;
@@ -93,26 +92,21 @@ export interface GameOverData extends BaseEventData{
 }
 
 
-export const parseAllEvents = (receipt: SuccessfulTransactionReceiptResponse) => {
-  if (receipt.execution_status === "REJECTED") {
+export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
+  if (receipt.execution_status !== "SUCCEEDED") {
     return []
-    //throw new Error(`transaction REJECTED`);
-  }
-  if (receipt.execution_status === "REVERTED") {
-    return []
-    //throw new Error(`transaction REVERTED`);
   }
 
-  const flatEvents = parseEvents(receipt as InvokeTransactionReceiptResponse)
+  const flatEvents = parseEvents(receipt as GetTransactionReceiptResponse)
   return flatEvents
 }
 
-export const parseEvents = (receipt: InvokeTransactionReceiptResponse) => {
+export const parseEvents = (receipt: GetTransactionReceiptResponse) => {
   const parsed = receipt.events.map(e => parseEvent(e))
   return parsed
 }
 
-export const parseEventsByEventType = (receipt: InvokeTransactionReceiptResponse, eventType: WorldEvents) => {
+export const parseEventsByEventType = (receipt: GetTransactionReceiptResponse, eventType: WorldEvents) => {
   const events = receipt.events.filter(e => e.keys[0] === eventType)
   const parsed = events.map(e => parseEvent(e))
   return parsed
@@ -131,7 +125,7 @@ export const parseEvent = (raw: any) => {
         playerId: num.toHexString(raw.keys[2]),
         gameMode: Number(raw.data[0]),
         playerName: shortString.decodeShortString(raw.data[1]),
-        hustlerId:  Number(raw.data[2]),
+        hustlerId: Number(raw.data[2]),
       } as GameCreatedData;
 
     case WorldEvents.Traveled:
@@ -217,19 +211,19 @@ export const parseEvent = (raw: any) => {
       } as TravelEncounterResultData;
 
 
-      case WorldEvents.GameOver:
-        return {
-          eventType: WorldEvents.GameOver,
-          eventName: "GameOver",
-          gameId: num.toHexString(raw.keys[1]),
-          playerId: num.toHexString(raw.keys[2]),
-          leaderboardVersion: num.toHexString(raw.keys[3]),
-          playerName: shortString.decodeShortString(raw.data[0]),
-          avatarId: Number(raw.data[1]),
-          turn: Number(raw.data[2]),
-          cash: Number(raw.data[3]),
-          health: Number(raw.data[4]),
-        } as GameOverData;
+    case WorldEvents.GameOver:
+      return {
+        eventType: WorldEvents.GameOver,
+        eventName: "GameOver",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        leaderboardVersion: num.toHexString(raw.keys[3]),
+        playerName: shortString.decodeShortString(raw.data[0]),
+        avatarId: Number(raw.data[1]),
+        turn: Number(raw.data[2]),
+        cash: Number(raw.data[3]),
+        health: Number(raw.data[4]),
+      } as GameOverData;
 
 
     case WorldEvents.MeetOG:

@@ -16,10 +16,7 @@ export interface FaucetInterface {
 }
 
 export const useFaucet = (tokenAddress?: string): FaucetInterface => {
-  const {
-    account,
-    dojoProvider
-  } = useDojoContext();
+  const { account } = useDojoContext();
 
   const { toast } = useToast();
 
@@ -36,8 +33,8 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
       try {
         const contract: TypedContractV2<typeof paperAbi> = new Contract(
           paperAbi,
-          tokenAddress,
-          account,
+          tokenAddress!,
+          account!,
         ).typedv2(paperAbi);
 
         tx = await contract.faucet();
@@ -66,11 +63,11 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
       setIsPending(false)
 
       return {
-        hash: tx?.transaction_hash,
+        hash: tx?.transaction_hash ||"0x0",
       };
 
     },
-    [tokenAddress, dojoProvider, account, toast],
+    [tokenAddress, account, toast],
   );
 
   return {

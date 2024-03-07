@@ -3,9 +3,6 @@ import { getEvents } from "@dojoengine/utils";
 import { useCallback, useState } from "react";
 import {
   BigNumberish, Call, GetTransactionReceiptResponse,
-  RejectedTransactionReceiptResponse,
-  RevertedTransactionReceiptResponse,
-  SuccessfulTransactionReceiptResponse,
   shortString, uint256
 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
@@ -124,18 +121,17 @@ export const useSystems = (): SystemsInterface => {
 
       if (receipt) {
         let receipt_error = undefined
-
-        if ("status" in receipt && receipt.status === "REJECTED") {
-          receipt_error = {
-            status: "REJECTED",
-            message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message
-          }
-        }
+        // if ("status" in receipt && receipt.status === "REJECTED") {
+        //   receipt_error = {
+        //     status: "REJECTED",
+        //     message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message
+        //   }
+        // }
 
         if ("execution_status" in receipt && receipt.execution_status === "REVERTED") {
           receipt_error = {
             status: "REVERTED",
-            message: (receipt as RevertedTransactionReceiptResponse).revert_reason
+            message: receipt.revert_reason || "REVERTED"
           }
         }
 
@@ -152,7 +148,7 @@ export const useSystems = (): SystemsInterface => {
 
 
       const events = getEvents(receipt);
-      const parsedEvents = parseAllEvents(receipt as SuccessfulTransactionReceiptResponse);
+      const parsedEvents = parseAllEvents(receipt);
 
 
       setIsPending(false)

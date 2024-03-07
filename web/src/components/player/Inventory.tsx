@@ -5,9 +5,11 @@ import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag, Home } from "../icons";
+import { Bag, PawnshopIcon } from "../icons";
 
 import colors from "@/theme/colors";
+import { Ring } from "../icons/Ring";
+import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
   0% {background-color: ${colors.neon[900]} ;}   
@@ -23,7 +25,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
   if (!game || !configStore) return null;
 
   return (
-    <HStack {...props} w="full" align="flex-start" pb="0">
+    <VStack {...props} w="full" align="flex-start" pb="0" gap={6}>
       {!hidePawnshop && (
         <VStack w="full" alignItems="flex-start">
           <Text textStyle="subheading" fontSize="11px" color="neon.500" h="24px" lineHeight="24px">
@@ -32,12 +34,13 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
           <Card
             cursor={game.isShopOpen ? "pointer" : "not-allowed"}
+            w="full"
             h="40px"
             px="20px"
+            flexDirection="row"
             justify="center"
             alignItems="center"
             opacity={game.isShopOpen ? 1 : 0.5}
-            flexDirection="row"
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
@@ -45,35 +48,58 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
               }
             }}
           >
-            <Home ml={-1} />
+            <PawnshopIcon ml={-1} />
             <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
           </Card>
         </VStack>
       )}
 
-      <VStack w="full" alignItems="flex-end">
-        <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center">
-          <Bag />
-          <Text textStyle="subheading" fontSize="11px">
-            {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
-            {game.items.transport!.tier.stat / 100} LBS
-          </Text>
-        </HStack>
-
-        <Card h="40px" px="20px" justify="center" minW="140px" alignItems="center">
-          <HStack gap="10px" justify="flex-start">
-            {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
-            {game.drugs.quantity > 0 && game.drugs.drug && (
-              <HStack gap="10px">
-                <HStack color="yellow.400">
-                  {game.drugs.drug?.icon({ boxSize: "26" })}
-                  <Text>{game.drugs.quantity}</Text>
-                </HStack>
-              </HStack>
-            )}
+      <HStack w="full" justifyContent="space-between">
+        <VStack w="full" alignItems="flex-start">
+          <HStack color="neon.500" justify="center" alignItems="center">
+            <Ring />
+            <Text textStyle="subheading" fontSize="11px" mt={2}>
+              REP: RANK {game.encounters.copsLevel + game.encounters.gangLevel}
+            </Text>
           </HStack>
-        </Card>
-      </VStack>
+
+          <Card h="40px" px="5px" justify="center" minW="140px" alignItems="center">
+            <PowerMeter
+              basePower={0}
+              power={game.encounters.copsLevel + game.encounters.gangLevel}
+              maxPower={16}
+              displayedPower={16}
+            />
+          </Card>
+        </VStack>
+
+        {/* ************** */}
+
+        <VStack w="full" alignItems="flex-end">
+          <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
+            <Bag />
+            <Text textStyle="subheading" fontSize="11px" mt={2}>
+              {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
+              {game.items.transport!.tier.stat / 100} LB
+            </Text>
+          </HStack>
+
+          <Card h="40px" px="20px" justify="center" minW="140px" alignItems="center">
+            <HStack gap="10px" justify="flex-start">
+              {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
+              {game.drugs.quantity > 0 && game.drugs.drug && (
+                <HStack gap="10px">
+                  <HStack color="yellow.400">
+                    {game.drugs.drug?.icon({ boxSize: "26" })}
+                    <Text>{game.drugs.quantity}</Text>
+                  </HStack>
+                </HStack>
+              )}
+            </HStack>
+          </Card>
+        </VStack>
+      </HStack>
+
       {/*
       <HStack w="full" flexWrap="wrap" justify="space-between">
         <Card h="40px" px="20px" justify="center">
@@ -89,7 +115,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
         </Card> 
       </HStack>
       */}
-    </HStack>
+    </VStack>
   );
 });
 

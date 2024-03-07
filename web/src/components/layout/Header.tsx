@@ -25,7 +25,7 @@ export const Header = observer(({ back }: HeaderProps) => {
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-  const { game } = useGameStore();
+  const { game, gameInfos } = useGameStore();
   const { config } = useConfigStore();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const Header = observer(({ back }: HeaderProps) => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <DayIndicator day={game.player.turn} />
+                <DayIndicator day={game.player.turn} max={gameInfos?.max_turns} />
                 {/* <WantedIndicator wanted={game.wanted.getValueByTick(game.player.wanted)} /> */}
               </HStack>
             </Flex>

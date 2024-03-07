@@ -144,7 +144,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
             return {
               ...i.node,
-              //  name: shortString.decodeShortString(i.node?.name),
+              name: shortString.decodeShortString(i.node?.name),
             } as HustlerItemBaseConfig;
           });
 
