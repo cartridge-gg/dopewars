@@ -1,12 +1,10 @@
-use starknet::{get_caller_address,get_contract_address};
+use starknet::{get_caller_address, get_contract_address};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     config::{ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
-    models::{leaderboard::{Leaderboard}},
-    packing::game_store::{GameStore},
-    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
-    constants::{ETHER}
+    models::{leaderboard::{Leaderboard}}, packing::game_store::{GameStore},
+    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER}
 };
 
 const FEW_MIN: u64 = 1800; // 30 * 60
@@ -84,16 +82,15 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
         let mut leaderboard = get!(self.world, (ryo_config.leaderboard_version), Leaderboard);
 
         // calc paper_fee
-        let paper_fee:u256 = ryo_config.paper_fee.into() * ETHER;
+        let paper_fee: u256 = ryo_config.paper_fee.into() * ETHER;
 
         // add paper_fee to current_leaderboard & save
         leaderboard.paper_balance += paper_fee;
         set!(self.world, (leaderboard));
 
         // transfer paper_fee from user to game ( user approved game contract to spend paper before)
-        IPaperDispatcher {
-            contract_address: ryo_config.paper_address
-        }.transfer_from(get_caller_address(), get_contract_address(), paper_fee);
+        IPaperDispatcher { contract_address: ryo_config.paper_address }
+            .transfer_from(get_caller_address(), get_contract_address(), paper_fee);
 
         ryo_config.leaderboard_version
     }

@@ -11,6 +11,6 @@ struct Leaderboard {
     //
     next_version_timestamp: u64,
     //
-    paper_balance: u256,   // TODO: use u32 ?
+    paper_balance: u256, // TODO: use u32 ?
     claimed: bool,
 }

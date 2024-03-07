@@ -178,7 +178,7 @@ mod paper_mock {
     // Faucet
     //
 
-    const ETHER : u256 = 1_000_000_000_000_000_000;
+    const ETHER: u256 = 1_000_000_000_000_000_000;
 
     #[abi(embed_v0)]
     impl PaperMockFaucetImpl of super::IPaperMockFaucet<ContractState> {

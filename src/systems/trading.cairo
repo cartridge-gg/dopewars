@@ -71,7 +71,7 @@ fn buy(ref game_store: GameStore, trade: Trade) {
     let drug_config = DrugConfigImpl::get(game_store.world, trade.drug);
 
     // check quantity
-    let max_transport = transport.tier.stat - (drugs.quantity * drug_config.weight);
+    let max_transport = transport.tier.stat - (drugs.quantity * drug_config.weight.into());
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash 

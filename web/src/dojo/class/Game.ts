@@ -97,16 +97,12 @@ export class GameClass {
             shopCount: computed
         })
 
-
-
-
-        console.log("Game", this)
+        // console.log("Game", this)
     }
 
     //
     //
     //
-
 
 
     clearPendingCalls() {
@@ -143,7 +139,7 @@ export class GameClass {
     get shopCount() {
         const shopCount = this.pending
             .map((i: PendingCall) => isShopAction(i) ? 1 : 0)
-            .reduce((acc:number, curr:number) => { return acc + curr }, 0)
+            .reduce((acc: number, curr: number) => { return acc + curr }, 0)
         return shopCount
     }
 

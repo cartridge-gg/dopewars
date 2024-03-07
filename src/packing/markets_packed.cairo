@@ -68,7 +68,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         let drug_config = self.get_drug_config(drug);
         let tick = self.get_tick(location, drug);
 
-        tick * drug_config.step + (drug_config.base)
+        tick * drug_config.step.into() + drug_config.base.into()
     }
 
     //

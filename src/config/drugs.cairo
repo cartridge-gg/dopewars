@@ -1,6 +1,7 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
+use rollyourown::utils::bytes16::{Bytes16, Bytes16Impl, Bytes16Trait};
+use rollyourown::utils::introspect::Bytes16IntrospectionImpl;
 
 use rollyourown::{traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl}};
 
@@ -21,19 +22,12 @@ struct DrugConfig {
     #[key]
     drug: Drugs,
     drug_id: u8,
-    base: usize,
-    step: usize,
-    weight: usize,
-    from_turn: u8,
-    to_turn: u8,
+    base: u16,
+    step: u16,
+    weight: u16,
+    name: Bytes16,
 }
 
-#[derive(Model, Copy, Drop, Serde)]
-struct DrugConfigMeta {
-    #[key]
-    drug: Drugs,
-    name: bytes31,
-}
 
 //
 //
@@ -112,7 +106,6 @@ impl U8IntoDrugs of Into<u8, Drugs> {
 //
 
 fn initialize_drug_config(world: IWorldDispatcher) {
-    set!(world, DrugConfigMeta { drug: Drugs::Ludes, name: 'Ludes'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -121,12 +114,10 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 18,
             step: 1,
             weight: 2,
-            from_turn: 0,
-            to_turn: 7
+            name: Bytes16Impl::from('Ludes')
         }
     );
 
-    set!(world, DrugConfigMeta { drug: Drugs::Speed, name: 'Speed'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -135,12 +126,10 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 85,
             step: 6,
             weight: 5,
-            from_turn: 0,
-            to_turn: 14
+            name: Bytes16Impl::from('Speed')
         }
     );
 
-    set!(world, DrugConfigMeta { drug: Drugs::Weed, name: 'Weed'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -149,12 +138,10 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 420,
             step: 23,
             weight: 14,
-            from_turn: 0,
-            to_turn: 255
+            name: Bytes16Impl::from('Weed')
         }
     );
 
-    set!(world, DrugConfigMeta { drug: Drugs::Acid, name: 'Acid'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -163,12 +150,10 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 1590,
             step: 69,
             weight: 30,
-            from_turn: 0,
-            to_turn: 255
+            name: Bytes16Impl::from('Acid')
         }
     );
 
-    set!(world, DrugConfigMeta { drug: Drugs::Heroin, name: 'Heroin'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -177,12 +162,10 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 5720,
             step: 169,
             weight: 65,
-            from_turn: 8,
-            to_turn: 255
+            name: Bytes16Impl::from('Heroin')
         }
     );
 
-    set!(world, DrugConfigMeta { drug: Drugs::Cocaine, name: 'Cocaine'.try_into().unwrap(), });
     set!(
         world,
         DrugConfig {
@@ -191,8 +174,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             base: 12200,
             step: 242,
             weight: 100,
-            from_turn: 15,
-            to_turn: 255
+            name: Bytes16Impl::from('Cocaine')
         }
     );
 }

@@ -5,7 +5,6 @@ mod config {
     mod game;
     mod hustlers;
     mod ryo;
-
 }
 
 mod models {

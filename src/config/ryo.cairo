@@ -12,8 +12,8 @@ struct RyoConfig {
     leaderboard_version: u16,
     paper_address: ContractAddress,
     paper_fee: u16,
-    // treasury_address: ContractAddress,
-    // treasury_pct: u8,
+// treasury_address: ContractAddress,
+// treasury_pct: u8,
 }
 
 #[derive(Copy, Drop)]

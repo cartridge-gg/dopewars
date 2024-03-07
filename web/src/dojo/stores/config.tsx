@@ -4,7 +4,6 @@ import {
   DrugConfig,
   DrugConfigEdge,
   DrugConfigMeta,
-  DrugConfigMetaEdge,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
   HustlerItemTiersConfig,
@@ -12,9 +11,8 @@ import {
   LocationConfig,
   LocationConfigEdge,
   LocationConfigMeta,
-  LocationConfigMetaEdge,
   RyoConfig,
-  RyoConfigEdge,
+  RyoConfigEdge
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -127,17 +125,11 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
           const drugConfig = drugConfigEdges.map((i) => i.node as DrugConfig);
 
-          const drugConfigMetaEdges = data.drugConfigMetaModels!.edges as DrugConfigMetaEdge[];
-          const drugConfigMeta = drugConfigMetaEdges.map((i) => i.node as DrugConfigMeta);
-
           //
 
           const locationConfigEdges = data.locationConfigModels!.edges as LocationConfigEdge[];
           const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
-
-          const locationConfigMetaEdges = data.locationConfigMetaModels!.edges as LocationConfigMetaEdge[];
-          const locationConfigMeta = locationConfigMetaEdges.map((i) => i.node as LocationConfigMeta);
-
+       
           //
 
           const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
@@ -156,11 +148,9 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           /*************************************************** */
 
           const drugConfigFull = drugConfig.map((i) => {
-            const meta = drugConfigMeta.find((m) => m.drug === i.drug);
             return {
               ...i,
-              ...meta,
-               name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
+               name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
               icon: drugIcons[i.drug as drugIconsKeys],
             } as DrugConfigFull;
           });
@@ -168,12 +158,10 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const locationConfigFull = locationConfig.flatMap((i) => {
             if (i.location === "Home") return [];
 
-            const meta = locationConfigMeta.find((m) => m.location === i.location);
             return [
               {
                 ...i,
-                ...meta,
-                name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
+                name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
                 icon: locationIcons[i.location as locationIconsKeys],
               },
             ] as LocationConfigFull[];

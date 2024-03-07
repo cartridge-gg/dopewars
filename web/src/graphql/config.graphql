@@ -12,6 +12,7 @@ query Config {
       }
     }
   }
+  
   # Drugs
   drugConfigModels(order: { field: DRUG_ID, direction: ASC }) {
     edges {
@@ -21,15 +22,6 @@ query Config {
         base
         step
         weight
-        from_turn
-        to_turn
-      }
-    }
-  }
-  drugConfigMetaModels {
-    edges {
-      node {
-        drug
         name
       }
     }
@@ -41,13 +33,6 @@ query Config {
       node {
         location
         location_id
-      }
-    }
-  }
-  locationConfigMetaModels {
-    edges {
-      node {
-        location
         name
       }
     }

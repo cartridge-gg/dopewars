@@ -61,7 +61,7 @@ const Location = observer(() => {
   // const prefixTitle = isLastDay
   //   ? "Final Day"
   //   : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
-  const prefixTitle = "Im comin'";
+  const prefixTitle = "Welcome to";
 
   return (
     <Layout

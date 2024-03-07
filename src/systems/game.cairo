@@ -22,12 +22,7 @@ enum EncounterActions {
 trait IGameActions<T> {
     fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
-    fn travel(
-        self: @T,
-        game_id: u32,
-        next_location: Locations,
-        actions: Span<Actions>
-    );
+    fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
     fn claim(self: @T, season: u16);
 }
@@ -37,8 +32,13 @@ mod game {
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use rollyourown::{
-        config::{drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl}, ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
-        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, leaderboard::{Leaderboard} },
+        config::{
+            drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl},
+            ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}
+        },
+        models::{
+            game_store_packed::GameStorePacked, game::{Game, GameImpl}, leaderboard::{Leaderboard}
+        },
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             encounters_packed::{Encounters}, player::{Player, PlayerImpl},
@@ -47,10 +47,7 @@ mod game {
             trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,
             game::EncounterActions, leaderboard::{LeaderboardManagerTrait}
         },
-        utils::{
-            random::{Random, RandomImpl},
-            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
-        },
+        utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
     };
 
@@ -189,7 +186,7 @@ mod game {
             self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
             self.assert_not_paused();
-            
+
             let world = self.world();
             let game_id = world.uuid();
             let player_id = get_caller_address();
@@ -226,9 +223,7 @@ mod game {
             emit!(world, GameCreated { game_id, player_id, game_mode, player_name, hustler_id });
         }
 
-        fn end_game(
-            self: @ContractState, game_id: u32, actions: Span<super::Actions>
-        ) {
+        fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
             let world = self.world();
             let player_id = get_caller_address();
 
@@ -248,7 +243,6 @@ mod game {
             game_id: u32,
             next_location: Locations,
             actions: Span<super::Actions>,
-           
         ) {
             let world = self.world();
             let player_id = get_caller_address();
@@ -289,12 +283,7 @@ mod game {
             }
         }
 
-        fn decide(
-            self: @ContractState,
-            game_id: u32,
-            action: super::EncounterActions,
-           
-        ) {
+        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
             let world = self.world();
             let player_id = get_caller_address();
 
@@ -321,7 +310,7 @@ mod game {
 
         fn claim(self: @ContractState, season: u16) {
             let world = self.world();
-            let mut leaderboard = get!(world, (season),(Leaderboard));
+            let mut leaderboard = get!(world, (season), (Leaderboard));
 
             // check not claimed
             assert(!leaderboard.claimed, 'already claimed!');
@@ -344,11 +333,10 @@ mod game {
             // retrieve paper address from ryo_config
             let ryo_config_manager = RyoConfigManagerTrait::new(world);
             let ryo_config = ryo_config_manager.get();
-           
+
             // transfer reward
-            IPaperDispatcher {
-                contract_address: ryo_config.paper_address
-            }.transfer( get_caller_address(), leaderboard.paper_balance);
+            IPaperDispatcher { contract_address: ryo_config.paper_address }
+                .transfer(get_caller_address(), leaderboard.paper_balance);
         }
     }
 

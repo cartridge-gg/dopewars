@@ -8,7 +8,6 @@
   "possibleTypes": {
     "ModelUnion": [
       "DrugConfig",
-      "DrugConfigMeta",
       "ERC20AllowanceModel",
       "ERC20BalanceModel",
       "ERC20MetadataModel",
@@ -20,7 +19,6 @@
       "InitializableModel",
       "Leaderboard",
       "LocationConfig",
-      "LocationConfigMeta",
       "RyoConfig"
     ]
   }

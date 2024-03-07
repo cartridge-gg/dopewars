@@ -35,9 +35,7 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  Leaderboard,$RYO_ADDRESS \
  GameConfig,$CONFIG_ADDRESS \
  DrugConfig,$CONFIG_ADDRESS \
- DrugConfigMeta,$CONFIG_ADDRESS \
  LocationConfig,$CONFIG_ADDRESS \
- LocationConfigMeta,$CONFIG_ADDRESS \
  HustlerItemBaseConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
  GameStorePacked,$GAME_ADDRESS \

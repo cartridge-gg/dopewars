@@ -24,8 +24,7 @@ mod ryo {
 
     use rollyourown::{
         config::{ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
-        models::{leaderboard::Leaderboard,},
-        utils::random::{RandomImpl},
+        models::{leaderboard::Leaderboard,}, utils::random::{RandomImpl},
         systems::leaderboard::{LeaderboardManager, LeaderboardManagerTrait},
     };
 
@@ -95,14 +94,16 @@ mod ryo {
             let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
             ryo_config.paper_fee
         }
-
     }
 
     #[generate_trait]
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
-            assert(self.world().is_owner(get_caller_address(), get_contract_address().into()), 'not owner');
+            assert(
+                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                'not owner'
+            );
         }
     }
 }
