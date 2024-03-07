@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x23590dce0bf4c5f8c3083e52bd641e479cd571d65137e52fbd6fae6f769e425",
+      "class_hash": "0x5d557f2caf593a51531e1adf581e50c16460a81f44d789781e353152e66a9d2",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x42d6b7a89c8cacad45b22bfcf2d3b01f0772592547eb81accdec572ca1b8615",
+      "class_hash": "0x710c77115b62c3aebfdee763dee7cc27d46dd1a83e1f6de10f615570cd33996",
       "abi": [
         {
           "type": "impl",
@@ -2858,7 +2858,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
-      "class_hash": "0x40cf74c35dbcd04b8ee5601a62a966bd27b4942d9c4e36a25d453f156fe970a",
+      "class_hash": "0x489128227f888531ec716a76d87b9bcc7423dfe9106aa53a7765c7b2e6937fb",
       "abi": [
         {
           "type": "impl",

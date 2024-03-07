@@ -9,7 +9,6 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { shortString } from "starknet";
 
 export default function New() {
   const { router } = useRouterContext();
@@ -35,25 +34,29 @@ export default function New() {
 
     const stats = {
       [ItemSlot.Weapon]: {
-        name: shortString.decodeShortString(hustler.weapon.base.name),
+        //name: shortString.decodeShortString(hustler.weapon.base.name),
+        name: hustler.weapon.base.name,
         initialTier: Number(hustler.weapon.base.initial_tier),
       },
       [ItemSlot.Clothes]: {
-        name: shortString.decodeShortString(hustler.clothes.base.name),
+        // name: shortString.decodeShortString(hustler.clothes.base.name),
+        name: hustler.clothes.base.name,
         initialTier: Number(hustler.clothes.base.initial_tier),
       },
       [ItemSlot.Feet]: {
-        name: shortString.decodeShortString(hustler.feet.base.name),
+        // name: shortString.decodeShortString(hustler.feet.base.name),
+        name: hustler.feet.base.name,
         initialTier: Number(hustler.feet.base.initial_tier),
       },
       [ItemSlot.Transport]: {
-        name: shortString.decodeShortString(hustler.transport.base.name),
+        // name: shortString.decodeShortString(hustler.transport.base.name),
+        name: hustler.transport.base.name,
         initialTier: Number(hustler.transport.base.initial_tier),
       },
     };
 
     setHustlerStats(stats);
-  }, [hustlerId, config, config?.config, config?.config?.items,config?.config?.tiers]);
+  }, [hustlerId, config, config?.config, config?.config?.items, config?.config?.tiers]);
 
   const create = async (gameMode: GameMode) => {
     setError("");

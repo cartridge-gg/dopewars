@@ -1,5 +1,7 @@
 import { useToast } from "@/hooks/toast";
 import { useCallback, useState } from "react";
+import { Contract, TypedContractV2 } from "starknet";
+import { ABI as paperAbi } from "../abis/paperAbi";
 import { useDojoContext } from "./useDojoContext";
 
 
@@ -13,7 +15,7 @@ export interface FaucetInterface {
   error?: string;
 }
 
-export const useFaucet = (): FaucetInterface => {
+export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   const {
     account,
     dojoProvider
@@ -32,7 +34,20 @@ export const useFaucet = (): FaucetInterface => {
 
       let tx, receipt;
       try {
-        tx = await dojoProvider.execute(account!, "rollyourown::_mocks::paper_mock::paper_mock", "faucet", []);
+        const contract: TypedContractV2<typeof paperAbi> = new Contract(
+          paperAbi,
+          tokenAddress,
+          account,
+        ).typedv2(paperAbi);
+
+        tx = await contract.faucet();
+        //tx = await dojoProvider.execute(account!, "rollyourown::_mocks::paper_mock::paper_mock", "faucet", []);
+
+        toast({
+          message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
+          duration: 5_000,
+          isError: false
+        })
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 200,
@@ -46,7 +61,6 @@ export const useFaucet = (): FaucetInterface => {
           duration: 20_000,
           isError: true
         })
-        throw Error(e.toString())
       }
 
       setIsPending(false)
@@ -56,7 +70,7 @@ export const useFaucet = (): FaucetInterface => {
       };
 
     },
-    [dojoProvider, account, toast],
+    [tokenAddress, dojoProvider, account, toast],
   );
 
   return {

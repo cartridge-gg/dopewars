@@ -22,7 +22,15 @@ import React from "react";
 import { Contract, TypedContractV2, shortString } from "starknet";
 import { createStore } from "zustand";
 import { ABI as configAbi } from "../abis/configAbi";
-import { drugIcons, drugIconsKeys, itemIcons, itemUpgrades, itemsIconsKeys, locationIcons, locationIconsKeys } from "../helpers";
+import {
+  drugIcons,
+  drugIconsKeys,
+  itemIcons,
+  itemUpgrades,
+  itemsIconsKeys,
+  locationIcons,
+  locationIconsKeys,
+} from "../helpers";
 import { ItemSlot } from "../types";
 
 export type DrugConfigFull = DrugConfig & Omit<DrugConfigMeta, "__typename"> & { icon: React.FC };
@@ -69,7 +77,6 @@ export type Config = {
   items: HustlerItemBaseConfig[];
   tiers: HustlerItemTiersConfig[];
   config: GetConfig;
-  
 };
 
 export interface ConfigStore {
@@ -111,11 +118,10 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const data = (await client.request(ConfigDocument, {})) as ConfigQuery;
 
           /*************************************************** */
-        
+
           const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
           const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
-        
-        
+
           /*************************************************** */
 
           const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
@@ -138,7 +144,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
           const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
             return {
               ...i.node,
-              name: shortString.decodeShortString(i.node?.name),
+              //  name: shortString.decodeShortString(i.node?.name),
             } as HustlerItemBaseConfig;
           });
 
@@ -154,7 +160,7 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             return {
               ...i,
               ...meta,
-              name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
+               name: shortString.decodeShortString(meta?.name), // todo: remove when bytes31 is supported
               icon: drugIcons[i.drug as drugIconsKeys],
             } as DrugConfigFull;
           });
@@ -173,12 +179,11 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
             ] as LocationConfigFull[];
           });
 
-     
           /*************************************************** */
 
           // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
           const contractInfos = manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
-       
+
           const contract: TypedContractV2<typeof configAbi> = new Contract(
             contractInfos.abi,
             contractInfos.address,
@@ -232,12 +237,12 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
     },
     /****************************************************/
     getGameStoreLayoutItem: (name: string): LayoutItem => {
-     return get().config?.config.layouts.game_store.find((i) => shortString.decodeShortString(i.name) === name)!;
-     // return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
+      // return get().config?.config.layouts.game_store.find((i) => shortString.decodeShortString(i.name) === name)!;
+      return get().config?.config.layouts.game_store.find((i) => i.name === name)!;
     },
     getPlayerLayoutItem: (name: string): LayoutItem => {
-      return get().config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
-      //return get().config?.config.layouts.player.find((i) => i.name === name)!;
+      // return get().config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
+      return get().config?.config.layouts.player.find((i) => i.name === name)!;
     },
     /****************************************************/
     getHustlerById: (id: number): HustlerConfig => {
@@ -251,7 +256,9 @@ export const createConfigStore = ({ client, dojoProvider, manifest }: ConfigStor
 
       // // TODO remove with starknet.js 6
       const tier = base_config.initial_tier + level;
-      const tier_config = get().config?.tiers.find((i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier))!;
+      const tier_config = get().config?.tiers.find(
+        (i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier),
+      )!;
 
       return {
         slot: slot_id as ItemSlot,
