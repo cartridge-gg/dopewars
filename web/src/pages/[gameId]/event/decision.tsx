@@ -61,9 +61,7 @@ const Decision = observer(() => {
           setTitle("Gang!");
           encounter && setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
-          setEncounterImg(
-            `/images/events/muggers${game.encounters!.gangLevel < 3 ? game.encounters!.gangLevel + 1 : 3}.gif`,
-          );
+          setEncounterImg(`/images/events/gang/${game.encounters!.gangLevel}.gif`);
 
           break;
         case PlayerStatus.BeingArrested:
@@ -71,9 +69,7 @@ const Decision = observer(() => {
           setTitle("Cops!");
           encounter && setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
-          setEncounterImg(
-            `/images/events/cops${game.encounters!.copsLevel < 3 ? game.encounters!.copsLevel + 1 : 3}.gif`,
-          );
+          setEncounterImg(`/images/events/cops/${game.encounters!.copsLevel}.gif`);
           break;
       }
     }
@@ -250,7 +246,7 @@ const Decision = observer(() => {
     <Layout
       isSinglePanel
       footer={
-        <Footer w={["100%","50%"]}>
+        <Footer w={["100%", "50%"]}>
           <Button
             w="full"
             px={["auto", "20px"]}
@@ -369,10 +365,10 @@ const Encounter = ({
         <Image
           src={imageSrc}
           alt="adverse event"
-          mt={[0, "10px"]}
-          maxH={["auto", "calc(100vh - 360px)"]}
+          mt={[0, "100px"]}
+          maxH={["auto", "calc(100vh - 300px)"]}
           w={[160, "auto"]}
-          h={[160, 360]}
+          h={[160, 300]}
         />
 
         <VStack w="full">
@@ -411,7 +407,6 @@ const Encounter = ({
             </VStack>
           </Card>
         </VStack>
-
       </VStack>
 
       {IsMobile() && (
@@ -419,7 +414,6 @@ const Encounter = ({
           {demand}
         </Card>
       )}
-
     </VStack>
   );
 };
