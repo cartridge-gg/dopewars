@@ -152,13 +152,13 @@ const Logs = () => {
           <Tab>Activity</Tab>
         </TabList>
 
-        <TabPanels>
-          <TabPanel h="calc(100vh - 360px)">
+        <TabPanels w="full">
+          <TabPanel w="full" h="calc(100vh - 360px)">
             <Box display="flex" alignItems="center" justifyContent="center" h="100%">
               <Loadout />
             </Box>
           </TabPanel>
-          <TabPanel h="calc(100vh - 360px)" overflowY="scroll">
+          <TabPanel w="full" h="calc(100vh - 360px)" overflowY="scroll">
             <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
               {logs && logs.map((log) => renderDay(configStore, game, log))}
             </VStack>

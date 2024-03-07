@@ -1,8 +1,9 @@
 import { Hustler, Hustlers } from "@/components/hustlers";
 import { PowerMeter } from "@/components/player";
+import { reputationRanks, reputationRanksKeys } from "@/dojo/helpers";
 import { useConfigStore, useGameStore } from "@/dojo/hooks";
 import { ItemSlot } from "@/dojo/types";
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { Box, Card, HStack, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
@@ -51,7 +52,8 @@ export const HustlerProfile = observer(() => {
           <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h="300px" />
           {/* <OG id={97} /> */}
         </Box>
-        <VStack /*w="full"*/ gap={3}>
+
+        <VStack gap={3}>
           <PowerMeter
             basePower={hustlerStats[ItemSlot.Weapon].initialTier}
             maxPower={hustlerStats[ItemSlot.Weapon].initialTier + 3}
@@ -85,6 +87,16 @@ export const HustlerProfile = observer(() => {
           />
         </VStack>
       </HStack>
+
+      <Card h="40px" px="5px" justify="center" alignItems="center">
+        <PowerMeter
+          text={reputationRanks[game.encounters.level as reputationRanksKeys]}
+          basePower={0}
+          power={Math.ceil(game.encounters.level / 3)}
+          maxPower={5}
+          displayedPower={5}
+        />
+      </Card>
 
       {/* <Card p="10px 20px">
         <VStack gap={2} alignItems="flex-start">

@@ -1,14 +1,13 @@
-import { statName } from "@/dojo/helpers";
+import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag, PawnshopIcon } from "../icons";
+import { Bag, Cigarette, PawnshopIcon } from "../icons";
 
 import colors from "@/theme/colors";
-import { Ring } from "../icons/Ring";
 import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
@@ -57,18 +56,19 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       <HStack w="full" justifyContent="space-between">
         <VStack w="full" alignItems="flex-start">
           <HStack color="neon.500" justify="center" alignItems="center">
-            <Ring />
+            <Cigarette />
             <Text textStyle="subheading" fontSize="11px" mt={2}>
-              REP: RANK {game.encounters.copsLevel + game.encounters.gangLevel}
+              REPUTATION
             </Text>
           </HStack>
 
-          <Card h="40px" px="5px" justify="center" minW="140px" alignItems="center">
+          <Card h="40px" px="5px" justify="center" alignItems="center">
             <PowerMeter
+              text={reputationRanks[game.encounters.level as reputationRanksKeys]}
               basePower={0}
-              power={game.encounters.copsLevel + game.encounters.gangLevel}
-              maxPower={16}
-              displayedPower={16}
+              power={Math.ceil(game.encounters.level / 3)}
+              maxPower={5}
+              displayedPower={5}
             />
           </Card>
         </VStack>

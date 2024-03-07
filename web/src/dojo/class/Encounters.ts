@@ -23,5 +23,9 @@ export class EncountersClass extends GamePropertyClass {
 
     }
 
+    get level() {
+        return this.copsLevel + this.gangLevel
+    }
+
 
 }

@@ -128,12 +128,14 @@ const Location = observer(() => {
                         initial={{ opacity: 0 }}
                         whileHover={{ opacity: 1 }}
                         p="2px"
-                        align="center"
+                      //  alignItems="flex-end"
+                        alignItems="center"
                         boxSize="full"
                         position="absolute"
+                        top={2}
                         pointerEvents={["none", "auto"]}
                       >
-                        <HStack h="100px" w="full" p="20px" gap="10px" bgColor="neon.900">
+                        <HStack  w="full" px={3} gap={6} /*bgColor="neon.900"*/>
                           <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
                         </HStack>
                       </Flex>
@@ -171,7 +173,7 @@ const BuySellBtns = ({
 }) => {
   const { router } = useRouterContext();
   return (
-    <HStack mb="10px" w="full">
+    <HStack mb="10px" w="full" gap="65px">
       <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
         Buy
       </Button>

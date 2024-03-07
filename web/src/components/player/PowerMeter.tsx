@@ -13,7 +13,7 @@ export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower }:
   return (
     <HStack p={2} bg="neon.800" clipPath={`polygon(${generatePixelBorderPath(4, 2)})`} alignItems="center" spacing={3}>
       {text && text !== "" && (
-        <Text fontFamily="broken-console" fontSize="10px" color="neon.500" lineHeight="14px" marginBottom={-1} w="30px">
+        <Text fontFamily="broken-console" fontSize="10px" color="neon.500" lineHeight="14px" marginBottom={-1} minW="30px">
           {text}
         </Text>
       )}

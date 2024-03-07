@@ -41,6 +41,25 @@ import {
 import { Chain } from "@/components/icons/items/Chain";
 
 
+export const reputationRanks = {
+  0: "Rookie",
+  1: "Rookie",
+  2: "Rookie",
+  3: "Hustler",
+  4: "Hustler",
+  5: "Hustler",
+  6: "Streetboss",
+  7: "Streetboss",
+  8: "Streetboss",
+  9: "OG",
+  10: "OG",
+  11: "OG",
+  12: "Kingpin",
+  13: "Kingpin",
+  14: "Kingpin",
+}
+export type reputationRanksKeys = keyof typeof reputationRanks;
+
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
     0: {
