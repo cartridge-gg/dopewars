@@ -159,44 +159,63 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
             Encounters::Cops
         };
 
-        // get encounter
-        let encounter = get_encounter_by_slot(game_store, encounter_slot);
+        let mut too_poor_to_get_rekt = false;
 
-        // update player status
-        game_store.player.status = match encounter.encounter {
-            Encounters::Cops => PlayerStatus::BeingArrested,
-            Encounters::Gang => PlayerStatus::BeingMugged,
+        // check min cash if Gang
+        if encounter_slot == Encounters::Gang && game_store.player.cash < 100 {
+            too_poor_to_get_rekt = true;
         };
 
-        // player lose health
-        let health_loss = encounter.get_first_strike_dmg();
-        game_store.player.health = game_store.player.health.sub_capped(health_loss, 0);
+        // check min drug if Cops
+        if encounter_slot == Encounters::Cops {
+            let drugs = game_store.drugs.get();
+            if drugs.quantity < 5 {
+                too_poor_to_get_rekt = true;
+            };
+        };
 
-        // emit TravelEncounter
-        game_store
-            .world
-            .emit_raw(
-                array![
-                    selector!("TravelEncounter"),
-                    Into::<u32, felt252>::into(game_store.game.game_id),
-                    Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
-                        .into()
-                ],
-                array![
-                    Into::<Encounters, u8>::into(encounter.encounter).into(),
-                    Into::<u8, felt252>::into(encounter.attack),
-                    Into::<u8, felt252>::into(encounter.health),
-                    Into::<u8, felt252>::into(encounter.level),
-                    Into::<u8, felt252>::into(health_loss),
-                    Into::<u8, felt252>::into(encounter.demand_pct),
-                    Into::<u32, felt252>::into(encounter.payout),
-                ],
-            );
+        if (too_poor_to_get_rekt) {
+            (false, false)
+        } else {
+            // get encounter
+            let encounter = get_encounter_by_slot(game_store, encounter_slot);
 
-        return (game_store.player.is_dead(), true);
+            // update player status
+            game_store.player.status = match encounter.encounter {
+                Encounters::Cops => PlayerStatus::BeingArrested,
+                Encounters::Gang => PlayerStatus::BeingMugged,
+            };
+
+            // player lose health
+            let health_loss = encounter.get_first_strike_dmg();
+            game_store.player.health = game_store.player.health.sub_capped(health_loss, 0);
+
+            // emit TravelEncounter
+            game_store
+                .world
+                .emit_raw(
+                    array![
+                        selector!("TravelEncounter"),
+                        Into::<u32, felt252>::into(game_store.game.game_id),
+                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+                            .into()
+                    ],
+                    array![
+                        Into::<Encounters, u8>::into(encounter.encounter).into(),
+                        Into::<u8, felt252>::into(encounter.attack),
+                        Into::<u8, felt252>::into(encounter.health),
+                        Into::<u8, felt252>::into(encounter.level),
+                        Into::<u8, felt252>::into(health_loss),
+                        Into::<u8, felt252>::into(encounter.demand_pct),
+                        Into::<u32, felt252>::into(encounter.payout),
+                    ],
+                );
+
+            (game_store.player.is_dead(), true)
+        }
+    } else {
+        (false, false)
     }
-
-    (false, false)
 }
 
 
