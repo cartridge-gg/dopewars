@@ -23,7 +23,7 @@ type CombatLog = {
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
   const { account } = useDojoContext();
-  const { game, gameEvents } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
   const { decide, isPending } = useSystems();
 
   const [prefixTitle, setPrefixTitle] = useState("");
@@ -123,15 +123,15 @@ const Decision = observer(() => {
         break;
       case EncountersAction.Fight:
         setSentence(getSentence(game?.player.status as PlayerStatus, EncountersAction.Fight));
-        switch (game?.items.attack.level) {
+        switch (gameInfos?.hustler_id) {
+          case 0:
+            playSound(Sounds.Uzi);
+            break;
           case 1:
-            playSound(Sounds.Knife);
+            playSound(Sounds.Chains);
             break;
           case 2:
-            playSound(Sounds.Magnum357);
-            break;
-          case 3:
-            playSound(Sounds.Uzi);
+            playSound(Sounds.Punch);
             break;
           default:
             playSound(Sounds.Punch);
@@ -356,8 +356,8 @@ const Encounter = ({
               <Box fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
                 {sentence}
               </Box>
-              <Card marginLeft="160px" w="10px" fontSize="12px" p="8px"></Card>
-              <Card marginLeft="180px" w="10px" fontSize="12px" p="6px"></Card>
+              <Card marginLeft="185px" w="10px" fontSize="12px" p="8px"></Card>
+              <Card marginLeft="170px" w="10px" fontSize="12px" p="6px"></Card>
             </Box>
           </>
         )}

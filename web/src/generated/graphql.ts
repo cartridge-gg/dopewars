@@ -869,6 +869,7 @@ export type RyoConfig = {
   entity?: Maybe<World__Entity>;
   initialized?: Maybe<Scalars['bool']>;
   key?: Maybe<Scalars['u8']>;
+  leaderboard_duration?: Maybe<Scalars['u32']>;
   leaderboard_version?: Maybe<Scalars['u16']>;
   paper_address?: Maybe<Scalars['ContractAddress']>;
   paper_fee?: Maybe<Scalars['u16']>;
@@ -896,6 +897,7 @@ export type RyoConfigOrder = {
 export enum RyoConfigOrderField {
   Initialized = 'INITIALIZED',
   Key = 'KEY',
+  LeaderboardDuration = 'LEADERBOARD_DURATION',
   LeaderboardVersion = 'LEADERBOARD_VERSION',
   PaperAddress = 'PAPER_ADDRESS',
   PaperFee = 'PAPER_FEE',
@@ -911,6 +913,13 @@ export type RyoConfigWhereInput = {
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
+  leaderboard_duration?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationEQ?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationGT?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationGTE?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationLT?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationLTE?: InputMaybe<Scalars['u32']>;
+  leaderboard_durationNEQ?: InputMaybe<Scalars['u32']>;
   leaderboard_version?: InputMaybe<Scalars['u16']>;
   leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
   leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
@@ -1404,12 +1413,12 @@ export type LeaderboardByVersionQueryVariables = Exact<{
 }>;
 
 
-export type LeaderboardByVersionQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+export type LeaderboardByVersionQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
 
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HallOfFameQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+export type HallOfFameQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -1417,7 +1426,7 @@ export type GameOverEventsQueryVariables = Exact<{
 }>;
 
 
-export type GameOverEventsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } | null } | null> | null } | null };
+export type GameOverEventsQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, transactionHash?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null, createdAt?: any | null } | null } | null> | null } | null };
 
 
 export const ConfigDocument = `
@@ -1701,6 +1710,7 @@ export const LeaderboardByVersionDocument = `
       node {
         version
         game_id
+        player_id
         high_score
         next_version_timestamp
         paper_balance
@@ -1751,6 +1761,7 @@ export const HallOfFameDocument = `
       node {
         version
         game_id
+        player_id
         high_score
         next_version_timestamp
         paper_balance
@@ -1801,6 +1812,7 @@ export const GameOverEventsDocument = `
     edges {
       node {
         id
+        transactionHash
         keys
         data
         createdAt

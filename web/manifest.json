@@ -1871,7 +1871,7 @@
     {
       "name": "rollyourown::systems::devtools::devtools",
       "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
-      "class_hash": "0x7e28264b71d504060f438591a56daef4d52847f3f81f1f7cef2e2df1bdb77d3",
+      "class_hash": "0x2de11202d682cfbdb558e40b4d2764fd7aa4a58336c025fc529244647328417",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x1964c8d8c2cf4cc0de50bfd32f65e2420fa82898bee297352d1e01adc509e93",
+      "class_hash": "0x2ea88efe0c9f6116f4c8690b2f4667b4a66482d5363509b9299724cbcce8c55",
       "abi": [
         {
           "type": "impl",
@@ -2858,7 +2858,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
-      "class_hash": "0x489128227f888531ec716a76d87b9bcc7423dfe9106aa53a7765c7b2e6937fb",
+      "class_hash": "0x5e9f94d528854eb903e794fb7d1b885277f77d037b1cde921b5f7edaefd8169",
       "abi": [
         {
           "type": "impl",
@@ -2975,6 +2975,18 @@
             },
             {
               "type": "function",
+              "name": "set_leaderboard_duration",
+              "inputs": [
+                {
+                  "name": "duration_sec",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "paused",
               "inputs": [],
               "outputs": [
@@ -3002,6 +3014,17 @@
               "outputs": [
                 {
                   "type": "core::integer::u16"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "leaderboard_duration",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
                 }
               ],
               "state_mutability": "view"
@@ -4506,6 +4529,11 @@
           "key": false
         },
         {
+          "name": "leaderboard_duration",
+          "type": "u32",
+          "key": false
+        },
+        {
           "name": "paper_address",
           "type": "ContractAddress",
           "key": false
@@ -4516,7 +4544,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x3d47c62a737eef0c07346a427983ee0ef10317320c56d35e3755c9c0e41056",
+      "class_hash": "0x49db81215eddd36d4d9285ab5a60aa2ef46741403cd0711c2e7b8f4b6c49349",
       "abi": [
         {
           "type": "impl",
@@ -4724,6 +4752,10 @@
             {
               "name": "leaderboard_version",
               "type": "core::integer::u16"
+            },
+            {
+              "name": "leaderboard_duration",
+              "type": "core::integer::u32"
             },
             {
               "name": "paper_address",

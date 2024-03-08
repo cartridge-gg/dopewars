@@ -18,13 +18,12 @@ export const Toast = ({
   return (
     <HStack
       {...cardPixelatedStyle({})}
-      // h="40px"
-      p={["8px", "20px"]}
-      mt={["16px", "20px"]}
+      p={["8px", "16px"]}
+      mt={["10px", "16px"]}
       fontSize={["14px", "16px"]}
       lineHeight={["1.2", "1.5"]}
-      bgColor={isError ? "red" : "neon.200"}
-      color="neon.900"
+      bgColor={isError ? "red" : "neon.600"}
+      color={isError ? "neon.700" : "neon.400"}
       justify="space-between"
       pointerEvents="all"
       onClick={onClose}

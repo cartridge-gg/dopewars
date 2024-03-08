@@ -113,6 +113,13 @@ export default function Travel() {
   }, [targetLocation]);
 
   const onContinue = useCallback(async () => {
+
+    toaster.toast({
+      message:"this is a long messga blabiab laij kd vjdf v;jd f;vj ",
+      isError:false,
+    })
+    return
+
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;

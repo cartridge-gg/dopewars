@@ -46,6 +46,9 @@ mod ryo {
 
             assert(ryo_config.initialized == false, 'Already initialized');
 
+            // consume first world uuid = 0
+            let _ = world.uuid();
+
             // RyoConfig
             ryo_config.initialized = true;
             ryo_config.paused = false;

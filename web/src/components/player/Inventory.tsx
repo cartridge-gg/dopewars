@@ -62,15 +62,17 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             </Text>
           </HStack>
 
-          <Card h="40px" px="5px" justify="center" alignItems="center">
-            <PowerMeter
-              text={reputationRanks[game.encounters.level as reputationRanksKeys]}
-              basePower={0}
-              power={Math.ceil((game.encounters.level + 1) / 3)}
-              maxPower={5}
-              displayedPower={5}
-            />
-          </Card>
+          <Tooltip title="Encountered" text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`}>
+            <Card h="40px" px="5px" justify="center" alignItems="center">
+              <PowerMeter
+                text={reputationRanks[game.encounters.level as reputationRanksKeys]}
+                basePower={0}
+                power={Math.ceil((game.encounters.level + 1) / 3)}
+                maxPower={5}
+                displayedPower={5}
+              />
+            </Card>
+          </Tooltip>
         </VStack>
 
         {/* ************** */}

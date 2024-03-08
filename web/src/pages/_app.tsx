@@ -6,6 +6,7 @@ import { dojoConfig } from "@/dojo/setup/config";
 import { SetupResult, setup } from "@/dojo/setup/setup";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
+import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Analytics } from "@vercel/analytics/react";
 import type { AppProps } from "next/app";
@@ -37,16 +38,17 @@ export default function App({ Component, pageProps }: AppProps) {
 
     init();
   }, []);
- 
+
   return (
     <>
       {setupResult && (
         <QueryClientProvider client={setupResult.queryClient}>
           <StarknetProviders>
-          <DojoProvider value={setupResult}>
+            <DojoProvider value={setupResult}>
               <RegisterEntities />
               <ChakraProvider theme={theme}>
                 <Fonts />
+                <GlobalStyles />
                 <NextHead>
                   <title>Roll your Own</title>
                   <meta
@@ -59,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Analytics />
                 {/* <Debug /> */}
               </ChakraProvider>
-          </DojoProvider>
+            </DojoProvider>
           </StarknetProviders>
         </QueryClientProvider>
       )}

@@ -4,6 +4,7 @@ query LeaderboardByVersion($version: u16) {
       node {
         version
         game_id
+        player_id
         high_score
         next_version_timestamp
         paper_balance
@@ -19,6 +20,7 @@ query HallOfFame {
       node {
         version
         game_id
+        player_id
         high_score
         next_version_timestamp
         paper_balance
@@ -34,6 +36,7 @@ query GameOverEvents($gameOverSelector: String, $version: String) {
     edges {
       node {
         id
+        transactionHash
         keys
         data
         createdAt

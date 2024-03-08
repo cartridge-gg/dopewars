@@ -2,7 +2,7 @@ import { Toast } from "@/components/common/Toast";
 import { useToast as useChakraToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 
-const TOAST_DURATION = 2500;
+const TOAST_DURATION = 3500;
 
 export type ToastType = ReturnType<typeof useToast>
 
@@ -31,8 +31,6 @@ export const useToast = () => {
           pointerEvents: "none",
           maxW: "100%",
           minW: "auto",
-          // maxW: ["100vw", "400px"],
-          // minW: ["100vw", "400px"],
           px: "24px",
           m: 0,
         },
