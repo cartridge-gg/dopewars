@@ -1,4 +1,5 @@
-import { Chain, devnet, goerli, mainnet } from "@starknet-react/chains";
+import { useDojoContext } from "@/dojo/hooks";
+import { Chain } from "@starknet-react/chains";
 import {
   ExplorerFactory,
   StarknetConfig,
@@ -8,7 +9,7 @@ import {
   starkscan,
   useInjectedConnectors,
 } from "@starknet-react/core";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -24,19 +25,36 @@ function rpc(chain: Chain) {
 }
 
 export function StarknetProviders({ children }: { children: ReactNode }) {
-  const chains = [devnet, goerli, mainnet];
+  const {
+    burner: { listConnectors },
+    network: { chains, selectedChain, isKatana },
+  } = useDojoContext();
+
   //const provider = publicProvider();
+  const [recommended, setRecommanded] = useState([]);
+
+  useEffect(() => {
+    if (isKatana) {
+      setRecommanded(listConnectors());
+    } else {
+      setRecommanded([argent(), braavos()]);
+    }
+  }, [isKatana]);
+
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
-    recommended: [argent(), braavos()],
+    recommended,
     // Hide recommended connectors if the user has any connector installed.
     includeRecommended: "always",
     // Randomize the order of the connectors.
-    //order: "random"
+    // order: "random"
   });
 
-  // TODO: remove
+  // console.log("StarknetProviders");
+  // console.log(recommended)
+  // console.log(connectors)
 
+  // TODO: remove
   const provider = jsonRpcProvider({ rpc });
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);

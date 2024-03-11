@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
-import { BuyPaper } from "../wallet/BuyPaper";
+import { ChainSelector } from "../wallet/ChainSelector";
 
 interface HeaderProps {
   back?: boolean;
@@ -47,9 +47,10 @@ export const Header = observer(({ back }: HeaderProps) => {
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
+        <ChainSelector />
         {/* game contract */}
         {/* <TokenBalance address={"0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec"} token={config?.ryo.paper_address} /> */}
-        <BuyPaper />
+        {/* <BuyPaper /> */}
 
         {!game && (
           <>

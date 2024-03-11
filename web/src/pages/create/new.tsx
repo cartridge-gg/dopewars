@@ -3,6 +3,7 @@ import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -86,14 +87,16 @@ export default function New() {
       isSinglePanel
       footer={
         <Footer>
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            isLoading={isPending}
-            onClick={() => create(GameMode.Unlimited)}
-          >
-            Play
-          </Button>
+          <ChildrenOrConnect>
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              isLoading={isPending}
+              onClick={() => create(GameMode.Unlimited)}
+            >
+              Play
+            </Button>
+          </ChildrenOrConnect>
         </Footer>
       }
     >

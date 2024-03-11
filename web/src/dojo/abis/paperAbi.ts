@@ -571,4 +571,4 @@ export const ABI = [
       }
     ]
   }
-] as const;
+] //as const;

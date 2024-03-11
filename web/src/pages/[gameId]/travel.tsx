@@ -114,11 +114,7 @@ export default function Travel() {
 
   const onContinue = useCallback(async () => {
 
-    toaster.toast({
-      message:"this is a long messga blabiab laij kd vjdf v;jd f;vj ",
-      isError:false,
-    })
-    return
+  
 
     if (targetLocation && game) {
       try {

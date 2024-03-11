@@ -3,6 +3,7 @@ import { Alert, Clock, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -79,9 +80,11 @@ export default function Home() {
                     Tutorial
                   </Button>
                 )}
-                <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
-                  Hustle
-                </Button>
+                <ChildrenOrConnect>
+                  <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
+                    Hustle
+                  </Button>
+                </ChildrenOrConnect>
               </>
             )}
           </HStack>

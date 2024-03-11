@@ -1,5 +1,8 @@
+import { katana_localhost, katana_slot } from "@/components/wallet/chain/katana";
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
-import { ReactNode, createContext, useContext, useMemo, useRef } from "react";
+import { Chain, goerli, mainnet } from "@starknet-react/chains";
+import { Connector } from "@starknet-react/core";
+import { ReactNode, createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Account, RpcProvider } from "starknet";
 import { StoreApi } from "zustand";
 import { SetupResult } from "../setup/setup";
@@ -8,9 +11,15 @@ import { GameStore, createGameStore } from "../stores/game";
 import { RyoStore, createRyoStore } from "../stores/ryo";
 
 interface DojoContextType extends SetupResult {
+  network: {
+    chain: Chain;
+    selectedChain: Chain;
+    setSelectedChain: VoidFunction;
+    isKatana: boolean;
+  };
   masterAccount: Account;
   account: Account | null;
-  burner: BurnerAccount;
+  burner: BurnerAccount & { listConnectors: Connector[] };
   configStore: StoreApi<ConfigStore>;
   gameStore: StoreApi<GameStore>;
   ryoStore: StoreApi<RyoStore>;
@@ -26,6 +35,16 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     config: { rpcUrl, toriiUrl, masterAddress, masterPrivateKey, accountClassHash, manifest },
   } = value;
 
+  const chains = [katana_localhost, katana_slot, goerli, mainnet];
+  const [selectedChain, setSelectedChain] = useState(
+    process.env.NODE_ENV === "production" ? katana_slot : katana_localhost,
+  );
+  const [isKatana, setIsKatana] = useState(true);
+
+  useEffect(() => {
+    setIsKatana(selectedChain.network.startsWith("katana_"));
+  }, [selectedChain]);
+
   const rpcProvider = useMemo(
     () =>
       new RpcProvider({
@@ -39,14 +58,24 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     [rpcProvider, masterAddress, masterPrivateKey],
   );
 
-  const { create, list, get, account, select, isDeploying, clear, copyToClipboard, applyFromClipboard } =
-    useBurnerManager({
-      burnerManager: new BurnerManager({
-        masterAccount,
-        accountClassHash,
-        rpcProvider,
-      }),
-    });
+  const {
+    create,
+    list,
+    get,
+    account,
+    select,
+    isDeploying,
+    clear,
+    copyToClipboard,
+    applyFromClipboard,
+    listConnectors,
+  } = useBurnerManager({
+    burnerManager: new BurnerManager({
+      masterAccount,
+      accountClassHash,
+      rpcProvider,
+    }),
+  });
 
   const configStoreRef = useRef<StoreApi<ConfigStore>>();
   if (!configStoreRef.current) {
@@ -79,6 +108,12 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     <DojoContext.Provider
       value={{
         ...value,
+        network: {
+          chains,
+          selectedChain,
+          setSelectedChain,
+          isKatana,
+        },
         masterAccount,
         burner: {
           create,
@@ -86,6 +121,7 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
           get,
           select,
           clear,
+          listConnectors,
           account: account ? account : masterAccount,
           isDeploying,
           copyToClipboard,

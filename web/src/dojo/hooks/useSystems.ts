@@ -1,5 +1,6 @@
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
+import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import {
   BigNumberish, Call, GetTransactionReceiptResponse,
@@ -62,10 +63,11 @@ const tryBetterErrorMsg = (msg: string): string => {
 
 export const useSystems = (): SystemsInterface => {
   const {
-    account,
+    //account,
     dojoProvider,
     configStore
   } = useDojoContext();
+  const { account } = useAccount()
 
   const { config } = useConfigStore();
 
@@ -82,11 +84,21 @@ export const useSystems = (): SystemsInterface => {
       parsedEvents: any[];
     }> => {
 
+      if (!account) {
+        toast({
+          message: `you are not connected`,
+          duration: 5_000,
+          isError: true
+        })
+        return
+      }
+
       setError(undefined)
       setIsPending(true)
 
       let tx, receipt;
       try {
+
         if (!Array.isArray(params)) {
           tx = await dojoProvider.execute(account!, params.contractName, params.functionName, params.callData);
         } else {
@@ -102,7 +114,7 @@ export const useSystems = (): SystemsInterface => {
         //
         // TODO : remove later
         //
-        await sleep(1_500);
+        await sleep(1_000);
         // clearToasts()
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {

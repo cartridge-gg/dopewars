@@ -43,8 +43,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       {setupResult && (
         <QueryClientProvider client={setupResult.queryClient}>
-          <StarknetProviders>
-            <DojoProvider value={setupResult}>
+          <DojoProvider value={setupResult}>
+            <StarknetProviders>
               <RegisterEntities />
               <ChakraProvider theme={theme}>
                 <Fonts />
@@ -61,8 +61,8 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Analytics />
                 {/* <Debug /> */}
               </ChakraProvider>
-            </DojoProvider>
-          </StarknetProviders>
+            </StarknetProviders>
+          </DojoProvider>
         </QueryClientProvider>
       )}
     </>

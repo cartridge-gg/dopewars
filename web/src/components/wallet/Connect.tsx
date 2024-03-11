@@ -1,4 +1,7 @@
-import { ExternalLink } from "@/components/icons";
+import { Cigarette, ExternalLink } from "@/components/icons";
+import { useDojoContext } from "@/dojo/hooks";
+import { useTokenBalance } from "@/dojo/hooks/useTokenBalance";
+import { formatEther } from "@/utils/ui";
 import {
   Box,
   Button,
@@ -13,8 +16,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Connector, useAccount, useBalance, useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
-import { useState } from "react";
+import { BurnerConnector } from "@dojoengine/create-burner";
+import { useAccount, /*useBalance,*/ useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
+import { useMemo, useState } from "react";
 import { AccountInterface } from "starknet";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProviders";
 
@@ -27,7 +31,10 @@ export const Connect = ({ ...props }) => {
   const { disconnect } = useDisconnect();
   const { account, address, status } = useAccount();
 
-  const { data: ethBalance } = useBalance({ address });
+  const { balance } = useTokenBalance({
+    address,
+    token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  });
 
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -54,19 +61,14 @@ export const Connect = ({ ...props }) => {
               <Text>{frenlyAddress(account.address || "")}</Text>
               <HStack gap={1}>
                 <Text fontFamily="monospace">Ξ</Text>
-                <Text>{Number(ethBalance?.formatted).toFixed(3)}</Text>
+                <Text>{formatEther(balance)}</Text>
               </HStack>
             </HStack>
           </Button>
         )}
       </Box>
 
-      <ConnectModal
-        connectors={connectors}
-        connect={connect}
-        isOpen={isConnectModalOpen}
-        onClose={() => setIsConnectModalOpen(false)}
-      />
+      <ConnectModal connect={connect} isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} />
 
       {account && (
         <AccountModal
@@ -163,17 +165,22 @@ const AccountModal = ({
   );
 };
 
-const ConnectModal = ({
-  connectors,
-  connect,
-  isOpen,
-  onClose,
-}: {
-  connectors: Array<Connector>;
-  connect: Function;
-  isOpen: boolean;
-  onClose: VoidFunction;
-}) => {
+const ConnectModal = ({ connect, isOpen, onClose }: { connect: Function; isOpen: boolean; onClose: VoidFunction }) => {
+  const { connectors } = useConnect();
+
+  const {
+    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
+    network: { isKatana, selectedChain },
+  } = useDojoContext();
+
+  const hasBurnerConnector = useMemo(() => {
+    return connectors.find((i) => i instanceof BurnerConnector);
+  }, [connectors, connectors.length, selectedChain]);
+
+  const onCreateBurner = async () => {
+    await createBurner();
+  };
+
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -183,31 +190,66 @@ const ConnectModal = ({
         </ModalHeader>
         <ModalBody p={3}>
           <VStack w="full">
-            {connectors.map((connector) => (
+            {isKatana && !hasBurnerConnector && (
               <Button
                 variant="pixelated"
                 w="full"
                 fontSize="14px"
-                key={connector.id}
-                onClick={() => {
-                  if (connector.available()) {
-                    connect({ connector });
-                  } else {
-                    window.open(walletInstallLinks[connector.id as walletInstallLinksKeys], "_blank");
-                  }
-                  onClose();
-                }}
+                isLoading={isBurnerDeploying}
+                onClick={onCreateBurner}
               >
                 <HStack w="full" justifyItems="flex-start">
-                  <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
-                  <Text ml="120px">{connector.available() ? connector.name : `Install ${connector.name}`}</Text>
-                  {!connector.available() && <ExternalLink ml="auto" />}
+                  {/* <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> */}
+                  <Text ml="120px">Create Burner</Text>
                 </HStack>
               </Button>
-            ))}
+            )}
+            {connectors.map((connector) => {
+              const isBurner = connector instanceof BurnerConnector;
+              return (
+                <HStack w="full" key={connector.id}>
+                  <Button
+                    variant="pixelated"
+                    w="full"
+                    fontSize="14px"
+                    onClick={() => {
+                      if (connector.available()) {
+                        connect({ connector });
+                      } else {
+                        window.open(walletInstallLinks[connector.id as walletInstallLinksKeys], "_blank");
+                      }
+                      onClose();
+                    }}
+                  >
+                    <HStack w="full" justifyItems="flex-start">
+                      <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                      <Text ml="120px">
+                        {connector.available()
+                          ? `${connector.name} ${frenlyAddress(connector.id)}`
+                          : `Install ${connector.name}`}
+                      </Text>
+                      {!connector.available() && <ExternalLink ml="auto" />}
+                    </HStack>
+                  </Button>
+                  {isBurner && (
+                    <Cigarette
+                      cursor="pointer"
+                      onClick={() => {
+                        clearBurner();
+                      }}
+                    />
+                  )}
+                </HStack>
+              );
+            })}
           </VStack>
         </ModalBody>
       </ModalContent>
     </Modal>
   );
+};
+
+export const ChildrenOrConnect = ({ children }) => {
+  const { account } = useAccount();
+  return account ? children : <Connect />;
 };

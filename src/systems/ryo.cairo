@@ -31,7 +31,7 @@ mod ryo {
         systems::leaderboard::{LeaderboardManager, LeaderboardManagerTrait},
     };
 
-    const FEW_MIN: u32 = 1800; // 30 * 60
+    const FEW_MIN: u32 = 1200; // 20 * 60
     const ONE_HOUR: u32 = 3600; // 60 * 60
     const ONE_DAY: u32 = 86_400; // 24 * 60 * 60
     const ONE_WEEK: u32 = 604_800; // 7 * 86_400;
@@ -47,7 +47,7 @@ mod ryo {
             assert(ryo_config.initialized == false, 'Already initialized');
 
             // consume first world uuid = 0
-            let _ = world.uuid();
+            let _ = self.world().uuid();
 
             // RyoConfig
             ryo_config.initialized = true;

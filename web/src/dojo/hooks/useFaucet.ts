@@ -1,8 +1,8 @@
 import { useToast } from "@/hooks/toast";
+import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import { Contract, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
-import { useDojoContext } from "./useDojoContext";
 
 
 export interface FaucetExecuteResult {
@@ -16,7 +16,7 @@ export interface FaucetInterface {
 }
 
 export const useFaucet = (tokenAddress?: string): FaucetInterface => {
-  const { account } = useDojoContext();
+  const { account } = useAccount()
 
   const { toast } = useToast();
 
