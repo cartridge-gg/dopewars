@@ -4,7 +4,7 @@ use core::hash::{HashStateTrait, HashStateExTrait};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::market::{Market};
-use rollyourown::models::encrypted_market::{EncryptedMarket};
+use rollyourown::models::encrypted_market::{BlindedMarket};
 use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::drug::{Drug, DrugTrait};
 use rollyourown::models::player::{Player};
@@ -60,7 +60,7 @@ fn initialize_markets(
                         cash: market_cash,
                         quantity: market_quantity
                     },
-                    EncryptedMarket {
+                    BlindedMarket {
                         game_id,
                         location_id: location_id,
                         drug_id: *drug_id,

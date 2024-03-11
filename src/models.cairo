@@ -1,6 +1,6 @@
 mod game;
 mod market;
-mod encrypted_market;
+mod blinded_market;
 mod player;
 mod drug;
 mod location;
