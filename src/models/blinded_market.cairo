@@ -22,26 +22,9 @@ struct BlindedMarket {
     quantity: felt252,
 }
 
-//#[generate_trait]
-//impl MarketImpl of MarketTrait {
-//    #[inline(always)]
-//    fn buy(ref self: Market, quantity: usize) -> u128 {
-//        assert(quantity < self.quantity, 'not enough liquidity');
-//   
-//    }
-//
-//    #[inline(always)]
-//    fn sell(ref self: Market, quantity: usize) -> u128 {
-//        let (amount, available, cash) = normalize(quantity, self);
-//        let k = cash * available;
-//        let payout = cash - (k / (available + amount));
-//        payout
-//    }
-//}
-
 
  #[test]
- fn test_market_encrypted() {
+ fn test_market_blinded() {
      let mut market = Market {
          game_id: 0, location_id: LocationEnum::Queens , drug_id: DrugEnum::Ludes, cash: SCALING_FACTOR * 1, quantity: 10
      }; // pool 1:10
