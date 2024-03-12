@@ -35,6 +35,19 @@ query MarketPrices($gameId: u32) {
   }
 }
 
+query BlindedMarketPrices($gameId: u32) {
+  blindedMarketModels(first: 36, where: { game_id: $gameId }) {
+    edges {
+      node {
+        drug_id
+        location_id
+        quantity
+        cash
+      }
+    }
+  }
+}
+
 query RyoMetas {
   ryoMetaModels(limit: 1) {
     edges {
