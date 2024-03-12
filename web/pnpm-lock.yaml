@@ -30,8 +30,8 @@ dependencies:
     specifier: ^0.1.7
     version: 0.1.7
   '@starknet-react/core':
-    specifier: file:../../starknet-react/packages/core
-    version: file:../../starknet-react/packages/core(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0)
+    specifier: ^2.4.0
+    version: 2.4.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0)
   '@vercel/analytics':
     specifier: ^1.0.2
     version: 1.1.2
@@ -4390,6 +4390,23 @@ packages:
 
   /@starknet-react/core@2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0):
     resolution: {integrity: sha512-8g9d0Gs811gJnQJHVMxQoXYhv+y5/qug7NQ0lnJ51uytdBhr/Zz5wgeTHW4ZQ5Igljyvf+ks+yhp4P1iSvnSqA==}
+    peerDependencies:
+      get-starknet-core: ^3.2.0
+      react: ^18.0
+      starknet: ^5.25.0
+    dependencies:
+      '@starknet-react/chains': 0.1.7
+      '@tanstack/react-query': 5.24.1(react@18.2.0)
+      eventemitter3: 5.0.1
+      get-starknet-core: 3.2.0(starknet@6.2.0)
+      immutable: 4.3.4
+      react: 18.2.0
+      starknet: 6.2.0
+      zod: 3.22.4
+    dev: false
+
+  /@starknet-react/core@2.4.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0):
+    resolution: {integrity: sha512-86Xjr48hF1bnKeKnR/zpNnZdYMOchfdj8eU3az47KdjHpo5RQZf0baVre8E+sFWmzoDeSsq3iH7m/Epx+srMig==}
     peerDependencies:
       get-starknet-core: ^3.2.0
       react: ^18.0
@@ -10573,23 +10590,4 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: false
-
-  file:../../starknet-react/packages/core(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0):
-    resolution: {directory: ../../starknet-react/packages/core, type: directory}
-    id: file:../../starknet-react/packages/core
-    name: '@starknet-react/core'
-    peerDependencies:
-      get-starknet-core: ^3.2.0
-      react: ^18.0
-      starknet: ^5.25.0
-    dependencies:
-      '@starknet-react/chains': 0.1.7
-      '@tanstack/react-query': 5.24.1(react@18.2.0)
-      eventemitter3: 5.0.1
-      get-starknet-core: 3.2.0(starknet@6.2.0)
-      immutable: 4.3.4
-      react: 18.2.0
-      starknet: 6.2.0
-      zod: 3.22.4
     dev: false

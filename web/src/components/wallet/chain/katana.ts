@@ -1,9 +1,9 @@
 import { Chain } from "@starknet-react/chains";
 
 export const katana_localhost = {
-    id: BigInt("0x4b4154414e41"),
+    id: BigInt("0x4b4154414e41"), // KATANA
     network: "katana_localhost",
-    name: "Katana Dev",
+    name: "Katana Local",
     nativeCurrency: {
         address:
             "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
@@ -27,7 +27,7 @@ export const katana_localhost = {
 
 
 export const katana_slot = {
-    id: BigInt("0x4b4154414e41"),
+    id: BigInt("0x4b4154414e415f534c4f54"), // KATANA_SLOT
     network: "katana_slot",
     name: "Katana Slot",
     nativeCurrency: {

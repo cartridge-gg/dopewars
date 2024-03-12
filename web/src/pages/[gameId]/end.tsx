@@ -43,6 +43,7 @@ const End = observer(() => {
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account } = useDojoContext();
+  
   const { game, gameInfos, gameEvents } = useGameStore();
 
   useEffect(() => {

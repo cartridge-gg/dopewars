@@ -39,7 +39,7 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
   const [selectedChain, setSelectedChain] = useState(
     process.env.NODE_ENV === "production" ? katana_slot : katana_localhost,
   );
-  const [isKatana, setIsKatana] = useState(true);
+  const [isKatana, setIsKatana] = useState(process.env.NODE_ENV === "production" ? true : false);
 
   useEffect(() => {
     setIsKatana(selectedChain.network.startsWith("katana_"));

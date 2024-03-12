@@ -6,17 +6,9 @@ import {
   argent,
   braavos,
   jsonRpcProvider,
-  starkscan,
-  useInjectedConnectors,
+  starkscan
 } from "@starknet-react/core";
-import { ReactNode, useEffect, useState } from "react";
-
-export const walletInstallLinks = {
-  argentX: "https://www.argent.xyz/argent-x/",
-  braavos: "https://braavos.app/download-braavos-wallet/",
-};
-
-export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
+import { ReactNode, useState } from "react";
 
 function rpc(chain: Chain) {
   return {
@@ -30,29 +22,35 @@ export function StarknetProviders({ children }: { children: ReactNode }) {
     network: { chains, selectedChain, isKatana },
   } = useDojoContext();
 
-  //const provider = publicProvider();
-  const [recommended, setRecommanded] = useState([]);
+  // //const provider = publicProvider();
+  // const [recommended, setRecommanded] = useState([]);
 
-  useEffect(() => {
-    if (isKatana) {
-      setRecommanded(listConnectors());
-    } else {
-      setRecommanded([argent(), braavos()]);
-    }
-  }, [isKatana]);
+  // useEffect(() => {
+  //   if (isKatana) {
+  //     setRecommanded(listConnectors());
+  //   } else {
+  //     setRecommanded([argent(), braavos()]);
+  //   }
+  // }, [isKatana, selectedChain]);
 
-  const { connectors } = useInjectedConnectors({
-    // Show these connectors if the user has no connector installed.
-    recommended,
-    // Hide recommended connectors if the user has any connector installed.
-    includeRecommended: "always",
-    // Randomize the order of the connectors.
-    // order: "random"
-  });
+  // useEffect(() => {
+  //   console.log(recommended)
+  // }, [recommended])
 
-  // console.log("StarknetProviders");
-  // console.log(recommended)
-  // console.log(connectors)
+  // const { connectors } = useInjectedConnectors({
+  //   // Show these connectors if the user has no connector installed.
+  //   recommended: isKatana ? listConnectors() : [argent(), braavos()],
+  //   // Hide recommended connectors if the user has any connector installed.
+  //   includeRecommended: "always",
+  //   // Randomize the order of the connectors.
+  //   // order: "random"
+  // });
+
+  // const connectors = useMemo(() => {
+  //   return isKatana ? listConnectors() : [argent(), braavos()];
+  // }, [selectedChain, isKatana, listConnectors()]);
+
+  const connectors = isKatana ? listConnectors() : [argent(), braavos()];
 
   // TODO: remove
   const provider = jsonRpcProvider({ rpc });

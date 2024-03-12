@@ -1,15 +1,20 @@
 import { useDojoContext } from "@/dojo/hooks";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { Chain } from "@starknet-react/chains";
-import { useDisconnect, useNetwork } from "@starknet-react/core";
+import { useDisconnect } from "@starknet-react/core";
 
 export const ChainSelector = ({ ...props }) => {
-  const { chain } = useNetwork();
+  // const { chain } = useNetwork();
   const {
     network: { chains, selectedChain, setSelectedChain },
   } = useDojoContext();
 
-  const { disconnect } = useDisconnect()
+  const { disconnectAsync } = useDisconnect();
+
+  const onSelectChain = async (chain: Chain) => {
+    await disconnectAsync();
+    setSelectedChain(chain);
+  };
 
   return (
     <Menu>
@@ -17,18 +22,13 @@ export const ChainSelector = ({ ...props }) => {
         {selectedChain.name}
       </MenuButton>
       <MenuList>
-        {chains.map((i: Chain) => {
-          if (i === selectedChain) return;
-          const isMainnet = i.network === "mainnet";
+        {chains.map((chain: Chain) => {
+          if (chain === selectedChain) return;
+          const isMainnet = chain.network === "mainnet";
           return (
-            <MenuItem
-              onClick={() => {
-                disconnect();
-                setSelectedChain(i);
-              }}
-            >
+            <MenuItem onClick={() => onSelectChain(chain)}>
               <Text>
-                {i.name} ({isMainnet ? "RANKED" : "FREE"})
+                {chain.name} ({isMainnet ? "RANKED" : "FREE"})
               </Text>
             </MenuItem>
           );

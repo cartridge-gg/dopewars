@@ -27,9 +27,10 @@ export const frenlyAddress = (address: string) => {
 };
 
 export const Connect = ({ ...props }) => {
+  const { account, address, status } = useAccount();
+
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
-  const { account, address, status } = useAccount();
 
   const { balance } = useTokenBalance({
     address,
@@ -68,7 +69,12 @@ export const Connect = ({ ...props }) => {
         )}
       </Box>
 
-      <ConnectModal connect={connect} isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} />
+      <ConnectModal
+        connectors={connectors}
+        connect={connect}
+        isOpen={isConnectModalOpen}
+        onClose={() => setIsConnectModalOpen(false)}
+      />
 
       {account && (
         <AccountModal
@@ -165,17 +171,25 @@ const AccountModal = ({
   );
 };
 
-const ConnectModal = ({ connect, isOpen, onClose }: { connect: Function; isOpen: boolean; onClose: VoidFunction }) => {
-  const { connectors } = useConnect();
-
+const ConnectModal = ({
+  connectors,
+  connect,
+  isOpen,
+  onClose,
+}: {
+  connectors: Connectors[];
+  connect: Function;
+  isOpen: boolean;
+  onClose: VoidFunction;
+}) => {
   const {
-    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
+    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying, account },
     network: { isKatana, selectedChain },
   } = useDojoContext();
 
   const hasBurnerConnector = useMemo(() => {
     return connectors.find((i) => i instanceof BurnerConnector);
-  }, [connectors, connectors.length, selectedChain]);
+  }, [connectors, connectors.length, selectedChain, isKatana]);
 
   const onCreateBurner = async () => {
     await createBurner();
@@ -206,6 +220,7 @@ const ConnectModal = ({ connect, isOpen, onClose }: { connect: Function; isOpen:
             )}
             {connectors.map((connector) => {
               const isBurner = connector instanceof BurnerConnector;
+              // const isDeployedOnCurrentChain = selectedChain
               return (
                 <HStack w="full" key={connector.id}>
                   <Button
@@ -225,7 +240,7 @@ const ConnectModal = ({ connect, isOpen, onClose }: { connect: Function; isOpen:
                       <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                       <Text ml="120px">
                         {connector.available()
-                          ? `${connector.name} ${frenlyAddress(connector.id)}`
+                          ? `${connector.name} ${isBurner ? frenlyAddress(connector.id) : ""}`
                           : `Install ${connector.name}`}
                       </Text>
                       {!connector.available() && <ExternalLink ml="auto" />}

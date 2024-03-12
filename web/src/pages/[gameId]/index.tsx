@@ -8,6 +8,7 @@ export default function Redirector() {
   const { router, gameId } = useRouterContext();
 
   const { account } = useDojoContext();
+  
   const { game } = useGameStore();
   const configStore = useConfigStore();
 

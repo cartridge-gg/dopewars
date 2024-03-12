@@ -63,7 +63,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
       setIsPending(false)
 
       return {
-        hash: tx?.transaction_hash ||"0x0",
+        hash: tx?.transaction_hash || "0x0",
       };
 
     },

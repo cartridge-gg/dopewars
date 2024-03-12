@@ -18,6 +18,7 @@ export default function Home() {
     account,
     burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
+  
 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
