@@ -14,10 +14,11 @@ export const katana_localhost = {
     testnet: true,
 
     rpcUrls: {
+        default: {
+            http: ["https://localhost:5050",],
+        },
         public: {
-            http: [
-                "https://localhost:5050",
-            ],
+            http: ["https://localhost:5050",],
         },
     },
     explorers: {
@@ -39,10 +40,11 @@ export const katana_slot = {
     },
 
     rpcUrls: {
+        default: {
+            http: ["https://api.cartridge.gg/x/ryo420/katana",],
+        },
         public: {
-            http: [
-                "https://api.cartridge.gg/x/ryo420/katana",
-            ],
+            http: ["https://api.cartridge.gg/x/ryo420/katana",],
         },
     },
     explorers: {

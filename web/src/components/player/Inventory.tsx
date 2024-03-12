@@ -62,7 +62,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             </Text>
           </HStack>
 
-          <Tooltip title="Encountered" text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`}>
+          <Tooltip title="Encountered" text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`} color="yellow.400">
             <Card h="40px" px="5px" justify="center" alignItems="center">
               <PowerMeter
                 text={reputationRanks[game.encounters.level as reputationRanksKeys]}

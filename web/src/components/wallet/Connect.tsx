@@ -17,8 +17,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { BurnerConnector } from "@dojoengine/create-burner";
-import { useAccount, /*useBalance,*/ useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
-import { useMemo, useState } from "react";
+import { Connector, useAccount, /*useBalance,*/ useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
+import { ReactNode, useMemo, useState } from "react";
 import { AccountInterface } from "starknet";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProviders";
 
@@ -177,7 +177,7 @@ const ConnectModal = ({
   isOpen,
   onClose,
 }: {
-  connectors: Connectors[];
+  connectors: Connector[];
   connect: Function;
   isOpen: boolean;
   onClose: VoidFunction;
@@ -264,7 +264,7 @@ const ConnectModal = ({
   );
 };
 
-export const ChildrenOrConnect = ({ children }) => {
+export const ChildrenOrConnect = ({ children }: { children: ReactNode }) => {
   const { account } = useAccount();
-  return account ? children : <Connect />;
+  return <>{account ? children : <Connect />}</>;
 };

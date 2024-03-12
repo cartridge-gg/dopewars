@@ -86,11 +86,11 @@ export const useSystems = (): SystemsInterface => {
 
       if (!account) {
         toast({
-          message: `you are not connected`,
+          message: `not connected`,
           duration: 5_000,
           isError: true
         })
-        return
+        throw Error(`not connected`)
       }
 
       setError(undefined)

@@ -2,7 +2,17 @@ import { katana_localhost, katana_slot } from "@/components/wallet/chain/katana"
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
 import { Chain, goerli, mainnet } from "@starknet-react/chains";
 import { Connector } from "@starknet-react/core";
-import { ReactNode, createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Account, RpcProvider } from "starknet";
 import { StoreApi } from "zustand";
 import { SetupResult } from "../setup/setup";
@@ -12,14 +22,14 @@ import { RyoStore, createRyoStore } from "../stores/ryo";
 
 interface DojoContextType extends SetupResult {
   network: {
-    chain: Chain;
+    chains: Chain[];
     selectedChain: Chain;
-    setSelectedChain: VoidFunction;
+    setSelectedChain: Dispatch<SetStateAction<any>>;
     isKatana: boolean;
   };
   masterAccount: Account;
   account: Account | null;
-  burner: BurnerAccount & { listConnectors: Connector[] };
+  burner: BurnerAccount & { listConnectors: () => Connector[] };
   configStore: StoreApi<ConfigStore>;
   gameStore: StoreApi<GameStore>;
   ryoStore: StoreApi<RyoStore>;

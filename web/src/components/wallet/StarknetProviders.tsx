@@ -1,14 +1,13 @@
 import { useDojoContext } from "@/dojo/hooks";
 import { Chain } from "@starknet-react/chains";
-import {
-  ExplorerFactory,
-  StarknetConfig,
-  argent,
-  braavos,
-  jsonRpcProvider,
-  starkscan
-} from "@starknet-react/core";
+import { ExplorerFactory, StarknetConfig, argent, braavos, jsonRpcProvider, starkscan } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
+
+export const walletInstallLinks = {
+  argentX: "https://www.argent.xyz/argent-x/",
+  braavos: "https://braavos.app/download-braavos-wallet/",
+};
+export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
 function rpc(chain: Chain) {
   return {
@@ -50,7 +49,7 @@ export function StarknetProviders({ children }: { children: ReactNode }) {
   //   return isKatana ? listConnectors() : [argent(), braavos()];
   // }, [selectedChain, isKatana, listConnectors()]);
 
-  const connectors = isKatana ? listConnectors() : [argent(), braavos()];
+  const connectors = isKatana ? [...listConnectors()] : [argent(), braavos()];
 
   // TODO: remove
   const provider = jsonRpcProvider({ rpc });

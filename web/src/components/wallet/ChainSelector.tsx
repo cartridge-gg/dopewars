@@ -22,11 +22,11 @@ export const ChainSelector = ({ ...props }) => {
         {selectedChain.name}
       </MenuButton>
       <MenuList>
-        {chains.map((chain: Chain) => {
+        {chains.map((chain: Chain, key:number) => {
           if (chain === selectedChain) return;
           const isMainnet = chain.network === "mainnet";
           return (
-            <MenuItem onClick={() => onSelectChain(chain)}>
+            <MenuItem key={key} onClick={() => onSelectChain(chain)}>
               <Text>
                 {chain.name} ({isMainnet ? "RANKED" : "FREE"})
               </Text>
