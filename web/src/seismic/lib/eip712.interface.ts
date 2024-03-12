@@ -41,8 +41,8 @@ export function createEIP712TypesNoBodyStarknet(
 export function createStarknetEIP712DomainType(name: string) {
     return { 
         name,
-        version: process.env.VERSION,
-        chainId: typeof process.env.CHAIN_ID === 'string' ? shortString.encodeShortString(process.env.CHAIN_ID) : Number(process.env.CHAIN_ID),
+        version: process.env.VERSION || 1,
+        chainId: typeof process.env.CHAIN_ID === 'string' ? shortString.encodeShortString(process.env.CHAIN_ID) : Number(process.env.CHAIN_ID) || shortString.encodeShortString("KATANA") as number,
     };
 }
 
