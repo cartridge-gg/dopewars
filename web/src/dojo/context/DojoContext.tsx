@@ -7,12 +7,14 @@ import {
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { Account, RpcProvider } from "starknet";
 import { SetupResult } from "../setup/setup";
+import SeismicClient from "@/seismic/client";
 
 interface DojoContextType extends SetupResult {
     masterAccount: Account;
     account: Account | null;
     playerEntityStore: PlayerEntityStore;
     burner:BurnerAccount;
+    seismic: SeismicClient;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -28,7 +30,7 @@ export const DojoProvider = ({
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
     const {
-        config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash },
+        config: { rpcUrl, masterAddress, masterPrivateKey, accountClassHash, seismic_url },
     } = value;
 
     const rpcProvider = useMemo(
@@ -63,6 +65,8 @@ export const DojoProvider = ({
     });
 
     const playerEntityStore =  usePlayerEntityStore()
+    
+    const seismic = useMemo(() => new SeismicClient(account as Account, seismic_url), [account, seismic_url]);
 
     return (
         <DojoContext.Provider
@@ -81,7 +85,8 @@ export const DojoProvider = ({
                     applyFromClipboard,
                 },
                 account,
-                playerEntityStore
+                playerEntityStore,
+                seismic
             }}
         >
             {children}
