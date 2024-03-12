@@ -25,6 +25,68 @@ export type Scalars = {
   usize: any;
 };
 
+export type BlindedMarket = {
+  __typename?: 'BlindedMarket';
+  cash?: Maybe<Scalars['felt252']>;
+  drug_id?: Maybe<Scalars['Enum']>;
+  entity?: Maybe<World__Entity>;
+  game_id?: Maybe<Scalars['u32']>;
+  location_id?: Maybe<Scalars['Enum']>;
+  quantity?: Maybe<Scalars['felt252']>;
+};
+
+export type BlindedMarketConnection = {
+  __typename?: 'BlindedMarketConnection';
+  edges?: Maybe<Array<Maybe<BlindedMarketEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type BlindedMarketEdge = {
+  __typename?: 'BlindedMarketEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<BlindedMarket>;
+};
+
+export type BlindedMarketOrder = {
+  direction: OrderDirection;
+  field: BlindedMarketOrderField;
+};
+
+export enum BlindedMarketOrderField {
+  Cash = 'CASH',
+  DrugId = 'DRUG_ID',
+  GameId = 'GAME_ID',
+  LocationId = 'LOCATION_ID',
+  Quantity = 'QUANTITY'
+}
+
+export type BlindedMarketWhereInput = {
+  cash?: InputMaybe<Scalars['felt252']>;
+  cashEQ?: InputMaybe<Scalars['felt252']>;
+  cashGT?: InputMaybe<Scalars['felt252']>;
+  cashGTE?: InputMaybe<Scalars['felt252']>;
+  cashLT?: InputMaybe<Scalars['felt252']>;
+  cashLTE?: InputMaybe<Scalars['felt252']>;
+  cashNEQ?: InputMaybe<Scalars['felt252']>;
+  drug_id?: InputMaybe<Scalars['Enum']>;
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  location_id?: InputMaybe<Scalars['Enum']>;
+  quantity?: InputMaybe<Scalars['felt252']>;
+  quantityEQ?: InputMaybe<Scalars['felt252']>;
+  quantityGT?: InputMaybe<Scalars['felt252']>;
+  quantityGTE?: InputMaybe<Scalars['felt252']>;
+  quantityLT?: InputMaybe<Scalars['felt252']>;
+  quantityLTE?: InputMaybe<Scalars['felt252']>;
+  quantityNEQ?: InputMaybe<Scalars['felt252']>;
+};
+
 export type Drug = {
   __typename?: 'Drug';
   drug_id?: Maybe<Scalars['Enum']>;
@@ -451,7 +513,7 @@ export type MarketWhereInput = {
   quantityNEQ?: InputMaybe<Scalars['usize']>;
 };
 
-export type ModelUnion = Drug | Encounter | Game | Item | Leaderboard | Market | Player | RyoMeta;
+export type ModelUnion = BlindedMarket | Drug | Encounter | Game | Item | Leaderboard | Market | Player | RyoMeta;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -827,6 +889,7 @@ export type World__PageInfo = {
 
 export type World__Query = {
   __typename?: 'World__Query';
+  blindedMarketModels?: Maybe<BlindedMarketConnection>;
   drugModels?: Maybe<DrugConnection>;
   encounterModels?: Maybe<EncounterConnection>;
   entities?: Maybe<World__EntityConnection>;
@@ -843,6 +906,18 @@ export type World__Query = {
   ryoMetaModels?: Maybe<RyoMetaConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
+};
+
+
+export type World__QueryBlindedMarketModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<BlindedMarketOrder>;
+  where?: InputMaybe<BlindedMarketWhereInput>;
 };
 
 
@@ -996,7 +1071,7 @@ export type World__QueryRyoMetaModelsArgs = {
 
 
 export type World__QueryTransactionArgs = {
-  id: Scalars['ID'];
+  transactionHash: Scalars['ID'];
 };
 
 
@@ -1078,6 +1153,13 @@ export type MarketPricesQueryVariables = Exact<{
 
 export type MarketPricesQuery = { __typename?: 'World__Query', marketModels?: { __typename?: 'MarketConnection', edges?: Array<{ __typename?: 'MarketEdge', node?: { __typename?: 'Market', drug_id?: any | null, location_id?: any | null, quantity?: any | null, cash?: any | null } | null } | null> | null } | null };
 
+export type BlindedMarketPricesQueryVariables = Exact<{
+  gameId?: InputMaybe<Scalars['u32']>;
+}>;
+
+
+export type BlindedMarketPricesQuery = { __typename?: 'World__Query', blindedMarketModels?: { __typename?: 'BlindedMarketConnection', edges?: Array<{ __typename?: 'BlindedMarketEdge', node?: { __typename?: 'BlindedMarket', drug_id?: any | null, location_id?: any | null, quantity?: any | null, cash?: any | null } | null } | null> | null } | null };
+
 export type RyoMetasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1098,21 +1180,21 @@ export type PlayerEntityQueryVariables = Exact<{
 }>;
 
 
-export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, mainnet_address?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
+export type PlayerEntityQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'BlindedMarket' } | { __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, mainnet_address?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
 
 export type PlayerEntitySubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, mainnet_address?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntitySubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'BlindedMarket' } | { __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player', name?: any | null, avatar_id?: any | null, mainnet_address?: any | null, cash?: any | null, status?: any | null, hood_id?: any | null, location_id?: any | null, drug_count?: any | null, health?: any | null, turn?: any | null, max_turns?: any | null, max_items?: any | null, attack?: any | null, defense?: any | null, transport?: any | null, speed?: any | null, wanted?: any | null, game_over?: any | null } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type PlayerEntityRelatedDataSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } };
+export type PlayerEntityRelatedDataSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'BlindedMarket' } | { __typename: 'Drug', drug_id?: any | null, quantity?: any | null } | { __typename: 'Encounter', encounter_id?: any | null, level?: any | null, health?: any | null, payout?: any | null } | { __typename: 'Game' } | { __typename: 'Item', item_id?: any | null, level?: any | null, name?: any | null, value?: any | null } | { __typename: 'Leaderboard' } | { __typename: 'Market' } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } };
 
 export type LocationEntitiesQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1120,7 +1202,7 @@ export type LocationEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type LocationEntitiesQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', cursor?: any | null, node?: { __typename?: 'World__Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
+export type LocationEntitiesQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', cursor?: any | null, node?: { __typename?: 'World__Entity', keys?: Array<string | null> | null, models?: Array<{ __typename: 'BlindedMarket' } | { __typename: 'Drug' } | { __typename: 'Encounter' } | { __typename: 'Game' } | { __typename: 'Item' } | { __typename: 'Leaderboard' } | { __typename: 'Market', cash?: any | null, quantity?: any | null, location_id?: any | null, drug_id?: any | null } | { __typename: 'Player' } | { __typename: 'RyoMeta' } | null> | null } | null } | null> | null } | null };
 
 export type PlayerLogsQueryVariables = Exact<{
   game_id: Scalars['String'];
@@ -1257,6 +1339,54 @@ export const useInfiniteMarketPricesQuery = <
 
 
 useInfiniteMarketPricesQuery.getKey = (variables?: MarketPricesQueryVariables) => variables === undefined ? ['MarketPrices.infinite'] : ['MarketPrices.infinite', variables];
+;
+
+export const BlindedMarketPricesDocument = `
+    query BlindedMarketPrices($gameId: u32) {
+  blindedMarketModels(first: 36, where: {game_id: $gameId}) {
+    edges {
+      node {
+        drug_id
+        location_id
+        quantity
+        cash
+      }
+    }
+  }
+}
+    `;
+export const useBlindedMarketPricesQuery = <
+      TData = BlindedMarketPricesQuery,
+      TError = unknown
+    >(
+      variables?: BlindedMarketPricesQueryVariables,
+      options?: UseQueryOptions<BlindedMarketPricesQuery, TError, TData>
+    ) =>
+    useQuery<BlindedMarketPricesQuery, TError, TData>(
+      variables === undefined ? ['BlindedMarketPrices'] : ['BlindedMarketPrices', variables],
+      useFetchData<BlindedMarketPricesQuery, BlindedMarketPricesQueryVariables>(BlindedMarketPricesDocument).bind(null, variables),
+      options
+    );
+
+useBlindedMarketPricesQuery.getKey = (variables?: BlindedMarketPricesQueryVariables) => variables === undefined ? ['BlindedMarketPrices'] : ['BlindedMarketPrices', variables];
+;
+
+export const useInfiniteBlindedMarketPricesQuery = <
+      TData = BlindedMarketPricesQuery,
+      TError = unknown
+    >(
+      variables?: BlindedMarketPricesQueryVariables,
+      options?: UseInfiniteQueryOptions<BlindedMarketPricesQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<BlindedMarketPricesQuery, BlindedMarketPricesQueryVariables>(BlindedMarketPricesDocument)
+    return useInfiniteQuery<BlindedMarketPricesQuery, TError, TData>(
+      variables === undefined ? ['BlindedMarketPrices.infinite'] : ['BlindedMarketPrices.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteBlindedMarketPricesQuery.getKey = (variables?: BlindedMarketPricesQueryVariables) => variables === undefined ? ['BlindedMarketPrices.infinite'] : ['BlindedMarketPrices.infinite', variables];
 ;
 
 export const RyoMetasDocument = `
