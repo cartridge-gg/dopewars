@@ -18,7 +18,7 @@ struct BlindedMarket {
     location_id: LocationEnum,
     #[key]
     drug_id: DrugEnum,
-    cash: felt252, // fixed point
+    cash: felt252,
     quantity: felt252,
 }
 
@@ -27,7 +27,7 @@ struct BlindedMarket {
  fn test_market_blinded() {
      let mut market = Market {
          game_id: 0, location_id: LocationEnum::Queens , drug_id: DrugEnum::Ludes, cash: SCALING_FACTOR * 1, quantity: 10
-     }; // pool 1:10
+     }; 
 
      let cash_hash = PoseidonTrait::new().update_with(SCALING_FACTOR * 1).finalize();
 
