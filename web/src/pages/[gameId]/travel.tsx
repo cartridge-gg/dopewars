@@ -42,6 +42,7 @@ import { Footer } from "@/components/Footer";
 interface MarketPriceInfo {
   id: string;
   price: number;
+  hiding_price: string;
   diff?: number;
   percentage?: number;
 }
@@ -53,20 +54,21 @@ export default function Travel() {
   const [currentLocationId, setCurrentLocationId] = useState<string>();
 
   const toaster = useToast();
-  const { account, playerEntityStore } = useDojoContext();
+  const { account, playerEntityStore, seismic } = useDojoContext();
   const { travel, isPending } = useSystems();
 
   const { playerEntity } = playerEntityStore;
-
-  const { locationPrices } = useMarketPrices({
-    gameId,
-  });
 
   const locationName = useMemo(() => {
     if (targetId) {
       return getLocationById(targetId)?.name;
     }
   }, [targetId]);
+  
+  const { locationPrices } = useMarketPrices({
+    gameId,
+    seismic
+  });
 
   useEffect(() => {
     if (playerEntity && !isPending) {
@@ -82,22 +84,17 @@ export default function Travel() {
   const prices = useMemo(() => {
     if (locationPrices && targetId) {
       const current = sortDrugMarkets(locationPrices.get(currentLocationId || ""));
-
       const target = sortDrugMarkets(locationPrices.get(targetId));
 
       return target.map((drug, index) => {
-        if (currentLocationId) {
-          const diff = drug.price - current[index].price;
-          const percentage = (Math.abs(drug.price - current[index].price) / current[index].price) * 100;
-
+        if (currentLocationId) { 
           return {
             id: drug.id,
             price: drug.price,
-            diff,
-            percentage,
+            hiding_price: drug.marketPool.quantity.toString().slice(0,5),
           } as MarketPriceInfo;
         }
-
+        const sliced_quantity = drug.marketPool.quantity.slice(0,5);
         return {
           id: drug.id,
           price: drug.price,
@@ -292,7 +289,7 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
                   {getDrugById(drug.id)?.icon({
                     boxSize: "24px",
                   })}
-                  <Text display={isCurrentLocation ? "block" : ["none", "block"]}>${drug.price.toFixed(0)}</Text>
+                  <Text display={isCurrentLocation ? "block" : ["none", "block"]}>{isCurrentLocation ? `$${drug.price.toFixed(0)}` : drug.hiding_price}</Text>
                   {drug.percentage && drug.diff && drug.diff !== 0 && (
                     <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
                       ({!isPercentage ? `${drug.percentage.toFixed(0)}%` : formatCash(drug.diff)})
