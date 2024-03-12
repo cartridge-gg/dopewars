@@ -7,6 +7,7 @@
       const result: PossibleTypesResultData = {
   "possibleTypes": {
     "ModelUnion": [
+      "BlindedMarket",
       "Drug",
       "Encounter",
       "Game",
