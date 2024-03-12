@@ -17,5 +17,7 @@ export function dojoConfig() {
         process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH ||
             "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
         manifest,
+        seismic_url:
+        process.env.SEISMIC_PUBLIC_RPC_ENDPOINT || "http://localhost:5025",
     }
 }
