@@ -7,6 +7,7 @@ import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Divider, Flex, HStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { ChainSelector } from "../wallet/ChainSelector";
@@ -58,6 +59,9 @@ export const Header = observer(({ back }: HeaderProps) => {
             {account && <PaperFaucet />}
           </>
         )}
+
+        <ClaimReward />
+
       </HStack>
 
       {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (

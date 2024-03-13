@@ -90,7 +90,10 @@ export const useSystems = (): SystemsInterface => {
           duration: 5_000,
           isError: true
         })
-        throw Error(`not connected`)
+        // throw Error(`not connected`)
+        return {
+          hash:""
+        }
       }
 
       setError(undefined)

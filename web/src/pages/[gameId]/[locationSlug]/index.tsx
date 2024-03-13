@@ -1,6 +1,7 @@
 import { Button } from "@/components/common";
 import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { getRandomGreeting } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
@@ -44,7 +45,7 @@ const Location = observer(() => {
         return;
       }
 
-      setGreetings(getRandomGreeting(game.player.turn))
+      setGreetings(getRandomGreeting(game.player.turn));
       setIsLastDay(game.player.turn === gameInfos.max_turns);
     }
   }, [location, game, router, gameId, gameInfos, gameInfos?.max_turns]);
@@ -62,7 +63,6 @@ const Location = observer(() => {
   // const prefixTitle = isLastDay
   //   ? "Final Day"
   //   : `Day ${game.player.turn} ${gameInfos.max_turns === 0 ? "" : "/ " + gameInfos.max_turns}`;
-  
 
   return (
     <Layout
@@ -73,25 +73,27 @@ const Location = observer(() => {
       }}
       footer={
         <Footer>
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            isLoading={isPending}
-            onClick={async () => {
-              if (isLastDay) {
-                try {
-                  await endGame(gameId, game.getPendingCalls());
-                } catch (e: any) {
-                  game.clearPendingCalls();
+          <ChildrenOrConnect>
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              isLoading={isPending}
+              onClick={async () => {
+                if (isLastDay) {
+                  try {
+                    await endGame(gameId, game.getPendingCalls());
+                  } catch (e: any) {
+                    game.clearPendingCalls();
+                  }
+                  router.push(`/${gameId}/end`);
+                } else {
+                  router.push(`/${gameId}/travel`);
                 }
-                router.push(`/${gameId}/end`);
-              } else {
-                router.push(`/${gameId}/travel`);
-              }
-            }}
-          >
-            {isLastDay ? "End Game" : "Continue"}
-          </Button>
+              }}
+            >
+              {isLastDay ? "End Game" : "Continue"}
+            </Button>
+          </ChildrenOrConnect>
         </Footer>
       }
     >

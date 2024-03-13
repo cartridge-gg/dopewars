@@ -3,6 +3,7 @@ import { Arrow, BorderImage } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -113,9 +114,6 @@ export default function Travel() {
   }, [targetLocation]);
 
   const onContinue = useCallback(async () => {
-
-  
-
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
@@ -163,22 +161,24 @@ export default function Travel() {
               Back
             </Button>
           )}
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            isDisabled={!targetLocation || targetLocation === currentLocation}
-            isLoading={isPending /*&& !txError*/}
-            onClick={onContinue}
-          >
-            Travel
-          </Button>
+          <ChildrenOrConnect>
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              isDisabled={!targetLocation || targetLocation === currentLocation}
+              isLoading={isPending /*&& !txError*/}
+              onClick={onContinue}
+            >
+              Travel
+            </Button>
+          </ChildrenOrConnect>
         </Footer>
       }
     >
       {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
         <VStack w="full" align="flex-start">
-          <Inventory hidePawnshop/>
+          <Inventory hidePawnshop />
           <HStack w="full" justify="space-between" pt={["0px", "20px"]}>
             <Text textStyle="subheading" fontSize="11px" color="neon.500">
               Location

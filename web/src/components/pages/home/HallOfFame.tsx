@@ -1,13 +1,14 @@
 import { HustlerIcon } from "@/components/hustlers";
-import { PaperIcon } from "@/components/icons";
-import { useConfigStore, useDojoContext, useRouterContext, useRyoStore, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { Leaderboard } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Account, shortString } from "starknet";
+
+
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
@@ -21,20 +22,24 @@ export const HallOfFame = observer(() => {
     return hallOfFame.filter((i) => i.version !== config?.ryo?.leaderboard_version);
   }, [hallOfFame, config?.ryo?.leaderboard_version]);
 
+  useEffect(() => {
+    console.log(filtered);
+  }, [filtered]);
+
   return (
-    <SimpleGrid columns={[1, 2]} w="full" gap={4}>
-      {filtered.map((i, index) => {
-        return <HallOfFameEntry entry={i} key={index} account={account} />;
-      })}
-    </SimpleGrid>
+    <>
+      <SimpleGrid columns={[1, 2]} w="full" gap={4}>
+        {filtered.map((i, index) => {
+          return <HallOfFameEntry entry={i} key={index} account={account} />;
+        })}
+      </SimpleGrid>
+    </>
   );
 });
 
 const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Account | null }) => {
   const { router } = useRouterContext();
   const { game, isFetched } = useGameById(entry.game_id);
-
-  const { claim, isPending } = useSystems();
 
   const claimable = useMemo(() => {
     return account?.address === game?.player_id && !entry.claimed;
@@ -44,9 +49,6 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
     router.push(`/0x${entry.game_id.toString(16)}/logs?playerId=${game?.player_id}`);
   }, [entry.game_id, game?.player_id]);
 
-  const onClaim = useCallback(async () => {
-    await claim(entry.version);
-  }, []);
 
   if (!isFetched) return null;
   return (
@@ -56,7 +58,6 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
           <Text>SEASON {entry.version}</Text>
           <Text color={claimable ? "yellow.400" : "neon.400"}>
             {formatCash(entry.paper_balance).replace("$", "")} <small>PAPER</small>
-            {/*claimable*/ true && <PaperIcon width="20px" height="20px" ml={1} onClick={onClaim} />}
           </Text>
         </HStack>
 
@@ -70,6 +71,8 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
             </VStack>
           </HStack>
         )}
+
+        {!game && <Text>No winner!</Text>}
       </VStack>
     </Card>
   );

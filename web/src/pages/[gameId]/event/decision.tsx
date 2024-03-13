@@ -2,6 +2,7 @@ import { Button } from "@/components/common";
 import { DollarBag, Heart, Siren } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { CashIndicator, HealthIndicator } from "@/components/player";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
@@ -247,44 +248,46 @@ const Decision = observer(() => {
       isSinglePanel
       footer={
         <Footer w={["100%", "50%"]}>
-          <Button
-            w="full"
-            px={["auto", "20px"]}
-            isDisabled={isRunning || isPaying}
-            isLoading={isFigthing}
-            onClick={() => {
-              setIsFigthing(true);
-              onDecision(EncountersAction.Fight);
-            }}
-          >
-            Fight
-          </Button>
+          <ChildrenOrConnect>
+            <Button
+              w="full"
+              px={["auto", "20px"]}
+              isDisabled={isRunning || isPaying}
+              isLoading={isFigthing}
+              onClick={() => {
+                setIsFigthing(true);
+                onDecision(EncountersAction.Fight);
+              }}
+            >
+              Fight
+            </Button>
 
-          <Button
-            w="full"
-            px={["auto", "20px"]}
-            isDisabled={isPaying || isFigthing}
-            isLoading={isRunning}
-            onClick={() => {
-              setIsRunning(true);
-              onDecision(EncountersAction.Run);
-            }}
-          >
-            Run
-          </Button>
+            <Button
+              w="full"
+              px={["auto", "20px"]}
+              isDisabled={isPaying || isFigthing}
+              isLoading={isRunning}
+              onClick={() => {
+                setIsRunning(true);
+                onDecision(EncountersAction.Run);
+              }}
+            >
+              Run
+            </Button>
 
-          <Button
-            w="full"
-            px={["auto", "20px"]}
-            isDisabled={isRunning || isFigthing}
-            isLoading={isPaying}
-            onClick={() => {
-              setIsPaying(true);
-              onDecision(EncountersAction.Pay);
-            }}
-          >
-            PAY
-          </Button>
+            <Button
+              w="full"
+              px={["auto", "20px"]}
+              isDisabled={isRunning || isFigthing}
+              isLoading={isPaying}
+              onClick={() => {
+                setIsPaying(true);
+                onDecision(EncountersAction.Pay);
+              }}
+            >
+              PAY
+            </Button>
+          </ChildrenOrConnect>
         </Footer>
       }
     >

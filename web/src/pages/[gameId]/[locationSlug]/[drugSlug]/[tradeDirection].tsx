@@ -1,6 +1,7 @@
 import { AlertMessage } from "@/components/common";
 import { ArrowEnclosed } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
@@ -24,7 +25,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useState } from "react";
 
- const  Market = observer(() => {
+const Market = observer(() => {
   const { router, gameId, location, drug, tradeDirection } = useRouterContext();
 
   const [market, setMarket] = useState<DrugMarket>();
@@ -82,21 +83,23 @@ import { useCallback, useEffect, useState } from "react";
       }}
       footer={
         <Footer>
-          <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
-            Back
-          </Button>
-
-          {tradeDirection == TradeDirection.Buy && canBuy && (
-            <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantityBuy === 0} onClick={onTrade}>
-              Buy ({quantityBuy})
+          <ChildrenOrConnect>
+            <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
+              Back
             </Button>
-          )}
 
-          {tradeDirection == TradeDirection.Sell && canSell && (
-            <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantitySell === 0} onClick={onTrade}>
-              Sell ({quantitySell})
-            </Button>
-          )}
+            {tradeDirection == TradeDirection.Buy && canBuy && (
+              <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantityBuy === 0} onClick={onTrade}>
+                Buy ({quantityBuy})
+              </Button>
+            )}
+
+            {tradeDirection == TradeDirection.Sell && canSell && (
+              <Button w={["full", "auto"]} px={["auto", "20px"]} isDisabled={quantitySell === 0} onClick={onTrade}>
+                Sell ({quantitySell})
+              </Button>
+            )}
+          </ChildrenOrConnect>
         </Footer>
       }
     >
@@ -138,7 +141,7 @@ import { useCallback, useEffect, useState } from "react";
       </Box>
     </Layout>
   );
-})
+});
 export default Market;
 
 const QuantitySelector = ({

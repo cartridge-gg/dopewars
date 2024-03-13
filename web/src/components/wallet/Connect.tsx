@@ -1,7 +1,6 @@
 import { Cigarette, ExternalLink } from "@/components/icons";
 import { useDojoContext } from "@/dojo/hooks";
 import { useTokenBalance } from "@/dojo/hooks/useTokenBalance";
-import { formatEther } from "@/utils/ui";
 import {
   Box,
   Button,
@@ -29,7 +28,7 @@ export const frenlyAddress = (address: string) => {
 export const Connect = ({ ...props }) => {
   const { account, address, status } = useAccount();
 
-  const { connect, connectors } = useConnect();
+  const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
 
   const { balance } = useTokenBalance({
@@ -59,11 +58,12 @@ export const Connect = ({ ...props }) => {
             justifyContent="center"
           >
             <HStack>
+              {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
               <Text>{frenlyAddress(account.address || "")}</Text>
-              <HStack gap={1}>
+              {/* <HStack gap={1}>
                 <Text fontFamily="monospace">Ξ</Text>
                 <Text>{formatEther(balance)}</Text>
-              </HStack>
+              </HStack> */}
             </HStack>
           </Button>
         )}
@@ -109,13 +109,16 @@ const AccountModal = ({
       setIsCopying(false);
     }, 1500);
   };
-
+  console.log(account)
+  
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent bg="bg.dark" maxW="360px">
         <ModalBody p={6}>
           <VStack w="full" gap={6}>
+            {/* <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> */}
+
             <Link
               fontSize="18px"
               fontWeight="bold"
@@ -220,7 +223,7 @@ const ConnectModal = ({
             )}
             {connectors.map((connector) => {
               const isBurner = connector instanceof BurnerConnector;
-              // const isDeployedOnCurrentChain = selectedChain
+             // const isDeployedOnCurrentChain = selectedChain.id === connector.chainId()
               return (
                 <HStack w="full" key={connector.id}>
                   <Button
@@ -237,7 +240,7 @@ const ConnectModal = ({
                     }}
                   >
                     <HStack w="full" justifyItems="flex-start">
-                      <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                    <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                       <Text ml="120px">
                         {connector.available()
                           ? `${connector.name} ${isBurner ? frenlyAddress(connector.id) : ""}`
