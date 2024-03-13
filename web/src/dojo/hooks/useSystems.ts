@@ -91,9 +91,9 @@ export const useSystems = (): SystemsInterface => {
           isError: true
         })
         // throw Error(`not connected`)
-        return {
-          hash:""
-        }
+        // return {
+        //   hash:""
+        // }
       }
 
       setError(undefined)

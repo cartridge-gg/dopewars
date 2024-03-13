@@ -40,14 +40,9 @@ export const ClaimReward = observer(() => {
     }, 20_000);
   };
 
-  const test = async () => {
-    const res = await account?.getStateUpdate(32);
-    console.log(res);
-  };
 
   return (
     <>
-      <Button onClick={test}>test</Button>
       {claimable.length > 0 && (
         <>
           <Button

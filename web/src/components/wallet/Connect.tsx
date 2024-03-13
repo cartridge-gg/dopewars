@@ -1,5 +1,5 @@
 import { Cigarette, ExternalLink } from "@/components/icons";
-import { useDojoContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext } from "@/dojo/hooks";
 import { useTokenBalance } from "@/dojo/hooks/useTokenBalance";
 import {
   Box,
@@ -20,6 +20,7 @@ import { Connector, useAccount, /*useBalance,*/ useConnect, useDisconnect, useEx
 import { ReactNode, useMemo, useState } from "react";
 import { AccountInterface } from "starknet";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProviders";
+import { TokenBalance } from "./TokenBalance";
 
 export const frenlyAddress = (address: string) => {
   return address.substring(0, 4) + "..." + address.substring(address.length - 4, address.length);
@@ -101,6 +102,7 @@ const AccountModal = ({
 }) => {
   const explorer = useExplorer();
   const [isCopying, setIsCopying] = useState(false);
+  const { config } = useConfigStore();
 
   const onCopy = () => {
     setIsCopying(true);
@@ -109,8 +111,8 @@ const AccountModal = ({
       setIsCopying(false);
     }, 1500);
   };
-  console.log(account)
-  
+  console.log(account);
+
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -123,37 +125,41 @@ const AccountModal = ({
               fontSize="18px"
               fontWeight="bold"
               fontFamily="monospace"
+              textDecoration="none"
+              textTransform="uppercase"
               isExternal
               href={explorer.contract(account?.address)}
             >
+              <>
               {frenlyAddress(account?.address || "")}
+              <ExternalLink />
+              </>
             </Link>
+
+
+            <HStack color="yellow.400">
+              <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
+              <Text>PAPER</Text>
+            </HStack>
 
             <HStack w="full" justifyContent="center">
               <Button
-                variant="transparent"
+                // variant="pixelated"
                 w="full"
-                h="auto"
-                border={0}
+                // h="auto"
+                // border={0}
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
-                onClick={onCopy}
+                onClick={onClose}
               >
-                {/* {isCopying ? (
-                  <CopiedAddressIcon width="16px" height="16px" />
-                ) : (
-                  <CopyAddressIcon width="20px" height="20px" />
-                )} */}
-                <Text textAlign="center" textTransform="none" mt={1} fontSize="12px">
-                  {isCopying ? "Copied!" : "Copy Address"}
-                </Text>
+                CLOSE
               </Button>
               <Button
-                variant="transparent"
+                //variant="pixelated"
                 w="full"
-                h="auto"
-                border={0}
+                // h="auto"
+                //border={0}
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
@@ -162,9 +168,7 @@ const AccountModal = ({
                   onClose();
                 }}
               >
-                <Text textAlign="center" textTransform="none" mt={1} fontSize="12px">
-                  Disconnect
-                </Text>
+                DISCONNECT
               </Button>
             </HStack>
           </VStack>
@@ -223,7 +227,7 @@ const ConnectModal = ({
             )}
             {connectors.map((connector) => {
               const isBurner = connector instanceof BurnerConnector;
-             // const isDeployedOnCurrentChain = selectedChain.id === connector.chainId()
+              // const isDeployedOnCurrentChain = selectedChain.id === connector.chainId()
               return (
                 <HStack w="full" key={connector.id}>
                   <Button
@@ -240,7 +244,7 @@ const ConnectModal = ({
                     }}
                   >
                     <HStack w="full" justifyItems="flex-start">
-                    <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                      <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                       <Text ml="120px">
                         {connector.available()
                           ? `${connector.name} ${isBurner ? frenlyAddress(connector.id) : ""}`

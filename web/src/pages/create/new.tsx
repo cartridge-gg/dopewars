@@ -3,24 +3,30 @@ import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
-import { ChildrenOrConnect } from "@/components/wallet";
+import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
+import { BuyPaper } from "@/components/wallet/BuyPaper";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { Box, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import { formatCash } from "@/utils/ui";
+import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 
 export default function New() {
   const { router } = useRouterContext();
 
   const {
-    account,
+    // account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
+  const { account } = useAccount();
+
   const { createGame, isPending } = useSystems();
-  const config = useConfigStore();
+  const configStore = useConfigStore();
+  const { config } = configStore;
 
   const { toast } = useToast();
 
@@ -30,7 +36,7 @@ export default function New() {
   const [hustlerStats, setHustlerStats] = useState<any>();
 
   useEffect(() => {
-    const hustler = config.getHustlerById(hustlerId);
+    const hustler = configStore.getHustlerById(hustlerId);
     if (!hustler) return;
 
     const stats = {
@@ -57,7 +63,7 @@ export default function New() {
     };
 
     setHustlerStats(stats);
-  }, [hustlerId, config, config?.config, config?.config?.items, config?.config?.tiers]);
+  }, [hustlerId, configStore, configStore?.config, configStore?.config?.items, configStore?.config?.tiers]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -80,7 +86,7 @@ export default function New() {
     }
   };
 
-  if (!config || !hustlerStats) return null;
+  if (!configStore || !hustlerStats) return null;
 
   return (
     <Layout
@@ -212,6 +218,35 @@ export default function New() {
               }}
             />
           </HStack>
+
+          {config?.ryo.paper_fee > 0 && (
+            <Card p={3} mb={6}>
+              <HStack gap={6} fontSize="14px">
+                <VStack gap={0} alignItems="flex-start" minW="240px">
+                  <HStack w="full" justifyContent="space-between">
+                    <Text color="yellow.400">ENTRY FEE </Text>
+                    <Text color="yellow.400">{formatCash(config?.ryo.paper_fee).replace("$", "")} PAPER</Text>
+                  </HStack>
+
+                  {account && (
+                    <HStack w="full" justifyContent="space-between">
+                      <Text>YOU OWN </Text>
+                      <HStack>
+                      <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
+                        <Text>PAPER</Text>
+                      </HStack>
+                    </HStack>
+                  )}
+                </VStack>
+
+                <HStack>
+                  <BuyPaper />
+                  {account && <PaperFaucet />}
+                </HStack>
+              </HStack>
+            </Card>
+          )}
+
           <Input
             display="flex"
             mx="auto"
@@ -234,6 +269,8 @@ export default function New() {
               {error}
             </Text>
           </VStack>
+
+          <Box minH="80px" />
         </VStack>
       </VStack>
     </Layout>

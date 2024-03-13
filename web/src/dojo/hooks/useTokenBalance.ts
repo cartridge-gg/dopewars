@@ -7,6 +7,7 @@ import { useDojoContext } from "./useDojoContext";
 export const useTokenBalance = ({ address, token, refetchInterval }: { address?: string, token?: string, refetchInterval?: number }) => {
   const { dojoProvider } = useDojoContext();
   const [balance, setBalance] = useState(0n)
+  const [isInitializing, setIsInitializing] = useState(true)
 
   const contract = useMemo(() => {
     if (!token) return undefined
@@ -24,6 +25,8 @@ export const useTokenBalance = ({ address, token, refetchInterval }: { address?:
     const bal = await contract.balanceOf(address);
     //@ts-ignore   returns a bigint
     setBalance(bal)
+    setIsInitializing(false)
+
   }, [contract, address])
 
 
@@ -31,6 +34,7 @@ export const useTokenBalance = ({ address, token, refetchInterval }: { address?:
     if (!contract) return
 
     if (refetchInterval) {
+      refresh()
       let handle = setInterval(refresh, refetchInterval);
 
       return () => {
@@ -46,6 +50,7 @@ export const useTokenBalance = ({ address, token, refetchInterval }: { address?:
 
   return {
     balance,
+    isInitializing,
     refresh
   };
 };
