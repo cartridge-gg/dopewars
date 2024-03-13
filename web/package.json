@@ -20,9 +20,9 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "https://github.com/dojoengine/dojo.js.git#burner-connectors",
-    "@dojoengine/create-burner": "https://github.com/dojoengine/dojo.js.git#burner-connectors",
-    "@dojoengine/utils": "https://github.com/dojoengine/dojo.js.git#burner-connectors",
+    "@dojoengine/core": "https://github.com/dojoengine/dojo.js.git#burner-connectors/packages/core",
+    "@dojoengine/create-burner": "https://github.com/dojoengine/dojo.js.git#burner-connectors/packages/create-burner",
+    "@dojoengine/utils": "https://github.com/dojoengine/dojo.js.git#burner-connectors/packages/utils",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@starknet-react/chains": "^0.1.7",
