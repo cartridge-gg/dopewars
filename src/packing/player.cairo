@@ -7,7 +7,7 @@ use rollyourown::{
     config::{locations::Locations, game::GameConfigImpl, drugs::{Drugs}},
     utils::{
         bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl},
+        events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}
     },
     packing::{
         game_store::{GameStore},
@@ -165,35 +165,31 @@ impl PlayerImpl of PlayerTrait {
     fn level_up_drug(
         ref self: Player, drugs_packed: DrugsPacked, encounters_packed: EncountersPacked
     ) {
-        if self.drug_level == 2 {
+        // check if already max drug_level
+        if self.drug_level == 4 {
             return;
         };
-
-        let drugs = drugs_packed.get();
 
         let cops_level = encounters_packed.get_encounter_level(Encounters::Cops);
         let gang_level = encounters_packed.get_encounter_level(Encounters::Gang);
         let level = cops_level + gang_level;
 
-        if self.drug_level < 1 && level > 2 {
-            // check if not carrying Ludes
-            if drugs.drug != Drugs::Ludes || (drugs.drug == Drugs::Ludes && drugs.quantity == 0) {
-                // Ludes -> Heroin
-                self.drug_level = 1;
-                // gibe player some HP ?
-                self.health += 5;
-            }
-        } else if self.drug_level < 2 && level > 5 {
-            // check if not carrying Speed or Ludes
-            if (drugs.drug != Drugs::Speed || (drugs.drug == Drugs::Speed && drugs.quantity == 0))
-                && (drugs.drug != Drugs::Ludes
-                    || (drugs.drug == Drugs::Ludes && drugs.quantity == 0)) {
-                // Speed -> Cocaine
-                self.drug_level = 2;
-                // gibe player some HP ?
-                self.health += 10;
-            }
+        // level up each 2 encounters capped to 4
+        let drug_level = 0_u8.add_capped(level / 2, 4);
+
+        // check if already the right level
+        if self.drug_level == drug_level {
+            return;
         }
+
+        // check if not carrying drug to be disabled
+        let drugs = drugs_packed.get();
+        if drugs.quantity > 0 && drugs.drug.into() < drug_level {
+            return;
+        }
+
+        // update drug level
+        self.drug_level = drug_level;
     }
 
     fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {

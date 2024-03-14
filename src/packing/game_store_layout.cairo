@@ -51,7 +51,7 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
             GameStoreLayout::Drugs => 16,
             GameStoreLayout::Wanted => 18,
             GameStoreLayout::Encounters => 6,
-            GameStoreLayout::Player => 55,
+            GameStoreLayout::Player => 57,
         }
     }
 

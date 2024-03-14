@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x7125a389dc1e96f123dd1369b935b6d05ce4fdbf27832aee2d91e2f23bf13f6",
+      "class_hash": "0x3121813bc42833edb9e219367b4e33c04bcd8242ad1fffb372ff5463288a80e",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x25640ee4c65509bf9264a3e4b2bb8eab4839aca6e791a820ae94a50feeb77c1",
+      "class_hash": "0x669b993b322f4fed45b98dd5f528d9878b9acf0801fc0aa4365a07d68521033",
       "abi": [
         {
           "type": "impl",
@@ -2130,7 +2130,15 @@
               "type": "()"
             },
             {
+              "name": "Shrooms",
+              "type": "()"
+            },
+            {
               "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Ketamine",
               "type": "()"
             },
             {
@@ -3131,7 +3139,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x75453e1c8f380848c72110e3b79cefcdccfa56b4ea36e4a7d4109b6fdc2b1c1",
+      "class_hash": "0xcf93a6a58195ad00e6f48c73ae059b9699dd0f61610b2544117bed38735015",
       "abi": [
         {
           "type": "impl",
@@ -3323,7 +3331,15 @@
               "type": "()"
             },
             {
+              "name": "Shrooms",
+              "type": "()"
+            },
+            {
               "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Ketamine",
               "type": "()"
             },
             {

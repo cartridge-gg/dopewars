@@ -101,17 +101,7 @@ const AccountModal = ({
   disconnect: VoidFunction;
 }) => {
   const explorer = useExplorer();
-  const [isCopying, setIsCopying] = useState(false);
   const { config } = useConfigStore();
-
-  const onCopy = () => {
-    setIsCopying(true);
-    navigator.clipboard.writeText(account?.address);
-    setTimeout(() => {
-      setIsCopying(false);
-    }, 1500);
-  };
-  console.log(account);
 
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={isOpen} onClose={onClose}>

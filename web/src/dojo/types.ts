@@ -15,7 +15,9 @@ export enum Drugs {
   Ludes,
   Speed,
   Weed,
+  Shrooms,
   Acid,
+  Ketamine,
   Heroin,
   Cocaine,
 }

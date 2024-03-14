@@ -11,3 +11,4 @@ export const Weed = (props: IconProps) => {
     </Icon>
   );
 };
+

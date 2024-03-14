@@ -1,11 +1,4 @@
-import {
-  Acid,
-  Cocaine,
-  Heroin,
-  Ludes,
-  Speed,
-  Weed,
-} from "@/components/icons/drugs";
+import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 import { Box, StyleProps, keyframes } from "@chakra-ui/react";
 
 const fallingAnim = keyframes`
@@ -29,7 +22,7 @@ const fallingAnim = keyframes`
   }
 `;
 
-const drugs = [Acid, Cocaine, Heroin, Ludes, Speed, Weed];
+const drugs = [Acid, Cocaine, Heroin, Ludes, Speed, Weed, Shrooms, Ketamine];
 
 const FallingStuff = ({ duration = 6 }) => {
   const randSize = 32 + Math.floor(Math.random() * 32);
@@ -62,21 +55,10 @@ const FallingStuff = ({ duration = 6 }) => {
   );
 };
 
-export const MakeItRain = ({
-  count = 42,
-  ...props
-}: { count?: number } & StyleProps) => (
-  <Box
-    position="fixed"
-    w="100%"
-    height="100%"
-    zIndex={999}
-    bg="transparent"
-    pointerEvents="none"
-  >
+export const MakeItRain = ({ count = 42, ...props }: { count?: number } & StyleProps) => (
+  <Box position="fixed" w="100%" height="100%" zIndex={999} bg="transparent" pointerEvents="none">
     {[...Array(count)].map((_, i) => (
       <FallingStuff key={i} duration={3 + Math.ceil(Math.random() * 5)} />
     ))}
   </Box>
 );
-

@@ -11,21 +11,19 @@ import {
   Acid,
   Cocaine,
   Heroin,
+  Ketamine,
   Ludes,
+  Shrooms,
   Speed,
   Weed,
 } from "@/components/icons/drugs";
 
 import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
-  DrugInfo,
-  Drugs,
   EncounterOutcomes,
   Encounters,
   EncountersAction,
   ItemSlot,
-  LocationInfo,
-  Locations,
   OutcomeInfo
 } from "./types";
 
@@ -64,20 +62,10 @@ export type randomGreetingsKeys = keyof typeof randomGreetings;
 
 export const reputationRanks = {
   0: "Goon",
-  1: "Goon",
-  2: "Goon",
-  3: "Hustler",
-  4: "Hustler",
-  5: "Hustler",
-  6: "Streetboss",
-  7: "Streetboss",
-  8: "Streetboss",
-  9: "OG",
-  10: "OG",
-  11: "OG",
-  12: "Kingpin",
-  13: "Kingpin",
-  14: "Kingpin",
+  1: "Hustler",
+  2: "Streetboss",
+  3: "OG",
+  4: "Kingpin",
 }
 export type reputationRanksKeys = keyof typeof reputationRanks;
 
@@ -173,7 +161,9 @@ export const drugIcons = {
   "Ludes": Ludes,
   "Speed": Speed,
   "Weed": Weed,
+  "Shrooms": Shrooms,
   "Acid": Acid,
+  "Ketamine": Ketamine,
   "Heroin": Heroin,
   "Cocaine": Cocaine,
 }
@@ -199,95 +189,95 @@ export const itemIcons = {
 export type itemsIconsKeys = keyof typeof itemIcons;
 
 
-export const locations: LocationInfo[] = [
-  {
-    type: Locations.Queens,
-    name: "Queens",
-    slug: "queens",
-    id: "Queens",
-    icon: Queens,
-  },
-  {
-    type: Locations.Bronx,
-    name: "The Bronx",
-    slug: "bronx",
-    id: "Bronx",
-    icon: Bronx,
-  },
-  {
-    type: Locations.Brooklyn,
-    name: "Brooklyn",
-    slug: "brooklyn",
-    id: "Brooklyn",
-    icon: Brooklyn,
-  },
-  {
-    type: Locations.Jersey,
-    name: "Jersey City",
-    slug: "jersey",
-    id: "Jersey",
-    icon: Manhattan,
-  },
-  {
-    type: Locations.Central,
-    name: "Central Park",
-    slug: "central",
-    id: "Central",
-    icon: CentralPark,
-  },
-  {
-    type: Locations.Coney,
-    name: "Coney Island",
-    slug: "coney",
-    id: "Coney",
-    icon: ConeyIsland,
-  },
-];
+// export const locations: LocationInfo[] = [
+//   {
+//     type: Locations.Queens,
+//     name: "Queens",
+//     slug: "queens",
+//     id: "Queens",
+//     icon: Queens,
+//   },
+//   {
+//     type: Locations.Bronx,
+//     name: "The Bronx",
+//     slug: "bronx",
+//     id: "Bronx",
+//     icon: Bronx,
+//   },
+//   {
+//     type: Locations.Brooklyn,
+//     name: "Brooklyn",
+//     slug: "brooklyn",
+//     id: "Brooklyn",
+//     icon: Brooklyn,
+//   },
+//   {
+//     type: Locations.Jersey,
+//     name: "Jersey City",
+//     slug: "jersey",
+//     id: "Jersey",
+//     icon: Manhattan,
+//   },
+//   {
+//     type: Locations.Central,
+//     name: "Central Park",
+//     slug: "central",
+//     id: "Central",
+//     icon: CentralPark,
+//   },
+//   {
+//     type: Locations.Coney,
+//     name: "Coney Island",
+//     slug: "coney",
+//     id: "Coney",
+//     icon: ConeyIsland,
+//   },
+// ];
 
-const drugs: DrugInfo[] = [
-  {
-    type: Drugs.Ludes,
-    name: "Ludes",
-    slug: "ludes",
-    id: "Ludes",
-    icon: Ludes,
-  },
-  {
-    type: Drugs.Speed,
-    name: "Speed",
-    slug: "speed",
-    id: "Speed",
-    icon: Speed,
-  },
-  {
-    type: Drugs.Weed,
-    name: "Weed",
-    slug: "weed",
-    id: "Weed",
-    icon: Weed,
-  },
-  {
-    type: Drugs.Acid,
-    name: "Acid",
-    slug: "acid",
-    id: "Acid",
-    icon: Acid,
-  },
-  {
-    type: Drugs.Heroin,
-    name: "Heroin",
-    slug: "heroin",
-    id: "Heroin",
-    icon: Heroin,
-  },
-  {
-    type: Drugs.Cocaine,
-    name: "Cocaine",
-    slug: "cocaine",
-    id: "Cocaine",
-    icon: Cocaine,
-  },
-];
+// const drugs: DrugInfo[] = [
+//   {
+//     type: Drugs.Ludes,
+//     name: "Ludes",
+//     slug: "ludes",
+//     id: "Ludes",
+//     icon: Ludes,
+//   },
+//   {
+//     type: Drugs.Speed,
+//     name: "Speed",
+//     slug: "speed",
+//     id: "Speed",
+//     icon: Speed,
+//   },
+//   {
+//     type: Drugs.Weed,
+//     name: "Weed",
+//     slug: "weed",
+//     id: "Weed",
+//     icon: Weed,
+//   },
+//   {
+//     type: Drugs.Acid,
+//     name: "Acid",
+//     slug: "acid",
+//     id: "Acid",
+//     icon: Acid,
+//   },
+//   {
+//     type: Drugs.Heroin,
+//     name: "Heroin",
+//     slug: "heroin",
+//     id: "Heroin",
+//     icon: Heroin,
+//   },
+//   {
+//     type: Drugs.Cocaine,
+//     name: "Cocaine",
+//     slug: "cocaine",
+//     id: "Cocaine",
+//     icon: Cocaine,
+//   },
+// ];
 
 export const outcomes: OutcomeInfo[] = [
   {

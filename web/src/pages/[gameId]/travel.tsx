@@ -5,7 +5,6 @@ import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { locations } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { useToast } from "@/hooks/toast";
@@ -33,6 +32,7 @@ export default function Travel() {
   const { account } = useDojoContext();
   const { game, gameEvents } = useGameStore();
   const configStore = useConfigStore();
+  const { config } = configStore;
 
   const locationName = useMemo(() => {
     if (targetLocation) {
@@ -96,20 +96,24 @@ export default function Travel() {
   });
 
   const onNext = useCallback(() => {
-    const idx = locations.findIndex((location) => location.id === targetLocation);
-    if (idx < locations.length - 1) {
-      setTargetLocation(locations[idx + 1].id);
+    if (!config) return;
+
+    const idx = config.location.findIndex((location) => location.location === targetLocation)!;
+    if (idx < config.location!.length - 1) {
+      setTargetLocation(config.location[idx + 1].location);
     } else {
-      setTargetLocation(locations[0].id);
+      setTargetLocation(config.location[0].location);
     }
-  }, [targetLocation]);
+  }, [targetLocation, config]);
 
   const onBack = useCallback(() => {
-    const idx = locations.findIndex((location) => location.id === targetLocation);
+    if (!config) return;
+
+    const idx = config.location.findIndex((location) => location.location === targetLocation)!;
     if (idx > 0) {
-      setTargetLocation(locations[idx - 1].id);
+      setTargetLocation(config.location[idx - 1].location);
     } else {
-      setTargetLocation(locations[locations.length - 1].id);
+      setTargetLocation(config.location[config.location.length - 1].location);
     }
   }, [targetLocation]);
 
@@ -156,12 +160,12 @@ export default function Travel() {
       }}
       footer={
         <Footer>
-          {game.player.turn > 0 && (
-            <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
-              Back
-            </Button>
-          )}
           <ChildrenOrConnect>
+            {game.player.turn > 0 && (
+              <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
+                Back
+              </Button>
+            )}
             <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}

@@ -56,6 +56,7 @@ const Location = observer(() => {
     }
   }, [location, game]);
 
+  console.log(game)
   if (!game || !gameInfos || !prices || !location || !configStore || !gameId) {
     return <></>;
   }
