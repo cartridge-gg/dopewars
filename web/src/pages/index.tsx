@@ -99,7 +99,7 @@ export default function Home() {
                 <Tab>HALL OF FAME</Tab>
               </TabList>
 
-              <TabPanels mt={0} h="calc(100vh - 400px)" overflowY="scroll">
+              <TabPanels mt={0} maxH="600px" overflowY="scroll">
                 <TabPanel p={0}>
                   <Leaderboard />
                 </TabPanel>

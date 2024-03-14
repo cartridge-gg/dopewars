@@ -98,10 +98,15 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         loop {
             match locations.pop_front() {
                 Option::Some(location) => {
-                    let mut drugs = DrugsEnumerableImpl::all();
-                    // limit to 4 drugs slots
-                    let _ = drugs.pop_back();
-                    let _ = drugs.pop_back();
+                    
+                    // limit to 4 drugs slots == [0,1,2,3]
+                    let mut drugs = array![
+                        Drugs::Ludes,
+                        Drugs::Speed,
+                        Drugs::Weed,
+                        Drugs::Shrooms,
+                    ].span();
+                  
                     loop {
                         match drugs.pop_front() {
                             Option::Some(drug) => {
@@ -153,6 +158,26 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                             Option::None => { break; }
                         };
                     };
+                },
+                Option::None(_) => { break; }
+            };
+        };
+    }
+
+     //
+    //
+    //
+
+    fn shuffle_drug_prices(ref self: MarketsPacked, ref randomizer: Random, drug_level: u8) {
+        let mut locations = LocationsEnumerableImpl::all();
+
+        let drug = drug_level.sub_capped(1,0);
+
+        loop {
+            match locations.pop_front() {
+                Option::Some(location) => {
+                    let rand_tick = randomizer.between::<usize>(0, 63).into();
+                    self.set_tick(*location, drug.into(), rand_tick);
                 },
                 Option::None(_) => { break; }
             };

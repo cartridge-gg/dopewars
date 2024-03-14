@@ -39,6 +39,13 @@ import {
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { shortString } from "starknet";
+  Tooltip,
+  UnorderedList,
+  VStack,
+} from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
+import { useEffect, useRef, useState } from "react";
+import { shortString } from "starknet";
 
 type LogByDay = {
   day: number;
@@ -153,12 +160,12 @@ const Logs = () => {
         </TabList>
 
         <TabPanels w="full">
-          <TabPanel w="full" h="calc(100vh - 360px)">
+          <TabPanel w="full" maxH="600px" /*h="calc(100vh - 360px)"*/>
             <Box display="flex" alignItems="center" justifyContent="center" h="100%">
               <Loadout />
             </Box>
           </TabPanel>
-          <TabPanel w="full" h="calc(100vh - 360px)" overflowY="scroll">
+          <TabPanel w="full" maxH="600px" /*h="calc(100vh - 360px)"*/ overflowY="scroll">
             <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
               {logs && logs.map((log) => renderDay(configStore, game, log))}
             </VStack>
@@ -176,7 +183,7 @@ const CustomLeftPanel = () => {
   return (
     <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1" marginBottom="50px" gap={0}>
       <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
-        {game  ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
+        {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
       </Text>
       <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name || "")}

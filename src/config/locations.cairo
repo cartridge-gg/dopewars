@@ -42,6 +42,7 @@ impl LocationsEnumerableImpl of Enumerable<Locations> {
         ];
         items.span()
     }
+
 }
 
 //

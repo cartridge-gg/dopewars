@@ -14,6 +14,7 @@ use rollyourown::{
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
         encounters_packed::{EncountersPacked, EncountersPackedImpl, Encounters},
+        markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
     },
 };
 
@@ -163,15 +164,16 @@ impl PlayerImpl of PlayerTrait {
     }
 
     fn level_up_drug(
-        ref self: Player, drugs_packed: DrugsPacked, encounters_packed: EncountersPacked
+        ref self: Player, ref game_store: GameStore, ref randomizer: Random
+        //drugs_packed: DrugsPacked, encounters_packed: EncountersPacked
     ) {
         // check if already max drug_level
         if self.drug_level == 4 {
             return;
         };
 
-        let cops_level = encounters_packed.get_encounter_level(Encounters::Cops);
-        let gang_level = encounters_packed.get_encounter_level(Encounters::Gang);
+        let cops_level = game_store.encounters.get_encounter_level(Encounters::Cops);
+        let gang_level = game_store.encounters.get_encounter_level(Encounters::Gang);
         let level = cops_level + gang_level;
 
         // level up each 2 encounters capped to 4
@@ -183,13 +185,16 @@ impl PlayerImpl of PlayerTrait {
         }
 
         // check if not carrying drug to be disabled
-        let drugs = drugs_packed.get();
+        let drugs = game_store.drugs.get();
         if drugs.quantity > 0 && drugs.drug.into() < drug_level {
             return;
         }
 
         // update drug level
         self.drug_level = drug_level;
+
+        // randomize price for new drug
+        game_store.markets.shuffle_drug_prices(ref randomizer, drug_level.into());
     }
 
     fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {

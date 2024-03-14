@@ -56,7 +56,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     }
 
     // level up drug_level if possible
-    game_store.player.level_up_drug(game_store.drugs, game_store.encounters);
+    game_store.player.level_up_drug(ref game_store, ref randomizer);
 
     // markets variations
     game_store.markets.market_variations(ref randomizer);

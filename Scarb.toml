@@ -29,8 +29,8 @@ private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 [profile.staging.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
-account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
-private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
+account_address = "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7"
+private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c"
 
 [profile.prod.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
