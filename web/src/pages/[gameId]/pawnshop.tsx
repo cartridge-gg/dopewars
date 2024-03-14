@@ -4,6 +4,7 @@ import { statName } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
+import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
 import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
@@ -40,6 +41,7 @@ const PawnShop = observer(() => {
     if (!game || !selectedShopItem) return;
     if (game.player!.cash < selectedShopItem.tier.cost) return;
 
+    playSound(Sounds.Trade)
     game.pushCall({ slot: selectedShopItem.slot as number, cost: selectedShopItem?.tier.cost });
 
     toaster.toast({

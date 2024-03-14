@@ -1454,6 +1454,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.1
 
+  /@babel/runtime@7.24.0:
+    resolution: {integrity: sha512-Chk32uHMg6TnQdvw2e9IlqPpFX/6NLuK0Ys2PqLb7/gL5uFn9mXvK715FGLlOLQrcO4qIkNHkvPGktzzXexsFw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.1
+    dev: false
+
   /@babel/template@7.22.15:
     resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
     engines: {node: '>=6.9.0'}
@@ -3899,16 +3906,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@latticexyz/utils@2.0.0-snapshot-test-32d38619:
-    resolution: {integrity: sha512-LKCni+jtKhIpGB67ZQV2A0imhFeR7Oh/u5HQj4IHWsNCdsLMPCFOKZPmd9QXGZ9pYTPO7kVHl8BJ3Z1PRrEcuA==}
+  /@latticexyz/utils@2.0.0-transaction-context-324984c5:
+    resolution: {integrity: sha512-M2QqBEolMmmJstD6j50A0OmdWWL9rE4Oby2nmE1Ebubfuq7NniXiqpgXoLA93evGZIxSRV5czF+V48ziBKu7kQ==}
     dependencies:
-      ethers: 5.7.2
       mobx: 6.12.0
       proxy-deep: 3.1.1
       rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
     dev: false
 
   /@next/env@14.1.0:
@@ -7869,12 +7872,12 @@ packages:
       remove-accents: 0.5.0
     dev: false
 
-  /mathjs@12.4.0:
-    resolution: {integrity: sha512-4Moy0RNjwMSajEkGGxNUyMMC/CZAcl87WBopvNsJWB4E4EFebpTedr+0/rhqmnOSTH3Wu/3WfiWiw6mqiaHxVw==}
+  /mathjs@12.4.1:
+    resolution: {integrity: sha512-welnW3khgwYjPYvECFHO+xkCxAx9IKIIPDDWPi8B5rKAvmgoEHnQX9slEmHKZTNaJiE+OS4qrJJcB4sfDn/4sw==}
     engines: {node: '>= 18'}
     hasBin: true
     dependencies:
-      '@babel/runtime': 7.23.9
+      '@babel/runtime': 7.24.0
       complex.js: 2.1.1
       decimal.js: 10.4.3
       escape-latex: 1.2.0
@@ -10581,8 +10584,8 @@ packages:
       starknet: 5.25.0
     dependencies:
       '@dojoengine/recs': 0.1.35(typescript@5.2.2)(zod@3.22.4)
-      '@latticexyz/utils': 2.0.0-snapshot-test-32d38619
-      mathjs: 12.4.0
+      '@latticexyz/utils': 2.0.0-transaction-context-324984c5
+      mathjs: 12.4.1
       micro-starknet: 0.2.3
       starknet: 6.2.0
     transitivePeerDependencies:

@@ -67,9 +67,9 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
               <PowerMeter
                 text={reputationRanks[game.encounters.level as reputationRanksKeys]}
                 basePower={0}
-                power={Math.ceil((game.encounters.level + 1) / 3)}
-                maxPower={5}
-                displayedPower={5}
+                power={(game.encounters.level % 3)+1}
+                maxPower={3}
+                displayedPower={3}
               />
             </Card>
           </Tooltip>

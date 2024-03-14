@@ -15,7 +15,7 @@ import {
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
+import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys, reputationRanks, reputationRanksKeys } from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
@@ -34,7 +34,7 @@ import {
   Text,
   Tooltip,
   UnorderedList,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
@@ -172,9 +172,12 @@ const Logs = () => {
 export default observer(Logs);
 
 const CustomLeftPanel = () => {
-  const { gameInfos } = useGameStore();
+  const { game, gameInfos } = useGameStore();
   return (
-    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1" marginBottom="50px">
+    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1" marginBottom="50px" gap={0}>
+      <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
+        {reputationRanks[game.encounters.level as reputationRanksKeys]}
+      </Text>
       <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name || "")}
       </Heading>
@@ -393,7 +396,10 @@ const FightLine = ({
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
-          <Tooltip label={action !== undefined ? encountersActionName[action as encountersActionNameKeys] : ""} placement="right-end">
+          <Tooltip
+            label={action !== undefined ? encountersActionName[action as encountersActionNameKeys] : ""}
+            placement="right-end"
+          >
             <Text>{text}</Text>
           </Tooltip>
         </HStack>

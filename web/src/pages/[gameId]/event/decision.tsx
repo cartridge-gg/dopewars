@@ -60,7 +60,8 @@ const Decision = observer(() => {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          encounter && setDemand(`They want ${encounter!.demandPct}% of your $PAPER!`);
+          const cashAmount = Math.ceil((game.player.cash * encounter!.demandPct) / 100);
+          encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           setEncounterImg(`/images/events/gang/${game.encounters!.gangLevel}.gif`);
 
@@ -68,7 +69,9 @@ const Decision = observer(() => {
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          encounter && setDemand(`They want ${encounter!.demandPct}% of your DRUGS!`);
+          const drugAmount = Math.ceil((game.drugs.quantity * encounter!.demandPct) / 100);
+          const drugName = game.drugs.drug?.name;
+          encounter && setDemand(`They want ${drugAmount} ${drugName}!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
           setEncounterImg(`/images/events/cops/${game.encounters!.copsLevel}.gif`);
           break;
@@ -374,9 +377,15 @@ const Encounter = ({
           h={[160, 300]}
         />
 
-        <VStack w="full">
-          <Card alignItems="center" w={["full", "auto"]} justify="center" mt={["20px", "40px"]}>
+        <VStack w="full" mt="20px">
+          <Text color="red" h="40px" lineHeight="40px">
+            <Heart /> You lost {encounter?.healthLoss} HP!
+          </Text>
+
+          <Card alignItems="center" w={["full", "auto"]} justify="center">
             <VStack w="full" gap="0">
+              {/* <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" /> */}
+
               <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
                 <HStack>
                   {" "}
@@ -403,10 +412,6 @@ const Encounter = ({
                   </Text>
                 </Box>
               )}
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-              <Text color="red" h="40px" lineHeight="40px">
-                <Heart /> You lost {encounter?.healthLoss} HP!
-              </Text>
             </VStack>
           </Card>
         </VStack>
