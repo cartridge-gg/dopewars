@@ -94,13 +94,14 @@ player_id: string;
 action: String;
 outcome: String;
 rounds: number;
-dmg_dealt: number;
-dmg_taken: number;
+dmg_dealt: String;
+dmg_taken: String;
 cash_earnt: number;
 cash_loss: number;
 drug_id: number;
-drug_loss: number;
+drug_loss: String;
 turn_loss: number;
+escaped_with_item: boolean;
         }
 
 export interface MeetOGData extends BaseEventData {
@@ -238,13 +239,14 @@ player_id: num.toHexString(raw.keys[2]),
 action: num.toHexString(raw.data[0]),
 outcome: num.toHexString(raw.data[1]),
 rounds: Number(raw.data[2]),
-dmg_dealt: Number(raw.data[3]),
-dmg_taken: Number(raw.data[4]),
+dmg_dealt: num.toHexString(raw.data[3]),
+dmg_taken: num.toHexString(raw.data[4]),
 cash_earnt: Number(raw.data[5]),
 cash_loss: Number(raw.data[6]),
 drug_id: Number(raw.data[7]),
-drug_loss: Number(raw.data[8]),
+drug_loss: num.toHexString(raw.data[8]),
 turn_loss: Number(raw.data[9]),
+escaped_with_item: raw.data[10] === "0x0" ? false : true,
 } as TravelEncounterResultData;
 
 case WorldEvents.MeetOG:

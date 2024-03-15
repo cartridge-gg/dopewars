@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x3121813bc42833edb9e219367b4e33c04bcd8242ad1fffb372ff5463288a80e",
+      "class_hash": "0x6b4878e20f74c38e424c4dc69013c18a1a02847e4b2a66e090e32b2754f0423",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x669b993b322f4fed45b98dd5f528d9878b9acf0801fc0aa4365a07d68521033",
+      "class_hash": "0x24af60a57ee7129362cec3b106c4ac98bb1bb66f5dff04164f50d96f9dac9af",
       "abi": [
         {
           "type": "impl",
@@ -2697,12 +2697,12 @@
             },
             {
               "name": "dmg_dealt",
-              "type": "core::integer::u8",
+              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
               "kind": "data"
             },
             {
               "name": "dmg_taken",
-              "type": "core::integer::u8",
+              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
               "kind": "data"
             },
             {
@@ -2722,12 +2722,17 @@
             },
             {
               "name": "drug_loss",
-              "type": "core::integer::u32",
+              "type": "core::array::Array::<core::integer::u32>",
               "kind": "data"
             },
             {
               "name": "turn_loss",
               "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "escaped_with_item",
+              "type": "core::bool",
               "kind": "data"
             }
           ]

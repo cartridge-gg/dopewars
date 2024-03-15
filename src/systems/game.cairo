@@ -27,6 +27,7 @@ trait IGameActions<T> {
     fn claim(self: @T, season: u16);
 }
 
+
 #[dojo::contract]
 mod game {
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
@@ -145,13 +146,14 @@ mod game {
         action: EncounterActions,
         outcome: EncounterOutcomes,
         rounds: u8,
-        dmg_dealt: u8,
-        dmg_taken: u8,
+        dmg_dealt: Array<(u8,u8)>,
+        dmg_taken: Array<(u8,u8)>,
         cash_earnt: u32,
         cash_loss: u32,
         drug_id: u8,
-        drug_loss: u32,
+        drug_loss: Array<u32>,
         turn_loss: u8,
+        escaped_with_item: bool,
     }
 
     #[derive(Drop, Serde, starknet::Event)]

@@ -15,7 +15,14 @@ import {
   UpgradeItemData,
 } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys, reputationRanks, reputationRanksKeys } from "@/dojo/helpers";
+import {
+  encountersActionName,
+  encountersActionNameKeys,
+  outcomeNames,
+  outcomeNamesKeys,
+  reputationRanks,
+  reputationRanksKeys,
+} from "@/dojo/helpers";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
@@ -32,13 +39,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tooltip,
-  UnorderedList,
-  VStack
-} from "@chakra-ui/react";
-import { observer } from "mobx-react-lite";
-import { useEffect, useRef, useState } from "react";
-import { shortString } from "starknet";
   Tooltip,
   UnorderedList,
   VStack,
@@ -298,7 +298,9 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
     : "";
 
   const action = lastEncouterResult?.action;
-  const totalHpLoss = lastEncouterResult ? log.healthLoss + lastEncouterResult?.dmgTaken : log.healthLoss;
+  const totalHpLoss = lastEncouterResult
+    ? log.healthLoss + lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0)
+    : log.healthLoss;
 
   return (
     <FightLine
@@ -391,7 +393,7 @@ const FightLine = ({
       if (resultInfos.cashLoss > 0) {
         setResultTooltip(`- ${formatCash(resultInfos.cashLoss)}`);
       } else {
-        setResultTooltip(`- ${resultInfos.drugLoss} Drugs`);
+        setResultTooltip(`- ${resultInfos.drugLoss.reduce((p, c) => p + c, 0)} Drugs`);
       }
     } else {
       setResultTooltip("");

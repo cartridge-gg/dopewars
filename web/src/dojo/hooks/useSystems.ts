@@ -3,8 +3,9 @@ import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import {
-  BigNumberish, Call, GetTransactionReceiptResponse,
-  shortString, uint256
+    BigNumberish, Call,
+    GetTransactionReceiptResponse,
+    shortString, uint256
 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
@@ -42,13 +43,11 @@ export type DojoCall = {
 }
 
 
-
 const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 const tryBetterErrorMsg = (msg: string): string => {
-
   const failureReasonIndex = msg.indexOf("Failure reason")
   if (failureReasonIndex > 0) {
     let betterMsg = msg.substring(failureReasonIndex)
@@ -58,23 +57,23 @@ const tryBetterErrorMsg = (msg: string): string => {
   }
 
   return msg;
-
 }
 
 export const useSystems = (): SystemsInterface => {
   const {
     //account,
     dojoProvider,
-    configStore
+    configStore,
+   
   } = useDojoContext();
   const { account } = useAccount()
-
   const { config } = useConfigStore();
 
   const { toast, clear: clearToasts } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
+
 
   const executeAndReceipt = useCallback(
     async (params: DojoCall | Call[]): Promise<{

@@ -18,7 +18,6 @@ export default function Home() {
     account,
     burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
-  
 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,7 +62,7 @@ export default function Home() {
 
   return (
     <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 230px)">
-      <VStack boxSize="full" gap="10px" justify="center">
+      <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
           <HStack w="full" p="20px" gap="10px" justify="center">
             {isGated ? (

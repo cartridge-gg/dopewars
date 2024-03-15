@@ -1,25 +1,21 @@
-use rollyourown::packing::drugs_packed::DrugsPackedTrait;
-use rollyourown::utils::random::RandomTrait;
 use core::traits::TryInto;
-use rollyourown::packing::items_packed::ItemsPackedTrait;
-use rollyourown::packing::encounters_packed::EncountersPackedTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
     utils::{
-        random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
+        random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
     config::{
-        hustlers::{HustlerItemConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl}
+        hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl}
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
-        wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl},
-        encounters_packed::{Encounters, EncountersPackedImpl},
-        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}
+        wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl, ItemsPackedTrait},
+        encounters_packed::{Encounters, EncountersPackedImpl, EncountersPackedTrait},
+        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
-    systems::game::{EncounterActions, game::TravelEncounterResult}
+    systems::game::{EncounterActions, game::TravelEncounterResult, game::Event}
 };
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -145,8 +141,6 @@ fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> E
     }
 }
 
-// fn get_encounter(ref self: EncountersPacked, ref randomizer: Random) -> Encounter {
-
 fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
     // get wanted level at destination 0-7
     let wanted_risk = game_store.wanted.get_wanted_risk(game_store.player.next_location);
@@ -236,28 +230,47 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
         EncounterActions::Fight => { on_fight(ref game_store, ref randomizer, encounter) },
     };
 
-    // emit event
-    game_store
-        .world
-        .emit_raw(
-            array![
-                selector!("TravelEncounterResult"),
-                Into::<u32, felt252>::into(game_store.game.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
-            ],
-            array![
-                Into::<EncounterActions, u8>::into(result.action).into(),
-                Into::<EncounterOutcomes, u8>::into(result.outcome).into(),
-                Into::<u8, felt252>::into(result.rounds),
-                Into::<u8, felt252>::into(result.dmg_dealt),
-                Into::<u8, felt252>::into(result.dmg_taken),
-                Into::<u32, felt252>::into(result.cash_earnt),
-                Into::<u32, felt252>::into(result.cash_loss),
-                Into::<u8, felt252>::into(result.drug_id),
-                Into::<u32, felt252>::into(result.drug_loss),
-                Into::<u8, felt252>::into(result.turn_loss),
-            ],
-        );
+
+    let result_event = TravelEncounterResult {
+        game_id: game_store.game.game_id,
+        player_id: game_store.game.player_id,
+        action: result.action,
+        outcome: result.outcome,
+        rounds: result.rounds,
+        dmg_dealt: result.dmg_dealt,
+        dmg_taken: result.dmg_taken,
+        cash_earnt: result.cash_earnt,
+        cash_loss: result.cash_loss,
+        drug_id: result.drug_id,
+        drug_loss: result.drug_loss,
+        turn_loss: result.turn_loss,
+        escaped_with_item: result.escaped_with_item,
+    };
+
+    emit!( game_store.world, result_event);
+    
+    // // emit event
+    // game_store
+    //     .world
+    //     .emit_raw(
+    //         array![
+    //             selector!("TravelEncounterResult"),
+    //             Into::<u32, felt252>::into(game_store.game.game_id),
+    //             Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
+    //         ],
+    //         array![
+    //             Into::<EncounterActions, u8>::into(result.action).into(),
+    //             Into::<EncounterOutcomes, u8>::into(result.outcome).into(),
+    //             Into::<u8, felt252>::into(result.rounds),
+    //             Into::<u8, felt252>::into(result.dmg_dealt),
+    //             Into::<u8, felt252>::into(result.dmg_taken),
+    //             Into::<u32, felt252>::into(result.cash_earnt),
+    //             Into::<u32, felt252>::into(result.cash_loss),
+    //             Into::<u8, felt252>::into(result.drug_id),
+    //             Into::<u32, felt252>::into(result.drug_loss),
+    //             Into::<u8, felt252>::into(result.turn_loss),
+    //         ],
+    //     );
 
     let is_dead = game_store.player.is_dead();
     if !is_dead {
@@ -275,17 +288,18 @@ fn on_pay(
     ref game_store: GameStore, ref randomizer: Random, encounter: Encounter
 ) -> TravelEncounterResult {
     let mut drug_id: u8 = 0;
-    let mut drug_loss: u32 = 0;
+    let mut drug_loss: Array<u32> = array![];
     let mut cash_loss: u32 = 0;
-    let mut dmg_taken: u8 = 0;
+    let mut dmg_taken: Array<(u8,u8)> = array![];
 
     match encounter.encounter {
         Encounters::Cops => {
             // pay demand_pct drugs
             let mut drug_unpacked = game_store.drugs.get();
-            drug_loss = drug_unpacked.quantity.pct(encounter.demand_pct.into());
+            let quantity_lost = drug_unpacked.quantity.pct(encounter.demand_pct.into());
             drug_id = drug_unpacked.drug.into();
-            drug_unpacked.quantity -= drug_loss;
+            drug_loss.append(quantity_lost);
+            drug_unpacked.quantity -= quantity_lost;
 
             // set drugs
             game_store.drugs.set(drug_unpacked);
@@ -293,13 +307,16 @@ fn on_pay(
         Encounters::Gang => {
             // calc cash_loss
             cash_loss = game_store.player.cash.pct(encounter.demand_pct.into());
+           
             // gang make u lose 1 extra hp (but can't die)
-            dmg_taken = 1;
+            if game_store.player.health > 1 {
+                // update player health
+                game_store.player.health -= 1;
+                dmg_taken.append((1,0));
+            }
 
             // update player cash
             game_store.player.cash -= cash_loss;
-            // update player health
-            game_store.player.health = game_store.player.health.sub_capped(dmg_taken, 1);
         },
     };
 
@@ -309,13 +326,14 @@ fn on_pay(
         action: EncounterActions::Pay,
         outcome: EncounterOutcomes::Paid,
         rounds: 0,
-        dmg_dealt: 0,
+        dmg_dealt: array![],
         dmg_taken,
         cash_earnt: 0,
         cash_loss,
         drug_id,
         drug_loss,
-        turn_loss: 0
+        turn_loss: 0,
+        escaped_with_item: false,
     }
 }
 
@@ -323,7 +341,7 @@ fn on_pay(
 fn on_run(
     ref game_store: GameStore, ref randomizer: Random, encounter: Encounter
 ) -> TravelEncounterResult {
-    // TODO: adjust with items
+    // TODO: make configurable
     let initial_capture_rate: u8 = 82; // 82% chance of capture 
 
     let player_defense: u8 = game_store
@@ -333,6 +351,7 @@ fn on_run(
         .stat
         .try_into()
         .unwrap();
+
     let player_speed: u8 = game_store.items.get_item(ItemSlot::Feet).tier.stat.try_into().unwrap();
 
     let capture_rate = initial_capture_rate.sub_capped(player_speed, 0);
@@ -341,27 +360,34 @@ fn on_run(
     let drug_id: u8 = drug_unpacked.drug.into();
 
     let mut rounds = 0;
-    let mut dmg_taken = 0;
-    let mut drug_loss = 0;
+    let mut dmg_taken = array![];
+    let mut drug_loss: Array<u32> = array![];
     let mut turn_loss = 0;
     let mut is_dead = false;
     let mut is_caught = false;
+    let mut escaped_with_item = false;
+
+    let initial_tier_defense: u8 = (get!(game_store.world, (ItemSlot::Clothes, 1), (HustlerItemTiersConfig)).stat / 10).try_into().unwrap();
+    let def = player_defense / 10;
 
     // loop until resolution
     loop {
         rounds += 1;
-        let is_captured = randomizer.occurs(capture_rate);
+
+        let rand_0_99 = randomizer.between::<u8>(0,100);
+        let is_captured = rand_0_99 < capture_rate;
 
         if is_captured {
             //encounter___attack = encounter_level * 2 + turn / 3;
 
             // reduce attack with defense
-            let def = player_defense / 10;
             let health_loss = encounter.attack.sub_capped(def, 1);
+            let health_saved = def - initial_tier_defense;
 
             // take dmgs
             game_store.player.health = game_store.player.health.sub_capped(health_loss, 0);
-            dmg_taken += health_loss;
+            //dmg_taken += health_loss;
+            dmg_taken.append((health_loss, health_saved));
 
             // loss a 2 or 1% drug each round xd
             let loss_pct = drug_unpacked.quantity.pct(1);
@@ -370,7 +396,7 @@ fn on_run(
             } else {
                 loss_pct
             };
-            drug_loss += loss;
+            drug_loss.append(loss);
             drug_unpacked.quantity = drug_unpacked.quantity.sub_capped(loss, 0);
 
             // set drugs
@@ -383,6 +409,7 @@ fn on_run(
                 break;
             }
         } else {
+            escaped_with_item = rand_0_99 <= player_speed;
             break;
         };
 
@@ -433,13 +460,14 @@ fn on_run(
         action: EncounterActions::Run,
         outcome,
         rounds,
-        dmg_dealt: 0,
+        dmg_dealt: array![],
         dmg_taken,
         cash_earnt: 0,
         cash_loss: 0,
         drug_id,
         drug_loss,
         turn_loss,
+        escaped_with_item,
     }
 }
 
@@ -453,6 +481,7 @@ fn on_fight(
         .stat
         .try_into()
         .unwrap();
+
     let player_defense: u8 = game_store
         .items
         .get_item(ItemSlot::Clothes)
@@ -460,14 +489,18 @@ fn on_fight(
         .stat
         .try_into()
         .unwrap();
+
+    let initial_tier_attack: u8 = (get!(game_store.world, (ItemSlot::Weapon, 1), (HustlerItemTiersConfig)).stat / 2).try_into().unwrap();
+    let initial_tier_defense: u8 = (get!(game_store.world, (ItemSlot::Clothes, 1), (HustlerItemTiersConfig)).stat / 10).try_into().unwrap();
+
     let atk = player_attack / 2;
     let def = player_defense / 10;
 
     let mut rounds = 0;
-    let mut dmg_taken = 0;
-    let mut dmg_dealt = 0;
+    let mut dmg_taken: Array<(u8,u8)> = array![];
+    let mut dmg_dealt: Array<(u8,u8)> = array![];
     let mut is_dead = false;
-
+  
     let mut encounter = encounter;
 
     // loop until resolution
@@ -476,7 +509,7 @@ fn on_fight(
 
         // player attack 
         encounter.health = encounter.health.sub_capped(atk, 0);
-        dmg_dealt += atk;
+        dmg_dealt.append((atk, atk - initial_tier_attack));
 
         // check if encounter is dead
         if encounter.health == 0 {
@@ -486,7 +519,7 @@ fn on_fight(
         // encounter attack 
         let encounter_atk = encounter.attack.sub_capped(def, 1);
         game_store.player.health = game_store.player.health.sub_capped(encounter_atk, 0);
-        dmg_taken += encounter_atk;
+        dmg_taken.append((encounter_atk, def - initial_tier_defense));
 
         // check if player is dead
         if game_store.player.health == 0 {
@@ -521,8 +554,9 @@ fn on_fight(
         cash_earnt,
         cash_loss: 0,
         drug_id: 0,
-        drug_loss: 0,
+        drug_loss: array![],
         turn_loss: 0,
+        escaped_with_item: false,
     }
 }
 

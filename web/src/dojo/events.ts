@@ -7,6 +7,14 @@ import {
 
 import { WorldEvents } from "./generated/contractEvents";
 
+import { Contract } from "starknet";
+
+import manifest from "../../manifest.json";
+
+const contract = manifest.contracts.find(i => i.name === "rollyourown::systems::game::game")!
+const gameContract = new Contract(contract.abi, contract.address)
+
+
 export interface BaseEventData {
   gameId: string;
   eventType: WorldEvents;
@@ -65,13 +73,14 @@ export interface TravelEncounterResultData extends BaseEventData {
   action: EncountersAction;
   outcome: EncounterOutcomes;
   rounds: number;
-  dmgDealt: number;
-  dmgTaken: number;
+  dmgDealt: Array<{ 0: number, 1: number }>;
+  dmgTaken: Array<{ 0: number, 1: number }>;
   cashEarnt: number;
   cashLoss: number;
   drugId: number;
-  drugLoss: number;
+  drugLoss: Array<number>;
   turnLoss: number;
+  escapedWithItem: boolean;
 }
 
 
@@ -193,6 +202,18 @@ export const parseEvent = (raw: any) => {
 
 
     case WorldEvents.TravelEncounterResult:
+      // use gameContract to parseEvents  (Array<(u8,u8)>...)
+
+      //@ts-ignore
+      const parsedEvents = gameContract.parseEvents({
+        events: [{
+          from_address: gameContract.address,
+          keys: [...raw.keys], // parseEvents consumes keys with iterators?
+          data: [...raw.data], // parseEvents consumes data with iterators?
+        }]
+      })
+      const parsed = parsedEvents[0]!["TravelEncounterResult"]!;
+
       return {
         eventType: WorldEvents.TravelEncounterResult,
         eventName: "TravelEncounterResult",
@@ -201,13 +222,18 @@ export const parseEvent = (raw: any) => {
         action: Number(raw.data[0]) as EncountersAction,
         outcome: Number(raw.data[1]) as EncounterOutcomes,
         rounds: Number(raw.data[2]),
-        dmgDealt: Number(raw.data[3]),
-        dmgTaken: Number(raw.data[4]),
-        cashEarnt: Number(raw.data[5]),
-        cashLoss: Number(raw.data[6]),
-        drugId: Number(raw.data[7]),
-        drugLoss: Number(raw.data[8]),
-        turnLoss: Number(raw.data[9]),
+        //
+        //@ts-ignore
+        dmgDealt: parsed.dmg_dealt.map(i => ({ "0": Number(i[0]), "1": Number(i[1]) })),
+        //@ts-ignore
+        dmgTaken: parsed.dmg_taken.map(i => ({ "0": Number(i[0]), "1": Number(i[1]) })),
+        cashEarnt: Number(parsed.cash_earnt),
+        cashLoss: Number(parsed.cash_loss),
+        drugId: Number(parsed.drug_id),
+        //@ts-ignore
+        drugLoss: parsed.drug_loss.map(i => Number(i)),
+        turnLoss: Number(parsed.turn_loss),
+        escapedWithItem: parsed.escapedWithItem as unknown as boolean,
       } as TravelEncounterResultData;
 
 

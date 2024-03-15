@@ -191,7 +191,7 @@ impl PlayerImpl of PlayerTrait {
         }
 
         // update drug level
-        self.drug_level = drug_level;
+        game_store.player.drug_level = drug_level;
 
         // randomize price for new drug
         game_store.markets.shuffle_drug_prices(ref randomizer, drug_level.into());

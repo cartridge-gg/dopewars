@@ -73,30 +73,24 @@ impl WantedPackedImpl of WantedPackedTrait {
 
     fn on_turn_end(ref self: WantedPacked, game_store: GameStore) {
         let mut locations = LocationsEnumerableImpl::all();
+        let drugs = game_store.drugs.get();
 
         loop {
             match locations.pop_front() {
                 Option::Some(location) => {
                     let mut value = self.get(*location);
 
-                    if game_store.player.next_location == *location {
-                        if game_store.player.next_location == game_store.player.prev_location {
-                            // travel back to same location : +3
-                            self.set(*location, value.add_capped(3, 7));
-                        } else {
-                            let drugs = game_store.drugs.get();
-                            if drugs.quantity > 0 {
-                                // travel to location with drugs : +2
-                                self.set(*location, value.add_capped(2, 7));
-                            };
-                        }
-                    } else {
-                        //not current location / not prev_location
-                        if game_store.player.location != *location
-                            && game_store.player.prev_location != *location {
-                            // nothin at location : -1
-                            self.set(*location, value.sub_capped(1, 0));
-                        }
+                    if game_store.player.next_location == *location && game_store.player.next_location == game_store.player.prev_location {
+                        // travel back to same location : +3
+                        self.set(*location, value.add_capped(3, 7));
+                    } else if game_store.player.location == *location {
+                        // leaving current location with drugs : +4
+                        if drugs.quantity > 0 {
+                            self.set(*location, value.add_capped(4, 7));
+                        };
+                    } else if *location != game_store.player.next_location {
+                        //  not next / not prev / not current : -1
+                        self.set(*location, value.sub_capped(1, 0));
                     }
                 },
                 Option::None => { break; }

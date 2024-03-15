@@ -30,7 +30,9 @@ export class EventClass {
         makeObservable(this, {
             events: observable,
             playerName: computed,
-            sortedEvents: computed
+            sortedEvents: computed,
+            lastEncounter: computed,
+            lastEncounterResult: computed,
         })
 
         console.log("Events", this)
@@ -75,13 +77,13 @@ export class EventClass {
     }
 
 
-    getLastEncounter() {
+    get lastEncounter() {
         return this
             .sortedEvents
             .findLast((i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounter)
     }
 
-    getLastEncounterResult() {
+    get lastEncounterResult() {
         return this
             .sortedEvents
             .findLast((i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounterResult)
