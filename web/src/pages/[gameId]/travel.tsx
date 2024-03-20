@@ -5,12 +5,14 @@ import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
+import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface MarketPriceInfo {
@@ -20,7 +22,7 @@ interface MarketPriceInfo {
   percentage?: number;
 }
 
-export default function Travel() {
+const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
 
   const [targetLocation, setTargetLocation] = useState<string>("");
@@ -29,7 +31,7 @@ export default function Travel() {
   const toaster = useToast();
   const { travel, isPending } = useSystems();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { game, gameEvents } = useGameStore();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -218,7 +220,9 @@ export default function Travel() {
       </VStack>
     </Layout>
   );
-}
+});
+
+export default Travel;
 
 const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();

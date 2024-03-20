@@ -3,9 +3,9 @@ import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import {
-    BigNumberish, Call,
-    GetTransactionReceiptResponse,
-    shortString, uint256
+  BigNumberish, Call,
+  GetTransactionReceiptResponse,
+  shortString, uint256
 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { BaseEventData, GameCreatedData, HighVolatilityData, TravelEncounterData, TravelEncounterResultData, parseAllEvents } from "../events";
@@ -61,11 +61,10 @@ const tryBetterErrorMsg = (msg: string): string => {
 
 export const useSystems = (): SystemsInterface => {
   const {
-    //account,
-    dojoProvider,
+    clients: { dojoProvider },
     configStore,
-   
   } = useDojoContext();
+
   const { account } = useAccount()
   const { config } = useConfigStore();
 

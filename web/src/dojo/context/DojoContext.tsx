@@ -1,72 +1,61 @@
-import { katana_localhost, katana_slot } from "@/components/wallet/chain/katana";
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
-import { Chain, goerli, mainnet } from "@starknet-react/chains";
 import { Connector } from "@starknet-react/core";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Account, RpcProvider } from "starknet";
-import { StoreApi } from "zustand";
+import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
+import { QueryClientProvider } from "react-query";
+import { Account } from "starknet";
+import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
+import { DojoClientsResult, useDojoClients } from "../hooks/useDojoClients";
+import { DojoContextConfig } from "../setup/config";
 import { SetupResult } from "../setup/setup";
-import { ConfigStore, createConfigStore } from "../stores/config";
-import { GameStore, createGameStore } from "../stores/game";
-import { RyoStore, createRyoStore } from "../stores/ryo";
+import { ConfigStoreClass } from "../stores/config";
+import { GameStoreClass } from "../stores/game";
 
 interface DojoContextType extends SetupResult {
-  network: {
-    chains: Chain[];
-    selectedChain: Chain;
-    setSelectedChain: Dispatch<SetStateAction<any>>;
-    isKatana: boolean;
-  };
+  chains: DojoChainsResult;
+  clients: DojoClientsResult;
   masterAccount: Account;
   account: Account | null;
   burner: BurnerAccount & { listConnectors: () => Connector[] };
-  configStore: StoreApi<ConfigStore>;
-  gameStore: StoreApi<GameStore>;
-  ryoStore: StoreApi<RyoStore>;
+  configStore: ConfigStoreClass;
+  gameStore: GameStoreClass;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
 
-export const DojoProvider = ({ children, value }: { children: ReactNode; value: SetupResult }) => {
+export const DojoContextProvider = ({
+  children,
+  dojoContextConfig,
+}: {
+  children: ReactNode;
+  dojoContextConfig: DojoContextConfig;
+}) => {
   const currentValue = useContext(DojoContext);
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
-  const {
-    config: { rpcUrl, toriiUrl, masterAddress, masterPrivateKey, accountClassHash, manifest },
-  } = value;
+  const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig);
+  const { dojoProvider, queryClient, graphqlClient, graphqlWsClient, rpcProvider } = useDojoClients(selectedChain);
 
-  const chains = [katana_localhost, katana_slot, goerli, mainnet];
-  const [selectedChain, setSelectedChain] = useState(
-    process.env.NODE_ENV === "production" ? katana_slot : katana_localhost,
-  );
-  const [isKatana, setIsKatana] = useState(process.env.NODE_ENV === "production" ? true : false);
+  const masterAccount = useMemo(() => {
+    if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
+      return new Account(rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey, "1");
+    }
+    return undefined;
+  }, [rpcProvider, selectedChain]);
+
+  const burnerManager = useMemo(() => {
+    return new BurnerManager({
+      masterAccount: masterAccount,
+      accountClassHash: selectedChain.accountClassHash,
+      rpcProvider: rpcProvider,
+    });
+  }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
 
   useEffect(() => {
-    setIsKatana(selectedChain.network.startsWith("katana_"));
-  }, [selectedChain]);
-
-  const rpcProvider = useMemo(
-    () =>
-      new RpcProvider({
-        nodeUrl: rpcUrl,
-      }),
-    [rpcUrl],
-  );
-
-  const masterAccount = useMemo(
-    () => new Account(rpcProvider, masterAddress, masterPrivateKey, "1"),
-    [rpcProvider, masterAddress, masterPrivateKey],
-  );
+    if (window.starknet_dojoburner) {
+      //setBurnerManager
+      window.starknet_dojoburner.setBurnerManager(burnerManager);
+    }
+  }, [burnerManager]);
 
   const {
     create,
@@ -81,48 +70,46 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
     listConnectors,
   } = useBurnerManager({
     burnerManager: new BurnerManager({
-      masterAccount,
-      accountClassHash,
-      rpcProvider,
+      masterAccount: masterAccount,
+      accountClassHash: selectedChain.accountClassHash,
+      rpcProvider: rpcProvider,
     }),
   });
 
-  const configStoreRef = useRef<StoreApi<ConfigStore>>();
-  if (!configStoreRef.current) {
-    configStoreRef.current = createConfigStore({
-      client: value.graphqlClient,
-      dojoProvider: value.dojoProvider,
-      manifest: value.config.manifest,
+  const configStore = useMemo(() => {
+    return new ConfigStoreClass({
+      client: graphqlClient,
+      dojoProvider: dojoProvider,
+      manifest: selectedChain.manifest,
     });
-  }
+  }, [graphqlClient, dojoProvider, selectedChain.manifest]);
 
-  const gameStoreRef = useRef<StoreApi<GameStore>>();
-  if (!gameStoreRef.current) {
-    gameStoreRef.current = createGameStore({
-      client: value.graphqlClient,
-      wsClient: value.graphqlWsClient,
-      configStore: configStoreRef.current,
+  const gameStore = useMemo(() => {
+    return new GameStoreClass({
+      client: graphqlClient,
+      wsClient: graphqlWsClient,
+      configStore,
     });
-  }
+  }, [graphqlClient, graphqlWsClient, configStore]);
 
-  const ryoStoreRef = useRef<StoreApi<RyoStore>>();
-  if (!ryoStoreRef.current) {
-    ryoStoreRef.current = createRyoStore({
-      client: value.graphqlClient,
-      wsClient: value.graphqlWsClient,
-      configStore: configStoreRef.current,
-    });
-  }
+  // const { account } = useAccount();
 
   return (
     <DojoContext.Provider
       value={{
-        ...value,
-        network: {
-          chains,
+        chains: {
+          dojoContextConfig,
           selectedChain,
           setSelectedChain,
           isKatana,
+          chains,
+        },
+        clients: {
+          dojoProvider,
+          queryClient,
+          graphqlClient,
+          graphqlWsClient,
+          rpcProvider,
         },
         masterAccount,
         burner: {
@@ -138,12 +125,11 @@ export const DojoProvider = ({ children, value }: { children: ReactNode; value: 
           applyFromClipboard,
         },
         account,
-        configStore: configStoreRef.current,
-        gameStore: gameStoreRef.current,
-        ryoStore: ryoStoreRef.current,
+        configStore,
+        gameStore,
       }}
     >
-      {children}
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </DojoContext.Provider>
   );
 };

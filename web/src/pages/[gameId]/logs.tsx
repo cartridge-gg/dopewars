@@ -23,7 +23,7 @@ import {
   reputationRanks,
   reputationRanksKeys,
 } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
@@ -43,6 +43,7 @@ import {
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { shortString } from "starknet";
@@ -56,7 +57,7 @@ type LogByDay = {
 const Logs = () => {
   const { router, gameId, playerId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const configStore = useConfigStore();
   const { game, gameEvents } = useGameStore();
 

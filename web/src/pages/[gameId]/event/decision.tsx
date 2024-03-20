@@ -5,13 +5,14 @@ import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
-import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { getSentence } from "@/responses";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -23,7 +24,7 @@ type CombatLog = {
 
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { game, gameInfos, gameEvents } = useGameStore();
   const { decide, isPending } = useSystems();
 

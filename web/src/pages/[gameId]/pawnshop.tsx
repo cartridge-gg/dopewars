@@ -1,20 +1,21 @@
 import { Button } from "@/components/common";
 import { Footer, Layout } from "@/components/layout";
 import { statName } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
 import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
 const PawnShop = observer(() => {
   const { router, gameId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const configStore = useConfigStore();
   const { game } = useGameStore();
 

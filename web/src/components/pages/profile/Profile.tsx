@@ -1,7 +1,8 @@
 import { Button } from "@/components/common";
-import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { headerButtonStyles } from "@/theme/styles";
 import { Box, MenuItem, Text } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
 import { HustlerIcon, Hustlers } from "../../hustlers";
 
@@ -9,7 +10,7 @@ import { HustlerIcon, Hustlers } from "../../hustlers";
 export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { gameInfos } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ export const ProfileLink = () => {
 export const ProfileLinkMobile = () => {
   const { router, gameId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { gameEvents, gameInfos } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -65,7 +66,7 @@ export const ProfileLinkMobile = () => {
 // export const Profile = observer(({ close, ...props }: { close?: () => void }) => {
 //   const { router, gameId, playerId } = useRouterContext();
 
-//   const { account } = useDojoContext();
+//   const { account } = useAccount();
 //   const configStore = useConfigStore();
 //   const gameStore = useGameStore();
 //   const { game, gameInfos, gameEvents } = gameStore;

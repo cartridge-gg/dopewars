@@ -1,16 +1,16 @@
 import { Layout } from "@/components/layout";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
 import { Image } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useEffect } from "react";
 
 export default function Redirector() {
   const { router, gameId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   
   const { game } = useGameStore();
-  const configStore = useConfigStore();
 
   useEffect(() => {
     if (!game) return;

@@ -1,38 +1,37 @@
 import { HustlerIcon } from "@/components/hustlers";
-import { useConfigStore, useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
+import { Loader } from "@/components/layout/Loader";
+import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
+import { useHallOfFame } from "@/dojo/hooks/useHallOfFame";
 import { Leaderboard } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Account, shortString } from "starknet";
-
-
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
-  const { account } = useDojoContext();
+  const { account } = useAccount();
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
 
-  const ryoStore = useRyoStore();
-  const { hallOfFame } = ryoStore;
-
-  const filtered = useMemo(() => {
-    if (!hallOfFame) return [];
-    return hallOfFame.filter((i) => i.version !== config?.ryo?.leaderboard_version);
-  }, [hallOfFame, config?.ryo?.leaderboard_version]);
-
-  useEffect(() => {
-    console.log(filtered);
-  }, [filtered]);
+  const { hallOfFame, refetchHallOfFame, isFetchingHallOfFame } = useHallOfFame();
 
   return (
     <>
-      <SimpleGrid columns={[1, 2]} w="full" gap={4}>
-        {filtered.map((i, index) => {
-          return <HallOfFameEntry entry={i} key={index} account={account} />;
-        })}
-      </SimpleGrid>
+      {isFetchingHallOfFame && <Loader />}
+      {!isFetchingHallOfFame && (
+        <SimpleGrid columns={[1, 2]} w="full" gap={4}>
+          {hallOfFame
+            .filter((i) => i.version !== config?.ryo?.leaderboard_version)
+            .map((i, index) => {
+              return <HallOfFameEntry entry={i} key={index} account={account} />;
+            })}
+        </SimpleGrid>
+      )}
     </>
   );
 });
@@ -48,7 +47,6 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
   const onClick = useCallback(() => {
     router.push(`/0x${entry.game_id.toString(16)}/logs?playerId=${game?.player_id}`);
   }, [entry.game_id, game?.player_id]);
-
 
   if (!isFetched) return null;
   return (

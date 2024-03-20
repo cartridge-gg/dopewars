@@ -5,12 +5,13 @@ import { useDojoContext } from "./useDojoContext";
 
 
 export const useTokenBalance = ({ address, token, refetchInterval }: { address?: string, token?: string, refetchInterval?: number }) => {
-  const { dojoProvider } = useDojoContext();
+  const { clients: { dojoProvider } } = useDojoContext();
   const [balance, setBalance] = useState(0n)
   const [isInitializing, setIsInitializing] = useState(true)
 
   const contract = useMemo(() => {
-    if (!token) return undefined
+    if (!token || !dojoProvider) return undefined
+
     const contract: TypedContractV2<typeof paperAbi> = new Contract(
       paperAbi,
       token!,

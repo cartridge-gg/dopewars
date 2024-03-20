@@ -1,17 +1,13 @@
-import { Gem } from "@/components/icons";
-import { MakeItRain } from "@/components/layout";
-import { useConfigStore, useRyoStore } from "@/dojo/hooks";
+import { useConfigStore, useHallOfFame } from "@/dojo/hooks";
 import { Leaderboard } from "@/generated/graphql";
 import { Button } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
-import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { ClaimModal } from "./ClaimModal";
 
-export const ClaimReward = observer(() => {
-  const { config } = useConfigStore();
-  const ryoStore = useRyoStore();
-  const { hallOfFame } = ryoStore;
+export const ClaimReward = () => {
+  const { config} = useConfigStore();
+ 
+  const { hallOfFame } = useHallOfFame()
 
   const { account } = useAccount();
 
@@ -19,6 +15,7 @@ export const ClaimReward = observer(() => {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
 
   const [isRainning, setIsRainning] = useState(false);
+
 
   useEffect(() => {
     if (!hallOfFame) {
@@ -64,4 +61,4 @@ export const ClaimReward = observer(() => {
       {isRainning && <MakeItRain />}
     </>
   );
-});
+};

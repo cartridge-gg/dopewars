@@ -5,6 +5,7 @@ import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Divider, Flex, HStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { ClaimReward } from "../pages/home";
@@ -22,9 +23,11 @@ export const Header = observer(({ back }: HeaderProps) => {
   const { router, gameId } = useRouterContext();
 
   const {
-    account,
+   
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
+  const { account } = useAccount();
+
 
   const { game, gameInfos } = useGameStore();
   const { config } = useConfigStore();

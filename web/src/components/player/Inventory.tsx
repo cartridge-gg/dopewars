@@ -1,5 +1,5 @@
 import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
@@ -8,6 +8,7 @@ import { Tooltip } from "../common";
 import { Bag, Cigarette, PawnshopIcon } from "../icons";
 
 import colors from "@/theme/colors";
+import { useAccount } from "@starknet-react/core";
 import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
@@ -17,7 +18,8 @@ const blinkAnim = keyframes`
 
 export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProps & { hidePawnshop?: boolean }) => {
   const { gameId, router } = useRouterContext();
-  const { account } = useDojoContext();
+  const { account } = useAccount();
+
   const { game, gameInfos } = useGameStore();
   const configStore = useConfigStore();
 
@@ -62,7 +64,11 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             </Text>
           </HStack>
 
-          <Tooltip title="Encountered" text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`} color="yellow.400">
+          <Tooltip
+            title="Encountered"
+            text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`}
+            color="yellow.400"
+          >
             <Card h="40px" px="5px" justify="center" alignItems="center">
               <PowerMeter
                 text={reputationRanks[game.player.drugLevel as reputationRanksKeys]}

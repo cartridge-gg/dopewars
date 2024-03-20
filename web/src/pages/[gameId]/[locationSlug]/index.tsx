@@ -3,7 +3,7 @@ import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { getRandomGreeting } from "@/dojo/helpers";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
 import { formatCash } from "@/utils/ui";
@@ -21,13 +21,14 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 const Location = observer(() => {
   const { router, gameId, location } = useRouterContext();
-  const { account } = useDojoContext();
+  const { account } = useAccount()
 
   const configStore = useConfigStore();
   const { game, gameInfos, gameEvents } = useGameStore();
@@ -55,7 +56,7 @@ const Location = observer(() => {
       setPrices(game.markets.marketsByLocation.get(location.location) || []);
     }
   }, [location, game]);
-
+debugger
   if (!game || !gameInfos || !prices || !location || !configStore || !gameId) {
     return <></>;
   }

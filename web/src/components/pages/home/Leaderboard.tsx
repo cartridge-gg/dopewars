@@ -1,10 +1,12 @@
 import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 
+import { Loader } from "@/components/layout/Loader";
 import { GameOverData } from "@/dojo/events";
-import { useConfigStore, useDojoContext, useRouterContext, useRyoStore } from "@/dojo/hooks";
-import { useLeaderboards } from "@/dojo/hooks/useLeaderboards";
+import { useDojoContext, useHallOfFame, useLeaderboardEntries, useRouterContext } from "@/dojo/hooks";
 import colors from "@/theme/colors";
-import { formatCash, formatEther } from "@/utils/ui";
+import { formatCash } from "@/utils/ui";
+import { useAccount } from "@starknet-react/core";
+import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Avatar } from "../../avatar/Avatar";
@@ -45,56 +47,47 @@ const renderer = ({
   }
 };
 
-export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
+export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const { router, gameId } = useRouterContext();
 
-  const { account } = useDojoContext();
-  const { config } = useConfigStore();
+  const {
+    chains: { selectedChain },
+    configStore: { config },
+  } = useDojoContext();
+  const { account } = useAccount();
 
-  const ryoStore = useRyoStore();
-  const { leaderboardEntries } = ryoStore;
+  //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
+  const { hallOfFame, isFetchingHallOfFame } = useHallOfFame();
+  const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0
+  const [selectedIndex, setSelectedIndex] = useState(maxIndex);
 
-  const [currentVersion, setCurrentVersion] = useState(config?.ryo?.leaderboard_version);
-  const [selectedVersion, setSelectedVersion] = useState(config?.ryo?.leaderboard_version);
-
-  const { leaderboard } = useLeaderboards(selectedVersion);
-
-  const [targetGameId, setTargetGameId] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const { leaderboardEntries, isFetchingLeaderboardEntries } = useLeaderboardEntries(
+    hallOfFame[selectedIndex]?.version || 0,
+  );
 
   const listRef = useRef(null);
 
   const onPrev = async () => {
-    if (selectedVersion > 1) {
-      setSelectedVersion(selectedVersion - 1);
+    if (selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
     }
   };
 
   const onNext = async () => {
-    if (selectedVersion < currentVersion) {
-      setSelectedVersion(selectedVersion + 1);
+    if (selectedIndex < maxIndex) {
+      setSelectedIndex(selectedIndex + 1);
     }
   };
 
-  useEffect(() => {
-    if (!ryoStore || !selectedVersion) return;
-    ryoStore.reset();
-    ryoStore.init(selectedVersion);
-  }, [/*ryoStore,*/ selectedVersion]);
-
-  useEffect(() => {
-    setCurrentVersion(config?.ryo?.leaderboard_version);
-    setSelectedVersion(config?.ryo?.leaderboard_version);
-  }, [config?.ryo?.leaderboard_version /*resetQuery inifinte load if included !*/]);
 
   useEffect(() => {
     if (!listRef.current) return;
     const lastEl = listRef.current["lastElementChild"];
     // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [leaderboard]);
+  }, [leaderboardEntries]);
 
-  if (!leaderboard || !selectedVersion) {
+  if (!hallOfFame || hallOfFame.length === 0) {
     return <></>;
   }
 
@@ -105,22 +98,27 @@ export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & S
           <Arrow
             direction="left"
             cursor="pointer"
-            opacity={selectedVersion > 1 ? "1" : "0.25"}
+            opacity={selectedIndex > 0 ? "1" : "0.25"}
             onClick={onPrev}
           ></Arrow>
           <HStack textStyle="subheading" fontSize="12px">
-            <Text>SEASON {leaderboard?.version} REWARDS</Text>
-            <Text color="yellow.400">{formatCash(formatEther(leaderboard.paper_balance)).replace("$", "")} PAPER</Text>
+            <Text>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
+            <Text color="yellow.400">
+              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")} PAPER
+            </Text>
           </HStack>
           <Arrow
             direction="right"
             cursor="pointer"
-            opacity={selectedVersion < currentVersion ? "1" : "0.25"}
+            opacity={selectedIndex < maxIndex ? "1" : "0.25"}
             onClick={onNext}
           ></Arrow>
         </HStack>
-        {selectedVersion === currentVersion && (
-          <Countdown date={new Date(leaderboard?.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+        {selectedIndex === maxIndex && (
+          <Countdown
+            date={new Date(hallOfFame[selectedIndex]?.next_version_timestamp * 1_000)}
+            renderer={renderer}
+          ></Countdown>
         )}
       </VStack>
       <VStack
@@ -134,75 +132,78 @@ export const Leaderboard = ({ nameEntry, ...props }: { nameEntry?: boolean } & S
           "scrollbar-width": "none",
         }}
       >
-        <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
-          {leaderboardEntries && leaderboardEntries.length > 0 ? (
-            leaderboardEntries.map((entry: GameOverData, index: number) => {
-              const isOwn = entry.playerId === account?.address;
-              const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
-              const avatarColor = isOwn ? "yellow" : "green";
-              const displayName = entry.playerName ? `${entry.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
+        {isFetchingLeaderboardEntries && <Loader />}
+        {!isFetchingLeaderboardEntries && (
+          <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
+            {leaderboardEntries && leaderboardEntries.length > 0 ? (
+              leaderboardEntries.map((entry: GameOverData, index: number) => {
+                const isOwn = entry.playerId === account?.address;
+                const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
+                const avatarColor = isOwn ? "yellow" : "green";
+                const displayName = entry.playerName ? `${entry.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
 
-              return (
-                <ListItem color={color} key={entry.gameId} cursor={isOwn && !entry.playerName ? "pointer" : "auto"}>
-                  <HStack mr={3}>
-                    <Text
-                      w={["10px", "30px"]}
-                      fontSize={["10px", "16px"]}
-                      flexShrink={0}
-                      // display={["none", "block"]}
-                      whiteSpace="nowrap"
-                    >
-                      {index + 1}.
-                    </Text>
-                    <Box
-                      flexShrink={0}
-                      style={{ marginTop: "-8px" }}
-                      cursor="pointer"
-                      onClick={() => router.push(`/${entry.gameId}/logs?playerId=${entry.playerId}`)}
-                    >
-                      {entry.health === 0 ? (
-                        <Skull color={avatarColor} hasCrown={index === 0} />
-                      ) : (
-                        <Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
-                      )}
-                    </Box>
-
-                    <HStack>
+                return (
+                  <ListItem color={color} key={entry.gameId} cursor={isOwn && !entry.playerName ? "pointer" : "auto"}>
+                    <HStack mr={3}>
                       <Text
+                        w={["10px", "30px"]}
+                        fontSize={["10px", "16px"]}
                         flexShrink={0}
-                        maxWidth={["150px", "350px"]}
+                        // display={["none", "block"]}
                         whiteSpace="nowrap"
-                        overflow="hidden"
-                        fontSize={["12px", "16px"]}
                       >
-                        {displayName}
+                        {index + 1}.
+                      </Text>
+                      <Box
+                        flexShrink={0}
+                        style={{ marginTop: "-8px" }}
+                        cursor="pointer"
+                        onClick={() => router.push(`/${entry.gameId}/logs?playerId=${entry.playerId}`)}
+                      >
+                        {entry.health === 0 ? (
+                          <Skull color={avatarColor} hasCrown={index === 0} />
+                        ) : (
+                          <Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                        )}
+                      </Box>
+
+                      <HStack>
+                        <Text
+                          flexShrink={0}
+                          maxWidth={["150px", "350px"]}
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          fontSize={["12px", "16px"]}
+                        >
+                          {displayName}
+                        </Text>
+                      </HStack>
+
+                      <Text
+                        backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
+                        backgroundSize="10px 10px"
+                        backgroundPosition="left center"
+                        backgroundRepeat="repeat-x"
+                        flexGrow={1}
+                        color="transparent"
+                      >
+                        {"."}
+                      </Text>
+                      <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                        {formatCash(entry.cash)}
                       </Text>
                     </HStack>
-
-                    <Text
-                      backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
-                      backgroundSize="10px 10px"
-                      backgroundPosition="left center"
-                      backgroundRepeat="repeat-x"
-                      flexGrow={1}
-                      color="transparent"
-                    >
-                      {"."}
-                    </Text>
-                    <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                      {formatCash(entry.cash)}
-                    </Text>
-                  </HStack>
-                </ListItem>
-              );
-            })
-          ) : (
-            <Text textAlign="center" color="neon.500">
-              No scores submitted yet
-            </Text>
-          )}
-        </UnorderedList>
+                  </ListItem>
+                );
+              })
+            ) : (
+              <Text textAlign="center" color="neon.500">
+                No scores submitted yet
+              </Text>
+            )}
+          </UnorderedList>
+        )}
       </VStack>
     </VStack>
   );
-};
+});

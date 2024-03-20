@@ -27,9 +27,10 @@ import { genAvatarFromId } from "@/components/avatar/avatars";
 import { Button } from "@/components/common";
 import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/pages/profile/ShareButton";
-import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
+import { useAccount } from "@starknet-react/core";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
@@ -42,7 +43,7 @@ const End = observer(() => {
   const [day, setDay] = useState(0);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   
   const { game, gameInfos, gameEvents } = useGameStore();
 

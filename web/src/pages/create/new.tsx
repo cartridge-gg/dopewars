@@ -12,16 +12,15 @@ import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
-export default function New() {
+const New = observer(() => {
   const { router } = useRouterContext();
 
   const {
-    // account,
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
-
   const { account } = useAccount();
 
   const { createGame, isPending } = useSystems();
@@ -232,7 +231,7 @@ export default function New() {
                     <HStack w="full" justifyContent="space-between">
                       <Text>YOU OWN </Text>
                       <HStack>
-                      <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
+                        <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
                         <Text>PAPER</Text>
                       </HStack>
                     </HStack>
@@ -275,4 +274,6 @@ export default function New() {
       </VStack>
     </Layout>
   );
-}
+});
+
+export default New;

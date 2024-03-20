@@ -5,6 +5,7 @@ import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "
 import { ConfigStore } from "@/dojo/stores/config";
 import { ToastType, useToast } from "@/hooks/toast";
 import { Box } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { Siren, Truck } from "./icons";
 import { OG } from "./layout";
@@ -12,7 +13,11 @@ import { OG } from "./layout";
 const RegisterEntities = () => {
   const { gameId, router, playerId } = useRouterContext();
 
-  const { account } = useDojoContext();
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
+  const { account } = useAccount();
+
   const configStore = useConfigStore();
   const gameStore = useGameStore();
   const { game, gameEvents } = gameStore;
@@ -22,7 +27,9 @@ const RegisterEntities = () => {
   const toaster = useToast();
 
   useEffect(() => {
-    configStore && configStore.init();
+    //debugger
+    // configStore && configStore.init();
+    console.log(account?.address);
 
     if (gameStore) {
       if (gameId && playerId) {
@@ -37,7 +44,7 @@ const RegisterEntities = () => {
         gameStore.reset();
       }
     }
-  }, [gameId, account?.address, playerId]);
+  }, [gameId, account?.address, playerId, selectedChain /*configStore*/]);
 
   //
   useEffect(() => {

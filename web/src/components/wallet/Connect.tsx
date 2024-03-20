@@ -180,13 +180,14 @@ const ConnectModal = ({
   onClose: VoidFunction;
 }) => {
   const {
+
     burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying, account },
-    network: { isKatana, selectedChain },
+    chains: { isKatana, chain },
   } = useDojoContext();
 
   const hasBurnerConnector = useMemo(() => {
     return connectors.find((i) => i instanceof BurnerConnector);
-  }, [connectors, connectors.length, selectedChain, isKatana]);
+  }, [connectors, connectors.length, chain, isKatana]);
 
   const onCreateBurner = async () => {
     await createBurner();
@@ -217,7 +218,7 @@ const ConnectModal = ({
             )}
             {connectors.map((connector) => {
               const isBurner = connector instanceof BurnerConnector;
-              // const isDeployedOnCurrentChain = selectedChain.id === connector.chainId()
+              // const isDeployedOnCurrentChain = chain.id === connector.chainId()
               return (
                 <HStack w="full" key={connector.id}>
                   <Button

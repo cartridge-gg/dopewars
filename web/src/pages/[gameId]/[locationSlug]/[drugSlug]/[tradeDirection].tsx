@@ -3,7 +3,7 @@ import { ArrowEnclosed } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket, TradeDirection } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -22,6 +22,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useState } from "react";
 
@@ -34,7 +35,7 @@ const Market = observer(() => {
   const [canSell, setCanSell] = useState(false);
   const [canBuy, setCanBuy] = useState(false);
 
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { game } = useGameStore();
 
   const { toast } = useToast();

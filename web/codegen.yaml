@@ -5,7 +5,7 @@ generates:
   src/generated/graphql.ts:
     plugins:
       - "typescript"
-      - "typescript-operations"
+      # - "typescript-operations"
       - "typescript-react-query"
     config:
       addInfiniteQuery: true

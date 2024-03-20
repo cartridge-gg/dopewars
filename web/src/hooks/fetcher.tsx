@@ -1,26 +1,36 @@
-export const useFetchData = <TData, TVariables>(
-  query: string,
-): ((variables?: TVariables) => Promise<TData>) => {
-  return async (variables?: TVariables) => {
-
-    const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-    });
+import { useDojoContext } from "@/dojo/hooks";
+import { useCallback } from "react";
 
 
-    const json = await res.json();
+export const useFetchData = <TData, TVariables>(query: string): ((variables?: TVariables) => Promise<TData>) => {
+  const {
+    chains: {
+      selectedChain: { toriiUrl },
+    },
+  } = useDojoContext();
 
-    if (json.errors) {
-      throw new Error(JSON.stringify(json.errors));
-    }
+  return useCallback(
+    async (variables?: TVariables) => {
+      console.log("fetcher", toriiUrl);
+      const res = await fetch(toriiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+      });
 
-    return json.data;
-  };
+      const json = await res.json();
+
+      if (json.errors) {
+        throw new Error(JSON.stringify(json.errors));
+      }
+
+      return json.data;
+    },
+    [toriiUrl],
+  );
 };

@@ -1,12 +1,13 @@
 import { Button } from "@/components/common";
 import { GameClass } from "@/dojo/class/Game";
-import { useDojoContext, useGameStore } from "@/dojo/hooks";
+import { useGameStore } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
 import { Link as ChakraLink, StyleProps } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { Twitter } from "../../icons";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
-  const { account } = useDojoContext();
+  const { account } = useAccount();
   const { game } = useGameStore();
 
   if (!account || !game) return null;
