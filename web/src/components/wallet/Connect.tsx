@@ -1,4 +1,4 @@
-import { Cigarette, ExternalLink } from "@/components/icons";
+import { ExternalLink } from "@/components/icons";
 import { useConfigStore, useDojoContext } from "@/dojo/hooks";
 import { useTokenBalance } from "@/dojo/hooks/useTokenBalance";
 import {
@@ -19,7 +19,7 @@ import { BurnerConnector } from "@dojoengine/create-burner";
 import { Connector, useAccount, /*useBalance,*/ useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
 import { ReactNode, useMemo, useState } from "react";
 import { AccountInterface } from "starknet";
-import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProviders";
+import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
 import { TokenBalance } from "./TokenBalance";
 
 export const frenlyAddress = (address: string) => {
@@ -121,11 +121,10 @@ const AccountModal = ({
               href={explorer.contract(account?.address)}
             >
               <>
-              {frenlyAddress(account?.address || "")}
-              <ExternalLink />
+                {frenlyAddress(account?.address || "")}
+                <ExternalLink />
               </>
             </Link>
-
 
             <HStack color="yellow.400">
               <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
@@ -180,14 +179,13 @@ const ConnectModal = ({
   onClose: VoidFunction;
 }) => {
   const {
-
     burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying, account },
-    chains: { isKatana, chain },
+    chains: { selectedChain },
   } = useDojoContext();
 
   const hasBurnerConnector = useMemo(() => {
     return connectors.find((i) => i instanceof BurnerConnector);
-  }, [connectors, connectors.length, chain, isKatana]);
+  }, [connectors, connectors.length, selectedChain]);
 
   const onCreateBurner = async () => {
     await createBurner();
@@ -202,7 +200,7 @@ const ConnectModal = ({
         </ModalHeader>
         <ModalBody p={3}>
           <VStack w="full">
-            {isKatana && !hasBurnerConnector && (
+            {/* {isKatana && !hasBurnerConnector && (
               <Button
                 variant="pixelated"
                 w="full"
@@ -211,11 +209,11 @@ const ConnectModal = ({
                 onClick={onCreateBurner}
               >
                 <HStack w="full" justifyItems="flex-start">
-                  {/* <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> */}
+                   <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> 
                   <Text ml="120px">Create Burner</Text>
                 </HStack>
               </Button>
-            )}
+            )} */}
             {connectors.map((connector) => {
               const isBurner = connector instanceof BurnerConnector;
               // const isDeployedOnCurrentChain = chain.id === connector.chainId()
@@ -244,14 +242,14 @@ const ConnectModal = ({
                       {!connector.available() && <ExternalLink ml="auto" />}
                     </HStack>
                   </Button>
-                  {isBurner && (
+                  {/* {isBurner && (
                     <Cigarette
                       cursor="pointer"
                       onClick={() => {
                         clearBurner();
                       }}
                     />
-                  )}
+                  )} */}
                 </HStack>
               );
             })}

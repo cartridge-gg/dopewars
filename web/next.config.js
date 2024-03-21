@@ -16,14 +16,6 @@ const nextConfig = {
 };
 
 
-// "@next/bundle-analyzer": "^14.1.1",
-// import bundleAnalyzer from "@next/bundle-analyzer";
-
-// const withBundleAnalyzer = bundleAnalyzer({
-//   enabled: true//process.env.ANALYZE === 'true',
-// })
-
-
 import nextPWA from "next-pwa";
 
 const withPWA = nextPWA({
@@ -36,3 +28,13 @@ const withPWA = nextPWA({
 
 
 export default withPWA(nextConfig)
+
+
+// "@next/bundle-analyzer": "^14.1.1",
+// import bundleAnalyzer from "@next/bundle-analyzer";
+
+// const withBundleAnalyzer = bundleAnalyzer({
+//   enabled: true//process.env.ANALYZE === 'true',
+// })
+
+// export default withBundleAnalyzer(withPWA(nextConfig))

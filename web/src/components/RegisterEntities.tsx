@@ -2,7 +2,7 @@ import { DojoEvent } from "@/dojo/class/Events";
 import { HighVolatilityData, MeetOGData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { ConfigStore } from "@/dojo/stores/config";
+import { ConfigStoreClass } from "@/dojo/stores/config";
 import { ToastType, useToast } from "@/hooks/toast";
 import { Box } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
@@ -27,24 +27,22 @@ const RegisterEntities = () => {
   const toaster = useToast();
 
   useEffect(() => {
-    //debugger
-    // configStore && configStore.init();
-    console.log(account?.address);
+    // const init = async () => {
+    //   // if (!gameId) {
+    //   //   gameStore.reset();
+    //   // }
+    // };
 
-    if (gameStore) {
-      if (gameId && playerId) {
+    if (gameStore && gameId) {
+      if (playerId) {
         // init for specatator
         gameStore.init(gameId, playerId);
-      } else if (gameId && account?.address) {
+      } else if (account?.address) {
         // init for player
         gameStore.init(gameId, account?.address);
       }
-
-      if (!gameId) {
-        gameStore.reset();
-      }
     }
-  }, [gameId, account?.address, playerId, selectedChain /*configStore*/]);
+  }, [gameId, account?.address, playerId, selectedChain]);
 
   //
   useEffect(() => {
@@ -105,7 +103,7 @@ const RegisterEntities = () => {
 
 export default RegisterEntities;
 
-const displayHighVolatility = (event: HighVolatilityData, toaster: ToastType, configStore: ConfigStore) => {
+const displayHighVolatility = (event: HighVolatilityData, toaster: ToastType, configStore: ConfigStoreClass) => {
   const location = configStore.getLocationById(event.locationId);
   const drug = configStore.getDrugById(event.drugId);
   const msg = event.increase

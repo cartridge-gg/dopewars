@@ -1,8 +1,8 @@
 import { Chain } from "@starknet-react/chains";
 
 export const katanaLocalChain = {
-   // id: BigInt("0x4b4154414e415f4c4f43414c"), // KATANA_LOCAL
-   id: BigInt("0x4b4154414e41"), // KATANA
+    // id: BigInt("0x4b4154414e415f4c4f43414c"), // KATANA_LOCAL
+    id: BigInt("0x4b4154414e41"), // KATANA
     network: "katana",
     name: "Katana Local",
     nativeCurrency: {
@@ -18,9 +18,9 @@ export const katanaLocalChain = {
         default: {
             http: ["https://localhost:5050",],
         },
-        // public: {
-        //     http: ["https://localhost:5050",],
-        // },
+        public: {
+            http: ["https://localhost:5050",],
+        },
     },
     explorers: {
         worlds: ["https://worlds.dev"],
@@ -44,9 +44,9 @@ export const katanaSlotChain = {
         default: {
             http: ["https://api.cartridge.gg/x/ryo420/katana",],
         },
-        // public: {
-        //     http: ["https://api.cartridge.gg/x/ryo420/katana",],
-        // },
+        public: {
+            http: ["https://api.cartridge.gg/x/ryo420/katana",],
+        },
     },
     explorers: {
         worlds: ["https://worlds.dev"],

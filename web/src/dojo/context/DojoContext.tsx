@@ -1,19 +1,19 @@
+import { DojoBurnerStarknetWindowObject } from "@/components/wallet/inpage/starknetWindowObject";
 import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
 import { Connector } from "@starknet-react/core";
 import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { QueryClientProvider } from "react-query";
-import { Account } from "starknet";
+import { Account, AccountInterface } from "starknet";
 import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
 import { DojoClientsResult, useDojoClients } from "../hooks/useDojoClients";
 import { DojoContextConfig } from "../setup/config";
-import { SetupResult } from "../setup/setup";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 
-interface DojoContextType extends SetupResult {
+interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
-  masterAccount: Account;
+  masterAccount: AccountInterface | undefined;
   account: Account | null;
   burner: BurnerAccount & { listConnectors: () => Connector[] };
   configStore: ConfigStoreClass;
@@ -43,17 +43,21 @@ export const DojoContextProvider = ({
   }, [rpcProvider, selectedChain]);
 
   const burnerManager = useMemo(() => {
+    if (!masterAccount) return undefined;
+
+    console.log("new BurnerManager");
+
     return new BurnerManager({
-      masterAccount: masterAccount,
-      accountClassHash: selectedChain.accountClassHash,
+      masterAccount: masterAccount!,
+      accountClassHash: selectedChain.accountClassHash!,
       rpcProvider: rpcProvider,
     });
   }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
 
   useEffect(() => {
-    if (window.starknet_dojoburner) {
+    if (window.starknet_dojoburner && burnerManager) {
       //setBurnerManager
-      window.starknet_dojoburner.setBurnerManager(burnerManager);
+      (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
     }
   }, [burnerManager]);
 
@@ -70,8 +74,8 @@ export const DojoContextProvider = ({
     listConnectors,
   } = useBurnerManager({
     burnerManager: new BurnerManager({
-      masterAccount: masterAccount,
-      accountClassHash: selectedChain.accountClassHash,
+      masterAccount: masterAccount!,
+      accountClassHash: selectedChain.accountClassHash!,
       rpcProvider: rpcProvider,
     }),
   });
@@ -91,6 +95,10 @@ export const DojoContextProvider = ({
       configStore,
     });
   }, [graphqlClient, graphqlWsClient, configStore]);
+
+  useEffect(() => {
+    configStore.init();
+  }, [configStore]);
 
   // const { account } = useAccount();
 
@@ -119,6 +127,7 @@ export const DojoContextProvider = ({
           select,
           clear,
           listConnectors,
+          ///@ts-ignore
           account: account ? account : masterAccount,
           isDeploying,
           copyToClipboard,

@@ -117,7 +117,7 @@ const Travel = observer(() => {
     } else {
       setTargetLocation(config.location[config.location.length - 1].location);
     }
-  }, [targetLocation]);
+  }, [targetLocation, config]);
 
   const onContinue = useCallback(async () => {
     if (targetLocation && game) {

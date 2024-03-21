@@ -22,9 +22,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { Avatar } from "@/components/avatar/Avatar";
-import { genAvatarFromId } from "@/components/avatar/avatars";
 import { Button } from "@/components/common";
+import { Hustler, Hustlers } from "@/components/hustlers";
 import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
@@ -44,8 +43,8 @@ const End = observer(() => {
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account } = useAccount();
-  
-  const { game, gameInfos, gameEvents } = useGameStore();
+
+  const { game, gameInfos } = useGameStore();
 
   useEffect(() => {
     if (isDead) {
@@ -97,8 +96,8 @@ const End = observer(() => {
                 <Divider borderColor="neon.600" /> */}
 
                 <StatsItem
-                  text={gameEvents!.playerName}
-                  icon={<Avatar name={genAvatarFromId(hustlerId)} w="24px" h="24px" />}
+                  text={gameInfos?.player_name}
+                  icon={<Hustler hustler={hustlerId as Hustlers} w="24px" h="24px" />}
                 />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />

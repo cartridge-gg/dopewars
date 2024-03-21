@@ -91,6 +91,7 @@ export class ConfigStoreClass {
 
   constructor({ client, dojoProvider, manifest }: ConfigStoreProps) {
     console.log("new ConfigStoreClass");
+
     this.client = client;
     this.dojoProvider = dojoProvider;
     this.manifest = manifest;
@@ -101,14 +102,12 @@ export class ConfigStoreClass {
       init: flow,
     });
 
-    this.init()
+    // this.init()
   }
 
   *init() {
-    //set({ config: undefined, isLoading: true });
-
-      this.config = undefined;
-      this.isLoading = true;
+    this.config = undefined;
+    this.isLoading = true;
 
     try {
       const data = (yield this.client.request(ConfigDocument, {})) as ConfigQuery;
@@ -176,6 +175,7 @@ export class ConfigStoreClass {
         this.dojoProvider.provider,
       ).typedv2(configAbi);
 
+      ///@ts-ignore 
       const getConfig = yield contract.get_config();
 
       /*************************************************** */
@@ -190,8 +190,8 @@ export class ConfigStoreClass {
         config: getConfig as GetConfig,
       };
     } catch (e: any) {
-      console.log("ERROR: ConfigStoreClass.init")
-     // console.log(e);
+      console.log("ERROR: ConfigStoreClass.init");
+      // console.log(e);
     }
 
     this.isLoading = false;

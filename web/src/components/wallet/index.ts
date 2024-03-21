@@ -1,5 +1,5 @@
 export * from "./Connect"
 export * from "./PaperFaucet"
-export * from "./StarknetProviders"
+export * from "./StarknetProvider"
 export * from "./TokenBalance"
 

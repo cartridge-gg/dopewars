@@ -56,7 +56,7 @@ const Location = observer(() => {
       setPrices(game.markets.marketsByLocation.get(location.location) || []);
     }
   }, [location, game]);
-debugger
+
   if (!game || !gameInfos || !prices || !location || !configStore || !gameId) {
     return <></>;
   }

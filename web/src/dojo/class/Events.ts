@@ -2,7 +2,7 @@ import { Game, World__Event } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { BaseEventData, GameCreatedData, ParseEventResult, parseEvent } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 
 export type DojoEvent = {
     idx: number;
@@ -21,7 +21,7 @@ export class EventClass {
 
     events: Array<DojoEvent>;
 
-    constructor(configStore: ConfigStore, gameInfos: Game, events: World__Event[]) {
+    constructor(configStore: ConfigStoreClass, gameInfos: Game, events: World__Event[]) {
         this.gameInfos = gameInfos;
         //
 

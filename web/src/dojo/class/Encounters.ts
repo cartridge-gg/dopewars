@@ -1,4 +1,4 @@
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass } from "./Game";
 import Bits from "./utils/Bits";
@@ -15,7 +15,7 @@ export class EncountersClass extends GamePropertyClass {
     copsLevel: number;
     gangLevel: number;
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         this.copsLevel = Number(Bits.extract(this.packed, BigInt(EncounterSlot.Cops) * this.bitsSize, this.bitsSize));

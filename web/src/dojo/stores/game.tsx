@@ -166,9 +166,9 @@ type GameStoreProps = {
 // };
 
 export class GameStoreClass {
-  client: GraphQLClient = undefined;
-  wsClient: Client = undefined;
-  configStore: ConfigStoreClass = undefined;
+  client: GraphQLClient;
+  wsClient: Client;
+  configStore: ConfigStoreClass;
   //  id: string = null;
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
@@ -176,6 +176,8 @@ export class GameStoreClass {
   handles: Array<() => void> = [];
 
   constructor({ client, wsClient, configStore }: GameStoreProps) {
+    console.log("new GameStoreClass");
+
     this.client = client;
     this.wsClient = wsClient;
     this.configStore = configStore;
@@ -196,7 +198,6 @@ export class GameStoreClass {
     for (let unsubscribe of this.handles) {
       unsubscribe();
     }
-    this.id = null;
     this.game = null;
     this.gameInfos = null;
     this.gameEvents = null;
@@ -300,7 +301,7 @@ export class GameStoreClass {
     ) as GameStorePacked;
 
     if (gameStorePacked) {
-      this.game = new GameClass(this.configStore, this.gameInfos, gameStorePacked);
+      this.game = new GameClass(this.configStore, this.gameInfos!, gameStorePacked);
     }
   };
 
@@ -308,6 +309,6 @@ export class GameStoreClass {
     if (!data?.eventEmitted) return;
 
     const worldEvent = data.eventEmitted as World__Event;
-    this.gameEvents.addEvent(worldEvent);
+    this.gameEvents!.addEvent(worldEvent);
   };
 }

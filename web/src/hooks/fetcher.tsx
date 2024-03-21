@@ -31,6 +31,6 @@ export const useFetchData = <TData, TVariables>(query: string): ((variables?: TV
 
       return json.data;
     },
-    [toriiUrl],
+    [toriiUrl, query],
   );
 };

@@ -1,4 +1,4 @@
-import { World__EventEdge, useGameOverEventsQuery } from "@/generated/graphql";
+import { World__Event, World__EventEdge, useGameOverEventsQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { GameOverData, parseEvent } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
@@ -21,14 +21,14 @@ export const useLeaderboardEntries = (version: number) => {
 
   useEffect(() => {
     refetch();
-  }, [selectedChain.toriiUrl]);
+  }, [selectedChain.toriiUrl, refetch]);
 
   const leaderboardEntries = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];
 
     const edges = (data.events?.edges || []) as World__EventEdge[];
     const nodes = edges.map((i: World__EventEdge) => i.node as World__Event);
-    const parsed = nodes.map((i: World__EventEdge) => {
+    const parsed = nodes.map((i: World__Event) => {
       return parseEvent(i) as GameOverData;
     });
     const sorted = parsed.sort((a, b) => b.cash - a.cash);

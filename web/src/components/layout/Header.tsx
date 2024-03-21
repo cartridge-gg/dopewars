@@ -23,11 +23,9 @@ export const Header = observer(({ back }: HeaderProps) => {
   const { router, gameId } = useRouterContext();
 
   const {
-   
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
   const { account } = useAccount();
-
 
   const { game, gameInfos } = useGameStore();
   const { config } = useConfigStore();
@@ -52,7 +50,7 @@ export const Header = observer(({ back }: HeaderProps) => {
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
         <ChainSelector />
-       
+
         {/* {!game && (
           <>
             {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
@@ -60,8 +58,7 @@ export const Header = observer(({ back }: HeaderProps) => {
           </>
         )} */}
 
-        <ClaimReward />
-
+        {!gameId && <ClaimReward />}
       </HStack>
 
       {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (

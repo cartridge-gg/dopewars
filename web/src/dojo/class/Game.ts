@@ -1,7 +1,7 @@
 import { Game, GameStorePacked } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { CairoCustomEnum } from "starknet";
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 import { ShopAction, TradeAction } from "../types";
 import { DrugsClass } from "./Drugs";
 import { EncountersClass } from "./Encounters";
@@ -59,7 +59,7 @@ export class GameClass {
 
     pending: Array<PendingCallWithCost>;
 
-    constructor(configStore: ConfigStore, gameInfos: Game, gameStorePacked: GameStorePacked) {
+    constructor(configStore: ConfigStoreClass, gameInfos: Game, gameStorePacked: GameStorePacked) {
         this.gameInfos = gameInfos;
         this.packed = gameStorePacked.packed;
         //

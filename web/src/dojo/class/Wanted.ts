@@ -1,4 +1,4 @@
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, WantedByLocation } from "./Game";
 import Bits from "./utils/Bits";
@@ -8,7 +8,7 @@ export class WantedClass extends GamePropertyClass {
     //
     wantedByLocation: WantedByLocation = new Map()
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         for (let locationId of [1, 2, 3, 4, 5, 6]) {

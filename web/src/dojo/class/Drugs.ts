@@ -1,4 +1,4 @@
-import { ConfigStore, DrugConfigFull } from "../stores/config";
+import { ConfigStoreClass, DrugConfigFull } from "../stores/config";
 import { TradeAction, TradeDirection } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isTradeAction } from "./Game";
@@ -8,7 +8,7 @@ export class DrugsClass extends GamePropertyClass {
     private _drug: DrugConfigFull | undefined;
     private _quantity: number;
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         const drugId = Number(Bits.extract(this.packed, 0n, 3n));

@@ -1,5 +1,5 @@
 import { computed, makeObservable, observable } from "mobx";
-import { ConfigStore, LocationConfigFull } from "../stores/config";
+import { ConfigStoreClass, LocationConfigFull } from "../stores/config";
 import { Drugs, TradeDirection } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isShopAction, isTradeAction } from "./Game";
@@ -15,7 +15,7 @@ export class PlayerClass extends GamePropertyClass {
     nextLocation: LocationConfigFull;
     drugLevel: number;
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         const cash = configStore.getPlayerLayoutItem("Cash")

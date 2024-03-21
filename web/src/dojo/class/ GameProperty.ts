@@ -1,12 +1,12 @@
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 import { GameClass } from "./Game";
 
 export abstract class GamePropertyClass {
     game: GameClass;
-    configStore: ConfigStore;
+    configStore: ConfigStoreClass;
     packed: bigint;
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         this.configStore = configStore
         this.game = game
         this.packed = packed

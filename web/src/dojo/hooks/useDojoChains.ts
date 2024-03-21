@@ -1,7 +1,7 @@
 
 import { Chain } from "@starknet-react/chains";
 import { useMemo, useState } from "react";
-import { DojoChainConfig, DojoContextConfig } from "../setup/config";
+import { DojoChainConfig, DojoContextConfig, SupportedChainIds } from "../setup/config";
 
 export type DojoChainsResult = ReturnType<typeof useDojoChains>;
 
@@ -16,7 +16,7 @@ export const useDojoChains = (dojoContextConfig: DojoContextConfig) => {
     const chains: Chain[] = useMemo(
         () =>
             Object.keys(dojoContextConfig).map((key) => {
-                return dojoContextConfig[key].chainConfig;
+                return dojoContextConfig[key as SupportedChainIds].chainConfig;
             }),
         [dojoContextConfig],
     );

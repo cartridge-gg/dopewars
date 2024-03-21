@@ -1,6 +1,6 @@
 import RegisterEntities from "@/components/RegisterEntities";
 import { MakeItRain } from "@/components/layout";
-import { StarknetProviders } from "@/components/wallet";
+import { StarknetProvider } from "@/components/wallet";
 import { initializeInPage } from "@/components/wallet/inpage";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
@@ -27,15 +27,6 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     const setupResult = await setup(dojoConfig());
-  //     setSetupResult(setupResult);
-  //   };
-
-  //   init();
-  // }, []);
-
   useEffect(() => {
     console.log("initializeInPage")
     initializeInPage();
@@ -44,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <DojoContextProvider dojoContextConfig={dojoContextConfig}>
-        <StarknetProviders>
+        <StarknetProvider>
           <RegisterEntities />
           <ChakraProvider theme={theme}>
             <Fonts />
@@ -61,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Analytics />
             {/* <Debug /> */}
           </ChakraProvider>
-        </StarknetProviders>
+        </StarknetProvider>
       </DojoContextProvider>
     </>
   );

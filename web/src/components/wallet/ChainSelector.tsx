@@ -1,5 +1,5 @@
 import { useDojoContext } from "@/dojo/hooks";
-import { DojoChainConfig } from "@/dojo/setup/config";
+import { DojoChainConfig, SupportedChainIds } from "@/dojo/setup/config";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { useDisconnect } from "@starknet-react/core";
 
@@ -23,7 +23,7 @@ export const ChainSelector = ({ ...props }) => {
       </MenuButton>
       <MenuList>
         {Object.keys(dojoContextConfig).map((key: string) => {
-          const dojoChainConfig: DojoChainConfig = dojoContextConfig[key];
+          const dojoChainConfig: DojoChainConfig = dojoContextConfig[key as SupportedChainIds];
 
           if (dojoChainConfig === selectedChain) return;
           const isMainnet = dojoChainConfig.chainConfig.network === "mainnet";

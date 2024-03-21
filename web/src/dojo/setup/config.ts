@@ -4,7 +4,7 @@ import { Chain, mainnet, sepolia } from "@starknet-react/chains";
 import manifest from "../../../manifest.json";
 import { katanaLocalChain, katanaSlotChain } from "./chains";
 
-// export type SupportedChainIds = keyof typeof dojoContextConfig;
+export type SupportedChainIds = keyof typeof dojoContextConfig;
 
 export type DojoContextConfig = typeof dojoContextConfig;
 
@@ -88,3 +88,11 @@ export const dojoChains = [
     snSepolia,
     snMainnet,
 ]
+
+
+export const getStarknetProviderChains = (): Chain[] => {
+    return Object.keys(dojoContextConfig).map((key) => {
+        return dojoContextConfig[key as SupportedChainIds].chainConfig;
+    })
+}
+

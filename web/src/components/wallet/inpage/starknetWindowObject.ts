@@ -1,5 +1,6 @@
 import { BurnerManager } from "@dojoengine/create-burner"
-import { WalletEvents } from "get-starknet-core"
+import { IStarknetWindowObject, WalletEvents } from "get-starknet-core"
+import { AccountInterface, RpcProvider } from "starknet"
 import { katanaIcon } from "./icons"
 
 const VERSION = "0.0.1"
@@ -7,18 +8,18 @@ export const userEventHandlers: WalletEvents[] = []
 
 // window.ethereum like
 
-export class DojoBurnerStarknetWindowObject {
+export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject{
     id = "dojoburner"
     name = "Dojo Burner"
     icon = katanaIcon
-    account = undefined
-    provider = undefined
-    selectedAddress = undefined
-    chainId = undefined
+    account: AccountInterface | undefined = undefined
+    provider: RpcProvider | undefined = undefined
+    selectedAddress: string | undefined = undefined
+    chainId : string | undefined = undefined
     isConnected = false
     version = VERSION
     //
-    burnerManager: BurnerManager = undefined
+    burnerManager: BurnerManager | undefined = undefined
 
     constructor() {}
 
@@ -33,10 +34,12 @@ export class DojoBurnerStarknetWindowObject {
         this.isConnected = true
     }
 
-    async request(call) {
+    ///@ts-ignore
+    async request(call: any) {
         console.log("request", call)
     }
 
+    ///@ts-ignore
     async enable({ starknetVersion = "v5" } = {}) {
         console.log("enable")
 
@@ -44,21 +47,21 @@ export class DojoBurnerStarknetWindowObject {
         
         this.isConnected = true
 
-        return [this.account.address]
+        return [this.account.address] 
     }
 
     async isPreauthorized() {
         return true
     }
 
-    on = (event, handleEvent) => {
+    ///@ts-ignore
+    on = (event: any, handleEvent: any) => {
         console.log("on", event)
- 
     }
 
-    off = (event, handleEvent) => {
+    ///@ts-ignore
+    off = (event: any, handleEvent: any) => {
         console.log("off", event)
-
     }
 }
 

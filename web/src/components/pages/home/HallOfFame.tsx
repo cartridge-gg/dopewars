@@ -9,7 +9,7 @@ import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
-import { Account, shortString } from "starknet";
+import { AccountInterface, shortString } from "starknet";
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
@@ -36,7 +36,7 @@ export const HallOfFame = observer(() => {
   );
 });
 
-const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Account | null }) => {
+const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: AccountInterface | undefined }) => {
   const { router } = useRouterContext();
   const { game, isFetched } = useGameById(entry.game_id);
 

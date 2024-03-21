@@ -94,7 +94,7 @@ export interface GameOverData extends BaseEventData {
   playerId: string;
   playerName: string;
   leaderboardVersion: string;
-  avatarId: number;
+  avatarId: number; // TODO: change to hustlerId
   turn: number;
   cash: number;
   health: number;

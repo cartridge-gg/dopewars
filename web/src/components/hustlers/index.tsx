@@ -26,7 +26,6 @@ export const Hustler = ({ hustler, ...rest }: HustlerProps & IconProps) => {
   return <SelectedHustler {...rest} />;
 };
 
-
 const hustlersIcons = {
   [Hustlers.Dragon]: DragonIcon,
   [Hustlers.Monkey]: MonkeyIcon,

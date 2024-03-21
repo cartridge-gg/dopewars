@@ -1,5 +1,6 @@
 import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 
+import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
 import { GameOverData } from "@/dojo/events";
 import { useDojoContext, useHallOfFame, useLeaderboardEntries, useRouterContext } from "@/dojo/hooks";
@@ -9,8 +10,6 @@ import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
-import { Avatar } from "../../avatar/Avatar";
-import { genAvatarFromId } from "../../avatar/avatars";
 import { Arrow, Skull } from "../../icons";
 
 const renderer = ({
@@ -163,7 +162,8 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         {entry.health === 0 ? (
                           <Skull color={avatarColor} hasCrown={index === 0} />
                         ) : (
-                          <Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
+                          <HustlerIcon hustler={entry.avatarId as Hustlers}/>
+                          //<Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
                         )}
                       </Box>
 

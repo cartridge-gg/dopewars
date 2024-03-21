@@ -1,4 +1,4 @@
-import { dojoChains } from "@/dojo/setup/config";
+import { getStarknetProviderChains } from "@/dojo/setup/config";
 import { Chain } from "@starknet-react/chains";
 import {
   ExplorerFactory,
@@ -24,7 +24,7 @@ function rpc(chain: Chain) {
   };
 }
 
-export function StarknetProviders({ children }: { children: ReactNode }) {
+export function StarknetProvider({ children }: { children: ReactNode }) {
 
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
@@ -35,8 +35,9 @@ export function StarknetProviders({ children }: { children: ReactNode }) {
     // order: "random"
   });
 
+  const chains = getStarknetProviderChains()
   // const connectors = isKatana ? [...listConnectors()] : [argent(), braavos()];
-
+ 
   // TODO: remove
   const provider = jsonRpcProvider({ rpc });
 
@@ -44,7 +45,7 @@ export function StarknetProviders({ children }: { children: ReactNode }) {
 
   return (
     <StarknetConfig
-      chains={dojoChains}
+      chains={chains}
       provider={provider}
       connectors={connectors}
       explorer={explorer}

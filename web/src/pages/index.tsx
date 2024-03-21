@@ -9,15 +9,17 @@ import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const { router } = useRouterContext();
 
   const {
-    account,
     burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
+
+  const {account} = useAccount()
 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);

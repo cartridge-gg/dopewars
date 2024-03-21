@@ -35,6 +35,7 @@ const New = observer(() => {
   const [hustlerStats, setHustlerStats] = useState<any>();
 
   useEffect(() => {
+
     const hustler = configStore.getHustlerById(hustlerId);
     if (!hustler) return;
 

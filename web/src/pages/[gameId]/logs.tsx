@@ -24,7 +24,7 @@ import {
   reputationRanksKeys,
 } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { ConfigStore, LocationConfigFull } from "@/dojo/stores/config";
+import { ConfigStoreClass, LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import {
@@ -194,7 +194,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(configStore: ConfigStore, game: GameClass, log: LogByDay) {
+function renderDay(configStore: ConfigStoreClass, game: GameClass, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -236,7 +236,7 @@ function renderDay(configStore: ConfigStore, game: GameClass, log: LogByDay) {
   );
 }
 
-function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: string) {
+function renderTradeDrug(configStore: ConfigStoreClass, log: TradeDrugData, key: string) {
   const drug = configStore.getDrugById(Number(log.drugId))!;
   const action = log.isBuy ? "Bought" : "Sold";
   const sign = log.isBuy ? "-" : "+";
@@ -252,7 +252,7 @@ function renderTradeDrug(configStore: ConfigStore, log: TradeDrugData, key: stri
   );
 }
 
-function renderUpgradeItem(configStore: ConfigStore, game: GameClass, log: UpgradeItemData, key: string) {
+function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: UpgradeItemData, key: string) {
   let item_id = 0;
   switch (log.itemSlot) {
     case ItemSlot.Weapon:

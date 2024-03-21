@@ -15,7 +15,7 @@ export const useLeaderboardByVersion = (version: number) => {
 
   useEffect(() => {
     refetch();
-  }, [selectedChain.toriiUrl]);
+  }, [selectedChain.toriiUrl, refetch]);
 
   const leaderboard = useMemo<Leaderboard | undefined>(() => {
     if (isError || isFetching || isRefetching || !data) return undefined;

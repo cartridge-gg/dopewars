@@ -1,5 +1,5 @@
 import { computed, makeObservable, observable } from "mobx";
-import { ConfigStore, HustlerConfig } from "../stores/config";
+import { ConfigStoreClass, HustlerConfig } from "../stores/config";
 import { ItemSlot, ShopAction } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isShopAction } from "./Game";
@@ -16,7 +16,7 @@ export class ItemsClass extends GamePropertyClass {
     //
     hustlerConfig: HustlerConfig;
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         this.hustlerConfig = configStore.getHustlerById(this.game.gameInfos.hustler_id)

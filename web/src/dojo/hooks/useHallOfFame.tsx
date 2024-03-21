@@ -16,7 +16,7 @@ export const useHallOfFame = () => {
 
   useEffect(() => {
     refetch();
-  }, [selectedChain.toriiUrl]);
+  }, [selectedChain.toriiUrl, refetch]);
 
   const hallOfFame = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];

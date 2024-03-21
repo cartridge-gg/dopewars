@@ -1,4 +1,4 @@
-import { ConfigStore } from "../stores/config";
+import { ConfigStoreClass } from "../stores/config";
 import { GamePropertyClass } from "./ GameProperty";
 import { DrugMarket, GameClass, MarketsByLocation } from "./Game";
 import Bits from "./utils/Bits";
@@ -9,7 +9,7 @@ export class MarketsClass extends GamePropertyClass {
     //
     marketsByLocation: MarketsByLocation = new Map()
 
-    constructor(configStore: ConfigStore, game: GameClass, packed: bigint) {
+    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
         super(configStore, game, packed);
 
         const drugLevel = game.player?.drugLevel || 0
