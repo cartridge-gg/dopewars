@@ -26,7 +26,7 @@ fn initialize_game_config(world: IWorldDispatcher) {
         world,
         GameConfig {
             key: GAME_CONFIG_KEY,
-            cash: 420,
+            cash: 690,
             health: 100, // 100,
             max_turns: 42,
             max_wanted_shopping: 5,

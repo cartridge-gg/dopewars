@@ -28,7 +28,6 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
   useEffect(() => {
-    console.log("initializeInPage")
     initializeInPage();
   }, []);
 
@@ -36,7 +35,6 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <DojoContextProvider dojoContextConfig={dojoContextConfig}>
         <StarknetProvider>
-          <RegisterEntities />
           <ChakraProvider theme={theme}>
             <Fonts />
             <GlobalStyles />
@@ -48,6 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
               />
             </NextHead>
             {isRightSequence && <MakeItRain />}
+            <RegisterEntities />
             <Component {...pageProps} />
             <Analytics />
             {/* <Debug /> */}

@@ -42,11 +42,11 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
 
   const claimable = useMemo(() => {
     return account?.address === game?.player_id && !entry.claimed;
-  }, [account?.address, entry.claimed]);
+  }, [account?.address, entry.claimed, game?.player_id]);
 
   const onClick = useCallback(() => {
     router.push(`/0x${entry.game_id.toString(16)}/logs?playerId=${game?.player_id}`);
-  }, [entry.game_id, game?.player_id]);
+  }, [entry.game_id, game?.player_id, router]);
 
   if (!isFetched) return null;
   return (

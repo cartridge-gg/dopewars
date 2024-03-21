@@ -188,6 +188,7 @@ export class GameStoreClass {
       gameInfos: observable,
       reset: action,
       init: flow,
+      loadGameInfos: flow,
       execute: flow,
       onGameStorePacked: action,
       onGameEvent: action,
@@ -204,7 +205,12 @@ export class GameStoreClass {
     this.handles = [];
   }
 
-  *init(gameId: string, playerId: string) {
+  *init(gameId: string /*, playerId: string*/) {
+    yield this.loadGameInfos(gameId);
+
+    // retrieve playerId from gameInfos
+    const playerId = this.gameInfos?.player_id;
+
     const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
 
     yield this.execute(gameId, playerId);
@@ -252,12 +258,23 @@ export class GameStoreClass {
     );
   }
 
-  *execute(gameId: string, playerId: string) {
+  *loadGameInfos(gameId: string) {
     // gameInfos dont change, no need to subscribe to updates
     const gameInfosData = (yield this.client.request(GameByIdDocument, {
       gameId: Number(gameId),
     })) as GameByIdQuery;
 
+    // parse gameInfosData
+    const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge[];
+    if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
+    let gameInfos = gameEdges[0].node as Game;
+    if (!gameInfos) return;
+
+    this.gameInfos = gameInfos;
+  }
+
+
+  *execute(gameId: string, playerId: string) {
     const gameData = (yield this.client.request(GameStorePackedDocument, {
       gameId: gameId,
       playerId: playerId,
@@ -266,12 +283,6 @@ export class GameStoreClass {
     const gameEventsData = (yield this.client.request(GameEventsDocument, {
       gameId: gameId,
     })) as GameEventsQuery;
-
-    // parse gameInfosData
-    const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge[];
-    if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
-    let gameInfos = gameEdges[0].node as Game;
-    if (!gameInfos) return;
 
     // parse gameData
     const edges = gameData!.entities!.edges as World__EntityEdge[];
@@ -285,10 +296,9 @@ export class GameStoreClass {
     const eventsEdges = gameEventsData.events?.edges as World__EventEdge[];
     const eventsNodes = eventsEdges.map((i) => i.node as World__Event);
 
-    const game = new GameClass(this.configStore, gameInfos, gameStorePacked);
-    const gameEvents = new EventClass(this.configStore, gameInfos, eventsNodes);
+    const game = new GameClass(this.configStore, this.gameInfos!, gameStorePacked);
+    const gameEvents = new EventClass(this.configStore, this.gameInfos!, eventsNodes);
 
-    this.gameInfos = gameInfos;
     this.game = game;
     this.gameEvents = gameEvents;
   }

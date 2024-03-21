@@ -1,15 +1,19 @@
 import { Hustler, Hustlers } from "@/components/hustlers";
 import { PowerMeter } from "@/components/player";
-import { useConfigStore, useGameStore } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ItemSlot } from "@/dojo/types";
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { useToast } from "@/hooks/toast";
+import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import ShareButton from "./ShareButton";
 
 export const HustlerProfile = observer(() => {
+  const { gameId} = useRouterContext()
   const { game, gameInfos } = useGameStore();
   const configStore = useConfigStore();
   const [hustlerStats, setHustlerStats] = useState<any>();
+  const { toast } = useToast();
 
   useEffect(() => {
     const hustler = configStore?.getHustlerById(gameInfos?.hustler_id);
@@ -39,13 +43,13 @@ export const HustlerProfile = observer(() => {
     };
 
     setHustlerStats(stats);
-  }, [configStore]);
+  }, [configStore, gameInfos?.hustler_id]);
 
   if (!configStore || !hustlerStats || !game) return null;
 
   return (
-    <VStack w="full">
-      <HStack w="full" p="20px" justifyContent="center">
+    <VStack w="full" gap={6}>
+      <HStack w="full" p="20px" justifyContent="center" gap={6}>
         <Box alignItems="center" h="300px" w="150px" position="relative" zIndex={99}>
           <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h="300px" />
           {/* <OG id={97} /> */}
@@ -86,7 +90,22 @@ export const HustlerProfile = observer(() => {
         </VStack>
       </HStack>
 
-      
+      <HStack>
+        <Button
+          variant="pixelated"
+          w="full"
+          onClick={() => {
+            navigator.clipboard.writeText(`${window.location.origin}/${gameId}/logs`);
+
+            toast({
+              message: "Copied to clipboard",
+            });
+          }}
+        >
+          Game Link
+        </Button>
+        <ShareButton variant="pixelated" />
+      </HStack>
 
       {/* <Card p="10px 20px">
         <VStack gap={2} alignItems="flex-start">

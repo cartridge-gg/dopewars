@@ -23,7 +23,7 @@ export const useDojoClients = (selectedChain: DojoChainConfig) => {
                 },
             },
         });
-    }, [selectedChain]);
+    }, [/*selectedChain*/]);
 
     const graphqlClient = useMemo(() => {
         return new GraphQLClient(selectedChain.toriiUrl);

@@ -33,6 +33,7 @@ export const DojoContextProvider = ({
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
   const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig);
+
   const { dojoProvider, queryClient, graphqlClient, graphqlWsClient, rpcProvider } = useDojoClients(selectedChain);
 
   const masterAccount = useMemo(() => {
@@ -97,10 +98,9 @@ export const DojoContextProvider = ({
   }, [graphqlClient, graphqlWsClient, configStore]);
 
   useEffect(() => {
+    console.log("configStore.init")
     configStore.init();
   }, [configStore]);
-
-  // const { account } = useAccount();
 
   return (
     <DojoContext.Provider

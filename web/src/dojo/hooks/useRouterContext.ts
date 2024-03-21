@@ -51,7 +51,7 @@ export const useRouterContext = (): RouterContext => {
 
     setContext(ctx)
 
-  }, [router, configStore])
+  }, [router, router.isReady, configStore, configStore.config])
 
 
   return context

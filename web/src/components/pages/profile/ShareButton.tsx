@@ -1,21 +1,23 @@
 import { Button } from "@/components/common";
 import { GameClass } from "@/dojo/class/Game";
 import { useGameStore } from "@/dojo/hooks";
+import { Game } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import { Link as ChakraLink, StyleProps } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
+import { shortString } from "starknet";
 import { Twitter } from "../../icons";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   const { account } = useAccount();
-  const { game } = useGameStore();
+  const { game, gameInfos } = useGameStore();
 
-  if (!account || !game) return null;
+  if (!account || !game ||!gameInfos) return null;
 
   return (
     <ChakraLink
       w="full"
-      href={`https://twitter.com/intent/tweet?text=${getShareText(game)}`}
+      href={`https://twitter.com/intent/tweet?text=${getShareText(game, gameInfos)}`}
       target="_blank"
       textDecoration="none !important"
       {...props}
@@ -27,16 +29,17 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   );
 };
 
-const getShareText = (game: GameClass): string => {
+const getShareText = (game: GameClass, gameInfos: Game): string => {
+  const playerName = shortString.decodeShortString(gameInfos.player_name)
   if (game.player.health > 0) {
     return encodeURIComponent(
-      `{player.name} has reached Day ${game.player.turn} with ${formatCash(
+      `${playerName} has reached Day ${game.player.turn} with ${formatCash(
         game.player.cash,
       )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
     );
   } else {
     return encodeURIComponent(
-      `{player.name} got dropped on Day ${game.player.turn} but pocketed ${formatCash(
+      `${playerName} got dropped on Day ${game.player.turn} but pocketed ${formatCash(
         game.player.cash,
       )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
     );

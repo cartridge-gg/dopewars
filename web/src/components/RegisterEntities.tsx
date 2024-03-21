@@ -6,11 +6,12 @@ import { ConfigStoreClass } from "@/dojo/stores/config";
 import { ToastType, useToast } from "@/hooks/toast";
 import { Box } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Siren, Truck } from "./icons";
 import { OG } from "./layout";
 
-const RegisterEntities = () => {
+const RegisterEntities = observer(() => {
   const { gameId, router, playerId } = useRouterContext();
 
   const {
@@ -33,16 +34,14 @@ const RegisterEntities = () => {
     //   // }
     // };
 
+    console.log("RegisterEntities", gameId);
+
     if (gameStore && gameId) {
-      if (playerId) {
-        // init for specatator
-        gameStore.init(gameId, playerId);
-      } else if (account?.address) {
-        // init for player
-        gameStore.init(gameId, account?.address);
-      }
+      gameStore.init(gameId);
+    } else {
+      gameStore.reset();
     }
-  }, [gameId, account?.address, playerId, selectedChain]);
+  }, [gameId, account?.address, playerId, selectedChain, gameStore]);
 
   //
   useEffect(() => {
@@ -99,7 +98,7 @@ const RegisterEntities = () => {
       <OG id={ogId} />
     </Box>
   );
-};
+});
 
 export default RegisterEntities;
 

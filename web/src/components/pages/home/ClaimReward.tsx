@@ -26,8 +26,8 @@ export const ClaimReward = () => {
       );
       setClaimable(_claimable);
     }
-  }, [account?.address, hallOfFame]);
-
+  }, [account?.address, hallOfFame, config?.ryo.leaderboard_version]);
+  
   const onClose = () => {
     setIsRainning(true);
     setIsClaimModalOpen(false);

@@ -185,7 +185,7 @@ const ConnectModal = ({
 
   const hasBurnerConnector = useMemo(() => {
     return connectors.find((i) => i instanceof BurnerConnector);
-  }, [connectors, connectors.length, selectedChain]);
+  }, [connectors]);
 
   const onCreateBurner = async () => {
     await createBurner();

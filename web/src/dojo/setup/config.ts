@@ -75,6 +75,7 @@ const snMainnet: DojoChainConfig = {
 }
 
 
+// keys must match chain.id
 export const dojoContextConfig = {
     "KATANA": katanaLocal,
     "KATANA_SLOT": katanaSlot,

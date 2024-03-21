@@ -55,11 +55,11 @@ type LogByDay = {
 };
 
 const Logs = () => {
-  const { router, gameId, playerId } = useRouterContext();
+  const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
   const configStore = useConfigStore();
-  const { game, gameEvents } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
 
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
 
@@ -126,7 +126,8 @@ const Logs = () => {
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
-  const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
+  //const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
+  const rigthPanelMaxH = isMobile ? "calc(100vh - 140px)" : "auto";
 
   if (!logs || !game) {
     return <></>;
@@ -141,9 +142,10 @@ const Logs = () => {
             w={["full", "auto"]}
             px={["auto", "20px"]}
             onClick={() => {
-              if (playerId && playerId !== "") {
+              if (gameInfos?.game_over || !account || account.address !== gameInfos?.player_id) {
                 router.push("/");
               } else {
+                // return to game
                 router.back();
               }
             }}

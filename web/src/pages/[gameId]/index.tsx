@@ -3,13 +3,14 @@ import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
 import { Image } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
+import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 
-export default function Redirector() {
+const Redirector = observer(() => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
-  
+
   const { game } = useGameStore();
 
   useEffect(() => {
@@ -17,10 +18,7 @@ export default function Redirector() {
 
     if (game.player.status === PlayerStatus.Normal) {
       router.push(`/${gameId}/${game.player.location.location}`);
-    } else if (
-      game.player.status ===PlayerStatus.BeingArrested ||
-      game.player.status === PlayerStatus.BeingMugged
-    ) {
+    } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
       //
       router.push(`/${gameId}/event/decision`);
     }
@@ -31,4 +29,6 @@ export default function Redirector() {
       <Image src="images/loading.gif" alt="loading" width="60px" height="60px" margin="auto" />
     </Layout>
   );
-}
+});
+
+export default Redirector;

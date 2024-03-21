@@ -29,7 +29,7 @@ export const katanaLocalChain = {
 
 
 export const katanaSlotChain = {
-    id: BigInt("0x4b4154414e41"), // KATANA
+    id: BigInt("0x4b4154414e415f534c4f54"), // KATANA_SLOT
     network: "katana",
     name: "Katana Slot",
     nativeCurrency: {

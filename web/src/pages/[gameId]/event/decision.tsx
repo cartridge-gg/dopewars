@@ -49,7 +49,7 @@ const Decision = observer(() => {
 
   useEffect(() => {
     if (game && gameEvents && !isPending) {
-      const encounter =  gameEvents?.lastEncounter!.parsed as TravelEncounterData;
+      const encounter = gameEvents?.lastEncounter!.parsed as TravelEncounterData;
       setEncounter(encounter);
     }
   }, [game, isPending, gameEvents, gameEvents?.lastEncounter]);
@@ -77,7 +77,7 @@ const Decision = observer(() => {
           break;
       }
     }
-  }, [game, game?.player.status, encounter]);
+  }, [game, gameEvents, game?.player.status, encounter, isPending]);
 
   useEffect(() => {
     if (game?.player.status == PlayerStatus.BeingArrested) {
