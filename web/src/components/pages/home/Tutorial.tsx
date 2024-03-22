@@ -1,6 +1,5 @@
 import { Button } from "@/components/common";
 import { useRouterContext } from "@/dojo/hooks";
-import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { Sounds } from "@/hooks/sound";
 import {
   Box,
@@ -67,17 +66,10 @@ export const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void
   const { router } = useRouterContext();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const {
-    account,
-    burner: { create: createBurner, isDeploying: isBurnerDeploying },
-  } = useDojoContext();
-
+  
   const onNext = async () => {
     if (currentStep == steps.length) {
-      if (!account) {
-        await createBurner();
-      }
-      router.push(`/create/new`);
+          router.push(`/create/new`);
 
       close();
     } else {
@@ -119,7 +111,7 @@ export const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void
               onClick={onNext}
               w="full"
               hoverSound={undefined}
-              isLoading={isBurnerDeploying}
+              // isLoading={isBurnerDeploying}
               clickSound={currentStep == steps.length ? Sounds.Magnum357 : Sounds.HoverClick}
             >
               {currentStep == steps.length ? "READY TO HUSTLE" : "NEXT"}

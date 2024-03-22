@@ -157,7 +157,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         flexShrink={0}
                         style={{ marginTop: "-8px" }}
                         cursor="pointer"
-                        onClick={() => router.push(`/${entry.gameId}/logs?playerId=${entry.playerId}`)}
+                        onClick={() => router.push(`/${entry.gameId}/logs`)}
                       >
                         {entry.health === 0 ? (
                           <Skull color={avatarColor} hasCrown={index === 0} />

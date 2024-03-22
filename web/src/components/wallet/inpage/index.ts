@@ -10,7 +10,8 @@ const attach = () => {
         // set read only property to window
         Object.defineProperty(window, name, {
             value: starknetWindowObject,
-            // writable: false,
+            writable: true,
+            //writable: false,
         })
     } catch { /* ignore*/ }
     try { (window as any)[name] = starknetWindowObject } catch {  /* ignore*/ }

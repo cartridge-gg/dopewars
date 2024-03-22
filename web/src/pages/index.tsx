@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
 import { ChildrenOrConnect } from "@/components/wallet";
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -15,14 +15,10 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const { router } = useRouterContext();
 
-  const {
-    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying },
-  } = useDojoContext();
 
-  const {account} = useAccount()
+  const { account } = useAccount();
 
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGated, setIsGated] = useState(false);
 
   useEffect(
@@ -40,24 +36,7 @@ export default function Home() {
       play();
     }
 
-    setIsSubmitting(true);
-    if (account) {
-      // check if burner still valid
-      try {
-        const nonce = await account?.getNonce();
-      } catch (e: any) {
-        console.log(e);
-
-        await clearBurner();
-        console.log("Burner cleared!");
-
-        await createBurner();
-        console.log("Burner created!");
-      }
-    } else {
-      // create burner account
-      await createBurner();
-    }
+   
 
     router.push(`/create/new`);
   };
@@ -83,7 +62,7 @@ export default function Home() {
                   </Button>
                 )}
                 <ChildrenOrConnect>
-                  <Button flex="1" isLoading={isSubmitting} onClick={onHustle}>
+                  <Button flex="1" onClick={onHustle}>
                     Hustle
                   </Button>
                 </ChildrenOrConnect>

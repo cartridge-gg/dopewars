@@ -1,6 +1,5 @@
 import { DojoBurnerStarknetWindowObject } from "@/components/wallet/inpage/starknetWindowObject";
-import { BurnerAccount, BurnerManager, useBurnerManager } from "@dojoengine/create-burner";
-import { Connector } from "@starknet-react/core";
+import { BurnerManager } from "@dojoengine/create-burner";
 import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { QueryClientProvider } from "react-query";
 import { Account, AccountInterface } from "starknet";
@@ -14,8 +13,7 @@ interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
   masterAccount: AccountInterface | undefined;
-  account: Account | null;
-  burner: BurnerAccount & { listConnectors: () => Connector[] };
+  burnerManager: BurnerManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
 }
@@ -41,7 +39,7 @@ export const DojoContextProvider = ({
       return new Account(rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey, "1");
     }
     return undefined;
-  }, [rpcProvider, selectedChain]);
+  }, [rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey]);
 
   const burnerManager = useMemo(() => {
     if (!masterAccount) return undefined;
@@ -56,30 +54,46 @@ export const DojoContextProvider = ({
   }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
 
   useEffect(() => {
-    if (window.starknet_dojoburner && burnerManager) {
-      //setBurnerManager
-      (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
-    }
+    const init_async = async () => {
+
+      // if (window.starknet_dojoburner && !burnerManager) {
+      //   window.starknet_dojoburner = undefined;
+      // }
+
+      if (window.starknet_dojoburner && burnerManager) {
+        // initialize burnerManager
+        await burnerManager.init();
+
+        // setBurnerManager
+        (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
+
+        if (!(window.starknet_dojoburner as DojoBurnerStarknetWindowObject).burnerManager.getActiveAccount()) {
+          // create burner
+          await (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).burnerManager.create();
+        }
+      }
+    };
+    init_async();
   }, [burnerManager]);
 
-  const {
-    create,
-    list,
-    get,
-    account,
-    select,
-    isDeploying,
-    clear,
-    copyToClipboard,
-    applyFromClipboard,
-    listConnectors,
-  } = useBurnerManager({
-    burnerManager: new BurnerManager({
-      masterAccount: masterAccount!,
-      accountClassHash: selectedChain.accountClassHash!,
-      rpcProvider: rpcProvider,
-    }),
-  });
+  // const {
+  //   create,
+  //   list,
+  //   get,
+  //   account,
+  //   select,
+  //   isDeploying,
+  //   clear,
+  //   copyToClipboard,
+  //   applyFromClipboard,
+  //   listConnectors,
+  // } = useBurnerManager({
+  //   burnerManager: new BurnerManager({
+  //     masterAccount: masterAccount!,
+  //     accountClassHash: selectedChain.accountClassHash!,
+  //     rpcProvider: rpcProvider,
+  //   }),
+  // });
 
   const configStore = useMemo(() => {
     return new ConfigStoreClass({
@@ -98,7 +112,7 @@ export const DojoContextProvider = ({
   }, [graphqlClient, graphqlWsClient, configStore]);
 
   useEffect(() => {
-    console.log("configStore.init")
+    console.log("configStore.init");
     configStore.init();
   }, [configStore]);
 
@@ -119,21 +133,8 @@ export const DojoContextProvider = ({
           graphqlWsClient,
           rpcProvider,
         },
+        burnerManager,
         masterAccount,
-        burner: {
-          create,
-          list,
-          get,
-          select,
-          clear,
-          listConnectors,
-          ///@ts-ignore
-          account: account ? account : masterAccount,
-          isDeploying,
-          copyToClipboard,
-          applyFromClipboard,
-        },
-        account,
         configStore,
         gameStore,
       }}

@@ -5,10 +5,9 @@ import {
   StarknetConfig,
   argent,
   braavos,
-  injected,
   jsonRpcProvider,
   starkscan,
-  useInjectedConnectors,
+  useInjectedConnectors
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 
@@ -28,7 +27,7 @@ export function StarknetProvider({ children }: { children: ReactNode }) {
 
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
-    recommended: [ injected({id:"dojoburner"}) ,argent(), braavos()],
+    recommended: [ /*injected({id:"dojoburner"}) */,argent(), braavos()],
     // Hide recommended connectors if the user has any connector installed.
     includeRecommended: "always",
     // Randomize the order of the connectors.

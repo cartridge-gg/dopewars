@@ -45,12 +45,12 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
   }, [account?.address, entry.claimed, game?.player_id]);
 
   const onClick = useCallback(() => {
-    router.push(`/0x${entry.game_id.toString(16)}/logs?playerId=${game?.player_id}`);
+    router.push(`/0x${entry.game_id.toString(16)}/logs`);
   }, [entry.game_id, game?.player_id, router]);
 
   if (!isFetched) return null;
   return (
-    <Card position="relative" p={3} cursor="pointer">
+    <Card position="relative" p={3} >
       <VStack alignItems="flex-start" gap={0}>
         <HStack w="full" justifyContent="space-between" borderBottom="solid 1px" borderColor="neon.700" pb={2} mb={2}>
           <Text>SEASON {entry.version}</Text>
@@ -61,7 +61,7 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
 
         {game && (
           <HStack w="full" gap={3}>
-            <HustlerIcon hustler={game?.hustler_id} width="48px" height="48px" onClick={onClick} />
+            <HustlerIcon hustler={game?.hustler_id} width="48px" height="48px"  cursor="pointer" onClick={onClick} />
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>{shortString.decodeShortString(game?.player_name)}</Text>

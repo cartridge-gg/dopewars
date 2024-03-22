@@ -1,6 +1,6 @@
 import { MediaPlayer, MobileMenu } from "@/components/layout";
 import { Connect } from "@/components/wallet";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
@@ -22,9 +22,6 @@ export const Header = observer(({ back }: HeaderProps) => {
 
   const { router, gameId } = useRouterContext();
 
-  const {
-    burner: { create: createBurner, isDeploying: isBurnerDeploying },
-  } = useDojoContext();
   const { account } = useAccount();
 
   const { game, gameInfos } = useGameStore();
@@ -49,7 +46,7 @@ export const Header = observer(({ back }: HeaderProps) => {
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
-        <ChainSelector />
+        <ChainSelector canChange={!gameId} />
 
         {/* {!game && (
           <>
@@ -78,7 +75,6 @@ export const Header = observer(({ back }: HeaderProps) => {
                 <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <DayIndicator day={game.player.turn} max={gameInfos?.max_turns} />
-                {/* <WantedIndicator wanted={game.wanted.getValueByTick(game.player.wanted)} /> */}
               </HStack>
             </Flex>
           </HStack>
@@ -92,21 +88,7 @@ export const Header = observer(({ back }: HeaderProps) => {
           </>
         )}
 
-        {/* {!account && (
-          <Button
-            h="48px"
-            sx={headerButtonStyles}
-            isLoading={isBurnerDeploying}
-            onClick={() => {
-              if (!account) {
-                createBurner();
-              }
-            }}
-          >
-            Create Burner
-          </Button>
-        )} */}
-
+       
         {!isMobile && account && game && <ProfileLink />}
         {isMobile && <MobileMenu />}
       </HStack>

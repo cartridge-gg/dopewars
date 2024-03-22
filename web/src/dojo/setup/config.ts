@@ -53,7 +53,7 @@ const katanaSlot: DojoChainConfig = {
 const snSepolia: DojoChainConfig = {
     name: "SEPOLIA",
     chainConfig: sepolia,
-    rpcUrl: undefined,
+    rpcUrl: "https://api.cartridge.gg/rpc/starknet-sepolia",
     toriiUrl: "https://api.cartridge.gg/x/ryo_sepolia/torii/graphql",
     toriiWsUrl: "wss://api.cartridge.gg/x/ryo_sepolia/torii/graphql/ws",
     masterAddress: undefined,
@@ -80,7 +80,7 @@ export const dojoContextConfig = {
     "KATANA": katanaLocal,
     "KATANA_SLOT": katanaSlot,
     "SN_SEPOLIA": snSepolia,
-    "SN_MAINNET": snMainnet,
+    "SN_MAIN": snMainnet,
 }
 
 export const dojoChains = [

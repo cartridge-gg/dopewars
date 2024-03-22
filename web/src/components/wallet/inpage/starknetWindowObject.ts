@@ -25,13 +25,13 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject{
 
     setBurnerManager(burnerManager: BurnerManager){
         this.burnerManager = burnerManager
-
+      
+        this.chainId = this.burnerManager.chainId
         this.provider = this.burnerManager.provider
-        this.account = this.burnerManager.masterAccount
-
-        this.selectedAddress = this.account.address
-        this.chainId = "KATANA"//network.chainId
-        this.isConnected = true
+       
+        this.account = this.burnerManager.getActiveAccount()
+        this.selectedAddress = this.account?.address
+        //this.isConnected = true
     }
 
     ///@ts-ignore
@@ -43,8 +43,10 @@ export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject{
     async enable({ starknetVersion = "v5" } = {}) {
         console.log("enable")
 
-        if(!this.account) return
-        
+        if(!this.account) {
+            this.account = await this.burnerManager?.create();
+        }
+
         this.isConnected = true
 
         return [this.account.address] 

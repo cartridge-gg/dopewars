@@ -5,7 +5,7 @@ import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
 import { BuyPaper } from "@/components/wallet/BuyPaper";
-import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -18,9 +18,7 @@ import { useEffect, useState } from "react";
 const New = observer(() => {
   const { router } = useRouterContext();
 
-  const {
-    burner: { create: createBurner, isDeploying: isBurnerDeploying },
-  } = useDojoContext();
+   
   const { account } = useAccount();
 
   const { createGame, isPending } = useSystems();
@@ -73,10 +71,7 @@ const New = observer(() => {
     }
 
     try {
-      if (!account) {
-        // create burner account
-        await createBurner();
-      }
+     
 
       const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 

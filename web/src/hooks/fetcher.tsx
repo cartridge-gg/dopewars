@@ -11,7 +11,9 @@ export const useFetchData = <TData, TVariables>(query: string): ((variables?: TV
 
   return useCallback(
     async (variables?: TVariables) => {
-      console.log("fetcher", toriiUrl);
+     
+      // console.log("fetcher", toriiUrl);
+     
       const res = await fetch(toriiUrl, {
         method: "POST",
         headers: {

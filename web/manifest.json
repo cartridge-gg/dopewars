@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x6b4878e20f74c38e424c4dc69013c18a1a02847e4b2a66e090e32b2754f0423",
+      "class_hash": "0x4cb81dfced9540cd5b38d7691ea5a9930d04ffcef72f6cd027318129aba94d5",
       "abi": [
         {
           "type": "impl",

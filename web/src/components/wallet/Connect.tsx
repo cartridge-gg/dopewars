@@ -15,7 +15,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BurnerConnector } from "@dojoengine/create-burner";
 import { Connector, useAccount, /*useBalance,*/ useConnect, useDisconnect, useExplorer } from "@starknet-react/core";
 import { ReactNode, useMemo, useState } from "react";
 import { AccountInterface } from "starknet";
@@ -179,17 +178,13 @@ const ConnectModal = ({
   onClose: VoidFunction;
 }) => {
   const {
-    burner: { create: createBurner, clear: clearBurner, isDeploying: isBurnerDeploying, account },
     chains: { selectedChain },
+    burnerManager,
   } = useDojoContext();
 
-  const hasBurnerConnector = useMemo(() => {
-    return connectors.find((i) => i instanceof BurnerConnector);
-  }, [connectors]);
-
-  const onCreateBurner = async () => {
-    await createBurner();
-  };
+  const isKatana = useMemo(() => {
+    return selectedChain.chainConfig.network === "katana";
+  }, [selectedChain]);
 
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={isOpen} onClose={onClose}>
@@ -200,23 +195,18 @@ const ConnectModal = ({
         </ModalHeader>
         <ModalBody p={3}>
           <VStack w="full">
-            {/* {isKatana && !hasBurnerConnector && (
-              <Button
-                variant="pixelated"
-                w="full"
-                fontSize="14px"
-                isLoading={isBurnerDeploying}
-                onClick={onCreateBurner}
-              >
-                <HStack w="full" justifyItems="flex-start">
-                   <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> 
-                  <Text ml="120px">Create Burner</Text>
-                </HStack>
-              </Button>
-            )} */}
             {connectors.map((connector) => {
-              const isBurner = connector instanceof BurnerConnector;
-              // const isDeployedOnCurrentChain = chain.id === connector.chainId()
+              const isBurner = connector.id === "dojoburner";
+              if (isBurner && !isKatana) {
+                // burner not on katana
+                return null;
+              }
+
+              if (!isBurner && isKatana) {
+                // not burner on katana
+                return null;
+              }
+
               return (
                 <HStack w="full" key={connector.id}>
                   <Button
@@ -235,9 +225,7 @@ const ConnectModal = ({
                     <HStack w="full" justifyItems="flex-start">
                       <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                       <Text ml="120px">
-                        {connector.available()
-                          ? `${connector.name} ${isBurner ? frenlyAddress(connector.id) : ""}`
-                          : `Install ${connector.name}`}
+                        {connector.available() ? `${connector.name}` : `Install ${connector.name}`}
                       </Text>
                       {!connector.available() && <ExternalLink ml="auto" />}
                     </HStack>
@@ -246,7 +234,7 @@ const ConnectModal = ({
                     <Cigarette
                       cursor="pointer"
                       onClick={() => {
-                        clearBurner();
+                        burnerManager.clear()
                       }}
                     />
                   )} */}
