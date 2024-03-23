@@ -1,235 +1,249 @@
-import { BurnerManager } from "@dojoengine/create-burner"
-import { IStarknetWindowObject, WalletEvents } from "get-starknet-core"
-import { AccountInterface, RpcProvider } from "starknet"
-import { katanaIcon } from "./icons"
+// import { BurnerManager, katanaIcon } from "@dojoengine/create-burner";
+// import { IStarknetWindowObject } from "get-starknet-core";
+// import { AccountInterface, RpcProvider } from "starknet";
 
-const VERSION = "0.0.1"
-export const userEventHandlers: WalletEvents[] = []
+// const VERSION = "0.0.1";
 
-// window.ethereum like
+// export class xxxxxxxxxxxxDojoBurnerStarknetWindowObject implements IStarknetWindowObject {
+//     id = "dojoburner";
+//     name = "Dojo Burner";
+//     icon = katanaIcon;
+//     account?: AccountInterface = undefined;
+//     provider?: RpcProvider = undefined;
+//     selectedAddress?: string = undefined;
+//     chainId?: string = undefined;
+//     isConnected = false;
+//     version = VERSION;
+//     //
+//     burnerManager: BurnerManager | null = null;
 
-export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject{
-    id = "dojoburner"
-    name = "Dojo Burner"
-    icon = katanaIcon
-    account: AccountInterface | undefined = undefined
-    provider: RpcProvider | undefined = undefined
-    selectedAddress: string | undefined = undefined
-    chainId : string | undefined = undefined
-    isConnected = false
-    version = VERSION
-    //
-    burnerManager: BurnerManager | undefined = undefined
+//     constructor() {}
 
-    constructor() {}
+//     setBurnerManager(burnerManager: BurnerManager) {
+//         this.burnerManager = burnerManager;
 
-    setBurnerManager(burnerManager: BurnerManager){
-        this.burnerManager = burnerManager
-      
-        this.chainId = this.burnerManager.chainId
-        this.provider = this.burnerManager.provider
-       
-        this.account = this.burnerManager.getActiveAccount()
-        this.selectedAddress = this.account?.address
-        //this.isConnected = true
-    }
+//         this.chainId = this.burnerManager.chainId;
+//         this.provider = this.burnerManager.provider;
 
-    ///@ts-ignore
-    async request(call: any) {
-        console.log("request", call)
-    }
+//         const activeAccount = this.burnerManager.getActiveAccount();
 
-    ///@ts-ignore
-    async enable({ starknetVersion = "v5" } = {}) {
-        console.log("enable")
+//         this.account = activeAccount ? activeAccount : undefined;
+//         this.selectedAddress = this.account?.address;
+//     }
 
-        if(!this.account) {
-            this.account = await this.burnerManager?.create();
-        }
+//     ///@ts-ignore
+//     async request(call: any) {
+//         //console.log("request", call);
+//     }
 
-        this.isConnected = true
+//     ///@ts-ignore
+//     async enable({ starknetVersion = "v5" } = {}) {
+//         //console.log("enable");
 
-        return [this.account.address] 
-    }
+//         // retrieve active account
+//         const activeAccount = this.burnerManager?.getActiveAccount();
+//         this.account = activeAccount ? activeAccount : undefined;
 
-    async isPreauthorized() {
-        return true
-    }
+//         if (!this.account) {
+//             this.account = await this.burnerManager?.create();
+//         }
+//         if (!this.account) {
+//             this.isConnected = false;
+//             return [];
+//         }
 
-    ///@ts-ignore
-    on = (event: any, handleEvent: any) => {
-        console.log("on", event)
-    }
+//         this.isConnected = true;
 
-    ///@ts-ignore
-    off = (event: any, handleEvent: any) => {
-        console.log("off", event)
-    }
-}
+//         return [this.account.address];
+//     }
+
+//     async isPreauthorized() {
+//         return true;
+//     }
+
+//     ///@ts-ignore
+//     on = (event: any, handleEvent: any) => {
+//         //console.log("on", event);
+//     };
+
+//     ///@ts-ignore
+//     off = (event: any, handleEvent: any) => {
+//         //console.log("off", event);
+//     };
+// }
+
+// // https://github.com/argentlabs/argent-x/blob/9e4907dc2630ea5c452d7e40a55739b5797544b6/packages/extension/src/inpage/index.ts#L30
+
+// const starknetWindowObjectKey = "starknet_dojoburner";
+
+// const attach = () => {
+//     const starknetWindowObject = new DojoBurnerStarknetWindowObject();
+//     // we need 2 different try catch blocks because we want to execute both even if one of them fails
+//     try {
+//         delete (window as any)[starknetWindowObjectKey];
+//     } catch (e) {
+//         /* ignore */
+//     }
+//     try {
+//         // set read only property to window
+//         Object.defineProperty(window, starknetWindowObjectKey, {
+//             value: starknetWindowObject,
+//             writable: true,
+//             //writable: false,
+//         });
+//     } catch {
+//         /* ignore*/
+//     }
+//     try {
+//         (window as any)[starknetWindowObjectKey] = starknetWindowObject;
+//     } catch {
+//         /* ignore*/
+//     }
+// };
+
+// const attachHandler = () => {
+//     attach();
+//     setTimeout(() => {
+//         attach();
+//     }, 100);
+// };
+
+// export const initializeInPage = () => {
+//     attachHandler();
+
+//     window.addEventListener("load", () => attachHandler());
+//     document.addEventListener("DOMContentLoaded", () => attachHandler());
+//     document.addEventListener("readystatechange", () => attachHandler());
+// };
+
+// export const cleanInPage = () => {
+//     window.removeEventListener("load", () => attachHandler());
+//     document.removeEventListener("DOMContentLoaded", () => attachHandler());
+//     document.removeEventListener("readystatechange", () => attachHandler());
+// };
 
 
-export const createStarknetWindowObject = () => {
-    return new DojoBurnerStarknetWindowObject()
-}
 
 
 
 
 
-//v0
-// export class DojoBurnerStarknetWindowObject {
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// import { BurnerManager } from "@dojoengine/create-burner"
+// import { IStarknetWindowObject } from "get-starknet-core"
+// import { AccountInterface, RpcProvider } from "starknet"
+// import { katanaIcon } from "./icons"
+
+// const VERSION = "0.0.1"
+
+// export class DojoBurnerStarknetWindowObject implements IStarknetWindowObject {
 //     id = "dojoburner"
 //     name = "Dojo Burner"
 //     icon = katanaIcon
-//     account = undefined
-//     provider = undefined
-//     selectedAddress = undefined
-//     chainId = undefined
+//     account?: AccountInterface = undefined
+//     provider?: RpcProvider = undefined
+//     selectedAddress?: string = undefined
+//     chainId?: string = undefined
 //     isConnected = false
 //     version = VERSION
 //     //
-//     burnerManager:BurnerManager = undefined
+//     burnerManager: BurnerManager | null = null
 
-//     constructor(burnerManager: BurnerManager) {
+//     constructor() { }
+
+//     setBurnerManager(burnerManager: BurnerManager) {
 //         this.burnerManager = burnerManager
 
+//         this.chainId = this.burnerManager.chainId
 //         this.provider = this.burnerManager.provider
-//         this.account = this.burnerManager.masterAccount
 
-//         this.selectedAddress = this.account.address
-//         this.chainId = "KATANA"//network.chainId
-//         this.isConnected = true
+//         const activeAccount = this.burnerManager.getActiveAccount()
+        
+//         this.account = activeAccount ? activeAccount : undefined
+//         this.selectedAddress = this.account?.address
 //     }
 
-//     async request(call) {
+//     ///@ts-ignore
+//     async request(call: any) {
 //         console.log("request", call)
-
-//         // if (
-//         //     call.type === "wallet_watchAsset" &&
-//         //     "type" in call.params &&
-//         //     call.params.type === "ERC20"
-//         // ) {
-//         //     return await handleAddTokenRequest(call.params)
-//         // } else if (call.type === "wallet_addStarknetChain" && "id" in call.params) {
-//         //     return await handleAddNetworkRequest(call.params)
-//         // } else if (
-//         //     call.type === "wallet_switchStarknetChain" &&
-//         //     "chainId" in call.params
-//         // ) {
-//         //     return await handleSwitchNetworkRequest(call.params)
-//         // } else if (
-//         //     // Currently not part of the spec
-//         //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//         //     // @ts-expect-error
-//         //     call.type === "wallet_deploymentData"
-//         // ) {
-//         //     console.warn("Using non-standard wallet_deploymentData")
-//         //     return (await handleDeploymentData()) as any
-//         // }
-//         // throw Error("Not implemented")
 //     }
 
+//     ///@ts-ignore
 //     async enable({ starknetVersion = "v5" } = {}) {
-
 //         console.log("enable")
 
-//         // const walletAccountP = Promise.race([
-//         //     waitForMessage("CONNECT_DAPP_RES", 10 * 60 * 1000),
-//         //     waitForMessage("REJECT_PREAUTHORIZATION", 10 * 60 * 1000).then(
-//         //         () => "USER_ABORTED" as const,
-//         //     ),
-//         // ])
-//         // sendMessage({
-//         //     type: "CONNECT_DAPP",
-//         // })
-//         // const walletAccount = await walletAccountP
+//         // retrieve active account
+//         const activeAccount = this.burnerManager.getActiveAccount()
+//         this.account = activeAccount ? activeAccount : undefined
 
-//         // if (!walletAccount) {
-//         //     throw Error("No wallet account (should not be possible)")
-//         // }
-//         // if (walletAccount === "USER_ABORTED") {
-//         //     throw Error("User aborted")
-//         // }
-
-//         // const { starknet } = window
-//         // if (!starknet) {
-//         //     throw Error("No starknet object detected")
-//         // }
-
-//         // const { address, network } = walletAccount
-
-//         // if (starknetVersion === "v5") {
-//         //     ; (starknet as any).starknetJsVersion = "v5"
-//         //     const provider = new ArgentXProvider(network)
-//         //     starknet.provider = provider
-//         //     starknet.account = new ArgentXAccount(address, provider)
-//         // } else if (starknetVersion === "v4") {
-//         //     ; (starknet as any).starknetJsVersion = "v4"
-//         //     const provider = new ArgentXProviderV4(network)
-//         //     starknet.provider = provider
-//         //     starknet.account = new ArgentXAccount4(address, provider)
-//         // } else {
-//         //     // Ideally this should never happen, but if dApp uses get-starknet with starknetVersion = v3,
-//         //     // we want to throw an error instead of silently falling back to v4.
-//         //     throw new Error(`Unsupported starknet.js version: ${starknetVersion}`)
-//         // }
-
-//         const { starknet } = window
-//         if (!starknet) {
-//             throw Error("No starknet object detected")
+//         if (!this.account) {
+//             this.account = await this.burnerManager?.create();
+//         }
+//         if (!this.account) {
+//             this.isConnected = false
+//             return []
 //         }
 
-       
-
-//         // window.starknet = this;
-//         //window.starknet_dojoburner = this;
+//         this.isConnected = true
 
 //         return [this.account.address]
 //     }
 
 //     async isPreauthorized() {
 //         return true
-//         //return getIsPreauthorized()
 //     }
 
-//     on = (event, handleEvent) => {
+//     ///@ts-ignore
+//     on = (event: any, handleEvent: any) => {
 //         console.log("on", event)
-//         // if (event === "accountsChanged") {
-//         //     userEventHandlers.push({
-//         //         type: event,
-//         //         handler: handleEvent as AccountChangeEventHandler,
-//         //     })
-//         // } else if (event === "networkChanged") {
-//         //     userEventHandlers.push({
-//         //         type: event,
-//         //         handler: handleEvent as NetworkChangeEventHandler,
-//         //     })
-//         // } else {
-//         //     assertNever(event)
-//         //     throw new Error(`Unknwown event: ${event}`)
-//         // }
 //     }
 
-//     off = (event, handleEvent) => {
+//     ///@ts-ignore
+//     off = (event: any, handleEvent: any) => {
 //         console.log("off", event)
-
-//         // if (event !== "accountsChanged" && event !== "networkChanged") {
-//         //     assertNever(event)
-//         //     throw new Error(`Unknwown event: ${event}`)
-//         // }
-
-//         // const eventIndex = userEventHandlers.findIndex(
-//         //     (userEvent) =>
-//         //         userEvent.type === event && userEvent.handler === handleEvent,
-//         // )
-
-//         // if (eventIndex >= 0) {
-//         //     userEventHandlers.splice(eventIndex, 1)
-//         // }
 //     }
+
+
+//     static
 // }
 
 
-// export const createStarknetWindowObject = (burnerManager: BurnerManager) => {
-//     return new DojoBurnerStarknetWindowObject(burnerManager)
+// export const createStarknetWindowObject = () => {
+//     return new DojoBurnerStarknetWindowObject()
+// }
+
+
+// const starknetWindowObjectKey = 'starknet_dojoburner'
+
+// const attach = () => {
+//     const starknetWindowObject = createStarknetWindowObject()
+//     // we need 2 different try catch blocks because we want to execute both even if one of them fails
+//     try { delete (window as any)[starknetWindowObjectKey] } catch (e) { /* ignore */ }
+//     try {
+//         // set read only property to window
+//         Object.defineProperty(window, starknetWindowObjectKey, {
+//             value: starknetWindowObject,
+//             writable: true,
+//             //writable: false,
+//         })
+//     } catch { /* ignore*/ }
+//     try { (window as any)[starknetWindowObjectKey] = starknetWindowObject } catch {  /* ignore*/ }
+// }
+
+// const attachHandler = () => {
+//     attach()
+//     setTimeout(() => { attach() }, 100)
+// }
+
+// export const initializeInPage = () => {
+//     // inject script
+//     attachHandler();
+
+//     window.addEventListener("load", () => attachHandler())
+//     document.addEventListener("DOMContentLoaded", () => attachHandler())
+//     document.addEventListener("readystatechange", () => attachHandler())
+
 // }

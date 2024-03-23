@@ -15,22 +15,42 @@ token = { git = "https://github.com/dojoengine/origami", tag = "v0.6.0-alpha.3" 
 katana = "katana --disable-fee --invoke-max-steps 999999999"
 build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
+
+# auth
 auth = "./scripts/default_auth.sh dev"
-auth_staging = "./scripts/default_auth.sh staging"
+auth_ryo420 = "./scripts/default_auth.sh ryo420"
+auth_ryo421 = "./scripts/default_auth.sh ryo421"
 auth_prod = "./scripts/default_auth.sh prod"
+
+# migrate
 migrate = "sozo -P dev migrate && scarb run gendojo && scarb run auth"
-migrate_staging = "sozo -P staging build && sozo -P staging migrate && scarb run auth_staging"
+migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate && scarb run auth_ryo420"
+migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate && scarb run auth_ryo421"
 migrate_prod = "sozo -P prod migrate"
+
+# slot ryo420
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0-alpha.3 --chain-id KATANA_SLOT_420"
+slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.0-alpha.3 --world 0x8d9e00f20d1d9039e26f3cec29892c11c611314d508188d5be88019be48a7d"
+
+# slot ryo421
+slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0-alpha.3 --chain-id KATANA_SLOT_421"
+slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.0-alpha.3 --world 0x8d9e00f20d1d9039e26f3cec29892c11c611314d508188d5be88019be48a7d"
+ 
 
 [profile.dev.tool.dojo.env]
 rpc_url = "http://localhost:5050"
 account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
-[profile.staging.tool.dojo.env]
+[profile.ryo420.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
 account_address = "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7"
 private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c"
+
+[profile.ryo421.tool.dojo.env]
+rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
+account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
+private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
 
 [profile.prod.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo420/katana"

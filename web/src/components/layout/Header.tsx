@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
+import { Burners } from "../wallet/Burners";
 import { ChainSelector } from "../wallet/ChainSelector";
 
 interface HeaderProps {
@@ -46,8 +47,8 @@ export const Header = observer(({ back }: HeaderProps) => {
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
+        <Burners />
         <ChainSelector canChange={!gameId} />
-
         {/* {!game && (
           <>
             {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
@@ -88,7 +89,6 @@ export const Header = observer(({ back }: HeaderProps) => {
           </>
         )}
 
-       
         {!isMobile && account && game && <ProfileLink />}
         {isMobile && <MobileMenu />}
       </HStack>

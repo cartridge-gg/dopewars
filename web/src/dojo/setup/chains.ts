@@ -1,8 +1,8 @@
 import { Chain } from "@starknet-react/chains";
+import { shortString } from "starknet";
 
 export const katanaLocalChain = {
-    // id: BigInt("0x4b4154414e415f4c4f43414c"), // KATANA_LOCAL
-    id: BigInt("0x4b4154414e41"), // KATANA
+    id: BigInt(shortString.encodeShortString("KATANA")),
     network: "katana",
     name: "Katana Local",
     nativeCurrency: {
@@ -28,10 +28,10 @@ export const katanaLocalChain = {
 } as const satisfies Chain;
 
 
-export const katanaSlotChain = {
-    id: BigInt("0x4b4154414e415f534c4f54"), // KATANA_SLOT
+export const katanaSlot420Chain = {
+    id: BigInt(shortString.encodeShortString("KATANA_SLOT_420")),
     network: "katana",
-    name: "Katana Slot",
+    name: "Katana Slot 420",
     nativeCurrency: {
         address:
             "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
@@ -46,6 +46,32 @@ export const katanaSlotChain = {
         },
         public: {
             http: ["https://api.cartridge.gg/x/ryo420/katana",],
+        },
+    },
+    explorers: {
+        worlds: ["https://worlds.dev"],
+    },
+} as const satisfies Chain;
+
+
+export const katanaSlot421Chain = {
+    id: BigInt(shortString.encodeShortString("KATANA_SLOT_421")),
+    network: "katana",
+    name: "Katana Slot 421",
+    nativeCurrency: {
+        address:
+            "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        name: "Ether",
+        symbol: "ETH",
+        decimals: 18,
+    },
+
+    rpcUrls: {
+        default: {
+            http: ["https://api.cartridge.gg/x/ryo421/katana",],
+        },
+        public: {
+            http: ["https://api.cartridge.gg/x/ryo421/katana",],
         },
     },
     explorers: {

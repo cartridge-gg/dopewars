@@ -5,9 +5,10 @@ import {
   StarknetConfig,
   argent,
   braavos,
+  injected,
   jsonRpcProvider,
   starkscan,
-  useInjectedConnectors
+  useInjectedConnectors,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 
@@ -24,32 +25,25 @@ function rpc(chain: Chain) {
 }
 
 export function StarknetProvider({ children }: { children: ReactNode }) {
-
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
-    recommended: [ /*injected({id:"dojoburner"}) */,argent(), braavos()],
+    recommended: [argent(), braavos(), injected({id:'dojoburner'})],
     // Hide recommended connectors if the user has any connector installed.
     includeRecommended: "always",
     // Randomize the order of the connectors.
     // order: "random"
   });
 
-  const chains = getStarknetProviderChains()
+  const chains = getStarknetProviderChains();
   // const connectors = isKatana ? [...listConnectors()] : [argent(), braavos()];
- 
+
   // TODO: remove
   const provider = jsonRpcProvider({ rpc });
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
   return (
-    <StarknetConfig
-      chains={chains}
-      provider={provider}
-      connectors={connectors}
-      explorer={explorer}
-      autoConnect={true}
-    >
+    <StarknetConfig chains={chains} provider={provider} connectors={connectors} explorer={explorer} autoConnect={true}>
       {children}
     </StarknetConfig>
   );

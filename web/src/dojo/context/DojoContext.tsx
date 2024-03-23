@@ -1,6 +1,5 @@
-import { DojoBurnerStarknetWindowObject } from "@/components/wallet/inpage/starknetWindowObject";
-import { BurnerManager } from "@dojoengine/create-burner";
-import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
+import { BurnerManager, DojoBurnerStarknetWindowObject } from "@dojoengine/create-burner";
+import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { Account, AccountInterface } from "starknet";
 import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
@@ -12,8 +11,8 @@ import { GameStoreClass } from "../stores/game";
 interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
-  masterAccount: AccountInterface | undefined;
-  burnerManager: BurnerManager;
+  masterAccount?: AccountInterface;
+  burnerManager?: BurnerManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
 }
@@ -30,7 +29,12 @@ export const DojoContextProvider = ({
   const currentValue = useContext(DojoContext);
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
-  const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig);
+  const [snWindowObjectInitialized, setSnWindowObjectInitialized] = useState(false);
+
+  const defaultChain =
+    process.env.NODE_ENV === "production" ? dojoContextConfig.KATANA_SLOT_420 : dojoContextConfig.KATANA;
+
+  const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig, defaultChain);
 
   const { dojoProvider, queryClient, graphqlClient, graphqlWsClient, rpcProvider } = useDojoClients(selectedChain);
 
@@ -43,8 +47,7 @@ export const DojoContextProvider = ({
 
   const burnerManager = useMemo(() => {
     if (!masterAccount) return undefined;
-
-    console.log("new BurnerManager");
+    // console.log("new BurnerManager");
 
     return new BurnerManager({
       masterAccount: masterAccount!,
@@ -55,45 +58,16 @@ export const DojoContextProvider = ({
 
   useEffect(() => {
     const init_async = async () => {
-
-      // if (window.starknet_dojoburner && !burnerManager) {
-      //   window.starknet_dojoburner = undefined;
-      // }
-
       if (window.starknet_dojoburner && burnerManager) {
         // initialize burnerManager
         await burnerManager.init();
-
         // setBurnerManager
         (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
-
-        if (!(window.starknet_dojoburner as DojoBurnerStarknetWindowObject).burnerManager.getActiveAccount()) {
-          // create burner
-          await (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).burnerManager.create();
-        }
       }
+      setSnWindowObjectInitialized(true);
     };
     init_async();
   }, [burnerManager]);
-
-  // const {
-  //   create,
-  //   list,
-  //   get,
-  //   account,
-  //   select,
-  //   isDeploying,
-  //   clear,
-  //   copyToClipboard,
-  //   applyFromClipboard,
-  //   listConnectors,
-  // } = useBurnerManager({
-  //   burnerManager: new BurnerManager({
-  //     masterAccount: masterAccount!,
-  //     accountClassHash: selectedChain.accountClassHash!,
-  //     rpcProvider: rpcProvider,
-  //   }),
-  // });
 
   const configStore = useMemo(() => {
     return new ConfigStoreClass({
@@ -112,9 +86,10 @@ export const DojoContextProvider = ({
   }, [graphqlClient, graphqlWsClient, configStore]);
 
   useEffect(() => {
-    console.log("configStore.init");
     configStore.init();
   }, [configStore]);
+
+  if (!snWindowObjectInitialized) return null;
 
   return (
     <DojoContext.Provider

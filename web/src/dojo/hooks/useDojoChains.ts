@@ -6,9 +6,7 @@ import { DojoChainConfig, DojoContextConfig, SupportedChainIds } from "../setup/
 
 export type DojoChainsResult = ReturnType<typeof useDojoChains>;
 
-export const useDojoChains = (dojoContextConfig: DojoContextConfig) => {
-
-    const defaultChain = process.env.NODE_ENV === "production" ? dojoContextConfig.KATANA_SLOT : dojoContextConfig.KATANA
+export const useDojoChains = (dojoContextConfig: DojoContextConfig, defaultChain: DojoChainConfig) => {
 
     const [selected, setSelected] = useState<DojoChainConfig>(defaultChain);
 

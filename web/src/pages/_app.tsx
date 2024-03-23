@@ -1,13 +1,13 @@
 import RegisterEntities from "@/components/RegisterEntities";
 import { MakeItRain } from "@/components/layout";
 import { StarknetProvider } from "@/components/wallet";
-import { initializeInPage } from "@/components/wallet/inpage";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
+import { useBurnerWindowObject } from "@dojoengine/create-burner";
 import { Analytics } from "@vercel/analytics/react";
 import type { AppProps } from "next/app";
 import NextHead from "next/head";
@@ -27,9 +27,11 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  useEffect(() => {
-    initializeInPage();
-  }, []);
+  // useEffect(() => {
+  //   initializeInPage();
+  // }, []);
+
+  useBurnerWindowObject();
 
   return (
     <>

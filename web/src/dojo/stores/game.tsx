@@ -176,7 +176,7 @@ export class GameStoreClass {
   handles: Array<() => void> = [];
 
   constructor({ client, wsClient, configStore }: GameStoreProps) {
-    console.log("new GameStoreClass");
+    // console.log("new GameStoreClass");
 
     this.client = client;
     this.wsClient = wsClient;

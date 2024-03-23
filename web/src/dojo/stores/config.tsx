@@ -90,7 +90,7 @@ export class ConfigStoreClass {
   isLoading = false;
 
   constructor({ client, dojoProvider, manifest }: ConfigStoreProps) {
-    console.log("new ConfigStoreClass");
+    // console.log("new ConfigStoreClass");
 
     this.client = client;
     this.dojoProvider = dojoProvider;
