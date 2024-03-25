@@ -211,7 +211,7 @@ const Travel = observer(() => {
         gap="14px"
         overflow={"visible"}
       >
-        <Inventory />
+        <Inventory hidePawnshop/>
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices
           prices={prices}

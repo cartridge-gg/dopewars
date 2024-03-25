@@ -1,6 +1,5 @@
 import { ExternalLink } from "@/components/icons";
 import { useConfigStore, useDojoContext } from "@/dojo/hooks";
-import { useTokenBalance } from "@/dojo/hooks/useTokenBalance";
 import {
   Box,
   Button,
@@ -31,10 +30,10 @@ export const Connect = ({ ...props }) => {
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
 
-  const { balance } = useTokenBalance({
-    address,
-    token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-  });
+  // const { balance } = useTokenBalance({
+  //   address,
+  //   token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  // });
 
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);

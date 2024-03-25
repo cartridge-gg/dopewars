@@ -81,7 +81,8 @@ export const Dragon = (props: IconProps) => {
   );
 };
 
-export const DragonIcon = (props: IconProps) => {
+
+export const DragonIcon = ({color, ...props}: { color: string } & IconProps) => {
   return (
     <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
       <path
@@ -137,7 +138,8 @@ export const DragonIcon = (props: IconProps) => {
         d="M9 9V12H10.5V13.5H12V15H15V16.5H21V15H15V13.5H21V12H16.5V10.5H12V9H9ZM12 12H15V13.5H12V12ZM12 12V10.5H10.5V12H12Z"
         fill="#A92223"
       />
-      {/* <g
+
+      <g
         style={{
           mixBlendMode: "color",
         }}
@@ -146,9 +148,9 @@ export const DragonIcon = (props: IconProps) => {
           fillRule="evenodd"
           clipRule="evenodd"
           d="M0 6V7.5H1.5V9H6V10.5H1.5V12H4.5V13.5H3V15H1.5V16.5H3V15H7.5V13.5H12V18H7.5V19.5H4.5V21H3V24H22.5V21H21V19.5H18V18H15V16.5H21V15H19.5V13.5H22.5V12H24V9H22.5V10.5H21V9H19.5V6H18V4.5H19.5V1.5H18V4.5H10.5V3H9V1.5H7.5V4.5H9V6H6V4.5H3V3H1.5V4.5H3V6H6V7.5H1.5V6H0ZM19.5 9H18V10.5H19.5V9Z"
-          fill="#0A8F4F"
+          fill={color}
         />
-      </g> */}
+      </g> 
     </Icon>
   );
 };

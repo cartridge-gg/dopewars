@@ -40,6 +40,10 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
   const { router } = useRouterContext();
   const { game, isFetched } = useGameById(entry.game_id);
 
+  const isSelf = useMemo(() => {
+    return account?.address === game?.player_id;
+  }, [account?.address, game?.player_id]);
+
   const claimable = useMemo(() => {
     return account?.address === game?.player_id && !entry.claimed;
   }, [account?.address, entry.claimed, game?.player_id]);
@@ -50,7 +54,7 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
 
   if (!isFetched) return null;
   return (
-    <Card position="relative" p={3} >
+    <Card position="relative" p={3}>
       <VStack alignItems="flex-start" gap={0}>
         <HStack w="full" justifyContent="space-between" borderBottom="solid 1px" borderColor="neon.700" pb={2} mb={2}>
           <Text>SEASON {entry.version}</Text>
@@ -61,7 +65,14 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
 
         {game && (
           <HStack w="full" gap={3}>
-            <HustlerIcon hustler={game?.hustler_id} width="48px" height="48px"  cursor="pointer" onClick={onClick} />
+            <HustlerIcon
+              hustler={game?.hustler_id}
+              color={isSelf ? "yellow.400" : "neon.400"}
+              width="48px"
+              height="48px"
+              cursor="pointer"
+              onClick={onClick}
+            />
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>{shortString.decodeShortString(game?.player_name)}</Text>

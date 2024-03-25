@@ -57,7 +57,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
 
   //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
   const { hallOfFame, isFetchingHallOfFame } = useHallOfFame();
-  const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0
+  const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
   const [selectedIndex, setSelectedIndex] = useState(maxIndex);
 
   const { leaderboardEntries, isFetchingLeaderboardEntries } = useLeaderboardEntries(
@@ -78,7 +78,6 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     }
   };
 
-
   useEffect(() => {
     if (!listRef.current) return;
     const lastEl = listRef.current["lastElementChild"];
@@ -94,12 +93,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     <VStack w="full" h="100%">
       <VStack my="15px" w="full">
         <HStack w="full" justifyContent="space-between">
-          <Arrow
-            direction="left"
-            cursor="pointer"
-            opacity={selectedIndex > 0 ? "1" : "0.25"}
-            onClick={onPrev}
-          ></Arrow>
+          <Arrow direction="left" cursor="pointer" opacity={selectedIndex > 0 ? "1" : "0.25"} onClick={onPrev}></Arrow>
           <HStack textStyle="subheading" fontSize="12px">
             <Text>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
             <Text color="yellow.400">
@@ -162,7 +156,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         {entry.health === 0 ? (
                           <Skull color={avatarColor} hasCrown={index === 0} />
                         ) : (
-                          <HustlerIcon hustler={entry.avatarId as Hustlers}/>
+                          <HustlerIcon hustler={entry.avatarId as Hustlers} color={color} />
                           //<Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
                         )}
                       </Box>

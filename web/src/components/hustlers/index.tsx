@@ -3,6 +3,8 @@ import { Dragon, DragonIcon } from "./Dragon";
 import { Monkey, MonkeyIcon } from "./Monkey";
 import { Rabbit, RabbitIcon } from "./Rabbit";
 
+import colors from "@/theme/colors";
+
 export enum Hustlers {
   Dragon = 0,
   Monkey = 1,
@@ -11,6 +13,11 @@ export enum Hustlers {
 
 interface HustlerProps {
   hustler: Hustlers;
+}
+
+interface HustlerIconProps {
+  hustler: Hustlers;
+  color: string,
 }
 
 const hustlers = {
@@ -32,8 +39,8 @@ const hustlersIcons = {
   [Hustlers.Rabbit]: RabbitIcon,
 };
 
-export const HustlerIcon = ({ hustler, ...rest }: HustlerProps & IconProps) => {
+export const HustlerIcon = ({ hustler, color = colors.neon["400"], ...rest }: HustlerIconProps & IconProps) => {
   const SelectedHustlerIcon = hustlersIcons[hustler];
-  return <SelectedHustlerIcon {...rest} />;
+  return <SelectedHustlerIcon color={color} {...rest} />;
 };
 

@@ -3,7 +3,6 @@ import { Alert, Clock, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
-import { ChildrenOrConnect } from "@/components/wallet";
 import { useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -14,8 +13,6 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { router } = useRouterContext();
-
-
   const { account } = useAccount();
 
   const { toast } = useToast();
@@ -36,9 +33,11 @@ export default function Home() {
       play();
     }
 
-   
+    // if (!account) {
 
-    router.push(`/create/new`);
+    // } else {
+      router.push(`/create/new`);
+    // }
   };
 
   return (
@@ -55,18 +54,9 @@ export default function Home() {
                 <Text align="center">Get ready hustlers... Season III starts in November</Text>
               </VStack>
             ) : (
-              <>
-                {!account && (
-                  <Button flex="1" onClick={() => setIsTutorialOpen(true)}>
-                    Tutorial
-                  </Button>
-                )}
-                <ChildrenOrConnect>
-                  <Button flex="1" onClick={onHustle}>
-                    Hustle
-                  </Button>
-                </ChildrenOrConnect>
-              </>
+              <Button flex="1" onClick={onHustle}>
+                Hustle
+              </Button>
             )}
           </HStack>
         </Card>

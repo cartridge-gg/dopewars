@@ -7,17 +7,19 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 const baseStyle = definePartsStyle({
   root: {},
   tab: {
-    color: "neon.300",
-    ...cardPixelatedStyle({ radius: 6, pixelSize: 1 }),
-    bg: "transparent",
-    border: "2px solid",
+    color: "neon.200",
+    ...cardPixelatedStyle({ radius: 2 }),
+    bg: "neon.700",
     borderColor: "neon.700",
+
     textTransform: "uppercase",
 
     _selected: {
-      color: "neon.200",
-      ...cardPixelatedStyle({ radius: 2 }),
-      bg: "neon.700",
+      color: "neon.300",
+      ...cardPixelatedStyle({ radius: 6, pixelSize: 1 }),
+      bg: "transparent",
+      border: "2px solid",
+      borderColor: "neon.700",
     },
   },
   tablist: {

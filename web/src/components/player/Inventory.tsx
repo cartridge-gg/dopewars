@@ -27,34 +27,6 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={6}>
-      {!hidePawnshop && (
-        <VStack w="full" alignItems="flex-start">
-          <Text textStyle="subheading" fontSize="11px" color="neon.500" h="24px" lineHeight="24px">
-            PAWNSHOP
-          </Text>
-
-          <Card
-            cursor={game.isShopOpen ? "pointer" : "not-allowed"}
-            w="full"
-            h="40px"
-            px="20px"
-            flexDirection="row"
-            justify="center"
-            alignItems="center"
-            opacity={game.isShopOpen ? 1 : 0.5}
-            animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
-            onClick={() => {
-              if (game.isShopOpen) {
-                router.push(`/${gameId}/pawnshop`);
-              }
-            }}
-          >
-            <PawnshopIcon ml={-1} />
-            <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
-          </Card>
-        </VStack>
-      )}
-
       <HStack w="full" justifyContent="space-between">
         <VStack w="full" alignItems="flex-start">
           <HStack color="neon.500" justify="center" alignItems="center">
@@ -107,6 +79,34 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           </Card>
         </VStack>
       </HStack>
+
+      {!hidePawnshop && (
+        <VStack w="full" alignItems="flex-start">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500" h="24px" lineHeight="24px">
+            PAWNSHOP
+          </Text>
+
+          <Card
+            cursor={game.isShopOpen ? "pointer" : "not-allowed"}
+            w="full"
+            h="40px"
+            px="20px"
+            flexDirection="row"
+            justify="center"
+            alignItems="center"
+            opacity={game.isShopOpen ? 1 : 0.5}
+            animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
+            onClick={() => {
+              if (game.isShopOpen) {
+                router.push(`/${gameId}/pawnshop`);
+              }
+            }}
+          >
+            <PawnshopIcon ml={-1} />
+            <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
+          </Card>
+        </VStack>
+      )}
 
       {/*
       <HStack w="full" flexWrap="wrap" justify="space-between">

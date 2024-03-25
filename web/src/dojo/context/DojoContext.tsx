@@ -59,10 +59,14 @@ export const DojoContextProvider = ({
   useEffect(() => {
     const init_async = async () => {
       if (window.starknet_dojoburner && burnerManager) {
-        // initialize burnerManager
-        await burnerManager.init();
-        // setBurnerManager
-        (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
+        try {
+          // initialize burnerManager
+          await burnerManager.init();
+          // setBurnerManager
+          (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
+        } catch (e: any) {
+          console.log(e);
+        }
       }
       setSnWindowObjectInitialized(true);
     };
