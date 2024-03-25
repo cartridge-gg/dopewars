@@ -2,15 +2,15 @@ import { useSystems } from "@/dojo/hooks";
 import { Leaderboard } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Text,
-    VStack,
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 

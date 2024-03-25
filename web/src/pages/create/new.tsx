@@ -227,7 +227,7 @@ const New = observer(() => {
                     <HStack w="full" justifyContent="space-between">
                       <Text>YOU OWN </Text>
                       <HStack>
-                        <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
+                        <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
                         <Text>PAPER</Text>
                       </HStack>
                     </HStack>

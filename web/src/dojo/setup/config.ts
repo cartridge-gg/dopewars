@@ -24,7 +24,7 @@ const katanaLocal: DojoChainConfig = {
     name: "KATANA",
     chainConfig: katanaLocalChain,
     rpcUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT || "http://localhost:5050",
-    toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080",
+    toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
     toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "ws://localhost:8080/graphql/ws",
     masterAddress:
         process.env.NEXT_PUBLIC_ADMIN_ADDRESS ||

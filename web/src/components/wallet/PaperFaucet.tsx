@@ -11,7 +11,7 @@ const iconsBySymbol = {
 
 export const PaperFaucet = () => {
   const { config } = useConfigStore();
-  const { isPending, faucet } = useFaucet(config?.ryo.paper_address);
+  const { isPending, faucet } = useFaucet(config?.ryoAddress.paper);
 
   const onClick = () => {
     if (isPending) return;

@@ -125,7 +125,7 @@ const AccountModal = ({
             </Link>
 
             <HStack color="yellow.400">
-              <TokenBalance address={account?.address} token={config?.ryo.paper_address} />
+              <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
               <Text>PAPER</Text>
             </HStack>
 

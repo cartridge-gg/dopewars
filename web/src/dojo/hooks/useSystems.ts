@@ -20,9 +20,13 @@ export interface SystemsInterface {
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   claim: (season: number) => Promise<SystemExecuteResult>;
-
+//
+  claimTreasury: () => Promise<SystemExecuteResult>;
+  setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
+  setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
+//
   failingTx: () => Promise<SystemExecuteResult>;
-  feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
+    feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: string;
@@ -185,7 +189,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameMode: GameMode, hustlerId: number, playerName: string,) => {
 
       const paperFee = config?.ryo.paper_fee * 10 ** 18;
-      const paperAddress = config?.ryo.paper_address;
+      const paperAddress = config?.ryoAddress.paper;
       const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.name === "rollyourown::systems::game::game").address;
       // 
       const approvalCall: Call = {
@@ -211,7 +215,7 @@ export const useSystems = (): SystemsInterface => {
         gameId: gameCreated.gameId,
       };
     },
-    [executeAndReceipt, config?.ryo.paper_address],
+    [executeAndReceipt, config?.ryoAddress.paper],
   );
 
 
@@ -329,6 +333,95 @@ export const useSystems = (): SystemsInterface => {
   //
 
 
+  const claimTreasury = useCallback(
+    async () => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::game::game",
+          functionName: "claim_treasury",
+          callData: [],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
+
+  const setPaused = useCallback(
+    async (paused: boolean) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::ryo::ryo",
+          functionName: "set_paused",
+          callData: [paused],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
+  const setPaperFee = useCallback(
+    async (paperFee: number) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::ryo::ryo",
+          functionName: "set_paper_fee",
+          callData: [paperFee],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+  const setTreasuryFeePct = useCallback(
+    async (treasuryFeePct: number) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::ryo::ryo",
+          functionName: "set_treasury_fee_pct",
+          callData: [treasuryFeePct],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
+  
+
+ 
+
+  //
+  //
+  //
+
+
   const feedLeaderboard = useCallback(
     async (count: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
@@ -373,6 +466,11 @@ export const useSystems = (): SystemsInterface => {
     endGame,
     decide,
     claim,
+    claimTreasury,
+    //
+    setPaused,
+    setPaperFee,
+    setTreasuryFeePct,
     //
     feedLeaderboard,
     failingTx,

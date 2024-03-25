@@ -9,6 +9,8 @@ import {
   HustlerItemTiersConfigEdge,
   LocationConfig,
   LocationConfigEdge,
+  RyoAddress,
+  RyoAddressEdge,
   RyoConfig,
   RyoConfigEdge,
 } from "@/generated/graphql";
@@ -68,6 +70,7 @@ export type GetConfig = {
 
 export type Config = {
   ryo: RyoConfig;
+  ryoAddress: RyoAddress;
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
   items: HustlerItemBaseConfig[];
@@ -116,6 +119,9 @@ export class ConfigStoreClass {
 
       const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
       const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
+
+      const ryoAddressEdges = data.ryoAddressModels!.edges as RyoAddressEdge[];
+      const ryoAddress = ryoAddressEdges[0]!.node as RyoAddress;
 
       /*************************************************** */
 
@@ -182,6 +188,7 @@ export class ConfigStoreClass {
 
       this.config = {
         ryo: ryoConfig,
+        ryoAddress: ryoAddress,
         drug: drugConfigFull,
         location: locationConfigFull,
         items: hustlerItemBaseConfig,
@@ -191,7 +198,7 @@ export class ConfigStoreClass {
       };
     } catch (e: any) {
       console.log("ERROR: ConfigStoreClass.init");
-      // console.log(e);
+      console.log(e);
     }
 
     this.isLoading = false;
@@ -202,6 +209,7 @@ export class ConfigStoreClass {
   getDrug(drug: string): DrugConfigFull {
     return this.config?.drug.find((i) => i.drug.toLowerCase() === drug.toLowerCase())!;
   }
+
   getDrugById(drug_id: number): DrugConfigFull {
     return this.config?.drug.find((i) => Number(i.drug_id) === Number(drug_id))!;
   }
@@ -214,6 +222,8 @@ export class ConfigStoreClass {
     return this.config?.location.find((i) => Number(i.location_id) === Number(location_id))!;
   }
 
+  // layout
+
   getGameStoreLayoutItem(name: string): LayoutItem {
     // return this.config?.config.layouts.game_store.find((i) => shortString.decodeShortString(i.name) === name)!;
     return this.config?.config.layouts.game_store.find((i) => i.name === name)!;
@@ -222,6 +232,8 @@ export class ConfigStoreClass {
     // return this.config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
     return this.config?.config.layouts.player.find((i) => i.name === name)!;
   }
+
+  // hustlers
 
   getHustlerById(id: number): HustlerConfig {
     return this.config?.config.hustlers.find((i) => Number(i.hustler_id) === Number(id))!;

@@ -25,6 +25,7 @@ trait IGameActions<T> {
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
     fn claim(self: @T, season: u16);
+    fn claim_treasury(self: @T);
 }
 
 
@@ -35,7 +36,8 @@ mod game {
     use rollyourown::{
         config::{
             drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl},
-            ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}
+            ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
+            ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
         },
         models::{
             game_store_packed::GameStorePacked, game::{Game, GameImpl}, leaderboard::{Leaderboard}
@@ -50,6 +52,7 @@ mod game {
         },
         utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
+        constants::{ETHER},
     };
 
 
@@ -332,22 +335,54 @@ mod game {
             leaderboard.claimed = true;
             set!(world, (leaderboard));
 
-            // retrieve paper address from ryo_config
-            let ryo_config_manager = RyoConfigManagerTrait::new(world);
-            let ryo_config = ryo_config_manager.get();
+            // retrieve paper address 
+            let paper_address = RyoAddressManagerTrait::new(world).paper();
+            let paper_jackpot_eth: u256 = leaderboard.paper_balance.into() * ETHER;
 
             // transfer reward
-            IPaperDispatcher { contract_address: ryo_config.paper_address }
-                .transfer(get_caller_address(), leaderboard.paper_balance);
+            IPaperDispatcher { contract_address: paper_address }
+                .transfer(get_caller_address(), paper_jackpot_eth);
+        }
+
+         fn claim_treasury(self: @ContractState) {
+            // check if owner ???   TODO: check if ok
+            // self.assert_caller_is_owner();
+           
+            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
+            let mut ryo_config = ryo_config_manager.get();
+
+            assert(ryo_config.treasury_balance > 0, 'nothin to claim');
+
+            // calc claimable amount
+            let claimable_eth: u256  = ryo_config.treasury_balance.into() * ETHER;
+
+            // reset treasury_balance
+            ryo_config.treasury_balance = 0;
+            ryo_config_manager.set(ryo_config);
+         
+            let ryo_addresses_manager = RyoAddressManagerTrait::new(self.world());
+
+            // transfer claimable_eth to treasury
+            IPaperDispatcher { contract_address: ryo_addresses_manager.paper() }
+                .transfer(ryo_addresses_manager.treasury(), claimable_eth);
         }
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
+        #[inline(always)]
         fn assert_not_paused(self: @ContractState) {
             let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
             let ryo_config = ryo_config_manager.get();
             assert(!ryo_config.paused, 'game is paused');
+        }
+
+        #[inline(always)]
+        fn assert_caller_is_owner(self: @ContractState) {
+            assert(
+                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                'not owner'
+            );
         }
 
         fn execute_actions(

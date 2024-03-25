@@ -9,12 +9,13 @@ struct RyoConfig {
     key: u8,
     initialized: bool,
     paused: bool,
+    //
     leaderboard_version: u16,
     leaderboard_duration: u32,
-    paper_address: ContractAddress,
+    //
     paper_fee: u16,
-// treasury_address: ContractAddress,
-// treasury_pct: u8,
+    treasury_fee_pct: u8,
+    treasury_balance: u32,
 }
 
 #[derive(Copy, Drop)]
@@ -35,4 +36,5 @@ impl RyoConfigImpl of RyoConfigManagerTrait {
     fn set(self: RyoConfigManager, ryo_config: RyoConfig) {
         set!(self.world, (ryo_config));
     }
+
 }

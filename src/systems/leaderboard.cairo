@@ -2,9 +2,13 @@ use starknet::{get_caller_address, get_contract_address};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    config::{ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}},
+    config::{
+        ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}, 
+        ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait}
+    },
     models::{leaderboard::{Leaderboard}}, packing::game_store::{GameStore},
-    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER}
+    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
+    utils::math::{MathImpl, MathTrait}
 };
 
 
@@ -79,16 +83,28 @@ impl LeaderboardManagerImpl of LeaderboardManagerTrait {
         // get current leaderboard infos
         let mut leaderboard = get!(self.world, (ryo_config.leaderboard_version), Leaderboard);
 
-        // calc paper_fee
-        let paper_fee: u256 = ryo_config.paper_fee.into() * ETHER;
+        // get paper_fee
+        let paper_fee : u32 = ryo_config.paper_fee.into();
+        let paper_fee_eth: u256 = paper_fee.into() * ETHER;
 
-        // add paper_fee to current_leaderboard & save
-        leaderboard.paper_balance += paper_fee;
+        // calc treasury share
+        let treasury_share = paper_fee.pct(ryo_config.treasury_fee_pct.into());
+        let jackpot_share = paper_fee - treasury_share;
+
+        // add jackpot_share to current_leaderboard & save
+        leaderboard.paper_balance += jackpot_share;
         set!(self.world, (leaderboard));
 
-        // transfer paper_fee from user to game ( user approved game contract to spend paper before)
-        IPaperDispatcher { contract_address: ryo_config.paper_address }
-            .transfer_from(get_caller_address(), get_contract_address(), paper_fee);
+        // add treasury_share to treasury_balance & save
+        ryo_config.treasury_balance += treasury_share;
+        ryo_config_manager.set(ryo_config);
+
+        // retrieve paper_address
+        let paper_address = RyoAddressManagerTrait::new(self.world).paper();
+        
+        // transfer paper_fee_ether from user to game ( user approved game contract to spend paper before)
+        IPaperDispatcher { contract_address: paper_address }
+            .transfer_from(get_caller_address(), get_contract_address(), paper_fee_eth);
 
         ryo_config.leaderboard_version
     }

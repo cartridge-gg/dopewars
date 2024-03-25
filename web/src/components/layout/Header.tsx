@@ -51,7 +51,7 @@ export const Header = observer(({ back }: HeaderProps) => {
         <ChainSelector canChange={!gameId} />
         {/* {!game && (
           <>
-            {config?.ryo.paper_address && <TokenBalance address={account?.address} token={config?.ryo.paper_address} />}
+            {config?.ryoAddress.paper && <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />}
             {account && <PaperFaucet />}
           </>
         )} */}

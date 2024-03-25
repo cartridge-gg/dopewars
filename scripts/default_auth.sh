@@ -18,6 +18,8 @@ export GAME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | sel
 
 export PAPER_MOCK_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
 
+export TREASURY_ADDRESS=$PAPER_MOCK_ADDRESS;
+
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE
 echo "---------------------------------------------------------------------------"
@@ -32,6 +34,7 @@ echo "--------------------------------------------------------------------------
 # enable system -> models authorizations
 sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  RyoConfig,$RYO_ADDRESS \
+ RyoAddress,$RYO_ADDRESS \
  Leaderboard,$RYO_ADDRESS \
  GameConfig,$CONFIG_ADDRESS \
  DrugConfig,$CONFIG_ADDRESS \
@@ -55,7 +58,7 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS --wait > /dev/null
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS --wait > /dev/null
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 

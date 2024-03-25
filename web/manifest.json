@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x4cb81dfced9540cd5b38d7691ea5a9930d04ffcef72f6cd027318129aba94d5",
+      "class_hash": "0x4e032de3da7ec321e6d1e584d8fe6a8622b0d16922942491b9eda5c5c5a2b29",
       "abi": [
         {
           "type": "impl",
@@ -1871,7 +1871,7 @@
     {
       "name": "rollyourown::systems::devtools::devtools",
       "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
-      "class_hash": "0x2de11202d682cfbdb558e40b4d2764fd7aa4a58336c025fc529244647328417",
+      "class_hash": "0x78077bee04ade4666311e407b37676df6bdcef7e125088c99db93048e272277",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2024,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x35c6f8f8f1bed3c18e260b16a30e6fba9032026a0e2be952c250494f4d0c671",
+      "class_hash": "0x1561122e4b6050d6732ab4fb0def3d66c5c74f13d7b03df8fdfee562d4c425e",
       "abi": [
         {
           "type": "impl",
@@ -2362,6 +2362,13 @@
                   "type": "core::integer::u16"
                 }
               ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "claim_treasury",
+              "inputs": [],
               "outputs": [],
               "state_mutability": "view"
             }
@@ -2871,7 +2878,7 @@
     {
       "name": "rollyourown::systems::ryo::ryo",
       "address": "0x48784839f4ded35f9324f6c49913f4b39a85520eeb8d68279586bb5b90603bf",
-      "class_hash": "0x47aa88701bc8b87f5b956f6864546688cf21e93455f414a934b3865470084f1",
+      "class_hash": "0x44baa1c5b1d38d988c4aa8ec75a516f4c75cfc885fc1bac841a76b376b0c6d3",
       "abi": [
         {
           "type": "impl",
@@ -2957,6 +2964,10 @@
                 {
                   "name": "paper_address",
                   "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "treasury_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [],
@@ -2988,6 +2999,18 @@
             },
             {
               "type": "function",
+              "name": "set_treasury_fee_pct",
+              "inputs": [
+                {
+                  "name": "fee_pct",
+                  "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "set_leaderboard_duration",
               "inputs": [
                 {
@@ -3000,22 +3023,33 @@
             },
             {
               "type": "function",
-              "name": "paused",
+              "name": "paper",
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::bool"
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "state_mutability": "view"
             },
             {
               "type": "function",
-              "name": "paper",
+              "name": "treasury",
               "inputs": [],
               "outputs": [
                 {
                   "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "paused",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
                 }
               ],
               "state_mutability": "view"
@@ -4555,17 +4589,22 @@
           "key": false
         },
         {
-          "name": "paper_address",
-          "type": "ContractAddress",
-          "key": false
-        },
-        {
           "name": "paper_fee",
           "type": "u16",
           "key": false
+        },
+        {
+          "name": "treasury_fee_pct",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "treasury_balance",
+          "type": "u32",
+          "key": false
         }
       ],
-      "class_hash": "0x49db81215eddd36d4d9285ab5a60aa2ef46741403cd0711c2e7b8f4b6c49349",
+      "class_hash": "0x45885517184c16daf73bbbd8bbd03b7de1ec183c280182bdab5a20fa436cd31",
       "abi": [
         {
           "type": "impl",
@@ -4779,12 +4818,16 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "paper_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
               "name": "paper_fee",
               "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "treasury_balance",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -4809,6 +4852,244 @@
         {
           "type": "event",
           "name": "rollyourown::config::ryo::ryo_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::ryo_address::ryo_address",
+      "members": [
+        {
+          "name": "key",
+          "type": "u8",
+          "key": true
+        },
+        {
+          "name": "paper",
+          "type": "ContractAddress",
+          "key": false
+        },
+        {
+          "name": "treasury",
+          "type": "ContractAddress",
+          "key": false
+        }
+      ],
+      "class_hash": "0x506d2335400c6ce9cb6d38fe85a3d50542231944837a1fe1b1d32babf35109d",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::model::IDojoModel",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "unpacked_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "packed_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "layout",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<core::integer::u8>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "schema",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::database::introspect::Ty"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "ryo_addressImpl",
+          "interface_name": "rollyourown::config::ryo_address::Iryo_address"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::ryo_address::RyoAddress",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "paper",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "treasury",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::config::ryo_address::Iryo_address",
+          "items": [
+            {
+              "type": "function",
+              "name": "ensure_abi",
+              "inputs": [
+                {
+                  "name": "model",
+                  "type": "rollyourown::config::ryo_address::RyoAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::ryo_address::ryo_address::Event",
           "kind": "enum",
           "variants": []
         }
@@ -5421,7 +5702,7 @@
         },
         {
           "name": "paper_balance",
-          "type": "u256",
+          "type": "u32",
           "key": false
         },
         {
@@ -5430,7 +5711,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x40a08497ad86f4559941dd6e4c86ad72382b7fd209d019e85c332e9d22ad30",
+      "class_hash": "0x1920fcf6fc057a3fa3e3a1213bff7325d48e4b3eef6d522d068ffc32a387fc8",
       "abi": [
         {
           "type": "impl",
@@ -5606,20 +5887,6 @@
           "interface_name": "rollyourown::models::leaderboard::Ileaderboard"
         },
         {
-          "type": "struct",
-          "name": "core::integer::u256",
-          "members": [
-            {
-              "name": "low",
-              "type": "core::integer::u128"
-            },
-            {
-              "name": "high",
-              "type": "core::integer::u128"
-            }
-          ]
-        },
-        {
           "type": "enum",
           "name": "core::bool",
           "variants": [
@@ -5659,7 +5926,7 @@
             },
             {
               "name": "paper_balance",
-              "type": "core::integer::u256"
+              "type": "core::integer::u32"
             },
             {
               "name": "claimed",

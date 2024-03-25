@@ -1,4 +1,16 @@
 query Config {
+
+  # RyoAddress
+  ryoAddressModels(limit:1){
+    edges {
+      node {
+        key,
+        paper,
+        treasury,
+      }
+    }
+  }
+
   # Ryo 
   ryoConfigModels(limit:1){
     edges {
@@ -7,8 +19,9 @@ query Config {
         initialized,
         paused,
         leaderboard_version,
-        paper_address,
         paper_fee,
+        treasury_fee_pct,
+        treasury_balance,
       }
     }
   }

@@ -19,6 +19,7 @@
       "InitializableModel",
       "Leaderboard",
       "LocationConfig",
+      "RyoAddress",
       "RyoConfig"
     ]
   }
