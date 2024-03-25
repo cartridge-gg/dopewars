@@ -4,6 +4,7 @@ import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { useHallOfFame } from "@/dojo/hooks/useHallOfFame";
 import { Leaderboard } from "@/generated/graphql";
+import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
@@ -52,6 +53,8 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
     router.push(`/0x${entry.game_id.toString(16)}/logs`);
   }, [entry.game_id, game?.player_id, router]);
 
+   const color = isSelf ? colors.yellow["400"].toString() : colors.neon["400"].toString()
+
   if (!isFetched) return null;
   return (
     <Card position="relative" p={3}>
@@ -67,7 +70,7 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
           <HStack w="full" gap={3}>
             <HustlerIcon
               hustler={game?.hustler_id}
-              color={isSelf ? "yellow.400" : "neon.400"}
+              color={color}
               width="48px"
               height="48px"
               cursor="pointer"

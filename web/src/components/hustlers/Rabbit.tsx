@@ -65,7 +65,7 @@ export const Rabbit = (props: IconProps) => {
   );
 };
 
-export const RabbitIcon = ({ color, ...props }: { color: string } & IconProps) => {
+export const RabbitIcon = ({ color, ...props }: IconProps) => {
   return (
     <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
       <path d="M9 4.5H7.5V6H9V4.5Z" fill="#3B2513" />
@@ -112,7 +112,7 @@ export const RabbitIcon = ({ color, ...props }: { color: string } & IconProps) =
       >
         <path
           d="M21 24V22.5H19.5V19.5H18V18H16.5V19.5H15V16.5H16.5V15H18V13.5H19.5V10.5H18V7.5H19.5V1.5H18V3H16.5V6H12V1.5H10.5V3H9V4.5H7.5V7.5H9V16.5H12V18H10.5V19.5H9V21H7.5V22.5H6V24H21Z"
-          fill={color}
+          fill={color as string}
         />
       </g>
     </Icon>

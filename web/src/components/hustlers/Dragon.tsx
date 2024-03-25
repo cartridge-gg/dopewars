@@ -81,8 +81,7 @@ export const Dragon = (props: IconProps) => {
   );
 };
 
-
-export const DragonIcon = ({color, ...props}: { color: string } & IconProps) => {
+export const DragonIcon = ({ color, ...props }: IconProps) => {
   return (
     <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
       <path
@@ -148,9 +147,9 @@ export const DragonIcon = ({color, ...props}: { color: string } & IconProps) => 
           fillRule="evenodd"
           clipRule="evenodd"
           d="M0 6V7.5H1.5V9H6V10.5H1.5V12H4.5V13.5H3V15H1.5V16.5H3V15H7.5V13.5H12V18H7.5V19.5H4.5V21H3V24H22.5V21H21V19.5H18V18H15V16.5H21V15H19.5V13.5H22.5V12H24V9H22.5V10.5H21V9H19.5V6H18V4.5H19.5V1.5H18V4.5H10.5V3H9V1.5H7.5V4.5H9V6H6V4.5H3V3H1.5V4.5H3V6H6V7.5H1.5V6H0ZM19.5 9H18V10.5H19.5V9Z"
-          fill={color}
+          fill={color as string}
         />
-      </g> 
+      </g>
     </Icon>
   );
 };

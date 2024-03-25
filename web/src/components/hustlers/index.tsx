@@ -17,7 +17,6 @@ interface HustlerProps {
 
 interface HustlerIconProps {
   hustler: Hustlers;
-  color: string,
 }
 
 const hustlers = {
@@ -39,7 +38,7 @@ const hustlersIcons = {
   [Hustlers.Rabbit]: RabbitIcon,
 };
 
-export const HustlerIcon = ({ hustler, color = colors.neon["400"], ...rest }: HustlerIconProps & IconProps) => {
+export const HustlerIcon = ({ hustler, color = colors.neon["400"].toString(), ...rest }: HustlerIconProps & IconProps) => {
   const SelectedHustlerIcon = hustlersIcons[hustler];
   return <SelectedHustlerIcon color={color} {...rest} />;
 };
