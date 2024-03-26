@@ -13,6 +13,7 @@ import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { Burners } from "../wallet/Burners";
 import { ChainSelector } from "../wallet/ChainSelector";
+import { Predeployed } from "../wallet/Predeployed";
 
 interface HeaderProps {
   back?: boolean;
@@ -48,6 +49,7 @@ export const Header = observer(({ back }: HeaderProps) => {
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
         <Connect />
         <Burners />
+        <Predeployed />
         <ChainSelector canChange={!gameId} />
         {/* {!game && (
           <>

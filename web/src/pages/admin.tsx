@@ -136,7 +136,7 @@ const TreasuryClaimCard = observer(() => {
         <VStack alignItems="flex-start">
           <HStack>
             <Text w="180px">PAPER BALANCE</Text>
-            <TokenBalance address={config?.ryoAddress.paper} token={config?.ryoAddress.paper} />
+            <TokenBalance address={config?.ryoAddress.treasury} token={config?.ryoAddress.paper} />
           </HStack>
           <HStack>
             <Text w="180px">PAPER CLAIMABLE</Text>

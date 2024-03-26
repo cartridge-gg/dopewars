@@ -18,7 +18,7 @@ export GAME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | sel
 
 export PAPER_MOCK_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
 
-export TREASURY_ADDRESS=$PAPER_MOCK_ADDRESS;
+export TREASURY_ADDRESS="0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a";
 
 echo "---------------------------------------------------------------------------"
 echo profile : $PROFILE

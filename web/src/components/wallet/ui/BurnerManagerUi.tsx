@@ -53,14 +53,16 @@ export const BurnerManagerUi = observer(({ burnerManager }: { burnerManager?: Bu
     burnerManager.delete(burner.address);
     setRefresher(!refresher);
 
-    playSound(Sounds.Magnum357)
+    playSound(Sounds.Magnum357);
 
-     // force connect active wallet
-     disconnect();
-     connect({ connector });
+    // force connect active wallet
+    disconnect();
+    connect({ connector });
   };
 
   if (!burnerManager) return null;
+  if (!connector) return null;
+  if (connector?.id !== "dojoburner") return null;
 
   return (
     <VStack w="full" p={3}>

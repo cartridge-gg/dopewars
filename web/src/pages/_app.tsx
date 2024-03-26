@@ -7,7 +7,6 @@ import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
-import { useBurnerWindowObject } from "@dojoengine/create-burner";
 import { Analytics } from "@vercel/analytics/react";
 import type { AppProps } from "next/app";
 import NextHead from "next/head";
@@ -26,12 +25,6 @@ export default function App({ Component, pageProps }: AppProps) {
       }, 20_000);
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
-
-  // useEffect(() => {
-  //   initializeInPage();
-  // }, []);
-
-  useBurnerWindowObject();
 
   return (
     <>

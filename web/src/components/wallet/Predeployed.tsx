@@ -2,25 +2,24 @@ import { useDojoContext } from "@/dojo/hooks";
 import { Button, Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { Wallet } from "../icons/archive";
-import { BurnerManagerUi } from "./ui/BurnerManagerUi";
+import { PredeployedManagerUi } from "./ui/PredeployedManagerUi";
 
-export const Burners = () => {
-  const { burnerManager } = useDojoContext();
-  const { connector } = useConnect();
+export const Predeployed = () => {
+  const { predeployedManager } = useDojoContext();
+  const { connector, isConnected } = useConnect();
   const { account } = useAccount();
 
-
-  if (!burnerManager) return null;
+  if (!predeployedManager) return null;
   if (!account) return null;
   if (!connector) return null;
-  if (connector?.id !== "dojoburner") return null;
+  if (connector?.id !== "dojopredeployed") return null;
   return (
     <Menu>
       <MenuButton as={Button} variant="pixelated" h="48px" /*rightIcon={<Arrow direction='down' />}*/>
         <Wallet />
       </MenuButton>
       <MenuList>
-        <BurnerManagerUi burnerManager={burnerManager} />
+        <PredeployedManagerUi predeployedManager={predeployedManager} />
       </MenuList>
     </Menu>
   );

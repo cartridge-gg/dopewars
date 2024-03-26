@@ -51,11 +51,11 @@ export type encountersActionNameKeys = keyof typeof encountersActionName;
 
 export const randomGreetings = {
   0: "Welcome to",
-  1: "GM",
-  2: "Yo",
-  3: "Sup",
-  4: "Here we go again",
-  5: "Ohayo",
+  // 1: "GM",
+  // 2: "Yo",
+  // 3: "Sup",
+  // 4: "Here we go again",
+  // 5: "Ohayo",
 }
 export type randomGreetingsKeys = keyof typeof randomGreetings;
 

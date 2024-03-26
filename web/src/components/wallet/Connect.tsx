@@ -26,7 +26,6 @@ export const frenlyAddress = (address: string) => {
 
 export const Connect = ({ ...props }) => {
   const { account, address, status } = useAccount();
-
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
 
@@ -196,13 +195,15 @@ const ConnectModal = ({
           <VStack w="full">
             {connectors.map((connector) => {
               const isBurner = connector.id === "dojoburner";
-              if (isBurner && !isKatana) {
-                // burner not on katana
+              const isPredeployed = connector.id === "dojopredeployed";
+            
+              if (!isKatana && (isBurner || isPredeployed)) {
+                // burner or predeployed not on katana
                 return null;
               }
 
-              if (!isBurner && isKatana) {
-                // not burner on katana
+              if (isKatana && !(isBurner || isPredeployed )) {
+                // not burner or predeployed on katana
                 return null;
               }
 

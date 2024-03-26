@@ -1,5 +1,10 @@
-import { BurnerManager, DojoBurnerStarknetWindowObject } from "@dojoengine/create-burner";
-import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  BurnerManager,
+  PredeployedManager,
+  useBurnerWindowObject,
+  usePredeployedWindowObject
+} from "@dojoengine/create-burner";
+import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { QueryClientProvider } from "react-query";
 import { Account, AccountInterface } from "starknet";
 import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
@@ -13,6 +18,7 @@ interface DojoContextType {
   clients: DojoClientsResult;
   masterAccount?: AccountInterface;
   burnerManager?: BurnerManager;
+  predeployedManager?: PredeployedManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
 }
@@ -29,7 +35,6 @@ export const DojoContextProvider = ({
   const currentValue = useContext(DojoContext);
   if (currentValue) throw new Error("DojoProvider can only be used once");
 
-  const [snWindowObjectInitialized, setSnWindowObjectInitialized] = useState(false);
 
   const defaultChain =
     process.env.NODE_ENV === "production" ? dojoContextConfig.KATANA_SLOT_420 : dojoContextConfig.KATANA;
@@ -56,22 +61,18 @@ export const DojoContextProvider = ({
     });
   }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
 
-  useEffect(() => {
-    const init_async = async () => {
-      if (window.starknet_dojoburner && burnerManager) {
-        try {
-          // initialize burnerManager
-          await burnerManager.init();
-          // setBurnerManager
-          (window.starknet_dojoburner as DojoBurnerStarknetWindowObject).setBurnerManager(burnerManager);
-        } catch (e: any) {
-          console.log(e);
-        }
-      }
-      setSnWindowObjectInitialized(true);
-    };
-    init_async();
-  }, [burnerManager]);
+  const predeployedManager = useMemo(() => {
+    if (!selectedChain.predeployedAccounts || selectedChain.predeployedAccounts.length === 0) return undefined;
+    // console.log("new BurnerManager");
+
+    return new PredeployedManager({
+      rpcProvider: rpcProvider,
+      predeployedAccounts: selectedChain.predeployedAccounts,
+    });
+  }, [rpcProvider, selectedChain.predeployedAccounts]);
+
+  const { isInitialized: burnerSWOInitialized} = useBurnerWindowObject(burnerManager);
+  const { isInitialized: predeployedSWOInitialized} = usePredeployedWindowObject(predeployedManager);
 
   const configStore = useMemo(() => {
     return new ConfigStoreClass({
@@ -93,7 +94,8 @@ export const DojoContextProvider = ({
     configStore.init();
   }, [configStore]);
 
-  if (!snWindowObjectInitialized) return null;
+
+  if (!(burnerSWOInitialized && predeployedSWOInitialized)) return null;
 
   return (
     <DojoContext.Provider
@@ -113,6 +115,7 @@ export const DojoContextProvider = ({
           rpcProvider,
         },
         burnerManager,
+        predeployedManager,
         masterAccount,
         configStore,
         gameStore,
