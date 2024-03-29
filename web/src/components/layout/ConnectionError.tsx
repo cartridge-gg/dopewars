@@ -2,7 +2,7 @@ import { Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ChainSelector } from "../wallet";
 
-const ConnectionError = ({ errors }: { errors: string[] }) => {
+const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
   const router = useRouter();
 
   return (
@@ -11,9 +11,9 @@ const ConnectionError = ({ errors }: { errors: string[] }) => {
         <VStack fontSize="16px">
           <VStack fontSize="16px">
             <Text>Unable to connect</Text>
-            {errors.map((e) => {
+            {errors.map((e,key) => {
               if (e) {
-                return <Text>{e}</Text>;
+                return <Text key={key}>{e}</Text>;
               }
             })}
           </VStack>

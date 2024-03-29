@@ -5,7 +5,7 @@ import { useDisconnect } from "@starknet-react/core";
 
 type ChainSelectorProps = {
   canChange: boolean;
-  onChange: VoidFunction;
+  onChange?: VoidFunction;
 };
 
 export const ChainSelector = ({ canChange = false, onChange = () => {} }: ChainSelectorProps) => {

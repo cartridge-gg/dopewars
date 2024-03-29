@@ -15,7 +15,7 @@ import { QueryClientProvider } from "react-query";
 import { Account, AccountInterface } from "starknet";
 import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
 import { DojoClientsResult, useDojoClients } from "../hooks/useDojoClients";
-import { DojoContextConfig } from "../setup/config";
+import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 
@@ -36,7 +36,11 @@ export const DojoContextProvider = observer(
     const currentValue = useContext(DojoContext);
     if (currentValue) throw new Error("DojoProvider can only be used once");
 
-    const [configStoreState, setConfigStoreState] = useState({
+    const [configStoreState, setConfigStoreState] = useState<{
+      isInitialized: boolean;
+      isError: boolean;
+      error: string | undefined;
+    }>({
       isInitialized: false,
       isError: false,
       error: undefined,
@@ -47,6 +51,7 @@ export const DojoContextProvider = observer(
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
+
     const intialChain =
       lastSelectedChainId && dojoContextConfig[lastSelectedChainId as SupportedChainIds]
         ? dojoContextConfig[lastSelectedChainId as SupportedChainIds]
@@ -65,7 +70,6 @@ export const DojoContextProvider = observer(
 
     const burnerManager = useMemo(() => {
       if (!masterAccount) return undefined;
-      // console.log("new BurnerManager");
 
       return new BurnerManager({
         masterAccount: masterAccount!,
@@ -76,7 +80,6 @@ export const DojoContextProvider = observer(
 
     const predeployedManager = useMemo(() => {
       if (!selectedChain.predeployedAccounts || selectedChain.predeployedAccounts.length === 0) return undefined;
-      // console.log("new BurnerManager");
 
       return new PredeployedManager({
         rpcProvider: rpcProvider,
@@ -89,7 +92,7 @@ export const DojoContextProvider = observer(
       isError: burnerSWOIsError,
       error: burnerSWOError,
     } = useBurnerWindowObject(burnerManager);
-    
+
     const {
       isInitialized: predeployedSWOIsInitialized,
       isError: predeployedSWOIsError,
@@ -114,7 +117,7 @@ export const DojoContextProvider = observer(
 
     useEffect(() => {
       const initAsync = async () => {
-        if(!configStore) return
+        if (!configStore) return;
         try {
           await configStore.init();
           setConfigStoreState({
@@ -139,7 +142,7 @@ export const DojoContextProvider = observer(
 
     // console.log("isInitialized", isInitialized);
     // console.log("hasError", hasError);
-    
+
     // is initializing
     if (!hasError && !isInitialized)
       return (

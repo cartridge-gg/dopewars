@@ -70,7 +70,14 @@ const katanaSlot420: DojoChainConfig = {
     masterPrivateKey: "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78",
     accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
     manifest,
-    predeployedAccounts: []
+    predeployedAccounts: [
+        {
+            name: "Deployer",
+            address: "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7",
+            privateKey: "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c",
+            active: false
+        },
+    ]
 }
 
 const katanaSlot421: DojoChainConfig = {

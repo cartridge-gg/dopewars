@@ -1,7 +1,6 @@
 import { useDojoContext } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
 import DataTable from "react-data-table-component";
-import { customTableStyles } from "./tables";
 
 // bigint not supported ...
 // const columns = getTableColumns(["name", "idx", "bits"]);
@@ -9,15 +8,15 @@ import { customTableStyles } from "./tables";
 const columns = [
   {
     name: "name",
-    selector: (row) => row["name"],
+    selector: (row: any) => row["name"],
   },
   {
     name: "idx",
-    selector: (row) => Number(row["idx"]),
+    selector: (row: any) => Number(row["idx"]),
   },
   {
     name: "bits",
-    selector: (row) => Number(row["bits"]),
+    selector: (row: any) => Number(row["bits"]),
   },
 ]
 
@@ -25,5 +24,5 @@ export const GameLayoutTable = observer(() => {
   const {
     configStore: { config },
   } = useDojoContext();
-  return <DataTable customStyles={customTableStyles} columns={columns} data={config?.config.layouts.game_store} />;
+  return <DataTable  columns={columns} data={config?.config.layouts.game_store || []} />;
 });

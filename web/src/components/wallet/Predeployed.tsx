@@ -6,7 +6,7 @@ import { PredeployedManagerUi } from "./ui/PredeployedManagerUi";
 
 export const Predeployed = () => {
   const { predeployedManager } = useDojoContext();
-  const { connector, isConnected } = useConnect();
+  const { connector } = useConnect();
   const { account } = useAccount();
 
   if (!predeployedManager) return null;

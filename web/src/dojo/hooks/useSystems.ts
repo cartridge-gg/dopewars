@@ -20,13 +20,14 @@ export interface SystemsInterface {
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   claim: (season: number) => Promise<SystemExecuteResult>;
-//
+  //
+  setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
   setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
-//
+  //
   failingTx: () => Promise<SystemExecuteResult>;
-    feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
+  feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: string;
@@ -361,7 +362,7 @@ export const useSystems = (): SystemsInterface => {
         {
           contractName: "rollyourown::systems::ryo::ryo",
           functionName: "set_paused",
-          callData: [paused],
+          callData: [paused ? 0 : 1],
         }
       );
 
@@ -413,9 +414,9 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
-  
 
- 
+
+
 
   //
   //
