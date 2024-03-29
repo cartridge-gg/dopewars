@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout";
+import { Loader } from "@/components/layout/Loader";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
-import { Image } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
@@ -14,19 +14,21 @@ const Redirector = observer(() => {
   const { game } = useGameStore();
 
   useEffect(() => {
-    if (!game) return;
-
-    if (game.player.status === PlayerStatus.Normal) {
-      router.push(`/${gameId}/${game.player.location.location}`);
-    } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
-      //
-      router.push(`/${gameId}/event/decision`);
+    if (!game) {
+      router.push(`/`);
+    } else {
+      if (game.player.status === PlayerStatus.Normal) {
+        router.push(`/${gameId}/${game.player.location.location}`);
+      } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
+        //
+        router.push(`/${gameId}/event/decision`);
+      }
     }
   }, [game, game?.player.status, game?.player.location, router, gameId]);
 
   return (
     <Layout isSinglePanel>
-      <Image src="images/loading.gif" alt="loading" width="60px" height="60px" margin="auto" />
+      <Loader />
     </Layout>
   );
 });

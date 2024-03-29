@@ -99,6 +99,8 @@ const Consequence = () => {
                   After {encounterResult.rounds} attempt{encounterResult.rounds > 1 ? "s" : ""}
                 </Text>
               )} */}
+
+                  {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}
                   {[...Array(encounterResult.rounds)].map((i, idx) => {
                     return (
                       <>

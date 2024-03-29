@@ -90,7 +90,10 @@ export class ConfigStoreClass {
   manifest: any;
 
   config: Config | undefined = undefined;
+
   isLoading = false;
+  isInitialized = false;
+  error: any | undefined = undefined;
 
   constructor({ client, dojoProvider, manifest }: ConfigStoreProps) {
     // console.log("new ConfigStoreClass");
@@ -109,100 +112,97 @@ export class ConfigStoreClass {
   }
 
   *init() {
-    this.config = undefined;
-    this.isLoading = true;
-
-    try {
-      const data = (yield this.client.request(ConfigDocument, {})) as ConfigQuery;
-
-      /*************************************************** */
-
-      const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
-      const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
-
-      const ryoAddressEdges = data.ryoAddressModels!.edges as RyoAddressEdge[];
-      const ryoAddress = ryoAddressEdges[0]!.node as RyoAddress;
-
-      /*************************************************** */
-
-      const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
-      const drugConfig = drugConfigEdges.map((i) => i.node as DrugConfig);
-
-      //
-
-      const locationConfigEdges = data.locationConfigModels!.edges as LocationConfigEdge[];
-      const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
-
-      //
-
-      const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
-      const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
-        return {
-          ...i.node,
-          name: shortString.decodeShortString(i.node?.name),
-        } as HustlerItemBaseConfig;
-      });
-
-      //
-
-      const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
-      const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
-
-      /*************************************************** */
-
-      const drugConfigFull = drugConfig.map((i) => {
-        return {
-          ...i,
-          name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
-          icon: drugIcons[i.drug as drugIconsKeys],
-        } as DrugConfigFull;
-      });
-
-      const locationConfigFull = locationConfig.flatMap((i) => {
-        if (i.location === "Home") return [];
-
-        return [
-          {
-            ...i,
-            name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
-            icon: locationIcons[i.location as locationIconsKeys],
-          },
-        ] as LocationConfigFull[];
-      });
-
-      /*************************************************** */
-
-      // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
-      const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
-
-      const contract: TypedContractV2<typeof configAbi> = new Contract(
-        contractInfos.abi,
-        contractInfos.address,
-        this.dojoProvider.provider,
-      ).typedv2(configAbi);
-
-      ///@ts-ignore 
-      const getConfig = yield contract.get_config();
-
-      /*************************************************** */
-
-      this.config = {
-        ryo: ryoConfig,
-        ryoAddress: ryoAddress,
-        drug: drugConfigFull,
-        location: locationConfigFull,
-        items: hustlerItemBaseConfig,
-        tiers: hustlerItemTiersConfig,
-        /// @ts-ignore
-        config: getConfig as GetConfig,
-      };
-    } catch (e: any) {
-      console.log("ERROR: ConfigStoreClass.init");
-      console.log(e);
+    if (this.isInitialized) {
+      return;
     }
 
-    this.isLoading = false;
+    this.config = undefined;
 
+    const data = (yield this.client.request(ConfigDocument, {})) as ConfigQuery;
+
+    /*************************************************** */
+
+    const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
+    const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
+
+    const ryoAddressEdges = data.ryoAddressModels!.edges as RyoAddressEdge[];
+    const ryoAddress = ryoAddressEdges[0]!.node as RyoAddress;
+
+    /*************************************************** */
+
+    const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
+    const drugConfig = drugConfigEdges.map((i) => i.node as DrugConfig);
+
+    //
+
+    const locationConfigEdges = data.locationConfigModels!.edges as LocationConfigEdge[];
+    const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
+
+    //
+
+    const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
+    const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
+      return {
+        ...i.node,
+        name: shortString.decodeShortString(i.node?.name),
+      } as HustlerItemBaseConfig;
+    });
+
+    //
+
+    const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
+    const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
+
+    /*************************************************** */
+
+    const drugConfigFull = drugConfig.map((i) => {
+      return {
+        ...i,
+        name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
+        icon: drugIcons[i.drug as drugIconsKeys],
+      } as DrugConfigFull;
+    });
+
+    const locationConfigFull = locationConfig.flatMap((i) => {
+      if (i.location === "Home") return [];
+
+      return [
+        {
+          ...i,
+          name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
+          icon: locationIcons[i.location as locationIconsKeys],
+        },
+      ] as LocationConfigFull[];
+    });
+
+    /*************************************************** */
+
+    // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
+    const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
+
+    const contract: TypedContractV2<typeof configAbi> = new Contract(
+      contractInfos.abi,
+      contractInfos.address,
+      this.dojoProvider.provider,
+    ).typedv2(configAbi);
+
+    ///@ts-ignore
+    const getConfig = yield contract.get_config();
+
+    /*************************************************** */
+
+    this.config = {
+      ryo: ryoConfig,
+      ryoAddress: ryoAddress,
+      drug: drugConfigFull,
+      location: locationConfigFull,
+      items: hustlerItemBaseConfig,
+      tiers: hustlerItemTiersConfig,
+      /// @ts-ignore
+      config: getConfig as GetConfig,
+    };
+
+    this.isInitialized = true;
     // console.log("config:", this.config);
   }
 

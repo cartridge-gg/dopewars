@@ -196,13 +196,13 @@ const ConnectModal = ({
             {connectors.map((connector) => {
               const isBurner = connector.id === "dojoburner";
               const isPredeployed = connector.id === "dojopredeployed";
-            
+
               if (!isKatana && (isBurner || isPredeployed)) {
                 // burner or predeployed not on katana
                 return null;
               }
 
-              if (isKatana && !(isBurner || isPredeployed )) {
+              if (isKatana && !(isBurner || isPredeployed)) {
                 // not burner or predeployed on katana
                 return null;
               }
@@ -249,6 +249,8 @@ const ConnectModal = ({
 };
 
 export const ChildrenOrConnect = ({ children }: { children: ReactNode }) => {
-  const { account } = useAccount();
-  return <>{account ? children : <Connect />}</>;
+  const { /*account,*/ isConnecting, isReconnecting, isConnected } = useAccount();
+  if (isConnecting || isReconnecting) return null;
+  return <>{isConnected ? children : <Connect />}</>;
+
 };

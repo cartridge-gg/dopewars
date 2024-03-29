@@ -1,14 +1,14 @@
 
 import { Chain } from "@starknet-react/chains";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { shortString } from "starknet";
 import { DojoChainConfig, DojoContextConfig, SupportedChainIds } from "../setup/config";
 
 export type DojoChainsResult = ReturnType<typeof useDojoChains>;
 
-export const useDojoChains = (dojoContextConfig: DojoContextConfig, defaultChain: DojoChainConfig) => {
+export const useDojoChains = (dojoContextConfig: DojoContextConfig, intialChain: DojoChainConfig) => {
 
-    const [selected, setSelected] = useState<DojoChainConfig>(defaultChain);
+    const [selected, setSelected] = useState<DojoChainConfig>(intialChain);
 
     const setSelectedChain = (chain: DojoChainConfig) => {
         setSelected(chain)
@@ -27,15 +27,15 @@ export const useDojoChains = (dojoContextConfig: DojoContextConfig, defaultChain
     );
 
 
-    useEffect(() => {
-        const lastSelectedChainId = (typeof window !== "undefined") ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
-        const toSelect = lastSelectedChainId && dojoContextConfig[lastSelectedChainId as SupportedChainIds] ?
-            dojoContextConfig[lastSelectedChainId as SupportedChainIds] :
-            defaultChain;
+    // useEffect(() => {
+    //     const lastSelectedChainId = (typeof window !== "undefined") ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
+    //     const toSelect = lastSelectedChainId && dojoContextConfig[lastSelectedChainId as SupportedChainIds] ?
+    //         dojoContextConfig[lastSelectedChainId as SupportedChainIds] :
+    //         defaultChain;
 
-        setSelected(toSelect)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    //     setSelected(toSelect)
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
 
     return {
         dojoContextConfig,

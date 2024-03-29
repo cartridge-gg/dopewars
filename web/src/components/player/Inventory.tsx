@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
 import { Bag, Cigarette, PawnshopIcon } from "../icons";
 
+import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
 import { useAccount } from "@starknet-react/core";
 import { PowerMeter } from "./PowerMeter";
@@ -98,6 +99,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
+                playSound(Sounds.Door, 0.5)
                 router.push(`/${gameId}/pawnshop`);
               }
             }}

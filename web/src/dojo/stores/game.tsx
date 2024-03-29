@@ -170,6 +170,7 @@ export class GameStoreClass {
   wsClient: Client;
   configStore: ConfigStoreClass;
   //  id: string = null;
+  isInitialized = false;
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
   gameInfos: Game | null = null;
@@ -203,9 +204,15 @@ export class GameStoreClass {
     this.gameInfos = null;
     this.gameEvents = null;
     this.handles = [];
+    this.isInitialized = false;
   }
 
   *init(gameId: string /*, playerId: string*/) {
+    //this.reset()
+    if(this.isInitialized){ 
+      return
+    }
+
     yield this.loadGameInfos(gameId);
 
     // retrieve playerId from gameInfos
@@ -256,6 +263,8 @@ export class GameStoreClass {
         },
       ),
     );
+
+    this.isInitialized = true
   }
 
   *loadGameInfos(gameId: string) {

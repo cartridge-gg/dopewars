@@ -33,11 +33,7 @@ export default function Home() {
       play();
     }
 
-    // if (!account) {
-
-    // } else {
       router.push(`/create/new`);
-    // }
   };
 
   return (

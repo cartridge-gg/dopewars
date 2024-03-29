@@ -1,5 +1,5 @@
 import { DojoEvent } from "@/dojo/class/Events";
-import { HighVolatilityData, MeetOGData } from "@/dojo/events";
+import { HighVolatilityData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ConfigStoreClass } from "@/dojo/stores/config";
@@ -28,12 +28,7 @@ const RegisterEntities = observer(() => {
   const toaster = useToast();
 
   useEffect(() => {
-    // const init = async () => {
-    //   // if (!gameId) {
-    //   //   gameStore.reset();
-    //   // }
-    // };
-
+   
     console.log("RegisterEntities", gameId);
 
     if (gameStore && gameId) {
@@ -41,7 +36,7 @@ const RegisterEntities = observer(() => {
     } else {
       gameStore.reset();
     }
-  }, [gameId, account?.address, playerId, selectedChain, gameStore]);
+  }, [gameId, gameStore]);
 
   //
   useEffect(() => {
@@ -70,11 +65,11 @@ const RegisterEntities = observer(() => {
       //   break;
 
       case WorldEvents.MeetOG:
-        const meetOgEvent = last.parsed as MeetOGData;
-        setOgId(meetOgEvent.ogId);
-        setTimeout(() => {
-          setOgId(undefined);
-        }, 10_000);
+        // const meetOgEvent = last.parsed as MeetOGData;
+        // setOgId(meetOgEvent.ogId);
+        // setTimeout(() => {
+        //   setOgId(undefined);
+        // }, 10_000);
         break;
 
       case WorldEvents.HighVolatility:

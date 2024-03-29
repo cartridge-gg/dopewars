@@ -1,6 +1,4 @@
-import RegisterEntities from "@/components/RegisterEntities";
 import { MakeItRain } from "@/components/layout";
-import { StarknetProvider } from "@/components/wallet";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
@@ -28,26 +26,23 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <DojoContextProvider dojoContextConfig={dojoContextConfig}>
-        <StarknetProvider>
-          <ChakraProvider theme={theme}>
-            <Fonts />
-            <GlobalStyles />
-            <NextHead>
-              <title>Roll your Own</title>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-              />
-            </NextHead>
-            {isRightSequence && <MakeItRain />}
-            <RegisterEntities />
-            <Component {...pageProps} />
-            <Analytics />
-            {/* <Debug /> */}
-          </ChakraProvider>
-        </StarknetProvider>
-      </DojoContextProvider>
+      <ChakraProvider theme={theme}>
+        <DojoContextProvider dojoContextConfig={dojoContextConfig}>
+          <Fonts />
+          <GlobalStyles />
+          <NextHead>
+            <title>Roll your Own</title>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            />
+          </NextHead>
+          {isRightSequence && <MakeItRain />}
+          <Component {...pageProps} />
+          <Analytics />
+          {/* <Debug /> */}
+        </DojoContextProvider>
+      </ChakraProvider>
     </>
   );
 }
