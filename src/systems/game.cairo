@@ -225,7 +225,7 @@ mod game {
             set!(world, (game_store_packed));
 
             // emit GameCreated
-            emit!(world, GameCreated { game_id, player_id, game_mode, player_name, hustler_id });
+            emit!(world, (Event::GameCreated(GameCreated { game_id, player_id, game_mode, player_name, hustler_id })));
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {

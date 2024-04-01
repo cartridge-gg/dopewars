@@ -108,13 +108,10 @@ export class ConfigStoreClass {
       init: flow,
     });
 
-    // this.init()
   }
 
   *init() {
-    if (this.isInitialized) {
-      return;
-    }
+    this.isInitialized = false;
 
     this.config = undefined;
 

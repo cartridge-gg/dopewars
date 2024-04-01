@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 
 import { Button } from "@/components/common";
-import { Hustler, Hustlers } from "@/components/hustlers";
+import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
@@ -33,6 +33,7 @@ import { useAccount } from "@starknet-react/core";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
+import { shortString } from "starknet";
 
 const End = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -96,8 +97,8 @@ const End = observer(() => {
                 <Divider borderColor="neon.600" /> */}
 
                 <StatsItem
-                  text={gameInfos?.player_name}
-                  icon={<Hustler hustler={hustlerId as Hustlers} w="24px" h="24px" />}
+                  text={shortString.decodeShortString(gameInfos?.player_name)}
+                  icon={<HustlerIcon hustler={hustlerId as Hustlers} w="24px" h="24px" />}
                 />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Day ${day}`} icon={<Calendar />} />

@@ -1023,6 +1023,7 @@ export type World__Entity = {
   __typename?: 'World__Entity';
   createdAt?: Maybe<Scalars['DateTime']>;
   eventId?: Maybe<Scalars['String']>;
+  executedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   keys?: Maybe<Array<Maybe<Scalars['String']>>>;
   models?: Maybe<Array<Maybe<ModelUnion>>>;
@@ -1046,6 +1047,7 @@ export type World__Event = {
   __typename?: 'World__Event';
   createdAt?: Maybe<Scalars['DateTime']>;
   data?: Maybe<Array<Maybe<Scalars['String']>>>;
+  executedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   keys?: Maybe<Array<Maybe<Scalars['String']>>>;
   transactionHash?: Maybe<Scalars['String']>;
@@ -1064,11 +1066,36 @@ export type World__EventEdge = {
   node?: Maybe<World__Event>;
 };
 
+export type World__EventMessage = {
+  __typename?: 'World__EventMessage';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  eventId?: Maybe<Scalars['String']>;
+  executedAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['ID']>;
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
+  models?: Maybe<Array<Maybe<ModelUnion>>>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type World__EventMessageConnection = {
+  __typename?: 'World__EventMessageConnection';
+  edges?: Maybe<Array<Maybe<World__EventMessageEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type World__EventMessageEdge = {
+  __typename?: 'World__EventMessageEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<World__EventMessage>;
+};
+
 export type World__Metadata = {
   __typename?: 'World__Metadata';
   content?: Maybe<World__Content>;
   coverImg?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  executedAt?: Maybe<Scalars['DateTime']>;
   iconImg?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1094,6 +1121,7 @@ export type World__Model = {
   classHash?: Maybe<Scalars['felt252']>;
   contractAddress?: Maybe<Scalars['felt252']>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  executedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   transactionHash?: Maybe<Scalars['felt252']>;
@@ -1138,6 +1166,8 @@ export type World__Query = {
   erc20AllowanceModelModels?: Maybe<Erc20AllowanceModelConnection>;
   erc20BalanceModelModels?: Maybe<Erc20BalanceModelConnection>;
   erc20MetadataModelModels?: Maybe<Erc20MetadataModelConnection>;
+  eventMessage: World__EventMessage;
+  eventMessages?: Maybe<World__EventMessageConnection>;
   events?: Maybe<World__EventConnection>;
   gameConfigModels?: Maybe<GameConfigConnection>;
   gameModels?: Maybe<GameConnection>;
@@ -1218,6 +1248,22 @@ export type World__QueryErc20MetadataModelModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Erc20MetadataModelOrder>;
   where?: InputMaybe<Erc20MetadataModelWhereInput>;
+};
+
+
+export type World__QueryEventMessageArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type World__QueryEventMessagesArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  keys?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1402,6 +1448,7 @@ export type World__Subscription = {
   __typename?: 'World__Subscription';
   entityUpdated: World__Entity;
   eventEmitted: World__Event;
+  eventMessageUpdated: World__EventMessage;
   modelRegistered: World__Model;
 };
 
@@ -1416,6 +1463,11 @@ export type World__SubscriptionEventEmittedArgs = {
 };
 
 
+export type World__SubscriptionEventMessageUpdatedArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
 export type World__SubscriptionModelRegisteredArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
@@ -1424,6 +1476,7 @@ export type World__Transaction = {
   __typename?: 'World__Transaction';
   calldata?: Maybe<Array<Maybe<Scalars['felt252']>>>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  executedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   maxFee?: Maybe<Scalars['felt252']>;
   nonce?: Maybe<Scalars['felt252']>;

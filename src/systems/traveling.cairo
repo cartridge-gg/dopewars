@@ -247,7 +247,7 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
         escaped_with_item: result.escaped_with_item,
     };
 
-    emit!( game_store.world, result_event);
+    emit!(game_store.world, (Event::TravelEncounterResult(result_event)));
     
     // // emit event
     // game_store
