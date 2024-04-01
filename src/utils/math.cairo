@@ -2,6 +2,8 @@ trait MathTrait<T> {
     fn add_capped(self: T, value: T, cap: T) -> T;
     fn sub_capped(self: T, value: T, cap: T) -> T;
     fn pct(self: T, p: u128) -> T;
+    fn min(lhs: T, rhs: T) -> T;
+    fn max(lhs: T, rhs: T) -> T;
 }
 
 impl MathImpl<
@@ -36,6 +38,15 @@ impl MathImpl<
     fn pct(self: T, p: u128) -> T {
         (self.into() * p / 100).try_into().unwrap()
     }
+
+    fn min(lhs: T, rhs: T) -> T {
+        if lhs < rhs { lhs } else { rhs }
+    }
+
+    fn max(lhs: T, rhs: T) -> T {
+        if lhs > rhs { lhs } else { rhs }
+    }
+
 }
 
 

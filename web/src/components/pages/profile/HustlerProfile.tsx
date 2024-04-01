@@ -1,5 +1,5 @@
 import { Hustler, Hustlers } from "@/components/hustlers";
-import { PowerMeter } from "@/components/player";
+import { Inventory, PowerMeter } from "@/components/player";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ItemSlot } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
@@ -119,7 +119,7 @@ export const HustlerProfile = observer(() => {
         </VStack>
       </Card> */}
 
-      {/* <Inventory /> */}
+      <Inventory hidePawnshop={true} />
     </VStack>
   );
 });

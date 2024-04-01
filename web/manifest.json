@@ -990,13 +990,12 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": [],
-      "name": "rollyourown::config::config::config"
+      "computed": []
     },
     {
-      "kind": "DojoContract",
-      "address": "0x2e52ab5e1fa5493848763c3367c960799d805f9f2c3c9cde31a0362b46d7eb2",
-      "class_hash": "0x53e517d6ad469baeb980e5f753eafe28f71d4259eac19bbab02bdc8bbdbba3b",
+      "name": "rollyourown::config::config::config",
+      "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
+      "class_hash": "0x41dde9b72449ef0e0cb33fa1003a92b88590b9b33aa9c5e6ccb61f65ddf2f95",
       "abi": [
         {
           "type": "impl",
@@ -1054,8 +1053,246 @@
         },
         {
           "type": "impl",
-          "name": "GameActionsImpl",
-          "interface_name": "rollyourown::systems::config::IGameActions"
+          "name": "ConfigImpl",
+          "interface_name": "rollyourown::config::config::IConfig"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::LayoutItem",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "idx",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "bits",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::LayoutsConfig",
+          "members": [
+            {
+              "name": "game_store",
+              "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
+            },
+            {
+              "name": "player",
+              "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::hustlers::ItemSlot",
+          "variants": [
+            {
+              "name": "Weapon",
+              "type": "()"
+            },
+            {
+              "name": "Clothes",
+              "type": "()"
+            },
+            {
+              "name": "Feet",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "initial_tier",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "tier",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "stat",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "base",
+              "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
+            },
+            {
+              "name": "tier",
+              "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerConfig",
+          "members": [
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "weapon",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "clothes",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "feet",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "transport",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::game::GameConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_turns",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_wanted_shopping",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rounds",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_drug_step",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_buy_item",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_carry_drugs",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_gang",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::Config",
+          "members": [
+            {
+              "name": "layouts",
+              "type": "rollyourown::config::config::LayoutsConfig"
+            },
+            {
+              "name": "hustlers",
+              "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
+            },
+            {
+              "name": "game_config",
+              "type": "rollyourown::config::game::GameConfig"
+            }
+          ]
         },
         {
           "type": "interface",
@@ -1132,13 +1369,12 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": [],
-      "name": "rollyourown::systems::config::config1"
+      "computed": []
     },
     {
-      "kind": "DojoContract",
-      "address": "0x39c0f0531ea74d657f91ed6e4467e01aea144060b7c69f6c8cdb7e6b904e082",
-      "class_hash": "0x3c204a2c8ce581c92fbd94287a71457d1888ed6fcfae216d93218587713003b",
+      "name": "rollyourown::systems::devtools::devtools",
+      "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
+      "class_hash": "0x1f20a5c0295585b3e1794abdc092de807edfcb3ba7d459933771b85f89742a9",
       "abi": [
         {
           "type": "impl",
@@ -1286,13 +1522,12 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": [],
-      "name": "rollyourown::systems::devtools::devtools"
+      "computed": []
     },
     {
-      "kind": "DojoContract",
-      "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
-      "class_hash": "0x4418a4bcff4fce0244d43fa9c79d47cb70d2b50f837baeeb12b0fba652220f8",
+      "name": "rollyourown::systems::game::game",
+      "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
+      "class_hash": "0x21a379c1cd0e4e9e53224a1a619962a3e38ddb1886490269c5a70d49b986a8e",
       "abi": [
         {
           "type": "impl",
@@ -2009,6 +2244,16 @@
               "name": "escaped_with_item",
               "type": "core::bool",
               "kind": "data"
+            },
+            {
+              "name": "rep_pos",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "rep_neg",
+              "type": "core::integer::u8",
+              "kind": "data"
             }
           ]
         },
@@ -2076,6 +2321,11 @@
             },
             {
               "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "reputation",
               "type": "core::integer::u8",
               "kind": "data"
             }
@@ -2360,19 +2610,85 @@
           "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel"
         },
         {
-          "type": "interface",
-          "name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel",
-          "items": [
+          "name": "health",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "max_turns",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "max_wanted_shopping",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "max_rounds",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_drug_step",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_buy_item",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_carry_drugs",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_pay_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_pay_gang",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_run_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_run_gang",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_fight_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_fight_gang",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x40f8c712d1ed5897bf9ee8e2e72903714713eccb1903078964aa1bcae7d5383",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
             {
-              "type": "function",
-              "name": "totalSupply",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::integer::u256"
-                }
-              ],
-              "state_mutability": "view"
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
             }
           ]
         },
@@ -2433,38 +2749,80 @@
                   "type": "core::bool"
                 }
               ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "transfer_from",
-              "inputs": [
-                {
-                  "name": "sender",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "recipient",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "amount",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::bool"
-                }
-              ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             }
           ]
         },
         {
           "type": "impl",
-          "name": "ERC20BalanceCamelImpl",
-          "interface_name": "token::components::token::erc20::erc20_balance::IERC20BalanceCamel"
+          "name": "game_configImpl",
+          "interface_name": "rollyourown::config::game::Igame_config"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::game::GameConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_turns",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_wanted_shopping",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rounds",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_drug_step",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_buy_item",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_carry_drugs",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_gang",
+              "type": "core::integer::u8"
+            }
+          ]
         },
         {
           "type": "interface",

@@ -9,7 +9,8 @@ enum PlayerLayout {
     PrevLocation,
     Location,
     NextLocation,
-    DrugLevel
+    DrugLevel,
+    Reputation,
 }
 
 impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
@@ -23,6 +24,7 @@ impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
             PlayerLayout::Location => 'Location',
             PlayerLayout::NextLocation => 'NextLocation',
             PlayerLayout::DrugLevel => 'DrugLevel',
+            PlayerLayout::Reputation => 'Reputation',
         };
         value.try_into().unwrap()
     }
@@ -42,6 +44,7 @@ impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
             PlayerLayout::Location,
             PlayerLayout::NextLocation,
             PlayerLayout::DrugLevel,
+            PlayerLayout::Reputation,
         ];
         items.span()
     }
@@ -60,6 +63,7 @@ impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
             PlayerLayout::Location => 3,
             PlayerLayout::NextLocation => 3,
             PlayerLayout::DrugLevel => 3,
+            PlayerLayout::Reputation => 7,
         }
     }
 

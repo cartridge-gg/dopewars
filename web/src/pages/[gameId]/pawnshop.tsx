@@ -17,6 +17,7 @@ const PawnShop = observer(() => {
 
   const { account } = useAccount();
   const configStore = useConfigStore();
+  const {config } = configStore;
   const { game } = useGameStore();
 
   const toaster = useToast();
@@ -32,6 +33,7 @@ const PawnShop = observer(() => {
   };
 
   const onBack = () => {
+    playSound(Sounds.Door, 0.3)
     if (!game?.player.location) {
       return router.push(`/${gameId}/travel`);
     }
@@ -46,7 +48,7 @@ const PawnShop = observer(() => {
     game.pushCall({ slot: selectedShopItem.slot as number, cost: selectedShopItem?.tier.cost });
 
     toaster.toast({
-      message: `${selectedShopItem.upgradeName} equiped!`,
+      message: `${selectedShopItem.upgradeName} equiped! +${config!.config.game_config.rep_buy_item} REP!`,
       icon: selectedShopItem.icon,
     });
     onBack();

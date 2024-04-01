@@ -76,6 +76,7 @@ struct Player {
     location: Locations,
     next_location: Locations,
     drug_level: u8,
+    reputation: u8,
 }
 
 
@@ -96,6 +97,7 @@ impl PlayerImpl of PlayerTrait {
             location: Locations::Home,
             next_location: Locations::Home,
             drug_level: 0,
+            reputation: 0,
         }
     }
 
@@ -113,6 +115,7 @@ impl PlayerImpl of PlayerTrait {
             location: Locations::Home,
             next_location: Locations::Home,
             drug_level: 0,
+            reputation: 0,
         }
     }
 
@@ -124,6 +127,7 @@ impl PlayerImpl of PlayerTrait {
         if self.health == 0 {
             return false;
         }
+
         if self.status != PlayerStatus::Normal {
             return false;
         }
@@ -131,6 +135,7 @@ impl PlayerImpl of PlayerTrait {
         if self.turn == self.game.max_turns {
             return false;
         }
+
         if self.game.game_over {
             return false;
         }
@@ -142,6 +147,7 @@ impl PlayerImpl of PlayerTrait {
         if self.health == 0 {
             return false;
         }
+        
         if self.status != PlayerStatus::Normal {
             return false;
         }
@@ -163,38 +169,47 @@ impl PlayerImpl of PlayerTrait {
         self.status == PlayerStatus::BeingArrested || self.status == PlayerStatus::BeingMugged
     }
 
-    fn level_up_drug(
-        ref self: Player, ref game_store: GameStore, ref randomizer: Random
-        //drugs_packed: DrugsPacked, encounters_packed: EncountersPacked
-    ) {
-        // check if already max drug_level
-        if self.drug_level == 4 {
-            return;
-        };
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
+        // // check if already max drug_level
+        // if self.drug_level == 4 {
+        //     return;
+        // };
 
-        let cops_level = game_store.encounters.get_encounter_level(Encounters::Cops);
-        let gang_level = game_store.encounters.get_encounter_level(Encounters::Gang);
-        let level = cops_level + gang_level;
+        let game_config = GameConfigImpl::get(self.world);
 
-        // level up each 2 encounters capped to 4
-        let drug_level = 0_u8.add_capped(level / 2, 4);
+        // level up each rep_drug_step capped to 4
+        let mut drug_level: u8 = MathImpl::min(self.reputation / game_config.rep_drug_step, 4);
 
         // check if already the right level
         if self.drug_level == drug_level {
             return;
         }
 
-        // check if not carrying drug to be disabled
+        // get drugs
         let drugs = game_store.drugs.get();
-        if drugs.quantity > 0 && drugs.drug.into() < drug_level {
-            return;
+
+        // level up
+        if self.drug_level < drug_level {
+            // check if not carrying drug to be disabled
+            if drugs.quantity > 0 && drugs.drug.into() < drug_level {
+                return;
+            }
         }
 
+        // level down
+        if self.drug_level > drug_level {
+            // check if not carrying drug to be disabled
+            if drugs.quantity > 0 && drugs.drug.into() > drug_level + 4 {
+                return;
+            }
+        }
+        
         // update drug level
         game_store.player.drug_level = drug_level;
 
         // randomize price for new drug
-        game_store.markets.shuffle_drug_prices(ref randomizer, drug_level.into());
+        let drug_slot = drug_level.sub_capped(1,0);
+        game_store.markets.shuffle_drug_prices(ref randomizer, drug_slot);
     }
 
     fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {
@@ -255,6 +270,9 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
                         PlayerLayout::DrugLevel => {
                             bits.replace::<u8>(item.idx(), item.bits(), self.drug_level.into());
                         },
+                        PlayerLayout::Reputation => {
+                            bits.replace::<u8>(item.idx(), item.bits(), self.reputation.into());
+                        },
                     };
                 },
                 Option::None => { break; },
@@ -309,6 +327,12 @@ impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
                         PlayerLayout::DrugLevel => {
                             player
                                 .drug_level = bits
+                                .extract_into::<u8>(item.idx(), item.bits())
+                                .into();
+                        },
+                        PlayerLayout::Reputation => {
+                            player
+                                .reputation = bits
                                 .extract_into::<u8>(item.idx(), item.bits())
                                 .into();
                         },

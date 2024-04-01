@@ -3,6 +3,7 @@ import {
   ConfigQuery,
   DrugConfig,
   DrugConfigEdge,
+  GameConfig,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
   HustlerItemTiersConfig,
@@ -66,6 +67,7 @@ export type GetConfig = {
     player: Array<LayoutItem>;
   };
   hustlers: Array<HustlerConfig>;
+  game_config: GameConfig;
 };
 
 export type Config = {

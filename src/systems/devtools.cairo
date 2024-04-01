@@ -64,6 +64,7 @@ mod devtools {
                             Into::<u8, felt252>::into(rand_10),
                             Into::<u32, felt252>::into(rand),
                             Into::<u8, felt252>::into(rand_100),
+                            Into::<u8, felt252>::into(rand_100),
                         ]
                     );
 
