@@ -145,7 +145,7 @@ const Market = observer(() => {
 });
 export default Market;
 
-const QuantitySelector = ({
+const QuantitySelector = observer(({
   tradeDirection,
   game,
   drug,
@@ -177,7 +177,7 @@ const QuantitySelector = ({
       const maxBuyable = Math.floor(game.player.cash / market.price);
 
       // free space
-      const freeSpace = game.items.transport.tier.stat - game.drugs.quantity;
+      const freeSpace = game.items.transport.tier.stat - (game.drugs.quantity * drug.weight);
       const maxCarryable = Math.floor(freeSpace / drug.weight);
 
       setMax(Math.min(maxBuyable, maxCarryable));
@@ -291,4 +291,4 @@ const QuantitySelector = ({
       </HStack>
     </VStack>
   );
-};
+});

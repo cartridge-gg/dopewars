@@ -1551,7 +1551,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x4e032de3da7ec321e6d1e584d8fe6a8622b0d16922942491b9eda5c5c5a2b29",
+      "class_hash": "0x41dde9b72449ef0e0cb33fa1003a92b88590b9b33aa9c5e6ccb61f65ddf2f95",
       "abi": [
         {
           "type": "impl",
@@ -1768,6 +1768,72 @@
         },
         {
           "type": "struct",
+          "name": "rollyourown::config::game::GameConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_turns",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_wanted_shopping",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rounds",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_drug_step",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_buy_item",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_carry_drugs",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_gang",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
           "name": "rollyourown::config::config::Config",
           "members": [
             {
@@ -1777,6 +1843,10 @@
             {
               "name": "hustlers",
               "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
+            },
+            {
+              "name": "game_config",
+              "type": "rollyourown::config::game::GameConfig"
             }
           ]
         },
@@ -1871,7 +1941,7 @@
     {
       "name": "rollyourown::systems::devtools::devtools",
       "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
-      "class_hash": "0x78077bee04ade4666311e407b37676df6bdcef7e125088c99db93048e272277",
+      "class_hash": "0x1f20a5c0295585b3e1794abdc092de807edfcb3ba7d459933771b85f89742a9",
       "abi": [
         {
           "type": "impl",
@@ -2024,7 +2094,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x1561122e4b6050d6732ab4fb0def3d66c5c74f13d7b03df8fdfee562d4c425e",
+      "class_hash": "0x21a379c1cd0e4e9e53224a1a619962a3e38ddb1886490269c5a70d49b986a8e",
       "abi": [
         {
           "type": "impl",
@@ -2741,6 +2811,16 @@
               "name": "escaped_with_item",
               "type": "core::bool",
               "kind": "data"
+            },
+            {
+              "name": "rep_pos",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "rep_neg",
+              "type": "core::integer::u8",
+              "kind": "data"
             }
           ]
         },
@@ -2808,6 +2888,11 @@
             },
             {
               "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "reputation",
               "type": "core::integer::u8",
               "kind": "data"
             }
@@ -3489,9 +3574,54 @@
           "name": "max_rounds",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "rep_drug_step",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_buy_item",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_carry_drugs",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_pay_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_pay_gang",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_run_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_run_gang",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_fight_cops",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_fight_gang",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x34bc7423f899bfebb8ab6fc3d366b5b408905758a9dadc513d432db881ccbc2",
+      "class_hash": "0x40f8c712d1ed5897bf9ee8e2e72903714713eccb1903078964aa1bcae7d5383",
       "abi": [
         {
           "type": "impl",
@@ -3692,6 +3822,42 @@
             },
             {
               "name": "max_rounds",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_drug_step",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_buy_item",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_carry_drugs",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run_gang",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_cops",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight_gang",
               "type": "core::integer::u8"
             }
           ]

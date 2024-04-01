@@ -27,7 +27,6 @@ struct GameStore {
     items: ItemsPacked,
     drugs: DrugsPacked,
     wanted: WantedPacked,
-    encounters: EncountersPacked,
     player: Player,
 }
 
@@ -43,7 +42,6 @@ impl GameStoreImpl of GameStoreTrait {
             items: ItemsPackedImpl::new(world, game),
             drugs: DrugsPackedImpl::new(world, game),
             wanted: WantedPackedImpl::new(world, game),
-            encounters: EncountersPackedImpl::new(world, game),
             player: PlayerImpl::new(world, game),
         }
     }
@@ -76,12 +74,6 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
                         },
                         GameStoreLayout::Wanted => {
                             bits.replace::<felt252>(item.idx(), item.bits(), self.wanted.packed);
-                        },
-                        GameStoreLayout::Encounters => {
-                            bits
-                                .replace::<
-                                    felt252
-                                >(item.idx(), item.bits(), self.encounters.packed);
                         },
                         GameStoreLayout::Player => {
                             let player_packed: felt252 = self.player.pack();
@@ -123,9 +115,6 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                         },
                         GameStoreLayout::Wanted => {
                             game_store.wanted = WantedPacked { world, game, packed };
-                        },
-                        GameStoreLayout::Encounters => {
-                            game_store.encounters = EncountersPacked { world, game, packed };
                         },
                         GameStoreLayout::Player => {
                             // unpack packed into Player

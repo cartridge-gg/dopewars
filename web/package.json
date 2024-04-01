@@ -20,9 +20,9 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "file:../../dojo-packages/packages/core",
-    "@dojoengine/create-burner": "file:../../dojo-packages/packages/create-burner",
-    "@dojoengine/utils": "file:../../dojo-packages/packages/utils",
+    "@dojoengine/core": "0.6.0-alpha.5",
+    "@dojoengine/create-burner": "0.6.0-alpha.5",
+    "@dojoengine/utils": "0.6.0-alpha.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@next/bundle-analyzer": "^14.1.4",

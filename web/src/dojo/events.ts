@@ -81,6 +81,8 @@ export interface TravelEncounterResultData extends BaseEventData {
   drugLoss: Array<number>;
   turnLoss: number;
   escapedWithItem: boolean;
+  repPos: number,
+  repNeg: number,
 }
 
 
@@ -98,6 +100,7 @@ export interface GameOverData extends BaseEventData {
   turn: number;
   cash: number;
   health: number;
+  reputation: number;
 }
 
 
@@ -234,6 +237,9 @@ export const parseEvent = (raw: any) => {
         drugLoss: parsed.drug_loss.map(i => Number(i)),
         turnLoss: Number(parsed.turn_loss),
         escapedWithItem: parsed.escapedWithItem as unknown as boolean,
+        repPos: Number(parsed.rep_pos),
+        repNeg: Number(parsed.rep_neg),
+
       } as TravelEncounterResultData;
 
 
@@ -249,6 +255,7 @@ export const parseEvent = (raw: any) => {
         turn: Number(raw.data[2]),
         cash: Number(raw.data[3]),
         health: Number(raw.data[4]),
+        reputation: Number(raw.data[5]),
       } as GameOverData;
 
 

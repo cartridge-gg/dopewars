@@ -168,16 +168,14 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     //
     //
 
-    fn shuffle_drug_prices(ref self: MarketsPacked, ref randomizer: Random, drug_level: u8) {
+    fn shuffle_drug_prices(ref self: MarketsPacked, ref randomizer: Random, drug_slot: u8) {
         let mut locations = LocationsEnumerableImpl::all();
-
-        let drug = drug_level.sub_capped(1,0);
 
         loop {
             match locations.pop_front() {
                 Option::Some(location) => {
                     let rand_tick = randomizer.between::<usize>(0, 63).into();
-                    self.set_tick(*location, drug.into(), rand_tick);
+                    self.set_tick(*location, drug_slot.into(), rand_tick);
                 },
                 Option::None(_) => { break; }
             };

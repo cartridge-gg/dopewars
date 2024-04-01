@@ -7,6 +7,7 @@ import Bits from "./utils/Bits";
 
 export class PlayerClass extends GamePropertyClass {
     private _cash: number;
+    private _reputation: number;
     health: number;
     turn: number;
     status: number;
@@ -26,6 +27,7 @@ export class PlayerClass extends GamePropertyClass {
         const location = configStore.getPlayerLayoutItem("Location")
         const nextLocation = configStore.getPlayerLayoutItem("NextLocation")
         const drugLevel = configStore.getPlayerLayoutItem("DrugLevel")
+        const reputation = configStore.getPlayerLayoutItem("Reputation")
 
         this._cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
         this.health = Number(Bits.extract(this.packed, health.idx, health.bits))
@@ -41,12 +43,14 @@ export class PlayerClass extends GamePropertyClass {
         this.nextLocation = configStore.getLocationById(Number(nextLocationId))
 
         this.drugLevel = Number(Bits.extract(this.packed, drugLevel.idx, drugLevel.bits))
+        this._reputation = Number(Bits.extract(this.packed, reputation.idx, reputation.bits))
 
         makeObservable(this, {
             cash: computed,
             game: observable,
             location: observable,
             wanted: computed,
+            reputation: computed,
         })
 
     }
@@ -86,6 +90,14 @@ export class PlayerClass extends GamePropertyClass {
             return this.game.wanted.getWantedTick(this.nextLocation.location_id)
         }
 
+    }
+
+    get reputation() {
+        if (!this.game?.pending || this.game?.pending?.length === 0) return this._reputation
+        const hasShop = this.game.pending.find(i => isShopAction(i))
+        if (!hasShop) return this._reputation
+
+        return Math.min(this._reputation + 1, 100)
     }
 
     canBuy(drug: Drugs) {

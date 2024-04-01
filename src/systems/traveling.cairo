@@ -7,7 +7,8 @@ use rollyourown::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
     config::{
-        hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl}
+        hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
+        game::{GameConfig, GameConfigImpl}
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
@@ -123,10 +124,12 @@ fn get_encounter_demand_from_game_store(game_store: GameStore) -> u8 {
 fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> Encounter {
     let turn = game_store.player.turn;
 
-    let encounter_level = game_store.encounters.get_encounter_level(encounter_slot) + 1;
+    // temp: lvl based on reputation    
+    let encounter_level = game_store.player.reputation / 15 + 1;
+    
     let health = encounter_level * 5 + turn;
-    // let attack = encounter_level * 2 + turn / 3;
-    let attack = encounter_level * 1 + turn / 3;
+    let attack = encounter_level * 2 + turn / 3;
+    
     let payout: u32 = (encounter_level.into() * encounter_level.into() * 4_000)
         + (turn.into() * 1_000);
     let demand_pct = get_encounter_demand_from_game_store(game_store);
@@ -245,37 +248,16 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
         drug_loss: result.drug_loss,
         turn_loss: result.turn_loss,
         escaped_with_item: result.escaped_with_item,
+        rep_pos: result.rep_pos,
+        rep_neg: result.rep_neg,
     };
 
     emit!( game_store.world, result_event);
     
-    // // emit event
-    // game_store
-    //     .world
-    //     .emit_raw(
-    //         array![
-    //             selector!("TravelEncounterResult"),
-    //             Into::<u32, felt252>::into(game_store.game.game_id),
-    //             Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
-    //         ],
-    //         array![
-    //             Into::<EncounterActions, u8>::into(result.action).into(),
-    //             Into::<EncounterOutcomes, u8>::into(result.outcome).into(),
-    //             Into::<u8, felt252>::into(result.rounds),
-    //             Into::<u8, felt252>::into(result.dmg_dealt),
-    //             Into::<u8, felt252>::into(result.dmg_taken),
-    //             Into::<u32, felt252>::into(result.cash_earnt),
-    //             Into::<u32, felt252>::into(result.cash_loss),
-    //             Into::<u8, felt252>::into(result.drug_id),
-    //             Into::<u32, felt252>::into(result.drug_loss),
-    //             Into::<u8, felt252>::into(result.turn_loss),
-    //         ],
-    //     );
-
     let is_dead = game_store.player.is_dead();
     if !is_dead {
         // update encounter level
-        game_store.encounters.increase_encounter_level(encounter_slot);
+        // game_store.encounters.increase_encounter_level(encounter_slot);
 
         // update player status
         game_store.player.status = PlayerStatus::Normal;
@@ -291,6 +273,9 @@ fn on_pay(
     let mut drug_loss: Array<u32> = array![];
     let mut cash_loss: u32 = 0;
     let mut dmg_taken: Array<(u8,u8)> = array![];
+    let mut rep_neg: u8 = 0;
+
+    let game_config = GameConfigImpl::get(game_store.world);
 
     match encounter.encounter {
         Encounters::Cops => {
@@ -303,6 +288,10 @@ fn on_pay(
 
             // set drugs
             game_store.drugs.set(drug_unpacked);
+
+            // loss rep
+            rep_neg = game_config.rep_pay_cops;
+        
         },
         Encounters::Gang => {
             // calc cash_loss
@@ -317,8 +306,14 @@ fn on_pay(
 
             // update player cash
             game_store.player.cash -= cash_loss;
+
+            // loss rep
+            rep_neg = game_config.rep_pay_gang;
         },
     };
+
+    // apply rep_neg
+    game_store.player.reputation = game_store.player.reputation.sub_capped(rep_neg,0);
 
     TravelEncounterResult {
         game_id: game_store.game.game_id,
@@ -334,6 +329,8 @@ fn on_pay(
         drug_loss,
         turn_loss: 0,
         escaped_with_item: false,
+        rep_pos: 0,
+        rep_neg,
     }
 }
 
@@ -366,7 +363,7 @@ fn on_run(
     let mut is_dead = false;
     let mut is_caught = false;
     let mut escaped_with_item = false;
-
+    
     let initial_tier_defense: u8 = (get!(game_store.world, (ItemSlot::Clothes, 1), (HustlerItemTiersConfig)).stat / 10).try_into().unwrap();
     let def = player_defense / 10;
 
@@ -454,6 +451,15 @@ fn on_run(
         }
     };
 
+    // reputation
+    let game_config = GameConfigImpl::get(game_store.world);
+    let rep_pos = match encounter.encounter {
+        Encounters::Cops => { game_config.rep_run_cops },
+        Encounters::Gang => { game_config.rep_run_gang },
+    };
+
+    game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
+
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
@@ -468,6 +474,8 @@ fn on_run(
         drug_loss,
         turn_loss,
         escaped_with_item,
+        rep_pos,
+        rep_neg: 0,
     }
 }
 
@@ -543,6 +551,15 @@ fn on_fight(
         EncounterOutcomes::Victorious
     };
 
+    // reputation
+    let game_config = GameConfigImpl::get(game_store.world);
+    let rep_pos = match encounter.encounter {
+        Encounters::Cops => { game_config.rep_fight_cops },
+        Encounters::Gang => { game_config.rep_fight_gang },
+    };
+
+    game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
+
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
@@ -557,6 +574,8 @@ fn on_fight(
         drug_loss: array![],
         turn_loss: 0,
         escaped_with_item: false,
+        rep_pos,
+        rep_neg: 0,
     }
 }
 

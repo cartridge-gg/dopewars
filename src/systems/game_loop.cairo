@@ -3,12 +3,13 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game},
-    utils::{random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl}},
-    config::locations::{Locations},
+    utils::{random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
+    config::{locations::{Locations}, game::{GameConfigImpl}},
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
-        markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl}
+        markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
+        drugs_packed::{DrugsPackedTrait}
     },
     systems::{traveling, leaderboard::{LeaderboardManager, LeaderboardManagerTrait}}
 };
@@ -35,6 +36,12 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
 
     // update turn
     game_store.player.turn += 1;
+
+    // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
+    let game_config = GameConfigImpl::get(game_store.world);
+    let drugs = game_store.drugs.get();
+    let reputation = if drugs.quantity > 5 { game_config.rep_carry_drugs } else { 1 };
+    game_store.player.reputation = game_store.player.reputation.add_capped(reputation, 100);
 
     // emit raw event Traveled if still alive
     if game_store.player.health > 0 {
@@ -108,6 +115,7 @@ fn on_game_over(ref game_store: GameStore) {
                 Into::<u8, felt252>::into(game_store.player.turn),
                 Into::<u32, felt252>::into(game_store.player.cash),
                 Into::<u8, felt252>::into(game_store.player.health),
+                Into::<u8, felt252>::into(game_store.player.reputation),
             ]
         );
 }

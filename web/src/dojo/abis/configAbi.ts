@@ -214,6 +214,72 @@ export const ABI = [
   },
   {
     "type": "struct",
+    "name": "rollyourown::config::game::GameConfig",
+    "members": [
+      {
+        "name": "key",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "cash",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "health",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "max_turns",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "max_wanted_shopping",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "max_rounds",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_drug_step",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_buy_item",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_carry_drugs",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_pay_cops",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_pay_gang",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_run_cops",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_run_gang",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_fight_cops",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_fight_gang",
+        "type": "core::integer::u8"
+      }
+    ]
+  },
+  {
+    "type": "struct",
     "name": "rollyourown::config::config::Config",
     "members": [
       {
@@ -223,6 +289,10 @@ export const ABI = [
       {
         "name": "hustlers",
         "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
+      },
+      {
+        "name": "game_config",
+        "type": "rollyourown::config::game::GameConfig"
       }
     ]
   },
