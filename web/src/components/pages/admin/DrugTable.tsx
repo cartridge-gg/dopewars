@@ -8,6 +8,7 @@ import { shortString } from "starknet";
 import { editComponents } from "./tables";
 
 const columns = [
+  { key: "icon",  width: 80  },
   { key: "drug", title: "drug", dataType: DataType.String },
   { key: "drug_id", title: "drug_id", dataType: DataType.Number },
   { key: "name", title: "name", dataType: DataType.String },

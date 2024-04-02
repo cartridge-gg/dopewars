@@ -43,6 +43,9 @@ export const editComponents = {
           </ChildrenOrConnect>
         );
       }
+      if (props.column.key === "icon") {
+        return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
+      }
     },
   },
   cellEditor: {
@@ -53,6 +56,21 @@ export const editComponents = {
             <SaveButton {...props} />
           </ChildrenOrConnect>
         );
+      }
+      if (props.column.key === "icon") {
+        return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
+      }
+    },
+  },
+};
+
+
+export const iconComponents = {
+  cellText: {
+    content: (props: any) => {
+      if (props.column.key === "icon") {
+        return props.rowData.icon()
+       // return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
       }
     },
   },

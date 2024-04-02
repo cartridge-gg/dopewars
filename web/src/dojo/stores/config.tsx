@@ -53,6 +53,10 @@ export type HustlerItemConfigFull = HustlerItemConfig & {
   upgradeName: string;
 };
 
+export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
+  icon: React.FC;
+};
+
 export type HustlerConfig = {
   hustler_id: number;
   weapon: HustlerItemConfig;
@@ -75,7 +79,7 @@ export type Config = {
   ryoAddress: RyoAddress;
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
-  items: HustlerItemBaseConfig[];
+  items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
   config: GetConfig;
 };
@@ -147,7 +151,8 @@ export class ConfigStoreClass {
       return {
         ...i.node,
         name: shortString.decodeShortString(i.node?.name),
-      } as HustlerItemBaseConfig;
+        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys]
+      } as HustlerItemBaseConfigFull;
     });
 
     //
