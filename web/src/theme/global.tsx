@@ -9,27 +9,57 @@ const GlobalStyles = () => (
         margin-top: 70px;
       }
 
-      .rdt_TableHeadRow {
+      .ka-table-wrapper{
+        padding: 16px;
+      }
+
+      .ka-table{
+        width: 100%;
+      }
+
+      .ka-table thead{
+        text-align: left;
         text-transform: uppercase;
+        font-weight: 400;
+        border-bottom: solid 1px ${colors.neon["700"]};
       }
 
-
-      .rdt_Table,
-      .rdt_TableHead,
-      .rdt_TableHeadRow,
-      .rdt_TableBody,
-      .rdt_TableRow {
-        background-color: transparent;
-        color: ${colors.neon["400"]};
+      .ka-row{
+        border-bottom: solid 1px ${colors.neon["700"]};
       }
+
+      .ka-cell, .ka-thead-cell{
+        padding: 4px;
+      }
+
+      .ka-input {
+          width: 100%;
+          padding: 4px;
+          min-width: 50px;
+          background: ${colors.neon["800"]};
+          border-color: ${colors.neon["500"]};
+      }
+
+      // .rdt_TableHeadRow {
+      //   text-transform: uppercase;
+      // }
+
+      // .rdt_Table,
+      // .rdt_TableHead,
+      // .rdt_TableHeadRow,
+      // .rdt_TableBody,
+      // .rdt_TableRow {
+      //   background-color: transparent;
+      //   color: ${colors.neon["400"]};
+      // }
      
-      .rdt_TableRow {
-        min-height: 30px;
-      }
+      // .rdt_TableRow {
+      //   min-height: 30px;
+      // }
 
-      .rdt_TableCell {
-        height: 30px;
-      }
+      // .rdt_TableCell {
+      //   height: 30px;
+      // }
 
     `}
   />

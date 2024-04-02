@@ -29,6 +29,14 @@ impl GameConfigImpl of GameConfigTrait {
     fn get(world: IWorldDispatcher) -> GameConfig {
         get!(world, (GAME_CONFIG_KEY), GameConfig)
     }
+
+    #[inline(always)]
+    fn set(world: IWorldDispatcher, game_config: GameConfig) {
+        let mut game_config = game_config;
+        game_config.key = GAME_CONFIG_KEY;
+        
+        set!(world, (game_config));
+    }
 }
 
 fn initialize_game_config(world: IWorldDispatcher) {

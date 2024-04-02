@@ -995,7 +995,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x41dde9b72449ef0e0cb33fa1003a92b88590b9b33aa9c5e6ccb61f65ddf2f95",
+      "class_hash": "0x52518ade8db331d80706e5a99faa43a82c88a8eeaf6e845f9c80ff2fb60f397",
       "abi": [
         {
           "type": "impl",
@@ -1295,6 +1295,84 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::drugs::Drugs",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Shrooms",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Ketamine",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::utils::bytes16::Bytes16",
+          "members": [
+            {
+              "name": "value",
+              "type": "core::integer::u128"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::drugs::DrugConfig",
+          "members": [
+            {
+              "name": "drug",
+              "type": "rollyourown::config::drugs::Drugs"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "base",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "step",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "weight",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "name",
+              "type": "rollyourown::utils::bytes16::Bytes16"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::config::IGameActions",
           "items": [
@@ -1302,6 +1380,30 @@
               "type": "function",
               "name": "hello",
               "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "update_game_config",
+              "inputs": [
+                {
+                  "name": "game_config",
+                  "type": "rollyourown::config::game::GameConfig"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "update_drug_config",
+              "inputs": [
+                {
+                  "name": "drug_config",
+                  "type": "rollyourown::config::drugs::DrugConfig"
+                }
+              ],
               "outputs": [],
               "state_mutability": "view"
             }

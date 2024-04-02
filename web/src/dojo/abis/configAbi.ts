@@ -297,6 +297,84 @@ export const ABI = [
     ]
   },
   {
+    "type": "enum",
+    "name": "rollyourown::config::drugs::Drugs",
+    "variants": [
+      {
+        "name": "Ludes",
+        "type": "()"
+      },
+      {
+        "name": "Speed",
+        "type": "()"
+      },
+      {
+        "name": "Weed",
+        "type": "()"
+      },
+      {
+        "name": "Shrooms",
+        "type": "()"
+      },
+      {
+        "name": "Acid",
+        "type": "()"
+      },
+      {
+        "name": "Ketamine",
+        "type": "()"
+      },
+      {
+        "name": "Heroin",
+        "type": "()"
+      },
+      {
+        "name": "Cocaine",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "rollyourown::utils::bytes16::Bytes16",
+    "members": [
+      {
+        "name": "value",
+        "type": "core::integer::u128"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "rollyourown::config::drugs::DrugConfig",
+    "members": [
+      {
+        "name": "drug",
+        "type": "rollyourown::config::drugs::Drugs"
+      },
+      {
+        "name": "drug_id",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "base",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "step",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "weight",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "name",
+        "type": "rollyourown::utils::bytes16::Bytes16"
+      }
+    ]
+  },
+  {
     "type": "interface",
     "name": "rollyourown::config::config::IConfig",
     "items": [
@@ -316,6 +394,30 @@ export const ABI = [
             "type": "rollyourown::config::config::Config"
           }
         ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "update_game_config",
+        "inputs": [
+          {
+            "name": "game_config",
+            "type": "rollyourown::config::game::GameConfig"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "update_drug_config",
+        "inputs": [
+          {
+            "name": "drug_config",
+            "type": "rollyourown::config::drugs::DrugConfig"
+          }
+        ],
+        "outputs": [],
         "state_mutability": "view"
       }
     ]
