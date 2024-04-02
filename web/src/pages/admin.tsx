@@ -23,6 +23,7 @@ import { observer } from "mobx-react-lite";
 
 import { Wallet } from "@/components/icons/archive";
 import { DrugTable } from "@/components/pages/admin/DrugTable";
+import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
 import { GameLayoutTable } from "@/components/pages/admin/GameLayoutTable";
 import { HustlerItemBaseTable } from "@/components/pages/admin/HustlerItemBaseTable";
 import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiersTable";
@@ -38,6 +39,7 @@ export default function Admin() {
       <Tabs variant="unstyled" w="full">
         <TabList pb={6}>
           <Tab>ADMIN</Tab>
+          <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
           <Tab>ITEMS</Tab>
           <Tab>LAYOUTS</Tab>
@@ -51,6 +53,12 @@ export default function Admin() {
               <TreasuryClaimCard />
               <RyoFeeCard />
             </Flex>
+          </TabPanel>
+
+          <TabPanel p={0}>
+            <Card w="full">
+              <GameConfigTable />
+            </Card>
           </TabPanel>
 
           <TabPanel p={0}>

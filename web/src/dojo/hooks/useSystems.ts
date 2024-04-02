@@ -1,3 +1,4 @@
+import { DrugConfig, GameConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
@@ -20,12 +21,16 @@ export interface SystemsInterface {
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   claim: (season: number) => Promise<SystemExecuteResult>;
-  //
+  // ryo
   setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
   setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
-  //
+  // config
+  updateGameConfig: (gameConfig: GameConfig) => Promise<SystemExecuteResult>;
+  updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
+  
+  // dev
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
 
@@ -44,7 +49,7 @@ export interface SystemExecuteResult {
 export type DojoCall = {
   contractName: string;
   functionName: string;
-  callData: BigNumberish[];
+  callData: BigNumberish[] | any;
 }
 
 
@@ -414,8 +419,43 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
+  const updateGameConfig = useCallback(
+    async (gameConfig: GameConfig) => {
 
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::config::config::config",
+          functionName: "update_game_config",
+          callData: [gameConfig],
+        }
+      );
 
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+  const updateDrugConfig = useCallback(
+    async (drugConfig: DrugConfig) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::config::config::config",
+          functionName: "update_drug_config",
+          callData: [drugConfig],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
 
 
   //
@@ -472,6 +512,9 @@ export const useSystems = (): SystemsInterface => {
     setPaused,
     setPaperFee,
     setTreasuryFeePct,
+    //
+    updateGameConfig,
+    updateDrugConfig,
     //
     feedLeaderboard,
     failingTx,

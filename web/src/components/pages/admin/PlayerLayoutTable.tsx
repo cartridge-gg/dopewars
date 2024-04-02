@@ -1,28 +1,31 @@
 import { useDojoContext } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
-import DataTable from "react-data-table-component";
 
-// bigint not supported ...
-// const columns = getTableColumns(["name", "idx", "bits"]);
+import { Table } from "ka-table";
+import { DataType, EditingMode, SortingMode } from "ka-table/enums";
 
 const columns = [
-  {
-    name: "name",
-    selector: (row: any) => row["name"],
-  },
-  {
-    name: "idx",
-    selector: (row: any) => Number(row["idx"]),
-  },
-  {
-    name: "bits",
-    selector: (row: any) => Number(row["bits"]),
-  },
+  { key: "name", title: "name", dataType: DataType.String },
+  { key: "idx", title: "idx", dataType: DataType.Number },
+  { key: "bits", title: "bits", dataType: DataType.Number },
 ];
 
 export const PlayerLayoutTable = observer(() => {
   const {
     configStore: { config },
   } = useDojoContext();
-  return <DataTable columns={columns} data={config?.config.layouts.player || []} />;
+
+  return (
+    <Table
+      width="100%"
+      columns={columns}
+      data={config?.config.layouts.player || []}
+      rowKeyField={"name"}
+      editingMode={EditingMode.None}
+      sortingMode={SortingMode.Single}
+    />
+  );
 });
+
+
+

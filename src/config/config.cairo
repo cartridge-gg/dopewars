@@ -1,6 +1,6 @@
 use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl},
-    game::{GameConfig}
+    game::{GameConfig}, drugs::{DrugConfig}
 };
 
 
@@ -8,7 +8,9 @@ use rollyourown::config::{
 trait IConfig<T> {
     fn initialize(ref self: T);
     fn get_config(self: @T) -> Config;
-// fn update_drug_config(ref self: T);
+    fn update_game_config(self: @T, game_config: GameConfig);
+    fn update_drug_config(self: @T, drug_config: DrugConfig);
+
 // fn update_drug_config_meta(ref self: T);
 // ...
 }
@@ -37,25 +39,28 @@ struct LayoutItem {
 
 #[dojo::contract]
 mod config {
-    use rollyourown::config::{
-        game::{initialize_game_config, GameConfig, GameConfigImpl},
-        drugs::initialize_drug_config, locations::initialize_location_config,
-        hustlers::{
-            HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
-            initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
-            initialize_clothes_tiers_config, initialize_feet_tiers_config,
-            initialize_transport_tiers_config,
-        }
-    };
+    use starknet::{get_caller_address, get_contract_address};
 
-    use rollyourown::packing::{
-        game_store_layout::{
-            GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
-            GameStoreLayoutIntoBytes31Impl
+    use rollyourown::{
+        config::{
+            game::{initialize_game_config, GameConfig, GameConfigImpl},
+            drugs::{initialize_drug_config, DrugConfig, Drugs}, locations::initialize_location_config,
+            hustlers::{
+                HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
+                initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
+                initialize_clothes_tiers_config, initialize_feet_tiers_config,
+                initialize_transport_tiers_config,
+            }
         },
-        player_layout::{
-            PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl,
-            PlayerLayoutIntoBytes31Impl
+        packing::{
+            game_store_layout::{
+                GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
+                GameStoreLayoutIntoBytes31Impl
+            },
+            player_layout::{
+                PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl,
+                PlayerLayoutIntoBytes31Impl
+            }
         }
     };
 
@@ -64,12 +69,11 @@ mod config {
     #[abi(embed_v0)]
     impl ConfigImpl of super::IConfig<ContractState> {
         fn initialize(ref self: ContractState) {
-            let world = self.world();
             // TODO checks
+            self.assert_caller_is_owner();
 
-            // only world owner
-            assert(world.is_owner(starknet::get_caller_address(), 0), 'only world owner');
-
+            let world = self.world();
+           
             // common
             initialize_drug_config(world);
             initialize_location_config(world);
@@ -148,5 +152,40 @@ mod config {
             //
             Config { game_config, layouts: LayoutsConfig { game_store, player }, hustlers }
         }
+
+        fn update_game_config(self: @ContractState, game_config: GameConfig) {
+            self.assert_caller_is_owner();
+            GameConfigImpl::set(self.world(), game_config);
+        }
+
+
+        fn update_drug_config(self: @ContractState, drug_config: DrugConfig) {
+            self.assert_caller_is_owner();
+
+            let drug: Drugs = drug_config.drug_id.into();
+            let mut to_update = get!(self.world(), (drug), (DrugConfig));
+
+            to_update.base = drug_config.base;
+            to_update.step = drug_config.step;
+            to_update.weight = drug_config.weight;
+            to_update.name = drug_config.name;
+
+            set!(self.world(), (to_update));
+        }
+
+        
+    }
+
+    #[generate_trait]
+    impl InternalImpl of InternalTrait {
+        fn assert_caller_is_owner(self: @ContractState) {
+            // assert(self.world().is_owner(starknet::get_caller_address(), 0), 'only world owner');
+
+            assert(
+                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                'not owner'
+            );
+        }
+
     }
 }
