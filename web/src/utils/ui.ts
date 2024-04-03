@@ -196,9 +196,3 @@ export function formatCashHeader(cash: number): string {
   }
   return "ElonMusk";
 }
-
-export function formatThreatLevel(wantedPerc: number): string {
-  if (wantedPerc >= 85) return "HIGH";
-  else if (wantedPerc >= 29) return "MED";
-  return "LOW";
-}
