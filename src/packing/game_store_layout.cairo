@@ -6,7 +6,6 @@ enum GameStoreLayout {
     Items,
     Drugs,
     Wanted,
-    Encounters,
     Player,
 }
 
@@ -17,7 +16,6 @@ impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
             GameStoreLayout::Items => 'Items',
             GameStoreLayout::Drugs => 'Drugs',
             GameStoreLayout::Wanted => 'Wanted',
-            GameStoreLayout::Encounters => 'Encounters',
             GameStoreLayout::Player => 'Player',
         };
         value.try_into().unwrap()
@@ -34,7 +32,6 @@ impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
             GameStoreLayout::Items,
             GameStoreLayout::Drugs,
             GameStoreLayout::Wanted,
-            GameStoreLayout::Encounters,
             GameStoreLayout::Player,
         ];
         items.span()
@@ -50,8 +47,7 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
             GameStoreLayout::Items => 8,
             GameStoreLayout::Drugs => 16,
             GameStoreLayout::Wanted => 18,
-            GameStoreLayout::Encounters => 6,
-            GameStoreLayout::Player => 57,
+            GameStoreLayout::Player => 64,
         }
     }
 

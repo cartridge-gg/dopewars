@@ -4,7 +4,6 @@ import { CairoCustomEnum } from "starknet";
 import { ConfigStoreClass } from "../stores/config";
 import { ShopAction, TradeAction } from "../types";
 import { DrugsClass } from "./Drugs";
-import { EncountersClass } from "./Encounters";
 import { ItemsClass } from "./Items";
 import { MarketsClass } from "./Market";
 import { PlayerClass } from "./Player";
@@ -54,7 +53,7 @@ export class GameClass {
     items: ItemsClass;
     drugs: DrugsClass;
     wanted: WantedClass;
-    encounters: EncountersClass;
+   // encounters: EncountersClass;
     player: PlayerClass;
 
     pending: Array<PendingCallWithCost>;
@@ -84,9 +83,9 @@ export class GameClass {
         const wantedPacked = Bits.extract(this.packed, wanted.idx, wanted.bits);
         this.wanted = new WantedClass(configStore, this, wantedPacked)
 
-        const encounters = configStore.getGameStoreLayoutItem("Encounters")
-        const encountersPacked = Bits.extract(this.packed, encounters.idx, encounters.bits);
-        this.encounters = new EncountersClass(configStore, this, encountersPacked)
+        // const encounters = configStore.getGameStoreLayoutItem("Encounters")
+        // const encountersPacked = Bits.extract(this.packed, encounters.idx, encounters.bits);
+        // this.encounters = new EncountersClass(configStore, this, encountersPacked)
 
         this.pending = []
 

@@ -2,7 +2,7 @@ import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { ItemSlot } from "@/dojo/types";
-import { Card, Divider, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
 import { Bag, Cigarette, PawnshopIcon } from "../icons";
@@ -38,11 +38,11 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           </HStack>
 
           <Tooltip
-            title="Encountered"
-            text={`COPS ${game.encounters.copsLevel} - GANG ${game.encounters.gangLevel}`}
+            title={`Reputation: ${game.player.reputation}`}
+            text={`Your actions influence your reputation. Do the right things...`}
             color="yellow.400"
           >
-            <Card h="40px" px="5px" justify="center" alignItems="center">
+            <Card h="44px" px="4px" justify="center" alignItems="center">
               <PowerMeter
                 text={reputationRanks[game.player.drugLevel as reputationRanksKeys]}
                 basePower={0}
@@ -50,6 +50,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
                 maxPower={4}
                 displayedPower={4}
               />
+              <Progress h="4px" px="1px" colorScheme="neon" w="full" value={(game.player.reputation % 20)*100/20}/>
             </Card>
           </Tooltip>
         </VStack>

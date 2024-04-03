@@ -1,12 +1,12 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
-    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations}},
+    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations}, game::{GameConfigImpl}},
     packing::{
         game_store::{GameStore}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
     },
-    utils::events::{RawEventEmitterTrait, RawEventEmitterImpl}
+    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}}
 };
 
 #[derive(Copy, Drop, Serde)]
@@ -52,6 +52,10 @@ fn execute_action(ref game_store: GameStore, action: Action) {
 
     // gibe item to customer
     game_store.items.upgrade_item(action.slot);
+
+    // earn reputation
+    let game_config = GameConfigImpl::get(game_store.world);
+    game_store.player.reputation = game_store.player.reputation.add_capped(game_config.rep_buy_item, 100);
 
     // emit event
     game_store

@@ -63,8 +63,8 @@ const Decision = observer(() => {
           const cashAmount = Math.ceil((game.player.cash * encounter!.demandPct) / 100);
           encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
-          setEncounterImg(`/images/events/gang/${game.encounters!.gangLevel}.gif`);
-
+          setEncounterImg(`/images/events/gang/${encounter.level}.gif`);
+          
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
@@ -73,7 +73,7 @@ const Decision = observer(() => {
           const drugName = game.drugs.drug?.name;
           encounter && setDemand(`They want ${drugAmount} ${drugName}!`);
           setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
-          setEncounterImg(`/images/events/cops/${game.encounters!.copsLevel}.gif`);
+          setEncounterImg(`/images/events/cops/${encounter.level}.gif`);
           break;
       }
     }

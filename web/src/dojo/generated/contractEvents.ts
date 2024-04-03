@@ -102,6 +102,8 @@ drug_id: number;
 drug_loss: String;
 turn_loss: number;
 escaped_with_item: boolean;
+rep_pos: number;
+rep_neg: number;
         }
 
 export interface MeetOGData extends BaseEventData {
@@ -119,6 +121,7 @@ hustler_id: number;
 turn: number;
 cash: number;
 health: number;
+reputation: number;
         }
 
 
@@ -247,6 +250,8 @@ drug_id: Number(raw.data[7]),
 drug_loss: num.toHexString(raw.data[8]),
 turn_loss: Number(raw.data[9]),
 escaped_with_item: raw.data[10] === "0x0" ? false : true,
+rep_pos: Number(raw.data[11]),
+rep_neg: Number(raw.data[12]),
 } as TravelEncounterResultData;
 
 case WorldEvents.MeetOG:
@@ -270,6 +275,7 @@ hustler_id: Number(raw.data[1]),
 turn: Number(raw.data[2]),
 cash: Number(raw.data[3]),
 health: Number(raw.data[4]),
+reputation: Number(raw.data[5]),
 } as GameOverData;
 
 

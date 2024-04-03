@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { Heart } from "@/components/icons";
+import { Cigarette, Heart } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
 import { getOutcomeInfo } from "@/dojo/helpers";
@@ -89,73 +89,72 @@ const Consequence = () => {
           </VStack>
           <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="30vh" height="280px" />
           <VStack width="full" maxW="600px" h="100%" gap={6}>
-            {(encounterResult.dmgDealt.length > 0 ||
-              encounterResult.dmgTaken.length > 0 ||
-              (encounterResult.action === EncountersAction.Run && encounterResult.drugLoss.length > 0)) && (
-              <Card p={3} minW="300px">
-                <VStack alignItems="flex-start" gap={1}>
-                  {/* {encounterResult.rounds > 0 && (
-                <Text>
-                  After {encounterResult.rounds} attempt{encounterResult.rounds > 1 ? "s" : ""}
-                </Text>
-              )} */}
+            <Card p={3} minW="300px">
+              <VStack alignItems="flex-start" gap={1}>
+                {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}
+                {[...Array(encounterResult.rounds)].map((i, idx) => {
+                  return (
+                    <>
+                      {encounterResult.dmgDealt[idx] && (
+                        <Line
+                          icon={game.items.attack.icon({ color: "yellow.400" })}
+                          text={
+                            <Text color="yellow.400">
+                              You hit for {encounterResult.dmgDealt[idx][0]} DMG{" "}
+                              {encounterResult.dmgDealt[idx][1] > 0 && <>(+{encounterResult.dmgDealt[idx][1]})</>}
+                            </Text>
+                          }
+                        />
+                      )}
 
-                  {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}
-                  {[...Array(encounterResult.rounds)].map((i, idx) => {
-                    return (
-                      <>
-                        {encounterResult.dmgDealt[idx] && (
-                          <Line
-                            icon={game.items.attack.icon({ color: "yellow.400" })}
-                            text={
-                              <Text color="yellow.400">
-                                You hit for {encounterResult.dmgDealt[idx][0]} DMG{" "}
-                                {encounterResult.dmgDealt[idx][1] > 0 && <>(+{encounterResult.dmgDealt[idx][1]})</>}
-                              </Text>
-                            }
-                          />
-                        )}
+                      {encounterResult.dmgTaken[idx] && (
+                        <Line
+                          icon={<Heart color="red" />}
+                          text={
+                            <Text color="red">
+                              You took {encounterResult.dmgTaken[idx][0]} DMG{" "}
+                              {encounterResult.dmgTaken[idx][1] > 0 && <>(-{encounterResult.dmgTaken[idx][1]})</>}
+                            </Text>
+                          }
+                        />
+                      )}
 
-                        {encounterResult.dmgTaken[idx] && (
-                          <Line
-                            icon={<Heart color="red" />}
-                            text={
-                              <Text color="red">
-                                You took {encounterResult.dmgTaken[idx][0]} DMG{" "}
-                                {encounterResult.dmgTaken[idx][1] > 0 && <>(-{encounterResult.dmgTaken[idx][1]})</>}
-                              </Text>
-                            }
-                          />
-                        )}
+                      {encounterResult.drugLoss[idx] && (
+                        <Line
+                          icon={configStore
+                            .getDrugById(encounterResult.drugId)
+                            .icon({ color: "yellow.400", width: "24px", height: "24px" })}
+                          text={
+                            <Text color="yellow.400">
+                              You lost {encounterResult.drugLoss[idx]}{" "}
+                              {configStore.getDrugById(encounterResult.drugId).name} on the run
+                            </Text>
+                          }
+                        />
+                      )}
+                    </>
+                  );
+                })}
 
-                        {encounterResult.drugLoss[idx] && (
-                          <Line
-                            icon={configStore
-                              .getDrugById(encounterResult.drugId)
-                              .icon({ color: "yellow.400", width: "24px", height: "24px" })}
-                            text={
-                              <Text color="yellow.400">
-                                You lost {encounterResult.drugLoss[idx]}{" "}
-                                {configStore.getDrugById(encounterResult.drugId).name} on the run
-                              </Text>
-                            }
-                          />
-                        )}
-                      </>
-                    );
-                  })}
+                {encounterResult.escapedWithItem && (
+                  <Line
+                    icon={game.items.speed.icon({ color: "neon.400" })}
+                    text={<Text color="neon.400">Your {game.items.speed.base.name} was decisive on this run</Text>}
+                  />
+                )}
 
-                  {encounterResult.escapedWithItem && (
-                    <Line
-                      icon={game.items.speed.icon({ color: "neon.400" })}
-                      text={<Text color="neon.400">Your {game.items.speed.base.name} was decisive on this run</Text>}
-                    />
-                  )}
-                </VStack>
-              </Card>
-            )}
+                {encounterResult.repPos > 0 && (
+                  <Line icon={<Cigarette />} text={<Text color="neon.400">REP +{encounterResult.repPos}</Text>} />
+                )}
 
-            {/* {encounterResult.rounds > 0 && <Divider borderBottomWidth={1} my={2} borderColor="neon.600" />} */}
+                {encounterResult.repNeg > 0 && (
+                  <Line
+                    icon={<Cigarette color="yellow.400" />}
+                    text={<Text color="yellow.400">REP -{encounterResult.repNeg}</Text>}
+                  />
+                )}
+              </VStack>
+            </Card>
 
             <VStack alignItems="center" gap={1}>
               {/* <Text>{outcomeInfos.getResponse(true)}</Text> */}

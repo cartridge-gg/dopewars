@@ -1,4 +1,7 @@
-use rollyourown::config::hustlers::{HustlerConfig, HustlerImpl};
+use rollyourown::config::{
+    hustlers::{HustlerConfig, HustlerImpl},
+    game::{GameConfig}
+};
 
 
 #[starknet::interface]
@@ -14,6 +17,7 @@ trait IConfig<T> {
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
+    game_config: GameConfig,
 }
 
 #[derive(Drop, Serde)]
@@ -34,8 +38,8 @@ struct LayoutItem {
 #[dojo::contract]
 mod config {
     use rollyourown::config::{
+        game::{initialize_game_config, GameConfig, GameConfigImpl},
         drugs::initialize_drug_config, locations::initialize_location_config,
-        game::initialize_game_config,
         hustlers::{
             HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
             initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
@@ -138,7 +142,11 @@ mod config {
             };
 
             //
-            Config { layouts: LayoutsConfig { game_store, player }, hustlers }
+
+            let game_config = GameConfigImpl::get(world);
+
+            //
+            Config { game_config, layouts: LayoutsConfig { game_store, player }, hustlers }
         }
     }
 }
