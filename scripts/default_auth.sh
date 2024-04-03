@@ -40,6 +40,8 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  DrugConfig,$CONFIG_ADDRESS \
  LocationConfig,$CONFIG_ADDRESS \
  HustlerItemBaseConfig,$CONFIG_ADDRESS \
+ HustlerItemTiersConfig,$CONFIG_ADDRESS \
+ EncounterConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
  GameStorePacked,$GAME_ADDRESS \
  RyoConfig,$GAME_ADDRESS \

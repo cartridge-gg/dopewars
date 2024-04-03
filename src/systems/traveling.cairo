@@ -8,16 +8,17 @@ use rollyourown::{
     },
     config::{
         hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
-        game::{GameConfig, GameConfigImpl}
+        encounters::{Encounters},
+        game::{GameConfig, GameConfigImpl}, 
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl, ItemsPackedTrait},
-        encounters_packed::{Encounters, EncountersPackedImpl, EncountersPackedTrait},
         drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
     systems::game::{EncounterActions, game::TravelEncounterResult, game::Event}
 };
+
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum EncounterOutcomes {

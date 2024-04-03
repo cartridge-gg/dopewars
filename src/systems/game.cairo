@@ -44,7 +44,7 @@ mod game {
         },
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
-            encounters_packed::{Encounters}, player::{Player, PlayerImpl},
+            player::{Player, PlayerImpl},
         },
         systems::{
             trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,

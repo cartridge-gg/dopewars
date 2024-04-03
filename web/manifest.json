@@ -995,7 +995,7 @@
     {
       "name": "rollyourown::config::config::config",
       "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x52518ade8db331d80706e5a99faa43a82c88a8eeaf6e845f9c80ff2fb60f397",
+      "class_hash": "0x7178e03a3bac58987047fe1bbc84dff004fb8c67e26749efe9b167d88e6633f",
       "abi": [
         {
           "type": "impl",
@@ -1629,7 +1629,7 @@
     {
       "name": "rollyourown::systems::game::game",
       "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x21a379c1cd0e4e9e53224a1a619962a3e38ddb1886490269c5a70d49b986a8e",
+      "class_hash": "0x7d9c7e2b7b3756d0cd9a9a57c27735f9244cb3df3d49c25f52a691cea8c05cc",
       "abi": [
         {
           "type": "impl",
@@ -2707,9 +2707,367 @@
           ]
         },
         {
+          "type": "event",
+          "name": "rollyourown::config::drugs::drug_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::encounters::encounter_config",
+      "members": [
+        {
+          "name": "id",
+          "type": "u8",
+          "key": true
+        },
+        {
+          "name": "encounter",
+          "type": "Encounters",
+          "key": false
+        },
+        {
+          "name": "level",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "health",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "attack",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "defense",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "payout",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "demand_pct",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_pay",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_run",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "rep_fight",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "min_rep",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "max_rep",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x77edf2bc33d4b0321fbbd50a8eef3a446e818b9f33ee8f26d08c883e92935ed",
+      "abi": [
+        {
           "type": "impl",
-          "name": "ERC20MetadataTotalSupplyCamelImpl",
-          "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel"
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::model::IDojoModel",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "unpacked_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "packed_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "layout",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<core::integer::u8>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "schema",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::database::introspect::Ty"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "encounter_configImpl",
+          "interface_name": "rollyourown::config::encounters::Iencounter_config"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::encounters::Encounters",
+          "variants": [
+            {
+              "name": "Cops",
+              "type": "()"
+            },
+            {
+              "name": "Gang",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::encounters::EncounterConfig",
+          "members": [
+            {
+              "name": "id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "encounter",
+              "type": "rollyourown::config::encounters::Encounters"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "attack",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "defense",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "demand_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "min_rep",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rep",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::config::encounters::Iencounter_config",
+          "items": [
+            {
+              "type": "function",
+              "name": "ensure_abi",
+              "inputs": [
+                {
+                  "name": "model",
+                  "type": "rollyourown::config::encounters::EncounterConfig"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::encounters::encounter_config::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "rollyourown::config::game::game_config",
+      "members": [
+        {
+          "name": "key",
+          "type": "u8",
+          "key": true
+        },
+        {
+          "name": "cash",
+          "type": "u32",
+          "key": false
         },
         {
           "name": "health",

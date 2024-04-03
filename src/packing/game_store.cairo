@@ -11,7 +11,6 @@ use rollyourown::{
         wanted_packed::{WantedPacked, WantedPackedImpl},
         markets_packed::{MarketsPacked, MarketsPackedImpl},
         items_packed::{ItemsPacked, ItemsPackedImpl},
-        encounters_packed::{EncountersPacked, EncountersPackedImpl},
         player::{Player, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
     },
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, traits::{Packable, Packer, Unpacker}

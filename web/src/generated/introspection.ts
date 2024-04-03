@@ -11,6 +11,7 @@
       "ERC20AllowanceModel",
       "ERC20BalanceModel",
       "ERC20MetadataModel",
+      "EncounterConfig",
       "Game",
       "GameConfig",
       "GameStorePacked",

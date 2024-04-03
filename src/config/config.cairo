@@ -19,7 +19,7 @@ trait IConfig<T> {
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
-    game_config: GameConfig,
+    game_config: GameConfig, // TODO: query torii instead
 }
 
 #[derive(Drop, Serde)]
@@ -50,7 +50,8 @@ mod config {
                 initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
                 initialize_clothes_tiers_config, initialize_feet_tiers_config,
                 initialize_transport_tiers_config,
-            }
+            },
+            encounters::{initialize_encounter_config, EncounterConfig, Encounters},
         },
         packing::{
             game_store_layout::{
@@ -90,6 +91,9 @@ mod config {
             initialize_clothes_tiers_config(world);
             initialize_feet_tiers_config(world);
             initialize_transport_tiers_config(world);
+
+            // encounters
+            initialize_encounter_config(world);
 
             // game
             initialize_game_config(world);
@@ -144,13 +148,13 @@ mod config {
                     Option::None => { break; }
                 };
             };
-
+          
             //
 
             let game_config = GameConfigImpl::get(world);
 
             //
-            Config { game_config, layouts: LayoutsConfig { game_store, player }, hustlers }
+            Config { game_config, hustlers, layouts: LayoutsConfig { game_store, player } }
         }
 
         fn update_game_config(self: @ContractState, game_config: GameConfig) {
