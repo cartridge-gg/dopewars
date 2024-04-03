@@ -5,7 +5,7 @@ import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag, Cigarette, PawnshopIcon } from "../icons";
+import { Bag, Cigarette, PawnshopIcon, Alert } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
@@ -50,7 +50,13 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
                 maxPower={4}
                 displayedPower={4}
               />
-              <Progress h="4px" px="1px" colorScheme="neon" w="full" value={(game.player.reputation % 20)*100/20}/>
+              <Progress
+                h="4px"
+                px="1px"
+                colorScheme="neon"
+                w="full"
+                value={((game.player.reputation % 20) * 100) / 20}
+              />
             </Card>
           </Tooltip>
         </VStack>
@@ -96,17 +102,18 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             flexDirection="row"
             justify="center"
             alignItems="center"
-            opacity={game.isShopOpen ? 1 : 0.5}
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
-                playSound(Sounds.Door, 0.5)
+                playSound(Sounds.Door, 0.5);
                 router.push(`/${gameId}/pawnshop`);
               }
             }}
           >
-            <PawnshopIcon ml={-1} />
-            <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
+            {game.isShopOpen ? <PawnshopIcon ml={-1} /> : <Alert ml={-1} />}
+            <Text ml={3} color={game.isShopOpen ? "neon" : "red"}>
+              {game.isShopOpen ? "Open" : "Closed"}
+            </Text>
           </Card>
         </VStack>
       )}
