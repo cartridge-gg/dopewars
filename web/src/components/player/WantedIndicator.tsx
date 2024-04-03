@@ -11,15 +11,14 @@ enum ThreatLevels {
 }
 
 export const WantedIndicator = ({
-  wanted,
-  max_wanted_shopping,
+  wantedTick,
+  highLimit,
   ...props
-}: { wanted: number; max_wanted_shopping: number } & StyleProps) => {
-  const wantedTick = Math.floor((wanted * 7) / 100);
+}: { wantedTick: number; highLimit: number } & StyleProps) => {
   const threatLevel =
-    wantedTick >= max_wanted_shopping || wantedTick >= 4.66
+    wantedTick >= highLimit || wantedTick >= 5
       ? ThreatLevels.High
-      : wantedTick >= 2.33
+      : wantedTick >= 2
       ? ThreatLevels.Medium
       : ThreatLevels.Low;
 
