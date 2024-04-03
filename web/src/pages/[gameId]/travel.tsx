@@ -189,7 +189,10 @@ const Travel = observer(() => {
             <Text textStyle="subheading" fontSize="11px" color="neon.500">
               Location
             </Text>
-            <WantedIndicator wanted={game.wanted.wantedByLocation.get(targetLocation)!} />
+            <WantedIndicator
+              wanted={game.wanted.wantedByLocation.get(targetLocation)!}
+              max_wanted_shopping={config?.config.game_config.max_wanted_shopping}
+            />
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
@@ -211,7 +214,7 @@ const Travel = observer(() => {
         gap="14px"
         overflow={"visible"}
       >
-        <Inventory hidePawnshop/>
+        <Inventory hidePawnshop />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices
           prices={prices}
