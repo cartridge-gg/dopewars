@@ -18,7 +18,7 @@ const baseStyle = definePartsStyle({
       color: "neon.300",
       ...cardPixelatedStyle({ radius: 6, pixelSize: 1 }),
       bg: "transparent",
-      border: "2px solid",
+      border: "0",
       borderColor: "neon.700",
     },
   },

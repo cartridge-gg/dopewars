@@ -10,7 +10,7 @@ import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
-import { Arrow, Skull } from "../../icons";
+import { Arrow, PaperIcon, Skull } from "../../icons";
 
 const renderer = ({
   days,
@@ -57,8 +57,15 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
 
   //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
   const { hallOfFame, isFetchingHallOfFame } = useHallOfFame();
-  const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
-  const [selectedIndex, setSelectedIndex] = useState(maxIndex);
+
+  const [maxIndex, setMaxIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
+    setMaxIndex(maxIndex);
+    setSelectedIndex(maxIndex);
+  }, [hallOfFame]);
 
   const { leaderboardEntries, isFetchingLeaderboardEntries } = useLeaderboardEntries(
     hallOfFame[selectedIndex]?.version || 0,
@@ -97,7 +104,8 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
           <HStack textStyle="subheading" fontSize="12px">
             <Text>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
             <Text color="yellow.400">
-              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")} PAPER
+              <PaperIcon width="16px" height="16px" color="yellow.400" mr={1}/>
+              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")}
             </Text>
           </HStack>
           <Arrow

@@ -110,8 +110,6 @@ const AccountModal = ({
 
             <Link
               fontSize="18px"
-              fontWeight="bold"
-              fontFamily="monospace"
               textDecoration="none"
               textTransform="uppercase"
               isExternal

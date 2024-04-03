@@ -1,13 +1,14 @@
 import { MediaPlayer, MobileMenu } from "@/components/layout";
-import { Connect } from "@/components/wallet";
+import { Connect, TokenBalance } from "@/components/wallet";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Divider, Flex, HStack } from "@chakra-ui/react";
+import { Card, Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+import { PaperIcon } from "../icons";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
@@ -51,12 +52,12 @@ export const Header = observer(({ back }: HeaderProps) => {
         <Burners />
         <Predeployed />
         <ChainSelector canChange={!gameId} />
-        {/* {!game && (
-          <>
-            {config?.ryoAddress.paper && <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />}
-            {account && <PaperFaucet />}
-          </>
-        )} */}
+        {!gameId && account && (
+          <Card h="48px" p={2} display="flex" justifyContent="center">
+            <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
+          </Card>
+        )}
+
 
         {!gameId && <ClaimReward />}
       </HStack>
