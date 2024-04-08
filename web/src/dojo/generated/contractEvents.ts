@@ -4,6 +4,8 @@ import { num, GetTransactionReceiptResponse, InvokeTransactionReceiptResponse, C
 
 export enum WorldEvents {
   Upgraded = "0x2db340e6c609371026731f47050d3976552c89b4fbb012941663841c59d1af3",
+  Transfer = "0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
+  Approval = "0x134692b230b9e1ffa39098904722134159652b09c5bc41d88d6698779d228ff",
   GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
   Traveled = "0x2c4d9d5da873550ed167876bf0bc2ae300ce1db2eeff67927a85693680a2328",
   TradeDrug = "0x168c796c89bf587204933184c04f932929cb578ea082f44a918b4251706f902",
@@ -13,8 +15,6 @@ export enum WorldEvents {
   TravelEncounterResult = "0x4c25d590d9373d60632194fce3d4237e3ccb1d31738c1f881045e495e04b35",
   MeetOG = "0xf8c38c7f438b31081598f251d7acc54d6a8f407da04a52ee1ee9f9ae3bb06a",
   GameOver = "0x165460ded86991fa560a0d331810f83651da90c5df6d4b61357c3b3807ff41c",
-  Transfer = "0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
-  Approval = "0x134692b230b9e1ffa39098904722134159652b09c5bc41d88d6698779d228ff",
 }
 
 /*
@@ -24,6 +24,18 @@ export enum WorldEvents {
         event_name: string;
       }
 
+
+export interface TransferData extends BaseEventData {
+        from: string;
+to: string;
+value: bigint;
+        }
+
+export interface ApprovalData extends BaseEventData {
+        owner: string;
+spender: string;
+value: bigint;
+        }
 
 export interface GameCreatedData extends BaseEventData {
         game_id: number;
@@ -112,18 +124,6 @@ health: number;
 reputation: number;
         }
 
-export interface TransferData extends BaseEventData {
-        from: string;
-to: string;
-value: bigint;
-        }
-
-export interface ApprovalData extends BaseEventData {
-        owner: string;
-spender: string;
-value: bigint;
-        }
-
 
       export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
       if (receipt.execution_status === "REVERTED") {
@@ -146,6 +146,24 @@ value: bigint;
     export const parseEvent = (raw: any) => {
       switch (raw.keys[0]) {
           
+case WorldEvents.Transfer:
+return {
+event_type: WorldEvents.Transfer,
+event_name: "Transfer",
+from: num.toHexString(raw.data[0]),
+to: num.toHexString(raw.data[1]),
+value: BigInt(raw.data[2]),
+} as TransferData;
+
+case WorldEvents.Approval:
+return {
+event_type: WorldEvents.Approval,
+event_name: "Approval",
+owner: num.toHexString(raw.data[0]),
+spender: num.toHexString(raw.data[1]),
+value: BigInt(raw.data[2]),
+} as ApprovalData;
+
 case WorldEvents.GameCreated:
 return {
 event_type: WorldEvents.GameCreated,
@@ -259,24 +277,6 @@ cash: Number(raw.data[3]),
 health: Number(raw.data[4]),
 reputation: Number(raw.data[5]),
 } as GameOverData;
-
-case WorldEvents.Transfer:
-return {
-event_type: WorldEvents.Transfer,
-event_name: "Transfer",
-from: num.toHexString(raw.data[0]),
-to: num.toHexString(raw.data[1]),
-value: BigInt(raw.data[2]),
-} as TransferData;
-
-case WorldEvents.Approval:
-return {
-event_type: WorldEvents.Approval,
-event_name: "Approval",
-owner: num.toHexString(raw.data[0]),
-spender: num.toHexString(raw.data[1]),
-value: BigInt(raw.data[2]),
-} as ApprovalData;
 
 
     default:

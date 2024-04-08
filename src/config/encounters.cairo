@@ -25,6 +25,7 @@ struct EncounterConfig {
     health: u8,
     attack: u8,
     defense: u8,
+    speed: u8,
     // 32
     payout: u32,
     // 32
@@ -104,6 +105,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 16,
             attack: 8,
             defense: 5,
+            speed : 2,
             //
             payout: 420,
             demand_pct: 20,
@@ -128,6 +130,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 26,
             attack: 16,
             defense: 11,
+            speed : 5,
             //
             payout: 2500,
             demand_pct: 30,
@@ -152,6 +155,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 42,
             attack: 25,
             defense: 15,
+            speed : 15,
             //
             payout: 20000,
             demand_pct: 30,
@@ -179,6 +183,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 16,
             attack: 8,
             defense: 5,
+            speed : 2,
             //
             payout: 420,
             demand_pct: 20,
@@ -203,6 +208,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 26,
             attack: 16,
             defense: 11,
+            speed : 5,
             //
             payout: 2500,
             demand_pct: 30,
@@ -227,6 +233,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
             health: 42,
             attack: 25,
             defense: 15,
+            speed : 15,
             //
             payout: 20000,
             demand_pct: 30,

@@ -7,9 +7,10 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.10"}
+dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.0"}
+# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.13"}
 # token = { git = "https://github.com/dojoengine/origami", tag = "v0.6.0-alpha.10" }
-token = { git = "https://github.com/dojoengine/origami", branch = "update_to_v0.6.0.alpha-10" }
+token = { git = "https://github.com/notV4l/origami", branch = "erc_without_events" }
 
 
 [scripts]
@@ -25,7 +26,7 @@ auth_ryo421 = "./scripts/default_auth.sh ryo421"
 auth_prod = "./scripts/default_auth.sh prod"
 
 # migrate
-migrate = "sozo -P dev migrate && scarb run gendojo && scarb run auth"
+migrate = "sozo migrate apply && scarb run gendojo && scarb run auth"
 migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate && scarb run auth_ryo420"
 migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate && scarb run auth_ryo421"
 migrate_prod = "sozo -P prod migrate"

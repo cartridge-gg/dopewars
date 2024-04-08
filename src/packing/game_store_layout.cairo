@@ -84,7 +84,7 @@ mod tests {
     #[test]
     #[available_gas(100000000)]
     fn test_layout_size() {
-        assert(GameStoreLayout::Markets.idx() == 144, 'bad markets size');
-        assert(GameStoreLayout::Items.idx() == 8, 'bad items size');
+        assert(GameStoreLayout::Markets.bits() == 144, 'bad markets size');
+        assert(GameStoreLayout::Items.bits() == 8, 'bad items size');
     }
 }

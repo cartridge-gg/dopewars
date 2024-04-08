@@ -6,12 +6,12 @@ use rollyourown::config::{
 
 #[starknet::interface]
 trait IConfig<T> {
-    fn initialize(ref self: T);
+    fn initialize(self: @T);
     fn get_config(self: @T) -> Config;
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
 
-// fn update_drug_config_meta(ref self: T);
+// fn update_drug_config_meta(self: @T);
 // ...
 }
 
@@ -69,7 +69,7 @@ mod config {
 
     #[abi(embed_v0)]
     impl ConfigImpl of super::IConfig<ContractState> {
-        fn initialize(ref self: ContractState) {
+        fn initialize(self: @ContractState) {
             // TODO checks
             self.assert_caller_is_owner();
 

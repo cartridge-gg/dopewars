@@ -17,6 +17,7 @@ export interface FaucetInterface {
 
 export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   const { account } = useAccount()
+  // const { clients: {dojoProvider}} = useDojoContext()
 
   const { toast } = useToast();
 
@@ -37,7 +38,8 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
           account!,
         ).typedv2(paperAbi);
 
-        tx = await contract.faucet();
+        tx = await contract.invoke("faucet", [], { parseRequest: false })
+        // tx = await contract.faucet();
         //tx = await dojoProvider.execute(account!, "rollyourown::_mocks::paper_mock::paper_mock", "faucet", []);
 
         toast({

@@ -11,6 +11,9 @@ import NextHead from "next/head";
 import { useEffect } from "react";
 import theme from "../theme";
 
+
+
+
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
 

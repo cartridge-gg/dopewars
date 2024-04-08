@@ -4,10 +4,10 @@ import { Loader } from "@/components/layout/Loader";
 import { StarknetProvider } from "@/components/wallet";
 import { Flex, VStack } from "@chakra-ui/react";
 import {
-  BurnerManager,
-  PredeployedManager,
-  useBurnerWindowObject,
-  usePredeployedWindowObject,
+    BurnerManager,
+    PredeployedManager,
+    useBurnerWindowObject,
+    usePredeployedWindowObject,
 } from "@dojoengine/create-burner";
 import { observer } from "mobx-react-lite";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";

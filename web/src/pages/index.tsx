@@ -11,6 +11,7 @@ import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, V
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 
+
 export default function Home() {
   const { router } = useRouterContext();
   const { account } = useAccount();
