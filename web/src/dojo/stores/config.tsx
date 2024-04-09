@@ -3,6 +3,8 @@ import {
   ConfigQuery,
   DrugConfig,
   DrugConfigEdge,
+  EncounterConfig,
+  EncounterConfigEdge,
   GameConfig,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
@@ -81,6 +83,7 @@ export type Config = {
   location: LocationConfigFull[];
   items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
+  encounters: EncounterConfig[],
   config: GetConfig;
 };
 
@@ -157,6 +160,12 @@ export class ConfigStoreClass {
     const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
     const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
 
+    //
+
+    const encounterConfigEdges = data.encounterConfigModels!.edges as EncounterConfigEdge[];
+    const encounterConfig = encounterConfigEdges.map((i) => i.node as EncounterConfig);
+
+
     /*************************************************** */
 
     const drugConfigFull = drugConfig.map((i) => {
@@ -202,12 +211,13 @@ export class ConfigStoreClass {
       location: locationConfigFull,
       items: hustlerItemBaseConfig,
       tiers: hustlerItemTiersConfig,
+      encounters: encounterConfig,
       /// @ts-ignore
       config: getConfig as GetConfig,
     };
 
     this.isInitialized = true;
-    // console.log("config:", this.config);
+    console.log("config:", this.config);
   }
 
   getDrug(drug: string): DrugConfigFull {
@@ -264,4 +274,11 @@ export class ConfigStoreClass {
       icon: itemIcons[base_config.name as itemsIconsKeys],
     };
   }
+
+  // encounters
+
+  getEncounterById(id: number): EncounterConfig {
+    return this.config?.encouters.find((i) => Number(i.id) === Number(id))!;
+  }
+
 }

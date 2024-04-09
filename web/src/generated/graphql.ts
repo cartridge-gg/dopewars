@@ -1870,7 +1870,7 @@ export const ConfigDocument = `
       }
     }
   }
-  encounterConfigModels(limit: 20) {
+  encounterConfigModels(limit: 20, order: {field: ID, direction: ASC}) {
     edges {
       node {
         id
