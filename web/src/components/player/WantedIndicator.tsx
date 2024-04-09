@@ -26,13 +26,14 @@ export const WantedIndicator = ({
     <Tooltip color="yellow.400" title="Wanted Level" text="Likelihood of encountering Cops or Gangs">
       <HStack
         w="70px"
-        color={
-          threatLevel === ThreatLevels.High ? "red" : threatLevel === ThreatLevels.Medium ? "yellow.400" : "neon.400"
-        }
+        color={threatLevel === ThreatLevels.High ? "red" : "neon.400"}
         animation={threatLevel === ThreatLevels.High ? `${blinkAnim} infinite 0.5s linear` : "none"}
         {...props}
       >
-        {threatLevel === ThreatLevels.High ? <Alert boxSize={21} /> : <Siren />} <Text>{threatLevel}</Text>
+        {threatLevel === ThreatLevels.High ? <Alert boxSize={21} /> : <Siren />}{" "}
+        <Text fontSize="11px" textStyle="subheading">
+          {threatLevel}
+        </Text>
       </HStack>
     </Tooltip>
   );
