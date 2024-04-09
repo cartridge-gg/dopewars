@@ -27,7 +27,7 @@ export class MarketsClass extends GamePropertyClass {
                     drug: drug.drug,
                     drugId: drug.drug_id,
                     price: price,
-                    weight: drug.weight / 100
+                    weight: drug.weight
                 };
 
                 if (this.marketsByLocation.has(location.location)) {

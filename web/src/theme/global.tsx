@@ -5,9 +5,17 @@ import colors from "./colors";
 const GlobalStyles = () => (
   <Global
     styles={`
+
+    #chakra-toast-manager-top-left {
+      margin-top: 50px;
+    }
+    
+    @media only screen and (min-width : 768px) {
       #chakra-toast-manager-top-left {
         margin-top: 70px;
       }
+    }
+     
 
       .ka-table-wrapper{
         padding: 16px;

@@ -372,8 +372,8 @@ const Encounter = ({
           src={imageSrc}
           alt="adverse event"
           mt={[0, "100px"]}
-          maxH={["auto", "calc(100vh - 300px)"]}
-          w={[160, "auto"]}
+          maxH={["30vh", "calc(100vh - 300px)"]}
+          w="auto"
           h={[160, 300]}
         />
 

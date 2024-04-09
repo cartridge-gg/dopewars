@@ -3,10 +3,9 @@ import { Footer, Layout } from "@/components/layout";
 import { statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
-import { ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { formatCash } from "@/utils/ui";
+import { IsMobile, formatCash } from "@/utils/ui";
 import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
@@ -83,7 +82,7 @@ const PawnShop = observer(() => {
     >
       <VStack w="full" pt={["0px", "20px"]} gap="20px" margin="auto">
         <VStack w="full" alignItems="flex-start" mt="10px">
-          <Text textStyle="subheading" fontSize="12px" color="neon.500">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500">
             For sale - choose one
           </Text>
         </VStack>
@@ -146,6 +145,7 @@ const ShopItem = observer(
     isActive: boolean;
     isDisabled: boolean;
   }) => {
+    const isMobile = IsMobile()
     return (
       <Button
         w="full"
@@ -159,11 +159,11 @@ const ShopItem = observer(
         isDisabled={isDisabled}
       >
         <HStack w="full" gap="20px">
-          {item.icon({ width: "40px", height: "40px" })}
+          {item.icon({ width: isMobile ? "32px" : "40px", height: isMobile ? "32px" : "40px"})}
 
           <HStack w="full" justify="space-between">
             <VStack w="full" alignItems="flex-start">
-              <Text textStyle="subheading" fontSize="12px" opacity="0.5">
+              <Text textStyle="subheading" fontSize={["9px","11px"]} opacity="0.5">
                 {title}
               </Text>
               <Text textStyle="heading" textTransform="uppercase" fontSize={["16px", "18px"]}>
@@ -174,7 +174,7 @@ const ShopItem = observer(
 
             <VStack w="full" alignItems="flex-end">
               <Text fontSize={["14px", "16px"]} opacity="0.5">
-                +{item.slot !== ItemSlot.Transport ? item.tier.stat : item.tier.stat / 100} {statName[item.slot]}
+                +{item.tier.stat} {statName[item.slot]}
               </Text>
               <Text fontSize={["16px", "18px"]}>{formatCash(item.tier.cost)}</Text>
             </VStack>

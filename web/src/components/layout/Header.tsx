@@ -1,19 +1,18 @@
 import { MediaPlayer, MobileMenu } from "@/components/layout";
-import { Connect, TokenBalance } from "@/components/wallet";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Card, Divider, Flex, HStack } from "@chakra-ui/react";
+import { Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { PaperIcon } from "../icons";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { Burners } from "../wallet/Burners";
 import { ChainSelector } from "../wallet/ChainSelector";
+import { ConnectButton } from "../wallet/ConnectButton";
 import { Predeployed } from "../wallet/Predeployed";
 
 interface HeaderProps {
@@ -48,16 +47,19 @@ export const Header = observer(({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        <Connect />
-        <Burners />
-        <Predeployed />
-        <ChainSelector canChange={!gameId} />
-        {!gameId && account && (
+        {!isMobile && (
+          <>
+            <Burners />
+            <Predeployed />
+            <ChainSelector canChange={!gameId} />
+          </>
+        )}
+
+        {/* {!gameId && account && (
           <Card h="48px" p={2} display="flex" justifyContent="center">
             <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </Card>
-        )}
-
+        )} */}
 
         {!gameId && <ClaimReward />}
       </HStack>
@@ -91,8 +93,9 @@ export const Header = observer(({ back }: HeaderProps) => {
             <MediaPlayer />
           </>
         )}
-
+        {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
+
         {isMobile && <MobileMenu />}
       </HStack>
     </HStack>

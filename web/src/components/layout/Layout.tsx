@@ -123,7 +123,8 @@ const RightPanel = ({
       >
         {children}
         {!isSinglePanel && rigthPanelScrollable && (
-          <Box display="block" minH={isMobile ? "170px" : "90px"} h={isMobile ? "170px" : "90px"} w="full" />
+          // <Box display="block" minH={isMobile ? "170px" : "90px"} h={isMobile ? "170px" : "90px"} w="full" />
+          <Box display="block" minH="80px" h="80px" w="full" />
         )}
       </VStack>
       {footer}

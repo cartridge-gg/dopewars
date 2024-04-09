@@ -1,4 +1,5 @@
 import { MakeItRain } from "@/components/layout";
+import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
@@ -44,6 +45,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <Analytics />
           {/* <Debug /> */}
+
+          {/* Common modales */}
+          <ConnectModal />
+          <AccountDetailsModal />
+
         </DojoContextProvider>
       </ChakraProvider>
     </>

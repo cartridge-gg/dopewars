@@ -4,10 +4,10 @@ import { Loader } from "@/components/layout/Loader";
 import { StarknetProvider } from "@/components/wallet";
 import { Flex, VStack } from "@chakra-ui/react";
 import {
-    BurnerManager,
-    PredeployedManager,
-    useBurnerWindowObject,
-    usePredeployedWindowObject,
+  BurnerManager,
+  PredeployedManager,
+  useBurnerWindowObject,
+  usePredeployedWindowObject,
 } from "@dojoengine/create-burner";
 import { observer } from "mobx-react-lite";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
@@ -15,9 +15,11 @@ import { QueryClientProvider } from "react-query";
 import { Account, AccountInterface } from "starknet";
 import { DojoChainsResult, useDojoChains } from "../hooks/useDojoChains";
 import { DojoClientsResult, useDojoClients } from "../hooks/useDojoClients";
+import { paperFaucet } from "../hooks/useFaucet";
 import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
+import { UiStore } from "../stores/ui";
 
 interface DojoContextType {
   chains: DojoChainsResult;
@@ -27,6 +29,7 @@ interface DojoContextType {
   predeployedManager?: PredeployedManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
+  uiStore: UiStore;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -71,11 +74,23 @@ export const DojoContextProvider = observer(
     const burnerManager = useMemo(() => {
       if (!masterAccount) return undefined;
 
-      return new BurnerManager({
+      const manager = new BurnerManager({
         masterAccount: masterAccount!,
         accountClassHash: selectedChain.accountClassHash!,
         rpcProvider: rpcProvider,
+        feeTokenAddress: selectedChain.chainConfig.nativeCurrency.address
       });
+
+      const afterDeploy = async ({ account, deployTx }: { account: Account; deployTx: string }) => {
+        const receipt = await account!.waitForTransaction(deployTx, {
+          retryInterval: 200,
+        });
+        await paperFaucet({ account, paperAddress: configStore.config?.ryoAddress.paper });
+      };
+
+      manager.setAfterDeployingCallback(afterDeploy);
+
+      return manager;
     }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
 
     const predeployedManager = useMemo(() => {
@@ -136,6 +151,8 @@ export const DojoContextProvider = observer(
       initAsync();
     }, [configStore]);
 
+    const uiStore = new UiStore();
+
     const isInitialized = burnerSWOIsInitialized && predeployedSWOIsInitialized && configStoreState.isInitialized;
     const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
     const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
@@ -175,6 +192,7 @@ export const DojoContextProvider = observer(
           masterAccount,
           configStore,
           gameStore,
+          uiStore,
         }}
       >
         <StarknetProvider>

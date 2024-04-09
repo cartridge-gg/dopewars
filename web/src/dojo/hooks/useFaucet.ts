@@ -1,7 +1,7 @@
 import { useToast } from "@/hooks/toast";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
-import { Contract, TypedContractV2 } from "starknet";
+import { Account, Contract, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
 
 
@@ -79,3 +79,21 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
     isPending,
   };
 };
+
+
+
+export const paperFaucet = async ({ account, paperAddress }: { account: Account, paperAddress: string }) => {
+
+  const contract: TypedContractV2<typeof paperAbi> = new Contract(
+    paperAbi,
+    paperAddress!,
+    account!,
+  ).typedv2(paperAbi);
+
+  const tx = await contract.invoke("faucet", [], { parseRequest: false })
+
+  const receipt = await account!.waitForTransaction(tx.transaction_hash, {
+    retryInterval: 200,
+  });
+
+}

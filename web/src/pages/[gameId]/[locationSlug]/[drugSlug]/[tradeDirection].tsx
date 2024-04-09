@@ -106,7 +106,7 @@ const Market = observer(() => {
     >
       <Box w="full" margin="auto">
         <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Image src={`/images/drugs/${drug.drug.toLowerCase()}.svg`} alt={drug.name} h={[140, 300]} maxH="40vh" />
+          <Image src={`/images/drugs/${drug.drug.toLowerCase()}.svg`} alt={drug.name} h={[200, 300]} maxH="36vh" />
           <HStack w="100%" justifyContent="space-between" fontSize="16px">
             <HStack>
               <Text>{market.weight} lb</Text>

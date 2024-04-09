@@ -3,7 +3,7 @@ import { Alert, Clock, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
-import { useRouterContext } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const { router } = useRouterContext();
   const { account } = useAccount();
+  const { uiStore } = useDojoContext();
 
   const { toast } = useToast();
   const [isGated, setIsGated] = useState(false);
@@ -30,18 +31,26 @@ export default function Home() {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   const onHustle = async () => {
+    if(!account){
+      uiStore.openConnectModal()
+      return
+    }
+
     if (!disableAutoPlay) {
       play();
     }
 
-      router.push(`/create/new`);
+    router.push(`/create/new`);
   };
 
   return (
-    <Layout CustomLeftPanel={HomeLeftPanel} rigthPanelScrollable={false} rigthPanelMaxH="calc(100vh - 230px)">
+    <Layout CustomLeftPanel={HomeLeftPanel}
+     rigthPanelScrollable={false} 
+    // rigthPanelMaxH="calc(100vh - 230px)"
+    >
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
-          <HStack w="full" p="20px" gap="10px" justify="center">
+          <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
             {isGated ? (
               <VStack>
                 <HStack>
@@ -66,7 +75,7 @@ export default function Home() {
                 <Tab>HALL OF FAME</Tab>
               </TabList>
 
-              <TabPanels mt={0} maxH="calc(100vh - 400px)" overflowY="scroll">
+              <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
                 <TabPanel p={0}>
                   <Leaderboard />
                 </TabPanel>

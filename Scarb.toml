@@ -27,17 +27,17 @@ auth_prod = "./scripts/default_auth.sh prod"
 
 # migrate
 migrate = "sozo migrate apply && scarb run gendojo && scarb run auth"
-migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate && scarb run auth_ryo420"
-migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate && scarb run auth_ryo421"
+migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate apply && scarb run auth_ryo420"
+migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate apply && scarb run auth_ryo421"
 migrate_prod = "sozo -P prod migrate"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0-alpha.3 --chain-id KATANA_SLOT_420"
-slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.0-alpha.3 --world 0x8d9e00f20d1d9039e26f3cec29892c11c611314d508188d5be88019be48a7d"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0 --chain-id KATANA_SLOT_420"
+slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
 # slot ryo421
-slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0-alpha.3 --chain-id KATANA_SLOT_421"
-slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.0-alpha.3 --world 0x8d9e00f20d1d9039e26f3cec29892c11c611314d508188d5be88019be48a7d"
+slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0 --chain-id KATANA_SLOT_421"
+slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 
 [profile.dev.tool.dojo.env]

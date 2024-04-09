@@ -217,7 +217,7 @@ export class ConfigStoreClass {
     };
 
     this.isInitialized = true;
-    console.log("config:", this.config);
+    // console.log("config:", this.config);
   }
 
   getDrug(drug: string): DrugConfigFull {
@@ -278,7 +278,7 @@ export class ConfigStoreClass {
   // encounters
 
   getEncounterById(id: number): EncounterConfig {
-    return this.config?.encouters.find((i) => Number(i.id) === Number(id))!;
+    return this.config?.encounters.find((i) => Number(i.id) === Number(id))!;
   }
 
 }

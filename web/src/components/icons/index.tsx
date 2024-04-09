@@ -26,6 +26,7 @@ export * from "./Chat";
 export * from "./Cigarette";
 export * from "./Clock";
 export * from "./Close";
+export * from "./Cops";
 export * from "./DollarBag";
 export * from "./Dots";
 export * from "./DynamicHeart";
@@ -33,9 +34,11 @@ export * from "./Event";
 export * from "./ExternalLink";
 export * from "./Fist";
 export * from "./Flipflop";
+export * from "./Gang";
 export * from "./Gem";
 export * from "./Heart";
 export * from "./Home";
+export * from "./Infos";
 export * from "./Link";
 export * from "./Music";
 export * from "./Paper";
@@ -52,6 +55,7 @@ export * from "./Truck";
 export * from "./Twitter";
 export * from "./User";
 export * from "./Warning";
+
 
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed

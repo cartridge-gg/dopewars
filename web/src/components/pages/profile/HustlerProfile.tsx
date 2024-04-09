@@ -1,5 +1,5 @@
 import { Hustler, Hustlers } from "@/components/hustlers";
-import { Inventory, PowerMeter } from "@/components/player";
+import { PowerMeter } from "@/components/player";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { ItemSlot } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
@@ -50,8 +50,8 @@ export const HustlerProfile = observer(() => {
   return (
     <VStack w="full" gap={6}>
       <HStack w="full" p="20px" justifyContent="center" gap={6}>
-        <Box alignItems="center" h="300px" w="150px" position="relative" zIndex={99}>
-          <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h="300px" />
+        <Box alignItems="center" h={["190px", "300px"]} w="150px" position="relative" zIndex={99}>
+          <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h={["190px", "300px"]} />
           {/* <OG id={97} /> */}
         </Box>
 
@@ -90,7 +90,7 @@ export const HustlerProfile = observer(() => {
         </VStack>
       </HStack>
 
-      <HStack>
+      <HStack w="100%" maxW={["260px","360px"]}>
         <Button
           variant="pixelated"
           w="full"
@@ -119,7 +119,6 @@ export const HustlerProfile = observer(() => {
         </VStack>
       </Card> */}
 
-      <Inventory hidePawnshop={true} />
     </VStack>
   );
 });
