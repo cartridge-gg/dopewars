@@ -73,7 +73,7 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
         <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["36px", "48px"]} textAlign="center" fontWeight="normal">
+        <Heading fontSize={["30px", "48px"]} textAlign="center" fontWeight="normal">
           {title}
         </Heading>
       </VStack>

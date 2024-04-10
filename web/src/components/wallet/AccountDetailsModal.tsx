@@ -1,23 +1,12 @@
-import { ExternalLink } from "@/components/icons";
-import { useConfigStore, useDojoContext } from "@/dojo/hooks";
-import { frenlyAddress } from "@/utils/ui";
-import {
-  Button,
-  HStack,
-  Link,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-  Text,
-  VStack
-} from "@chakra-ui/react";
+import { ExternalLink, PaperIcon } from "@/components/icons";
+import { useConfigStore, useDojoContext, useTokenBalance } from "@/dojo/hooks";
+import { formatEther, frenlyAddress } from "@/utils/ui";
+import { Button, HStack, Link, Modal, ModalBody, ModalContent, ModalOverlay, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useDisconnect, useExplorer } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { TokenBalance } from "./TokenBalance";
 
-
-export const AccountDetailsModal =  observer(() => {
+export const AccountDetailsModal = observer(() => {
   const explorer = useExplorer();
   const { config } = useConfigStore();
 
@@ -28,6 +17,11 @@ export const AccountDetailsModal =  observer(() => {
   const onClose = () => {
     uiStore.closeAccountDetails();
   };
+
+  const { balance } = useTokenBalance({
+    address: account?.address,
+    token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  });
 
   return (
     <Modal
@@ -55,10 +49,17 @@ export const AccountDetailsModal =  observer(() => {
               </>
             </Link>
 
-            <HStack color="yellow.400">
-              <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
-              <Text>PAPER</Text>
-            </HStack>
+            <VStack w="full" gap={1}>
+              <HStack color="yellow.400">
+                <PaperIcon width="16px" height="16px" />
+                <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
+              </HStack>
+
+              <HStack gap={1}>
+                <Text fontFamily="monospace">Ξ</Text>
+                <Text>{formatEther(balance)}</Text>
+              </HStack>
+            </VStack>
 
             <HStack w="full" justifyContent="center">
               <Button

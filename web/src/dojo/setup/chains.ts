@@ -42,10 +42,10 @@ export const katanaSlot420Chain = {
 
     rpcUrls: {
         default: {
-            http: ["https://api.cartridge.gg/x/ryo420/katana",],
+            http: ["https://us-east.api.cartridge.gg/x/ryo420/katana",],
         },
         public: {
-            http: ["https://api.cartridge.gg/x/ryo420/katana",],
+            http: ["https://us-east.api.cartridge.gg/x/ryo420/katana",],
         },
     },
     explorers: {

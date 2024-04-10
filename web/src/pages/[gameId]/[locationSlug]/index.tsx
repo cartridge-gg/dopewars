@@ -1,4 +1,5 @@
 import { Button } from "@/components/common";
+import { WeightIcon } from "@/components/icons/Weigth";
 import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
@@ -153,8 +154,11 @@ const Location = observer(() => {
 
                   <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
                     <HStack justifyContent="space-between">
-                      <Text>{drug.weight} lb</Text>
-                      <Text>{formatCash(drug.price)}</Text>
+                      <Text>
+                      <WeightIcon mb={1} />
+                        <span>{drug.weight}</span>
+                      </Text>
+                      <Text> {formatCash(drug.price)}</Text>
                     </HStack>
                     <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
                   </CardFooter>

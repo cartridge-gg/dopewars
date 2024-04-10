@@ -97,7 +97,7 @@ export const HomeLeftPanel = () => {
           <Text textStyle="subheading" fontSize="11px">
             DOPE WARS
           </Text>
-          <Heading fontSize={["36px", "48px"]} fontWeight="normal">
+          <Heading fontSize={["30px", "48px"]} fontWeight="normal">
             Roll your Own
           </Heading>
         </VStack>

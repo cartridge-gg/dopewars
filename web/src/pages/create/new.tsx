@@ -103,7 +103,7 @@ const New = observer(() => {
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               Choose your
             </Text>
-            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+            <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
               Hustler...
             </Heading>
           </VStack>

@@ -85,7 +85,7 @@ const End = observer(() => {
               </Text>
             )}
 
-            <Heading fontSize={["36px", "48px"]} fontWeight="normal">
+            <Heading fontSize={["30px", "48px"]} fontWeight="normal">
               Game Over
             </Heading>
             <HStack w="full">

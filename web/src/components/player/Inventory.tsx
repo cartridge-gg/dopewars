@@ -4,11 +4,12 @@ import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag, Cigarette, PawnshopIcon } from "../icons";
+import { Cigarette, PawnshopIcon } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
 import { useAccount } from "@starknet-react/core";
+import { WeightIcon } from "../icons/Weigth";
 import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
@@ -68,7 +69,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
         <VStack w="full" alignItems="flex-end" gap={[0,1]}>
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
-            <Bag />
+            <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
               {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight : 0}/
               {game.items.transport!.tier.stat}
