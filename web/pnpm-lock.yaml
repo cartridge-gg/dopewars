@@ -12,14 +12,14 @@ dependencies:
     specifier: ^2.8.1
     version: 2.8.2(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.0.28)(framer-motion@10.18.0)(react-dom@18.2.0)(react@18.2.0)
   '@dojoengine/core':
-    specifier: file:../../dojo-packages/packages/core
-    version: file:../../dojo-packages/packages/core(starknet@6.2.0)
+    specifier: 0.6.122
+    version: 0.6.122(starknet@6.2.0)
   '@dojoengine/create-burner':
-    specifier: file:../../dojo-packages/packages/create-burner
-    version: file:../../dojo-packages/packages/create-burner(react@18.2.0)(starknet@6.2.0)
+    specifier: 0.6.122
+    version: 0.6.122(react@18.2.0)(starknet@6.2.0)
   '@dojoengine/utils':
-    specifier: file:../../dojo-packages/packages/utils
-    version: file:../../dojo-packages/packages/utils(starknet@6.2.0)(typescript@5.2.2)(zod@3.22.4)
+    specifier: 0.6.122
+    version: 0.6.122(starknet@6.2.0)(typescript@5.2.2)(zod@3.22.4)
   '@emotion/react':
     specifier: ^11.10.6
     version: 11.11.3(@types/react@18.0.28)(react@18.2.0)
@@ -2662,12 +2662,27 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: false
 
-  /@dojoengine/core@0.6.121(starknet@6.2.0):
-    resolution: {integrity: sha512-hDmvNHhQN+FdqfPIbFOr8l8DMWMSvhWPsU27gjmefZK3bgbu/UXER+hF7uEFpLYPKW2SK18OAKinsJsUGemSVw==}
+  /@dojoengine/core@0.6.122(starknet@6.2.0):
+    resolution: {integrity: sha512-TSP1YZnYrfusvRs/uzUEdByXbZ5p21SlnWDM7+MLbkCDwhEdIkdbVKjMjkbvTOsKru6045TTiAuz3qsShMiYOw==}
     hasBin: true
     peerDependencies:
       starknet: ^6.1.5
     dependencies:
+      starknet: 6.2.0
+    dev: false
+
+  /@dojoengine/create-burner@0.6.122(react@18.2.0)(starknet@6.2.0):
+    resolution: {integrity: sha512-tiU2NxIAz1Z7liz0aBOlNUO2pOnGqiJFFx/BbaD+VnrHGdJySiH+aEfCx1rMVS8w2OnfzyOODgp4KKx5g+Q5Cw==}
+    peerDependencies:
+      react: ^18.2.0
+      starknet: ^6.1.5
+    dependencies:
+      '@dojoengine/core': 0.6.122(starknet@6.2.0)
+      '@starknet-react/core': 2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0)
+      encoding: 0.1.13
+      get-starknet-core: 3.2.0(starknet@6.2.0)
+      js-cookie: 3.0.5
+      react: 18.2.0
       starknet: 6.2.0
     dev: false
 
@@ -2678,6 +2693,23 @@ packages:
       '@latticexyz/utils': 2.0.0-next.12
       mobx: 6.12.0
       rxjs: 7.5.5
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@dojoengine/utils@0.6.122(starknet@6.2.0)(typescript@5.2.2)(zod@3.22.4):
+    resolution: {integrity: sha512-lAbD8cbb1Zjmy0Z9Rkc255iHcqqQpMm8bjVzWMu6hTdh+CTiOhMoqUXQxGE9OHtESMvNSHjanDy5jwnaO9QuEw==}
+    peerDependencies:
+      starknet: ^6.1.5
+    dependencies:
+      '@dojoengine/recs': 0.1.35(typescript@5.2.2)(zod@3.22.4)
+      '@latticexyz/utils': 2.0.0-transaction-context-324984c5
+      mathjs: 12.4.1
+      micro-starknet: 0.2.3
+      starknet: 6.2.0
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -10800,51 +10832,4 @@ packages:
       '@types/react': 18.0.28
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
-
-  file:../../dojo-packages/packages/core(starknet@6.2.0):
-    resolution: {directory: ../../dojo-packages/packages/core, type: directory}
-    id: file:../../dojo-packages/packages/core
-    name: '@dojoengine/core'
-    hasBin: true
-    peerDependencies:
-      starknet: ^6.1.5
-    dependencies:
-      starknet: 6.2.0
-    dev: false
-
-  file:../../dojo-packages/packages/create-burner(react@18.2.0)(starknet@6.2.0):
-    resolution: {directory: ../../dojo-packages/packages/create-burner, type: directory}
-    id: file:../../dojo-packages/packages/create-burner
-    name: '@dojoengine/create-burner'
-    peerDependencies:
-      react: ^18.2.0
-      starknet: ^6.1.5
-    dependencies:
-      '@dojoengine/core': 0.6.121(starknet@6.2.0)
-      '@starknet-react/core': 2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.2.0)
-      encoding: 0.1.13
-      get-starknet-core: 3.2.0(starknet@6.2.0)
-      js-cookie: 3.0.5
-      react: 18.2.0
-      starknet: 6.2.0
-    dev: false
-
-  file:../../dojo-packages/packages/utils(starknet@6.2.0)(typescript@5.2.2)(zod@3.22.4):
-    resolution: {directory: ../../dojo-packages/packages/utils, type: directory}
-    id: file:../../dojo-packages/packages/utils
-    name: '@dojoengine/utils'
-    peerDependencies:
-      starknet: ^6.1.5
-    dependencies:
-      '@dojoengine/recs': 0.1.35(typescript@5.2.2)(zod@3.22.4)
-      '@latticexyz/utils': 2.0.0-transaction-context-324984c5
-      mathjs: 12.4.1
-      micro-starknet: 0.2.3
-      starknet: 6.2.0
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
     dev: false
