@@ -32,11 +32,11 @@ migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate apply && scarb 
 migrate_prod = "sozo -P prod migrate"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0 --chain-id KATANA_SLOT_420"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0 --chain-id KATANA_SLOT_420 --disable-fee true"
 slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
 # slot ryo421
-slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0 --chain-id KATANA_SLOT_421"
+slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0 --chain-id KATANA_SLOT_421 --disable-fee true"
 slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 

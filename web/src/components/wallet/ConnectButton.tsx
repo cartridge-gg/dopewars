@@ -1,5 +1,5 @@
-import { useDojoContext } from "@/dojo/hooks";
-import { frenlyAddress } from "@/utils/ui";
+import { useDojoContext, useTokenBalance } from "@/dojo/hooks";
+import { formatEther, frenlyAddress } from "@/utils/ui";
 import { Box, Button, HStack, Image, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet-react/core";
 
@@ -9,10 +9,10 @@ export const ConnectButton = ({ ...props }) => {
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
 
-  // const { balance } = useTokenBalance({
-  //   address,
-  //   token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-  // });
+  const { balance } = useTokenBalance({
+    address,
+    token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  });
 
   return (
     <>
@@ -35,10 +35,10 @@ export const ConnectButton = ({ ...props }) => {
             <HStack>
               {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
               <Text>{frenlyAddress(account.address || "")}</Text>
-              {/* <HStack gap={1}>
+              <HStack gap={1}>
                 <Text fontFamily="monospace">Ξ</Text>
                 <Text>{formatEther(balance)}</Text>
-              </HStack> */}
+              </HStack>
             </HStack>
           </Button>
         )}
@@ -53,10 +53,10 @@ export const ConnectButtonMobile = ({ ...props }) => {
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
 
-  // const { balance } = useTokenBalance({
-  //   address,
-  //   token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-  // });
+  const { balance } = useTokenBalance({
+    address,
+    token: "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  });
 
   return (
     <>
@@ -70,10 +70,10 @@ export const ConnectButtonMobile = ({ ...props }) => {
           <HStack w="full" justifyContent="center">
             {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
             <Text>{frenlyAddress(account.address || "")}</Text>
-            {/* <HStack gap={1}>
+            <HStack gap={1}>
                 <Text fontFamily="monospace">Ξ</Text>
                 <Text>{formatEther(balance)}</Text>
-              </HStack> */}
+              </HStack>
           </HStack>
         </MenuItem>
       )}

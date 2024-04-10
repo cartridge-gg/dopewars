@@ -1,9 +1,7 @@
 import { Menu, MenuItem, Popover, PopoverBody, PopoverContent, PopoverTrigger, StyleProps } from "@chakra-ui/react";
 import { Dots } from "../icons";
 import { ProfileLinkMobile } from "../pages/profile/Profile";
-import { ChainSelector, ConnectButtonMobile } from "../wallet";
-import { Burners } from "../wallet/Burners";
-import { Predeployed } from "../wallet/Predeployed";
+import { ConnectButtonMobile } from "../wallet";
 import { HeaderButton } from "./HeaderButton";
 import { MediaPlayer } from "./MediaPlayer";
 
@@ -24,11 +22,11 @@ export const MobileMenu = ({ ...props }: StyleProps) => {
               </MenuItem>
               <ProfileLinkMobile />
               <ConnectButtonMobile />
-              <MenuItem>
+              {/* <MenuItem>
                 <ChainSelector/>
                 <Burners />
                 <Predeployed />
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </PopoverBody>
         </PopoverContent>

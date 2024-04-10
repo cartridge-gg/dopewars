@@ -6,7 +6,7 @@ import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { AppProps } from "next/app";
 import NextHead from "next/head";
 import { useEffect } from "react";
@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </NextHead>
           {isRightSequence && <MakeItRain />}
           <Component {...pageProps} />
-          <Analytics />
+          <SpeedInsights />
           {/* <Debug /> */}
 
           {/* Common modales */}

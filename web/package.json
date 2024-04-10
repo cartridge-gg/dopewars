@@ -28,7 +28,7 @@
     "@next/bundle-analyzer": "^14.1.4",
     "@starknet-react/chains": "^0.1.7",
     "@starknet-react/core": "^2.4.0",
-    "@vercel/analytics": "^1.0.2",
+    "@vercel/speed-insights": "^1.0.10",
     "eslint": "8.36.0",
     "eslint-config-next": "14.1.4",
     "framer-motion": "^10.5.0",
