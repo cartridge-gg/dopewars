@@ -26,6 +26,7 @@ interface DojoContextType {
   clients: DojoClientsResult;
   masterAccount?: AccountInterface;
   burnerManager?: BurnerManager;
+  isPrefundingPaper: boolean;
   predeployedManager?: PredeployedManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
@@ -48,6 +49,8 @@ export const DojoContextProvider = observer(
       isError: false,
       error: undefined,
     });
+
+    const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
       process.env.NODE_ENV === "production" ? dojoContextConfig.KATANA_SLOT_420 : dojoContextConfig.KATANA;
@@ -78,14 +81,20 @@ export const DojoContextProvider = observer(
         masterAccount: masterAccount!,
         accountClassHash: selectedChain.accountClassHash!,
         rpcProvider: rpcProvider,
-        feeTokenAddress: selectedChain.chainConfig.nativeCurrency.address
+        feeTokenAddress: selectedChain.chainConfig.nativeCurrency.address,
       });
 
       const afterDeploy = async ({ account, deployTx }: { account: Account; deployTx: string }) => {
-        const receipt = await account!.waitForTransaction(deployTx, {
-          retryInterval: 200,
-        });
-        await paperFaucet({ account, paperAddress: configStore.config?.ryoAddress.paper });
+        setIsPrefundingPaper(true);
+        try {
+          const receipt = await account!.waitForTransaction(deployTx, {
+            retryInterval: 500,
+          });
+          await paperFaucet({ account, paperAddress: configStore.config?.ryoAddress.paper });
+        } catch (e: any) {
+          console.log("fail afterDeploy");
+        }
+        setIsPrefundingPaper(false);
       };
 
       manager.setAfterDeployingCallback(afterDeploy);
@@ -188,6 +197,7 @@ export const DojoContextProvider = observer(
             rpcProvider,
           },
           burnerManager,
+          isPrefundingPaper,
           predeployedManager,
           masterAccount,
           configStore,

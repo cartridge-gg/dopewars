@@ -67,13 +67,13 @@ export const ConnectButtonMobile = ({ ...props }) => {
       )}
       {account && (
         <MenuItem h="48px" borderRadius={0} onClick={() => uiStore.openAccountDetails()}>
-          <HStack w="full" justifyContent="center">
+          <HStack w="full" /*justifyContent="center"*/>
             {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
             <Text>{frenlyAddress(account.address || "")}</Text>
             <HStack gap={1}>
-                <Text fontFamily="monospace">Ξ</Text>
-                <Text>{formatEther(balance)}</Text>
-              </HStack>
+              <Text fontFamily="monospace">Ξ</Text>
+              <Text>{formatEther(balance)}</Text>
+            </HStack>
           </HStack>
         </MenuItem>
       )}

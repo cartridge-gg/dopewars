@@ -49,7 +49,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
         })
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 200,
+          retryInterval: 500,
         });
 
       } catch (e: any) {
@@ -93,7 +93,7 @@ export const paperFaucet = async ({ account, paperAddress }: { account: Account,
   const tx = await contract.invoke("faucet", [], { parseRequest: false })
 
   const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-    retryInterval: 200,
+    retryInterval: 500,
   });
 
 }

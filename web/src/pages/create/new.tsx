@@ -98,7 +98,7 @@ const New = observer(() => {
       }
     >
       <VStack w={["full", "540px"]} margin="auto">
-        <VStack w="full"  gap={[6,9]}>
+        <VStack w="full"  gap={[3,9]}>
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               Choose your
@@ -218,7 +218,7 @@ const New = observer(() => {
             />
           </HStack>
 
-          {config?.ryo.paper_fee > 0 && (
+          {!isMobile && config?.ryo.paper_fee > 0 && (
             <Card p={3} >
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">

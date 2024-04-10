@@ -71,7 +71,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             <Bag />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
               {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight : 0}/
-              {game.items.transport!.tier.stat} LB
+              {game.items.transport!.tier.stat}
             </Text>
           </HStack>
 

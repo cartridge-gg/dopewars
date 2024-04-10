@@ -55,7 +55,7 @@ export const ProfileLinkMobile = () => {
 
   return (
     <>
-      <MenuItem h="48px" borderRadius={0} onClick={onClick} justifyContent="center">
+      <MenuItem h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
         <Text ml="10px">{gameEvents.playerName}</Text>
       </MenuItem>

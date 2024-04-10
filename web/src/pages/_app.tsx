@@ -1,5 +1,6 @@
 import { MakeItRain } from "@/components/layout";
 import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
+import { DeployingModal } from "@/components/wallet/DeployingModal";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
@@ -13,6 +14,11 @@ import { useEffect } from "react";
 import theme from "../theme";
 
 
+// should avoid mobx memory leaks / GC issue..
+import { LoadingModal } from "@/components/layout/LoadingModal";
+import { QuitGameModal } from "@/components/layout/QuitGameModal";
+import { enableStaticRendering } from "mobx-react-lite";
+enableStaticRendering(typeof window === "undefined");
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -47,8 +53,11 @@ export default function App({ Component, pageProps }: AppProps) {
           {/* <Debug /> */}
 
           {/* Common modales */}
+          <LoadingModal />
+          <DeployingModal />
           <ConnectModal />
           <AccountDetailsModal />
+          <QuitGameModal />
 
         </DojoContextProvider>
       </ChakraProvider>

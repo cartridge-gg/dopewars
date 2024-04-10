@@ -11,11 +11,10 @@ import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, V
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 
-
 export default function Home() {
   const { router } = useRouterContext();
   const { account } = useAccount();
-  const { uiStore } = useDojoContext();
+  const { uiStore, burnerManager } = useDojoContext();
 
   const { toast } = useToast();
   const [isGated, setIsGated] = useState(false);
@@ -31,9 +30,9 @@ export default function Home() {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   const onHustle = async () => {
-    if(!account){
-      uiStore.openConnectModal()
-      return
+    if (!account) {
+      uiStore.openConnectModal();
+      return;
     }
 
     if (!disableAutoPlay) {
@@ -44,9 +43,10 @@ export default function Home() {
   };
 
   return (
-    <Layout CustomLeftPanel={HomeLeftPanel}
-     rigthPanelScrollable={false} 
-    // rigthPanelMaxH="calc(100vh - 230px)"
+    <Layout
+      CustomLeftPanel={HomeLeftPanel}
+      rigthPanelScrollable={false}
+      // rigthPanelMaxH="calc(100vh - 230px)"
     >
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">

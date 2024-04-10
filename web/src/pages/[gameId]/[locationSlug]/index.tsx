@@ -98,7 +98,7 @@ const Location = observer(() => {
         </Footer>
       }
     >
-      <VStack h="100%" w="100%" alignItems="center" justifyContent="center" gap={[6, 9]}>
+      <VStack /*h="100%"*/ w="full" alignItems="center" justifyContent="center" gap={[6, 9]}>
         <Box w="full" zIndex="1" bg="neon.900">
           <Inventory />
         </Box>
@@ -110,10 +110,13 @@ const Location = observer(() => {
 
               const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
               const hasFreeSpace = freeSpace >= drug.weight;
+              const hasMinCash = game.player.cash >= drug.price;
 
               const canBuy =
                 hasFreeSpace &&
+                hasMinCash &&
                 (game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug!.drug);
+
               const canSell =
                 (game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) || false;
 
@@ -171,7 +174,7 @@ const BuySellBtns = observer(
   ({ canBuy, canSell, drugConfig }: { canBuy: boolean; canSell: boolean; drugConfig: DrugConfigFull }) => {
     const { router } = useRouterContext();
     return (
-      <HStack mb="10px" w="full" bg="neon.900" /*gap="65px"*/>
+      <HStack mb="10px" bg="neon.900" w="full" /*gap="65px"*/>
         <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
           Buy
         </Button>
@@ -199,22 +202,25 @@ const BuySellMobileToggle = observer(
     return (
       <>
         <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
-        <HStack
+        <Box
           as={motion.div}
           initial={{ height: "0", opacity: 0 }}
           animate={{
             height: isOpen ? "auto" : "0",
             opacity: isOpen ? 1 : 0,
           }}
-          boxSize="full"
+          position="absolute"
+          width="90%"
+          bottom="0px"
+          left="5%"
           gap="10px"
           overflow="hidden"
-          align="flex-start"
+          // align="flex-start"
           display={["flex", "none"]}
           {...props}
         >
           <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-        </HStack>
+        </Box>
       </>
     );
   },

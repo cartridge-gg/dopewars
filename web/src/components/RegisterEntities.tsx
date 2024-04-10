@@ -29,7 +29,7 @@ const RegisterEntities = observer(() => {
 
   useEffect(() => {
    
-    console.log("RegisterEntities", gameId);
+    // console.log("RegisterEntities", gameId);
 
     if (gameStore && gameId) {
       gameStore.init(gameId);
