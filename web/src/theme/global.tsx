@@ -18,31 +18,6 @@ const GlobalStyles = () => (
           margin-top: 70px;
         }
       }
-
-      .ka-cell, .ka-thead-cell{
-        padding: 4px;
-      }
-
-      .ka-input {
-          width: 100%;
-          padding: 4px;
-          min-width: 50px;
-          background: ${colors.neon["800"]};
-          border-color: ${colors.neon["500"]};
-      }
-
-      // .rdt_TableHeadRow {
-      //   text-transform: uppercase;
-      // }
-
-      // .rdt_Table,
-      // .rdt_TableHead,
-      // .rdt_TableHeadRow,
-      // .rdt_TableBody,
-      // .rdt_TableRow {
-      //   background-color: transparent;
-      //   color: ${colors.neon["400"]};
-      // }
      
       .ka-table-wrapper{
         padding: 16px;

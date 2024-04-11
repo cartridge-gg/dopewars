@@ -2,10 +2,6 @@ use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl},
     game::{GameConfig}, drugs::{DrugConfig}
 };
-use rollyourown::config::{
-    hustlers::{HustlerConfig, HustlerImpl},
-    game::{GameConfig}, drugs::{DrugConfig}
-};
 
 
 #[starknet::interface]
@@ -15,7 +11,7 @@ trait IConfig<T> {
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
 
-// fn update_drug_config_meta(ref self: T);
+// fn update_drug_config_meta(self: @T);
 // ...
 }
 
@@ -23,7 +19,7 @@ trait IConfig<T> {
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
-    game_config: GameConfig,
+    game_config: GameConfig, // TODO: query torii instead
 }
 
 #[derive(Drop, Serde)]
@@ -54,7 +50,8 @@ mod config {
                 initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
                 initialize_clothes_tiers_config, initialize_feet_tiers_config,
                 initialize_transport_tiers_config,
-            }
+            },
+            encounters::{initialize_encounter_config, EncounterConfig, Encounters},
         },
         packing::{
             game_store_layout::{
@@ -72,12 +69,11 @@ mod config {
 
     #[abi(embed_v0)]
     impl ConfigImpl of super::IConfig<ContractState> {
-        fn initialize(ref self: ContractState) {
+        fn initialize(self: @ContractState) {
             // TODO checks
             self.assert_caller_is_owner();
 
             let world = self.world();
-           
            
             // common
             initialize_drug_config(world);
@@ -158,7 +154,7 @@ mod config {
             let game_config = GameConfigImpl::get(world);
 
             //
-            Config { game_config, layouts: LayoutsConfig { game_store, player }, hustlers }
+            Config { game_config, hustlers, layouts: LayoutsConfig { game_store, player } }
         }
 
         fn update_game_config(self: @ContractState, game_config: GameConfig) {

@@ -8,7 +8,8 @@ use rollyourown::{
     },
     config::{
         hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
-        game::{GameConfig, GameConfigImpl}
+        encounters::{Encounters},
+        game::{GameConfig, GameConfigImpl}, 
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
@@ -127,12 +128,7 @@ fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> E
     // temp: lvl based on reputation    
     let encounter_level = game_store.player.reputation / 15 + 1;
     
-    // temp: lvl based on reputation    
-    let encounter_level = game_store.player.reputation / 15 + 1;
-    
     let health = encounter_level * 5 + turn;
-    let attack = encounter_level * 2 + turn / 3;
-    
     let attack = encounter_level * 2 + turn / 3;
     
     let payout: u32 = (encounter_level.into() * encounter_level.into() * 4_000)
@@ -257,12 +253,11 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
         rep_neg: result.rep_neg,
     };
 
-    emit!( game_store.world, result_event);
+    emit!(game_store.world, (Event::TravelEncounterResult(result_event)));
     
     let is_dead = game_store.player.is_dead();
     if !is_dead {
         // update encounter level
-        // game_store.encounters.increase_encounter_level(encounter_slot);
         // game_store.encounters.increase_encounter_level(encounter_slot);
 
         // update player status
@@ -282,9 +277,6 @@ fn on_pay(
     let mut rep_neg: u8 = 0;
 
     let game_config = GameConfigImpl::get(game_store.world);
-    let mut rep_neg: u8 = 0;
-
-    let game_config = GameConfigImpl::get(game_store.world);
 
     match encounter.encounter {
         Encounters::Cops => {
@@ -297,10 +289,6 @@ fn on_pay(
 
             // set drugs
             game_store.drugs.set(drug_unpacked);
-
-            // loss rep
-            rep_neg = game_config.rep_pay_cops;
-        
 
             // loss rep
             rep_neg = game_config.rep_pay_cops;
@@ -322,14 +310,8 @@ fn on_pay(
 
             // loss rep
             rep_neg = game_config.rep_pay_gang;
-
-            // loss rep
-            rep_neg = game_config.rep_pay_gang;
         },
     };
-
-    // apply rep_neg
-    game_store.player.reputation = game_store.player.reputation.sub_capped(rep_neg,0);
 
     // apply rep_neg
     game_store.player.reputation = game_store.player.reputation.sub_capped(rep_neg,0);
@@ -348,8 +330,6 @@ fn on_pay(
         drug_loss,
         turn_loss: 0,
         escaped_with_item: false,
-        rep_pos: 0,
-        rep_neg,
         rep_pos: 0,
         rep_neg,
     }
@@ -384,7 +364,6 @@ fn on_run(
     let mut is_dead = false;
     let mut is_caught = false;
     let mut escaped_with_item = false;
-    
     
     let initial_tier_defense: u8 = (get!(game_store.world, (ItemSlot::Clothes, 1), (HustlerItemTiersConfig)).stat / 10).try_into().unwrap();
     let def = player_defense / 10;
@@ -482,15 +461,6 @@ fn on_run(
 
     game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
 
-    // reputation
-    let game_config = GameConfigImpl::get(game_store.world);
-    let rep_pos = match encounter.encounter {
-        Encounters::Cops => { game_config.rep_run_cops },
-        Encounters::Gang => { game_config.rep_run_gang },
-    };
-
-    game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
-
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
@@ -505,8 +475,6 @@ fn on_run(
         drug_loss,
         turn_loss,
         escaped_with_item,
-        rep_pos,
-        rep_neg: 0,
         rep_pos,
         rep_neg: 0,
     }
@@ -593,15 +561,6 @@ fn on_fight(
 
     game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
 
-    // reputation
-    let game_config = GameConfigImpl::get(game_store.world);
-    let rep_pos = match encounter.encounter {
-        Encounters::Cops => { game_config.rep_fight_cops },
-        Encounters::Gang => { game_config.rep_fight_gang },
-    };
-
-    game_store.player.reputation = game_store.player.reputation.add_capped(rep_pos,100);
-
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
@@ -616,8 +575,6 @@ fn on_fight(
         drug_loss: array![],
         turn_loss: 0,
         escaped_with_item: false,
-        rep_pos,
-        rep_neg: 0,
         rep_pos,
         rep_neg: 0,
     }

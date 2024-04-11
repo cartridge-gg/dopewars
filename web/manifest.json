@@ -1256,12 +1256,15 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": []
+      "computed": [],
+      "name": "rollyourown::_mocks::paper_mock::paper_mock"
     },
     {
-      "name": "rollyourown::config::config::config",
-      "address": "0x73e5a7b0f2ff860ae67f9edc7709d3dbbee30f84afcccf1f8e3963e128e1bc5",
-      "class_hash": "0x4e032de3da7ec321e6d1e584d8fe6a8622b0d16922942491b9eda5c5c5a2b29",
+      "kind": "DojoContract",
+      "address": "0x77cfc8df2e0d60abf3ad87a9773a91f72cde6b65a860fe98cd55c4900ce29ea",
+      "class_hash": "0x65ee9a14d2a5b2863e961d4322e039ff2c6a30cd3340dc884826fde36c90046",
+      "original_class_hash": "0x65ee9a14d2a5b2863e961d4322e039ff2c6a30cd3340dc884826fde36c90046",
+      "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
           "type": "impl",
@@ -1748,12 +1751,15 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": []
+      "computed": [],
+      "name": "rollyourown::config::config::config"
     },
     {
-      "name": "rollyourown::systems::devtools::devtools",
-      "address": "0x443bf5fc4480469fa6f52082310e91e90cb86249c1731bb2b4057d77bfcea2",
-      "class_hash": "0x78077bee04ade4666311e407b37676df6bdcef7e125088c99db93048e272277",
+      "kind": "DojoContract",
+      "address": "0x39c0f0531ea74d657f91ed6e4467e01aea144060b7c69f6c8cdb7e6b904e082",
+      "class_hash": "0x1b227cb71aff952f78c742ed52c37bfafce69cdbad51f547d9634f8a7528812",
+      "original_class_hash": "0x1b227cb71aff952f78c742ed52c37bfafce69cdbad51f547d9634f8a7528812",
+      "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
           "type": "impl",
@@ -1901,12 +1907,15 @@
       ],
       "reads": [],
       "writes": [],
-      "computed": []
+      "computed": [],
+      "name": "rollyourown::systems::devtools::devtools"
     },
     {
-      "name": "rollyourown::systems::game::game",
-      "address": "0x52d79bdb709ee84fbf0199f427d058977a04c5403f149796ad9d76927a162ec",
-      "class_hash": "0x1561122e4b6050d6732ab4fb0def3d66c5c74f13d7b03df8fdfee562d4c425e",
+      "kind": "DojoContract",
+      "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
+      "class_hash": "0x20ea67758fb4fa5ceb0be4d4217856597a572949d4953d8aa9efbfa7754c0ba",
+      "original_class_hash": "0x20ea67758fb4fa5ceb0be4d4217856597a572949d4953d8aa9efbfa7754c0ba",
+      "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
           "type": "impl",
@@ -3792,7 +3801,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x34bc7423f899bfebb8ab6fc3d366b5b408905758a9dadc513d432db881ccbc2",
+      "class_hash": "0x6aef29644cf6292fa7e17b96f795bc0826d6595d00bb5cbe379df340c25960a",
+      "original_class_hash": "0x6aef29644cf6292fa7e17b96f795bc0826d6595d00bb5cbe379df340c25960a",
       "abi": [
         {
           "type": "impl",

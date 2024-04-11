@@ -193,7 +193,7 @@ const Travel = observer(() => {
               <WantedIndicator
                 wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
                 highLimit={config?.config.game_config.max_wanted_shopping}
-              />
+            />
             )}
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />

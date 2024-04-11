@@ -1,11 +1,10 @@
 import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
-import { ItemSlot } from "@/dojo/types";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Bag, Cigarette, PawnshopIcon, Alert } from "../icons";
+import { Cigarette, PawnshopIcon, Alert } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
@@ -30,7 +29,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[3, 6]}>
       <HStack w="full" justifyContent="space-between">
-        <VStack w="full" alignItems="flex-start" gap={[0,1]}>
+        <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
           <HStack color="neon.500" justify="center" alignItems="center">
             <Cigarette />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -41,23 +40,25 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           <Tooltip
             title={`Reputation: ${game.player.reputation}`}
             text={`Your actions influence your reputation. Do the right things...`}
-            title={`Reputation: ${game.player.reputation}`}
-            text={`Your actions influence your reputation. Do the right things...`}
             color="yellow.400"
           >
-            <Card h="44px" px="4px" justify="center" alignItems="center">
+            <Card h="40px" px="4px" justify="center" alignItems="center">
               <PowerMeter
                 text={reputationRanks[game.player.drugLevel as reputationRanksKeys]}
                 basePower={0}
                 power={game.player.drugLevel}
                 maxPower={4}
                 displayedPower={4}
+                bg="transparent"
               />
               <Progress
+                position="absolute"
+                bottom="4px"
                 h="4px"
-                px="1px"
+                px="6px"
                 colorScheme="neon"
                 w="full"
+                zIndex={0}
                 value={((game.player.reputation % 20) * 100) / 20}
               />
             </Card>
@@ -66,7 +67,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
         {/* ************** */}
 
-        <VStack w="full" alignItems="flex-end" gap={[0,1]}>
+        <VStack w="full" alignItems="flex-end" gap={[0, 1]}>
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
             <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -108,7 +109,6 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
-                playSound(Sounds.Door, 0.5);
                 playSound(Sounds.Door, 0.5);
                 router.push(`/${gameId}/pawnshop`);
               }
