@@ -83,7 +83,7 @@ export type Config = {
   location: LocationConfigFull[];
   items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
-  encounters: EncounterConfig[],
+  encounters: EncounterConfig[];
   config: GetConfig;
 };
 
@@ -116,7 +116,6 @@ export class ConfigStoreClass {
       isLoading: observable,
       init: flow,
     });
-
   }
 
   *init() {
@@ -151,7 +150,7 @@ export class ConfigStoreClass {
       return {
         ...i.node,
         name: shortString.decodeShortString(i.node?.name),
-        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys]
+        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys],
       } as HustlerItemBaseConfigFull;
     });
 
@@ -164,7 +163,6 @@ export class ConfigStoreClass {
 
     const encounterConfigEdges = data.encounterConfigModels!.edges as EncounterConfigEdge[];
     const encounterConfig = encounterConfigEdges.map((i) => i.node as EncounterConfig);
-
 
     /*************************************************** */
 
@@ -280,5 +278,4 @@ export class ConfigStoreClass {
   getEncounterById(id: number): EncounterConfig {
     return this.config?.encounters.find((i) => Number(i.id) === Number(id))!;
   }
-
 }

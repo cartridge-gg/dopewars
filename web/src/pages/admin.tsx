@@ -16,7 +16,7 @@ import {
   TabPanels,
   Tabs,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
@@ -71,11 +71,11 @@ export default function Admin() {
 
           <TabPanel p={0}>
             <VStack w="full" alignItems="flex-start">
-            <Text>ITEM BASE</Text>
+              <Text>ITEM BASE</Text>
               <Card w="full">
                 <HustlerItemBaseTable />
               </Card>
-            <Text>ITEM TIERS</Text>
+              <Text>ITEM TIERS</Text>
               <Card w="full">
                 <HustlerItemTiersTable />
               </Card>
@@ -90,12 +90,12 @@ export default function Admin() {
 
           <TabPanel p={0}>
             <VStack w="full" alignItems="flex-start">
-            <Text>GAME </Text>
-              <Card w="full" >
+              <Text>GAME </Text>
+              <Card w="full">
                 <GameLayoutTable />
               </Card>
               <Text>PLAYER </Text>
-              <Card w="full" >
+              <Card w="full">
                 <PlayerLayoutTable />
               </Card>
             </VStack>

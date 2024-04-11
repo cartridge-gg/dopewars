@@ -64,7 +64,6 @@ const Decision = observer(() => {
           encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           setEncounterImg(`/images/events/gang/${encounter.level}.gif`);
-
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
@@ -377,7 +376,7 @@ const Encounter = ({
           h={[150, 300]}
         />
 
-        <VStack w="full" mt={[0,"20px"]}>
+        <VStack w="full" mt={[0, "20px"]}>
           <Text color="red" h="40px" lineHeight="40px">
             <Heart /> You lost {encounter?.healthLoss} HP!
           </Text>

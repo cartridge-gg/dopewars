@@ -189,7 +189,12 @@ const Travel = observer(() => {
             <Text textStyle="subheading" fontSize="11px" color="neon.500">
               Location
             </Text>
-            <WantedIndicator wanted={game.wanted.wantedByLocation.get(targetLocation)!} />
+            {targetLocation && (
+              <WantedIndicator
+                wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
+                highLimit={config?.config.game_config.max_wanted_shopping}
+            />
+            )}
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>

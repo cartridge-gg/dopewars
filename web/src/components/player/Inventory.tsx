@@ -4,7 +4,7 @@ import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Cigarette, PawnshopIcon } from "../icons";
+import { Cigarette, PawnshopIcon, Alert } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
@@ -29,7 +29,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[3, 6]}>
       <HStack w="full" justifyContent="space-between">
-        <VStack w="full" alignItems="flex-start" gap={[0,1]}>
+        <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
           <HStack color="neon.500" justify="center" alignItems="center">
             <Cigarette />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -67,7 +67,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
         {/* ************** */}
 
-        <VStack w="full" alignItems="flex-end" gap={[0,1]}>
+        <VStack w="full" alignItems="flex-end" gap={[0, 1]}>
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
             <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -106,7 +106,6 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             flexDirection="row"
             justify="center"
             alignItems="center"
-            opacity={game.isShopOpen ? 1 : 0.5}
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
@@ -115,8 +114,10 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
               }
             }}
           >
-            <PawnshopIcon ml={-1} />
-            <Text ml={3}>{game.isShopOpen ? "Open" : "Closed"}</Text>
+            {game.isShopOpen ? <PawnshopIcon ml={-1} /> : <Alert ml={-1} />}
+            <Text ml={3} color={game.isShopOpen ? "neon" : "red"}>
+              {game.isShopOpen ? "Open" : "Closed"}
+            </Text>
           </Card>
         </VStack>
       )}

@@ -1,18 +1,39 @@
 import { HStack, StyleProps, Text } from "@chakra-ui/react";
-import { Siren } from "../icons";
+import { Alert, Siren } from "../icons";
 
 import { Tooltip } from "../common";
 import { blinkAnim } from "./HealthIndicator";
 
-export const WantedIndicator = ({ wanted, ...props }: { wanted: number } & StyleProps) => {
+enum ThreatLevels {
+  High = "HIGH",
+  Medium = "MED",
+  Low = "LOW",
+}
+
+export const WantedIndicator = ({
+  wantedTick,
+  highLimit,
+  ...props
+}: { wantedTick: number; highLimit: number } & StyleProps) => {
+  const threatLevel =
+    wantedTick >= highLimit || wantedTick >= 5
+      ? ThreatLevels.High
+      : wantedTick >= 2
+      ? ThreatLevels.Medium
+      : ThreatLevels.Low;
+
   return (
     <Tooltip color="yellow.400" title="Wanted Level" text="Likelihood of encountering Cops or Gangs">
-      <HStack w="70px"
-        color={wanted > 68 ? "red" : wanted > 29 ? "yellow.400" : "neon.400"}
-        animation={wanted >= 85 ? `${blinkAnim} infinite 0.5s linear` : "none"}
+      <HStack
+        w="70px"
+        color={threatLevel === ThreatLevels.High ? "red" : "neon.400"}
+        animation={threatLevel === ThreatLevels.High ? `${blinkAnim} infinite 0.5s linear` : "none"}
         {...props}
       >
-        <Siren /> <Text>{wanted}%</Text>
+        {threatLevel === ThreatLevels.High ? <Alert boxSize={21} /> : <Siren />}{" "}
+        <Text fontSize="11px" textStyle="subheading">
+          {threatLevel}
+        </Text>
       </HStack>
     </Tooltip>
   );
