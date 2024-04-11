@@ -1,9 +1,10 @@
 mod config {
     mod config;
     mod drugs;
-    mod locations;
+    mod encounters;
     mod game;
     mod hustlers;
+    mod locations;
     mod ryo;
     mod ryo_address;
 }

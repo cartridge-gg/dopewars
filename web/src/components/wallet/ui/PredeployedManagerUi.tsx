@@ -1,9 +1,9 @@
+import { frenlyAddress } from "@/utils/ui";
 import { HStack, List, ListItem, Text, VStack } from "@chakra-ui/react";
 import { Predeployed, PredeployedManager } from "@dojoengine/create-burner";
 import { useConnect, useDisconnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { frenlyAddress } from "../Connect";
 
 export const PredeployedManagerUi = observer(({ predeployedManager }: { predeployedManager?: PredeployedManager }) => {
   const { connect, connector } = useConnect();

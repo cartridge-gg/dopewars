@@ -122,14 +122,14 @@ export const useSystems = (): SystemsInterface => {
           isError: false
         })
 
-        //
-        // TODO : remove later
-        //
-        await sleep(1_000);
-        // clearToasts()
+        // //
+        // // TODO : remove later
+        // //
+        // await sleep(1_000);
+        // // clearToasts()
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 200,
+          retryInterval: 500,
         });
       } catch (e: any) {
         setIsPending(false)

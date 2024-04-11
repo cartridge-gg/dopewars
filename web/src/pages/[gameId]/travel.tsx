@@ -274,7 +274,7 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
                   <Text display={isCurrentLocation ? "block" : ["none", "block"]}>${drug.price.toFixed(0)}</Text>
                   {drug.percentage && drug.diff && drug.diff !== 0 && (
                     <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
-                      ({!isPercentage ? `${drug.percentage.toFixed(0)}%` : formatCash(drug.diff)})
+                      ({!isPercentage ? `${(drug.percentage || 0).toFixed(0)}%` : formatCash(drug.diff)})
                     </Text>
                   )}
                 </HStack>

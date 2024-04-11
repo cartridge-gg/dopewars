@@ -3,6 +3,8 @@ import {
   ConfigQuery,
   DrugConfig,
   DrugConfigEdge,
+  EncounterConfig,
+  EncounterConfigEdge,
   GameConfig,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
@@ -81,6 +83,7 @@ export type Config = {
   location: LocationConfigFull[];
   items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
+  encounters: EncounterConfig[];
   config: GetConfig;
 };
 
@@ -113,14 +116,10 @@ export class ConfigStoreClass {
       isLoading: observable,
       init: flow,
     });
-
-    // this.init()
   }
 
   *init() {
-    if (this.isInitialized) {
-      return;
-    }
+    this.isInitialized = false;
 
     this.config = undefined;
 
@@ -151,7 +150,7 @@ export class ConfigStoreClass {
       return {
         ...i.node,
         name: shortString.decodeShortString(i.node?.name),
-        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys]
+        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys],
       } as HustlerItemBaseConfigFull;
     });
 
@@ -159,6 +158,11 @@ export class ConfigStoreClass {
 
     const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
     const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
+
+    //
+
+    const encounterConfigEdges = data.encounterConfigModels!.edges as EncounterConfigEdge[];
+    const encounterConfig = encounterConfigEdges.map((i) => i.node as EncounterConfig);
 
     /*************************************************** */
 
@@ -205,6 +209,7 @@ export class ConfigStoreClass {
       location: locationConfigFull,
       items: hustlerItemBaseConfig,
       tiers: hustlerItemTiersConfig,
+      encounters: encounterConfig,
       /// @ts-ignore
       config: getConfig as GetConfig,
     };
@@ -266,5 +271,11 @@ export class ConfigStoreClass {
       upgradeName: itemUpgrades[Number(slot_id) as ItemSlot][Number(id)][Number(level)] || "Original",
       icon: itemIcons[base_config.name as itemsIconsKeys],
     };
+  }
+
+  // encounters
+
+  getEncounterById(id: number): EncounterConfig {
+    return this.config?.encounters.find((i) => Number(i.id) === Number(id))!;
   }
 }

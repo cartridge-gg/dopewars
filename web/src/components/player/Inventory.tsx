@@ -10,6 +10,7 @@ import { Bag, Cigarette, PawnshopIcon, Alert } from "../icons";
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
 import { useAccount } from "@starknet-react/core";
+import { WeightIcon } from "../icons/Weigth";
 import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
@@ -27,17 +28,19 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
   if (!game || !configStore) return null;
 
   return (
-    <VStack {...props} w="full" align="flex-start" pb="0" gap={6}>
+    <VStack {...props} w="full" align="flex-start" pb="0" gap={[3, 6]}>
       <HStack w="full" justifyContent="space-between">
-        <VStack w="full" alignItems="flex-start">
+        <VStack w="full" alignItems="flex-start" gap={[0,1]}>
           <HStack color="neon.500" justify="center" alignItems="center">
             <Cigarette />
-            <Text textStyle="subheading" fontSize="11px" mt={2}>
+            <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
               REPUTATION
             </Text>
           </HStack>
 
           <Tooltip
+            title={`Reputation: ${game.player.reputation}`}
+            text={`Your actions influence your reputation. Do the right things...`}
             title={`Reputation: ${game.player.reputation}`}
             text={`Your actions influence your reputation. Do the right things...`}
             color="yellow.400"
@@ -63,17 +66,17 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
         {/* ************** */}
 
-        <VStack w="full" alignItems="flex-end">
+        <VStack w="full" alignItems="flex-end" gap={[0,1]}>
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
-            <Bag />
-            <Text textStyle="subheading" fontSize="11px" mt={2}>
-              {game.drugs.drug ? (game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight) / 100 : 0}/
-              {game.items.transport!.tier.stat / 100} LB
+            <WeightIcon mb={1} />
+            <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
+              {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight : 0}/
+              {game.items.transport!.tier.stat}
             </Text>
           </HStack>
 
-          <Card h="40px" px="20px" justify="center" minW="140px" alignItems="center">
-            <HStack gap="10px" justify="flex-start">
+          <Card h="40px" px="20px" justify="center" minW="120px" alignItems="center">
+            <HStack gap="10px" justify="flex-start" fontSize={["14px", "16px"]}>
               {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
               {game.drugs.quantity > 0 && game.drugs.drug && (
                 <HStack gap="10px">
@@ -90,7 +93,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
       {!hidePawnshop && (
         <VStack w="full" alignItems="flex-start">
-          <Text textStyle="subheading" fontSize="11px" color="neon.500" h="24px" lineHeight="24px">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500" h="24px" lineHeight="24px">
             PAWNSHOP
           </Text>
 
@@ -105,6 +108,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
             animation={game.isShopOpen ? `${blinkAnim} 6s linear infinite` : "none"}
             onClick={() => {
               if (game.isShopOpen) {
+                playSound(Sounds.Door, 0.5);
                 playSound(Sounds.Door, 0.5);
                 router.push(`/${gameId}/pawnshop`);
               }
@@ -140,12 +144,12 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 const PlayerItem = ({ item, ...props }: { item: HustlerItemConfigFull }) => {
   if (!item) return null;
 
-  const stat = item.slot === ItemSlot.Transport ? item.tier.stat / 100 : item.tier.stat;
+  //const stat = item.slot === ItemSlot.Transport ? item.tier.stat / 100 : item.tier.stat;
   return (
     <HStack gap="10px" {...props}>
       <Tooltip
         title={`${item.base.name}`}
-        text={`${item.upgradeName} (+${stat} ${statName[item.slot]})`}
+        text={`${item.upgradeName} (+${item.tier.stat} ${statName[item.slot]})`}
         color="yellow.400"
       >
         <HStack>

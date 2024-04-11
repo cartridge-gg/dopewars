@@ -383,7 +383,7 @@ export const ABI = [
         "name": "initialize",
         "inputs": [],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",

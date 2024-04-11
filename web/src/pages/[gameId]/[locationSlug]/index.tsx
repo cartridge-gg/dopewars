@@ -1,4 +1,5 @@
 import { Button } from "@/components/common";
+import { WeightIcon } from "@/components/icons/Weigth";
 import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
@@ -28,7 +29,7 @@ import { useEffect, useState } from "react";
 
 const Location = observer(() => {
   const { router, gameId, location } = useRouterContext();
-  const { account } = useAccount()
+  const { account } = useAccount();
 
   const configStore = useConfigStore();
   const { game, gameInfos, gameEvents } = useGameStore();
@@ -98,7 +99,7 @@ const Location = observer(() => {
         </Footer>
       }
     >
-      <VStack h="100%" w="100%" alignItems="center" justifyContent="center" gap={9}>
+      <VStack /*h="100%"*/ w="full" alignItems="center" justifyContent="center" gap={[6, 9]}>
         <Box w="full" zIndex="1" bg="neon.900">
           <Inventory />
         </Box>
@@ -108,12 +109,17 @@ const Location = observer(() => {
             {prices.map((drug, index) => {
               const drugConfig = configStore.getDrug(drug.drug)!;
 
-              // TODO : move in Player
+              const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
+              const hasFreeSpace = freeSpace >= drug.weight;
+              const hasMinCash = game.player.cash >= drug.price;
+
               const canBuy =
-                game.drugs.quantity === 0 ||
-                !game.drugs?.drug ||
-                (game.drugs?.drug?.drug === drug?.drug && game.player.cash > drug.price);
-              const canSell = game.drugs.quantity > 0 && game.drugs?.drug?.drug === drug.drug;
+                hasFreeSpace &&
+                hasMinCash &&
+                (game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug!.drug);
+
+              const canSell =
+                (game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) || false;
 
               return (
                 <Card h={["auto", "180px"]} key={index} position="relative">
@@ -146,10 +152,13 @@ const Location = observer(() => {
                     </HStack>
                   </CardBody>
 
-                  <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["0 10px", "10px 20px"]}>
+                  <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
                     <HStack justifyContent="space-between">
-                      <Text>{drug.weight} lb</Text>
-                      <Text>{formatCash(drug.price)}</Text>
+                      <Text>
+                      <WeightIcon mb={1} />
+                        <span>{drug.weight}</span>
+                      </Text>
+                      <Text> {formatCash(drug.price)}</Text>
                     </HStack>
                     <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
                   </CardFooter>
@@ -165,59 +174,58 @@ const Location = observer(() => {
 
 export default Location;
 
-const BuySellBtns = ({
-  canBuy,
-  canSell,
-  drugConfig,
-}: {
-  canBuy: boolean;
-  canSell: boolean;
-  drugConfig: DrugConfigFull;
-}) => {
-  const { router } = useRouterContext();
-  return (
-    <HStack mb="10px" w="full" gap="65px">
-      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
-        Buy
-      </Button>
-      <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)} isDisabled={!canSell}>
-        Sell
-      </Button>
-    </HStack>
-  );
-};
-
-const BuySellMobileToggle = ({
-  canBuy,
-  canSell,
-  drugConfig,
-  ...props
-}: {
-  canBuy: boolean;
-  canSell: boolean;
-  drugConfig: DrugConfigFull;
-} & StyleProps) => {
-  const { isOpen, onToggle } = useDisclosure();
-
-  return (
-    <>
-      <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
-      <HStack
-        as={motion.div}
-        initial={{ height: "0", opacity: 0 }}
-        animate={{
-          height: isOpen ? "auto" : "0",
-          opacity: isOpen ? 1 : 0,
-        }}
-        boxSize="full"
-        gap="10px"
-        overflow="hidden"
-        align="flex-start"
-        display={["flex", "none"]}
-        {...props}
-      >
-        <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
+const BuySellBtns = observer(
+  ({ canBuy, canSell, drugConfig }: { canBuy: boolean; canSell: boolean; drugConfig: DrugConfigFull }) => {
+    const { router } = useRouterContext();
+    return (
+      <HStack mb="10px" bg="neon.900" w="full" /*gap="65px"*/>
+        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
+          Buy
+        </Button>
+        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)} isDisabled={!canSell}>
+          Sell
+        </Button>
       </HStack>
-    </>
-  );
-};
+    );
+  },
+);
+
+const BuySellMobileToggle = observer(
+  ({
+    canBuy,
+    canSell,
+    drugConfig,
+    ...props
+  }: {
+    canBuy: boolean;
+    canSell: boolean;
+    drugConfig: DrugConfigFull;
+  } & StyleProps) => {
+    const { isOpen, onToggle } = useDisclosure();
+
+    return (
+      <>
+        <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
+        <Box
+          as={motion.div}
+          initial={{ height: "0", opacity: 0 }}
+          animate={{
+            height: isOpen ? "auto" : "0",
+            opacity: isOpen ? 1 : 0,
+          }}
+          position="absolute"
+          width="90%"
+          bottom="0px"
+          left="5%"
+          gap="10px"
+          overflow="hidden"
+          // align="flex-start"
+          display={["flex", "none"]}
+          {...props}
+        >
+          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
+        </Box>
+      </>
+    );
+  },
+);

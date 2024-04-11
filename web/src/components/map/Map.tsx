@@ -31,7 +31,7 @@ export const coordinatePercent: CoordinateType = {
   [Locations.Brooklyn]: { x: 47, y: 72 },
 };
 
-const yOffset = -150;
+const yOffset = -180;
 
 export const Map = ({
   targetId,
@@ -53,9 +53,9 @@ export const Map = ({
       const point = coordinate[targetId] ? coordinate[targetId] : { x: 0, y: 0 };
       const animation = isMobile
         ? {
-            scale: 1.5,
-            x: point.x,
-            y: point.y + yOffset,
+            scale: 1.25,
+            x: point.x * 0.5,
+            y: point.y * 0.5 + yOffset,
           }
         : { scale: 1, x: 0, y: 0 };
       animate(

@@ -16,13 +16,14 @@ import {
   TabPanels,
   Tabs,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 
 import { Wallet } from "@/components/icons/archive";
 import { DrugTable } from "@/components/pages/admin/DrugTable";
+import { EncounterTable } from "@/components/pages/admin/EncounterTable";
 import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
 import { GameLayoutTable } from "@/components/pages/admin/GameLayoutTable";
 import { HustlerItemBaseTable } from "@/components/pages/admin/HustlerItemBaseTable";
@@ -42,6 +43,7 @@ export default function Admin() {
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
           <Tab>ITEMS</Tab>
+          <Tab>ENCOUNTERS</Tab>
           <Tab>LAYOUTS</Tab>
         </TabList>
 
@@ -69,11 +71,11 @@ export default function Admin() {
 
           <TabPanel p={0}>
             <VStack w="full" alignItems="flex-start">
-            <Text>ITEM BASE</Text>
+              <Text>ITEM BASE</Text>
               <Card w="full">
                 <HustlerItemBaseTable />
               </Card>
-            <Text>ITEM TIERS</Text>
+              <Text>ITEM TIERS</Text>
               <Card w="full">
                 <HustlerItemTiersTable />
               </Card>
@@ -81,13 +83,19 @@ export default function Admin() {
           </TabPanel>
 
           <TabPanel p={0}>
+            <Card w="full">
+              <EncounterTable />
+            </Card>
+          </TabPanel>
+
+          <TabPanel p={0}>
             <VStack w="full" alignItems="flex-start">
-            <Text>GAME </Text>
-              <Card w="full" >
+              <Text>GAME </Text>
+              <Card w="full">
                 <GameLayoutTable />
               </Card>
               <Text>PLAYER </Text>
-              <Card w="full" >
+              <Card w="full">
                 <PlayerLayoutTable />
               </Card>
             </VStack>

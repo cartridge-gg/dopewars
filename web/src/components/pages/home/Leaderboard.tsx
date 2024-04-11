@@ -1,16 +1,16 @@
-import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
-
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
 import { GameOverData } from "@/dojo/events";
 import { useDojoContext, useHallOfFame, useLeaderboardEntries, useRouterContext } from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
+import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
-import { Arrow, Skull } from "../../icons";
+import { Arrow, InfosIcon, PaperIcon, Skull } from "../../icons";
+import { SeasonDetailsModal } from "./SeasonDetailsModal";
 
 const renderer = ({
   days,
@@ -52,13 +52,21 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
   const {
     chains: { selectedChain },
     configStore: { config },
+    uiStore,
   } = useDojoContext();
   const { account } = useAccount();
 
   //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
   const { hallOfFame, isFetchingHallOfFame } = useHallOfFame();
-  const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
-  const [selectedIndex, setSelectedIndex] = useState(maxIndex);
+
+  const [maxIndex, setMaxIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
+    setMaxIndex(maxIndex);
+    setSelectedIndex(maxIndex);
+  }, [hallOfFame]);
 
   const { leaderboardEntries, isFetchingLeaderboardEntries } = useLeaderboardEntries(
     hallOfFame[selectedIndex]?.version || 0,
@@ -78,12 +86,12 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     }
   };
 
-  useEffect(() => {
-    if (!listRef.current) return;
-    const lastEl = listRef.current["lastElementChild"];
-    // @ts-ignore
-    lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [leaderboardEntries]);
+  // useEffect(() => {
+  //   if (!listRef.current) return;
+  //   const lastEl = listRef.current["lastElementChild"];
+  //   // @ts-ignore
+  //   lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
+  // }, [leaderboardEntries]);
 
   if (!hallOfFame || hallOfFame.length === 0) {
     return <></>;
@@ -94,10 +102,11 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
       <VStack my="15px" w="full">
         <HStack w="full" justifyContent="space-between">
           <Arrow direction="left" cursor="pointer" opacity={selectedIndex > 0 ? "1" : "0.25"} onClick={onPrev}></Arrow>
-          <HStack textStyle="subheading" fontSize="12px">
+          <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
             <Text>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
             <Text color="yellow.400">
-              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")} PAPER
+              <PaperIcon width="16px" height="16px" color="yellow.400" mr={1} />
+              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")}
             </Text>
           </HStack>
           <Arrow
@@ -108,16 +117,24 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
           ></Arrow>
         </HStack>
         {selectedIndex === maxIndex && (
-          <Countdown
-            date={new Date(hallOfFame[selectedIndex]?.next_version_timestamp * 1_000)}
-            renderer={renderer}
-          ></Countdown>
+          <HStack>
+            <Countdown
+              date={new Date(hallOfFame[selectedIndex]?.next_version_timestamp * 1_000)}
+              renderer={renderer}
+            ></Countdown>
+            <Box
+              cursor="pointer"
+              onClick={() => uiStore.openSeasonDetails()} /*position="absolute" right="10px" top="10px"*/
+            >
+              <InfosIcon />
+            </Box>
+          </HStack>
         )}
       </VStack>
       <VStack
         boxSize="full"
         gap="20px"
-        maxH={["calc(100vh - 460px)", "calc(100vh - 480px)"]}
+        maxH={["calc(100vh - 430px)", "calc(100vh - 480px)"]}
         sx={{
           overflowY: "scroll",
         }}
@@ -198,6 +215,8 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
           </UnorderedList>
         )}
       </VStack>
+
+      <SeasonDetailsModal />
     </VStack>
   );
 });

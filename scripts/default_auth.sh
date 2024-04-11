@@ -10,13 +10,13 @@ fi
 
 TX_SLEEP=0.5
 
-export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
+export WORLD_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.world.address')
 
-export RYO_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::ryo::ryo" ).address')
-export CONFIG_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::config::config::config" ).address')
-export GAME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::game::game" ).address')
+export RYO_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::ryo::ryo" ).address')
+export CONFIG_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::config::config::config" ).address')
+export GAME_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::systems::game::game" ).address')
 
-export PAPER_MOCK_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
+export PAPER_MOCK_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
 
 export TREASURY_ADDRESS="0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a";
 
@@ -40,11 +40,13 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  DrugConfig,$CONFIG_ADDRESS \
  LocationConfig,$CONFIG_ADDRESS \
  HustlerItemBaseConfig,$CONFIG_ADDRESS \
+ HustlerItemTiersConfig,$CONFIG_ADDRESS \
+ EncounterConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
  GameStorePacked,$GAME_ADDRESS \
  RyoConfig,$GAME_ADDRESS \
  Leaderboard,$GAME_ADDRESS \
- > /dev/null
+
 
 
 # remove later
@@ -52,21 +54,22 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
  ERC20MetadataModel,$PAPER_MOCK_ADDRESS \
  ERC20BalanceModel,$PAPER_MOCK_ADDRESS \
  ERC20AllowanceModel,$PAPER_MOCK_ADDRESS \
- ERC20BridgeableModel,$PAPER_MOCK_ADDRESS \
- > /dev/null
+ InitializableModel,$PAPER_MOCK_ADDRESS \
+
+
 
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS --wait > /dev/null
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS --wait
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait > /dev/null
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait 
 echo "Initialized CONFIG!"
 sleep $TX_SLEEP
 
 # remove later
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait > /dev/null
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait 
 echo "Initialized PAPER_MOCK!"
 sleep $TX_SLEEP

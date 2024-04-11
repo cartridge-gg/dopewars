@@ -1,11 +1,11 @@
 import { Cigarette } from "@/components/icons";
 import { Sounds, playSound } from "@/hooks/sound";
+import { frenlyAddress } from "@/utils/ui";
 import { Button, HStack, List, ListItem, Text, VStack } from "@chakra-ui/react";
 import { Burner, BurnerManager } from "@dojoengine/create-burner";
 import { useConnect, useDisconnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { frenlyAddress } from "../Connect";
 
 export const BurnerManagerUi = observer(({ burnerManager }: { burnerManager?: BurnerManager }) => {
   const { connect, connector } = useConnect();

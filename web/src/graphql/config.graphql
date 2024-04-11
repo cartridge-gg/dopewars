@@ -1,31 +1,30 @@
 query Config {
-
   # RyoAddress
-  ryoAddressModels(limit:1){
+  ryoAddressModels(limit: 1) {
     edges {
       node {
-        key,
-        paper,
-        treasury,
+        key
+        paper
+        treasury
       }
     }
   }
 
-  # Ryo 
-  ryoConfigModels(limit:1){
+  # Ryo
+  ryoConfigModels(limit: 1) {
     edges {
       node {
-        key,
-        initialized,
-        paused,
-        leaderboard_version,
-        paper_fee,
-        treasury_fee_pct,
-        treasury_balance,
+        key
+        initialized
+        paused
+        leaderboard_version
+        paper_fee
+        treasury_fee_pct
+        treasury_balance
       }
     }
   }
-  
+
   # Drugs
   drugConfigModels(order: { field: DRUG_ID, direction: ASC }) {
     edges {
@@ -73,6 +72,28 @@ query Config {
         tier
         cost
         stat
+      }
+    }
+  }
+
+  # EncounterConfig
+  encounterConfigModels(limit: 20, order: { field: ID, direction: ASC }) {
+    edges {
+      node {
+        id
+        encounter
+        level
+        health
+        attack
+        defense
+        speed
+        payout
+        demand_pct
+        rep_pay
+        rep_run
+        rep_fight
+        min_rep
+        max_rep
       }
     }
   }

@@ -78,17 +78,17 @@ const Consequence = () => {
           </Footer>
         }
       >
-        <VStack h="full" gap={6}>
+        <VStack h="full" gap={[3, 6]}>
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               {outcomeInfos.title}
             </Text>
-            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+            <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
               {outcomeInfos.name}
             </Heading>
           </VStack>
-          <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="30vh" height="280px" />
-          <VStack width="full" maxW="600px" h="100%" gap={6}>
+          <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="30vh" height={[150, 280]} />
+          <VStack width="full" maxW="600px" h="100%" gap={[3, 6]}>
             <Card p={3} minW="300px">
               <VStack alignItems="flex-start" gap={1}>
                 {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}

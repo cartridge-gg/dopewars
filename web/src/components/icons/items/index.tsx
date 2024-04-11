@@ -1,8 +1,9 @@
 export * from "./AK47";
-export * from "./Chain";
 export * from "./Backpack";
 export * from "./BaseballBat";
 export * from "./Bicycle";
+export * from "./Boots";
+export * from "./Chain";
 export * from "./Dufflebag";
 export * from "./Fannypack";
 export * from "./Glock";
@@ -10,10 +11,10 @@ export * from "./Kevlar";
 export * from "./Kneepads";
 export * from "./Knife";
 export * from "./Leatherjacket";
+export * from "./PlasticBag";
+export * from "./Shirt";
 export * from "./Shoes";
 export * from "./Skateboard";
 export * from "./Trenchcoat";
 export * from "./Uzi";
-export * from "./PlasticBag";
-export * from "./Shirt";
 

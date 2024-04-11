@@ -1,4 +1,4 @@
-import { Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ChainSelector } from "../wallet";
 
@@ -10,6 +10,7 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
       <VStack>
         <VStack fontSize="16px">
           <VStack fontSize="16px">
+            <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
             <Text>Unable to connect</Text>
             {errors.map((e,key) => {
               if (e) {

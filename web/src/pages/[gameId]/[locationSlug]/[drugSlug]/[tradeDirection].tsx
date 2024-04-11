@@ -1,5 +1,6 @@
 import { AlertMessage } from "@/components/common";
 import { ArrowEnclosed } from "@/components/icons";
+import { WeightIcon } from "@/components/icons/Weigth";
 import { Footer, Layout } from "@/components/layout";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
@@ -105,11 +106,14 @@ const Market = observer(() => {
       }
     >
       <Box w="full" margin="auto">
-        <Card variant="pixelated" p={6} mb={6} _hover={{}} align="center">
-          <Image src={`/images/drugs/${drug.drug.toLowerCase()}.svg`} alt={drug.name} h={[140, 300]} maxH="40vh" />
+        <Card variant="pixelated" p={[3, 6]} mb={[3, 6]} _hover={{}} align="center">
+          <Image src={`/images/drugs/${drug.drug.toLowerCase()}.svg`} alt={drug.name} h={[160, 300]} maxH="30vh" />
           <HStack w="100%" justifyContent="space-between" fontSize="16px">
             <HStack>
-              <Text>{market.weight} lb</Text>
+              <Text>
+                <WeightIcon mb={1} />
+                <span>{market.weight}</span>
+              </Text>
             </HStack>
             <HStack>
               {drug.icon({ boxSize: "36px" })}
@@ -145,150 +149,155 @@ const Market = observer(() => {
 });
 export default Market;
 
-const QuantitySelector = observer(({
-  tradeDirection,
-  game,
-  drug,
-  market,
-  onChange,
-}: {
-  tradeDirection: TradeDirection;
-  game: GameClass;
-  drug: DrugConfigFull;
-  market: DrugMarket;
-  onChange: (quantity: number, newPrice: number) => void;
-}) => {
-  const [totalPrice, setTotalPrice] = useState(market.price);
-  const [priceImpact, setPriceImpact] = useState(0);
-  const [alertColor, setAlertColor] = useState("neon.500");
-  const [quantity, setQuantity] = useState(0);
-  const [max, setMax] = useState(0);
+const QuantitySelector = observer(
+  ({
+    tradeDirection,
+    game,
+    drug,
+    market,
+    onChange,
+  }: {
+    tradeDirection: TradeDirection;
+    game: GameClass;
+    drug: DrugConfigFull;
+    market: DrugMarket;
+    onChange: (quantity: number, newPrice: number) => void;
+  }) => {
+    const [totalPrice, setTotalPrice] = useState(market.price);
+    const [priceImpact, setPriceImpact] = useState(0);
+    const [alertColor, setAlertColor] = useState("neon.500");
+    const [quantity, setQuantity] = useState(0);
+    const [max, setMax] = useState(0);
 
-  useEffect(() => {
-    if (tradeDirection === TradeDirection.Buy) {
-      const canTrade = game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug?.drug;
-      if (!canTrade) {
-        // TODO: add alert msg?
-        setMax(0);
-        setQuantity(0);
-        return;
+    useEffect(() => {
+      if (tradeDirection === TradeDirection.Buy) {
+        const canTrade = game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug?.drug;
+        if (!canTrade) {
+          // TODO: add alert msg?
+          setMax(0);
+          setQuantity(0);
+          return;
+        }
+
+        const maxBuyable = Math.floor(game.player.cash / market.price);
+
+        // free space
+        const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * drug.weight;
+        const maxCarryable = Math.floor(freeSpace / drug.weight);
+
+        setMax(Math.min(maxBuyable, maxCarryable));
+      } else if (tradeDirection === TradeDirection.Sell) {
+        const canTrade = game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug?.drug;
+
+        if (!canTrade) {
+          // TODO: add alert msg?
+          setMax(0);
+          setQuantity(0);
+          return;
+        }
+        setMax(game.drugs.quantity || 0);
+        setQuantity(game.drugs.quantity || 0);
       }
+    }, [tradeDirection, drug, game, market]);
 
-      const maxBuyable = Math.floor(game.player.cash / market.price);
+    useEffect(() => {
+      setTotalPrice(quantity * market.price);
+      onChange(quantity, market.price);
+    }, [quantity, market, tradeDirection, onChange]);
 
-      // free space
-      const freeSpace = game.items.transport.tier.stat - (game.drugs.quantity * drug.weight);
-      const maxCarryable = Math.floor(freeSpace / drug.weight);
-
-      setMax(Math.min(maxBuyable, maxCarryable));
-    } else if (tradeDirection === TradeDirection.Sell) {
-      const canTrade = game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug?.drug;
-
-      if (!canTrade) {
-        // TODO: add alert msg?
-        setMax(0);
-        setQuantity(0);
-        return;
+    const onDown = useCallback(() => {
+      if (quantity > 1) {
+        setQuantity(quantity - 1);
       }
-      setMax(game.drugs.quantity || 0);
-      setQuantity(game.drugs.quantity || 0);
-    }
-  }, [tradeDirection, drug, game, market]);
+    }, [quantity]);
 
-  useEffect(() => {
-    setTotalPrice(quantity * market.price);
-    onChange(quantity, market.price);
-  }, [quantity, market, tradeDirection, onChange]);
+    const onUp = useCallback(() => {
+      if (quantity < max) {
+        setQuantity(quantity + 1);
+      }
+    }, [quantity, max]);
 
-  const onDown = useCallback(() => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  }, [quantity]);
+    const onSlider = useCallback((value: number) => {
+      setQuantity(value);
+    }, []);
 
-  const onUp = useCallback(() => {
-    if (quantity < max) {
-      setQuantity(quantity + 1);
-    }
-  }, [quantity, max]);
-
-  const onSlider = useCallback((value: number) => {
-    setQuantity(value);
-  }, []);
-
-  return (
-    <VStack opacity={max === 0 ? "0.2" : "1"} pointerEvents={max === 0 ? "none" : "all"} w="full">
-      <Flex
-        w="100%"
-        direction={["column", "row"]}
-        justifyContent="space-between"
-        align="center"
-        gap={["10px", "20px"]}
-        fontSize="13px"
-      >
-        <HStack>
-          <Text textStyle="subheading" color="neon.500">
-            Weight:
-          </Text>
-          <Text textStyle="subheading">{Number(quantity * market.weight).toFixed(2)} lb</Text>
-        </HStack>
-        <HStack>
-          <Text textStyle="subheading" color="neon.500">
-            Total:
-          </Text>
-          <Text textStyle="subheading">{totalPrice ? formatCash(totalPrice) : "$0"}</Text>
-        </HStack>
-      </Flex>
-
-      <HStack w="100%" py={2}>
-        <Box />
-        <Slider
-          aria-label="slider-quantity"
+    return (
+      <VStack opacity={max === 0 ? "0.2" : "1"} pointerEvents={max === 0 ? "none" : "all"} w="full">
+        <Flex
           w="100%"
-          min={0}
-          max={max}
-          step={1}
-          defaultValue={1}
-          value={quantity}
-          onChange={onSlider}
+          direction={["column", "row"]}
+          justifyContent="space-between"
+          align="center"
+          gap={["10px", "20px"]}
+          fontSize="13px"
         >
-          <SliderTrack>
-            <SliderFilledTrack />
-          </SliderTrack>
-        </Slider>
-        <HStack spacing="0">
-          <ArrowEnclosed
-            direction="down"
-            boxSize={["36px", "48px"]}
-            cursor="pointer"
-            onClick={onDown}
-            color="neon.500"
-            _hover={{
-              color: "neon.300",
-            }}
-          />
-          <ArrowEnclosed
-            direction="up"
-            boxSize={["36px", "48px"]}
-            cursor="pointer"
-            onClick={onUp}
-            color="neon.500"
-            _hover={{
-              color: "neon.300",
-            }}
-          />
+          <HStack>
+            <Text textStyle="subheading" color="neon.500">
+              Weight:
+            </Text>
+            <Text textStyle="subheading">
+              <WeightIcon mb={1} />
+              <span>{Number(quantity * market.weight)}</span>
+            </Text>
+          </HStack>
+          <HStack>
+            <Text textStyle="subheading" color="neon.500">
+              Total:
+            </Text>
+            <Text textStyle="subheading">{totalPrice ? formatCash(totalPrice) : "$0"}</Text>
+          </HStack>
+        </Flex>
+
+        <HStack w="100%" py={2}>
+          <Box />
+          <Slider
+            aria-label="slider-quantity"
+            w="100%"
+            min={0}
+            max={max}
+            step={1}
+            defaultValue={1}
+            value={quantity}
+            onChange={onSlider}
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+          </Slider>
+          <HStack spacing="0">
+            <ArrowEnclosed
+              direction="down"
+              boxSize={["36px", "48px"]}
+              cursor="pointer"
+              onClick={onDown}
+              color="neon.500"
+              _hover={{
+                color: "neon.300",
+              }}
+            />
+            <ArrowEnclosed
+              direction="up"
+              boxSize={["36px", "48px"]}
+              cursor="pointer"
+              onClick={onUp}
+              color="neon.500"
+              _hover={{
+                color: "neon.300",
+              }}
+            />
+          </HStack>
+          <Button
+            h="36px"
+            w="100px"
+            variant="pixelated"
+            marginInlineStart={0}
+            // display={["none", "block"]}
+            onClick={() => setQuantity(max)}
+          >
+            Max
+          </Button>
         </HStack>
-        <Button
-          h="36px"
-          w="100px"
-          variant="pixelated"
-          marginInlineStart={0}
-          // display={["none", "block"]}
-          onClick={() => setQuantity(max)}
-        >
-          Max
-        </Button>
-      </HStack>
-    </VStack>
-  );
-});
+      </VStack>
+    );
+  },
+);

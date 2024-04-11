@@ -3,8 +3,8 @@ version = 1
 
 [[package]]
 name = "dojo"
-version = "0.5.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.6.0-alpha.3#9b2bf3e465be5efeeb7f41032c15d35c46d90002"
+version = "0.6.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v0.6.0#fc5ad790c1993713e59f3fc65739160f132f29f0"
 dependencies = [
  "dojo_plugin",
 ]
@@ -25,7 +25,7 @@ dependencies = [
 [[package]]
 name = "token"
 version = "0.0.0"
-source = "git+https://github.com/dojoengine/origami?tag=v0.6.0-alpha.3#dc6c9c76efaf9dd0b3d34326f1d380b675aa361e"
+source = "git+https://github.com/notV4l/origami?branch=erc_without_events#69c967abe6d3be3cd235cce4fa44a2d0a0ec7bf1"
 dependencies = [
  "dojo",
 ]

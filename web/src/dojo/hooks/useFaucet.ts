@@ -1,7 +1,7 @@
 import { useToast } from "@/hooks/toast";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
-import { Contract, TypedContractV2 } from "starknet";
+import { Account, Contract, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
 
 
@@ -17,6 +17,7 @@ export interface FaucetInterface {
 
 export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   const { account } = useAccount()
+  // const { clients: {dojoProvider}} = useDojoContext()
 
   const { toast } = useToast();
 
@@ -37,7 +38,8 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
           account!,
         ).typedv2(paperAbi);
 
-        tx = await contract.faucet();
+        tx = await contract.invoke("faucet", [], { parseRequest: false })
+        // tx = await contract.faucet();
         //tx = await dojoProvider.execute(account!, "rollyourown::_mocks::paper_mock::paper_mock", "faucet", []);
 
         toast({
@@ -47,7 +49,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
         })
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 200,
+          retryInterval: 500,
         });
 
       } catch (e: any) {
@@ -77,3 +79,21 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
     isPending,
   };
 };
+
+
+
+export const paperFaucet = async ({ account, paperAddress }: { account: Account, paperAddress: string }) => {
+
+  const contract: TypedContractV2<typeof paperAbi> = new Contract(
+    paperAbi,
+    paperAddress!,
+    account!,
+  ).typedv2(paperAbi);
+
+  const tx = await contract.invoke("faucet", [], { parseRequest: false })
+
+  const receipt = await account!.waitForTransaction(tx.transaction_hash, {
+    retryInterval: 500,
+  });
+
+}

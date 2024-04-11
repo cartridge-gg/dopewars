@@ -180,6 +180,17 @@ function edgeCoord(n: number, offset: number) {
   return n === 0 ? "100%" : `calc(100% - ${n}px)`;
 }
 
+
+
+//
+//
+//
+
+export const frenlyAddress = (address: string) => {
+  return address.substring(0, 4) + "..." + address.substring(address.length - 4, address.length);
+};
+
+
 export function formatQuantity(quantity: number): string {
   return Intl.NumberFormat("en-US", {
     notation: "compact",

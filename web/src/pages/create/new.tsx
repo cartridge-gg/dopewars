@@ -4,12 +4,11 @@ import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { BuyPaper } from "@/components/wallet/BuyPaper";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { formatCash } from "@/utils/ui";
+import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
@@ -18,7 +17,6 @@ import { useEffect, useState } from "react";
 const New = observer(() => {
   const { router } = useRouterContext();
 
-   
   const { account } = useAccount();
 
   const { createGame, isPending } = useSystems();
@@ -31,9 +29,9 @@ const New = observer(() => {
   const [name, setName] = useState("");
   const [hustlerId, setHustlerId] = useState(0);
   const [hustlerStats, setHustlerStats] = useState<any>();
+  const isMobile = IsMobile();
 
   useEffect(() => {
-
     const hustler = configStore.getHustlerById(hustlerId);
     if (!hustler) return;
 
@@ -71,8 +69,6 @@ const New = observer(() => {
     }
 
     try {
-     
-
       const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 
       router.push(`/${gameId}/travel`);
@@ -102,17 +98,17 @@ const New = observer(() => {
       }
     >
       <VStack w={["full", "540px"]} margin="auto">
-        <VStack w="full">
+        <VStack w="full"  gap={[3,9]}>
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               Choose your
             </Text>
-            <Heading fontSize={["36px", "48px"]} fontWeight="400" textAlign="center">
+            <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
               Hustler...
             </Heading>
           </VStack>
 
-          <HStack my="30px" align="center" justify="center">
+          <HStack /*my="30px"*/ align="center" justify="center">
             <Arrow
               style="outline"
               direction="left"
@@ -125,19 +121,21 @@ const New = observer(() => {
               }}
             />
 
-            <HStack p="20px">
+            <HStack p={["10px 0", "20px"]}>
               <Box>
-                <Hustler hustler={hustlerId as Hustlers} w="200px" h="300px" />
+                <Hustler hustler={hustlerId as Hustlers} w={["80px", "200px"]} h={["180px", "300px"]} />
               </Box>
 
               <VStack w="full" gap={3}>
                 <HStack w="full">
-                  <VStack alignItems="flex-start" w="200px" gap={0}>
-                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                      WEAPON
-                    </Text>
-                    <Text>{hustlerStats[ItemSlot.Weapon].name}</Text>
-                  </VStack>
+                  {!isMobile && (
+                    <VStack alignItems="flex-start" w="200px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        WEAPON
+                      </Text>
+                      <Text>{hustlerStats[ItemSlot.Weapon].name}</Text>
+                    </VStack>
+                  )}
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Weapon].initialTier}
@@ -149,12 +147,14 @@ const New = observer(() => {
                 </HStack>
 
                 <HStack w="full">
-                  <VStack alignItems="flex-start" w="200px" gap={0}>
-                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                      CLOTHES
-                    </Text>
-                    <Text>{hustlerStats[ItemSlot.Clothes].name}</Text>
-                  </VStack>
+                  {!isMobile && (
+                    <VStack alignItems="flex-start" w="200px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        CLOTHES
+                      </Text>
+                      <Text>{hustlerStats[ItemSlot.Clothes].name}</Text>
+                    </VStack>
+                  )}
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Clothes].initialTier}
@@ -166,12 +166,14 @@ const New = observer(() => {
                 </HStack>
 
                 <HStack w="full">
-                  <VStack alignItems="flex-start" w="200px" gap={0}>
-                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                      FEET
-                    </Text>
-                    <Text>{hustlerStats[ItemSlot.Feet].name}</Text>
-                  </VStack>
+                  {!isMobile && (
+                    <VStack alignItems="flex-start" w="200px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        FEET
+                      </Text>
+                      <Text>{hustlerStats[ItemSlot.Feet].name}</Text>
+                    </VStack>
+                  )}
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Feet].initialTier}
@@ -183,12 +185,14 @@ const New = observer(() => {
                 </HStack>
 
                 <HStack w="full">
-                  <VStack alignItems="flex-start" w="200px" gap={0}>
-                    <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                      BAG
-                    </Text>
-                    <Text>{hustlerStats[ItemSlot.Transport].name}</Text>
-                  </VStack>
+                  {!isMobile && (
+                    <VStack alignItems="flex-start" w="200px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        BAG
+                      </Text>
+                      <Text>{hustlerStats[ItemSlot.Transport].name}</Text>
+                    </VStack>
+                  )}
 
                   <PowerMeter
                     basePower={hustlerStats[ItemSlot.Transport].initialTier}
@@ -214,8 +218,8 @@ const New = observer(() => {
             />
           </HStack>
 
-          {config?.ryo.paper_fee > 0 && (
-            <Card p={3} mb={6}>
+          {!isMobile && config?.ryo.paper_fee > 0 && (
+            <Card p={3} >
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">
                   <HStack w="full" justifyContent="space-between">
@@ -235,7 +239,7 @@ const New = observer(() => {
                 </VStack>
 
                 <HStack>
-                  <BuyPaper />
+                  {/* <BuyPaper /> */}
                   {account && <PaperFaucet />}
                 </HStack>
               </HStack>

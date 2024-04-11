@@ -2,11 +2,15 @@ use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl},
     game::{GameConfig}, drugs::{DrugConfig}
 };
+use rollyourown::config::{
+    hustlers::{HustlerConfig, HustlerImpl},
+    game::{GameConfig}, drugs::{DrugConfig}
+};
 
 
 #[starknet::interface]
 trait IConfig<T> {
-    fn initialize(ref self: T);
+    fn initialize(self: @T);
     fn get_config(self: @T) -> Config;
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
@@ -74,6 +78,7 @@ mod config {
 
             let world = self.world();
            
+           
             // common
             initialize_drug_config(world);
             initialize_location_config(world);
@@ -90,6 +95,9 @@ mod config {
             initialize_clothes_tiers_config(world);
             initialize_feet_tiers_config(world);
             initialize_transport_tiers_config(world);
+
+            // encounters
+            initialize_encounter_config(world);
 
             // game
             initialize_game_config(world);
@@ -144,7 +152,7 @@ mod config {
                     Option::None => { break; }
                 };
             };
-
+          
             //
 
             let game_config = GameConfigImpl::get(world);

@@ -64,7 +64,6 @@ const Decision = observer(() => {
           encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
           setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
           setEncounterImg(`/images/events/gang/${encounter.level}.gif`);
-          
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
@@ -345,7 +344,7 @@ const Encounter = ({
         <Text textStyle="subheading" textAlign="center" fontSize={["10px", "11px"]} letterSpacing="0.25em">
           {prefixTitle}
         </Text>
-        <Heading fontSize={["36px", "48px"]} fontWeight="400">
+        <Heading fontSize={["30px", "48px"]} fontWeight="400">
           {title}
         </Heading>
       </VStack>
@@ -372,36 +371,27 @@ const Encounter = ({
           src={imageSrc}
           alt="adverse event"
           mt={[0, "100px"]}
-          maxH={["auto", "calc(100vh - 300px)"]}
-          w={[160, "auto"]}
-          h={[160, 300]}
+          maxH={["30vh", "calc(100vh - 300px)"]}
+          w="auto"
+          h={[150, 300]}
         />
 
-        <VStack w="full" mt="20px">
+        <VStack w="full" mt={[0, "20px"]}>
           <Text color="red" h="40px" lineHeight="40px">
             <Heart /> You lost {encounter?.healthLoss} HP!
           </Text>
 
-          <Card alignItems="center" w={["full", "auto"]} justify="center">
+          <Card alignItems="center" w={"auto"} justify="center">
             <VStack w="full" gap="0">
               {/* <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" /> */}
 
-              <HStack w="full" px="16px" py="8px" alignItems={["flex-start", "center"]} flexDir={["column", "row"]}>
+              <HStack w="full" px="16px" py="8px" justifyContent="center">
                 <HStack>
-                  {" "}
                   <Siren /> <Text> LVL {encounter?.level}</Text>{" "}
                 </HStack>
-                {IsMobile() ? (
-                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-                ) : (
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                )}
-                {<CashIndicator cash={formatCash(encounter?.payout)} />}
-                {IsMobile() ? (
-                  <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-                ) : (
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                )}
+                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+                <CashIndicator cash={formatCash(encounter?.payout)} />
+                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                 <HealthIndicator health={encounter?.health} maxHealth={100} />
               </HStack>
               {!IsMobile() && (

@@ -13,7 +13,6 @@ use rollyourown::{
         game_store::{GameStore},
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
-        encounters_packed::{EncountersPacked, EncountersPackedImpl, Encounters},
         markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
     },
 };

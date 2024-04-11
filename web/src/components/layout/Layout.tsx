@@ -73,7 +73,7 @@ const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<Left
         <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
           {prefixTitle}
         </Text>
-        <Heading fontSize={["36px", "48px"]} textAlign="center" fontWeight="normal">
+        <Heading fontSize={["30px", "48px"]} textAlign="center" fontWeight="normal">
           {title}
         </Heading>
       </VStack>
@@ -123,7 +123,8 @@ const RightPanel = ({
       >
         {children}
         {!isSinglePanel && rigthPanelScrollable && (
-          <Box display="block" minH={isMobile ? "170px" : "90px"} h={isMobile ? "170px" : "90px"} w="full" />
+          // <Box display="block" minH={isMobile ? "170px" : "90px"} h={isMobile ? "170px" : "90px"} w="full" />
+          <Box display="block" minH="80px" h="80px" w="full" />
         )}
       </VStack>
       {footer}

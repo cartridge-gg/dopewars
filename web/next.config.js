@@ -5,7 +5,6 @@ const nextConfig = {
   images: {
     domains: ["static.cartridge.gg", "static.localhost"],
   },
-
   // "dev": "NODE_OPTIONS=--experimental-wasm-modules next dev",
   // webpack: (config, options) => {
   //   config.experiments = {
@@ -13,6 +12,7 @@ const nextConfig = {
   //   };
   //   return config
   // },
+
 };
 
 

@@ -31,6 +31,7 @@ import { Cigarette } from "@/components/icons";
 import {
   AK47,
   BaseballBat,
+  Boots,
   Kevlar,
   Leatherjacket,
   PlasticBag,
@@ -182,7 +183,7 @@ export const itemIcons = {
   //
   "All-Black Sneakers": Shoes,
   "Athletic Trainers": Shoes,
-  "Work Boots": Shoes,
+  "Work Boots": Boots,
   //
   "Plastic bag": PlasticBag,
 }

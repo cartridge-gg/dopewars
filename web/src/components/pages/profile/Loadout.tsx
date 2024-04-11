@@ -1,7 +1,8 @@
 import { itemUpgrades, slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
 import { useGameStore } from "@/dojo/hooks";
 import { HustlerItemConfigFull } from "@/dojo/stores/config";
-import { HStack, Text, VStack } from "@chakra-ui/react";
+import { IsMobile } from "@/utils/ui";
+import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 
 export const Loadout = () => {
@@ -22,36 +23,39 @@ export const Loadout = () => {
 const Item = observer(({ item }: { item: HustlerItemConfigFull }) => {
   /// @ts-ignore
   const upgrades = itemUpgrades[item.slot][Number(item.base.id)];
+  const isMobile = IsMobile();
 
   return (
     <HStack
       w="full"
-      gap={9}
+      gap={[2, 9]}
       fontSize="14px"
       borderBottom="solid 1px"
       borderColor="neon.800"
       paddingBottom="20px"
       marginLeft="-20px"
       _last={{
-        borderBottom:"none"
+        borderBottom: "none",
       }}
     >
-      {item.icon && item.icon({ boxSize: "48px" })}
+      <Flex w="50%" flexDirection={["column", "row"]} gap={[2, 9]}>
+        {item.icon && item.icon({ boxSize: isMobile ? "36px" : "48px" })}
 
-      <VStack w="250px" alignItems="flex-start" gap={0}>
-        <HStack
-          w="160px"
-          fontSize="12px"
-          justifyContent="space-between"
-          fontFamily="broken-console"
-          color="neon.500"
-          gap={0}
-        >
-          <Text>{slotName[item.slot as slotNameKeys]}</Text>
-          <Text>{statName[item.slot as statNameKeys]}</Text>
-        </HStack>
-        <Text>{item.base.name}</Text>
-      </VStack>
+        <VStack alignItems="flex-start" gap={0}>
+          <HStack
+            w={["120px", "160px"]}
+            fontSize="12px"
+            justifyContent="space-between"
+            fontFamily="broken-console"
+            color="neon.500"
+            gap={0}
+          >
+            <Text>{slotName[item.slot as slotNameKeys]}</Text>
+            {!isMobile && <Text>{statName[item.slot as statNameKeys]}</Text>}
+          </HStack>
+          <Text>{item.base.name}</Text>
+        </VStack>
+      </Flex>
 
       <VStack w="full" alignItems="flex-start" gap={0} mt={1}>
         {[1, 2, 3].map((i) => (

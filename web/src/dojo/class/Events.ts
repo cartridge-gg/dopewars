@@ -35,7 +35,7 @@ export class EventClass {
             lastEncounterResult: computed,
         })
 
-        console.log("Events", this)
+        // console.log("Events", this)
     }
 
     public static parseWorldEvent(event: World__Event): DojoEvent {

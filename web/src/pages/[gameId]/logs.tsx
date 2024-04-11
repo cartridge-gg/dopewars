@@ -1,8 +1,9 @@
 import { Button } from "@/components/common";
-import { Event as EventIcon } from "@/components/icons";
+import { CopsIcon, GangIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
 import { Loadout } from "@/components/pages/profile/Loadout";
+import { Inventory } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import {
   GameCreatedData,
@@ -29,6 +30,7 @@ import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/doj
 import { IsMobile, formatCash } from "@/utils/ui";
 import {
   Box,
+  Flex,
   HStack,
   Heading,
   Image,
@@ -135,7 +137,6 @@ const Logs = () => {
 
   return (
     <Layout
-      CustomLeftPanel={CustomLeftPanel}
       footer={
         <Footer>
           <Button
@@ -154,27 +155,36 @@ const Logs = () => {
           </Button>
         </Footer>
       }
-      rigthPanelMaxH={rigthPanelMaxH}
+      isSinglePanel={true}
+      // CustomLeftPanel={CustomLeftPanel}
+      // rigthPanelMaxH={rigthPanelMaxH}
     >
-      <Tabs variant="unstyled" w="full">
-        <TabList>
-          <Tab>Loadout</Tab>
-          <Tab>Activity</Tab>
-        </TabList>
+      <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
+        <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
+          <CustomLeftPanel />
 
-        <TabPanels w="full">
-          <TabPanel w="full" maxH="600px" /*h="calc(100vh - 360px)"*/>
-            <Box display="flex" alignItems="center" justifyContent="center" h="100%">
-              <Loadout />
-            </Box>
-          </TabPanel>
-          <TabPanel w="full" maxH="600px" /*h="calc(100vh - 360px)"*/ overflowY="scroll">
-            <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
-              {logs && logs.map((log) => renderDay(configStore, game, log))}
-            </VStack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          <Tabs variant="unstyled" w="full" flex={1} h={["auto", "100%"]}>
+            <TabList>
+              <Tab>Loadout</Tab>
+              <Tab>Activity</Tab>
+            </TabList>
+
+            <TabPanels w="full" h={["auto", "100%"]}>
+              <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
+                <Box display="flex" alignItems="center" justifyContent="center" h="100%">
+                  <Loadout />
+                </Box>
+              </TabPanel>
+              <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
+                <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
+                  {logs && logs.map((log) => renderDay(configStore, game, log))}
+                </VStack>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Flex>
+        {isMobile && <Box display="block" minH={"80px"} w="full" />}
+      </VStack>
     </Layout>
   );
 };
@@ -183,14 +193,28 @@ export default observer(Logs);
 
 const CustomLeftPanel = () => {
   const { game, gameInfos } = useGameStore();
+
   return (
-    <VStack w="full" h="full" justifyContent="center" alignItems="center" flex="1" marginBottom="50px" gap={0}>
+    <VStack
+      flex={1}
+      w="full"
+      h="full"
+      justifyContent="center"
+      alignItems="center"
+      marginBottom={["30px", "50px"]}
+      gap={0}
+    >
       <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
         {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
       </Text>
-      <Heading fontSize={["36px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
+      <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name || "")}
       </Heading>
+
+      <Box maxW="350px" w="100%">
+        <Inventory hidePawnshop={true} />
+      </Box>
+
       <HustlerProfile />
     </VStack>
   );
@@ -290,6 +314,7 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
 
 function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
   const encounter = log.encounterId === Encounters.Cops ? "Cops" : "Gang";
+  const icon = log.encounterId === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
     .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
@@ -308,7 +333,7 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
   return (
     <FightLine
       key={key}
-      icon={EventIcon}
+      icon={icon}
       text={`Meet ${encounter} Lvl ${log.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
