@@ -132,12 +132,8 @@ mod game {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        attack: u8,
-        health: u8,
-        level: u8,
+        encounter_id: u8,
         health_loss: u8,
-        demand_pct: u8,
-        payout: u32,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -156,7 +152,6 @@ mod game {
         drug_id: u8,
         drug_loss: Array<u32>,
         turn_loss: u8,
-        escaped_with_item: bool,
         rep_pos:u8,
         rep_neg:u8,
     }
@@ -210,7 +205,7 @@ mod game {
                 player_name: Bytes16Impl::from(player_name),
                 hustler_id,
                 leaderboard_version,
-                game_mode,// TODO: remove
+                game_mode,
                 max_turns: game_config.max_turns, // TODO: remove?
                 max_wanted_shopping: game_config.max_wanted_shopping, // TODO: remove?
                 max_rounds: game_config.max_rounds, // TODO: remove?

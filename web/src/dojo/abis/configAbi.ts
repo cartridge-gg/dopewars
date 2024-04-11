@@ -241,6 +241,10 @@ export const ABI = [
         "type": "core::integer::u8"
       },
       {
+        "name": "encounter_count",
+        "type": "core::integer::u8"
+      },
+      {
         "name": "rep_drug_step",
         "type": "core::integer::u8"
       },
@@ -253,27 +257,11 @@ export const ABI = [
         "type": "core::integer::u8"
       },
       {
-        "name": "rep_pay_cops",
+        "name": "rep_hospitalized",
         "type": "core::integer::u8"
       },
       {
-        "name": "rep_pay_gang",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_run_cops",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_run_gang",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_fight_cops",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_fight_gang",
+        "name": "rep_jailed",
         "type": "core::integer::u8"
       }
     ]
@@ -380,7 +368,14 @@ export const ABI = [
     "items": [
       {
         "type": "function",
-        "name": "initialize",
+        "name": "initialize_1",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "initialize_2",
         "inputs": [],
         "outputs": [],
         "state_mutability": "view"

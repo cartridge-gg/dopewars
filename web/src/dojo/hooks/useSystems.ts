@@ -29,7 +29,7 @@ export interface SystemsInterface {
   // config
   updateGameConfig: (gameConfig: GameConfig) => Promise<SystemExecuteResult>;
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
-  
+
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
@@ -98,10 +98,6 @@ export const useSystems = (): SystemsInterface => {
           duration: 5_000,
           isError: true
         })
-        // throw Error(`not connected`)
-        // return {
-        //   hash:""
-        // }
       }
 
       setError(undefined)
@@ -122,15 +118,13 @@ export const useSystems = (): SystemsInterface => {
           isError: false
         })
 
-        // //
-        // // TODO : remove later
-        // //
-        // await sleep(1_000);
-        // // clearToasts()
+        // chill
+        await sleep(500);
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 500,
         });
+
       } catch (e: any) {
         setIsPending(false)
         setError(e.toString())
@@ -284,7 +278,7 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(
+      const {  hash, events, parsedEvents } = await executeAndReceipt(
         {
           contractName: "rollyourown::systems::game::game",
           functionName: "decide",

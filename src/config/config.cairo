@@ -6,7 +6,8 @@ use rollyourown::config::{
 
 #[starknet::interface]
 trait IConfig<T> {
-    fn initialize(self: @T);
+    fn initialize_1(self: @T);
+    fn initialize_2(self: @T);
     fn get_config(self: @T) -> Config;
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
@@ -69,16 +70,17 @@ mod config {
 
     #[abi(embed_v0)]
     impl ConfigImpl of super::IConfig<ContractState> {
-        fn initialize(self: @ContractState) {
+        fn initialize_1(self: @ContractState) {
             // TODO checks
             self.assert_caller_is_owner();
 
             let world = self.world();
            
             // common
+            initialize_game_config(world); // must be set before encounters
+
             initialize_drug_config(world);
             initialize_location_config(world);
-            //initialize_item_config(world);
 
             // hustlers items
             initialize_weapons_config(world);
@@ -91,12 +93,17 @@ mod config {
             initialize_clothes_tiers_config(world);
             initialize_feet_tiers_config(world);
             initialize_transport_tiers_config(world);
+          
+        }
 
+        fn initialize_2(self: @ContractState) {
+            // TODO checks
+            self.assert_caller_is_owner();
+
+            let world = self.world();
+           
             // encounters
             initialize_encounter_config(world);
-
-            // game
-            initialize_game_config(world);
         }
 
         fn get_config(self: @ContractState) -> Config {
@@ -150,7 +157,7 @@ mod config {
             };
           
             //
-
+            // TODO: remove & use torii 
             let game_config = GameConfigImpl::get(world);
 
             //

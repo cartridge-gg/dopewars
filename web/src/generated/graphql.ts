@@ -465,6 +465,7 @@ export type Game = {
 export type GameConfig = {
   __typename?: 'GameConfig';
   cash?: Maybe<Scalars['u32']>;
+  encounter_count?: Maybe<Scalars['u8']>;
   entity?: Maybe<World__Entity>;
   health?: Maybe<Scalars['u8']>;
   key?: Maybe<Scalars['u8']>;
@@ -474,12 +475,8 @@ export type GameConfig = {
   rep_buy_item?: Maybe<Scalars['u8']>;
   rep_carry_drugs?: Maybe<Scalars['u8']>;
   rep_drug_step?: Maybe<Scalars['u8']>;
-  rep_fight_cops?: Maybe<Scalars['u8']>;
-  rep_fight_gang?: Maybe<Scalars['u8']>;
-  rep_pay_cops?: Maybe<Scalars['u8']>;
-  rep_pay_gang?: Maybe<Scalars['u8']>;
-  rep_run_cops?: Maybe<Scalars['u8']>;
-  rep_run_gang?: Maybe<Scalars['u8']>;
+  rep_hospitalized?: Maybe<Scalars['u8']>;
+  rep_jailed?: Maybe<Scalars['u8']>;
 };
 
 export type GameConfigConnection = {
@@ -502,6 +499,7 @@ export type GameConfigOrder = {
 
 export enum GameConfigOrderField {
   Cash = 'CASH',
+  EncounterCount = 'ENCOUNTER_COUNT',
   Health = 'HEALTH',
   Key = 'KEY',
   MaxRounds = 'MAX_ROUNDS',
@@ -510,12 +508,8 @@ export enum GameConfigOrderField {
   RepBuyItem = 'REP_BUY_ITEM',
   RepCarryDrugs = 'REP_CARRY_DRUGS',
   RepDrugStep = 'REP_DRUG_STEP',
-  RepFightCops = 'REP_FIGHT_COPS',
-  RepFightGang = 'REP_FIGHT_GANG',
-  RepPayCops = 'REP_PAY_COPS',
-  RepPayGang = 'REP_PAY_GANG',
-  RepRunCops = 'REP_RUN_COPS',
-  RepRunGang = 'REP_RUN_GANG'
+  RepHospitalized = 'REP_HOSPITALIZED',
+  RepJailed = 'REP_JAILED'
 }
 
 export type GameConfigWhereInput = {
@@ -526,6 +520,13 @@ export type GameConfigWhereInput = {
   cashLT?: InputMaybe<Scalars['u32']>;
   cashLTE?: InputMaybe<Scalars['u32']>;
   cashNEQ?: InputMaybe<Scalars['u32']>;
+  encounter_count?: InputMaybe<Scalars['u8']>;
+  encounter_countEQ?: InputMaybe<Scalars['u8']>;
+  encounter_countGT?: InputMaybe<Scalars['u8']>;
+  encounter_countGTE?: InputMaybe<Scalars['u8']>;
+  encounter_countLT?: InputMaybe<Scalars['u8']>;
+  encounter_countLTE?: InputMaybe<Scalars['u8']>;
+  encounter_countNEQ?: InputMaybe<Scalars['u8']>;
   health?: InputMaybe<Scalars['u8']>;
   healthEQ?: InputMaybe<Scalars['u8']>;
   healthGT?: InputMaybe<Scalars['u8']>;
@@ -582,48 +583,20 @@ export type GameConfigWhereInput = {
   rep_drug_stepLT?: InputMaybe<Scalars['u8']>;
   rep_drug_stepLTE?: InputMaybe<Scalars['u8']>;
   rep_drug_stepNEQ?: InputMaybe<Scalars['u8']>;
-  rep_fight_cops?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsEQ?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsGT?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsGTE?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsLT?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsLTE?: InputMaybe<Scalars['u8']>;
-  rep_fight_copsNEQ?: InputMaybe<Scalars['u8']>;
-  rep_fight_gang?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangEQ?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangGT?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangGTE?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangLT?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangLTE?: InputMaybe<Scalars['u8']>;
-  rep_fight_gangNEQ?: InputMaybe<Scalars['u8']>;
-  rep_pay_cops?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsEQ?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsGT?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsGTE?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsLT?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsLTE?: InputMaybe<Scalars['u8']>;
-  rep_pay_copsNEQ?: InputMaybe<Scalars['u8']>;
-  rep_pay_gang?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangEQ?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangGT?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangGTE?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangLT?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangLTE?: InputMaybe<Scalars['u8']>;
-  rep_pay_gangNEQ?: InputMaybe<Scalars['u8']>;
-  rep_run_cops?: InputMaybe<Scalars['u8']>;
-  rep_run_copsEQ?: InputMaybe<Scalars['u8']>;
-  rep_run_copsGT?: InputMaybe<Scalars['u8']>;
-  rep_run_copsGTE?: InputMaybe<Scalars['u8']>;
-  rep_run_copsLT?: InputMaybe<Scalars['u8']>;
-  rep_run_copsLTE?: InputMaybe<Scalars['u8']>;
-  rep_run_copsNEQ?: InputMaybe<Scalars['u8']>;
-  rep_run_gang?: InputMaybe<Scalars['u8']>;
-  rep_run_gangEQ?: InputMaybe<Scalars['u8']>;
-  rep_run_gangGT?: InputMaybe<Scalars['u8']>;
-  rep_run_gangGTE?: InputMaybe<Scalars['u8']>;
-  rep_run_gangLT?: InputMaybe<Scalars['u8']>;
-  rep_run_gangLTE?: InputMaybe<Scalars['u8']>;
-  rep_run_gangNEQ?: InputMaybe<Scalars['u8']>;
+  rep_hospitalized?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedEQ?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedGT?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedGTE?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedLT?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedLTE?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedNEQ?: InputMaybe<Scalars['u8']>;
+  rep_jailed?: InputMaybe<Scalars['u8']>;
+  rep_jailedEQ?: InputMaybe<Scalars['u8']>;
+  rep_jailedGT?: InputMaybe<Scalars['u8']>;
+  rep_jailedGTE?: InputMaybe<Scalars['u8']>;
+  rep_jailedLT?: InputMaybe<Scalars['u8']>;
+  rep_jailedLTE?: InputMaybe<Scalars['u8']>;
+  rep_jailedNEQ?: InputMaybe<Scalars['u8']>;
 };
 
 export type GameConnection = {

@@ -83,10 +83,6 @@ export class GameClass {
         const wantedPacked = Bits.extract(this.packed, wanted.idx, wanted.bits);
         this.wanted = new WantedClass(configStore, this, wantedPacked)
 
-        // const encounters = configStore.getGameStoreLayoutItem("Encounters")
-        // const encountersPacked = Bits.extract(this.packed, encounters.idx, encounters.bits);
-        // this.encounters = new EncountersClass(configStore, this, encountersPacked)
-
         this.pending = []
 
         makeObservable(this, {

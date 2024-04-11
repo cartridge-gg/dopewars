@@ -65,8 +65,12 @@ sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calld
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize --wait 
-echo "Initialized CONFIG!"
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1 --wait 
+echo "Initialized CONFIG 1!"
+sleep $TX_SLEEP
+
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2 --wait 
+echo "Initialized CONFIG 2!"
 sleep $TX_SLEEP
 
 # remove later

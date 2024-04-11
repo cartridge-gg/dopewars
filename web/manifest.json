@@ -1262,8 +1262,8 @@
     {
       "kind": "DojoContract",
       "address": "0x77cfc8df2e0d60abf3ad87a9773a91f72cde6b65a860fe98cd55c4900ce29ea",
-      "class_hash": "0x65ee9a14d2a5b2863e961d4322e039ff2c6a30cd3340dc884826fde36c90046",
-      "original_class_hash": "0x65ee9a14d2a5b2863e961d4322e039ff2c6a30cd3340dc884826fde36c90046",
+      "class_hash": "0x3ea491f8a1a66f1bb34a4ec03782211c509b22627a82b980135f6e1ade46a81",
+      "original_class_hash": "0x3ea491f8a1a66f1bb34a4ec03782211c509b22627a82b980135f6e1ade46a81",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -1508,6 +1508,10 @@
               "type": "core::integer::u8"
             },
             {
+              "name": "encounter_count",
+              "type": "core::integer::u8"
+            },
+            {
               "name": "rep_drug_step",
               "type": "core::integer::u8"
             },
@@ -1520,27 +1524,11 @@
               "type": "core::integer::u8"
             },
             {
-              "name": "rep_pay_cops",
+              "name": "rep_hospitalized",
               "type": "core::integer::u8"
             },
             {
-              "name": "rep_pay_gang",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_run_cops",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_run_gang",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_fight_cops",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_fight_gang",
+              "name": "rep_jailed",
               "type": "core::integer::u8"
             }
           ]
@@ -1647,7 +1635,14 @@
           "items": [
             {
               "type": "function",
-              "name": "initialize",
+              "name": "initialize_1",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "initialize_2",
               "inputs": [],
               "outputs": [],
               "state_mutability": "view"
@@ -1913,8 +1908,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
-      "class_hash": "0x20ea67758fb4fa5ceb0be4d4217856597a572949d4953d8aa9efbfa7754c0ba",
-      "original_class_hash": "0x20ea67758fb4fa5ceb0be4d4217856597a572949d4953d8aa9efbfa7754c0ba",
+      "class_hash": "0x213ca589ffe65715db57d3c70106783fc8e8d133d901cdd97d32f775fc776a",
+      "original_class_hash": "0x213ca589ffe65715db57d3c70106783fc8e8d133d901cdd97d32f775fc776a",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -1981,11 +1976,11 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Test",
+              "name": "Dealer",
               "type": "()"
             },
             {
-              "name": "Unlimited",
+              "name": "Warrior",
               "type": "()"
             }
           ]
@@ -2502,33 +2497,13 @@
               "kind": "key"
             },
             {
-              "name": "attack",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "level",
+              "name": "encounter_id",
               "type": "core::integer::u8",
               "kind": "data"
             },
             {
               "name": "health_loss",
               "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "demand_pct",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "payout",
-              "type": "core::integer::u32",
               "kind": "data"
             }
           ]
@@ -2626,11 +2601,6 @@
             {
               "name": "turn_loss",
               "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "escaped_with_item",
-              "type": "core::bool",
               "kind": "data"
             },
             {
@@ -2785,8 +2755,8 @@
     {
       "kind": "DojoContract",
       "address": "0x665adc0ff60b1f5b1e16c013ba363c98b1c2ecc13a038ad2ebc9a72b81854e8",
-      "class_hash": "0x6c6188a99c2ec88f32e22031e560a05acc1705710649c5e3c47b8ce7ae9d4d2",
-      "original_class_hash": "0x6c6188a99c2ec88f32e22031e560a05acc1705710649c5e3c47b8ce7ae9d4d2",
+      "class_hash": "0x7c723e92cca4683f3a88622c8cef169a96e2a3887b1adf3ae302eb4ac807932",
+      "original_class_hash": "0x7c723e92cca4683f3a88622c8cef169a96e2a3887b1adf3ae302eb4ac807932",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -3756,6 +3726,11 @@
           "key": false
         },
         {
+          "name": "encounter_count",
+          "type": "u8",
+          "key": false
+        },
+        {
           "name": "rep_drug_step",
           "type": "u8",
           "key": false
@@ -3771,38 +3746,18 @@
           "key": false
         },
         {
-          "name": "rep_pay_cops",
+          "name": "rep_hospitalized",
           "type": "u8",
           "key": false
         },
         {
-          "name": "rep_pay_gang",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "rep_run_cops",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "rep_run_gang",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "rep_fight_cops",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "rep_fight_gang",
+          "name": "rep_jailed",
           "type": "u8",
           "key": false
         }
       ],
-      "class_hash": "0x6aef29644cf6292fa7e17b96f795bc0826d6595d00bb5cbe379df340c25960a",
-      "original_class_hash": "0x6aef29644cf6292fa7e17b96f795bc0826d6595d00bb5cbe379df340c25960a",
+      "class_hash": "0x1eb4608f53f9497f5bef570d5a7ffece32f2ffd2940f39c5ac2403445257d08",
+      "original_class_hash": "0x1eb4608f53f9497f5bef570d5a7ffece32f2ffd2940f39c5ac2403445257d08",
       "abi": [
         {
           "type": "impl",
@@ -4006,6 +3961,10 @@
               "type": "core::integer::u8"
             },
             {
+              "name": "encounter_count",
+              "type": "core::integer::u8"
+            },
+            {
               "name": "rep_drug_step",
               "type": "core::integer::u8"
             },
@@ -4018,27 +3977,11 @@
               "type": "core::integer::u8"
             },
             {
-              "name": "rep_pay_cops",
+              "name": "rep_hospitalized",
               "type": "core::integer::u8"
             },
             {
-              "name": "rep_pay_gang",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_run_cops",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_run_gang",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_fight_cops",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_fight_gang",
+              "name": "rep_jailed",
               "type": "core::integer::u8"
             }
           ]
@@ -5507,8 +5450,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x623fab3813ee16f1124a9eabd6c7db80414cb0ad03bf2bb2f7b0e7c38b900ed",
-      "original_class_hash": "0x623fab3813ee16f1124a9eabd6c7db80414cb0ad03bf2bb2f7b0e7c38b900ed",
+      "class_hash": "0x4d25ed14bab536755433a442e56ef0afb33ff039c454050a7e5940756cb17ef",
+      "original_class_hash": "0x4d25ed14bab536755433a442e56ef0afb33ff039c454050a7e5940756cb17ef",
       "abi": [
         {
           "type": "impl",
@@ -5698,11 +5641,11 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Test",
+              "name": "Dealer",
               "type": "()"
             },
             {
-              "name": "Unlimited",
+              "name": "Warrior",
               "type": "()"
             }
           ]

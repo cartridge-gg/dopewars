@@ -66,7 +66,7 @@ impl BitsImpl of BitsTrait {
 
 #[generate_trait]
 impl BitsMathImpl of BitsMathTrait {
-    // match is better
+    // match is better or not...
     fn fpow(x: u256, n: u8) -> u256 {
         let y = x;
         if n == 0 {
@@ -84,6 +84,7 @@ impl BitsMathImpl of BitsMathTrait {
 
     fn pow2(n: u8) -> u256 {
         pow2(n)
+       // BitsMathImpl::fpow(2, n)
     }
 
     fn mask<T, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(size: u8) -> T {
@@ -181,6 +182,8 @@ mod tests {
         assert(BitsMathImpl::fpow(2, 42) == BitsMathImpl::pow2(42), 'invalid pow2 42');
     }
 }
+
+
 
 
 //

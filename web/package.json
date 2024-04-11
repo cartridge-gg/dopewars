@@ -11,7 +11,7 @@
     "knip": "knip",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:dojo": "pnpm gen & pnpm gen:events",
+    "gen:dojo": "pnpm gen && pnpm gen:events",
     "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {

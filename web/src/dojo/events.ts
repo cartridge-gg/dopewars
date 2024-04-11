@@ -59,13 +59,8 @@ export interface UpgradeItemData extends BaseEventData {
 
 export interface TravelEncounterData extends BaseEventData {
   playerId: string;
-  attack: number;
-  health: number;
-  level: number;
   encounterId: number;
   healthLoss: number;
-  demandPct: number;
-  payout: number;
 }
 
 export interface TravelEncounterResultData extends BaseEventData {
@@ -80,7 +75,6 @@ export interface TravelEncounterResultData extends BaseEventData {
   drugId: number;
   drugLoss: Array<number>;
   turnLoss: number;
-  escapedWithItem: boolean;
   repPos: number,
   repNeg: number,
 }
@@ -195,12 +189,7 @@ export const parseEvent = (raw: any) => {
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
         encounterId: Number(raw.data[0]),
-        attack: Number(raw.data[1]),
-        health: Number(raw.data[2]),
-        level: Number(raw.data[3]),
-        healthLoss: Number(raw.data[4]),
-        demandPct: Number(raw.data[5]),
-        payout: Number(raw.data[6]),
+        healthLoss: Number(raw.data[1]),
       } as TravelEncounterData;
 
 
@@ -236,7 +225,6 @@ export const parseEvent = (raw: any) => {
         //@ts-ignore
         drugLoss: parsed.drug_loss.map(i => Number(i)),
         turnLoss: Number(parsed.turn_loss),
-        escapedWithItem: parsed.escapedWithItem as unknown as boolean,
         repPos: Number(parsed.rep_pos),
         repNeg: Number(parsed.rep_neg),
 

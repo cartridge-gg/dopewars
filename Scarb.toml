@@ -15,7 +15,7 @@ token = { git = "https://github.com/notV4l/origami", branch = "erc_without_event
 
 [scripts]
 # dope_mock = "./scripts/dope_mock.sh"
-katana = "katana --disable-fee --invoke-max-steps 999999999"
+katana = "katana --disable-fee --invoke-max-steps 2000000"
 build = "sozo build && scarb run gendojo"
 gendojo = "./scripts/gen.sh"
 
@@ -26,17 +26,17 @@ auth_ryo421 = "./scripts/default_auth.sh ryo421"
 auth_prod = "./scripts/default_auth.sh prod"
 
 # migrate
-migrate = "sozo migrate apply && scarb run gendojo && scarb run auth"
+migrate = "sozo migrate apply && scarb run auth && scarb run gendojo"
 migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate apply && scarb run auth_ryo420"
 migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate apply && scarb run auth_ryo421"
 migrate_prod = "sozo -P prod migrate"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0 --chain-id KATANA_SLOT_420 --disable-fee true"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.0 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
 slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
 # slot ryo421
-slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0 --chain-id KATANA_SLOT_421 --disable-fee true"
+slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.0 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
 slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 

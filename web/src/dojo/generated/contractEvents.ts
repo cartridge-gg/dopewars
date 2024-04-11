@@ -80,12 +80,8 @@ item_level: number;
 export interface TravelEncounterData extends BaseEventData {
         game_id: number;
 player_id: string;
-attack: number;
-health: number;
-level: number;
+encounter_id: number;
 health_loss: number;
-demand_pct: number;
-payout: number;
         }
 
 export interface TravelEncounterResultData extends BaseEventData {
@@ -101,7 +97,6 @@ cash_loss: number;
 drug_id: number;
 drug_loss: String;
 turn_loss: number;
-escaped_with_item: boolean;
 rep_pos: number;
 rep_neg: number;
         }
@@ -225,12 +220,8 @@ event_type: WorldEvents.TravelEncounter,
 event_name: "TravelEncounter",
 game_id: Number(raw.keys[1]),
 player_id: num.toHexString(raw.keys[2]),
-attack: Number(raw.data[0]),
-health: Number(raw.data[1]),
-level: Number(raw.data[2]),
-health_loss: Number(raw.data[3]),
-demand_pct: Number(raw.data[4]),
-payout: Number(raw.data[5]),
+encounter_id: Number(raw.data[0]),
+health_loss: Number(raw.data[1]),
 } as TravelEncounterData;
 
 case WorldEvents.TravelEncounterResult:
@@ -249,9 +240,8 @@ cash_loss: Number(raw.data[6]),
 drug_id: Number(raw.data[7]),
 drug_loss: num.toHexString(raw.data[8]),
 turn_loss: Number(raw.data[9]),
-escaped_with_item: raw.data[10] === "0x0" ? false : true,
-rep_pos: Number(raw.data[11]),
-rep_neg: Number(raw.data[12]),
+rep_pos: Number(raw.data[10]),
+rep_neg: Number(raw.data[11]),
 } as TravelEncounterResultData;
 
 case WorldEvents.MeetOG:

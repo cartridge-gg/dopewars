@@ -85,20 +85,29 @@ const New = observer(() => {
       footer={
         <Footer>
           <ChildrenOrConnect>
+          <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              isLoading={isPending}
+              onClick={() => create(GameMode.Dealer)}
+            >
+              Play Dealer
+            </Button>
+            
             <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isLoading={isPending}
-              onClick={() => create(GameMode.Unlimited)}
+              onClick={() => create(GameMode.Warrior)}
             >
-              Play
+              Play Warrior
             </Button>
           </ChildrenOrConnect>
         </Footer>
       }
     >
       <VStack w={["full", "540px"]} margin="auto">
-        <VStack w="full"  gap={[3,9]}>
+        <VStack w="full"  gap={[3,6]}>
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               Choose your

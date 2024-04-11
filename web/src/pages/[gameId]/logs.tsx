@@ -246,7 +246,7 @@ function renderDay(configStore: ConfigStoreClass, game: GameClass, log: LogByDay
               break;
 
             case WorldEvents.TravelEncounter:
-              return renderTravelEncounter(i as TravelEncounterData, log, key);
+              return renderTravelEncounter(configStore, i as TravelEncounterData, log, key);
               break;
 
             case WorldEvents.GameOver:
@@ -310,11 +310,12 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
       iconColor="yellow.400"
     />
   );
-}
+} 
 
-function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: string) {
-  const encounter = log.encounterId === Encounters.Cops ? "Cops" : "Gang";
-  const icon = log.encounterId === Encounters.Cops ? CopsIcon : GangIcon;
+function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
+  const encounter = configStore.getEncounterById(log.encounterId);
+  
+  const icon = encounter.encounter === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
     .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
@@ -334,7 +335,7 @@ function renderTravelEncounter(log: TravelEncounterData, dayLog: LogByDay, key: 
     <FightLine
       key={key}
       icon={icon}
-      text={`Meet ${encounter} Lvl ${log.level}`}
+      text={`Meet ${encounter.encounter} Lvl ${encounter.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
       consequence={`-${totalHpLoss} HP`}

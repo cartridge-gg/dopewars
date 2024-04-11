@@ -30,8 +30,11 @@ const Consequence = () => {
 
     setEncounterResult(gameEvents?.lastEncounterResult.parsed as TravelEncounterResultData);
 
+    const lastEncounterEvent = gameEvents?.lastEncounter.parsed as TravelEncounterData;
+    const lastEncounter = configStore.getEncounterById(lastEncounterEvent.encounterId);
+
     const outcome = getOutcomeInfo(
-      (gameEvents?.lastEncounter.parsed as TravelEncounterData).encounterId as Encounters,
+      lastEncounter.encounter as Encounters,
       (gameEvents?.lastEncounterResult?.parsed as TravelEncounterResultData).outcome as EncounterOutcomes,
     );
     setOutcomeInfos(outcome);
@@ -135,13 +138,6 @@ const Consequence = () => {
                     </>
                   );
                 })}
-
-                {encounterResult.escapedWithItem && (
-                  <Line
-                    icon={game.items.speed.icon({ color: "neon.400" })}
-                    text={<Text color="neon.400">Your {game.items.speed.base.name} was decisive on this run</Text>}
-                  />
-                )}
 
                 {encounterResult.repPos > 0 && (
                   <Line icon={<Cigarette />} text={<Text color="neon.400">REP +{encounterResult.repPos}</Text>} />

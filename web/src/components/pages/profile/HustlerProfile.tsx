@@ -106,19 +106,6 @@ export const HustlerProfile = observer(() => {
         </Button>
         <ShareButton variant="pixelated" />
       </HStack>
-
-      {/* <Card p="10px 20px">
-        <VStack gap={2} alignItems="flex-start">
-          <HStack>
-            <Siren ml={-1} /> <Text>Met {game?.encounters.copsLevel} COPS</Text>
-          </HStack>
-          <Divider borderColor="neon.700"/>
-          <HStack>
-            <Knife ml={-1} /> <Text>Met {game?.encounters.gangLevel} GANG</Text>
-          </HStack>
-        </VStack>
-      </Card> */}
-
     </VStack>
   );
 });

@@ -14,6 +14,8 @@ const columns = [
   { key: "rep_drug_step", title: "rep_drug_step", dataType: DataType.Number },
   { key: "rep_buy_item", title: "rep_buy_item", dataType: DataType.Number },
   { key: "rep_carry_drugs", title: "rep_carry_drugs", dataType: DataType.Number },
+  { key: "rep_hospitalized", title: "rep_hospitalized", dataType: DataType.Number },
+  { key: "rep_jailed", title: "rep_jailed", dataType: DataType.Number },
   { key: "editColumn", width: 80 },
 ];
 

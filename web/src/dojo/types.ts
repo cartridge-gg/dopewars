@@ -43,8 +43,8 @@ export enum PlayerStatus {
 }
 
 export enum Encounters {
-  Cops,
-  Gang
+  Cops = "Cops",
+  Gang = "Gang"
 }
 
 export enum EncountersAction {
@@ -63,8 +63,8 @@ export enum EncounterOutcomes {
 }
 
 export enum GameMode {
-  Test,
-  Unlimited
+  Dealer,
+  Warrior,
 }
 
 export interface LocationInfo {

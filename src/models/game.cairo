@@ -26,8 +26,8 @@ struct Game {
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 enum GameMode {
-    Test,
-    Unlimited
+    Dealer,
+    Warrior,
 }
 
 #[generate_trait]

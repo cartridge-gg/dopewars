@@ -447,25 +447,25 @@ fn initialize_feet_tiers_config(world: IWorldDispatcher) {
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 3, stat: 18, cost: 1_600,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 3, stat: 25, cost: 1_600,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 4, stat: 27, cost: 9_600,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 4, stat: 40, cost: 9_600,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 5, stat: 36, cost: 58_000,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 5, stat: 55, cost: 58_000,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 6, stat: 45, cost: 345_000,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 6, stat: 69, cost: 345_000,
         }
     );
 }
