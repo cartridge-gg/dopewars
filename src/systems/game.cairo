@@ -133,7 +133,8 @@ mod game {
         #[key]
         player_id: ContractAddress,
         encounter_id: u8,
-        health_loss: u8,
+        demand_pct: u8,
+        payout: u32,
     }
 
     #[derive(Drop, Serde, starknet::Event)]

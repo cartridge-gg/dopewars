@@ -84,9 +84,9 @@ impl WantedPackedImpl of WantedPackedTrait {
                         // travel back to same location : +3
                         self.set(*location, value.add_capped(3, 7));
                     } else if game_store.player.location == *location {
-                        // leaving current location with drugs : +4
+                        // leaving current location with drugs : +5
                         if drugs.quantity > 0 {
-                            self.set(*location, value.add_capped(4, 7));
+                            self.set(*location, value.add_capped(5, 7));
                         };
                     } else if *location != game_store.player.next_location {
                         //  not next / not prev / not current : -1

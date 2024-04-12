@@ -24,7 +24,6 @@ mod packing {
     mod markets_packed;
     mod items_packed;
     mod wanted_packed;
-    mod encounters_packed;
 
     mod player;
     mod player_layout;

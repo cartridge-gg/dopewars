@@ -59,6 +59,10 @@ export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
   icon: React.FC;
 };
 
+export type EncounterConfigFull = EncounterConfig & {
+  image: string;
+};
+
 export type HustlerConfig = {
   hustler_id: number;
   weapon: HustlerItemConfig;
@@ -83,7 +87,7 @@ export type Config = {
   location: LocationConfigFull[];
   items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
-  encounters: EncounterConfig[];
+  encounters: EncounterConfigFull[];
   config: GetConfig;
 };
 
@@ -163,6 +167,12 @@ export class ConfigStoreClass {
 
     const encounterConfigEdges = data.encounterConfigModels!.edges as EncounterConfigEdge[];
     const encounterConfig = encounterConfigEdges.map((i) => i.node as EncounterConfig);
+    const encounterConfigFull = encounterConfig.map((i) => {
+      return {
+        ...i,
+        image:`/images/events/${i.encounter.toLowerCase()}/${i.level}.gif`
+      }
+    })
 
     /*************************************************** */
 
@@ -209,7 +219,7 @@ export class ConfigStoreClass {
       location: locationConfigFull,
       items: hustlerItemBaseConfig,
       tiers: hustlerItemTiersConfig,
-      encounters: encounterConfig,
+      encounters: encounterConfigFull,
       /// @ts-ignore
       config: getConfig as GetConfig,
     };
@@ -275,7 +285,7 @@ export class ConfigStoreClass {
 
   // encounters
 
-  getEncounterById(id: number): EncounterConfig {
+  getEncounterById(id: number): EncounterConfigFull {
     return this.config?.encounters.find((i) => Number(i.id) === Number(id))!;
   }
 }

@@ -1,5 +1,5 @@
 import { ChildrenOrConnect } from "@/components/wallet";
-import { Button } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 import { closeRowEditors, openRowEditors, saveRowEditors } from "ka-table/actionCreators";
 import { ICellEditorProps, ICellTextProps } from "ka-table/props";
 
@@ -46,6 +46,9 @@ export const editComponents = {
       if (props.column.key === "icon") {
         return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
       }
+      if (props.column.key === "image") {
+        return <Image src={props.rowData.image} alt="image" width="100px" height="100px" objectFit="contain" />;
+      }
     },
   },
   cellEditor: {
@@ -60,17 +63,22 @@ export const editComponents = {
       if (props.column.key === "icon") {
         return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
       }
+      if (props.column.key === "image") {
+        return <Image src={props.rowData.image} alt="image" width="100px" height="100px" objectFit="contain" />;
+      }
     },
   },
 };
-
 
 export const iconComponents = {
   cellText: {
     content: (props: any) => {
       if (props.column.key === "icon") {
-        return props.rowData.icon()
-       // return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
+        return props.rowData.icon();
+        // return <>{props.rowData.icon && props.rowData.icon({ width: "36px", height: "36px" })}</>;
+      }
+      if (props.column.key === "image") {
+        return <Image src={props.rowData.image} alt="image" width="100px" height="100px" objectFit="contain" />;
       }
     },
   },

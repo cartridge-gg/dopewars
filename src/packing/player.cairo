@@ -118,10 +118,12 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
+    #[inline(always)]
     fn is_dead(self: Player) -> bool {
         self.health == 0
     }
 
+    #[inline(always)]
     fn can_continue(self: Player) -> bool {
         if self.health == 0 {
             return false;
@@ -142,6 +144,7 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
+    #[inline(always)]
     fn can_trade(self: Player) -> bool {
         if self.health == 0 {
             return false;
@@ -158,6 +161,7 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
+    #[inline(always)]
     fn can_trade_drug(self: Player, drug: Drugs) -> bool {
         let drug_id: u8 = drug.into();
         drug_id >= self.drug_level && drug_id < 4 + self.drug_level
@@ -168,12 +172,12 @@ impl PlayerImpl of PlayerTrait {
         self.status == PlayerStatus::BeingArrested || self.status == PlayerStatus::BeingMugged
     }
 
-    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
-        // // check if already max drug_level
-        // if self.drug_level == 4 {
-        //     return;
-        // };
+    #[inline(always)]
+    fn health_loss(ref self: Player, amount: u8) {
+        self.health = self.health.sub_capped(amount, 0);
+    }
 
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
         let game_config = GameConfigImpl::get(self.world);
 
         // level up each rep_drug_step capped to 4

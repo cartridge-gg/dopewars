@@ -1,8 +1,10 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}
+    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
+    models::game::{Game, GameMode},
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
+    packing::game_store::{GameStore}
 };
 
 
@@ -48,6 +50,53 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         bits.replace::<u8>(index, size, level + 1);
 
         self.packed = bits.into_felt();
+    }
+
+
+    //
+    //
+    //
+
+    #[inline(always)]
+    fn attack_item(self: ItemsPacked) -> HustlerItemConfig {
+        self.get_item(ItemSlot::Weapon)
+    }
+
+    #[inline(always)]
+    fn defense_item(self: ItemsPacked) -> HustlerItemConfig {
+        self.get_item(ItemSlot::Clothes)
+    }
+
+    #[inline(always)]
+    fn speed_item(self: ItemsPacked) -> HustlerItemConfig {
+        self.get_item(ItemSlot::Feet)
+    }
+
+    #[inline(always)]
+    fn transport_item(self: ItemsPacked) -> HustlerItemConfig {
+        self.get_item(ItemSlot::Transport)
+    }
+
+    // stats
+
+    #[inline(always)]
+    fn attack(self: ItemsPacked) -> u8 {
+        self.attack_item().tier.stat.try_into().unwrap()
+    }
+
+    #[inline(always)]
+    fn defense(self: ItemsPacked) -> u8 {
+        self.defense_item().tier.stat.try_into().unwrap()
+    }
+
+    #[inline(always)]
+    fn speed(self: ItemsPacked) -> u8 {
+        self.speed_item().tier.stat.try_into().unwrap()
+    }
+
+    #[inline(always)]
+    fn transport(self: ItemsPacked) -> u32 {
+        self.transport_item().tier.stat
     }
 }
 

@@ -60,7 +60,8 @@ export interface UpgradeItemData extends BaseEventData {
 export interface TravelEncounterData extends BaseEventData {
   playerId: string;
   encounterId: number;
-  healthLoss: number;
+  demandPct: number;
+  payout: number;
 }
 
 export interface TravelEncounterResultData extends BaseEventData {
@@ -189,7 +190,8 @@ export const parseEvent = (raw: any) => {
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
         encounterId: Number(raw.data[0]),
-        healthLoss: Number(raw.data[1]),
+        demandPct: Number(raw.data[1]),
+        payout: Number(raw.data[2]),
       } as TravelEncounterData;
 
 

@@ -56,12 +56,8 @@ struct EncounterConfig {
     level: u8,
     health: u8,
     attack: u8, // *
-    defense: u8, // *
-    speed: u8,
-    // 
-    payout: u32,
-    // 
-    demand_pct: u8,
+    defense: u8, // % dmg reduction
+    speed: u8, // run: rand speed win | fight: initiative  
     //
     rep_pay: u8,   // reputation modifier for paying NEGATIVE
     rep_run: u8,   // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
@@ -70,6 +66,8 @@ struct EncounterConfig {
     min_rep: u8,
     max_rep: u8,
     //
+    payout: u32,
+    demand_pct: u8,
     // crit_rate:u8,
     // incorruptible: bool,
     // challenger: bool,
@@ -104,7 +102,7 @@ impl EncounterConfigImpl of EncounterConfigTrait {
 //
 
 #[generate_trait]
-impl EncounterImpl of EncounterTrait {
+impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounters_ids_by_rep(world: IWorldDispatcher, rep: u8) -> Span<u8> {
         let mut game_config = GameConfigImpl::get(world);
         let mut encounters_ids = array![];
@@ -131,18 +129,93 @@ impl EncounterImpl of EncounterTrait {
     fn get_encounter(ref game_store: GameStore) -> EncounterConfig {
         let rep = game_store.player.reputation;
 
-        let encounters_ids = EncounterImpl::get_encounters_ids_by_rep(game_store.world, rep);
+        let encounters_ids = EncounterSpawnerImpl::get_encounters_ids_by_rep(game_store.world, rep);
 
-        let rand_from_game_store: u256 = pedersen::pedersen(
-             game_store.markets.packed, game_store.markets.packed
-        ).into();
+        let rand_from_game_store: u256 = pedersen::pedersen(game_store.markets.packed, game_store.markets.packed).into();
 
         let rand_index = rand_from_game_store % encounters_ids.len().into();
         let rand_id = *encounters_ids.at(rand_index.try_into().unwrap());
 
-        get!(game_store.world, (rand_id), (EncounterConfig))
+        let mut encounter = get!(game_store.world, (rand_id), (EncounterConfig));
+
+        // set random demand_pct
+        encounter.demand_pct = EncounterSpawnerImpl::get_random_demand_pct(ref game_store);
+
+        // set scaling payout
+        encounter.payout = (encounter.level.into() * encounter.level.into() * 4_000) + (game_store.player.turn.into() * 1_000);
+
+        encounter
+    }
+
+    fn get_random_demand_pct(ref game_store: GameStore) -> u8 {
+        let rand_from_game_store: u256 = pedersen::pedersen(
+            game_store.markets.packed, game_store.game.game_id.into()
+        ).into();
+
+        let rand_0_99: u8 = (rand_from_game_store % 100).try_into().unwrap();
+
+        if rand_0_99 < 1 {
+            69
+        } else if rand_0_99 < 20 {
+            50
+        } else if rand_0_99 < 50 {
+            30
+        } else {
+            20
+        }
     }
 }
+
+
+//
+//
+//
+
+
+
+#[generate_trait]
+impl EncounterImpl of EncounterTrait {
+    #[inline(always)]
+    fn is_dead(ref self: EncounterConfig) -> bool {
+        self.health == 0
+    }
+
+    #[inline(always)]
+    fn health_loss(ref self: EncounterConfig, amount: u8) {
+        self.health = self.health.sub_capped(amount, 0);
+    }
+
+}
+
+
+
+//
+//
+//
+
+
+// fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> Encounter {
+//     let turn = game_store.player.turn;
+
+//     // temp: lvl based on reputation    
+//     let encounter_level = game_store.player.reputation / 15 + 1;
+    
+//     let health = encounter_level * 5 + turn;
+//     let attack = encounter_level * 2 + turn / 3;
+    
+//     let payout: u32 = (encounter_level.into() * encounter_level.into() * 4_000)
+//         + (turn.into() * 1_000);
+//     let demand_pct = get_encounter_demand_from_game_store(game_store);
+
+//     Encounter {
+//         encounter: encounter_slot,
+//         level: encounter_level,
+//         health: health,
+//         attack: attack,
+//         payout: payout,
+//         demand_pct: demand_pct,
+//     }
+// }
 
 //
 //
@@ -166,13 +239,10 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 encounter: Encounters::Cops,
                 //
                 level: lvl,
-                health: lvl * 9,
-                attack: lvl * 11,
-                defense: lvl * 7,
+                health: lvl * 12,
+                attack: lvl * 8,
+                defense: lvl * 10,
                 speed : lvl * 8,
-                //
-                payout: 2500_u32 * lvl.into(),
-                demand_pct: 20,
                 //
                 rep_pay: lvl + 5,  
                 rep_run: lvl,  
@@ -180,6 +250,9 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 // 
                 min_rep: i * 15,
                 max_rep: (i * 15) + 25,
+                //
+                payout: 0, // overrided
+                demand_pct: 0, // overrided
         };
 
         EncounterConfigImpl::add_encounter(world,ref encounter, ref game_config);
@@ -201,13 +274,10 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 encounter: Encounters::Gang,
                 //
                 level: lvl,
-                health: lvl * 11,
-                attack: lvl * 10,
-                defense: lvl * 6,
-                speed : lvl * 6,
-                //
-                payout: 2000_u32 * lvl.into(),
-                demand_pct: 20,
+                health: lvl * 8,
+                attack: lvl * 12,
+                defense: lvl * 9,
+                speed : lvl * 8,
                 //
                 rep_pay: lvl + 5,  
                 rep_run: lvl,  
@@ -215,6 +285,9 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 // 
                 min_rep: i * 15,
                 max_rep: (i * 15) + 25,
+                //
+                payout: 0, // overrided
+                demand_pct: 0, // overrided
         };
 
         EncounterConfigImpl::add_encounter(world,ref encounter, ref game_config);
@@ -224,7 +297,7 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
     // save encounter_count
     GameConfigImpl::set(world, game_config);
 
-    initialize_encounter_config_extra(world);
+    // initialize_encounter_config_extra(world);
 }
 
 fn initialize_encounter_config_extra(world: IWorldDispatcher) {
@@ -243,16 +316,16 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             defense: 5,
             speed : 2,
             //
-            payout: 4200,
-            demand_pct: 20,
-            //
             rep_pay: 10,  
             rep_run: 0,  
             rep_fight: 2,
             // 
             min_rep: 0,
             max_rep: 40,
-        };
+            //
+            payout: 0, // overrided
+            demand_pct: 0, // overrided
+     };
 
 
     let mut cops2 = EncounterConfig {
@@ -265,15 +338,15 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             defense: 11,
             speed : 14,
             //
-            payout: 42000,
-            demand_pct: 30,
-            //
             rep_pay: 6,  
             rep_run: 2,  
             rep_fight: 4,
             // 
             min_rep: 40,
             max_rep: 100,
+            //
+            payout: 0, // overrided
+            demand_pct: 0, // overrided
         };
     
 
@@ -294,15 +367,15 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             defense: 15,
             speed : 20,
             //
-            payout: 20000,
-            demand_pct: 50,
-            //
             rep_pay: 10,  
             rep_run: 0,  
             rep_fight: 2,
             // 
             min_rep: 0,
             max_rep: 40,
+            //
+            payout: 0, // overrided
+            demand_pct: 0, // overrided
         };
 
    let mut gang2 = EncounterConfig {
@@ -315,15 +388,15 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             defense: 25,
             speed : 35,
             //
-            payout: 50000,
-            demand_pct: 60,
-            //
             rep_pay: 6,  
             rep_run: 2,  
             rep_fight: 4,
             // 
             min_rep: 40,
             max_rep: 100,
+            //
+            payout: 0, // overrided
+            demand_pct: 0, // overrided
         };
 
 

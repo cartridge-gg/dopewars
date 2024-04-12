@@ -1262,8 +1262,8 @@
     {
       "kind": "DojoContract",
       "address": "0x77cfc8df2e0d60abf3ad87a9773a91f72cde6b65a860fe98cd55c4900ce29ea",
-      "class_hash": "0x3ea491f8a1a66f1bb34a4ec03782211c509b22627a82b980135f6e1ade46a81",
-      "original_class_hash": "0x3ea491f8a1a66f1bb34a4ec03782211c509b22627a82b980135f6e1ade46a81",
+      "class_hash": "0x6d7bc9b15c3ee62d3c114089b4e64baafd3c1df44036a2b68ee7451c0b401f2",
+      "original_class_hash": "0x6d7bc9b15c3ee62d3c114089b4e64baafd3c1df44036a2b68ee7451c0b401f2",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -1908,8 +1908,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
-      "class_hash": "0x213ca589ffe65715db57d3c70106783fc8e8d133d901cdd97d32f775fc776a",
-      "original_class_hash": "0x213ca589ffe65715db57d3c70106783fc8e8d133d901cdd97d32f775fc776a",
+      "class_hash": "0xbf7d314d7ab2b6d9a51f772abe004582317537e8ce70ca7b2380d2f7a65f52",
+      "original_class_hash": "0xbf7d314d7ab2b6d9a51f772abe004582317537e8ce70ca7b2380d2f7a65f52",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -2502,8 +2502,13 @@
               "kind": "data"
             },
             {
-              "name": "health_loss",
+              "name": "demand_pct",
               "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32",
               "kind": "data"
             }
           ]
@@ -3378,16 +3383,6 @@
           "key": false
         },
         {
-          "name": "payout",
-          "type": "u32",
-          "key": false
-        },
-        {
-          "name": "demand_pct",
-          "type": "u8",
-          "key": false
-        },
-        {
           "name": "rep_pay",
           "type": "u8",
           "key": false
@@ -3411,10 +3406,20 @@
           "name": "max_rep",
           "type": "u8",
           "key": false
+        },
+        {
+          "name": "payout",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "demand_pct",
+          "type": "u8",
+          "key": false
         }
       ],
-      "class_hash": "0x5528b38c79724c528f128a8e59c1674ade15bcbf064004f9e5932f84a1b744c",
-      "original_class_hash": "0x5528b38c79724c528f128a8e59c1674ade15bcbf064004f9e5932f84a1b744c",
+      "class_hash": "0x5160839064ca0d37a8702c95d6c64cb2ce43c018e6d574c1c66b5f528558ae7",
+      "original_class_hash": "0x5160839064ca0d37a8702c95d6c64cb2ce43c018e6d574c1c66b5f528558ae7",
       "abi": [
         {
           "type": "impl",
@@ -3636,14 +3641,6 @@
               "type": "core::integer::u8"
             },
             {
-              "name": "payout",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "demand_pct",
-              "type": "core::integer::u8"
-            },
-            {
               "name": "rep_pay",
               "type": "core::integer::u8"
             },
@@ -3661,6 +3658,14 @@
             },
             {
               "name": "max_rep",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "demand_pct",
               "type": "core::integer::u8"
             }
           ]

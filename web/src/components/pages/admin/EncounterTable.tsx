@@ -7,7 +7,7 @@ import { useState } from "react";
 import { editComponents } from "./tables";
 
 const columns = [
-  // { key: "icon",  width: 80  },
+  { key: "image",  width: 100  },
   { key: "id", title: "id", dataType: DataType.Number },
   { key: "encounter", title: "encounter", dataType: DataType.String },
   { key: "level", title: "level", dataType: DataType.Number },
@@ -17,15 +17,15 @@ const columns = [
   { key: "defense", title: "defense", dataType: DataType.Number },
   { key: "speed", title: "speed", dataType: DataType.Number },
   //
-  { key: "payout", title: "payout", dataType: DataType.Number },
-  { key: "demand_pct", title: "demand_pct", dataType: DataType.Number },
-  //
   { key: "rep_pay", title: "rep_pay", dataType: DataType.Number },
   { key: "rep_run", title: "rep_run", dataType: DataType.Number },
   { key: "rep_fight", title: "rep_fight", dataType: DataType.Number },
   //
   { key: "min_rep", title: "min_rep", dataType: DataType.Number },
   { key: "max_rep", title: "max_rep", dataType: DataType.Number },
+  // //
+  // { key: "payout", title: "payout", dataType: DataType.Number },
+  // { key: "demand_pct", title: "demand_pct", dataType: DataType.Number },
 
   { key: "editColumn", width: 80 },
 ];

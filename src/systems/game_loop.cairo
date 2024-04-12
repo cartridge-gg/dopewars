@@ -15,6 +15,7 @@ use rollyourown::{
 };
 
 
+// -> (is_dead, has_encounter)
 fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
     // update wanted
     game_store.wanted.on_turn_end(game_store);

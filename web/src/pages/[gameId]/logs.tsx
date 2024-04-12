@@ -327,9 +327,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
     : "";
 
   const action = lastEncouterResult?.action;
-  const totalHpLoss = lastEncouterResult
-    ? log.healthLoss + lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0)
-    : log.healthLoss;
+  const totalHpLoss =  lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0)
 
   return (
     <FightLine

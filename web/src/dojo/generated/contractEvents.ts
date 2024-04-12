@@ -81,7 +81,8 @@ export interface TravelEncounterData extends BaseEventData {
         game_id: number;
 player_id: string;
 encounter_id: number;
-health_loss: number;
+demand_pct: number;
+payout: number;
         }
 
 export interface TravelEncounterResultData extends BaseEventData {
@@ -221,7 +222,8 @@ event_name: "TravelEncounter",
 game_id: Number(raw.keys[1]),
 player_id: num.toHexString(raw.keys[2]),
 encounter_id: Number(raw.data[0]),
-health_loss: Number(raw.data[1]),
+demand_pct: Number(raw.data[1]),
+payout: Number(raw.data[2]),
 } as TravelEncounterData;
 
 case WorldEvents.TravelEncounterResult:

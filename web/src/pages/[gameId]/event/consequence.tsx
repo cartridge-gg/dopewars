@@ -50,6 +50,7 @@ const Consequence = () => {
   if (!router.isReady || !game || !gameEvents || !encounterResult || !outcomeInfos) {
     return <></>;
   }
+  console.log(encounterResult)
 
   return (
     <>
@@ -104,7 +105,7 @@ const Consequence = () => {
                           text={
                             <Text color="yellow.400">
                               You hit for {encounterResult.dmgDealt[idx][0]} DMG{" "}
-                              {encounterResult.dmgDealt[idx][1] > 0 && <>(+{encounterResult.dmgDealt[idx][1]})</>}
+                              {encounterResult.dmgDealt[idx][1] > 0 && <>(-{encounterResult.dmgDealt[idx][1]})</>}
                             </Text>
                           }
                         />

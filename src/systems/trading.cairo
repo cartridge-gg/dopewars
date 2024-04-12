@@ -1,6 +1,7 @@
 use rollyourown::packing::markets_packed::MarketsPackedTrait;
 use starknet::ContractAddress;
 use rollyourown::{
+    models::{game::{GameMode}},
     config::{
         locations::{Locations}, drugs::{Drugs, DrugConfig, DrugConfigImpl},
         hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}
@@ -31,16 +32,16 @@ struct Trade {
 //
 //
 
-fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
-    let tick = game_store.markets.get_tick(game_store.player.location, trade.drug);
+// fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
+//     let tick = game_store.markets.get_tick(game_store.player.location, trade.drug);
 
-    let new_tick = match trade.direction {
-        TradeDirection::Sell => { tick.sub_capped(2, 0) },
-        TradeDirection::Buy => { tick.add_capped(2, 63) },
-    };
+//     let new_tick = match trade.direction {
+//         TradeDirection::Sell => { tick.sub_capped(2, 0) },
+//         TradeDirection::Buy => { tick.add_capped(2, 63) },
+//     };
 
-    game_store.markets.set_tick(game_store.player.location, trade.drug, new_tick);
-}
+//     game_store.markets.set_tick(game_store.player.location, trade.drug, new_tick);
+// }
 
 //
 //
@@ -49,6 +50,9 @@ fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
 fn execute_trade(ref game_store: GameStore, trade: Trade) {
     // check if can trade 
     assert(game_store.player.can_trade(), 'player cannot trade');
+
+    // check not warrior mode
+    assert(game_store.game.game_mode != GameMode::Warrior, 'warriors dont trade');
 
     match trade.direction {
         TradeDirection::Sell => sell(ref game_store, trade),
@@ -67,11 +71,11 @@ fn buy(ref game_store: GameStore, trade: Trade) {
     assert(drugs.quantity == 0 || drugs.drug == trade.drug, 'one kind of drug');
 
     // get transport
-    let transport = game_store.items.get_item(ItemSlot::Transport);
+    let transport = game_store.items.transport();
     let drug_config = DrugConfigImpl::get(game_store.world, trade.drug);
 
     // check quantity
-    let max_transport = transport.tier.stat - (drugs.quantity * drug_config.weight.into());
+    let max_transport = transport - (drugs.quantity * drug_config.weight.into());
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash 

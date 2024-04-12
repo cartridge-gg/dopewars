@@ -4,7 +4,7 @@ import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Cigarette, PawnshopIcon, Alert } from "../icons";
+import { Alert, Cigarette, PawnshopIcon } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
