@@ -116,7 +116,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
 
             let encounter = get!(world, (id), (EncounterConfig));
 
-            if rep >= encounter.min_rep && rep < encounter.max_rep {
+            if rep >= encounter.min_rep && rep <= encounter.max_rep {
                 encounters_ids.append(encounter.id);
             };
 
@@ -142,7 +142,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
         encounter.demand_pct = EncounterSpawnerImpl::get_random_demand_pct(ref game_store);
 
         // set scaling payout
-        encounter.payout = (encounter.level.into() * encounter.level.into() * 4_000) + (game_store.player.turn.into() * 1_000);
+        encounter.payout = (encounter.level.into() * encounter.level.into() * 3_000) + (game_store.player.turn.into() * 1_000);
 
         encounter
     }

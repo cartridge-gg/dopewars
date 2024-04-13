@@ -5,6 +5,7 @@ type Modals = {
   connect?: any;
   accountDetails?: any;
   quitGame?: any;
+  refreshGame?: any;
 };
 
 export class UiStore {
@@ -13,6 +14,7 @@ export class UiStore {
     connect: undefined,
     accountDetails: undefined,
     quitGame: undefined,
+    refreshGame: undefined,
   };
 
   constructor() {
@@ -30,6 +32,9 @@ export class UiStore {
       //
       openQuitGame: action,
       closeQuitGame: action,
+      //
+      openRefreshGame: action,
+      closeRefreshGame: action,
     });
   }
 
@@ -68,4 +73,14 @@ export class UiStore {
   closeQuitGame() {
     this.modals.quitGame = undefined;
   }
+
+  //
+
+  openRefreshGame() {
+    this.modals.refreshGame = {};
+  }
+  closeRefreshGame() {
+    this.modals.refreshGame = undefined;
+  }
+
 }

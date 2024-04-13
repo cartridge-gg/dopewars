@@ -4,12 +4,13 @@ import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Alert, Cigarette, PawnshopIcon } from "../icons";
+import { Alert, PawnshopIcon } from "../icons";
 
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
 import { useAccount } from "@starknet-react/core";
 import { WeightIcon } from "../icons/Weigth";
+import { Reputation } from "../icons/items/Reputation";
 import { PowerMeter } from "./PowerMeter";
 
 const blinkAnim = keyframes`  
@@ -31,7 +32,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       <HStack w="full" justifyContent="space-between">
         <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
           <HStack color="neon.500" justify="center" alignItems="center">
-            <Cigarette />
+            <Reputation />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
               REPUTATION
             </Text>
@@ -93,7 +94,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       </HStack>
 
       {!hidePawnshop && (
-        <VStack w="full" alignItems="flex-start">
+        <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
           <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500" h="24px" lineHeight="24px">
             PAWNSHOP
           </Text>

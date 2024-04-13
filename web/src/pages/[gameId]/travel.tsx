@@ -9,7 +9,7 @@ import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
-import { formatCash, generatePixelBorderPath } from "@/utils/ui";
+import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
@@ -35,6 +35,7 @@ const Travel = observer(() => {
   const { game, gameEvents } = useGameStore();
   const configStore = useConfigStore();
   const { config } = configStore;
+  const isMobile = IsMobile();
 
   const locationName = useMemo(() => {
     if (targetLocation) {
@@ -193,7 +194,7 @@ const Travel = observer(() => {
               <WantedIndicator
                 wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
                 highLimit={config?.config.game_config.max_wanted_shopping}
-            />
+              />
             )}
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
@@ -205,7 +206,7 @@ const Travel = observer(() => {
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="60px 16px 86px 16px"
+        p="30px 16px 86px 16px"
         position="fixed"
         bottom="0"
         right="0"
@@ -216,7 +217,17 @@ const Travel = observer(() => {
         gap="14px"
         overflow={"visible"}
       >
+        {/* {isMobile && targetLocation && (
+          <Box position="absolute" right="145px" top="64px">
+            <WantedIndicator
+              wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
+              highLimit={config?.config.game_config.max_wanted_shopping}
+            />
+          </Box>
+        )} */}
+
         <Inventory hidePawnshop />
+
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices
           prices={prices}

@@ -1,5 +1,6 @@
 import { Button } from "@/components/common";
-import { Cigarette, Heart } from "@/components/icons";
+import { Heart } from "@/components/icons";
+import { Reputation } from "@/components/icons/items/Reputation";
 import { Footer, Layout } from "@/components/layout";
 import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
 import { getOutcomeInfo } from "@/dojo/helpers";
@@ -141,13 +142,13 @@ const Consequence = () => {
                 })}
 
                 {encounterResult.repPos > 0 && (
-                  <Line icon={<Cigarette />} text={<Text color="neon.400">REP +{encounterResult.repPos}</Text>} />
+                  <Line icon={<Reputation />} text={<Text color="neon.400"> +{encounterResult.repPos} REP</Text>} />
                 )}
 
                 {encounterResult.repNeg > 0 && (
                   <Line
-                    icon={<Cigarette color="yellow.400" />}
-                    text={<Text color="yellow.400">REP -{encounterResult.repNeg}</Text>}
+                    icon={<Reputation color="yellow.400" />}
+                    text={<Text color="yellow.400"> -{encounterResult.repNeg} REP</Text>}
                   />
                 )}
               </VStack>

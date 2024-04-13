@@ -112,7 +112,7 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
                 encounter_id: encounter.id,
                 demand_pct: encounter.demand_pct,
                 payout: encounter.payout,
-                }
+            }
         )));
 
         (game_store.player.is_dead(), true)
@@ -444,11 +444,11 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let encounter_attack = encounter.attack;
+        let encounter_attack = encounter.attack / 3;
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
-        let dmg_dealt = (encounter_attack - dmg_shield) / 3; // TODO: config ***
+        let dmg_dealt = encounter_attack - dmg_shield; // TODO: config ***
 
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
@@ -462,11 +462,11 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
-        let encounter_attack = encounter.attack;
+        let encounter_attack = encounter.attack / 5;
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
-        let dmg_dealt = (encounter_attack - dmg_shield) / 5; // TODO: config ***
+        let dmg_dealt = encounter_attack - dmg_shield; // TODO: config ***
 
         // player lose HP
         game_store.player.health_loss(dmg_dealt);

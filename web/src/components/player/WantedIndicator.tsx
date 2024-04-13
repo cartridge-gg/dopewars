@@ -1,4 +1,4 @@
-import { HStack, StyleProps, Text } from "@chakra-ui/react";
+import { Box, HStack, StyleProps, Text } from "@chakra-ui/react";
 import { Alert, Siren } from "../icons";
 
 import { Tooltip } from "../common";
@@ -30,8 +30,14 @@ export const WantedIndicator = ({
         animation={threatLevel === ThreatLevels.High ? `${blinkAnim} infinite 0.5s linear` : "none"}
         {...props}
       >
-        {threatLevel === ThreatLevels.High ? <Alert boxSize={21} /> : <Siren />}{" "}
-        <Text fontSize="11px" textStyle="subheading">
+        {threatLevel === ThreatLevels.High ? (
+          <Box boxSize="24px">
+            <Alert width="20px" height="20px" />
+          </Box>
+        ) : (
+          <Siren />
+        )}{" "}
+        <Text fontSize="11px" textStyle="subheading" lineHeight={1}>
           {threatLevel}
         </Text>
       </HStack>

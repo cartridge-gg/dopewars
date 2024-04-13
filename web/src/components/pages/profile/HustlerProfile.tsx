@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import ShareButton from "./ShareButton";
 
 export const HustlerProfile = observer(() => {
-  const { gameId} = useRouterContext()
+  const { gameId } = useRouterContext();
   const { game, gameInfos } = useGameStore();
   const configStore = useConfigStore();
   const [hustlerStats, setHustlerStats] = useState<any>();
@@ -90,7 +90,11 @@ export const HustlerProfile = observer(() => {
         </VStack>
       </HStack>
 
-      <HStack w="100%" maxW={["260px","360px"]}>
+      {/* <Card>
+        <HustlerStats />
+      </Card> */}
+
+      <HStack w="100%" maxW={["260px", "360px"]}>
         <Button
           variant="pixelated"
           w="full"

@@ -202,7 +202,7 @@ impl PlayerImpl of PlayerTrait {
         // level down
         if self.drug_level > drug_level {
             // check if not carrying drug to be disabled
-            if drugs.quantity > 0 && drugs.drug.into() > drug_level + 4 {
+            if drugs.quantity > 0 && drugs.drug.into() >= drug_level + 4 {
                 return;
             }
         }

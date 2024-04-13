@@ -1,5 +1,4 @@
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { Sounds, playSound } from "@/hooks/sound";
 import { Menu, MenuItem, Popover, PopoverBody, PopoverContent, PopoverTrigger, StyleProps } from "@chakra-ui/react";
 import { Cigarette, Dots, Home } from "../icons";
 import { ProfileLinkMobile } from "../pages/profile/Profile";
@@ -40,8 +39,7 @@ export const MobileMenu = ({ ...props }: StyleProps) => {
                   <MenuItem
                     h="48px"
                     onClick={() => {
-                      playSound(Sounds.Ooo);
-                      //uiStore.openQuitGame();
+                        uiStore.openRefreshGame();
                     }}
                   >
                     <Cigarette mr={2} /> IM LOST

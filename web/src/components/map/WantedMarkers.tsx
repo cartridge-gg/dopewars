@@ -1,5 +1,6 @@
 import { useConfigStore, useGameStore } from "@/dojo/hooks";
 import { Locations } from "@/dojo/types";
+import { IsMobile } from "@/utils/ui";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Alert } from "../icons";
@@ -8,9 +9,12 @@ import { coordinatePercent } from "./Map";
 export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; current?: Locations }) => {
   const { game } = useGameStore();
   const configStore = useConfigStore();
+  const { config } = configStore;
 
   const [wanted, setWanted] = useState<Map<number, number>>();
-  const minWanted = 69;
+  const minWanted = (config?.config.game_config.max_wanted_shopping * 100n) / 8n;
+
+  const isMobile = IsMobile();
 
   useEffect(() => {
     const locations = configStore.config?.location!;
@@ -33,6 +37,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Queens].x - 2}%`}
           top={`${coordinatePercent[Locations.Queens].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
       {/* Jersey */}
@@ -41,6 +47,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Jersey].x - 2}%`}
           top={`${coordinatePercent[Locations.Jersey].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
       {/* Bronx */}
@@ -49,6 +57,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Bronx].x - 2}%`}
           top={`${coordinatePercent[Locations.Bronx].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
       {/* Central */}
@@ -57,6 +67,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Central].x - 2}%`}
           top={`${coordinatePercent[Locations.Central].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
       {/* Coney */}
@@ -65,6 +77,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Coney].x - 2}%`}
           top={`${coordinatePercent[Locations.Coney].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
       {/* Brooklyn */}
@@ -73,6 +87,8 @@ export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; cur
           position="absolute"
           left={`${coordinatePercent[Locations.Brooklyn].x - 2}%`}
           top={`${coordinatePercent[Locations.Brooklyn].y - 1}%`}
+          width={isMobile ? "20px" : "24px"}
+          height={isMobile ? "20px" : "24px"}
         />
       )}
     </Box>

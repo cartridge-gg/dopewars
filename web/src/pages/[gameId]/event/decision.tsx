@@ -3,6 +3,7 @@ import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { Footer, Layout } from "@/components/layout";
+import { HustlerStats } from "@/components/pages/profile/HustlerStats";
 import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
@@ -364,21 +365,8 @@ const Encounter = observer(
 
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
-              <HStack w="full" px="10px" py="6px" justifyContent="center">
-                <Text flex="1">
-                  {game?.items.attack.icon({})} {game?.items.attack.tier.stat}
-                </Text>
-                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                <Text flex="1">
-                  {game?.items.defense.icon({})} {game?.items.defense.tier.stat}
-                </Text>
-                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                <Text flex="1">
-                  {game?.items.speed.icon({})} {game?.items.speed.tier.stat}
-                </Text>
-                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                <HealthIndicator health={game?.player.health} maxHealth={100} flex="1" />
-              </HStack>
+              <HustlerStats />
+
             </Card>
           </VStack>
         </VStack>

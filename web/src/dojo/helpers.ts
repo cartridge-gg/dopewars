@@ -39,6 +39,7 @@ import {
   Shoes
 } from "@/components/icons/items";
 import { Chain } from "@/components/icons/items/Chain";
+import { Shoes2 } from "@/components/icons/items/Shoes2";
 
 
 
@@ -182,7 +183,7 @@ export const itemIcons = {
   "Trench Coat": Leatherjacket,
   //
   "All-Black Sneakers": Shoes,
-  "Athletic Trainers": Shoes,
+  "Athletic Trainers": Shoes2,
   "Work Boots": Boots,
   //
   "Plastic bag": PlasticBag,
