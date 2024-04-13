@@ -58,7 +58,6 @@ export const Layout = ({
             {children}
           </RightPanel>
         </Container>
-
         <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
       </Flex>
       <CrtEffect />

@@ -263,10 +263,12 @@ const Encounter = observer(
         </VStack>
         <VStack
           w="full"
-          // flexDir={["row", "column"]}
+          h="full"
+          flexDir={["column", "row"]}
           justifyContent="center"
-          alignItems={"center"}
+          alignItems="center"
           position="relative"
+          gap={[0, 12]}
         >
           {/* {!IsMobile() && sentence && (
             <>
@@ -289,7 +291,7 @@ const Encounter = observer(
             h={[150, 300]}
           />
 
-          <VStack w="320px" mt={[0, "20px"]}>
+          <VStack w="320px" gap={[0,3]}>
             {/* <Card alignItems="center" w={"auto"} justify="center">
               <HStack w="full" px="16px" py="8px" justifyContent="center">
                 <Text>id: {encounter?.id}</Text>
@@ -315,12 +317,6 @@ const Encounter = observer(
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                   <CashIndicator cash={formatCash(encounterEvent?.payout)} flex="1" justifyContent="center" />
                 </HStack>
-
-                {/* <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-
-                <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
-                  {demand}
-                </Text> */}
 
                 <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
@@ -366,7 +362,6 @@ const Encounter = observer(
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
               <HustlerStats />
-
             </Card>
           </VStack>
         </VStack>

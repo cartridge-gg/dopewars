@@ -24,17 +24,17 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
+  const { account } = useAccount();
+  const { game, gameEvents } = useGameStore();
+  const { travel, isPending } = useSystems();
+  const configStore = useConfigStore();
+  const { config } = configStore;
+
+  const toaster = useToast();
 
   const [targetLocation, setTargetLocation] = useState<string>("");
   const [currentLocation, setCurrentLocation] = useState<string>();
 
-  const toaster = useToast();
-  const { travel, isPending } = useSystems();
-
-  const { account } = useAccount();
-  const { game, gameEvents } = useGameStore();
-  const configStore = useConfigStore();
-  const { config } = configStore;
   const isMobile = IsMobile();
 
   const locationName = useMemo(() => {
@@ -199,14 +199,14 @@ const Travel = observer(() => {
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
-        <LocationPrices prices={prices} />
+        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation}/>
       </VStack>
       {/* Mobile  */}
       <VStack
         display={["flex", "none"]}
         w="full"
         h="auto"
-        p="30px 16px 86px 16px"
+        p="50px 16px 86px 16px"
         position="fixed"
         bottom="0"
         right="0"
@@ -217,22 +217,18 @@ const Travel = observer(() => {
         gap="14px"
         overflow={"visible"}
       >
-        {/* {isMobile && targetLocation && (
-          <Box position="absolute" right="145px" top="64px">
+        {isMobile && targetLocation && (
+          <Box position="absolute" top="20px" left="16px">
             <WantedIndicator
               wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
               highLimit={config?.config.game_config.max_wanted_shopping}
             />
           </Box>
-        )} */}
+        )}
 
         <Inventory hidePawnshop />
-
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
-        <LocationPrices
-          prices={prices}
-          isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
-        />
+        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation} />
       </VStack>
     </Layout>
   );
@@ -287,6 +283,9 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
                     <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
                       ({!isPercentage ? `${(drug.percentage || 0).toFixed(0)}%` : formatCash(drug.diff)})
                     </Text>
+                  )}
+                  {!(drug.percentage && drug.diff && drug.diff !== 0) && !isCurrentLocation && (
+                    <Text opacity="0.2"> (0%) </Text>
                   )}
                 </HStack>
               </GridItem>

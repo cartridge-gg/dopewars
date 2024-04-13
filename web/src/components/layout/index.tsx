@@ -1,3 +1,4 @@
+export * from "./ConnectionError"
 export * from "./CrtEffect"
 export * from "./Footer"
 export * from "./Header"
@@ -9,4 +10,5 @@ export * from "./MediaPlayer"
 export * from "./MobileMenu"
 export * from "./OG"
 export * from "./QuitGameModal"
+export * from "./RefreshGameModal"
 

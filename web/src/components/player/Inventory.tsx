@@ -30,7 +30,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
   return (
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[3, 6]}>
       <HStack w="full" justifyContent="space-between">
-        <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
+        <VStack w="full" alignItems="flex-start" gap={1}>
           <HStack color="neon.500" justify="center" alignItems="center">
             <Reputation />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -68,7 +68,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
 
         {/* ************** */}
 
-        <VStack w="full" alignItems="flex-end" gap={[0, 1]}>
+        <VStack w="full" alignItems="flex-end" gap={1}>
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
             <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
@@ -94,7 +94,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       </HStack>
 
       {!hidePawnshop && (
-        <VStack w="full" alignItems="flex-start" gap={[0, 1]}>
+        <VStack w="full" alignItems="flex-start" gap={1}>
           <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500" h="24px" lineHeight="24px">
             PAWNSHOP
           </Text>

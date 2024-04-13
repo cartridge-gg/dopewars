@@ -1,4 +1,4 @@
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import {
   Button,
   HStack,
@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 export const RefreshGameModal = observer(() => {
   const { router, gameId } = useRouterContext();
   const { uiStore } = useDojoContext();
+  const { game } = useGameStore()
 
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={uiStore.modals.refreshGame !== undefined} onClose={() => {}}>
@@ -25,6 +26,7 @@ export const RefreshGameModal = observer(() => {
             <HStack w="full" justifyContent="center">
               <Button
                 onClick={() => {
+                  game?.clearPendingCalls();
                   uiStore.closeRefreshGame();
 
                   if (gameId) {

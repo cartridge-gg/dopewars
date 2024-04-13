@@ -444,11 +444,11 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let encounter_attack = encounter.attack / 3;
+        let encounter_attack = encounter.attack / 3; // TODO: config ***
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
-        let dmg_dealt = encounter_attack - dmg_shield; // TODO: config ***
+        let dmg_dealt = encounter_attack - dmg_shield;
 
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
@@ -462,20 +462,24 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
-        let encounter_attack = encounter.attack / 5;
+        let encounter_attack = encounter.attack / 5; // TODO: config ***
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
-        let dmg_dealt = encounter_attack - dmg_shield; // TODO: config ***
+        let dmg_dealt = encounter_attack - dmg_shield; 
 
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
 
         // loss a 2 or 1% drug each round xd
         let loss_pct = drug_unpacked.quantity.pct(1);
-        let drug_loss = MathImpl::max(loss_pct, 2);
+        let possible_drug_loss = MathImpl::max(loss_pct, 2);
+        let mut drug_loss = 0;
        
-        drug_unpacked.quantity = drug_unpacked.quantity.sub_capped(drug_loss, 0);
+        if possible_drug_loss <=  drug_unpacked.quantity{
+            drug_unpacked.quantity -= possible_drug_loss;
+            drug_loss = possible_drug_loss;
+        };
 
         // set drugs
         game_store.drugs.set(drug_unpacked);
