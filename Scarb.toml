@@ -7,7 +7,7 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.0"}
+dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.1-alpha.1"}
 # dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.0-alpha.13"}
 # token = { git = "https://github.com/dojoengine/origami", tag = "v0.6.0-alpha.10" }
 token = { git = "https://github.com/notV4l/origami", branch = "erc_without_events" }
