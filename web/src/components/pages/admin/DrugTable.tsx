@@ -29,7 +29,7 @@ export const DrugTable = observer(() => {
 
   const table = useTable({
     onDispatch: (action) => {
-      console.log(action);
+      // console.log(action);
 
       if (action.type === ActionType.UpdateEditorValue) {
         const toUpdateIndex = data.findIndex((i) => i.drug_id === action.rowKeyValue);

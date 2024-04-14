@@ -60,7 +60,7 @@ export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
 };
 
 export type EncounterConfigFull = EncounterConfig & {
-  image: string;
+  image?: string;
 };
 
 export type HustlerConfig = {

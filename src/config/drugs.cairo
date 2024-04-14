@@ -131,9 +131,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Ludes,
             drug_id: Drugs::Ludes.into(),
-            base: 18,
-            step: 1,
-            weight: 5,
+            base: 24,
+            step: 2,
+            weight: 10,
             name: Bytes16Impl::from('Ludes')
         }
     );
@@ -143,9 +143,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Speed,
             drug_id: Drugs::Speed.into(),
-            base: 85,
-            step: 6,
-            weight: 10,
+            base: 150,
+            step: 4,
+            weight: 14,
             name: Bytes16Impl::from('Speed')
         }
     );
@@ -155,9 +155,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Weed,
             drug_id: Drugs::Weed.into(),
-            base: 290,
-            step: 18,
-            weight: 15,
+            base: 402,
+            step: 8,
+            weight: 19,
             name: Bytes16Impl::from('Weed')
         }
     );
@@ -167,9 +167,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Shrooms,
             drug_id: Drugs::Shrooms.into(),
-            base: 980,
-            step: 54,
-            weight: 25,
+            base: 906,
+            step: 16,
+            weight: 27,
             name: Bytes16Impl::from('Shrooms')
         }
     );
@@ -179,9 +179,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Acid,
             drug_id: Drugs::Acid.into(),
-            base: 2900,
-            step: 111,
-            weight: 30,
+            base: 1914,
+            step: 32,
+            weight: 37,
             name: Bytes16Impl::from('Acid')
         }
     );
@@ -191,9 +191,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Ketamine,
             drug_id: Drugs::Ketamine.into(),
-            base: 6800,
-            step: 186,
-            weight: 45,
+            base: 3930,
+            step: 64,
+            weight: 52,
             name: Bytes16Impl::from('Ketamine')
         }
     );
@@ -203,9 +203,9 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Heroin,
             drug_id: Drugs::Heroin.into(),
-            base: 13500,
-            step: 231,
-            weight: 65,
+            base: 7962,
+            step: 128,
+            weight: 72,
             name: Bytes16Impl::from('Heroin')
         }
     );
@@ -215,10 +215,113 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         DrugConfig {
             drug: Drugs::Cocaine,
             drug_id: Drugs::Cocaine.into(),
-            base: 19800,
-            step: 284,
+            base: 16026,
+            step: 256,
             weight: 100,
             name: Bytes16Impl::from('Cocaine')
         }
     );
 }
+
+
+//
+//
+//
+
+// fn initialize_drug_config_v0(world: IWorldDispatcher) {
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Ludes,
+//             drug_id: Drugs::Ludes.into(),
+//             base: 18,
+//             step: 1,
+//             weight: 5,
+//             name: Bytes16Impl::from('Ludes')
+//         }
+//     );
+
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Speed,
+//             drug_id: Drugs::Speed.into(),
+//             base: 85,
+//             step: 6,
+//             weight: 10,
+//             name: Bytes16Impl::from('Speed')
+//         }
+//     );
+
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Weed,
+//             drug_id: Drugs::Weed.into(),
+//             base: 290,
+//             step: 18,
+//             weight: 15,
+//             name: Bytes16Impl::from('Weed')
+//         }
+//     );
+
+//      set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Shrooms,
+//             drug_id: Drugs::Shrooms.into(),
+//             base: 980,
+//             step: 54,
+//             weight: 25,
+//             name: Bytes16Impl::from('Shrooms')
+//         }
+//     );
+
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Acid,
+//             drug_id: Drugs::Acid.into(),
+//             base: 2900,
+//             step: 111,
+//             weight: 30,
+//             name: Bytes16Impl::from('Acid')
+//         }
+//     );
+
+//      set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Ketamine,
+//             drug_id: Drugs::Ketamine.into(),
+//             base: 6800,
+//             step: 186,
+//             weight: 45,
+//             name: Bytes16Impl::from('Ketamine')
+//         }
+//     );
+
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Heroin,
+//             drug_id: Drugs::Heroin.into(),
+//             base: 13500,
+//             step: 231,
+//             weight: 65,
+//             name: Bytes16Impl::from('Heroin')
+//         }
+//     );
+
+//     set!(
+//         world,
+//         DrugConfig {
+//             drug: Drugs::Cocaine,
+//             drug_id: Drugs::Cocaine.into(),
+//             base: 19800,
+//             step: 284,
+//             weight: 100,
+//             name: Bytes16Impl::from('Cocaine')
+//         }
+//     );
+// }

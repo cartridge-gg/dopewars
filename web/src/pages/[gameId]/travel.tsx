@@ -199,7 +199,7 @@ const Travel = observer(() => {
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
-        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation}/>
+        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation} />
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -228,7 +228,10 @@ const Travel = observer(() => {
 
         <Inventory hidePawnshop />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
-        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation} />
+        <LocationPrices
+          prices={prices}
+          isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
+        />
       </VStack>
     </Layout>
   );
@@ -279,9 +282,14 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
                     boxSize: "24px",
                   })}
                   <Text display={isCurrentLocation ? "block" : ["none", "block"]}>${drug.price.toFixed(0)}</Text>
+
                   {drug.percentage && drug.diff && drug.diff !== 0 && (
                     <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
-                      ({!isPercentage ? `${(drug.percentage || 0).toFixed(0)}%` : formatCash(drug.diff)})
+                      (
+                      {!isPercentage || isCurrentLocation === undefined
+                        ? `${(drug.percentage || 0).toFixed(0)}%`
+                        : formatCash(drug.diff)}
+                      )
                     </Text>
                   )}
                   {!(drug.percentage && drug.diff && drug.diff !== 0) && !isCurrentLocation && (

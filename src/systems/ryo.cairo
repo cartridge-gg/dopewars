@@ -8,7 +8,6 @@ trait IRyo<T> {
     fn set_paused(self: @T, paused: bool);
     fn set_paper_fee(self: @T, fee: u16);
     fn set_treasury_fee_pct(self: @T, fee_pct: u8);
-
     fn set_leaderboard_duration(self: @T, duration_sec: u32);
 
     //

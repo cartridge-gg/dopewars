@@ -302,7 +302,6 @@ export type EncounterConfig = {
   __typename?: 'EncounterConfig';
   attack?: Maybe<Scalars['u8']>;
   defense?: Maybe<Scalars['u8']>;
-  demand_pct?: Maybe<Scalars['u8']>;
   encounter?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
   health?: Maybe<Scalars['u8']>;
@@ -338,7 +337,6 @@ export type EncounterConfigOrder = {
 export enum EncounterConfigOrderField {
   Attack = 'ATTACK',
   Defense = 'DEFENSE',
-  DemandPct = 'DEMAND_PCT',
   Encounter = 'ENCOUNTER',
   Health = 'HEALTH',
   Id = 'ID',
@@ -367,13 +365,6 @@ export type EncounterConfigWhereInput = {
   defenseLT?: InputMaybe<Scalars['u8']>;
   defenseLTE?: InputMaybe<Scalars['u8']>;
   defenseNEQ?: InputMaybe<Scalars['u8']>;
-  demand_pct?: InputMaybe<Scalars['u8']>;
-  demand_pctEQ?: InputMaybe<Scalars['u8']>;
-  demand_pctGT?: InputMaybe<Scalars['u8']>;
-  demand_pctGTE?: InputMaybe<Scalars['u8']>;
-  demand_pctLT?: InputMaybe<Scalars['u8']>;
-  demand_pctLTE?: InputMaybe<Scalars['u8']>;
-  demand_pctNEQ?: InputMaybe<Scalars['u8']>;
   encounter?: InputMaybe<Scalars['Enum']>;
   health?: InputMaybe<Scalars['u8']>;
   healthEQ?: InputMaybe<Scalars['u8']>;
@@ -1717,7 +1708,7 @@ export type World__TransactionEdge = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, leaderboard_version?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, payout?: any | null, demand_pct?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, leaderboard_version?: any | null, leaderboard_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
 
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1794,6 +1785,7 @@ export const ConfigDocument = `
         initialized
         paused
         leaderboard_version
+        leaderboard_duration
         paper_fee
         treasury_fee_pct
         treasury_balance
@@ -1853,13 +1845,12 @@ export const ConfigDocument = `
         attack
         defense
         speed
-        payout
-        demand_pct
         rep_pay
         rep_run
         rep_fight
         min_rep
         max_rep
+        payout
       }
     }
   }

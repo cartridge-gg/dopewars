@@ -2,6 +2,7 @@ import { LoadingModal, MakeItRain, QuitGameModal, RefreshGameModal } from "@/com
 import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
 import { DeployingModal } from "@/components/wallet/DeployingModal";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
+import { useAutoBurner } from "@/dojo/hooks/useAutoBurner";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
@@ -13,8 +14,8 @@ import NextHead from "next/head";
 import { useEffect } from "react";
 import theme from "../theme";
 
-// should avoid mobx memory leaks / GC issue..
 
+// should avoid mobx memory leaks / GC issue..
 import { enableStaticRendering } from "mobx-react-lite";
 enableStaticRendering(typeof window === "undefined");
 
@@ -30,6 +31,8 @@ export default function App({ Component, pageProps }: AppProps) {
       }, 20_000);
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
+
+  useAutoBurner()
 
   return (
     <>

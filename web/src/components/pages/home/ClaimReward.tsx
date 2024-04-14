@@ -2,6 +2,7 @@ import { Gem } from "@/components/icons";
 import { MakeItRain } from "@/components/layout";
 import { useConfigStore, useHallOfFame } from "@/dojo/hooks";
 import { Leaderboard } from "@/generated/graphql";
+import { IsMobile } from "@/utils/ui";
 import { Button } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
@@ -16,6 +17,8 @@ export const ClaimReward = () => {
   const [claimable, setClaimable] = useState<Leaderboard[]>([]);
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isRainning, setIsRainning] = useState(false);
+
+  const isMobile = IsMobile()
 
   useEffect(() => {
     if (!hallOfFame) {
@@ -52,7 +55,7 @@ export const ClaimReward = () => {
             }}
             onClick={() => setIsClaimModalOpen(true)}
           >
-            <Gem /> Claim
+            <Gem /> {!isMobile ? 'Claim' : ""} 
           </Button>
           <ClaimModal claimable={claimable[0]} isOpen={isClaimModalOpen} onClose={onClose} />
         </>

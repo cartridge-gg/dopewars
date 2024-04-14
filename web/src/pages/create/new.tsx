@@ -15,7 +15,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 const New = observer(() => {
-  const { router } = useRouterContext();
+  const { router, isRyoDotGame } = useRouterContext();
 
   const { account } = useAccount();
 
@@ -227,7 +227,7 @@ const New = observer(() => {
             />
           </HStack>
 
-          {!isMobile && config?.ryo.paper_fee > 0 && (
+          {!isRyoDotGame && !isMobile && config?.ryo.paper_fee > 0 && (
             <Card p={3} >
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">

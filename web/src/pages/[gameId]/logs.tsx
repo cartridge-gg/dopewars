@@ -327,7 +327,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
     : "";
 
   const action = lastEncouterResult?.action;
-  const totalHpLoss =  lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0)
+  const totalHpLoss =  lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0
 
   return (
     <FightLine
@@ -336,7 +336,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
       text={`Meet ${encounter.encounter} Lvl ${encounter.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
-      consequence={`-${totalHpLoss} HP`}
+      consequence={ totalHpLoss > 0  ? `-${totalHpLoss} HP` : ''}
       action={action}
       color="yellow.400"
     />

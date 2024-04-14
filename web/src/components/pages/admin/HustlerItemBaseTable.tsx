@@ -24,7 +24,7 @@ export const HustlerItemBaseTable = observer(() => {
       width="100%"
       columns={columns}
       data={config?.items || []}
-      rowKeyField={"id"}
+      rowKeyField={"name"}
       editingMode={EditingMode.None}
       childComponents={editComponents}
     />

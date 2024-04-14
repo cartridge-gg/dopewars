@@ -31,9 +31,10 @@ import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiers
 import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 
-export default function Admin() {
+const Admin = () => {
   const { router } = useRouterContext();
   const { account } = useAccount();
+  const { configStore } = useDojoContext();
 
   return (
     <Layout isSinglePanel={true}>
@@ -45,6 +46,11 @@ export default function Admin() {
           <Tab>ITEMS</Tab>
           <Tab>ENCOUNTERS</Tab>
           <Tab>LAYOUTS</Tab>
+          {/* <Cigarette
+            onClick={() => {
+              configStore.init();
+            }}
+          /> */}
         </TabList>
 
         <TabPanels mt={0} maxH="calc(100vh - 300px)" overflowY="scroll">
@@ -54,6 +60,7 @@ export default function Admin() {
               <RyoPauseCard />
               <TreasuryClaimCard />
               <RyoFeeCard />
+              <RyoLeaderboardDurationCard />
             </Flex>
           </TabPanel>
 
@@ -104,7 +111,9 @@ export default function Admin() {
       </Tabs>
     </Layout>
   );
-}
+};
+
+export default observer(Admin);
 
 const RyoAddressCard = observer(() => {
   const {
@@ -199,6 +208,48 @@ const RyoPauseCard = observer(() => {
           </Button>
         </ChildrenOrConnect>
       </CardFooter>
+    </Card>
+  );
+});
+
+const RyoLeaderboardDurationCard = observer(() => {
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const [duration, setDuration] = useState(config?.ryo.leaderboard_duration);
+
+  const { setLeaderboardDuration, isPending } = useSystems();
+
+  const updateLeaderboardDuration = async () => {
+    await setLeaderboardDuration(duration);
+    await configStore.init();
+  };
+
+  return (
+    <Card p={3}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        LEADERBOARD
+      </CardHeader>
+      <CardBody>
+        <HStack>
+          <Text w="180px" flexShrink={0}>
+            DURATION (sec)
+          </Text>
+          <Input
+            w="100px"
+            value={duration}
+            onChange={(e) => {
+              setDuration(e.target.value);
+            }}
+          />
+          <ChildrenOrConnect>
+            <Button isLoading={isPending} onClick={updateLeaderboardDuration}>
+              <Wallet />
+            </Button>
+          </ChildrenOrConnect>
+        </HStack>
+      </CardBody>
+      <CardFooter></CardFooter>
     </Card>
   );
 });

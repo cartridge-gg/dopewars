@@ -19,15 +19,16 @@ export const walletInstallLinks = {
 export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
 function rpc(chain: Chain) {
+  //console.log(chain)
   return {
-    nodeUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT,
+    nodeUrl: chain.rpcUrls.default.http[0],
   };
 }
 
 export function StarknetProvider({ children }: { children: ReactNode }) {
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
-    recommended: [argent(), braavos(), injected({id:'dojoburner'})],
+    recommended: [argent(), braavos(), injected({ id: "dojoburner" })],
     // Hide recommended connectors if the user has any connector installed.
     includeRecommended: "always",
     // Randomize the order of the connectors.

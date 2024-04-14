@@ -5,6 +5,7 @@ import { Header } from "./Header";
 
 import { IsMobile } from "@/utils/ui";
 import { CrtEffect } from "./CrtEffect";
+import { Pending } from "./Pending";
 
 interface LayoutProps {
   CustomLeftPanel?: React.FC;
@@ -61,6 +62,7 @@ export const Layout = ({
         <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
       </Flex>
       <CrtEffect />
+      <Pending />
     </>
   );
 };

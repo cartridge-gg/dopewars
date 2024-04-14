@@ -18,6 +18,7 @@ query Config {
         initialized
         paused
         leaderboard_version
+        leaderboard_duration
         paper_fee
         treasury_fee_pct
         treasury_balance
@@ -87,13 +88,12 @@ query Config {
         attack
         defense
         speed
-        payout
-        demand_pct
         rep_pay
         rep_run
         rep_fight
         min_rep
         max_rep
+        payout
       }
     }
   }

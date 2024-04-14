@@ -38,7 +38,7 @@ export const GameConfigTable = observer(() => {
 
   const table = useTable({
     onDispatch: (action) => {
-      console.log(action);
+      // console.log(action);
 
       if (action.type === ActionType.UpdateEditorValue) {
         setData([

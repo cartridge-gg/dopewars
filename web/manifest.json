@@ -1262,8 +1262,8 @@
     {
       "kind": "DojoContract",
       "address": "0x77cfc8df2e0d60abf3ad87a9773a91f72cde6b65a860fe98cd55c4900ce29ea",
-      "class_hash": "0x6d7bc9b15c3ee62d3c114089b4e64baafd3c1df44036a2b68ee7451c0b401f2",
-      "original_class_hash": "0x6d7bc9b15c3ee62d3c114089b4e64baafd3c1df44036a2b68ee7451c0b401f2",
+      "class_hash": "0x517218b8d3fc4b967b60c7937bfadf5ff82f60d87a6b0022e6ace397366780c",
+      "original_class_hash": "0x517218b8d3fc4b967b60c7937bfadf5ff82f60d87a6b0022e6ace397366780c",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -1630,6 +1630,78 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::encounters::Encounters",
+          "variants": [
+            {
+              "name": "Cops",
+              "type": "()"
+            },
+            {
+              "name": "Gang",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::encounters::EncounterConfig",
+          "members": [
+            {
+              "name": "id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "encounter",
+              "type": "rollyourown::config::encounters::Encounters"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "attack",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "defense",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "speed",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_pay",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_run",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "rep_fight",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "min_rep",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "max_rep",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::config::config::IConfig",
           "items": [
@@ -1677,6 +1749,18 @@
                 {
                   "name": "drug_config",
                   "type": "rollyourown::config::drugs::DrugConfig"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "update_encounter_config",
+              "inputs": [
+                {
+                  "name": "encounter_config",
+                  "type": "rollyourown::config::encounters::EncounterConfig"
                 }
               ],
               "outputs": [],
@@ -1908,8 +1992,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
-      "class_hash": "0xbf7d314d7ab2b6d9a51f772abe004582317537e8ce70ca7b2380d2f7a65f52",
-      "original_class_hash": "0xbf7d314d7ab2b6d9a51f772abe004582317537e8ce70ca7b2380d2f7a65f52",
+      "class_hash": "0x7e612582da22cc4cc56266e3019c30063d0d6a204b1b607fd3ff8f5655620d4",
+      "original_class_hash": "0x7e612582da22cc4cc56266e3019c30063d0d6a204b1b607fd3ff8f5655620d4",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -3411,15 +3495,10 @@
           "name": "payout",
           "type": "u32",
           "key": false
-        },
-        {
-          "name": "demand_pct",
-          "type": "u8",
-          "key": false
         }
       ],
-      "class_hash": "0x5160839064ca0d37a8702c95d6c64cb2ce43c018e6d574c1c66b5f528558ae7",
-      "original_class_hash": "0x5160839064ca0d37a8702c95d6c64cb2ce43c018e6d574c1c66b5f528558ae7",
+      "class_hash": "0x6096229c6671813a20e47b67831e5f23ff2ea92ec0a81fd2d2d70253d1b8a0b",
+      "original_class_hash": "0x6096229c6671813a20e47b67831e5f23ff2ea92ec0a81fd2d2d70253d1b8a0b",
       "abi": [
         {
           "type": "impl",
@@ -3663,10 +3742,6 @@
             {
               "name": "payout",
               "type": "core::integer::u32"
-            },
-            {
-              "name": "demand_pct",
-              "type": "core::integer::u8"
             }
           ]
         },

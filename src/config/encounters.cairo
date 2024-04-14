@@ -67,11 +67,7 @@ struct EncounterConfig {
     max_rep: u8,
     //
     payout: u32,
-    demand_pct: u8,
-    // crit_rate:u8,
-    // incorruptible: bool,
-    // challenger: bool,
-    // challenger: bool,
+    
 }
 
 //
@@ -137,13 +133,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
         let rand_id = *encounters_ids.at(rand_index.try_into().unwrap());
 
         let mut encounter = get!(game_store.world, (rand_id), (EncounterConfig));
-
-        // set random demand_pct
-        encounter.demand_pct = EncounterSpawnerImpl::get_random_demand_pct(ref game_store);
-
-        // set scaling payout
-        encounter.payout = (encounter.level.into() * encounter.level.into() * 3_000) + (game_store.player.turn.into() * 1_000);
-
+            
         encounter
     }
 
@@ -156,8 +146,10 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
 
         if rand_0_99 < 1 {
             69
-        } else if rand_0_99 < 20 {
+        } else if rand_0_99 < 10 {
             50
+        } else if rand_0_99 < 20 {
+            40
         } else if rand_0_99 < 50 {
             30
         } else {
@@ -183,6 +175,14 @@ impl EncounterImpl of EncounterTrait {
     #[inline(always)]
     fn health_loss(ref self: EncounterConfig, amount: u8) {
         self.health = self.health.sub_capped(amount, 0);
+    }
+
+    fn get_demand_pct(self: EncounterConfig, ref game_store: GameStore) -> u8 {
+        EncounterSpawnerImpl::get_random_demand_pct(ref game_store)
+    }
+
+    fn get_payout(self: EncounterConfig, ref game_store: GameStore) -> u32 {
+        (self.level.into() * self.level.into() * 3_000) + (game_store.player.turn.into() * 1_000)
     }
 
 }
@@ -252,7 +252,6 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 max_rep: (i * 15) + 25,
                 //
                 payout: 0, // overrided
-                demand_pct: 0, // overrided
         };
 
         EncounterConfigImpl::add_encounter(world,ref encounter, ref game_config);
@@ -287,7 +286,6 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
                 max_rep: (i * 15) + 25,
                 //
                 payout: 0, // overrided
-                demand_pct: 0, // overrided
         };
 
         EncounterConfigImpl::add_encounter(world,ref encounter, ref game_config);
@@ -297,7 +295,6 @@ fn initialize_encounter_config(world: IWorldDispatcher) {
     // save encounter_count
     GameConfigImpl::set(world, game_config);
 
-    // initialize_encounter_config_extra(world);
 }
 
 fn initialize_encounter_config_extra(world: IWorldDispatcher) {
@@ -311,20 +308,19 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             encounter: Encounters::Cops,
             //
             level: 1,
-            health: 16,
-            attack: 8,
-            defense: 5,
-            speed : 2,
+            health: 15,
+            attack: 15,
+            defense: 15,
+            speed : 15,
             //
-            rep_pay: 10,  
-            rep_run: 0,  
+            rep_pay: 5,  
+            rep_run: 1,  
             rep_fight: 2,
             // 
             min_rep: 0,
             max_rep: 40,
             //
             payout: 0, // overrided
-            demand_pct: 0, // overrided
      };
 
 
@@ -332,27 +328,47 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             id:0,
             encounter: Encounters::Cops,
             //
-            level: 3,
-            health: 26,
-            attack: 16,
-            defense: 11,
-            speed : 14,
+            level: 2,
+            health: 25,
+            attack: 25,
+            defense: 25,
+            speed : 25,
             //
             rep_pay: 6,  
             rep_run: 2,  
             rep_fight: 4,
             // 
-            min_rep: 40,
+            min_rep: 30,
+            max_rep: 70,
+            //
+            payout: 0, // overrided
+        };
+
+        let mut cops3 = EncounterConfig {
+            id:0,
+            encounter: Encounters::Cops,
+            //
+            level: 3,
+            health: 35,
+            attack: 35,
+            defense: 35,
+            speed : 25,
+            //
+            rep_pay: 7,  
+            rep_run: 3,  
+            rep_fight: 5,
+            // 
+            min_rep: 50,
             max_rep: 100,
             //
             payout: 0, // overrided
-            demand_pct: 0, // overrided
         };
     
 
    
     EncounterConfigImpl::add_encounter(world,ref cops1, ref game_config );
     EncounterConfigImpl::add_encounter(world,ref cops2, ref game_config );
+    EncounterConfigImpl::add_encounter(world,ref cops3, ref game_config );
 
 
     //////// GANGS ////////
@@ -361,47 +377,66 @@ fn initialize_encounter_config_extra(world: IWorldDispatcher) {
             id:0,
             encounter: Encounters::Gang,
             //
-            level: 2,
-            health: 40,
-            attack: 25,
+            level: 1,
+            health: 15,
+            attack: 15,
             defense: 15,
-            speed : 20,
+            speed : 15,
             //
-            rep_pay: 10,  
-            rep_run: 0,  
-            rep_fight: 2,
+            rep_pay: 12,  
+            rep_run: 2,  
+            rep_fight: 3,
             // 
             min_rep: 0,
             max_rep: 40,
             //
             payout: 0, // overrided
-            demand_pct: 0, // overrided
         };
 
    let mut gang2 = EncounterConfig {
             id:0,
             encounter: Encounters::Gang,
             //
-            level: 4,
-            health: 60,
-            attack: 45,
+            level: 2,
+            health: 25,
+            attack: 25,
             defense: 25,
             speed : 35,
             //
-            rep_pay: 6,  
+            rep_pay: 5,  
             rep_run: 2,  
             rep_fight: 4,
             // 
-            min_rep: 40,
+            min_rep: 30,
+            max_rep: 80,
+            //
+            payout: 0, // overrided
+        };
+
+     let mut gang3 = EncounterConfig {
+            id:0,
+            encounter: Encounters::Gang,
+            //
+            level: 4,
+            health: 45,
+            attack: 45,
+            defense: 45,
+            speed : 45,
+            //
+            rep_pay: 4,  
+            rep_run: 3,  
+            rep_fight: 6,
+            // 
+            min_rep: 60,
             max_rep: 100,
             //
             payout: 0, // overrided
-            demand_pct: 0, // overrided
         };
 
 
     EncounterConfigImpl::add_encounter(world,ref gang1, ref game_config );
     EncounterConfigImpl::add_encounter(world,ref gang2, ref game_config );
+    EncounterConfigImpl::add_encounter(world,ref gang3, ref game_config );
 
     // save encounter_count
     GameConfigImpl::set(world, game_config);

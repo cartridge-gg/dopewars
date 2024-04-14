@@ -363,6 +363,78 @@ export const ABI = [
     ]
   },
   {
+    "type": "enum",
+    "name": "rollyourown::config::encounters::Encounters",
+    "variants": [
+      {
+        "name": "Cops",
+        "type": "()"
+      },
+      {
+        "name": "Gang",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "rollyourown::config::encounters::EncounterConfig",
+    "members": [
+      {
+        "name": "id",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "encounter",
+        "type": "rollyourown::config::encounters::Encounters"
+      },
+      {
+        "name": "level",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "health",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "attack",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "defense",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "speed",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_pay",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_run",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "rep_fight",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "min_rep",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "max_rep",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "payout",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
     "type": "interface",
     "name": "rollyourown::config::config::IConfig",
     "items": [
@@ -410,6 +482,18 @@ export const ABI = [
           {
             "name": "drug_config",
             "type": "rollyourown::config::drugs::DrugConfig"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "update_encounter_config",
+        "inputs": [
+          {
+            "name": "encounter_config",
+            "type": "rollyourown::config::encounters::EncounterConfig"
           }
         ],
         "outputs": [],

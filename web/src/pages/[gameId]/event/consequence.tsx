@@ -51,7 +51,6 @@ const Consequence = () => {
   if (!router.isReady || !game || !gameEvents || !encounterResult || !outcomeInfos) {
     return <></>;
   }
-  console.log(encounterResult)
 
   return (
     <>
@@ -124,7 +123,7 @@ const Consequence = () => {
                         />
                       )}
 
-                      {encounterResult.drugLoss[idx] && (
+                      {encounterResult.drugLoss[idx] ? (
                         <Line
                           icon={configStore
                             .getDrugById(encounterResult.drugId)
@@ -136,6 +135,8 @@ const Consequence = () => {
                             </Text>
                           }
                         />
+                      ) : (
+                        <></>
                       )}
                     </>
                   );

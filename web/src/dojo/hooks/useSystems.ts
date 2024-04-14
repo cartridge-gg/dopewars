@@ -1,4 +1,4 @@
-import { DrugConfig, GameConfig } from "@/generated/graphql";
+import { DrugConfig, EncounterConfig, GameConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
@@ -26,9 +26,11 @@ export interface SystemsInterface {
   claimTreasury: () => Promise<SystemExecuteResult>;
   setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
   setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
+  setLeaderboardDuration: (duration: number) => Promise<SystemExecuteResult>;
   // config
   updateGameConfig: (gameConfig: GameConfig) => Promise<SystemExecuteResult>;
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
+  updateEncounterConfig: (encounterConfig: EncounterConfig) => Promise<SystemExecuteResult>;
 
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
@@ -112,11 +114,11 @@ export const useSystems = (): SystemsInterface => {
           tx = await dojoProvider.executeMulti(account!, params)
         }
 
-        toast({
-          message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
-          duration: 5_000,
-          isError: false
-        })
+        // toast({
+        //   message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
+        //   duration: 5_000,
+        //   isError: false
+        // })
 
         // chill
         await sleep(500);
@@ -278,7 +280,7 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
 
-      const {  hash, events, parsedEvents } = await executeAndReceipt(
+      const { hash, events, parsedEvents } = await executeAndReceipt(
         {
           contractName: "rollyourown::systems::game::game",
           functionName: "decide",
@@ -413,6 +415,28 @@ export const useSystems = (): SystemsInterface => {
   );
 
 
+  const setLeaderboardDuration = useCallback(
+    async (duration: number) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::systems::ryo::ryo",
+          functionName: "set_leaderboard_duration",
+          callData: [duration],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
+
+
   const updateGameConfig = useCallback(
     async (gameConfig: GameConfig) => {
 
@@ -455,6 +479,33 @@ export const useSystems = (): SystemsInterface => {
   //
   //
   //
+
+  const updateEncounterConfig = useCallback(
+    async (encounterConfig: EncounterConfig) => {
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(
+        {
+          contractName: "rollyourown::config::config::config",
+          functionName: "update_encounter_config",
+          callData: [encounterConfig],
+        }
+      );
+
+      return {
+        hash,
+      };
+
+    },
+    [executeAndReceipt],
+  );
+
+
+
+  //
+  //
+  //
+
+
 
 
   const feedLeaderboard = useCallback(
@@ -506,9 +557,11 @@ export const useSystems = (): SystemsInterface => {
     setPaused,
     setPaperFee,
     setTreasuryFeePct,
+    setLeaderboardDuration,
     //
     updateGameConfig,
     updateDrugConfig,
+    updateEncounterConfig,
     //
     feedLeaderboard,
     failingTx,

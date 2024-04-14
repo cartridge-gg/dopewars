@@ -9,7 +9,7 @@ import { HeaderButton } from "./HeaderButton";
 import { MediaPlayer } from "./MediaPlayer";
 
 export const MobileMenu = ({ ...props }: StyleProps) => {
-  const { gameId } = useRouterContext();
+  const { gameId, isRyoDotGame } = useRouterContext();
   const { uiStore } = useDojoContext();
   return (
     <>
@@ -28,18 +28,20 @@ export const MobileMenu = ({ ...props }: StyleProps) => {
               <ProfileLinkMobile />
               <ConnectButtonMobile />
 
-              <MenuItem>
-                <ChainSelector canChange={!gameId} />{"   "}
-                <Burners />{" "}
-                <Predeployed />
-              </MenuItem>
+              {!isRyoDotGame && (
+                <MenuItem>
+                  <ChainSelector canChange={!gameId} />
+                  {"   "}
+                  <Burners /> <Predeployed />
+                </MenuItem>
+              )}
 
               {gameId && (
                 <>
                   <MenuItem
                     h="48px"
                     onClick={() => {
-                        uiStore.openRefreshGame();
+                      uiStore.openRefreshGame();
                     }}
                   >
                     <Cigarette mr={2} /> IM LOST

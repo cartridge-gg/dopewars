@@ -110,8 +110,8 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
                 encounter_id: encounter.id,
-                demand_pct: encounter.demand_pct,
-                payout: encounter.payout,
+                demand_pct: encounter.get_demand_pct(ref game_store),
+                payout: encounter.get_payout(ref game_store),
             }
         )));
 
@@ -200,7 +200,7 @@ fn on_pay(
         Encounters::Cops => {
             // pay demand_pct drugs
             let mut drug_unpacked = game_store.drugs.get();
-            let quantity_lost = drug_unpacked.quantity.pct(encounter.demand_pct.into());
+            let quantity_lost = drug_unpacked.quantity.pct(encounter.get_demand_pct(ref game_store).into());
            
             // can't pay
             assert(quantity_lost > 0, 'you cant pay!');
@@ -214,7 +214,7 @@ fn on_pay(
         },
         Encounters::Gang => {
             // calc cash_loss
-            result.cash_loss = game_store.player.cash.pct(encounter.demand_pct.into());
+            result.cash_loss = game_store.player.cash.pct(encounter.get_demand_pct(ref game_store).into());
 
             // can't pay
             assert(result.cash_loss > 0, 'you cant pay!');
@@ -361,7 +361,7 @@ fn on_fight(
     result.cash_earnt = if game_store.player.is_dead() {
         0
     } else {
-        encounter.payout
+        encounter.get_payout(ref game_store)
     };
 
     // player get money
@@ -417,6 +417,13 @@ struct EncounterRaceWinResult {
 #[generate_trait]
 impl ResolutionImpl of ResolutionTrait {
 
+    fn plus_or_less_random_pct(value: u8, pct: u8, ref randomizer: Random) -> u8 {
+        let value_pct = value.pct(pct.into());
+        let rand = randomizer.between::<u8>(0, value_pct * 2);
+
+        value + rand - value_pct
+    }
+
     fn race(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> RaceResult {
         let rand_player = randomizer.between::<u8>(0,game_store.items.speed());
         let rand_encounter = randomizer.between::<u8>(0,encounter.speed);
@@ -428,7 +435,11 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn hustler_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let hustler_attack:u8 = game_store.items.attack();
+        let hustler_attack:u8 = ResolutionImpl::plus_or_less_random_pct(
+            game_store.items.attack(),
+            20,
+            ref randomizer
+        );
 
         let dmg_shield = hustler_attack.pct(encounter.defense.into());
         let dmg_dealt = hustler_attack - dmg_shield;
@@ -444,7 +455,13 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let encounter_attack = encounter.attack / 3; // TODO: config ***
+        let mut encounter_attack = ResolutionImpl::plus_or_less_random_pct(
+            encounter.attack,
+            20,
+            ref randomizer
+        );
+
+        encounter_attack = encounter.attack / 3; // TODO: config ***
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
@@ -462,7 +479,13 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
-        let encounter_attack = encounter.attack / 5; // TODO: config ***
+        let mut encounter_attack = ResolutionImpl::plus_or_less_random_pct(
+            encounter.attack,
+            20,
+            ref randomizer
+        );
+
+        encounter_attack = encounter.attack / 5; // TODO: config ***
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());

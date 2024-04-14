@@ -22,7 +22,7 @@ interface HeaderProps {
 export const Header = observer(({ back }: HeaderProps) => {
   const isMobile = IsMobile();
 
-  const { router, gameId } = useRouterContext();
+  const { router, gameId, isAdmin } = useRouterContext();
 
   const { account } = useAccount();
 
@@ -47,7 +47,7 @@ export const Header = observer(({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        {!isMobile && (
+        {isAdmin && (
           <>
             <Burners />
             <Predeployed />

@@ -1,6 +1,6 @@
 use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl},
-    game::{GameConfig}, drugs::{DrugConfig}
+    game::{GameConfig}, drugs::{DrugConfig}, encounters::{EncounterConfig},
 };
 
 
@@ -11,9 +11,9 @@ trait IConfig<T> {
     fn get_config(self: @T) -> Config;
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
+    fn update_encounter_config(self: @T, encounter_config: EncounterConfig);
 
-// fn update_drug_config_meta(self: @T);
-// ...
+
 }
 
 #[derive(Drop, Serde)]
@@ -52,7 +52,7 @@ mod config {
                 initialize_clothes_tiers_config, initialize_feet_tiers_config,
                 initialize_transport_tiers_config,
             },
-            encounters::{initialize_encounter_config, EncounterConfig, Encounters},
+            encounters::{initialize_encounter_config,initialize_encounter_config_extra, EncounterConfig, Encounters},
         },
         packing::{
             game_store_layout::{
@@ -104,6 +104,8 @@ mod config {
            
             // encounters
             initialize_encounter_config(world);
+            initialize_encounter_config_extra(world);
+
         }
 
         fn get_config(self: @ContractState) -> Config {
@@ -184,6 +186,30 @@ mod config {
             set!(self.world(), (to_update));
         }
 
+        fn update_encounter_config(self: @ContractState, encounter_config: EncounterConfig) {
+            self.assert_caller_is_owner();
+            
+            let mut to_update = get!(self.world(), (encounter_config.id), (EncounterConfig));
+            
+            to_update.encounter = encounter_config.encounter;
+          
+            to_update.level = encounter_config.level;
+            to_update.health = encounter_config.health;
+            to_update.attack = encounter_config.attack;
+            to_update.defense = encounter_config.defense;
+            to_update.speed = encounter_config.speed;
+
+            to_update.rep_pay = encounter_config.rep_pay;
+            to_update.rep_run = encounter_config.rep_run;
+            to_update.rep_fight = encounter_config.rep_fight;
+
+            to_update.min_rep = encounter_config.min_rep;
+            to_update.max_rep = encounter_config.max_rep;
+
+            to_update.payout = encounter_config.payout;
+
+            set!(self.world(), (to_update));
+        }
         
     }
 

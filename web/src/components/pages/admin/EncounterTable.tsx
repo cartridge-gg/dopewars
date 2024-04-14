@@ -23,7 +23,7 @@ const columns = [
   //
   { key: "min_rep", title: "min_rep", dataType: DataType.Number },
   { key: "max_rep", title: "max_rep", dataType: DataType.Number },
-  // //
+  // 
   // { key: "payout", title: "payout", dataType: DataType.Number },
   // { key: "demand_pct", title: "demand_pct", dataType: DataType.Number },
 
@@ -35,13 +35,12 @@ export const EncounterTable = observer(() => {
     configStore: { config },
   } = useDojoContext();
 
-  const { updateDrugConfig } = useSystems();
+  const { updateEncounterConfig } = useSystems();
 
   const [data, setData] = useState(config?.encounters || []);
 
   const table = useTable({
     onDispatch: (action) => {
-      console.log(action);
 
       // triggered on cell modifs
       if (action.type === ActionType.UpdateEditorValue) {
@@ -61,15 +60,13 @@ export const EncounterTable = observer(() => {
         const update = data.find((i) => i.id === action.rowKeyValue);
         if (!update) return;
 
-        // const newValue = {
-        //   drug: update.drug_id,
-        //   drug_id: update.drug_id,
-        //   base: update.base,
-        //   step: update.step,
-        //   weight: update.weight,
-        //   name: shortString.encodeShortString(update.name),
-        // };
-        // updateDrugConfig(newValue);
+        const newValue = {
+          ...update,
+          encounter: update.encounter === "Cops" ? 0 : 1,
+        };
+        delete newValue.image;
+      //  console.log(newValue)
+        updateEncounterConfig(newValue);
       }
 
       if (action.type === ActionType.CloseRowEditors) {

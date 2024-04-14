@@ -13,6 +13,8 @@ type RouterContext = {
   location: LocationConfigFull | undefined,
   drug: DrugConfigFull | undefined,
   tradeDirection: TradeDirection | undefined,
+  isAdmin: boolean,
+  isRyoDotGame: boolean,
 }
 
 export const useRouterContext = (): RouterContext => {
@@ -26,6 +28,8 @@ export const useRouterContext = (): RouterContext => {
     location: undefined,
     drug: undefined,
     tradeDirection: undefined,
+    isAdmin: false,
+    isRyoDotGame: false
   });
 
   useEffect(() => {
@@ -39,6 +43,8 @@ export const useRouterContext = (): RouterContext => {
       (router.query.tradeDirection as string) === "buy" ? TradeDirection.Buy : TradeDirection.Sell
       : undefined;
 
+    const isAdmin = router.pathname.startsWith('/admin')
+    const isRyoDotGame = window.location.host === "ryo.game"
 
     const ctx = {
       router,
@@ -47,6 +53,8 @@ export const useRouterContext = (): RouterContext => {
       location,
       drug,
       tradeDirection,
+      isAdmin,
+      isRyoDotGame
     }
 
     setContext(ctx)
