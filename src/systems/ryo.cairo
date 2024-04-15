@@ -59,7 +59,7 @@ mod ryo {
             ryo_config.paused = false;
            
             ryo_config.leaderboard_version = 1;
-            ryo_config.leaderboard_duration = FEW_MIN; // ONE_WEEK
+            ryo_config.leaderboard_duration = 8 * ONE_HOUR; // ONE_WEEK
            
             ryo_config.paper_fee = 100; // in ether
             ryo_config.treasury_fee_pct = 5;

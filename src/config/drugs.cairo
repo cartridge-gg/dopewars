@@ -144,7 +144,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Speed,
             drug_id: Drugs::Speed.into(),
             base: 150,
-            step: 4,
+            step: 8,
             weight: 14,
             name: Bytes16Impl::from('Speed')
         }
@@ -156,7 +156,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Weed,
             drug_id: Drugs::Weed.into(),
             base: 402,
-            step: 8,
+            step: 16,
             weight: 19,
             name: Bytes16Impl::from('Weed')
         }
@@ -168,7 +168,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Shrooms,
             drug_id: Drugs::Shrooms.into(),
             base: 906,
-            step: 16,
+            step: 32,
             weight: 27,
             name: Bytes16Impl::from('Shrooms')
         }
@@ -180,7 +180,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Acid,
             drug_id: Drugs::Acid.into(),
             base: 1914,
-            step: 32,
+            step: 64,
             weight: 37,
             name: Bytes16Impl::from('Acid')
         }
@@ -192,7 +192,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Ketamine,
             drug_id: Drugs::Ketamine.into(),
             base: 3930,
-            step: 64,
+            step: 128,
             weight: 52,
             name: Bytes16Impl::from('Ketamine')
         }
@@ -204,7 +204,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Heroin,
             drug_id: Drugs::Heroin.into(),
             base: 7962,
-            step: 128,
+            step: 256,
             weight: 72,
             name: Bytes16Impl::from('Heroin')
         }
@@ -216,7 +216,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
             drug: Drugs::Cocaine,
             drug_id: Drugs::Cocaine.into(),
             base: 16026,
-            step: 256,
+            step: 512,
             weight: 100,
             name: Bytes16Impl::from('Cocaine')
         }
