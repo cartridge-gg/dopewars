@@ -1,5 +1,5 @@
 import { ExternalLink } from "@/components/icons";
-import { useDojoContext } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import {
   Button,
   HStack,
@@ -19,6 +19,7 @@ import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
 
 export const ConnectModal = observer(() => {
   const { connect, connectors } = useConnect();
+  const { isRyoDotGame } = useRouterContext();
 
   const {
     chains: { selectedChain },
@@ -55,6 +56,10 @@ export const ConnectModal = observer(() => {
               if (isKatana && !(isBurner || isPredeployed)) {
                 // not burner or predeployed on katana
                 return null;
+              }
+
+              if (isRyoDotGame && isPredeployed) {
+                return null
               }
 
               return (
