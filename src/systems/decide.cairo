@@ -209,6 +209,7 @@ mod decide {
                 },
                 Action::Accept => {
                     game.scaling_factor = randomizer.between::<u128>(10_000, 30_000_00);
+                    player.is_drugged = true;
                     set!(world, (game));
 
                     match player.status {
