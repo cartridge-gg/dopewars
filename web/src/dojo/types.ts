@@ -40,13 +40,16 @@ export enum PlayerStatus {
   Normal = "Normal",
   BeingMugged = "BeingMugged",
   BeingArrested = "BeingArrested",
-  AtPawnshop = "AtPawnshop"
+  AtPawnshop = "AtPawnshop",
+  BeingDrugged = "BeingDrugged",
 }
 
 export enum Action {
   Run,
   Pay,
   Fight,
+  Accept,
+  Decline
 }
 
 export enum Outcome {
@@ -55,6 +58,7 @@ export enum Outcome {
   Escaped,
   Captured,
   Victorious,
+  Drugged,
 }
 
 export enum GameMode {

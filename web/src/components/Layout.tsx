@@ -35,6 +35,27 @@ const Layout = ({
   rigthPanelScrollable = true,
   footer,
 }: LayoutProps) => {
+  const isUserTrippin = false;
+  const defaultBg = "gray.100"; // A standard, non-trippy background
+  const trippyBg = "linear-gradient(45deg, #ff6fd8, #d783ff, #8a78ff, #78cdff)"; 
+
+  const container = (
+
+<Container position="relative" px={["10px", "16px"]} py="16px">
+{!isSinglePanel &&
+(!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
+<RightPanel
+flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
+footer={footer}
+isSinglePanel={isSinglePanel}
+rigthPanelMaxH={rigthPanelMaxH}
+rigthPanelScrollable={rigthPanelScrollable}
+>
+{children}
+</RightPanel>
+</Container>
+  )
+
   return (
     <>
       <Flex
@@ -43,24 +64,71 @@ const Layout = ({
         boxSize="full"
         as={motion.div}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <Header back={showBack} />
-        <Container position="relative" px={["10px", "16px"]} py="16px">
-          {!isSinglePanel &&
-            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
-          <RightPanel
-            flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
-            footer={footer}
-            isSinglePanel={isSinglePanel}
-            rigthPanelMaxH={rigthPanelMaxH}
-            rigthPanelScrollable={rigthPanelScrollable}
-          >
-            {children}
-          </RightPanel>
-        </Container>
+        animate={{ opacity: 1}}
+        bg={isUserTrippin ? trippyBg : defaultBg}
+        bgSize="300% 300%" // Enlarge background size for better gradient effect
+        style={{
+          backgroundSize: '300% 300%',
+          animation: isUserTrippin ? 'slide 15s linear infinite' : 'none',
+        }}
 
-        <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
+      >
+        {isUserTrippin ? (
+                    <motion.div
+                    animate={{
+                      x: ["0%", "3%", "0%", "-3%", "0%"],
+                      filter: [
+                        "hue-rotate(0deg) brightness(120%)",
+                        "hue-rotate(60deg) brightness(100%)",
+                        "hue-rotate(180deg) brightness(180%)",
+                        "hue-rotate(300deg) brightness(150%)",
+                        "hue-rotate(240deg) brightness(140%)",
+                        "hue-rotate(120deg) brightness(200%)",
+                        "hue-rotate(360deg) brightness(100%)"
+                      ]
+                    }}
+                    transition={{
+                      duration: 3,
+                      ease: "linear",
+                      times: [0, 0.25, 0.5, 0.75, 1],
+                      repeat: Infinity,
+                      repeatDelay: 0
+                    }}
+                  >
+        <Header back={showBack} />
+        </motion.div>
+        ) : (
+        <Header back={showBack} />
+        )}
+        {isUserTrippin ? 
+        (
+          <motion.div
+          animate={{
+            scale: [1, 1.05, 1.1, 1.05, 1],
+            x: ["0%", "3%", "0%", "-3%", "0%"],
+            filter: [
+              "hue-rotate(0deg) brightness(100%)",
+              "hue-rotate(60deg) brightness(120%)",
+              "hue-rotate(180deg) brightness(150%)",
+              "hue-rotate(300deg) brightness(180%)",
+              "hue-rotate(240deg) brightness(200%)",
+              "hue-rotate(120deg) brightness(140%)",
+              "hue-rotate(360deg) brightness(100%)"
+            ]
+          }}
+          transition={{
+            duration: 3,
+            ease: "linear",
+            times: [0, 0.25, 0.5, 0.75, 1],
+            repeat: Infinity,
+            repeatDelay: 0
+          }}
+        >
+       {container}
+       </motion.div>
+
+ ) : (container)}
+        {/* <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} /> */}
       </Flex>
       <CrtEffect />
     </>

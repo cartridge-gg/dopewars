@@ -30,7 +30,7 @@ import {
   PlayerStatus,
   ShopItemInfo
 } from "./types";
-import { getMuggerResponses, getCopResponses } from "@/responses";
+import { getMuggerResponses, getCopResponses, getGoblinResponses } from "@/responses";
 
 import {
   Trenchcoat,
@@ -225,8 +225,28 @@ export const outcomes: OutcomeInfo[] = [
       getMuggerResponses(Outcome.Victorious, isInitial),
     color: "neon.200",
   },
-
-
+  {
+    title: "You",
+    name: "Took the mushrooms!",
+    type: Outcome.Drugged,
+    status: PlayerStatus.BeingDrugged,
+    imageSrc: "/images/events/paid.png", //update
+    description: "Have fun!",
+    getResponse: (isInitial: boolean) =>
+      getGoblinResponses(Outcome.Drugged, isInitial),
+    color: "yellow.400",
+  },
+  {
+    title: "You",
+    name: "Declined the trip!",
+    type: Outcome.Escaped,
+    status: PlayerStatus.Normal,
+    imageSrc: "/images/events/paid.png",
+    description: "Boring!",
+    getResponse: (isInitial: boolean) =>
+      getGoblinResponses(Outcome.Escaped, isInitial),
+    color: "yellow.400",
+  },
 ];
 
 
@@ -412,6 +432,10 @@ export function getActionName(action: Action): string {
       return "Pay";
     case Action.Run:
       return "Run";
+    case Action.Accept:
+      return "Run";
+    case Action.Decline:
+      return "Run";
     default:
       return "?"
   }
@@ -430,6 +454,8 @@ export function getOutcomeName(outcome: Outcome): string {
       return "Paid";
     case Outcome.Victorious:
       return "Victorious";
+    case Outcome.Drugged:
+      return "Drugged";
     default:
       return  "?"
   }

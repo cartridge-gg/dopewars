@@ -51,6 +51,11 @@ const muggerResponses: Record<Outcome, Record<Encounter, string[]>> = {
     initial: ["Its about sending a message!"],
     repeat: [],
   },
+  // Not needed
+  [Outcome.Drugged]: {
+    initial: ["Its about sending a message!"],
+    repeat: [],
+  },
 };
 
 const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
@@ -112,6 +117,69 @@ const copResponses: Record<Outcome, Record<Encounter, string[]>> = {
     initial: ["Its about sending a message!"],
     repeat: [],
   },
+  // Not needed
+  [Outcome.Drugged]: {
+    initial: [],
+    repeat: [],
+  },
+};
+
+const goblinResponses: Record<Outcome, Record<Encounter, string[]>> = {
+  [Outcome.Escaped]: {
+    initial: [
+      "No? Too wary of the whimsical? Your loss, my cautious friend!",
+      "Ah, refusing the ticket to the stars? Earthbound forever, then!",
+      "No takers? Are you sure? The skies won’t dance by themselves!",
+      "Rejected? But we were about to paint the cosmos! Maybe next time?",
+      "Allergic to fun, are we? Very well, I'll keep the magic to myself!",
+      "Oh, a straight arrow! That’s fine, more giggles for me!",
+    ],
+    repeat: [
+      "Back again to say 'no'? You really are a stick in the mud!",
+      "You sure are consistent! My potions are wasted on the wary.",
+      "Declining again? You're missing out on all the fun, my friend!",
+      "Always the party pooper, eh? Suit yourself, more for me!",
+      "A recurring no? You do like to play it safe. How dully delightful!",
+      "Refusing again? One day, you’ll see what you're missing!",
+    ],
+  },
+  [Outcome.Paid]: {
+    initial: [],
+    repeat: [],
+  },
+  [Outcome.Captured]: {
+    initial: [],
+    repeat: [],
+  },
+  // Not needed
+  [Outcome.Died]: {
+    initial: [],
+    repeat: [],
+  },
+  // Not needed
+  [Outcome.Victorious]: {
+    initial: [],
+    repeat: [],
+  },
+  // Not needed
+  [Outcome.Drugged]: {
+    initial: [
+      "Buckle up, buttercup! Your mind's about to sprout wings and fly!",
+      "Hehehe, sip this and watch the stars do cartwheels around the moon!",
+      "Oh, the fun has just begun! Try not to lose your toes in the clouds!",
+      "Right down the rabbit hole we go! Who said reality can’t be twisted?",
+      "Ever seen your thoughts dance? You're in for a treat!",
+      "Hang onto your hat! Things are gonna get wibbly-wobbly!",
+    ],
+    repeat: [
+      "Back for more magical mischief? Your mind must be thirsty for stars!",
+      "Ah, my favorite guinea pig! Ready for another spin around the cosmos?",
+      "I knew you’d come back! Got a fresh batch of brain ticklers for you!",
+      "You must like your world all swirly-twirly, huh? Let’s stir it up again!",
+      "Round two of brain-twisting fun! Hold on, I'm turning it up a notch!",
+      "Can’t get enough of the magic, can you? Let’s add another splash of chaos!",
+    ],
+  },
 };
 
 function getRandomIdx(length: number): number {
@@ -143,6 +211,10 @@ export function getCopResponses(outcome: Outcome, isInitial: boolean): string {
   return getResponse(outcome, isInitial, copResponses);
 }
 
+export function getGoblinResponses(outcome: Outcome, isInitial: boolean): string {
+  return getResponse(outcome, isInitial, goblinResponses);
+}
+
 
 
 
@@ -152,11 +224,15 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
     [Action.Pay]: [],
     [Action.Run]: [],
     [Action.Fight]: [],
+    [Action.Accept]:[],
+    [Action.Decline]: []
   },
   [PlayerStatus.AtPawnshop]: {
     [Action.Pay]: [],
     [Action.Run]: [],
     [Action.Fight]: [],
+    [Action.Accept]:[],
+    [Action.Decline]: []
   },
   [PlayerStatus.BeingMugged]: {
     [Action.Pay]: [
@@ -206,7 +282,8 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "I'll make an example out of you. Show everyone what happens when they cross us.",
       "Stealing business and disrespecting me in my own neighborhood? Huge mistake."
     ],
-
+    [Action.Accept]:[],
+    [Action.Decline]: []
   },
   [PlayerStatus.BeingArrested]: {
     [Action.Pay]: [
@@ -241,9 +318,25 @@ const encounterSentences: Record<PlayerStatus, Record<Action, string[]>> = {
       "And you call yourself a drug dealer? Pathetic.",
       "My grandma could sling better than you. You're a joke.",
     ],
-
+    [Action.Accept]:[],
+    [Action.Decline]: []
   },
+  [PlayerStatus.BeingDrugged]: {
+    [Action.Run]:[],
+    [Action.Fight]: [],
+    [Action.Pay]:[],
+    [Action.Accept]: [
+      "Oh, ho, ho! You're in for a ride! Buckle up, buttercup, the stars await!",
+      "Zing! Zap! Off you go! Don't tell the elf lords where you got 'em, capisce?",
+      "Right choice, my human friend! These will tickle your soul! And maybe your toes too!",
+    ],
+    [Action.Decline]: [
+      "No? Too scared? Bah! More cosmic journeys for me!",
+      "Ah, you're missing out! These shrooms could make even a troll smile!",
+      "Suit yourself, but when the sky calls, don't come crying for my stash!",
 
+    ],
+  }
 }
 
 export function getSentence(
