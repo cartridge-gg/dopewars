@@ -230,7 +230,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Took the mushrooms!",
     type: Outcome.Drugged,
     status: PlayerStatus.BeingDrugged,
-    imageSrc: "/images/events/paid.png", //update
+    imageSrc: "/images/events/duende-drug.gif", //update
     description: "Have fun!",
     getResponse: (isInitial: boolean) =>
       getGoblinResponses(Outcome.Drugged, isInitial),
@@ -241,7 +241,7 @@ export const outcomes: OutcomeInfo[] = [
     name: "Declined the trip!",
     type: Outcome.Escaped,
     status: PlayerStatus.Normal,
-    imageSrc: "/images/events/paid.png",
+    imageSrc: "/images/events/duende-drug.gif",
     description: "Boring!",
     getResponse: (isInitial: boolean) =>
       getGoblinResponses(Outcome.Escaped, isInitial),
@@ -433,9 +433,9 @@ export function getActionName(action: Action): string {
     case Action.Run:
       return "Run";
     case Action.Accept:
-      return "Run";
+      return "Accept";
     case Action.Decline:
-      return "Run";
+      return "Decline";
     default:
       return "?"
   }

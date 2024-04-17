@@ -26,6 +26,20 @@ type CombatLog = {
   icon?: React.FC;
 };
 
+function getImageSrc(status: PlayerStatus, encounter: Encounter) {
+  const levelSuffix = encounter.level <= 3 ? encounter.level : 3; // Ensures level is capped at 3 for image selection
+  switch (status) {
+    case PlayerStatus.BeingMugged:
+      return `/images/events/muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif`;
+    case PlayerStatus.BeingDrugged: // Assuming this is the case for cops
+      return `/images/events/duende-drug.gif`;
+    case PlayerStatus.BeingArrested:
+      return `/images/events/cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`;
+    default:
+      return `/images/events/default.gif`; // A default case if none of the above
+  }
+}
+
 export default function Decision() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
@@ -79,8 +93,8 @@ export default function Decision() {
         case PlayerStatus.BeingDrugged:
           setPrefixTitle("You stumbled upon a...");
           setTitle("Mysterious Goblin!");
-          setDemand(`The Goblin offers you some magical mushrooms for a journey beyond!`);
-          setSentence(getSentence(PlayerStatus.BeingArrested, Action.Fight));
+          setDemand(`The Goblin offers you some magical mushrooms for a trip!`);
+          setSentence(getSentence(PlayerStatus.BeingDrugged, Action.Accept));
           break;
       }
 
@@ -96,7 +110,7 @@ export default function Decision() {
       playSound(Sounds.Gang);
     }
     if (status == PlayerStatus.BeingDrugged) {
-      playSound(Sounds.Gang); //change sounds to goblin
+      playSound(Sounds.Goblin);
     }
   }, [status]);
 
@@ -184,7 +198,7 @@ export default function Decision() {
               icon: DollarBag,
             });
             setSentence(getSentence(playerEntity!.status, Action.Accept));
-            playSound(Sounds.Pay); //ACCEPT SOUND
+            playSound(Sounds.Mushroom); 
             break;
           case Action.Decline:
             addCombatLog({
@@ -193,7 +207,7 @@ export default function Decision() {
               icon: DollarBag,
             });
             setSentence(getSentence(playerEntity!.status, Action.Decline));
-            playSound(Sounds.Pay); //DECLINE SOUND
+            playSound(Sounds.Run); 
             break;
       }
 
@@ -299,10 +313,7 @@ export default function Decision() {
           sentence={sentence}
           encounter={encounter!}
           playerEntity={playerEntity}
-          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? 
-            `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif` : 
-            `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
-            }`}
+          imageSrc={getImageSrc(playerEntity.status, encounter!)}
           flex={[0, 1]}
           mb={0}
           w="full"
@@ -350,7 +361,7 @@ export default function Decision() {
 
           <Box minH="60px" />
 
-          { PlayerStatus.BeingDrugged ? (
+          { !PlayerStatus.BeingDrugged ? (
                       <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
                       <Button
                         w="full"

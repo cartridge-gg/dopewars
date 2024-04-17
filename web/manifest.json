@@ -949,7 +949,7 @@
     {
       "name": "rollyourown::systems::decide::decide",
       "address": "0x513e8a833b22e0e8fc32635427db3531166742cad938d0473b5f2342b8d670d",
-      "class_hash": "0x4ac0264916c9a5b4a49bfe6a60a3818375a168330839d39543514c1b774e44e",
+      "class_hash": "0x349ca2f6245e8e10a27217351a8d60efb7db31c39c241564564e7fcb0c6f333",
       "abi": [
         {
           "type": "impl",
@@ -1024,6 +1024,14 @@
             },
             {
               "name": "Fight",
+              "type": "()"
+            },
+            {
+              "name": "Accept",
+              "type": "()"
+            },
+            {
+              "name": "Decline",
               "type": "()"
             }
           ]
@@ -1146,6 +1154,10 @@
             {
               "name": "Unsupported",
               "type": "()"
+            },
+            {
+              "name": "Drugged",
+              "type": "()"
             }
           ]
         },
@@ -1214,6 +1226,10 @@
             },
             {
               "name": "AtPawnshop",
+              "type": "()"
+            },
+            {
+              "name": "BeingDrugged",
               "type": "()"
             }
           ]
@@ -1290,7 +1306,7 @@
     {
       "name": "rollyourown::systems::lobby::lobby",
       "address": "0x49edd91ee46f739b4ef1d945fc462c686fbdbb077a99d420f85e7c3d497795f",
-      "class_hash": "0x67ac71fb3b14168447d0b71747e81bd798f8470738f5efd6d56185c20c860be",
+      "class_hash": "0x68c4b58d86350ab7ac1ad2f5ba0479966edb15fe29307e943d94ad1e9327bf9",
       "abi": [
         {
           "type": "impl",
@@ -1686,7 +1702,7 @@
     {
       "name": "rollyourown::systems::shop::shop",
       "address": "0x369cb17d0b420599756dc27c11e5be1eb85182b36cb9b12f923aec7b6959f43",
-      "class_hash": "0x183f9273cebe4a433fbb5735f20caecb0d9e0d69d19418d5b0f73dcbd6d83d3",
+      "class_hash": "0x4cb16f058ea5bff4e67dd767af449590f15ff76716c8f2490700faff2c276e3",
       "abi": [
         {
           "type": "impl",
@@ -2028,7 +2044,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0xc55edfec1f9654a586a1be43c6dc8f1b5b2c6bad8b9e1d5c19d9bbcc135432",
+      "class_hash": "0x1504d5047ed0b505917a749cfdb199225170b38f1c69383478b2c28a8df965a",
       "abi": [
         {
           "type": "impl",
@@ -2348,7 +2364,7 @@
     {
       "name": "rollyourown::systems::travel::travel",
       "address": "0x4c24c51ab65c7a5ea606ce4b873f85481c0327c14fca2941353a408ce689e10",
-      "class_hash": "0x41b63c13614cb5f630f637ffd44d41e438b4c44861d7f9d022ff241ee62e4a",
+      "class_hash": "0x2b5f66951df85d1d57fb2d12661a484f6023a614847c6b5074ec4d65b389fed",
       "abi": [
         {
           "type": "impl",
@@ -2592,6 +2608,10 @@
             },
             {
               "name": "AtPawnshop",
+              "type": "()"
+            },
+            {
+              "name": "BeingDrugged",
               "type": "()"
             }
           ]
@@ -3053,7 +3073,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x153a8c11d69562cecac0e67098465d183acc6977c94e330c73d3c639e3c50df",
+      "class_hash": "0x6ffba020255f85411e7c287826e0e964112cc84e21531d670401b00296d3f06",
       "abi": [
         {
           "type": "impl",
@@ -3235,6 +3255,10 @@
             {
               "name": "Cops",
               "type": "()"
+            },
+            {
+              "name": "Goblin",
+              "type": "()"
             }
           ]
         },
@@ -3335,9 +3359,19 @@
           "name": "creator",
           "type": "ContractAddress",
           "key": false
+        },
+        {
+          "name": "scaling_factor",
+          "type": "u128",
+          "key": false
+        },
+        {
+          "name": "goblin_appeared",
+          "type": "bool",
+          "key": false
         }
       ],
-      "class_hash": "0x3e41663fbdf3c02059810f62f44981f8d33485c47c60f8843e3803e2348f729",
+      "class_hash": "0x122ed69198954fa1164c575ec167be77f23bfc5a01ac191d9a8d3a1e717ee9",
       "abi": [
         {
           "type": "impl",
@@ -3523,6 +3557,20 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::models::game::Game",
           "members": [
@@ -3553,6 +3601,14 @@
             {
               "name": "creator",
               "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "scaling_factor",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "goblin_appeared",
+              "type": "core::bool"
             }
           ]
         },
@@ -4529,7 +4585,7 @@
           "key": false
         }
       ],
-      "class_hash": "0x3034bf6aee99c41bfeba285897da2c12cd64e81e4d7a313c263fa4524e5f16d",
+      "class_hash": "0x661f8a85ce0c706b18cc83813cda20dcd71b057417ead52a897cbee37dba995",
       "abi": [
         {
           "type": "impl",
@@ -4718,6 +4774,10 @@
             },
             {
               "name": "AtPawnshop",
+              "type": "()"
+            },
+            {
+              "name": "BeingDrugged",
               "type": "()"
             }
           ]

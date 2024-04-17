@@ -26,6 +26,8 @@ export enum Sounds {
   Ooo = "Ooo.wav",
   Death = "Flatline.mp3",
   Punch = "Punch.mp3",
+  Goblin = "Goblin.mp3",
+  Mushroom = "Mushroom.mp3"
 }
 
 export interface SoundState {

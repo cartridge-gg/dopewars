@@ -1,11 +1,14 @@
 import { VStack, Heading, Text, Flex, Image, StyleProps, Container, Box, Button, Spacer } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import React, { useCallback, useEffect, useRef, useState, ReactNode }from "react";
+import { useRouter } from "next/router";
 import Header from "./Header";
 import { motion } from "framer-motion";
 
 import CrtEffect from "./CrtEffect";
 import { Footer } from "./Footer";
 import { IsMobile } from "@/utils/ui";
+import { useDojoContext } from "@/dojo/hooks/useDojoContext";
+import { useSystems } from "@/dojo/hooks/useSystems";
 
 export interface LayoutProps {
   CustomLeftPanel?: React.FC;
@@ -35,7 +38,10 @@ const Layout = ({
   rigthPanelScrollable = true,
   footer,
 }: LayoutProps) => {
-  const isUserTrippin = false;
+  const { playerEntityStore } = useDojoContext();
+  const { decide, isPending } = useSystems();
+  const { playerEntity } = playerEntityStore;
+  const [isUserTrippin, setIsUserTrippin] = useState(false);
   const defaultBg = "gray.100"; // A standard, non-trippy background
   const trippyBg = "linear-gradient(45deg, #ff6fd8, #d783ff, #8a78ff, #78cdff)"; 
 
@@ -55,6 +61,13 @@ rigthPanelScrollable={rigthPanelScrollable}
 </RightPanel>
 </Container>
   )
+
+  useEffect(() => {
+    if (playerEntity && !isPending) {
+      setIsUserTrippin(playerEntity.isDrugged);
+    }
+  }, [playerEntity, isPending]);
+
 
   return (
     <>
