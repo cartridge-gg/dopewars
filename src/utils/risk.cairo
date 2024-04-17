@@ -26,26 +26,32 @@ impl RiskImpl of RiskTrait<RiskSettings> {
         if randomizer.occurs(travel_threshold) {
             let result = randomizer.between::<u128>(0, 100);
 
-            return match result <= self.encounter_bias_gangs {
-                bool::False => {
-                    if (*player).drug_count < self.cops_drug_threshold {
-                        Option::None
-                    } else {
-                        Option::Some(
-                            EncounterImpl::get_or_spawn(world, player,ref randomizer, EncounterType::Cops)
-                        )
+            if result > self.encounter_goblin_threshold {
+                return Option::Some(
+                    EncounterImpl::get_or_spawn(world, player, ref randomizer, EncounterType::Goblin)
+                );
+            } else {
+                return match result <= self.encounter_bias_gangs {
+                    bool::False => {
+                        if (*player).drug_count < self.cops_drug_threshold {
+                            Option::None
+                        } else {
+                            Option::Some(
+                                EncounterImpl::get_or_spawn(world, player, ref randomizer, EncounterType::Cops)
+                            )
+                        }
+                    },
+                    bool::True => {
+                        if (*player).cash <= self.gangs_cash_threshold {
+                            Option::None
+                        } else {
+                            Option::Some(
+                                EncounterImpl::get_or_spawn(world, player, ref randomizer,EncounterType::Gang)
+                            )
+                        }
                     }
-                },
-                bool::True => {
-                    if (*player).cash <= self.gangs_cash_threshold {
-                        Option::None
-                    } else {
-                        Option::Some(
-                            EncounterImpl::get_or_spawn(world, player, ref randomizer,EncounterType::Gang)
-                        )
-                    }
-                }
-            };
+                };
+            }
         }
         Option::None
     }

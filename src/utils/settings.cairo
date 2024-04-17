@@ -28,6 +28,7 @@ struct RiskSettings {
     travel: u8,
     capture: u8,
     encounter_bias_gangs: u128,
+    encounter_goblin_threshold: u128,
     cops_drug_threshold: usize,
     gangs_cash_threshold: u128,
     health_increase_by_turn: u8,
@@ -158,8 +159,9 @@ impl RiskSettingsImpl of PlayerSettingsTrait<RiskSettings> {
         let mut risk_settings = RiskSettings {
             travel,
             capture,
-            encounter_bias_gangs: 50, // 50% chance of gangs encounter vs cops
+            encounter_bias_gangs: 40, // 40% chance of gangs encounter vs cops
             cops_drug_threshold: 5, // cops encounter threshold
+            encounter_goblin_threshold: 50, // 50% chance of goblin event
             gangs_cash_threshold: 500_0000, // gangs encounter threshold
             health_increase_by_turn: 0,
             wanted_decrease_by_turn: 1,
