@@ -6,6 +6,8 @@ enum Action {
     Run: (),
     Pay: (),
     Fight: (),
+    AcceptDrugs: (),
+    DeclineDrugs: (),
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -16,6 +18,8 @@ enum Outcome {
     Captured: (),
     Victorious: (),
     Unsupported: (),
+    Drugged: (),
+    NotDrugged: (),
 }
 
 #[starknet::interface]
@@ -129,6 +133,7 @@ mod decide {
                             encounter_settings.dmg.pct(80)
                         },
                         PlayerStatus::AtPawnshop => { 0 },
+                        PlayerStatus::BeingGlobin => { 0 },
                     };
 
                     match risk_settings.run(world, ref randomizer, @player) {
@@ -182,6 +187,7 @@ mod decide {
                             (Outcome::Paid, 0, drug_loss_, 0, 0, 0)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingGlobin => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
                 },
                 Action::Fight => {
@@ -199,8 +205,31 @@ mod decide {
                             self.fight(ref randomizer, @game, @player, EncounterType::Cops)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingGlobin => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
                 },
+                Action::AcceptDrugs => {
+                    match player.status {
+                        PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingMugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingArrested => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingGlobin => {
+                            (Outcome::Unsupported, 0, 0, 0, 0, 0)
+                        },
+                    }
+                }, // TODO: 
+                Action::DeclineDrugs => {
+                    match player.status {
+                        PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingMugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingArrested => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingGlobin => {
+                            (Outcome::Unsupported, 0, 0, 0, 0, 0)
+                        }
+                    }
+                }, // TODO: 
             };
 
             player.cash -= cash_loss;
@@ -276,7 +305,6 @@ mod decide {
             };
             total_drug_loss
         }
-
 
         fn fight(
             self: @ContractState,

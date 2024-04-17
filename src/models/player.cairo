@@ -110,6 +110,7 @@ enum PlayerStatus {
     BeingMugged: (),
     BeingArrested: (),
     AtPawnshop: (),
+    BeingGlobin: (),
 }
 
 impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
@@ -134,6 +135,7 @@ impl PlayerStatusIntrospectionImpl of Introspect<PlayerStatus> {
                     ('BeingMugged', serialize_member_type(@Ty::Tuple(array![].span()))),
                     ('BeingArrested', serialize_member_type(@Ty::Tuple(array![].span()))),
                     ('AtPawnshop', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('BeingGlobin', serialize_member_type(@Ty::Tuple(array![].span()))),
                 ]
                     .span()
             }
@@ -149,6 +151,7 @@ impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
             PlayerStatus::BeingMugged => 'BeingMugged',
             PlayerStatus::BeingArrested => 'BeingArrested',
             PlayerStatus::AtPawnshop => 'AtPawnshop',
+            PlayerStatus::BeingGlobin => 'BeingGlobin',
         }
     }
 }
