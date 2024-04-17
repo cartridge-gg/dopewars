@@ -121,33 +121,46 @@ mod travel {
                             EncounterType::Goblin => PlayerStatus::BeingDrugged,
                         };
 
-                        let encounter_settings = EncounterSettingsImpl::get(
-                            game.game_mode, @player, encounter.level
-                        );
+                        if player.status == PlayerStatus::BeingMugged || player.status == PlayerStatus::BeingArrested {
+                            let encounter_settings = EncounterSettingsImpl::get(
+                                game.game_mode, @player, encounter.level
+                            );
 
-                        // player lose max(encounter_settings.dmg / 3,1)  HP
-                        let mut encounter_dmg = if encounter_settings.dmg < 3 {
-                            1
-                        } else {
-                            encounter_settings.dmg / 3
-                        };
-                        let new_health = player.health.sub_capped(encounter_dmg, 0);
-                        let health_loss = player.health - new_health;
-                        player.health = new_health;
+                            // player lose max(encounter_settings.dmg / 3,1)  HP
+                            let mut encounter_dmg = if encounter_settings.dmg < 3 {
+                                1
+                            } else {
+                                encounter_settings.dmg / 3
+                            };
+                            let new_health = player.health.sub_capped(encounter_dmg, 0);
+                            let health_loss = player.health - new_health;
+                            player.health = new_health;
 
-                        emit!(
-                            world,
-                            AdverseEvent {
-                                game_id,
-                                player_id,
-                                player_status: player.status,
-                                health_loss,
-                                demand_pct: encounter.demand_pct
+                            emit!(
+                                world,
+                                AdverseEvent {
+                                    game_id,
+                                    player_id,
+                                    player_status: player.status,
+                                    health_loss,
+                                    demand_pct: encounter.demand_pct
+                                }
+                            );
+
+                            if player.health == 0 {
+                                ryo::game_over(world, ref player);
                             }
-                        );
-
-                        if player.health == 0 {
-                            ryo::game_over(world, ref player);
+                        } else {
+                            emit!(
+                                world,
+                                AdverseEvent {
+                                    game_id,
+                                    player_id,
+                                    player_status: player.status,
+                                    health_loss: 0,
+                                    demand_pct: 0
+                                }
+                            );
                         }
 
                         set!(world, (player));
