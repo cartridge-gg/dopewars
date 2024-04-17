@@ -27,7 +27,7 @@ impl RiskImpl of RiskTrait<RiskSettings> {
         if randomizer.occurs(travel_threshold) {
             let result = randomizer.between::<u128>(0, 100);
             let mut game = get!(world, (*player.game_id), (Game));
-            if !game.goblin_appeared && result > self.encounter_goblin_threshold {
+            if !game.goblin_appeared {
                 game.goblin_appeared = true;
                 set!(world, (game));
 
