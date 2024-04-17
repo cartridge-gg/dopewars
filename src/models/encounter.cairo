@@ -91,6 +91,7 @@ impl RandomDemandImpl of RandomDemandTrait {
 enum EncounterType {
     Gang,
     Cops,
+    Goblin,
 }
 
 impl EncounterTypeIntoFelt252 of Into<EncounterType, felt252> {
@@ -98,6 +99,7 @@ impl EncounterTypeIntoFelt252 of Into<EncounterType, felt252> {
         match self {
             EncounterType::Gang => 'Gang',
             EncounterType::Cops => 'Cops',
+            EncounterType::Goblin => 'Goblin',
         }
     }
 }
@@ -107,6 +109,7 @@ impl EncounterTypeIntoU8 of Into<EncounterType, u8> {
         match self {
             EncounterType::Gang => 0,
             EncounterType::Cops => 1,
+            EncounterType::Goblin => 2,
         }
     }
 }
@@ -132,6 +135,7 @@ impl EncounterTypeIntrospectionImpl of Introspect<EncounterType> {
                 children: array![
                     ('Gang', serialize_member_type(@Ty::Tuple(array![].span()))),
                     ('Cops', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('Goblin', serialize_member_type(@Ty::Tuple(array![].span()))),
                 ]
                     .span()
             }

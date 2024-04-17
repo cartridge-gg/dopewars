@@ -19,8 +19,6 @@ mod devtools {
 
     use super::IDevtools;
 
-    use rollyourown::constants::SCALING_FACTOR;
-
     use rollyourown::models::player::{Player, PlayerStatus};
     use rollyourown::models::location::{LocationEnum};
     use rollyourown::models::leaderboard::{Leaderboard};
@@ -62,7 +60,7 @@ mod devtools {
                     hood_id: LocationEnum::Home,
                     location_id: LocationEnum::Home,
                     next_location_id: LocationEnum::Home,
-                    cash: rand * SCALING_FACTOR,
+                    cash: rand * game.scaling_factor
                     health: rand_2,
                     drug_count: 0,
                     turn: rand_100.into(),

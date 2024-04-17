@@ -1,11 +1,10 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::constants::SCALING_FACTOR;
 use rollyourown::models::player::{Player, PlayerStatus};
 use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
 use rollyourown::utils::events::{RawEventEmitterTrait, RawEventEmitterImpl};
-
+use rollyourown::models::game::{Game, GameTrait};
 
 #[starknet::interface]
 trait IRyo<TContractState> {
@@ -83,6 +82,7 @@ fn game_over(world: IWorldDispatcher, ref player: Player) {
     // in case player starts game in version v & end game in version v+1
     player.leaderboard_version = leaderboard_manager.get_current_version();
 
+    let game = get!(world, player.game_id, Game);
     world
         .emit_raw(
             array![selector!("GameOver"), player.game_id.into(), player.player_id.into()],
@@ -90,7 +90,7 @@ fn game_over(world: IWorldDispatcher, ref player: Player) {
                 player.name.into(),
                 player.status.into(),
                 player.turn.into(),
-                (player.cash / SCALING_FACTOR).into(),
+                (player.cash / game.scaling_factor).into(),
             ]
         );
 }

@@ -10,6 +10,7 @@ struct Game {
     num_players: usize,
     max_turns: usize,
     creator: ContractAddress,
+    scaling_factor: u128,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]

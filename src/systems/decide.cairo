@@ -6,6 +6,8 @@ enum Action {
     Run: (),
     Pay: (),
     Fight: (),
+    Accept: (),
+    Decline: (),
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -16,6 +18,7 @@ enum Outcome {
     Captured: (),
     Victorious: (),
     Unsupported: (),
+    Drugged: (),
 }
 
 #[starknet::interface]
@@ -94,7 +97,7 @@ mod decide {
             let mut player: Player = get!(world, (game_id, player_id), Player);
             assert(player.status != PlayerStatus::Normal, 'player response not needed');
 
-            let game = get!(world, game_id, Game);
+            let mut game = get!(world, game_id, Game);
             let decide_settings = DecideSettingsImpl::get(game.game_mode, @player);
             let risk_settings = RiskSettingsImpl::get(game.game_mode, @player);
 
@@ -129,6 +132,7 @@ mod decide {
                             encounter_settings.dmg.pct(80)
                         },
                         PlayerStatus::AtPawnshop => { 0 },
+                        PlayerStatus::BeingDrugged => { 0 },
                     };
 
                     match risk_settings.run(world, ref randomizer, @player) {
@@ -182,6 +186,7 @@ mod decide {
                             (Outcome::Paid, 0, drug_loss_, 0, 0, 0)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingDrugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
                     }
                 },
                 Action::Fight => {
@@ -199,6 +204,32 @@ mod decide {
                             self.fight(ref randomizer, @game, @player, EncounterType::Cops)
                         },
                         PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingDrugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                    }
+                },
+                Action::Accept => {
+                    game.scaling_factor = randomizer.between::<u128>(10_000, 30_000_00);
+                    set!(world, (game));
+
+                    match player.status {
+                        PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingMugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingArrested => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingDrugged => {
+                            (Outcome::Drugged, 0, 0, 0, 0, 0)
+                        },
+                    }
+                },
+                Action::Decline => {
+                    match player.status {
+                        PlayerStatus::Normal => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingMugged => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingArrested => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::AtPawnshop => (Outcome::Unsupported, 0, 0, 0, 0, 0),
+                        PlayerStatus::BeingDrugged => {
+                            (Outcome::Unsupported, 0, 0, 0, 0, 0)
+                        }
                     }
                 },
             };
@@ -224,9 +255,9 @@ mod decide {
                     outcome,
                     health_loss,
                     drug_loss,
-                    cash_loss: cash_loss / SCALING_FACTOR,
+                    cash_loss: cash_loss / game.scaling_factor,
                     dmg_dealt,
-                    cash_earnt: cash_earnt / SCALING_FACTOR
+                    cash_earnt: cash_earnt / game.scaling_factor
                 }
             );
             emit!(world, Decision { game_id, player_id, action });
@@ -276,7 +307,6 @@ mod decide {
             };
             total_drug_loss
         }
-
 
         fn fight(
             self: @ContractState,
@@ -336,11 +366,11 @@ mod decide {
                 );
 
                 // reduce dmgs by defense_item.value %
-                let health_saved: u128 = ((SCALING_FACTOR
+                let health_saved: u128 = ((*game.scaling_factor
                     * defense_item.value.into()
                     * encounter_dmg.into())
                     / 100)
-                    / SCALING_FACTOR;
+                    / *game.scaling_factor;
                 let final_health_loss: u8 = (encounter_dmg - health_saved.try_into().unwrap())
                     .try_into()
                     .unwrap();

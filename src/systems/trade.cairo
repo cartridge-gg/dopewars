@@ -94,7 +94,7 @@ mod trade {
 
             let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
 
-            let cost = market.buy(quantity);
+            let cost = market.buy(quantity, game.scaling_factor);
             assert(cost < player.cash, 'not enough cash');
 
             let mut drug = get!(world, (game_id, player_id, drug_id).into(), Drug);
@@ -135,7 +135,7 @@ mod trade {
             assert(drug.quantity >= quantity, 'not enough drugs to sell');
 
             let mut market = get!(world, (game_id, location_id, drug_id).into(), Market);
-            let payout = market.sell(quantity);
+            let payout = market.sell(quantity, game.scaling_factor);
 
             // update market
             market.quantity += quantity;

@@ -117,7 +117,8 @@ mod travel {
                         // update player status
                         player.status = match encounter.encounter_id {
                             EncounterType::Gang => PlayerStatus::BeingMugged,
-                            EncounterType::Cops => PlayerStatus::BeingArrested
+                            EncounterType::Cops => PlayerStatus::BeingArrested,
+                            EncounterType::Goblin => PlayerStatus::BeingDrugged,
                         };
 
                         let encounter_settings = EncounterSettingsImpl::get(

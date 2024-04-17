@@ -34,11 +34,10 @@ mod lobby {
     use rollyourown::utils::market;
     use rollyourown::utils::random::{Random, RandomImpl};
     use rollyourown::utils::leaderboard::{LeaderboardManager, LeaderboardManagerTrait};
-
+    use rollyourown::constants::SCALING_FACTOR;
 
     use super::ILobby;
 
-   
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -118,6 +117,7 @@ mod lobby {
                 num_players: 1, // caller auto joins
                 max_turns: game_settings.max_turns,
                 creator: caller,
+                scaling_factor: SCALING_FACTOR,
             };
 
             set!(self.world(), (game, player));
