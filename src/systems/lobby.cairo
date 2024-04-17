@@ -118,6 +118,7 @@ mod lobby {
                 max_turns: game_settings.max_turns,
                 creator: caller,
                 scaling_factor: SCALING_FACTOR,
+                goblin_appeared: false
             };
 
             set!(self.world(), (game, player));

@@ -11,6 +11,7 @@ struct Game {
     max_turns: usize,
     creator: ContractAddress,
     scaling_factor: u128,
+    goblin_appeared: bool
 }
 
 #[derive(Copy, Drop, Serde, PartialEq)]

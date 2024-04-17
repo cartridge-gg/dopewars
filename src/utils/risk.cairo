@@ -3,6 +3,7 @@ use debug::PrintTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::utils::settings::RiskSettings;
+use rollyourown::models::game::{Game, GameMode};
 use rollyourown::models::player::{Player, PlayerStatus, PlayerTrait, PlayerImpl};
 use rollyourown::models::encounter::{Encounter, EncounterType, EncounterImpl};
 use rollyourown::utils::math::{MathTrait, MathImplU8};
@@ -25,8 +26,11 @@ impl RiskImpl of RiskTrait<RiskSettings> {
 
         if randomizer.occurs(travel_threshold) {
             let result = randomizer.between::<u128>(0, 100);
+            let mut game = get!(world, (*player.game_id), (Game));
+            if !game.goblin_appeared && result > self.encounter_goblin_threshold {
+                game.goblin_appeared = true;
+                set!(world, (game));
 
-            if result > self.encounter_goblin_threshold {
                 return Option::Some(
                     EncounterImpl::get_or_spawn(world, player, ref randomizer, EncounterType::Goblin)
                 );
