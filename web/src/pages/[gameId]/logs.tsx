@@ -201,7 +201,6 @@ export default observer(Logs);
 
 const CustomLeftPanel = () => {
   const { game, gameInfos } = useGameStore();
-
   return (
     <VStack
       flex={1}
