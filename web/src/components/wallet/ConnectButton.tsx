@@ -2,12 +2,17 @@ import { useDojoContext } from "@/dojo/hooks";
 import { frenlyAddress } from "@/utils/ui";
 import { Box, Button, HStack, Image, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet-react/core";
+import { KatanaIcon } from "../icons";
 
 export const ConnectButton = ({ ...props }) => {
   const { account, address, status } = useAccount();
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
+
+  const isBurnerOrPredeplyed = connector?.id.includes("dojo");
+
+  console.log(connector);
 
   return (
     <>
@@ -28,7 +33,11 @@ export const ConnectButton = ({ ...props }) => {
             justifyContent="center"
           >
             <HStack>
-              {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
+              {connector && isBurnerOrPredeplyed && <KatanaIcon />}
+              {connector && !isBurnerOrPredeplyed && (
+                <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+              )}
+
               <Text>{frenlyAddress(account.address || "")}</Text>
             </HStack>
           </Button>

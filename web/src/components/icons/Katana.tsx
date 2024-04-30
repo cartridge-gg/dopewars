@@ -1,0 +1,15 @@
+import { Icon, IconProps } from ".";
+
+export const KatanaIcon = (props: IconProps) => {
+  return (
+    <Icon viewBox="0 0 24 24" {...props}>
+      <>
+        <path
+          d="M3 6.34204H21V8.2448H20.0531V9.19144H17.2125V12.0219H18.1499V11.0752H21V13.9246H17.2125V18.6578H16.2562V17.7112H15.3093V16.7646H14.3624V10.1286H15.3093V9.19144H8.6907V10.1286H9.63757V16.7646H8.6907V17.7112H7.74383V18.6578H6.78748V13.9246H3V11.0752H5.85009V12.0219H6.78748V9.19144H3.94687V8.2448H3V6.34204Z"
+          fill="currentColor"
+        />
+        <path d="M13.425 11.0752V13.9246H10.575V11.0752H13.425Z" fill="currentColor" />
+      </>
+    </Icon>
+  );
+};

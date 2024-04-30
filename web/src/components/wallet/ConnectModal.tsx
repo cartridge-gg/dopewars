@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/components/icons";
+import { ExternalLink, KatanaIcon } from "@/components/icons";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import {
   Button,
@@ -59,7 +59,7 @@ export const ConnectModal = observer(() => {
               }
 
               if (isRyoDotGame && isPredeployed) {
-                return null
+                return null;
               }
 
               return (
@@ -78,7 +78,12 @@ export const ConnectModal = observer(() => {
                     }}
                   >
                     <HStack w="full" alignItems="center" justifyContent="center" gap={3}>
-                      <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                      {isBurner || isPredeployed ? (
+                        <KatanaIcon />
+                      ) : (
+                        <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                      )}
+
                       <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
                       {!connector.available() && <ExternalLink ml="auto" />}
                     </HStack>

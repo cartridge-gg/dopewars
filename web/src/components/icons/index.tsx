@@ -56,6 +56,7 @@ export * from "./Twitter";
 export * from "./User";
 export * from "./Warning";
 export * from "./Weigth";
+export * from "./Katana";
 
 
 // Template for adding new icons. When copying svg from figma, viewBox is assumed
