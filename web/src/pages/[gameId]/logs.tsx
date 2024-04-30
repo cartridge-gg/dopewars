@@ -65,11 +65,27 @@ const Logs = () => {
   const { game, gameInfos, gameEvents } = useGameStore();
 
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
+  const [imageBase64Data, setImageBase64Data] = useState("");
 
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
   const isMobile = IsMobile();
+
+  useEffect(() => {
+    const fetchImageData = async () => {
+      try {
+        const response = await fetch("/api/image?name=satyam&rating=3&day=25&hp=55&cash=1000");
+        const imageBuffer = await response.arrayBuffer();
+        const base64Data = Buffer.from(imageBuffer).toString("base64");
+        setImageBase64Data(base64Data);
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+
+    fetchImageData();
+  }, []);
 
   useEffect(() => {
     if (!gameEvents?.sortedEvents) return;
@@ -140,7 +156,9 @@ const Logs = () => {
     <>
       <Head>
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content="/api/image?name=satyam&rating=3&day=25&hp=55&cash=1000" />
+        <meta name="twitter:title" content="Roll Your Own" />
+        <meta name="twitter:description" content="Roll Your Own" />
+        <meta name="twitter:image" content={`data:image/png;base64,${imageBase64Data}`} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Layout
