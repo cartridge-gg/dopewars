@@ -1,11 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# TODO use ./target/[profile]
-cp ./manifests/dev/manifest.json ./web/manifest.json 
+if [ $# -ge 1 ]; then
+    export PROFILE=$1
+else
+    export PROFILE="dev"
+fi
 
-npx abi-wan-kanabi@2.2.0 --input ./target/dev/rollyourown::config::config::config.json --output ./web/src/dojo/abis/configAbi.ts
-npx abi-wan-kanabi@2.2.0 --input ./target/dev/rollyourown::_mocks::paper_mock::paper_mock.json --output ./web/src/dojo/abis/paperAbi.ts
+npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/rollyourown::config::config::config.json --output ./web/src/dojo/abis/configAbi.ts
+npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/rollyourown::_mocks::paper_mock::paper_mock.json --output ./web/src/dojo/abis/paperAbi.ts
 
 pushd $(dirname "$0")/../web
 

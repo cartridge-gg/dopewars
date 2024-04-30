@@ -82,7 +82,7 @@ const Consequence = () => {
           </Footer>
         }
       >
-        <VStack h="full" gap={[3, 6]}>
+        <VStack h="full" gap={[3, 6]} alignItems="center">
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               {outcomeInfos.title}
@@ -91,8 +91,8 @@ const Consequence = () => {
               {outcomeInfos.name}
             </Heading>
           </VStack>
-          <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="30vh" height={[150, 280]} />
-          <VStack width="full" maxW="600px" h="100%" gap={[3, 6]}>
+          {/* <Image alt={outcomeInfos.name} src={outcomeInfos.imageSrc} maxH="30vh" height={[150, 280]} /> */}
+          <VStack width="full" maxW="600px" h="100%" gap={[3, 6]} justifyContent="center">
             <Card p={3} minW="300px">
               <VStack alignItems="flex-start" gap={1}>
                 {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}

@@ -12,7 +12,7 @@
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
     "gen:dojo": "pnpm gen && pnpm gen:events",
-    "gen:events": "npx create-events ./manifest.json ./src/dojo/generated/contractEvents.ts"
+    "gen:events": "npx create-events ./src/manifests/dev/manifest.json ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {
     "create-events": "./bin/generateEvents.cjs"

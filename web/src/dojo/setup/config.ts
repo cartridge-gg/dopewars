@@ -2,8 +2,12 @@
 // TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import manifest from "../../../manifest.json";
-import { katanaLocalChain, katanaSlot420Chain, katanaSlot421Chain } from "./chains";
+import { katanaLocalChain, katanaSlot420Chain /*, katanaSlot421Chain */} from "./chains";
+
+import manifestDev from "../../manifests/dev/manifest.json";
+import manifestRyo420 from "../../manifests/ryo420/manifest.json";
+// import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 
@@ -37,7 +41,7 @@ const katanaLocal: DojoChainConfig = {
     accountClassHash:
         process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH ||
         "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-    manifest,
+    manifest: manifestDev,
     predeployedAccounts: [
         {
             name: "Deployer",
@@ -69,7 +73,7 @@ const katanaSlot420: DojoChainConfig = {
     masterAddress: "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266",
     masterPrivateKey: "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78",
     accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-    manifest,
+    manifest: manifestRyo420,
     predeployedAccounts: [
         {
             name: "Deployer",
@@ -80,18 +84,18 @@ const katanaSlot420: DojoChainConfig = {
     ]
 }
 
-const katanaSlot421: DojoChainConfig = {
-    name: "SLOT 421",
-    chainConfig: katanaSlot421Chain,
-    rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
-    toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
-    toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
-    masterAddress: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
-    masterPrivateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
-    accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-    manifest,
-    predeployedAccounts: []
-}
+// const katanaSlot421: DojoChainConfig = {
+//     name: "SLOT 421",
+//     chainConfig: katanaSlot421Chain,
+//     rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
+//     toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
+//     toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
+//     masterAddress: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
+//     masterPrivateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
+//     accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
+//     manifest,
+//     predeployedAccounts: []
+// }
 
 const snSepolia: DojoChainConfig = {
     name: "SEPOLIA",
@@ -102,7 +106,7 @@ const snSepolia: DojoChainConfig = {
     masterAddress: undefined,
     masterPrivateKey: undefined,
     accountClassHash: undefined,
-    manifest,
+    manifest: manifestDev, // TODO
     predeployedAccounts: []
 }
 
@@ -115,7 +119,7 @@ const snMainnet: DojoChainConfig = {
     masterAddress: undefined,
     masterPrivateKey: undefined,
     accountClassHash: undefined,
-    manifest,
+    manifest: manifestDev, // TODO
     predeployedAccounts: []
 }
 
@@ -125,7 +129,7 @@ export const dojoContextConfig = {
     "KATANA": katanaLocal,
     "KATANA_SLOT_420": katanaSlot420,
     // "KATANA_SLOT_421": katanaSlot421,
-    // "SN_SEPOLIA": snSepolia,
+    "SN_SEPOLIA": snSepolia,
     // "SN_MAIN": snMainnet,
 }
 
@@ -133,7 +137,7 @@ export const dojoChains = [
     katanaLocal,
     katanaSlot420,
     // katanaSlot421,
-    // snSepolia,
+    snSepolia,
     // snMainnet,
 ]
 

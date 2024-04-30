@@ -14,30 +14,37 @@ token = { git = "https://github.com/notV4l/origami", branch = "erc_without_event
 
 
 [scripts]
-# dope_mock = "./scripts/dope_mock.sh"
+
+aaa="./scripts/test.sh"
+bbb="AAA=aaaValue && scarb run aaa $AAA"
+
+# 
 katana = "katana --disable-fee --invoke-max-steps 2000000"
 build = "sozo build && scarb run gendojo"
-gendojo = "./scripts/gen.sh"
 
-# auth
-auth = "./scripts/default_auth.sh dev"
-auth_ryo420 = "./scripts/default_auth.sh ryo420"
-auth_ryo421 = "./scripts/default_auth.sh ryo421"
-auth_prod = "./scripts/default_auth.sh prod"
+# common
+copy_manifest = "./scripts/copy_manifest.sh"
+gendojo = "./scripts/gen.sh"
+auth = "./scripts/default_auth.sh"
+
 
 # migrate
-migrate = "sozo migrate apply && scarb run auth && scarb run gendojo"
-migrate_ryo420 = "sozo -P ryo420 build && sozo -P ryo420 migrate apply && scarb run auth_ryo420"
-migrate_ryo421 = "sozo -P ryo421 build && sozo -P ryo421 migrate apply && scarb run auth_ryo421"
-migrate_prod = "sozo -P prod migrate"
+migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+# migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+
 
 # slot ryo420
 slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.1-alpha.1 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
 slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
-# slot ryo421
-slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.1-alpha.1 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+# # slot ryo421
+# slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.1-alpha.1 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
+# slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+ 
+# slot ryo_sepolia
+slot_ryosepolia_torii="slot d create ryosepolia torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 
 [profile.dev.tool.dojo.env]
@@ -50,15 +57,21 @@ rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
 account_address = "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7"
 private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c"
 
-[profile.ryo421.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
-account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
-private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
+# [profile.ryo421.tool.dojo.env]
+# rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
+# account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
+# private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
 
-[profile.prod.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
-account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
-private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
+[profile.ryosepolia.tool.dojo.env]
+rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
+# account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
+# private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
+
+
+# [profile.prod.tool.dojo.env]
+# rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
+# account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
+# private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
 
 [tool.dojo.world]
 name = "Roll Your Own"
@@ -67,7 +80,6 @@ website = "https://rollyourown.preview.cartridge.gg/"
 icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"
 socials.x = "https://x.com/TheDopeWars"
-
 
 
 [[target.dojo]]

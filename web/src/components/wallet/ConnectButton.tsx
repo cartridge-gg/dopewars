@@ -12,8 +12,6 @@ export const ConnectButton = ({ ...props }) => {
 
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
 
-  console.log(connector);
-
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="center" {...props}>

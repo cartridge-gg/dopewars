@@ -9,7 +9,8 @@ import { WorldEvents } from "./generated/contractEvents";
 
 import { Contract } from "starknet";
 
-import manifest from "../../manifest.json";
+// TODO: update
+import manifest from "../manifests/dev/manifest.json";
 
 const contract = manifest.contracts.find(i => i.name === "rollyourown::systems::game::game")!
 const gameContract = new Contract(contract.abi, contract.address)

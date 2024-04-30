@@ -58,7 +58,7 @@ export const initMediaStore = async () => {
           navigator.mediaSession.playbackState = "paused";
         },
         onend: () => {
-          const state = useMediaStore.getState();
+          // const state = useMediaStore.getState();
           useMediaStore.setState((state) => ({
             currentIndex: (state.currentIndex + 1) % state.medias.length,
           }));
