@@ -71,6 +71,27 @@ export const reputationRanks = {
 }
 export type reputationRanksKeys = keyof typeof reputationRanks;
 
+export const copsRanks = {
+  1: "Grunt",
+  2: "Sergeant",
+  3: "Heavy",
+  4: "Captain",
+  5: "SWAT",
+  6: "Mech",
+}
+export type copsRanksKeys = keyof typeof copsRanks;
+
+export const gangRanks = {
+  1: "Runner",
+  2: "Goon",
+  3: "Soldier",
+  4: "Enforcer",
+  5: "Underboss",
+  6: "Big Boss",
+}
+export type gangRanksKeys = keyof typeof gangRanks;
+
+
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
     0: {

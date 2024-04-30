@@ -8,7 +8,14 @@ import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { TravelEncounterData } from "@/dojo/events";
-import { reputationRanks, reputationRanksKeys } from "@/dojo/helpers";
+import {
+  copsRanks,
+  copsRanksKeys,
+  gangRanks,
+  gangRanksKeys,
+  reputationRanks,
+  reputationRanksKeys,
+} from "@/dojo/helpers";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { EncounterConfig } from "@/generated/graphql";
@@ -16,11 +23,12 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { getSentence } from "@/responses";
 import colors from "@/theme/colors";
-import { IsMobile, formatCash } from "@/utils/ui";
+import { IsMobile, formatCash, formatCashHeader } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
+import { shortString } from "starknet";
 
 type CombatLog = {
   text: string;
@@ -271,18 +279,6 @@ const Encounter = observer(
           position="relative"
           gap={[0, 12]}
         >
-          {/* {!IsMobile() && sentence && (
-            <>
-              <Box top="0" position="absolute" w="280px">
-                <Box fontSize="14px" p="6px" color="neon.500" textAlign="center" mb="8px">
-                  {sentence}
-                </Box>
-                <Card marginLeft="185px" w="10px" fontSize="12px" p="8px"></Card>
-                <Card marginLeft="170px" w="10px" fontSize="12px" p="6px"></Card>
-              </Box>
-            </>
-          )} */}
-
           <Image
             src={imageSrc}
             alt="adverse event"
@@ -292,7 +288,7 @@ const Encounter = observer(
             h={[150, 300]}
           />
 
-          <VStack w="320px" gap={[0,3]}>
+          <VStack w="320px" gap={[0, 3]}>
             {/* <Card alignItems="center" w={"auto"} justify="center">
               <HStack w="full" px="16px" py="8px" justifyContent="center">
                 <Text>id: {encounter?.id}</Text>
@@ -303,21 +299,27 @@ const Encounter = observer(
               </HStack>
             </Card> */}
 
-            <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
-              {demand}
-            </Text>
-
             <Card alignItems="center" w="full" justify="center">
               <VStack w="full" gap={0}>
-                <HStack w="full" px="10px" py="6px" justifyContent="space-between">
-                  {encounter.encounter === Encounters.Cops ? <CopsIcon /> : <GangIcon />}
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <Text flex="1">
-                    {encounter?.encounter} lvl {encounter?.level}
-                  </Text>
+                <HStack w="full" px="10px" py="6px" justifyContent="center">
+                  <HStack flex="1" justifyContent="center" alignItems="center">
+                    {encounter.encounter === Encounters.Cops ? <CopsIcon /> : <GangIcon />}
+                    <Text>
+                      {/* {encounter?.encounter} lvl {encounter?.level} */}
+                      {encounter?.encounter === Encounters.Cops
+                        ? copsRanks[encounter?.level as copsRanksKeys]
+                        : gangRanks[encounter?.level as gangRanksKeys]}
+                    </Text>
+                  </HStack>
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                   <CashIndicator cash={formatCash(encounterEvent?.payout)} flex="1" justifyContent="center" />
                 </HStack>
+
+                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+
+                <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
+                  {demand}
+                </Text>
 
                 <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
@@ -342,27 +344,35 @@ const Encounter = observer(
             <Text> VS </Text>
 
             <Card alignItems="center" w="full" justify="center" color="yellow.400">
+              <HustlerStats />
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
-                  <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <Text textTransform="uppercase">{reputationRanks[game.player.drugLevel as reputationRanksKeys]}</Text>
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <HStack w="full" justify="center" fontSize={["14px", "16px"]}>
-                    {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
-                    {game.drugs.quantity > 0 && game.drugs.drug && (
-                      <>
-                        {game.drugs.drug?.icon({ boxSize: "26" })}
-                        <Text>{game.drugs.quantity}</Text>
-                      </>
-                    )}
+                  <HStack w="full" justifyContent="center">
+                    <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
+                    {/* <Text>{reputationRanks[game.player.drugLevel as reputationRanksKeys]}</Text> */}
+                    <Text>{shortString.decodeShortString(game.gameInfos.player_name)}</Text>
                   </HStack>
+
+                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+
+                  {encounter?.encounter === Encounters.Cops ? (
+                    <HStack w="full" justify="center" fontSize={["14px", "16px"]}>
+                      {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
+                      {game.drugs.quantity > 0 && game.drugs.drug && (
+                        <>
+                          {game.drugs.drug?.icon({ boxSize: "26" })}
+                          <Text>{game.drugs.quantity}</Text>
+                        </>
+                      )}
+                    </HStack>
+                  ) : (
+                    <HStack w="full" justify="center">
+                      <CashIndicator cash={formatCashHeader(game.player.cash)} />
+                    </HStack>
+                  )}
                 </HStack>
               </VStack>
-
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-
-              <HustlerStats />
             </Card>
           </VStack>
         </VStack>
