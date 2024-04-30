@@ -42,7 +42,7 @@ export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
   }, [data]);
 
   const onGoingGames = useMemo(() => {
-    return games.filter((i: GameClass) => !i.gameInfos.game_over);
+    return games.filter((i: GameClass) => !i.gameInfos.game_over); // TODO: filter by season
   }, [games]);
 
   const endedGames = useMemo(() => {

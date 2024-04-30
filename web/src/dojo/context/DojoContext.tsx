@@ -153,7 +153,7 @@ export const DojoContextProvider = observer(
           setConfigStoreState({
             isInitialized: false,
             isError: true,
-            error: "faild to init configStore",
+            error: "failed to init configStore",
           });
         }
       };
