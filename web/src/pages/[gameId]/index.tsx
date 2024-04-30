@@ -14,7 +14,7 @@ const Redirector = observer(() => {
   const { game } = useGameStore();
 
   useEffect(() => {
-    let handle = undefined;
+    let handle: any = undefined;
 
     if (!game) {
       handle = setTimeout(() => {
