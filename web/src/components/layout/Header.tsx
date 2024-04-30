@@ -14,6 +14,7 @@ import { Burners } from "../wallet/Burners";
 import { ChainSelector } from "../wallet/ChainSelector";
 import { ConnectButton } from "../wallet/ConnectButton";
 import { Predeployed } from "../wallet/Predeployed";
+import { OnGoingGames } from "../pages/home/OnGoingGames";
 
 interface HeaderProps {
   back?: boolean;
@@ -47,13 +48,13 @@ export const Header = observer(({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        {isAdmin && (
+        {/* {isAdmin && (  )} */}
           <>
             <Burners />
             <Predeployed />
             <ChainSelector canChange={!gameId} />
           </>
-        )}
+        
 
         {/* {!gameId && account && (
           <Card h="48px" p={2} display="flex" justifyContent="center">
@@ -62,6 +63,8 @@ export const Header = observer(({ back }: HeaderProps) => {
         )} */}
 
         {!gameId && <ClaimReward />}
+        {!gameId && <OnGoingGames />}
+        
       </HStack>
 
       {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (

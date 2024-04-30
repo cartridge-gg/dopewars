@@ -18,7 +18,7 @@ export const ClaimReward = () => {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isRainning, setIsRainning] = useState(false);
 
-  const isMobile = IsMobile()
+  const isMobile = IsMobile();
 
   useEffect(() => {
     if (!hallOfFame) {
@@ -30,7 +30,7 @@ export const ClaimReward = () => {
       setClaimable(_claimable);
     }
   }, [account?.address, hallOfFame, config?.ryo.leaderboard_version]);
-  
+
   const onClose = () => {
     setIsRainning(true);
     setIsClaimModalOpen(false);
@@ -55,7 +55,7 @@ export const ClaimReward = () => {
             }}
             onClick={() => setIsClaimModalOpen(true)}
           >
-            <Gem /> {!isMobile ? 'Claim' : ""} 
+            <Gem /> {!isMobile ? "Claim" : ""}
           </Button>
           <ClaimModal claimable={claimable[0]} isOpen={isClaimModalOpen} onClose={onClose} />
         </>

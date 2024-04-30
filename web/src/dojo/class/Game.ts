@@ -53,7 +53,6 @@ export class GameClass {
     items: ItemsClass;
     drugs: DrugsClass;
     wanted: WantedClass;
-   // encounters: EncountersClass;
     player: PlayerClass;
 
     pending: Array<PendingCallWithCost>;

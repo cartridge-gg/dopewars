@@ -91,17 +91,17 @@ const New = observer(() => {
               isLoading={isPending}
               onClick={() => create(GameMode.Dealer)}
             >
-              Play
+              Play Dealer
             </Button>
             
-            {/* <Button
+            <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isLoading={isPending}
               onClick={() => create(GameMode.Warrior)}
             >
               Play Warrior
-            </Button> */}
+            </Button> 
           </ChildrenOrConnect>
         </Footer>
       }

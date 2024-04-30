@@ -9,7 +9,7 @@ struct Game {
     #[key]
     game_id: u32,
     #[key]
-    player_id: ContractAddress,
+    player_id: ContractAddress,   // check if can remove key
     //
     player_name: Bytes16,
     hustler_id: u16,

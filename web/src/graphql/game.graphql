@@ -15,6 +15,23 @@ query GameById($gameId: u32) {
   }
 }
 
+query GamesByPlayer($playerId: ContractAddress) {
+  gameModels(where: { player_id: $playerId }) {
+    edges {
+      node {
+        game_id
+        player_id
+        leaderboard_version
+        game_mode
+        hustler_id
+        player_name
+        game_over
+      }
+    }
+  }
+}
+
+
 query GameStorePacked($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
     totalCount

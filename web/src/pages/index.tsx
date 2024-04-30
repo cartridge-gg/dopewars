@@ -39,7 +39,7 @@ export default function Home() {
       play();
     }
 
-    router.push(`/create/new`);
+    router.push(`/game/new`);
   };
 
   return (

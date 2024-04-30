@@ -40,7 +40,7 @@
     "ka-table": "^8.11.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
-    "next": "14.2.0-canary.63",
+    "next": "14.3.0-canary.32",
     "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",

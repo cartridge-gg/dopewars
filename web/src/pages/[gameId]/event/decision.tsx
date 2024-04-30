@@ -15,6 +15,7 @@ import { EncounterConfig } from "@/generated/graphql";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { getSentence } from "@/responses";
+import colors from "@/theme/colors";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
@@ -343,7 +344,7 @@ const Encounter = observer(
             <Card alignItems="center" w="full" justify="center" color="yellow.400">
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
-                  <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color="yellow.400" />
+                  <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
                   <Text textTransform="uppercase">{reputationRanks[game.player.drugLevel as reputationRanksKeys]}</Text>
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />

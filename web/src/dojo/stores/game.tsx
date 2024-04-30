@@ -209,14 +209,15 @@ export class GameStoreClass {
 
   *init(gameId: string /*, playerId: string*/) {
     //this.reset()
-    if(this.isInitialized){ 
-      return
-    }
+
+    // if(this.isInitialized){ 
+    //   return
+    // }
 
     yield this.loadGameInfos(gameId);
 
     // retrieve playerId from gameInfos
-    const playerId = this.gameInfos?.player_id;
+    const playerId = this.gameInfos?.player_id || "0x0";
 
     const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
 

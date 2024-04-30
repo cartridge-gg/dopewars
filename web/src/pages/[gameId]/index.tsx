@@ -14,16 +14,28 @@ const Redirector = observer(() => {
   const { game } = useGameStore();
 
   useEffect(() => {
+    let handle = undefined;
+
     if (!game) {
-      router.push(`/`);
+      handle = setTimeout(() => {
+        router.push(`/`);
+      }, 1000);
     } else {
+      clearTimeout(handle);
+
       if (game.player.status === PlayerStatus.Normal) {
-        router.push(`/${gameId}/${game.player.location.location}`);
+        if (game.player.location) {
+          router.push(`/${gameId}/${game.player.location.location}`);
+        } else {
+          router.push(`/${gameId}/travel`);
+        }
       } else if (game.player.status === PlayerStatus.BeingArrested || game.player.status === PlayerStatus.BeingMugged) {
         //
         router.push(`/${gameId}/event/decision`);
       }
     }
+
+    return () => clearTimeout(handle);
   }, [game, game?.player.status, game?.player.location, router, gameId]);
 
   return (

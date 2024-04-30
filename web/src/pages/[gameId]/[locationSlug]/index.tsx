@@ -43,7 +43,8 @@ const Location = observer(() => {
     if (game && gameInfos && location) {
       // check if player at right location
       if (location?.location !== game.player.location?.location) {
-        router.replace(`/${gameId}/${game.player.location?.location}`);
+        // router.replace(`/${gameId}/${game.player.location?.location}`);
+        router.push(`/${gameId}/${game.player.location?.location}`);
         return;
       }
 
@@ -141,7 +142,7 @@ const Location = observer(() => {
                         alignItems="center"
                         boxSize="full"
                         position="absolute"
-                        top={2}
+                        top={"6px"}
                         pointerEvents={["none", "auto"]}
                       >
                         <HStack w="full" px={3} gap={6} /*bgColor="neon.900"*/>
@@ -155,7 +156,7 @@ const Location = observer(() => {
                   <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
                     <HStack justifyContent="space-between">
                       <Text>
-                      <WeightIcon mb={1} />
+                        <WeightIcon mb={1} />
                         <span>{drug.weight}</span>
                       </Text>
                       <Text> {formatCash(drug.price)}</Text>

@@ -49,11 +49,7 @@ const renderer = ({
 export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
   const { router, gameId } = useRouterContext();
 
-  const {
-    chains: { selectedChain },
-    configStore: { config },
-    uiStore,
-  } = useDojoContext();
+  const { uiStore } = useDojoContext();
   const { account } = useAccount();
 
   //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
@@ -72,8 +68,6 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     hallOfFame[selectedIndex]?.version || 0,
   );
 
-  const listRef = useRef(null);
-
   const onPrev = async () => {
     if (selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1);
@@ -85,13 +79,6 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
       setSelectedIndex(selectedIndex + 1);
     }
   };
-
-  // useEffect(() => {
-  //   if (!listRef.current) return;
-  //   const lastEl = listRef.current["lastElementChild"];
-  //   // @ts-ignore
-  //   lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  // }, [leaderboardEntries]);
 
   if (!hallOfFame || hallOfFame.length === 0) {
     return <></>;
@@ -124,7 +111,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
             ></Countdown>
             <Box
               cursor="pointer"
-              onClick={() => uiStore.openSeasonDetails()} /*position="absolute" right="10px" top="10px"*/
+              onClick={() => uiStore.openSeasonDetails()} 
             >
               <InfosIcon />
             </Box>
@@ -144,7 +131,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
       >
         {isFetchingLeaderboardEntries && <Loader />}
         {!isFetchingLeaderboardEntries && (
-          <UnorderedList boxSize="full" variant="dotted" h="auto" ref={listRef}>
+          <UnorderedList boxSize="full" variant="dotted" h="auto">
             {leaderboardEntries && leaderboardEntries.length > 0 ? (
               leaderboardEntries.map((entry: GameOverData, index: number) => {
                 const isOwn = entry.playerId === account?.address;

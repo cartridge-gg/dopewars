@@ -10,4 +10,4 @@ npx abi-wan-kanabi@2.2.0 --input ./target/dev/rollyourown::_mocks::paper_mock::p
 pushd $(dirname "$0")/../web
 
 pnpm run gen:dojo
-prettier --write ./src/dojo/generated
+pnpm exec prettier --write ./src/dojo/generated

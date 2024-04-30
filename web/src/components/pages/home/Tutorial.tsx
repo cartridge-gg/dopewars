@@ -69,7 +69,7 @@ export const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void
   
   const onNext = async () => {
     if (currentStep == steps.length) {
-          router.push(`/create/new`);
+          router.push(`/game/new`);
 
       close();
     } else {

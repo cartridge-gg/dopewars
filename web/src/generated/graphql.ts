@@ -1731,6 +1731,13 @@ export type GameByIdQueryVariables = Exact<{
 
 export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
+export type GamesByPlayerQueryVariables = Exact<{
+  playerId?: InputMaybe<Scalars['ContractAddress']>;
+}>;
+
+
+export type GamesByPlayerQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, leaderboard_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | null } | null> | null } | null };
+
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
   playerId: Scalars['String'];
@@ -1999,6 +2006,57 @@ export const useInfiniteGameByIdQuery = <
 
 
 useInfiniteGameByIdQuery.getKey = (variables?: GameByIdQueryVariables) => variables === undefined ? ['GameById.infinite'] : ['GameById.infinite', variables];
+;
+
+export const GamesByPlayerDocument = `
+    query GamesByPlayer($playerId: ContractAddress) {
+  gameModels(where: {player_id: $playerId}) {
+    edges {
+      node {
+        game_id
+        player_id
+        leaderboard_version
+        game_mode
+        hustler_id
+        player_name
+        game_over
+      }
+    }
+  }
+}
+    `;
+export const useGamesByPlayerQuery = <
+      TData = GamesByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: GamesByPlayerQueryVariables,
+      options?: UseQueryOptions<GamesByPlayerQuery, TError, TData>
+    ) =>
+    useQuery<GamesByPlayerQuery, TError, TData>(
+      variables === undefined ? ['GamesByPlayer'] : ['GamesByPlayer', variables],
+      useFetchData<GamesByPlayerQuery, GamesByPlayerQueryVariables>(GamesByPlayerDocument).bind(null, variables),
+      options
+    );
+
+useGamesByPlayerQuery.getKey = (variables?: GamesByPlayerQueryVariables) => variables === undefined ? ['GamesByPlayer'] : ['GamesByPlayer', variables];
+;
+
+export const useInfiniteGamesByPlayerQuery = <
+      TData = GamesByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: GamesByPlayerQueryVariables,
+      options?: UseInfiniteQueryOptions<GamesByPlayerQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GamesByPlayerQuery, GamesByPlayerQueryVariables>(GamesByPlayerDocument)
+    return useInfiniteQuery<GamesByPlayerQuery, TError, TData>(
+      variables === undefined ? ['GamesByPlayer.infinite'] : ['GamesByPlayer.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGamesByPlayerQuery.getKey = (variables?: GamesByPlayerQueryVariables) => variables === undefined ? ['GamesByPlayer.infinite'] : ['GamesByPlayer.infinite', variables];
 ;
 
 export const GameStorePackedDocument = `
