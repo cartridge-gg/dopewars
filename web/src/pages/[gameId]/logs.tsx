@@ -49,6 +49,7 @@ import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { shortString } from "starknet";
+import Head from "next/head";
 
 type LogByDay = {
   day: number;
@@ -64,11 +65,27 @@ const Logs = () => {
   const { game, gameInfos, gameEvents } = useGameStore();
 
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
+  const [imageBase64Data, setImageBase64Data] = useState("");
 
   const [logs, setLogs] = useState<LogByDay[]>([]);
   const listRef = useRef(null);
 
   const isMobile = IsMobile();
+
+  useEffect(() => {
+    const fetchImageData = async () => {
+      try {
+        const response = await fetch("/api/image?name=satyam&rating=3&day=25&hp=55&cash=1000");
+        const imageBuffer = await response.arrayBuffer();
+        const base64Data = Buffer.from(imageBuffer).toString("base64");
+        setImageBase64Data(base64Data);
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+
+    fetchImageData();
+  }, []);
 
   useEffect(() => {
     if (!gameEvents?.sortedEvents) return;
@@ -136,56 +153,65 @@ const Logs = () => {
   }
 
   return (
-    <Layout
-      footer={
-        <Footer>
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            onClick={() => {
-              if (gameInfos?.game_over || !account || account.address !== gameInfos?.player_id) {
-                router.push("/");
-              } else {
-                // return to game
-                router.back();
-              }
-            }}
-          >
-            Back
-          </Button>
-        </Footer>
-      }
-      isSinglePanel={true}
-      // CustomLeftPanel={CustomLeftPanel}
-      // rigthPanelMaxH={rigthPanelMaxH}
-    >
-      <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
-        <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
-          <CustomLeftPanel />
+    <>
+      <Head>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ryo" />
+        <meta name="twitter:description" content="Roll Your Own" />
+        <meta name="twitter:image" content={`data:image/png;base64,${imageBase64Data}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+      <Layout
+        footer={
+          <Footer>
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              onClick={() => {
+                if (gameInfos?.game_over || !account || account.address !== gameInfos?.player_id) {
+                  router.push("/");
+                } else {
+                  // return to game
+                  router.back();
+                }
+              }}
+            >
+              Back
+            </Button>
+          </Footer>
+        }
+        isSinglePanel={true}
+        // CustomLeftPanel={CustomLeftPanel}
+        // rigthPanelMaxH={rigthPanelMaxH}
+      >
+        <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
+          <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
+            <CustomLeftPanel />
 
-          <Tabs variant="unstyled" w="full" flex={1} h={["auto", "100%"]}>
-            <TabList>
-              <Tab>Loadout</Tab>
-              <Tab>Activity</Tab>
-            </TabList>
+            <Tabs variant="unstyled" w="full" flex={1} h={["auto", "100%"]}>
+              <TabList>
+                <Tab>Loadout</Tab>
+                <Tab>Activity</Tab>
+              </TabList>
 
-            <TabPanels w="full" h={["auto", "100%"]}>
-              <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
-                <Box display="flex" alignItems="center" justifyContent="center" h="100%">
-                  <Loadout />
-                </Box>
-              </TabPanel>
-              <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
-                <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
-                  {logs && logs.map((log) => renderDay(configStore, game, log))}
-                </VStack>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Flex>
-        {isMobile && <Box display="block" minH={"80px"} w="full" />}
-      </VStack>
-    </Layout>
+              <TabPanels w="full" h={["auto", "100%"]}>
+                <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
+                  <Box display="flex" alignItems="center" justifyContent="center" h="100%">
+                    <Loadout />
+                  </Box>
+                </TabPanel>
+                <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
+                  <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
+                    {logs && logs.map((log) => renderDay(configStore, game, log))}
+                  </VStack>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Flex>
+          {isMobile && <Box display="block" minH={"80px"} w="full" />}
+        </VStack>
+      </Layout>
+    </>
   );
 };
 
@@ -193,7 +219,6 @@ export default observer(Logs);
 
 const CustomLeftPanel = () => {
   const { game, gameInfos } = useGameStore();
-
   return (
     <VStack
       flex={1}
@@ -310,11 +335,11 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
       iconColor="yellow.400"
     />
   );
-} 
+}
 
 function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
   const encounter = configStore.getEncounterById(log.encounterId);
-  
+
   const icon = encounter.encounter === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
@@ -327,7 +352,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
     : "";
 
   const action = lastEncouterResult?.action;
-  const totalHpLoss =  lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0
+  const totalHpLoss = lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0;
 
   return (
     <FightLine
@@ -336,7 +361,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
       text={`Meet ${encounter.encounter} Lvl ${encounter.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
-      consequence={ totalHpLoss > 0  ? `-${totalHpLoss} HP` : ''}
+      consequence={totalHpLoss > 0 ? `-${totalHpLoss} HP` : ""}
       action={action}
       color="yellow.400"
     />
