@@ -155,8 +155,8 @@ const Logs = () => {
   return (
     <>
       <Head>
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Roll Your Own" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ryo" />
         <meta name="twitter:description" content="Roll Your Own" />
         <meta name="twitter:image" content={`data:image/png;base64,${imageBase64Data}`} />
         <meta name="twitter:card" content="summary_large_image" />
