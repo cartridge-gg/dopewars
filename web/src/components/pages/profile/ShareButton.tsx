@@ -12,7 +12,7 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   const { account } = useAccount();
   const { game, gameInfos } = useGameStore();
 
-  if (!account || !game ||!gameInfos) return null;
+  if (!account || !game || !gameInfos) return null;
 
   return (
     <ChakraLink
@@ -30,18 +30,18 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
 };
 
 const getShareText = (game: GameClass, gameInfos: Game): string => {
-  const playerName = shortString.decodeShortString(gameInfos.player_name)
+  const playerName = shortString.decodeShortString(gameInfos.player_name);
   if (game.player.health > 0) {
     return encodeURIComponent(
       `${playerName} has reached Day ${game.player.turn} with ${formatCash(
         game.player.cash,
-      )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
+      )} $paper. Think you can out hustle them? #rollyourown.\n\n${window.location.href}`,
     );
   } else {
     return encodeURIComponent(
       `${playerName} got dropped on Day ${game.player.turn} but pocketed ${formatCash(
         game.player.cash,
-      )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.origin}`,
+      )} $paper before checking out. Think you can out hustle them? #rollyourown.\n\n${window.location.href}`,
     );
   }
 };
