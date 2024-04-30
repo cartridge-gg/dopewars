@@ -1732,11 +1732,11 @@ export type GameByIdQueryVariables = Exact<{
 export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
 
 export type GamesByPlayerQueryVariables = Exact<{
-  playerId?: InputMaybe<Scalars['ContractAddress']>;
+  playerId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, leaderboard_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, leaderboard_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -2009,17 +2009,29 @@ useInfiniteGameByIdQuery.getKey = (variables?: GameByIdQueryVariables) => variab
 ;
 
 export const GamesByPlayerDocument = `
-    query GamesByPlayer($playerId: ContractAddress) {
-  gameModels(where: {player_id: $playerId}) {
+    query GamesByPlayer($playerId: String) {
+  entities(keys: ["*", $playerId]) {
     edges {
       node {
-        game_id
-        player_id
-        leaderboard_version
-        game_mode
-        hustler_id
-        player_name
-        game_over
+        id
+        keys
+        models {
+          __typename
+          ... on Game {
+            game_id
+            player_id
+            leaderboard_version
+            game_mode
+            hustler_id
+            player_name
+            game_over
+          }
+          ... on GameStorePacked {
+            game_id
+            player_id
+            packed
+          }
+        }
       }
     }
   }

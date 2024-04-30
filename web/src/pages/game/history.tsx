@@ -1,14 +1,17 @@
 import { Button } from "@/components/common";
+import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Alert, Clock, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
+import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Game } from "@/generated/graphql";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
+import { formatCashHeader } from "@/utils/ui";
 import {
   Card,
   Divider,
@@ -82,14 +85,14 @@ export default function History() {
   );
 }
 
-const GameList = ({ games }: { games?: Game[] }) => {
+const GameList = ({ games }: { games?: GameClass[] }) => {
   const { router } = useRouterContext();
 
-  const onClick = (game: Game) => {
-    if (!game.game_over) {
-      router.push(`/0x${game.game_id.toString(16)}`);
+  const onClick = (game: GameClass) => {
+    if (!game.gameInfos.game_over) {
+      router.push(`/0x${game.gameInfos.game_id.toString(16)}`);
     } else {
-      router.push(`/0x${game.game_id.toString(16)}/logs`);
+      router.push(`/0x${game.gameInfos.game_id.toString(16)}/logs`);
     }
   };
 
@@ -98,32 +101,49 @@ const GameList = ({ games }: { games?: Game[] }) => {
     <UnorderedList boxSize="full" variant="dotted" h="auto" fontSize={"12px"}>
       <ListItem key={"OxO"}>
         <HStack mr={3} whiteSpace="nowrap">
-          <Text w={"70px"} flexShrink={0}>
-            Saison
-          </Text>
-          <Text w={"70px"} flexShrink={0}>
-            Game id
-          </Text>
-          <Text w={"200px"} flexShrink={0}>
+          <Text w={"40px"} flexShrink={0}></Text>
+          <Text w={"80px"} flexShrink={0}>
             Identity
+          </Text>
+          <Text w={"70px"} flexShrink={0} align="right">
+            Turn
+          </Text>
+          <Text w={"120px"} flexShrink={0} align="right">
+            Location
+          </Text>
+          <Text w={"70px"} flexShrink={0} align="right">
+            Health
+          </Text>
+          <Text w={"100px"} flexShrink={0} align="right">
+            Cash
           </Text>
         </HStack>
       </ListItem>
 
-      {games.map((game: Game, index: number) => {
-        const playerName = shortString.decodeShortString(game.player_name);
+      {games.map((game: GameClass, index: number) => {
+        const playerName = shortString.decodeShortString(game.gameInfos.player_name);
 
         return (
-          <ListItem key={game.game_id} cursor="pointer" onClick={() => onClick(game)} h="30px">
+          <ListItem key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)} h="30px">
             <HStack mr={3} whiteSpace="nowrap">
-              <Text w={"70px"} flexShrink={0}>
-                {game.leaderboard_version}
+              <Text w={"40px"} flexShrink={0}>
+                <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
               </Text>
-              <Text w={"70px"} flexShrink={0}>
-                {game.game_id}
-              </Text>
-              <Text w={"200px"} flexShrink={0}>
+
+              <Text w={"80px"} flexShrink={0}>
                 {playerName}
+              </Text>
+              <Text w={"70px"} flexShrink={0} align="right">
+                {game.player.turn}
+              </Text>
+              <Text w={"120px"} flexShrink={0} align="right">
+                {game.player.location.name}
+              </Text>
+              <Text w={"70px"} flexShrink={0} align="right">
+                {game.player.health}
+              </Text>
+              <Text w={"100px"} flexShrink={0} align="right">
+                {formatCashHeader(game.player.cash)}
               </Text>
             </HStack>
           </ListItem>
@@ -132,3 +152,10 @@ const GameList = ({ games }: { games?: Game[] }) => {
     </UnorderedList>
   );
 };
+
+// <Text w={"70px"} flexShrink={0}>
+//               {game.gameInfos.leaderboard_version}
+//             </Text>
+//             <Text w={"70px"} flexShrink={0}>
+//               {game.gameInfos.game_id}
+//             </Text>

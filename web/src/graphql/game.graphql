@@ -15,17 +15,31 @@ query GameById($gameId: u32) {
   }
 }
 
-query GamesByPlayer($playerId: ContractAddress) {
-  gameModels(where: { player_id: $playerId }) {
+
+query GamesByPlayer($playerId: String) {
+  entities(keys: ["*", $playerId]) {
     edges {
       node {
-        game_id
-        player_id
-        leaderboard_version
-        game_mode
-        hustler_id
-        player_name
-        game_over
+        id
+        keys
+        models {
+          __typename
+          ... on Game {
+            game_id
+            player_id
+            leaderboard_version
+            game_mode
+            hustler_id
+            player_name
+            game_over
+          }
+          ... on GameStorePacked {
+            game_id
+            player_id
+            packed
+          
+          }
+        }
       }
     }
   }
