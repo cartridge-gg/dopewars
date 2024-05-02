@@ -67,7 +67,7 @@ export const ABI = [
         "name": "initializer",
         "inputs": [],
         "outputs": [],
-        "state_mutability": "view"
+        "state_mutability": "external"
       }
     ]
   },
@@ -85,7 +85,7 @@ export const ABI = [
         "name": "faucet",
         "inputs": [],
         "outputs": [],
-        "state_mutability": "view"
+        "state_mutability": "external"
       },
       {
         "type": "function",
@@ -97,7 +97,7 @@ export const ABI = [
           }
         ],
         "outputs": [],
-        "state_mutability": "view"
+        "state_mutability": "external"
       }
     ]
   },
@@ -283,7 +283,7 @@ export const ABI = [
             "type": "core::bool"
           }
         ],
-        "state_mutability": "view"
+        "state_mutability": "external"
       },
       {
         "type": "function",
@@ -307,7 +307,7 @@ export const ABI = [
             "type": "core::bool"
           }
         ],
-        "state_mutability": "view"
+        "state_mutability": "external"
       }
     ]
   },
@@ -358,7 +358,7 @@ export const ABI = [
             "type": "core::bool"
           }
         ],
-        "state_mutability": "view"
+        "state_mutability": "external"
       }
     ]
   },
@@ -409,7 +409,7 @@ export const ABI = [
             "type": "core::bool"
           }
         ],
-        "state_mutability": "view"
+        "state_mutability": "external"
       }
     ]
   },

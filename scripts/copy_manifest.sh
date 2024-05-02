@@ -7,7 +7,6 @@ else
     export PROFILE="dev"
 fi
 
-# TODO use ./target/[profile]
 mkdir -p ./web/src/manifests/$PROFILE
 cp ./manifests/$PROFILE/manifest.json ./web/src/manifests/$PROFILE/manifest.json 
 

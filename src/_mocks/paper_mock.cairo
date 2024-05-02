@@ -7,7 +7,7 @@ trait IPaperMock<TState> {
     fn world(self: @TState,) -> IWorldDispatcher;
 
     // IUpgradeable
-    fn upgrade(self: @TState, new_class_hash: ClassHash);
+    fn upgrade(ref self: TState, new_class_hash: ClassHash);
 
     // IERC20Metadata
     fn decimals(self: @TState,) -> u8;
@@ -22,23 +22,23 @@ trait IPaperMock<TState> {
 
     // IERC20Balance
     fn balance_of(self: @TState, account: ContractAddress) -> u256;
-    fn transfer(self: @TState, recipient: ContractAddress, amount: u256) -> bool;
+    fn transfer(ref self: TState, recipient: ContractAddress, amount: u256) -> bool;
     fn transfer_from(
-        self: @TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
+        ref self: TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
     ) -> bool;
 
     // IERC20BalanceCamel
     fn balanceOf(self: @TState, account: ContractAddress) -> u256;
     fn transferFrom(
-        self: @TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
+        ref self: TState, sender: ContractAddress, recipient: ContractAddress, amount: u256
     ) -> bool;
 
     // IERC20Allowance
     fn allowance(self: @TState, owner: ContractAddress, spender: ContractAddress) -> u256;
-    fn approve(self: @TState, spender: ContractAddress, amount: u256) -> bool;
+    fn approve(ref self: TState, spender: ContractAddress, amount: u256) -> bool;
 
     // WITHOUT INTERFACE !!!
-    fn initializer(self: @TState);
+    fn initializer(ref self: TState);
     fn dojo_resource(self: @TState,) -> felt252;
 }
 
@@ -49,17 +49,17 @@ trait IPaperMock<TState> {
 ///
 #[starknet::interface]
 trait IPaperMockInitializer<TState> {
-    fn initializer(self: @TState);
+    fn initializer(ref self: TState);
 }
 
 #[starknet::interface]
 trait IPaperMockFaucet<TState> {
-    fn faucet(self: @TState);
-    fn faucetTo(self: @TState,recipient: ContractAddress);
+    fn faucet(ref self: TState,);
+    fn faucetTo(ref self: TState, recipient: ContractAddress);
 }
 
 
-#[dojo::contract]
+#[dojo::contract(allow_ref_self)]
 mod paper_mock {
     use integer::BoundedInt;
     use starknet::ContractAddress;
@@ -160,7 +160,7 @@ mod paper_mock {
 
     #[abi(embed_v0)]
     impl PaperMockInitializerImpl of super::IPaperMockInitializer<ContractState> {
-        fn initializer(self: @ContractState) {
+        fn initializer(ref self: ContractState) {
             assert(
                 self.world().is_owner(get_caller_address(), get_contract_address().into()),
                 Errors::CALLER_IS_NOT_OWNER
@@ -169,7 +169,7 @@ mod paper_mock {
             self.erc20_metadata.initialize('fPAPER', 'fPAPER', 18);
             self.erc20_mintable.mint(get_caller_address(), 10_000);
 
-            // self.initializable.initialize();  // <-- error
+            self.initializable.initialize();
         }
     }
 
@@ -179,14 +179,12 @@ mod paper_mock {
 
     const ETHER: u256 = 1_000_000_000_000_000_000;
 
-    use debug::PrintTrait;
-
     #[abi(embed_v0)]
     impl PaperMockFaucetImpl of super::IPaperMockFaucet<ContractState> {
-        fn faucet(self: @ContractState) {
+        fn faucet(ref self: ContractState) {
             self.erc20_mintable.mint(get_caller_address(), 10_000 * ETHER);
         }
-        fn faucetTo(self: @ContractState, recipient: ContractAddress) {
+        fn faucetTo(ref self: ContractState, recipient: ContractAddress) {
             self.erc20_mintable.mint(recipient, 10_000 * ETHER);
         }
     }

@@ -48,13 +48,13 @@ export const Header = observer(({ back }: HeaderProps) => {
       fontSize={["14px", "16px"]}
     >
       <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        {/* {isAdmin && (  )} */}
+        {!isMobile && (
           <>
             <Burners />
             <Predeployed />
             <ChainSelector canChange={!gameId} />
           </>
-        
+        )}
 
         {/* {!gameId && account && (
           <Card h="48px" p={2} display="flex" justifyContent="center">
@@ -64,10 +64,9 @@ export const Header = observer(({ back }: HeaderProps) => {
 
         {!gameId && <ClaimReward />}
         {!gameId && <OnGoingGames />}
-        
       </HStack>
 
-      {game && /*!game.gameOver ||*/ (true || router.asPath.includes("logs")) && (
+      {game && router.asPath.includes("logs") && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"

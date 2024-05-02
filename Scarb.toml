@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.4.0"
+cairo-version = "2.5.4"
 name = "rollyourown"
 version = "0.1.0"
 
@@ -7,16 +7,11 @@ version = "0.1.0"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.1-alpha.1"}
-# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.6.1-alpha.1-alpha.13"}
-# token = { git = "https://github.com/dojoengine/origami", tag = "v0.6.1-alpha.1-alpha.10" }
-token = { git = "https://github.com/notV4l/origami", branch = "erc_without_events" }
+dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.0-alpha.0"}
+token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.0-alpha.0"}
 
 
 [scripts]
-
-aaa="./scripts/test.sh"
-bbb="AAA=aaaValue && scarb run aaa $AAA"
 
 # 
 katana = "katana --disable-fee --invoke-max-steps 2000000"
@@ -32,20 +27,23 @@ auth = "./scripts/default_auth.sh"
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 # migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
-migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
+migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo000"
+migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --name ryo000 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
+auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.6.1-alpha.1 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.0 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
+slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.7.0-alpha.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
 # # slot ryo421
-# slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.6.1-alpha.1 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
-# slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+# slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.0 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
+# slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 # slot ryo_sepolia
-slot_ryosepolia_torii="slot d create ryosepolia torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.6.1-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
- 
+slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.0 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
+# slot_ryosepolia_torii="slot d create ryosepolia torii --rpc  https://free-rpc.nethermind.io/sepolia-juno -s 63260 --version v0.7.0-alpha.0 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
+
 
 [profile.dev.tool.dojo.env]
 rpc_url = "http://localhost:5050"
@@ -63,10 +61,11 @@ private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c
 # private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
 
 [profile.ryosepolia.tool.dojo.env]
+# world_address= "0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
 rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
-# account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
-# private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
-
+account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
+keystore_path = "/Users/boo/sozo_acc"
+# password = "sozo_acc"
 
 # [profile.prod.tool.dojo.env]
 # rpc_url = "https://api.cartridge.gg/x/ryo420/katana"

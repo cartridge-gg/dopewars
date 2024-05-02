@@ -137,7 +137,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
                 {game.player.turn}
               </Text>
               <Text w={"120px"} flexShrink={0} align="right">
-                {game.player.location.name}
+                {game.player.location?.name}
               </Text>
               <Text w={"70px"} flexShrink={0} align="right">
                 {game.player.health}
