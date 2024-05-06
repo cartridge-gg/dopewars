@@ -50,6 +50,7 @@ mod utils {
     mod events;
     mod bits;
     mod introspect;
+    mod payout_structure;
 }
 
 mod interfaces {
