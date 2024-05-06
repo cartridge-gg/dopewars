@@ -27,7 +27,7 @@ export const TokenBalance = ({ address, token, icon }: { address?: string; token
         </>
       )}
       {/* {iconsBySymbol[balance?.symbol as iconsBySymbolKeys] && iconsBySymbol[balance?.symbol as iconsBySymbolKeys]({})} */}
-      {/* <Text>{balance?.symbol || "?"}</Text> */}
+      {/* <Text>{balance?.symbol || ""}</Text> */}
       {/* <Text>{token}</Text> */}
     </HStack>
   );

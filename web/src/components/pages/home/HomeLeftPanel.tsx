@@ -1,7 +1,18 @@
 import { ScrollDown } from "@/components/icons/ScrollDown";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
-import { Box, Card, Link as ChakraLink, HStack, Heading, Image, Text, VStack, keyframes } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  Link as ChakraLink,
+  HStack,
+  Heading,
+  Image,
+  StyleProps,
+  Text,
+  VStack,
+  keyframes,
+} from "@chakra-ui/react";
 
 const floatAnim = keyframes`  
   0% {transform: translateY(0%);}
@@ -123,38 +134,7 @@ export const HomeLeftPanel = () => {
           </Box>
 
           <HStack py="100px">
-            <Card display="flex" flexDirection="row" p="2" alignItems="center" variant="pixelated" px="5">
-              <ChakraLink
-                href="https://cartridge.gg/"
-                target="_blank"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                textDecoration="none"
-                _hover={{
-                  color: "cartridgeYellow",
-                }}
-              >
-                BUILT BY <Cartridge ml="2" />
-              </ChakraLink>
-
-              <Text px="2" fontSize="xl">
-                |
-              </Text>
-              <ChakraLink
-                href="https://dojoengine.org/"
-                target="_blank"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                textDecoration="none"
-                _hover={{
-                  color: "dojoRed",
-                }}
-              >
-                BUILT WITH <Dojo ml="2" />
-              </ChakraLink>
-            </Card>
+            <BuiltBy />
           </HStack>
         </VStack>
       </VStack>
@@ -183,5 +163,42 @@ export const HomeLeftPanel = () => {
         pointerEvents="none"
       ></HStack>
     </>
+  );
+};
+
+export const BuiltBy = ({ ...props }: StyleProps) => {
+  return (
+    <Card display="flex" flexDirection="row" p="2" alignItems="center" variant="pixelated" px="5" {...props}>
+      <ChakraLink
+        href="https://cartridge.gg/"
+        target="_blank"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        textDecoration="none"
+        _hover={{
+          color: "cartridgeYellow",
+        }}
+      >
+        BUILT BY <Cartridge ml="2" />
+      </ChakraLink>
+
+      <Text px="2" fontSize="xl">
+        |
+      </Text>
+      <ChakraLink
+        href="https://dojoengine.org/"
+        target="_blank"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        textDecoration="none"
+        _hover={{
+          color: "dojoRed",
+        }}
+      >
+        BUILT WITH <Dojo ml="2" />
+      </ChakraLink>
+    </Card>
   );
 };

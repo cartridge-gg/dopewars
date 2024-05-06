@@ -6,7 +6,7 @@ import { katanaLocalChain, katanaSlot420Chain /*, katanaSlot421Chain */} from ".
 
 import manifestDev from "../../manifests/dev/manifest.json";
 import manifestRyo420 from "../../manifests/ryo420/manifest.json";
-// import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
@@ -100,13 +100,15 @@ const katanaSlot420: DojoChainConfig = {
 const snSepolia: DojoChainConfig = {
     name: "SEPOLIA",
     chainConfig: sepolia,
-    rpcUrl: "https://api.cartridge.gg/rpc/starknet-sepolia",
-    toriiUrl: "https://api.cartridge.gg/x/ryo_sepolia/torii/graphql",
-    toriiWsUrl: "wss://api.cartridge.gg/x/ryo_sepolia/torii/graphql/ws",
+    rpcUrl: "https://api.cartridge.gg/rpc/starknet-sepolia/v0_7",
+    // toriiUrl: "https://api.cartridge.gg/x/ryosepolia/torii/graphql",
+    // toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia/torii/graphql/ws",
+    toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
+    toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "ws://localhost:8080/graphql/ws",
     masterAddress: undefined,
     masterPrivateKey: undefined,
     accountClassHash: undefined,
-    manifest: manifestDev, // TODO
+    manifest: manifestRyoSepolia,
     predeployedAccounts: []
 }
 

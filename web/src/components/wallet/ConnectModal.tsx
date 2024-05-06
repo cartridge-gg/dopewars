@@ -1,6 +1,7 @@
 import { ExternalLink, KatanaIcon } from "@/components/icons";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import {
+  Box,
   Button,
   HStack,
   Image,
@@ -78,14 +79,16 @@ export const ConnectModal = observer(() => {
                     }}
                   >
                     <HStack w="full" alignItems="center" justifyContent="center" gap={3}>
-                      {isBurner || isPredeployed ? (
-                        <KatanaIcon />
-                      ) : (
-                        <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
-                      )}
+                      <HStack>
+                        {isBurner || isPredeployed ? (
+                          <KatanaIcon />
+                        ) : (
+                          <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                        )}
 
-                      <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
-                      {!connector.available() && <ExternalLink ml="auto" />}
+                        <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
+                        {!connector.available() && <ExternalLink ml="auto" />}
+                      </HStack  >
                     </HStack>
                   </Button>
                 </HStack>

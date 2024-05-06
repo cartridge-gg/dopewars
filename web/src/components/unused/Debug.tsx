@@ -15,9 +15,7 @@ import { JsonView, darkStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 
 const Debug = () => {
-  const isMobile = IsMobile();
 
-  const { router, gameId } = useRouterContext();
   const { game } = useGameStore();
 
   const { isOpen, onOpen, onClose } = useDisclosure();

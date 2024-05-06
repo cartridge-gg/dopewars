@@ -17,6 +17,7 @@ import {
   reputationRanksKeys,
 } from "@/dojo/helpers";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { EncounterConfigFull } from "@/dojo/stores/config";
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { EncounterConfig } from "@/generated/graphql";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -49,13 +50,10 @@ const Decision = observer(() => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [encounter, setEncounter] = useState<EncounterConfig | undefined>(undefined);
   const [encounterEvent, setEncounterEvent] = useState<TravelEncounterData | undefined>(undefined);
-  const [encounterImg, setEncounterImg] = useState<string>("");
 
   const [isPaying, setIsPaying] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isFigthing, setIsFigthing] = useState(false);
-
-  const [sentence, setSentence] = useState("");
 
   const [canPay, setCanPay] = useState(true);
 
@@ -81,8 +79,7 @@ const Decision = observer(() => {
           const cashAmount = Math.ceil((game.player.cash * encounterEvent!.demandPct) / 100);
           setCanPay(cashAmount > 0);
           encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
-          setSentence(getSentence(PlayerStatus.BeingMugged, EncountersAction.Fight));
-          setEncounterImg(`/images/events/gang/${encounter.level}.gif`);
+
           break;
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
@@ -91,8 +88,7 @@ const Decision = observer(() => {
           const drugName = game.drugs.drug?.name || "you";
           setCanPay(drugAmount > 0);
           encounter && setDemand(`They want ${drugAmount ? drugAmount : ""} ${drugName}!`);
-          setSentence(getSentence(PlayerStatus.BeingArrested, EncountersAction.Fight));
-          setEncounterImg(`/images/events/cops/${encounter.level}.gif`);
+
           break;
       }
     }
@@ -221,11 +217,9 @@ const Decision = observer(() => {
           prefixTitle={prefixTitle}
           title={title}
           demand={demand}
-          sentence={sentence}
           encounter={encounter!}
           encounterEvent={encounterEvent!}
           game={game}
-          imageSrc={encounterImg}
           flex={[0, 1]}
           mb={0}
           w="full"
@@ -242,8 +236,7 @@ const Encounter = observer(
     prefixTitle,
     title,
     demand,
-    imageSrc,
-    sentence,
+
     encounter,
     encounterEvent,
     game,
@@ -252,10 +245,9 @@ const Encounter = observer(
     prefixTitle?: string;
     title?: string;
     demand?: string;
-    imageSrc: string;
-    sentence: string;
+
     game: GameClass;
-    encounter: EncounterConfig;
+    encounter: EncounterConfigFull;
     encounterEvent: TravelEncounterData;
   } & StyleProps) => {
     const { gameInfos } = useGameStore();
@@ -280,7 +272,7 @@ const Encounter = observer(
           gap={[0, 12]}
         >
           <Image
-            src={imageSrc}
+            src={encounter.image}
             alt="adverse event"
             // mt={[0, "100px"]}
             maxH={["30vh", "calc(100vh - 300px)"]}
@@ -317,35 +309,19 @@ const Encounter = observer(
 
                 <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
-                <Text color="yellow.400" textAlign="center" h="40px" lineHeight="40px">
-                  {demand}
-                </Text>
-
-                <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
-
-                <HStack w="full" px="10px" py="6px" justifyContent="center">
-                  <Text flex="1">
-                    <Knife /> {encounter.attack}
-                  </Text>
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <Text flex="1">
-                    <Kevlar /> {encounter.defense}
-                  </Text>
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <Text flex="1">
-                    <Shoes /> {encounter.speed}
-                  </Text>
-                  <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                  <HealthIndicator health={encounter?.health} maxHealth={100} flex="1" />
-                </HStack>
+                <EncounterStats encounter={encounter} />
               </VStack>
+
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+
+              <Text textAlign="center" h="40px" lineHeight="40px">
+                {demand}
+              </Text>
             </Card>
 
-            <Text> VS </Text>
+            <Text opacity={0.5}> VS </Text>
 
             <Card alignItems="center" w="full" justify="center" color="yellow.400">
-              <HustlerStats />
-              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
@@ -373,6 +349,8 @@ const Encounter = observer(
                   )}
                 </HStack>
               </VStack>
+              <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
+              <HustlerStats />
             </Card>
           </VStack>
         </VStack>
@@ -380,6 +358,28 @@ const Encounter = observer(
     );
   },
 );
+
+export const EncounterStats = observer(({ encounter }: { encounter: EncounterConfig }) => {
+  if (!encounter) return null;
+  return (
+    <HStack flexDirection="row" w="full" px="10px" py="6px" justifyContent="center">
+      <HStack flex="1">
+        <Knife /> <Text>{encounter.attack}</Text>
+      </HStack>
+      <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+      <HStack flex="1">
+        <Kevlar />
+        <Text>{encounter.defense}</Text>
+      </HStack>
+      <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+      <HStack flex="1">
+        <Shoes /> <Text>{encounter.speed}</Text>
+      </HStack>
+      <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
+      <HealthIndicator health={encounter?.health} maxHealth={encounter?.health} flex="1" />
+    </HStack>
+  );
+});
 
 // /// TODO: move this in a relevant place
 // function getEncounterNPCMaxHealth(level: number, turn: number) {

@@ -38,6 +38,7 @@ const Admin = () => {
 
   return (
     <Layout isSinglePanel={true}>
+
       <Tabs variant="unstyled" w="full">
         <TabList pb={6}>
           <Tab>ADMIN</Tab>

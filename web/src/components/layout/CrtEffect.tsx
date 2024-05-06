@@ -10,7 +10,8 @@ export const CrtEffect = () => {
       left="0"
       boxSize="full"
       pointerEvents="none"
-      zIndex="overlay"
+      // zIndex="overlay"
+      zIndex={2600}
       sx={{
         filter: "saturate(1) brightness(1) contrast(1.2)",
       }}

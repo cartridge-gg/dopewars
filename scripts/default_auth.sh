@@ -37,7 +37,7 @@ echo "--------------------------------------------------------------------------
 
 
 # enable system -> models authorizations
-sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 5 --wait writer\
+sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100 --wait writer\
  RyoConfig,$RYO_ADDRESS \
  RyoAddress,$RYO_ADDRESS \
  Leaderboard,$RYO_ADDRESS \
@@ -54,7 +54,7 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 5 -
 
 
 # remove later
-sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
+sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100  --wait writer\
  ERC20MetadataModel,$PAPER_MOCK_ADDRESS \
  ERC20BalanceModel,$PAPER_MOCK_ADDRESS \
  ERC20AllowanceModel,$PAPER_MOCK_ADDRESS \
@@ -64,19 +64,19 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --wait writer\
 echo "Default authorizations have been successfully set."
 
 echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS --wait
+sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS --fee-estimate-multiplier 100  --wait
 echo "Initialized RYO!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1 --wait 
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1 --fee-estimate-multiplier 10 --wait 
 echo "Initialized CONFIG 1!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2 --wait 
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2 --fee-estimate-multiplier 10 --wait 
 echo "Initialized CONFIG 2!"
 sleep $TX_SLEEP
 
 # remove later
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --wait 
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --fee-estimate-multiplier 10 --wait 
 echo "Initialized PAPER_MOCK!"
 sleep $TX_SLEEP

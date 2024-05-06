@@ -205,7 +205,7 @@ export const DojoContextProvider = observer(
           uiStore,
         }}
       >
-        <StarknetProvider>
+        <StarknetProvider selectedChain={selectedChain}>
           {hasError ? (
             <ConnectionError errors={errors} />
           ) : (

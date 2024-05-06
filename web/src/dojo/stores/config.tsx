@@ -170,9 +170,9 @@ export class ConfigStoreClass {
     const encounterConfigFull = encounterConfig.map((i) => {
       return {
         ...i,
-        image:`/images/events/${i.encounter.toLowerCase()}/${i.level}.gif`
-      }
-    })
+        image: `/images/events/${i.encounter.toLowerCase()}/${i.level}.gif`,
+      };
+    });
 
     /*************************************************** */
 
@@ -198,17 +198,24 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-    // const res = await dojoProvider.callContract("rollyourown::config::config::config", "get_config", []);
-    const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
+   ///@ts-ignore
+    const getConfig = yield this.dojoProvider.call({
+      contractName: "rollyourown::config::config::config",
+      entrypoint: "get_config",
+      calldata: [],
+    });
 
-    const contract: TypedContractV2<typeof configAbi> = new Contract(
-      contractInfos.abi,
-      contractInfos.address,
-      this.dojoProvider.provider,
-    ).typedv2(configAbi);
 
-    ///@ts-ignore
-    const getConfig = yield contract.get_config();
+    // const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
+
+    // const contract: TypedContractV2<typeof configAbi> = new Contract(
+    //   contractInfos.abi,
+    //   contractInfos.address,
+    //   this.dojoProvider.provider,
+    // ).typedv2(configAbi);
+
+    // ///@ts-ignore
+    // const getConfig = yield contract.get_config();
 
     /*************************************************** */
 

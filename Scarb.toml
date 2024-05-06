@@ -42,8 +42,7 @@ slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/
  
 # slot ryo_sepolia
 slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.0 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
-# slot_ryosepolia_torii="slot d create ryosepolia torii --rpc  https://free-rpc.nethermind.io/sepolia-juno -s 63260 --version v0.7.0-alpha.0 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
-
+# --index-pending 
 
 [profile.dev.tool.dojo.env]
 rpc_url = "http://localhost:5050"
@@ -62,7 +61,8 @@ private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c
 
 [profile.ryosepolia.tool.dojo.env]
 # world_address= "0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
-rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
+# rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
+rpc_url = "https://starknet-sepolia.g.alchemy.com/v2/AQxmz1FjMPH2mY7wc3er677SdzOdS1XE"
 account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
 keystore_path = "/Users/boo/sozo_acc"
 # password = "sozo_acc"
