@@ -14,14 +14,15 @@ struct Game {
     player_name: Bytes16,
     hustler_id: u16,
     //
-    leaderboard_version: u16,
+    season_version: u16,
     game_mode: GameMode,
-    //
-    max_turns: u8,
+    // // TODO: check if move to SeasonGameConfig
+    max_turns: u8,  
     max_wanted_shopping: u8,
     max_rounds: u8,
     // 
     game_over: bool,
+    final_score: u32,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]

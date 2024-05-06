@@ -8,15 +8,15 @@ trait IRyo<T> {
     fn set_paused(self: @T, paused: bool);
     fn set_paper_fee(self: @T, fee: u16);
     fn set_treasury_fee_pct(self: @T, fee_pct: u8);
-    fn set_leaderboard_duration(self: @T, duration_sec: u32);
+    fn set_season_duration(self: @T, duration_sec: u32);
 
-    //
+    // 
     fn paper(self: @T) -> ContractAddress;
     fn treasury(self: @T) -> ContractAddress;
 
     fn paused(self: @T) -> bool;
     fn paper_fee(self: @T) -> u16;
-    fn leaderboard_duration(self: @T) -> u32;
+    fn season_duration(self: @T) -> u32;
 }
 
 #[dojo::contract]
@@ -32,8 +32,8 @@ mod ryo {
             ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
             ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
         },
-        models::{leaderboard::Leaderboard,}, utils::random::{RandomImpl},
-        systems::leaderboard::{LeaderboardManager, LeaderboardManagerTrait},
+        models::{season::Season,}, utils::random::{RandomImpl},
+        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
     };
 
     const FEW_MIN: u32 = 1200; // 20 * 60
@@ -58,8 +58,8 @@ mod ryo {
             ryo_config.initialized = true;
             ryo_config.paused = false;
            
-            ryo_config.leaderboard_version = 1;
-            ryo_config.leaderboard_duration = 8 * ONE_HOUR; // ONE_WEEK
+            ryo_config.season_version = 1;
+            ryo_config.season_duration = FEW_MIN; // ONE_WEEK
            
             ryo_config.paper_fee = 100; // in ether
             ryo_config.treasury_fee_pct = 5;
@@ -77,9 +77,9 @@ mod ryo {
             // save 
             ryo_addresses_manager.set(ryo_addresses);
 
-            // Leaderboard
-            let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
-            leaderboard_manager.new_leaderboard(ryo_config.leaderboard_version);
+            // Season
+            let season_manager = SeasonManagerTrait::new(self.world());
+            season_manager.new_season(ryo_config.season_version);
         }
 
         //
@@ -117,13 +117,13 @@ mod ryo {
             ryo_config_manager.set(ryo_config);
         }
 
-        fn set_leaderboard_duration(self: @ContractState, duration_sec: u32) {
+        fn set_season_duration(self: @ContractState, duration_sec: u32) {
             self.assert_caller_is_owner();
 
             let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
             let mut ryo_config = ryo_config_manager.get();
 
-            ryo_config.leaderboard_duration = duration_sec;
+            ryo_config.season_duration = duration_sec;
             ryo_config_manager.set(ryo_config);
         }
 
@@ -151,9 +151,9 @@ mod ryo {
             ryo_config.paper_fee
         }
 
-        fn leaderboard_duration(self: @ContractState) -> u32 {
+        fn season_duration(self: @ContractState) -> u32 {
             let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
-            ryo_config.leaderboard_duration
+            ryo_config.season_duration
         }
 
     }

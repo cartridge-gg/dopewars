@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use rollyourown::{
     config::{locations::{Locations}, hustlers::{ItemSlot}}, packing::game_store::{GameMode},
-    systems::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
+    systems::helpers::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
 };
 
 #[derive(Copy, Drop, Serde)]
@@ -17,17 +17,14 @@ enum EncounterActions {
     Fight,
 }
 
-
 #[starknet::interface]
 trait IGameActions<T> {
     fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
+    // fn register_score(self: @T, game_id: u32 );
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
-    fn claim(self: @T, season: u16);
-    fn claim_treasury(self: @T);
 }
-
 
 #[dojo::contract]
 mod game {
@@ -40,16 +37,17 @@ mod game {
             ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
         },
         models::{
-            game_store_packed::GameStorePacked, game::{Game, GameImpl}, leaderboard::{Leaderboard}
+            game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}
         },
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             player::{Player, PlayerImpl},
         },
         systems::{
-            trading, shopping, traveling, traveling::EncounterOutcomes, game_loop,
-            game::EncounterActions, leaderboard::{LeaderboardManagerTrait}
+            helpers::{trading, shopping, traveling, traveling::EncounterOutcomes, game_loop},
+            game::EncounterActions,
         },
+        helpers::season_manager::{SeasonManagerTrait},
         utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
         constants::{ETHER},
@@ -174,7 +172,7 @@ mod game {
         #[key]
         player_id: ContractAddress,
         #[key]
-        leaderboard_version: u16,
+        season_version: u16,
         player_name: felt252,
         hustler_id: u16,
         turn: u8,
@@ -195,9 +193,9 @@ mod game {
             let game_id = world.uuid();
             let player_id = get_caller_address();
 
-            // get leaderboard version & pay paper_fee
-            let leaderboard_manager = LeaderboardManagerTrait::new(world);
-            let leaderboard_version = leaderboard_manager.on_game_start();
+            // get season version & pay paper_fee
+            let season_manager = SeasonManagerTrait::new(world);
+            let season_version = season_manager.on_game_start();
 
             let game_config = GameConfigImpl::get(world);
             let game = Game {
@@ -205,12 +203,13 @@ mod game {
                 player_id,
                 player_name: Bytes16Impl::from(player_name),
                 hustler_id,
-                leaderboard_version,
+                season_version,
                 game_mode,
                 max_turns: game_config.max_turns, // TODO: remove?
                 max_wanted_shopping: game_config.max_wanted_shopping, // TODO: remove?
                 max_rounds: game_config.max_rounds, // TODO: remove?
-                game_over: false
+                game_over: false,
+                final_score: 0,
             };
 
             // save Game
@@ -312,59 +311,6 @@ mod game {
             };
         }
 
-        fn claim(self: @ContractState, season: u16) {
-            let world = self.world();
-            let mut leaderboard = get!(world, (season), (Leaderboard));
-
-            // check not claimed
-            assert(!leaderboard.claimed, 'already claimed!');
-
-            // check if caller is winner
-            assert(leaderboard.player_id == get_caller_address(), 'you aint dat OG!');
-
-            let leaderboard_manager = LeaderboardManagerTrait::new(world);
-            let current_version = leaderboard_manager.get_current_version();
-
-            // check if season has end
-            assert(season < current_version, 'season has not ended yet!');
-
-            // any other check missing ?
-
-            // update claimed & save
-            leaderboard.claimed = true;
-            set!(world, (leaderboard));
-
-            // retrieve paper address 
-            let paper_address = RyoAddressManagerTrait::new(world).paper();
-            let paper_jackpot_eth: u256 = leaderboard.paper_balance.into() * ETHER;
-
-            // transfer reward
-            IPaperDispatcher { contract_address: paper_address }
-                .transfer(get_caller_address(), paper_jackpot_eth);
-        }
-
-         fn claim_treasury(self: @ContractState) {
-            // check if owner ???   TODO: check if ok
-            // self.assert_caller_is_owner();
-           
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
-
-            assert(ryo_config.treasury_balance > 0, 'nothin to claim');
-
-            // calc claimable amount
-            let claimable_eth: u256  = ryo_config.treasury_balance.into() * ETHER;
-
-            // reset treasury_balance
-            ryo_config.treasury_balance = 0;
-            ryo_config_manager.set(ryo_config);
-         
-            let ryo_addresses_manager = RyoAddressManagerTrait::new(self.world());
-
-            // transfer claimable_eth to treasury
-            IPaperDispatcher { contract_address: ryo_addresses_manager.paper() }
-                .transfer(ryo_addresses_manager.treasury(), claimable_eth);
-        }
     }
 
     #[generate_trait]

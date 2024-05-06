@@ -11,7 +11,8 @@ use rollyourown::{
         markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
         drugs_packed::{DrugsPackedTrait}
     },
-    systems::{traveling, leaderboard::{LeaderboardManager, LeaderboardManagerTrait}}
+    systems::helpers::{traveling},
+    helpers::season_manager::{SeasonManager, SeasonManagerTrait}
 };
 
 
@@ -90,15 +91,15 @@ fn on_game_over(ref game_store: GameStore) {
     // set game_over on game 
     game_store.game.game_over = true;
 
-    let leaderboard_manager = LeaderboardManagerTrait::new(game_store.world);
+    let season_manager = SeasonManagerTrait::new(game_store.world);
     // in case player starts game in version v & end game in version v+1
-    game_store.game.leaderboard_version = leaderboard_manager.get_current_version();
+    game_store.game.season_version = season_manager.get_current_version();
 
     // save game
     set!(game_store.world, (game_store.game));
 
-    // handle new highscore & leaderboard version
-    leaderboard_manager.on_game_over(ref game_store);
+    // handle new highscore & season version
+    season_manager.on_game_over(ref game_store);
 
     // emit GameOver
     game_store
@@ -108,7 +109,7 @@ fn on_game_over(ref game_store: GameStore) {
                 selector!("GameOver"),
                 Into::<u32, felt252>::into(game_store.game.game_id),
                 Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into(),
-                Into::<u16, felt252>::into(game_store.game.leaderboard_version),
+                Into::<u16, felt252>::into(game_store.game.season_version),
             ],
             array![
                 game_store.game.player_name.into(),

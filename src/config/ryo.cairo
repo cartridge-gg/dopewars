@@ -10,8 +10,8 @@ struct RyoConfig {
     initialized: bool,
     paused: bool,
     //
-    leaderboard_version: u16,
-    leaderboard_duration: u32,
+    season_version: u16,
+    season_duration: u32,
     //
     paper_fee: u16,
     treasury_fee_pct: u8,

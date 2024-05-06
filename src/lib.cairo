@@ -9,11 +9,15 @@ mod config {
     mod ryo_address;
 }
 
+mod helpers {
+    mod season_manager;
+}
+
 mod models {
     mod game;
     mod game_store_packed;
 
-    mod leaderboard;
+    mod season;
 }
 
 mod packing {
@@ -31,16 +35,18 @@ mod packing {
 
 mod systems {
     mod ryo;
-    mod leaderboard;
-
     mod game;
-    mod game_loop;
+    mod laundromat;
 
-    mod trading;
-    mod shopping;
-    mod traveling;
+    mod helpers {
+        mod game_loop;
 
-    mod devtools;
+        mod trading;
+        mod shopping;
+        mod traveling; 
+    }
+
+    // mod devtools;
 }
 
 mod utils {

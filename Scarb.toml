@@ -41,7 +41,7 @@ slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/
 # slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 # slot ryo_sepolia
-slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.0 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
+slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
 # --index-pending 
 
 [profile.dev.tool.dojo.env]
