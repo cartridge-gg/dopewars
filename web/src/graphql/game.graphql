@@ -10,6 +10,27 @@ query GameById($gameId: u32) {
         player_name
         player_id
         game_over
+        final_score
+        registered
+        claimed
+        position
+      }
+    }
+  }
+} 
+
+query RegisteredGamesBySeason($version: u16) {
+  gameModels(
+  limit: 9001, 
+  where: { season_version: $version, registered: true }
+  order: {field: FINAL_SCORE, direction: DESC}
+  ) {
+    edges {
+      node {
+        game_id
+        player_id
+        final_score
+        registered
       }
     }
   }
@@ -17,7 +38,7 @@ query GameById($gameId: u32) {
 
 
 query GamesByPlayer($playerId: String) {
-  entities(keys: ["*", $playerId]) {
+  entities(limit: 9001, keys: ["*", $playerId]) {
     edges {
       node {
         id
@@ -27,11 +48,15 @@ query GamesByPlayer($playerId: String) {
           ... on Game {
             game_id
             player_id
-            leaderboard_version
+            season_version
             game_mode
             hustler_id
             player_name
             game_over
+            final_score
+            registered
+            claimed
+            position
           }
           ... on GameStorePacked {
             game_id

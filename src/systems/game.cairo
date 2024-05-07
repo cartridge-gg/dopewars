@@ -21,7 +21,7 @@ enum EncounterActions {
 trait IGameActions<T> {
     fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
-    // fn register_score(self: @T, game_id: u32 );
+    fn register_score(self: @T, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
@@ -36,9 +36,7 @@ mod game {
             ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
             ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
         },
-        models::{
-            game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}
-        },
+        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}},
         packing::{
             game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
             player::{Player, PlayerImpl},
@@ -48,9 +46,11 @@ mod game {
             game::EncounterActions,
         },
         helpers::season_manager::{SeasonManagerTrait},
-        utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
-        constants::{ETHER},
+        utils::{
+            random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
+            sorted_list::{SortedListImpl, SortedListTrait}
+        },
+        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
 
 
@@ -144,15 +144,15 @@ mod game {
         action: EncounterActions,
         outcome: EncounterOutcomes,
         rounds: u8,
-        dmg_dealt: Array<(u8,u8)>,
-        dmg_taken: Array<(u8,u8)>,
+        dmg_dealt: Array<(u8, u8)>,
+        dmg_taken: Array<(u8, u8)>,
         cash_earnt: u32,
         cash_loss: u32,
         drug_id: u8,
         drug_loss: Array<u32>,
         turn_loss: u8,
-        rep_pos:u8,
-        rep_neg:u8,
+        rep_pos: u8,
+        rep_neg: u8,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -201,15 +201,22 @@ mod game {
             let game = Game {
                 game_id,
                 player_id,
-                player_name: Bytes16Impl::from(player_name),
-                hustler_id,
+                //
                 season_version,
                 game_mode,
-                max_turns: game_config.max_turns, // TODO: remove?
-                max_wanted_shopping: game_config.max_wanted_shopping, // TODO: remove?
-                max_rounds: game_config.max_rounds, // TODO: remove?
+                //
+                player_name: Bytes16Impl::from(player_name),
+                hustler_id,
+                //
                 game_over: false,
                 final_score: 0,
+                registered: false,
+                claimed: false,
+                position: 0,
+                //
+                max_turns: game_config.max_turns,
+                max_wanted_shopping: game_config.max_wanted_shopping,
+                max_rounds: game_config.max_rounds,
             };
 
             // save Game
@@ -223,7 +230,12 @@ mod game {
             set!(world, (game_store_packed));
 
             // emit GameCreated
-            emit!(world, (Event::GameCreated(GameCreated { game_id, player_id, game_mode, player_name, hustler_id })));
+            emit!(
+                world,
+                (Event::GameCreated(
+                    GameCreated { game_id, player_id, game_mode, player_name, hustler_id }
+                ))
+            );
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
@@ -240,6 +252,39 @@ mod game {
             //save & on_game_over
             game_loop::on_game_over(ref game_store);
         }
+
+        fn register_score(self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress) {
+            let world = self.world();
+            let player_id = get_caller_address();
+
+            let mut game = GameImpl::get(world, game_id, player_id);
+
+            // check dat game exists & is game_over
+            assert(game.game_over, 'game is not over');
+            // check not already registered
+            assert(!game.registered, 'already registered');
+
+            //
+            // TODO: check Season status
+            //
+
+            // register final_score
+            let mut game_store = GameStoreImpl::get(world, game);
+            game.final_score = game_store.player.cash; 
+            game.registered = true;
+            set!(world, (game));
+
+            // retrieve Season Sorted List   TODO: check season_version / status
+            let list_id = pedersen::pedersen('SeasonLeaderboard', game.season_version.into());
+            let mut sorted_list = SortedListImpl::get(world, list_id);
+
+            // add to Game to sorted_list
+            sorted_list.add(world, game, (prev_game_id, prev_player_id));
+
+
+            // TODO : emit event
+        }
+
 
         fn travel(
             self: @ContractState,
@@ -310,7 +355,6 @@ mod game {
                 game_loop::on_turn_end(ref game_store, ref randomizer,);
             };
         }
-
     }
 
     #[generate_trait]

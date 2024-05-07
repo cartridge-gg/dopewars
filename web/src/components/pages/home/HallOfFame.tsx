@@ -38,7 +38,7 @@ export const HallOfFame = observer(() => {
         {!isFetchingHallOfFame && (
           <SimpleGrid columns={[1, 2]} w="full" gap={4}>
             {hallOfFame
-              .filter((i) => i.version !== config?.ryo?.leaderboard_version)
+              .filter((i) => i.version !== config?.ryo?.season_version)
               .sort((a, b) => b.version - a.version)
               .map((i, index) => {
                 return <HallOfFameEntry entry={i} key={index} account={account} />;

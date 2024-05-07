@@ -136,6 +136,10 @@ const RyoAddressCard = observer(() => {
             <Text w="180px">TREASURY</Text>
             <Text>{config?.ryoAddress.treasury}</Text>
           </HStack>
+          <HStack>
+            <Text w="180px">LAUNDROMAT</Text>
+            <Text>{config?.ryoAddress.laundromat}</Text>
+          </HStack>
         </VStack>
       </CardBody>
     </Card>

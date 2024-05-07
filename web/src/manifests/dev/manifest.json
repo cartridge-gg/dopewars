@@ -1840,8 +1840,8 @@
     {
       "kind": "DojoContract",
       "address": "0x39c0f0531ea74d657f91ed6e4467e01aea144060b7c69f6c8cdb7e6b904e082",
-      "class_hash": "0x1b227cb71aff952f78c742ed52c37bfafce69cdbad51f547d9634f8a7528812",
-      "original_class_hash": "0x1b227cb71aff952f78c742ed52c37bfafce69cdbad51f547d9634f8a7528812",
+      "class_hash": "0x2c79516ac5870394ddec48323e43a3d418d9521716056fb244074632d245f8e",
+      "original_class_hash": "0x2c79516ac5870394ddec48323e43a3d418d9521716056fb244074632d245f8e",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -1916,10 +1916,10 @@
             },
             {
               "type": "function",
-              "name": "feed_leaderboard",
+              "name": "create_fake_game",
               "inputs": [
                 {
-                  "name": "count",
+                  "name": "final_score",
                   "type": "core::integer::u32"
                 }
               ],
@@ -1996,8 +1996,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1318cc9a062d080e98792cfc7af13b96bf465134474bcba1a190ae76304df7",
-      "class_hash": "0x69f843f0585d895781dec13ace55cdb97b62f6984de737e7b5d328c795058d",
-      "original_class_hash": "0x69f843f0585d895781dec13ace55cdb97b62f6984de737e7b5d328c795058d",
+      "class_hash": "0x569cb2112f16463250fd25b7389620cd9116274ad3df53c7d76abd5a121a82c",
+      "original_class_hash": "0x569cb2112f16463250fd25b7389620cd9116274ad3df53c7d76abd5a121a82c",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -2075,7 +2075,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::systems::trading::TradeDirection",
+          "name": "rollyourown::systems::helpers::trading::TradeDirection",
           "variants": [
             {
               "name": "Sell",
@@ -2127,11 +2127,11 @@
         },
         {
           "type": "struct",
-          "name": "rollyourown::systems::trading::Trade",
+          "name": "rollyourown::systems::helpers::trading::Trade",
           "members": [
             {
               "name": "direction",
-              "type": "rollyourown::systems::trading::TradeDirection"
+              "type": "rollyourown::systems::helpers::trading::TradeDirection"
             },
             {
               "name": "drug",
@@ -2167,7 +2167,7 @@
         },
         {
           "type": "struct",
-          "name": "rollyourown::systems::shopping::Action",
+          "name": "rollyourown::systems::helpers::shopping::Action",
           "members": [
             {
               "name": "slot",
@@ -2181,11 +2181,11 @@
           "variants": [
             {
               "name": "Trade",
-              "type": "rollyourown::systems::trading::Trade"
+              "type": "rollyourown::systems::helpers::trading::Trade"
             },
             {
               "name": "Shop",
-              "type": "rollyourown::systems::shopping::Action"
+              "type": "rollyourown::systems::helpers::shopping::Action"
             }
           ]
         },
@@ -2293,6 +2293,26 @@
             },
             {
               "type": "function",
+              "name": "register_score",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "prev_game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "prev_player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "travel",
               "inputs": [
                 {
@@ -2324,25 +2344,6 @@
                   "type": "rollyourown::systems::game::EncounterActions"
                 }
               ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "claim",
-              "inputs": [
-                {
-                  "name": "season",
-                  "type": "core::integer::u16"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "claim_treasury",
-              "inputs": [],
               "outputs": [],
               "state_mutability": "view"
             }
@@ -2603,7 +2604,7 @@
         },
         {
           "type": "enum",
-          "name": "rollyourown::systems::traveling::EncounterOutcomes",
+          "name": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
           "variants": [
             {
               "name": "Died",
@@ -2653,7 +2654,7 @@
             },
             {
               "name": "outcome",
-              "type": "rollyourown::systems::traveling::EncounterOutcomes",
+              "type": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
               "kind": "data"
             },
             {
@@ -2746,7 +2747,7 @@
               "kind": "key"
             },
             {
-              "name": "leaderboard_version",
+              "name": "season_version",
               "type": "core::integer::u16",
               "kind": "key"
             },
@@ -2847,9 +2848,195 @@
     },
     {
       "kind": "DojoContract",
+      "address": "0x3522830da89f412070ca1a08678bca2a526ceb67e5efb8b1d31621fef23c2cd",
+      "class_hash": "0x4c9ef83d88c7f9ce3a802c0dc2db567c89e91ab92b4e2b5b0f13255fb3b5829",
+      "original_class_hash": "0x4c9ef83d88c7f9ce3a802c0dc2db567c89e91ab92b4e2b5b0f13255fb3b5829",
+      "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoResourceProviderImpl",
+          "interface_name": "dojo::world::IDojoResourceProvider"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::world::IDojoResourceProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_resource",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::world::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::world::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "LaundromatImpl",
+          "interface_name": "rollyourown::systems::laundromat::ILaundromat"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u32>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u32>"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::laundromat::ILaundromat",
+          "items": [
+            {
+              "type": "function",
+              "name": "launder",
+              "inputs": [
+                {
+                  "name": "season_version",
+                  "type": "core::integer::u16"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "claim",
+              "inputs": [
+                {
+                  "name": "season",
+                  "type": "core::integer::u16"
+                },
+                {
+                  "name": "game_ids",
+                  "type": "core::array::Span::<core::integer::u32>"
+                },
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "claim_treasury",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradableImpl",
+          "interface_name": "dojo::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::components::upgradeable::upgradeable::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::components::upgradeable::upgradeable::Event",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "reads": [],
+      "writes": [],
+      "computed": [],
+      "name": "rollyourown::systems::laundromat::laundromat"
+    },
+    {
+      "kind": "DojoContract",
       "address": "0x665adc0ff60b1f5b1e16c013ba363c98b1c2ecc13a038ad2ebc9a72b81854e8",
-      "class_hash": "0x3a399c8a25a399e3a33ecf7af41d81630a23d3125ed7ecd74a55025e35c97ed",
-      "original_class_hash": "0x3a399c8a25a399e3a33ecf7af41d81630a23d3125ed7ecd74a55025e35c97ed",
+      "class_hash": "0x69281247d2561e69555d53e52671420a3b095098d0de0d4d172189462953c33",
+      "original_class_hash": "0x69281247d2561e69555d53e52671420a3b095098d0de0d4d172189462953c33",
       "base_class_hash": "0x679177a2cb757694ac4f326d01052ff0963eac0bc2a17116a2b87badcdf6f76",
       "abi": [
         {
@@ -2940,6 +3127,10 @@
                 {
                   "name": "treasury_address",
                   "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "laundromat_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [],
@@ -2983,7 +3174,7 @@
             },
             {
               "type": "function",
-              "name": "set_leaderboard_duration",
+              "name": "set_season_duration",
               "inputs": [
                 {
                   "name": "duration_sec",
@@ -3017,6 +3208,17 @@
             },
             {
               "type": "function",
+              "name": "laundromat",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "paused",
               "inputs": [],
               "outputs": [
@@ -3039,7 +3241,7 @@
             },
             {
               "type": "function",
-              "name": "leaderboard_duration",
+              "name": "season_duration",
               "inputs": [],
               "outputs": [
                 {
@@ -4958,10 +5160,15 @@
           "name": "treasury",
           "type": "ContractAddress",
           "key": false
+        },
+        {
+          "name": "laundromat",
+          "type": "ContractAddress",
+          "key": false
         }
       ],
-      "class_hash": "0x5d45a0b7166d5fef0e633da37289dd602049e59f60961f3f42169d70b5bfc2e",
-      "original_class_hash": "0x5d45a0b7166d5fef0e633da37289dd602049e59f60961f3f42169d70b5bfc2e",
+      "class_hash": "0x3c255992a8c23d26310481c04f38e4e023bb85d12b79a170a138780cebe27cc",
+      "original_class_hash": "0x3c255992a8c23d26310481c04f38e4e023bb85d12b79a170a138780cebe27cc",
       "abi": [
         {
           "type": "impl",
@@ -5151,6 +5358,10 @@
             {
               "name": "treasury",
               "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "laundromat",
+              "type": "core::starknet::contract_address::ContractAddress"
             }
           ]
         },
@@ -5200,12 +5411,12 @@
           "key": false
         },
         {
-          "name": "leaderboard_version",
+          "name": "season_version",
           "type": "u16",
           "key": false
         },
         {
-          "name": "leaderboard_duration",
+          "name": "season_duration",
           "type": "u32",
           "key": false
         },
@@ -5225,8 +5436,8 @@
           "key": false
         }
       ],
-      "class_hash": "0xc79f9914d4ca75ecef56d27d6e50e6c25d711bedb041a719112b3ef3a4dd97",
-      "original_class_hash": "0xc79f9914d4ca75ecef56d27d6e50e6c25d711bedb041a719112b3ef3a4dd97",
+      "class_hash": "0x227e44ff7fe99290149ae25caa3d41577e1ccd1488a4633c42a23085479002b",
+      "original_class_hash": "0x227e44ff7fe99290149ae25caa3d41577e1ccd1488a4633c42a23085479002b",
       "abi": [
         {
           "type": "impl",
@@ -5432,11 +5643,11 @@
               "type": "core::bool"
             },
             {
-              "name": "leaderboard_version",
+              "name": "season_version",
               "type": "core::integer::u16"
             },
             {
-              "name": "leaderboard_duration",
+              "name": "season_duration",
               "type": "core::integer::u32"
             },
             {
@@ -5494,6 +5705,16 @@
           "key": true
         },
         {
+          "name": "season_version",
+          "type": "u16",
+          "key": false
+        },
+        {
+          "name": "game_mode",
+          "type": "GameMode",
+          "key": false
+        },
+        {
           "name": "player_name",
           "type": "Bytes16",
           "key": false
@@ -5504,13 +5725,28 @@
           "key": false
         },
         {
-          "name": "leaderboard_version",
-          "type": "u16",
+          "name": "game_over",
+          "type": "bool",
           "key": false
         },
         {
-          "name": "game_mode",
-          "type": "GameMode",
+          "name": "final_score",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "registered",
+          "type": "bool",
+          "key": false
+        },
+        {
+          "name": "claimed",
+          "type": "bool",
+          "key": false
+        },
+        {
+          "name": "position",
+          "type": "u16",
           "key": false
         },
         {
@@ -5527,15 +5763,10 @@
           "name": "max_rounds",
           "type": "u8",
           "key": false
-        },
-        {
-          "name": "game_over",
-          "type": "bool",
-          "key": false
         }
       ],
-      "class_hash": "0x4d25ed14bab536755433a442e56ef0afb33ff039c454050a7e5940756cb17ef",
-      "original_class_hash": "0x4d25ed14bab536755433a442e56ef0afb33ff039c454050a7e5940756cb17ef",
+      "class_hash": "0xa3e03f641855fa09a2ebed2b97a8a7e61483a365dea87793d1a56de4e50b88",
+      "original_class_hash": "0xa3e03f641855fa09a2ebed2b97a8a7e61483a365dea87793d1a56de4e50b88",
       "abi": [
         {
           "type": "impl",
@@ -5711,16 +5942,6 @@
           "interface_name": "rollyourown::models::game::Igame"
         },
         {
-          "type": "struct",
-          "name": "rollyourown::utils::bytes16::Bytes16",
-          "members": [
-            {
-              "name": "value",
-              "type": "core::integer::u128"
-            }
-          ]
-        },
-        {
           "type": "enum",
           "name": "rollyourown::models::game::GameMode",
           "variants": [
@@ -5731,6 +5952,16 @@
             {
               "name": "Warrior",
               "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::utils::bytes16::Bytes16",
+          "members": [
+            {
+              "name": "value",
+              "type": "core::integer::u128"
             }
           ]
         },
@@ -5761,6 +5992,14 @@
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
+              "name": "season_version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "game_mode",
+              "type": "rollyourown::models::game::GameMode"
+            },
+            {
               "name": "player_name",
               "type": "rollyourown::utils::bytes16::Bytes16"
             },
@@ -5769,12 +6008,24 @@
               "type": "core::integer::u16"
             },
             {
-              "name": "leaderboard_version",
-              "type": "core::integer::u16"
+              "name": "game_over",
+              "type": "core::bool"
             },
             {
-              "name": "game_mode",
-              "type": "rollyourown::models::game::GameMode"
+              "name": "final_score",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "registered",
+              "type": "core::bool"
+            },
+            {
+              "name": "claimed",
+              "type": "core::bool"
+            },
+            {
+              "name": "position",
+              "type": "core::integer::u16"
             },
             {
               "name": "max_turns",
@@ -5787,10 +6038,6 @@
             {
               "name": "max_rounds",
               "type": "core::integer::u8"
-            },
-            {
-              "name": "game_over",
-              "type": "core::bool"
             }
           ]
         },
@@ -6070,18 +6317,18 @@
           "key": true
         },
         {
-          "name": "game_id",
+          "name": "season_duration",
           "type": "u32",
           "key": false
         },
         {
-          "name": "player_id",
-          "type": "ContractAddress",
+          "name": "paper_fee",
+          "type": "u16",
           "key": false
         },
         {
-          "name": "high_score",
-          "type": "u32",
+          "name": "treasury_fee_pct",
+          "type": "u8",
           "key": false
         },
         {
@@ -6093,15 +6340,10 @@
           "name": "paper_balance",
           "type": "u32",
           "key": false
-        },
-        {
-          "name": "claimed",
-          "type": "bool",
-          "key": false
         }
       ],
-      "class_hash": "0x846290e630532c0a16562b21c8f8a6970770a8aed4f1d1fe382dcb6ee4556d",
-      "original_class_hash": "0x846290e630532c0a16562b21c8f8a6970770a8aed4f1d1fe382dcb6ee4556d",
+      "class_hash": "0x78142b7e2b1ee5d07936978ae6116ad259cf27b0401a2fb21cf4bfa349332ab",
+      "original_class_hash": "0x78142b7e2b1ee5d07936978ae6116ad259cf27b0401a2fb21cf4bfa349332ab",
       "abi": [
         {
           "type": "impl",
@@ -6273,8 +6515,285 @@
         },
         {
           "type": "impl",
-          "name": "leaderboardImpl",
-          "interface_name": "rollyourown::models::leaderboard::Ileaderboard"
+          "name": "seasonImpl",
+          "interface_name": "rollyourown::models::season::Iseason"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::models::season::Season",
+          "members": [
+            {
+              "name": "version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "paper_fee",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "next_version_timestamp",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "paper_balance",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::models::season::Iseason",
+          "items": [
+            {
+              "type": "function",
+              "name": "ensure_abi",
+              "inputs": [
+                {
+                  "name": "model",
+                  "type": "rollyourown::models::season::Season"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::models::season::season::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ],
+      "name": "rollyourown::models::season::season"
+    },
+    {
+      "kind": "DojoModel",
+      "members": [
+        {
+          "name": "list_id",
+          "type": "felt252",
+          "key": true
+        },
+        {
+          "name": "size",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "locked",
+          "type": "bool",
+          "key": false
+        },
+        {
+          "name": "processed",
+          "type": "bool",
+          "key": false
+        },
+        {
+          "name": "process_max_size",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "process_size",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "process_cursor_k0",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "process_cursor_k1",
+          "type": "ContractAddress",
+          "key": false
+        }
+      ],
+      "class_hash": "0x11bce8d570ba1c47208ed7a57145ccfe439b61a9fda0dcc3c82835a639d146e",
+      "original_class_hash": "0x11bce8d570ba1c47208ed7a57145ccfe439b61a9fda0dcc3c82835a639d146e",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::model::IDojoModel",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "unpacked_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "packed_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "layout",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<core::integer::u8>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "schema",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::database::introspect::Ty"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "sorted_listImpl",
+          "interface_name": "rollyourown::utils::sorted_list::Isorted_list"
         },
         {
           "type": "enum",
@@ -6292,41 +6811,45 @@
         },
         {
           "type": "struct",
-          "name": "rollyourown::models::leaderboard::Leaderboard",
+          "name": "rollyourown::utils::sorted_list::SortedList",
           "members": [
             {
-              "name": "version",
-              "type": "core::integer::u16"
+              "name": "list_id",
+              "type": "core::felt252"
             },
             {
-              "name": "game_id",
+              "name": "size",
               "type": "core::integer::u32"
             },
             {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "high_score",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "next_version_timestamp",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "paper_balance",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "claimed",
+              "name": "locked",
               "type": "core::bool"
+            },
+            {
+              "name": "processed",
+              "type": "core::bool"
+            },
+            {
+              "name": "process_max_size",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "process_size",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "process_cursor_k0",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "process_cursor_k1",
+              "type": "core::starknet::contract_address::ContractAddress"
             }
           ]
         },
         {
           "type": "interface",
-          "name": "rollyourown::models::leaderboard::Ileaderboard",
+          "name": "rollyourown::utils::sorted_list::Isorted_list",
           "items": [
             {
               "type": "function",
@@ -6334,7 +6857,7 @@
               "inputs": [
                 {
                   "name": "model",
-                  "type": "rollyourown::models::leaderboard::Leaderboard"
+                  "type": "rollyourown::utils::sorted_list::SortedList"
                 }
               ],
               "outputs": [],
@@ -6344,12 +6867,270 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::models::leaderboard::leaderboard::Event",
+          "name": "rollyourown::utils::sorted_list::sorted_list::Event",
           "kind": "enum",
           "variants": []
         }
       ],
-      "name": "rollyourown::models::leaderboard::leaderboard"
+      "name": "rollyourown::utils::sorted_list::sorted_list"
+    },
+    {
+      "kind": "DojoModel",
+      "members": [
+        {
+          "name": "list_id",
+          "type": "felt252",
+          "key": true
+        },
+        {
+          "name": "item_k0",
+          "type": "u32",
+          "key": true
+        },
+        {
+          "name": "item_k1",
+          "type": "ContractAddress",
+          "key": true
+        },
+        {
+          "name": "next_k0",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "next_k1",
+          "type": "ContractAddress",
+          "key": false
+        }
+      ],
+      "class_hash": "0x2fc2dcb8adeac2c91b43d09dc6fea0d2e7d7eb2c87306bdf683ef97eb1671e3",
+      "original_class_hash": "0x2fc2dcb8adeac2c91b43d09dc6fea0d2e7d7eb2c87306bdf683ef97eb1671e3",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DojoModelImpl",
+          "interface_name": "dojo::model::IDojoModel"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::introspect::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::introspect::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::introspect::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::introspect::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            },
+            {
+              "name": "Array",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::model::IDojoModel",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "unpacked_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "packed_size",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "layout",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Span::<core::integer::u8>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "schema",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::database::introspect::Ty"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "sorted_list_itemImpl",
+          "interface_name": "rollyourown::utils::sorted_list::Isorted_list_item"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::utils::sorted_list::SortedListItem",
+          "members": [
+            {
+              "name": "list_id",
+              "type": "core::felt252"
+            },
+            {
+              "name": "item_k0",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "item_k1",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "next_k0",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "next_k1",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::utils::sorted_list::Isorted_list_item",
+          "items": [
+            {
+              "type": "function",
+              "name": "ensure_abi",
+              "inputs": [
+                {
+                  "name": "model",
+                  "type": "rollyourown::utils::sorted_list::SortedListItem"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::utils::sorted_list::sorted_list_item::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ],
+      "name": "rollyourown::utils::sorted_list::sorted_list_item"
     },
     {
       "kind": "DojoModel",

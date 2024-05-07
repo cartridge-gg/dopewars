@@ -38,9 +38,7 @@ import { shortString } from "starknet";
 const End = observer(() => {
   const { router, gameId } = useRouterContext();
 
-  const [hustlerId, setHustlerId] = useState(0);
   const [isDead, setIsDead] = useState(false);
-  const [day, setDay] = useState(0);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
 
   const { account } = useAccount();
@@ -55,16 +53,15 @@ const End = observer(() => {
 
   useEffect(() => {
     if (game) {
-      setHustlerId(gameInfos?.hustler_id);
       setIsDead(game.player?.health === 0);
-      setDay(game.player.turn);
     }
-  }, [game, gameInfos?.hustler_id]);
+  }, [game]);
 
   const onCreditClose = useCallback(() => {
     setIsCreditOpen(false);
   }, [setIsCreditOpen]);
 
+  if (!gameInfos || !game) return null;
   return (
     <>
       <Flex
@@ -76,10 +73,10 @@ const End = observer(() => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Header back={false} />
+        <Header />
         <Container overflowY="auto">
           <VStack flex={["0", "1"]} my="auto">
-            {isDead && (
+            {game.player?.health === 0 && (
               <Text fontSize="11px" fontFamily="broken-console" padding="0.5rem 0.5rem 0.25rem">
                 You died ...
               </Text>
@@ -98,10 +95,10 @@ const End = observer(() => {
 
                 <StatsItem
                   text={shortString.decodeShortString(gameInfos?.player_name)}
-                  icon={<HustlerIcon hustler={hustlerId as Hustlers} w="24px" h="24px" />}
+                  icon={<HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} w="24px" h="24px" />}
                 />
                 <Divider borderColor="neon.600" />
-                <StatsItem text={`Day ${day}`} icon={<Calendar />} />
+                <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} />
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<DollarBag />} />
 
@@ -143,6 +140,10 @@ const End = observer(() => {
               </Link>
             </HStack>
           </VStack>
+
+
+
+
           <VStack flex="1" my="auto" justify="space-between">
             <Image display={["none", "flex"]} src="/images/sunset.png" alt="sunset" />
             <Button
@@ -152,6 +153,16 @@ const End = observer(() => {
               }}
             >
               Lobby
+            </Button>
+
+
+            <Button
+              mt="20px"
+              onClick={() => {
+                router.push("/");
+              }}
+            >
+              REGISTER YOUR SCORE
             </Button>
           </VStack>
         </Container>

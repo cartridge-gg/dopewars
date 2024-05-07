@@ -4,7 +4,12 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 #[starknet::interface]
 trait IRyo<T> {
     //
-    fn initialize(self: @T, paper_address: ContractAddress, treasury_address: ContractAddress);
+    fn initialize(
+        self: @T,
+        paper_address: ContractAddress,
+        treasury_address: ContractAddress,
+        laundromat_address: ContractAddress
+    );
     fn set_paused(self: @T, paused: bool);
     fn set_paper_fee(self: @T, fee: u16);
     fn set_treasury_fee_pct(self: @T, fee_pct: u8);
@@ -13,6 +18,7 @@ trait IRyo<T> {
     // 
     fn paper(self: @T) -> ContractAddress;
     fn treasury(self: @T) -> ContractAddress;
+    fn laundromat(self: @T) -> ContractAddress;
 
     fn paused(self: @T) -> bool;
     fn paper_fee(self: @T) -> u16;
@@ -43,7 +49,12 @@ mod ryo {
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
-        fn initialize(self: @ContractState, paper_address: ContractAddress, treasury_address: ContractAddress) {
+        fn initialize(
+            self: @ContractState,
+            paper_address: ContractAddress,
+            treasury_address: ContractAddress,
+            laundromat_address: ContractAddress
+        ) {
             self.assert_caller_is_owner();
 
             let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
@@ -57,22 +68,23 @@ mod ryo {
             // RyoConfig
             ryo_config.initialized = true;
             ryo_config.paused = false;
-           
+
             ryo_config.season_version = 1;
             ryo_config.season_duration = FEW_MIN; // ONE_WEEK
-           
+
             ryo_config.paper_fee = 100; // in ether
             ryo_config.treasury_fee_pct = 5;
-           
+
             // save 
             ryo_config_manager.set(ryo_config);
-           
+
             // RyoAddresses
             let ryo_addresses_manager = RyoAddressManagerTrait::new(self.world());
             let mut ryo_addresses = ryo_addresses_manager.get();
 
             ryo_addresses.paper = paper_address;
             ryo_addresses.treasury = treasury_address;
+            ryo_addresses.laundromat = laundromat_address;
 
             // save 
             ryo_addresses_manager.set(ryo_addresses);
@@ -140,6 +152,10 @@ mod ryo {
             RyoAddressManagerTrait::new(self.world()).treasury()
         }
 
+        fn laundromat(self: @ContractState) -> ContractAddress {
+            RyoAddressManagerTrait::new(self.world()).laundromat()
+        }
+
 
         fn paused(self: @ContractState) -> bool {
             let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
@@ -155,7 +171,6 @@ mod ryo {
             let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
             ryo_config.season_duration
         }
-
     }
 
     #[generate_trait]

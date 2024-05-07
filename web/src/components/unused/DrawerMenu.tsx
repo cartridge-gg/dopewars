@@ -57,80 +57,83 @@ const DrawerMenu = () => {
             <VStack
               w="full"
               h="full"
-              // justifyContent="space-between"
-              alignItems="flex-start"
+              justifyContent="space-between"
+              // alignItems="flex-start"
               gap={6}
             >
-              <MediaPlayer />
-
-              <VStack w="full" alignItems="flex-start">
-                {account && game && (
-                  <VStack w="full" alignItems="flex-start">
-                    <Text mb={3}> GAME </Text>
-                    <ProfileLinkDrawer />
-
-                    <Card>
-                      <HustlerStats />
-                    </Card>
-                  </VStack>
-                )}
-
+              <VStack w="full" alignItems="flex-start" gap={12} mt={12}>
                 <VStack w="full" alignItems="flex-start">
-                  <Text mb={3}> ACCOUNT </Text>
+                  {/* {account && game && (
+                    <VStack w="full" alignItems="flex-start">
+                      <Text mb={3}> GAME </Text>
+                      <ProfileLinkDrawer />
 
-                  <HStack w="full" justifyContent="space-between">
+                      <Card>
+                        <HustlerStats />
+                      </Card>
+                    </VStack>
+                  )} */}
+
+                  <VStack w="full" alignItems="flex-start">
+                    <Text mb={3} textAlign="center">
+                      ACCOUNT
+                    </Text>
                     <ConnectButton />
-                    {account && config && (
-                      <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
-                    )}
-                  </HStack>
 
-                  <HStack w="full">
-                    <ChainSelector canChange={!gameId} />
-                    <Burners />
-                    <Predeployed />
-                  </HStack>
+                    <HStack w="full">
+                      <ChainSelector canChange={!gameId} />
+                      <Burners />
+                      <Predeployed />
+                    </HStack>
+
+                    <HStack w="full" justifyContent="space-between" h="48px">
+                      {account && config && (
+                        <>
+                          <Text>PAPER</Text>{" "}
+                          <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
+                        </>
+                      )}
+                    </HStack>
+                  </VStack>
                 </VStack>
-              </VStack>
 
-              {/* <Divider borderColor="neon.700" /> */}
+                {/* <Divider borderColor="neon.700" /> */}
 
-              {/* <VStack w="full" alignItems="flex-start"></VStack> */}
+                {/* <VStack w="full" alignItems="flex-start"></VStack> */}
 
-              <UnorderedList w="full" listStyleType="none">
-                <ListItem>
-                  <Text mb={3}> LINKS </Text>
-                </ListItem>
-                {game && (
-                  <>
-                    <ListItem
-                      borderBottom="solid 1px"
-                      borderColor="neon.700"
-                      pb={2}
-                      pt={2}
-                      cursor="pointer"
-                      onClick={() => {
-                        uiStore.openRefreshGame();
-                      }}
-                    >
-                      <Refresh mr={2} /> REFRESH
-                    </ListItem>
-                    <ListItem
-                      // borderBottom="solid 1px"
-                      // borderColor="neon.700"
-                      pb={2}
-                      pt={2}
-                      cursor="pointer"
-                      onClick={() => {
-                        uiStore.openQuitGame();
-                      }}
-                    >
-                      <Home mr={2} /> QUIT GAME
-                    </ListItem>
-                  </>
-                )}
-                {!game && (
-                  <>
+                <UnorderedList w="full" listStyleType="none">
+                  <ListItem>
+                    <Text mb={3}> LINKS </Text>
+                  </ListItem>
+                  {game && (
+                    <>
+                      <ListItem
+                        borderBottom="solid 1px"
+                        borderColor="neon.700"
+                        pb={2}
+                        pt={2}
+                        cursor="pointer"
+                        onClick={() => {
+                          uiStore.openRefreshGame();
+                        }}
+                      >
+                        <Refresh mr={2} /> REFRESH
+                      </ListItem>
+                      <ListItem
+                        borderBottom="solid 1px"
+                        borderColor="neon.700"
+                        pb={2}
+                        pt={2}
+                        cursor="pointer"
+                        onClick={() => {
+                          uiStore.openQuitGame();
+                        }}
+                      >
+                        <Home mr={2} /> QUIT GAME
+                      </ListItem>
+                    </>
+                  )}
+                  {!game && (
                     <ListItem
                       borderBottom="solid 1px"
                       borderColor="neon.700"
@@ -143,27 +146,26 @@ const DrawerMenu = () => {
                     >
                       <Home mr={2} /> HOME
                     </ListItem>
-                    <ListItem
-                      // borderBottom="solid 1px"
-                      // borderColor="neon.700"
-                      pb={2}
-                      pt={2}
-                      cursor="pointer"
-                      onClick={() => {
-                        router.push("/game/history");
-                      }}
-                    >
-                      <Clock mr={2} /> HISTORY
-                    </ListItem>
-                  </>
-                )}
-              </UnorderedList>
+                  )}
+                  <ListItem
+                    // borderBottom="solid 1px"
+                    // borderColor="neon.700"
+                    pb={2}
+                    pt={2}
+                    cursor="pointer"
+                    onClick={() => {
+                      router.push("/game/history");
+                    }}
+                  >
+                    <Clock mr={2} /> HISTORY
+                  </ListItem>
+                </UnorderedList>
+              </VStack>
+              <MediaPlayer />
             </VStack>
           </DrawerBody>
 
-          <DrawerFooter>
-            <BuiltBy />
-          </DrawerFooter>
+          <DrawerFooter>{/* <BuiltBy /> */}</DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

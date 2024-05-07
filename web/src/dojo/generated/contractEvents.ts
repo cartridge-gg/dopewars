@@ -111,7 +111,7 @@ og_id: number;
 export interface GameOverData extends BaseEventData {
         game_id: number;
 player_id: string;
-leaderboard_version: number;
+season_version: number;
 player_name: string;
 hustler_id: number;
 turn: number;
@@ -261,7 +261,7 @@ event_type: WorldEvents.GameOver,
 event_name: "GameOver",
 game_id: Number(raw.keys[1]),
 player_id: num.toHexString(raw.keys[2]),
-leaderboard_version: Number(raw.keys[3]),
+season_version: Number(raw.keys[3]),
 player_name: num.toHexString(raw.data[0]),
 hustler_id: Number(raw.data[1]),
 turn: Number(raw.data[2]),

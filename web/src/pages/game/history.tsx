@@ -117,6 +117,12 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
           <Text w={"100px"} flexShrink={0} align="right">
             Cash
           </Text>
+          <Text w={"80px"} flexShrink={0} align="right">
+            Season
+          </Text>
+          <Text w={"80px"} flexShrink={0} align="right">
+            Register
+          </Text>
         </HStack>
       </ListItem>
 
@@ -124,9 +130,9 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
         const playerName = shortString.decodeShortString(game.gameInfos.player_name);
 
         return (
-          <ListItem key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)} h="30px">
+          <ListItem key={game.gameInfos.game_id} h="30px">
             <HStack mr={3} whiteSpace="nowrap">
-              <Text w={"40px"} flexShrink={0}>
+              <Text w={"40px"} flexShrink={0} cursor="pointer" onClick={() => onClick(game)}>
                 <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
               </Text>
 
@@ -144,6 +150,17 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
               </Text>
               <Text w={"100px"} flexShrink={0} align="right">
                 {formatCashHeader(game.player.cash)}
+              </Text>
+
+              <Text w={"80px"} align="right">
+                {game.gameInfos.season_version}
+              </Text>
+              <Text
+                w={"80px"}
+                onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/register`)}
+                align="right"
+              >
+                {game.gameInfos.registered ? "" : "register"}
               </Text>
             </HStack>
           </ListItem>

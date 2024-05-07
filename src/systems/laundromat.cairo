@@ -1,8 +1,10 @@
+use starknet::ContractAddress;
+
 #[starknet::interface]
 trait ILaundromat<T> {
-    fn launder(self: @T, season: u16);
+    fn launder(self: @T, season_version: u16);
 
-    fn claim(self: @T, season: u16);
+    fn claim(self: @T, season: u16, game_ids: Span<u32>, player_id: ContractAddress);
     fn claim_treasury(self: @T);
 }
 
@@ -15,8 +17,9 @@ mod laundromat {
             ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
             ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
         },
-        models::{season::{Season}}, helpers::season_manager::{SeasonManagerTrait},
+        models::{season::{Season}, game::{Game}} , helpers::season_manager::{SeasonManagerTrait},
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
+        utils::{sorted_list::{SortedListItem, SortedListImpl, SortedListTrait}, payout_structure::{get_payed_count}}
     };
 
 
@@ -27,11 +30,38 @@ mod laundromat {
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
-        fn launder(self: @ContractState, season: u16) {}
-
-
-        fn claim(self: @ContractState, season: u16) {
+        fn launder(self: @ContractState, season_version: u16) {
             let world = self.world();
+
+            let season = get!(world, (season_version), (Season));
+
+            assert(season.season_duration > 0, 'invalid season_version');
+            // TODO: check season_version / status
+
+            // retrieve Season Sorted List   
+            let list_id = pedersen::pedersen('SeasonLeaderboard', season_version.into());
+            let mut sorted_list = SortedListImpl::get(world, list_id);
+
+
+            // TODO : MOVE 
+
+            // set process_max_size && lock list 
+            if !sorted_list.locked {
+                let process_max_size = get_payed_count(sorted_list.size);
+                sorted_list.lock(world, process_max_size);
+            }
+
+            assert(sorted_list.locked, 'cannot launder yet');
+            assert(!sorted_list.processed, 'launder ended');
+
+            sorted_list.process::<Game>(world, 2); // TODO: change batch_size
+         
+        }
+
+
+        fn claim(self: @ContractState, season: u16, game_ids: Span<u32>, player_id: ContractAddress) {
+            let world = self.world();
+          
             let mut season = get!(world, (season), (Season));
         // // check not claimed
         // assert(!leaderboard.claimed, 'already claimed!');

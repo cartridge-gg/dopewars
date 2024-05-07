@@ -85,10 +85,10 @@ const Location = observer(() => {
                 if (isLastDay) {
                   try {
                     await endGame(gameId, game.getPendingCalls());
+                    router.push(`/${gameId}/end`);
                   } catch (e: any) {
                     game.clearPendingCalls();
                   }
-                  router.push(`/${gameId}/end`);
                 } else {
                   router.push(`/${gameId}/travel`);
                 }

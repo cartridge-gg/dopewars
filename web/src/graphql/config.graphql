@@ -6,6 +6,7 @@ query Config {
         key
         paper
         treasury
+        laundromat
       }
     }
   }
@@ -17,8 +18,8 @@ query Config {
         key
         initialized
         paused
-        leaderboard_version
-        leaderboard_duration
+        season_version
+        season_duration
         paper_fee
         treasury_fee_pct
         treasury_balance

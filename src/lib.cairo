@@ -46,7 +46,7 @@ mod systems {
         mod traveling; 
     }
 
-    // mod devtools;
+    mod devtools;
 }
 
 mod utils {
@@ -57,6 +57,7 @@ mod utils {
     mod bits;
     mod introspect;
     mod payout_structure;
+    mod sorted_list;
 }
 
 mod interfaces {

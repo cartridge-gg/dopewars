@@ -18,10 +18,12 @@
       "HustlerItemBaseConfig",
       "HustlerItemTiersConfig",
       "InitializableModel",
-      "Leaderboard",
       "LocationConfig",
       "RyoAddress",
-      "RyoConfig"
+      "RyoConfig",
+      "Season",
+      "SortedList",
+      "SortedListItem"
     ]
   }
 };

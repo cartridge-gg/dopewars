@@ -9,6 +9,7 @@ struct RyoAddress {
     key: u8,
     paper: ContractAddress,
     treasury: ContractAddress,
+    laundromat: ContractAddress,
 }
 
 #[derive(Copy, Drop)]
@@ -38,6 +39,10 @@ impl RyoAddressImpl of RyoAddressManagerTrait {
 
     fn treasury(self: RyoAddressManager) -> ContractAddress {
         self.get().treasury
+    }
+
+    fn laundromat(self: RyoAddressManager) -> ContractAddress {
+        self.get().laundromat
     }
 
 }

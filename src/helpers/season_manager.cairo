@@ -3,14 +3,13 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     config::{
-        ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait}, 
+        ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
         ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait}
     },
     models::{season::{Season}}, packing::game_store::{GameStore},
     interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-    utils::math::{MathImpl, MathTrait}
+    utils::{math::{MathImpl, MathTrait},}
 };
-
 
 
 #[derive(Copy, Drop)]
@@ -48,11 +47,11 @@ impl SeasonManagerImpl of SeasonManagerTrait {
     }
 
     fn new_season(self: SeasonManager, version: u16) {
-
         let ryo_config_manager = RyoConfigManagerTrait::new(self.world);
         let ryo_config = ryo_config_manager.get();
 
-        let next_version_timestamp = starknet::info::get_block_timestamp() + ryo_config.season_duration.into();
+        let next_version_timestamp = starknet::info::get_block_timestamp()
+            + ryo_config.season_duration.into();
 
         set!(
             self.world,
@@ -79,7 +78,6 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         let season = get!(self.world, (ryo_config.season_version), Season);
         let current_timestamp = starknet::info::get_block_timestamp();
 
-
         // TODO: move
         if current_timestamp > season.next_version_timestamp {
             // create a new Season version with high_score = 0 & player_id = 0 & next_version_timestamp
@@ -93,7 +91,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         let mut season = get!(self.world, (ryo_config.season_version), Season);
 
         // get paper_fee
-        let paper_fee : u32 = ryo_config.paper_fee.into();
+        let paper_fee: u32 = ryo_config.paper_fee.into();
         let paper_fee_eth: u256 = paper_fee.into() * ETHER;
 
         // calc treasury share
@@ -108,40 +106,42 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         ryo_config.treasury_balance += treasury_share;
         ryo_config_manager.set(ryo_config);
 
-        // retrieve paper_address
-        let paper_address = RyoAddressManagerTrait::new(self.world).paper();
-        
-        // transfer paper_fee_ether from user to game ( user approved game contract to spend paper before)
+        // retrieve paper_address & laundromat_address
+        let ryo_addresses_manager = RyoAddressManagerTrait::new(self.world);
+        let paper_address = ryo_addresses_manager.paper();
+        let laundromat_address = ryo_addresses_manager.laundromat();
+
+        // transfer paper_fee_ether from user to laundromat ( user approved laundromat contract to spend paper before)
         IPaperDispatcher { contract_address: paper_address }
-            .transfer_from(get_caller_address(), get_contract_address(), paper_fee_eth);
+            .transfer_from(get_caller_address(), laundromat_address, paper_fee_eth);
 
         ryo_config.season_version
     }
 
+    // rename on_register_score
     fn on_game_over(self: SeasonManager, ref game_store: GameStore) {
         // check if new high_score & update high_score & next_version_timestamp if necessary
         let current_version = self.get_current_version();
         let mut season = get!(self.world, (current_version), Season);
+    // // new high score
+    // if game_store.player.cash > season.high_score {
+    //     //set highscore
+    //     season.high_score = game_store.player.cash;
 
-        // // new high score
-        // if game_store.player.cash > season.high_score {
-        //     //set highscore
-        //     season.high_score = game_store.player.cash;
+    //     // set game_id & player_id
+    //     season.game_id = game_store.game.game_id;
+    //     season.player_id = game_store.game.player_id;
 
-        //     // set game_id & player_id
-        //     season.game_id = game_store.game.game_id;
-        //     season.player_id = game_store.game.player_id;
+    //     //reset current version timer
+    //     season
+    //         .next_version_timestamp = self.get_next_version_timestamp();
 
-        //     //reset current version timer
-        //     season
-        //         .next_version_timestamp = self.get_next_version_timestamp();
-
-        //     // save season
-        //     set!(self.world, (season));
-        //     // trigger NewHighScore event ?
-        //     true
-        // } else {
-        //     false
-        // }
+    //     // save season
+    //     set!(self.world, (season));
+    //     // trigger NewHighScore event ?
+    //     true
+    // } else {
+    //     false
+    // }
     }
 }

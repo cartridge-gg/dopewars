@@ -17,11 +17,8 @@ import { Predeployed } from "../wallet/Predeployed";
 import { OnGoingGames } from "../pages/home/OnGoingGames";
 import DrawerMenu from "../unused/DrawerMenu";
 
-interface HeaderProps {
-  back?: boolean;
-}
 
-export const Header = observer(({ back }: HeaderProps) => {
+export const Header = observer(() => {
   const isMobile = IsMobile();
 
   const { router, gameId, isAdmin } = useRouterContext();
@@ -99,7 +96,7 @@ export const Header = observer(({ back }: HeaderProps) => {
         {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
 
-        {isMobile && <MobileMenu />}
+        {/* {isMobile && <MobileMenu />} */}
 
         <DrawerMenu />
       </HStack>

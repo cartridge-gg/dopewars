@@ -3,7 +3,45 @@
 
 // TODO add more payout & add binary search
 
-fn get_payout(rank: u32,entrants: u32) -> u32 {
+fn get_payed_count(entrants: u32) -> u32 {
+
+    if entrants <= 200 {
+        if entrants <= 2 {
+            1 // payout_0_2(rank)
+        } else if entrants <= 10 {
+            2 // payout_3_10(rank)
+        } else if entrants <= 30 {
+            3 // payout_11_30(rank)
+        } else if entrants <= 50 {
+            5 // payout_31_50(rank)
+        } else if entrants <= 75 {
+            8 //payout_51_75(rank)
+        } else if entrants <= 100 {
+            10 // payout_76_100(rank)
+        } else if entrants <= 150 {
+            15 // payout_101_150(rank)
+        } else {
+            20 // payout_151_200(rank)
+        }
+    } else {
+        if entrants <= 250 {
+            25 // payout_201_250(rank)
+        } else if entrants <= 300 {
+            30 // payout_251_300(rank)
+        } else if entrants <= 350 {
+            35 // payout_301_350(rank)
+        } else if entrants <= 400 {
+            40 // payout_351_400(rank)
+        } else if entrants <= 500 {
+            50 // payout_401_500(rank)
+        } else {
+            60 // payout_501_700(rank)
+        }
+    }
+}
+
+
+fn get_payout(rank: u32, entrants: u32) -> u32 {
     if entrants <= 200 {
         if entrants <= 2 {
             payout_0_2(rank)
@@ -31,8 +69,10 @@ fn get_payout(rank: u32,entrants: u32) -> u32 {
             payout_301_350(rank)
         } else if entrants <= 400 {
             payout_351_400(rank)
-        } else {
+        } else if entrants <= 500 {
             payout_401_500(rank)
+        } else {
+            payout_501_700(rank)
         }
     }
 }
@@ -355,25 +395,73 @@ fn payout_401_500(rank: u32) -> u32 {
     }
 }
 
+fn payout_501_700(rank: u32) -> u32 {
+    if rank == 1 {
+        2400
+    } else if rank == 2 {
+        1400
+    } else if rank == 3 {
+        880
+    } else if rank == 4 {
+        680
+    } else if rank == 5 {
+        580
+    } else if rank == 6 {
+        410
+    } else if rank == 7 {
+        310
+    } else if rank == 8 {
+        210
+    } else if rank == 9 {
+        150
+    } else if rank <= 15 {
+        110
+    } else if rank <= 20 {
+        85
+    } else if rank <= 25 {
+        75
+    } else if rank <= 30 {
+        65
+    } else if rank <= 35 {
+        55
+    } else if rank <= 40 {
+        50
+    } else if rank <= 50 {
+        37
+    } else if rank <= 60 {
+        30
+    } else {
+        0
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
     use super::{
-        get_payout, payout_0_2, payout_3_10, payout_11_30, payout_31_50, payout_51_75,
-        payout_76_100, payout_101_150, payout_151_200, payout_201_250, payout_251_300,
-        payout_301_350, payout_351_400, payout_401_500
+        get_payout, get_payed_count, payout_0_2, payout_3_10, payout_11_30, payout_31_50,
+        payout_51_75, payout_76_100, payout_101_150, payout_151_200, payout_201_250, payout_251_300,
+        payout_301_350, payout_351_400, payout_401_500, payout_501_700
     };
 
     #[test]
     fn test_get_payout() {
-        assert(get_payout(1,2) == 10000, 'invalid 1,2');
-        assert(get_payout(2,2) == 0, 'invalid 2,2');
+        assert(get_payout(1, 2) == 10000, 'invalid 1,2');
+        assert(get_payout(2, 2) == 0, 'invalid 2,2');
 
-        assert(get_payout(4,151) == 800, 'invalid 4,151');
-        assert(get_payout(8,220) == 280, 'invalid 8,220');
+        assert(get_payout(4, 151) == 800, 'invalid 4,151');
+        assert(get_payout(8, 220) == 280, 'invalid 8,220');
 
-        assert(get_payout(2,600) == 1425, 'invalid 2,600');
+        assert(get_payout(2, 600) == 1400, 'invalid 2,600');
     }
+
+    #[test]
+    fn test_get_payed_count() {
+        assert(get_payed_count(5) == 2, 'invalid 5');
+        assert(get_payed_count(420) == 50, 'invalid 420');
+        assert(get_payed_count(89) == 10, 'invalid 89');
+    }
+
 
     #[test]
     fn test_payout_0_2() {
@@ -615,6 +703,25 @@ mod tests {
             }
 
             let payout = payout_401_500(rank);
+            total += payout;
+            rank += 1;
+        };
+
+        assert(total == 10000, 'invalid total !')
+    }
+
+    #[test]
+    fn test_payout_501_700() {
+        let mut rank = 1;
+        let mut max = 75;
+        let mut total = 0;
+
+        loop {
+            if rank == max {
+                break;
+            }
+
+            let payout = payout_501_700(rank);
             total += payout;
             rank += 1;
         };

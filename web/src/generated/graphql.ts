@@ -440,17 +440,21 @@ export type EncounterConfigWhereInput = {
 
 export type Game = {
   __typename?: 'Game';
+  claimed?: Maybe<Scalars['bool']>;
   entity?: Maybe<World__Entity>;
+  final_score?: Maybe<Scalars['u32']>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
   hustler_id?: Maybe<Scalars['u16']>;
-  leaderboard_version?: Maybe<Scalars['u16']>;
   max_rounds?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['u128']>;
+  position?: Maybe<Scalars['u16']>;
+  registered?: Maybe<Scalars['bool']>;
+  season_version?: Maybe<Scalars['u16']>;
 };
 
 export type GameConfig = {
@@ -609,16 +613,20 @@ export type GameOrder = {
 };
 
 export enum GameOrderField {
+  Claimed = 'CLAIMED',
+  FinalScore = 'FINAL_SCORE',
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
   HustlerId = 'HUSTLER_ID',
-  LeaderboardVersion = 'LEADERBOARD_VERSION',
   MaxRounds = 'MAX_ROUNDS',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
   PlayerId = 'PLAYER_ID',
-  PlayerName = 'PLAYER_NAME'
+  PlayerName = 'PLAYER_NAME',
+  Position = 'POSITION',
+  Registered = 'REGISTERED',
+  SeasonVersion = 'SEASON_VERSION'
 }
 
 export type GameStorePacked = {
@@ -678,6 +686,14 @@ export type GameStorePackedWhereInput = {
 };
 
 export type GameWhereInput = {
+  claimed?: InputMaybe<Scalars['bool']>;
+  final_score?: InputMaybe<Scalars['u32']>;
+  final_scoreEQ?: InputMaybe<Scalars['u32']>;
+  final_scoreGT?: InputMaybe<Scalars['u32']>;
+  final_scoreGTE?: InputMaybe<Scalars['u32']>;
+  final_scoreLT?: InputMaybe<Scalars['u32']>;
+  final_scoreLTE?: InputMaybe<Scalars['u32']>;
+  final_scoreNEQ?: InputMaybe<Scalars['u32']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
@@ -694,13 +710,6 @@ export type GameWhereInput = {
   hustler_idLT?: InputMaybe<Scalars['u16']>;
   hustler_idLTE?: InputMaybe<Scalars['u16']>;
   hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  leaderboard_version?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionGTE?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionLT?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionLTE?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionNEQ?: InputMaybe<Scalars['u16']>;
   max_rounds?: InputMaybe<Scalars['u8']>;
   max_roundsEQ?: InputMaybe<Scalars['u8']>;
   max_roundsGT?: InputMaybe<Scalars['u8']>;
@@ -736,6 +745,21 @@ export type GameWhereInput = {
   player_nameLT?: InputMaybe<Scalars['u128']>;
   player_nameLTE?: InputMaybe<Scalars['u128']>;
   player_nameNEQ?: InputMaybe<Scalars['u128']>;
+  position?: InputMaybe<Scalars['u16']>;
+  positionEQ?: InputMaybe<Scalars['u16']>;
+  positionGT?: InputMaybe<Scalars['u16']>;
+  positionGTE?: InputMaybe<Scalars['u16']>;
+  positionLT?: InputMaybe<Scalars['u16']>;
+  positionLTE?: InputMaybe<Scalars['u16']>;
+  positionNEQ?: InputMaybe<Scalars['u16']>;
+  registered?: InputMaybe<Scalars['bool']>;
+  season_version?: InputMaybe<Scalars['u16']>;
+  season_versionEQ?: InputMaybe<Scalars['u16']>;
+  season_versionGT?: InputMaybe<Scalars['u16']>;
+  season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionLT?: InputMaybe<Scalars['u16']>;
+  season_versionLTE?: InputMaybe<Scalars['u16']>;
+  season_versionNEQ?: InputMaybe<Scalars['u16']>;
 };
 
 export type HustlerItemBaseConfig = {
@@ -915,92 +939,6 @@ export type InitializableModelWhereInput = {
   tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
 };
 
-export type Leaderboard = {
-  __typename?: 'Leaderboard';
-  claimed?: Maybe<Scalars['bool']>;
-  entity?: Maybe<World__Entity>;
-  game_id?: Maybe<Scalars['u32']>;
-  high_score?: Maybe<Scalars['u32']>;
-  next_version_timestamp?: Maybe<Scalars['u64']>;
-  paper_balance?: Maybe<Scalars['u32']>;
-  player_id?: Maybe<Scalars['ContractAddress']>;
-  version?: Maybe<Scalars['u16']>;
-};
-
-export type LeaderboardConnection = {
-  __typename?: 'LeaderboardConnection';
-  edges?: Maybe<Array<Maybe<LeaderboardEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type LeaderboardEdge = {
-  __typename?: 'LeaderboardEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Leaderboard>;
-};
-
-export type LeaderboardOrder = {
-  direction: OrderDirection;
-  field: LeaderboardOrderField;
-};
-
-export enum LeaderboardOrderField {
-  Claimed = 'CLAIMED',
-  GameId = 'GAME_ID',
-  HighScore = 'HIGH_SCORE',
-  NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
-  PaperBalance = 'PAPER_BALANCE',
-  PlayerId = 'PLAYER_ID',
-  Version = 'VERSION'
-}
-
-export type LeaderboardWhereInput = {
-  claimed?: InputMaybe<Scalars['bool']>;
-  game_id?: InputMaybe<Scalars['u32']>;
-  game_idEQ?: InputMaybe<Scalars['u32']>;
-  game_idGT?: InputMaybe<Scalars['u32']>;
-  game_idGTE?: InputMaybe<Scalars['u32']>;
-  game_idLT?: InputMaybe<Scalars['u32']>;
-  game_idLTE?: InputMaybe<Scalars['u32']>;
-  game_idNEQ?: InputMaybe<Scalars['u32']>;
-  high_score?: InputMaybe<Scalars['u32']>;
-  high_scoreEQ?: InputMaybe<Scalars['u32']>;
-  high_scoreGT?: InputMaybe<Scalars['u32']>;
-  high_scoreGTE?: InputMaybe<Scalars['u32']>;
-  high_scoreLT?: InputMaybe<Scalars['u32']>;
-  high_scoreLTE?: InputMaybe<Scalars['u32']>;
-  high_scoreNEQ?: InputMaybe<Scalars['u32']>;
-  next_version_timestamp?: InputMaybe<Scalars['u64']>;
-  next_version_timestampEQ?: InputMaybe<Scalars['u64']>;
-  next_version_timestampGT?: InputMaybe<Scalars['u64']>;
-  next_version_timestampGTE?: InputMaybe<Scalars['u64']>;
-  next_version_timestampLT?: InputMaybe<Scalars['u64']>;
-  next_version_timestampLTE?: InputMaybe<Scalars['u64']>;
-  next_version_timestampNEQ?: InputMaybe<Scalars['u64']>;
-  paper_balance?: InputMaybe<Scalars['u32']>;
-  paper_balanceEQ?: InputMaybe<Scalars['u32']>;
-  paper_balanceGT?: InputMaybe<Scalars['u32']>;
-  paper_balanceGTE?: InputMaybe<Scalars['u32']>;
-  paper_balanceLT?: InputMaybe<Scalars['u32']>;
-  paper_balanceLTE?: InputMaybe<Scalars['u32']>;
-  paper_balanceNEQ?: InputMaybe<Scalars['u32']>;
-  player_id?: InputMaybe<Scalars['ContractAddress']>;
-  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  version?: InputMaybe<Scalars['u16']>;
-  versionEQ?: InputMaybe<Scalars['u16']>;
-  versionGT?: InputMaybe<Scalars['u16']>;
-  versionGTE?: InputMaybe<Scalars['u16']>;
-  versionLT?: InputMaybe<Scalars['u16']>;
-  versionLTE?: InputMaybe<Scalars['u16']>;
-  versionNEQ?: InputMaybe<Scalars['u16']>;
-};
-
 export type LocationConfig = {
   __typename?: 'LocationConfig';
   entity?: Maybe<World__Entity>;
@@ -1051,7 +989,7 @@ export type LocationConfigWhereInput = {
   nameNEQ?: InputMaybe<Scalars['u128']>;
 };
 
-export type ModelUnion = DrugConfig | Erc20AllowanceModel | Erc20BalanceModel | Erc20MetadataModel | EncounterConfig | Game | GameConfig | GameStorePacked | HustlerItemBaseConfig | HustlerItemTiersConfig | InitializableModel | Leaderboard | LocationConfig | RyoAddress | RyoConfig;
+export type ModelUnion = DrugConfig | Erc20AllowanceModel | Erc20BalanceModel | Erc20MetadataModel | EncounterConfig | Game | GameConfig | GameStorePacked | HustlerItemBaseConfig | HustlerItemTiersConfig | InitializableModel | LocationConfig | RyoAddress | RyoConfig | Season | SortedList | SortedListItem;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -1062,6 +1000,7 @@ export type RyoAddress = {
   __typename?: 'RyoAddress';
   entity?: Maybe<World__Entity>;
   key?: Maybe<Scalars['u8']>;
+  laundromat?: Maybe<Scalars['ContractAddress']>;
   paper?: Maybe<Scalars['ContractAddress']>;
   treasury?: Maybe<Scalars['ContractAddress']>;
 };
@@ -1086,6 +1025,7 @@ export type RyoAddressOrder = {
 
 export enum RyoAddressOrderField {
   Key = 'KEY',
+  Laundromat = 'LAUNDROMAT',
   Paper = 'PAPER',
   Treasury = 'TREASURY'
 }
@@ -1098,6 +1038,13 @@ export type RyoAddressWhereInput = {
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
+  laundromat?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatEQ?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatGT?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatGTE?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatLT?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatLTE?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatNEQ?: InputMaybe<Scalars['ContractAddress']>;
   paper?: InputMaybe<Scalars['ContractAddress']>;
   paperEQ?: InputMaybe<Scalars['ContractAddress']>;
   paperGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -1119,10 +1066,10 @@ export type RyoConfig = {
   entity?: Maybe<World__Entity>;
   initialized?: Maybe<Scalars['bool']>;
   key?: Maybe<Scalars['u8']>;
-  leaderboard_duration?: Maybe<Scalars['u32']>;
-  leaderboard_version?: Maybe<Scalars['u16']>;
   paper_fee?: Maybe<Scalars['u16']>;
   paused?: Maybe<Scalars['bool']>;
+  season_duration?: Maybe<Scalars['u32']>;
+  season_version?: Maybe<Scalars['u16']>;
   treasury_balance?: Maybe<Scalars['u32']>;
   treasury_fee_pct?: Maybe<Scalars['u8']>;
 };
@@ -1148,10 +1095,10 @@ export type RyoConfigOrder = {
 export enum RyoConfigOrderField {
   Initialized = 'INITIALIZED',
   Key = 'KEY',
-  LeaderboardDuration = 'LEADERBOARD_DURATION',
-  LeaderboardVersion = 'LEADERBOARD_VERSION',
   PaperFee = 'PAPER_FEE',
   Paused = 'PAUSED',
+  SeasonDuration = 'SEASON_DURATION',
+  SeasonVersion = 'SEASON_VERSION',
   TreasuryBalance = 'TREASURY_BALANCE',
   TreasuryFeePct = 'TREASURY_FEE_PCT'
 }
@@ -1165,20 +1112,6 @@ export type RyoConfigWhereInput = {
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
-  leaderboard_duration?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationEQ?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationGT?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationGTE?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationLT?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationLTE?: InputMaybe<Scalars['u32']>;
-  leaderboard_durationNEQ?: InputMaybe<Scalars['u32']>;
-  leaderboard_version?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionEQ?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionGT?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionGTE?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionLT?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionLTE?: InputMaybe<Scalars['u16']>;
-  leaderboard_versionNEQ?: InputMaybe<Scalars['u16']>;
   paper_fee?: InputMaybe<Scalars['u16']>;
   paper_feeEQ?: InputMaybe<Scalars['u16']>;
   paper_feeGT?: InputMaybe<Scalars['u16']>;
@@ -1187,6 +1120,20 @@ export type RyoConfigWhereInput = {
   paper_feeLTE?: InputMaybe<Scalars['u16']>;
   paper_feeNEQ?: InputMaybe<Scalars['u16']>;
   paused?: InputMaybe<Scalars['bool']>;
+  season_duration?: InputMaybe<Scalars['u32']>;
+  season_durationEQ?: InputMaybe<Scalars['u32']>;
+  season_durationGT?: InputMaybe<Scalars['u32']>;
+  season_durationGTE?: InputMaybe<Scalars['u32']>;
+  season_durationLT?: InputMaybe<Scalars['u32']>;
+  season_durationLTE?: InputMaybe<Scalars['u32']>;
+  season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  season_version?: InputMaybe<Scalars['u16']>;
+  season_versionEQ?: InputMaybe<Scalars['u16']>;
+  season_versionGT?: InputMaybe<Scalars['u16']>;
+  season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionLT?: InputMaybe<Scalars['u16']>;
+  season_versionLTE?: InputMaybe<Scalars['u16']>;
+  season_versionNEQ?: InputMaybe<Scalars['u16']>;
   treasury_balance?: InputMaybe<Scalars['u32']>;
   treasury_balanceEQ?: InputMaybe<Scalars['u32']>;
   treasury_balanceGT?: InputMaybe<Scalars['u32']>;
@@ -1201,6 +1148,252 @@ export type RyoConfigWhereInput = {
   treasury_fee_pctLT?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctLTE?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctNEQ?: InputMaybe<Scalars['u8']>;
+};
+
+export type Season = {
+  __typename?: 'Season';
+  entity?: Maybe<World__Entity>;
+  next_version_timestamp?: Maybe<Scalars['u64']>;
+  paper_balance?: Maybe<Scalars['u32']>;
+  paper_fee?: Maybe<Scalars['u16']>;
+  season_duration?: Maybe<Scalars['u32']>;
+  treasury_fee_pct?: Maybe<Scalars['u8']>;
+  version?: Maybe<Scalars['u16']>;
+};
+
+export type SeasonConnection = {
+  __typename?: 'SeasonConnection';
+  edges?: Maybe<Array<Maybe<SeasonEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type SeasonEdge = {
+  __typename?: 'SeasonEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Season>;
+};
+
+export type SeasonOrder = {
+  direction: OrderDirection;
+  field: SeasonOrderField;
+};
+
+export enum SeasonOrderField {
+  NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
+  PaperBalance = 'PAPER_BALANCE',
+  PaperFee = 'PAPER_FEE',
+  SeasonDuration = 'SEASON_DURATION',
+  TreasuryFeePct = 'TREASURY_FEE_PCT',
+  Version = 'VERSION'
+}
+
+export type SeasonWhereInput = {
+  next_version_timestamp?: InputMaybe<Scalars['u64']>;
+  next_version_timestampEQ?: InputMaybe<Scalars['u64']>;
+  next_version_timestampGT?: InputMaybe<Scalars['u64']>;
+  next_version_timestampGTE?: InputMaybe<Scalars['u64']>;
+  next_version_timestampLT?: InputMaybe<Scalars['u64']>;
+  next_version_timestampLTE?: InputMaybe<Scalars['u64']>;
+  next_version_timestampNEQ?: InputMaybe<Scalars['u64']>;
+  paper_balance?: InputMaybe<Scalars['u32']>;
+  paper_balanceEQ?: InputMaybe<Scalars['u32']>;
+  paper_balanceGT?: InputMaybe<Scalars['u32']>;
+  paper_balanceGTE?: InputMaybe<Scalars['u32']>;
+  paper_balanceLT?: InputMaybe<Scalars['u32']>;
+  paper_balanceLTE?: InputMaybe<Scalars['u32']>;
+  paper_balanceNEQ?: InputMaybe<Scalars['u32']>;
+  paper_fee?: InputMaybe<Scalars['u16']>;
+  paper_feeEQ?: InputMaybe<Scalars['u16']>;
+  paper_feeGT?: InputMaybe<Scalars['u16']>;
+  paper_feeGTE?: InputMaybe<Scalars['u16']>;
+  paper_feeLT?: InputMaybe<Scalars['u16']>;
+  paper_feeLTE?: InputMaybe<Scalars['u16']>;
+  paper_feeNEQ?: InputMaybe<Scalars['u16']>;
+  season_duration?: InputMaybe<Scalars['u32']>;
+  season_durationEQ?: InputMaybe<Scalars['u32']>;
+  season_durationGT?: InputMaybe<Scalars['u32']>;
+  season_durationGTE?: InputMaybe<Scalars['u32']>;
+  season_durationLT?: InputMaybe<Scalars['u32']>;
+  season_durationLTE?: InputMaybe<Scalars['u32']>;
+  season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  treasury_fee_pct?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctEQ?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctGT?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctGTE?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctLT?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctLTE?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctNEQ?: InputMaybe<Scalars['u8']>;
+  version?: InputMaybe<Scalars['u16']>;
+  versionEQ?: InputMaybe<Scalars['u16']>;
+  versionGT?: InputMaybe<Scalars['u16']>;
+  versionGTE?: InputMaybe<Scalars['u16']>;
+  versionLT?: InputMaybe<Scalars['u16']>;
+  versionLTE?: InputMaybe<Scalars['u16']>;
+  versionNEQ?: InputMaybe<Scalars['u16']>;
+};
+
+export type SortedList = {
+  __typename?: 'SortedList';
+  entity?: Maybe<World__Entity>;
+  list_id?: Maybe<Scalars['felt252']>;
+  locked?: Maybe<Scalars['bool']>;
+  process_cursor_k0?: Maybe<Scalars['u32']>;
+  process_cursor_k1?: Maybe<Scalars['ContractAddress']>;
+  process_max_size?: Maybe<Scalars['u32']>;
+  process_size?: Maybe<Scalars['u32']>;
+  processed?: Maybe<Scalars['bool']>;
+  size?: Maybe<Scalars['u32']>;
+};
+
+export type SortedListConnection = {
+  __typename?: 'SortedListConnection';
+  edges?: Maybe<Array<Maybe<SortedListEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type SortedListEdge = {
+  __typename?: 'SortedListEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<SortedList>;
+};
+
+export type SortedListItem = {
+  __typename?: 'SortedListItem';
+  entity?: Maybe<World__Entity>;
+  item_k0?: Maybe<Scalars['u32']>;
+  item_k1?: Maybe<Scalars['ContractAddress']>;
+  list_id?: Maybe<Scalars['felt252']>;
+  next_k0?: Maybe<Scalars['u32']>;
+  next_k1?: Maybe<Scalars['ContractAddress']>;
+};
+
+export type SortedListItemConnection = {
+  __typename?: 'SortedListItemConnection';
+  edges?: Maybe<Array<Maybe<SortedListItemEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type SortedListItemEdge = {
+  __typename?: 'SortedListItemEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<SortedListItem>;
+};
+
+export type SortedListItemOrder = {
+  direction: OrderDirection;
+  field: SortedListItemOrderField;
+};
+
+export enum SortedListItemOrderField {
+  ItemK0 = 'ITEM_K0',
+  ItemK1 = 'ITEM_K1',
+  ListId = 'LIST_ID',
+  NextK0 = 'NEXT_K0',
+  NextK1 = 'NEXT_K1'
+}
+
+export type SortedListItemWhereInput = {
+  item_k0?: InputMaybe<Scalars['u32']>;
+  item_k0EQ?: InputMaybe<Scalars['u32']>;
+  item_k0GT?: InputMaybe<Scalars['u32']>;
+  item_k0GTE?: InputMaybe<Scalars['u32']>;
+  item_k0LT?: InputMaybe<Scalars['u32']>;
+  item_k0LTE?: InputMaybe<Scalars['u32']>;
+  item_k0NEQ?: InputMaybe<Scalars['u32']>;
+  item_k1?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1GT?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1LT?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+  list_id?: InputMaybe<Scalars['felt252']>;
+  list_idEQ?: InputMaybe<Scalars['felt252']>;
+  list_idGT?: InputMaybe<Scalars['felt252']>;
+  list_idGTE?: InputMaybe<Scalars['felt252']>;
+  list_idLT?: InputMaybe<Scalars['felt252']>;
+  list_idLTE?: InputMaybe<Scalars['felt252']>;
+  list_idNEQ?: InputMaybe<Scalars['felt252']>;
+  next_k0?: InputMaybe<Scalars['u32']>;
+  next_k0EQ?: InputMaybe<Scalars['u32']>;
+  next_k0GT?: InputMaybe<Scalars['u32']>;
+  next_k0GTE?: InputMaybe<Scalars['u32']>;
+  next_k0LT?: InputMaybe<Scalars['u32']>;
+  next_k0LTE?: InputMaybe<Scalars['u32']>;
+  next_k0NEQ?: InputMaybe<Scalars['u32']>;
+  next_k1?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1GT?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1LT?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+};
+
+export type SortedListOrder = {
+  direction: OrderDirection;
+  field: SortedListOrderField;
+};
+
+export enum SortedListOrderField {
+  ListId = 'LIST_ID',
+  Locked = 'LOCKED',
+  Processed = 'PROCESSED',
+  ProcessCursorK0 = 'PROCESS_CURSOR_K0',
+  ProcessCursorK1 = 'PROCESS_CURSOR_K1',
+  ProcessMaxSize = 'PROCESS_MAX_SIZE',
+  ProcessSize = 'PROCESS_SIZE',
+  Size = 'SIZE'
+}
+
+export type SortedListWhereInput = {
+  list_id?: InputMaybe<Scalars['felt252']>;
+  list_idEQ?: InputMaybe<Scalars['felt252']>;
+  list_idGT?: InputMaybe<Scalars['felt252']>;
+  list_idGTE?: InputMaybe<Scalars['felt252']>;
+  list_idLT?: InputMaybe<Scalars['felt252']>;
+  list_idLTE?: InputMaybe<Scalars['felt252']>;
+  list_idNEQ?: InputMaybe<Scalars['felt252']>;
+  locked?: InputMaybe<Scalars['bool']>;
+  process_cursor_k0?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0EQ?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0GT?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0GTE?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0LT?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0LTE?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0NEQ?: InputMaybe<Scalars['u32']>;
+  process_cursor_k1?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1GT?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1LT?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+  process_max_size?: InputMaybe<Scalars['u32']>;
+  process_max_sizeEQ?: InputMaybe<Scalars['u32']>;
+  process_max_sizeGT?: InputMaybe<Scalars['u32']>;
+  process_max_sizeGTE?: InputMaybe<Scalars['u32']>;
+  process_max_sizeLT?: InputMaybe<Scalars['u32']>;
+  process_max_sizeLTE?: InputMaybe<Scalars['u32']>;
+  process_max_sizeNEQ?: InputMaybe<Scalars['u32']>;
+  process_size?: InputMaybe<Scalars['u32']>;
+  process_sizeEQ?: InputMaybe<Scalars['u32']>;
+  process_sizeGT?: InputMaybe<Scalars['u32']>;
+  process_sizeGTE?: InputMaybe<Scalars['u32']>;
+  process_sizeLT?: InputMaybe<Scalars['u32']>;
+  process_sizeLTE?: InputMaybe<Scalars['u32']>;
+  process_sizeNEQ?: InputMaybe<Scalars['u32']>;
+  processed?: InputMaybe<Scalars['bool']>;
+  size?: InputMaybe<Scalars['u32']>;
+  sizeEQ?: InputMaybe<Scalars['u32']>;
+  sizeGT?: InputMaybe<Scalars['u32']>;
+  sizeGTE?: InputMaybe<Scalars['u32']>;
+  sizeLT?: InputMaybe<Scalars['u32']>;
+  sizeLTE?: InputMaybe<Scalars['u32']>;
+  sizeNEQ?: InputMaybe<Scalars['u32']>;
 };
 
 export type World__Content = {
@@ -1370,13 +1563,15 @@ export type World__Query = {
   hustlerItemBaseConfigModels?: Maybe<HustlerItemBaseConfigConnection>;
   hustlerItemTiersConfigModels?: Maybe<HustlerItemTiersConfigConnection>;
   initializableModelModels?: Maybe<InitializableModelConnection>;
-  leaderboardModels?: Maybe<LeaderboardConnection>;
   locationConfigModels?: Maybe<LocationConfigConnection>;
   metadatas?: Maybe<World__MetadataConnection>;
   model: World__Model;
   models?: Maybe<World__ModelConnection>;
   ryoAddressModels?: Maybe<RyoAddressConnection>;
   ryoConfigModels?: Maybe<RyoConfigConnection>;
+  seasonModels?: Maybe<SeasonConnection>;
+  sortedListItemModels?: Maybe<SortedListItemConnection>;
+  sortedListModels?: Maybe<SortedListConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
 };
@@ -1557,18 +1752,6 @@ export type World__QueryInitializableModelModelsArgs = {
 };
 
 
-export type World__QueryLeaderboardModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<LeaderboardOrder>;
-  where?: InputMaybe<LeaderboardWhereInput>;
-};
-
-
 export type World__QueryLocationConfigModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1628,6 +1811,42 @@ export type World__QueryRyoConfigModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<RyoConfigOrder>;
   where?: InputMaybe<RyoConfigWhereInput>;
+};
+
+
+export type World__QuerySeasonModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SeasonOrder>;
+  where?: InputMaybe<SeasonWhereInput>;
+};
+
+
+export type World__QuerySortedListItemModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SortedListItemOrder>;
+  where?: InputMaybe<SortedListItemWhereInput>;
+};
+
+
+export type World__QuerySortedListModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SortedListOrder>;
+  where?: InputMaybe<SortedListWhereInput>;
 };
 
 
@@ -1708,7 +1927,7 @@ export type World__TransactionEdge = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, leaderboard_version?: any | null, leaderboard_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
 
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1729,14 +1948,21 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, position?: any | null } | null } | null> | null } | null };
+
+export type RegisteredGamesBySeasonQueryVariables = Exact<{
+  version?: InputMaybe<Scalars['u16']>;
+}>;
+
+
+export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, final_score?: any | null, registered?: any | null } | null } | null> | null } | null };
 
 export type GamesByPlayerQueryVariables = Exact<{
   playerId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, leaderboard_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1744,26 +1970,26 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'Leaderboard' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } };
 
-export type LeaderboardByVersionQueryVariables = Exact<{
+export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type LeaderboardByVersionQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null };
 
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HallOfFameQuery = { __typename?: 'World__Query', leaderboardModels?: { __typename?: 'LeaderboardConnection', edges?: Array<{ __typename?: 'LeaderboardEdge', node?: { __typename?: 'Leaderboard', version?: any | null, game_id?: any | null, player_id?: any | null, high_score?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null, claimed?: any | null } | null } | null> | null } | null };
+export type HallOfFameQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, next_version_timestamp?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -1782,6 +2008,7 @@ export const ConfigDocument = `
         key
         paper
         treasury
+        laundromat
       }
     }
   }
@@ -1791,8 +2018,8 @@ export const ConfigDocument = `
         key
         initialized
         paused
-        leaderboard_version
-        leaderboard_duration
+        season_version
+        season_duration
         paper_fee
         treasury_fee_pct
         treasury_balance
@@ -1969,6 +2196,10 @@ export const GameByIdDocument = `
         player_name
         player_id
         game_over
+        final_score
+        registered
+        claimed
+        position
       }
     }
   }
@@ -2008,9 +2239,61 @@ export const useInfiniteGameByIdQuery = <
 useInfiniteGameByIdQuery.getKey = (variables?: GameByIdQueryVariables) => variables === undefined ? ['GameById.infinite'] : ['GameById.infinite', variables];
 ;
 
+export const RegisteredGamesBySeasonDocument = `
+    query RegisteredGamesBySeason($version: u16) {
+  gameModels(
+    limit: 9001
+    where: {season_version: $version, registered: true}
+    order: {field: FINAL_SCORE, direction: DESC}
+  ) {
+    edges {
+      node {
+        game_id
+        player_id
+        final_score
+        registered
+      }
+    }
+  }
+}
+    `;
+export const useRegisteredGamesBySeasonQuery = <
+      TData = RegisteredGamesBySeasonQuery,
+      TError = unknown
+    >(
+      variables?: RegisteredGamesBySeasonQueryVariables,
+      options?: UseQueryOptions<RegisteredGamesBySeasonQuery, TError, TData>
+    ) =>
+    useQuery<RegisteredGamesBySeasonQuery, TError, TData>(
+      variables === undefined ? ['RegisteredGamesBySeason'] : ['RegisteredGamesBySeason', variables],
+      useFetchData<RegisteredGamesBySeasonQuery, RegisteredGamesBySeasonQueryVariables>(RegisteredGamesBySeasonDocument).bind(null, variables),
+      options
+    );
+
+useRegisteredGamesBySeasonQuery.getKey = (variables?: RegisteredGamesBySeasonQueryVariables) => variables === undefined ? ['RegisteredGamesBySeason'] : ['RegisteredGamesBySeason', variables];
+;
+
+export const useInfiniteRegisteredGamesBySeasonQuery = <
+      TData = RegisteredGamesBySeasonQuery,
+      TError = unknown
+    >(
+      variables?: RegisteredGamesBySeasonQueryVariables,
+      options?: UseInfiniteQueryOptions<RegisteredGamesBySeasonQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<RegisteredGamesBySeasonQuery, RegisteredGamesBySeasonQueryVariables>(RegisteredGamesBySeasonDocument)
+    return useInfiniteQuery<RegisteredGamesBySeasonQuery, TError, TData>(
+      variables === undefined ? ['RegisteredGamesBySeason.infinite'] : ['RegisteredGamesBySeason.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteRegisteredGamesBySeasonQuery.getKey = (variables?: RegisteredGamesBySeasonQueryVariables) => variables === undefined ? ['RegisteredGamesBySeason.infinite'] : ['RegisteredGamesBySeason.infinite', variables];
+;
+
 export const GamesByPlayerDocument = `
     query GamesByPlayer($playerId: String) {
-  entities(keys: ["*", $playerId]) {
+  entities(limit: 9001, keys: ["*", $playerId]) {
     edges {
       node {
         id
@@ -2020,11 +2303,15 @@ export const GamesByPlayerDocument = `
           ... on Game {
             game_id
             player_id
-            leaderboard_version
+            season_version
             game_mode
             hustler_id
             player_name
             game_over
+            final_score
+            registered
+            claimed
+            position
           }
           ... on GameStorePacked {
             game_id
@@ -2141,69 +2428,63 @@ export const GameStorePackedSubscriptionDocument = `
   }
 }
     `;
-export const LeaderboardByVersionDocument = `
-    query LeaderboardByVersion($version: u16) {
-  leaderboardModels(where: {version: $version}) {
+export const SeasonByVersionDocument = `
+    query SeasonByVersion($version: u16) {
+  seasonModels(where: {version: $version}) {
     edges {
       node {
         version
-        game_id
-        player_id
-        high_score
+        season_duration
+        paper_fee
+        treasury_fee_pct
         next_version_timestamp
         paper_balance
-        claimed
       }
     }
   }
 }
     `;
-export const useLeaderboardByVersionQuery = <
-      TData = LeaderboardByVersionQuery,
+export const useSeasonByVersionQuery = <
+      TData = SeasonByVersionQuery,
       TError = unknown
     >(
-      variables?: LeaderboardByVersionQueryVariables,
-      options?: UseQueryOptions<LeaderboardByVersionQuery, TError, TData>
+      variables?: SeasonByVersionQueryVariables,
+      options?: UseQueryOptions<SeasonByVersionQuery, TError, TData>
     ) =>
-    useQuery<LeaderboardByVersionQuery, TError, TData>(
-      variables === undefined ? ['LeaderboardByVersion'] : ['LeaderboardByVersion', variables],
-      useFetchData<LeaderboardByVersionQuery, LeaderboardByVersionQueryVariables>(LeaderboardByVersionDocument).bind(null, variables),
+    useQuery<SeasonByVersionQuery, TError, TData>(
+      variables === undefined ? ['SeasonByVersion'] : ['SeasonByVersion', variables],
+      useFetchData<SeasonByVersionQuery, SeasonByVersionQueryVariables>(SeasonByVersionDocument).bind(null, variables),
       options
     );
 
-useLeaderboardByVersionQuery.getKey = (variables?: LeaderboardByVersionQueryVariables) => variables === undefined ? ['LeaderboardByVersion'] : ['LeaderboardByVersion', variables];
+useSeasonByVersionQuery.getKey = (variables?: SeasonByVersionQueryVariables) => variables === undefined ? ['SeasonByVersion'] : ['SeasonByVersion', variables];
 ;
 
-export const useInfiniteLeaderboardByVersionQuery = <
-      TData = LeaderboardByVersionQuery,
+export const useInfiniteSeasonByVersionQuery = <
+      TData = SeasonByVersionQuery,
       TError = unknown
     >(
-      variables?: LeaderboardByVersionQueryVariables,
-      options?: UseInfiniteQueryOptions<LeaderboardByVersionQuery, TError, TData>
+      variables?: SeasonByVersionQueryVariables,
+      options?: UseInfiniteQueryOptions<SeasonByVersionQuery, TError, TData>
     ) =>{
-    const query = useFetchData<LeaderboardByVersionQuery, LeaderboardByVersionQueryVariables>(LeaderboardByVersionDocument)
-    return useInfiniteQuery<LeaderboardByVersionQuery, TError, TData>(
-      variables === undefined ? ['LeaderboardByVersion.infinite'] : ['LeaderboardByVersion.infinite', variables],
+    const query = useFetchData<SeasonByVersionQuery, SeasonByVersionQueryVariables>(SeasonByVersionDocument)
+    return useInfiniteQuery<SeasonByVersionQuery, TError, TData>(
+      variables === undefined ? ['SeasonByVersion.infinite'] : ['SeasonByVersion.infinite', variables],
       (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
 
-useInfiniteLeaderboardByVersionQuery.getKey = (variables?: LeaderboardByVersionQueryVariables) => variables === undefined ? ['LeaderboardByVersion.infinite'] : ['LeaderboardByVersion.infinite', variables];
+useInfiniteSeasonByVersionQuery.getKey = (variables?: SeasonByVersionQueryVariables) => variables === undefined ? ['SeasonByVersion.infinite'] : ['SeasonByVersion.infinite', variables];
 ;
 
 export const HallOfFameDocument = `
     query HallOfFame {
-  leaderboardModels(limit: 420) {
+  seasonModels(limit: 420) {
     edges {
       node {
         version
-        game_id
-        player_id
-        high_score
         next_version_timestamp
-        paper_balance
-        claimed
       }
     }
   }

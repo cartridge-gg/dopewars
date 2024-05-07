@@ -1,16 +1,9 @@
 import { DrugConfig, EncounterConfig, GameConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
-import {  getEvents } from "@dojoengine/utils";
+import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
-import {
-  AllowArray,
-  Call,
-  CallData,
-  GetTransactionReceiptResponse,
-  shortString,
-  uint256,
-} from "starknet";
+import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import {
   BaseEventData,
@@ -29,13 +22,12 @@ import { DojoCall } from "@dojoengine/core";
 
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
+  registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
+  travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
-  claim: (season: number) => Promise<SystemExecuteResult>;
   // ryo
   setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
-  claimTreasury: () => Promise<SystemExecuteResult>;
   setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
   setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
   setLeaderboardDuration: (duration: number) => Promise<SystemExecuteResult>;
@@ -44,9 +36,15 @@ export interface SystemsInterface {
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
   updateEncounterConfig: (encounterConfig: EncounterConfig) => Promise<SystemExecuteResult>;
 
+  // laundromat
+  claim: (season: number, gameIds: number[]) => Promise<SystemExecuteResult>;
+  claimTreasury: () => Promise<SystemExecuteResult>;
+  launder: (season: number) => Promise<SystemExecuteResult>;
+
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
+  createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: string;
@@ -59,7 +57,6 @@ export interface SystemExecuteResult {
   events?: BaseEventData[];
   [key: string]: any;
 }
-
 
 const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -101,7 +98,7 @@ export const useSystems = (): SystemsInterface => {
 
   const executeAndReceipt = useCallback(
     async (
-      params: AllowArray<(DojoCall | Call)>,
+      params: AllowArray<DojoCall | Call>,
     ): Promise<{
       hash: string;
       receipt: GetTransactionReceiptResponse;
@@ -229,6 +226,40 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt, config?.ryoAddress.paper],
   );
 
+  const endGame = useCallback(
+    async (gameId: string, calls: Array<PendingCall>) => {
+      const callsEnum = calls.map(pendingCallToCairoEnum);
+
+      const { hash, events, parsedEvents } = await executeAndReceipt({
+        contractName: "rollyourown::systems::game::game",
+        entrypoint: "end_game",
+        // @ts-ignore
+        calldata: CallData.compile({ gameId, callsEnum }),
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  const registerScore = useCallback(
+    async (gameId: string, prevGameId: string, prevPlayerId: string) => {
+      const { hash } = await executeAndReceipt({
+        contractName: "rollyourown::systems::game::game",
+        entrypoint: "register_score",
+        // @ts-ignore
+        calldata: [gameId, prevGameId, prevPlayerId],
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
   const travel = useCallback(
     async (gameId: string, location: Locations, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
@@ -253,24 +284,6 @@ export const useSystems = (): SystemsInterface => {
         events: parsedEvents
           .filter((e) => e.eventType === WorldEvents.HighVolatility)
           .map((e) => e as HighVolatilityData),
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const endGame = useCallback(
-    async (gameId: string, calls: Array<PendingCall>) => {
-      const callsEnum = calls.map(pendingCallToCairoEnum);
-
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
-        entrypoint: "end_game",
-        // @ts-ignore
-        calldata: [gameId, callsEnum],
-      });
-
-      return {
-        hash,
       };
     },
     [executeAndReceipt],
@@ -302,11 +315,42 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  //
+  // LAUNDROMAT
+  //
+
   const claim = useCallback(
+    async (season: number, gameIds: number[]) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt({
+        contractName: "rollyourown::systems::laundromat::laundromat",
+        entrypoint: "claim",
+        calldata: [season, game_ids],
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  const claimTreasury = useCallback(async () => {
+    const { hash, events, parsedEvents } = await executeAndReceipt({
+      contractName: "rollyourown::systems::laundromat::laundromat",
+      entrypoint: "claim_treasury",
+      calldata: [],
+    });
+
+    return {
+      hash,
+    };
+  }, [executeAndReceipt]);
+
+  const launder = useCallback(
     async (season: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
-        entrypoint: "claim",
+        contractName: "rollyourown::systems::laundromat::laundromat",
+        entrypoint: "launder",
         calldata: [season],
       });
 
@@ -320,18 +364,6 @@ export const useSystems = (): SystemsInterface => {
   //
   //
   //
-
-  const claimTreasury = useCallback(async () => {
-    const { hash, events, parsedEvents } = await executeAndReceipt({
-      contractName: "rollyourown::systems::game::game",
-      entrypoint: "claim_treasury",
-      calldata: [],
-    });
-
-    return {
-      hash,
-    };
-  }, [executeAndReceipt]);
 
   const setPaused = useCallback(
     async (paused: boolean) => {
@@ -446,6 +478,21 @@ export const useSystems = (): SystemsInterface => {
   //
   //
 
+  const createFakeGame = useCallback(
+    async (finalScore = 0) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt({
+        contractName: "rollyourown::systems::devtools::devtools",
+        entrypoint: "create_fake_game",
+        calldata: [finalScore],
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
   const feedLeaderboard = useCallback(
     async (count: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
@@ -475,11 +522,14 @@ export const useSystems = (): SystemsInterface => {
 
   return {
     createGame,
-    travel,
     endGame,
+    registerScore,
+    travel,
     decide,
+    //
     claim,
     claimTreasury,
+    launder,
     //
     setPaused,
     setPaperFee,
@@ -492,6 +542,7 @@ export const useSystems = (): SystemsInterface => {
     //
     feedLeaderboard,
     failingTx,
+    createFakeGame,
     //
     error,
     isPending,

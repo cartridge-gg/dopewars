@@ -28,8 +28,7 @@ const RegisterEntities = observer(() => {
   const toaster = useToast();
 
   useEffect(() => {
-   
-    // console.log("RegisterEntities", gameId);
+    console.log("RegisterEntities", gameId);
 
     if (gameStore && gameId) {
       gameStore.init(gameId);
