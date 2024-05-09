@@ -157,7 +157,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
               </Text>
               <Text
                 w={"80px"}
-                onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/register`)}
+                onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`)}
                 align="right"
               >
                 {game.gameInfos.registered ? "" : "register"}

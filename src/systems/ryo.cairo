@@ -42,6 +42,8 @@ mod ryo {
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
     };
 
+    const THREE_MIN: u16 = 180;
+    const THIRTY_MIN: u32 = 1800; // 20 * 60
     const FEW_MIN: u32 = 1200; // 20 * 60
     const ONE_HOUR: u32 = 3600; // 60 * 60
     const ONE_DAY: u32 = 86_400; // 24 * 60 * 60
@@ -71,9 +73,11 @@ mod ryo {
 
             ryo_config.season_version = 1;
             ryo_config.season_duration = FEW_MIN; // ONE_WEEK
+            ryo_config.season_time_limit = THREE_MIN; // ONE_HOUR
 
-            ryo_config.paper_fee = 100; // in ether
+            ryo_config.paper_fee = 1000; // in ether
             ryo_config.treasury_fee_pct = 5;
+            ryo_config.paper_reward_launderer = 100; // in ether
 
             // save 
             ryo_config_manager.set(ryo_config);

@@ -440,6 +440,7 @@ export type EncounterConfigWhereInput = {
 
 export type Game = {
   __typename?: 'Game';
+  claimable?: Maybe<Scalars['u32']>;
   claimed?: Maybe<Scalars['bool']>;
   entity?: Maybe<World__Entity>;
   final_score?: Maybe<Scalars['u32']>;
@@ -613,6 +614,7 @@ export type GameOrder = {
 };
 
 export enum GameOrderField {
+  Claimable = 'CLAIMABLE',
   Claimed = 'CLAIMED',
   FinalScore = 'FINAL_SCORE',
   GameId = 'GAME_ID',
@@ -686,6 +688,13 @@ export type GameStorePackedWhereInput = {
 };
 
 export type GameWhereInput = {
+  claimable?: InputMaybe<Scalars['u32']>;
+  claimableEQ?: InputMaybe<Scalars['u32']>;
+  claimableGT?: InputMaybe<Scalars['u32']>;
+  claimableGTE?: InputMaybe<Scalars['u32']>;
+  claimableLT?: InputMaybe<Scalars['u32']>;
+  claimableLTE?: InputMaybe<Scalars['u32']>;
+  claimableNEQ?: InputMaybe<Scalars['u32']>;
   claimed?: InputMaybe<Scalars['bool']>;
   final_score?: InputMaybe<Scalars['u32']>;
   final_scoreEQ?: InputMaybe<Scalars['u32']>;
@@ -1067,8 +1076,10 @@ export type RyoConfig = {
   initialized?: Maybe<Scalars['bool']>;
   key?: Maybe<Scalars['u8']>;
   paper_fee?: Maybe<Scalars['u16']>;
+  paper_reward_launderer?: Maybe<Scalars['u16']>;
   paused?: Maybe<Scalars['bool']>;
   season_duration?: Maybe<Scalars['u32']>;
+  season_time_limit?: Maybe<Scalars['u16']>;
   season_version?: Maybe<Scalars['u16']>;
   treasury_balance?: Maybe<Scalars['u32']>;
   treasury_fee_pct?: Maybe<Scalars['u8']>;
@@ -1096,8 +1107,10 @@ export enum RyoConfigOrderField {
   Initialized = 'INITIALIZED',
   Key = 'KEY',
   PaperFee = 'PAPER_FEE',
+  PaperRewardLaunderer = 'PAPER_REWARD_LAUNDERER',
   Paused = 'PAUSED',
   SeasonDuration = 'SEASON_DURATION',
+  SeasonTimeLimit = 'SEASON_TIME_LIMIT',
   SeasonVersion = 'SEASON_VERSION',
   TreasuryBalance = 'TREASURY_BALANCE',
   TreasuryFeePct = 'TREASURY_FEE_PCT'
@@ -1119,6 +1132,13 @@ export type RyoConfigWhereInput = {
   paper_feeLT?: InputMaybe<Scalars['u16']>;
   paper_feeLTE?: InputMaybe<Scalars['u16']>;
   paper_feeNEQ?: InputMaybe<Scalars['u16']>;
+  paper_reward_launderer?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererEQ?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererGT?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererGTE?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererLT?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererLTE?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererNEQ?: InputMaybe<Scalars['u16']>;
   paused?: InputMaybe<Scalars['bool']>;
   season_duration?: InputMaybe<Scalars['u32']>;
   season_durationEQ?: InputMaybe<Scalars['u32']>;
@@ -1127,6 +1147,13 @@ export type RyoConfigWhereInput = {
   season_durationLT?: InputMaybe<Scalars['u32']>;
   season_durationLTE?: InputMaybe<Scalars['u32']>;
   season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  season_time_limit?: InputMaybe<Scalars['u16']>;
+  season_time_limitEQ?: InputMaybe<Scalars['u16']>;
+  season_time_limitGT?: InputMaybe<Scalars['u16']>;
+  season_time_limitGTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitLT?: InputMaybe<Scalars['u16']>;
+  season_time_limitLTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitNEQ?: InputMaybe<Scalars['u16']>;
   season_version?: InputMaybe<Scalars['u16']>;
   season_versionEQ?: InputMaybe<Scalars['u16']>;
   season_versionGT?: InputMaybe<Scalars['u16']>;
@@ -1153,10 +1180,12 @@ export type RyoConfigWhereInput = {
 export type Season = {
   __typename?: 'Season';
   entity?: Maybe<World__Entity>;
+  high_score?: Maybe<Scalars['u32']>;
   next_version_timestamp?: Maybe<Scalars['u64']>;
   paper_balance?: Maybe<Scalars['u32']>;
   paper_fee?: Maybe<Scalars['u16']>;
   season_duration?: Maybe<Scalars['u32']>;
+  season_time_limit?: Maybe<Scalars['u16']>;
   treasury_fee_pct?: Maybe<Scalars['u8']>;
   version?: Maybe<Scalars['u16']>;
 };
@@ -1180,15 +1209,24 @@ export type SeasonOrder = {
 };
 
 export enum SeasonOrderField {
+  HighScore = 'HIGH_SCORE',
   NextVersionTimestamp = 'NEXT_VERSION_TIMESTAMP',
   PaperBalance = 'PAPER_BALANCE',
   PaperFee = 'PAPER_FEE',
   SeasonDuration = 'SEASON_DURATION',
+  SeasonTimeLimit = 'SEASON_TIME_LIMIT',
   TreasuryFeePct = 'TREASURY_FEE_PCT',
   Version = 'VERSION'
 }
 
 export type SeasonWhereInput = {
+  high_score?: InputMaybe<Scalars['u32']>;
+  high_scoreEQ?: InputMaybe<Scalars['u32']>;
+  high_scoreGT?: InputMaybe<Scalars['u32']>;
+  high_scoreGTE?: InputMaybe<Scalars['u32']>;
+  high_scoreLT?: InputMaybe<Scalars['u32']>;
+  high_scoreLTE?: InputMaybe<Scalars['u32']>;
+  high_scoreNEQ?: InputMaybe<Scalars['u32']>;
   next_version_timestamp?: InputMaybe<Scalars['u64']>;
   next_version_timestampEQ?: InputMaybe<Scalars['u64']>;
   next_version_timestampGT?: InputMaybe<Scalars['u64']>;
@@ -1217,6 +1255,13 @@ export type SeasonWhereInput = {
   season_durationLT?: InputMaybe<Scalars['u32']>;
   season_durationLTE?: InputMaybe<Scalars['u32']>;
   season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  season_time_limit?: InputMaybe<Scalars['u16']>;
+  season_time_limitEQ?: InputMaybe<Scalars['u16']>;
+  season_time_limitGT?: InputMaybe<Scalars['u16']>;
+  season_time_limitGTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitLT?: InputMaybe<Scalars['u16']>;
+  season_time_limitLTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitNEQ?: InputMaybe<Scalars['u16']>;
   treasury_fee_pct?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctEQ?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctGT?: InputMaybe<Scalars['u8']>;
@@ -1927,7 +1972,7 @@ export type World__TransactionEdge = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
 
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1948,21 +1993,21 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, position?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | null } | null> | null } | null };
 
 export type RegisteredGamesBySeasonQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, final_score?: any | null, registered?: any | null } | null } | null> | null } | null };
+export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', season_version?: any | null, game_id?: any | null, player_id?: any | null, player_name?: any | null, hustler_id?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | null } | null> | null } | null };
 
 export type GamesByPlayerQueryVariables = Exact<{
   playerId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1981,15 +2026,16 @@ export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Sub
 
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
+  listId?: InputMaybe<Scalars['felt252']>;
 }>;
 
 
-export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null };
+export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
 
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HallOfFameQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, next_version_timestamp?: any | null } | null } | null> | null } | null };
+export type HallOfFameQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -2020,6 +2066,7 @@ export const ConfigDocument = `
         paused
         season_version
         season_duration
+        season_time_limit
         paper_fee
         treasury_fee_pct
         treasury_balance
@@ -2188,6 +2235,7 @@ export const GameByIdDocument = `
   gameModels(where: {game_id: $gameId}) {
     edges {
       node {
+        season_version
         game_id
         game_mode
         max_turns
@@ -2199,6 +2247,7 @@ export const GameByIdDocument = `
         final_score
         registered
         claimed
+        claimable
         position
       }
     }
@@ -2248,10 +2297,16 @@ export const RegisteredGamesBySeasonDocument = `
   ) {
     edges {
       node {
+        season_version
         game_id
         player_id
+        player_name
+        hustler_id
         final_score
         registered
+        claimed
+        claimable
+        position
       }
     }
   }
@@ -2311,6 +2366,7 @@ export const GamesByPlayerDocument = `
             final_score
             registered
             claimed
+            claimable
             position
           }
           ... on GameStorePacked {
@@ -2429,16 +2485,29 @@ export const GameStorePackedSubscriptionDocument = `
 }
     `;
 export const SeasonByVersionDocument = `
-    query SeasonByVersion($version: u16) {
+    query SeasonByVersion($version: u16, $listId: felt252) {
   seasonModels(where: {version: $version}) {
     edges {
       node {
         version
         season_duration
+        season_time_limit
         paper_fee
         treasury_fee_pct
         next_version_timestamp
         paper_balance
+      }
+    }
+  }
+  sortedListModels(where: {list_id: $listId}) {
+    edges {
+      node {
+        list_id
+        size
+        locked
+        processed
+        process_size
+        process_max_size
       }
     }
   }
@@ -2485,6 +2554,7 @@ export const HallOfFameDocument = `
       node {
         version
         next_version_timestamp
+        paper_balance
       }
     }
   }

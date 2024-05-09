@@ -60,7 +60,7 @@ export const SeasonDetailsModal = observer(() => {
                 <HStack w="full" alignItems="flex-start">
                   <Text w="120px">Entry fee:</Text>
                   <Text color="neon.400">
-                    {config?.ryo.paper_fee} <PaperIcon width="16px" height="16px" />
+                    {config?.ryo.paper_fee} <PaperIcon />
                   </Text>
                 </HStack>
                 <HStack w="full" alignItems="flex-start">

@@ -27,7 +27,7 @@ const New = observer(() => {
 
   const [error, setError] = useState("");
   const [name, setName] = useState("");
-  const [hustlerId, setHustlerId] = useState(0);
+  const [hustlerId, setHustlerId] = useState(Math.floor(Math.random()*3));
   const [hustlerStats, setHustlerStats] = useState<any>();
   const isMobile = IsMobile();
 

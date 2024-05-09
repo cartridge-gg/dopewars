@@ -24,16 +24,14 @@ struct GameConfig {
 
 #[generate_trait]
 impl GameConfigImpl of GameConfigTrait {
-    #[inline(always)]
     fn get(world: IWorldDispatcher) -> GameConfig {
         get!(world, (GAME_CONFIG_KEY), GameConfig)
     }
 
-    #[inline(always)]
     fn set(world: IWorldDispatcher, game_config: GameConfig) {
         let mut game_config = game_config;
         game_config.key = GAME_CONFIG_KEY;
-        
+
         set!(world, (game_config));
     }
 }
@@ -44,9 +42,9 @@ fn initialize_game_config(world: IWorldDispatcher) {
         GameConfig {
             key: GAME_CONFIG_KEY,
             cash: 1000,
-            health: 100,
+            health: 1, // 100,
             //
-            max_turns: 30,
+            max_turns: 4, //30,
             max_wanted_shopping: 5,
             max_rounds: 3,
             //

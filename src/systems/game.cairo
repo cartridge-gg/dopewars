@@ -21,7 +21,6 @@ enum EncounterActions {
 trait IGameActions<T> {
     fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
-    fn register_score(self: @T, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
@@ -48,7 +47,7 @@ mod game {
         helpers::season_manager::{SeasonManagerTrait},
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            sorted_list::{SortedListImpl, SortedListTrait}
+            sorted_list::{SortedListImpl, SortedListTrait},
         },
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
@@ -64,7 +63,6 @@ mod game {
         UpgradeItem: UpgradeItem,
         TravelEncounter: TravelEncounter,
         TravelEncounterResult: TravelEncounterResult,
-        MeetOG: MeetOG,
         GameOver: GameOver,
     }
 
@@ -156,16 +154,6 @@ mod game {
     }
 
     #[derive(Drop, Serde, starknet::Event)]
-    struct MeetOG {
-        #[key]
-        game_id: u32,
-        #[key]
-        player_id: ContractAddress,
-        #[key]
-        og_id: u16,
-    }
-
-    #[derive(Drop, Serde, starknet::Event)]
     struct GameOver {
         #[key]
         game_id: u32,
@@ -193,10 +181,14 @@ mod game {
             let game_id = world.uuid();
             let player_id = get_caller_address();
 
-            // get season version & pay paper_fee
+            // get season version 
             let season_manager = SeasonManagerTrait::new(world);
-            let season_version = season_manager.on_game_start();
+            let season_version = season_manager.get_current_version();
 
+            // pay paper_fee
+            season_manager.on_game_start();
+
+            // create game
             let game_config = GameConfigImpl::get(world);
             let game = Game {
                 game_id,
@@ -212,6 +204,7 @@ mod game {
                 final_score: 0,
                 registered: false,
                 claimed: false,
+                claimable: 0,
                 position: 0,
                 //
                 max_turns: game_config.max_turns,
@@ -253,38 +246,7 @@ mod game {
             game_loop::on_game_over(ref game_store);
         }
 
-        fn register_score(self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress) {
-            let world = self.world();
-            let player_id = get_caller_address();
-
-            let mut game = GameImpl::get(world, game_id, player_id);
-
-            // check dat game exists & is game_over
-            assert(game.game_over, 'game is not over');
-            // check not already registered
-            assert(!game.registered, 'already registered');
-
-            //
-            // TODO: check Season status
-            //
-
-            // register final_score
-            let mut game_store = GameStoreImpl::get(world, game);
-            game.final_score = game_store.player.cash; 
-            game.registered = true;
-            set!(world, (game));
-
-            // retrieve Season Sorted List   TODO: check season_version / status
-            let list_id = pedersen::pedersen('SeasonLeaderboard', game.season_version.into());
-            let mut sorted_list = SortedListImpl::get(world, list_id);
-
-            // add to Game to sorted_list
-            sorted_list.add(world, game, (prev_game_id, prev_player_id));
-
-
-            // TODO : emit event
-        }
-
+       
 
         fn travel(
             self: @ContractState,
@@ -308,7 +270,6 @@ mod game {
             self.execute_actions(ref game_store, ref actions);
 
             let mut randomizer = RandomImpl::new(world);
-
             // save next_location
             game_store.player.next_location = next_location;
 
@@ -359,7 +320,7 @@ mod game {
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        #[inline(always)]
+        // #[inline(always)]
         fn assert_not_paused(self: @ContractState) {
             let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
             let ryo_config = ryo_config_manager.get();
@@ -378,23 +339,20 @@ mod game {
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>
         ) {
             let mut has_shopped = false;
-            loop {
-                match actions.pop_front() {
-                    Option::Some(action) => {
-                        match action {
-                            super::Actions::Trade(tradeAction) => {
-                                trading::execute_trade(ref game_store, *tradeAction);
-                            },
-                            super::Actions::Shop(shopAction) => {
-                                assert(has_shopped == false, 'one upgrade by turn');
-                                shopping::execute_action(ref game_store, *shopAction);
-                                has_shopped = true;
-                            },
-                        };
-                    },
-                    Option::None => { break; },
+
+            while let Option::Some(action) = actions
+                .pop_front() {
+                    match action {
+                        super::Actions::Trade(tradeAction) => {
+                            trading::execute_trade(ref game_store, *tradeAction);
+                        },
+                        super::Actions::Shop(shopAction) => {
+                            assert(has_shopped == false, 'one upgrade by turn');
+                            shopping::execute_action(ref game_store, *shopAction);
+                            has_shopped = true;
+                        },
+                    };
                 };
-            };
         // TODO handle price impact ?
         }
     }

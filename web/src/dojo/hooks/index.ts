@@ -11,4 +11,5 @@ export * from "./useRouterContext"
 export * from "./useSystems"
 export * from "./useTokenBalance"
 export * from "./useRegisteredGamesBySeason"
+export * from "./useSeasonByVersion"
 

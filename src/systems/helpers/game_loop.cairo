@@ -3,7 +3,10 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game},
-    utils::{random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
+    utils::{
+        random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl},
+        math::{MathImpl, MathTrait}
+    },
     config::{locations::{Locations}, game::{GameConfigImpl}},
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
@@ -11,8 +14,7 @@ use rollyourown::{
         markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
         drugs_packed::{DrugsPackedTrait}
     },
-    systems::helpers::{traveling},
-    helpers::season_manager::{SeasonManager, SeasonManagerTrait}
+    systems::helpers::{traveling}, helpers::season_manager::{SeasonManager, SeasonManagerTrait}
 };
 
 
@@ -42,7 +44,11 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
     let game_config = GameConfigImpl::get(game_store.world);
     let drugs = game_store.drugs.get();
-    let reputation = if drugs.quantity > 5 { game_config.rep_carry_drugs } else { 1 };
+    let reputation = if drugs.quantity > 5 {
+        game_config.rep_carry_drugs
+    } else {
+        1
+    };
     game_store.player.reputation = game_store.player.reputation.add_capped(reputation, 100);
 
     // emit raw event Traveled if still alive
@@ -69,9 +75,6 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
 
     // markets variations
     game_store.markets.market_variations(ref randomizer);
-
-    // hustling
-    game_store.player.hustle(ref game_store, ref randomizer);
 
     // save 
     let game_store_packed = game_store.pack();

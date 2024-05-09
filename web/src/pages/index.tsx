@@ -1,9 +1,9 @@
 import { Button } from "@/components/common";
-import { Alert, Clock, User } from "@/components/icons";
+import { Alert, Clock, LaundromatIcon, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -15,6 +15,7 @@ export default function Home() {
   const { router } = useRouterContext();
   const { account } = useAccount();
   const { uiStore, burnerManager } = useDojoContext();
+  const { launder, isPending } = useSystems();
 
   const { toast } = useToast();
   const [isGated, setIsGated] = useState(false);
@@ -42,6 +43,15 @@ export default function Home() {
     router.push(`/game/new`);
   };
 
+  const onLaunder = async () => {
+    if (!account) {
+      uiStore.openConnectModal();
+      return;
+    }
+
+    await launder(2); // TODO get current season & check
+  };
+
   return (
     <Layout
       CustomLeftPanel={HomeLeftPanel}
@@ -51,7 +61,7 @@ export default function Home() {
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
           <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
-            {isGated ? (
+            {isGated && (
               <VStack>
                 <HStack>
                   <Alert />
@@ -59,10 +69,23 @@ export default function Home() {
                 </HStack>
                 <Text align="center">Get ready hustlers... Season III starts in November</Text>
               </VStack>
-            ) : (
+            )}
+            {!isGated && true /* TODO season open*/ && (
               <Button flex="1" onClick={onHustle}>
                 Hustle
               </Button>
+            )}
+            {!isGated && false /*TODO season need wash*/ && (
+              <HStack w="full">
+                <LaundromatIcon />
+
+                <VStack h="full">
+                  <Text>Last seasons results need to be washed. Confirm a transaction and earn 100 PAPER!</Text>
+                  <Button w="full" isLoading={isPending} onClick={onLaunder}>
+                    Launder results
+                  </Button>
+                </VStack>
+              </HStack>
             )}
           </HStack>
         </Card>

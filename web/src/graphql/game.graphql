@@ -2,6 +2,7 @@ query GameById($gameId: u32) {
   gameModels(where: { game_id: $gameId }) {
     edges {
       node {
+        season_version
         game_id
         game_mode
         max_turns
@@ -13,6 +14,7 @@ query GameById($gameId: u32) {
         final_score
         registered
         claimed
+        claimable
         position
       }
     }
@@ -27,10 +29,16 @@ query RegisteredGamesBySeason($version: u16) {
   ) {
     edges {
       node {
+        season_version
         game_id
         player_id
+        player_name
+        hustler_id
         final_score
         registered
+        claimed
+        claimable
+        position
       }
     }
   }
@@ -56,6 +64,7 @@ query GamesByPlayer($playerId: String) {
             final_score
             registered
             claimed
+            claimable
             position
           }
           ... on GameStorePacked {

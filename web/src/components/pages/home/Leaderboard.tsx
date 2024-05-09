@@ -80,6 +80,10 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     }
   };
 
+  const onDetails = (version: any) => {
+    router.push(`/season/${version}`)
+  }
+
   if (!hallOfFame || hallOfFame.length === 0) {
     return <></>;
   }
@@ -90,9 +94,9 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
         <HStack w="full" justifyContent="space-between">
           <Arrow direction="left" cursor="pointer" opacity={selectedIndex > 0 ? "1" : "0.25"} onClick={onPrev}></Arrow>
           <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
-            <Text>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
+            <Text cursor="pointer" onClick={() =>onDetails(hallOfFame[selectedIndex]?.version)}>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
             <Text color="yellow.400">
-              <PaperIcon width="16px" height="16px" color="yellow.400" mr={1} />
+              <PaperIcon color="yellow.400" mr={1} />
               {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")}
             </Text>
           </HStack>

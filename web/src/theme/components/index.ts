@@ -13,4 +13,4 @@ export * from "./modal";
 export * from "./slider";
 export * from "./tabs";
 export * from "./tooltip";
-
+export * from "./table";

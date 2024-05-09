@@ -106,7 +106,7 @@ const HallOfFameEntry = ({ entry, account }: { entry: Leaderboard; account: Acco
         >
           <Text>SEASON {entry.version}</Text>
           <Text color={color}>
-            <PaperIcon width="16px" height="16px" color={color} mr={1} />
+            <PaperIcon color={color} mr={1} />
             {formatCash(entry.paper_balance).replace("$", "")}
           </Text>
         </HStack>

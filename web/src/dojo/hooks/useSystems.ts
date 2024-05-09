@@ -23,7 +23,6 @@ import { DojoCall } from "@dojoengine/core";
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
-  registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   // ryo
@@ -37,10 +36,11 @@ export interface SystemsInterface {
   updateEncounterConfig: (encounterConfig: EncounterConfig) => Promise<SystemExecuteResult>;
 
   // laundromat
-  claim: (season: number, gameIds: number[]) => Promise<SystemExecuteResult>;
-  claimTreasury: () => Promise<SystemExecuteResult>;
+  registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
+  claim: (season: number, playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
   launder: (season: number) => Promise<SystemExecuteResult>;
-
+  claimTreasury: () => Promise<SystemExecuteResult>;
+  superchargeJackpot: ( season: number, amount_eth: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
@@ -52,9 +52,19 @@ export interface SystemsInterface {
 
 export interface SystemExecuteResult {
   hash: string;
-  isGameOver?: BaseEventData;
+  receipt?: GetTransactionReceiptResponse;
   event?: BaseEventData;
-  events?: BaseEventData[];
+  parsedEvents?: any[];
+  isGameOver?: BaseEventData;
+  [key: string]: any;
+}
+
+export interface ExecuteAndReceiptResult {
+  hash: string;
+  receipt?: GetTransactionReceiptResponse;
+  event?: BaseEventData;
+  parsedEvents: any[];
+  isGameOver?: BaseEventData;
   [key: string]: any;
 }
 
@@ -97,14 +107,7 @@ export const useSystems = (): SystemsInterface => {
   //
 
   const executeAndReceipt = useCallback(
-    async (
-      params: AllowArray<DojoCall | Call>,
-    ): Promise<{
-      hash: string;
-      receipt: GetTransactionReceiptResponse;
-      events: any[];
-      parsedEvents: any[];
-    }> => {
+    async (params: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
       if (!account) {
         toast({
           message: `not connected`,
@@ -147,17 +150,11 @@ export const useSystems = (): SystemsInterface => {
           duration: 20_000,
           isError: true,
         });
-        throw Error(e.toString());
+        // throw Error(e.toString());
       }
 
       if (receipt) {
         let receipt_error = undefined;
-        // if ("status" in receipt && receipt.status === "REJECTED") {
-        //   receipt_error = {
-        //     status: "REJECTED",
-        //     message: (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message
-        //   }
-        // }
 
         if ("execution_status" in receipt && receipt.execution_status === "REVERTED") {
           receipt_error = {
@@ -177,13 +174,13 @@ export const useSystems = (): SystemsInterface => {
         }
       }
 
-      const events = getEvents(receipt);
+      const events = receipt ? getEvents(receipt) : [];
       const parsedEvents = parseAllEvents(receipt);
 
       setIsPending(false);
 
       return {
-        hash: tx?.transaction_hash,
+        hash: tx?.transaction_hash || "",
         receipt,
         events,
         parsedEvents,
@@ -220,6 +217,7 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        parsedEvents,
         gameId: gameCreated.gameId,
       };
     },
@@ -244,21 +242,7 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const registerScore = useCallback(
-    async (gameId: string, prevGameId: string, prevPlayerId: string) => {
-      const { hash } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
-        entrypoint: "register_score",
-        // @ts-ignore
-        calldata: [gameId, prevGameId, prevPlayerId],
-      });
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
+ 
 
   const travel = useCallback(
     async (gameId: string, location: Locations, calls: Array<PendingCall>) => {
@@ -319,12 +303,28 @@ export const useSystems = (): SystemsInterface => {
   // LAUNDROMAT
   //
 
+  const registerScore = useCallback(
+    async (gameId: string, prevGameId: string, prevPlayerId: string) => {
+      const { hash } = await executeAndReceipt({
+        contractName: "rollyourown::systems::laundromat::laundromat",
+        entrypoint: "register_score",
+        // @ts-ignore
+        calldata: [gameId, prevGameId, prevPlayerId],
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
   const claim = useCallback(
-    async (season: number, gameIds: number[]) => {
+    async (season: number, playerId: string, gameIds: number[]) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::laundromat::laundromat",
         entrypoint: "claim",
-        calldata: [season, game_ids],
+        calldata: [season, playerId, gameIds],
       });
 
       return {
@@ -345,6 +345,42 @@ export const useSystems = (): SystemsInterface => {
       hash,
     };
   }, [executeAndReceipt]);
+
+
+  const superchargeJackpot = useCallback(
+    async (season: number, amount_eth: number) => {
+
+    const paperAddress = config?.ryoAddress.paper;
+      const laundromatAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.name ===  "rollyourown::systems::laundromat::laundromat",
+      ).address;
+
+      //
+      const approvalCall: Call = {
+        contractAddress: paperAddress,
+        entrypoint: "approve",
+        calldata: CallData.compile({ laundromatAddress, amount_eth }),
+      };
+
+      const superchargeJackpotCall = {
+        contractName:  "rollyourown::systems::laundromat::laundromat",
+        //  contractAddress: gameAddress,
+        entrypoint: "supercharge_jackpot",
+        calldata: [ season, amount_eth],
+      };
+
+
+
+    const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
+
+    return {
+      hash,
+    };
+  
+  }, [executeAndReceipt]);
+
+
+
 
   const launder = useCallback(
     async (season: number) => {
@@ -523,12 +559,13 @@ export const useSystems = (): SystemsInterface => {
   return {
     createGame,
     endGame,
-    registerScore,
     travel,
     decide,
     //
+    registerScore,
     claim,
     claimTreasury,
+    superchargeJackpot,
     launder,
     //
     setPaused,

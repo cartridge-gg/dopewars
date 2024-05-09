@@ -27,7 +27,7 @@ export default function LeaderboardPage() {
   };
 
   const onLaunder = async () => {
-    const res = await launder(1);
+    const res = await launder(2);
     toast({ message: "laundering..." });
   };
 

@@ -4,10 +4,11 @@ import { useMemo } from "react";
 export interface RegisteredGamesBySeasonInterface {
   registeredGames: Game[];
   isFetched: boolean;
+  refetch: any;
 }
 
 export const useRegisteredGamesBySeason = (version: number): RegisteredGamesBySeasonInterface => {
-  const { data, isFetched } = useRegisteredGamesBySeasonQuery({
+  const { data, isFetched, refetch } = useRegisteredGamesBySeasonQuery({
     version,
   });
 
@@ -16,8 +17,10 @@ export const useRegisteredGamesBySeason = (version: number): RegisteredGamesBySe
     return edges?.length > 0 ? edges.map((i) => i.node as Game) : [];
   }, [data]);
 
+
   return {
     registeredGames,
     isFetched,
+    refetch
   };
 };

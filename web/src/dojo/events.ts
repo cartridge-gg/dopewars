@@ -100,8 +100,8 @@ export interface GameOverData extends BaseEventData {
 }
 
 
-export const parseAllEvents = (receipt: GetTransactionReceiptResponse) => {
-  if (receipt.execution_status !== "SUCCEEDED") {
+export const parseAllEvents = (receipt?: GetTransactionReceiptResponse) => {
+  if (!receipt || receipt.execution_status !== "SUCCEEDED") {
     return []
   }
 

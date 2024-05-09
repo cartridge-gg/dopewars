@@ -42,7 +42,6 @@ struct DrugConfig {
 
 #[generate_trait]
 impl DrugConfigImpl of DrugConfigTrait {
-    #[inline(always)]
     fn get(world: IWorldDispatcher, drug: Drugs) -> DrugConfig {
         get!(world, (drug), DrugConfig)
     }

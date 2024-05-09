@@ -21,6 +21,7 @@ struct Game {
     final_score: u32,
     registered: bool,
     claimed: bool,
+    claimable: u32,
     position: u16,
     // 
     // Copied from GameConfig
@@ -41,5 +42,9 @@ enum GameMode {
 impl GameImpl of GameTrait {
     fn get(world: IWorldDispatcher, game_id: u32, player_id: ContractAddress) -> Game {
         get!(world, (game_id, player_id), Game)
+    }
+
+    fn exists(self: Game) -> bool {
+        self.season_version > 0
     }
 }

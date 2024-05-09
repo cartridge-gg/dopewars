@@ -11,7 +11,8 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 mod devtools {
-    use core::traits::Into;
+    use core::traits::TryInto;
+use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::contract_address::Felt252TryIntoContractAddress;
@@ -23,7 +24,8 @@ mod devtools {
         models::{season::{Season}, game::{Game}, game_store_packed::{GameStorePacked}},
         utils::{
             events::{RawEventEmitterTrait, RawEventEmitterImpl}, random::{RandomImpl},
-            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
+            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
+            sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
         },
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
@@ -49,7 +51,7 @@ mod devtools {
                 randomizer.between::<u32>(0, 100000000)
             };
 
-            let game = Game {
+            let mut game = Game {
                 game_id,
                 player_id,
                 //
@@ -63,6 +65,7 @@ mod devtools {
                 final_score: 0,
                 registered: false,
                 claimed: false,
+                claimable: 0,
                 position: 0,
                 //
                 max_turns: 2,
@@ -76,6 +79,24 @@ mod devtools {
 
             // save Game & GameStorePacked
             set!(world, (game, game_store_packed));
+
+
+
+            // simulate register_score
+
+            // register final_score
+            let mut game_store = GameStoreImpl::get(world, game);
+            game.final_score = game_store.player.cash; 
+            game.registered = true;
+            set!(world, (game));
+
+            // retrieve Season Sorted List   TODO: check season_version / status
+            let list_id = game.season_version.into();
+            let mut sorted_list = SortedListImpl::get(world, list_id);
+
+            // add to Game to sorted_list
+            sorted_list.add(world, game, (0, 0.try_into().unwrap()));
+
         }
 
         // fn feed_leaderboard(self: @ContractState, count: u32) {

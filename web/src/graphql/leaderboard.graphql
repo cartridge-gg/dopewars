@@ -1,14 +1,27 @@
-query SeasonByVersion($version: u16) {
+query SeasonByVersion($version: u16, $listId: felt252) {
   seasonModels(where: { version: $version }) {
     edges {
       node {
         version
         season_duration
+        season_time_limit
         paper_fee
         treasury_fee_pct
         next_version_timestamp
         paper_balance
+      }
+    }
+  }
 
+  sortedListModels(where: { list_id: $listId }) {
+    edges {
+      node {
+        list_id
+        size
+        locked
+        processed
+        process_size
+        process_max_size
       }
     }
   }
@@ -20,6 +33,7 @@ query HallOfFame {
       node {
         version
         next_version_timestamp
+        paper_balance
       }
     }
   }

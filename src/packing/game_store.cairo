@@ -58,31 +58,27 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
         let mut bits = BitsDefaultImpl::default();
         let mut layout = GameStoreLayoutEnumerableImpl::all();
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(item) => {
-                    match *item {
-                        GameStoreLayout::Markets => {
-                            bits.replace::<felt252>(item.idx(), item.bits(), self.markets.packed);
-                        },
-                        GameStoreLayout::Items => {
-                            bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
-                        },
-                        GameStoreLayout::Drugs => {
-                            bits.replace::<felt252>(item.idx(), item.bits(), self.drugs.packed);
-                        },
-                        GameStoreLayout::Wanted => {
-                            bits.replace::<felt252>(item.idx(), item.bits(), self.wanted.packed);
-                        },
-                        GameStoreLayout::Player => {
-                            let player_packed: felt252 = self.player.pack();
-                            bits.replace::<felt252>(item.idx(), item.bits(), player_packed);
-                        },
-                    };
-                },
-                Option::None => { break; },
+        while let Option::Some(item) = layout
+            .pop_front() {
+                match *item {
+                    GameStoreLayout::Markets => {
+                        bits.replace::<felt252>(item.idx(), item.bits(), self.markets.packed);
+                    },
+                    GameStoreLayout::Items => {
+                        bits.replace::<felt252>(item.idx(), item.bits(), self.items.packed);
+                    },
+                    GameStoreLayout::Drugs => {
+                        bits.replace::<felt252>(item.idx(), item.bits(), self.drugs.packed);
+                    },
+                    GameStoreLayout::Wanted => {
+                        bits.replace::<felt252>(item.idx(), item.bits(), self.wanted.packed);
+                    },
+                    GameStoreLayout::Player => {
+                        let player_packed: felt252 = self.player.pack();
+                        bits.replace::<felt252>(item.idx(), item.bits(), player_packed);
+                    },
+                };
             };
-        };
 
         GameStorePacked {
             game_id: self.game.game_id, player_id: self.game.player_id, packed: bits.into_felt(),
@@ -97,33 +93,29 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self.packed);
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(item) => {
-                    let packed = bits.extract_into::<felt252>(item.idx(), item.bits());
+        while let Option::Some(item) = layout
+            .pop_front() {
+                let packed = bits.extract_into::<felt252>(item.idx(), item.bits());
 
-                    match *item {
-                        GameStoreLayout::Markets => {
-                            game_store.markets = MarketsPacked { world, game, packed };
-                        },
-                        GameStoreLayout::Items => {
-                            game_store.items = ItemsPacked { world, game, packed };
-                        },
-                        GameStoreLayout::Drugs => {
-                            game_store.drugs = DrugsPacked { world, game, packed };
-                        },
-                        GameStoreLayout::Wanted => {
-                            game_store.wanted = WantedPacked { world, game, packed };
-                        },
-                        GameStoreLayout::Player => {
-                            // unpack packed into Player
-                            game_store.player = packed.unpack(world, game);
-                        },
-                    };
-                },
-                Option::None => { break; },
+                match *item {
+                    GameStoreLayout::Markets => {
+                        game_store.markets = MarketsPacked { world, game, packed };
+                    },
+                    GameStoreLayout::Items => {
+                        game_store.items = ItemsPacked { world, game, packed };
+                    },
+                    GameStoreLayout::Drugs => {
+                        game_store.drugs = DrugsPacked { world, game, packed };
+                    },
+                    GameStoreLayout::Wanted => {
+                        game_store.wanted = WantedPacked { world, game, packed };
+                    },
+                    GameStoreLayout::Player => {
+                        // unpack packed into Player
+                        game_store.player = packed.unpack(world, game);
+                    },
+                };
             };
-        };
 
         game_store
     }

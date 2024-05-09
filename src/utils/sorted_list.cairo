@@ -1,8 +1,13 @@
+use core::traits::TryInto;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use debug::PrintTrait;
 
-use rollyourown::models::game::Game;
+use rollyourown::{
+    models::{game::Game, season::Season},
+    utils::payout_structure::{get_payout}
+};
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct SortedList {
@@ -43,8 +48,8 @@ trait SortableItem<T> {
     fn get_keys(self: T) -> (u32, ContractAddress);
     fn get_value(self: T) -> u32;
     fn get_by_keys(world: IWorldDispatcher, keys: (u32, ContractAddress)) -> T;
-    fn get_position(self: T) -> u16;
-    fn set_position(ref self: T, world: IWorldDispatcher, position: u16);
+    // fn get_position(self: T) -> u16;
+    fn set_position(ref self: T, world: IWorldDispatcher, position: u16, entrants: u32, paper_balance: u32);
 }
 
 
@@ -58,11 +63,14 @@ impl SortableItemGameImpl of SortableItem<Game> {
     fn get_by_keys(world: IWorldDispatcher, keys: (u32, ContractAddress)) -> Game {
         get!(world, keys, Game)
     }
-    fn get_position(self: Game) -> u16 {
-        self.position
-    }
-    fn set_position(ref self: Game, world: IWorldDispatcher, position: u16) {
+    // fn get_position(self: Game) -> u16 {
+    //     self.position
+    // }
+    fn set_position(ref self: Game, world: IWorldDispatcher, position: u16, entrants: u32, paper_balance: u32) {
+        // calc payout for this game
+        let payout = get_payout(position.into(), entrants, paper_balance);
         self.position = position;
+        self.claimable = payout;
         set!(world, (self));
     }
 }
@@ -175,7 +183,7 @@ impl SortedListImpl of SortedListTrait {
  
         loop {
             let mut next = get!(
-                world, (self.list_id, curr.next_k0, curr.next_k0), (SortedListItem)
+                world, (self.list_id, curr.next_k0, curr.next_k1), (SortedListItem)
             );
 
             if self.is_correct_position::<T>(world, ref curr, ref next, item_value) {
@@ -209,13 +217,17 @@ impl SortedListImpl of SortedListTrait {
         assert(self.locked, 'list must be locked');
         assert(!self.processed, 'list already processed');
         assert(batch_size > 0, 'invalid batch_size');
+
+        let season = get!(world, (self.list_id), (Season));
+        let paper_balance = season.paper_balance;
+        let entrants = self.size;
        
         let curr_k0 = self.process_cursor_k0;
         let curr_k1 = self.process_cursor_k1;
 
         let mut curr = get!(world, (self.list_id, curr_k0, curr_k1), (SortedListItem));
         let mut curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
-        let mut curr_position = curr_item.get_position();
+        let mut curr_position: u16 = self.process_size.try_into().unwrap();//curr_item.get_position();
 
         let mut i = 0;
 
@@ -237,7 +249,7 @@ impl SortedListImpl of SortedListTrait {
             curr = get!(world, (self.list_id, curr.next_k0, curr.next_k1), (SortedListItem));
             curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
             curr_position += 1;
-            curr_item.set_position(world, curr_position);
+            curr_item.set_position(world, curr_position, entrants, paper_balance);
 
             self.process_size += 1;
 

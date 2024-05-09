@@ -123,7 +123,7 @@ impl PlayerImpl of PlayerTrait {
         self.health == 0
     }
 
-    #[inline(always)]
+    // #[inline(always)]
     fn can_continue(self: Player) -> bool {
         if self.health == 0 {
             return false;
@@ -144,12 +144,12 @@ impl PlayerImpl of PlayerTrait {
         true
     }
 
-    #[inline(always)]
+    // #[inline(always)]
     fn can_trade(self: Player) -> bool {
         if self.health == 0 {
             return false;
         }
-        
+
         if self.status != PlayerStatus::Normal {
             return false;
         }
@@ -206,34 +206,35 @@ impl PlayerImpl of PlayerTrait {
                 return;
             }
         }
-        
+
         // update drug level
         game_store.player.drug_level = drug_level;
 
         // randomize price for new drug
-        let drug_slot = drug_level.sub_capped(1,0);
+        let drug_slot = drug_level.sub_capped(1, 0);
         game_store.markets.shuffle_drug_prices(ref randomizer, drug_slot);
     }
-
-    fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {
-        let og_id = randomizer.between::<u16>(0, 30_000);
-
-        // emit raw event MeetOG 
-        if og_id < 500 {
-            game_store
-                .world
-                .emit_raw(
-                    array![
-                        selector!("MeetOG"),
-                        Into::<u32, felt252>::into(game_store.game.game_id),
-                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
-                            .into()
-                    ],
-                    array![Into::<u16, felt252>::into(og_id),]
-                );
-        };
-    }
 }
+
+
+// fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {
+//     let og_id = randomizer.between::<u16>(0, 30_000);
+
+//     // emit raw event MeetOG 
+//     if og_id < 500 {
+//         game_store
+//             .world
+//             .emit_raw(
+//                 array![
+//                     selector!("MeetOG"),
+//                     Into::<u32, felt252>::into(game_store.game.game_id),
+//                     Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+//                         .into()
+//                 ],
+//                 array![Into::<u16, felt252>::into(og_id),]
+//             );
+//     };
+// }
 
 //
 //
@@ -245,42 +246,38 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
         let mut bits = BitsDefaultImpl::default();
         let mut layout = PlayerLayoutEnumerableImpl::all();
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(item) => {
-                    match *item {
-                        PlayerLayout::Cash => {
-                            bits.replace::<u32>(item.idx(), item.bits(), self.cash);
-                        },
-                        PlayerLayout::Health => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.health);
-                        },
-                        PlayerLayout::Turn => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.turn);
-                        },
-                        PlayerLayout::Status => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.status.into());
-                        },
-                        PlayerLayout::PrevLocation => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.prev_location.into());
-                        },
-                        PlayerLayout::Location => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.location.into());
-                        },
-                        PlayerLayout::NextLocation => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.next_location.into());
-                        },
-                        PlayerLayout::DrugLevel => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.drug_level.into());
-                        },
-                        PlayerLayout::Reputation => {
-                            bits.replace::<u8>(item.idx(), item.bits(), self.reputation.into());
-                        },
-                    };
-                },
-                Option::None => { break; },
+        while let Option::Some(item) = layout
+            .pop_front() {
+                match *item {
+                    PlayerLayout::Cash => {
+                        bits.replace::<u32>(item.idx(), item.bits(), self.cash);
+                    },
+                    PlayerLayout::Health => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.health);
+                    },
+                    PlayerLayout::Turn => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.turn);
+                    },
+                    PlayerLayout::Status => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.status.into());
+                    },
+                    PlayerLayout::PrevLocation => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.prev_location.into());
+                    },
+                    PlayerLayout::Location => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.location.into());
+                    },
+                    PlayerLayout::NextLocation => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.next_location.into());
+                    },
+                    PlayerLayout::DrugLevel => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.drug_level.into());
+                    },
+                    PlayerLayout::Reputation => {
+                        bits.replace::<u8>(item.idx(), item.bits(), self.reputation.into());
+                    },
+                }
             };
-        };
 
         bits.into_felt()
     }
@@ -293,57 +290,44 @@ impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(item) => {
-                    match *item {
-                        PlayerLayout::Cash => {
-                            player.cash = bits.extract_into::<u32>(item.idx(), item.bits());
-                        },
-                        PlayerLayout::Health => {
-                            player.health = bits.extract_into::<u8>(item.idx(), item.bits());
-                        },
-                        PlayerLayout::Turn => {
-                            player.turn = bits.extract_into::<u8>(item.idx(), item.bits());
-                        },
-                        PlayerLayout::Status => {
-                            player.status = bits.extract_into::<u8>(item.idx(), item.bits()).into();
-                        },
-                        PlayerLayout::PrevLocation => {
-                            player
-                                .prev_location = bits
-                                .extract_into::<u8>(item.idx(), item.bits())
-                                .into();
-                        },
-                        PlayerLayout::Location => {
-                            player
-                                .location = bits
-                                .extract_into::<u8>(item.idx(), item.bits())
-                                .into();
-                        },
-                        PlayerLayout::NextLocation => {
-                            player
-                                .next_location = bits
-                                .extract_into::<u8>(item.idx(), item.bits())
-                                .into();
-                        },
-                        PlayerLayout::DrugLevel => {
-                            player
-                                .drug_level = bits
-                                .extract_into::<u8>(item.idx(), item.bits())
-                                .into();
-                        },
-                        PlayerLayout::Reputation => {
-                            player
-                                .reputation = bits
-                                .extract_into::<u8>(item.idx(), item.bits())
-                                .into();
-                        },
-                    };
-                },
-                Option::None => { break; },
+        while let Option::Some(item) = layout
+            .pop_front() {
+                match *item {
+                    PlayerLayout::Cash => {
+                        player.cash = bits.extract_into::<u32>(item.idx(), item.bits());
+                    },
+                    PlayerLayout::Health => {
+                        player.health = bits.extract_into::<u8>(item.idx(), item.bits());
+                    },
+                    PlayerLayout::Turn => {
+                        player.turn = bits.extract_into::<u8>(item.idx(), item.bits());
+                    },
+                    PlayerLayout::Status => {
+                        player.status = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                    },
+                    PlayerLayout::PrevLocation => {
+                        player
+                            .prev_location = bits
+                            .extract_into::<u8>(item.idx(), item.bits())
+                            .into();
+                    },
+                    PlayerLayout::Location => {
+                        player.location = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                    },
+                    PlayerLayout::NextLocation => {
+                        player
+                            .next_location = bits
+                            .extract_into::<u8>(item.idx(), item.bits())
+                            .into();
+                    },
+                    PlayerLayout::DrugLevel => {
+                        player.drug_level = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                    },
+                    PlayerLayout::Reputation => {
+                        player.reputation = bits.extract_into::<u8>(item.idx(), item.bits()).into();
+                    },
+                };
             };
-        };
 
         player
     }

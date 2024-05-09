@@ -15,7 +15,7 @@ import { ChainSelector } from "../wallet/ChainSelector";
 import { ConnectButton } from "../wallet/ConnectButton";
 import { Predeployed } from "../wallet/Predeployed";
 import { OnGoingGames } from "../pages/home/OnGoingGames";
-import DrawerMenu from "../unused/DrawerMenu";
+import DrawerMenu from "./DrawerMenu";
 
 
 export const Header = observer(() => {

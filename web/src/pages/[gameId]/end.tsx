@@ -1,7 +1,8 @@
-import { DollarBag, Roll } from "@/components/icons";
-import { Header } from "@/components/layout";
+import { Alert, Arrest, DollarBag, Pistol, Roll, Trophy, Warning } from "@/components/icons";
+import { Header, Layout } from "@/components/layout";
 
 import {
+  Card,
   Container,
   Divider,
   Flex,
@@ -26,7 +27,13 @@ import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/pages/profile/ShareButton";
-import { useGameStore, useRouterContext } from "@/dojo/hooks";
+import {
+  useGameStore,
+  useRegisteredGamesBySeason,
+  useRouterContext,
+  useSeasonByVersion,
+  useSystems,
+} from "@/dojo/hooks";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { useAccount } from "@starknet-react/core";
@@ -34,26 +41,49 @@ import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
+import { GameClass } from "@/dojo/class/Game";
+import { Game } from "@/generated/graphql";
+import { useToast } from "@/hooks/toast";
 
 const End = observer(() => {
+  const { game } = useGameStore();
+
+  if (!game) return null;
+  return <EndContent game={game} />;
+});
+
+export default End;
+
+const EndContent = ({ game }: { game: GameClass }) => {
   const { router, gameId } = useRouterContext();
 
-  const [isDead, setIsDead] = useState(false);
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
+  const [position, setPosition] = useState(0);
+  const [prev, setPrev] = useState<Game | undefined>(undefined);
 
   const { account } = useAccount();
+  const { toast } = useToast();
 
-  const { game, gameInfos } = useGameStore();
+  const { isPending, registerScore } = useSystems();
+
+  const {
+    registeredGames,
+    isFetched,
+    refetch: refetchRegisteredGame,
+  } = useRegisteredGamesBySeason(game.gameInfos.season_version);
+
+  const { season, sortedList, refetch: refetchSeason } = useSeasonByVersion(game.gameInfos.season_version);
 
   useEffect(() => {
-    if (isDead) {
-      playSound(Sounds.Death, 0.3);
-    }
-  }, [isDead]);
+    refetchSeason();
+    refetchRegisteredGame();
+  }, []);
 
   useEffect(() => {
     if (game) {
-      setIsDead(game.player?.health === 0);
+      if (game.player?.health === 0) {
+        // playSound(Sounds.Death, 0.3);
+      }
     }
   }, [game]);
 
@@ -61,168 +91,178 @@ const End = observer(() => {
     setIsCreditOpen(false);
   }, [setIsCreditOpen]);
 
-  if (!gameInfos || !game) return null;
+  useEffect(() => {
+    if (!game) return;
+    const filtered = registeredGames.filter((i) => i.final_score >= game?.player.cash);
+    const sorted = filtered.sort((a, b) => b.final_score - a.final_score);
+
+    const prev = sorted.length > 0 ? sorted[sorted.length - 1] : undefined;
+
+    setPrev(prev);
+
+    if (game.gameInfos.registered) {
+      setPosition(sorted.length - 1);
+    } else {
+      setPosition(sorted.length + 1);
+    }
+  }, [registeredGames, game]);
+
+  const onRegister = async () => {
+    try {
+      // TODO: should retrieve prev just before submitting tx
+
+      const prevGameId = prev ? prev.game_id : 0;
+      const prevPlayerId = prev ? prev.player_id : 0;
+
+      const { hash } = await registerScore(game.gameInfos.game_id!, prevGameId, prevPlayerId);
+
+      if (hash !== "") {
+        toast({
+          message: `Congrats!`,
+          duration: 5_000,
+          isError: false,
+        });
+
+        router.push("/");
+      }
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
   return (
-    <>
-      <Flex
-        direction="column"
-        position="fixed"
-        boxSize="full"
-        align="center"
-        as={motion.div}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <Header />
-        <Container overflowY="auto">
-          <VStack flex={["0", "1"]} my="auto">
-            {game.player?.health === 0 && (
-              <Text fontSize="11px" fontFamily="broken-console" padding="0.5rem 0.5rem 0.25rem">
-                You died ...
-              </Text>
-            )}
-
-            <Heading fontSize={["30px", "48px"]} fontWeight="normal">
-              Game Over
-            </Heading>
-            <HStack w="full">
-              <VStack flex="1">
-                <Image src="/images/trophy1.gif" alt="winner" />
-              </VStack>
-              <VStack flex="1">
-                {/* <StatsItem text="Xth place" icon={<Trophy />} />
-                <Divider borderColor="neon.600" /> */}
-
-                <StatsItem
-                  text={shortString.decodeShortString(gameInfos?.player_name)}
-                  icon={<HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} w="24px" h="24px" />}
-                />
-                <Divider borderColor="neon.600" />
-                <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} />
-                <Divider borderColor="neon.600" />
-                <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<DollarBag />} />
-
-                {/* <StatsItem
-                  text={`${playerEntity?.health} Health`}
-                  icon={isDead ? <Skull color="green" /> : <Heart />}
-                />
-                <Divider borderColor="neon.600" />
-                <StatsItem text={`${playerEntity?.wanted}% Wanted`} icon={<Siren color="red" />} />
-                <Divider borderColor="neon.600" /> */}
-                {/* 
-                <Divider borderColor="neon.600" />
-                <StatsItem text="X Muggings" icon={<Pistol />} />
-                <Divider borderColor="neon.600" />
-                <StatsItem text="X Arrest" icon={<Arrest />} /> */}
-              </VStack>
-            </HStack>
-
-            <HStack gap="10px" w={["full", "auto"]}>
-              <Button variant="pixelated" w="full" onClick={() => setIsCreditOpen(true)}>
-                <Roll />
-              </Button>
-
-              <ShareButton variant="pixelated" />
-
-              <Link
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdHXV6YWUUd2l3azgst0L6vYvLwY6abGoQu5rbf8r7h8ffCnQ/viewform"
-                isExternal
-                flex="1"
-                textDecoration="none"
-                _hover={{
-                  textDecoration: "none",
-                }}
-                display="flex"
-              >
-                <Button variant="pixelated" w="100%">
-                  GIVE FEEDBACK
-                </Button>
-              </Link>
-            </HStack>
-          </VStack>
-
-
-
-
-          <VStack flex="1" my="auto" justify="space-between">
-            <Image display={["none", "flex"]} src="/images/sunset.png" alt="sunset" />
-            <Button
-              mt="20px"
-              onClick={() => {
-                router.push("/");
-              }}
-            >
+    <Layout
+      leftPanelProps={{
+        title: "Game Over",
+        prefixTitle: game.player?.health === 0 ? "You died" : "You survived",
+        imageSrc: "/images/sunset.png",
+      }}
+      footer={
+        <>
+          {!game.gameInfos.registered ? (
+            <Button isLoading={isPending} onClick={() => onRegister()}>
+              Register you score
+            </Button>
+          ) :  (
+            <Button  onClick={() => router.push("/")}>
               Lobby
             </Button>
-
-
-            <Button
-              mt="20px"
-              onClick={() => {
-                router.push("/");
-              }}
-            >
-              REGISTER YOUR SCORE
-            </Button>
+          )}
+        </>
+      }
+    >
+      <VStack h="full" justifyContent="center" gap={12}>
+        <HStack w="full">
+          <VStack flex="1">
+            {position === 1 && <Image src="/images/trophy1.gif" alt="trophy1" />}
+            {position > 1 && position <= sortedList?.size / 10 && <Image src="/images/suitcase.gif" alt="suitcase" />}
+            {position > 1 && position > sortedList?.size / 10 && <Image src="/images/trashcan.gif" alt="trashcan" />}
           </VStack>
-        </Container>
-        <Spacer maxH="100px" />
+          <VStack flex="1">
+            <StatsItem
+              text={shortString.decodeShortString(game.gameInfos.player_name)}
+              icon={<HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
+            />
+            <Divider borderColor="neon.600" />
+            <StatsItem text={`${position}th place`} icon={<Trophy />} />
 
-        <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader textAlign="center" mt={1}>
-              CREDITS
-            </ModalHeader>
-            <ModalBody mx->
-              <UnorderedList pb={5}>
-                <ListItem>
-                  Built by{" "}
-                  <Link href="https://cartridge.gg/" target="_blank">
-                    cartridge
-                  </Link>{" "}
-                  with{" "}
-                  <Link href="https://dojoengine.org/" target="_blank">
-                    DOJO
-                  </Link>
-                </ListItem>
+            <Divider borderColor="neon.600" />
+            <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} />
+            <Divider borderColor="neon.600" />
+            <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<DollarBag />} />
 
-                <ListItem>
-                  Art by{" "}
-                  <Link href="https://twitter.com/Mr_faxu" target="_blank">
-                    Mr. Fax
-                  </Link>{" "}
-                  &{" "}
-                  <Link href="https://twitter.com/HPMNK_One" target="_blank">
-                    HPMNK
-                  </Link>
-                </ListItem>
+            {/* <Divider borderColor="neon.600" />
+              <StatsItem text="X Muggings" icon={<Pistol />} />
+              <Divider borderColor="neon.600" />
+              <StatsItem text="X Arrest" icon={<Arrest />} /> */}
+          </VStack>
+        </HStack>
 
-                <ListItem>
-                  Music and SFX by{" "}
-                  <Link href="https://twitter.com/CaseyWescott" target="_blank">
-                    Casey Wescott
-                  </Link>{" "}
-                  &{" "}
-                  <Link href="https://twitter.com/SheckyGreen" target="_blank">
-                    SheckyGreen
-                  </Link>
-                </ListItem>
-              </UnorderedList>
-            </ModalBody>
-            <ModalFooter justifyContent="stretch">
-              <Button w="full" onClick={onCreditClose}>
-                Close
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </Flex>
-    </>
+        <HStack gap="10px" w={["full", "auto"]}>
+          <Button variant="pixelated" w="full" onClick={() => setIsCreditOpen(true)}>
+            <Roll />
+          </Button>
+
+          <ShareButton variant="pixelated" />
+
+          <Link
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdHXV6YWUUd2l3azgst0L6vYvLwY6abGoQu5rbf8r7h8ffCnQ/viewform"
+            isExternal
+            flex="1"
+            textDecoration="none"
+            _hover={{
+              textDecoration: "none",
+            }}
+            display="flex"
+          >
+            <Button variant="pixelated" w="100%">
+              GIVE FEEDBACK
+            </Button>
+          </Link>
+        </HStack>
+
+        {!game.gameInfos.registered && (
+          <Card p={3} mt={[3, 0]}>
+            <HStack color="yellow.400">
+              <Warning mr={2} color="yellow.400" />
+              <Text maxW="340px">You must register your score in order to be eligible for season rewards</Text>
+            </HStack>
+          </Card>
+        )}
+      </VStack>
+
+      <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textAlign="center" mt={1}>
+            CREDITS
+          </ModalHeader>
+          <ModalBody mx->
+            <UnorderedList pb={5}>
+              <ListItem>
+                Built by{" "}
+                <Link href="https://cartridge.gg/" target="_blank">
+                  cartridge
+                </Link>{" "}
+                with{" "}
+                <Link href="https://dojoengine.org/" target="_blank">
+                  DOJO
+                </Link>
+              </ListItem>
+
+              <ListItem>
+                Art by{" "}
+                <Link href="https://twitter.com/Mr_faxu" target="_blank">
+                  Mr. Fax
+                </Link>{" "}
+                &{" "}
+                <Link href="https://twitter.com/HPMNK_One" target="_blank">
+                  HPMNK
+                </Link>
+              </ListItem>
+
+              <ListItem>
+                Music and SFX by{" "}
+                <Link href="https://twitter.com/CaseyWescott" target="_blank">
+                  Casey Wescott
+                </Link>{" "}
+                &{" "}
+                <Link href="https://twitter.com/SheckyGreen" target="_blank">
+                  SheckyGreen
+                </Link>
+              </ListItem>
+            </UnorderedList>
+          </ModalBody>
+          <ModalFooter justifyContent="stretch">
+            <Button w="full" onClick={onCreditClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Layout>
   );
-});
-
-export default End;
+};
 
 const StatsItem = ({ text, icon }: { text: string; icon: ReactNode }) => {
   return (

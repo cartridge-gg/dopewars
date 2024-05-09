@@ -46,7 +46,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         6
     }
 
-    #[inline(always)]
+    // #[inline(always)]
     fn get_drug_config(ref self: MarketsPacked, drug: Drugs) -> DrugConfig {
         get!(self.world, (drug), DrugConfig)
     }

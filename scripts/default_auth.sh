@@ -47,6 +47,7 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100
  RyoConfig,$RYO_ADDRESS \
  RyoAddress,$RYO_ADDRESS \
  Season,$RYO_ADDRESS \
+ \
  GameConfig,$CONFIG_ADDRESS \
  DrugConfig,$CONFIG_ADDRESS \
  LocationConfig,$CONFIG_ADDRESS \
@@ -54,15 +55,18 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100
  HustlerItemTiersConfig,$CONFIG_ADDRESS \
  EncounterConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
+ \
  GameStorePacked,$GAME_ADDRESS \
  RyoConfig,$GAME_ADDRESS \
  Season,$GAME_ADDRESS \
-\
  SortedList,$GAME_ADDRESS \
  SortedListItem,$GAME_ADDRESS \
+ \
  SortedList,$LAUNDROMAT_ADDRESS \
  SortedListItem,$LAUNDROMAT_ADDRESS \
+ Season,$LAUNDROMAT_ADDRESS \
  Game,$LAUNDROMAT_ADDRESS \
+ RyoConfig,$LAUNDROMAT_ADDRESS \
  \
  SortedList,$DEVTOOLS_ADDRESS \
  SortedListItem,$DEVTOOLS_ADDRESS \

@@ -10,6 +10,7 @@ type RouterContext = {
   router: NextRouter
   gameId: string | undefined,
   playerId: string | undefined,
+  seasonId: number | undefined,
   location: LocationConfigFull | undefined,
   drug: DrugConfigFull | undefined,
   tradeDirection: TradeDirection | undefined,
@@ -25,11 +26,12 @@ export const useRouterContext = (): RouterContext => {
     router,
     gameId: undefined,
     playerId: undefined,
+    seasonId: undefined,
     location: undefined,
     drug: undefined,
     tradeDirection: undefined,
     isAdmin: false,
-    isRyoDotGame: false
+    isRyoDotGame: false,
   });
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export const useRouterContext = (): RouterContext => {
 
     const gameId = router.query.gameId ? router.query.gameId as string : undefined;
     const playerId = router.query.playerId ? router.query.playerId as string : undefined;
+    const seasonId = router.query.seasonId ? Number(router.query.seasonId) : undefined;
     const location = router.query.locationSlug ? configStore.getLocation(router.query.locationSlug as string) : undefined;
     const drug = router.query.drugSlug ? configStore.getDrug(router.query.drugSlug as string) : undefined;
     const tradeDirection = router.query.tradeDirection ?
@@ -50,6 +53,7 @@ export const useRouterContext = (): RouterContext => {
       router,
       gameId,
       playerId,
+      seasonId,
       location,
       drug,
       tradeDirection,

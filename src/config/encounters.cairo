@@ -76,7 +76,6 @@ struct EncounterConfig {
 
 #[generate_trait]
 impl EncounterConfigImpl of EncounterConfigTrait {
-    #[inline(always)]
     fn get(world: IWorldDispatcher, id: u8) -> EncounterConfig {
         get!(world, (id), EncounterConfig)
     }

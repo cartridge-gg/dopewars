@@ -1,3 +1,4 @@
+
 // https://www.wsop.com/how-to-play-poker/mtt-tournament-payouts/
 // MTT Payout Structure (top 10% paid)
 
@@ -41,7 +42,13 @@ fn get_payed_count(entrants: u32) -> u32 {
 }
 
 
-fn get_payout(rank: u32, entrants: u32) -> u32 {
+fn get_payout(rank: u32, entrants: u32, jackpot: u32) -> u32 {
+    let payout_pct = get_payout_pct(rank, entrants);
+    let payout_u128: u128 = jackpot.into() * payout_pct.into() / 10_000;
+    payout_u128.try_into().unwrap()
+}
+
+fn get_payout_pct(rank: u32, entrants: u32) -> u32 {
     if entrants <= 200 {
         if entrants <= 2 {
             payout_0_2(rank)
@@ -439,20 +446,43 @@ fn payout_501_700(rank: u32) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_payout, get_payed_count, payout_0_2, payout_3_10, payout_11_30, payout_31_50,
+        get_payout, get_payout_pct, get_payed_count, payout_0_2, payout_3_10, payout_11_30, payout_31_50,
         payout_51_75, payout_76_100, payout_101_150, payout_151_200, payout_201_250, payout_251_300,
         payout_301_350, payout_351_400, payout_401_500, payout_501_700
     };
 
+
+    #[test]
+    fn test_pedersen() {
+        
+        let a = poseidon::poseidon_hash_span(array![1].span());
+        let aa = 0x579e8877c7755365d5ec1ec7d3a94a457eff5d1f40482bbe9729c064cdead2;
+        let b = poseidon::poseidon_hash_span(array![2].span());
+        let bb = 0x20185e0ab367a55b068e0f8b7abda935f15b418737e7b67d84aaee133ec2572;
+
+        println!("{:?}", a);
+        println!("{:?}", aa);
+        println!("{:?}", b);
+        println!("{:?}", bb);
+
+    }
+
     #[test]
     fn test_get_payout() {
-        assert(get_payout(1, 2) == 10000, 'invalid 1,2');
-        assert(get_payout(2, 2) == 0, 'invalid 2,2');
+        assert(get_payout(1, 2, 1234) == 1234, 'invalid 1,2, 1234');
+        assert(get_payout(4, 120, 100_000) == 8600, 'invalid 4,120, 100_000'); // 860
+        assert(get_payout(20, 120, 100_000) == 0, 'invalid 4,120, 100_000');
+    }
 
-        assert(get_payout(4, 151) == 800, 'invalid 4,151');
-        assert(get_payout(8, 220) == 280, 'invalid 8,220');
+    #[test]
+    fn test_get_payout_pct() {
+        assert(get_payout_pct(1, 2) == 10000, 'invalid 1,2');
+        assert(get_payout_pct(2, 2) == 0, 'invalid 2,2');
 
-        assert(get_payout(2, 600) == 1400, 'invalid 2,600');
+        assert(get_payout_pct(4, 151) == 800, 'invalid 4,151');
+        assert(get_payout_pct(8, 220) == 280, 'invalid 8,220');
+
+        assert(get_payout_pct(2, 600) == 1400, 'invalid 2,600');
     }
 
     #[test]

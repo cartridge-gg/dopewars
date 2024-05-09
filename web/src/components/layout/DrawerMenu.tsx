@@ -21,8 +21,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
-import { HeaderButton, MediaPlayer } from "../layout";
+import { Cigarette, Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
+import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
 import { Burners } from "../wallet/Burners";
 import { Predeployed } from "../wallet/Predeployed";
@@ -148,8 +148,8 @@ const DrawerMenu = () => {
                     </ListItem>
                   )}
                   <ListItem
-                    // borderBottom="solid 1px"
-                    // borderColor="neon.700"
+                    borderBottom="solid 1px"
+                    borderColor="neon.700"
                     pb={2}
                     pt={2}
                     cursor="pointer"
@@ -158,6 +158,19 @@ const DrawerMenu = () => {
                     }}
                   >
                     <Clock mr={2} /> HISTORY
+                  </ListItem>
+
+                  <ListItem
+                    borderBottom="solid 1px"
+                    borderColor="neon.700"
+                    pb={2}
+                    pt={2}
+                    cursor="pointer"
+                    onClick={() => {
+                      router.push("/devtools");
+                    }}
+                  >
+                    <Cigarette mr={2} /> DEVTOOLS
                   </ListItem>
                 </UnorderedList>
               </VStack>

@@ -51,7 +51,7 @@ export const AccountDetailsModal = observer(() => {
 
             <VStack w="full" gap={1}>
               <HStack color="yellow.400">
-                <PaperIcon width="16px" height="16px" />
+                <PaperIcon />
                 <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
               </HStack>
 
