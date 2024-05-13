@@ -3,7 +3,6 @@ use starknet::ContractAddress;
 #[starknet::interface]
 trait IDevtools<T> {
     fn failing_tx(self: @T);
-    // fn feed_leaderboard(self: @T, count: u32);
     fn create_fake_game(self: @T, final_score: u32);
 }
 
@@ -48,7 +47,7 @@ use core::traits::Into;
             let rand_score: u32 = if final_score > 0 {
                 final_score
             } else {
-                randomizer.between::<u32>(0, 100000000)
+                randomizer.between::<u32>(0, 100_000)
             };
 
             let mut game = Game {
@@ -99,51 +98,7 @@ use core::traits::Into;
 
         }
 
-        // fn feed_leaderboard(self: @ContractState, count: u32) {
-        //     self.check_chain();
-
-        //     let mut randomizer = RandomImpl::new(self.world());
-
-        //     let leaderboard_manager = LeaderboardManagerTrait::new(self.world());
-        //     let leaderboard_version = leaderboard_manager.get_current_version();
-
-        //     let mut i = 0;
-        //     loop {
-        //         if i == count {
-        //             break;
-        //         }
-
-        //         let uuid = self.world().uuid();
-        //         let uuid_f: felt252 = uuid.into();
-
-        //         let rand: u32 = randomizer.between::<u32>(0, 100000000);
-        //         let rand_100: u8 = randomizer.between::<u8>(0, 100);
-        //         let rand_10: u8 = randomizer.between::<u8>(0, 10);
-
-        //         // emit GameOver / Leaderboard entry
-        //         self
-        //             .world()
-        //             .emit_raw(
-        //                 array![
-        //                     selector!("GameOver"),
-        //                     Into::<u32, felt252>::into(uuid),
-        //                     Into::<u32, felt252>::into(rand).into(),
-        //                     leaderboard_version.into()
-        //                 ],
-        //                 array![
-        //                     uuid_f,
-        //                     Into::<u8, felt252>::into(i.try_into().unwrap() % 3_u8),
-        //                     Into::<u8, felt252>::into(rand_10),
-        //                     Into::<u32, felt252>::into(rand),
-        //                     Into::<u8, felt252>::into(rand_100),
-        //                     Into::<u8, felt252>::into(rand_100),
-        //                 ]
-        //             );
-
-        //         i += 1;
-        //     };
-        // }
-
+       
         fn failing_tx(self: @ContractState) {
             self.check_chain();
 

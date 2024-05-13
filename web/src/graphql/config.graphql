@@ -22,6 +22,7 @@ query Config {
         season_duration
         season_time_limit
         paper_fee
+        paper_reward_launderer
         treasury_fee_pct
         treasury_balance
       }

@@ -246,7 +246,6 @@ mod game {
             game_loop::on_game_over(ref game_store);
         }
 
-       
 
         fn travel(
             self: @ContractState,

@@ -42,9 +42,9 @@ mod ryo {
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
     };
 
-    const THREE_MIN: u16 = 180;
+    const THREE_MIN: u16 = 120;
     const THIRTY_MIN: u32 = 1800; // 20 * 60
-    const FEW_MIN: u32 = 1200; // 20 * 60
+    const FEW_MIN: u32 = 600; // 10 * 60
     const ONE_HOUR: u32 = 3600; // 60 * 60
     const ONE_DAY: u32 = 86_400; // 24 * 60 * 60
     const ONE_WEEK: u32 = 604_800; // 7 * 86_400;

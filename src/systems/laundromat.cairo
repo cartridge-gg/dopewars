@@ -13,7 +13,7 @@ trait ILaundromat<T> {
 #[dojo::contract]
 mod laundromat {
     use rollyourown::models::game::GameTrait;
-use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{
@@ -96,12 +96,12 @@ use starknet::{ContractAddress, get_caller_address, get_contract_address};
                 let process_max_size = get_payed_count(sorted_list.size);
                 sorted_list.lock(world, process_max_size);
             }
-           
+
             // if not process, process batch_size items
             if !sorted_list.processed {
                 sorted_list.process::<Game>(world, 2); // TODO: change batch_size
             }
-  
+
             // if process, create new season
             if sorted_list.processed {
                 // retrieve next season

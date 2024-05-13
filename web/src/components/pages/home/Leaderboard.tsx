@@ -1,7 +1,11 @@
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
-import { GameOverData } from "@/dojo/events";
-import { useDojoContext, useHallOfFame, useLeaderboardEntries, useRouterContext } from "@/dojo/hooks";
+import {
+  useDojoContext,
+  useHallOfFame,
+  useRegisteredGamesBySeason,
+  useRouterContext,
+} from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
@@ -11,6 +15,8 @@ import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull } from "../../icons";
 import { SeasonDetailsModal } from "./SeasonDetailsModal";
+import { Game } from "@/generated/graphql";
+import { shortString } from "starknet";
 
 const renderer = ({
   days,
@@ -64,9 +70,11 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     setSelectedIndex(maxIndex);
   }, [hallOfFame]);
 
-  const { leaderboardEntries, isFetchingLeaderboardEntries } = useLeaderboardEntries(
-    hallOfFame[selectedIndex]?.version || 0,
-  );
+  const {
+    registeredGames,
+    isFetching: isFetchingRegisteredGames,
+    refetch: refetchRegisteredGames,
+  } = useRegisteredGamesBySeason(hallOfFame[selectedIndex]?.version || 0);
 
   const onPrev = async () => {
     if (selectedIndex > 0) {
@@ -81,10 +89,10 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
   };
 
   const onDetails = (version: any) => {
-    router.push(`/season/${version}`)
-  }
+    router.push(`/season/${version}`);
+  };
 
-  if (!hallOfFame || hallOfFame.length === 0) {
+  if (!registeredGames ) {
     return <></>;
   }
 
@@ -94,7 +102,9 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
         <HStack w="full" justifyContent="space-between">
           <Arrow direction="left" cursor="pointer" opacity={selectedIndex > 0 ? "1" : "0.25"} onClick={onPrev}></Arrow>
           <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
-            <Text cursor="pointer" onClick={() =>onDetails(hallOfFame[selectedIndex]?.version)}>SEASON {hallOfFame[selectedIndex]?.version} REWARDS</Text>
+            <Text cursor="pointer" onClick={() => onDetails(hallOfFame[selectedIndex]?.version)}>
+              SEASON {hallOfFame[selectedIndex]?.version} REWARDS
+            </Text>
             <Text color="yellow.400">
               <PaperIcon color="yellow.400" mr={1} />
               {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")}
@@ -113,10 +123,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
               date={new Date(hallOfFame[selectedIndex]?.next_version_timestamp * 1_000)}
               renderer={renderer}
             ></Countdown>
-            <Box
-              cursor="pointer"
-              onClick={() => uiStore.openSeasonDetails()} 
-            >
+            <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
               <InfosIcon />
             </Box>
           </HStack>
@@ -133,18 +140,18 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
           "scrollbar-width": "none",
         }}
       >
-        {isFetchingLeaderboardEntries && <Loader />}
-        {!isFetchingLeaderboardEntries && (
+        {isFetchingRegisteredGames && <Loader />}
+        {!isFetchingRegisteredGames && (
           <UnorderedList boxSize="full" variant="dotted" h="auto">
-            {leaderboardEntries && leaderboardEntries.length > 0 ? (
-              leaderboardEntries.map((entry: GameOverData, index: number) => {
-                const isOwn = entry.playerId === account?.address;
+            {registeredGames && registeredGames.length > 0 ? (
+              registeredGames.map((game: Game, index: number) => {
+                const isOwn = game.player_id === account?.address;
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
-                const displayName = entry.playerName ? `${entry.playerName}${isOwn ? " (you)" : ""}` : "Anonymous";
+                const displayName = game.player_name ? `${shortString.decodeShortString( game.player_name)}${isOwn ? " (you)" : ""}` : "Anonymous";
 
                 return (
-                  <ListItem color={color} key={entry.gameId} cursor={isOwn && !entry.playerName ? "pointer" : "auto"}>
+                  <ListItem color={color} key={game.game_id} cursor="pointer">
                     <HStack mr={3}>
                       <Text
                         w={["10px", "30px"]}
@@ -159,14 +166,13 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         flexShrink={0}
                         style={{ marginTop: "-8px" }}
                         cursor="pointer"
-                        onClick={() => router.push(`/${entry.gameId}/logs`)}
+                        onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
                       >
-                        {entry.health === 0 ? (
+                        {/* {game.health === 0 ? (
                           <Skull color={avatarColor} hasCrown={index === 0} />
-                        ) : (
-                          <HustlerIcon hustler={entry.avatarId as Hustlers} color={color} />
-                          //<Avatar name={genAvatarFromId(entry.avatarId)} color={avatarColor} hasCrown={index === 0} />
-                        )}
+                        ) : ( */}
+                          <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
+                        {/* )} */}
                       </Box>
 
                       <HStack>
@@ -191,9 +197,20 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                       >
                         {"."}
                       </Text>
+
+                        {
+                        game.claimable > 0 && (
+                          <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                         <PaperIcon /> {game.claimable} ...
+                        </Text>
+                        )
+                      }
+
                       <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                        {formatCash(entry.cash)}
+                        {formatCash(game.final_score)}
                       </Text>
+
+                    
                     </HStack>
                   </ListItem>
                 );

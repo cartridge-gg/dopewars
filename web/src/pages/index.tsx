@@ -1,9 +1,10 @@
 import { Button } from "@/components/common";
-import { Alert, Clock, LaundromatIcon, User } from "@/components/icons";
+import { Alert, Clock, LaundromatIcon, PaperCashIcon, PaperIcon, User, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
-import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import { sleep } from "@/dojo/utils";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -17,15 +18,17 @@ export default function Home() {
   const { uiStore, burnerManager } = useDojoContext();
   const { launder, isPending } = useSystems();
 
-  const { toast } = useToast();
-  const [isGated, setIsGated] = useState(false);
+  const configStore = useConfigStore();
+  const { config } = configStore;
+  const {
+    season,
+    isSeasonOpen,
+    isSeasonWashed,
+    canCreateGame,
+    refetch: refetchSeason,
+  } = useSeasonByVersion(config?.ryo.season_version);
 
-  useEffect(
-    () =>
-      //setIsGated(window.location.host ==! "rollyourown.preview.cartridge.gg"),
-      setIsGated(false),
-    [],
-  );
+  const { toast } = useToast();
 
   const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
@@ -49,7 +52,9 @@ export default function Home() {
       return;
     }
 
-    await launder(2); // TODO get current season & check
+    await launder(season?.version);
+    await sleep(500);
+    await configStore.init();
   };
 
   return (
@@ -61,26 +66,31 @@ export default function Home() {
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
           <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
-            {isGated && (
-              <VStack>
-                <HStack>
-                  <Alert />
-                  <Text align="center">Under Construction</Text>
-                </HStack>
-                <Text align="center">Get ready hustlers... Season III starts in November</Text>
-              </VStack>
-            )}
-            {!isGated && true /* TODO season open*/ && (
+            {isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={onHustle}>
                 Hustle
               </Button>
             )}
-            {!isGated && false /*TODO season need wash*/ && (
-              <HStack w="full">
-                <LaundromatIcon />
+
+            {isSeasonOpen && !canCreateGame && (
+              <HStack w="full" color="yellow.400" justifyContent="center" gap={3}>
+                <Warning color="yellow.400" />
 
                 <VStack h="full">
-                  <Text>Last seasons results need to be washed. Confirm a transaction and earn 100 PAPER!</Text>
+                  <Text>Waiting for season end ...</Text>
+                </VStack>
+              </HStack>
+            )}
+
+            {!isSeasonOpen && !isSeasonWashed && (
+              <HStack w="full">
+                <LaundromatIcon isWashing={isPending} />
+
+                <VStack h="full">
+                  <Text>
+                    Last seasons results need to be washed. Confirm a transaction and earn <PaperIcon />{" "}
+                    {config?.ryo.paper_reward_launderer} PAPER!
+                  </Text>
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
                     Launder results
                   </Button>
@@ -90,74 +100,24 @@ export default function Home() {
           </HStack>
         </Card>
 
-        {!isGated && (
-          <>
-            <Tabs variant="unstyled" w="full">
-              <TabList pb={6}>
-                <Tab>LEADERBOARD</Tab>
-                <Tab>HALL OF FAME</Tab>
-              </TabList>
+        <Tabs variant="unstyled" w="full">
+          <TabList pb={6}>
+            <Tab>LEADERBOARD</Tab>
+            <Tab>HALL OF FAME</Tab>
+          </TabList>
 
-              <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
-                <TabPanel p={0}>
-                  <Leaderboard />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <HallOfFame />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </>
-        )}
+          <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
+            <TabPanel p={0}>
+              <Leaderboard />
+            </TabPanel>
+            <TabPanel p={0}>
+              <HallOfFame />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </VStack>
 
       <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
     </Layout>
   );
 }
-
-// unused
-const Game = ({
-  name,
-  startTime,
-  joined,
-  max,
-  onClick,
-  onMouseEnter,
-}: {
-  name: string;
-  startTime: string;
-  joined: number;
-  max: number;
-  onClick?: () => void;
-  onMouseEnter?: () => void;
-}) => (
-  <HStack
-    layerStyle="card"
-    w="full"
-    px="14px"
-    py="10px"
-    cursor="pointer"
-    onClick={onClick}
-    onMouseEnter={() => {
-      playSound(Sounds.HoverClick, 0.3);
-    }}
-  >
-    <HStack overflow="hidden" whiteSpace="nowrap" flex="1">
-      <Text>{name}</Text>
-      <Divider borderColor="neon.200" borderStyle="dotted" />
-    </HStack>
-    <HStack>
-      <HStack color="yellow.400">
-        <Clock />
-        <Text>{startTime}</Text>
-      </HStack>
-      <HStack>
-        <User boxSize="16px" />
-        <Text>
-          {joined}/{max}
-        </Text>
-      </HStack>
-    </HStack>
-  </HStack>
-);

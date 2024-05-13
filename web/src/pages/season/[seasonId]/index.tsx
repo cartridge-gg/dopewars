@@ -50,7 +50,7 @@ export default function SeasonIndex() {
   const { router, seasonId } = useRouterContext();
   const { account } = useAccount();
 
-  const { registeredGames, isFetched, refetch } = useRegisteredGamesBySeason(seasonId || 0);
+  const { registeredGames, isFetched, refetch: refetchRegisteredGames } = useRegisteredGamesBySeason(seasonId || 0);
   const { season, sortedList } = useSeasonByVersion(seasonId || 0);
 
   const [claimable, setClaimable] = useState<Claimable>({
@@ -62,7 +62,7 @@ export default function SeasonIndex() {
   const { claim, isPending } = useSystems();
 
   useEffect(() => {
-    refetch();
+    refetchRegisteredGames();
   }, []);
 
   useEffect(() => {
@@ -86,16 +86,15 @@ export default function SeasonIndex() {
     if (!seasonId || !account) return;
 
     await claim(seasonId, account?.address, claimable.gameIds);
-    // claim(seasonId, account?.address, [30]);
 
-    refetch();
+    refetchRegisteredGames();
   };
 
   return (
     <Layout
       leftPanelProps={{
         prefixTitle: "",
-        title: "Laundromat",
+        title: `Season ${seasonId}`,
         imageSrc: "/images/laundromat.png",
       }}
       rigthPanelScrollable={false}
@@ -104,12 +103,12 @@ export default function SeasonIndex() {
       <VStack boxSize="full" gap={6}>
         <VStack w="full">
           <Card w="full" p={3} alignItems="center">
-            <Text textStyle="subheading" fontSize={"11px"}>
+            {/* <Text textStyle="subheading" fontSize={"11px"}>
               Season {seasonId}
-            </Text>
+            </Text> 
 
             <Divider borderColor="neon.700" my={1} />
-
+*/}
             <Text>Total entrants {sortedList?.size}</Text>
 
             {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}

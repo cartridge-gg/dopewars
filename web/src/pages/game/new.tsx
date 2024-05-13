@@ -4,7 +4,7 @@ import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -22,6 +22,7 @@ const New = observer(() => {
   const { createGame, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
+  const { season } = useSeasonByVersion(config?.ryo.season_version);
 
   const { toast } = useToast();
 
@@ -77,7 +78,7 @@ const New = observer(() => {
     }
   };
 
-  if (!configStore || !hustlerStats) return null;
+  if (!configStore || !hustlerStats || ! season) return null;
 
   return (
     <Layout
@@ -227,13 +228,13 @@ const New = observer(() => {
             />
           </HStack>
 
-          {!isRyoDotGame && !isMobile && config?.ryo.paper_fee > 0 && (
+          {!isRyoDotGame && !isMobile && season.paper_fee > 0 && (
             <Card p={3} >
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">
                   <HStack w="full" justifyContent="space-between">
                     <Text color="yellow.400">ENTRY FEE </Text>
-                    <Text color="yellow.400">{formatCash(config?.ryo.paper_fee).replace("$", "")} PAPER</Text>
+                    <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
                   </HStack>
 
                   {account && (

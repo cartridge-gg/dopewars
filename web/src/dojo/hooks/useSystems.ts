@@ -18,6 +18,7 @@ import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall } from "@dojoengine/core";
+import { sleep } from "../utils";
 // import { getContractByName } from "@dojoengine/core";
 
 export interface SystemsInterface {
@@ -68,9 +69,7 @@ export interface ExecuteAndReceiptResult {
   [key: string]: any;
 }
 
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+
 
 const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");

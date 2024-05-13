@@ -1,5 +1,5 @@
 import { Clock, DollarBag, PaperIcon, Pistol, Trophy } from "@/components/icons";
-import { useDojoContext } from "@/dojo/hooks";
+import { useDojoContext, useSeasonByVersion } from "@/dojo/hooks";
 import {
   Button,
   HStack,
@@ -18,9 +18,13 @@ export const SeasonDetailsModal = observer(() => {
   const { uiStore, configStore } = useDojoContext();
   const { config } = configStore;
 
+  const { season } = useSeasonByVersion(config?.ryo.season_version);
+
   const onClose = () => {
     uiStore.closeSeasonDetails();
   };
+
+  if (!season) return null;
 
   return (
     <>
@@ -37,7 +41,7 @@ export const SeasonDetailsModal = observer(() => {
           </ModalHeader>
           <ModalBody py={6}>
             <VStack w="full" gap={6} color="neon.500">
-              <VStack w="full" gap={2} >
+              <VStack w="full" gap={2}>
                 <HStack w="full" alignItems="flex-start">
                   <Clock />
                   <Text>If the countdown reaches zero the season ends.</Text>
@@ -60,16 +64,16 @@ export const SeasonDetailsModal = observer(() => {
                 <HStack w="full" alignItems="flex-start">
                   <Text w="120px">Entry fee:</Text>
                   <Text color="neon.400">
-                    {config?.ryo.paper_fee} <PaperIcon />
+                    {season.paper_fee} <PaperIcon />
                   </Text>
                 </HStack>
                 <HStack w="full" alignItems="flex-start">
                   <Text w="120px">Player cut:</Text>
-                  <Text color="neon.400">{100 - config?.ryo.treasury_fee_pct}%</Text>
+                  <Text color="neon.400">{100 - season.treasury_fee_pct}%</Text>
                 </HStack>
                 <HStack w="full" alignItems="flex-start">
                   <Text w="120px">DAO cut:</Text>
-                  <Text color="neon.400">{config?.ryo.treasury_fee_pct}%</Text>
+                  <Text color="neon.400">{season.treasury_fee_pct}%</Text>
                 </HStack>
               </VStack>
             </VStack>

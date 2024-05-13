@@ -93,14 +93,11 @@ fn on_game_over(ref game_store: GameStore) {
 
     // set game_over on game 
     game_store.game.game_over = true;
+    // save game
+     set!(game_store.world, (game_store.game));
 
     let season_manager = SeasonManagerTrait::new(game_store.world);
-    // in case player starts game in version v & end game in version v+1
-    game_store.game.season_version = season_manager.get_current_version();
-
-    // save game
-    set!(game_store.world, (game_store.game));
-
+ 
     // handle new highscore & season version
     season_manager.on_game_over(ref game_store);
 

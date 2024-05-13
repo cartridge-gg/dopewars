@@ -1,4 +1,4 @@
-import { Alert, Arrest, DollarBag, Pistol, Roll, Trophy, Warning } from "@/components/icons";
+import { Alert, Arrest, DollarBag, PaperCashIcon, Pistol, Roll, Trophy, Warning } from "@/components/icons";
 import { Header, Layout } from "@/components/layout";
 
 import {
@@ -44,6 +44,7 @@ import { shortString } from "starknet";
 import { GameClass } from "@/dojo/class/Game";
 import { Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
+import { Reputation } from "@/components/icons/items/Reputation";
 
 const End = observer(() => {
   const { game } = useGameStore();
@@ -140,18 +141,25 @@ const EndContent = ({ game }: { game: GameClass }) => {
       footer={
         <>
           {!game.gameInfos.registered ? (
-            <Button isLoading={isPending} onClick={() => onRegister()}>
-              Register you score
-            </Button>
-          ) :  (
-            <Button  onClick={() => router.push("/")}>
-              Lobby
-            </Button>
+            <VStack w="full" gap={3}>
+              <Card p={3}>
+                <HStack color="yellow.400">
+                  <Warning mr={2} color="yellow.400" />
+                  <Text maxW="340px">You must register your score in order to be eligible for season rewards</Text>
+                </HStack>
+              </Card>
+
+              <Button isLoading={isPending} onClick={() => onRegister()}>
+                Register you score
+              </Button>
+            </VStack>
+          ) : (
+            <Button onClick={() => router.push("/")}>Lobby</Button>
           )}
         </>
       }
     >
-      <VStack h="full" justifyContent="center" gap={12}>
+      <VStack h="full" justifyContent="center" gap={6}>
         <HStack w="full">
           <VStack flex="1">
             {position === 1 && <Image src="/images/trophy1.gif" alt="trophy1" />}
@@ -167,9 +175,10 @@ const EndContent = ({ game }: { game: GameClass }) => {
             <StatsItem text={`${position}th place`} icon={<Trophy />} />
 
             <Divider borderColor="neon.600" />
-            <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} />
-            <Divider borderColor="neon.600" />
-            <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<DollarBag />} />
+            {/* <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} /> */}
+            <StatsItem text={`Reputation ${game.player.reputation}`} icon={<Reputation />} />
+              <Divider borderColor="neon.600" />
+              <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<PaperCashIcon />} />
 
             {/* <Divider borderColor="neon.600" />
               <StatsItem text="X Muggings" icon={<Pistol />} />
@@ -201,14 +210,14 @@ const EndContent = ({ game }: { game: GameClass }) => {
           </Link>
         </HStack>
 
-        {!game.gameInfos.registered && (
+        {/* {!game.gameInfos.registered && (
           <Card p={3} mt={[3, 0]}>
             <HStack color="yellow.400">
               <Warning mr={2} color="yellow.400" />
               <Text maxW="340px">You must register your score in order to be eligible for season rewards</Text>
             </HStack>
           </Card>
-        )}
+        )} */}
       </VStack>
 
       <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>
