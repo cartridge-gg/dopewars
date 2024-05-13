@@ -66,7 +66,7 @@ export const Header = observer(({ back }: HeaderProps) => {
         {!gameId && <OnGoingGames />}
       </HStack>
 
-      {game && router.asPath.includes("logs") && (
+      {game && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
