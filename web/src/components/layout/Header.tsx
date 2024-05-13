@@ -24,7 +24,7 @@ export const Header = observer(() => {
 
   const { account } = useAccount();
 
-  const { uiStore} = useDojoContext()
+  const { uiStore } = useDojoContext()
   const { game, gameConfig } = useGameStore();
   const { config } = useConfigStore();
 
