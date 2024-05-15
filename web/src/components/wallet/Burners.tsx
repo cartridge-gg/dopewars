@@ -16,7 +16,7 @@ export const Burners = () => {
   if (connector?.id !== "dojoburner") return null;
   return (
     <Menu>
-      <MenuButton as={Button} variant="pixelated" h="48px" /*rightIcon={<Arrow direction='down' />}*/>
+      <MenuButton as={Button} variant="pixelated" h="40px" /*rightIcon={<Arrow direction='down' />}*/>
         <Wallet />
       </MenuButton>
       <MenuList>

@@ -12,13 +12,13 @@ const baseStyle = definePartsStyle({
   list: {
     // this will style the MenuList component
     ... cardPixelatedStyle({}),
-    bg:"neon.800",
+    bg:"neon.700",
     p:0,
     overflow:"hidden"
   },
   item: {
     // this will style the MenuItem and MenuItemOption components
-    bg:"neon.800",
+    bg:"neon.700",
     _hover: {
       bg: "neon.600",
     },

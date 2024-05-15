@@ -80,9 +80,9 @@ export const ProfileLinkDrawer = () => {
   if (!account || !gameInfos || !gameEvents) return null;
 
   return (
-    <HStack h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
+    <HStack borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
       <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-      <Text ml="10px">{gameEvents.playerName}</Text>
+      <Text ml="4px">{gameEvents.playerName}</Text>
     </HStack>
   );
 };

@@ -10,7 +10,7 @@ export const Drawer: ComponentMultiStyleConfig = {
   baseStyle: {
     dialog: {
       pointerEvents: "auto",
-      backgroundColor: "neon.900",
+      backgroundColor: "neon.800",
     },
     dialogContainer: {
       pointerEvents: "none",

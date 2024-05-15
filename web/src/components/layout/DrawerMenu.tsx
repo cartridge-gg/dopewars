@@ -15,12 +15,14 @@ import {
   Heading,
   ListIcon,
   ListItem,
+  ListItemProps,
+  StyleProps,
   Text,
   UnorderedList,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { Cigarette, Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
 import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
@@ -31,6 +33,8 @@ import { ProfileLink, ProfileLinkDrawer } from "../pages/profile/Profile";
 import { useAccount } from "@starknet-react/core";
 import { HustlerStats } from "../pages/profile/HustlerStats";
 import { BuiltBy } from "../pages/home";
+import { HustlerIcon, Hustlers } from "../hustlers";
+import { shortString } from "starknet";
 
 const DrawerMenu = () => {
   const { router, gameId, isRyoDotGame } = useRouterContext();
@@ -49,11 +53,13 @@ const DrawerMenu = () => {
       <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay onClick={onClose} />
         <DrawerContent minW="340px">
-          <DrawerHeader mt="4px" h="48px">
-            Roll Your Own
+          <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
+            <Heading color="neon.500" fontWeight="normal">
+             <PaperIcon width="28px" height="28px" />  Roll Your Own
+            </Heading>
           </DrawerHeader>
-          <Close position="absolute" right="16px" top="16px" onClick={onClose} />
-          <DrawerBody p={3}>
+          <Close position="absolute" right="16px" top="16px" cursor="pointer" onClick={onClose} />
+          <DrawerBody px={3} py={0}>
             <VStack
               w="full"
               h="full"
@@ -61,120 +67,98 @@ const DrawerMenu = () => {
               // alignItems="flex-start"
               gap={6}
             >
-              <VStack w="full" alignItems="flex-start" gap={12} mt={12}>
-                <VStack w="full" alignItems="flex-start">
-                  {/* {account && game && (
-                    <VStack w="full" alignItems="flex-start">
-                      <Text mb={3}> GAME </Text>
-                      <ProfileLinkDrawer />
+              <VStack w="full" alignItems="flex-start" gap={12}>
+                <UnorderedList w="full" listStyleType="none">
+                  <DrawerListItem cursor="default">
+                    <MediaPlayer />
+                  </DrawerListItem>
 
-                      <Card>
-                        <HustlerStats />
-                      </Card>
-                    </VStack>
-                  )} */}
+                  <DrawerListItem cursor="default">
+                      <Text color="neon.500"> ACCOUNT </Text>
+                  </DrawerListItem>
 
-                  <VStack w="full" alignItems="flex-start">
-                    <Text mb={3} textAlign="center">
-                      ACCOUNT
-                    </Text>
-                    <ConnectButton />
-
-                    <HStack w="full">
-                      <ChainSelector canChange={!gameId} />
-                      <Burners />
+                  <DrawerListItem cursor="default">
+                    <HStack w="full" justifyContent="space-between">
+                      <ConnectButton /> <ChainSelector canChange={!gameId} /> <Burners />
                       <Predeployed />
                     </HStack>
+                  </DrawerListItem>
 
-                    <HStack w="full" justifyContent="space-between" h="48px">
-                      {account && config && (
-                        <>
-                          <Text>PAPER</Text>{" "}
-                          <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
-                        </>
-                      )}
-                    </HStack>
-                  </VStack>
-                </VStack>
+                  {account && config && (
+                    <DrawerListItem cursor="default">
+                      <HStack w="full">
+                        <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />{" "}
+                        <Text>PAPER</Text>
+                      </HStack>
+                    </DrawerListItem>
+                  )}
 
-                {/* <Divider borderColor="neon.700" /> */}
-
-                {/* <VStack w="full" alignItems="flex-start"></VStack> */}
-
-                <UnorderedList w="full" listStyleType="none">
-                  <ListItem>
-                    <Text mb={3}> LINKS </Text>
-                  </ListItem>
                   {game && (
                     <>
-                      <ListItem
-                        borderBottom="solid 1px"
-                        borderColor="neon.700"
-                        pb={2}
-                        pt={2}
-                        cursor="pointer"
+                      <DrawerListItem cursor="default">
+                        <HStack w="full" justifyContent="space-between">
+                          <Text color="neon.500"> GAME </Text>
+                          <></>
+                        </HStack>
+                      </DrawerListItem>
+
+                      <DrawerListItem >
+                        <ProfileLinkDrawer />
+                        {/* <HStack w="full">
+                          <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
+                          <Text> {shortString.decodeShortString(game.gameInfos.player_name)} </Text>
+                        </HStack> */}
+                      </DrawerListItem>
+
+                      <DrawerListItem
                         onClick={() => {
                           uiStore.openRefreshGame();
                         }}
                       >
                         <Refresh mr={2} /> REFRESH
-                      </ListItem>
-                      <ListItem
-                        borderBottom="solid 1px"
-                        borderColor="neon.700"
-                        pb={2}
-                        pt={2}
-                        cursor="pointer"
+                      </DrawerListItem>
+                      <DrawerListItem
                         onClick={() => {
                           uiStore.openQuitGame();
                         }}
                       >
                         <Home mr={2} /> QUIT GAME
-                      </ListItem>
+                      </DrawerListItem>
                     </>
                   )}
+
+                  <DrawerListItem cursor="default" color="neon.500">
+                    <Text> NAVIGATION </Text>
+                  </DrawerListItem>
+
                   {!game && (
-                    <ListItem
-                      borderBottom="solid 1px"
-                      borderColor="neon.700"
-                      pb={2}
-                      pt={2}
-                      cursor="pointer"
+                    <DrawerListItem
                       onClick={() => {
                         router.push("/");
                       }}
                     >
                       <Home mr={2} /> HOME
-                    </ListItem>
+                    </DrawerListItem>
                   )}
-                  <ListItem
-                    borderBottom="solid 1px"
-                    borderColor="neon.700"
-                    pb={2}
-                    pt={2}
-                    cursor="pointer"
+                  <DrawerListItem
                     onClick={() => {
                       router.push("/game/history");
                     }}
                   >
                     <Clock mr={2} /> HISTORY
-                  </ListItem>
+                  </DrawerListItem>
 
-                  <ListItem
-                    borderBottom="solid 1px"
-                    borderColor="neon.700"
-                    pb={2}
-                    pt={2}
-                    cursor="pointer"
+                  <DrawerListItem
                     onClick={() => {
                       router.push("/devtools");
                     }}
                   >
                     <Cigarette mr={2} /> DEVTOOLS
-                  </ListItem>
+                  </DrawerListItem>
                 </UnorderedList>
               </VStack>
-              <MediaPlayer />
+
+              {/* <MediaPlayer /> */}
             </VStack>
           </DrawerBody>
 
@@ -186,3 +170,21 @@ const DrawerMenu = () => {
 };
 
 export default DrawerMenu;
+
+const DrawerListItem = ({ children, ...props }: { children: ReactNode } & StyleProps & ListItemProps) => {
+  return (
+    <ListItem
+      display="flex"
+      alignItems="center"
+      borderBottom="solid 2px"
+      borderColor="neon.900"
+      pb={2}
+      pt={2}
+      cursor="pointer"
+      minH="48px"
+      {...props}
+    >
+      {children}
+    </ListItem>
+  );
+};

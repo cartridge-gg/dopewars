@@ -17,7 +17,6 @@ import { Predeployed } from "../wallet/Predeployed";
 import { OnGoingGames } from "../pages/home/OnGoingGames";
 import DrawerMenu from "./DrawerMenu";
 
-
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
@@ -60,11 +59,17 @@ export const Header = observer(() => {
           </Card>
         )} */}
 
+        {/* {!isMobile && (
+          <>
+            <MediaPlayer />
+          </>
+        )} */}
+
         {!gameId && <ClaimReward />}
         {/* {!gameId && <OnGoingGames />} */}
       </HStack>
 
-      {(game /*|| router.asPath.includes("logs")*/) && (
+      {game /*|| router.asPath.includes("logs")*/ && (
         <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
           <HStack
             h="48px"
@@ -88,11 +93,6 @@ export const Header = observer(() => {
       )}
 
       <HStack flex="1" justify="right">
-        {/* {!isMobile && (
-          <>
-            <MediaPlayer />
-          </>
-        )} */}
         {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
 
