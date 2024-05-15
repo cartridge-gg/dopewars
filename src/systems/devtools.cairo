@@ -10,8 +10,9 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 mod devtools {
+    use rollyourown::config::config::config::InternalTrait;
     use core::traits::TryInto;
-use core::traits::Into;
+    use core::traits::Into;
     use starknet::ContractAddress;
     use starknet::get_caller_address;
     use starknet::contract_address::Felt252TryIntoContractAddress;
@@ -28,7 +29,7 @@ use core::traits::Into;
         },
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
-        
+        library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
     };
 
 
@@ -40,10 +41,10 @@ use core::traits::Into;
             let player_id = get_caller_address();
 
             // get season version & pay paper_fee
-            let season_manager = SeasonManagerTrait::new(world);
+            let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
-            let mut randomizer = RandomImpl::new(world);
+            let mut randomizer = RandomImpl::new('devtools');
             let rand_score: u32 = if final_score > 0 {
                 final_score
             } else {
@@ -72,22 +73,20 @@ use core::traits::Into;
                 max_rounds: 2,
             };
 
-            let mut game_store = GameStoreImpl::get(world, game);
+            let mut game_store = self.s().game_store(game.game_id, game.player_id);
             game_store.player.cash = rand_score;
-            let game_store_packed = game_store.pack();
 
             // save Game & GameStorePacked
-            set!(world, (game, game_store_packed));
-
-
+            self.s().set_game(game);
+            self.s().set_game_store(game_store);
 
             // simulate register_score
 
             // register final_score
-            let mut game_store = GameStoreImpl::get(world, game);
-            game.final_score = game_store.player.cash; 
+            let mut game_store = self.s().game_store(game.game_id, game.player_id);
+            game.final_score = game_store.player.cash;
             game.registered = true;
-            set!(world, (game));
+            self.s().set_game(game);
 
             // retrieve Season Sorted List   TODO: check season_version / status
             let list_id = game.season_version.into();
@@ -95,10 +94,9 @@ use core::traits::Into;
 
             // add to Game to sorted_list
             sorted_list.add(world, game, (0, 0.try_into().unwrap()));
-
         }
 
-       
+
         fn failing_tx(self: @ContractState) {
             self.check_chain();
 
@@ -110,6 +108,12 @@ use core::traits::Into;
     impl DevtoolsInternalImpl of DevtoolsInternalTrait {
         fn check_chain(self: @ContractState) { // let chain_id = get_tx_info().unbox().chain_id;
         // assert(chain_id != 'KATANA', 'wrong chain_id');
+        }
+
+        #[inline(always)]
+        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
+            let (class_hash, _) = self.world().contract('store');
+            IStoreLibraryDispatcher { class_hash, }
         }
     }
 }

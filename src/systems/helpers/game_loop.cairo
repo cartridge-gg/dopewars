@@ -1,3 +1,4 @@
+use rollyourown::library::store::IStoreDispatcherTrait;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
@@ -7,7 +8,8 @@ use rollyourown::{
         random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl},
         math::{MathImpl, MathTrait}
     },
-    config::{locations::{Locations}, game::{GameConfigImpl}},
+    library::{store::{IStoreLibraryDispatcher, IStoreLibraryDispatcherImpl},},
+    config::{locations::{Locations}},
     packing::{
         game_store::{GameStore, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
@@ -32,7 +34,9 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
 }
 
 
-fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
+fn on_turn_end(
+    ref game_store: GameStore, ref randomizer: Random, s: IStoreLibraryDispatcher
+) -> bool {
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
@@ -42,7 +46,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     game_store.player.turn += 1;
 
     // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
-    let game_config = GameConfigImpl::get(game_store.world);
+    let mut game_config = s.game_config();
     let drugs = game_store.drugs.get();
     let reputation = if drugs.quantity > 5 {
         game_config.rep_carry_drugs
@@ -54,7 +58,8 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     // emit raw event Traveled if still alive
     if game_store.player.health > 0 {
         game_store
-            .world
+            .s
+            .w()
             .emit_raw(
                 array![
                     selector!("Traveled"),
@@ -71,39 +76,39 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random) -> bool {
     }
 
     // level up drug_level if possible
-    game_store.player.level_up_drug(ref game_store, ref randomizer);
+    game_store.player.level_up_drug(ref game_store, ref randomizer, ref game_config);
 
     // markets variations
-    game_store.markets.market_variations(ref randomizer);
+    game_store.markets.market_variations(game_store.s.w(), ref randomizer, ref game_store.game);
 
     // save 
-    let game_store_packed = game_store.pack();
-    set!(game_store.world, (game_store_packed));
+    s.set_game_store(game_store);
 
     true
 }
 
 
-fn on_game_over(ref game_store: GameStore) {
+fn on_game_over(ref game_store: GameStore, s: IStoreLibraryDispatcher) {
     assert(game_store.game.game_over == false, 'already game_over');
 
     // save 
-    let game_store_packed = game_store.pack();
-    set!(game_store.world, (game_store_packed));
+    s.set_game_store(game_store);
 
     // set game_over on game 
     game_store.game.game_over = true;
-    // save game
-     set!(game_store.world, (game_store.game));
 
-    let season_manager = SeasonManagerTrait::new(game_store.world);
- 
+    // save game
+    s.set_game(game_store.game);
+
+    let season_manager = SeasonManagerTrait::new(s);
+
     // handle new highscore & season version
     season_manager.on_game_over(ref game_store);
 
     // emit GameOver
-    game_store
-        .world
+
+    s
+        .w()
         .emit_raw(
             array![
                 selector!("GameOver"),

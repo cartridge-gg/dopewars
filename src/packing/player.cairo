@@ -4,17 +4,18 @@ use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
-    config::{locations::Locations, game::GameConfigImpl, drugs::{Drugs}},
+    config::{locations::Locations, game::{GameConfig}, drugs::{Drugs}},
     utils::{
         bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
         events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}
     },
     packing::{
-        game_store::{GameStore},
+        game_store::{GameStore, },
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
         markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
     },
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 
 
@@ -64,9 +65,6 @@ impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
 
 #[derive(Copy, Drop, Serde)]
 struct Player {
-    world: IWorldDispatcher,
-    game: Game,
-    //
     cash: u32,
     health: u8,
     turn: u8,
@@ -81,13 +79,9 @@ struct Player {
 
 #[generate_trait]
 impl PlayerImpl of PlayerTrait {
-    fn new(world: IWorldDispatcher, game: Game) -> Player {
+    fn new(ref game_config: GameConfig) -> Player {
         // create initial player state with game_config
-        let game_config = GameConfigImpl::get(world);
         Player {
-            world,
-            game,
-            //
             cash: game_config.cash,
             health: game_config.health,
             turn: 0,
@@ -100,12 +94,8 @@ impl PlayerImpl of PlayerTrait {
         }
     }
 
-    fn with(world: IWorldDispatcher, game: Game) -> Player {
-        // create initial player state with world, game
+    fn empty() -> Player {
         Player {
-            world,
-            game,
-            //
             cash: 0,
             health: 0,
             turn: 0,
@@ -123,43 +113,6 @@ impl PlayerImpl of PlayerTrait {
         self.health == 0
     }
 
-    // #[inline(always)]
-    fn can_continue(self: Player) -> bool {
-        if self.health == 0 {
-            return false;
-        }
-
-        if self.status != PlayerStatus::Normal {
-            return false;
-        }
-
-        if self.turn == self.game.max_turns {
-            return false;
-        }
-
-        if self.game.game_over {
-            return false;
-        }
-
-        true
-    }
-
-    // #[inline(always)]
-    fn can_trade(self: Player) -> bool {
-        if self.health == 0 {
-            return false;
-        }
-
-        if self.status != PlayerStatus::Normal {
-            return false;
-        }
-
-        if self.game.game_over {
-            return false;
-        }
-
-        true
-    }
 
     #[inline(always)]
     fn can_trade_drug(self: Player, drug: Drugs) -> bool {
@@ -177,9 +130,7 @@ impl PlayerImpl of PlayerTrait {
         self.health = self.health.sub_capped(amount, 0);
     }
 
-    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
-        let game_config = GameConfigImpl::get(self.world);
-
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random, ref game_config: GameConfig) {
         // level up each rep_drug_step capped to 4
         let mut drug_level: u8 = MathImpl::min(self.reputation / game_config.rep_drug_step, 4);
 
@@ -215,26 +166,6 @@ impl PlayerImpl of PlayerTrait {
         game_store.markets.shuffle_drug_prices(ref randomizer, drug_slot);
     }
 }
-
-
-// fn hustle(self: Player, ref game_store: GameStore, ref randomizer: Random) {
-//     let og_id = randomizer.between::<u16>(0, 30_000);
-
-//     // emit raw event MeetOG 
-//     if og_id < 500 {
-//         game_store
-//             .world
-//             .emit_raw(
-//                 array![
-//                     selector!("MeetOG"),
-//                     Into::<u32, felt252>::into(game_store.game.game_id),
-//                     Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
-//                         .into()
-//                 ],
-//                 array![Into::<u16, felt252>::into(og_id),]
-//             );
-//     };
-// }
 
 //
 //
@@ -285,8 +216,8 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 
 // unpack 
 impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
-    fn unpack(self: felt252, world: IWorldDispatcher, game: Game,) -> Player {
-        let mut player = PlayerImpl::with(world, game);
+    fn unpack(self: felt252, s: IStoreLibraryDispatcher, game: Game) -> Player {
+        let mut player = PlayerImpl::empty();
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);
 

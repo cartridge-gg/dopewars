@@ -1,16 +1,13 @@
 use rollyourown::packing::markets_packed::MarketsPackedTrait;
 use starknet::ContractAddress;
 use rollyourown::{
-    models::{game::{GameMode}},
-    config::{
-        locations::{Locations}, drugs::{Drugs, DrugConfig, DrugConfigImpl},
-        hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}
-    },
+    models::{game::{GameMode}}, config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
     packing::{
-        game_store::{GameStore}, player::{PlayerImpl},
+        game_store::{GameStore, GameStoreTrait}, player::{PlayerImpl},
         drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, items_packed::{ItemsPackedImpl},
         markets_packed::{MarketsPackedImpl}
     },
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}}
 };
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -47,20 +44,20 @@ struct Trade {
 //
 //
 
-fn execute_trade(ref game_store: GameStore, trade: Trade) {
+fn execute_trade(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
     // check if can trade 
-    assert(game_store.player.can_trade(), 'player cannot trade');
+    assert(game_store.can_trade(), 'player cannot trade');
 
     // check not warrior mode
     assert(game_store.game.game_mode != GameMode::Warrior, 'warriors dont trade');
 
     match trade.direction {
-        TradeDirection::Sell => sell(ref game_store, trade),
-        TradeDirection::Buy => buy(ref game_store, trade),
+        TradeDirection::Sell => sell(s, ref game_store, trade),
+        TradeDirection::Buy => buy(s, ref game_store, trade),
     };
 }
 
-fn buy(ref game_store: GameStore, trade: Trade) {
+fn buy(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade,) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -72,14 +69,14 @@ fn buy(ref game_store: GameStore, trade: Trade) {
 
     // get transport
     let transport = game_store.items.transport();
-    let drug_config = DrugConfigImpl::get(game_store.world, trade.drug);
+    let drug_config = s.drug_config(trade.drug);
 
     // check quantity
     let max_transport = transport - (drugs.quantity * drug_config.weight.into());
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash 
-    let market_price = game_store.markets.get_drug_price(game_store.player.location, trade.drug);
+    let market_price = game_store.markets.get_drug_price(s, game_store.player.location, trade.drug);
     let total_cost = market_price * trade.quantity;
     assert(game_store.player.cash >= total_cost, 'not enought ca$h');
 
@@ -93,7 +90,8 @@ fn buy(ref game_store: GameStore, trade: Trade) {
 
     // emit event
     game_store
-        .world
+        .s
+        .w()
         .emit_raw(
             array![
                 selector!("TradeDrug"),
@@ -110,7 +108,7 @@ fn buy(ref game_store: GameStore, trade: Trade) {
 }
 
 
-fn sell(ref game_store: GameStore, trade: Trade) {
+fn sell(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -123,7 +121,7 @@ fn sell(ref game_store: GameStore, trade: Trade) {
     // must have enought to sell
     assert(drugs.quantity >= trade.quantity, 'not enought drug');
 
-    let market_price = game_store.markets.get_drug_price(game_store.player.location, trade.drug);
+    let market_price = game_store.markets.get_drug_price(s, game_store.player.location, trade.drug);
     let total = market_price * trade.quantity;
 
     // update drug
@@ -135,7 +133,7 @@ fn sell(ref game_store: GameStore, trade: Trade) {
 
     // emit event
     game_store
-        .world
+        .s.w()
         .emit_raw(
             array![
                 selector!("TradeDrug"),

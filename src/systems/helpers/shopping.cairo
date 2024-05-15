@@ -1,14 +1,12 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
-    config::{
-        hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations},
-        game::{GameConfigImpl}
-    },
+    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations},},
     packing::{
         game_store::{GameStore}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
     },
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}}
 };
 
@@ -17,9 +15,9 @@ struct Action {
     slot: ItemSlot,
 }
 
-fn execute_action(ref game_store: GameStore, action: Action) {
+fn execute_action(s: IStoreLibraryDispatcher, ref game_store: GameStore, action: Action) {
     // get game infos
-    let game = get!(game_store.world, (game_store.game.game_id, game_store.game.player_id), Game);
+    let game = s.game(game_store.game.game_id, game_store.game.player_id);
 
     // get wanted 
     let wanted = if game_store.player.location == Locations::Home {
@@ -42,7 +40,7 @@ fn execute_action(ref game_store: GameStore, action: Action) {
     let next_level = level + 1;
 
     // get hustler
-    let hustler = HustlerImpl::get(game_store.world, game_store.game.hustler_id);
+    let hustler = HustlerImpl::get(s, game_store.game.hustler_id);
 
     // get next item
     let next_item = hustler.get_item_config(action.slot, next_level);
@@ -57,7 +55,7 @@ fn execute_action(ref game_store: GameStore, action: Action) {
     game_store.items.upgrade_item(action.slot);
 
     // earn reputation
-    let game_config = GameConfigImpl::get(game_store.world);
+    let game_config = s.game_config();
     game_store
         .player
         .reputation = game_store
@@ -67,7 +65,8 @@ fn execute_action(ref game_store: GameStore, action: Action) {
 
     // emit event
     game_store
-        .world
+        .s
+        .w()
         .emit_raw(
             array![
                 selector!("UpgradeItem"),

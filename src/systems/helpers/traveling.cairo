@@ -9,14 +9,15 @@ use rollyourown::{
     config::{
         hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
         encounters::{Encounters, EncounterSpawnerImpl, EncounterConfig, EncounterImpl},
-        game::{GameConfig, GameConfigImpl}, 
+        game::{GameConfig}, 
     },
     packing::{
         game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl, ItemsPackedTrait},
         drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
-    systems::game::{EncounterActions, game::TravelEncounter, game::TravelEncounterResult}
+    systems::game::{EncounterActions, game::TravelEncounter, game::TravelEncounterResult},
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 
 
@@ -105,7 +106,7 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
             Encounters::Gang => PlayerStatus::BeingMugged,
         };
 
-        emit!(game_store.world, (rollyourown::systems::game::game::Event::TravelEncounter(
+        emit!(game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounter(
             TravelEncounter {
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
@@ -126,13 +127,13 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
 //
 
 
-fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterActions) -> bool {
+fn decide(s: IStoreLibraryDispatcher, ref game_store: GameStore, ref randomizer: Random, action: EncounterActions) -> bool {
     // get encounter
     let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store);
 
     // run action
     let mut result = match action {
-        EncounterActions::Run => { on_run(ref game_store, ref randomizer,ref encounter) },
+        EncounterActions::Run => { on_run(s, ref game_store, ref randomizer,ref encounter) },
         EncounterActions::Pay => { on_pay(ref game_store, ref randomizer,ref  encounter) },
         EncounterActions::Fight => { on_fight(ref game_store, ref randomizer,ref  encounter) },
     };
@@ -149,7 +150,7 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
     // update turns with turn_loss 
     game_store.player.turn = game_store.player.turn.add_capped(result.turn_loss, game_store.game.max_turns);
 
-    emit!(game_store.world, (rollyourown::systems::game::game::Event::TravelEncounterResult(result)));
+    emit!(game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounterResult(result)));
     
     if !game_store.player.is_dead() {
         // update player status
@@ -157,6 +158,7 @@ fn decide(ref game_store: GameStore, ref randomizer: Random, action: EncounterAc
     }
 
     game_store.player.is_dead()
+    // game_store
 }
 
 //
@@ -240,7 +242,7 @@ fn on_pay(
 //
 
 fn on_run(
-    ref game_store: GameStore, ref randomizer: Random,ref encounter: EncounterConfig
+   s: IStoreLibraryDispatcher, ref game_store: GameStore, ref randomizer: Random,ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
 
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Run);
@@ -281,7 +283,7 @@ fn on_run(
         }
     };
 
-    let game_config = GameConfigImpl::get(game_store.world);
+    let game_config = s.game_config();
 
     result.outcome = if game_store.player.is_dead() {
         EncounterOutcomes::Died

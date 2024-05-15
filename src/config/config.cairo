@@ -1,6 +1,6 @@
 use rollyourown::config::{
-    hustlers::{HustlerConfig, HustlerImpl},
-    game::{GameConfig}, drugs::{DrugConfig}, encounters::{EncounterConfig},
+    hustlers::{HustlerConfig, HustlerImpl}, game::{GameConfig}, drugs::{DrugConfig},
+    encounters::{EncounterConfig},
 };
 
 
@@ -12,8 +12,6 @@ trait IConfig<T> {
     fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
     fn update_encounter_config(self: @T, encounter_config: EncounterConfig);
-
-
 }
 
 #[derive(Drop, Serde)]
@@ -40,20 +38,26 @@ struct LayoutItem {
 
 #[dojo::contract]
 mod config {
-    use starknet::{get_caller_address, get_contract_address};
+    use rollyourown::config::encounters::EncounterTrait;
+use starknet::{get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{
-            game::{initialize_game_config, GameConfig, GameConfigImpl},
-            drugs::{initialize_drug_config, DrugConfig, Drugs}, locations::initialize_location_config,
+            game::{initialize_game_config, GameConfig},
+            drugs::{initialize_drug_config, DrugConfig, Drugs},
+            locations::initialize_location_config,
             hustlers::{
                 HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
-                initialize_feet_config, initialize_transport_config, initialize_weapons_tiers_config,
-                initialize_clothes_tiers_config, initialize_feet_tiers_config,
-                initialize_transport_tiers_config,
+                initialize_feet_config, initialize_transport_config,
+                initialize_weapons_tiers_config, initialize_clothes_tiers_config,
+                initialize_feet_tiers_config, initialize_transport_tiers_config,
             },
-            encounters::{initialize_encounter_config,initialize_encounter_config_extra, EncounterConfig, Encounters},
+            encounters::{
+                initialize_encounter_config, initialize_encounter_config_extra, EncounterConfig,
+                Encounters
+            },
         },
+        library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         packing::{
             game_store_layout::{
                 GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
@@ -75,7 +79,7 @@ mod config {
             self.assert_caller_is_owner();
 
             let world = self.world();
-           
+
             // common
             initialize_game_config(world); // must be set before encounters
 
@@ -93,7 +97,6 @@ mod config {
             initialize_clothes_tiers_config(world);
             initialize_feet_tiers_config(world);
             initialize_transport_tiers_config(world);
-          
         }
 
         fn initialize_2(self: @ContractState) {
@@ -101,11 +104,10 @@ mod config {
             self.assert_caller_is_owner();
 
             let world = self.world();
-           
-            // encounters
-            initialize_encounter_config(world);
-            initialize_encounter_config_extra(world);
 
+            // encounters
+            initialize_encounter_config(self.s());
+            initialize_encounter_config_extra(self.s());
         }
 
         fn get_config(self: @ContractState) -> Config {
@@ -151,16 +153,16 @@ mod config {
             loop {
                 match hustler_ids.pop_front() {
                     Option::Some(id) => {
-                        let hustler = HustlerImpl::get(world, *id);
+                        let hustler = HustlerImpl::get(self.s(), *id);
                         hustlers.append(hustler.get_hustler_config());
                     },
                     Option::None => { break; }
                 };
             };
-          
+
             //
             // TODO: remove & use torii 
-            let game_config = GameConfigImpl::get(world);
+            let game_config = self.s().game_config();
 
             //
             Config { game_config, hustlers, layouts: LayoutsConfig { game_store, player } }
@@ -168,7 +170,7 @@ mod config {
 
         fn update_game_config(self: @ContractState, game_config: GameConfig) {
             self.assert_caller_is_owner();
-            GameConfigImpl::set(self.world(), game_config);
+            self.s().save_game_config(game_config);
         }
 
 
@@ -176,23 +178,23 @@ mod config {
             self.assert_caller_is_owner();
 
             let drug: Drugs = drug_config.drug_id.into();
-            let mut to_update = get!(self.world(), (drug), (DrugConfig));
+            let mut to_update = self.s().drug_config(drug);
 
             to_update.base = drug_config.base;
             to_update.step = drug_config.step;
             to_update.weight = drug_config.weight;
             to_update.name = drug_config.name;
 
-            set!(self.world(), (to_update));
+            self.s().save_drug_config(to_update);
         }
 
         fn update_encounter_config(self: @ContractState, encounter_config: EncounterConfig) {
             self.assert_caller_is_owner();
-            
-            let mut to_update = get!(self.world(), (encounter_config.id), (EncounterConfig));
-            
+
+            let mut to_update = self.s().encounter_config(encounter_config.id);
+
             to_update.encounter = encounter_config.encounter;
-          
+
             to_update.level = encounter_config.level;
             to_update.health = encounter_config.health;
             to_update.attack = encounter_config.attack;
@@ -208,9 +210,8 @@ mod config {
 
             to_update.payout = encounter_config.payout;
 
-            set!(self.world(), (to_update));
+            self.s().save_encounter_config(to_update);
         }
-        
     }
 
     #[generate_trait]
@@ -224,5 +225,11 @@ mod config {
             );
         }
 
+
+        #[inline(always)]
+        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
+            let (class_hash, _) = self.world().contract('store');
+            IStoreLibraryDispatcher { class_hash, }
+        }
     }
 }

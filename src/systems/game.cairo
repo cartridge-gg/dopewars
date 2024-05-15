@@ -27,23 +27,21 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
+    // use rollyourown::library::decide::IDecide;
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{
-            drugs::{Drugs}, locations::{Locations}, game::{GameConfig, GameConfigImpl},
-            ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
-            ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
+            drugs::{Drugs}, locations::{Locations}, game::{GameConfig}, ryo::{RyoConfig},
+            ryo_address::{RyoAddress},
         },
         models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}},
-        packing::{
-            game_store::{GameStore, GameStoreImpl, GameStorePackerImpl, GameMode},
-            player::{Player, PlayerImpl},
-        },
+        packing::{game_store::{GameStore, GameStoreImpl, GameMode}, player::{Player, PlayerImpl},},
         systems::{
             helpers::{trading, shopping, traveling, traveling::EncounterOutcomes, game_loop},
             game::EncounterActions,
         },
+        library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         helpers::season_manager::{SeasonManagerTrait},
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
@@ -182,14 +180,14 @@ mod game {
             let player_id = get_caller_address();
 
             // get season version 
-            let season_manager = SeasonManagerTrait::new(world);
+            let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
             // pay paper_fee
             season_manager.on_game_start();
 
             // create game
-            let game_config = GameConfigImpl::get(world);
+            let mut game_config = self.s().game_config();
             let game = Game {
                 game_id,
                 player_id,
@@ -213,14 +211,11 @@ mod game {
             };
 
             // save Game
-            set!(world, (game));
+            self.s().set_game(game);
 
-            // create GameStorePacked
-            let game_store = GameStoreImpl::new(world, game);
-            let game_store_packed = game_store.pack();
-
-            // save GameStorePacked
-            set!(world, (game_store_packed));
+            // create & save GameStorePacked
+            let game_store = GameStoreImpl::new(self.s(), game, ref game_config);
+            self.s().set_game_store(game_store);
 
             // emit GameCreated
             emit!(
@@ -232,18 +227,16 @@ mod game {
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
-            let world = self.world();
             let player_id = get_caller_address();
 
-            let game = GameImpl::get(world, game_id, player_id);
-            let mut game_store = GameStoreImpl::get(world, game);
+            let mut game_store = self.s().game_store(game_id, player_id);
 
             // execute actions (trades & shop)
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
             //save & on_game_over
-            game_loop::on_game_over(ref game_store);
+            game_loop::on_game_over(ref game_store, self.s());
         }
 
 
@@ -253,14 +246,13 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            let world = self.world();
+            // let world = self.world();
             let player_id = get_caller_address();
 
-            let game = GameImpl::get(world, game_id, player_id);
-            let mut game_store = GameStoreImpl::get(world, game);
+            let mut game_store = self.s().game_store(game_id, player_id);
 
             // check if can travel
-            assert(game_store.player.can_continue(), 'player cannot travel');
+            assert(game_store.can_continue(), 'player cannot travel');
             assert(next_location != Locations::Home, 'cannot travel to Home');
             assert(game_store.player.location != next_location, 'already at location');
 
@@ -268,7 +260,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new(world);
+            let mut randomizer = RandomImpl::new('travel');
             // save next_location
             game_store.player.next_location = next_location;
 
@@ -278,41 +270,38 @@ mod game {
             // check if dead
             if is_dead {
                 // save & gameover RIP
-                game_loop::on_game_over(ref game_store);
+                game_loop::on_game_over(ref game_store, self.s());
             } else {
                 if has_encounter {
                     // save & no end turn
-                    let game_store_packed = game_store.pack();
-                    set!(world, (game_store_packed));
+                    self.s().set_game_store(game_store);
                 } else {
                     // save & on_turn_end
-                    game_loop::on_turn_end(ref game_store, ref randomizer,);
+                    game_loop::on_turn_end(ref game_store, ref randomizer, self.s());
                 }
             }
         }
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
-            let world = self.world();
             let player_id = get_caller_address();
 
-            let game = GameImpl::get(world, game_id, player_id);
-            let mut game_store = GameStoreImpl::get(world, game);
+            let mut game_store = self.s().game_store(game_id, player_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new(world);
+            let mut randomizer = RandomImpl::new('decide');
 
-            // resolve decision
-            let is_dead = traveling::decide(ref game_store, ref randomizer, action);
+            // // resolve decision
+            let is_dead = traveling::decide(self.s(), ref game_store, ref randomizer, action);
 
             // check if dead
             if is_dead {
                 // save & gameover RIP
-                game_loop::on_game_over(ref game_store);
+                game_loop::on_game_over(ref game_store, self.s());
             } else {
                 // on_turn_end & save
-                game_loop::on_turn_end(ref game_store, ref randomizer,);
+                game_loop::on_turn_end(ref game_store, ref randomizer, self.s());
             };
         }
     }
@@ -321,8 +310,7 @@ mod game {
     impl InternalImpl of InternalTrait {
         // #[inline(always)]
         fn assert_not_paused(self: @ContractState) {
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let ryo_config = ryo_config_manager.get();
+            let ryo_config = self.s().ryo_config();
             assert(!ryo_config.paused, 'game is paused');
         }
 
@@ -343,16 +331,22 @@ mod game {
                 .pop_front() {
                     match action {
                         super::Actions::Trade(tradeAction) => {
-                            trading::execute_trade(ref game_store, *tradeAction);
+                            trading::execute_trade(self.s(), ref game_store, *tradeAction);
                         },
                         super::Actions::Shop(shopAction) => {
                             assert(has_shopped == false, 'one upgrade by turn');
-                            shopping::execute_action(ref game_store, *shopAction);
+                            shopping::execute_action(self.s(), ref game_store, *shopAction);
                             has_shopped = true;
                         },
                     };
                 };
         // TODO handle price impact ?
+        }
+
+        #[inline(always)]
+        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
+            let (class_hash, _) = self.world().contract('store');
+            IStoreLibraryDispatcher { class_hash, }
         }
     }
 }

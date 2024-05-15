@@ -4,11 +4,13 @@ name = "rollyourown"
 version = "0.1.0"
 
 [cairo]
-sierra-replace-ids = true
+# sierra-replace-ids = true
 
 [dependencies]
-dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.0-alpha.1"}
-token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.0-alpha.1"}
+# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.0-alpha.1"}
+# token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.0-alpha.1"}
+dojo = { path = "../dojo/crates/dojo-core"}
+token = { path = "../origami"}
 
 
 [scripts]

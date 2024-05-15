@@ -55,16 +55,14 @@ impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let mut idx = 0_u8;
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(i) => { if self == i {
+        while let Option::Some(i) = layout
+            .pop_front() {
+                if self == i {
                     break;
                 } else {
                     idx += i.bits()
-                } },
-                Option::None => { break; }
-            }
-        };
+                }
+            };
         idx
     }
 }

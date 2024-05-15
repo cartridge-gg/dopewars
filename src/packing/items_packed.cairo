@@ -4,14 +4,15 @@ use rollyourown::{
     config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
     models::game::{Game, GameMode},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
-    packing::game_store::{GameStore}
+    packing::game_store::{GameStore},
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 
 
-#[derive(Copy, Drop)]
+#[derive(Copy, Drop, Serde)]
 struct ItemsPacked {
-    world: IWorldDispatcher,
-    game: Game,
+    s: IStoreLibraryDispatcher,
+    hustler_id: u16,
     //
     packed: felt252
 }
@@ -19,8 +20,8 @@ struct ItemsPacked {
 
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
-    fn new(world: IWorldDispatcher, game: Game) -> ItemsPacked {
-        ItemsPacked { world, game, packed: 0 }
+    fn new(s: IStoreLibraryDispatcher, hustler_id: u16) -> ItemsPacked {
+        ItemsPacked { s, hustler_id, packed: 0 }
     }
 
     #[inline(always)]
@@ -35,7 +36,7 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         let index: u8 = slot.into() * size;
         let level: u8 = bits.extract_into::<u8>(index, size).into();
 
-        let hustler = HustlerImpl::get(self.world, self.game.hustler_id);
+        let hustler = HustlerImpl::get(self.s, self.hustler_id);
         hustler.get_item_config(slot, level)
     }
 

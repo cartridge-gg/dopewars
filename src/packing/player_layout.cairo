@@ -71,16 +71,14 @@ impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let mut idx = 0_u8;
 
-        loop {
-            match layout.pop_front() {
-                Option::Some(i) => { if self == i {
+        while let Option::Some(i) = layout
+            .pop_front() {
+                if self == i {
                     break;
                 } else {
                     idx += i.bits()
-                } },
-                Option::None => { break; }
-            }
-        };
+                }
+            };
         idx
     }
 }

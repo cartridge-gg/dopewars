@@ -1,7 +1,10 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
-use rollyourown::{traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl}};
+use rollyourown::{
+    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
+};
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -123,14 +126,14 @@ impl HustlerMetasImpl of HustlerMetasTrait {
 
 #[derive(Copy, Drop, Serde)]
 struct Hustler {
-    world: IWorldDispatcher,
+    s: IStoreLibraryDispatcher,
     hustler_id: u16,
 }
 
 #[generate_trait]
 impl HustlerImpl of HustlerTrait {
-    fn get(world: IWorldDispatcher, hustler_id: u16) -> Hustler {
-        Hustler { world, hustler_id }
+    fn get(s: IStoreLibraryDispatcher, hustler_id: u16) -> Hustler {
+        Hustler { s, hustler_id }
     }
 
     fn get_metas(self: Hustler) -> HustlerMetas {
@@ -168,6 +171,7 @@ impl HustlerImpl of HustlerTrait {
         }
     }
 
+    // only called by get_config
     fn get_hustler_config(self: Hustler) -> HustlerConfig {
         HustlerConfig {
             hustler_id: self.hustler_id,
@@ -184,13 +188,13 @@ impl HustlerImpl of HustlerTrait {
         let item_id = hustler_metas.get_item_id(slot);
 
         // retrieve base config
-        let base_config = get!(self.world, (slot, item_id), (HustlerItemBaseConfig));
+        let base_config = self.s.item_base_config(slot, item_id);
 
         // calc current tier
         let tier = base_config.initial_tier + level;
 
         // get tier config
-        let tier_config = get!(self.world, (slot, tier), (HustlerItemTiersConfig));
+        let tier_config = self.s.item_tiers_config(slot, tier);
 
         HustlerItemConfig { slot, level, base: base_config, tier: tier_config, }
     }

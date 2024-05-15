@@ -13,6 +13,10 @@ mod helpers {
     mod season_manager;
 }
 
+mod library {
+    mod store;
+}
+
 mod models {
     mod game;
     mod game_store_packed;
@@ -37,6 +41,7 @@ mod systems {
     mod ryo;
     mod game;
     mod laundromat;
+
 
     mod helpers {
         mod game_loop;

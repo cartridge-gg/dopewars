@@ -8,11 +8,8 @@ use rollyourown::{
 };
 
 // 16 bits : 3 bits for Drugs, 13 bits for quantity
-#[derive(Copy, Drop)]
+#[derive(Copy, Drop, Serde)]
 struct DrugsPacked {
-    world: IWorldDispatcher,
-    game: Game,
-    //
     packed: felt252
 }
 
@@ -25,8 +22,8 @@ struct DrugsUnpacked {
 
 #[generate_trait]
 impl DrugsPackedImpl of DrugsPackedTrait {
-    fn new(world: IWorldDispatcher, game: Game) -> DrugsPacked {
-        DrugsPacked { world, game, packed: 0 }
+    fn new() -> DrugsPacked {
+        DrugsPacked { packed: 0 }
     }
 
     fn get(self: @DrugsPacked) -> DrugsUnpacked {

@@ -12,24 +12,21 @@ use rollyourown::{
 
 
 // 18 bits : 3 bits x 6 locations
-#[derive(Copy, Drop)]
+#[derive(Copy, Drop, Serde)]
 struct WantedPacked {
-    world: IWorldDispatcher,
-    game: Game,
-    //
     packed: felt252
 }
 
 
 #[generate_trait]
 impl WantedPackedImpl of WantedPackedTrait {
-    fn new(world: IWorldDispatcher, game: Game) -> WantedPacked {
-        let packed: u256 = core::pedersen::pedersen(game.game_id.into() + 1, game.player_id.into())
+    fn new(salt: u32) -> WantedPacked {
+        let packed: u256 = core::pedersen::pedersen(salt.into(),starknet::get_caller_address().into())
             .into();
         let mask = BitsMathImpl::mask::<u256>(18);
         let safe_packed: felt252 = (packed & mask).try_into().unwrap();
 
-        WantedPacked { world, game, packed: safe_packed }
+        WantedPacked { packed: safe_packed }
     }
 
     #[inline(always)]

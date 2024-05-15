@@ -2,13 +2,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    utils::{
-        bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-        introspect::Bytes16IntrospectionImpl
-    }
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::Bytes16IntrospectionImpl}
 };
-
-
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -35,17 +30,6 @@ struct DrugConfig {
     name: Bytes16,
 }
 
-
-//
-//
-//
-
-#[generate_trait]
-impl DrugConfigImpl of DrugConfigTrait {
-    fn get(world: IWorldDispatcher, drug: Drugs) -> DrugConfig {
-        get!(world, (drug), DrugConfig)
-    }
-}
 
 //
 //
@@ -161,7 +145,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         }
     );
 
-     set!(
+    set!(
         world,
         DrugConfig {
             drug: Drugs::Shrooms,
@@ -185,7 +169,7 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         }
     );
 
-     set!(
+    set!(
         world,
         DrugConfig {
             drug: Drugs::Ketamine,
@@ -221,8 +205,6 @@ fn initialize_drug_config(world: IWorldDispatcher) {
         }
     );
 }
-
-
 //
 //
 //
@@ -324,3 +306,4 @@ fn initialize_drug_config(world: IWorldDispatcher) {
 //         }
 //     );
 // }
+

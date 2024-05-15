@@ -34,12 +34,9 @@ mod ryo {
     use starknet::info::get_tx_info;
 
     use rollyourown::{
-        config::{
-            ryo::{RyoConfig, RyoConfigManager, RyoConfigManagerTrait},
-            ryo_address::{RyoAddress, RyoAddressManager, RyoAddressManagerTrait},
-        },
-        models::{season::Season,}, utils::random::{RandomImpl},
-        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
+        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},}, models::{season::Season,},
+        utils::random::{RandomImpl}, helpers::season_manager::{SeasonManager, SeasonManagerTrait},
+        library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
     };
 
     const THREE_MIN: u16 = 120;
@@ -59,8 +56,7 @@ mod ryo {
         ) {
             self.assert_caller_is_owner();
 
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
+            let mut ryo_config = self.s().ryo_config();
 
             assert(ryo_config.initialized == false, 'Already initialized');
 
@@ -80,21 +76,20 @@ mod ryo {
             ryo_config.paper_reward_launderer = 100; // in ether
 
             // save 
-            ryo_config_manager.set(ryo_config);
+            self.s().save_ryo_config(ryo_config);
 
             // RyoAddresses
-            let ryo_addresses_manager = RyoAddressManagerTrait::new(self.world());
-            let mut ryo_addresses = ryo_addresses_manager.get();
+            let mut ryo_addresses = self.s().ryo_addresses();
 
             ryo_addresses.paper = paper_address;
             ryo_addresses.treasury = treasury_address;
             ryo_addresses.laundromat = laundromat_address;
 
             // save 
-            ryo_addresses_manager.set(ryo_addresses);
+            self.s().save_ryo_addresses(ryo_addresses);
 
             // Season
-            let season_manager = SeasonManagerTrait::new(self.world());
+            let season_manager = SeasonManagerTrait::new(self.s());
             season_manager.new_season(ryo_config.season_version);
         }
 
@@ -105,42 +100,38 @@ mod ryo {
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();
 
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
+            let mut ryo_config = self.s().ryo_config();
 
             ryo_config.paused = paused;
-            ryo_config_manager.set(ryo_config);
+            self.s().save_ryo_config(ryo_config);
         }
 
         fn set_paper_fee(self: @ContractState, fee: u16) {
             self.assert_caller_is_owner();
 
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
+            let mut ryo_config = self.s().ryo_config();
 
             ryo_config.paper_fee = fee;
-            ryo_config_manager.set(ryo_config);
+            self.s().save_ryo_config(ryo_config);
         }
 
 
         fn set_treasury_fee_pct(self: @ContractState, fee_pct: u8) {
             self.assert_caller_is_owner();
 
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
+            let mut ryo_config = self.s().ryo_config();
 
             ryo_config.treasury_fee_pct = fee_pct;
-            ryo_config_manager.set(ryo_config);
+            self.s().save_ryo_config(ryo_config);
         }
 
         fn set_season_duration(self: @ContractState, duration_sec: u32) {
             self.assert_caller_is_owner();
 
-            let ryo_config_manager = RyoConfigManagerTrait::new(self.world());
-            let mut ryo_config = ryo_config_manager.get();
+            let mut ryo_config = self.s().ryo_config();
 
             ryo_config.season_duration = duration_sec;
-            ryo_config_manager.set(ryo_config);
+            self.s().save_ryo_config(ryo_config);
         }
 
 
@@ -149,30 +140,30 @@ mod ryo {
         //
 
         fn paper(self: @ContractState) -> ContractAddress {
-            RyoAddressManagerTrait::new(self.world()).paper()
+            self.s().ryo_addresses().paper
         }
 
         fn treasury(self: @ContractState) -> ContractAddress {
-            RyoAddressManagerTrait::new(self.world()).treasury()
+            self.s().ryo_addresses().treasury
         }
 
         fn laundromat(self: @ContractState) -> ContractAddress {
-            RyoAddressManagerTrait::new(self.world()).laundromat()
+            self.s().ryo_addresses().laundromat
         }
 
 
         fn paused(self: @ContractState) -> bool {
-            let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
+            let ryo_config = self.s().ryo_config();
             ryo_config.paused
         }
 
         fn paper_fee(self: @ContractState) -> u16 {
-            let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
+            let ryo_config = self.s().ryo_config();
             ryo_config.paper_fee
         }
 
         fn season_duration(self: @ContractState) -> u32 {
-            let ryo_config = RyoConfigManagerTrait::new(self.world()).get();
+            let ryo_config = self.s().ryo_config();
             ryo_config.season_duration
         }
     }
@@ -186,6 +177,11 @@ mod ryo {
                 'not owner'
             );
         }
+
+        #[inline(always)]
+        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
+            let (class_hash, _) = self.world().contract('store');
+            IStoreLibraryDispatcher { class_hash, }
+        }
     }
 }
-

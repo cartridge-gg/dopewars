@@ -1,8 +1,10 @@
+use core::traits::TryInto;
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::{game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}},
+    config::{game::{GameConfig}},
     packing::{
         game_store_layout::{
             GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl
@@ -11,15 +13,16 @@ use rollyourown::{
         wanted_packed::{WantedPacked, WantedPackedImpl},
         markets_packed::{MarketsPacked, MarketsPackedImpl},
         items_packed::{ItemsPacked, ItemsPackedImpl},
-        player::{Player, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
+        player::{Player, PlayerStatus, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
     },
+    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, traits::{Packable, Packer, Unpacker}
 };
 
 
-#[derive(Copy, Drop)]
+#[derive(Copy, Drop, Serde)]
 struct GameStore {
-    world: IWorldDispatcher,
+    s: IStoreLibraryDispatcher,
     game: Game,
     //
     markets: MarketsPacked,
@@ -32,22 +35,71 @@ struct GameStore {
 // init new game state
 #[generate_trait]
 impl GameStoreImpl of GameStoreTrait {
-    fn new(world: IWorldDispatcher, game: Game) -> GameStore {
+    fn new(s: IStoreLibraryDispatcher, game: Game, ref game_config: GameConfig) -> GameStore {
         GameStore {
-            world,
+            s,
             game,
             //
-            markets: MarketsPackedImpl::new(world, game),
-            items: ItemsPackedImpl::new(world, game),
-            drugs: DrugsPackedImpl::new(world, game),
-            wanted: WantedPackedImpl::new(world, game),
-            player: PlayerImpl::new(world, game),
+            markets: MarketsPackedImpl::new(game.game_id),
+            items: ItemsPackedImpl::new(s, game.hustler_id),
+            drugs: DrugsPackedImpl::new(),
+            wanted: WantedPackedImpl::new(game.game_id + 1),
+            player: PlayerImpl::new(ref game_config),
         }
     }
 
-    fn get(world: IWorldDispatcher, game: Game) -> GameStore {
-        let game_store_packed = get!(world, (game.game_id, game.player_id), GameStorePacked);
-        game_store_packed.unpack(world, game)
+    fn empty(s: IStoreLibraryDispatcher, game: Game) -> GameStore { 
+        GameStore {
+            s,
+            game,
+            //
+            markets: MarketsPacked { packed: 0 },
+            items: ItemsPackedImpl::new(s, 0),
+            drugs: DrugsPacked { packed: 0 },
+            wanted: WantedPacked { packed: 0 },
+            player: PlayerImpl::empty()
+        }
+    }
+
+    //
+    //
+    //
+
+    fn can_continue(self: GameStore) -> bool {
+        if self.player.health == 0 {
+            return false;
+        }
+
+        if self.player.status != PlayerStatus::Normal {
+            return false;
+        }
+
+        if self.player.turn == self.game.max_turns {
+            return false;
+        }
+
+        if self.game.game_over {
+            return false;
+        }
+
+        true
+    }
+
+
+    fn can_trade(self: GameStore) -> bool {
+        if self.player.health == 0 {
+            return false;
+        }
+
+        if self.player.status != PlayerStatus::Normal {
+            return false;
+        }
+
+        if self.game.game_over {
+            return false;
+        }
+
+        true
     }
 }
 
@@ -88,8 +140,8 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 
 // unpack 
 impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
-    fn unpack(self: GameStorePacked, world: IWorldDispatcher, game: Game,) -> GameStore {
-        let mut game_store = GameStoreImpl::new(world, game);
+    fn unpack(self: GameStorePacked, s: IStoreLibraryDispatcher, game: Game,) -> GameStore {
+        let mut game_store = GameStoreImpl::empty(s, game);
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self.packed);
 
@@ -98,21 +150,16 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                 let packed = bits.extract_into::<felt252>(item.idx(), item.bits());
 
                 match *item {
-                    GameStoreLayout::Markets => {
-                        game_store.markets = MarketsPacked { world, game, packed };
-                    },
+                    GameStoreLayout::Markets => { game_store.markets = MarketsPacked { packed }; },
                     GameStoreLayout::Items => {
-                        game_store.items = ItemsPacked { world, game, packed };
+                        game_store
+                            .items = ItemsPacked { s, hustler_id: game.hustler_id, packed };
                     },
-                    GameStoreLayout::Drugs => {
-                        game_store.drugs = DrugsPacked { world, game, packed };
-                    },
-                    GameStoreLayout::Wanted => {
-                        game_store.wanted = WantedPacked { world, game, packed };
-                    },
+                    GameStoreLayout::Drugs => { game_store.drugs = DrugsPacked { packed }; },
+                    GameStoreLayout::Wanted => { game_store.wanted = WantedPacked { packed }; },
                     GameStoreLayout::Player => {
                         // unpack packed into Player
-                        game_store.player = packed.unpack(world, game);
+                        game_store.player = packed.unpack(s, game);
                     },
                 };
             };

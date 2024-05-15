@@ -1,6 +1,6 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-const GAME_CONFIG_KEY: u8 = 0;
+const GAME_CONFIG_KEY: u8 = 42;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct GameConfig {
@@ -22,19 +22,7 @@ struct GameConfig {
     rep_jailed: u8, // reputation earn when Jailed
 }
 
-#[generate_trait]
-impl GameConfigImpl of GameConfigTrait {
-    fn get(world: IWorldDispatcher) -> GameConfig {
-        get!(world, (GAME_CONFIG_KEY), GameConfig)
-    }
 
-    fn set(world: IWorldDispatcher, game_config: GameConfig) {
-        let mut game_config = game_config;
-        game_config.key = GAME_CONFIG_KEY;
-
-        set!(world, (game_config));
-    }
-}
 
 fn initialize_game_config(world: IWorldDispatcher) {
     set!(

@@ -5,7 +5,6 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[derive(Copy, Drop, Serde)]
 struct Random {
-    world: IWorldDispatcher,
     seed: felt252,
     nonce: usize,
 }
@@ -13,8 +12,8 @@ struct Random {
 #[generate_trait]
 impl RandomImpl of RandomTrait {
     // one instance by contract, then passed by ref to sub fns
-    fn new(world: IWorldDispatcher) -> Random {
-        Random { world, seed: seed(get_contract_address()), nonce: 0 }
+    fn new(salt: felt252) -> Random {
+        Random { seed: seed(salt), nonce: 0 }
     }
 
     fn next_seed(ref self: Random) -> felt252 {
@@ -67,7 +66,7 @@ impl RandomImpl of RandomTrait {
     }
 }
 
-fn seed(salt: ContractAddress) -> felt252 {
-    pedersen::pedersen(starknet::get_tx_info().unbox().transaction_hash, salt.into())
+fn seed(salt: felt252) -> felt252 {
+    pedersen::pedersen(starknet::get_tx_info().unbox().transaction_hash, salt)
 }
 
