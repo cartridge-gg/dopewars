@@ -196,7 +196,6 @@ use starknet::{ContractAddress, get_caller_address, get_contract_address};
         }
 
         fn supercharge_jackpot(self: @ContractState, season_version: u16, amount_eth: u32) {
-            let world = self.world();
             // retrieve season
             let mut season = self.s().season(season_version);
 

@@ -21,6 +21,8 @@ import { DojoCall } from "@dojoengine/core";
 import { sleep } from "../utils";
 // import { getContractByName } from "@dojoengine/core";
 
+export const ETHER = 10n ** 18n;
+
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
@@ -41,7 +43,7 @@ export interface SystemsInterface {
   claim: (season: number, playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
-  superchargeJackpot: ( season: number, amount_eth: number) => Promise<SystemExecuteResult>;
+  superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
@@ -68,8 +70,6 @@ export interface ExecuteAndReceiptResult {
   isGameOver?: BaseEventData;
   [key: string]: any;
 }
-
-
 
 const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");
@@ -190,7 +190,7 @@ export const useSystems = (): SystemsInterface => {
 
   const createGame = useCallback(
     async (gameMode: GameMode, hustlerId: number, playerName: string) => {
-      const paperFee = config?.ryo.paper_fee * 10 ** 18;
+      const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
       const paperAddress = config?.ryoAddress.paper;
       const gameAddress = dojoProvider.manifest.contracts.find(
         (i: any) => i.name === "rollyourown::systems::game::game",
@@ -240,8 +240,6 @@ export const useSystems = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
-
- 
 
   const travel = useCallback(
     async (gameId: string, location: Locations, calls: Array<PendingCall>) => {
@@ -345,41 +343,38 @@ export const useSystems = (): SystemsInterface => {
     };
   }, [executeAndReceipt]);
 
-
   const superchargeJackpot = useCallback(
-    async (season: number, amount_eth: number) => {
-
-    const paperAddress = config?.ryoAddress.paper;
+    async (season: number, amountEth: number) => {
+      const paperAddress = config?.ryoAddress.paper;
       const laundromatAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.name ===  "rollyourown::systems::laundromat::laundromat",
+        (i: any) => i.name === "rollyourown::systems::laundromat::laundromat",
       ).address;
+
+      const amount = BigInt(amountEth) * ETHER;
 
       //
       const approvalCall: Call = {
         contractAddress: paperAddress,
         entrypoint: "approve",
-        calldata: CallData.compile({ laundromatAddress, amount_eth }),
+        calldata: CallData.compile({ laundromatAddress, amount: uint256.bnToUint256(amount) }),
       };
 
       const superchargeJackpotCall = {
-        contractName:  "rollyourown::systems::laundromat::laundromat",
+        contractName: "rollyourown::systems::laundromat::laundromat",
         //  contractAddress: gameAddress,
         entrypoint: "supercharge_jackpot",
-        calldata: [ season, amount_eth],
+        calldata: [season, amountEth],
       };
 
 
+      const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
 
-    const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
-
-    return {
-      hash,
-    };
-  
-  }, [executeAndReceipt]);
-
-
-
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
 
   const launder = useCallback(
     async (season: number) => {

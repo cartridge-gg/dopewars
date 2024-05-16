@@ -28,16 +28,22 @@ query SeasonByVersion($version: u16, $listId: felt252) {
 }
 
 query HallOfFame {
-  seasonModels(limit: 420) {
+  gameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
     edges {
       node {
-        version
-        next_version_timestamp
-        paper_balance
+        game_id
+        player_id
+        player_name
+        season_version
+        final_score
+        position
+        claimable
       }
     }
   }
 }
+
+# remove ?
 
 query GameOverEvents($gameOverSelector: String, $version: String) {
   events(last: 1000, keys: [$gameOverSelector, "*", "*", $version]) {

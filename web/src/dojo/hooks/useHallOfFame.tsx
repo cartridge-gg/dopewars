@@ -1,4 +1,4 @@
-import { Season, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
+import { Game, Season, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
@@ -18,10 +18,8 @@ export const useHallOfFame = () => {
   const hallOfFame = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];
 
-    const edges = data.seasonModels?.edges as World__ModelEdge[];
-    const nodes = edges.map((i: World__ModelEdge) => i.node as Season);
-
-    return nodes.sort((a, b) => a.version - b.version);
+    const edges = data.gameModels?.edges as World__ModelEdge[];
+    return edges.map((i: World__ModelEdge) => i.node as Game);
   }, [data, isFetching, isRefetching, isError]);
 
   return {

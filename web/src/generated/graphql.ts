@@ -2035,7 +2035,7 @@ export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?:
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HallOfFameQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null };
+export type HallOfFameQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, player_name?: any | null, season_version?: any | null, final_score?: any | null, position?: any | null, claimable?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -2550,12 +2550,20 @@ useInfiniteSeasonByVersionQuery.getKey = (variables?: SeasonByVersionQueryVariab
 
 export const HallOfFameDocument = `
     query HallOfFame {
-  seasonModels(limit: 420) {
+  gameModels(
+    limit: 420
+    where: {position: 1}
+    order: {field: SEASON_VERSION, direction: DESC}
+  ) {
     edges {
       node {
-        version
-        next_version_timestamp
-        paper_balance
+        game_id
+        player_id
+        player_name
+        season_version
+        final_score
+        position
+        claimable
       }
     }
   }

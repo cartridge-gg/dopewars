@@ -1,10 +1,12 @@
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
 import {
+  useConfigStore,
   useDojoContext,
   useHallOfFame,
   useRegisteredGamesBySeason,
   useRouterContext,
+  useSeasonByVersion,
 } from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
@@ -57,34 +59,30 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
 
   const { uiStore } = useDojoContext();
   const { account } = useAccount();
+  const { config } = useConfigStore();
 
   //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
-  const { hallOfFame, isFetchingHallOfFame } = useHallOfFame();
 
-  const [maxIndex, setMaxIndex] = useState(0);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
+  const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version  || 0);
 
-  useEffect(() => {
-    const maxIndex = hallOfFame.length > 0 ? hallOfFame.length - 1 : 0;
-    setMaxIndex(maxIndex);
-    setSelectedIndex(maxIndex);
-  }, [hallOfFame]);
+  const  { season }= useSeasonByVersion(selectedVersion)
 
   const {
     registeredGames,
     isFetching: isFetchingRegisteredGames,
     refetch: refetchRegisteredGames,
-  } = useRegisteredGamesBySeason(hallOfFame[selectedIndex]?.version || 0);
+  } = useRegisteredGamesBySeason(selectedVersion);
 
   const onPrev = async () => {
-    if (selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
+    if (selectedVersion > 1) {
+      setSelectedVersion(selectedVersion - 1);
     }
   };
 
   const onNext = async () => {
-    if (selectedIndex < maxIndex) {
-      setSelectedIndex(selectedIndex + 1);
+    if (selectedVersion < currentVersion) {
+      setSelectedVersion(selectedVersion + 1);
     }
   };
 
@@ -92,7 +90,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     router.push(`/season/${version}`);
   };
 
-  if (!registeredGames ) {
+  if (!registeredGames || !season ) {
     return <></>;
   }
 
@@ -100,27 +98,27 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     <VStack w="full" h="100%">
       <VStack my="15px" w="full">
         <HStack w="full" justifyContent="space-between">
-          <Arrow direction="left" cursor="pointer" opacity={selectedIndex > 0 ? "1" : "0.25"} onClick={onPrev}></Arrow>
+          <Arrow direction="left" cursor="pointer" opacity={selectedVersion > 1 ? "1" : "0.25"} onClick={onPrev}></Arrow>
           <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
-            <Text cursor="pointer" onClick={() => onDetails(hallOfFame[selectedIndex]?.version)}>
-              SEASON {hallOfFame[selectedIndex]?.version} REWARDS
+            <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
+              SEASON {selectedVersion} REWARDS
             </Text>
             <Text color="yellow.400">
               <PaperIcon color="yellow.400" mr={1} />
-              {formatCash(hallOfFame[selectedIndex]?.paper_balance || 0).replace("$", "")}
+              {formatCash(season.paper_balance || 0).replace("$", "")}
             </Text>
           </HStack>
           <Arrow
             direction="right"
             cursor="pointer"
-            opacity={selectedIndex < maxIndex ? "1" : "0.25"}
+            opacity={selectedVersion < currentVersion ? "1" : "0.25"}
             onClick={onNext}
           ></Arrow>
         </HStack>
-        {selectedIndex === maxIndex && (
+        {selectedVersion === currentVersion && (
           <HStack>
             <Countdown
-              date={new Date(hallOfFame[selectedIndex]?.next_version_timestamp * 1_000)}
+              date={new Date(season.next_version_timestamp * 1_000)}
               renderer={renderer}
             ></Countdown>
             <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>

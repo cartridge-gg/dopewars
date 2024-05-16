@@ -45,6 +45,7 @@ import { GameClass } from "@/dojo/class/Game";
 import { Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { Reputation } from "@/components/icons/items/Reputation";
+import { sleep } from "@/dojo/utils";
 
 const End = observer(() => {
   const { game } = useGameStore();
@@ -177,8 +178,8 @@ const EndContent = ({ game }: { game: GameClass }) => {
             <Divider borderColor="neon.600" />
             {/* <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} /> */}
             <StatsItem text={`Reputation ${game.player.reputation}`} icon={<Reputation />} />
-              <Divider borderColor="neon.600" />
-              <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<PaperCashIcon />} />
+            <Divider borderColor="neon.600" />
+            <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<PaperCashIcon />} />
 
             {/* <Divider borderColor="neon.600" />
               <StatsItem text="X Muggings" icon={<Pistol />} />

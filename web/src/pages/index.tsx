@@ -53,7 +53,7 @@ export default function Home() {
     }
 
     await launder(season?.version);
-    await sleep(500);
+    await sleep(1000);
     await configStore.init();
   };
 
@@ -88,8 +88,8 @@ export default function Home() {
 
                 <VStack h="full">
                   <Text>
-                    Last seasons results need to be washed. Confirm a transaction and earn <PaperIcon />{" "}
-                    {config?.ryo.paper_reward_launderer} PAPER!
+                    Last seasons results need to be washed. Confirm a transaction and earn <PaperIcon  color="yellow.400" mr={1}/>
+                    <Text display="inline" color="yellow.400">{config?.ryo.paper_reward_launderer} PAPER</Text>!
                   </Text>
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
                     Launder results

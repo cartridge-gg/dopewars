@@ -30,6 +30,7 @@ import { HustlerItemBaseTable } from "@/components/pages/admin/HustlerItemBaseTa
 import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiersTable";
 import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
+import { Dropdown } from "@/components/common";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -38,10 +39,10 @@ const Admin = () => {
 
   return (
     <Layout isSinglePanel={true}>
-
       <Tabs variant="unstyled" w="full">
         <TabList pb={6}>
           <Tab>ADMIN</Tab>
+          <Tab>SEASON</Tab>
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
           <Tab>ITEMS</Tab>
@@ -61,6 +62,12 @@ const Admin = () => {
               <RyoPauseCard />
               <TreasuryClaimCard />
               <RyoFeeCard />
+            </Flex>
+          </TabPanel>
+
+          <TabPanel p={0}>
+            <Flex w="full" alignItems="flex-start" gap={3} flexDirection="row" flexWrap="wrap">
+              <RyoSuperchargeCard />
               <RyoLeaderboardDurationCard />
             </Flex>
           </TabPanel>
@@ -221,7 +228,7 @@ const RyoLeaderboardDurationCard = observer(() => {
   const { configStore } = useDojoContext();
   const { config } = configStore;
 
-  const [duration, setDuration] = useState(config?.ryo.leaderboard_duration);
+  const [duration, setDuration] = useState(config?.ryo.season_duration);
 
   const { setLeaderboardDuration, isPending } = useSystems();
 
@@ -249,6 +256,52 @@ const RyoLeaderboardDurationCard = observer(() => {
           />
           <ChildrenOrConnect>
             <Button isLoading={isPending} onClick={updateLeaderboardDuration}>
+              <Wallet />
+            </Button>
+          </ChildrenOrConnect>
+        </HStack>
+      </CardBody>
+      <CardFooter></CardFooter>
+    </Card>
+  );
+});
+
+const RyoSuperchargeCard = observer(() => {
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const [value, setValue] = useState(0);
+
+  const { superchargeJackpot, isPending } = useSystems();
+
+  const onSuperchargeJackpot = async () => {
+    await superchargeJackpot(config?.ryo.season_version, value);
+    await configStore.init();
+  };
+
+  return (
+    <Card p={3}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        SUPERCHARGE JACKPOT
+      </CardHeader>
+      <CardBody>
+        <HStack>
+          <Text w="180px" flexShrink={0}>
+            CURRENT SEASON : {config?.ryo.season_version}
+          </Text>
+
+          <Text w="180px" flexShrink={0}>
+            PAPER AMOUNT
+          </Text>
+          <Input
+            w="100px"
+            value={value}
+            onChange={(e) => {
+              setValue(Number(e.target.value));
+            }}
+          />
+          <ChildrenOrConnect>
+            <Button isLoading={isPending} onClick={onSuperchargeJackpot}>
               <Wallet />
             </Button>
           </ChildrenOrConnect>

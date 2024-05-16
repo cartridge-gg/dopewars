@@ -103,8 +103,6 @@ use starknet::{get_caller_address, get_contract_address};
             // TODO checks
             self.assert_caller_is_owner();
 
-            let world = self.world();
-
             // encounters
             initialize_encounter_config(self.s());
             initialize_encounter_config_extra(self.s());

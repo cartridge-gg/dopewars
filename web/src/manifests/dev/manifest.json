@@ -887,7 +887,7 @@
     ],
     "address": "0x2a96c7af5ffec9cbdf64202c619064207b618d24b0a78e70d84e92ae1f0e725",
     "transaction_hash": "0x3116cc58f218156089631bcf2b549e81c3a96be131bf2198ff9d88832cf84fe",
-    "block_number": null,
+    "block_number": 25,
     "seed": "rollyourown",
     "metadata": {
       "profile_name": "dev",
@@ -4096,8 +4096,8 @@
     {
       "kind": "DojoContract",
       "address": "0x33f2a478c877b2b1b18e1ef713db7c8cc2235b20673180626f0e23c57648f95",
-      "class_hash": "0x50cadde0f5ecfb280007fd6d0d256eab78e6e5dbd69a3a60a967fdee7aef662",
-      "original_class_hash": "0x50cadde0f5ecfb280007fd6d0d256eab78e6e5dbd69a3a60a967fdee7aef662",
+      "class_hash": "0x3ea0f006f96c898d8c311ff03a6d34f95746c5856fb3a57a55834cd6fded77",
+      "original_class_hash": "0x3ea0f006f96c898d8c311ff03a6d34f95746c5856fb3a57a55834cd6fded77",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {

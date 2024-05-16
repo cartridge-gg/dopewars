@@ -1,5 +1,5 @@
 import { Box, Input as ChakraInput, InputProps, StyleProps, keyframes } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // @ts-ignore
 import useCaretPosition from "use-caret-position";
@@ -38,6 +38,15 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
       props.onKeyDown(e);
     }
   };
+
+  const onScroll = (e: any) => {
+    updateCaretPosition(e);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll, true); // use capturing, not bubbling
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div
@@ -82,4 +91,3 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
     </div>
   );
 };
-

@@ -12,7 +12,7 @@ import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const New = observer(() => {
   const { router, isRyoDotGame } = useRouterContext();
@@ -28,9 +28,11 @@ const New = observer(() => {
 
   const [error, setError] = useState("");
   const [name, setName] = useState("");
-  const [hustlerId, setHustlerId] = useState(Math.floor(Math.random()*3));
+  const [hustlerId, setHustlerId] = useState(Math.floor(Math.random() * 3));
   const [hustlerStats, setHustlerStats] = useState<any>();
   const isMobile = IsMobile();
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const hustler = configStore.getHustlerById(hustlerId);
@@ -66,6 +68,7 @@ const New = observer(() => {
     setError("");
     if (name === "" || name.length > 16 || name.length < 3) {
       setError("Invalid name, at least 3 chars, max 16!");
+      inputRef.current && inputRef.current.scrollIntoView()    
       return;
     }
 
@@ -78,7 +81,7 @@ const New = observer(() => {
     }
   };
 
-  if (!configStore || !hustlerStats || ! season) return null;
+  if (!configStore || !hustlerStats || !season) return null;
 
   return (
     <Layout
@@ -86,7 +89,7 @@ const New = observer(() => {
       footer={
         <Footer>
           <ChildrenOrConnect>
-          <Button
+            <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isLoading={isPending}
@@ -94,7 +97,7 @@ const New = observer(() => {
             >
               Play Dealer
             </Button>
-            
+
             <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}
@@ -102,13 +105,13 @@ const New = observer(() => {
               onClick={() => create(GameMode.Warrior)}
             >
               Play Warrior
-            </Button> 
+            </Button>
           </ChildrenOrConnect>
         </Footer>
       }
     >
       <VStack w={["full", "540px"]} margin="auto">
-        <VStack w="full"  gap={[3,6]}>
+        <VStack w="full" gap={[3, 6]}>
           <VStack>
             <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
               Choose your
@@ -131,9 +134,9 @@ const New = observer(() => {
               }}
             />
 
-            <HStack p={["10px 0", "20px"]}>
+            <HStack p={["10px 0", "10px"]}>
               <Box>
-                <Hustler hustler={hustlerId as Hustlers} w={["80px", "200px"]} h={["180px", "300px"]} />
+                <Hustler hustler={hustlerId as Hustlers} w={["80px", "160px"]} h={["180px", "250px"]} />
               </Box>
 
               <VStack w="full" gap={3}>
@@ -229,7 +232,7 @@ const New = observer(() => {
           </HStack>
 
           {!isRyoDotGame && !isMobile && season.paper_fee > 0 && (
-            <Card p={3} >
+            <Card p={3}>
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">
                   <HStack w="full" justifyContent="space-between">
@@ -256,27 +259,29 @@ const New = observer(() => {
             </Card>
           )}
 
-          <Input
-            display="flex"
-            mx="auto"
-            maxW="260px"
-            maxLength={20}
-            placeholder="Enter your name"
-            autoFocus={true}
-            value={name}
-            onChange={(e) => {
-              setError("");
-              setName(e.target.value);
-            }}
-          />
+          <VStack w="full" ref={inputRef}>
+            <Input
+              display="flex"
+              mx="auto"
+              maxW="260px"
+              maxLength={20}
+              placeholder="Enter your name"
+              autoFocus
+              value={name}
+              onChange={(e) => {
+                setError("");
+                setName(e.target.value);
+              }}
+            />
 
-          <VStack w="full" h="30px">
-            <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
-              Max 20 characters
-            </Text>
-            <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
-              {error}
-            </Text>
+            <VStack w="full" h="30px">
+              <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
+                Max 20 characters
+              </Text>
+              <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
+                {error}
+              </Text>
+            </VStack>
           </VStack>
 
           <Box minH="80px" />
