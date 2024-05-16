@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@cartridge/connector':
+    specifier: ../../cartridge/packages/connector
+    version: link:../../cartridge/packages/connector
   '@chakra-ui/anatomy':
     specifier: ^2.1.1
     version: 2.2.2
