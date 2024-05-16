@@ -61,7 +61,6 @@ const Admin = () => {
               <RyoAddressCard />
               <RyoPauseCard />
               <TreasuryClaimCard />
-              <RyoFeeCard />
             </Flex>
           </TabPanel>
 
@@ -69,6 +68,7 @@ const Admin = () => {
             <Flex w="full" alignItems="flex-start" gap={3} flexDirection="row" flexWrap="wrap">
               <RyoSuperchargeCard />
               <RyoLeaderboardDurationCard />
+              <RyoFeeCard />
             </Flex>
           </TabPanel>
 

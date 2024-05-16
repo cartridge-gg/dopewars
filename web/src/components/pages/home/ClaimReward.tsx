@@ -1,48 +1,61 @@
 import { Gem } from "@/components/icons";
 import { MakeItRain } from "@/components/layout";
-import { useConfigStore, useHallOfFame } from "@/dojo/hooks";
-import { Leaderboard } from "@/generated/graphql";
+import { useClaimable } from "@/dojo/hooks";
 import { IsMobile } from "@/utils/ui";
 import { Button } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { ClaimModal } from "./ClaimModal";
 
+export interface Claimable {
+  totalClaimable: number;
+  gameIds: Array<number>;
+}
+
 export const ClaimReward = () => {
-  const { config } = useConfigStore();
   const { account } = useAccount();
 
-  const { hallOfFame } = useHallOfFame();
+  const { claimable: claimableData, refetchClaimable } = useClaimable(account?.address || "0x0");
 
-  const [claimable, setClaimable] = useState<Leaderboard[]>([]);
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isRainning, setIsRainning] = useState(false);
 
-  const isMobile = IsMobile();
+  const [claimable, setClaimable] = useState<Claimable>({
+    totalClaimable: 0,
+    gameIds: [],
+  });
 
   useEffect(() => {
-    if (!hallOfFame) {
-      setClaimable([]);
-    } else {
-      const _claimable = hallOfFame.filter(
-        (i) => i.player_id === account?.address && !i.claimed && i.version !== config?.ryo.leaderboard_version,
-      );
-      setClaimable(_claimable);
-    }
-  }, [account?.address, hallOfFame, config?.ryo.leaderboard_version]);
+    const gameIds = claimableData.map((i) => i.game_id);
+    const totalClaimable = claimableData.map((i) => i.claimable).reduce((p, c) => p + c, 0);
 
-  const onClose = () => {
-    setIsRainning(true);
+    setClaimable({
+      totalClaimable,
+      gameIds,
+    });
+  }, [claimableData]);
+
+  const isMobile = IsMobile();
+
+  const onClose = (claimed: boolean) => {
+    if (claimed) {
+      setIsRainning(true);
+
+      setTimeout(() => {
+        setIsRainning(false);
+      }, 10_000);
+    }
+
     setIsClaimModalOpen(false);
 
     setTimeout(() => {
-      setIsRainning(false);
-    }, 20_000);
+      refetchClaimable();
+    }, 1000);
   };
 
   return (
     <>
-      {claimable.length > 0 && (
+      {claimable.totalClaimable > 0 && (
         <>
           <Button
             h="48px"
@@ -57,7 +70,7 @@ export const ClaimReward = () => {
           >
             <Gem /> {!isMobile ? "Claim" : ""}
           </Button>
-          <ClaimModal claimable={claimable[0]} isOpen={isClaimModalOpen} onClose={onClose} />
+          <ClaimModal claimable={claimable} claimableData={claimableData} isOpen={isClaimModalOpen} onClose={onClose} />
         </>
       )}
       {isRainning && <MakeItRain />}

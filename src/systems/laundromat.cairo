@@ -5,7 +5,7 @@ trait ILaundromat<T> {
     fn register_score(self: @T, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress);
     fn launder(self: @T, season_version: u16);
 
-    fn claim(self: @T, season_version: u16, player_id: ContractAddress, game_ids: Span<u32>);
+    fn claim(self: @T, player_id: ContractAddress, game_ids: Span<u32>);
     fn claim_treasury(self: @T);
     fn supercharge_jackpot(self: @T, season_version: u16, amount_eth: u32);
 }
@@ -13,11 +13,9 @@ trait ILaundromat<T> {
 #[dojo::contract]
 mod laundromat {
     use rollyourown::library::store::IStore;
-use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use starknet::{ContractAddress, get_caller_address, get_contract_address};
     use rollyourown::{
-        config::{
-            ryo::{RyoConfig}, ryo_address::{RyoAddress},
-        },
+        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},},
         models::{season::{Season, SeasonImpl, SeasonTrait}, game::{Game, GameImpl, GameTrait}},
         helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
@@ -125,36 +123,32 @@ use starknet::{ContractAddress, get_caller_address, get_contract_address};
                 .transfer(get_caller_address(), paper_reward_launderer);
         }
 
-        fn claim(
-            self: @ContractState,
-            season_version: u16,
-            player_id: ContractAddress,
-            game_ids: Span<u32>,
-        ) {
+        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>,) {
             let world = self.world();
             let mut game_ids = game_ids;
 
-            // retrieve season
-            let season = self.s().season(season_version);
-
-            // retrieve Season SortedList   
-            let list_id = season_version.into();
-            let mut sorted_list = SortedListImpl::get(world, list_id);
-            let entrants = sorted_list.size;
-
             // check max batch size
             assert(game_ids.len() <= 10, 'too much game_ids');
-            // check season status
-            assert(sorted_list.locked, 'season has not ended');
-            assert(sorted_list.processed, 'need more launder');
-
-            // any other check missing ?
 
             let mut total_claimable = 0;
 
             while let Option::Some(game_id) = game_ids
                 .pop_front() {
                     let mut game = self.s().game(*game_id, player_id);
+
+                    // retrieve season
+                    let season = self.s().season(game.season_version);
+
+                    // retrieve Season SortedList   
+                    let list_id = game.season_version.into();
+                    let mut sorted_list = SortedListImpl::get(world, list_id);
+                    let entrants = sorted_list.size;
+
+                    // check season status
+                    assert(sorted_list.locked, 'season has not ended');
+                    assert(sorted_list.processed, 'need more launder');
+
+                    // any other check missing ?
 
                     assert(game.registered, 'unregistered game');
                     assert(game.position > 0, 'invalid position');

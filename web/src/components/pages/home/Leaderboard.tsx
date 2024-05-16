@@ -61,8 +61,6 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
   const { account } = useAccount();
   const { config } = useConfigStore();
 
-  //const { leaderboard, isFetchingLeaderboard } = useLeaderboardByVersion(selectedVersion);
-
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
   const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version  || 0);
 

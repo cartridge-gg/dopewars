@@ -4,7 +4,7 @@ import { Loader } from "@/components/layout/Loader";
 import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { useHallOfFame } from "@/dojo/hooks/useHallOfFame";
-import { Game, Leaderboard } from "@/generated/graphql";
+import { Game } from "@/generated/graphql";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
@@ -38,7 +38,7 @@ export const HallOfFame = observer(() => {
         {!isFetchingHallOfFame && (
           <SimpleGrid columns={[1, 2]} w="full" gap={4}>
             {hallOfFame.map((i, index) => {
-              return <HallOfFameEntry entry={i} key={index} account={account} />;
+              return <HallOfFameEntry game={i} key={index} account={account} />;
             })}
           </SimpleGrid>
         )}
@@ -47,26 +47,20 @@ export const HallOfFame = observer(() => {
   );
 });
 
-const HallOfFameEntry = ({ entry, account }: { entry: Game; account: AccountInterface | undefined }) => {
+const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterface | undefined }) => {
   const { router } = useRouterContext();
-  const { game, isFetched } = useGameById(entry.game_id);
 
   const isSelf = useMemo(() => {
     if (!account) return false;
     return account?.address === game?.player_id;
   }, [account?.address, game?.player_id]);
 
-  const claimable = useMemo(() => {
-    return account?.address === game?.player_id && !entry.claimed;
-  }, [account?.address, entry.claimed, game?.player_id]);
-
   const onClick = useCallback(() => {
-    router.push(`/0x${entry.game_id.toString(16)}/logs`);
-  }, [entry.game_id, game?.player_id, router]);
+    router.push(`/0x${game.game_id.toString(16)}/logs`);
+  }, [game.game_id, game?.player_id, router]);
 
   const color = isSelf ? colors.yellow["400"].toString() : colors.neon["400"].toString();
 
-  if (!isFetched) return null;
   return (
     <Card position="relative" h="100px" p={2} color={color}>
       <VStack h="100%" justifyContent="space-between" gap={0}>
@@ -85,7 +79,7 @@ const HallOfFameEntry = ({ entry, account }: { entry: Game; account: AccountInte
               <Text>
                 {shortString.decodeShortString(game?.player_name)} {isSelf && "(you)"}
               </Text>
-              <Text>{formatCash(entry.final_score)}</Text>
+              <Text>{formatCash(game.final_score)}</Text>
             </VStack>
           </HStack>
         )}
@@ -101,10 +95,10 @@ const HallOfFameEntry = ({ entry, account }: { entry: Game; account: AccountInte
           mt={1}
           opacity={0.7}
         >
-          <Text>SEASON {entry.season_version}</Text>
+          <Text>SEASON {game.season_version}</Text>
           <Text color={color}>
             <PaperIcon color={color} mr={1} />
-            {formatCash(entry.claimable).replace("$", "")}
+            {formatCash(game.claimable).replace("$", "")}
           </Text>
         </HStack>
       </VStack>

@@ -40,7 +40,7 @@ export interface SystemsInterface {
 
   // laundromat
   registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
-  claim: (season: number, playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
+  claim: (playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
@@ -317,11 +317,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const claim = useCallback(
-    async (season: number, playerId: string, gameIds: number[]) => {
+    async (playerId: string, gameIds: number[]) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::laundromat::laundromat",
         entrypoint: "claim",
-        calldata: [season, playerId, gameIds],
+        calldata: [playerId, gameIds],
       });
 
       return {
@@ -365,7 +365,6 @@ export const useSystems = (): SystemsInterface => {
         entrypoint: "supercharge_jackpot",
         calldata: [season, amountEth],
       };
-
 
       const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
 

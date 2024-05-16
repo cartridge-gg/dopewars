@@ -2035,7 +2035,14 @@ export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?:
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HallOfFameQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, player_name?: any | null, season_version?: any | null, final_score?: any | null, position?: any | null, claimable?: any | null } | null } | null> | null } | null };
+export type HallOfFameQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, player_name?: any | null, hustler_id?: any | null, season_version?: any | null, final_score?: any | null, position?: any | null, claimable?: any | null } | null } | null> | null } | null };
+
+export type ClaimableQueryVariables = Exact<{
+  playerId?: InputMaybe<Scalars['ContractAddress']>;
+}>;
+
+
+export type ClaimableQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, season_version?: any | null, player_id?: any | null, player_name?: any | null, hustler_id?: any | null, claimed?: any | null, claimable?: any | null, final_score?: any | null, position?: any | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -2560,6 +2567,7 @@ export const HallOfFameDocument = `
         game_id
         player_id
         player_name
+        hustler_id
         season_version
         final_score
         position
@@ -2601,6 +2609,59 @@ export const useInfiniteHallOfFameQuery = <
 
 
 useInfiniteHallOfFameQuery.getKey = (variables?: HallOfFameQueryVariables) => variables === undefined ? ['HallOfFame.infinite'] : ['HallOfFame.infinite', variables];
+;
+
+export const ClaimableDocument = `
+    query Claimable($playerId: ContractAddress) {
+  gameModels(where: {player_id: $playerId, claimed: false, claimableGT: 0}) {
+    edges {
+      node {
+        game_id
+        season_version
+        player_id
+        player_name
+        hustler_id
+        claimed
+        claimable
+        final_score
+        position
+      }
+    }
+  }
+}
+    `;
+export const useClaimableQuery = <
+      TData = ClaimableQuery,
+      TError = unknown
+    >(
+      variables?: ClaimableQueryVariables,
+      options?: UseQueryOptions<ClaimableQuery, TError, TData>
+    ) =>
+    useQuery<ClaimableQuery, TError, TData>(
+      variables === undefined ? ['Claimable'] : ['Claimable', variables],
+      useFetchData<ClaimableQuery, ClaimableQueryVariables>(ClaimableDocument).bind(null, variables),
+      options
+    );
+
+useClaimableQuery.getKey = (variables?: ClaimableQueryVariables) => variables === undefined ? ['Claimable'] : ['Claimable', variables];
+;
+
+export const useInfiniteClaimableQuery = <
+      TData = ClaimableQuery,
+      TError = unknown
+    >(
+      variables?: ClaimableQueryVariables,
+      options?: UseInfiniteQueryOptions<ClaimableQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<ClaimableQuery, ClaimableQueryVariables>(ClaimableDocument)
+    return useInfiniteQuery<ClaimableQuery, TError, TData>(
+      variables === undefined ? ['Claimable.infinite'] : ['Claimable.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteClaimableQuery.getKey = (variables?: ClaimableQueryVariables) => variables === undefined ? ['Claimable.infinite'] : ['Claimable.infinite', variables];
 ;
 
 export const GameOverEventsDocument = `

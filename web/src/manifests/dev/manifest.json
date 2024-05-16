@@ -1491,8 +1491,8 @@
     {
       "kind": "DojoContract",
       "address": "0xbb15417a75f5b9b96831847c502472e2b3d3c008d010a1bcbbad3e1cbbaa6c",
-      "class_hash": "0x49d0afd30c35d4dd4b4c0778d3f04fcab73dcef4d3a5a5af11d10202819a8f8",
-      "original_class_hash": "0x49d0afd30c35d4dd4b4c0778d3f04fcab73dcef4d3a5a5af11d10202819a8f8",
+      "class_hash": "0x25562993b647fd3b09e6a32047ee98fa7ba8d0eb92af88114d7373769daeda6",
+      "original_class_hash": "0x25562993b647fd3b09e6a32047ee98fa7ba8d0eb92af88114d7373769daeda6",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4096,8 +4096,8 @@
     {
       "kind": "DojoContract",
       "address": "0x33f2a478c877b2b1b18e1ef713db7c8cc2235b20673180626f0e23c57648f95",
-      "class_hash": "0x3ea0f006f96c898d8c311ff03a6d34f95746c5856fb3a57a55834cd6fded77",
-      "original_class_hash": "0x3ea0f006f96c898d8c311ff03a6d34f95746c5856fb3a57a55834cd6fded77",
+      "class_hash": "0x78184d386bf9dbadc4fd6e7041f5f8cfb70ff3084f6304a6d3b9c90e2b26de8",
+      "original_class_hash": "0x78184d386bf9dbadc4fd6e7041f5f8cfb70ff3084f6304a6d3b9c90e2b26de8",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4209,10 +4209,6 @@
               "type": "function",
               "name": "claim",
               "inputs": [
-                {
-                  "name": "season_version",
-                  "type": "core::integer::u16"
-                },
                 {
                   "name": "player_id",
                   "type": "core::starknet::contract_address::ContractAddress"

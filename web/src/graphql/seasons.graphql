@@ -34,6 +34,7 @@ query HallOfFame {
         game_id
         player_id
         player_name
+        hustler_id
         season_version
         final_score
         position
@@ -42,6 +43,29 @@ query HallOfFame {
     }
   }
 }
+
+
+
+query Claimable($playerId: ContractAddress) {
+  gameModels(where: { player_id: $playerId, claimed: false, claimableGT: 0 }) {
+    edges {
+      node {
+        game_id
+        season_version
+        player_id
+        player_name
+        hustler_id
+        claimed
+        claimable
+        final_score
+        position
+      }
+    }
+  }
+}
+
+
+
 
 # remove ?
 

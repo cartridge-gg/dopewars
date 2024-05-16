@@ -2,9 +2,6 @@ import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Alert, Cigarette, Clock, Gem, PaperIcon, User } from "@/components/icons";
 import { Layout } from "@/components/layout";
-import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
-import { HallOfFame } from "@/components/pages/home/HallOfFame";
-import { GameClass } from "@/dojo/class/Game";
 import {
   useDojoContext,
   useRegisteredGamesBySeason,
@@ -12,10 +9,8 @@ import {
   useSeasonByVersion,
   useSystems,
 } from "@/dojo/hooks";
-import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Game } from "@/generated/graphql";
-import { play } from "@/hooks/media";
-import { Sounds, playSound } from "@/hooks/sound";
+
 import { useToast } from "@/hooks/toast";
 import { formatCashHeader } from "@/utils/ui";
 import {

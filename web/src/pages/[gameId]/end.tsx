@@ -120,12 +120,14 @@ const EndContent = ({ game }: { game: GameClass }) => {
 
       if (hash !== "") {
         toast({
-          message: `Congrats!`,
+          message: `Registered!`,
           duration: 5_000,
           isError: false,
         });
 
-        router.push("/");
+        await sleep(1000);
+        router.push(`/`);
+      
       }
     } catch (e: any) {
       console.log(e);

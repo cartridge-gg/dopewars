@@ -1,21 +1,23 @@
-import { Game, Season, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
+import { Game, Season, World__ModelEdge, useClaimableQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export type HallOfFameResult = ReturnType<typeof useHallOfFame>;
+export type ClaimableResult = ReturnType<typeof useClaimable>;
 
-export const useHallOfFame = () => {
+export const useClaimable = (playerId: string) => {
   const {
     chains: { selectedChain },
   } = useDojoContext();
 
-  const { data, isFetching, isRefetching, isError, refetch } = useHallOfFameQuery({});
+  const { data, isFetching, isRefetching, isError, refetch } = useClaimableQuery({
+    playerId
+  });
 
   useEffect(() => {
     refetch();
   }, [selectedChain.toriiUrl, refetch]);
 
-  const hallOfFame = useMemo(() => {
+  const claimable = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];
 
     const edges = data.gameModels?.edges as World__ModelEdge[];
@@ -23,9 +25,8 @@ export const useHallOfFame = () => {
   }, [data, isFetching, isRefetching, isError]);
 
   return {
-    hallOfFame,
-    isFetchingHallOfFame: isFetching || isRefetching,
-    refetchHallOfFame: refetch,
+    claimable,
+    isFetchingClaimable: isFetching || isRefetching,
+    refetchClaimable: refetch,
   };
 };
-
