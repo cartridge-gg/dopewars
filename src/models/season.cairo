@@ -33,10 +33,4 @@ impl SeasonImpl of SeasonTrait {
         current_timestamp < self.next_version_timestamp - self.season_time_limit.into()
     }
 }
-// #[derive( Copy, Drop, Serde)]
-// enum SeasonStatus {
-//     Open,
-//     Closed,
-//     Processed,
-// }
 

@@ -78,6 +78,7 @@ export type GetConfig = {
   };
   hustlers: Array<HustlerConfig>;
   game_config: GameConfig;
+  ryo_config: RyoConfig;
 };
 
 export type Config = {

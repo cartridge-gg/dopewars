@@ -108,3 +108,8 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100
 sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --fee-estimate-multiplier 10 --wait 
 echo "Initialized PAPER_MOCK!"
 sleep $TX_SLEEP
+
+
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS faucetTo -c $LAUNDROMAT_ADDRESS --fee-estimate-multiplier 10 --wait 
+echo "Sent some PAPER to LAUNDROMAT!"
+sleep $TX_SLEEP

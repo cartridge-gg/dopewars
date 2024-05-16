@@ -1,6 +1,6 @@
 use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl}, game::{GameConfig}, drugs::{DrugConfig},
-    encounters::{EncounterConfig},
+    encounters::{EncounterConfig}, ryo::{RyoConfig}
 };
 
 
@@ -18,7 +18,8 @@ trait IConfig<T> {
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
-    game_config: GameConfig, // TODO: query torii instead
+    game_config: GameConfig, // TODO: query torii instead ?
+    ryo_config: RyoConfig,
 }
 
 #[derive(Drop, Serde)]
@@ -39,7 +40,7 @@ struct LayoutItem {
 #[dojo::contract]
 mod config {
     use rollyourown::config::encounters::EncounterTrait;
-use starknet::{get_caller_address, get_contract_address};
+    use starknet::{get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{
@@ -56,6 +57,7 @@ use starknet::{get_caller_address, get_contract_address};
                 initialize_encounter_config, initialize_encounter_config_extra, EncounterConfig,
                 Encounters
             },
+            ryo::{RyoConfig}
         },
         library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         packing::{
@@ -161,9 +163,12 @@ use starknet::{get_caller_address, get_contract_address};
             //
             // TODO: remove & use torii 
             let game_config = self.s().game_config();
+            let ryo_config = self.s().ryo_config();
 
             //
-            Config { game_config, hustlers, layouts: LayoutsConfig { game_store, player } }
+            Config {
+                game_config, ryo_config, hustlers, layouts: LayoutsConfig { game_store, player }
+            }
         }
 
         fn update_game_config(self: @ContractState, game_config: GameConfig) {

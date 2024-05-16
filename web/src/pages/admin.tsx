@@ -31,6 +31,7 @@ import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiers
 import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
+import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -73,8 +74,17 @@ const Admin = () => {
           </TabPanel>
 
           <TabPanel p={0}>
-            <Card w="full">
-              <GameConfigTable />
+            <Card w="full" p={3}>
+              <HStack w="full" gap={6} alignItems="flex-start">
+                <VStack alignItems="flex-start">
+                  <Text>Game Config</Text>
+                  <GameConfigTable />
+                </VStack>
+                <VStack alignItems="flex-start">
+                  <Text>Ryo Config</Text>
+                  <RyoConfigTable />
+                </VStack>
+              </HStack>
             </Card>
           </TabPanel>
 

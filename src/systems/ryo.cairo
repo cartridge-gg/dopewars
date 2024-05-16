@@ -34,6 +34,7 @@ mod ryo {
     use starknet::info::get_tx_info;
 
     use rollyourown::{
+        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
         config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},}, models::{season::Season,},
         utils::random::{RandomImpl}, helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},

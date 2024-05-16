@@ -267,6 +267,66 @@ export const ABI = [
     ]
   },
   {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "rollyourown::config::ryo::RyoConfig",
+    "members": [
+      {
+        "name": "key",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "initialized",
+        "type": "core::bool"
+      },
+      {
+        "name": "paused",
+        "type": "core::bool"
+      },
+      {
+        "name": "season_version",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "season_duration",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "season_time_limit",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "paper_fee",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "paper_reward_launderer",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "treasury_fee_pct",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "treasury_balance",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
     "type": "struct",
     "name": "rollyourown::config::config::Config",
     "members": [
@@ -281,6 +341,10 @@ export const ABI = [
       {
         "name": "game_config",
         "type": "rollyourown::config::game::GameConfig"
+      },
+      {
+        "name": "ryo_config",
+        "type": "rollyourown::config::ryo::RyoConfig"
       }
     ]
   },

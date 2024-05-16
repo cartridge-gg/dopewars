@@ -1491,8 +1491,8 @@
     {
       "kind": "DojoContract",
       "address": "0xbb15417a75f5b9b96831847c502472e2b3d3c008d010a1bcbbad3e1cbbaa6c",
-      "class_hash": "0x25562993b647fd3b09e6a32047ee98fa7ba8d0eb92af88114d7373769daeda6",
-      "original_class_hash": "0x25562993b647fd3b09e6a32047ee98fa7ba8d0eb92af88114d7373769daeda6",
+      "class_hash": "0x1623978021de9b2414f4f4374faa5536362bef3cc5f8987ad0364f5f87e7aa2",
+      "original_class_hash": "0x1623978021de9b2414f4f4374faa5536362bef3cc5f8987ad0364f5f87e7aa2",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1763,6 +1763,66 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::ryo::RyoConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "initialized",
+              "type": "core::bool"
+            },
+            {
+              "name": "paused",
+              "type": "core::bool"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "season_time_limit",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_fee",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_reward_launderer",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "treasury_balance",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::config::config::Config",
           "members": [
@@ -1777,6 +1837,10 @@
             {
               "name": "game_config",
               "type": "rollyourown::config::game::GameConfig"
+            },
+            {
+              "name": "ryo_config",
+              "type": "rollyourown::config::ryo::RyoConfig"
             }
           ]
         },

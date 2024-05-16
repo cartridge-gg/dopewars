@@ -7,27 +7,27 @@ import { useState } from "react";
 import { editComponents } from "./tables";
 
 const columns = [
-  { key: "cash", title: "cash", dataType: DataType.Number },
-  { key: "health", title: "health", dataType: DataType.Number },
-  { key: "max_turns", title: "max_turns", dataType: DataType.Number },
-  { key: "max_wanted_shopping", title: "max_wanted_shopping", dataType: DataType.Number },
-  { key: "rep_drug_step", title: "rep_drug_step", dataType: DataType.Number },
-  { key: "rep_buy_item", title: "rep_buy_item", dataType: DataType.Number },
-  { key: "rep_carry_drugs", title: "rep_carry_drugs", dataType: DataType.Number },
-  { key: "rep_hospitalized", title: "rep_hospitalized", dataType: DataType.Number },
-  { key: "rep_jailed", title: "rep_jailed", dataType: DataType.Number },
+  // { key: "key", title: "key", dataType: DataType.Number },
+  { key: "initialized", title: "initialized", dataType: DataType.Boolean },
+  { key: "paused", title: "paused", dataType: DataType.Boolean },
+  { key: "season_version", title: "season_version", dataType: DataType.Number },
+  { key: "season_duration", title: "season_duration", dataType: DataType.Number },
+  { key: "season_time_limit", title: "season_time_limit", dataType: DataType.Number },
+  { key: "paper_fee", title: "paper_fee", dataType: DataType.Number },
+  { key: "paper_reward_launderer", title: "paper_reward_launderer", dataType: DataType.Number },
+  { key: "treasury_fee_pct", title: "treasury_fee_pct", dataType: DataType.Number },
+  // { key: "treasury_balance", title: "treasury_balance", dataType: DataType.Number },
   { key: "editColumn", width: 80 },
 ];
 
-
-export const GameConfigTable = observer(() => {
+export const RyoConfigTable = observer(() => {
   const {
     configStore: { config },
   } = useDojoContext();
 
-  const { updateGameConfig } = useSystems();
+  // const { updateGameConfig } = useSystems();
 
-  const [data, setData] = useState([config?.config.game_config] || []);
+  const [data, setData] = useState([config?.config.ryo_config] || []);
 
   const table = useTable({
     onDispatch: (action) => {
@@ -45,12 +45,13 @@ export const GameConfigTable = observer(() => {
       // triggered twice ... why ?
       if (action.type === ActionType.SaveRowEditors) {
         if (data && data[0]) {
-          updateGameConfig(data[0]);
+          alert("not implemented");
+          // updateGameConfig(data[0]);
         }
       }
 
       if (action.type === ActionType.CloseRowEditors) {
-        setData([config?.config.game_config]);
+        setData([config?.config.ryo_config]);
       }
     },
   });
