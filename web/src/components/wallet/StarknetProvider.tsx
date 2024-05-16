@@ -3,7 +3,7 @@ import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
   ExplorerFactory,
-  JsonRpcProviderArgs,
+  InjectedConnector,
   StarknetConfig,
   argent,
   braavos,
@@ -15,7 +15,8 @@ import {
   useNetwork,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
-import { RpcProvider } from "starknet";
+import CartridgeConnector from "@cartridge/connector"
+import colors from "@/theme/colors";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -35,7 +36,7 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 
     const config = {
       nodeUrl: selectedChain.rpcUrl || ""
-    } 
+    }
     // if (!config) return null;
     const chainId = selectedChain.chainConfig.id || undefined
 
@@ -49,7 +50,12 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
   const { connectors } = useInjectedConnectors({
     // Show these connectors if the user has no connector installed.
-    recommended: [argent(), braavos(), injected({ id: "dojoburner" })],
+    recommended: [
+      argent(),
+      braavos(),
+      injected({ id: "dojoburner" }),
+      cartridgeConnector
+    ],
     // Hide recommended connectors if the user has any connector installed.
     includeRecommended: "always",
     // Randomize the order of the connectors.
@@ -71,3 +77,21 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
     </StarknetConfig>
   );
 }
+
+const cartridgeConnector = new CartridgeConnector(
+  [
+    // {
+    //   target: "0x...",
+    //   method: "todo",
+    // },
+  ],
+  {
+    url: "https://x.cartridge.gg",
+    theme: {
+      colors: {
+        // e.g. button bg
+        primary: colors.neon["200"] as string,
+      }
+    },
+  }
+) as unknown as InjectedConnector

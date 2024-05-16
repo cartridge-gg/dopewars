@@ -10,6 +10,7 @@
     "lint": "next lint",
     "knip": "knip",
     "format": "prettier --write ./src",
+    "clean": "git clean -xdf && pnpm store prune",
     "gen": "graphql-codegen --config codegen.yaml",
     "gen:dojo": "pnpm gen && pnpm gen:events",
     "gen:events": "npx create-events ./src/manifests/dev/manifest.json ./src/dojo/generated/contractEvents.ts"
@@ -18,6 +19,7 @@
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
+    "@cartridge/connector": "../../cartridge/packages/connector",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "0.7.0-alpha.0",
