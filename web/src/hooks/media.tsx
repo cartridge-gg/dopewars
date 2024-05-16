@@ -29,6 +29,7 @@ export interface MediaState {
   medias: MediaItem[];
   currentIndex: number;
   isPlaying: boolean;
+  volume: number;
 }
 
 export const useMediaStore = create<MediaState>(() => ({
@@ -36,6 +37,7 @@ export const useMediaStore = create<MediaState>(() => ({
   medias: [],
   currentIndex: 0,
   isPlaying: false,
+  volume: 0.8,
 }));
 
 export const initMediaStore = async () => {
@@ -99,6 +101,7 @@ export const play = () => {
 
   // play sound
   if (!currentMedia.sound?.playing()) {
+    currentMedia.sound?.volume(state.volume)
     currentMedia.sound?.play();
   }
 
@@ -116,6 +119,14 @@ export const pause = () => {
   state.medias[state.currentIndex].sound?.pause();
   useMediaStore.setState((state) => ({
     isPlaying: false,
+  }));
+};
+
+export const volume = (v: number) => {
+  const state = useMediaStore.getState();
+  state.medias[state.currentIndex].sound?.volume(v)
+  useMediaStore.setState((state) => ({
+    volume: v,
   }));
 };
 

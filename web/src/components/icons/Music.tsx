@@ -42,3 +42,22 @@ export const Forward = (props: IconProps) => {
     </Icon>
   );
 };
+
+export const Volume = (props: IconProps) => {
+  return (
+    <Icon viewBox="0 0 24 24" {...props}>
+      <>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M9.81765 5.45483V6.90922H8.36324V8.3636H4V15.637H8.36324V17.0914H9.81765V18.5457H14.1823V5.45483H9.81765ZM8.36469 8.36506V9.81944H5.45587V14.1811H8.36469V15.6355H9.81911V17.0899H12.7265V6.91067H9.81911V8.36506H8.36469Z"
+          fill="currentColor"
+        />
+        <path
+          d="M18.4231 11.9996H16.9686V14.9098H19.8789V10.5466H21.3333V9.09079H18.4231V11.9996Z"
+          fill="currentColor"
+        />
+      </>
+    </Icon>
+  );
+};

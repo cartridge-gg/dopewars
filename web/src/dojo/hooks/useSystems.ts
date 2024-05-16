@@ -19,7 +19,7 @@ import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall } from "@dojoengine/core";
 import { sleep } from "../utils";
-// import { getContractByName } from "@dojoengine/core";
+
 
 export const ETHER = 10n ** 18n;
 
@@ -46,7 +46,6 @@ export interface SystemsInterface {
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
-  feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
 
   isPending: boolean;
@@ -522,21 +521,6 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const feedLeaderboard = useCallback(
-    async (count: number) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::devtools::devtools",
-        entrypoint: "feed_leaderboard",
-        calldata: [count],
-      });
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
-
   const failingTx = useCallback(async () => {
     const { hash, events, parsedEvents } = await executeAndReceipt({
       contractName: "rollyourown::systems::devtools::devtools",
@@ -570,7 +554,6 @@ export const useSystems = (): SystemsInterface => {
     updateDrugConfig,
     updateEncounterConfig,
     //
-    feedLeaderboard,
     failingTx,
     createFakeGame,
     //

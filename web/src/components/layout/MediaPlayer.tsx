@@ -1,8 +1,20 @@
-import { backward, forward, initMediaStore, pause, play, useMediaStore } from "@/hooks/media";
+import { backward, forward, initMediaStore, pause, play, useMediaStore, volume } from "@/hooks/media";
 import { generatePixelBorderPath } from "@/utils/ui";
-import { Box, BoxProps, Flex, HStack, StyleProps, keyframes } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Flex,
+  HStack,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  StyleProps,
+  VStack,
+  keyframes,
+} from "@chakra-ui/react";
 import React, { ReactNode, useEffect, useState } from "react";
-import { Backward, Forward, Note, Pause, Play } from "../icons";
+import { Backward, Forward, Note, Pause, Play, Volume } from "../icons";
 
 const slideAnim = keyframes`  
   0% {transform: translateX( 0%);}
@@ -55,84 +67,92 @@ export const MediaPlayer = ({ ...props }: StyleProps) => {
   }, []);
 
   return (
-    <Flex
-      w="320px"
-      h={height}
-      direction="row"
-      alignItems="normal"
-      className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
-      borderRadius={6}
-      bg="neon.700"
-      overflow="hidden"
-      // _hover={{
-      //   lg: {
-      //     ".mediaplayer-status, .mediaplayer-commands": {
-      //       transform: `translateY(-${height})`,
-      //     },
-      //   },
-      // }}
-      sx={{
-        ".mediaplayer-status,.mediaplayer-commands": {
-          transition: "all .2s",
-        },
-        // "&.mediaplayer-paused": {
-        //   ".mediaplayer-status, .mediaplayer-commands": {
-        //     md: {
-        //       transform: `translateY(-${height})`,
-        //     },
-        //   },
-        // },
-      }}
-      clipPath={`polygon(${generatePixelBorderPath()})`}
-    >
-      <Box
-        className="mediaplayer-status"
-        w="180px"
+    <VStack w="auto">
+      <Flex
+        w="320px"
         h={height}
-        display="flex"
-        flexDirection="row"
-        flexShrink={0}
+        direction="row"
+        alignItems="normal"
+        className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
+        borderRadius={6}
+        bg="neon.700"
         overflow="hidden"
-        alignItems="center"
-        m={0}
-        // pr={4}
+        sx={{
+          ".mediaplayer-status,.mediaplayer-commands": {
+            transition: "all .2s",
+          },
+        }}
+        clipPath={`polygon(${generatePixelBorderPath()})`}
       >
-        <Box>
-          <Note m={1} />
+        <Box
+          className="mediaplayer-status"
+          w="180px"
+          h={height}
+          display="flex"
+          flexDirection="row"
+          flexShrink={0}
+          overflow="hidden"
+          alignItems="center"
+          m={0}
+          // pr={4}
+        >
+          <Box>
+            <Note m={1} />
+          </Box>
+
+          <Flex direction="row" overflow="hidden" whiteSpace="nowrap" userSelect="none">
+            <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
+              {songTitle}
+            </Box>
+            <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
+              {songTitle}
+            </Box>
+          </Flex>
         </Box>
 
-        <Flex direction="row" overflow="hidden" whiteSpace="nowrap" userSelect="none">
-          <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
-            {songTitle}
-          </Box>
-          <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
-            {songTitle}
-          </Box>
+        <Flex
+          className="mediaplayer-commands"
+          h={height}
+          alignItems="center"
+          justifyContent="center"
+          flexShrink={0}
+          m={0}
+          ml="10px"
+        >
+          <HStack alignItems="center" justifyContent="center">
+            <ClickFeedback>
+              <Backward onClick={backward} />
+            </ClickFeedback>
+
+            <ClickFeedback>{mediaStore.isPlaying ? <Pause onClick={pause} /> : <Play onClick={play} />}</ClickFeedback>
+
+            <ClickFeedback>
+              <Forward onClick={forward} />
+            </ClickFeedback>
+          </HStack>
         </Flex>
-      </Box>
-
-      <Flex
-        className="mediaplayer-commands"
-        h={height}
-        alignItems="center"
-        justifyContent="center"
-        flexShrink={0}
-        m={0}
-        ml="10px"
-      >
-        <HStack alignItems="center" justifyContent="center">
-          <ClickFeedback>
-            <Backward onClick={backward} />
-          </ClickFeedback>
-
-          <ClickFeedback>{mediaStore.isPlaying ? <Pause onClick={pause} /> : <Play onClick={play} />}</ClickFeedback>
-
-          <ClickFeedback>
-            <Forward onClick={forward} />
-          </ClickFeedback>
-        </HStack>
       </Flex>
-    </Flex>
+
+      <HStack w="full" px={1}>
+        <Volume />
+
+        <Slider
+          variant="small"
+          min={0}
+          max={1}
+          step={0.05}
+          value={mediaStore.volume}
+          onChange={(e: number) => {
+            volume(e);
+          }}
+        >
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+      </HStack>
+    </VStack>
   );
 };
 
