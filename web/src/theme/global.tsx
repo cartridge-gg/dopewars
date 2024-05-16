@@ -50,26 +50,48 @@ const GlobalStyles = () => (
           border-color: ${colors.neon["500"]};
       }
 
-      // .rdt_TableHeadRow {
-      //   text-transform: uppercase;
-      // }
 
-      // .rdt_Table,
-      // .rdt_TableHead,
-      // .rdt_TableHeadRow,
-      // .rdt_TableBody,
-      // .rdt_TableRow {
-      //   background-color: transparent;
-      //   color: ${colors.neon["400"]};
-      // }
-     
-      // .rdt_TableRow {
-      //   min-height: 30px;
-      // }
+      .table-vertical {
+        .ka {
+          // width: 400px;
+          table {
+            border-collapse: collapse;
+          }
 
-      // .rdt_TableCell {
-      //   height: 30px;
-      // }
+          colgroup{
+            display: none;
+          }
+
+          /* Force table to not be like tables anymore */
+          table,
+          thead,
+          tbody,
+          th,
+          td,
+          tr {
+            display: block;
+          }
+
+          table{
+            display: flex;
+            flex-direction: row;
+          }
+
+          th, td {
+            height:40px;
+          }
+      
+          th{
+            border-bottom: 1px solid ;
+          }
+      
+          td.ka-cell {
+             border-bottom: 1px solid;
+           }
+        }
+      }
+
+
 
     `}
   />

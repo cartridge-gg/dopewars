@@ -26,7 +26,6 @@ const columns = [
 // rep_fight_cops: 4,
 // rep_fight_gang: 3,
 
-
 export const GameConfigTable = observer(() => {
   const {
     configStore: { config },
@@ -51,7 +50,7 @@ export const GameConfigTable = observer(() => {
 
       // triggered twice ... why ?
       if (action.type === ActionType.SaveRowEditors) {
-        if(data && data[0] ){
+        if (data && data[0]) {
           updateGameConfig(data[0]);
         }
       }
@@ -63,14 +62,16 @@ export const GameConfigTable = observer(() => {
   });
 
   return (
-    <Table
-      width="100%"
-      table={table}
-      columns={columns}
-      data={data}
-      rowKeyField={"key"}
-      sortingMode={SortingMode.Single}
-      childComponents={editComponents}
-    />
+    <div className="table-vertical">
+      <Table
+        width="100%"
+        table={table}
+        columns={columns}
+        data={data}
+        rowKeyField={"key"}
+        sortingMode={SortingMode.Single}
+        childComponents={editComponents}
+      />
+    </div>
   );
 });
