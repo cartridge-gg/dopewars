@@ -92,11 +92,18 @@ const katanaSlot421: DojoChainConfig = {
     rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
     toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
     toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
-    masterAddress: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
-    masterPrivateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
+    masterAddress: "0x7baae2348f94122027a90480a0724da3710533145738177dbe79f6f8f606eaf",
+    masterPrivateKey: "0x5b59606be97709903b509a13666b194f23849c7243c074b26b826405bec2eb0",
     accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
     manifest: manifestRyo421,
-    predeployedAccounts: []
+    predeployedAccounts: [
+        {
+            name: "Deployer",
+            address: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
+            privateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
+            active: false
+        },
+    ]
 }
 
 const snSepolia: DojoChainConfig = {

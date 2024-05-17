@@ -40,7 +40,7 @@ slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/
 
 # slot ryo421
 slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.1 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.1 --world 0x2a96c7af5ffec9cbdf64202c619064207b618d24b0a78e70d84e92ae1f0e725"
  
 # slot ryo_sepolia
 slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
@@ -56,10 +56,10 @@ rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
 account_address = "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7"
 private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c"
 
-# [profile.ryo421.tool.dojo.env]
-# rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
-# account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
-# private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
+[profile.ryo421.tool.dojo.env]
+rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
+account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
+private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
 
 [profile.ryosepolia.tool.dojo.env]
 # world_address= "0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"

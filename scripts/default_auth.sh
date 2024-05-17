@@ -21,10 +21,10 @@ export DEVTOOLS_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.contr
 export PAPER_MOCK_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
 
 # dev/katana
-# export TREASURY_ADDRESS="0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a";
+export TREASURY_ADDRESS="0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a";
 
 # sepolia deployer
-export TREASURY_ADDRESS="0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936";
+# export TREASURY_ADDRESS="0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936";
 
 echo "---------------------------------------------------------------------------"
 echo profile    : $PROFILE
