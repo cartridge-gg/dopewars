@@ -58,7 +58,7 @@ export default function SeasonIndex() {
 
   useEffect(() => {
     refetchRegisteredGames();
-  }, []);
+  }, [refetchRegisteredGames]);
 
   useEffect(() => {
     const onlyClaimable = registeredGames.filter(
@@ -75,7 +75,7 @@ export default function SeasonIndex() {
       totalClaimed,
       gameIds,
     });
-  }, [registeredGames]);
+  }, [account?.address, registeredGames, refetchRegisteredGames]);
 
   const onClaim = async () => {
     if (!seasonId || !account) return;

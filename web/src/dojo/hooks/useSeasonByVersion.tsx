@@ -48,7 +48,7 @@ export const useSeasonByVersion = (seasonId: number): SeasonByVersionInterface =
 
   const isSeasonWashed = useMemo(() => {
     return sortedList?.processed;
-  }, [season, timestamp]);
+  }, [sortedList]);
 
   useEffect(() => {
     const handle = setInterval(() => {

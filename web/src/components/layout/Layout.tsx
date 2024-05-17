@@ -45,7 +45,7 @@ export const Layout = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Header back={showBack} />
+        <Header/>
         <Container position="relative" px={["10px", "16px"]} py="16px">
           {!isSinglePanel &&
             (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}

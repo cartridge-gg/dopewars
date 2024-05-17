@@ -63,13 +63,13 @@ const RegisterEntities = observer(() => {
       //   target = `/${gameId}/event/decision`;
       //   break;
 
-      case WorldEvents.MeetOG:
-        // const meetOgEvent = last.parsed as MeetOGData;
-        // setOgId(meetOgEvent.ogId);
-        // setTimeout(() => {
-        //   setOgId(undefined);
-        // }, 10_000);
-        break;
+      // case WorldEvents.MeetOG:
+      //   // const meetOgEvent = last.parsed as MeetOGData;
+      //   // setOgId(meetOgEvent.ogId);
+      //   // setTimeout(() => {
+      //   //   setOgId(undefined);
+      //   // }, 10_000);
+      //   break;
 
       case WorldEvents.HighVolatility:
         const volatilityEvent = last.parsed as HighVolatilityData;

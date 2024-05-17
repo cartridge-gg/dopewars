@@ -250,14 +250,14 @@ export const parseEvent = (raw: any) => {
       } as GameOverData;
 
 
-    case WorldEvents.MeetOG:
-      return {
-        eventType: WorldEvents.MeetOG,
-        eventName: "MeetOG",
-        gameId: num.toHexString(raw.keys[1]),
-        playerId: num.toHexString(raw.keys[2]),
-        ogId: Number(raw.data[0]),
-      } as MeetOGData
+    // case WorldEvents.MeetOG:
+    //   return {
+    //     eventType: WorldEvents.MeetOG,
+    //     eventName: "MeetOG",
+    //     gameId: num.toHexString(raw.keys[1]),
+    //     playerId: num.toHexString(raw.keys[2]),
+    //     ogId: Number(raw.data[0]),
+    //   } as MeetOGData
 
 
     default:

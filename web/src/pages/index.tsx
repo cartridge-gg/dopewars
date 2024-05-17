@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { Alert, Clock, LaundromatIcon, PaperCashIcon, PaperIcon, User, Warning } from "@/components/icons";
+import {  LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
@@ -113,7 +113,9 @@ export default function Home() {
 
           <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
             <TabPanel p={0}>
-              <Leaderboard />
+              <Leaderboard
+              
+              />
             </TabPanel>
             <TabPanel p={0}>
               <HallOfFame />

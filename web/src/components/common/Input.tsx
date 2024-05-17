@@ -1,5 +1,5 @@
 import { Box, Input as ChakraInput, InputProps, StyleProps, keyframes } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // @ts-ignore
 import useCaretPosition from "use-caret-position";
@@ -16,11 +16,11 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
   const inputRef = useRef(null);
   const { x, y, getPosition, getSelection } = useCaretPosition(inputRef);
 
-  const updateCaretPosition = (e: any) => {
+  const updateCaretPosition = useCallback((e: any) => {
     setTimeout(() => {
       getPosition(inputRef);
     }, 10);
-  };
+  }, [getPosition]);
 
   const onFocus = (e: any) => {
     updateCaretPosition(e);
@@ -39,14 +39,14 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
     }
   };
 
-  const onScroll = (e: any) => {
-    updateCaretPosition(e);
-  };
-
   useEffect(() => {
+    const onScroll = (e: any) => {
+      updateCaretPosition(e);
+    };
+
     window.addEventListener("scroll", onScroll, true); // use capturing, not bubbling
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [updateCaretPosition]);
 
   return (
     <div

@@ -83,6 +83,7 @@ export const ChatEvent = ({
             p="7px 12px"
             borderRadius="8px"
             style={{
+              ///@ts-ignore
               borderimageslice: "4",
               borderimagewidth: "2px",
               borderimagesource: `url("data:image/svg+xml,${BorderImage({

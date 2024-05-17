@@ -53,11 +53,11 @@ const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterf
   const isSelf = useMemo(() => {
     if (!account) return false;
     return account?.address === game?.player_id;
-  }, [account?.address, game?.player_id]);
+  }, [account, game?.player_id]);
 
   const onClick = useCallback(() => {
     router.push(`/0x${game.game_id.toString(16)}/logs`);
-  }, [game.game_id, game?.player_id, router]);
+  }, [game.game_id, router]);
 
   const color = isSelf ? colors.yellow["400"].toString() : colors.neon["400"].toString();
 

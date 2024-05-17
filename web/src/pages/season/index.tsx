@@ -1,42 +1,12 @@
 import { Button } from "@/components/common";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
-import { Alert, Cigarette, Clock, Gem, PaperIcon, User } from "@/components/icons";
-import { Layout } from "@/components/layout";
-import {
-  SeasonInfos,
-  useDojoContext,
-  useHallOfFame,
-  useRegisteredGamesBySeason,
-  useRouterContext,
-  useSeasonByVersion,
-  useSeasons,
-  useSystems,
-} from "@/dojo/hooks";
-import { Game, Season } from "@/generated/graphql";
 
-import { useToast } from "@/hooks/toast";
-import { formatCash, formatCashHeader } from "@/utils/ui";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  Text,
-  UnorderedList,
-  VStack,
-  HStack,
-  Heading,
-  Card,
-  Divider,
-} from "@chakra-ui/react";
+import { PaperIcon } from "@/components/icons";
+import { Layout } from "@/components/layout";
+import { SeasonInfos, useRouterContext, useSeasons } from "@/dojo/hooks";
+
+import { formatCash } from "@/utils/ui";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
-import { useEffect, useState } from "react";
-import { shortString } from "starknet";
 
 export default function SeasonIndex() {
   const { router, seasonId } = useRouterContext();
@@ -88,7 +58,10 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
                 <Td isNumeric>SEASON {season.season.version}</Td>
                 <Td isNumeric>{season.sortedList?.size}</Td>
                 <Td isNumeric>{season.sortedList?.process_size}</Td>
-                <Td isNumeric> {formatCash(season.season.paper_balance).replace('$', '')} <PaperIcon /></Td>
+                <Td isNumeric>
+                  {" "}
+                  {formatCash(season.season.paper_balance).replace("$", "")} <PaperIcon />
+                </Td>
               </Tr>
             );
           })}

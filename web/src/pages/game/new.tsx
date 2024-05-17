@@ -32,7 +32,7 @@ const New = observer(() => {
   const [hustlerStats, setHustlerStats] = useState<any>();
   const isMobile = IsMobile();
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     const hustler = configStore.getHustlerById(hustlerId);

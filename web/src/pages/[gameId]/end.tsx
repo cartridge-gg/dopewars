@@ -80,7 +80,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
   useEffect(() => {
     refetchSeason();
     refetchRegisteredGame();
-  }, []);
+  }, [refetchSeason,refetchRegisteredGame ]);
 
   useEffect(() => {
     if (game) {

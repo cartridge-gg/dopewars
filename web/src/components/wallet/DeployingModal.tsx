@@ -25,7 +25,7 @@ export const DeployingModal = observer(() => {
     return () => {
       clearInterval(handle);
     };
-  }, []);
+  }, [burnerManager?.isDeploying]);
 
   useEffect(() => {
     if (isDeploying) {

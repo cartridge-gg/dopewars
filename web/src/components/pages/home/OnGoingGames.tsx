@@ -1,12 +1,8 @@
 import { Cigarette, Gem } from "@/components/icons";
-import { MakeItRain } from "@/components/layout";
-import { useConfigStore, useHallOfFame, useRouterContext } from "@/dojo/hooks";
-import { Game, Leaderboard } from "@/generated/graphql";
+import { useConfigStore, useRouterContext } from "@/dojo/hooks";
 import { IsMobile } from "@/utils/ui";
 import { Button } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
-import { useEffect, useState } from "react";
-import { ClaimModal } from "./ClaimModal";
 import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 
 export const OnGoingGames = () => {
@@ -22,17 +18,7 @@ export const OnGoingGames = () => {
     <>
       {onGoingGames.length > 0 && (
         <>
-          <Button
-            h="48px"
-            variant="pixelated"
-            // bg="yellow.600"
-            // borderColor="yellow.600"
-            // color="yellow.400"
-            // _hover={{
-            //   bg: "yellow.500",
-            // }}
-            onClick={() => router.push("/game/history")}
-          >
+          <Button h="48px" variant="pixelated" onClick={() => router.push("/game/history")}>
             {onGoingGames.length} <Cigarette />
           </Button>
         </>
