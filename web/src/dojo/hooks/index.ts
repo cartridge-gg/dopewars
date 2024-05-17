@@ -11,4 +11,5 @@ export * from "./useTokenBalance"
 export * from "./useRegisteredGamesBySeason"
 export * from "./useSeasonByVersion"
 export * from "./useClaimable"
+export * from "./useSeasons"
 

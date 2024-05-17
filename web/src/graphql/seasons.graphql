@@ -27,6 +27,38 @@ query SeasonByVersion($version: u16, $listId: felt252) {
   }
 }
 
+
+query Seasons {
+  seasonModels(limit: 420) {
+    edges {
+      node {
+        version
+        season_duration
+        season_time_limit
+        paper_fee
+        treasury_fee_pct
+        next_version_timestamp
+        paper_balance
+      }
+    }
+  }
+
+  sortedListModels(limit: 420) {
+    edges {
+      node {
+        list_id
+        size
+        locked
+        processed
+        process_size
+        process_max_size
+      }
+    }
+  }
+}
+
+
+
 query HallOfFame {
   gameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
     edges {

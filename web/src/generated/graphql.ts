@@ -2032,6 +2032,11 @@ export type SeasonByVersionQueryVariables = Exact<{
 
 export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
 
+export type SeasonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SeasonsQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
+
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2553,6 +2558,69 @@ export const useInfiniteSeasonByVersionQuery = <
 
 
 useInfiniteSeasonByVersionQuery.getKey = (variables?: SeasonByVersionQueryVariables) => variables === undefined ? ['SeasonByVersion.infinite'] : ['SeasonByVersion.infinite', variables];
+;
+
+export const SeasonsDocument = `
+    query Seasons {
+  seasonModels(limit: 420) {
+    edges {
+      node {
+        version
+        season_duration
+        season_time_limit
+        paper_fee
+        treasury_fee_pct
+        next_version_timestamp
+        paper_balance
+      }
+    }
+  }
+  sortedListModels(limit: 420) {
+    edges {
+      node {
+        list_id
+        size
+        locked
+        processed
+        process_size
+        process_max_size
+      }
+    }
+  }
+}
+    `;
+export const useSeasonsQuery = <
+      TData = SeasonsQuery,
+      TError = unknown
+    >(
+      variables?: SeasonsQueryVariables,
+      options?: UseQueryOptions<SeasonsQuery, TError, TData>
+    ) =>
+    useQuery<SeasonsQuery, TError, TData>(
+      variables === undefined ? ['Seasons'] : ['Seasons', variables],
+      useFetchData<SeasonsQuery, SeasonsQueryVariables>(SeasonsDocument).bind(null, variables),
+      options
+    );
+
+useSeasonsQuery.getKey = (variables?: SeasonsQueryVariables) => variables === undefined ? ['Seasons'] : ['Seasons', variables];
+;
+
+export const useInfiniteSeasonsQuery = <
+      TData = SeasonsQuery,
+      TError = unknown
+    >(
+      variables?: SeasonsQueryVariables,
+      options?: UseInfiniteQueryOptions<SeasonsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<SeasonsQuery, SeasonsQueryVariables>(SeasonsDocument)
+    return useInfiniteQuery<SeasonsQuery, TError, TData>(
+      variables === undefined ? ['Seasons.infinite'] : ['Seasons.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteSeasonsQuery.getKey = (variables?: SeasonsQueryVariables) => variables === undefined ? ['Seasons.infinite'] : ['Seasons.infinite', variables];
 ;
 
 export const HallOfFameDocument = `

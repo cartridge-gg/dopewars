@@ -80,7 +80,7 @@ export default function SeasonIndex() {
   const onClaim = async () => {
     if (!seasonId || !account) return;
 
-    await claim(seasonId, account?.address, claimable.gameIds);
+    await claim(account?.address, claimable.gameIds);
 
     refetchRegisteredGames();
   };
@@ -94,16 +94,11 @@ export default function SeasonIndex() {
       }}
       rigthPanelScrollable={false}
       // rigthPanelMaxH="calc(100vh - 230px)"
+      footer={<Button onClick={() => router.push("/season")}>BACK</Button>}
     >
       <VStack boxSize="full" gap={6}>
         <VStack w="full">
           <Card w="full" p={3} alignItems="center">
-            {/* <Text textStyle="subheading" fontSize={"11px"}>
-              Season {seasonId}
-            </Text> 
-
-            <Divider borderColor="neon.700" my={1} />
-*/}
             <Text>Total entrants {sortedList?.size}</Text>
 
             {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}
@@ -183,13 +178,6 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
             );
           })}
         </Tbody>
-        {/* <Tfoot>
-      <Tr>
-        <Th>To convert</Th>
-        <Th>into</Th>
-        <Th isNumeric>multiply by</Th>
-      </Tr>
-    </Tfoot> */}
       </Table>
     </TableContainer>
   );

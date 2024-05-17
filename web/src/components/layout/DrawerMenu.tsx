@@ -148,6 +148,9 @@ const DrawerMenu = () => {
                     <Clock mr={2} /> HISTORY
                   </DrawerListItem>
 
+{/* DEV */}
+
+
                   <DrawerListItem
                     onClick={() => {
                       router.push("/devtools");
@@ -155,6 +158,15 @@ const DrawerMenu = () => {
                   >
                     <Cigarette mr={2} /> DEVTOOLS
                   </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/admin");
+                    }}
+                  >
+                    <Cigarette mr={2} /> ADMIN
+                  </DrawerListItem>
+
                 </UnorderedList>
               </VStack>
 
