@@ -87,7 +87,7 @@ export const ClaimModal = ({
                       if (!game) return;
 
                       return (
-                        <Tr title={`season ${game.season_version}\ngame 0x${game.game_id.toString(16)}`}>
+                        <Tr key={idx} title={`season ${game.season_version}\ngame 0x${game.game_id.toString(16)}`}>
                           <Td isNumeric>{game.position}</Td>
                           <Td>
                             <HStack>

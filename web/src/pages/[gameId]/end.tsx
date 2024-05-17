@@ -46,6 +46,7 @@ import { Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { Reputation } from "@/components/icons/items/Reputation";
 import { sleep } from "@/dojo/utils";
+import { ReputationIndicator } from "@/components/player";
 
 const End = observer(() => {
   const { game } = useGameStore();
@@ -103,7 +104,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
     setPrev(prev);
 
     if (game.gameInfos.registered) {
-      setPosition(sorted.length - 1);
+      setPosition(sorted.length );
     } else {
       setPosition(sorted.length + 1);
     }
@@ -179,9 +180,9 @@ const EndContent = ({ game }: { game: GameClass }) => {
 
             <Divider borderColor="neon.600" />
             {/* <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} /> */}
-            <StatsItem text={`Reputation ${game.player.reputation}`} icon={<Reputation />} />
-            <Divider borderColor="neon.600" />
             <StatsItem text={`${formatCash(game?.player?.cash || 0)}`} icon={<PaperCashIcon />} />
+            {/* <Divider borderColor="neon.600" /> */}
+            {/* <ReputationIndicator reputation={game.player.reputation} /> */}
 
             {/* <Divider borderColor="neon.600" />
               <StatsItem text="X Muggings" icon={<Pistol />} />

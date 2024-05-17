@@ -28,7 +28,7 @@ export const useSeasons = (): SeasonsInterface => {
 
   const seasons = useMemo(() => {
     if(!data) return []
-    debugger
+ 
     const seasonEdges = data?.seasonModels?.edges as SeasonEdge[];
     const sortedListEdges = data?.sortedListModels?.edges as SortedListEdge[];
 

@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/toast";
 import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
+import colors from "@/theme/colors";
 
 export default function Home() {
   const { router } = useRouterContext();
@@ -88,8 +89,12 @@ export default function Home() {
 
                 <VStack h="full">
                   <Text>
-                    Last seasons results need to be washed. Confirm a transaction and earn <PaperIcon  color="yellow.400" mr={1}/>
-                    <Text display="inline" color="yellow.400">{config?.ryo.paper_reward_launderer} PAPER</Text>!
+                    Last seasons results need to be washed. Confirm a transaction and earn{" "}
+                    <PaperIcon color="yellow.400" mr={1} />
+                    <span style={{ color: colors.yellow["400"].toString() }}>
+                      {config?.ryo.paper_reward_launderer} PAPER
+                    </span>
+                    !
                   </Text>
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
                     Launder results

@@ -269,7 +269,7 @@ function renderTradeDrug(configStore: ConfigStoreClass, log: TradeDrugData, key:
   const totalPrice = log.price * log.quantity;
   return (
     <Line
-      key={key}
+      lineKey={key}
       icon={drug.icon}
       text={`${action} ${drug.name}`}
       quantity={log.quantity}
@@ -302,7 +302,7 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
 
   return (
     <Line
-      key={key}
+      lineKey={key}
       icon={item.icon}
       text={`Bought ${item.upgradeName}`}
       total={`- ${formatCash(item.tier.cost)}`}
@@ -310,11 +310,11 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
       iconColor="yellow.400"
     />
   );
-} 
+}
 
 function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
   const encounter = configStore.getEncounterById(log.encounterId);
-  
+
   const icon = encounter.encounter === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
@@ -327,16 +327,16 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
     : "";
 
   const action = lastEncouterResult?.action;
-  const totalHpLoss =  lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0
+  const totalHpLoss = lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0;
 
   return (
     <FightLine
-      key={key}
+      lineKey={key}
       icon={icon}
       text={`Meet ${encounter.encounter} Lvl ${encounter.level}`}
       result={lastEncounterResultName}
       resultInfos={lastEncouterResult}
-      consequence={ totalHpLoss > 0  ? `-${totalHpLoss} HP` : ''}
+      consequence={totalHpLoss > 0 ? `-${totalHpLoss} HP` : ""}
       action={action}
       color="yellow.400"
     />
@@ -345,7 +345,7 @@ function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncount
 
 function renderGameOver(log: GameOverData, key: string) {
   return (
-    <ListItem w="full" mt="40px">
+    <ListItem key={key} w="full" mt="40px">
       <Text w="full" fontStyle="headings" fontSize={["16px", "20px"]} textTransform="uppercase" textAlign="center">
         WP <br /> ~ {log.playerName} ~
       </Text>
@@ -361,7 +361,7 @@ const Line = ({
   text,
   quantity,
   total,
-  key,
+  lineKey,
   color = "neon.400",
   iconColor = "neon.400",
 }: {
@@ -369,12 +369,12 @@ const Line = ({
   text?: string;
   quantity?: number | string;
   total?: number | string;
-  key: string;
+  lineKey: string;
   color?: string;
   iconColor?: string;
 }) => {
   return (
-    <ListItem w="full" key={key} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
+    <ListItem w="full" key={lineKey} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
         <HStack flex="4" color={color}>
           <Box w="30px">{icon && icon({ boxSize: "24px", color: iconColor })}</Box>
@@ -399,7 +399,7 @@ const FightLine = ({
   resultInfos,
   consequence,
   action,
-  key,
+  lineKey,
   color,
 }: {
   icon?: React.FC;
@@ -408,7 +408,7 @@ const FightLine = ({
   resultInfos?: TravelEncounterResultData;
   consequence?: string;
   action?: EncountersAction;
-  key: string;
+  lineKey: string;
   color?: string;
 }) => {
   const [resultTooltip, setResultTooltip] = useState("");
@@ -428,7 +428,7 @@ const FightLine = ({
   }, [resultInfos, result]);
 
   return (
-    <ListItem w="full" key={key} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
+    <ListItem w="full" key={lineKey} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>

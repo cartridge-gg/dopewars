@@ -162,7 +162,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
             const isPlayer = game.player_id === account?.address;
             const color = isPlayer ? "yellow.400" : "neon.400";
             return (
-              <Tr color={color}>
+              <Tr color={color} key={idx}>
                 {/* <Td isNumeric>{game.game_id}</Td> */}
                 <Td isNumeric>{game.position > 0 ? game.position : idx + 1}</Td>
                 <Td>

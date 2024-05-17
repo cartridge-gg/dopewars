@@ -84,7 +84,7 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
             if (!season) return;
 
             return (
-              <Tr cursor="pointer" onClick={() => router.push(`/season/${season.season.version}`)}>
+              <Tr key={idx} cursor="pointer" onClick={() => router.push(`/season/${season.season.version}`)}>
                 <Td isNumeric>SEASON {season.season.version}</Td>
                 <Td isNumeric>{season.sortedList?.size}</Td>
                 <Td isNumeric>{season.sortedList?.process_size}</Td>

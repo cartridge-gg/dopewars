@@ -26,7 +26,7 @@ export const ProfileLink = () => {
 
   return (
     <>
-      <Button as={Box} cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
+      <Button cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
       </Button>
     </>

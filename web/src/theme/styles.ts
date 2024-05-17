@@ -15,12 +15,11 @@ export const styles = {
       color: "neon.200",
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
-      "scrollbar-width": "none"
+      "scrollbar-width": "none",
     },
     "&::-webkit-scrollbar": {
       display: "none",
     },
-    
   },
 };
 
@@ -30,9 +29,9 @@ export const cardStyle = {
   color: "neon.200",
   bgColor: "none",
   borderStyle: "solid",
-  borderImageSlice: "6",
-  borderImageWidth: "6px",
-  borderImageSource: `url("data:image/svg+xml,${BorderImage({
+  borderimageslice: "6",
+  borderimagewidth: "6px",
+  borderimagesource: `url("data:image/svg+xml,${BorderImage({
     color: colors.neon["600"].toString(),
   })}")`,
 };
@@ -52,14 +51,14 @@ export const cardPixelatedStyle = ({
   borderWidth: "0",
   borderRadius: "0",
 
-  borderImageSource: "none",
+  borderimagesource: "none",
   _hover: {
-    borderImageSource: `none`,
+    borderimagesource: `none`,
   },
   _active: {
     top: 0,
     left: 0,
-    borderImageSource: `none`,
+    borderimagesource: `none`,
   },
   clipPath: `polygon(${generatePixelBorderPath(radius, pixelSize)})`,
 });
@@ -67,32 +66,32 @@ export const cardPixelatedStyle = ({
 // use borderImage & borderImageOutset to display border with outset
 export const cardPixelatedStyleOutset = ({
   color = colors.neon["700"].toString(),
-  borderImageWidth = 8,
+  borderimagewidth = 8,
 }: {
   color?: string;
-  borderImageWidth?: number;
+  borderimagewidth?: number;
 }) => ({
   w: "full",
   bg: color,
   borderWidth: "0",
   borderRadius: "0",
-  borderImageWidth: `${borderImageWidth}px`,
-  borderImageOutset: `${borderImageWidth}px`,
-  borderImageSlice: 7,
+  borderimagewidth: `${borderimagewidth}px`,
+  borderImageOutset: `${borderimagewidth}px`,
+  borderimageslice: 7,
 
-  borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+  borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
     color,
   })}")`,
 
   _hover: {
-    borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+    borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
       color,
     })}")`,
   },
   _active: {
     top: 0,
     left: 0,
-    borderImageSource: `url("data:image/svg+xml,${BorderImagePixelated({
+    borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
       color,
     })}")`,
   },
@@ -102,28 +101,30 @@ export const headerStyles = {
   border: 0,
   bg: "neon.700",
   borderStyle: "solid",
-  borderImageSlice: "8",
-  borderImageWidth: "12px",
+  borderimageslice: "8",
+  borderimagewidth: "12px",
   borderRadius: ["16px", "0"],
-  borderImageSource: [
+  borderimagesource: [
     `url("data:image/svg+xml,${PixelatedBorderImage({
       color: colors.neon["700"].toString(),
-    })}")`, 'none'
+    })}")`,
+    "none",
   ],
   clipPath: ["none", `polygon(${generatePixelBorderPath()})`],
-}
+};
 
 export const headerButtonStyles = {
   ...headerStyles,
   _hover: {
     bg: "neon.600",
-    borderImageSource: [
+    borderimagesource: [
       `url("data:image/svg+xml,${PixelatedBorderImage({
         color: colors.neon["600"].toString(),
-      })}")`, 'none'
-    ]
+      })}")`,
+      "none",
+    ],
   },
-}
+};
 
 //layer styles
 export const layerStyles = {

@@ -4,14 +4,15 @@ import { HustlerItemConfigFull } from "@/dojo/stores/config";
 import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { Tooltip } from "../common";
-import { Alert, PawnshopIcon } from "../icons";
+import { Alert, Cigarette, DynamicReputation, PawnshopIcon } from "../icons";
+import colors from "@/theme/colors";
 
 import { Sounds, playSound } from "@/hooks/sound";
-import colors from "@/theme/colors";
 import { useAccount } from "@starknet-react/core";
 import { WeightIcon } from "../icons/Weigth";
 import { Reputation } from "../icons/items/Reputation";
 import { PowerMeter } from "./PowerMeter";
+import { ReputationIndicator } from "./ReputationIndicator";
 
 const blinkAnim = keyframes`  
   0% {background-color: ${colors.neon[900]} ;}   
@@ -32,38 +33,13 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
       <HStack w="full" justifyContent="space-between">
         <VStack w="full" alignItems="flex-start" gap={1}>
           <HStack color="neon.500" justify="center" alignItems="center">
-            <Reputation />
+            <Cigarette mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
               REPUTATION
             </Text>
           </HStack>
 
-          <Tooltip
-            title={`Reputation: ${game.player.reputation}`}
-            text={`Your actions influence your reputation. Do the right things...`}
-            color="yellow.400"
-          >
-            <Card h="40px" px="4px" justify="center" alignItems="center">
-              <PowerMeter
-                text={reputationRanks[game.player.drugLevel as reputationRanksKeys]}
-                basePower={0}
-                power={game.player.drugLevel}
-                maxPower={4}
-                displayedPower={4}
-                bg="transparent"
-              />
-              <Progress
-                position="absolute"
-                bottom="4px"
-                h="4px"
-                px="6px"
-                colorScheme="neon"
-                w="full"
-                zIndex={0}
-                value={((game.player.reputation % 20) * 100) / 20}
-              />
-            </Card>
-          </Tooltip>
+          <ReputationIndicator reputation={game.player.reputation} />
         </VStack>
 
         {/* ************** */}

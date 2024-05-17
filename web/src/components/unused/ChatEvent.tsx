@@ -83,9 +83,9 @@ export const ChatEvent = ({
             p="7px 12px"
             borderRadius="8px"
             style={{
-              borderImageSlice: "4",
-              borderImageWidth: "2px",
-              borderImageSource: `url("data:image/svg+xml,${BorderImage({
+              borderimageslice: "4",
+              borderimagewidth: "2px",
+              borderimagesource: `url("data:image/svg+xml,${BorderImage({
                 color: colors.neon["700"].toString(),
                 isPressed: false,
               })}")`,

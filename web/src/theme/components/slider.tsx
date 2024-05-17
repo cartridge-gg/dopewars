@@ -16,7 +16,7 @@ const baseStyle = definePartsStyle({
     // this will style the SliderTrack component
     height: "16px",
     //...cardPixelatedStyle({radius:2}),
-    ...cardPixelatedStyleOutset({ borderImageWidth: 8 }),
+    ...cardPixelatedStyleOutset({ borderimagewidth: 8 }),
   },
   thumb: {
     // this will style the SliderThumb component
@@ -38,7 +38,7 @@ const small = definePartsStyle({
     // this will style the SliderTrack component
     height: "5px",
     borderImage: "none",
-    borderImageWidth: 0,
+    borderimagewidth: 0,
   },
   filledTrack: {
     // this will style the SliderFilledTrack component
@@ -46,7 +46,7 @@ const small = definePartsStyle({
     height: "5px",
     borderRadius: 0,
     borderImage: "none",
-    borderImageWidth: 0,
+    borderimagewidth: 0,
     // clipPath: `polygon(${generatePixelBorderPath(2, 2)})`,
   },
   thumb: {

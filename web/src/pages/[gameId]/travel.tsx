@@ -266,7 +266,7 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
         p="5px"
         pointerEvents="all"
         sx={{
-          borderImageSource: `url("data:image/svg+xml,${BorderImage({
+          borderimagesource: `url("data:image/svg+xml,${BorderImage({
             color: colors.neon["700"].toString(),
           })}")`,
         }}

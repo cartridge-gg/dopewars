@@ -23,6 +23,9 @@ const Redirector = observer(() => {
     } else {
       clearTimeout(handle);
 
+      if( game.gameInfos.game_over) {
+        router.push(`/${gameId}/end`);
+      } else
       if (game.player.status === PlayerStatus.Normal) {
         if (game.player.location) {
           router.push(`/${gameId}/${game.player.location.location}`);
