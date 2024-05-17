@@ -5,14 +5,13 @@ import {
   ExplorerFactory,
   InjectedConnector,
   StarknetConfig,
-  argent,
-  braavos,
-  injected,
+  // argent,
+  // braavos,
+  // injected,
   jsonRpcProvider,
   starknetChainId,
   starkscan,
   useInjectedConnectors,
-  useNetwork,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 import CartridgeConnector from "@cartridge/connector"
@@ -48,20 +47,6 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  const { connectors } = useInjectedConnectors({
-    // Show these connectors if the user has no connector installed.
-    recommended: [
-      argent(),
-      braavos(),
-      injected({ id: "dojoburner" }),
-      cartridgeConnector
-    ],
-    // Hide recommended connectors if the user has any connector installed.
-    includeRecommended: "always",
-    // Randomize the order of the connectors.
-    // order: "random"
-  });
-
   const chains = getStarknetProviderChains();
   // const connectors = isKatana ? [...listConnectors()] : [argent(), braavos()];
 
@@ -72,7 +57,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
   return (
-    <StarknetConfig chains={chains} provider={provider} connectors={connectors} explorer={explorer} autoConnect={true}>
+    <StarknetConfig chains={chains} provider={provider} connectors={[cartridgeConnector]} explorer={explorer} autoConnect={true}>
       {children}
     </StarknetConfig>
   );
@@ -80,6 +65,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 
 const cartridgeConnector = new CartridgeConnector(
   [
+    // TODO: Set Policies
     // {
     //   target: "0x...",
     //   method: "todo",

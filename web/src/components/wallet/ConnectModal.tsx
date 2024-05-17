@@ -1,5 +1,5 @@
-import { ExternalLink, KatanaIcon } from "@/components/icons";
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { ExternalLink, /* KatanaIcon */ } from "@/components/icons";
+import { useDojoContext, /* useRouterContext */ } from "@/dojo/hooks";
 import {
   Box,
   Button,
@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { /*useBalance,*/ useConnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
+// import { useMemo } from "react";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
 
 export const ConnectModal = observer(() => {
@@ -23,14 +23,14 @@ export const ConnectModal = observer(() => {
   const { isAdmin } = useRouterContext();
 
   const {
-    chains: { selectedChain },
-    burnerManager,
+    // chains: { selectedChain },
+    // burnerManager,
     uiStore,
   } = useDojoContext();
 
-  const isKatana = useMemo(() => {
-    return selectedChain.chainConfig.network === "katana";
-  }, [selectedChain]);
+  // const isKatana = useMemo(() => {
+  //   return selectedChain.chainConfig.network === "katana";
+  // }, [selectedChain]);
 
   const onClose = () => {
     uiStore.closeConnectModal();
@@ -46,18 +46,18 @@ export const ConnectModal = observer(() => {
         <ModalBody p={3}>
           <VStack w="full">
             {connectors.map((connector) => {
-              const isBurner = connector.id === "dojoburner";
-              const isPredeployed = connector.id === "dojopredeployed";
+              // const isBurner = connector.id === "dojoburner";
+              // const isPredeployed = connector.id === "dojopredeployed";
 
-              if (!isKatana && (isBurner || isPredeployed)) {
-                // burner or predeployed not on katana
-                return null;
-              }
+              // if (!isKatana && (isBurner || isPredeployed)) {
+              //   // burner or predeployed not on katana
+              //   return null;
+              // }
 
-              if (isKatana && !(isBurner || isPredeployed)) {
-                // not burner or predeployed on katana
-                return null;
-              }
+              // if (isKatana && !(isBurner || isPredeployed)) {
+              //   // not burner or predeployed on katana
+              //   return null;
+              // }
 
               if (!isAdmin && isPredeployed) {
                 return null;
@@ -89,14 +89,14 @@ export const ConnectModal = observer(() => {
                         <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
                         {!connector.available() && <ExternalLink ml="auto" />}
                       </HStack  >
-                    </HStack>
-                  </Button>
-                </HStack>
+                    </HStack >
+                  </Button >
+                </HStack >
               );
             })}
-          </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+          </VStack >
+        </ModalBody >
+      </ModalContent >
+    </Modal >
   );
 });
