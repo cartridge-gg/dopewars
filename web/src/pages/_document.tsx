@@ -41,8 +41,9 @@ export default function Document() {
         <meta property="og:type" content="website" />
 
         {/* Twitter */}
-        <meta name="twitter:card" content="Play Rollyourown" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={metas.title} />
+        <meta name="twitter:description" content={metas.descritpion} />
         <meta name="twitter:image" content={metas.image.url} />
         <meta name="twitter:image:width" content={metas.image.width} />
         <meta name="twitter:image:height" content={metas.image.height} />
