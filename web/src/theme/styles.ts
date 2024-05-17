@@ -29,9 +29,9 @@ export const cardStyle = {
   color: "neon.200",
   bgColor: "none",
   borderStyle: "solid",
-  borderimageslice: "6",
-  borderimagewidth: "6px",
-  borderimagesource: `url("data:image/svg+xml,${BorderImage({
+  "border-image-slice": "6",
+  "border-image-width": "6px",
+  "border-image-source": `url("data:image/svg+xml,${BorderImage({
     color: colors.neon["600"].toString(),
   })}")`,
 };
@@ -51,14 +51,14 @@ export const cardPixelatedStyle = ({
   borderWidth: "0",
   borderRadius: "0",
 
-  borderimagesource: "none",
+  "border-image-source": "none",
   _hover: {
-    borderimagesource: `none`,
+    "border-image-source": `none`,
   },
   _active: {
     top: 0,
     left: 0,
-    borderimagesource: `none`,
+    "border-image-source": `none`,
   },
   clipPath: `polygon(${generatePixelBorderPath(radius, pixelSize)})`,
 });
@@ -75,23 +75,23 @@ export const cardPixelatedStyleOutset = ({
   bg: color,
   borderWidth: "0",
   borderRadius: "0",
-  borderimagewidth: `${borderimagewidth}px`,
+  "border-image-width": `${borderimagewidth}px`,
   borderImageOutset: `${borderimagewidth}px`,
-  borderimageslice: 7,
+  "border-image-slice": 7,
 
-  borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
+  "border-image-source": `url("data:image/svg+xml,${BorderImagePixelated({
     color,
   })}")`,
 
   _hover: {
-    borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
+    "border-image-source": `url("data:image/svg+xml,${BorderImagePixelated({
       color,
     })}")`,
   },
   _active: {
     top: 0,
     left: 0,
-    borderimagesource: `url("data:image/svg+xml,${BorderImagePixelated({
+    "border-image-source": `url("data:image/svg+xml,${BorderImagePixelated({
       color,
     })}")`,
   },
@@ -101,10 +101,10 @@ export const headerStyles = {
   border: 0,
   bg: "neon.700",
   borderStyle: "solid",
-  borderimageslice: "8",
-  borderimagewidth: "12px",
+  "border-image-slice": "8",
+  "border-image-width": "12px",
   borderRadius: ["16px", "0"],
-  borderimagesource: [
+  "border-image-source": [
     `url("data:image/svg+xml,${PixelatedBorderImage({
       color: colors.neon["700"].toString(),
     })}")`,
@@ -117,7 +117,7 @@ export const headerButtonStyles = {
   ...headerStyles,
   _hover: {
     bg: "neon.600",
-    borderimagesource: [
+    "border-image-source": [
       `url("data:image/svg+xml,${PixelatedBorderImage({
         color: colors.neon["600"].toString(),
       })}")`,

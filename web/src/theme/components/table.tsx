@@ -1,21 +1,20 @@
-import { tableAnatomy } from '@chakra-ui/anatomy'
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
+import { tableAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(tableAnatomy.keys)
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(tableAnatomy.keys);
 
 const baseStyle = definePartsStyle({
   // define the part you're going to style
-  th:{
-    borderBottom: "solid 1px",  
-    borderBottomColor:"neon.600"
+  th: {
+    borderBottom: "solid 1px",
+    borderBottomColor: "neon.600",
+    fontFamily: "dos-vga",
+    fontWeight: "normal",
   },
   td: {
-    borderBottom: "solid 1px",  
-    borderBottomColor:"neon.600"
+    borderBottom: "solid 1px",
+    borderBottomColor: "neon.600",
   },
-})
+});
 
-export const Table = defineMultiStyleConfig({ baseStyle })
-
-
+export const Table = defineMultiStyleConfig({ baseStyle });

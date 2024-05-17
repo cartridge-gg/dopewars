@@ -22,10 +22,10 @@ export const Card: ComponentMultiStyleConfig = {
   variants: {
     primary: {
       header: {
-        py: "12px",
+        py: "6px",
       },
       body: {
-        p: "0",
+        py: "6px",
       },
       footer: {
         px: "20px",

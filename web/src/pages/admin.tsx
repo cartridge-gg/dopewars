@@ -32,6 +32,7 @@ import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
 import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
+import { PaperIcon } from "@/components/icons";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -139,23 +140,26 @@ const RyoAddressCard = observer(() => {
   } = useDojoContext();
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         RYO ADDRESS
       </CardHeader>
       <CardBody>
-        <VStack alignItems="flex-start">
+        <VStack alignItems="flex-start" >
           <HStack>
-            <Text w="180px">PAPER</Text>
+            <Text w="120px">PAPER</Text>
             <Text>{config?.ryoAddress.paper}</Text>
+            <TokenBalance address={config?.ryoAddress.paper} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
           <HStack>
-            <Text w="180px">TREASURY</Text>
+            <Text w="120px">TREASURY</Text>
             <Text>{config?.ryoAddress.treasury}</Text>
+            <TokenBalance address={config?.ryoAddress.treasury} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
           <HStack>
-            <Text w="180px">LAUNDROMAT</Text>
+            <Text w="120px">LAUNDROMAT</Text>
             <Text>{config?.ryoAddress.laundromat}</Text>
+            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper}  icon={PaperIcon} />
           </HStack>
         </VStack>
       </CardBody>
@@ -175,7 +179,7 @@ const TreasuryClaimCard = observer(() => {
   };
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         TREASURY
       </CardHeader>
@@ -214,7 +218,7 @@ const RyoPauseCard = observer(() => {
   };
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         RYO
       </CardHeader>
@@ -248,7 +252,7 @@ const RyoLeaderboardDurationCard = observer(() => {
   };
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         LEADERBOARD
       </CardHeader>
@@ -290,7 +294,7 @@ const RyoSuperchargeCard = observer(() => {
   };
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         SUPERCHARGE JACKPOT
       </CardHeader>
@@ -352,7 +356,7 @@ const RyoFeeCard = observer(() => {
   };
 
   return (
-    <Card p={3}>
+    <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
         RYO FEES
       </CardHeader>

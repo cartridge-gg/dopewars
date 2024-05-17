@@ -38,7 +38,7 @@ const small = definePartsStyle({
     // this will style the SliderTrack component
     height: "5px",
     borderImage: "none",
-    borderimagewidth: 0,
+    "border-image-width": 0,
   },
   filledTrack: {
     // this will style the SliderFilledTrack component
@@ -46,7 +46,7 @@ const small = definePartsStyle({
     height: "5px",
     borderRadius: 0,
     borderImage: "none",
-    borderimagewidth: 0,
+    "border-image-width": 0,
     // clipPath: `polygon(${generatePixelBorderPath(2, 2)})`,
   },
   thumb: {

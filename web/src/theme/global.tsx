@@ -82,11 +82,13 @@ const GlobalStyles = () => (
           }
       
           th{
-            border-bottom: 1px solid ;
+            border-bottom: 1px solid;
+            border-color: ${colors.neon["700"]};
           }
       
           td.ka-cell {
              border-bottom: 1px solid;
+             border-color: ${colors.neon["700"]};
            }
         }
       }

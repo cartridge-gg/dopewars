@@ -132,7 +132,7 @@ const Location = observer(() => {
                   >
                     {drugConfig.name}
                   </CardHeader>
-                  <CardBody>
+                  <CardBody py="0">
                     <HStack w="full" justify="center">
                       <Flex
                         as={motion.div}

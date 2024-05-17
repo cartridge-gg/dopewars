@@ -14,8 +14,8 @@ export const Button: ComponentStyleConfig = {
     position: "relative",
     borderStyle: "solid",
     borderWidth: "2px",
-    borderimageslice: "4",
-    borderimagewidth: "4px",
+    "border-image-slice": "4",
+    "border-image-width": "4px",
     px: "40px",
     gap: "10px",
     bgColor: "neon.900",
@@ -31,19 +31,19 @@ export const Button: ComponentStyleConfig = {
   variants: {
     primary: {
       color: "neon.200",
-      borderimagesource: `url("data:image/svg+xml,${BorderImage({
+      "border-image-source": `url("data:image/svg+xml,${BorderImage({
         color: colors.neon["200"].toString(),
         isPressed: false,
       })}")`,
       _hover: {
         color: "neon.300",
-        borderimagesource: `url("data:image/svg+xml,${BorderImage({
+        "border-image-source": `url("data:image/svg+xml,${BorderImage({
           color: colors.neon["300"].toString(),
           isPressed: false,
         })}")`,
       },
       _active: {
-        borderimagesource: `url("data:image/svg+xml,${BorderImage({
+        "border-image-source": `url("data:image/svg+xml,${BorderImage({
           color: colors.neon["300"].toString(),
           isPressed: true,
         })}")`,
@@ -51,20 +51,20 @@ export const Button: ComponentStyleConfig = {
     },
     selectable: {
       color: "neon.200",
-      borderimagesource: `url("data:image/svg+xml,${BorderImage({
+      "border-image-source": `url("data:image/svg+xml,${BorderImage({
         color: colors.neon["200"].toString(),
         isPressed: false,
       })}")`,
       _hover: {
         color: "neon.300",
-        borderimagesource: `url("data:image/svg+xml,${BorderImage({
+        "border-image-source": `url("data:image/svg+xml,${BorderImage({
           color: colors.neon["300"].toString(),
           isPressed: false,
         })}")`,
       },
       _active: {
         color: colors.yellow["400"].toString(),
-        borderimagesource: `url("data:image/svg+xml,${BorderImage({
+        "border-image-source": `url("data:image/svg+xml,${BorderImage({
           color: colors.yellow["400"].toString(),
           isPressed: true,
         })}")`,
