@@ -44,7 +44,7 @@ trait IStore<T> {
     fn set_game_store(self: @T, game_store: GameStore);
 }
 
-const UNIVERSAL_ANSWER: u8 = 42;
+const UNIVERSAL_ANSWER: u8 = 0; //42;
 
 #[dojo::contract]
 mod store {

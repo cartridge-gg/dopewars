@@ -252,6 +252,20 @@ const Encounter = observer(
   } & StyleProps) => {
     const { gameInfos } = useGameStore();
 
+    const [imgUrl, setImgUrl] = useState<string | undefined>("");
+
+    useEffect(() => {
+      if (encounter.image === "/images/events/cops/6.gif") {
+        setImgUrl("/images/events/cops/6-intro.gif");
+        setTimeout(() => {
+          setImgUrl(encounter.image);
+        }, 1500);
+      } else {
+        setImgUrl(encounter.image);
+      }
+    }, [encounter.image]);
+
+    console.log(encounter.image);
     return (
       <VStack {...props}>
         <VStack>
@@ -272,7 +286,7 @@ const Encounter = observer(
           gap={[0, 12]}
         >
           <Image
-            src={encounter.image}
+            src={imgUrl}
             alt="adverse event"
             // mt={[0, "100px"]}
             maxH={["30vh", "calc(100vh - 300px)"]}

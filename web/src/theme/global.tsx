@@ -15,7 +15,7 @@ const GlobalStyles = () => (
       
       @media only screen and (min-width : 768px) {
         #chakra-toast-manager-top-left {
-          margin-top: 70px;
+          margin-top: 0px;
         }
       }
      

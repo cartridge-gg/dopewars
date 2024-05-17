@@ -1,8 +1,6 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-const RYO_CONFIG_KEY: u8 = 42;
-
 #[derive(Model, Copy, Drop, Serde)]
 struct RyoConfig {
     #[key]

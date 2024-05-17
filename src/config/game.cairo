@@ -1,7 +1,5 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-const GAME_CONFIG_KEY: u8 = 42;
-
 #[derive(Model, Copy, Drop, Serde)]
 struct GameConfig {
     #[key]
@@ -28,11 +26,11 @@ fn initialize_game_config(world: IWorldDispatcher) {
     set!(
         world,
         GameConfig {
-            key: GAME_CONFIG_KEY,
+            key: 0,
             cash: 1000,
-            health: 1, // 100,
+            health: 100, // 100,
             //
-            max_turns: 4, //30,
+            max_turns: 30, //30,
             max_wanted_shopping: 5,
             max_rounds: 3,
             //

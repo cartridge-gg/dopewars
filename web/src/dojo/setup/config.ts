@@ -2,10 +2,12 @@
 // TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot420Chain /*, katanaSlot421Chain */} from "./chains";
+import { katanaLocalChain, katanaSlot420Chain, /*, katanaSlot421Chain */
+katanaSlot421Chain} from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
 import manifestRyo420 from "../../manifests/ryo420/manifest.json";
+import manifestRyo421 from "../../manifests/ryo421/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 
 
@@ -84,18 +86,18 @@ const katanaSlot420: DojoChainConfig = {
     ]
 }
 
-// const katanaSlot421: DojoChainConfig = {
-//     name: "SLOT 421",
-//     chainConfig: katanaSlot421Chain,
-//     rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
-//     toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
-//     toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
-//     masterAddress: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
-//     masterPrivateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
-//     accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-//     manifest,
-//     predeployedAccounts: []
-// }
+const katanaSlot421: DojoChainConfig = {
+    name: "SLOT 421",
+    chainConfig: katanaSlot421Chain,
+    rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
+    toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
+    toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
+    masterAddress: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
+    masterPrivateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
+    accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
+    manifest: manifestRyo421,
+    predeployedAccounts: []
+}
 
 const snSepolia: DojoChainConfig = {
     name: "SEPOLIA",
@@ -130,7 +132,7 @@ const snMainnet: DojoChainConfig = {
 export const dojoContextConfig = {
     "KATANA": katanaLocal,
     "KATANA_SLOT_420": katanaSlot420,
-    // "KATANA_SLOT_421": katanaSlot421,
+    "KATANA_SLOT_421": katanaSlot421,
     "SN_SEPOLIA": snSepolia,
     // "SN_MAIN": snMainnet,
 }
@@ -138,7 +140,7 @@ export const dojoContextConfig = {
 export const dojoChains = [
     katanaLocal,
     katanaSlot420,
-    // katanaSlot421,
+    katanaSlot421,
     snSepolia,
     // snMainnet,
 ]

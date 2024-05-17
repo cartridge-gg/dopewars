@@ -28,19 +28,19 @@ auth = "./scripts/default_auth.sh"
 # migrate
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
-# migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
 migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo000"
 migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --name ryo000 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.0 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.7.0-alpha.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.1 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
+slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --version v0.7.0-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
 
-# # slot ryo421
-# slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.0 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
-# slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.0 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+# slot ryo421
+slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.1 --chain-id KATANA_SLOT_421 --disable-fee true  --invoke-max-steps 2000000"
+slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --version v0.7.0-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
  
 # slot ryo_sepolia
 slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"

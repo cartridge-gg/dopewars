@@ -41,11 +41,14 @@ mod ryo {
     };
 
     const THREE_MIN: u16 = 120;
-    const THIRTY_MIN: u32 = 1800; // 20 * 60
-    const FEW_MIN: u32 = 600; // 10 * 60
-    const ONE_HOUR: u32 = 3600; // 60 * 60
-    const ONE_DAY: u32 = 86_400; // 24 * 60 * 60
-    const ONE_WEEK: u32 = 604_800; // 7 * 86_400;
+    const TEN_MIN: u16 = 600;
+    const TWENTY_MIN: u16 = 1200; 
+    //
+    const THIRTY_MIN: u32 = 1800; 
+    const ONE_HOUR: u32 = 3600; 
+    const TWO_HOUR: u32 = 7200; 
+    const ONE_DAY: u32 = 86_400; 
+    const ONE_WEEK: u32 = 604_800; 
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
@@ -69,8 +72,8 @@ mod ryo {
             ryo_config.paused = false;
 
             ryo_config.season_version = 1;
-            ryo_config.season_duration = FEW_MIN; // ONE_WEEK
-            ryo_config.season_time_limit = THREE_MIN; // ONE_HOUR
+            ryo_config.season_duration = ONE_HOUR; // ONE_WEEK
+            ryo_config.season_time_limit = TEN_MIN; // ONE_HOUR
 
             ryo_config.paper_fee = 1000; // in ether
             ryo_config.treasury_fee_pct = 5;
