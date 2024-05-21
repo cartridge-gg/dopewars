@@ -22,7 +22,7 @@ mod laundromat {
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
         utils::{
             sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-            payout_structure::{get_payout, get_payed_count}
+            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl}
         },
         packing::game_store::{GameStore, GameStoreImpl}
     };
@@ -53,7 +53,7 @@ mod laundromat {
             assert(season.is_open(), 'season has closed');
 
             // register final_score
-            let mut game_store = self.s().game_store(game.game_id, game.player_id);
+            let mut game_store = GameStoreImpl::load(self.s(),game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
             self.s().set_game(game);
@@ -111,8 +111,9 @@ mod laundromat {
                     self.s().save_ryo_config(ryo_config);
 
                     // create new season
+                    let mut randomizer = RandomImpl::new('laundromat');
                     let mut season_manager = SeasonManagerTrait::new(self.s());
-                    season_manager.new_season(ryo_config.season_version);
+                    season_manager.new_season(ref randomizer, ryo_config.season_version);
                 } else {
                     assert(false, 'launder already ended');
                 }

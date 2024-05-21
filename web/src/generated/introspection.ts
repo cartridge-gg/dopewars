@@ -12,6 +12,7 @@
       "ERC20BalanceModel",
       "ERC20MetadataModel",
       "EncounterConfig",
+      "EncounterStatsConfig",
       "Game",
       "GameConfig",
       "GameStorePacked",
@@ -22,6 +23,7 @@
       "RyoAddress",
       "RyoConfig",
       "Season",
+      "SeasonSettings",
       "SortedList",
       "SortedListItem"
     ]

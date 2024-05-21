@@ -1,9 +1,10 @@
+use rollyourown::packing::game_store::GameStoreTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game},
     config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations},},
     packing::{
-        game_store::{GameStore}, player::{PlayerImpl},
+        game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
     },
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
@@ -16,9 +17,6 @@ struct Action {
 }
 
 fn execute_action(s: IStoreLibraryDispatcher, ref game_store: GameStore, action: Action) {
-    // get game infos
-    let game = s.game(game_store.game.game_id, game_store.game.player_id);
-
     // get wanted 
     let wanted = if game_store.player.location == Locations::Home {
         0
@@ -28,7 +26,7 @@ fn execute_action(s: IStoreLibraryDispatcher, ref game_store: GameStore, action:
     };
 
     // closed for wanted < max_wanted_shopping
-    assert(wanted < game.max_wanted_shopping, 'too dangerous');
+    assert(wanted < game_store.game_config().max_wanted_shopping, 'too dangerous');
 
     // get current item
     let current_item = game_store.items.get_item(action.slot);
@@ -55,7 +53,7 @@ fn execute_action(s: IStoreLibraryDispatcher, ref game_store: GameStore, action:
     game_store.items.upgrade_item(action.slot);
 
     // earn reputation
-    let game_config = s.game_config();
+    let game_config = game_store.game_config();
     game_store
         .player
         .reputation = game_store

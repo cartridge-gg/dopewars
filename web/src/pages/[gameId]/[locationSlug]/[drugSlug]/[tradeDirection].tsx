@@ -28,8 +28,9 @@ import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useState } from "react";
 
 const Market = observer(() => {
-  const { router, gameId, location, drug, tradeDirection } = useRouterContext();
+  const { router, gameId, location, /* drug, */ drugSlug, tradeDirection } = useRouterContext();
 
+  const [drug, setDrug] = useState<DrugConfigFull>();
   const [market, setMarket] = useState<DrugMarket>();
   const [quantityBuy, setQuantityBuy] = useState(0);
   const [quantitySell, setQuantitySell] = useState(0);
@@ -42,7 +43,10 @@ const Market = observer(() => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!game || !location) return;
+    if (!game || !location || !drugSlug) return;
+
+    const drug = game.configStore.getDrug(game.seasonSettings.drugs_mode, drugSlug);
+    setDrug(drug);
 
     const markets = game.markets.marketsByLocation.get(location!.location) || [];
     const market = markets.find((d) => d.drug === drug?.drug);
@@ -52,7 +56,7 @@ const Market = observer(() => {
     setCanBuy((game.drugs.quantity === 0 || !game.drugs?.drug || game.drugs?.drug?.drug === drug!.drug) as boolean);
 
     setMarket(market);
-  }, [location, game, drug]);
+  }, [location, game, drugSlug]);
 
   const onTrade = useCallback(async () => {
     playSound(Sounds.Trade);

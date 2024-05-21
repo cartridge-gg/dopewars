@@ -79,7 +79,12 @@ item_level: number;
 export interface TravelEncounterData extends BaseEventData {
         game_id: number;
 player_id: string;
-encounter_id: number;
+encounter: string;
+level: number;
+health: number;
+attack: number;
+defense: number;
+speed: number;
 demand_pct: number;
 payout: number;
         }
@@ -214,9 +219,14 @@ event_type: WorldEvents.TravelEncounter,
 event_name: "TravelEncounter",
 game_id: Number(raw.keys[1]),
 player_id: num.toHexString(raw.keys[2]),
-encounter_id: Number(raw.data[0]),
-demand_pct: Number(raw.data[1]),
-payout: Number(raw.data[2]),
+encounter: num.toHexString(raw.data[0]),
+level: Number(raw.data[1]),
+health: Number(raw.data[2]),
+attack: Number(raw.data[3]),
+defense: Number(raw.data[4]),
+speed: Number(raw.data[5]),
+demand_pct: Number(raw.data[6]),
+payout: Number(raw.data[7]),
 } as TravelEncounterData;
 
 case WorldEvents.TravelEncounterResult:

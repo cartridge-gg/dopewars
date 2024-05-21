@@ -4,7 +4,10 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::{game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}},
-    config::{game::{GameConfig}},
+    config::{
+        game::{GameConfig}, drugs::{Drugs, DrugsEnumerableImpl, DrugConfig},
+        locations::{Locations, LocationsEnumerableImpl}, settings::{SeasonSettings, DrugsMode}
+    },
     packing::{
         game_store_layout::{
             GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl
@@ -16,7 +19,7 @@ use rollyourown::{
         player::{Player, PlayerStatus, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
     },
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, traits::{Packable, Packer, Unpacker}
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, traits::{Packable, Packer}
 };
 
 
@@ -24,6 +27,8 @@ use rollyourown::{
 struct GameStore {
     s: IStoreLibraryDispatcher,
     game: Game,
+    game_config: Option<GameConfig>,
+    season_settings: Option<SeasonSettings>,
     //
     markets: MarketsPacked,
     items: ItemsPacked,
@@ -35,10 +40,12 @@ struct GameStore {
 // init new game state
 #[generate_trait]
 impl GameStoreImpl of GameStoreTrait {
-    fn new(s: IStoreLibraryDispatcher, game: Game, ref game_config: GameConfig) -> GameStore {
+    fn new(s: IStoreLibraryDispatcher, ref game: Game, ref game_config: GameConfig) -> GameStore {
         GameStore {
             s,
             game,
+            game_config: Option::Some(game_config),
+            season_settings: Option::None,
             //
             markets: MarketsPackedImpl::new(game.game_id),
             items: ItemsPackedImpl::new(s, game.hustler_id),
@@ -48,10 +55,12 @@ impl GameStoreImpl of GameStoreTrait {
         }
     }
 
-    fn empty(s: IStoreLibraryDispatcher, game: Game) -> GameStore { 
+    fn empty(s: IStoreLibraryDispatcher, ref game: Game) -> GameStore {
         GameStore {
             s,
             game,
+            game_config: Option::None,
+            season_settings: Option::None,
             //
             markets: MarketsPacked { packed: 0 },
             items: ItemsPackedImpl::new(s, 0),
@@ -65,7 +74,60 @@ impl GameStoreImpl of GameStoreTrait {
     //
     //
 
-    fn can_continue(self: GameStore) -> bool {
+    fn load(s: IStoreLibraryDispatcher, game_id: u32, player_id: ContractAddress) -> GameStore {
+        let mut game = s.game(game_id, player_id);
+        let game_store_packed = s.game_store_packed(game_id, player_id);
+        game_store_packed.unpack(s, ref game)
+    }
+
+    fn save(self: GameStore) {
+        let game_store_packed = self.pack();
+        self.s.set_game_store_packed(game_store_packed);
+    }
+
+
+    //
+    //
+    //
+
+    fn game_config(ref self: GameStore) -> GameConfig {
+        if let Option::Some(game_config) = self.game_config {
+            game_config
+        } else {
+            let game_config = self.s.game_config(self.game.season_version);
+            self.game_config = Option::Some(game_config);
+            game_config
+        }
+    }
+
+    fn season_settings(ref self: GameStore) -> SeasonSettings {
+        if let Option::Some(season_settings) = self.season_settings {
+            season_settings
+        } else {
+            let season_settings = self.s.season_settings(self.game.season_version);
+            self.season_settings = Option::Some(season_settings);
+            season_settings
+        }
+    }
+
+    //
+    //
+    //
+
+    fn get_drug_price(ref self: GameStore, location: Locations, drug: Drugs) -> usize {
+        let season_settings = self.season_settings();
+        let drug_config = self.s.drug_config(season_settings.drugs_mode, drug);
+        let tick = self.markets.get_tick(location, drug);
+
+        tick * drug_config.step.into() + drug_config.base.into()
+    }
+
+
+    //
+    //
+    //
+
+    fn can_continue(ref self: GameStore) -> bool {
         if self.player.health == 0 {
             return false;
         }
@@ -74,7 +136,7 @@ impl GameStoreImpl of GameStoreTrait {
             return false;
         }
 
-        if self.player.turn == self.game.max_turns {
+        if self.player.turn == self.game_config().max_turns {
             return false;
         }
 
@@ -139,9 +201,10 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 }
 
 // unpack 
-impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
-    fn unpack(self: GameStorePacked, s: IStoreLibraryDispatcher, game: Game,) -> GameStore {
-        let mut game_store = GameStoreImpl::empty(s, game);
+#[generate_trait]
+impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
+    fn unpack(self: GameStorePacked, s: IStoreLibraryDispatcher, ref game: Game) -> GameStore {
+        let mut game_store = GameStoreImpl::empty(s, ref game);
         let mut layout = GameStoreLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self.packed);
 
@@ -152,14 +215,13 @@ impl GameStoreUnpackerImpl of Unpacker<GameStorePacked, GameStore> {
                 match *item {
                     GameStoreLayout::Markets => { game_store.markets = MarketsPacked { packed }; },
                     GameStoreLayout::Items => {
-                        game_store
-                            .items = ItemsPacked { s, hustler_id: game.hustler_id, packed };
+                        game_store.items = ItemsPacked { s, hustler_id: game.hustler_id, packed };
                     },
                     GameStoreLayout::Drugs => { game_store.drugs = DrugsPacked { packed }; },
                     GameStoreLayout::Wanted => { game_store.wanted = WantedPacked { packed }; },
                     GameStoreLayout::Player => {
                         // unpack packed into Player
-                        game_store.player = packed.unpack(s, game);
+                        game_store.player = packed.unpack();
                     },
                 };
             };

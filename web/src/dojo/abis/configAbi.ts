@@ -217,8 +217,8 @@ export const ABI = [
     "name": "rollyourown::config::game::GameConfig",
     "members": [
       {
-        "name": "key",
-        "type": "core::integer::u8"
+        "name": "season_version",
+        "type": "core::integer::u16"
       },
       {
         "name": "cash",
@@ -238,10 +238,6 @@ export const ABI = [
       },
       {
         "name": "max_rounds",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "encounter_count",
         "type": "core::integer::u8"
       },
       {
@@ -327,6 +323,204 @@ export const ABI = [
     ]
   },
   {
+    "type": "enum",
+    "name": "rollyourown::config::settings::CashMode",
+    "variants": [
+      {
+        "name": "Broke",
+        "type": "()"
+      },
+      {
+        "name": "Average",
+        "type": "()"
+      },
+      {
+        "name": "Rich",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::CashMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::CashMode>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "rollyourown::config::settings::HealthMode",
+    "variants": [
+      {
+        "name": "Junkie",
+        "type": "()"
+      },
+      {
+        "name": "Hustler",
+        "type": "()"
+      },
+      {
+        "name": "Streetboss",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::HealthMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::HealthMode>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "rollyourown::config::settings::TurnsMode",
+    "variants": [
+      {
+        "name": "OnSpeed",
+        "type": "()"
+      },
+      {
+        "name": "OnWeed",
+        "type": "()"
+      },
+      {
+        "name": "OnMush",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::TurnsMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::TurnsMode>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "rollyourown::config::settings::EncountersMode",
+    "variants": [
+      {
+        "name": "Chill",
+        "type": "()"
+      },
+      {
+        "name": "NoJokes",
+        "type": "()"
+      },
+      {
+        "name": "UltraViolence",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::EncountersMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::EncountersMode>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "rollyourown::config::settings::EncountersOddsMode",
+    "variants": [
+      {
+        "name": "Easy",
+        "type": "()"
+      },
+      {
+        "name": "Normal",
+        "type": "()"
+      },
+      {
+        "name": "Hard",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::EncountersOddsMode>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "rollyourown::config::settings::DrugsMode",
+    "variants": [
+      {
+        "name": "Cheap",
+        "type": "()"
+      },
+      {
+        "name": "Normal",
+        "type": "()"
+      },
+      {
+        "name": "Expensive",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::DrugsMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::DrugsMode>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "rollyourown::config::settings::SeasonSettingsModes",
+    "members": [
+      {
+        "name": "cash_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::CashMode>"
+      },
+      {
+        "name": "health_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::HealthMode>"
+      },
+      {
+        "name": "turns_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::TurnsMode>"
+      },
+      {
+        "name": "encounters_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::EncountersMode>"
+      },
+      {
+        "name": "encounters_odds_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>"
+      },
+      {
+        "name": "drugs_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::DrugsMode>"
+      }
+    ]
+  },
+  {
     "type": "struct",
     "name": "rollyourown::config::config::Config",
     "members": [
@@ -345,6 +539,10 @@ export const ABI = [
       {
         "name": "ryo_config",
         "type": "rollyourown::config::ryo::RyoConfig"
+      },
+      {
+        "name": "season_settings_modes",
+        "type": "rollyourown::config::settings::SeasonSettingsModes"
       }
     ]
   },
@@ -401,6 +599,10 @@ export const ABI = [
     "name": "rollyourown::config::drugs::DrugConfig",
     "members": [
       {
+        "name": "drugs_mode",
+        "type": "rollyourown::config::settings::DrugsMode"
+      },
+      {
         "name": "drug",
         "type": "rollyourown::config::drugs::Drugs"
       },
@@ -423,78 +625,6 @@ export const ABI = [
       {
         "name": "name",
         "type": "rollyourown::utils::bytes16::Bytes16"
-      }
-    ]
-  },
-  {
-    "type": "enum",
-    "name": "rollyourown::config::encounters::Encounters",
-    "variants": [
-      {
-        "name": "Cops",
-        "type": "()"
-      },
-      {
-        "name": "Gang",
-        "type": "()"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::encounters::EncounterConfig",
-    "members": [
-      {
-        "name": "id",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "encounter",
-        "type": "rollyourown::config::encounters::Encounters"
-      },
-      {
-        "name": "level",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "health",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "attack",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "defense",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "speed",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_pay",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_run",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_fight",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "min_rep",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "max_rep",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "payout",
-        "type": "core::integer::u32"
       }
     ]
   },
@@ -529,35 +659,11 @@ export const ABI = [
       },
       {
         "type": "function",
-        "name": "update_game_config",
-        "inputs": [
-          {
-            "name": "game_config",
-            "type": "rollyourown::config::game::GameConfig"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
         "name": "update_drug_config",
         "inputs": [
           {
             "name": "drug_config",
             "type": "rollyourown::config::drugs::DrugConfig"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "update_encounter_config",
-        "inputs": [
-          {
-            "name": "encounter_config",
-            "type": "rollyourown::config::encounters::EncounterConfig"
           }
         ],
         "outputs": [],

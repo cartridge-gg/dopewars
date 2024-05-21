@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import {  LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
+import { LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
@@ -8,7 +8,19 @@ import { sleep } from "@/dojo/utils";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { Card, Divider, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from "@chakra-ui/react";
+import {
+  Card,
+  Divider,
+  HStack,
+  Progress,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
@@ -60,7 +72,7 @@ export default function Home() {
 
   return (
     <Layout
-      CustomLeftPanel={HomeLeftPanel}
+      customLeftPanel={<HomeLeftPanel />}
       rigthPanelScrollable={false}
       // rigthPanelMaxH="calc(100vh - 230px)"
     >
@@ -99,6 +111,11 @@ export default function Home() {
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
                     Launder results
                   </Button>
+
+                  <VStack w="full">
+                    <Text>PROGRESS TODO: </Text>
+                    <Progress w="full" colorScheme="neon" value={20} />
+                  </VStack>
                 </VStack>
               </HStack>
             )}
@@ -113,9 +130,7 @@ export default function Home() {
 
           <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
             <TabPanel p={0}>
-              <Leaderboard
-              
-              />
+              <Leaderboard />
             </TabPanel>
             <TabPanel p={0}>
               <HallOfFame />

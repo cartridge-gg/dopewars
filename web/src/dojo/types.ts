@@ -1,4 +1,3 @@
-
 // must have same order than cairo enum
 export enum Locations {
   Home,
@@ -44,7 +43,7 @@ export enum PlayerStatus {
 
 export enum Encounters {
   Cops = "Cops",
-  Gang = "Gang"
+  Gang = "Gang",
 }
 
 export enum EncountersAction {
@@ -59,7 +58,7 @@ export enum EncounterOutcomes {
   Escaped,
   Victorious,
   Jailed,
-  Hospitalized
+  Hospitalized,
 }
 
 export enum GameMode {
@@ -97,7 +96,7 @@ export interface ShopItemInfo {
 export interface OutcomeInfo {
   title: string;
   encounterOutcome: EncounterOutcomes;
-  encounter:Encounters;
+  encounter: Encounters;
   name: string;
   imageSrc: string;
   description?: string;
@@ -120,19 +119,57 @@ export enum TradeDirection {
 }
 
 export type TradeAction = {
-  direction: TradeDirection,
-  drug: Drugs,
-  quantity: number
-}
-
+  direction: TradeDirection;
+  drug: Drugs;
+  quantity: number;
+};
 
 export type ShopAction = {
-  slot: number
-}
+  slot: number;
+};
 
 export enum ItemSlot {
   Weapon,
   Clothes,
   Feet,
   Transport,
+}
+
+//
+//
+//
+export enum CashMode {
+  Broke = "Broke",
+  Average = "Average",
+  Rich = "Rich",
+}
+
+export enum HealthMode {
+  Junkie = "Junkie",
+  Hustler = "Hustler",
+  Streetboss = "Streetboss",
+}
+
+export enum TurnsMode {
+  OnSpeed = "OnSpeed",
+  OnWeed = "OnWeed",
+  OnMush = "OnMush",
+}
+
+export enum EncountersMode {
+  Chill = "Chill",
+  NoJokes = "NoJokes",
+  UltraViolence = "UltraViolence",
+}
+
+export enum EncountersOddsMode {
+  Easy = "Easy",
+  Normal = "Normal",
+  Hard = "Hard",
+}
+
+export enum DrugsMode {
+  Cheap = "Cheap",
+  Normal = "Normal",
+  Expensive = "Expensive",
 }

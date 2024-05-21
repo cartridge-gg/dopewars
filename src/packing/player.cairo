@@ -3,7 +3,7 @@ use starknet::ContractAddress;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game}, traits::{Enumerable, Packable, Packer, Unpacker},
+    models::game::{Game}, traits::{Enumerable, Packable, Packer},
     config::{locations::Locations, game::{GameConfig}, drugs::{Drugs}},
     utils::{
         bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
@@ -215,8 +215,9 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 }
 
 // unpack 
-impl PlayerUnpackerImpl of Unpacker<felt252, Player> {
-    fn unpack(self: felt252, s: IStoreLibraryDispatcher, game: Game) -> Player {
+#[generate_trait]
+impl PlayerUnpackerImpl of PlayerUnpackerTrait {
+    fn unpack(self: felt252) -> Player {
         let mut player = PlayerImpl::empty();
         let mut layout = PlayerLayoutEnumerableImpl::all();
         let bits = BitsImpl::from_felt(self);

@@ -1,13 +1,15 @@
+use rollyourown::config::ryo::RyoConfigTrait;
 use starknet::{get_caller_address, get_contract_address};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     config::{
-        ryo::{RyoConfig,}, ryo_address::{RyoAddress}
+        ryo::{RyoConfig,}, ryo_address::{RyoAddress},
+        settings::{SeasonSettingsImpl, SeasonSettings, SeasonSettingsTrait}
     },
     models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
     interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-    utils::{math::{MathImpl, MathTrait},},
+    utils::{math::{MathImpl, MathTrait}, random::{Random, RandomTrait}},
     library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
 };
 
@@ -21,7 +23,7 @@ trait SeasonManagerTrait {
     fn new(s: IStoreLibraryDispatcher) -> SeasonManager;
     fn get_current_version(self: SeasonManager) -> u16;
     fn get_next_version_timestamp(self: SeasonManager) -> u64;
-    fn new_season(self: SeasonManager, version: u16);
+    fn new_season(self: SeasonManager, ref randomizer: Random, version: u16);
     fn on_game_start(self: SeasonManager);
     fn on_game_over(self: SeasonManager, ref game_store: GameStore) -> bool;
 }
@@ -43,28 +45,16 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         current_timestamp + ryo_config.season_duration.into()
     }
 
-    fn new_season(self: SeasonManager, version: u16) {
+    fn new_season(self: SeasonManager, ref randomizer: Random, version: u16) {
         let ryo_config = self.s.ryo_config();
-        let next_version_timestamp = starknet::info::get_block_timestamp()
-            + ryo_config.season_duration.into();
 
-        self
-            .s
-            .save_season(
-                Season {
-                    version,
-                    //
-                    // season config copied from RyoConfig
-                    season_duration: ryo_config.season_duration,
-                    season_time_limit: ryo_config.season_time_limit,
-                    paper_fee: ryo_config.paper_fee,
-                    treasury_fee_pct: ryo_config.treasury_fee_pct,
-                    // season datas
-                    next_version_timestamp,
-                    paper_balance: 0,
-                    high_score: 0,
-                }
-            );
+        let season = ryo_config.build_season(version); 
+        let season_settings = SeasonSettingsImpl::random(ref randomizer, version);
+        let game_config = season_settings.build_game_config();
+        
+        self.s.save_season(season);
+        self.s.save_season_settings(season_settings);
+        self.s.save_game_config(game_config);
     }
 
     // TODO : move somewhere else
@@ -115,11 +105,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
             //set highscore
             season.high_score = game_store.player.cash;
 
-            // // set game_id & player_id
-            // season.game_id = game_store.game.game_id;
-            // season.player_id = game_store.game.player_id;
-
-            //reset current version timer
+            // reset current version timer
             season.next_version_timestamp = self.get_next_version_timestamp();
 
             // save season

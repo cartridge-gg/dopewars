@@ -7,25 +7,18 @@ import { useState } from "react";
 import { editComponents } from "./tables";
 
 const columns = [
-  { key: "image",  width: 100  },
-  { key: "id", title: "id", dataType: DataType.Number },
+  // { key: "image", width: 100 },
   { key: "encounter", title: "encounter", dataType: DataType.String },
-  { key: "level", title: "level", dataType: DataType.Number },
-  //
-  { key: "health", title: "health", dataType: DataType.Number },
-  { key: "attack", title: "attack", dataType: DataType.Number },
-  { key: "defense", title: "defense", dataType: DataType.Number },
-  { key: "speed", title: "speed", dataType: DataType.Number },
-  //
-  { key: "rep_pay", title: "rep_pay", dataType: DataType.Number },
-  { key: "rep_run", title: "rep_run", dataType: DataType.Number },
-  { key: "rep_fight", title: "rep_fight", dataType: DataType.Number },
-  //
-  { key: "min_rep", title: "min_rep", dataType: DataType.Number },
-  { key: "max_rep", title: "max_rep", dataType: DataType.Number },
-  // 
-  // { key: "payout", title: "payout", dataType: DataType.Number },
-  // { key: "demand_pct", title: "demand_pct", dataType: DataType.Number },
+  { key: "encounters_mode", title: "encounters_mode", dataType: DataType.String },
+
+  { key: "health_base", title: "health_base", dataType: DataType.Number },
+  { key: "health_step", title: "health_step", dataType: DataType.Number },
+  { key: "attack_base", title: "attack_base", dataType: DataType.Number },
+  { key: "attack_step", title: "attack_step", dataType: DataType.Number },
+  { key: "defense_base", title: "defense_base", dataType: DataType.Number },
+  { key: "defense_step", title: "defense_step", dataType: DataType.Number },
+  { key: "speed_base", title: "speed_base", dataType: DataType.Number },
+  { key: "speed_step", title: "speed_step", dataType: DataType.Number },
 
   { key: "editColumn", width: 80 },
 ];
@@ -37,42 +30,36 @@ export const EncounterTable = observer(() => {
 
   const { updateEncounterConfig } = useSystems();
 
-  const [data, setData] = useState(config?.encounters || []);
+  const [data, setData] = useState(config?.encounterStats || []);
 
   const table = useTable({
-    onDispatch: (action) => {
-
-      // triggered on cell modifs
-      if (action.type === ActionType.UpdateEditorValue) {
-        const toUpdateIndex = data.findIndex((i) => i.id === action.rowKeyValue);
-        const toUpdate = {
-          ...data[toUpdateIndex],
-          [action.columnKey]: action.value,
-        };
-
-        data.splice(toUpdateIndex, 1, toUpdate);
-
-        setData(data);
-      }
-
-      // triggered twice ... why ?
-      if (action.type === ActionType.SaveRowEditors) {
-        const update = data.find((i) => i.id === action.rowKeyValue);
-        if (!update) return;
-
-        const newValue = {
-          ...update,
-          encounter: update.encounter === "Cops" ? 0 : 1,
-        };
-        delete newValue.image;
-      //  console.log(newValue)
-        updateEncounterConfig(newValue);
-      }
-
-      if (action.type === ActionType.CloseRowEditors) {
-        setData(config!.encounters);
-      }
-    },
+    // onDispatch: (action) => {
+    //   // triggered on cell modifs
+    //   if (action.type === ActionType.UpdateEditorValue) {
+    //     const toUpdateIndex = data.findIndex((i) => i.id === action.rowKeyValue);
+    //     const toUpdate = {
+    //       ...data[toUpdateIndex],
+    //       [action.columnKey]: action.value,
+    //     };
+    //     data.splice(toUpdateIndex, 1, toUpdate);
+    //     setData(data);
+    //   }
+    //   // triggered twice ... why ?
+    //   if (action.type === ActionType.SaveRowEditors) {
+    //     const update = data.find((i) => i.id === action.rowKeyValue);
+    //     if (!update) return;
+    //     const newValue = {
+    //       ...update,
+    //       encounter: update.encounter === "Cops" ? 0 : 1,
+    //     };
+    //     delete newValue.image;
+    //   //  console.log(newValue)
+    //     updateEncounterConfig(newValue);
+    //   }
+    //   if (action.type === ActionType.CloseRowEditors) {
+    //     setData(config!.encounters);
+    //   }
+    // },
   });
 
   return (

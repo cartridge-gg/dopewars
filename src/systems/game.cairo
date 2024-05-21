@@ -27,13 +27,12 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
-    // use rollyourown::library::decide::IDecide;
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     use rollyourown::{
         config::{
             drugs::{Drugs}, locations::{Locations}, game::{GameConfig}, ryo::{RyoConfig},
-            ryo_address::{RyoAddress},
+            ryo_address::{RyoAddress}, encounters::{Encounters}
         },
         models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}},
         packing::{game_store::{GameStore, GameStoreImpl, GameMode}, player::{Player, PlayerImpl},},
@@ -126,7 +125,12 @@ mod game {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        encounter_id: u8,
+        encounter: felt252,
+        level: u8,
+        health: u8,
+        attack: u8,
+        defense: u8,
+        speed: u8,
         demand_pct: u8,
         payout: u32,
     }
@@ -187,35 +191,17 @@ mod game {
             season_manager.on_game_start();
 
             // create game
-            let mut game_config = self.s().game_config();
-            let game = Game {
-                game_id,
-                player_id,
-                //
-                season_version,
-                game_mode,
-                //
-                player_name: Bytes16Impl::from(player_name),
-                hustler_id,
-                //
-                game_over: false,
-                final_score: 0,
-                registered: false,
-                claimed: false,
-                claimable: 0,
-                position: 0,
-                //
-                max_turns: game_config.max_turns,
-                max_wanted_shopping: game_config.max_wanted_shopping,
-                max_rounds: game_config.max_rounds,
-            };
+            let mut game_config = self.s().game_config(season_version);
+            let mut game = GameImpl::new(
+                game_id, player_id, season_version, game_mode, player_name, hustler_id
+            );
 
             // save Game
             self.s().set_game(game);
 
             // create & save GameStorePacked
-            let game_store = GameStoreImpl::new(self.s(), game, ref game_config);
-            self.s().set_game_store(game_store);
+            let game_store = GameStoreImpl::new(self.s(), ref game, ref game_config);
+            game_store.save();
 
             // emit GameCreated
             emit!(
@@ -229,7 +215,7 @@ mod game {
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
             let player_id = get_caller_address();
 
-            let mut game_store = self.s().game_store(game_id, player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // execute actions (trades & shop)
             let mut actions = actions;
@@ -249,7 +235,7 @@ mod game {
             // let world = self.world();
             let player_id = get_caller_address();
 
-            let mut game_store = self.s().game_store(game_id, player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check if can travel
             assert(game_store.can_continue(), 'player cannot travel');
@@ -261,11 +247,14 @@ mod game {
             self.execute_actions(ref game_store, ref actions);
 
             let mut randomizer = RandomImpl::new('travel');
+            let mut season_settings = self.s().season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;
 
             // traveling
-            let (is_dead, has_encounter) = game_loop::on_travel(ref game_store, ref randomizer);
+            let (is_dead, has_encounter) = game_loop::on_travel(
+                ref game_store, ref season_settings, ref randomizer
+            );
 
             // check if dead
             if is_dead {
@@ -274,7 +263,7 @@ mod game {
             } else {
                 if has_encounter {
                     // save & no end turn
-                    self.s().set_game_store(game_store);
+                    game_store.save();
                 } else {
                     // save & on_turn_end
                     game_loop::on_turn_end(ref game_store, ref randomizer, self.s());
@@ -285,15 +274,18 @@ mod game {
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
             let player_id = get_caller_address();
 
-            let mut game_store = self.s().game_store(game_id, player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
             let mut randomizer = RandomImpl::new('decide');
+            let mut season_settings = self.s().season_settings(game_store.game.season_version);
 
             // // resolve decision
-            let is_dead = traveling::decide(self.s(), ref game_store, ref randomizer, action);
+            let is_dead = traveling::decide(
+                self.s(), ref game_store, ref season_settings, ref randomizer, action
+            );
 
             // check if dead
             if is_dead {
@@ -331,7 +323,7 @@ mod game {
                 .pop_front() {
                     match action {
                         super::Actions::Trade(tradeAction) => {
-                            trading::execute_trade(self.s(), ref game_store, *tradeAction);
+                            trading::execute_trade(ref game_store, *tradeAction);
                         },
                         super::Actions::Shop(shopAction) => {
                             assert(has_shopped == false, 'one upgrade by turn');

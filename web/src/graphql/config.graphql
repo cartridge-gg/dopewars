@@ -30,9 +30,10 @@ query Config {
   }
 
   # Drugs
-  drugConfigModels(order: { field: DRUG_ID, direction: ASC }) {
+  drugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
     edges {
       node {
+        drugs_mode
         drug
         drug_id
         base
@@ -80,23 +81,19 @@ query Config {
     }
   }
 
-  # EncounterConfig
-  encounterConfigModels(limit: 20, order: { field: ID, direction: ASC }) {
+  encounterStatsConfigModels(limit: 100) {
     edges {
       node {
-        id
+        encounters_mode
         encounter
-        level
-        health
-        attack
-        defense
-        speed
-        rep_pay
-        rep_run
-        rep_fight
-        min_rep
-        max_rep
-        payout
+        health_base
+        health_step
+        attack_base
+        attack_step
+        defense_base
+        defense_step
+        speed_base
+        speed_step
       }
     }
   }

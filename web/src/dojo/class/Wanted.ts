@@ -8,11 +8,11 @@ export class WantedClass extends GamePropertyClass {
     //
     wantedByLocation: WantedByLocation = new Map()
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor( game: GameClass, packed: bigint) {
+        super( game, packed);
 
         for (let locationId of [1, 2, 3, 4, 5, 6]) {
-            const location = configStore.getLocationById(locationId)!;
+            const location = game.configStore.getLocationById(locationId)!;
 
             const wantedTick = this.getWantedTick(locationId)
             const wantedValue = this.getValueByTick(wantedTick)

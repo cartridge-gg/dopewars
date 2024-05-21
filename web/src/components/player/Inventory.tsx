@@ -48,7 +48,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
             <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
-              {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.drugs.drug?.drug)!.weight : 0}/
+              {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.seasonSettings.drugs_mode, game.drugs.drug?.drug)!.weight : 0}/
               {game.items.transport!.tier.stat}
             </Text>
           </HStack>

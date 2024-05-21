@@ -31,6 +31,7 @@ export type DrugConfig = {
   base?: Maybe<Scalars['u16']>;
   drug?: Maybe<Scalars['Enum']>;
   drug_id?: Maybe<Scalars['u8']>;
+  drugs_mode?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
   name?: Maybe<Scalars['u128']>;
   step?: Maybe<Scalars['u16']>;
@@ -58,6 +59,7 @@ export type DrugConfigOrder = {
 export enum DrugConfigOrderField {
   Base = 'BASE',
   Drug = 'DRUG',
+  DrugsMode = 'DRUGS_MODE',
   DrugId = 'DRUG_ID',
   Name = 'NAME',
   Step = 'STEP',
@@ -69,38 +71,59 @@ export type DrugConfigWhereInput = {
   baseEQ?: InputMaybe<Scalars['u16']>;
   baseGT?: InputMaybe<Scalars['u16']>;
   baseGTE?: InputMaybe<Scalars['u16']>;
+  baseIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  baseLIKE?: InputMaybe<Scalars['u16']>;
   baseLT?: InputMaybe<Scalars['u16']>;
   baseLTE?: InputMaybe<Scalars['u16']>;
   baseNEQ?: InputMaybe<Scalars['u16']>;
+  baseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  baseNOTLIKE?: InputMaybe<Scalars['u16']>;
   drug?: InputMaybe<Scalars['Enum']>;
   drug_id?: InputMaybe<Scalars['u8']>;
   drug_idEQ?: InputMaybe<Scalars['u8']>;
   drug_idGT?: InputMaybe<Scalars['u8']>;
   drug_idGTE?: InputMaybe<Scalars['u8']>;
+  drug_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  drug_idLIKE?: InputMaybe<Scalars['u8']>;
   drug_idLT?: InputMaybe<Scalars['u8']>;
   drug_idLTE?: InputMaybe<Scalars['u8']>;
   drug_idNEQ?: InputMaybe<Scalars['u8']>;
+  drug_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  drug_idNOTLIKE?: InputMaybe<Scalars['u8']>;
+  drugs_mode?: InputMaybe<Scalars['Enum']>;
   name?: InputMaybe<Scalars['u128']>;
   nameEQ?: InputMaybe<Scalars['u128']>;
   nameGT?: InputMaybe<Scalars['u128']>;
   nameGTE?: InputMaybe<Scalars['u128']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  nameLIKE?: InputMaybe<Scalars['u128']>;
   nameLT?: InputMaybe<Scalars['u128']>;
   nameLTE?: InputMaybe<Scalars['u128']>;
   nameNEQ?: InputMaybe<Scalars['u128']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['u128']>;
   step?: InputMaybe<Scalars['u16']>;
   stepEQ?: InputMaybe<Scalars['u16']>;
   stepGT?: InputMaybe<Scalars['u16']>;
   stepGTE?: InputMaybe<Scalars['u16']>;
+  stepIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  stepLIKE?: InputMaybe<Scalars['u16']>;
   stepLT?: InputMaybe<Scalars['u16']>;
   stepLTE?: InputMaybe<Scalars['u16']>;
   stepNEQ?: InputMaybe<Scalars['u16']>;
+  stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  stepNOTLIKE?: InputMaybe<Scalars['u16']>;
   weight?: InputMaybe<Scalars['u16']>;
   weightEQ?: InputMaybe<Scalars['u16']>;
   weightGT?: InputMaybe<Scalars['u16']>;
   weightGTE?: InputMaybe<Scalars['u16']>;
+  weightIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  weightLIKE?: InputMaybe<Scalars['u16']>;
   weightLT?: InputMaybe<Scalars['u16']>;
   weightLTE?: InputMaybe<Scalars['u16']>;
   weightNEQ?: InputMaybe<Scalars['u16']>;
+  weightNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  weightNOTLIKE?: InputMaybe<Scalars['u16']>;
 };
 
 export type Erc20AllowanceModel = {
@@ -142,30 +165,46 @@ export type Erc20AllowanceModelWhereInput = {
   amountEQ?: InputMaybe<Scalars['u256']>;
   amountGT?: InputMaybe<Scalars['u256']>;
   amountGTE?: InputMaybe<Scalars['u256']>;
+  amountIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  amountLIKE?: InputMaybe<Scalars['u256']>;
   amountLT?: InputMaybe<Scalars['u256']>;
   amountLTE?: InputMaybe<Scalars['u256']>;
   amountNEQ?: InputMaybe<Scalars['u256']>;
+  amountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  amountNOTLIKE?: InputMaybe<Scalars['u256']>;
   owner?: InputMaybe<Scalars['ContractAddress']>;
   ownerEQ?: InputMaybe<Scalars['ContractAddress']>;
   ownerGT?: InputMaybe<Scalars['ContractAddress']>;
   ownerGTE?: InputMaybe<Scalars['ContractAddress']>;
+  ownerIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  ownerLIKE?: InputMaybe<Scalars['ContractAddress']>;
   ownerLT?: InputMaybe<Scalars['ContractAddress']>;
   ownerLTE?: InputMaybe<Scalars['ContractAddress']>;
   ownerNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  ownerNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  ownerNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   spender?: InputMaybe<Scalars['ContractAddress']>;
   spenderEQ?: InputMaybe<Scalars['ContractAddress']>;
   spenderGT?: InputMaybe<Scalars['ContractAddress']>;
   spenderGTE?: InputMaybe<Scalars['ContractAddress']>;
+  spenderIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  spenderLIKE?: InputMaybe<Scalars['ContractAddress']>;
   spenderLT?: InputMaybe<Scalars['ContractAddress']>;
   spenderLTE?: InputMaybe<Scalars['ContractAddress']>;
   spenderNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  spenderNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  spenderNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   token?: InputMaybe<Scalars['ContractAddress']>;
   tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
   tokenGT?: InputMaybe<Scalars['ContractAddress']>;
   tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
+  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
   tokenLT?: InputMaybe<Scalars['ContractAddress']>;
   tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
   tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type Erc20BalanceModel = {
@@ -205,23 +244,35 @@ export type Erc20BalanceModelWhereInput = {
   accountEQ?: InputMaybe<Scalars['ContractAddress']>;
   accountGT?: InputMaybe<Scalars['ContractAddress']>;
   accountGTE?: InputMaybe<Scalars['ContractAddress']>;
+  accountIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  accountLIKE?: InputMaybe<Scalars['ContractAddress']>;
   accountLT?: InputMaybe<Scalars['ContractAddress']>;
   accountLTE?: InputMaybe<Scalars['ContractAddress']>;
   accountNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  accountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  accountNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   amount?: InputMaybe<Scalars['u256']>;
   amountEQ?: InputMaybe<Scalars['u256']>;
   amountGT?: InputMaybe<Scalars['u256']>;
   amountGTE?: InputMaybe<Scalars['u256']>;
+  amountIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  amountLIKE?: InputMaybe<Scalars['u256']>;
   amountLT?: InputMaybe<Scalars['u256']>;
   amountLTE?: InputMaybe<Scalars['u256']>;
   amountNEQ?: InputMaybe<Scalars['u256']>;
+  amountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  amountNOTLIKE?: InputMaybe<Scalars['u256']>;
   token?: InputMaybe<Scalars['ContractAddress']>;
   tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
   tokenGT?: InputMaybe<Scalars['ContractAddress']>;
   tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
+  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
   tokenLT?: InputMaybe<Scalars['ContractAddress']>;
   tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
   tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type Erc20MetadataModel = {
@@ -265,37 +316,57 @@ export type Erc20MetadataModelWhereInput = {
   decimalsEQ?: InputMaybe<Scalars['u8']>;
   decimalsGT?: InputMaybe<Scalars['u8']>;
   decimalsGTE?: InputMaybe<Scalars['u8']>;
+  decimalsIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  decimalsLIKE?: InputMaybe<Scalars['u8']>;
   decimalsLT?: InputMaybe<Scalars['u8']>;
   decimalsLTE?: InputMaybe<Scalars['u8']>;
   decimalsNEQ?: InputMaybe<Scalars['u8']>;
+  decimalsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  decimalsNOTLIKE?: InputMaybe<Scalars['u8']>;
   name?: InputMaybe<Scalars['felt252']>;
   nameEQ?: InputMaybe<Scalars['felt252']>;
   nameGT?: InputMaybe<Scalars['felt252']>;
   nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameLIKE?: InputMaybe<Scalars['felt252']>;
   nameLT?: InputMaybe<Scalars['felt252']>;
   nameLTE?: InputMaybe<Scalars['felt252']>;
   nameNEQ?: InputMaybe<Scalars['felt252']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
   symbol?: InputMaybe<Scalars['felt252']>;
   symbolEQ?: InputMaybe<Scalars['felt252']>;
   symbolGT?: InputMaybe<Scalars['felt252']>;
   symbolGTE?: InputMaybe<Scalars['felt252']>;
+  symbolIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  symbolLIKE?: InputMaybe<Scalars['felt252']>;
   symbolLT?: InputMaybe<Scalars['felt252']>;
   symbolLTE?: InputMaybe<Scalars['felt252']>;
   symbolNEQ?: InputMaybe<Scalars['felt252']>;
+  symbolNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  symbolNOTLIKE?: InputMaybe<Scalars['felt252']>;
   token?: InputMaybe<Scalars['ContractAddress']>;
   tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
   tokenGT?: InputMaybe<Scalars['ContractAddress']>;
   tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
+  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
   tokenLT?: InputMaybe<Scalars['ContractAddress']>;
   tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
   tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   total_supply?: InputMaybe<Scalars['u256']>;
   total_supplyEQ?: InputMaybe<Scalars['u256']>;
   total_supplyGT?: InputMaybe<Scalars['u256']>;
   total_supplyGTE?: InputMaybe<Scalars['u256']>;
+  total_supplyIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  total_supplyLIKE?: InputMaybe<Scalars['u256']>;
   total_supplyLT?: InputMaybe<Scalars['u256']>;
   total_supplyLTE?: InputMaybe<Scalars['u256']>;
   total_supplyNEQ?: InputMaybe<Scalars['u256']>;
+  total_supplyNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
+  total_supplyNOTLIKE?: InputMaybe<Scalars['u256']>;
 };
 
 export type EncounterConfig = {
@@ -355,87 +426,274 @@ export type EncounterConfigWhereInput = {
   attackEQ?: InputMaybe<Scalars['u8']>;
   attackGT?: InputMaybe<Scalars['u8']>;
   attackGTE?: InputMaybe<Scalars['u8']>;
+  attackIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attackLIKE?: InputMaybe<Scalars['u8']>;
   attackLT?: InputMaybe<Scalars['u8']>;
   attackLTE?: InputMaybe<Scalars['u8']>;
   attackNEQ?: InputMaybe<Scalars['u8']>;
+  attackNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attackNOTLIKE?: InputMaybe<Scalars['u8']>;
   defense?: InputMaybe<Scalars['u8']>;
   defenseEQ?: InputMaybe<Scalars['u8']>;
   defenseGT?: InputMaybe<Scalars['u8']>;
   defenseGTE?: InputMaybe<Scalars['u8']>;
+  defenseIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defenseLIKE?: InputMaybe<Scalars['u8']>;
   defenseLT?: InputMaybe<Scalars['u8']>;
   defenseLTE?: InputMaybe<Scalars['u8']>;
   defenseNEQ?: InputMaybe<Scalars['u8']>;
+  defenseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defenseNOTLIKE?: InputMaybe<Scalars['u8']>;
   encounter?: InputMaybe<Scalars['Enum']>;
   health?: InputMaybe<Scalars['u8']>;
   healthEQ?: InputMaybe<Scalars['u8']>;
   healthGT?: InputMaybe<Scalars['u8']>;
   healthGTE?: InputMaybe<Scalars['u8']>;
+  healthIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  healthLIKE?: InputMaybe<Scalars['u8']>;
   healthLT?: InputMaybe<Scalars['u8']>;
   healthLTE?: InputMaybe<Scalars['u8']>;
   healthNEQ?: InputMaybe<Scalars['u8']>;
+  healthNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  healthNOTLIKE?: InputMaybe<Scalars['u8']>;
   id?: InputMaybe<Scalars['u8']>;
   idEQ?: InputMaybe<Scalars['u8']>;
   idGT?: InputMaybe<Scalars['u8']>;
   idGTE?: InputMaybe<Scalars['u8']>;
+  idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  idLIKE?: InputMaybe<Scalars['u8']>;
   idLT?: InputMaybe<Scalars['u8']>;
   idLTE?: InputMaybe<Scalars['u8']>;
   idNEQ?: InputMaybe<Scalars['u8']>;
+  idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  idNOTLIKE?: InputMaybe<Scalars['u8']>;
   level?: InputMaybe<Scalars['u8']>;
   levelEQ?: InputMaybe<Scalars['u8']>;
   levelGT?: InputMaybe<Scalars['u8']>;
   levelGTE?: InputMaybe<Scalars['u8']>;
+  levelIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  levelLIKE?: InputMaybe<Scalars['u8']>;
   levelLT?: InputMaybe<Scalars['u8']>;
   levelLTE?: InputMaybe<Scalars['u8']>;
   levelNEQ?: InputMaybe<Scalars['u8']>;
+  levelNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  levelNOTLIKE?: InputMaybe<Scalars['u8']>;
   max_rep?: InputMaybe<Scalars['u8']>;
   max_repEQ?: InputMaybe<Scalars['u8']>;
   max_repGT?: InputMaybe<Scalars['u8']>;
   max_repGTE?: InputMaybe<Scalars['u8']>;
+  max_repIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_repLIKE?: InputMaybe<Scalars['u8']>;
   max_repLT?: InputMaybe<Scalars['u8']>;
   max_repLTE?: InputMaybe<Scalars['u8']>;
   max_repNEQ?: InputMaybe<Scalars['u8']>;
+  max_repNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_repNOTLIKE?: InputMaybe<Scalars['u8']>;
   min_rep?: InputMaybe<Scalars['u8']>;
   min_repEQ?: InputMaybe<Scalars['u8']>;
   min_repGT?: InputMaybe<Scalars['u8']>;
   min_repGTE?: InputMaybe<Scalars['u8']>;
+  min_repIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  min_repLIKE?: InputMaybe<Scalars['u8']>;
   min_repLT?: InputMaybe<Scalars['u8']>;
   min_repLTE?: InputMaybe<Scalars['u8']>;
   min_repNEQ?: InputMaybe<Scalars['u8']>;
+  min_repNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  min_repNOTLIKE?: InputMaybe<Scalars['u8']>;
   payout?: InputMaybe<Scalars['u32']>;
   payoutEQ?: InputMaybe<Scalars['u32']>;
   payoutGT?: InputMaybe<Scalars['u32']>;
   payoutGTE?: InputMaybe<Scalars['u32']>;
+  payoutIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  payoutLIKE?: InputMaybe<Scalars['u32']>;
   payoutLT?: InputMaybe<Scalars['u32']>;
   payoutLTE?: InputMaybe<Scalars['u32']>;
   payoutNEQ?: InputMaybe<Scalars['u32']>;
+  payoutNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  payoutNOTLIKE?: InputMaybe<Scalars['u32']>;
   rep_fight?: InputMaybe<Scalars['u8']>;
   rep_fightEQ?: InputMaybe<Scalars['u8']>;
   rep_fightGT?: InputMaybe<Scalars['u8']>;
   rep_fightGTE?: InputMaybe<Scalars['u8']>;
+  rep_fightIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_fightLIKE?: InputMaybe<Scalars['u8']>;
   rep_fightLT?: InputMaybe<Scalars['u8']>;
   rep_fightLTE?: InputMaybe<Scalars['u8']>;
   rep_fightNEQ?: InputMaybe<Scalars['u8']>;
+  rep_fightNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_fightNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_pay?: InputMaybe<Scalars['u8']>;
   rep_payEQ?: InputMaybe<Scalars['u8']>;
   rep_payGT?: InputMaybe<Scalars['u8']>;
   rep_payGTE?: InputMaybe<Scalars['u8']>;
+  rep_payIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_payLIKE?: InputMaybe<Scalars['u8']>;
   rep_payLT?: InputMaybe<Scalars['u8']>;
   rep_payLTE?: InputMaybe<Scalars['u8']>;
   rep_payNEQ?: InputMaybe<Scalars['u8']>;
+  rep_payNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_payNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_run?: InputMaybe<Scalars['u8']>;
   rep_runEQ?: InputMaybe<Scalars['u8']>;
   rep_runGT?: InputMaybe<Scalars['u8']>;
   rep_runGTE?: InputMaybe<Scalars['u8']>;
+  rep_runIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_runLIKE?: InputMaybe<Scalars['u8']>;
   rep_runLT?: InputMaybe<Scalars['u8']>;
   rep_runLTE?: InputMaybe<Scalars['u8']>;
   rep_runNEQ?: InputMaybe<Scalars['u8']>;
+  rep_runNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_runNOTLIKE?: InputMaybe<Scalars['u8']>;
   speed?: InputMaybe<Scalars['u8']>;
   speedEQ?: InputMaybe<Scalars['u8']>;
   speedGT?: InputMaybe<Scalars['u8']>;
   speedGTE?: InputMaybe<Scalars['u8']>;
+  speedIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speedLIKE?: InputMaybe<Scalars['u8']>;
   speedLT?: InputMaybe<Scalars['u8']>;
   speedLTE?: InputMaybe<Scalars['u8']>;
   speedNEQ?: InputMaybe<Scalars['u8']>;
+  speedNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speedNOTLIKE?: InputMaybe<Scalars['u8']>;
+};
+
+export type EncounterStatsConfig = {
+  __typename?: 'EncounterStatsConfig';
+  attack_base?: Maybe<Scalars['u8']>;
+  attack_step?: Maybe<Scalars['u8']>;
+  defense_base?: Maybe<Scalars['u8']>;
+  defense_step?: Maybe<Scalars['u8']>;
+  encounter?: Maybe<Scalars['Enum']>;
+  encounters_mode?: Maybe<Scalars['Enum']>;
+  entity?: Maybe<World__Entity>;
+  health_base?: Maybe<Scalars['u8']>;
+  health_step?: Maybe<Scalars['u8']>;
+  speed_base?: Maybe<Scalars['u8']>;
+  speed_step?: Maybe<Scalars['u8']>;
+};
+
+export type EncounterStatsConfigConnection = {
+  __typename?: 'EncounterStatsConfigConnection';
+  edges?: Maybe<Array<Maybe<EncounterStatsConfigEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type EncounterStatsConfigEdge = {
+  __typename?: 'EncounterStatsConfigEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<EncounterStatsConfig>;
+};
+
+export type EncounterStatsConfigOrder = {
+  direction: OrderDirection;
+  field: EncounterStatsConfigOrderField;
+};
+
+export enum EncounterStatsConfigOrderField {
+  AttackBase = 'ATTACK_BASE',
+  AttackStep = 'ATTACK_STEP',
+  DefenseBase = 'DEFENSE_BASE',
+  DefenseStep = 'DEFENSE_STEP',
+  Encounter = 'ENCOUNTER',
+  EncountersMode = 'ENCOUNTERS_MODE',
+  HealthBase = 'HEALTH_BASE',
+  HealthStep = 'HEALTH_STEP',
+  SpeedBase = 'SPEED_BASE',
+  SpeedStep = 'SPEED_STEP'
+}
+
+export type EncounterStatsConfigWhereInput = {
+  attack_base?: InputMaybe<Scalars['u8']>;
+  attack_baseEQ?: InputMaybe<Scalars['u8']>;
+  attack_baseGT?: InputMaybe<Scalars['u8']>;
+  attack_baseGTE?: InputMaybe<Scalars['u8']>;
+  attack_baseIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attack_baseLIKE?: InputMaybe<Scalars['u8']>;
+  attack_baseLT?: InputMaybe<Scalars['u8']>;
+  attack_baseLTE?: InputMaybe<Scalars['u8']>;
+  attack_baseNEQ?: InputMaybe<Scalars['u8']>;
+  attack_baseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attack_baseNOTLIKE?: InputMaybe<Scalars['u8']>;
+  attack_step?: InputMaybe<Scalars['u8']>;
+  attack_stepEQ?: InputMaybe<Scalars['u8']>;
+  attack_stepGT?: InputMaybe<Scalars['u8']>;
+  attack_stepGTE?: InputMaybe<Scalars['u8']>;
+  attack_stepIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attack_stepLIKE?: InputMaybe<Scalars['u8']>;
+  attack_stepLT?: InputMaybe<Scalars['u8']>;
+  attack_stepLTE?: InputMaybe<Scalars['u8']>;
+  attack_stepNEQ?: InputMaybe<Scalars['u8']>;
+  attack_stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  attack_stepNOTLIKE?: InputMaybe<Scalars['u8']>;
+  defense_base?: InputMaybe<Scalars['u8']>;
+  defense_baseEQ?: InputMaybe<Scalars['u8']>;
+  defense_baseGT?: InputMaybe<Scalars['u8']>;
+  defense_baseGTE?: InputMaybe<Scalars['u8']>;
+  defense_baseIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defense_baseLIKE?: InputMaybe<Scalars['u8']>;
+  defense_baseLT?: InputMaybe<Scalars['u8']>;
+  defense_baseLTE?: InputMaybe<Scalars['u8']>;
+  defense_baseNEQ?: InputMaybe<Scalars['u8']>;
+  defense_baseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defense_baseNOTLIKE?: InputMaybe<Scalars['u8']>;
+  defense_step?: InputMaybe<Scalars['u8']>;
+  defense_stepEQ?: InputMaybe<Scalars['u8']>;
+  defense_stepGT?: InputMaybe<Scalars['u8']>;
+  defense_stepGTE?: InputMaybe<Scalars['u8']>;
+  defense_stepIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defense_stepLIKE?: InputMaybe<Scalars['u8']>;
+  defense_stepLT?: InputMaybe<Scalars['u8']>;
+  defense_stepLTE?: InputMaybe<Scalars['u8']>;
+  defense_stepNEQ?: InputMaybe<Scalars['u8']>;
+  defense_stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  defense_stepNOTLIKE?: InputMaybe<Scalars['u8']>;
+  encounter?: InputMaybe<Scalars['Enum']>;
+  encounters_mode?: InputMaybe<Scalars['Enum']>;
+  health_base?: InputMaybe<Scalars['u8']>;
+  health_baseEQ?: InputMaybe<Scalars['u8']>;
+  health_baseGT?: InputMaybe<Scalars['u8']>;
+  health_baseGTE?: InputMaybe<Scalars['u8']>;
+  health_baseIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  health_baseLIKE?: InputMaybe<Scalars['u8']>;
+  health_baseLT?: InputMaybe<Scalars['u8']>;
+  health_baseLTE?: InputMaybe<Scalars['u8']>;
+  health_baseNEQ?: InputMaybe<Scalars['u8']>;
+  health_baseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  health_baseNOTLIKE?: InputMaybe<Scalars['u8']>;
+  health_step?: InputMaybe<Scalars['u8']>;
+  health_stepEQ?: InputMaybe<Scalars['u8']>;
+  health_stepGT?: InputMaybe<Scalars['u8']>;
+  health_stepGTE?: InputMaybe<Scalars['u8']>;
+  health_stepIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  health_stepLIKE?: InputMaybe<Scalars['u8']>;
+  health_stepLT?: InputMaybe<Scalars['u8']>;
+  health_stepLTE?: InputMaybe<Scalars['u8']>;
+  health_stepNEQ?: InputMaybe<Scalars['u8']>;
+  health_stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  health_stepNOTLIKE?: InputMaybe<Scalars['u8']>;
+  speed_base?: InputMaybe<Scalars['u8']>;
+  speed_baseEQ?: InputMaybe<Scalars['u8']>;
+  speed_baseGT?: InputMaybe<Scalars['u8']>;
+  speed_baseGTE?: InputMaybe<Scalars['u8']>;
+  speed_baseIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speed_baseLIKE?: InputMaybe<Scalars['u8']>;
+  speed_baseLT?: InputMaybe<Scalars['u8']>;
+  speed_baseLTE?: InputMaybe<Scalars['u8']>;
+  speed_baseNEQ?: InputMaybe<Scalars['u8']>;
+  speed_baseNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speed_baseNOTLIKE?: InputMaybe<Scalars['u8']>;
+  speed_step?: InputMaybe<Scalars['u8']>;
+  speed_stepEQ?: InputMaybe<Scalars['u8']>;
+  speed_stepGT?: InputMaybe<Scalars['u8']>;
+  speed_stepGTE?: InputMaybe<Scalars['u8']>;
+  speed_stepIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speed_stepLIKE?: InputMaybe<Scalars['u8']>;
+  speed_stepLT?: InputMaybe<Scalars['u8']>;
+  speed_stepLTE?: InputMaybe<Scalars['u8']>;
+  speed_stepNEQ?: InputMaybe<Scalars['u8']>;
+  speed_stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  speed_stepNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type Game = {
@@ -448,9 +706,6 @@ export type Game = {
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
   hustler_id?: Maybe<Scalars['u16']>;
-  max_rounds?: Maybe<Scalars['u8']>;
-  max_turns?: Maybe<Scalars['u8']>;
-  max_wanted_shopping?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['u128']>;
   position?: Maybe<Scalars['u16']>;
@@ -461,10 +716,8 @@ export type Game = {
 export type GameConfig = {
   __typename?: 'GameConfig';
   cash?: Maybe<Scalars['u32']>;
-  encounter_count?: Maybe<Scalars['u8']>;
   entity?: Maybe<World__Entity>;
   health?: Maybe<Scalars['u8']>;
-  key?: Maybe<Scalars['u8']>;
   max_rounds?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
   max_wanted_shopping?: Maybe<Scalars['u8']>;
@@ -473,6 +726,7 @@ export type GameConfig = {
   rep_drug_step?: Maybe<Scalars['u8']>;
   rep_hospitalized?: Maybe<Scalars['u8']>;
   rep_jailed?: Maybe<Scalars['u8']>;
+  season_version?: Maybe<Scalars['u16']>;
 };
 
 export type GameConfigConnection = {
@@ -495,9 +749,7 @@ export type GameConfigOrder = {
 
 export enum GameConfigOrderField {
   Cash = 'CASH',
-  EncounterCount = 'ENCOUNTER_COUNT',
   Health = 'HEALTH',
-  Key = 'KEY',
   MaxRounds = 'MAX_ROUNDS',
   MaxTurns = 'MAX_TURNS',
   MaxWantedShopping = 'MAX_WANTED_SHOPPING',
@@ -505,7 +757,8 @@ export enum GameConfigOrderField {
   RepCarryDrugs = 'REP_CARRY_DRUGS',
   RepDrugStep = 'REP_DRUG_STEP',
   RepHospitalized = 'REP_HOSPITALIZED',
-  RepJailed = 'REP_JAILED'
+  RepJailed = 'REP_JAILED',
+  SeasonVersion = 'SEASON_VERSION'
 }
 
 export type GameConfigWhereInput = {
@@ -513,86 +766,123 @@ export type GameConfigWhereInput = {
   cashEQ?: InputMaybe<Scalars['u32']>;
   cashGT?: InputMaybe<Scalars['u32']>;
   cashGTE?: InputMaybe<Scalars['u32']>;
+  cashIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  cashLIKE?: InputMaybe<Scalars['u32']>;
   cashLT?: InputMaybe<Scalars['u32']>;
   cashLTE?: InputMaybe<Scalars['u32']>;
   cashNEQ?: InputMaybe<Scalars['u32']>;
-  encounter_count?: InputMaybe<Scalars['u8']>;
-  encounter_countEQ?: InputMaybe<Scalars['u8']>;
-  encounter_countGT?: InputMaybe<Scalars['u8']>;
-  encounter_countGTE?: InputMaybe<Scalars['u8']>;
-  encounter_countLT?: InputMaybe<Scalars['u8']>;
-  encounter_countLTE?: InputMaybe<Scalars['u8']>;
-  encounter_countNEQ?: InputMaybe<Scalars['u8']>;
+  cashNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  cashNOTLIKE?: InputMaybe<Scalars['u32']>;
   health?: InputMaybe<Scalars['u8']>;
   healthEQ?: InputMaybe<Scalars['u8']>;
   healthGT?: InputMaybe<Scalars['u8']>;
   healthGTE?: InputMaybe<Scalars['u8']>;
+  healthIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  healthLIKE?: InputMaybe<Scalars['u8']>;
   healthLT?: InputMaybe<Scalars['u8']>;
   healthLTE?: InputMaybe<Scalars['u8']>;
   healthNEQ?: InputMaybe<Scalars['u8']>;
-  key?: InputMaybe<Scalars['u8']>;
-  keyEQ?: InputMaybe<Scalars['u8']>;
-  keyGT?: InputMaybe<Scalars['u8']>;
-  keyGTE?: InputMaybe<Scalars['u8']>;
-  keyLT?: InputMaybe<Scalars['u8']>;
-  keyLTE?: InputMaybe<Scalars['u8']>;
-  keyNEQ?: InputMaybe<Scalars['u8']>;
+  healthNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  healthNOTLIKE?: InputMaybe<Scalars['u8']>;
   max_rounds?: InputMaybe<Scalars['u8']>;
   max_roundsEQ?: InputMaybe<Scalars['u8']>;
   max_roundsGT?: InputMaybe<Scalars['u8']>;
   max_roundsGTE?: InputMaybe<Scalars['u8']>;
+  max_roundsIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_roundsLIKE?: InputMaybe<Scalars['u8']>;
   max_roundsLT?: InputMaybe<Scalars['u8']>;
   max_roundsLTE?: InputMaybe<Scalars['u8']>;
   max_roundsNEQ?: InputMaybe<Scalars['u8']>;
+  max_roundsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_roundsNOTLIKE?: InputMaybe<Scalars['u8']>;
   max_turns?: InputMaybe<Scalars['u8']>;
   max_turnsEQ?: InputMaybe<Scalars['u8']>;
   max_turnsGT?: InputMaybe<Scalars['u8']>;
   max_turnsGTE?: InputMaybe<Scalars['u8']>;
+  max_turnsIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_turnsLIKE?: InputMaybe<Scalars['u8']>;
   max_turnsLT?: InputMaybe<Scalars['u8']>;
   max_turnsLTE?: InputMaybe<Scalars['u8']>;
   max_turnsNEQ?: InputMaybe<Scalars['u8']>;
+  max_turnsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_turnsNOTLIKE?: InputMaybe<Scalars['u8']>;
   max_wanted_shopping?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingEQ?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingGT?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingGTE?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_wanted_shoppingLIKE?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingLT?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingLTE?: InputMaybe<Scalars['u8']>;
   max_wanted_shoppingNEQ?: InputMaybe<Scalars['u8']>;
+  max_wanted_shoppingNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  max_wanted_shoppingNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_buy_item?: InputMaybe<Scalars['u8']>;
   rep_buy_itemEQ?: InputMaybe<Scalars['u8']>;
   rep_buy_itemGT?: InputMaybe<Scalars['u8']>;
   rep_buy_itemGTE?: InputMaybe<Scalars['u8']>;
+  rep_buy_itemIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_buy_itemLIKE?: InputMaybe<Scalars['u8']>;
   rep_buy_itemLT?: InputMaybe<Scalars['u8']>;
   rep_buy_itemLTE?: InputMaybe<Scalars['u8']>;
   rep_buy_itemNEQ?: InputMaybe<Scalars['u8']>;
+  rep_buy_itemNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_buy_itemNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_carry_drugs?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsEQ?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsGT?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsGTE?: InputMaybe<Scalars['u8']>;
+  rep_carry_drugsIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_carry_drugsLIKE?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsLT?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsLTE?: InputMaybe<Scalars['u8']>;
   rep_carry_drugsNEQ?: InputMaybe<Scalars['u8']>;
+  rep_carry_drugsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_carry_drugsNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_drug_step?: InputMaybe<Scalars['u8']>;
   rep_drug_stepEQ?: InputMaybe<Scalars['u8']>;
   rep_drug_stepGT?: InputMaybe<Scalars['u8']>;
   rep_drug_stepGTE?: InputMaybe<Scalars['u8']>;
+  rep_drug_stepIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_drug_stepLIKE?: InputMaybe<Scalars['u8']>;
   rep_drug_stepLT?: InputMaybe<Scalars['u8']>;
   rep_drug_stepLTE?: InputMaybe<Scalars['u8']>;
   rep_drug_stepNEQ?: InputMaybe<Scalars['u8']>;
+  rep_drug_stepNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_drug_stepNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_hospitalized?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedEQ?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedGT?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedGTE?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_hospitalizedLIKE?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedLT?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedLTE?: InputMaybe<Scalars['u8']>;
   rep_hospitalizedNEQ?: InputMaybe<Scalars['u8']>;
+  rep_hospitalizedNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_hospitalizedNOTLIKE?: InputMaybe<Scalars['u8']>;
   rep_jailed?: InputMaybe<Scalars['u8']>;
   rep_jailedEQ?: InputMaybe<Scalars['u8']>;
   rep_jailedGT?: InputMaybe<Scalars['u8']>;
   rep_jailedGTE?: InputMaybe<Scalars['u8']>;
+  rep_jailedIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_jailedLIKE?: InputMaybe<Scalars['u8']>;
   rep_jailedLT?: InputMaybe<Scalars['u8']>;
   rep_jailedLTE?: InputMaybe<Scalars['u8']>;
   rep_jailedNEQ?: InputMaybe<Scalars['u8']>;
+  rep_jailedNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  rep_jailedNOTLIKE?: InputMaybe<Scalars['u8']>;
+  season_version?: InputMaybe<Scalars['u16']>;
+  season_versionEQ?: InputMaybe<Scalars['u16']>;
+  season_versionGT?: InputMaybe<Scalars['u16']>;
+  season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionLIKE?: InputMaybe<Scalars['u16']>;
+  season_versionLT?: InputMaybe<Scalars['u16']>;
+  season_versionLTE?: InputMaybe<Scalars['u16']>;
+  season_versionNEQ?: InputMaybe<Scalars['u16']>;
+  season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
 };
 
 export type GameConnection = {
@@ -621,9 +911,6 @@ export enum GameOrderField {
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
   HustlerId = 'HUSTLER_ID',
-  MaxRounds = 'MAX_ROUNDS',
-  MaxTurns = 'MAX_TURNS',
-  MaxWantedShopping = 'MAX_WANTED_SHOPPING',
   PlayerId = 'PLAYER_ID',
   PlayerName = 'PLAYER_NAME',
   Position = 'POSITION',
@@ -668,23 +955,35 @@ export type GameStorePackedWhereInput = {
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
   game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idLIKE?: InputMaybe<Scalars['u32']>;
   game_idLT?: InputMaybe<Scalars['u32']>;
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
+  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
   packed?: InputMaybe<Scalars['felt252']>;
   packedEQ?: InputMaybe<Scalars['felt252']>;
   packedGT?: InputMaybe<Scalars['felt252']>;
   packedGTE?: InputMaybe<Scalars['felt252']>;
+  packedIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  packedLIKE?: InputMaybe<Scalars['felt252']>;
   packedLT?: InputMaybe<Scalars['felt252']>;
   packedLTE?: InputMaybe<Scalars['felt252']>;
   packedNEQ?: InputMaybe<Scalars['felt252']>;
+  packedNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  packedNOTLIKE?: InputMaybe<Scalars['felt252']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
   player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type GameWhereInput = {
@@ -692,83 +991,94 @@ export type GameWhereInput = {
   claimableEQ?: InputMaybe<Scalars['u32']>;
   claimableGT?: InputMaybe<Scalars['u32']>;
   claimableGTE?: InputMaybe<Scalars['u32']>;
+  claimableIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  claimableLIKE?: InputMaybe<Scalars['u32']>;
   claimableLT?: InputMaybe<Scalars['u32']>;
   claimableLTE?: InputMaybe<Scalars['u32']>;
   claimableNEQ?: InputMaybe<Scalars['u32']>;
+  claimableNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  claimableNOTLIKE?: InputMaybe<Scalars['u32']>;
   claimed?: InputMaybe<Scalars['bool']>;
   final_score?: InputMaybe<Scalars['u32']>;
   final_scoreEQ?: InputMaybe<Scalars['u32']>;
   final_scoreGT?: InputMaybe<Scalars['u32']>;
   final_scoreGTE?: InputMaybe<Scalars['u32']>;
+  final_scoreIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  final_scoreLIKE?: InputMaybe<Scalars['u32']>;
   final_scoreLT?: InputMaybe<Scalars['u32']>;
   final_scoreLTE?: InputMaybe<Scalars['u32']>;
   final_scoreNEQ?: InputMaybe<Scalars['u32']>;
+  final_scoreNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  final_scoreNOTLIKE?: InputMaybe<Scalars['u32']>;
   game_id?: InputMaybe<Scalars['u32']>;
   game_idEQ?: InputMaybe<Scalars['u32']>;
   game_idGT?: InputMaybe<Scalars['u32']>;
   game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idLIKE?: InputMaybe<Scalars['u32']>;
   game_idLT?: InputMaybe<Scalars['u32']>;
   game_idLTE?: InputMaybe<Scalars['u32']>;
   game_idNEQ?: InputMaybe<Scalars['u32']>;
+  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
   game_over?: InputMaybe<Scalars['bool']>;
   hustler_id?: InputMaybe<Scalars['u16']>;
   hustler_idEQ?: InputMaybe<Scalars['u16']>;
   hustler_idGT?: InputMaybe<Scalars['u16']>;
   hustler_idGTE?: InputMaybe<Scalars['u16']>;
+  hustler_idIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  hustler_idLIKE?: InputMaybe<Scalars['u16']>;
   hustler_idLT?: InputMaybe<Scalars['u16']>;
   hustler_idLTE?: InputMaybe<Scalars['u16']>;
   hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  max_rounds?: InputMaybe<Scalars['u8']>;
-  max_roundsEQ?: InputMaybe<Scalars['u8']>;
-  max_roundsGT?: InputMaybe<Scalars['u8']>;
-  max_roundsGTE?: InputMaybe<Scalars['u8']>;
-  max_roundsLT?: InputMaybe<Scalars['u8']>;
-  max_roundsLTE?: InputMaybe<Scalars['u8']>;
-  max_roundsNEQ?: InputMaybe<Scalars['u8']>;
-  max_turns?: InputMaybe<Scalars['u8']>;
-  max_turnsEQ?: InputMaybe<Scalars['u8']>;
-  max_turnsGT?: InputMaybe<Scalars['u8']>;
-  max_turnsGTE?: InputMaybe<Scalars['u8']>;
-  max_turnsLT?: InputMaybe<Scalars['u8']>;
-  max_turnsLTE?: InputMaybe<Scalars['u8']>;
-  max_turnsNEQ?: InputMaybe<Scalars['u8']>;
-  max_wanted_shopping?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingEQ?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingGT?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingGTE?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingLT?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingLTE?: InputMaybe<Scalars['u8']>;
-  max_wanted_shoppingNEQ?: InputMaybe<Scalars['u8']>;
+  hustler_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  hustler_idNOTLIKE?: InputMaybe<Scalars['u16']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
   player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
   player_idLT?: InputMaybe<Scalars['ContractAddress']>;
   player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   player_name?: InputMaybe<Scalars['u128']>;
   player_nameEQ?: InputMaybe<Scalars['u128']>;
   player_nameGT?: InputMaybe<Scalars['u128']>;
   player_nameGTE?: InputMaybe<Scalars['u128']>;
+  player_nameIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  player_nameLIKE?: InputMaybe<Scalars['u128']>;
   player_nameLT?: InputMaybe<Scalars['u128']>;
   player_nameLTE?: InputMaybe<Scalars['u128']>;
   player_nameNEQ?: InputMaybe<Scalars['u128']>;
+  player_nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  player_nameNOTLIKE?: InputMaybe<Scalars['u128']>;
   position?: InputMaybe<Scalars['u16']>;
   positionEQ?: InputMaybe<Scalars['u16']>;
   positionGT?: InputMaybe<Scalars['u16']>;
   positionGTE?: InputMaybe<Scalars['u16']>;
+  positionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  positionLIKE?: InputMaybe<Scalars['u16']>;
   positionLT?: InputMaybe<Scalars['u16']>;
   positionLTE?: InputMaybe<Scalars['u16']>;
   positionNEQ?: InputMaybe<Scalars['u16']>;
+  positionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  positionNOTLIKE?: InputMaybe<Scalars['u16']>;
   registered?: InputMaybe<Scalars['bool']>;
   season_version?: InputMaybe<Scalars['u16']>;
   season_versionEQ?: InputMaybe<Scalars['u16']>;
   season_versionGT?: InputMaybe<Scalars['u16']>;
   season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionLIKE?: InputMaybe<Scalars['u16']>;
   season_versionLT?: InputMaybe<Scalars['u16']>;
   season_versionLTE?: InputMaybe<Scalars['u16']>;
   season_versionNEQ?: InputMaybe<Scalars['u16']>;
+  season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
 };
 
 export type HustlerItemBaseConfig = {
@@ -812,31 +1122,47 @@ export type HustlerItemBaseConfigWhereInput = {
   idEQ?: InputMaybe<Scalars['u32']>;
   idGT?: InputMaybe<Scalars['u32']>;
   idGTE?: InputMaybe<Scalars['u32']>;
+  idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  idLIKE?: InputMaybe<Scalars['u32']>;
   idLT?: InputMaybe<Scalars['u32']>;
   idLTE?: InputMaybe<Scalars['u32']>;
   idNEQ?: InputMaybe<Scalars['u32']>;
+  idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  idNOTLIKE?: InputMaybe<Scalars['u32']>;
   initial_tier?: InputMaybe<Scalars['u8']>;
   initial_tierEQ?: InputMaybe<Scalars['u8']>;
   initial_tierGT?: InputMaybe<Scalars['u8']>;
   initial_tierGTE?: InputMaybe<Scalars['u8']>;
+  initial_tierIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  initial_tierLIKE?: InputMaybe<Scalars['u8']>;
   initial_tierLT?: InputMaybe<Scalars['u8']>;
   initial_tierLTE?: InputMaybe<Scalars['u8']>;
   initial_tierNEQ?: InputMaybe<Scalars['u8']>;
+  initial_tierNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  initial_tierNOTLIKE?: InputMaybe<Scalars['u8']>;
   name?: InputMaybe<Scalars['felt252']>;
   nameEQ?: InputMaybe<Scalars['felt252']>;
   nameGT?: InputMaybe<Scalars['felt252']>;
   nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameLIKE?: InputMaybe<Scalars['felt252']>;
   nameLT?: InputMaybe<Scalars['felt252']>;
   nameLTE?: InputMaybe<Scalars['felt252']>;
   nameNEQ?: InputMaybe<Scalars['felt252']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
   slot?: InputMaybe<Scalars['Enum']>;
   slot_id?: InputMaybe<Scalars['u8']>;
   slot_idEQ?: InputMaybe<Scalars['u8']>;
   slot_idGT?: InputMaybe<Scalars['u8']>;
   slot_idGTE?: InputMaybe<Scalars['u8']>;
+  slot_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  slot_idLIKE?: InputMaybe<Scalars['u8']>;
   slot_idLT?: InputMaybe<Scalars['u8']>;
   slot_idLTE?: InputMaybe<Scalars['u8']>;
   slot_idNEQ?: InputMaybe<Scalars['u8']>;
+  slot_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  slot_idNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type HustlerItemTiersConfig = {
@@ -880,31 +1206,47 @@ export type HustlerItemTiersConfigWhereInput = {
   costEQ?: InputMaybe<Scalars['u32']>;
   costGT?: InputMaybe<Scalars['u32']>;
   costGTE?: InputMaybe<Scalars['u32']>;
+  costIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  costLIKE?: InputMaybe<Scalars['u32']>;
   costLT?: InputMaybe<Scalars['u32']>;
   costLTE?: InputMaybe<Scalars['u32']>;
   costNEQ?: InputMaybe<Scalars['u32']>;
+  costNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  costNOTLIKE?: InputMaybe<Scalars['u32']>;
   slot?: InputMaybe<Scalars['Enum']>;
   slot_id?: InputMaybe<Scalars['u8']>;
   slot_idEQ?: InputMaybe<Scalars['u8']>;
   slot_idGT?: InputMaybe<Scalars['u8']>;
   slot_idGTE?: InputMaybe<Scalars['u8']>;
+  slot_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  slot_idLIKE?: InputMaybe<Scalars['u8']>;
   slot_idLT?: InputMaybe<Scalars['u8']>;
   slot_idLTE?: InputMaybe<Scalars['u8']>;
   slot_idNEQ?: InputMaybe<Scalars['u8']>;
+  slot_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  slot_idNOTLIKE?: InputMaybe<Scalars['u8']>;
   stat?: InputMaybe<Scalars['u32']>;
   statEQ?: InputMaybe<Scalars['u32']>;
   statGT?: InputMaybe<Scalars['u32']>;
   statGTE?: InputMaybe<Scalars['u32']>;
+  statIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  statLIKE?: InputMaybe<Scalars['u32']>;
   statLT?: InputMaybe<Scalars['u32']>;
   statLTE?: InputMaybe<Scalars['u32']>;
   statNEQ?: InputMaybe<Scalars['u32']>;
+  statNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  statNOTLIKE?: InputMaybe<Scalars['u32']>;
   tier?: InputMaybe<Scalars['u8']>;
   tierEQ?: InputMaybe<Scalars['u8']>;
   tierGT?: InputMaybe<Scalars['u8']>;
   tierGTE?: InputMaybe<Scalars['u8']>;
+  tierIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  tierLIKE?: InputMaybe<Scalars['u8']>;
   tierLT?: InputMaybe<Scalars['u8']>;
   tierLTE?: InputMaybe<Scalars['u8']>;
   tierNEQ?: InputMaybe<Scalars['u8']>;
+  tierNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  tierNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type InitializableModel = {
@@ -943,9 +1285,13 @@ export type InitializableModelWhereInput = {
   tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
   tokenGT?: InputMaybe<Scalars['ContractAddress']>;
   tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
+  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
   tokenLT?: InputMaybe<Scalars['ContractAddress']>;
   tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
   tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type LocationConfig = {
@@ -986,19 +1332,27 @@ export type LocationConfigWhereInput = {
   location_idEQ?: InputMaybe<Scalars['u8']>;
   location_idGT?: InputMaybe<Scalars['u8']>;
   location_idGTE?: InputMaybe<Scalars['u8']>;
+  location_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  location_idLIKE?: InputMaybe<Scalars['u8']>;
   location_idLT?: InputMaybe<Scalars['u8']>;
   location_idLTE?: InputMaybe<Scalars['u8']>;
   location_idNEQ?: InputMaybe<Scalars['u8']>;
+  location_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  location_idNOTLIKE?: InputMaybe<Scalars['u8']>;
   name?: InputMaybe<Scalars['u128']>;
   nameEQ?: InputMaybe<Scalars['u128']>;
   nameGT?: InputMaybe<Scalars['u128']>;
   nameGTE?: InputMaybe<Scalars['u128']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  nameLIKE?: InputMaybe<Scalars['u128']>;
   nameLT?: InputMaybe<Scalars['u128']>;
   nameLTE?: InputMaybe<Scalars['u128']>;
   nameNEQ?: InputMaybe<Scalars['u128']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['u128']>;
 };
 
-export type ModelUnion = DrugConfig | Erc20AllowanceModel | Erc20BalanceModel | Erc20MetadataModel | EncounterConfig | Game | GameConfig | GameStorePacked | HustlerItemBaseConfig | HustlerItemTiersConfig | InitializableModel | LocationConfig | RyoAddress | RyoConfig | Season | SortedList | SortedListItem;
+export type ModelUnion = DrugConfig | Erc20AllowanceModel | Erc20BalanceModel | Erc20MetadataModel | EncounterConfig | EncounterStatsConfig | Game | GameConfig | GameStorePacked | HustlerItemBaseConfig | HustlerItemTiersConfig | InitializableModel | LocationConfig | RyoAddress | RyoConfig | Season | SeasonSettings | SortedList | SortedListItem;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -1044,30 +1398,46 @@ export type RyoAddressWhereInput = {
   keyEQ?: InputMaybe<Scalars['u8']>;
   keyGT?: InputMaybe<Scalars['u8']>;
   keyGTE?: InputMaybe<Scalars['u8']>;
+  keyIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  keyLIKE?: InputMaybe<Scalars['u8']>;
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
+  keyNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  keyNOTLIKE?: InputMaybe<Scalars['u8']>;
   laundromat?: InputMaybe<Scalars['ContractAddress']>;
   laundromatEQ?: InputMaybe<Scalars['ContractAddress']>;
   laundromatGT?: InputMaybe<Scalars['ContractAddress']>;
   laundromatGTE?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  laundromatLIKE?: InputMaybe<Scalars['ContractAddress']>;
   laundromatLT?: InputMaybe<Scalars['ContractAddress']>;
   laundromatLTE?: InputMaybe<Scalars['ContractAddress']>;
   laundromatNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  laundromatNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  laundromatNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   paper?: InputMaybe<Scalars['ContractAddress']>;
   paperEQ?: InputMaybe<Scalars['ContractAddress']>;
   paperGT?: InputMaybe<Scalars['ContractAddress']>;
   paperGTE?: InputMaybe<Scalars['ContractAddress']>;
+  paperIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  paperLIKE?: InputMaybe<Scalars['ContractAddress']>;
   paperLT?: InputMaybe<Scalars['ContractAddress']>;
   paperLTE?: InputMaybe<Scalars['ContractAddress']>;
   paperNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  paperNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  paperNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   treasury?: InputMaybe<Scalars['ContractAddress']>;
   treasuryEQ?: InputMaybe<Scalars['ContractAddress']>;
   treasuryGT?: InputMaybe<Scalars['ContractAddress']>;
   treasuryGTE?: InputMaybe<Scalars['ContractAddress']>;
+  treasuryIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  treasuryLIKE?: InputMaybe<Scalars['ContractAddress']>;
   treasuryLT?: InputMaybe<Scalars['ContractAddress']>;
   treasuryLTE?: InputMaybe<Scalars['ContractAddress']>;
   treasuryNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  treasuryNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  treasuryNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type RyoConfig = {
@@ -1122,59 +1492,91 @@ export type RyoConfigWhereInput = {
   keyEQ?: InputMaybe<Scalars['u8']>;
   keyGT?: InputMaybe<Scalars['u8']>;
   keyGTE?: InputMaybe<Scalars['u8']>;
+  keyIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  keyLIKE?: InputMaybe<Scalars['u8']>;
   keyLT?: InputMaybe<Scalars['u8']>;
   keyLTE?: InputMaybe<Scalars['u8']>;
   keyNEQ?: InputMaybe<Scalars['u8']>;
+  keyNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  keyNOTLIKE?: InputMaybe<Scalars['u8']>;
   paper_fee?: InputMaybe<Scalars['u16']>;
   paper_feeEQ?: InputMaybe<Scalars['u16']>;
   paper_feeGT?: InputMaybe<Scalars['u16']>;
   paper_feeGTE?: InputMaybe<Scalars['u16']>;
+  paper_feeIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_feeLIKE?: InputMaybe<Scalars['u16']>;
   paper_feeLT?: InputMaybe<Scalars['u16']>;
   paper_feeLTE?: InputMaybe<Scalars['u16']>;
   paper_feeNEQ?: InputMaybe<Scalars['u16']>;
+  paper_feeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_feeNOTLIKE?: InputMaybe<Scalars['u16']>;
   paper_reward_launderer?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererEQ?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererGT?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererGTE?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_reward_laundererLIKE?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererLT?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererLTE?: InputMaybe<Scalars['u16']>;
   paper_reward_laundererNEQ?: InputMaybe<Scalars['u16']>;
+  paper_reward_laundererNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_reward_laundererNOTLIKE?: InputMaybe<Scalars['u16']>;
   paused?: InputMaybe<Scalars['bool']>;
   season_duration?: InputMaybe<Scalars['u32']>;
   season_durationEQ?: InputMaybe<Scalars['u32']>;
   season_durationGT?: InputMaybe<Scalars['u32']>;
   season_durationGTE?: InputMaybe<Scalars['u32']>;
+  season_durationIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  season_durationLIKE?: InputMaybe<Scalars['u32']>;
   season_durationLT?: InputMaybe<Scalars['u32']>;
   season_durationLTE?: InputMaybe<Scalars['u32']>;
   season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  season_durationNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  season_durationNOTLIKE?: InputMaybe<Scalars['u32']>;
   season_time_limit?: InputMaybe<Scalars['u16']>;
   season_time_limitEQ?: InputMaybe<Scalars['u16']>;
   season_time_limitGT?: InputMaybe<Scalars['u16']>;
   season_time_limitGTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_time_limitLIKE?: InputMaybe<Scalars['u16']>;
   season_time_limitLT?: InputMaybe<Scalars['u16']>;
   season_time_limitLTE?: InputMaybe<Scalars['u16']>;
   season_time_limitNEQ?: InputMaybe<Scalars['u16']>;
+  season_time_limitNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_time_limitNOTLIKE?: InputMaybe<Scalars['u16']>;
   season_version?: InputMaybe<Scalars['u16']>;
   season_versionEQ?: InputMaybe<Scalars['u16']>;
   season_versionGT?: InputMaybe<Scalars['u16']>;
   season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionLIKE?: InputMaybe<Scalars['u16']>;
   season_versionLT?: InputMaybe<Scalars['u16']>;
   season_versionLTE?: InputMaybe<Scalars['u16']>;
   season_versionNEQ?: InputMaybe<Scalars['u16']>;
+  season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
   treasury_balance?: InputMaybe<Scalars['u32']>;
   treasury_balanceEQ?: InputMaybe<Scalars['u32']>;
   treasury_balanceGT?: InputMaybe<Scalars['u32']>;
   treasury_balanceGTE?: InputMaybe<Scalars['u32']>;
+  treasury_balanceIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  treasury_balanceLIKE?: InputMaybe<Scalars['u32']>;
   treasury_balanceLT?: InputMaybe<Scalars['u32']>;
   treasury_balanceLTE?: InputMaybe<Scalars['u32']>;
   treasury_balanceNEQ?: InputMaybe<Scalars['u32']>;
+  treasury_balanceNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  treasury_balanceNOTLIKE?: InputMaybe<Scalars['u32']>;
   treasury_fee_pct?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctEQ?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctGT?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctGTE?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  treasury_fee_pctLIKE?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctLT?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctLTE?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctNEQ?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  treasury_fee_pctNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type Season = {
@@ -1219,63 +1621,155 @@ export enum SeasonOrderField {
   Version = 'VERSION'
 }
 
+export type SeasonSettings = {
+  __typename?: 'SeasonSettings';
+  cash_mode?: Maybe<Scalars['Enum']>;
+  drugs_mode?: Maybe<Scalars['Enum']>;
+  encounters_mode?: Maybe<Scalars['Enum']>;
+  encounters_odds_mode?: Maybe<Scalars['Enum']>;
+  entity?: Maybe<World__Entity>;
+  health_mode?: Maybe<Scalars['Enum']>;
+  season_version?: Maybe<Scalars['u16']>;
+  turns_mode?: Maybe<Scalars['Enum']>;
+};
+
+export type SeasonSettingsConnection = {
+  __typename?: 'SeasonSettingsConnection';
+  edges?: Maybe<Array<Maybe<SeasonSettingsEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type SeasonSettingsEdge = {
+  __typename?: 'SeasonSettingsEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<SeasonSettings>;
+};
+
+export type SeasonSettingsOrder = {
+  direction: OrderDirection;
+  field: SeasonSettingsOrderField;
+};
+
+export enum SeasonSettingsOrderField {
+  CashMode = 'CASH_MODE',
+  DrugsMode = 'DRUGS_MODE',
+  EncountersMode = 'ENCOUNTERS_MODE',
+  EncountersOddsMode = 'ENCOUNTERS_ODDS_MODE',
+  HealthMode = 'HEALTH_MODE',
+  SeasonVersion = 'SEASON_VERSION',
+  TurnsMode = 'TURNS_MODE'
+}
+
+export type SeasonSettingsWhereInput = {
+  cash_mode?: InputMaybe<Scalars['Enum']>;
+  drugs_mode?: InputMaybe<Scalars['Enum']>;
+  encounters_mode?: InputMaybe<Scalars['Enum']>;
+  encounters_odds_mode?: InputMaybe<Scalars['Enum']>;
+  health_mode?: InputMaybe<Scalars['Enum']>;
+  season_version?: InputMaybe<Scalars['u16']>;
+  season_versionEQ?: InputMaybe<Scalars['u16']>;
+  season_versionGT?: InputMaybe<Scalars['u16']>;
+  season_versionGTE?: InputMaybe<Scalars['u16']>;
+  season_versionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionLIKE?: InputMaybe<Scalars['u16']>;
+  season_versionLT?: InputMaybe<Scalars['u16']>;
+  season_versionLTE?: InputMaybe<Scalars['u16']>;
+  season_versionNEQ?: InputMaybe<Scalars['u16']>;
+  season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
+  turns_mode?: InputMaybe<Scalars['Enum']>;
+};
+
 export type SeasonWhereInput = {
   high_score?: InputMaybe<Scalars['u32']>;
   high_scoreEQ?: InputMaybe<Scalars['u32']>;
   high_scoreGT?: InputMaybe<Scalars['u32']>;
   high_scoreGTE?: InputMaybe<Scalars['u32']>;
+  high_scoreIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  high_scoreLIKE?: InputMaybe<Scalars['u32']>;
   high_scoreLT?: InputMaybe<Scalars['u32']>;
   high_scoreLTE?: InputMaybe<Scalars['u32']>;
   high_scoreNEQ?: InputMaybe<Scalars['u32']>;
+  high_scoreNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  high_scoreNOTLIKE?: InputMaybe<Scalars['u32']>;
   next_version_timestamp?: InputMaybe<Scalars['u64']>;
   next_version_timestampEQ?: InputMaybe<Scalars['u64']>;
   next_version_timestampGT?: InputMaybe<Scalars['u64']>;
   next_version_timestampGTE?: InputMaybe<Scalars['u64']>;
+  next_version_timestampIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  next_version_timestampLIKE?: InputMaybe<Scalars['u64']>;
   next_version_timestampLT?: InputMaybe<Scalars['u64']>;
   next_version_timestampLTE?: InputMaybe<Scalars['u64']>;
   next_version_timestampNEQ?: InputMaybe<Scalars['u64']>;
+  next_version_timestampNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  next_version_timestampNOTLIKE?: InputMaybe<Scalars['u64']>;
   paper_balance?: InputMaybe<Scalars['u32']>;
   paper_balanceEQ?: InputMaybe<Scalars['u32']>;
   paper_balanceGT?: InputMaybe<Scalars['u32']>;
   paper_balanceGTE?: InputMaybe<Scalars['u32']>;
+  paper_balanceIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  paper_balanceLIKE?: InputMaybe<Scalars['u32']>;
   paper_balanceLT?: InputMaybe<Scalars['u32']>;
   paper_balanceLTE?: InputMaybe<Scalars['u32']>;
   paper_balanceNEQ?: InputMaybe<Scalars['u32']>;
+  paper_balanceNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  paper_balanceNOTLIKE?: InputMaybe<Scalars['u32']>;
   paper_fee?: InputMaybe<Scalars['u16']>;
   paper_feeEQ?: InputMaybe<Scalars['u16']>;
   paper_feeGT?: InputMaybe<Scalars['u16']>;
   paper_feeGTE?: InputMaybe<Scalars['u16']>;
+  paper_feeIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_feeLIKE?: InputMaybe<Scalars['u16']>;
   paper_feeLT?: InputMaybe<Scalars['u16']>;
   paper_feeLTE?: InputMaybe<Scalars['u16']>;
   paper_feeNEQ?: InputMaybe<Scalars['u16']>;
+  paper_feeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  paper_feeNOTLIKE?: InputMaybe<Scalars['u16']>;
   season_duration?: InputMaybe<Scalars['u32']>;
   season_durationEQ?: InputMaybe<Scalars['u32']>;
   season_durationGT?: InputMaybe<Scalars['u32']>;
   season_durationGTE?: InputMaybe<Scalars['u32']>;
+  season_durationIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  season_durationLIKE?: InputMaybe<Scalars['u32']>;
   season_durationLT?: InputMaybe<Scalars['u32']>;
   season_durationLTE?: InputMaybe<Scalars['u32']>;
   season_durationNEQ?: InputMaybe<Scalars['u32']>;
+  season_durationNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  season_durationNOTLIKE?: InputMaybe<Scalars['u32']>;
   season_time_limit?: InputMaybe<Scalars['u16']>;
   season_time_limitEQ?: InputMaybe<Scalars['u16']>;
   season_time_limitGT?: InputMaybe<Scalars['u16']>;
   season_time_limitGTE?: InputMaybe<Scalars['u16']>;
+  season_time_limitIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_time_limitLIKE?: InputMaybe<Scalars['u16']>;
   season_time_limitLT?: InputMaybe<Scalars['u16']>;
   season_time_limitLTE?: InputMaybe<Scalars['u16']>;
   season_time_limitNEQ?: InputMaybe<Scalars['u16']>;
+  season_time_limitNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  season_time_limitNOTLIKE?: InputMaybe<Scalars['u16']>;
   treasury_fee_pct?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctEQ?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctGT?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctGTE?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  treasury_fee_pctLIKE?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctLT?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctLTE?: InputMaybe<Scalars['u8']>;
   treasury_fee_pctNEQ?: InputMaybe<Scalars['u8']>;
+  treasury_fee_pctNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  treasury_fee_pctNOTLIKE?: InputMaybe<Scalars['u8']>;
   version?: InputMaybe<Scalars['u16']>;
   versionEQ?: InputMaybe<Scalars['u16']>;
   versionGT?: InputMaybe<Scalars['u16']>;
   versionGTE?: InputMaybe<Scalars['u16']>;
+  versionIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  versionLIKE?: InputMaybe<Scalars['u16']>;
   versionLT?: InputMaybe<Scalars['u16']>;
   versionLTE?: InputMaybe<Scalars['u16']>;
   versionNEQ?: InputMaybe<Scalars['u16']>;
+  versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
+  versionNOTLIKE?: InputMaybe<Scalars['u16']>;
 };
 
 export type SortedList = {
@@ -1345,37 +1839,57 @@ export type SortedListItemWhereInput = {
   item_k0EQ?: InputMaybe<Scalars['u32']>;
   item_k0GT?: InputMaybe<Scalars['u32']>;
   item_k0GTE?: InputMaybe<Scalars['u32']>;
+  item_k0IN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  item_k0LIKE?: InputMaybe<Scalars['u32']>;
   item_k0LT?: InputMaybe<Scalars['u32']>;
   item_k0LTE?: InputMaybe<Scalars['u32']>;
   item_k0NEQ?: InputMaybe<Scalars['u32']>;
+  item_k0NOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  item_k0NOTLIKE?: InputMaybe<Scalars['u32']>;
   item_k1?: InputMaybe<Scalars['ContractAddress']>;
   item_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
   item_k1GT?: InputMaybe<Scalars['ContractAddress']>;
   item_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1IN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  item_k1LIKE?: InputMaybe<Scalars['ContractAddress']>;
   item_k1LT?: InputMaybe<Scalars['ContractAddress']>;
   item_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
   item_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+  item_k1NOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  item_k1NOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   list_id?: InputMaybe<Scalars['felt252']>;
   list_idEQ?: InputMaybe<Scalars['felt252']>;
   list_idGT?: InputMaybe<Scalars['felt252']>;
   list_idGTE?: InputMaybe<Scalars['felt252']>;
+  list_idIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  list_idLIKE?: InputMaybe<Scalars['felt252']>;
   list_idLT?: InputMaybe<Scalars['felt252']>;
   list_idLTE?: InputMaybe<Scalars['felt252']>;
   list_idNEQ?: InputMaybe<Scalars['felt252']>;
+  list_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  list_idNOTLIKE?: InputMaybe<Scalars['felt252']>;
   next_k0?: InputMaybe<Scalars['u32']>;
   next_k0EQ?: InputMaybe<Scalars['u32']>;
   next_k0GT?: InputMaybe<Scalars['u32']>;
   next_k0GTE?: InputMaybe<Scalars['u32']>;
+  next_k0IN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  next_k0LIKE?: InputMaybe<Scalars['u32']>;
   next_k0LT?: InputMaybe<Scalars['u32']>;
   next_k0LTE?: InputMaybe<Scalars['u32']>;
   next_k0NEQ?: InputMaybe<Scalars['u32']>;
+  next_k0NOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  next_k0NOTLIKE?: InputMaybe<Scalars['u32']>;
   next_k1?: InputMaybe<Scalars['ContractAddress']>;
   next_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
   next_k1GT?: InputMaybe<Scalars['ContractAddress']>;
   next_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1IN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  next_k1LIKE?: InputMaybe<Scalars['ContractAddress']>;
   next_k1LT?: InputMaybe<Scalars['ContractAddress']>;
   next_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
   next_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+  next_k1NOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  next_k1NOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type SortedListOrder = {
@@ -1399,46 +1913,70 @@ export type SortedListWhereInput = {
   list_idEQ?: InputMaybe<Scalars['felt252']>;
   list_idGT?: InputMaybe<Scalars['felt252']>;
   list_idGTE?: InputMaybe<Scalars['felt252']>;
+  list_idIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  list_idLIKE?: InputMaybe<Scalars['felt252']>;
   list_idLT?: InputMaybe<Scalars['felt252']>;
   list_idLTE?: InputMaybe<Scalars['felt252']>;
   list_idNEQ?: InputMaybe<Scalars['felt252']>;
+  list_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  list_idNOTLIKE?: InputMaybe<Scalars['felt252']>;
   locked?: InputMaybe<Scalars['bool']>;
   process_cursor_k0?: InputMaybe<Scalars['u32']>;
   process_cursor_k0EQ?: InputMaybe<Scalars['u32']>;
   process_cursor_k0GT?: InputMaybe<Scalars['u32']>;
   process_cursor_k0GTE?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0IN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_cursor_k0LIKE?: InputMaybe<Scalars['u32']>;
   process_cursor_k0LT?: InputMaybe<Scalars['u32']>;
   process_cursor_k0LTE?: InputMaybe<Scalars['u32']>;
   process_cursor_k0NEQ?: InputMaybe<Scalars['u32']>;
+  process_cursor_k0NOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_cursor_k0NOTLIKE?: InputMaybe<Scalars['u32']>;
   process_cursor_k1?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1EQ?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1GT?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1GTE?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1IN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  process_cursor_k1LIKE?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1LT?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1LTE?: InputMaybe<Scalars['ContractAddress']>;
   process_cursor_k1NEQ?: InputMaybe<Scalars['ContractAddress']>;
+  process_cursor_k1NOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  process_cursor_k1NOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
   process_max_size?: InputMaybe<Scalars['u32']>;
   process_max_sizeEQ?: InputMaybe<Scalars['u32']>;
   process_max_sizeGT?: InputMaybe<Scalars['u32']>;
   process_max_sizeGTE?: InputMaybe<Scalars['u32']>;
+  process_max_sizeIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_max_sizeLIKE?: InputMaybe<Scalars['u32']>;
   process_max_sizeLT?: InputMaybe<Scalars['u32']>;
   process_max_sizeLTE?: InputMaybe<Scalars['u32']>;
   process_max_sizeNEQ?: InputMaybe<Scalars['u32']>;
+  process_max_sizeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_max_sizeNOTLIKE?: InputMaybe<Scalars['u32']>;
   process_size?: InputMaybe<Scalars['u32']>;
   process_sizeEQ?: InputMaybe<Scalars['u32']>;
   process_sizeGT?: InputMaybe<Scalars['u32']>;
   process_sizeGTE?: InputMaybe<Scalars['u32']>;
+  process_sizeIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_sizeLIKE?: InputMaybe<Scalars['u32']>;
   process_sizeLT?: InputMaybe<Scalars['u32']>;
   process_sizeLTE?: InputMaybe<Scalars['u32']>;
   process_sizeNEQ?: InputMaybe<Scalars['u32']>;
+  process_sizeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  process_sizeNOTLIKE?: InputMaybe<Scalars['u32']>;
   processed?: InputMaybe<Scalars['bool']>;
   size?: InputMaybe<Scalars['u32']>;
   sizeEQ?: InputMaybe<Scalars['u32']>;
   sizeGT?: InputMaybe<Scalars['u32']>;
   sizeGTE?: InputMaybe<Scalars['u32']>;
+  sizeIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  sizeLIKE?: InputMaybe<Scalars['u32']>;
   sizeLT?: InputMaybe<Scalars['u32']>;
   sizeLTE?: InputMaybe<Scalars['u32']>;
   sizeNEQ?: InputMaybe<Scalars['u32']>;
+  sizeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  sizeNOTLIKE?: InputMaybe<Scalars['u32']>;
 };
 
 export type World__Content = {
@@ -1594,6 +2132,7 @@ export type World__Query = {
   __typename?: 'World__Query';
   drugConfigModels?: Maybe<DrugConfigConnection>;
   encounterConfigModels?: Maybe<EncounterConfigConnection>;
+  encounterStatsConfigModels?: Maybe<EncounterStatsConfigConnection>;
   entities?: Maybe<World__EntityConnection>;
   entity: World__Entity;
   erc20AllowanceModelModels?: Maybe<Erc20AllowanceModelConnection>;
@@ -1615,6 +2154,7 @@ export type World__Query = {
   ryoAddressModels?: Maybe<RyoAddressConnection>;
   ryoConfigModels?: Maybe<RyoConfigConnection>;
   seasonModels?: Maybe<SeasonConnection>;
+  seasonSettingsModels?: Maybe<SeasonSettingsConnection>;
   sortedListItemModels?: Maybe<SortedListItemConnection>;
   sortedListModels?: Maybe<SortedListConnection>;
   transaction: World__Transaction;
@@ -1643,6 +2183,18 @@ export type World__QueryEncounterConfigModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<EncounterConfigOrder>;
   where?: InputMaybe<EncounterConfigWhereInput>;
+};
+
+
+export type World__QueryEncounterStatsConfigModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<EncounterStatsConfigOrder>;
+  where?: InputMaybe<EncounterStatsConfigWhereInput>;
 };
 
 
@@ -1871,6 +2423,18 @@ export type World__QuerySeasonModelsArgs = {
 };
 
 
+export type World__QuerySeasonSettingsModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SeasonSettingsOrder>;
+  where?: InputMaybe<SeasonSettingsWhereInput>;
+};
+
+
 export type World__QuerySortedListItemModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1972,7 +2536,7 @@ export type World__TransactionEdge = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterConfigModels?: { __typename?: 'EncounterConfigConnection', edges?: Array<{ __typename?: 'EncounterConfigEdge', node?: { __typename?: 'EncounterConfig', id?: any | null, encounter?: any | null, level?: any | null, health?: any | null, attack?: any | null, defense?: any | null, speed?: any | null, rep_pay?: any | null, rep_run?: any | null, rep_fight?: any | null, min_rep?: any | null, max_rep?: any | null, payout?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterStatsConfigModels?: { __typename?: 'EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'EncounterStatsConfigEdge', node?: { __typename?: 'EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null };
 
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -1993,7 +2557,7 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | null } | null> | null } | null };
 
 export type RegisteredGamesBySeasonQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
@@ -2007,7 +2571,14 @@ export type GamesByPlayerQueryVariables = Exact<{
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'EncounterStatsConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SeasonSettings' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
+
+export type GameConfigQueryVariables = Exact<{
+  version?: InputMaybe<Scalars['u16']>;
+}>;
+
+
+export type GameConfigQuery = { __typename?: 'World__Query', gameConfigModels?: { __typename?: 'GameConfigConnection', edges?: Array<{ __typename?: 'GameConfigEdge', node?: { __typename?: 'GameConfig', season_version?: any | null, cash?: any | null, health?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, rep_drug_step?: any | null, rep_buy_item?: any | null, rep_carry_drugs?: any | null, rep_hospitalized?: any | null, rep_jailed?: any | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -2015,14 +2586,14 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'EncounterStatsConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SeasonSettings' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'EncounterStatsConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SeasonSettings' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } };
 
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
@@ -2030,12 +2601,19 @@ export type SeasonByVersionQueryVariables = Exact<{
 }>;
 
 
-export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
+export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
 
 export type SeasonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SeasonsQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
+export type SeasonsQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
+
+export type SeasonSettingsQueryVariables = Exact<{
+  version?: InputMaybe<Scalars['u16']>;
+}>;
+
+
+export type SeasonSettingsQuery = { __typename?: 'World__Query', seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null };
 
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2086,9 +2664,10 @@ export const ConfigDocument = `
       }
     }
   }
-  drugConfigModels(order: {field: DRUG_ID, direction: ASC}) {
+  drugConfigModels(limit: 24, order: {field: DRUG_ID, direction: ASC}) {
     edges {
       node {
+        drugs_mode
         drug
         drug_id
         base
@@ -2129,22 +2708,19 @@ export const ConfigDocument = `
       }
     }
   }
-  encounterConfigModels(limit: 20, order: {field: ID, direction: ASC}) {
+  encounterStatsConfigModels(limit: 100) {
     edges {
       node {
-        id
+        encounters_mode
         encounter
-        level
-        health
-        attack
-        defense
-        speed
-        rep_pay
-        rep_run
-        rep_fight
-        min_rep
-        max_rep
-        payout
+        health_base
+        health_step
+        attack_base
+        attack_step
+        defense_base
+        defense_step
+        speed_base
+        speed_step
       }
     }
   }
@@ -2251,8 +2827,6 @@ export const GameByIdDocument = `
         season_version
         game_id
         game_mode
-        max_turns
-        max_wanted_shopping
         hustler_id
         player_name
         player_id
@@ -2427,6 +3001,60 @@ export const useInfiniteGamesByPlayerQuery = <
 useInfiniteGamesByPlayerQuery.getKey = (variables?: GamesByPlayerQueryVariables) => variables === undefined ? ['GamesByPlayer.infinite'] : ['GamesByPlayer.infinite', variables];
 ;
 
+export const GameConfigDocument = `
+    query GameConfig($version: u16) {
+  gameConfigModels(where: {season_version: $version}) {
+    edges {
+      node {
+        season_version
+        cash
+        health
+        max_turns
+        max_wanted_shopping
+        rep_drug_step
+        rep_buy_item
+        rep_carry_drugs
+        rep_hospitalized
+        rep_jailed
+      }
+    }
+  }
+}
+    `;
+export const useGameConfigQuery = <
+      TData = GameConfigQuery,
+      TError = unknown
+    >(
+      variables?: GameConfigQueryVariables,
+      options?: UseQueryOptions<GameConfigQuery, TError, TData>
+    ) =>
+    useQuery<GameConfigQuery, TError, TData>(
+      variables === undefined ? ['GameConfig'] : ['GameConfig', variables],
+      useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument).bind(null, variables),
+      options
+    );
+
+useGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig'] : ['GameConfig', variables];
+;
+
+export const useInfiniteGameConfigQuery = <
+      TData = GameConfigQuery,
+      TError = unknown
+    >(
+      variables?: GameConfigQueryVariables,
+      options?: UseInfiniteQueryOptions<GameConfigQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument)
+    return useInfiniteQuery<GameConfigQuery, TError, TData>(
+      variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables];
+;
+
 export const GameStorePackedDocument = `
     query GameStorePacked($gameId: String!, $playerId: String!) {
   entities(keys: [$gameId, $playerId]) {
@@ -2512,6 +3140,19 @@ export const SeasonByVersionDocument = `
       }
     }
   }
+  seasonSettingsModels(where: {season_version: $version}) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
   sortedListModels(where: {list_id: $listId}) {
     edges {
       node {
@@ -2562,7 +3203,7 @@ useInfiniteSeasonByVersionQuery.getKey = (variables?: SeasonByVersionQueryVariab
 
 export const SeasonsDocument = `
     query Seasons {
-  seasonModels(limit: 420) {
+  seasonModels(limit: 420, order: {field: VERSION, direction: DESC}) {
     edges {
       node {
         version
@@ -2572,6 +3213,19 @@ export const SeasonsDocument = `
         treasury_fee_pct
         next_version_timestamp
         paper_balance
+      }
+    }
+  }
+  seasonSettingsModels(limit: 420) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
       }
     }
   }
@@ -2621,6 +3275,57 @@ export const useInfiniteSeasonsQuery = <
 
 
 useInfiniteSeasonsQuery.getKey = (variables?: SeasonsQueryVariables) => variables === undefined ? ['Seasons.infinite'] : ['Seasons.infinite', variables];
+;
+
+export const SeasonSettingsDocument = `
+    query SeasonSettings($version: u16) {
+  seasonSettingsModels(where: {season_version: $version}) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
+}
+    `;
+export const useSeasonSettingsQuery = <
+      TData = SeasonSettingsQuery,
+      TError = unknown
+    >(
+      variables?: SeasonSettingsQueryVariables,
+      options?: UseQueryOptions<SeasonSettingsQuery, TError, TData>
+    ) =>
+    useQuery<SeasonSettingsQuery, TError, TData>(
+      variables === undefined ? ['SeasonSettings'] : ['SeasonSettings', variables],
+      useFetchData<SeasonSettingsQuery, SeasonSettingsQueryVariables>(SeasonSettingsDocument).bind(null, variables),
+      options
+    );
+
+useSeasonSettingsQuery.getKey = (variables?: SeasonSettingsQueryVariables) => variables === undefined ? ['SeasonSettings'] : ['SeasonSettings', variables];
+;
+
+export const useInfiniteSeasonSettingsQuery = <
+      TData = SeasonSettingsQuery,
+      TError = unknown
+    >(
+      variables?: SeasonSettingsQueryVariables,
+      options?: UseInfiniteQueryOptions<SeasonSettingsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<SeasonSettingsQuery, SeasonSettingsQueryVariables>(SeasonSettingsDocument)
+    return useInfiniteQuery<SeasonSettingsQuery, TError, TData>(
+      variables === undefined ? ['SeasonSettings.infinite'] : ['SeasonSettings.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteSeasonSettingsQuery.getKey = (variables?: SeasonSettingsQueryVariables) => variables === undefined ? ['SeasonSettings.infinite'] : ['SeasonSettings.infinite', variables];
 ;
 
 export const HallOfFameDocument = `

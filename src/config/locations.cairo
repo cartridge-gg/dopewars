@@ -32,17 +32,16 @@ enum Locations {
 
 impl LocationsEnumerableImpl of Enumerable<Locations> {
     fn all() -> Span<Locations> {
-        let mut items = array![
+        array![
             Locations::Queens,
             Locations::Bronx,
             Locations::Brooklyn,
             Locations::Jersey,
             Locations::Central,
             Locations::Coney
-        ];
-        items.span()
+        ]
+            .span()
     }
-
 }
 
 //

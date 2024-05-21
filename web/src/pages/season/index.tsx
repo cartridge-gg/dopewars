@@ -19,11 +19,11 @@ export default function SeasonIndex() {
       leftPanelProps={{
         prefixTitle: "RYO",
         title: `Seasons`,
-        imageSrc: "/images/sunset.png",
+        imageSrc: "/images/landing/main.png",
       }}
       rigthPanelScrollable={false}
       // rigthPanelMaxH="calc(100vh - 230px)"
-      footer={<Button onClick={() => router.push("/")}>BACK</Button>}
+      footer={<Button onClick={() => router.push("/")}>HOME</Button>}
     >
       <VStack boxSize="full" gap={6}>
         <VStack w="full">
@@ -39,11 +39,11 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
   const { router } = useRouterContext();
   return (
     <TableContainer position="relative" w="full" maxH="calc(100vh - 300px)" overflow="hidden" overflowY="auto">
-      <Table size="md">
+      <Table size="sm">
         <Thead position="sticky" top="0" bg="neon.900">
           <Tr>
             {/* <Th isNumeric>gameId</Th> */}
-            <Th isNumeric></Th>
+            <Th></Th>
             <Th isNumeric>Total Entrants</Th>
             <Th isNumeric>Total Paid</Th>
             <Th isNumeric>Total Paper</Th>
@@ -53,9 +53,16 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
           {seasons.map((season, idx) => {
             if (!season) return;
 
+            const seasonName = season.seasonSettings
+              ? `${season.seasonSettings.cash_mode} ${season.seasonSettings.health_mode} ${season.seasonSettings.turns_mode}`
+              : "";
+
             return (
               <Tr key={idx} cursor="pointer" onClick={() => router.push(`/season/${season.season.version}`)}>
-                <Td isNumeric>SEASON {season.season.version}</Td>
+                <Td>
+                  <small>SEASON {season.season.version}</small> <br />"{seasonName}"
+                </Td>
+
                 <Td isNumeric>{season.sortedList?.size}</Td>
                 <Td isNumeric>{season.sortedList?.process_size}</Td>
                 <Td isNumeric>

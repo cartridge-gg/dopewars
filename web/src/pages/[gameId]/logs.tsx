@@ -177,7 +177,7 @@ const Logs = () => {
               </TabPanel>
               <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
                 <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
-                  {logs && logs.map((log) => renderDay(configStore, game, log))}
+                  {logs && logs.map((log) => renderDay(game, log))}
                 </VStack>
               </TabPanel>
             </TabPanels>
@@ -220,7 +220,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(configStore: ConfigStoreClass, game: GameClass, log: LogByDay) {
+function renderDay( game: GameClass, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -238,15 +238,15 @@ function renderDay(configStore: ConfigStoreClass, game: GameClass, log: LogByDay
 
           switch (i.eventType) {
             case WorldEvents.TradeDrug:
-              return renderTradeDrug(configStore, i as TradeDrugData, key);
+              return renderTradeDrug(game, i as TradeDrugData, key);
               break;
 
             case WorldEvents.UpgradeItem:
-              return renderUpgradeItem(configStore, game, i as UpgradeItemData, key);
+              return renderUpgradeItem( game, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:
-              return renderTravelEncounter(configStore, i as TravelEncounterData, log, key);
+              return renderTravelEncounter(game, i as TravelEncounterData, log, key);
               break;
 
             case WorldEvents.GameOver:
@@ -262,8 +262,8 @@ function renderDay(configStore: ConfigStoreClass, game: GameClass, log: LogByDay
   );
 }
 
-function renderTradeDrug(configStore: ConfigStoreClass, log: TradeDrugData, key: string) {
-  const drug = configStore.getDrugById(Number(log.drugId))!;
+function renderTradeDrug(game: GameClass, log: TradeDrugData, key: string) {
+  const drug = game.configStore.getDrugById(game.seasonSettings.drugs_mode, Number(log.drugId))!;
   const action = log.isBuy ? "Bought" : "Sold";
   const sign = log.isBuy ? "-" : "+";
   const totalPrice = log.price * log.quantity;
@@ -278,7 +278,7 @@ function renderTradeDrug(configStore: ConfigStoreClass, log: TradeDrugData, key:
   );
 }
 
-function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: UpgradeItemData, key: string) {
+function renderUpgradeItem(game: GameClass, log: UpgradeItemData, key: string) {
   let item_id = 0;
   switch (log.itemSlot) {
     case ItemSlot.Weapon:
@@ -298,7 +298,7 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
       break;
   }
 
-  const item = configStore.getHustlerItemByIds(item_id, log.itemSlot, log.itemLevel);
+  const item = game.configStore.getHustlerItemByIds(item_id, log.itemSlot, log.itemLevel);
 
   return (
     <Line
@@ -312,30 +312,28 @@ function renderUpgradeItem(configStore: ConfigStoreClass, game: GameClass, log: 
   );
 }
 
-function renderTravelEncounter(configStore: ConfigStoreClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
-  const encounter = configStore.getEncounterById(log.encounterId);
-
-  const icon = encounter.encounter === Encounters.Cops ? CopsIcon : GangIcon;
+function renderTravelEncounter(game: GameClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
+  const icon = log.encounter === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
     .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
     .map((i) => i as TravelEncounterResultData);
 
-  const lastEncouterResult = results.length > 0 ? results[results.length - 1] : undefined;
-  const lastEncounterResultName = lastEncouterResult
-    ? outcomeNames[lastEncouterResult.outcome as outcomeNamesKeys]
+  const lastEncounterResult = results.length > 0 ? results[results.length - 1] : undefined;
+  const lastEncounterResultName = lastEncounterResult
+    ? outcomeNames[lastEncounterResult.outcome as outcomeNamesKeys]
     : "";
 
-  const action = lastEncouterResult?.action;
-  const totalHpLoss = lastEncouterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0;
+  const action = lastEncounterResult?.action;
+  const totalHpLoss = lastEncounterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0;
 
   return (
     <FightLine
       lineKey={key}
       icon={icon}
-      text={`Meet ${encounter.encounter} Lvl ${encounter.level}`}
+      text={`Meet ${log.encounter} Lvl ${log.level}`}
       result={lastEncounterResultName}
-      resultInfos={lastEncouterResult}
+      resultInfos={lastEncounterResult}
       consequence={totalHpLoss > 0 ? `-${totalHpLoss} HP` : ""}
       action={action}
       color="yellow.400"

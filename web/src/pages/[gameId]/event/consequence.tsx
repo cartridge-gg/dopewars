@@ -30,14 +30,13 @@ const Consequence = () => {
       return;
 
     setEncounterResult(gameEvents?.lastEncounterResult.parsed as TravelEncounterResultData);
-
     const lastEncounterEvent = gameEvents?.lastEncounter.parsed as TravelEncounterData;
-    const lastEncounter = configStore.getEncounterById(lastEncounterEvent.encounterId);
 
     const outcome = getOutcomeInfo(
-      lastEncounter.encounter as Encounters,
+      lastEncounterEvent.encounter as Encounters,
       (gameEvents?.lastEncounterResult?.parsed as TravelEncounterResultData).outcome as EncounterOutcomes,
     );
+
     setOutcomeInfos(outcome);
   }, [game, gameEvents, gameEvents?.sortedEvents, gameEvents?.lastEncounter, gameEvents?.lastEncounterResult]);
 
@@ -126,12 +125,12 @@ const Consequence = () => {
                       {encounterResult.drugLoss[idx] ? (
                         <Line
                           icon={configStore
-                            .getDrugById(encounterResult.drugId)
+                            .getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId)
                             .icon({ color: "yellow.400", width: "24px", height: "24px" })}
                           text={
                             <Text color="yellow.400">
                               You lost {encounterResult.drugLoss[idx]}{" "}
-                              {configStore.getDrugById(encounterResult.drugId).name} on the run
+                              {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId).name} on the run
                             </Text>
                           }
                         />
@@ -180,7 +179,7 @@ const Consequence = () => {
                 encounterResult.drugLoss.reduce((p, c) => p + c, 0) > 0 && (
                   <Text color="yellow.400">
                     You lost {encounterResult.drugLoss.reduce((p, c) => p + c, 0)}{" "}
-                    {configStore.getDrugById(encounterResult.drugId).name}
+                    {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId).name}
                   </Text>
                 )}
 

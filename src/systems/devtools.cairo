@@ -4,6 +4,7 @@ use starknet::ContractAddress;
 trait IDevtools<T> {
     fn failing_tx(self: @T);
     fn create_fake_game(self: @T, final_score: u32);
+    fn create_new_season(self: @T,);
 }
 
 // use with katana --chain_id != 'KATANA'
@@ -67,23 +68,19 @@ mod devtools {
                 claimed: false,
                 claimable: 0,
                 position: 0,
-                //
-                max_turns: 2,
-                max_wanted_shopping: 2,
-                max_rounds: 2,
             };
 
-            let mut game_store = self.s().game_store(game.game_id, game.player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
             game_store.player.cash = rand_score;
 
             // save Game & GameStorePacked
             self.s().set_game(game);
-            self.s().set_game_store(game_store);
+            game_store.save();
 
             // simulate register_score
 
             // register final_score
-            let mut game_store = self.s().game_store(game.game_id, game.player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
             self.s().set_game(game);
@@ -94,6 +91,16 @@ mod devtools {
 
             // add to Game to sorted_list
             sorted_list.add(world, game, (0, 0.try_into().unwrap()));
+        }
+
+        fn create_new_season(self: @ContractState,) {
+            let mut ryo_config = self.s().ryo_config();
+            ryo_config.season_version += 1;
+            self.s().save_ryo_config(ryo_config);
+
+            let mut randomizer = RandomImpl::new('devtools');
+            let season_manager = SeasonManagerTrait::new(self.s());
+            season_manager.new_season(ref randomizer, ryo_config.season_version);
         }
 
 

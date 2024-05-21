@@ -8,14 +8,14 @@ export class DrugsClass extends GamePropertyClass {
     private _drug: DrugConfigFull | undefined;
     private _quantity: number;
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor( game: GameClass, packed: bigint) {
+        super( game, packed);
 
         const drugId = Number(Bits.extract(this.packed, 0n, 3n));
         this._quantity = Number(Bits.extract(this.packed, 3n, 13n));
 
         this._drug = this.quantity > 0 ?
-            configStore.getDrugById(drugId)
+        game.configStore.getDrugById(game.seasonSettings.drugs_mode, drugId)
             : undefined
 
     }
@@ -44,7 +44,7 @@ export class DrugsClass extends GamePropertyClass {
         for (let trade of trades) {
             if (trade.direction === TradeDirection.Buy) {
                 if (!drug || drug.drug_id === trade.drug) {
-                    drug = this.configStore.getDrugById(trade.drug)
+                    drug = this.game.configStore.getDrugById(this.game.seasonSettings.drugs_mode,trade.drug)
                     quantity += trade.quantity
                 }
                 else {

@@ -1,8 +1,9 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::utils::bytes16::Bytes16;
-use rollyourown::utils::introspect::Bytes16IntrospectionImpl;
+use rollyourown::{
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::{Bytes16IntrospectionImpl}}
+};
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Game {
@@ -23,12 +24,6 @@ struct Game {
     claimed: bool,
     claimable: u32,
     position: u16,
-    // 
-    // Copied from GameConfig
-    //
-    max_turns: u8,
-    max_wanted_shopping: u8,
-    max_rounds: u8,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -39,6 +34,33 @@ enum GameMode {
 
 #[generate_trait]
 impl GameImpl of GameTrait {
+    fn new(
+        game_id: u32,
+        player_id: ContractAddress,
+        season_version: u16,
+        game_mode: GameMode,
+        player_name: felt252,
+        hustler_id: u16
+    ) -> Game {
+        Game {
+            game_id,
+            player_id,
+            //
+            season_version,
+            game_mode,
+            //
+            player_name: Bytes16Impl::from(player_name),
+            hustler_id,
+            //
+            game_over: false,
+            final_score: 0,
+            registered: false,
+            claimed: false,
+            claimable: 0,
+            position: 0,
+        }
+    }
+
     fn exists(self: Game) -> bool {
         self.season_version > 0
     }

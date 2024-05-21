@@ -2,13 +2,15 @@ import { useDojoContext, useSystems } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
 
 import { Table, useTable } from "ka-table";
-import { ActionType, DataType, SortingMode } from "ka-table/enums";
+import { ActionType, DataType, FilteringMode, SortingMode } from "ka-table/enums";
 import { useState } from "react";
 import { shortString } from "starknet";
 import { editComponents } from "./tables";
 
 const columns = [
-  { key: "icon",  width: 80  },
+  { key: "id" },
+  { key: "icon", width: 80 },
+  { key: "drugs_mode", title: "drugs_mode", dataType: DataType.String },
   { key: "drug", title: "drug", dataType: DataType.String },
   { key: "drug_id", title: "drug_id", dataType: DataType.Number },
   { key: "name", title: "name", dataType: DataType.String },
@@ -25,7 +27,7 @@ export const DrugTable = observer(() => {
 
   const { updateDrugConfig } = useSystems();
 
-  const [data, setData] = useState(config?.drug || []);
+  const [data, setData] = useState(config?.drug.map((i, id) => ({ id: id, ...i })) || []);
 
   const table = useTable({
     onDispatch: (action) => {
@@ -60,7 +62,7 @@ export const DrugTable = observer(() => {
       }
 
       if (action.type === ActionType.CloseRowEditors) {
-        setData(config!.drug);
+        setData(config!.drug.map((i, id) => ({ id: id, ...i })));
       }
     },
   });
@@ -71,8 +73,9 @@ export const DrugTable = observer(() => {
       table={table}
       columns={columns}
       data={data}
-      rowKeyField={"drug_id"}
+      rowKeyField={"id"}
       sortingMode={SortingMode.Single}
+      filteringMode={FilteringMode.HeaderFilter}
       childComponents={editComponents}
     />
   );

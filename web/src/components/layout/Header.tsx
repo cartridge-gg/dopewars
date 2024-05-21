@@ -24,7 +24,7 @@ export const Header = observer(() => {
 
   const { account } = useAccount();
 
-  const { game, gameInfos } = useGameStore();
+  const { game, gameConfig } = useGameStore();
   const { config } = useConfigStore();
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const Header = observer(() => {
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <HealthIndicator health={game.player.health} maxHealth={100} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <DayIndicator day={game.player.turn} max={gameInfos?.max_turns} />
+                <DayIndicator day={game.player.turn} max={gameConfig?.max_turns} />
               </HStack>
             </Flex>
           </HStack>

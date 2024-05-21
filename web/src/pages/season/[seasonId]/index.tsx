@@ -1,7 +1,33 @@
 import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
-import { Alert, Cigarette, Clock, Gem, PaperIcon, User } from "@/components/icons";
+import {
+  Alert,
+  Cigarette,
+  Clock,
+  CopsIcon,
+  GangIcon,
+  Gem,
+  Heart,
+  PaperCashIcon,
+  PaperIcon,
+  User,
+} from "@/components/icons";
+import { Cocaine } from "@/components/icons/drugs";
 import { Layout } from "@/components/layout";
+import {
+  cashModeColor,
+  cashModeColorKeys,
+  drugsModeColor,
+  drugsModeColorKeys,
+  encountersModeColor,
+  encountersModeColorKeys,
+  encountersModeOddsColor,
+  encountersModeOddsColorKeys,
+  healthModeColor,
+  healthModeColorKeys,
+  turnsModeColor,
+  turnsModeColorKeys,
+} from "@/dojo/helpers";
 import {
   useDojoContext,
   useRegisteredGamesBySeason,
@@ -9,7 +35,7 @@ import {
   useSeasonByVersion,
   useSystems,
 } from "@/dojo/hooks";
-import { Game } from "@/generated/graphql";
+import { Game, SeasonSettings, SortedList } from "@/generated/graphql";
 
 import { useToast } from "@/hooks/toast";
 import { formatCashHeader } from "@/utils/ui";
@@ -30,6 +56,7 @@ import {
   Heading,
   Card,
   Divider,
+  CardBody,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
@@ -43,101 +70,138 @@ interface Claimable {
 
 export default function SeasonIndex() {
   const { router, seasonId } = useRouterContext();
-  const { account } = useAccount();
 
   const { registeredGames, isFetched, refetch: refetchRegisteredGames } = useRegisteredGamesBySeason(seasonId || 0);
-  const { season, sortedList } = useSeasonByVersion(seasonId || 0);
-
-  const [claimable, setClaimable] = useState<Claimable>({
-    totalClaimable: 0,
-    totalClaimed: 0,
-    gameIds: [],
-  });
-
-  const { claim, isPending } = useSystems();
+  const { season, seasonSettings, sortedList } = useSeasonByVersion(seasonId || 0);
 
   useEffect(() => {
     refetchRegisteredGames();
   }, [refetchRegisteredGames]);
 
-  useEffect(() => {
-    const onlyClaimable = registeredGames.filter(
-      (i) => i.player_id === account?.address && i.claimable > 0 && !i.claimed,
-    );
-    const gameIds = onlyClaimable.map((i) => i.game_id);
-    const totalClaimable = onlyClaimable.map((i) => i.claimable).reduce((p, c) => p + c, 0);
-
-    const onlyClaimed = registeredGames.filter((i) => i.player_id === account?.address && i.claimable > 0 && i.claimed);
-    const totalClaimed = onlyClaimed.map((i) => i.claimable).reduce((p, c) => p + c, 0);
-
-    setClaimable({
-      totalClaimable,
-      totalClaimed,
-      gameIds,
-    });
-  }, [account?.address, registeredGames, refetchRegisteredGames]);
-
-  const onClaim = async () => {
-    if (!seasonId || !account) return;
-
-    await claim(account?.address, claimable.gameIds);
-
-    refetchRegisteredGames();
-  };
+  if (!season || !seasonSettings) return null;
 
   return (
     <Layout
-      leftPanelProps={{
-        prefixTitle: "",
-        title: `Season ${seasonId}`,
-        imageSrc: "/images/laundromat.png",
-      }}
+      customLeftPanel={<SeasonLeftPanel seasonId={seasonId} seasonSettings={seasonSettings} sortedList={sortedList} />}
       rigthPanelScrollable={false}
-      // rigthPanelMaxH="calc(100vh - 230px)"
-      footer={<Button onClick={() => router.push("/season")}>BACK</Button>}
+      footer={<Button onClick={() => router.push("/season")}>ALL SEASONS</Button>}
     >
       <VStack boxSize="full" gap={6}>
-        <VStack w="full">
-          <Card w="full" p={3} alignItems="center">
-            <Text>Total entrants {sortedList?.size}</Text>
-
-            {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}
-
-            {claimable.totalClaimable > 0 && (
-              <Text fontSize="16px">
-                {claimable.totalClaimable} <PaperIcon /> Claimable
-              </Text>
-            )}
-            {claimable.totalClaimed > 0 && (
-              <Text fontSize="16px" my={3}>
-                You claimed {claimable.totalClaimed} <PaperIcon /> PAPER!
-              </Text>
-            )}
-          </Card>
-          {/* <Text>Game ids : {claimable.gameIds.join(", ")}</Text> */}
-          {claimable.totalClaimable > 0 && (
-            <Button
-              isLoading={isPending}
-              h="48px"
-              variant="pixelated"
-              bg="yellow.600"
-              color="yellow.400"
-              onClick={() => onClaim()}
-            >
-              <Gem />
-              CLAIM
-            </Button>
-          )}
-        </VStack>
+        {/*       
+          <Card>
+            <CardBody>
+              <Text>SEASON Winner HERE </Text>
+            </CardBody>
+          </Card> */}
 
         <VStack w="full">
-          <Text>Registered Games</Text>
           <GamesTable games={registeredGames} />
         </VStack>
       </VStack>
     </Layout>
   );
 }
+
+const SeasonLeftPanel = ({
+  seasonId,
+  seasonSettings,
+  sortedList,
+}: {
+  seasonId?: number;
+  seasonSettings: SeasonSettings;
+  sortedList: SortedList;
+}) => {
+  return (
+    <VStack
+      flex={1}
+      w="full"
+      h="full"
+      // justifyContent="center"
+      alignItems="center"
+      marginBottom={["30px", "50px"]}
+      gap={0}
+    >
+      <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
+        SEASON {seasonId}
+      </Text>
+      <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]} textAlign="center">
+        {seasonSettings.cash_mode} {seasonSettings.health_mode} <br /> {seasonSettings.turns_mode}
+      </Heading>
+
+      <VStack>
+        <Card w="full" p={3} alignItems="center">
+          <Text>Total entrants {sortedList?.size || 0}</Text>
+          {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}
+        </Card>
+
+        <SeasonSettingsTable settings={seasonSettings} />
+      </VStack>
+    </VStack>
+  );
+};
+
+export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings }) => {
+  const { account } = useAccount();
+
+  return (
+    <Card>
+      <CardBody>
+        <TableContainer position="relative">
+          <Table size="sm">
+            <Tbody>
+              <Tr>
+                <Td w="30px">
+                  <PaperCashIcon />
+                </Td>
+                <Td>Cash</Td>
+                <Td color={cashModeColor[settings?.cash_mode as cashModeColorKeys]}>{settings?.cash_mode}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Heart />
+                </Td>
+                <Td>Health</Td>
+                <Td color={healthModeColor[settings?.health_mode as healthModeColorKeys]}>{settings?.health_mode}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Clock />
+                </Td>
+                <Td>Turns</Td>
+                <Td color={turnsModeColor[settings?.turns_mode as turnsModeColorKeys]}>{settings?.turns_mode}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <GangIcon />
+                </Td>
+                <Td>Encounters</Td>
+                <Td color={encountersModeColor[settings?.encounters_mode as encountersModeColorKeys]}>
+                  {settings?.encounters_mode}
+                </Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <CopsIcon />
+                </Td>
+                <Td>Encounters Odds</Td>
+                <Td color={encountersModeOddsColor[settings?.encounters_odds_mode as encountersModeOddsColorKeys]}>
+                  {settings?.encounters_odds_mode}
+                </Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Cigarette />
+                </Td>
+                <Td>Drugs</Td>
+                <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys]}>{settings?.drugs_mode}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </CardBody>
+    </Card>
+  );
+};
 
 export const GamesTable = ({ games }: { games: Game[] }) => {
   const { account } = useAccount();

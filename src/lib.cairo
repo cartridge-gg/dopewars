@@ -7,6 +7,7 @@ mod config {
     mod locations;
     mod ryo;
     mod ryo_address;
+    mod settings;
 }
 
 mod helpers {

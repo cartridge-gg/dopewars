@@ -47,25 +47,29 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100
  RyoConfig,$RYO_ADDRESS \
  RyoAddress,$RYO_ADDRESS \
  Season,$RYO_ADDRESS \
+ SeasonSettings,$RYO_ADDRESS \
  \
  GameConfig,$CONFIG_ADDRESS \
  DrugConfig,$CONFIG_ADDRESS \
  LocationConfig,$CONFIG_ADDRESS \
  HustlerItemBaseConfig,$CONFIG_ADDRESS \
  HustlerItemTiersConfig,$CONFIG_ADDRESS \
- EncounterConfig,$CONFIG_ADDRESS \
+ EncounterStatsConfig,$CONFIG_ADDRESS \
  Game,$GAME_ADDRESS \
  \
  GameStorePacked,$GAME_ADDRESS \
  RyoConfig,$GAME_ADDRESS \
  Season,$GAME_ADDRESS \
+ SeasonSettings,$GAME_ADDRESS \
  SortedList,$GAME_ADDRESS \
  SortedListItem,$GAME_ADDRESS \
  \
  SortedList,$LAUNDROMAT_ADDRESS \
  SortedListItem,$LAUNDROMAT_ADDRESS \
  Season,$LAUNDROMAT_ADDRESS \
+ SeasonSettings,$LAUNDROMAT_ADDRESS \
  Game,$LAUNDROMAT_ADDRESS \
+ GameConfig,$LAUNDROMAT_ADDRESS \
  RyoConfig,$LAUNDROMAT_ADDRESS \
  \
  SortedList,$DEVTOOLS_ADDRESS \
@@ -73,7 +77,11 @@ sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100
  SortedList,$DEVTOOLS_ADDRESS \
  SortedListItem,$DEVTOOLS_ADDRESS \
  Game,$DEVTOOLS_ADDRESS \
+ GameConfig,$DEVTOOLS_ADDRESS \
  GameStorePacked,$DEVTOOLS_ADDRESS \
+ Season,$DEVTOOLS_ADDRESS \
+ SeasonSettings,$DEVTOOLS_ADDRESS \
+ RyoConfig,$DEVTOOLS_ADDRESS \
 
 echo "Default authorizations have been successfully set."
 

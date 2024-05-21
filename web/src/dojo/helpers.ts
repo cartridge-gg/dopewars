@@ -1,55 +1,35 @@
-import {
-  Bronx,
-  Brooklyn,
-  CentralPark,
-  ConeyIsland,
-  Manhattan,
-  Queens,
-} from "@/components/icons/locations";
+import { editComponents } from "./../components/pages/admin/tables";
+import { Bronx, Brooklyn, CentralPark, ConeyIsland, Manhattan, Queens } from "@/components/icons/locations";
 
-import {
-  Acid,
-  Cocaine,
-  Heroin,
-  Ketamine,
-  Ludes,
-  Shrooms,
-  Speed,
-  Weed,
-} from "@/components/icons/drugs";
+import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 
 import { getCopResponses, getMuggerResponses } from "@/responses";
 import {
+  CashMode,
+  DrugsMode,
   EncounterOutcomes,
   Encounters,
   EncountersAction,
+  EncountersMode,
+  EncountersOddsMode,
+  HealthMode,
   ItemSlot,
-  OutcomeInfo
+  OutcomeInfo,
+  TurnsMode,
 } from "./types";
 
 import { Cigarette } from "@/components/icons";
-import {
-  AK47,
-  BaseballBat,
-  Boots,
-  Kevlar,
-  Leatherjacket,
-  PlasticBag,
-  Shirt,
-  Shoes
-} from "@/components/icons/items";
+import { AK47, BaseballBat, Boots, Kevlar, Leatherjacket, PlasticBag, Shirt, Shoes } from "@/components/icons/items";
 import { Chain } from "@/components/icons/items/Chain";
 import { Shoes2 } from "@/components/icons/items/Shoes2";
-
-
+import colors from "@/theme/colors";
 
 export const encountersActionName = {
-  [EncountersAction.Run] : "Run",
-  [EncountersAction.Pay] : "Pay",
-  [EncountersAction.Fight] : "Fight",
-}
+  [EncountersAction.Run]: "Run",
+  [EncountersAction.Pay]: "Pay",
+  [EncountersAction.Fight]: "Fight",
+};
 export type encountersActionNameKeys = keyof typeof encountersActionName;
-
 
 export const randomGreetings = {
   0: "Welcome to",
@@ -58,9 +38,8 @@ export const randomGreetings = {
   // 3: "Sup",
   // 4: "Here we go again",
   // 5: "Ohayo",
-}
+};
 export type randomGreetingsKeys = keyof typeof randomGreetings;
-
 
 export const reputationRanks = {
   0: "Goon",
@@ -68,7 +47,7 @@ export const reputationRanks = {
   2: "Streetboss",
   3: "OG",
   4: "Kingpin",
-}
+};
 export type reputationRanksKeys = keyof typeof reputationRanks;
 
 export const copsRanks = {
@@ -78,7 +57,7 @@ export const copsRanks = {
   4: "Captain",
   5: "SWAT",
   6: "Mech",
-}
+};
 export type copsRanksKeys = keyof typeof copsRanks;
 
 export const gangRanks = {
@@ -88,9 +67,8 @@ export const gangRanks = {
   4: "Enforcer",
   5: "Underboss",
   6: "Big Boss",
-}
+};
 export type gangRanksKeys = keyof typeof gangRanks;
-
 
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
@@ -108,7 +86,7 @@ export const itemUpgrades = {
       1: "Grip Tape",
       2: "Corked Bat",
       3: "Aluminum Bat",
-    }
+    },
   },
   [ItemSlot.Clothes]: {
     0: {
@@ -125,7 +103,7 @@ export const itemUpgrades = {
       1: "Tailor Fitting",
       2: "Treated Leather",
       3: "Ballistic Inserts",
-    }
+    },
   },
   [ItemSlot.Feet]: {
     0: {
@@ -142,23 +120,23 @@ export const itemUpgrades = {
       1: "Locking Laces",
       2: "Shock-Absorbing Insoles",
       3: "Steel-toed Cap",
-    }
+    },
   },
   [ItemSlot.Transport]: {
     0: {
       1: "Fanny Pack",
       2: "Backpack",
       3: "Duffle Bag",
-    }
+    },
   },
-}
+};
 
 export const statName = {
   [ItemSlot.Weapon]: "ATK",
   [ItemSlot.Clothes]: "DEF",
   [ItemSlot.Feet]: "SPD",
   [ItemSlot.Transport]: "INV",
-}
+};
 export type statNameKeys = keyof typeof statName;
 
 export const slotName = {
@@ -166,37 +144,36 @@ export const slotName = {
   [ItemSlot.Clothes]: "SHIRT",
   [ItemSlot.Feet]: "SHOES",
   [ItemSlot.Transport]: "BAG",
-}
+};
 export type slotNameKeys = keyof typeof slotName;
 
-
 export const locationIcons = {
-  "Queens": Queens,
-  "Bronx": Bronx,
-  "Brooklyn": Brooklyn,
-  "Jersey": Manhattan,
-  "Central": CentralPark,
-  "Coney": ConeyIsland,
-}
+  Queens: Queens,
+  Bronx: Bronx,
+  Brooklyn: Brooklyn,
+  Jersey: Manhattan,
+  Central: CentralPark,
+  Coney: ConeyIsland,
+};
 export type locationIconsKeys = keyof typeof locationIcons;
 
 export const drugIcons = {
-  "Ludes": Ludes,
-  "Speed": Speed,
-  "Weed": Weed,
-  "Shrooms": Shrooms,
-  "Acid": Acid,
-  "Ketamine": Ketamine,
-  "Heroin": Heroin,
-  "Cocaine": Cocaine,
-}
+  Ludes: Ludes,
+  Speed: Speed,
+  Weed: Weed,
+  Shrooms: Shrooms,
+  Acid: Acid,
+  Ketamine: Ketamine,
+  Heroin: Heroin,
+  Cocaine: Cocaine,
+};
 export type drugIconsKeys = keyof typeof drugIcons;
 
 export const itemIcons = {
-  "Naked": Cigarette,
+  Naked: Cigarette,
   //
-  "AK47": AK47,
-  "Chain": Chain,
+  AK47: AK47,
+  Chain: Chain,
   "Baseball Bat": BaseballBat,
   //
   "Blood-Stained Shirt": Shirt,
@@ -208,99 +185,8 @@ export const itemIcons = {
   "Work Boots": Boots,
   //
   "Plastic bag": PlasticBag,
-}
+};
 export type itemsIconsKeys = keyof typeof itemIcons;
-
-
-// export const locations: LocationInfo[] = [
-//   {
-//     type: Locations.Queens,
-//     name: "Queens",
-//     slug: "queens",
-//     id: "Queens",
-//     icon: Queens,
-//   },
-//   {
-//     type: Locations.Bronx,
-//     name: "The Bronx",
-//     slug: "bronx",
-//     id: "Bronx",
-//     icon: Bronx,
-//   },
-//   {
-//     type: Locations.Brooklyn,
-//     name: "Brooklyn",
-//     slug: "brooklyn",
-//     id: "Brooklyn",
-//     icon: Brooklyn,
-//   },
-//   {
-//     type: Locations.Jersey,
-//     name: "Jersey City",
-//     slug: "jersey",
-//     id: "Jersey",
-//     icon: Manhattan,
-//   },
-//   {
-//     type: Locations.Central,
-//     name: "Central Park",
-//     slug: "central",
-//     id: "Central",
-//     icon: CentralPark,
-//   },
-//   {
-//     type: Locations.Coney,
-//     name: "Coney Island",
-//     slug: "coney",
-//     id: "Coney",
-//     icon: ConeyIsland,
-//   },
-// ];
-
-// const drugs: DrugInfo[] = [
-//   {
-//     type: Drugs.Ludes,
-//     name: "Ludes",
-//     slug: "ludes",
-//     id: "Ludes",
-//     icon: Ludes,
-//   },
-//   {
-//     type: Drugs.Speed,
-//     name: "Speed",
-//     slug: "speed",
-//     id: "Speed",
-//     icon: Speed,
-//   },
-//   {
-//     type: Drugs.Weed,
-//     name: "Weed",
-//     slug: "weed",
-//     id: "Weed",
-//     icon: Weed,
-//   },
-//   {
-//     type: Drugs.Acid,
-//     name: "Acid",
-//     slug: "acid",
-//     id: "Acid",
-//     icon: Acid,
-//   },
-//   {
-//     type: Drugs.Heroin,
-//     name: "Heroin",
-//     slug: "heroin",
-//     id: "Heroin",
-//     icon: Heroin,
-//   },
-//   {
-//     type: Drugs.Cocaine,
-//     name: "Cocaine",
-//     slug: "cocaine",
-//     id: "Cocaine",
-//     icon: Cocaine,
-//   },
-// ];
 
 export const outcomes: OutcomeInfo[] = [
   {
@@ -310,8 +196,7 @@ export const outcomes: OutcomeInfo[] = [
     encounter: Encounters.Cops,
     imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(EncounterOutcomes.Paid, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Paid, isInitial),
     color: "yellow.400",
   },
   {
@@ -321,8 +206,7 @@ export const outcomes: OutcomeInfo[] = [
     encounter: Encounters.Gang,
     imageSrc: "/images/events/paid.png",
     description: "You paid the gang off",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(EncounterOutcomes.Paid, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Paid, isInitial),
     color: "yellow.400",
   },
   {
@@ -331,8 +215,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Escaped,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/escaped.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(EncounterOutcomes.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Escaped, isInitial),
     description: "You escaped",
     color: "neon.200",
   },
@@ -342,8 +225,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Escaped,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/escaped.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(EncounterOutcomes.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Escaped, isInitial),
     description: "You escaped",
     color: "neon.200",
   },
@@ -353,8 +235,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Died,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/fought.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(EncounterOutcomes.Died, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Died, isInitial),
     color: "red",
   },
   {
@@ -363,8 +244,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Died,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/fought.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(EncounterOutcomes.Died, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Died, isInitial),
     color: "red",
   },
   {
@@ -373,8 +253,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Victorious,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/victorious.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(EncounterOutcomes.Victorious, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Victorious, isInitial),
     color: "neon.200",
   },
   {
@@ -383,8 +262,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Victorious,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/victorious.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(EncounterOutcomes.Victorious, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Victorious, isInitial),
     color: "neon.200",
   },
   {
@@ -393,8 +271,7 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Jailed,
     encounter: Encounters.Cops,
     imageSrc: "/images/events/police_cruiser.gif",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(EncounterOutcomes.Jailed, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Jailed, isInitial),
     color: "neon.200",
   },
   {
@@ -403,19 +280,10 @@ export const outcomes: OutcomeInfo[] = [
     encounterOutcome: EncounterOutcomes.Hospitalized,
     encounter: Encounters.Gang,
     imageSrc: "/images/events/hospital.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(EncounterOutcomes.Hospitalized, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Hospitalized, isInitial),
     color: "neon.200",
   },
-
 ];
-
-
-// function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
-//   return array.find((item) => item[key] === value);
-// }
-
-
 
 export const outcomeNames = {
   [EncounterOutcomes.Died]: "Died",
@@ -424,16 +292,10 @@ export const outcomeNames = {
   [EncounterOutcomes.Victorious]: "Victorious",
   [EncounterOutcomes.Jailed]: "Jailed",
   [EncounterOutcomes.Hospitalized]: "Hospitalized",
-}
+};
 export type outcomeNamesKeys = keyof typeof outcomeNames;
 
-
-
-
-export function getOutcomeInfo(
-  encounter: Encounters,
-  encounterOutcome: EncounterOutcomes,
-): OutcomeInfo {
+export function getOutcomeInfo(encounter: Encounters, encounterOutcome: EncounterOutcomes): OutcomeInfo {
   const found = outcomes.find((i) => {
     return i.encounter === encounter && i.encounterOutcome === encounterOutcome;
   });
@@ -443,9 +305,52 @@ export function getOutcomeInfo(
   return found || outcomes[0];
 }
 
-
-
-
 export function getRandomGreeting(seed: number) {
-  return randomGreetings[seed % Object.values(randomGreetings).length as randomGreetingsKeys]
+  return randomGreetings[(seed % Object.values(randomGreetings).length) as randomGreetingsKeys];
 }
+
+//
+// Season settings
+//
+
+export const cashModeColor = {
+  [CashMode.Broke]: colors.red,
+  [CashMode.Average]: colors.yellow["400"],
+  [CashMode.Rich]: colors.neon["400"],
+};
+export type cashModeColorKeys = keyof typeof cashModeColor;
+
+export const healthModeColor = {
+  [HealthMode.Junkie]: colors.red,
+  [HealthMode.Hustler]: colors.yellow["400"],
+  [HealthMode.Streetboss]: colors.neon["400"],
+};
+export type healthModeColorKeys = keyof typeof healthModeColor;
+
+export const turnsModeColor = {
+  [TurnsMode.OnMush]: colors.red,
+  [TurnsMode.OnWeed]: colors.yellow["400"],
+  [TurnsMode.OnSpeed]: colors.neon["400"],
+};
+export type turnsModeColorKeys = keyof typeof turnsModeColor;
+
+export const encountersModeColor = {
+  [EncountersMode.UltraViolence]: colors.red,
+  [EncountersMode.NoJokes]: colors.yellow["400"],
+  [EncountersMode.Chill]: colors.neon["400"],
+};
+export type encountersModeColorKeys = keyof typeof encountersModeColor;
+
+export const encountersModeOddsColor = {
+  [EncountersOddsMode.Hard]: colors.red,
+  [EncountersOddsMode.Normal]: colors.yellow["400"],
+  [EncountersOddsMode.Easy]: colors.neon["400"],
+};
+export type encountersModeOddsColorKeys = keyof typeof encountersModeOddsColor;
+
+export const drugsModeColor = {
+  [DrugsMode.Expensive]: colors.red,
+  [DrugsMode.Normal]: colors.yellow["400"],
+  [DrugsMode.Cheap]: colors.neon["400"],
+};
+export type drugsModeColorKeys = keyof typeof drugsModeColor;

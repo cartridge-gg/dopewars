@@ -108,7 +108,7 @@ const Location = observer(() => {
         <VStack w="full" align="flex-start" gap="10px">
           <SimpleGrid columns={2} w="full" gap={["10px", "16px"]} fontSize={["16px", "20px"]}>
             {prices.map((drug, index) => {
-              const drugConfig = configStore.getDrug(drug.drug)!;
+              const drugConfig = configStore.getDrug(game.seasonSettings.drugs_mode, drug.drug)!;
 
               const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
               const hasFreeSpace = freeSpace >= drug.weight;

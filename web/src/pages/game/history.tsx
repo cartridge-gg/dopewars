@@ -1,10 +1,9 @@
-import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Layout } from "@/components/layout";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
-import { useToast } from "@/hooks/toast";
+
 import { formatCashHeader } from "@/utils/ui";
 import {
   HStack,
@@ -17,7 +16,7 @@ import {
   Text,
   UnorderedList,
   VStack,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react";  
 import { useAccount } from "@starknet-react/core";
 
 import { shortString } from "starknet";
@@ -46,17 +45,8 @@ export default function History() {
         imageSrc: "/images/will-smith-with-attitude.png",
       }}
       rigthPanelScrollable={false}
-      // rigthPanelMaxH="calc(100vh - 230px)"
     >
       <VStack boxSize="full" gap="10px">
-        {/* <Card variant="pixelated">
-          <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
-            <Button flex="1" onClick={onHustle}>
-              Hustle
-            </Button>
-          </HStack>
-        </Card> */}
-
         <Tabs variant="unstyled" w="full">
           <TabList pb={6}>
             <Tab>ON GOING</Tab>
@@ -161,10 +151,3 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
     </UnorderedList>
   );
 };
-
-// <Text w={"70px"} flexShrink={0}>
-//               {game.gameInfos.leaderboard_version}
-//             </Text>
-//             <Text w={"70px"} flexShrink={0}>
-//               {game.gameInfos.game_id}
-//             </Text>

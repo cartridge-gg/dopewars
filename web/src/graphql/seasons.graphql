@@ -13,6 +13,20 @@ query SeasonByVersion($version: u16, $listId: felt252) {
     }
   }
 
+  seasonSettingsModels(where: { season_version: $version }) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
+
   sortedListModels(where: { list_id: $listId }) {
     edges {
       node {
@@ -29,7 +43,7 @@ query SeasonByVersion($version: u16, $listId: felt252) {
 
 
 query Seasons {
-  seasonModels(limit: 420) {
+  seasonModels(limit: 420, order: {field: VERSION, direction: DESC}) {
     edges {
       node {
         version
@@ -39,6 +53,20 @@ query Seasons {
         treasury_fee_pct
         next_version_timestamp
         paper_balance
+      }
+    }
+  }
+
+  seasonSettingsModels(limit: 420) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
       }
     }
   }
@@ -56,6 +84,25 @@ query Seasons {
     }
   }
 }
+
+
+
+query SeasonSettings($version: u16) {
+  seasonSettingsModels(where: { season_version: $version }) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
+}
+
 
 
 

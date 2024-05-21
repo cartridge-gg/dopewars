@@ -12,7 +12,8 @@ type RouterContext = {
   playerId: string | undefined,
   seasonId: number | undefined,
   location: LocationConfigFull | undefined,
-  drug: DrugConfigFull | undefined,
+  drugSlug: string | undefined,
+  // drug: DrugConfigFull | undefined,
   tradeDirection: TradeDirection | undefined,
   isAdmin: boolean,
   isRyoDotGame: boolean,
@@ -28,7 +29,8 @@ export const useRouterContext = (): RouterContext => {
     playerId: undefined,
     seasonId: undefined,
     location: undefined,
-    drug: undefined,
+    // drug: undefined,
+    drugSlug: undefined,
     tradeDirection: undefined,
     isAdmin: false,
     isRyoDotGame: false,
@@ -41,7 +43,9 @@ export const useRouterContext = (): RouterContext => {
     const playerId = router.query.playerId ? router.query.playerId as string : undefined;
     const seasonId = router.query.seasonId ? Number(router.query.seasonId) : undefined;
     const location = router.query.locationSlug ? configStore.getLocation(router.query.locationSlug as string) : undefined;
-    const drug = router.query.drugSlug ? configStore.getDrug(router.query.drugSlug as string) : undefined;
+    // const drug = router.query.drugSlug ? configStore.getDrug(router.query.drugSlug as string) : undefined;
+    const drugSlug = router.query.drugSlug ? router.query.drugSlug as string : undefined;
+   
     const tradeDirection = router.query.tradeDirection ?
       (router.query.tradeDirection as string) === "buy" ? TradeDirection.Buy : TradeDirection.Sell
       : undefined;
@@ -55,7 +59,8 @@ export const useRouterContext = (): RouterContext => {
       playerId,
       seasonId,
       location,
-      drug,
+      // drug,
+      drugSlug,
       tradeDirection,
       isAdmin,
       isRyoDotGame

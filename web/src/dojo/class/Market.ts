@@ -9,18 +9,18 @@ export class MarketsClass extends GamePropertyClass {
     //
     marketsByLocation: MarketsByLocation = new Map()
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor( game: GameClass, packed: bigint) {
+        super( game, packed);
 
         const drugLevel = game.player?.drugLevel || 0
 
         for (let locationId of [1, 2, 3, 4, 5, 6]) {
-            const location = configStore.getLocationById(locationId)!;
+            const location = game.configStore.getLocationById(locationId)!;
 
             for (let drugId of [0, 1, 2, 3, /*4, 5*/]) {
                 const drugIdWithDrugLevel = drugId + drugLevel
 
-                const drug = configStore.getDrugById(drugIdWithDrugLevel)!;
+                const drug = game.configStore.getDrugById(game.seasonSettings.drugs_mode, drugIdWithDrugLevel)!;
                 const price = this.getDrugPrice(locationId, drugIdWithDrugLevel);
 
                 const drugMarket: DrugMarket = {
@@ -46,7 +46,7 @@ export class MarketsClass extends GamePropertyClass {
     }
 
     getDrugPriceByTick(drugId: number, tick: bigint) {
-        const drugConfig = this.configStore.getDrugById(drugId)!;
+        const drugConfig = this.game.configStore.getDrugById(this.game.seasonSettings.drugs_mode, drugId)!;
         return Number(tick) * Number(drugConfig.step) + Number(drugConfig.base);
     }
 

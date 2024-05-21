@@ -13,6 +13,14 @@ trait Randomizable<T> {
     fn random(ref randomizer: Random) -> T;
 }
 
+impl RandomizableImpl<T, +Copy<T>, +Enumerable<T>> of Randomizable<T> {
+    fn random(ref randomizer: Random) -> T {
+        let items = Enumerable::<T>::all();
+        let index = randomizer.between::<u32>(0, items.len().into());
+        *items.at(index.try_into().unwrap())
+    }
+}
+
 
 //
 
@@ -26,7 +34,7 @@ trait Packer<Unpacked, Packed> {
     fn pack(self: Unpacked) -> Packed;
 }
 
-trait Unpacker<Packed, Unpacked> {
-    fn unpack(self: Packed, s: IStoreLibraryDispatcher, game: Game) -> Unpacked;
-}
+// trait Unpacker<Packed, Unpacked> {
+//     fn unpack(self: Packed, s: IStoreLibraryDispatcher, game: Game) -> Unpacked;
+// }
 

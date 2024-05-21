@@ -77,7 +77,7 @@ export const cardPixelatedStyleOutset = ({
   borderRadius: "0",
   "border-image-width": `${borderimagewidth}px`,
   borderImageOutset: `${borderimagewidth}px`,
-  "border-image-slice": 7,
+  "border-image-slice": "7",
 
   "border-image-source": `url("data:image/svg+xml,${BorderImagePixelated({
     color,

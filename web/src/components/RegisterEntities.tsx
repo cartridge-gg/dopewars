@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Siren, Truck } from "./icons";
 import { OG } from "./layout";
+import { GameClass } from "@/dojo/class/Game";
 
 const RegisterEntities = observer(() => {
   const { gameId, router, playerId } = useRouterContext();
@@ -73,7 +74,7 @@ const RegisterEntities = observer(() => {
 
       case WorldEvents.HighVolatility:
         const volatilityEvent = last.parsed as HighVolatilityData;
-        displayHighVolatility(volatilityEvent, toaster, configStore);
+        displayHighVolatility(volatilityEvent, toaster, game);
         break;
 
       default:
@@ -96,9 +97,9 @@ const RegisterEntities = observer(() => {
 
 export default RegisterEntities;
 
-const displayHighVolatility = (event: HighVolatilityData, toaster: ToastType, configStore: ConfigStoreClass) => {
-  const location = configStore.getLocationById(event.locationId);
-  const drug = configStore.getDrugById(event.drugId);
+const displayHighVolatility = (event: HighVolatilityData, toaster: ToastType, game: GameClass) => {
+  const location = game.configStore.getLocationById(event.locationId);
+  const drug = game.configStore.getDrugById(game.seasonSettings.drugs_mode, event.drugId);
   const msg = event.increase
     ? `Pigs seized ${drug!.name} in ${location!.name}`
     : `A shipment of ${drug!.name} has arrived to ${location!.name}`;

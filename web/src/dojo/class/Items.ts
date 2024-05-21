@@ -16,10 +16,10 @@ export class ItemsClass extends GamePropertyClass {
     //
     hustlerConfig: HustlerConfig;
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor(game: GameClass, packed: bigint) {
+        super( game, packed);
 
-        this.hustlerConfig = configStore.getHustlerById(this.game.gameInfos.hustler_id)
+        this.hustlerConfig = game.configStore.getHustlerById(this.game.gameInfos.hustler_id)
 
         this.attackLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Weapon) * this.bitsSize, this.bitsSize));
         this.defenseLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Clothes) * this.bitsSize, this.bitsSize));
@@ -49,7 +49,7 @@ export class ItemsClass extends GamePropertyClass {
                 .filter(i => i.slot === ItemSlot.Weapon)
                 .length
         }
-        return this.configStore.getHustlerItemByIds(
+        return this.game.configStore.getHustlerItemByIds(
             this.hustlerConfig.weapon.base.id,
             ItemSlot.Weapon,
             level
@@ -67,7 +67,7 @@ export class ItemsClass extends GamePropertyClass {
                 .length
         }
 
-        return this.configStore.getHustlerItemByIds(
+        return this.game.configStore.getHustlerItemByIds(
             this.hustlerConfig.clothes.base.id,
             ItemSlot.Clothes,
             level
@@ -84,7 +84,7 @@ export class ItemsClass extends GamePropertyClass {
                 .length
         }
 
-        return this.configStore.getHustlerItemByIds(
+        return this.game.configStore.getHustlerItemByIds(
             this.hustlerConfig.feet.base.id,
             ItemSlot.Feet,
             level
@@ -100,7 +100,7 @@ export class ItemsClass extends GamePropertyClass {
                 .filter(i => i.slot === ItemSlot.Transport)
                 .length
         }
-        return this.configStore.getHustlerItemByIds(
+        return this.game.configStore.getHustlerItemByIds(
             this.hustlerConfig.transport.base.id,
             ItemSlot.Transport,
             level
@@ -110,7 +110,7 @@ export class ItemsClass extends GamePropertyClass {
 
     get attackUpgrade() {
         if (this.attack!.level < this.maxLevel) {
-            return this.configStore.getHustlerItemByIds(
+            return this.game.configStore.getHustlerItemByIds(
                 this.hustlerConfig.weapon.base.id,
                 ItemSlot.Weapon,
                 this.attack!.level + 1
@@ -121,7 +121,7 @@ export class ItemsClass extends GamePropertyClass {
 
     get defenseUpgrade() {
         if (this.defense!.level < this.maxLevel) {
-            return this.configStore.getHustlerItemByIds(
+            return this.game.configStore.getHustlerItemByIds(
                 this.hustlerConfig.clothes.base.id,
                 ItemSlot.Clothes,
                 this.defense!.level + 1
@@ -132,7 +132,7 @@ export class ItemsClass extends GamePropertyClass {
 
     get speedUpgrade() {
         if (this.speed!.level < this.maxLevel) {
-            return this.configStore.getHustlerItemByIds(
+            return this.game.configStore.getHustlerItemByIds(
                 this.hustlerConfig.feet.base.id,
                 ItemSlot.Feet,
                 this.speed!.level + 1
@@ -143,7 +143,7 @@ export class ItemsClass extends GamePropertyClass {
 
     get transportUpgrade() {
         if (this.transport!.level < this.maxLevel) {
-            return this.configStore.getHustlerItemByIds(
+            return this.game.configStore.getHustlerItemByIds(
                 this.hustlerConfig.transport.base.id,
                 ItemSlot.Transport,
                 this.transport!.level + 1

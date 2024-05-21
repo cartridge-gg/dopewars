@@ -8,9 +8,8 @@ import { CrtEffect } from "./CrtEffect";
 import { Pending } from "./Pending";
 
 interface LayoutProps {
-  CustomLeftPanel?: React.FC;
+  customLeftPanel?: ReactNode;
   leftPanelProps?: LeftPanelProps;
-  showBack?: boolean;
   children: ReactNode;
   isSinglePanel?: boolean;
   footer?: ReactNode;
@@ -26,9 +25,8 @@ interface LeftPanelProps {
 }
 
 export const Layout = ({
-  CustomLeftPanel,
+  customLeftPanel,
   leftPanelProps,
-  showBack,
   children,
   isSinglePanel = false,
   rigthPanelMaxH,
@@ -45,10 +43,9 @@ export const Layout = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Header/>
+        <Header />
         <Container position="relative" px={["10px", "16px"]} py="16px">
-          {!isSinglePanel &&
-            (!CustomLeftPanel ? <LeftPanel {...leftPanelProps} /> : <CustomLeftPanel /*{...leftPanelProps}*/ />)}
+          {!isSinglePanel && (!customLeftPanel ? <LeftPanel {...leftPanelProps} /> : <>{customLeftPanel}</>)}
           <RightPanel
             flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
             footer={footer}

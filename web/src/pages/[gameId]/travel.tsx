@@ -4,6 +4,7 @@ import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
+import { GameClass } from "@/dojo/class/Game";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
@@ -199,7 +200,7 @@ const Travel = observer(() => {
           </HStack>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
-        <LocationPrices prices={prices} isCurrentLocation={targetLocation == currentLocation} />
+        <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -229,6 +230,7 @@ const Travel = observer(() => {
         <Inventory hidePawnshop />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         <LocationPrices
+          game={game}
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
@@ -239,7 +241,15 @@ const Travel = observer(() => {
 
 export default Travel;
 
-const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean }) => {
+const LocationPrices = ({
+  game,
+  prices,
+  isCurrentLocation,
+}: {
+  game: GameClass;
+  prices: MarketPriceInfo[];
+  isCurrentLocation?: boolean;
+}) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
   const configStore = useConfigStore();
 
@@ -274,7 +284,7 @@ const LocationPrices = ({ prices, isCurrentLocation }: { prices: MarketPriceInfo
         <Grid templateColumns="repeat(2, 1fr)" position="relative">
           <Box position="absolute" boxSize="full" border="2px" borderColor="neon.900" />
           {prices.map((drug, index) => {
-            const drugConfig = configStore.getDrug(drug.drug)!;
+            const drugConfig = configStore.getDrug(game.seasonSettings.drugs_mode, drug.drug)!;
             return (
               <GridItem key={index} colSpan={1} border="1px" p="6px" borderColor="neon.600">
                 <HStack gap="8px">

@@ -5,6 +5,8 @@ import {
   DrugConfigEdge,
   EncounterConfig,
   EncounterConfigEdge,
+  EncounterStatsConfig,
+  EncounterStatsConfigEdge,
   GameConfig,
   HustlerItemBaseConfig,
   HustlerItemBaseConfigEdge,
@@ -16,6 +18,7 @@ import {
   RyoAddressEdge,
   RyoConfig,
   RyoConfigEdge,
+  SeasonSettings,
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -32,7 +35,7 @@ import {
   locationIcons,
   locationIconsKeys,
 } from "../helpers";
-import { ItemSlot } from "../types";
+import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
 
 export type DrugConfigFull = DrugConfig & { icon: React.FC };
 export type LocationConfigFull = LocationConfig & { icon: React.FC };
@@ -71,14 +74,24 @@ export type HustlerConfig = {
   transport: HustlerItemConfig;
 };
 
+export type SeasonSettingsModes = {
+  cash_modes: Array<CashMode>,
+  health_modes: Array<HealthMode>,
+  turns_modes: Array<TurnsMode>,
+  //
+  encounters_modes: Array<EncountersMode>,
+  encounters_odds_modes: Array<EncountersOddsMode>,
+  drugs_modes: Array<DrugsMode>,
+};
+
 export type GetConfig = {
   layouts: {
     game_store: Array<LayoutItem>;
     player: Array<LayoutItem>;
   };
   hustlers: Array<HustlerConfig>;
-  game_config: GameConfig;
   ryo_config: RyoConfig;
+  season_settings_modes: SeasonSettingsModes,
 };
 
 export type Config = {
@@ -88,7 +101,7 @@ export type Config = {
   location: LocationConfigFull[];
   items: HustlerItemBaseConfigFull[];
   tiers: HustlerItemTiersConfig[];
-  encounters: EncounterConfigFull[];
+  encounterStats: EncounterStatsConfig[];
   config: GetConfig;
 };
 
@@ -166,14 +179,8 @@ export class ConfigStoreClass {
 
     //
 
-    const encounterConfigEdges = data.encounterConfigModels!.edges as EncounterConfigEdge[];
-    const encounterConfig = encounterConfigEdges.map((i) => i.node as EncounterConfig);
-    const encounterConfigFull = encounterConfig.map((i) => {
-      return {
-        ...i,
-        image: `/images/events/${i.encounter.toLowerCase()}/${i.level}.gif`,
-      };
-    });
+    const encounterStatsConfigEdges = data.encounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
+    const encounterStatsConfig = encounterStatsConfigEdges.map((i) => i.node as EncounterStatsConfig);
 
     /*************************************************** */
 
@@ -199,7 +206,7 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-   ///@ts-ignore
+    ///@ts-ignore
     const getConfig = yield this.dojoProvider.call({
       contractName: "rollyourown::config::config::config",
       entrypoint: "get_config",
@@ -227,7 +234,7 @@ export class ConfigStoreClass {
       location: locationConfigFull,
       items: hustlerItemBaseConfig,
       tiers: hustlerItemTiersConfig,
-      encounters: encounterConfigFull,
+      encounterStats: encounterStatsConfig,
       /// @ts-ignore
       config: getConfig as GetConfig,
     };
@@ -236,12 +243,12 @@ export class ConfigStoreClass {
     // console.log("config:", this.config);
   }
 
-  getDrug(drug: string): DrugConfigFull {
-    return this.config?.drug.find((i) => i.drug.toLowerCase() === drug.toLowerCase())!;
+  getDrug(drugs_mode: string, drug: string): DrugConfigFull {
+    return this.config?.drug.find((i) =>i.drugs_mode === drugs_mode && i.drug.toLowerCase() === drug.toLowerCase())!;
   }
 
-  getDrugById(drug_id: number): DrugConfigFull {
-    return this.config?.drug.find((i) => Number(i.drug_id) === Number(drug_id))!;
+  getDrugById(drugs_mode: string, drug_id: number): DrugConfigFull {
+    return this.config?.drug.find((i) => i.drugs_mode === drugs_mode && Number(i.drug_id) === Number(drug_id))!;
   }
 
   getLocation(location: string): LocationConfigFull {
@@ -289,11 +296,5 @@ export class ConfigStoreClass {
       upgradeName: itemUpgrades[Number(slot_id) as ItemSlot][Number(id)][Number(level)] || "Original",
       icon: itemIcons[base_config.name as itemsIconsKeys],
     };
-  }
-
-  // encounters
-
-  getEncounterById(id: number): EncounterConfigFull {
-    return this.config?.encounters.find((i) => Number(i.id) === Number(id))!;
   }
 }

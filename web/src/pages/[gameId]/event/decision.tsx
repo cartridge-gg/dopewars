@@ -48,7 +48,6 @@ const Decision = observer(() => {
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [encounter, setEncounter] = useState<EncounterConfig | undefined>(undefined);
   const [encounterEvent, setEncounterEvent] = useState<TravelEncounterData | undefined>(undefined);
 
   const [isPaying, setIsPaying] = useState(false);
@@ -62,23 +61,22 @@ const Decision = observer(() => {
   const isMobile = IsMobile();
 
   useEffect(() => {
-    if (game && gameEvents && !isPending) {
+    if (game && gameEvents ) {
       const encounterEvent = gameEvents?.lastEncounter!.parsed as TravelEncounterData;
-      const encounter = configStore.getEncounterById(encounterEvent.encounterId);
-      setEncounter(encounter);
       setEncounterEvent(encounterEvent);
     }
-  }, [game, isPending, gameEvents, gameEvents?.lastEncounter]);
+  }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
 
   useEffect(() => {
-    if (game && gameEvents && encounter && encounterEvent && !isPending) {
+   
+    if (game && gameEvents && encounterEvent) {
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
           const cashAmount = Math.ceil((game.player.cash * encounterEvent!.demandPct) / 100);
           setCanPay(cashAmount > 0);
-          encounter && setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
+          setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
 
           break;
         case PlayerStatus.BeingArrested:
@@ -87,12 +85,12 @@ const Decision = observer(() => {
           const drugAmount = Math.ceil((game.drugs.quantity * encounterEvent!.demandPct) / 100);
           const drugName = game.drugs.drug?.name || "you";
           setCanPay(drugAmount > 0);
-          encounter && setDemand(`They want ${drugAmount ? drugAmount : ""} ${drugName}!`);
+          setDemand(`They want ${drugAmount ? drugAmount : ""} ${drugName}!`);
 
           break;
       }
     }
-  }, [game, gameEvents, game?.player.status, encounter, isPending]);
+  }, [game, gameEvents, game?.player.status, encounterEvent]);
 
   useEffect(() => {
     if (game?.player.status == PlayerStatus.BeingArrested) {
@@ -153,7 +151,7 @@ const Decision = observer(() => {
     // }
   };
 
-  if (!game || !router.isReady || isRedirecting || !encounter || !encounterEvent) {
+  if (!game || !router.isReady || isRedirecting || !encounterEvent) {
     return <></>;
   }
 
@@ -217,7 +215,6 @@ const Decision = observer(() => {
           prefixTitle={prefixTitle}
           title={title}
           demand={demand}
-          encounter={encounter!}
           encounterEvent={encounterEvent!}
           game={game}
           flex={[0, 1]}
@@ -236,8 +233,6 @@ const Encounter = observer(
     prefixTitle,
     title,
     demand,
-
-    encounter,
     encounterEvent,
     game,
     ...props
@@ -245,9 +240,7 @@ const Encounter = observer(
     prefixTitle?: string;
     title?: string;
     demand?: string;
-
     game: GameClass;
-    encounter: EncounterConfigFull;
     encounterEvent: TravelEncounterData;
   } & StyleProps) => {
     const { gameInfos } = useGameStore();
@@ -255,17 +248,23 @@ const Encounter = observer(
     const [imgUrl, setImgUrl] = useState<string | undefined>("");
 
     useEffect(() => {
-      if (encounter.image === "/images/events/cops/6.gif") {
+      let url = "";
+      if (game.player.status === PlayerStatus.BeingArrested) {
+        url = `/images/events/cops/${encounterEvent.level}.gif`;
+      } else {
+        url = `/images/events/gang/${encounterEvent.level}.gif`;
+      }
+
+      if (url === "/images/events/cops/6.gif") {
         setImgUrl("/images/events/cops/6-intro.gif");
         setTimeout(() => {
-          setImgUrl(encounter.image);
+          setImgUrl(url);
         }, 1500);
       } else {
-        setImgUrl(encounter.image);
+        setImgUrl(url);
       }
-    }, [encounter.image]);
+    }, [encounterEvent, game.player.status]);
 
-    console.log(encounter.image);
     return (
       <VStack {...props}>
         <VStack>
@@ -309,12 +308,12 @@ const Encounter = observer(
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="center">
                   <HStack flex="1" justifyContent="center" alignItems="center">
-                    {encounter.encounter === Encounters.Cops ? <CopsIcon /> : <GangIcon />}
+                    {encounterEvent.encounter === Encounters.Cops ? <CopsIcon /> : <GangIcon />}
                     <Text>
                       {/* {encounter?.encounter} lvl {encounter?.level} */}
-                      {encounter?.encounter === Encounters.Cops
-                        ? copsRanks[encounter?.level as copsRanksKeys]
-                        : gangRanks[encounter?.level as gangRanksKeys]}
+                      {encounterEvent?.encounter === Encounters.Cops
+                        ? copsRanks[encounterEvent?.level as copsRanksKeys]
+                        : gangRanks[encounterEvent?.level as gangRanksKeys]}
                     </Text>
                   </HStack>
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
@@ -323,7 +322,7 @@ const Encounter = observer(
 
                 <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
 
-                <EncounterStats encounter={encounter} />
+                <EncounterStats encounterEvent={encounterEvent} />
               </VStack>
 
               <Divider w="full" orientation="horizontal" borderWidth="1px" borderColor="neon.600" />
@@ -346,7 +345,7 @@ const Encounter = observer(
 
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
 
-                  {encounter?.encounter === Encounters.Cops ? (
+                  {encounterEvent?.encounter === Encounters.Cops ? (
                     <HStack w="full" justify="center" fontSize={["14px", "16px"]}>
                       {game.drugs.quantity === 0 && <Text color="neon.500">No product</Text>}
                       {game.drugs.quantity > 0 && game.drugs.drug && (
@@ -373,24 +372,24 @@ const Encounter = observer(
   },
 );
 
-export const EncounterStats = observer(({ encounter }: { encounter: EncounterConfig }) => {
-  if (!encounter) return null;
+export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: TravelEncounterData }) => {
+  if (!encounterEvent) return null;
   return (
     <HStack flexDirection="row" w="full" px="10px" py="6px" justifyContent="center">
       <HStack flex="1">
-        <Knife /> <Text>{encounter.attack}</Text>
+        <Knife /> <Text>{encounterEvent.attack}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
       <HStack flex="1">
         <Kevlar />
-        <Text>{encounter.defense}</Text>
+        <Text>{encounterEvent.defense}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
       <HStack flex="1">
-        <Shoes /> <Text>{encounter.speed}</Text>
+        <Shoes /> <Text>{encounterEvent.speed}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-      <HealthIndicator health={encounter?.health} maxHealth={encounter?.health} flex="1" />
+      <HealthIndicator health={encounterEvent?.health} maxHealth={encounterEvent?.health} flex="1" />
     </HStack>
   );
 });

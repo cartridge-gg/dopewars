@@ -18,6 +18,8 @@ export interface GamesByPlayerInterface {
   isFetched: boolean;
 }
 
+
+// TODO : change to get games by player by Season
 export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
   const { data, isFetched } = useGamesByPlayerQuery({
     playerId,
@@ -26,19 +28,20 @@ export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
   const { configStore } = useDojoContext();
 
   const games = useMemo(() => {
-    const edges = data?.entities?.edges as World__EntityEdge[];
-    const nodes = (edges || []).map((i) => i.node);
+    // const edges = data?.entities?.edges as World__EntityEdge[];
+    // const nodes = (edges || []).map((i) => i.node);
 
-    const games = nodes.flatMap((i) => {
-      const game = (i!.models || []).find((i) => i?.__typename === "Game") as Game;
-      const gamePacked = (i!.models || []).find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
+    // const games = nodes.flatMap((i) => {
+    //   const gameInfos = (i!.models || []).find((i) => i?.__typename === "Game") as Game;
+    //   const gameStorePacked = (i!.models || []).find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
 
-      if (!game || !gamePacked) return [];
+    //   if (!gameInfos || !gameStorePacked) return [];
 
-      return [new GameClass(configStore, game, gamePacked)];
-    });
+    //   return [new GameClass(configStore, gameInfos, gameStorePacked)];
+    // });
 
-    return games;
+    // return games;
+    return []
   }, [data]);
 
   const onGoingGames = useMemo(() => {

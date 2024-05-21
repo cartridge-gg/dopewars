@@ -16,18 +16,18 @@ export class PlayerClass extends GamePropertyClass {
     nextLocation: LocationConfigFull;
     drugLevel: number;
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor(game: GameClass, packed: bigint) {
+        super( game, packed);
 
-        const cash = configStore.getPlayerLayoutItem("Cash")
-        const health = configStore.getPlayerLayoutItem("Health")
-        const turn = configStore.getPlayerLayoutItem("Turn")
-        const status = configStore.getPlayerLayoutItem("Status")
-        const prevLocation = configStore.getPlayerLayoutItem("PrevLocation")
-        const location = configStore.getPlayerLayoutItem("Location")
-        const nextLocation = configStore.getPlayerLayoutItem("NextLocation")
-        const drugLevel = configStore.getPlayerLayoutItem("DrugLevel")
-        const reputation = configStore.getPlayerLayoutItem("Reputation")
+        const cash = game.configStore.getPlayerLayoutItem("Cash")
+        const health = game.configStore.getPlayerLayoutItem("Health")
+        const turn = game.configStore.getPlayerLayoutItem("Turn")
+        const status = game.configStore.getPlayerLayoutItem("Status")
+        const prevLocation = game.configStore.getPlayerLayoutItem("PrevLocation")
+        const location = game.configStore.getPlayerLayoutItem("Location")
+        const nextLocation = game.configStore.getPlayerLayoutItem("NextLocation")
+        const drugLevel = game.configStore.getPlayerLayoutItem("DrugLevel")
+        const reputation = game.configStore.getPlayerLayoutItem("Reputation")
 
         this._cash = Number(Bits.extract(this.packed, cash.idx, cash.bits))
         this.health = Number(Bits.extract(this.packed, health.idx, health.bits))
@@ -38,9 +38,9 @@ export class PlayerClass extends GamePropertyClass {
         const locationId = Bits.extract(this.packed, location.idx, location.bits);
         const nextLocationId = Bits.extract(this.packed, nextLocation.idx, nextLocation.bits);
 
-        this.prevLocation = configStore.getLocationById(Number(prevLocationId))
-        this.location = configStore.getLocationById(Number(locationId))
-        this.nextLocation = configStore.getLocationById(Number(nextLocationId))
+        this.prevLocation = game.configStore.getLocationById(Number(prevLocationId))
+        this.location = game.configStore.getLocationById(Number(locationId))
+        this.nextLocation = game.configStore.getLocationById(Number(nextLocationId))
 
         this.drugLevel = Number(Bits.extract(this.packed, drugLevel.idx, drugLevel.bits))
         this._reputation = Number(Bits.extract(this.packed, reputation.idx, reputation.bits))

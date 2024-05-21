@@ -6,6 +6,9 @@ import {
   Game,
   GameByIdDocument,
   GameByIdQuery,
+  GameConfig,
+  GameConfigDocument,
+  GameConfigQuery,
   GameEventsDocument,
   GameEventsQuery,
   GameEventsSubscriptionDocument,
@@ -13,6 +16,9 @@ import {
   GameStorePackedDocument,
   GameStorePackedQuery,
   GameStorePackedSubscriptionDocument,
+  SeasonSettings,
+  SeasonSettingsDocument,
+  SeasonSettingsQuery,
   World__EntityEdge,
   World__Event,
   World__EventEdge,
@@ -24,146 +30,11 @@ import { EventClass } from "../class/Events";
 import { GameClass } from "../class/Game";
 import { ConfigStoreClass } from "./config";
 
-// export interface GameStore {
-//   client: GraphQLClient;
-//   wsClient: Client;
-//   configStore: ConfigStoreClass;
-//   id: string | null;
-//   game: GameClass | null;
-//   gameEvents: EventClass | null;
-//   gameInfos: Game | null;
-//   handles: Array<() => void>;
-//   init: (gameId: string, playerId: string) => void;
-//   subscribe: (gameId: string, playerId: string) => void;
-//   execute: (gameId: string, playerId: string) => void;
-//   reset: () => void;
-// }
-
 type GameStoreProps = {
   client: GraphQLClient;
   wsClient: Client;
   configStore: ConfigStoreClass;
 };
-
-// export const createGameStore = ({ client, wsClient, configStore }: GameStoreProps) => {
-//   return createStore<GameStore>((set, get) => ({
-//     client,
-//     wsClient,
-//     configStore,
-//     id: null,
-//     game: null,
-//     gameEvents: null,
-//     gameInfos: null,
-//     handles: [],
-//     init: (gameId: string, playerId: string) => {
-//       if (get().id === null) {
-//           get().subscribe(gameId, playerId);
-
-//       }
-//     },
-//     reset: () => {
-//       for (let unsubscribe of get().handles) {
-//         unsubscribe();
-//       }
-//       set({ id: null, game: null, gameInfos: null, gameEvents: null, handles: [] });
-//     },
-//     subscribe: async (gameId: string, playerId: string) => {
-//       const { wsClient, handles } = get();
-//       const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
-
-//       await get().execute(gameId, playerId);
-
-//       // subscribe to GameStorePacked updates
-//       handles.push(
-//         wsClient.subscribe(
-//           {
-//             query: GameStorePackedSubscriptionDocument,
-//             variables: {
-//               id,
-//             },
-//           },
-//           {
-//             next: ({ data }) => {
-//               return onGameStorePacked({
-//                 set,
-//                 data: data as World__Subscription,
-//                 configStore,
-//                 gameInfos: get().gameInfos!,
-//               });
-//             },
-//             error: (error) => console.log({ error }),
-//             complete: () => console.log("complete"),
-//           },
-//         ),
-//       );
-
-//       // subscribe to GameEvents updates
-//       handles.push(
-//         wsClient.subscribe(
-//           {
-//             query: GameEventsSubscriptionDocument,
-//             variables: {
-//               gameId: `0x${Number(gameId).toString(16)}`,
-//             },
-//           },
-//           {
-//             next: ({ data }) => {
-//               return onGameEvent({
-//                 get,
-//                 set,
-//                 data: data as World__Subscription,
-//                 configStore,
-//                 gameInfos: get().gameInfos!,
-//               });
-//             },
-//             error: (error) => console.log({ error }),
-//             complete: () => console.log("complete"),
-//           },
-//         ),
-//       );
-
-//       set({ id: id, handles: handles });
-//     },
-//     execute: async (gameId: string, playerId: string) => {
-//       // gameInfos dont change, no need to subscribe to updates
-//       const gameInfosData = (await client.request(GameByIdDocument, {
-//         gameId: Number(gameId),
-//       })) as GameByIdQuery;
-
-//       const gameData = (await client.request(GameStorePackedDocument, {
-//         gameId: gameId,
-//         playerId: playerId,
-//       })) as GameStorePackedQuery;
-
-//       const gameEventsData = (await client.request(GameEventsDocument, {
-//         gameId: gameId,
-//       })) as GameEventsQuery;
-
-//       // parse gameInfosData
-//       const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge[];
-//       if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
-//       let gameInfos = gameEdges[0].node as Game;
-//       if (!gameInfos) return;
-
-//       // parse gameData
-//       const edges = gameData!.entities!.edges as World__EntityEdge[];
-//       if (!edges || !edges[0] || !edges[0].node || !edges[0].node.models) return;
-
-//       // parse gameStorePacked
-//       let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
-//       if (!gameStorePacked) return;
-
-//       // parse gameEvent
-//       const eventsEdges = gameEventsData.events?.edges as World__EventEdge[];
-//       const eventsNodes = eventsEdges.map((i) => i.node as World__Event);
-
-//       const game = new GameClass(configStore.getState(), gameInfos, gameStorePacked);
-//       const gameEvents = new EventClass(configStore.getState(), gameInfos, eventsNodes);
-
-//       set({ game, gameInfos, gameEvents });
-//     },
-//   }));
-// };
 
 export class GameStoreClass {
   client: GraphQLClient;
@@ -174,11 +45,11 @@ export class GameStoreClass {
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
   gameInfos: Game | null = null;
+  gameConfig: GameConfig | null = null;
+  seasonSettings: SeasonSettings | null = null;
   handles: Array<() => void> = [];
 
   constructor({ client, wsClient, configStore }: GameStoreProps) {
-    // console.log("new GameStoreClass");
-
     this.client = client;
     this.wsClient = wsClient;
     this.configStore = configStore;
@@ -187,9 +58,13 @@ export class GameStoreClass {
       game: observable,
       gameEvents: observable,
       gameInfos: observable,
+      gameConfig: observable,
+      seasonSettings: observable,
       reset: action,
       init: flow,
       loadGameInfos: flow,
+      loadGameConfig: flow,
+      loadSeasonSettings: flow,
       execute: flow,
       onGameStorePacked: action,
       onGameEvent: action,
@@ -202,7 +77,9 @@ export class GameStoreClass {
     }
     this.game = null;
     this.gameInfos = null;
+    this.gameConfig = null;
     this.gameEvents = null;
+    this.seasonSettings = null;
     this.handles = [];
     this.isInitialized = false;
   }
@@ -210,11 +87,13 @@ export class GameStoreClass {
   *init(gameId: string /*, playerId: string*/) {
     //this.reset()
 
-    // if(this.isInitialized){ 
+    // if(this.isInitialized){
     //   return
     // }
 
     yield this.loadGameInfos(gameId);
+    yield this.loadGameConfig(this.gameInfos?.season_version);
+    yield this.loadSeasonSettings(this.gameInfos?.season_version);
 
     // retrieve playerId from gameInfos
     const playerId = this.gameInfos?.player_id || "0x0";
@@ -265,7 +144,7 @@ export class GameStoreClass {
       ),
     );
 
-    this.isInitialized = true
+    this.isInitialized = true;
   }
 
   *loadGameInfos(gameId: string) {
@@ -283,6 +162,35 @@ export class GameStoreClass {
     this.gameInfos = gameInfos;
   }
 
+  *loadSeasonSettings(season_version: string) {
+    // gameInfos dont change, no need to subscribe to updates
+    const seasonSettingsData = (yield this.client.request(SeasonSettingsDocument, {
+      version: Number(season_version),
+    })) as SeasonSettingsQuery;
+
+    // parse seasonSettingsData
+    const seasonSettingsEdges = seasonSettingsData!.seasonSettingsModels!.edges as World__ModelEdge[];
+    if (!seasonSettingsEdges || !seasonSettingsEdges[0] || !seasonSettingsEdges[0].node) return;
+    let seasonSettings = seasonSettingsEdges[0].node as SeasonSettings;
+    if (!seasonSettings) return;
+
+    this.seasonSettings = seasonSettings;
+  }
+
+  *loadGameConfig(season_version: string) {
+    // gameInfos dont change, no need to subscribe to updates
+    const gameConfigData = (yield this.client.request(GameConfigDocument, {
+      version: Number(season_version),
+    })) as GameConfigQuery;
+
+    // parse gameConfigData
+    const gameConfigEdges = gameConfigData!.gameConfigModels!.edges as World__ModelEdge[];
+    if (!gameConfigEdges || !gameConfigEdges[0] || !gameConfigEdges[0].node) return;
+    let gameConfig = gameConfigEdges[0].node as GameConfig;
+    if (!gameConfig) return;
+
+    this.gameConfig = gameConfig;
+  }
 
   *execute(gameId: string, playerId: string) {
     const gameData = (yield this.client.request(GameStorePackedDocument, {
@@ -306,7 +214,7 @@ export class GameStoreClass {
     const eventsEdges = gameEventsData.events?.edges as World__EventEdge[];
     const eventsNodes = eventsEdges.map((i) => i.node as World__Event);
 
-    const game = new GameClass(this.configStore, this.gameInfos!, gameStorePacked);
+    const game = new GameClass(this.configStore, this.gameInfos!, this.seasonSettings!, gameStorePacked);
     const gameEvents = new EventClass(this.configStore, this.gameInfos!, eventsNodes);
 
     this.game = game;
@@ -321,7 +229,7 @@ export class GameStoreClass {
     ) as GameStorePacked;
 
     if (gameStorePacked) {
-      this.game = new GameClass(this.configStore, this.gameInfos!, gameStorePacked);
+      this.game = new GameClass(this.configStore, this.gameInfos!, this.seasonSettings!, gameStorePacked);
     }
   };
 

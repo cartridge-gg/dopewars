@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export default function LeaderboardPage() {
   const { toast } = useToast();
 
-  const { failingTx, createFakeGame } = useSystems();
+  const { failingTx, createFakeGame , createNewSeason} = useSystems();
 
   const [running, setRunning] = useState(false);
   const valueRef = useRef(100_000);
@@ -23,9 +23,14 @@ export default function LeaderboardPage() {
 
   const onCreateFakeGame = async () => {
     const res = await createFakeGame(valueRef.current);
-    toast({ message: "creating fake game Ser" });
+    toast({ message: "created fake game Ser" });
   };
 
+  const onCreateNewSeason = async () => {
+    const res = await createNewSeason();
+    toast({ message: "created new season" });
+  };
+  
   const update = useCallback(() => {
     console.log("update", valueRef.current)
     valueRef.current = Number(Number(valueRef.current)+ 1)
@@ -54,6 +59,7 @@ export default function LeaderboardPage() {
       <VStack w="full" alignItems="flex-start" gap={6}>
         <Button onClick={onFailingTx}>Failing tx</Button>
 
+          <Button onClick={onCreateNewSeason}>createNewSeason</Button>
         <HStack w="full ">
           <Button onClick={onCreateFakeGame}>createFakeGame</Button>
           <Input value={valueRef.current} onChange={(e: any) => valueRef.current = e.target.value} w="100px" />

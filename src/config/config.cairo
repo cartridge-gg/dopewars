@@ -1,6 +1,6 @@
 use rollyourown::config::{
     hustlers::{HustlerConfig, HustlerImpl}, game::{GameConfig}, drugs::{DrugConfig},
-    encounters::{EncounterConfig}, ryo::{RyoConfig}
+    encounters::{EncounterConfig}, ryo::{RyoConfig}, settings::{SeasonSettingsModes}
 };
 
 
@@ -9,17 +9,17 @@ trait IConfig<T> {
     fn initialize_1(self: @T);
     fn initialize_2(self: @T);
     fn get_config(self: @T) -> Config;
-    fn update_game_config(self: @T, game_config: GameConfig);
+    // fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
-    fn update_encounter_config(self: @T, encounter_config: EncounterConfig);
 }
 
 #[derive(Drop, Serde)]
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
-    game_config: GameConfig, // TODO: query torii instead ?
+    // game_config: GameConfig, // TODO: query torii instead ?
     ryo_config: RyoConfig,
+    season_settings_modes: SeasonSettingsModes,
 }
 
 #[derive(Drop, Serde)]
@@ -44,8 +44,11 @@ mod config {
 
     use rollyourown::{
         config::{
-            game::{initialize_game_config, GameConfig},
-            drugs::{initialize_drug_config, DrugConfig, Drugs},
+            game::{GameConfig},
+            drugs::{
+                initialize_drug_config_normal, initialize_drug_config_cheap,
+                initialize_drug_config_expensive, DrugConfig, Drugs
+            },
             locations::initialize_location_config,
             hustlers::{
                 HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
@@ -53,11 +56,8 @@ mod config {
                 initialize_weapons_tiers_config, initialize_clothes_tiers_config,
                 initialize_feet_tiers_config, initialize_transport_tiers_config,
             },
-            encounters::{
-                initialize_encounter_config, initialize_encounter_config_extra, EncounterConfig,
-                Encounters
-            },
-            ryo::{RyoConfig}
+            encounters::{EncounterConfig, Encounters, initialize_encounter_stats_config},
+            ryo::{RyoConfig}, settings::{SeasonSettingsModes, SeasonSettingsModesImpl}
         },
         library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         packing::{
@@ -82,10 +82,10 @@ mod config {
 
             let world = self.world();
 
-            // common
-            initialize_game_config(world); // must be set before encounters
+            initialize_drug_config_normal(world);
+            initialize_drug_config_cheap(world);
+            initialize_drug_config_expensive(world);
 
-            initialize_drug_config(world);
             initialize_location_config(world);
 
             // hustlers items
@@ -106,8 +106,9 @@ mod config {
             self.assert_caller_is_owner();
 
             // encounters
-            initialize_encounter_config(self.s());
-            initialize_encounter_config_extra(self.s());
+            initialize_encounter_stats_config(self.s());
+        // initialize_encounter_config(self.s());
+        // initialize_encounter_config_extra(self.s());
         }
 
         fn get_config(self: @ContractState) -> Config {
@@ -162,26 +163,30 @@ mod config {
 
             //
             // TODO: remove & use torii 
-            let game_config = self.s().game_config();
             let ryo_config = self.s().ryo_config();
+            // let game_config = self.s().game_config(ryo_config.season_version);
+            let season_settings_modes = SeasonSettingsModesImpl::all();
 
             //
             Config {
-                game_config, ryo_config, hustlers, layouts: LayoutsConfig { game_store, player }
+                // game_config,
+                ryo_config,
+                season_settings_modes,
+                hustlers,
+                layouts: LayoutsConfig { game_store, player }
             }
         }
 
-        fn update_game_config(self: @ContractState, game_config: GameConfig) {
-            self.assert_caller_is_owner();
-            self.s().save_game_config(game_config);
-        }
-
+        // fn update_game_config(self: @ContractState, game_config: GameConfig) {
+        //     self.assert_caller_is_owner();
+        //     self.s().save_game_config(game_config);
+        // }
 
         fn update_drug_config(self: @ContractState, drug_config: DrugConfig) {
             self.assert_caller_is_owner();
 
             let drug: Drugs = drug_config.drug_id.into();
-            let mut to_update = self.s().drug_config(drug);
+            let mut to_update = self.s().drug_config(drug_config.drugs_mode, drug);
 
             to_update.base = drug_config.base;
             to_update.step = drug_config.step;
@@ -189,31 +194,6 @@ mod config {
             to_update.name = drug_config.name;
 
             self.s().save_drug_config(to_update);
-        }
-
-        fn update_encounter_config(self: @ContractState, encounter_config: EncounterConfig) {
-            self.assert_caller_is_owner();
-
-            let mut to_update = self.s().encounter_config(encounter_config.id);
-
-            to_update.encounter = encounter_config.encounter;
-
-            to_update.level = encounter_config.level;
-            to_update.health = encounter_config.health;
-            to_update.attack = encounter_config.attack;
-            to_update.defense = encounter_config.defense;
-            to_update.speed = encounter_config.speed;
-
-            to_update.rep_pay = encounter_config.rep_pay;
-            to_update.rep_run = encounter_config.rep_run;
-            to_update.rep_fight = encounter_config.rep_fight;
-
-            to_update.min_rep = encounter_config.min_rep;
-            to_update.max_rep = encounter_config.max_rep;
-
-            to_update.payout = encounter_config.payout;
-
-            self.s().save_encounter_config(to_update);
         }
     }
 

@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::game::{GameConfig},
+    config::{game::{GameConfig}, settings::{SeasonSettings, EncountersMode, EncountersOddsMode}},
     utils::{
         random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
         bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
@@ -10,6 +10,130 @@ use rollyourown::{
     packing::{game_store::{GameStore},},
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
+
+
+#[derive(Model, Copy, Drop, Serde)]
+struct EncounterStatsConfig {
+    #[key]
+    encounter: Encounters,
+    #[key]
+    encounters_mode: EncountersMode,
+    //
+    health_base: u8,
+    health_step: u8,
+    attack_base: u8,
+    attack_step: u8,
+    defense_base: u8,
+    defense_step: u8,
+    speed_base: u8,
+    speed_step: u8,
+}
+
+
+fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
+    // Chill
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Cops,
+                encounters_mode: EncountersMode::Chill,
+                health_base: 12 - 2,
+                health_step: 8 - 2,
+                attack_base: 14 - 2,
+                attack_step: 8 - 2,
+                defense_base: 16 - 2,
+                defense_step: 9 - 2,
+                speed_base: 6 - 2,
+                speed_step: 8 - 2,
+            }
+        );
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Gang,
+                encounters_mode: EncountersMode::Chill,
+                health_base: 1,
+                health_step: 11 - 2,
+                attack_base: 5,
+                attack_step: 11 - 2,
+                defense_base: 7,
+                defense_step: 8 - 2,
+                speed_base: 2,
+                speed_step: 8 - 2,
+            }
+        );
+
+    // NoJokes
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Cops,
+                encounters_mode: EncountersMode::NoJokes,
+                health_base: 12,
+                health_step: 8,
+                attack_base: 14,
+                attack_step: 8,
+                defense_base: 16,
+                defense_step: 9,
+                speed_base: 6,
+                speed_step: 8,
+            }
+        );
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Gang,
+                encounters_mode: EncountersMode::NoJokes,
+                health_base: 1,
+                health_step: 11,
+                attack_base: 5,
+                attack_step: 11,
+                defense_base: 7,
+                defense_step: 8,
+                speed_base: 2,
+                speed_step: 8,
+            }
+        );
+
+    // UltraViolence
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Cops,
+                encounters_mode: EncountersMode::UltraViolence,
+                health_base: 12 + 2,
+                health_step: 8 + 2,
+                attack_base: 14 + 2,
+                attack_step: 8 + 2,
+                defense_base: 16 + 2,
+                defense_step: 9 + 2,
+                speed_base: 6 + 2,
+                speed_step: 8 + 2,
+            }
+        );
+
+    s
+        .save_encounter_stats_config(
+            EncounterStatsConfig {
+                encounter: Encounters::Gang,
+                encounters_mode: EncountersMode::UltraViolence,
+                health_base: 1 + 3,
+                health_step: 11 + 3,
+                attack_base: 5 + 3,
+                attack_step: 11 + 3,
+                defense_base: 7 + 3,
+                defense_step: 8 + 3,
+                speed_base: 2 + 3,
+                speed_step: 8 + 3,
+            }
+        );
+}
+
 
 //
 //
@@ -44,11 +168,8 @@ impl EncountersIntoU8 of Into<Encounters, u8> {
 //
 //
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
 struct EncounterConfig {
-    // name: Bytes16,
-    #[key]
-    id: u8,
     encounter: Encounters,
     //
     level: u8,
@@ -60,73 +181,64 @@ struct EncounterConfig {
     rep_pay: u8, // reputation modifier for paying NEGATIVE
     rep_run: u8, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
     rep_fight: u8, // reputation modifier for fighting
-    // 
-    min_rep: u8,
-    max_rep: u8,
-    //
-    payout: u32,
 }
 
-//
-//
-//
 
-
-fn add_encounter(
-    s: IStoreLibraryDispatcher, ref encounter: EncounterConfig, ref game_config: GameConfig
-) {
-    // override id
-    encounter.id = game_config.encounter_count;
-
-    // create encounter
-    s.save_encounter_config(encounter);
-
-    // update total encounter count
-    game_config.encounter_count += 1;
-}
 // 
 //
 //
 
 #[generate_trait]
 impl EncounterSpawnerImpl of EncounterSpawnerTrait {
-    fn get_encounters_ids_by_rep(s: IStoreLibraryDispatcher, rep: u8) -> Span<u8> {
-        let mut game_config = s.game_config();
-        let mut encounters_ids = array![];
-        
-        let mut id = 0;
-
-        loop {
-            if id == game_config.encounter_count {
-                break;
-            }
-
-            let encounter = s.encounter_config(id);
-
-            if rep >= encounter.min_rep && rep <= encounter.max_rep {
-                encounters_ids.append(encounter.id);
-            };
-
-            id += 1;
+    fn get_encounter_level(ref season_settings: SeasonSettings, reputation: u8) -> u8 {
+        let level = match season_settings.encounters_odds_mode {
+            EncountersOddsMode::Easy => { reputation / 20 + 1 },
+            EncountersOddsMode::Normal => { reputation / 16 + 1 },
+            EncountersOddsMode::Hard => { reputation / 12 + 1 },
         };
 
-        encounters_ids.span()
+        MathImplU8::min(6, level)
     }
 
-    fn get_encounter(ref game_store: GameStore) -> EncounterConfig {
-        let rep = game_store.player.reputation;
-
-        let encounters_ids = EncounterSpawnerImpl::get_encounters_ids_by_rep(game_store.s, rep);
+    fn get_encounter(
+        ref game_store: GameStore, ref season_settings: SeasonSettings
+    ) -> EncounterConfig {
+        let level = EncounterSpawnerImpl::get_encounter_level(
+            ref season_settings, game_store.player.reputation
+        );
 
         let rand_from_game_store: u256 = pedersen::pedersen(
             game_store.markets.packed, game_store.markets.packed
         )
-            .into();
+            .into() % 2;
 
-        let rand_index = rand_from_game_store % encounters_ids.len().into();
-        let rand_id = *encounters_ids.at(rand_index.try_into().unwrap());
+        let rand_felt252: felt252 = rand_from_game_store.try_into().unwrap(); 
 
-        let mut encounter = game_store.s.encounter_config(rand_id);
+        let encounter_type = match rand_felt252 {
+            0 => Encounters::Cops,
+            _ => Encounters::Gang,
+        };
+
+        let mut encounter_stats = game_store
+            .s
+            .encounter_stats_config(encounter_type, season_settings.encounters_mode);
+
+        //   let mut encounter = game_store.s.encounter_config(rand_id);
+
+        let encounter = EncounterConfig {
+            encounter: encounter_type,
+            //
+            level,
+            health: encounter_stats.health_base + level * encounter_stats.health_step,
+            attack: encounter_stats.attack_base + level * encounter_stats.attack_step,
+            defense: encounter_stats.defense_base + level * encounter_stats.defense_step,
+            speed: encounter_stats.speed_base + level * encounter_stats.speed_step,
+            //
+            rep_pay: level, // reputation modifier for paying NEGATIVE
+            rep_run: level
+                / 2, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
+            rep_fight: level, // reputation modifier for fighting
+        };
 
         encounter
     }
@@ -179,246 +291,3 @@ impl EncounterImpl of EncounterTrait {
     }
 }
 
-
-//
-//
-//
-
-// fn get_encounter_by_slot(game_store: GameStore, encounter_slot: Encounters) -> Encounter {
-//     let turn = game_store.player.turn;
-
-//     // temp: lvl based on reputation    
-//     let encounter_level = game_store.player.reputation / 15 + 1;
-
-//     let health = encounter_level * 5 + turn;
-//     let attack = encounter_level * 2 + turn / 3;
-
-//     let payout: u32 = (encounter_level.into() * encounter_level.into() * 4_000)
-//         + (turn.into() * 1_000);
-//     let demand_pct = get_encounter_demand_from_game_store(game_store);
-
-//     Encounter {
-//         encounter: encounter_slot,
-//         level: encounter_level,
-//         health: health,
-//         attack: attack,
-//         payout: payout,
-//         demand_pct: demand_pct,
-//     }
-// }
-
-//
-//
-//
-
-fn initialize_encounter_config(s: IStoreLibraryDispatcher) {
-    let mut game_config = s.game_config();
-
-    // COPS
-
-    let mut i = 0;
-    loop {
-        if i == 6 {
-            break;
-        }
-
-        let lvl = i + 1;
-        let mut encounter = EncounterConfig {
-            id: 0, // overrided
-            encounter: Encounters::Cops,
-            //
-            level: lvl,
-            health: lvl * 12,
-            attack: lvl * 8,
-            defense: lvl * 10,
-            speed: lvl * 8,
-            //
-            rep_pay: lvl + 5,
-            rep_run: lvl,
-            rep_fight: lvl + 2,
-            // 
-            min_rep: i * 15,
-            max_rep: (i * 15) + 25,
-            //
-            payout: 0, // overrided
-        };
-
-        add_encounter(s, ref encounter, ref game_config);
-        i += 1;
-    };
-
-    // GANG
-
-    let mut i = 0;
-    loop {
-        if i == 6 {
-            break;
-        }
-
-        let lvl = i + 1;
-        let mut encounter = EncounterConfig {
-            id: 0, // overrided
-            encounter: Encounters::Gang,
-            //
-            level: lvl,
-            health: lvl * 8,
-            attack: lvl * 12,
-            defense: lvl * 9,
-            speed: lvl * 8,
-            //
-            rep_pay: lvl + 5,
-            rep_run: lvl,
-            rep_fight: lvl + 2,
-            // 
-            min_rep: i * 15,
-            max_rep: (i * 15) + 25,
-            //
-            payout: 0, // overrided
-        };
-
-        add_encounter(s, ref encounter, ref game_config);
-        i += 1;
-    };
-
-    // save encounter_count
-    s.save_game_config(game_config);
-}
-
-fn initialize_encounter_config_extra(s: IStoreLibraryDispatcher) {
-    let mut game_config = s.game_config();
-
-    //////// COPS ////////
-
-    let mut cops1 = EncounterConfig {
-        id: 0, // overrided
-        encounter: Encounters::Cops,
-        //
-        level: 1,
-        health: 15,
-        attack: 15,
-        defense: 15,
-        speed: 15,
-        //
-        rep_pay: 5,
-        rep_run: 1,
-        rep_fight: 2,
-        // 
-        min_rep: 0,
-        max_rep: 40,
-        //
-        payout: 0, // overrided
-    };
-
-    let mut cops2 = EncounterConfig {
-        id: 0,
-        encounter: Encounters::Cops,
-        //
-        level: 2,
-        health: 25,
-        attack: 25,
-        defense: 25,
-        speed: 25,
-        //
-        rep_pay: 6,
-        rep_run: 2,
-        rep_fight: 4,
-        // 
-        min_rep: 30,
-        max_rep: 70,
-        //
-        payout: 0, // overrided
-    };
-
-    let mut cops3 = EncounterConfig {
-        id: 0,
-        encounter: Encounters::Cops,
-        //
-        level: 3,
-        health: 35,
-        attack: 35,
-        defense: 35,
-        speed: 25,
-        //
-        rep_pay: 7,
-        rep_run: 3,
-        rep_fight: 5,
-        // 
-        min_rep: 50,
-        max_rep: 100,
-        //
-        payout: 0, // overrided
-    };
-
-    add_encounter(s, ref cops1, ref game_config);
-    add_encounter(s, ref cops2, ref game_config);
-    add_encounter(s, ref cops3, ref game_config);
-
-    //////// GANGS ////////
-
-    let mut gang1 = EncounterConfig {
-        id: 0,
-        encounter: Encounters::Gang,
-        //
-        level: 1,
-        health: 15,
-        attack: 15,
-        defense: 15,
-        speed: 15,
-        //
-        rep_pay: 12,
-        rep_run: 2,
-        rep_fight: 3,
-        // 
-        min_rep: 0,
-        max_rep: 40,
-        //
-        payout: 0, // overrided
-    };
-
-    let mut gang2 = EncounterConfig {
-        id: 0,
-        encounter: Encounters::Gang,
-        //
-        level: 2,
-        health: 25,
-        attack: 25,
-        defense: 25,
-        speed: 35,
-        //
-        rep_pay: 5,
-        rep_run: 2,
-        rep_fight: 4,
-        // 
-        min_rep: 30,
-        max_rep: 80,
-        //
-        payout: 0, // overrided
-    };
-
-    let mut gang3 = EncounterConfig {
-        id: 0,
-        encounter: Encounters::Gang,
-        //
-        level: 4,
-        health: 45,
-        attack: 45,
-        defense: 45,
-        speed: 45,
-        //
-        rep_pay: 4,
-        rep_run: 3,
-        rep_fight: 6,
-        // 
-        min_rep: 60,
-        max_rep: 100,
-        //
-        payout: 0, // overrided
-    };
-
-    add_encounter(s, ref gang1, ref game_config);
-    add_encounter(s, ref gang2, ref game_config);
-    add_encounter(s, ref gang3, ref game_config);
-
-    // save encounter_count
-    s.save_game_config(game_config);
-}

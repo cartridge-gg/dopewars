@@ -20,7 +20,6 @@ import { useDojoContext } from "./useDojoContext";
 import { DojoCall } from "@dojoengine/core";
 import { sleep } from "../utils";
 
-
 export const ETHER = 10n ** 18n;
 
 export interface SystemsInterface {
@@ -47,6 +46,7 @@ export interface SystemsInterface {
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
+  createNewSeason: () => Promise<SystemExecuteResult>;
 
   isPending: boolean;
   error?: string;
@@ -442,7 +442,7 @@ export const useSystems = (): SystemsInterface => {
     async (duration: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::ryo::ryo",
-        entrypoint: "set_leaderboard_duration",
+        entrypoint: "set_season_duration",
         calldata: [duration],
       });
 
@@ -521,6 +521,21 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
+  const createNewSeason = useCallback(
+    async (finalScore = 0) => {
+      const { hash, events, parsedEvents } = await executeAndReceipt({
+        contractName: "rollyourown::systems::devtools::devtools",
+        entrypoint: "create_new_season",
+        calldata: [],
+      });
+
+      return {
+        hash,
+      };
+    },
+    [executeAndReceipt],
+  );
+
   const failingTx = useCallback(async () => {
     const { hash, events, parsedEvents } = await executeAndReceipt({
       contractName: "rollyourown::systems::devtools::devtools",
@@ -556,6 +571,7 @@ export const useSystems = (): SystemsInterface => {
     //
     failingTx,
     createFakeGame,
+    createNewSeason,
     //
     error,
     isPending,

@@ -44,7 +44,7 @@ struct Trade {
 //
 //
 
-fn execute_trade(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
+fn execute_trade(ref game_store: GameStore, trade: Trade) {
     // check if can trade 
     assert(game_store.can_trade(), 'player cannot trade');
 
@@ -52,12 +52,12 @@ fn execute_trade(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: T
     assert(game_store.game.game_mode != GameMode::Warrior, 'warriors dont trade');
 
     match trade.direction {
-        TradeDirection::Sell => sell(s, ref game_store, trade),
-        TradeDirection::Buy => buy(s, ref game_store, trade),
+        TradeDirection::Sell => sell(ref game_store, trade),
+        TradeDirection::Buy => buy(ref game_store, trade),
     };
 }
 
-fn buy(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade,) {
+fn buy(ref game_store: GameStore, trade: Trade,) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -69,14 +69,15 @@ fn buy(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade,) {
 
     // get transport
     let transport = game_store.items.transport();
-    let drug_config = s.drug_config(trade.drug);
+    let season_settings = game_store.season_settings();
+    let drug_config = game_store.s.drug_config(season_settings.drugs_mode, trade.drug);
 
     // check quantity
     let max_transport = transport - (drugs.quantity * drug_config.weight.into());
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash 
-    let market_price = game_store.markets.get_drug_price(s, game_store.player.location, trade.drug);
+    let market_price = game_store.get_drug_price(game_store.player.location, trade.drug);
     let total_cost = market_price * trade.quantity;
     assert(game_store.player.cash >= total_cost, 'not enought ca$h');
 
@@ -108,7 +109,7 @@ fn buy(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade,) {
 }
 
 
-fn sell(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
+fn sell(ref game_store: GameStore, trade: Trade) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -121,7 +122,7 @@ fn sell(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
     // must have enought to sell
     assert(drugs.quantity >= trade.quantity, 'not enought drug');
 
-    let market_price = game_store.markets.get_drug_price(s, game_store.player.location, trade.drug);
+    let market_price = game_store.get_drug_price(game_store.player.location, trade.drug);
     let total = market_price * trade.quantity;
 
     // update drug
@@ -133,7 +134,8 @@ fn sell(s: IStoreLibraryDispatcher, ref game_store: GameStore, trade: Trade) {
 
     // emit event
     game_store
-        .s.w()
+        .s
+        .w()
         .emit_raw(
             array![
                 selector!("TradeDrug"),

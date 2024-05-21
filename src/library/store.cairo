@@ -4,12 +4,13 @@ use rollyourown::{
     config::{
         locations::{Locations}, ryo::{RyoConfig},
         hustlers::{ItemSlot, HustlerItemBaseConfig, HustlerItemTiersConfig},
-        drugs::{Drugs, DrugConfig}, encounters::{EncounterConfig}, game::{GameConfig},
-        ryo_address::{RyoAddress}
+        drugs::{Drugs, DrugConfig}, encounters::{Encounters, EncounterConfig, EncounterStatsConfig},
+        game::{GameConfig}, ryo_address::{RyoAddress},
+        settings::{SeasonSettings, EncountersMode, DrugsMode}
     },
     models::{game::Game, season::Season, game_store_packed::GameStorePacked,},
     packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}},
-    traits::{Packable, Packer, Unpacker}
+    traits::{Packable, Packer}
 };
 
 
@@ -19,16 +20,19 @@ trait IStore<T> {
     //
     fn ryo_config(self: @T,) -> RyoConfig;
     fn ryo_addresses(self: @T,) -> RyoAddress;
-    fn game_config(self: @T,) -> GameConfig;
+    fn game_config(self: @T, version: u16) -> GameConfig;
     //
-    fn drug_config(self: @T, drug: Drugs) -> DrugConfig;
-    fn encounter_config(self: @T, id: u8) -> EncounterConfig;
+    fn drug_config(self: @T, drugs_mode: DrugsMode, drug: Drugs) -> DrugConfig;
+    fn encounter_stats_config(
+        self: @T, encounter: Encounters, encounters_mode: EncountersMode
+    ) -> EncounterStatsConfig;
     fn item_base_config(self: @T, slot: ItemSlot, item_id: u16) -> HustlerItemBaseConfig;
     fn item_tiers_config(self: @T, slot: ItemSlot, tiers: u8) -> HustlerItemTiersConfig;
     //
     fn season(self: @T, version: u16) -> Season;
+    fn season_settings(self: @T, version: u16) -> SeasonSettings;
     fn game(self: @T, game_id: u32, player_id: ContractAddress) -> Game;
-    fn game_store(self: @T, game_id: u32, player_id: ContractAddress) -> GameStore;
+    fn game_store_packed(self: @T, game_id: u32, player_id: ContractAddress) -> GameStorePacked;
     //
     //
     //
@@ -36,12 +40,13 @@ trait IStore<T> {
     fn save_ryo_addresses(self: @T, ryo_addresses: RyoAddress);
     fn save_game_config(self: @T, game_config: GameConfig);
     //
-    fn save_encounter_config(self: @T, encounter_config: EncounterConfig);
-    fn save_drug_config(self: @T, drug_config: DrugConfig);
+    fn save_encounter_stats_config(self: @T, config: EncounterStatsConfig);
+    fn save_drug_config(self: @T, config: DrugConfig);
     //
     fn save_season(self: @T, season: Season);
+    fn save_season_settings(self: @T, season_settings: SeasonSettings);
     fn set_game(self: @T, game: Game);
-    fn set_game_store(self: @T, game_store: GameStore);
+    fn set_game_store_packed(self: @T, game_store_packed: GameStorePacked);
 }
 
 const UNIVERSAL_ANSWER: u8 = 0; //42;
@@ -55,7 +60,8 @@ mod store {
         config::{
             drugs::{Drugs, DrugConfig}, locations::{Locations}, game::{GameConfig},
             hustlers::{ItemSlot, HustlerItemBaseConfig, HustlerItemTiersConfig}, ryo::{RyoConfig,},
-            encounters::{EncounterConfig}, ryo_address::{RyoAddress},
+            encounters::{Encounters, EncounterConfig, EncounterStatsConfig},
+            ryo_address::{RyoAddress}, settings::{SeasonSettings, EncountersMode, DrugsMode}
         },
         models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}},
         packing::{
@@ -85,18 +91,24 @@ mod store {
             get!(self.world(), (UNIVERSAL_ANSWER), (RyoAddress))
         }
 
-        fn game_config(self: @ContractState) -> GameConfig {
-            get!(self.world(), (UNIVERSAL_ANSWER), (GameConfig))
-        }
-
         //
 
-        fn drug_config(self: @ContractState, drug: Drugs) -> DrugConfig {
-            get!(self.world(), (drug), DrugConfig)
+        fn game_config(self: @ContractState, version: u16) -> GameConfig {
+            get!(self.world(), (version), (GameConfig))
         }
 
-        fn encounter_config(self: @ContractState, id: u8) -> EncounterConfig {
-            get!(self.world(), (id), EncounterConfig)
+        fn drug_config(self: @ContractState, drugs_mode: DrugsMode, drug: Drugs) -> DrugConfig {
+            get!(self.world(), (drugs_mode, drug), DrugConfig)
+        }
+
+        // fn encounter_config(self: @ContractState, id: u8) -> EncounterConfig {
+        //     get!(self.world(), (id), EncounterConfig)
+        // }
+
+        fn encounter_stats_config(
+            self: @ContractState, encounter: Encounters, encounters_mode: EncountersMode
+        ) -> EncounterStatsConfig {
+            get!(self.world(), (encounter, encounters_mode), EncounterStatsConfig)
         }
 
         fn item_base_config(
@@ -118,15 +130,25 @@ mod store {
             get!(self.world(), (version), Season)
         }
 
+        fn season_settings(self: @ContractState, version: u16) -> SeasonSettings {
+            get!(self.world(), (version), SeasonSettings)
+        }
+
         fn game(self: @ContractState, game_id: u32, player_id: ContractAddress) -> Game {
             get!(self.world(), (game_id, player_id), Game)
         }
 
-        fn game_store(self: @ContractState, game_id: u32, player_id: ContractAddress) -> GameStore {
-            let game = self.game(game_id, player_id);
-            let game_store_packed = get!(self.world(), (game_id, player_id), GameStorePacked);
-            let game_store: GameStore = game_store_packed.unpack(self.s(), game);
-            game_store
+        // fn game_store(self: @ContractState, game_id: u32, player_id: ContractAddress) -> GameStore {
+        //     let game = self.game(game_id, player_id);
+        //     let game_store_packed = get!(self.world(), (game_id, player_id), GameStorePacked);
+        //     let game_store: GameStore = game_store_packed.unpack(self.s(), game);
+        //     game_store
+        // }
+
+        fn game_store_packed(
+            self: @ContractState, game_id: u32, player_id: ContractAddress
+        ) -> GameStorePacked {
+            get!(self.world(), (game_id, player_id), GameStorePacked)
         }
 
         //
@@ -150,12 +172,16 @@ mod store {
 
         //
 
-        fn save_encounter_config(self: @ContractState, encounter_config: EncounterConfig) {
-            set!(self.world(), (encounter_config))
+        // fn save_encounter_config(self: @ContractState, config: EncounterConfig) {
+        //     set!(self.world(), (config))
+        // }
+
+        fn save_encounter_stats_config(self: @ContractState, config: EncounterStatsConfig) {
+            set!(self.world(), (config))
         }
 
-        fn save_drug_config(self: @ContractState, drug_config: DrugConfig) {
-            set!(self.world(), (drug_config))
+        fn save_drug_config(self: @ContractState, config: DrugConfig) {
+            set!(self.world(), (config))
         }
 
         //
@@ -164,12 +190,20 @@ mod store {
             set!(self.world(), (season))
         }
 
+        fn save_season_settings(self: @ContractState, season_settings: SeasonSettings) {
+            set!(self.world(), (season_settings))
+        }
+
         fn set_game(self: @ContractState, game: Game) {
             set!(self.world(), (game));
         }
 
-        fn set_game_store(self: @ContractState, game_store: GameStore) {
-            let game_store_packed = game_store.pack();
+        // fn set_game_store(self: @ContractState, game_store: GameStore) {
+        //     let game_store_packed = game_store.pack();
+        //     set!(self.world(), (game_store_packed));
+        // }
+
+        fn set_game_store_packed(self: @ContractState, game_store_packed: GameStorePacked) {
             set!(self.world(), (game_store_packed));
         }
     }

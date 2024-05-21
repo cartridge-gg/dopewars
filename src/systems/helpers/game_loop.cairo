@@ -9,9 +9,9 @@ use rollyourown::{
         math::{MathImpl, MathTrait}
     },
     library::{store::{IStoreLibraryDispatcher, IStoreLibraryDispatcherImpl},},
-    config::{locations::{Locations}},
+    config::{locations::{Locations}, settings::{SeasonSettings}},
     packing::{
-        game_store::{GameStore, GameStorePackerImpl},
+        game_store::{GameStore,GameStoreImpl, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
         markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
         drugs_packed::{DrugsPackedTrait}
@@ -21,7 +21,9 @@ use rollyourown::{
 
 
 // -> (is_dead, has_encounter)
-fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
+fn on_travel(
+    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
+) -> (bool, bool) {
     // update wanted
     game_store.wanted.on_turn_end(game_store);
 
@@ -30,7 +32,7 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
         return (false, false);
     };
 
-    traveling::on_travel(ref game_store, ref randomizer)
+    traveling::on_travel(ref game_store, ref season_settings, ref randomizer)
 }
 
 
@@ -46,7 +48,8 @@ fn on_turn_end(
     game_store.player.turn += 1;
 
     // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
-    let mut game_config = s.game_config();
+    let mut game_config = game_store.game_config();
+
     let drugs = game_store.drugs.get();
     let reputation = if drugs.quantity > 5 {
         game_config.rep_carry_drugs
@@ -82,7 +85,7 @@ fn on_turn_end(
     game_store.markets.market_variations(game_store.s.w(), ref randomizer, ref game_store.game);
 
     // save 
-    s.set_game_store(game_store);
+    game_store.save();
 
     true
 }
@@ -92,7 +95,7 @@ fn on_game_over(ref game_store: GameStore, s: IStoreLibraryDispatcher) {
     assert(game_store.game.game_over == false, 'already game_over');
 
     // save 
-    s.set_game_store(game_store);
+    game_store.save();
 
     // set game_over on game 
     game_store.game.game_over = true;

@@ -1,3 +1,4 @@
+use rollyourown::packing::game_store::GameStoreTrait;
 use core::traits::TryInto;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
@@ -9,10 +10,10 @@ use rollyourown::{
     config::{
         hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
         encounters::{Encounters, EncounterSpawnerImpl, EncounterConfig, EncounterImpl},
-        game::{GameConfig}, 
+        game::{GameConfig}, settings::{SeasonSettings}
     },
     packing::{
-        game_store::{GameStore}, player::{PlayerImpl, PlayerStatus},
+        game_store::{GameStore,GameStoreImpl}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl, ItemsPackedTrait},
         drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
@@ -84,7 +85,7 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
 //
 
 // -> (is_dead, has_encounter)
-fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) {
+fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random) -> (bool, bool) {
     let has_encounter = match game_store.game.game_mode {
         GameMode::Dealer => {
             // get wanted level at destination 0-7
@@ -98,7 +99,7 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
 
     if has_encounter {
         // get encounter
-        let encounter = EncounterSpawnerImpl::get_encounter(ref game_store);
+        let encounter = EncounterSpawnerImpl::get_encounter(ref game_store, ref season_settings);
 
         // update player status
         game_store.player.status = match encounter.encounter {
@@ -110,7 +111,12 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
             TravelEncounter {
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
-                encounter_id: encounter.id,
+                encounter: encounter.encounter.into(),
+                level: encounter.level,
+                health: encounter.health,
+                attack: encounter.attack,
+                defense: encounter.defense,
+                speed: encounter.speed,
                 demand_pct: encounter.get_demand_pct(ref game_store),
                 payout: encounter.get_payout(ref game_store),
             }
@@ -127,9 +133,9 @@ fn on_travel(ref game_store: GameStore, ref randomizer: Random) -> (bool, bool) 
 //
 
 
-fn decide(s: IStoreLibraryDispatcher, ref game_store: GameStore, ref randomizer: Random, action: EncounterActions) -> bool {
+fn decide(s: IStoreLibraryDispatcher, ref game_store: GameStore,ref season_settings: SeasonSettings, ref randomizer: Random, action: EncounterActions) -> bool {
     // get encounter
-    let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store);
+    let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store,ref season_settings);
 
     // run action
     let mut result = match action {
@@ -148,7 +154,7 @@ fn decide(s: IStoreLibraryDispatcher, ref game_store: GameStore, ref randomizer:
     game_store.player.reputation = game_store.player.reputation.sub_capped(result.rep_neg,0);
 
     // update turns with turn_loss 
-    game_store.player.turn = game_store.player.turn.add_capped(result.turn_loss, game_store.game.max_turns);
+    game_store.player.turn = game_store.player.turn.add_capped(result.turn_loss, game_store.game_config().max_turns);
 
     emit!(game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounterResult(result)));
     
@@ -275,7 +281,7 @@ fn on_run(
             break;
         };
 
-        if result.rounds == game_store.game.max_rounds {
+        if result.rounds == game_store.game_config().max_rounds {
             // didnt escaped -> land in random location
             game_store.player.next_location = LocationsRandomizableImpl::random(ref randomizer);
             is_caught = true;
@@ -283,7 +289,7 @@ fn on_run(
         }
     };
 
-    let game_config = s.game_config();
+    let game_config = game_store.game_config();
 
     result.outcome = if game_store.player.is_dead() {
         EncounterOutcomes::Died

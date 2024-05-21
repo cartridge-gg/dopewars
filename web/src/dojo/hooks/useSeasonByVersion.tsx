@@ -3,6 +3,8 @@ import {
   GameEdge,
   Season,
   SeasonEdge,
+  SeasonSettings,
+  SeasonSettingsEdge,
   SortedList,
   SortedListEdge,
   useGameByIdQuery,
@@ -12,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export interface SeasonByVersionInterface {
   season?: Season;
+  seasonSettings?: SeasonSettings;
   sortedList?: SortedList;
   isSeasonOpen: boolean;
   isSeasonWashed: boolean;
@@ -33,11 +36,16 @@ export const useSeasonByVersion = (seasonId: number): SeasonByVersionInterface =
     return edges?.length > 0 ? (edges[0].node as Season) : undefined;
   }, [data]);
 
+  const seasonSettings = useMemo(() => {
+    const edges = data?.seasonSettingsModels?.edges as SeasonSettingsEdge[];
+    return edges?.length > 0 ? (edges[0].node as SeasonSettings) : undefined;
+  }, [data]);
+
   const sortedList = useMemo(() => {
     const edges = data?.sortedListModels?.edges as SortedListEdge[];
     return edges?.length > 0 ? (edges[0].node as SortedList) : undefined;
   }, [data]);
-
+  
   const isSeasonOpen = useMemo(() => {
     return timestamp < season?.next_version_timestamp * 1000;
   }, [season, timestamp]);
@@ -60,6 +68,7 @@ export const useSeasonByVersion = (seasonId: number): SeasonByVersionInterface =
 
   return {
     season,
+    seasonSettings,
     sortedList,
     isSeasonOpen,
     isSeasonWashed,
