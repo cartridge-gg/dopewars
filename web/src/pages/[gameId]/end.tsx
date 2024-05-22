@@ -176,7 +176,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
               icon={<HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
             />
             <Divider borderColor="neon.600" />
-            <StatsItem text={`${position}th place`} icon={<Trophy />} />
+            <StatsItem text={`Rank ${position}`} icon={<Trophy />} />
 
             <Divider borderColor="neon.600" />
             {/* <StatsItem text={`Day ${game.player.turn}`} icon={<Calendar />} /> */}
