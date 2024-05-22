@@ -48,7 +48,7 @@ export default function Home() {
     if (!sortedList || sortedList.process_max_size === 0) return;
 
     const value = (sortedList?.process_size * 100) / sortedList?.process_max_size;
-    setProgressPercent(value);
+    setProgressPercent(Math.floor(value));
   }, [sortedList]);
 
   const { toast } = useToast();
@@ -143,7 +143,7 @@ export default function Home() {
 
           <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
             <TabPanel p={0}>
-              <Leaderboard />
+              <Leaderboard config={config} />
             </TabPanel>
             <TabPanel p={0}>
               <HallOfFame />

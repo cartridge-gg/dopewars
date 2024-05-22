@@ -19,6 +19,7 @@ import { Arrow, InfosIcon, PaperIcon, Skull } from "../../icons";
 import { SeasonDetailsModal } from "./SeasonDetailsModal";
 import { Game } from "@/generated/graphql";
 import { shortString } from "starknet";
+import { Config, ConfigStoreClass } from "@/dojo/stores/config";
 
 const renderer = ({
   days,
@@ -54,23 +55,29 @@ const renderer = ({
   }
 };
 
-export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: boolean } & StyleProps & ListProps) => {
+export const Leaderboard = observer(({ config }: { config: Config }) => {
   const { router, gameId } = useRouterContext();
 
   const { uiStore } = useDojoContext();
   const { account } = useAccount();
-  const { config } = useConfigStore();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
-  const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version  || 0);
+  const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version || 0);
 
-  const  { season }= useSeasonByVersion(selectedVersion)
+  const { season } = useSeasonByVersion(selectedVersion);
 
   const {
     registeredGames,
     isFetching: isFetchingRegisteredGames,
     refetch: refetchRegisteredGames,
   } = useRegisteredGamesBySeason(selectedVersion);
+
+  useEffect(() => {
+    if (!config) return;
+
+    setCurrentVersion(config?.ryo.season_version || 0);
+    refetchRegisteredGames();
+  }, [config]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -88,7 +95,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     router.push(`/season/${version}`);
   };
 
-  if (!registeredGames || !season ) {
+  if (!registeredGames || !season) {
     return <></>;
   }
 
@@ -96,7 +103,12 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
     <VStack w="full" h="100%">
       <VStack my="15px" w="full">
         <HStack w="full" justifyContent="space-between">
-          <Arrow direction="left" cursor="pointer" opacity={selectedVersion > 1 ? "1" : "0.25"} onClick={onPrev}></Arrow>
+          <Arrow
+            direction="left"
+            cursor="pointer"
+            opacity={selectedVersion > 1 ? "1" : "0.25"}
+            onClick={onPrev}
+          ></Arrow>
           <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
             <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
               SEASON {selectedVersion} REWARDS
@@ -115,10 +127,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
         </HStack>
         {selectedVersion === currentVersion && (
           <HStack>
-            <Countdown
-              date={new Date(season.next_version_timestamp * 1_000)}
-              renderer={renderer}
-            ></Countdown>
+            <Countdown date={new Date(season.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
             <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
               <InfosIcon />
             </Box>
@@ -144,7 +153,9 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                 const isOwn = game.player_id === account?.address;
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
-                const displayName = game.player_name ? `${shortString.decodeShortString( game.player_name)}${isOwn ? " (you)" : ""}` : "Anonymous";
+                const displayName = game.player_name
+                  ? `${shortString.decodeShortString(game.player_name)}${isOwn ? " (you)" : ""}`
+                  : "Anonymous";
 
                 return (
                   <ListItem color={color} key={game.game_id} cursor="pointer">
@@ -167,7 +178,7 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         {/* {game.health === 0 ? (
                           <Skull color={avatarColor} hasCrown={index === 0} />
                         ) : ( */}
-                          <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
+                        <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
                         {/* )} */}
                       </Box>
 
@@ -194,19 +205,15 @@ export const Leaderboard = observer(({ nameEntry, ...props }: { nameEntry?: bool
                         {"."}
                       </Text>
 
-                        {
-                        game.claimable > 0 && (
-                          <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                         <PaperIcon /> {game.claimable} ...
+                      {game.claimable > 0 && (
+                        <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                          <PaperIcon /> {game.claimable} ...
                         </Text>
-                        )
-                      }
+                      )}
 
                       <Text flexShrink={0} fontSize={["12px", "16px"]}>
                         {formatCash(game.final_score)}
                       </Text>
-
-                    
                     </HStack>
                   </ListItem>
                 );

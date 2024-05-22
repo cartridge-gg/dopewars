@@ -2,7 +2,7 @@ import { useDojoContext } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
 
 import { Table } from "ka-table";
-import { DataType, EditingMode } from "ka-table/enums";
+import { DataType, EditingMode, FilteringMode } from "ka-table/enums";
 import { editComponents } from "./tables";
 
 const columns = [
@@ -26,8 +26,8 @@ export const HustlerItemBaseTable = observer(() => {
       data={config?.items || []}
       rowKeyField={"name"}
       editingMode={EditingMode.None}
+      filteringMode={FilteringMode.HeaderFilter}
       childComponents={editComponents}
     />
   );
 });
-

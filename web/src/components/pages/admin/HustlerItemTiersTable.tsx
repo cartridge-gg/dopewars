@@ -2,7 +2,7 @@ import { useDojoContext } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
 
 import { Table } from "ka-table";
-import { DataType, EditingMode, SortingMode } from "ka-table/enums";
+import { DataType, EditingMode, FilteringMode, SortingMode } from "ka-table/enums";
 
 const columns = [
   { key: "slot", title: "slot", dataType: DataType.String },
@@ -25,6 +25,7 @@ export const HustlerItemTiersTable = observer(() => {
       rowKeyField={"id"}
       editingMode={EditingMode.None}
       sortingMode={SortingMode.Single}
+      filteringMode={FilteringMode.HeaderFilter}
     />
   );
 });

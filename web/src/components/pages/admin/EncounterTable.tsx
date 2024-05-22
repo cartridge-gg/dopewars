@@ -2,23 +2,23 @@ import { useDojoContext, useSystems } from "@/dojo/hooks";
 import { observer } from "mobx-react-lite";
 
 import { Table, useTable } from "ka-table";
-import { ActionType, DataType, SortingMode } from "ka-table/enums";
+import { ActionType, DataType, FilteringMode, SortingMode } from "ka-table/enums";
 import { useState } from "react";
 import { editComponents } from "./tables";
 
 const columns = [
   // { key: "image", width: 100 },
+  { key: "encounters_mode", title: "mode", dataType: DataType.String },
   { key: "encounter", title: "encounter", dataType: DataType.String },
-  { key: "encounters_mode", title: "encounters_mode", dataType: DataType.String },
 
-  { key: "health_base", title: "health_base", dataType: DataType.Number },
-  { key: "health_step", title: "health_step", dataType: DataType.Number },
-  { key: "attack_base", title: "attack_base", dataType: DataType.Number },
-  { key: "attack_step", title: "attack_step", dataType: DataType.Number },
-  { key: "defense_base", title: "defense_base", dataType: DataType.Number },
-  { key: "defense_step", title: "defense_step", dataType: DataType.Number },
-  { key: "speed_base", title: "speed_base", dataType: DataType.Number },
-  { key: "speed_step", title: "speed_step", dataType: DataType.Number },
+  { key: "health_base", title: "HP base", dataType: DataType.Number },
+  { key: "health_step", title: "HP step", dataType: DataType.Number },
+  { key: "attack_base", title: "ATK base", dataType: DataType.Number },
+  { key: "attack_step", title: "ATK step", dataType: DataType.Number },
+  { key: "defense_base", title: "DEF base", dataType: DataType.Number },
+  { key: "defense_step", title: "DEF step", dataType: DataType.Number },
+  { key: "speed_base", title: "SPD base", dataType: DataType.Number },
+  { key: "speed_step", title: "SPD step", dataType: DataType.Number },
 
   { key: "editColumn", width: 80 },
 ];
@@ -70,6 +70,7 @@ export const EncounterTable = observer(() => {
       data={data}
       rowKeyField={"id"}
       sortingMode={SortingMode.Single}
+      filteringMode={FilteringMode.HeaderFilter}
       childComponents={editComponents}
     />
   );

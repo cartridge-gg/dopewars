@@ -177,10 +177,6 @@ mod config {
             }
         }
 
-        // fn update_game_config(self: @ContractState, game_config: GameConfig) {
-        //     self.assert_caller_is_owner();
-        //     self.s().save_game_config(game_config);
-        // }
 
         fn update_drug_config(self: @ContractState, drug_config: DrugConfig) {
             self.assert_caller_is_owner();

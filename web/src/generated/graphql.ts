@@ -2538,6 +2538,13 @@ export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ConfigQuery = { __typename?: 'World__Query', ryoAddressModels?: { __typename?: 'RyoAddressConnection', edges?: Array<{ __typename?: 'RyoAddressEdge', node?: { __typename?: 'RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, ryoConfigModels?: { __typename?: 'RyoConfigConnection', edges?: Array<{ __typename?: 'RyoConfigEdge', node?: { __typename?: 'RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, drugConfigModels?: { __typename?: 'DrugConfigConnection', edges?: Array<{ __typename?: 'DrugConfigEdge', node?: { __typename?: 'DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: any | null } | null } | null> | null } | null, locationConfigModels?: { __typename?: 'LocationConfigConnection', edges?: Array<{ __typename?: 'LocationConfigEdge', node?: { __typename?: 'LocationConfig', location?: any | null, location_id?: any | null, name?: any | null } | null } | null> | null } | null, hustlerItemBaseConfigModels?: { __typename?: 'HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'HustlerItemBaseConfigEdge', node?: { __typename?: 'HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, hustlerItemTiersConfigModels?: { __typename?: 'HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'HustlerItemTiersConfigEdge', node?: { __typename?: 'HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, encounterStatsConfigModels?: { __typename?: 'EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'EncounterStatsConfigEdge', node?: { __typename?: 'EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null };
 
+export type GameConfigQueryVariables = Exact<{
+  version?: InputMaybe<Scalars['u16']>;
+}>;
+
+
+export type GameConfigQuery = { __typename?: 'World__Query', gameConfigModels?: { __typename?: 'GameConfigConnection', edges?: Array<{ __typename?: 'GameConfigEdge', node?: { __typename?: 'GameConfig', season_version?: any | null, cash?: any | null, health?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, rep_drug_step?: any | null, rep_buy_item?: any | null, rep_carry_drugs?: any | null, rep_hospitalized?: any | null, rep_jailed?: any | null } | null } | null> | null } | null };
+
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
 }>;
@@ -2572,13 +2579,6 @@ export type GamesByPlayerQueryVariables = Exact<{
 
 
 export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterConfig' } | { __typename: 'EncounterStatsConfig' } | { __typename: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, player_name?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SeasonSettings' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } | null } | null> | null } | null };
-
-export type GameConfigQueryVariables = Exact<{
-  version?: InputMaybe<Scalars['u16']>;
-}>;
-
-
-export type GameConfigQuery = { __typename?: 'World__Query', gameConfigModels?: { __typename?: 'GameConfigConnection', edges?: Array<{ __typename?: 'GameConfigEdge', node?: { __typename?: 'GameConfig', season_version?: any | null, cash?: any | null, health?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, rep_drug_step?: any | null, rep_buy_item?: any | null, rep_carry_drugs?: any | null, rep_hospitalized?: any | null, rep_jailed?: any | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -2758,6 +2758,60 @@ export const useInfiniteConfigQuery = <
 
 
 useInfiniteConfigQuery.getKey = (variables?: ConfigQueryVariables) => variables === undefined ? ['Config.infinite'] : ['Config.infinite', variables];
+;
+
+export const GameConfigDocument = `
+    query GameConfig($version: u16) {
+  gameConfigModels(where: {season_version: $version}) {
+    edges {
+      node {
+        season_version
+        cash
+        health
+        max_turns
+        max_wanted_shopping
+        rep_drug_step
+        rep_buy_item
+        rep_carry_drugs
+        rep_hospitalized
+        rep_jailed
+      }
+    }
+  }
+}
+    `;
+export const useGameConfigQuery = <
+      TData = GameConfigQuery,
+      TError = unknown
+    >(
+      variables?: GameConfigQueryVariables,
+      options?: UseQueryOptions<GameConfigQuery, TError, TData>
+    ) =>
+    useQuery<GameConfigQuery, TError, TData>(
+      variables === undefined ? ['GameConfig'] : ['GameConfig', variables],
+      useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument).bind(null, variables),
+      options
+    );
+
+useGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig'] : ['GameConfig', variables];
+;
+
+export const useInfiniteGameConfigQuery = <
+      TData = GameConfigQuery,
+      TError = unknown
+    >(
+      variables?: GameConfigQueryVariables,
+      options?: UseInfiniteQueryOptions<GameConfigQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument)
+    return useInfiniteQuery<GameConfigQuery, TError, TData>(
+      variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables];
 ;
 
 export const GameEventsDocument = `
@@ -2999,60 +3053,6 @@ export const useInfiniteGamesByPlayerQuery = <
 
 
 useInfiniteGamesByPlayerQuery.getKey = (variables?: GamesByPlayerQueryVariables) => variables === undefined ? ['GamesByPlayer.infinite'] : ['GamesByPlayer.infinite', variables];
-;
-
-export const GameConfigDocument = `
-    query GameConfig($version: u16) {
-  gameConfigModels(where: {season_version: $version}) {
-    edges {
-      node {
-        season_version
-        cash
-        health
-        max_turns
-        max_wanted_shopping
-        rep_drug_step
-        rep_buy_item
-        rep_carry_drugs
-        rep_hospitalized
-        rep_jailed
-      }
-    }
-  }
-}
-    `;
-export const useGameConfigQuery = <
-      TData = GameConfigQuery,
-      TError = unknown
-    >(
-      variables?: GameConfigQueryVariables,
-      options?: UseQueryOptions<GameConfigQuery, TError, TData>
-    ) =>
-    useQuery<GameConfigQuery, TError, TData>(
-      variables === undefined ? ['GameConfig'] : ['GameConfig', variables],
-      useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument).bind(null, variables),
-      options
-    );
-
-useGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig'] : ['GameConfig', variables];
-;
-
-export const useInfiniteGameConfigQuery = <
-      TData = GameConfigQuery,
-      TError = unknown
-    >(
-      variables?: GameConfigQueryVariables,
-      options?: UseInfiniteQueryOptions<GameConfigQuery, TError, TData>
-    ) =>{
-    const query = useFetchData<GameConfigQuery, GameConfigQueryVariables>(GameConfigDocument)
-    return useInfiniteQuery<GameConfigQuery, TError, TData>(
-      variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables],
-      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
-      options
-    )};
-
-
-useInfiniteGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables];
 ;
 
 export const GameStorePackedDocument = `

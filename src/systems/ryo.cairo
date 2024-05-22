@@ -1,6 +1,8 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
+use rollyourown::{config::ryo::{RyoConfig}};
+
 #[starknet::interface]
 trait IRyo<T> {
     //
@@ -11,9 +13,8 @@ trait IRyo<T> {
         laundromat_address: ContractAddress
     );
     fn set_paused(self: @T, paused: bool);
-    fn set_paper_fee(self: @T, fee: u16);
-    fn set_treasury_fee_pct(self: @T, fee_pct: u8);
-    fn set_season_duration(self: @T, duration_sec: u32);
+    fn update_ryo_config(self: @T, ryo_config: RyoConfig);
+
 
     // 
     fn paper(self: @T) -> ContractAddress;
@@ -35,20 +36,12 @@ mod ryo {
 
     use rollyourown::{
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},}, models::{season::Season,},
-        utils::random::{RandomImpl}, helpers::season_manager::{SeasonManager, SeasonManagerTrait},
+        config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress},},
+        models::{season::Season,}, utils::random::{RandomImpl},
+        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
     };
 
-    const THREE_MIN: u16 = 120;
-    const TEN_MIN: u16 = 600;
-    const TWENTY_MIN: u16 = 1200; 
-    //
-    const THIRTY_MIN: u32 = 1800; 
-    const ONE_HOUR: u32 = 3600; 
-    const TWO_HOUR: u32 = 7200; 
-    const ONE_DAY: u32 = 86_400; 
-    const ONE_WEEK: u32 = 604_800; 
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
@@ -64,21 +57,8 @@ mod ryo {
 
             assert(ryo_config.initialized == false, 'Already initialized');
 
-            // consume first world uuid = 0
-            let _ = self.world().uuid();
-
-            // RyoConfig
-            ryo_config.initialized = true;
-            ryo_config.paused = false;
-
-            ryo_config.season_version = 1;
-            ryo_config.season_duration = ONE_HOUR; // ONE_WEEK
-            ryo_config.season_time_limit = TEN_MIN; // ONE_HOUR
-
-            ryo_config.paper_fee = 1000; // in ether
-            ryo_config.treasury_fee_pct = 5;
-            ryo_config.paper_reward_launderer = 100; // in ether
-
+            // initial config
+            ryo_config = RyoConfigImpl::build_initial_ryo_config();
             // save 
             self.s().save_ryo_config(ryo_config);
 
@@ -86,8 +66,8 @@ mod ryo {
             let mut ryo_addresses = self.s().ryo_addresses();
 
             ryo_addresses.paper = paper_address;
-            ryo_addresses.treasury = treasury_address;
-            ryo_addresses.laundromat = laundromat_address;
+            ryo_addresses.treasury = treasury_address; // could be removed
+            ryo_addresses.laundromat = laundromat_address; // could be removed
 
             // save 
             self.s().save_ryo_addresses(ryo_addresses);
@@ -99,7 +79,7 @@ mod ryo {
         }
 
         //
-        // TODO: test it
+        // 
         //
 
         fn set_paused(self: @ContractState, paused: bool) {
@@ -111,31 +91,17 @@ mod ryo {
             self.s().save_ryo_config(ryo_config);
         }
 
-        fn set_paper_fee(self: @ContractState, fee: u16) {
+        fn update_ryo_config(self: @ContractState, ryo_config: RyoConfig) {
             self.assert_caller_is_owner();
 
-            let mut ryo_config = self.s().ryo_config();
+            let mut new_ryo_config = self.s().ryo_config();
 
-            ryo_config.paper_fee = fee;
-            self.s().save_ryo_config(ryo_config);
-        }
+            new_ryo_config.season_duration = ryo_config.season_duration;
+            new_ryo_config.season_time_limit = ryo_config.season_time_limit;
+            new_ryo_config.paper_fee = ryo_config.paper_fee;
+            new_ryo_config.paper_reward_launderer = ryo_config.paper_reward_launderer;
+            new_ryo_config.treasury_fee_pct = ryo_config.treasury_fee_pct;
 
-
-        fn set_treasury_fee_pct(self: @ContractState, fee_pct: u8) {
-            self.assert_caller_is_owner();
-
-            let mut ryo_config = self.s().ryo_config();
-
-            ryo_config.treasury_fee_pct = fee_pct;
-            self.s().save_ryo_config(ryo_config);
-        }
-
-        fn set_season_duration(self: @ContractState, duration_sec: u32) {
-            self.assert_caller_is_owner();
-
-            let mut ryo_config = self.s().ryo_config();
-
-            ryo_config.season_duration = duration_sec;
             self.s().save_ryo_config(ryo_config);
         }
 

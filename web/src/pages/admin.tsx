@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { ChildrenOrConnect, TokenBalance } from "@/components/wallet";
-import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
   Card,
@@ -32,7 +32,8 @@ import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
 import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
-import { PaperIcon } from "@/components/icons";
+import { Bag, Clock, CopsIcon, DollarBag, PaperIcon } from "@/components/icons";
+import { formatCash } from "@/utils/ui";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -48,8 +49,10 @@ const Admin = () => {
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
           <Tab>ITEMS</Tab>
+          <Tab>ITEMS TIERS</Tab>
           <Tab>ENCOUNTERS</Tab>
-          <Tab>LAYOUTS</Tab>
+          {/* <Tab>LAYOUTS</Tab> */}
+
           {/* <Cigarette
             onClick={() => {
               configStore.init();
@@ -68,64 +71,76 @@ const Admin = () => {
 
           <TabPanel p={0}>
             <Flex w="full" alignItems="flex-start" gap={3} flexDirection="row" flexWrap="wrap">
+              <RyoSeasonConfigCard />
               <RyoSuperchargeCard />
-              <RyoLeaderboardDurationCard />
-              <RyoFeeCard />
             </Flex>
           </TabPanel>
 
           <TabPanel p={0}>
             <Card w="full" p={3}>
-              <HStack w="full" gap={6} alignItems="flex-start">
-                <VStack alignItems="flex-start">
-                  <Text>Game Config</Text>
-                  <GameConfigTable />
-                </VStack>
-                <VStack alignItems="flex-start">
-                  <Text>Ryo Config</Text>
-                  <RyoConfigTable />
-                </VStack>
-              </HStack>
+              <CardBody>
+                <HStack w="full" gap={6} alignItems="flex-start">
+                  <VStack alignItems="flex-start">
+                    <Text>Game Config</Text>
+                    <GameConfigTable />
+                  </VStack>
+                  <VStack alignItems="flex-start">
+                    <Text>Ryo Config</Text>
+                    <RyoConfigTable />
+                  </VStack>
+                </HStack>
+              </CardBody>
             </Card>
           </TabPanel>
 
           <TabPanel p={0}>
             <Card w="full">
-              <DrugTable />
+              <CardBody>
+                <DrugTable />
+              </CardBody>
             </Card>
           </TabPanel>
 
           <TabPanel p={0}>
-            <VStack w="full" alignItems="flex-start">
-              <Text>ITEM BASE</Text>
-              <Card w="full">
+            <Card w="full">
+              <CardBody>
                 <HustlerItemBaseTable />
-              </Card>
-              <Text>ITEM TIERS</Text>
-              <Card w="full">
-                <HustlerItemTiersTable />
-              </Card>
-            </VStack>
-          </TabPanel>
-
-          <TabPanel p={0}>
-            <Card w="full">
-              <EncounterTable />
+              </CardBody>
             </Card>
           </TabPanel>
 
           <TabPanel p={0}>
+            <Card w="full">
+              <CardBody>
+                <HustlerItemTiersTable />
+              </CardBody>
+            </Card>
+          </TabPanel>
+
+          <TabPanel p={0}>
+            <Card w="full">
+              <CardBody>
+                <EncounterTable />
+              </CardBody>
+            </Card>
+          </TabPanel>
+
+          {/* <TabPanel p={0}>
             <VStack w="full" alignItems="flex-start">
               <Text>GAME </Text>
               <Card w="full">
-                <GameLayoutTable />
+                <CardBody>
+                  <GameLayoutTable />
+                </CardBody>
               </Card>
               <Text>PLAYER </Text>
               <Card w="full">
-                <PlayerLayoutTable />
+                <CardBody>
+                  <PlayerLayoutTable />
+                </CardBody>
               </Card>
             </VStack>
-          </TabPanel>
+          </TabPanel> */}
         </TabPanels>
       </Tabs>
     </Layout>
@@ -142,24 +157,24 @@ const RyoAddressCard = observer(() => {
   return (
     <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        RYO ADDRESS
+        <Wallet /> RYO ADDRESS
       </CardHeader>
       <CardBody>
-        <VStack alignItems="flex-start" >
+        <VStack alignItems="flex-start">
           <HStack>
-            <Text w="120px">PAPER</Text>
-            <Text>{config?.ryoAddress.paper}</Text>
+            <Text w="100px">PAPER</Text>
+            <Text fontFamily="monospace">{config?.ryoAddress.paper}</Text>
             <TokenBalance address={config?.ryoAddress.paper} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
           <HStack>
-            <Text w="120px">TREASURY</Text>
-            <Text>{config?.ryoAddress.treasury}</Text>
+            <Text w="100px">TREASURY</Text>
+            <Text fontFamily="monospace">{config?.ryoAddress.treasury}</Text>
             <TokenBalance address={config?.ryoAddress.treasury} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
           <HStack>
-            <Text w="120px">LAUNDROMAT</Text>
-            <Text>{config?.ryoAddress.laundromat}</Text>
-            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper}  icon={PaperIcon} />
+            <Text w="100px">LAUNDROMAT</Text>
+            <Text fontFamily="monospace">{config?.ryoAddress.laundromat}</Text>
+            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
         </VStack>
       </CardBody>
@@ -181,7 +196,7 @@ const TreasuryClaimCard = observer(() => {
   return (
     <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        TREASURY
+        <PaperIcon /> TREASURY
       </CardHeader>
       <CardBody>
         <VStack alignItems="flex-start">
@@ -220,7 +235,7 @@ const RyoPauseCard = observer(() => {
   return (
     <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        RYO
+        <CopsIcon /> RYO
       </CardHeader>
       <CardBody>
         <VStack alignItems="flex-start">
@@ -238,42 +253,115 @@ const RyoPauseCard = observer(() => {
   );
 });
 
-const RyoLeaderboardDurationCard = observer(() => {
+const RyoSeasonConfigCard = observer(() => {
   const { configStore } = useDojoContext();
   const { config } = configStore;
 
-  const [duration, setDuration] = useState(config?.ryo.season_duration);
+  const [ryoConfig, setRyoConfig] = useState(config?.ryo);
 
-  const { setLeaderboardDuration, isPending } = useSystems();
+  const { updateRyoConfig, isPending } = useSystems();
 
-  const updateLeaderboardDuration = async () => {
-    await setLeaderboardDuration(duration);
+  const onUpdate = async () => {
+    await updateRyoConfig(ryoConfig!);
     await configStore.init();
   };
 
   return (
     <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        LEADERBOARD
+        <Clock /> NEXT SEASON PARAMETERS
       </CardHeader>
       <CardBody>
-        <HStack>
-          <Text w="180px" flexShrink={0}>
-            DURATION (sec)
-          </Text>
-          <Input
-            w="100px"
-            value={duration}
-            onChange={(e) => {
-              setDuration(e.target.value);
-            }}
-          />
+        <VStack alignItems="flex-start" gap={6}>
+          <Text color="neon.500">Configure next season parameters</Text>
+
+          <VStack>
+            <HStack>
+              <Text w="220px" flexShrink={0}>
+                SEASON DURATION (sec)
+              </Text>
+              <Input
+                w="100px"
+                value={ryoConfig?.season_duration}
+                onChange={(e) => {
+                  setRyoConfig({
+                    ...ryoConfig,
+                    season_duration: Number(e.target.value),
+                  });
+                }}
+              />
+            </HStack>
+
+            <HStack>
+              <Text w="220px" flexShrink={0}>
+                SEASON TIME LIMIT (sec)
+              </Text>
+              <Input
+                w="100px"
+                value={ryoConfig?.season_time_limit}
+                onChange={(e) => {
+                  setRyoConfig({
+                    ...ryoConfig,
+                    season_time_limit: Number(e.target.value),
+                  });
+                }}
+              />
+            </HStack>
+
+            <HStack>
+              <Text w="220px" flexShrink={0}>
+                PAPER FEE
+              </Text>
+              <Input
+                w="100px"
+                value={ryoConfig?.paper_fee}
+                onChange={(e) => {
+                  setRyoConfig({
+                    ...ryoConfig,
+                    paper_fee: Number(e.target.value),
+                  });
+                }}
+              />
+            </HStack>
+
+            <HStack>
+              <Text w="220px" flexShrink={0}>
+                TREASURY FEE %
+              </Text>
+              <Input
+                w="100px"
+                value={ryoConfig?.treasury_fee_pct}
+                onChange={(e) => {
+                  setRyoConfig({
+                    ...ryoConfig,
+                    treasury_fee_pct: Number(e.target.value),
+                  });
+                }}
+              />
+            </HStack>
+
+            <HStack>
+              <Text w="220px" flexShrink={0}>
+                PAPER REWARD LAUNDERER
+              </Text>
+              <Input
+                w="100px"
+                value={ryoConfig?.paper_reward_launderer}
+                onChange={(e) => {
+                  setRyoConfig({
+                    ...ryoConfig,
+                    paper_reward_launderer: Number(e.target.value),
+                  });
+                }}
+              />
+            </HStack>
+          </VStack>
           <ChildrenOrConnect>
-            <Button isLoading={isPending} onClick={updateLeaderboardDuration}>
-              <Wallet />
+            <Button isLoading={isPending} onClick={onUpdate}>
+              UPDATE
             </Button>
           </ChildrenOrConnect>
-        </HStack>
+        </VStack>
       </CardBody>
       <CardFooter></CardFooter>
     </Card>
@@ -283,116 +371,58 @@ const RyoLeaderboardDurationCard = observer(() => {
 const RyoSuperchargeCard = observer(() => {
   const { configStore } = useDojoContext();
   const { config } = configStore;
+  const { account } = useAccount();
 
   const [value, setValue] = useState(0);
+  const { season, refetch } = useSeasonByVersion(config?.ryo.season_version || 0);
 
   const { superchargeJackpot, isPending } = useSystems();
 
   const onSuperchargeJackpot = async () => {
     await superchargeJackpot(config?.ryo.season_version, value);
     await configStore.init();
+    await refetch();
   };
 
   return (
     <Card p={1}>
       <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        SUPERCHARGE JACKPOT
+        <DollarBag /> SUPERCHARGE JACKPOT
       </CardHeader>
       <CardBody>
-        <HStack>
-          <Text w="180px" flexShrink={0}>
-            CURRENT SEASON : {config?.ryo.season_version}
+        <VStack alignItems="flex-start" gap={6}>
+          <Text color="neon.500">
+            Transfer some PAPER from your wallet
+            <br /> to supercharge current season jackpot
           </Text>
 
-          <Text w="180px" flexShrink={0}>
-            PAPER AMOUNT
-          </Text>
-          <Input
-            w="100px"
-            value={value}
-            onChange={(e) => {
-              setValue(Number(e.target.value));
-            }}
-          />
-          <ChildrenOrConnect>
-            <Button isLoading={isPending} onClick={onSuperchargeJackpot}>
-              <Wallet />
-            </Button>
-          </ChildrenOrConnect>
-        </HStack>
-      </CardBody>
-      <CardFooter></CardFooter>
-    </Card>
-  );
-});
+          <VStack alignItems="flex-start">
+            <Text>CURRENT SEASON : {config?.ryo.season_version}</Text>
+            <Text>CURRENT JACKPOT : {formatCash(season?.paper_balance).replace("$", "")}</Text>
+          </VStack>
 
-const RyoFeeCard = observer(() => {
-  const { configStore } = useDojoContext();
-  const { config } = configStore;
+          <VStack alignItems="flex-start">
+            <HStack>
+              <Text>YOUR BALANCE : </Text>
+              <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
+            </HStack>
 
-  const [paperFeeValue, setPaperFeeValue] = useState(config?.ryo.paper_fee);
-  const [treasuryFeePctValue, setTreasuryFeePctValue] = useState(config?.ryo.treasury_fee_pct);
-
-  const { setPaperFee, setTreasuryFeePct, isPending } = useSystems();
-
-  useEffect(() => {
-    setPaperFeeValue(config?.ryo.paper_fee);
-  }, [config?.ryo.paper_fee]);
-
-  useEffect(() => {
-    setTreasuryFeePctValue(config?.ryo.treasury_fee_pct);
-  }, [config?.ryo.treasury_fee_pct]);
-
-  // const { setPaused, isPending } = useSystems();
-
-  const updatePaperFee = async () => {
-    await setPaperFee(paperFeeValue);
-    await configStore.init();
-  };
-
-  const updateTreasuryFeePct = async () => {
-    await setTreasuryFeePct(treasuryFeePctValue);
-    await configStore.init();
-  };
-
-  return (
-    <Card p={1}>
-      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
-        RYO FEES
-      </CardHeader>
-      <CardBody>
-        <VStack alignItems="flex-start">
-          <HStack>
-            <Text w="180px" flexShrink={0}>
-              PAPER FEE
-            </Text>
-            <Input
-              w="100px"
-              value={paperFeeValue}
-              onChange={(e) => {
-                setPaperFeeValue(e.target.value);
-              }}
-            />
-            <Button isLoading={isPending} onClick={updatePaperFee}>
-              <Wallet />
-            </Button>
-          </HStack>
-
-          <HStack>
-            <Text w="180px" flexShrink={0}>
-              TREASURY FEE %
-            </Text>
-            <Input
-              w="100px"
-              value={treasuryFeePctValue}
-              onChange={(e) => {
-                setTreasuryFeePctValue(e.target.value);
-              }}
-            />
-            <Button isLoading={isPending} onClick={updateTreasuryFeePct}>
-              <Wallet />
-            </Button>
-          </HStack>
+            <HStack>
+              <Text>PAPER AMOUNT</Text>
+              <Input
+                w="100px"
+                value={value}
+                onChange={(e) => {
+                  setValue(Number(e.target.value));
+                }}
+              />
+              <ChildrenOrConnect>
+                <Button isLoading={isPending} onClick={onSuperchargeJackpot}>
+                  SEND
+                </Button>
+              </ChildrenOrConnect>
+            </HStack>
+          </VStack>
         </VStack>
       </CardBody>
       <CardFooter></CardFooter>

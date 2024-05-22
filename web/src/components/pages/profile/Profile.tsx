@@ -5,6 +5,7 @@ import { Box, HStack, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
 import { HustlerIcon, Hustlers } from "../../hustlers";
+import { shortString } from "starknet";
 
 export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
@@ -55,7 +56,7 @@ export const ProfileLinkMobile = () => {
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-        <Text ml="10px">{gameEvents.playerName}</Text>
+        <Text ml="10px">{shortString.decodeShortString(gameInfos.player_name)}</Text>
       </MenuItem>
     </>
   );
@@ -82,7 +83,7 @@ export const ProfileLinkDrawer = () => {
   return (
     <HStack borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
       <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-      <Text ml="4px">{gameEvents.playerName}</Text>
+      <Text ml="4px">{shortString.decodeShortString(gameInfos.player_name)}</Text>
     </HStack>
   );
 };

@@ -1,4 +1,4 @@
-import { DrugConfig, EncounterConfig, GameConfig } from "@/generated/graphql";
+import { DrugConfig, EncounterConfig, GameConfig, RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
@@ -29,11 +29,9 @@ export interface SystemsInterface {
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   // ryo
   setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
-  setPaperFee: (fee: number) => Promise<SystemExecuteResult>;
-  setTreasuryFeePct: (fee: number) => Promise<SystemExecuteResult>;
-  setLeaderboardDuration: (duration: number) => Promise<SystemExecuteResult>;
+  updateRyoConfig: (ryoConfig: RyoConfig) => Promise<SystemExecuteResult>;
+  
   // config
-  updateGameConfig: (gameConfig: GameConfig) => Promise<SystemExecuteResult>;
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
   updateEncounterConfig: (encounterConfig: EncounterConfig) => Promise<SystemExecuteResult>;
 
@@ -408,12 +406,14 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const setPaperFee = useCallback(
-    async (paperFee: number) => {
+  
+  const updateRyoConfig = useCallback(
+    async (ryoConfig: RyoConfig) => {
+      
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::ryo::ryo",
-        entrypoint: "set_paper_fee",
-        calldata: [paperFee],
+        entrypoint: "update_ryo_config",
+        calldata: [ryoConfig],
       });
 
       return {
@@ -423,50 +423,7 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  const setTreasuryFeePct = useCallback(
-    async (treasuryFeePct: number) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::ryo::ryo",
-        entrypoint: "set_treasury_fee_pct",
-        calldata: [treasuryFeePct],
-      });
 
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const setLeaderboardDuration = useCallback(
-    async (duration: number) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::ryo::ryo",
-        entrypoint: "set_season_duration",
-        calldata: [duration],
-      });
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
-
-  const updateGameConfig = useCallback(
-    async (gameConfig: GameConfig) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::config::config::config",
-        entrypoint: "update_game_config",
-        calldata: [gameConfig],
-      });
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
 
   const updateDrugConfig = useCallback(
     async (drugConfig: DrugConfig) => {
@@ -561,11 +518,8 @@ export const useSystems = (): SystemsInterface => {
     launder,
     //
     setPaused,
-    setPaperFee,
-    setTreasuryFeePct,
-    setLeaderboardDuration,
+    updateRyoConfig,
     //
-    updateGameConfig,
     updateDrugConfig,
     updateEncounterConfig,
     //

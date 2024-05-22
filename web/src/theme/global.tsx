@@ -18,6 +18,14 @@ const GlobalStyles = () => (
           margin-top: 0px;
         }
       }
+
+      html .ka {
+        background-color: transparent;
+      }
+
+      html .ka-thead-background {
+        background-color: transparent;
+      }
      
       // .ka-table-wrapper{
       //   padding: 16px;
@@ -27,28 +35,55 @@ const GlobalStyles = () => (
       //   width: 100%;
       // }
 
-      // .ka-table thead{
-      //   text-align: left;
-      //   text-transform: uppercase;
-      //   font-weight: 400;
-      //   border-bottom: solid 1px ${colors.neon["700"]};
-      // }
+      html .ka-table thead{
+        text-align: left;
+        text-transform: uppercase;
+        font-weight: 400;
+        border-bottom: solid 1px ${colors.neon["700"]};
+      }
 
-      // .ka-row{
-      //   border-bottom: solid 1px ${colors.neon["700"]};
-      // }
+      html .ka-row{
+        border-top: solid 1px ${colors.neon["700"]};
+        border-bottom: solid 1px ${colors.neon["700"]};
+      }
 
-      // .ka-cell, .ka-thead-cell{
-      //   padding: 4px;
-      // }
+      html .ka-thead-cell{
+        color:${colors.neon["500"]};
+      }
 
-      // .ka-input {
-      //     width: 100%;
-      //     padding: 4px;
-      //     min-width: 50px;
-      //     background: ${colors.neon["800"]};
-      //     border-color: ${colors.neon["500"]};
-      // }
+      html .ka-cell{
+        color:${colors.neon["400"]};
+      }
+
+      html .ka-cell, html .ka-thead-cell{
+        padding: 4px;
+      }
+
+      html .ka-header-filter-button-icon {
+        left: 0;
+        color:${colors.neon["500"]};
+      }
+
+      html .ka-header-filter-button.ka-header-filter-button-has-value .ka-icon-filter {
+        color:${colors.neon["400"]};
+      }
+
+      html .ka-popup{
+        background-color:${colors.neon["700"]};
+      }
+
+      html .ka-popup-content-item-value {
+        padding: 4px;
+        color:${colors.neon["400"]};
+      }
+
+      .ka-input {
+          width: 100%;
+          padding: 4px;
+          min-width: 50px;
+          background: transparent;
+          border-color: ${colors.neon["500"]};
+      }
 
 
       .table-vertical {
