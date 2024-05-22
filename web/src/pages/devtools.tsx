@@ -31,11 +31,11 @@ export default function LeaderboardPage() {
     toast({ message: "created new season" });
   };
   
-  const update = useCallback(() => {
+  const update = useCallback(async () => {
     console.log("update", valueRef.current)
     valueRef.current = Number(Number(valueRef.current)+ 1)
     onCreateFakeGame()
-  }, [valueRef.current]);
+  }, [valueRef.current, onCreateFakeGame]);
 
   useEffect(() => {
     if (running && !handleRef.current) {

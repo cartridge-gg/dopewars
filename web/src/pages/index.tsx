@@ -35,11 +35,21 @@ export default function Home() {
   const { config } = configStore;
   const {
     season,
+    sortedList,
     isSeasonOpen,
     isSeasonWashed,
     canCreateGame,
     refetch: refetchSeason,
   } = useSeasonByVersion(config?.ryo.season_version);
+
+  const [progressPercent, setProgressPercent] = useState(0);
+
+  useEffect(() => {
+    if (!sortedList || sortedList.process_max_size === 0) return;
+
+    const value = (sortedList?.process_size * 100) / sortedList?.process_max_size;
+    setProgressPercent(value);
+  }, [sortedList]);
 
   const { toast } = useToast();
 
@@ -67,6 +77,7 @@ export default function Home() {
 
     await launder(season?.version);
     await sleep(1000);
+    await refetchSeason()
     await configStore.init();
   };
 
@@ -112,9 +123,11 @@ export default function Home() {
                     Launder results
                   </Button>
 
-                  <VStack w="full">
-                    <Text>PROGRESS TODO: </Text>
-                    <Progress w="full" colorScheme="neon" value={20} />
+                  <VStack w="full" position="relative">
+                    <Progress w="full" colorScheme="neon" value={progressPercent} max={100} h="22px" />
+                    <Text position="absolute" w="full" textAlign="center">
+                      {progressPercent}%
+                    </Text>
                   </VStack>
                 </VStack>
               </HStack>

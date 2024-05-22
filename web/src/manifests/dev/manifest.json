@@ -1,8 +1,8 @@
 {
   "world": {
     "kind": "WorldContract",
-    "class_hash": "0xeb90405fd5bacde6a4891c1c1696d743fa61e35b155b49b34c1dfd18c3a424",
-    "original_class_hash": "0xeb90405fd5bacde6a4891c1c1696d743fa61e35b155b49b34c1dfd18c3a424",
+    "class_hash": "0x44fe688cc4d46636ffb424972c3510b10c3b1a738f6a6c9885cb7352ac8e5b1",
+    "original_class_hash": "0x44fe688cc4d46636ffb424972c3510b10c3b1a738f6a6c9885cb7352ac8e5b1",
     "abi": [
       {
         "type": "impl",
@@ -885,8 +885,8 @@
         ]
       }
     ],
-    "address": "0x2a96c7af5ffec9cbdf64202c619064207b618d24b0a78e70d84e92ae1f0e725",
-    "transaction_hash": "0x3116cc58f218156089631bcf2b549e81c3a96be131bf2198ff9d88832cf84fe",
+    "address": "0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14",
+    "transaction_hash": "0x23d8f0f19d1a0625a336efd3626d5e26ee37b44adfe33202dc79095e0b984d0",
     "block_number": 4,
     "seed": "rollyourown",
     "metadata": {
@@ -905,7 +905,7 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x3b87f7c08148f6ef61c6cf9e4d35511b76e473d42f9da33fa32ad00b1d8685d",
+      "address": "0x673f6981af3302142f661c8b8177cc979f1d96ede0d7d90f17c9710b072de02",
       "class_hash": "0x68da37166388a028b1f2cb34a9b058b762590d02045bb8043907e9012eac41a",
       "original_class_hash": "0x68da37166388a028b1f2cb34a9b058b762590d02045bb8043907e9012eac41a",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
@@ -1490,9 +1490,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0xbb15417a75f5b9b96831847c502472e2b3d3c008d010a1bcbbad3e1cbbaa6c",
-      "class_hash": "0x305bae3c32a6906cb5c3a52c17e986edf2e086f6d6daa0565f56618f336c74b",
-      "original_class_hash": "0x305bae3c32a6906cb5c3a52c17e986edf2e086f6d6daa0565f56618f336c74b",
+      "address": "0x478fdd83cec8d174113ab6e4273672886d173fb88efe7d0a3279b8e7993d52f",
+      "class_hash": "0x249a8a38a4546ecd1644a38287012c8522362c4c3c3f3548e6ce8be1fa39fb4",
+      "original_class_hash": "0x249a8a38a4546ecd1644a38287012c8522362c4c3c3f3548e6ce8be1fa39fb4",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1705,56 +1705,6 @@
             {
               "name": "transport",
               "type": "rollyourown::config::hustlers::HustlerItemConfig"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::game::GameConfig",
-          "members": [
-            {
-              "name": "season_version",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "max_turns",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "max_wanted_shopping",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "max_rounds",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_drug_step",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_buy_item",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_carry_drugs",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_hospitalized",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "rep_jailed",
-              "type": "core::integer::u8"
             }
           ]
         },
@@ -2029,10 +1979,6 @@
               "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
             },
             {
-              "name": "game_config",
-              "type": "rollyourown::config::game::GameConfig"
-            },
-            {
               "name": "ryo_config",
               "type": "rollyourown::config::ryo::RyoConfig"
             },
@@ -2234,7 +2180,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x1bb9afa06d721d572761335a79b9cb6f8920891b99ba266200c70f90fa47942",
+      "address": "0x19fecff4ffe0f2139e91a4da80db26d296e3b8a46f6872eca1cb49756a153a1",
       "class_hash": "0x55a2835f26395d627dc1d3c576c09c02dd87638ecf89db587e98fe4a9cf097",
       "original_class_hash": "0x55a2835f26395d627dc1d3c576c09c02dd87638ecf89db587e98fe4a9cf097",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
@@ -3294,7 +3240,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x26fc2d2b6a71c6f94fb37669262b4a1b4d8a2560432c306399feded3ac6a713",
+      "address": "0x65f1f91178c3f048d4a50643609dd09bcb871519e708a3c8166b8143c7eed5a",
       "class_hash": "0x4405b106d60259983f727460eff89f134e9eef92b2a816814d16498b846d3cf",
       "original_class_hash": "0x4405b106d60259983f727460eff89f134e9eef92b2a816814d16498b846d3cf",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
@@ -3457,7 +3403,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x4a4f0dffd9303887d77e6c8616c9a36099efb7ce2e5c31018fd3823551e4d40",
+      "address": "0x494d272e65874b95792a8bf9d726e162d77b6bd2ffa557c286afd2660c27828",
       "class_hash": "0x2938171d31308e6f03c81ec524da26f591fa05e93bef7c6d7366c05ceee8fe2",
       "original_class_hash": "0x2938171d31308e6f03c81ec524da26f591fa05e93bef7c6d7366c05ceee8fe2",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
@@ -4288,7 +4234,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x33f2a478c877b2b1b18e1ef713db7c8cc2235b20673180626f0e23c57648f95",
+      "address": "0x665fbbceaab1c1b8458df8d75d93bbbe986c4a9e59ce07665f5cfe4e92188c1",
       "class_hash": "0x1b77b5e56ce9ab3c97e149f07935f9fa7703bbe44d2f333632ed9d53fcb5e48",
       "original_class_hash": "0x1b77b5e56ce9ab3c97e149f07935f9fa7703bbe44d2f333632ed9d53fcb5e48",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
@@ -4506,7 +4452,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x5d28b6a17212a9757f4d11571395564b7a985df40876b4e1fb021f738009af1",
+      "address": "0x7ccf33bb6c279a222acf5bba91c93933ea71461670e5cf19a9f6d334bc2e5a9",
       "class_hash": "0x1d22a0de556015f7a1dfe96ab0be531e5db788c3706a2d69f016d595e08a7f8",
       "original_class_hash": "0x1d22a0de556015f7a1dfe96ab0be531e5db788c3706a2d69f016d595e08a7f8",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",

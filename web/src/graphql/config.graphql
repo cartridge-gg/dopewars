@@ -98,3 +98,25 @@ query Config {
     }
   }
 }
+
+
+
+
+query GameConfig($version: u16) {
+  gameConfigModels(where: { season_version: $version }) {
+    edges {
+      node {
+        season_version
+        cash
+        health
+        max_turns
+        max_wanted_shopping
+        rep_drug_step
+        rep_buy_item
+        rep_carry_drugs
+        rep_hospitalized
+        rep_jailed
+      }
+    }
+  }
+}

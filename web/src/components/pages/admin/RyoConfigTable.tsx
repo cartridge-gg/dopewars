@@ -17,7 +17,7 @@ const columns = [
   { key: "paper_reward_launderer", title: "paper_reward_launderer", dataType: DataType.Number },
   { key: "treasury_fee_pct", title: "treasury_fee_pct", dataType: DataType.Number },
   // { key: "treasury_balance", title: "treasury_balance", dataType: DataType.Number },
-  { key: "editColumn", width: 80 },
+  // { key: "editColumn", width: 80 },
 ];
 
 export const RyoConfigTable = observer(() => {
@@ -29,32 +29,7 @@ export const RyoConfigTable = observer(() => {
 
   const [data, setData] = useState([config?.config.ryo_config] || []);
 
-  const table = useTable({
-    onDispatch: (action) => {
-      // console.log(action);
-
-      if (action.type === ActionType.UpdateEditorValue) {
-        setData([
-          {
-            ...data[0],
-            [action.columnKey]: action.value,
-          },
-        ]);
-      }
-
-      // triggered twice ... why ?
-      if (action.type === ActionType.SaveRowEditors) {
-        if (data && data[0]) {
-          alert("not implemented");
-          // updateGameConfig(data[0]);
-        }
-      }
-
-      if (action.type === ActionType.CloseRowEditors) {
-        setData([config?.config.ryo_config]);
-      }
-    },
-  });
+  const table = useTable();
 
   return (
     <div className="table-vertical">

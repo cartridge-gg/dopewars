@@ -69,14 +69,11 @@ mod laundromat {
 
         fn launder(self: @ContractState, season_version: u16) {
             let world = self.world();
+            let process_batch_size = 10; // around 620k steps
 
             let season = self.s().season(season_version);
 
             let mut ryo_config = self.s().ryo_config();
-
-            // retrieve paper address 
-            let paper_address = self.s().ryo_addresses().paper;
-            let paper_reward_launderer: u256 = ryo_config.paper_reward_launderer.into() * ETHER;
 
             // check if exists
             assert(season.exists(), 'invalid season_version');
@@ -95,7 +92,7 @@ mod laundromat {
 
             // if not process, process batch_size items
             if !sorted_list.processed {
-                sorted_list.process::<Game>(world, 2); // TODO: change batch_size
+                sorted_list.process::<Game>(world, process_batch_size); // TODO: change batch_size
             }
 
             // if process, create new season
@@ -118,6 +115,10 @@ mod laundromat {
                     assert(false, 'launder already ended');
                 }
             };
+
+            // retrieve paper address 
+            let paper_address = self.s().ryo_addresses().paper;
+            let paper_reward_launderer: u256 = ryo_config.paper_reward_launderer.into() * ETHER;
 
             // reward launderer with some clean paper
             IPaperDispatcher { contract_address: paper_address }

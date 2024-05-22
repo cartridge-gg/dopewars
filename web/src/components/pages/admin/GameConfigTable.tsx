@@ -3,10 +3,13 @@ import { observer } from "mobx-react-lite";
 
 import { Table, useTable } from "ka-table";
 import { ActionType, DataType, SortingMode } from "ka-table/enums";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { editComponents } from "./tables";
+import { useGameConfig } from "@/dojo/hooks/useGameConfig";
+import { GameConfig } from "@/generated/graphql";
 
 const columns = [
+  { key: "season_version", title: "season_version", dataType: DataType.Number },
   { key: "cash", title: "cash", dataType: DataType.Number },
   { key: "health", title: "health", dataType: DataType.Number },
   { key: "max_turns", title: "max_turns", dataType: DataType.Number },
@@ -16,44 +19,26 @@ const columns = [
   { key: "rep_carry_drugs", title: "rep_carry_drugs", dataType: DataType.Number },
   { key: "rep_hospitalized", title: "rep_hospitalized", dataType: DataType.Number },
   { key: "rep_jailed", title: "rep_jailed", dataType: DataType.Number },
-  { key: "editColumn", width: 80 },
 ];
-
 
 export const GameConfigTable = observer(() => {
   const {
     configStore: { config },
   } = useDojoContext();
 
-  const { updateGameConfig } = useSystems();
+  // const { updateGameConfig } = useSystems();
 
-  const [data, setData] = useState([config?.config.game_config] || []);
+  //useGameConfigQuery
+  const { gameConfig } = useGameConfig(config?.ryo.season_version);
+  const [data, setData] = useState<GameConfig[]>([]);
 
-  const table = useTable({
-    onDispatch: (action) => {
-      // console.log(action);
+  useEffect(() => {
+    if (gameConfig) {
+      setData([gameConfig]);
+    }
+  }, [gameConfig]);
 
-      if (action.type === ActionType.UpdateEditorValue) {
-        setData([
-          {
-            ...data[0],
-            [action.columnKey]: action.value,
-          },
-        ]);
-      }
-
-      // triggered twice ... why ?
-      if (action.type === ActionType.SaveRowEditors) {
-        if (data && data[0]) {
-          updateGameConfig(data[0]);
-        }
-      }
-
-      if (action.type === ActionType.CloseRowEditors) {
-        setData([config?.config.game_config]);
-      }
-    },
-  });
+  const table = useTable({});
 
   return (
     <div className="table-vertical">
@@ -62,9 +47,8 @@ export const GameConfigTable = observer(() => {
         table={table}
         columns={columns}
         data={data}
-        rowKeyField={"key"}
+        rowKeyField={"season_version"}
         sortingMode={SortingMode.Single}
-        childComponents={editComponents}
       />
     </div>
   );

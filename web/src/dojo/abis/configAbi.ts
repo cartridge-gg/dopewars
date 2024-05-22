@@ -213,56 +213,6 @@ export const ABI = [
     ]
   },
   {
-    "type": "struct",
-    "name": "rollyourown::config::game::GameConfig",
-    "members": [
-      {
-        "name": "season_version",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "cash",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "health",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "max_turns",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "max_wanted_shopping",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "max_rounds",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_drug_step",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_buy_item",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_carry_drugs",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_hospitalized",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rep_jailed",
-        "type": "core::integer::u8"
-      }
-    ]
-  },
-  {
     "type": "enum",
     "name": "core::bool",
     "variants": [
@@ -531,10 +481,6 @@ export const ABI = [
       {
         "name": "hustlers",
         "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
-      },
-      {
-        "name": "game_config",
-        "type": "rollyourown::config::game::GameConfig"
       },
       {
         "name": "ryo_config",
