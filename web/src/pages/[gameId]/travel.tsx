@@ -26,7 +26,7 @@ interface MarketPriceInfo {
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
   const { account } = useAccount();
-  const { game, gameEvents } = useGameStore();
+  const { game, gameConfig } = useGameStore();
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -194,7 +194,7 @@ const Travel = observer(() => {
             {targetLocation && (
               <WantedIndicator
                 wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
-                highLimit={config?.config.game_config.max_wanted_shopping}
+                highLimit={gameConfig?.max_wanted_shopping}
               />
             )}
           </HStack>
@@ -222,7 +222,7 @@ const Travel = observer(() => {
           <Box position="absolute" top="20px" left="16px">
             <WantedIndicator
               wantedTick={game.wanted.getWantedTick(configStore.getLocation(targetLocation).location_id)}
-              highLimit={config?.config.game_config.max_wanted_shopping}
+              highLimit={gameConfig?.max_wanted_shopping}
             />
           </Box>
         )}

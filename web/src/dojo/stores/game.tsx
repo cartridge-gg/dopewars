@@ -214,7 +214,13 @@ export class GameStoreClass {
     const eventsEdges = gameEventsData.events?.edges as World__EventEdge[];
     const eventsNodes = eventsEdges.map((i) => i.node as World__Event);
 
-    const game = new GameClass(this.configStore, this.gameInfos!, this.seasonSettings!, gameStorePacked);
+    const game = new GameClass(
+      this.configStore,
+      this.gameInfos!,
+      this.seasonSettings!,
+      this.gameConfig!,
+      gameStorePacked,
+    );
     const gameEvents = new EventClass(this.configStore, this.gameInfos!, eventsNodes);
 
     this.game = game;
@@ -229,7 +235,13 @@ export class GameStoreClass {
     ) as GameStorePacked;
 
     if (gameStorePacked) {
-      this.game = new GameClass(this.configStore, this.gameInfos!, this.seasonSettings!, gameStorePacked);
+      this.game = new GameClass(
+        this.configStore,
+        this.gameInfos!,
+        this.seasonSettings!,
+        this.gameConfig!,
+        gameStorePacked,
+      );
     }
   };
 

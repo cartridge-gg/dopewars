@@ -7,12 +7,12 @@ import { Alert } from "../icons";
 import { coordinatePercent } from "./Map";
 
 export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; current?: Locations }) => {
-  const { game } = useGameStore();
+  const { game , gameConfig} = useGameStore();
   const configStore = useConfigStore();
   const { config } = configStore;
 
   const [wanted, setWanted] = useState<Map<number, number>>();
-  const minWanted = (config?.config.game_config.max_wanted_shopping * 100n) / 8n;
+  const minWanted = (gameConfig?.max_wanted_shopping * 100) / 8;
 
   const isMobile = IsMobile();
 

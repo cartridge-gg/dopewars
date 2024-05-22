@@ -1,4 +1,4 @@
-import { Season, SeasonSettings } from "./../../generated/graphql";
+import { GameConfig, Season, SeasonSettings } from "./../../generated/graphql";
 import { Game, GameStorePacked } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { CairoCustomEnum } from "starknet";
@@ -47,6 +47,7 @@ export const pendingCallToCairoEnum = (i: PendingCall) => {
 export class GameClass {
   configStore: ConfigStoreClass;
   gameInfos: Game;
+  gameConfig: GameConfig;
   seasonSettings: SeasonSettings;
   packed: bigint;
 
@@ -62,11 +63,13 @@ export class GameClass {
     configStore: ConfigStoreClass,
     gameInfos: Game,
     seasonSettings: SeasonSettings,
+    gameConfig: GameConfig,
     gameStorePacked: GameStorePacked,
   ) {
     this.configStore = configStore;
     this.gameInfos = gameInfos;
     this.seasonSettings = seasonSettings;
+    this.gameConfig = gameConfig;
 
     this.packed = gameStorePacked.packed;
     //
@@ -128,7 +131,7 @@ export class GameClass {
 
   get isShopOpen() {
     const wanted = this.player.wanted;
-    const maxWantedShopping = this.gameInfos.max_wanted_shopping;
+    const maxWantedShopping = this.gameConfig.max_wanted_shopping;
 
     return wanted < maxWantedShopping && this.shopCount < 1;
   }
