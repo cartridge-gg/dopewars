@@ -89,7 +89,7 @@ fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref
     let has_encounter = match game_store.game.game_mode {
         GameMode::Dealer => {
             // get wanted level at destination 0-7
-            let wanted_risk = game_store.wanted.get_wanted_risk(game_store.player.next_location);
+            let wanted_risk = game_store.get_wanted_risk(game_store.player.next_location);
             randomizer.occurs(wanted_risk)
         },
         GameMode::Warrior => {

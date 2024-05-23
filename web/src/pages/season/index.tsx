@@ -44,9 +44,9 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
           <Tr>
             {/* <Th isNumeric>gameId</Th> */}
             <Th></Th>
-            <Th isNumeric>Total Entrants</Th>
-            <Th isNumeric>Total Paid</Th>
-            <Th isNumeric>Total Paper</Th>
+            <Th isNumeric>Entrants</Th>
+            <Th isNumeric>Paid</Th>
+            <Th isNumeric>Paper Jackpot</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -64,7 +64,7 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
                 </Td>
 
                 <Td isNumeric>{season.sortedList?.size}</Td>
-                <Td isNumeric>{season.sortedList?.process_size}</Td>
+                <Td isNumeric>{season.sortedList?.processed ? season.sortedList?.process_size : "?"}</Td>
                 <Td isNumeric>
                   {" "}
                   {formatCash(season.season.paper_balance).replace("$", "")} <PaperIcon />

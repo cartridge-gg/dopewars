@@ -9,16 +9,16 @@ import { useGameConfig } from "@/dojo/hooks/useGameConfig";
 import { GameConfig } from "@/generated/graphql";
 
 const columns = [
-  { key: "season_version", title: "season_version", dataType: DataType.Number },
-  { key: "cash", title: "cash", dataType: DataType.Number },
-  { key: "health", title: "health", dataType: DataType.Number },
-  { key: "max_turns", title: "max_turns", dataType: DataType.Number },
-  { key: "max_wanted_shopping", title: "max_wanted_shopping", dataType: DataType.Number },
-  { key: "rep_drug_step", title: "rep_drug_step", dataType: DataType.Number },
-  { key: "rep_buy_item", title: "rep_buy_item", dataType: DataType.Number },
-  { key: "rep_carry_drugs", title: "rep_carry_drugs", dataType: DataType.Number },
-  { key: "rep_hospitalized", title: "rep_hospitalized", dataType: DataType.Number },
-  { key: "rep_jailed", title: "rep_jailed", dataType: DataType.Number },
+  { key: "season_version", title: "season", dataType: DataType.Number },
+  { key: "cash", title: "initial cash", dataType: DataType.Number },
+  { key: "health", title: "initial health", dataType: DataType.Number },
+  { key: "max_turns", title: "max turns", dataType: DataType.Number },
+  { key: "max_wanted_shopping", title: "max wanted shopping", dataType: DataType.Number },
+  { key: "rep_drug_step", title: "rep drug step", dataType: DataType.Number },
+  { key: "rep_buy_item", title: "rep buy item", dataType: DataType.Number },
+  { key: "rep_carry_drugs", title: "rep carry drugs", dataType: DataType.Number },
+  { key: "rep_hospitalized", title: "rep hospitalized", dataType: DataType.Number },
+  { key: "rep_jailed", title: "rep jailed", dataType: DataType.Number },
 ];
 
 export const GameConfigTable = observer(() => {

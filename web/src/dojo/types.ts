@@ -173,3 +173,9 @@ export enum DrugsMode {
   Normal = "Normal",
   Expensive = "Expensive",
 }
+
+export enum WantedMode {
+  KoolAndTheGang = "KoolAndTheGang",
+  ThugLife = "ThugLife",
+  MostWanted = "MostWanted",
+}

@@ -1491,8 +1491,8 @@
     {
       "kind": "DojoContract",
       "address": "0x478fdd83cec8d174113ab6e4273672886d173fb88efe7d0a3279b8e7993d52f",
-      "class_hash": "0x249a8a38a4546ecd1644a38287012c8522362c4c3c3f3548e6ce8be1fa39fb4",
-      "original_class_hash": "0x249a8a38a4546ecd1644a38287012c8522362c4c3c3f3548e6ce8be1fa39fb4",
+      "class_hash": "0x2b34ae906f5d6f0048cbbc6cf8b81607312325c3bade1bf59a5d4802f610b2a",
+      "original_class_hash": "0x2b34ae906f5d6f0048cbbc6cf8b81607312325c3bade1bf59a5d4802f610b2a",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1937,6 +1937,34 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::settings::WantedMode",
+          "variants": [
+            {
+              "name": "KoolAndTheGang",
+              "type": "()"
+            },
+            {
+              "name": "ThugLife",
+              "type": "()"
+            },
+            {
+              "name": "MostWanted",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::WantedMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::WantedMode>"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::config::settings::SeasonSettingsModes",
           "members": [
@@ -1963,6 +1991,10 @@
             {
               "name": "drugs_modes",
               "type": "core::array::Span::<rollyourown::config::settings::DrugsMode>"
+            },
+            {
+              "name": "wanted_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::WantedMode>"
             }
           ]
         },
@@ -2181,8 +2213,8 @@
     {
       "kind": "DojoContract",
       "address": "0x19fecff4ffe0f2139e91a4da80db26d296e3b8a46f6872eca1cb49756a153a1",
-      "class_hash": "0x55a2835f26395d627dc1d3c576c09c02dd87638ecf89db587e98fe4a9cf097",
-      "original_class_hash": "0x55a2835f26395d627dc1d3c576c09c02dd87638ecf89db587e98fe4a9cf097",
+      "class_hash": "0x288816fc9e9c1c6633b396ba21a30b8f2b04e02f658e8eaf1573424219585ca",
+      "original_class_hash": "0x288816fc9e9c1c6633b396ba21a30b8f2b04e02f658e8eaf1573424219585ca",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -2739,6 +2771,24 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::settings::WantedMode",
+          "variants": [
+            {
+              "name": "KoolAndTheGang",
+              "type": "()"
+            },
+            {
+              "name": "ThugLife",
+              "type": "()"
+            },
+            {
+              "name": "MostWanted",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::config::settings::SeasonSettings",
           "members": [
@@ -2769,6 +2819,10 @@
             {
               "name": "drugs_mode",
               "type": "rollyourown::config::settings::DrugsMode"
+            },
+            {
+              "name": "wanted_mode",
+              "type": "rollyourown::config::settings::WantedMode"
             }
           ]
         },
@@ -3241,8 +3295,8 @@
     {
       "kind": "DojoContract",
       "address": "0x65f1f91178c3f048d4a50643609dd09bcb871519e708a3c8166b8143c7eed5a",
-      "class_hash": "0x4405b106d60259983f727460eff89f134e9eef92b2a816814d16498b846d3cf",
-      "original_class_hash": "0x4405b106d60259983f727460eff89f134e9eef92b2a816814d16498b846d3cf",
+      "class_hash": "0x5574bca3846c83f04abee5c28b854c41561a4ef00ec574f6118ecdc2d1f045a",
+      "original_class_hash": "0x5574bca3846c83f04abee5c28b854c41561a4ef00ec574f6118ecdc2d1f045a",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -3404,8 +3458,8 @@
     {
       "kind": "DojoContract",
       "address": "0x494d272e65874b95792a8bf9d726e162d77b6bd2ffa557c286afd2660c27828",
-      "class_hash": "0x2938171d31308e6f03c81ec524da26f591fa05e93bef7c6d7366c05ceee8fe2",
-      "original_class_hash": "0x2938171d31308e6f03c81ec524da26f591fa05e93bef7c6d7366c05ceee8fe2",
+      "class_hash": "0x53ed7a50456dfc294f8e57e0cac5904fd391d637fc3abd68841c617e051d8e5",
+      "original_class_hash": "0x53ed7a50456dfc294f8e57e0cac5904fd391d637fc3abd68841c617e051d8e5",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4235,8 +4289,8 @@
     {
       "kind": "DojoContract",
       "address": "0x665fbbceaab1c1b8458df8d75d93bbbe986c4a9e59ce07665f5cfe4e92188c1",
-      "class_hash": "0x1b77b5e56ce9ab3c97e149f07935f9fa7703bbe44d2f333632ed9d53fcb5e48",
-      "original_class_hash": "0x1b77b5e56ce9ab3c97e149f07935f9fa7703bbe44d2f333632ed9d53fcb5e48",
+      "class_hash": "0x540675123eac4b21a348e99fef1fe648c82cafa5385bd862051c440fdc80c3",
+      "original_class_hash": "0x540675123eac4b21a348e99fef1fe648c82cafa5385bd862051c440fdc80c3",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4453,8 +4507,8 @@
     {
       "kind": "DojoContract",
       "address": "0x7ccf33bb6c279a222acf5bba91c93933ea71461670e5cf19a9f6d334bc2e5a9",
-      "class_hash": "0x1d22a0de556015f7a1dfe96ab0be531e5db788c3706a2d69f016d595e08a7f8",
-      "original_class_hash": "0x1d22a0de556015f7a1dfe96ab0be531e5db788c3706a2d69f016d595e08a7f8",
+      "class_hash": "0x10bb3c489addfd3df5cbeb4b811c62054183355b5748a6a9685eef837739d5d",
+      "original_class_hash": "0x10bb3c489addfd3df5cbeb4b811c62054183355b5748a6a9685eef837739d5d",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4531,6 +4585,52 @@
           ]
         },
         {
+          "type": "struct",
+          "name": "rollyourown::config::ryo::RyoConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "initialized",
+              "type": "core::bool"
+            },
+            {
+              "name": "paused",
+              "type": "core::bool"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "season_time_limit",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_fee",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_reward_launderer",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "treasury_balance",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::ryo::IRyo",
           "items": [
@@ -4568,35 +4668,11 @@
             },
             {
               "type": "function",
-              "name": "set_paper_fee",
+              "name": "update_ryo_config",
               "inputs": [
                 {
-                  "name": "fee",
-                  "type": "core::integer::u16"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "set_treasury_fee_pct",
-              "inputs": [
-                {
-                  "name": "fee_pct",
-                  "type": "core::integer::u8"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "set_season_duration",
-              "inputs": [
-                {
-                  "name": "duration_sec",
-                  "type": "core::integer::u32"
+                  "name": "ryo_config",
+                  "type": "rollyourown::config::ryo::RyoConfig"
                 }
               ],
               "outputs": [],
@@ -7517,10 +7593,15 @@
           "name": "drugs_mode",
           "type": "DrugsMode",
           "key": false
+        },
+        {
+          "name": "wanted_mode",
+          "type": "WantedMode",
+          "key": false
         }
       ],
-      "class_hash": "0x56758e63d72c06cf6d92e54d2c983a487048952eabae8a8095fd8f8678bf9a8",
-      "original_class_hash": "0x56758e63d72c06cf6d92e54d2c983a487048952eabae8a8095fd8f8678bf9a8",
+      "class_hash": "0x37591fb934421543891c5255311a7921368469357325a0934025b452d53b282",
+      "original_class_hash": "0x37591fb934421543891c5255311a7921368469357325a0934025b452d53b282",
       "abi": [
         {
           "type": "impl",
@@ -7804,6 +7885,24 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "rollyourown::config::settings::WantedMode",
+          "variants": [
+            {
+              "name": "KoolAndTheGang",
+              "type": "()"
+            },
+            {
+              "name": "ThugLife",
+              "type": "()"
+            },
+            {
+              "name": "MostWanted",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "rollyourown::config::settings::SeasonSettings",
           "members": [
@@ -7834,6 +7933,10 @@
             {
               "name": "drugs_mode",
               "type": "rollyourown::config::settings::DrugsMode"
+            },
+            {
+              "name": "wanted_mode",
+              "type": "rollyourown::config::settings::WantedMode"
             }
           ]
         },

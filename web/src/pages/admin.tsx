@@ -31,7 +31,7 @@ import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiers
 import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
-import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
+// import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
 import { Bag, Clock, CopsIcon, DollarBag, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 
@@ -81,13 +81,16 @@ const Admin = () => {
               <CardBody>
                 <HStack w="full" gap={6} alignItems="flex-start">
                   <VStack alignItems="flex-start">
-                    <Text>Game Config</Text>
-                    <GameConfigTable />
+                    <Card>
+                      <CardBody>
+                        <GameConfigTable />
+                      </CardBody>
+                    </Card>
                   </VStack>
-                  <VStack alignItems="flex-start">
+                  {/* <VStack alignItems="flex-start">
                     <Text>Ryo Config</Text>
                     <RyoConfigTable />
-                  </VStack>
+                  </VStack> */}
                 </HStack>
               </CardBody>
             </Card>
@@ -277,9 +280,14 @@ const RyoSeasonConfigCard = observer(() => {
 
           <VStack>
             <HStack>
-              <Text w="220px" flexShrink={0}>
-                SEASON DURATION (sec)
-              </Text>
+              <VStack alignItems="flex-start" gap={0}>
+                <Text w="220px" flexShrink={0}>
+                  SEASON DURATION (sec)
+                </Text>
+                <Text color="neon.500">
+                  {Math.floor(ryoConfig?.season_duration / 60)} min ({(ryoConfig?.season_duration / 3600).toFixed(1)} H)
+                </Text>
+              </VStack>
               <Input
                 w="100px"
                 value={ryoConfig?.season_duration}
@@ -293,9 +301,16 @@ const RyoSeasonConfigCard = observer(() => {
             </HStack>
 
             <HStack>
-              <Text w="220px" flexShrink={0}>
-                SEASON TIME LIMIT (sec)
-              </Text>
+              <VStack alignItems="flex-start" gap={0}>
+                <Text w="220px" flexShrink={0}>
+                  SEASON TIME LIMIT (sec)
+                </Text>
+                <Text color="neon.500">
+                  {Math.floor(ryoConfig?.season_time_limit / 60)} min (
+                  {(ryoConfig?.season_time_limit / 3600).toFixed(1)} H)
+                </Text>
+              </VStack>
+
               <Input
                 w="100px"
                 value={ryoConfig?.season_time_limit}

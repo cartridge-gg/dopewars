@@ -25,7 +25,7 @@ fn on_travel(
     ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
 ) -> (bool, bool) {
     // update wanted
-    game_store.wanted.on_turn_end(game_store);
+    game_store.update_wanted();
 
     // no encounter on first turn
     if game_store.player.turn == 0 {

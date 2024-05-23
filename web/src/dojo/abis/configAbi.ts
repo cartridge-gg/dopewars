@@ -441,6 +441,34 @@ export const ABI = [
     ]
   },
   {
+    "type": "enum",
+    "name": "rollyourown::config::settings::WantedMode",
+    "variants": [
+      {
+        "name": "KoolAndTheGang",
+        "type": "()"
+      },
+      {
+        "name": "ThugLife",
+        "type": "()"
+      },
+      {
+        "name": "MostWanted",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::WantedMode>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::WantedMode>"
+      }
+    ]
+  },
+  {
     "type": "struct",
     "name": "rollyourown::config::settings::SeasonSettingsModes",
     "members": [
@@ -467,6 +495,10 @@ export const ABI = [
       {
         "name": "drugs_modes",
         "type": "core::array::Span::<rollyourown::config::settings::DrugsMode>"
+      },
+      {
+        "name": "wanted_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::WantedMode>"
       }
     ]
   },

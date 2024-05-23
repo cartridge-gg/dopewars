@@ -16,6 +16,7 @@ import {
   ItemSlot,
   OutcomeInfo,
   TurnsMode,
+  WantedMode,
 } from "./types";
 
 import { Cigarette } from "@/components/icons";
@@ -354,3 +355,10 @@ export const drugsModeColor = {
   [DrugsMode.Cheap]: colors.neon["400"],
 };
 export type drugsModeColorKeys = keyof typeof drugsModeColor;
+
+export const wantedModeColor = {
+  [WantedMode.MostWanted]: colors.red,
+  [WantedMode.ThugLife]: colors.yellow["400"],
+  [WantedMode.KoolAndTheGang]: colors.neon["400"],
+};
+export type wantedModeColorKeys = keyof typeof wantedModeColor;

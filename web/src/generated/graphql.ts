@@ -1631,6 +1631,7 @@ export type SeasonSettings = {
   health_mode?: Maybe<Scalars['Enum']>;
   season_version?: Maybe<Scalars['u16']>;
   turns_mode?: Maybe<Scalars['Enum']>;
+  wanted_mode?: Maybe<Scalars['Enum']>;
 };
 
 export type SeasonSettingsConnection = {
@@ -1658,7 +1659,8 @@ export enum SeasonSettingsOrderField {
   EncountersOddsMode = 'ENCOUNTERS_ODDS_MODE',
   HealthMode = 'HEALTH_MODE',
   SeasonVersion = 'SEASON_VERSION',
-  TurnsMode = 'TURNS_MODE'
+  TurnsMode = 'TURNS_MODE',
+  WantedMode = 'WANTED_MODE'
 }
 
 export type SeasonSettingsWhereInput = {
@@ -1679,6 +1681,7 @@ export type SeasonSettingsWhereInput = {
   season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
   season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
   turns_mode?: InputMaybe<Scalars['Enum']>;
+  wanted_mode?: InputMaybe<Scalars['Enum']>;
 };
 
 export type SeasonWhereInput = {
@@ -2601,7 +2604,7 @@ export type SeasonByVersionQueryVariables = Exact<{
 }>;
 
 
-export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
+export type SeasonByVersionQuery = { __typename?: 'World__Query', seasonModels?: { __typename?: 'SeasonConnection', edges?: Array<{ __typename?: 'SeasonEdge', node?: { __typename?: 'Season', version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, treasury_fee_pct?: any | null, next_version_timestamp?: any | null, paper_balance?: any | null } | null } | null> | null } | null, seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null, wanted_mode?: any | null } | null } | null> | null } | null, sortedListModels?: { __typename?: 'SortedListConnection', edges?: Array<{ __typename?: 'SortedListEdge', node?: { __typename?: 'SortedList', list_id?: any | null, size?: any | null, locked?: any | null, processed?: any | null, process_size?: any | null, process_max_size?: any | null } | null } | null> | null } | null };
 
 export type SeasonsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3150,6 +3153,7 @@ export const SeasonByVersionDocument = `
         drugs_mode
         encounters_mode
         encounters_odds_mode
+        wanted_mode
       }
     }
   }

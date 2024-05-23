@@ -6,7 +6,8 @@ use rollyourown::{
     models::{game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}},
     config::{
         game::{GameConfig}, drugs::{Drugs, DrugsEnumerableImpl, DrugConfig},
-        locations::{Locations, LocationsEnumerableImpl}, settings::{SeasonSettings, DrugsMode}
+        locations::{Locations, LocationsEnumerableImpl},
+        settings::{SeasonSettings, SeasonSettingsTrait, DrugsMode}
     },
     packing::{
         game_store_layout::{
@@ -19,7 +20,8 @@ use rollyourown::{
         player::{Player, PlayerStatus, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
     },
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, traits::{Packable, Packer}
+    utils::{bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, math::{MathTrait, MathImplU8},},
+    traits::{Packable, Packer}
 };
 
 
@@ -71,7 +73,7 @@ impl GameStoreImpl of GameStoreTrait {
     }
 
     //
-    //
+    // Load / Save
     //
 
     fn load(s: IStoreLibraryDispatcher, game_id: u32, player_id: ContractAddress) -> GameStore {
@@ -87,7 +89,7 @@ impl GameStoreImpl of GameStoreTrait {
 
 
     //
-    //
+    // Lazy load 
     //
 
     fn game_config(ref self: GameStore) -> GameConfig {
@@ -111,7 +113,7 @@ impl GameStoreImpl of GameStoreTrait {
     }
 
     //
-    //
+    // Markets
     //
 
     fn get_drug_price(ref self: GameStore, location: Locations, drug: Drugs) -> usize {
@@ -122,9 +124,8 @@ impl GameStoreImpl of GameStoreTrait {
         tick * drug_config.step.into() + drug_config.base.into()
     }
 
-
     //
-    //
+    // Player
     //
 
     fn can_continue(ref self: GameStore) -> bool {
@@ -162,6 +163,58 @@ impl GameStoreImpl of GameStoreTrait {
         }
 
         true
+    }
+
+
+    //
+    //  Wanted
+    //
+
+    #[inline(always)]
+    fn get_wanted_risk(ref self: GameStore, location: Locations) -> u8 {
+        // 0	0%   
+        // 1	0%   
+        // 2	15%  
+        // 3	30%
+        // 4	45%
+        // 5	60%
+        // 6	75%
+        // 7	90%
+        let modifier = self.season_settings().get_wanted_risk_modifier();
+
+        let wanted = self.wanted.get(location);
+        (wanted * 15).sub_capped(modifier, 0)
+    }
+
+    fn update_wanted(ref self: GameStore) {
+        let mut locations = LocationsEnumerableImpl::all();
+        let drugs = self.drugs.get();
+        let season_settings = self.season_settings();
+        let travel_back_mod = season_settings.get_wanted_travel_back_modifier();
+        let leave_with_drugs_mod = season_settings.get_wanted_leave_with_drug_modifier();
+
+        loop {
+            match locations.pop_front() {
+                Option::Some(location) => {
+                    let mut value = self.wanted.get(*location);
+
+                    if self.player.next_location == *location
+                        && self.player.next_location == self.player.prev_location {
+                        // travel back to same location : +3
+                        self.wanted.set(*location, value.add_capped(travel_back_mod, 7));
+                    } else if self.player.location == *location {
+                        // leaving current location with drugs : +5
+                        if drugs.quantity > 0 {
+                            self.wanted.set(*location, value.add_capped(leave_with_drugs_mod, 7));
+                        };
+                    } else if *location != self.player.next_location {
+                        //  not next / not prev / not current : -1
+                        self.wanted.set(*location, value.sub_capped(1, 0));
+                    }
+                },
+                Option::None => { break; }
+            }
+        }
     }
 }
 

@@ -23,6 +23,7 @@ query SeasonByVersion($version: u16, $listId: felt252) {
         drugs_mode
         encounters_mode
         encounters_odds_mode
+        wanted_mode
       }
     }
   }

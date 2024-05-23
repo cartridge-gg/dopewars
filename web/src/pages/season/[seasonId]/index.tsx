@@ -10,7 +10,9 @@ import {
   Heart,
   PaperCashIcon,
   PaperIcon,
+  Siren,
   User,
+  Warning,
 } from "@/components/icons";
 import { Cocaine } from "@/components/icons/drugs";
 import { Layout } from "@/components/layout";
@@ -27,6 +29,8 @@ import {
   healthModeColorKeys,
   turnsModeColor,
   turnsModeColorKeys,
+  wantedModeColor,
+  wantedModeColorKeys,
 } from "@/dojo/helpers";
 import {
   useDojoContext,
@@ -124,15 +128,15 @@ const SeasonLeftPanel = ({
       <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
         SEASON {seasonId}
       </Text>
-      <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]} textAlign="center">
+      <Heading fontSize={["24px", "40px"]} fontWeight="400" mb={["0px", "20px"]} textAlign="center">
         {seasonSettings.cash_mode} {seasonSettings.health_mode} <br /> {seasonSettings.turns_mode}
       </Heading>
 
       <VStack>
-        <Card w="full" p={3} alignItems="center">
+        {/* <Card w="full" p={3} alignItems="center">
           <Text>Total entrants {sortedList?.size || 0}</Text>
           {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}
-        </Card>
+        </Card> */}
 
         <SeasonSettingsTable settings={seasonSettings} />
       </VStack>
@@ -153,22 +157,29 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                 <Td w="30px">
                   <PaperCashIcon />
                 </Td>
-                <Td>Cash</Td>
+                <Td>Initial Cash</Td>
                 <Td color={cashModeColor[settings?.cash_mode as cashModeColorKeys]}>{settings?.cash_mode}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Heart />
                 </Td>
-                <Td>Health</Td>
+                <Td>Initial Health</Td>
                 <Td color={healthModeColor[settings?.health_mode as healthModeColorKeys]}>{settings?.health_mode}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Clock />
                 </Td>
-                <Td>Turns</Td>
+                <Td>Max Turns</Td>
                 <Td color={turnsModeColor[settings?.turns_mode as turnsModeColorKeys]}>{settings?.turns_mode}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Cigarette />
+                </Td>
+                <Td>Drugs</Td>
+                <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys]}>{settings?.drugs_mode}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
@@ -189,11 +200,16 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                 </Td>
               </Tr>
               <Tr>
-                <Td w="30px">
-                  <Cigarette />
+                <Td w="30px" borderBottomColor="transparent">
+                  <Siren />
                 </Td>
-                <Td>Drugs</Td>
-                <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys]}>{settings?.drugs_mode}</Td>
+                <Td borderBottomColor="transparent">Wanted</Td>
+                <Td
+                  color={wantedModeColor[settings?.wanted_mode as wantedModeColorKeys]}
+                  borderBottomColor="transparent"
+                >
+                  {settings?.wanted_mode}
+                </Td>
               </Tr>
             </Tbody>
           </Table>

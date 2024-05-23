@@ -14,6 +14,7 @@ struct SeasonSettings {
     encounters_mode: EncountersMode,
     encounters_odds_mode: EncountersOddsMode,
     drugs_mode: DrugsMode,
+    wanted_mode: WantedMode,
 }
 
 
@@ -59,6 +60,13 @@ enum DrugsMode {
     Expensive,
 }
 
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+enum WantedMode {
+    KoolAndTheGang,
+    ThugLife,
+    MostWanted,
+}
+
 
 #[generate_trait]
 impl SeasonSettingsImpl of SeasonSettingsTrait {
@@ -71,6 +79,7 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
             encounters_mode: RandomizableImpl::<EncountersMode>::random(ref randomizer),
             encounters_odds_mode: RandomizableImpl::<EncountersOddsMode>::random(ref randomizer),
             drugs_mode: RandomizableImpl::<DrugsMode>::random(ref randomizer),
+            wanted_mode: RandomizableImpl::<WantedMode>::random(ref randomizer),
         }
     }
 
@@ -80,7 +89,7 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
             season_version: self.season_version,
             cash: self.get_initial_cash(),
             health: self.get_initial_health(),
-            max_turns: self.get_turns_mode(),
+            max_turns: self.get_max_turns(),
             //
             max_wanted_shopping: 5,
             max_rounds: 3,
@@ -94,7 +103,7 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
     }
 
     //
-    //
+    // Game params
     //
 
     fn get_initial_cash(self: SeasonSettings) -> u32 {
@@ -113,13 +122,43 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
         }
     }
 
-    fn get_turns_mode(self: SeasonSettings) -> u8 {
+    fn get_max_turns(self: SeasonSettings) -> u8 {
         match self.turns_mode {
             TurnsMode::OnSpeed => { 24 },
             TurnsMode::OnWeed => { 30 },
             TurnsMode::OnMush => { 36 },
         }
     }
+
+    //
+    // Wanted Params
+    //
+
+    fn get_wanted_risk_modifier(self: SeasonSettings) -> u8 {
+        match self.wanted_mode {
+            WantedMode::KoolAndTheGang => { 20 },
+            WantedMode::ThugLife => { 15 },
+            WantedMode::MostWanted => { 10 },
+        }
+    }
+
+    fn get_wanted_travel_back_modifier(self: SeasonSettings) -> u8 {
+        match self.wanted_mode {
+            WantedMode::KoolAndTheGang => { 2 },
+            WantedMode::ThugLife => { 3 },
+            WantedMode::MostWanted => { 4 },
+        }
+    }
+
+    fn get_wanted_leave_with_drug_modifier(self: SeasonSettings) -> u8 {
+        match self.wanted_mode {
+            WantedMode::KoolAndTheGang => { 5 },
+            WantedMode::ThugLife => { 5 },
+            WantedMode::MostWanted => { 6 },
+        }
+    }
+
+
 }
 
 
@@ -165,6 +204,12 @@ impl DrugsModeEnumerableImpl of Enumerable<DrugsMode> {
     }
 }
 
+impl WantedModeEnumerableImpl of Enumerable<WantedMode> {
+    fn all() -> Span<WantedMode> {
+        array![WantedMode::KoolAndTheGang, WantedMode::ThugLife, WantedMode::MostWanted,].span()
+    }
+}
+
 
 #[derive(Copy, Drop, Serde)]
 struct SeasonSettingsModes {
@@ -175,6 +220,7 @@ struct SeasonSettingsModes {
     encounters_modes: Span<EncountersMode>,
     encounters_odds_modes: Span<EncountersOddsMode>,
     drugs_modes: Span<DrugsMode>,
+    wanted_modes: Span<WantedMode>,
 }
 
 #[generate_trait]
@@ -188,6 +234,7 @@ impl SeasonSettingsModesImpl of SeasonSettingsModesTrait {
             encounters_modes: EncountersModeEnumerableImpl::all(),
             encounters_odds_modes: EncountersOddsModeEnumerableImpl::all(),
             drugs_modes: DrugsModeEnumerableImpl::all(),
+            wanted_modes: WantedModeEnumerableImpl::all(),
         }
     }
 }
