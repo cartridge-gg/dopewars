@@ -325,13 +325,13 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Weapon, slot_id: ItemSlot::Weapon.into(), tier: 1, stat: 10, cost: 0,
+            slot: ItemSlot::Weapon, slot_id: ItemSlot::Weapon.into(), tier: 1, stat: 12, cost: 0,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Weapon, slot_id: ItemSlot::Weapon.into(), tier: 2, stat: 20, cost: 400,
+            slot: ItemSlot::Weapon, slot_id: ItemSlot::Weapon.into(), tier: 2, stat: 24, cost: 420,
         }
     );
     set!(
@@ -340,8 +340,8 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Weapon,
             slot_id: ItemSlot::Weapon.into(),
             tier: 3,
-            stat: 30,
-            cost: 2_500,
+            stat: 36,
+            cost: 2_600,
         }
     );
     set!(
@@ -350,7 +350,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Weapon,
             slot_id: ItemSlot::Weapon.into(),
             tier: 4,
-            stat: 40,
+            stat: 48,
             cost: 12_000,
         }
     );
@@ -360,7 +360,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Weapon,
             slot_id: ItemSlot::Weapon.into(),
             tier: 5,
-            stat: 50,
+            stat: 60,
             cost: 75_000,
         }
     );
@@ -370,7 +370,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Weapon,
             slot_id: ItemSlot::Weapon.into(),
             tier: 6,
-            stat: 60,
+            stat: 72,
             cost: 420_000,
         }
     );
@@ -380,7 +380,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Clothes, slot_id: ItemSlot::Clothes.into(), tier: 1, stat: 10, cost: 0,
+            slot: ItemSlot::Clothes, slot_id: ItemSlot::Clothes.into(), tier: 1, stat: 12, cost: 0,
         }
     );
     set!(
@@ -389,8 +389,8 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Clothes,
             slot_id: ItemSlot::Clothes.into(),
             tier: 2,
-            stat: 20,
-            cost: 300,
+            stat: 24,
+            cost: 390,
         }
     );
     set!(
@@ -399,8 +399,8 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Clothes,
             slot_id: ItemSlot::Clothes.into(),
             tier: 3,
-            stat: 30,
-            cost: 1_800,
+            stat: 36,
+            cost: 2_800,
         }
     );
     set!(
@@ -409,7 +409,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Clothes,
             slot_id: ItemSlot::Clothes.into(),
             tier: 4,
-            stat: 40,
+            stat: 48,
             cost: 11_000,
         }
     );
@@ -419,7 +419,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Clothes,
             slot_id: ItemSlot::Clothes.into(),
             tier: 5,
-            stat: 50,
+            stat: 60,
             cost: 65_000,
         }
     );
@@ -429,7 +429,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot: ItemSlot::Clothes,
             slot_id: ItemSlot::Clothes.into(),
             tier: 6,
-            stat: 60,
+            stat: 72,
             cost: 388_000,
         }
     );
