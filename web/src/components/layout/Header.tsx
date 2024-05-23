@@ -1,5 +1,5 @@
 import { MediaPlayer, MobileMenu } from "@/components/layout";
-import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
@@ -24,6 +24,7 @@ export const Header = observer(() => {
 
   const { account } = useAccount();
 
+  const { uiStore} = useDojoContext()
   const { game, gameConfig } = useGameStore();
   const { config } = useConfigStore();
 
@@ -70,7 +71,9 @@ export const Header = observer(() => {
       </HStack>
 
       {game /*|| router.asPath.includes("logs")*/ && (
-        <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]}>
+        <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]} cursor="help" onClick={() => {
+          uiStore.openSeasonDetails()
+        }}>
           <HStack
             h="48px"
             width={["100%", "auto"]}

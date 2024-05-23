@@ -124,7 +124,7 @@ export default function Home() {
                   </Button>
 
                   <VStack w="full" position="relative">
-                    <Progress w="full" colorScheme="neon" value={progressPercent} max={100} h="22px" />
+                    <Progress w="full" colorScheme="neon" isIndeterminate={progressPercent === 0} value={progressPercent} max={100} h="22px" />
                     <Text position="absolute" w="full" textAlign="center">
                       {progressPercent}%
                     </Text>

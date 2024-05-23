@@ -22,6 +22,7 @@ import {
   UnorderedList,
   VStack,
   Table,
+  Button,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 
@@ -42,6 +43,7 @@ export default function History() {
         imageSrc: "/images/will-smith-with-attitude.png",
       }}
       rigthPanelScrollable={false}
+      footer={<Button onClick={() => router.push("/")}>HOME</Button>}
     >
       <VStack boxSize="full" gap="10px">
         <Tabs variant="unstyled" w="full">
@@ -82,13 +84,27 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
         <Tbody>
           <Tr>
             <Td w="40px"></Td>
-            <Td w="80px">Identity</Td>
-            <Td w="50px">Turn</Td>
-            <Td w="120px">Location</Td>
-            <Td w="60px">Health</Td>
-            <Td w="100px">Cash</Td>
-            <Td w="80px">Season</Td>
-            <Td w="120px">Registered</Td>
+            <Td w="80px" textAlign="right">
+              Identity
+            </Td>
+            <Td w="50px" textAlign="right">
+              Turn
+            </Td>
+            <Td w="120px" textAlign="right">
+              Location
+            </Td>
+            <Td w="60px" textAlign="right">
+              Health
+            </Td>
+            <Td w="100px" textAlign="right">
+              Cash
+            </Td>
+            <Td w="80px" textAlign="right">
+              Season
+            </Td>
+            <Td w="120px" textAlign="right">
+              Registered
+            </Td>
           </Tr>
 
           {games.map((game: GameClass, index: number) => {
@@ -101,15 +117,15 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
                 </Td>
 
                 <Td>{playerName}</Td>
-                <Td align="right">{game.player.turn}</Td>
-                <Td align="right">{game.player.location?.name}</Td>
-                <Td align="right">{game.player.health}</Td>
-                <Td align="right">{formatCashHeader(game.player.cash)}</Td>
+                <Td textAlign="right">{game.player.turn}</Td>
+                <Td textAlign="right">{game.player.location?.name}</Td>
+                <Td textAlign="right">{game.player.health}</Td>
+                <Td textAlign="right">{formatCashHeader(game.player.cash)}</Td>
 
-                <Td align="right">{game.gameInfos.season_version}</Td>
+                <Td textAlign="right">{game.gameInfos.season_version}</Td>
                 <Td
                   onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`)}
-                  align="right"
+                  textAlign="right"
                   color={game.gameInfos.registered ? "neon.400" : "yellow.400"}
                 >
                   {game.gameInfos.registered ? "Yes" : "No"}

@@ -5,7 +5,7 @@ import { Layout } from "@/components/layout";
 import { SeasonInfos, useRouterContext, useSeasons } from "@/dojo/hooks";
 
 import { formatCash } from "@/utils/ui";
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, VStack } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, VStack, Text } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 
 export default function SeasonIndex() {
@@ -42,7 +42,6 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
       <Table size="sm">
         <Thead position="sticky" top="0" bg="neon.900">
           <Tr>
-            {/* <Th isNumeric>gameId</Th> */}
             <Th></Th>
             <Th isNumeric>Entrants</Th>
             <Th isNumeric>Paid</Th>
@@ -60,13 +59,18 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
             return (
               <Tr key={idx} cursor="pointer" onClick={() => router.push(`/season/${season.season.version}`)}>
                 <Td>
-                  <small>SEASON {season.season.version}</small> <br />"{seasonName}"
+                  <VStack alignItems="flex-start">
+                    <Text color="neon.500" fontSize="11px" lineHeight={1}>
+                      SEASON {season.season.version}
+                    </Text>
+
+                    <Text>"{seasonName}" </Text>
+                  </VStack>
                 </Td>
 
                 <Td isNumeric>{season.sortedList?.size}</Td>
                 <Td isNumeric>{season.sortedList?.processed ? season.sortedList?.process_size : "?"}</Td>
                 <Td isNumeric>
-                  {" "}
                   {formatCash(season.season.paper_balance).replace("$", "")} <PaperIcon />
                 </Td>
               </Tr>

@@ -226,8 +226,6 @@ export const Leaderboard = observer(({ config }: { config: Config }) => {
           </UnorderedList>
         )}
       </VStack>
-
-      <SeasonDetailsModal />
     </VStack>
   );
 });

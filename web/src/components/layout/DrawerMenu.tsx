@@ -35,6 +35,7 @@ import { HustlerStats } from "../pages/profile/HustlerStats";
 import { BuiltBy } from "../pages/home";
 import { HustlerIcon, Hustlers } from "../hustlers";
 import { shortString } from "starknet";
+import { Calendar } from "../icons/archive";
 
 const DrawerMenu = () => {
   const { router, gameId, isRyoDotGame } = useRouterContext();
@@ -55,7 +56,7 @@ const DrawerMenu = () => {
         <DrawerContent minW="340px">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
             <Heading color="neon.500" fontWeight="normal">
-             <PaperIcon width="28px" height="28px" />  Roll Your Own
+              <PaperIcon width="28px" height="28px" /> Roll Your Own
             </Heading>
           </DrawerHeader>
           <Close position="absolute" right="16px" top="16px" cursor="pointer" onClick={onClose} />
@@ -74,7 +75,7 @@ const DrawerMenu = () => {
                   </DrawerListItem>
 
                   <DrawerListItem cursor="default">
-                      <Text color="neon.500"> ACCOUNT </Text>
+                    <Text color="neon.500"> ACCOUNT </Text>
                   </DrawerListItem>
 
                   <DrawerListItem cursor="default">
@@ -102,7 +103,7 @@ const DrawerMenu = () => {
                         </HStack>
                       </DrawerListItem>
 
-                      <DrawerListItem >
+                      <DrawerListItem>
                         <ProfileLinkDrawer />
                         {/* <HStack w="full">
                           <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
@@ -147,9 +148,19 @@ const DrawerMenu = () => {
                   >
                     <Clock mr={2} /> HISTORY
                   </DrawerListItem>
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/season");
+                    }}
+                  >
+                    <Calendar mr={2} /> SEASONS
+                  </DrawerListItem>
 
-{/* DEV */}
+                  {/* DEV */}
 
+                  <DrawerListItem cursor="default" color="neon.500">
+                    <Text> ADMIN </Text>
+                  </DrawerListItem>
 
                   <DrawerListItem
                     onClick={() => {
@@ -166,7 +177,6 @@ const DrawerMenu = () => {
                   >
                     <Cigarette mr={2} /> ADMIN
                   </DrawerListItem>
-
                 </UnorderedList>
               </VStack>
 
