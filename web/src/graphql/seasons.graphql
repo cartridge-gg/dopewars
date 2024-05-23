@@ -104,6 +104,22 @@ query SeasonSettings($version: u16) {
   }
 }
 
+query AllSeasonSettings {
+  seasonSettingsModels(limit: 420) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
+}
+
 
 
 

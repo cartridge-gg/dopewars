@@ -12,11 +12,17 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  TableContainer,
   Tabs,
+  Tbody,
+  Td,
   Text,
+  Th,
+  Tr,
   UnorderedList,
   VStack,
-} from "@chakra-ui/react";  
+  Table,
+} from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 
 import { shortString } from "starknet";
@@ -27,15 +33,6 @@ export default function History() {
   const { uiStore } = useDojoContext();
 
   const { games, onGoingGames, endedGames } = useGamesByPlayer(account?.address || "0x0");
-
-  const onHustle = async () => {
-    if (!account) {
-      uiStore.openConnectModal();
-      return;
-    }
-
-    router.push(`/game/new`);
-  };
 
   return (
     <Layout
@@ -80,74 +77,48 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
 
   if (!games) return null;
   return (
-    <UnorderedList boxSize="full" variant="dotted" h="auto" fontSize={"12px"}>
-      <ListItem key={"OxO"}>
-        <HStack mr={3} whiteSpace="nowrap">
-          <Text w={"40px"} flexShrink={0}></Text>
-          <Text w={"80px"} flexShrink={0}>
-            Identity
-          </Text>
-          <Text w={"70px"} flexShrink={0} align="right">
-            Turn
-          </Text>
-          <Text w={"120px"} flexShrink={0} align="right">
-            Location
-          </Text>
-          <Text w={"70px"} flexShrink={0} align="right">
-            Health
-          </Text>
-          <Text w={"100px"} flexShrink={0} align="right">
-            Cash
-          </Text>
-          <Text w={"80px"} flexShrink={0} align="right">
-            Season
-          </Text>
-          <Text w={"80px"} flexShrink={0} align="right">
-            Register
-          </Text>
-        </HStack>
-      </ListItem>
+    <TableContainer position="relative">
+      <Table size="sm">
+        <Tbody>
+          <Tr>
+            <Td w="40px"></Td>
+            <Td w="80px">Identity</Td>
+            <Td w="50px">Turn</Td>
+            <Td w="120px">Location</Td>
+            <Td w="60px">Health</Td>
+            <Td w="100px">Cash</Td>
+            <Td w="80px">Season</Td>
+            <Td w="120px">Registered</Td>
+          </Tr>
 
-      {games.map((game: GameClass, index: number) => {
-        const playerName = shortString.decodeShortString(game.gameInfos.player_name);
+          {games.map((game: GameClass, index: number) => {
+            const playerName = shortString.decodeShortString(game.gameInfos.player_name);
 
-        return (
-          <ListItem key={game.gameInfos.game_id} h="30px">
-            <HStack mr={3} whiteSpace="nowrap">
-              <Text w={"40px"} flexShrink={0} cursor="pointer" onClick={() => onClick(game)}>
-                <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
-              </Text>
+            return (
+              <Tr key={game.gameInfos.game_id}>
+                <Td cursor="pointer" onClick={() => onClick(game)}>
+                  <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
+                </Td>
 
-              <Text w={"80px"} flexShrink={0}>
-                {playerName}
-              </Text>
-              <Text w={"70px"} flexShrink={0} align="right">
-                {game.player.turn}
-              </Text>
-              <Text w={"120px"} flexShrink={0} align="right">
-                {game.player.location?.name}
-              </Text>
-              <Text w={"70px"} flexShrink={0} align="right">
-                {game.player.health}
-              </Text>
-              <Text w={"100px"} flexShrink={0} align="right">
-                {formatCashHeader(game.player.cash)}
-              </Text>
+                <Td>{playerName}</Td>
+                <Td align="right">{game.player.turn}</Td>
+                <Td align="right">{game.player.location?.name}</Td>
+                <Td align="right">{game.player.health}</Td>
+                <Td align="right">{formatCashHeader(game.player.cash)}</Td>
 
-              <Text w={"80px"} align="right">
-                {game.gameInfos.season_version}
-              </Text>
-              <Text
-                w={"80px"}
-                onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`)}
-                align="right"
-              >
-                {game.gameInfos.registered ? "" : "register"}
-              </Text>
-            </HStack>
-          </ListItem>
-        );
-      })}
-    </UnorderedList>
+                <Td align="right">{game.gameInfos.season_version}</Td>
+                <Td
+                  onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`)}
+                  align="right"
+                  color={game.gameInfos.registered ? "neon.400" : "yellow.400"}
+                >
+                  {game.gameInfos.registered ? "Yes" : "No"}
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };

@@ -7,6 +7,11 @@ const getRep = (rep: number, step: number): number => {
   return Math.max(0, rep - step * 20);
 };
 
+const getColor = (rep: number, step: number): string => {
+  let value = getRep(rep, step);
+  return value > 0 ? colors.yellow["400"].toString() : colors.yellow["500"].toString();
+};
+
 export const ReputationIndicator = ({ reputation, ...props }: { reputation: number } & StyleProps) => {
   return (
     <Tooltip
@@ -16,30 +21,12 @@ export const ReputationIndicator = ({ reputation, ...props }: { reputation: numb
     >
       <Card h="40px" px="6px" justify="center" alignItems="center">
         <HStack>
-          <DynamicReputation value={getRep(reputation, 0)} max={20} color={colors.yellow["400"].toString()} />
-          <DynamicReputation value={getRep(reputation, 1)} max={20} color={colors.yellow["400"].toString()} />
-          <DynamicReputation value={getRep(reputation, 2)} max={20} color={colors.yellow["400"].toString()} />
-          <DynamicReputation value={getRep(reputation, 3)} max={20} color={colors.yellow["400"].toString()} />
-          <DynamicReputation value={getRep(reputation, 4)} max={20} color={colors.yellow["400"].toString()} />
+          <DynamicReputation value={getRep(reputation, 0)} max={20} color={getColor(reputation, 0)} />
+          <DynamicReputation value={getRep(reputation, 1)} max={20} color={getColor(reputation, 1)} />
+          <DynamicReputation value={getRep(reputation, 2)} max={20} color={getColor(reputation, 2)} />
+          <DynamicReputation value={getRep(reputation, 3)} max={20} color={getColor(reputation, 3)} />
+          <DynamicReputation value={getRep(reputation, 4)} max={20} color={getColor(reputation, 4)} />
         </HStack>
-        {/* <PowerMeter
-        text={reputationRanks[game.player.drugLevel as reputationRanksKeys]}
-        basePower={0}
-        power={game.player.drugLevel}
-        maxPower={4}
-        displayedPower={4}
-        bg="transparent"
-      />
-      <Progress
-        position="absolute"
-        bottom="4px"
-        h="4px"
-        px="6px"
-        colorScheme="neon"
-        w="full"
-        zIndex={0}
-        value={((game.player.reputation % 20) * 100) / 20}
-      /> */}
       </Card>
     </Tooltip>
   );

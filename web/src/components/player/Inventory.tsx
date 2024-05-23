@@ -32,10 +32,12 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
     <VStack {...props} w="full" align="flex-start" pb="0" gap={[3, 6]}>
       <HStack w="full" justifyContent="space-between">
         <VStack w="full" alignItems="flex-start" gap={1}>
-          <HStack color="neon.500" justify="center" alignItems="center">
-            <Cigarette mb={1} />
-            <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
-              REPUTATION
+          <HStack justify="center" alignItems="center" h="27px">
+            <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1} color="yellow.500">
+              REP:
+            </Text>
+            <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1} color="yellow.400">
+              {game.player.reputation}/100
             </Text>
           </HStack>
 
@@ -48,8 +50,11 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           <HStack color={game?.drugs.quantity === 0 ? "neon.500" : "yellow.400"} justify="center" alignItems="center">
             <WeightIcon mb={1} />
             <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1}>
-              {game.drugs.drug ? game?.drugs.quantity * configStore.getDrug(game.seasonSettings.drugs_mode, game.drugs.drug?.drug)!.weight : 0}/
-              {game.items.transport!.tier.stat}
+              {game.drugs.drug
+                ? game?.drugs.quantity *
+                  configStore.getDrug(game.seasonSettings.drugs_mode, game.drugs.drug?.drug)!.weight
+                : 0}
+              /{game.items.transport!.tier.stat}
             </Text>
           </HStack>
 

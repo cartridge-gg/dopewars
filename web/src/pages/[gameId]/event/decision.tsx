@@ -263,7 +263,7 @@ const Encounter = observer(
       } else {
         setImgUrl(url);
       }
-    }, [encounterEvent, game.player.status]);
+    }, [encounterEvent, /*game.player.status*/]);
 
     return (
       <VStack {...props}>

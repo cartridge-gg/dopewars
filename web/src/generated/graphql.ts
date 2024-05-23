@@ -2548,6 +2548,11 @@ export type GameConfigQueryVariables = Exact<{
 
 export type GameConfigQuery = { __typename?: 'World__Query', gameConfigModels?: { __typename?: 'GameConfigConnection', edges?: Array<{ __typename?: 'GameConfigEdge', node?: { __typename?: 'GameConfig', season_version?: any | null, cash?: any | null, health?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, rep_drug_step?: any | null, rep_buy_item?: any | null, rep_carry_drugs?: any | null, rep_hospitalized?: any | null, rep_jailed?: any | null } | null } | null> | null } | null };
 
+export type AllGameConfigQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGameConfigQuery = { __typename?: 'World__Query', gameConfigModels?: { __typename?: 'GameConfigConnection', edges?: Array<{ __typename?: 'GameConfigEdge', node?: { __typename?: 'GameConfig', season_version?: any | null, cash?: any | null, health?: any | null, max_turns?: any | null, max_wanted_shopping?: any | null, rep_drug_step?: any | null, rep_buy_item?: any | null, rep_carry_drugs?: any | null, rep_hospitalized?: any | null, rep_jailed?: any | null } | null } | null> | null } | null };
+
 export type GameEventsQueryVariables = Exact<{
   gameId: Scalars['String'];
 }>;
@@ -2617,6 +2622,11 @@ export type SeasonSettingsQueryVariables = Exact<{
 
 
 export type SeasonSettingsQuery = { __typename?: 'World__Query', seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null };
+
+export type AllSeasonSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllSeasonSettingsQuery = { __typename?: 'World__Query', seasonSettingsModels?: { __typename?: 'SeasonSettingsConnection', edges?: Array<{ __typename?: 'SeasonSettingsEdge', node?: { __typename?: 'SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null };
 
 export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2815,6 +2825,60 @@ export const useInfiniteGameConfigQuery = <
 
 
 useInfiniteGameConfigQuery.getKey = (variables?: GameConfigQueryVariables) => variables === undefined ? ['GameConfig.infinite'] : ['GameConfig.infinite', variables];
+;
+
+export const AllGameConfigDocument = `
+    query AllGameConfig {
+  gameConfigModels(limit: 420) {
+    edges {
+      node {
+        season_version
+        cash
+        health
+        max_turns
+        max_wanted_shopping
+        rep_drug_step
+        rep_buy_item
+        rep_carry_drugs
+        rep_hospitalized
+        rep_jailed
+      }
+    }
+  }
+}
+    `;
+export const useAllGameConfigQuery = <
+      TData = AllGameConfigQuery,
+      TError = unknown
+    >(
+      variables?: AllGameConfigQueryVariables,
+      options?: UseQueryOptions<AllGameConfigQuery, TError, TData>
+    ) =>
+    useQuery<AllGameConfigQuery, TError, TData>(
+      variables === undefined ? ['AllGameConfig'] : ['AllGameConfig', variables],
+      useFetchData<AllGameConfigQuery, AllGameConfigQueryVariables>(AllGameConfigDocument).bind(null, variables),
+      options
+    );
+
+useAllGameConfigQuery.getKey = (variables?: AllGameConfigQueryVariables) => variables === undefined ? ['AllGameConfig'] : ['AllGameConfig', variables];
+;
+
+export const useInfiniteAllGameConfigQuery = <
+      TData = AllGameConfigQuery,
+      TError = unknown
+    >(
+      variables?: AllGameConfigQueryVariables,
+      options?: UseInfiniteQueryOptions<AllGameConfigQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<AllGameConfigQuery, AllGameConfigQueryVariables>(AllGameConfigDocument)
+    return useInfiniteQuery<AllGameConfigQuery, TError, TData>(
+      variables === undefined ? ['AllGameConfig.infinite'] : ['AllGameConfig.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteAllGameConfigQuery.getKey = (variables?: AllGameConfigQueryVariables) => variables === undefined ? ['AllGameConfig.infinite'] : ['AllGameConfig.infinite', variables];
 ;
 
 export const GameEventsDocument = `
@@ -3330,6 +3394,57 @@ export const useInfiniteSeasonSettingsQuery = <
 
 
 useInfiniteSeasonSettingsQuery.getKey = (variables?: SeasonSettingsQueryVariables) => variables === undefined ? ['SeasonSettings.infinite'] : ['SeasonSettings.infinite', variables];
+;
+
+export const AllSeasonSettingsDocument = `
+    query AllSeasonSettings {
+  seasonSettingsModels(limit: 420) {
+    edges {
+      node {
+        season_version
+        cash_mode
+        health_mode
+        turns_mode
+        drugs_mode
+        encounters_mode
+        encounters_odds_mode
+      }
+    }
+  }
+}
+    `;
+export const useAllSeasonSettingsQuery = <
+      TData = AllSeasonSettingsQuery,
+      TError = unknown
+    >(
+      variables?: AllSeasonSettingsQueryVariables,
+      options?: UseQueryOptions<AllSeasonSettingsQuery, TError, TData>
+    ) =>
+    useQuery<AllSeasonSettingsQuery, TError, TData>(
+      variables === undefined ? ['AllSeasonSettings'] : ['AllSeasonSettings', variables],
+      useFetchData<AllSeasonSettingsQuery, AllSeasonSettingsQueryVariables>(AllSeasonSettingsDocument).bind(null, variables),
+      options
+    );
+
+useAllSeasonSettingsQuery.getKey = (variables?: AllSeasonSettingsQueryVariables) => variables === undefined ? ['AllSeasonSettings'] : ['AllSeasonSettings', variables];
+;
+
+export const useInfiniteAllSeasonSettingsQuery = <
+      TData = AllSeasonSettingsQuery,
+      TError = unknown
+    >(
+      variables?: AllSeasonSettingsQueryVariables,
+      options?: UseInfiniteQueryOptions<AllSeasonSettingsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<AllSeasonSettingsQuery, AllSeasonSettingsQueryVariables>(AllSeasonSettingsDocument)
+    return useInfiniteQuery<AllSeasonSettingsQuery, TError, TData>(
+      variables === undefined ? ['AllSeasonSettings.infinite'] : ['AllSeasonSettings.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteAllSeasonSettingsQuery.getKey = (variables?: AllSeasonSettingsQueryVariables) => variables === undefined ? ['AllSeasonSettings.infinite'] : ['AllSeasonSettings.infinite', variables];
 ;
 
 export const HallOfFameDocument = `
