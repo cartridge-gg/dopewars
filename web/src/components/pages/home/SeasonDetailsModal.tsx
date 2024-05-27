@@ -41,7 +41,7 @@ export const SeasonDetailsModal = observer(() => {
         onClose={onClose}
       >
         <ModalOverlay />
-        <ModalContent bg="bg.dark" >
+        <ModalContent bg="bg.dark">
           <ModalHeader textAlign="center" pb={0}>
             Season Informations
           </ModalHeader>
@@ -61,16 +61,18 @@ export const SeasonDetailsModal = observer(() => {
                     <VStack w="full" gap={2}>
                       <HStack w="full" alignItems="flex-start">
                         <Clock />
-                        <Text>If the countdown reaches zero the season ends.</Text>
+                        <Text>When the countdown reaches zero the season ends</Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <Pistol />
-                        <Text>When a player set a new highscore, the season countdown timer resets.</Text>
+                        <Text>
+                          When a player sets a new high score, the season countdown timer resets (timer duration)
+                        </Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <DollarBag />
                         <Text>
-                          When the season ends rewards are distributed to the players with the three highest scores
+                          When the timer expires rewards are calculated and distributed to the top 10% of players
                         </Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
