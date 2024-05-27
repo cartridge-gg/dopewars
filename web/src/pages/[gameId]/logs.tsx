@@ -61,7 +61,7 @@ const Logs = () => {
 
   const { account } = useAccount();
   const configStore = useConfigStore();
-  const { game, gameInfos, gameEvents } = useGameStore();
+  const { game, gameInfos, gameConfig, gameEvents } = useGameStore();
 
   const [playerHustlerId, setPlayerHustlerId] = useState(0);
 

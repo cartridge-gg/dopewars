@@ -1,5 +1,5 @@
 import { Clock, DollarBag, PaperIcon, Pistol, Trophy } from "@/components/icons";
-import { useDojoContext, useSeasonByVersion } from "@/dojo/hooks";
+import { useDojoContext, useGameStore, useSeasonByVersion } from "@/dojo/hooks";
 import { SeasonSettingsTable } from "@/pages/season/[seasonId]";
 import {
   Button,
@@ -19,12 +19,18 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 
 export const SeasonDetailsModal = observer(() => {
   const { uiStore, configStore } = useDojoContext();
   const { config } = configStore;
+  const { gameConfig } = useGameStore();
 
-  const { season, seasonSettings } = useSeasonByVersion(config?.ryo.season_version);
+  const seasonVersion = useMemo(() => {
+    return gameConfig?.season_version || config?.ryo.season_version;
+  }, [gameConfig, config]);
+
+  const { season, seasonSettings } = useSeasonByVersion(seasonVersion);
 
   const onClose = () => {
     uiStore.closeSeasonDetails();
