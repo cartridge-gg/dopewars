@@ -199,7 +199,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
           <ShareButton variant="pixelated" />
 
           <Link
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdHXV6YWUUd2l3azgst0L6vYvLwY6abGoQu5rbf8r7h8ffCnQ/viewform"
+            href="https://docs.google.com/forms/d/e/1FAIpQLScWuaWHjXsMJc2kmFvt1TlAdq4szDXh2pm16kBl0H7y2Mo4Xg/viewform"
             isExternal
             flex="1"
             textDecoration="none"
