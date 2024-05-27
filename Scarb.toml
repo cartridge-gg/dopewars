@@ -25,9 +25,9 @@ gendojo = "./scripts/gen.sh"
 auth = "./scripts/default_auth.sh"
 
 
-# migrate
+# migrate  && scarb run gendojo $PROFILE
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
-migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE"
 migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
 migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo000"
@@ -35,8 +35,8 @@ migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROF
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.1 --chain-id KATANA_SLOT_420 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending --version v0.7.0-alpha.1 --world 0x3bf84ccc82282acd4c8afbb843c9e864bf1e0770fba607595104202b938b7a4"
+slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_420 -b 1000 --disable-fee true  --invoke-max-steps 1000000"
+slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
 
 # slot ryo421
 slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_421 -b 1000 --disable-fee true  --invoke-max-steps 2000000"
