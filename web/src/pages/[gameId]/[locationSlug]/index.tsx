@@ -32,7 +32,7 @@ const Location = observer(() => {
   const { account } = useAccount();
 
   const configStore = useConfigStore();
-  const { game, gameInfos, gameEvents } = useGameStore();
+  const { game, gameInfos,gameConfig, gameEvents } = useGameStore();
   const { endGame, isPending } = useSystems();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
@@ -40,7 +40,7 @@ const Location = observer(() => {
   const [greetings, setGreetings] = useState("");
 
   useEffect(() => {
-    if (game && gameInfos && location) {
+    if (game && gameConfig && location) {
       // check if player at right location
       if (location?.location !== game.player.location?.location) {
         // router.replace(`/${gameId}/${game.player.location?.location}`);
@@ -49,9 +49,9 @@ const Location = observer(() => {
       }
 
       setGreetings(getRandomGreeting(game.player.turn));
-      setIsLastDay(game.player.turn === gameInfos.max_turns);
+      setIsLastDay(game.player.turn === gameConfig.max_turns);
     }
-  }, [location, game, router, gameId, gameInfos, gameInfos?.max_turns]);
+  }, [location, game, router, gameId, gameConfig?.max_turns]);
 
   useEffect(() => {
     if (game && game.markets.marketsByLocation && location) {

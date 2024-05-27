@@ -55,7 +55,7 @@ const renderer = ({
   }
 };
 
-export const Leaderboard = observer(({ config }: { config: Config }) => {
+export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
   const { uiStore } = useDojoContext();
@@ -95,7 +95,7 @@ export const Leaderboard = observer(({ config }: { config: Config }) => {
     router.push(`/season/${version}`);
   };
 
-  if (!registeredGames || !season) {
+  if (!config || !registeredGames || !season) {
     return <></>;
   }
 

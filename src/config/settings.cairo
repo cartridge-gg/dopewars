@@ -95,10 +95,10 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
             max_rounds: 3,
             //
             rep_drug_step: 20,
-            rep_buy_item: 1,
+            rep_buy_item: 2,
             rep_carry_drugs: 2,
-            rep_hospitalized: 3,
-            rep_jailed: 4,
+            rep_hospitalized: 4,
+            rep_jailed: 6,
         }
     }
 
@@ -157,8 +157,6 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
             WantedMode::MostWanted => { 6 },
         }
     }
-
-
 }
 
 

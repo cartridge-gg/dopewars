@@ -11,7 +11,6 @@
       "ERC20AllowanceModel",
       "ERC20BalanceModel",
       "ERC20MetadataModel",
-      "EncounterConfig",
       "EncounterStatsConfig",
       "Game",
       "GameConfig",

@@ -74,7 +74,7 @@ const RegisterEntities = observer(() => {
 
       case WorldEvents.HighVolatility:
         const volatilityEvent = last.parsed as HighVolatilityData;
-        displayHighVolatility(volatilityEvent, toaster, game);
+        displayHighVolatility(volatilityEvent, toaster, game!);
         break;
 
       default:

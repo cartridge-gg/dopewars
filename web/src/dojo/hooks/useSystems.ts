@@ -1,4 +1,4 @@
-import { DrugConfig, EncounterConfig, GameConfig, RyoConfig } from "@/generated/graphql";
+import { DrugConfig, RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
@@ -33,8 +33,7 @@ export interface SystemsInterface {
   
   // config
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
-  updateEncounterConfig: (encounterConfig: EncounterConfig) => Promise<SystemExecuteResult>;
-
+  
   // laundromat
   registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
   claim: (playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
@@ -444,20 +443,7 @@ export const useSystems = (): SystemsInterface => {
   //
   //
 
-  const updateEncounterConfig = useCallback(
-    async (encounterConfig: EncounterConfig) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::config::config::config",
-        entrypoint: "update_encounter_config",
-        calldata: [encounterConfig],
-      });
 
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
 
   //
   //
@@ -521,7 +507,6 @@ export const useSystems = (): SystemsInterface => {
     updateRyoConfig,
     //
     updateDrugConfig,
-    updateEncounterConfig,
     //
     failingTx,
     createFakeGame,
