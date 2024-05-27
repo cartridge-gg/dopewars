@@ -17,9 +17,9 @@ import {
   reputationRanksKeys,
 } from "@/dojo/helpers";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { EncounterConfigFull } from "@/dojo/stores/config";
+
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
-import { EncounterConfig } from "@/generated/graphql";
+
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { getSentence } from "@/responses";

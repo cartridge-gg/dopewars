@@ -15,8 +15,8 @@ export class EncountersClass extends GamePropertyClass {
     copsLevel: number;
     gangLevel: number;
 
-    constructor(configStore: ConfigStoreClass, game: GameClass, packed: bigint) {
-        super(configStore, game, packed);
+    constructor(game: GameClass, packed: bigint) {
+        super(game, packed);
 
         this.copsLevel = Number(Bits.extract(this.packed, BigInt(EncounterSlot.Cops) * this.bitsSize, this.bitsSize));
         this.gangLevel = Number(Bits.extract(this.packed, BigInt(EncounterSlot.Gangs) * this.bitsSize, this.bitsSize));

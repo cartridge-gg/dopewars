@@ -3,8 +3,6 @@ import {
   ConfigQuery,
   DrugConfig,
   DrugConfigEdge,
-  EncounterConfig,
-  EncounterConfigEdge,
   EncounterStatsConfig,
   EncounterStatsConfigEdge,
   GameConfig,
@@ -60,10 +58,6 @@ export type HustlerItemConfigFull = HustlerItemConfig & {
 
 export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
   icon: React.FC;
-};
-
-export type EncounterConfigFull = EncounterConfig & {
-  image?: string;
 };
 
 export type HustlerConfig = {

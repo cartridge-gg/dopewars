@@ -234,10 +234,9 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
             defense: encounter_stats.defense_base + level * encounter_stats.defense_step,
             speed: encounter_stats.speed_base + level * encounter_stats.speed_step,
             //
-            rep_pay: level, // reputation modifier for paying NEGATIVE
-            rep_run: level
-                / 2, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
-            rep_fight: level, // reputation modifier for fighting
+            rep_pay: (level * 3) * 2, // reputation modifier for paying NEGATIVE
+            rep_run: level * 2, // reputation modifier for running POSITIVE(success)
+            rep_fight: level * 3, // reputation modifier for fighting
         };
 
         encounter
@@ -287,7 +286,8 @@ impl EncounterImpl of EncounterTrait {
     }
 
     fn get_payout(self: EncounterConfig, ref game_store: GameStore) -> u32 {
-        (self.level.into() * self.level.into() * 3_000) + (game_store.player.turn.into() * 1_000)
+        let turn_modifer = game_store.player.turn / 5;
+        (self.level.into() * 3 + (turn_modifer.into() * turn_modifer.into())) * 1_000
     }
 }
 

@@ -82,7 +82,7 @@ export default function SeasonIndex() {
     refetchRegisteredGames();
   }, [refetchRegisteredGames]);
 
-  if (!season || !seasonSettings) return null;
+  if (!season || !seasonSettings ) return null;
 
   return (
     <Layout
@@ -113,7 +113,7 @@ const SeasonLeftPanel = ({
 }: {
   seasonId?: number;
   seasonSettings: SeasonSettings;
-  sortedList: SortedList;
+  sortedList?: SortedList;
 }) => {
   return (
     <VStack
@@ -158,6 +158,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <PaperCashIcon />
                 </Td>
                 <Td>Initial Cash</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={cashModeColor[settings?.cash_mode as cashModeColorKeys]}>{settings?.cash_mode}</Td>
               </Tr>
               <Tr>
@@ -165,6 +167,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <Heart />
                 </Td>
                 <Td>Initial Health</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={healthModeColor[settings?.health_mode as healthModeColorKeys]}>{settings?.health_mode}</Td>
               </Tr>
               <Tr>
@@ -172,6 +176,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <Clock />
                 </Td>
                 <Td>Max Turns</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={turnsModeColor[settings?.turns_mode as turnsModeColorKeys]}>{settings?.turns_mode}</Td>
               </Tr>
               <Tr>
@@ -179,6 +185,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <Cigarette />
                 </Td>
                 <Td>Drugs</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys]}>{settings?.drugs_mode}</Td>
               </Tr>
               <Tr>
@@ -186,6 +194,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <GangIcon />
                 </Td>
                 <Td>Encounters</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={encountersModeColor[settings?.encounters_mode as encountersModeColorKeys]}>
                   {settings?.encounters_mode}
                 </Td>
@@ -195,6 +205,8 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <CopsIcon />
                 </Td>
                 <Td>Encounters Odds</Td>
+                {/* 
+// @ts-ignore */}
                 <Td color={encountersModeOddsColor[settings?.encounters_odds_mode as encountersModeOddsColorKeys]}>
                   {settings?.encounters_odds_mode}
                 </Td>
@@ -204,10 +216,9 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <Siren />
                 </Td>
                 <Td borderBottomColor="transparent">Wanted</Td>
-                <Td
-                  color={wantedModeColor[settings?.wanted_mode as wantedModeColorKeys]}
-                  borderBottomColor="transparent"
-                >
+                {/* 
+// @ts-ignore */}
+                <Td color={wantedModeColor[settings?.wanted_mode as wantedModeColorKeys]} borderBottomColor="transparent" >
                   {settings?.wanted_mode}
                 </Td>
               </Tr>

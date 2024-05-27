@@ -28,8 +28,7 @@ export const EncounterTable = observer(() => {
     configStore: { config },
   } = useDojoContext();
 
-  const { updateEncounterConfig } = useSystems();
-
+ 
   const [data, setData] = useState(config?.encounterStats || []);
 
   const table = useTable({
