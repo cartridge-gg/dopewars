@@ -791,8 +791,8 @@ packages:
     resolution: {integrity: sha512-+BIznRzyqBf+2wCTxcKE3wDjfGeCoVE61KSHGpkzqrLi8qxqFwBeUFyId2cxkTmm55fzDGnm0+yCxaxygrLUnQ==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/runtime@7.24.5':
-    resolution: {integrity: sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==}
+  '@babel/runtime@7.24.6':
+    resolution: {integrity: sha512-Ja18XcETdEl5mzzACGd+DKgaGJzPTCow7EglgwTmHdwokzDFYh/MHua6lU6DV/hjF2IaOJ4oX2nqnjG7RElKOw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.22.15':
@@ -1875,6 +1875,9 @@ packages:
 
   '@latticexyz/utils@2.0.0-next.12':
     resolution: {integrity: sha512-xJMFZs2thDsCB4pXB1b5xcSk5ur6e/GVpFYZuR4yeEFFvw7tRkXdduSEiI7vB60CN8ATyeKLnVXLZYo1Q2pT2A==}
+
+  '@latticexyz/utils@2.0.11':
+    resolution: {integrity: sha512-odm/y2+XFq4LOrb/AeJLH873I1xSe9bZ2gqFnDZOm90AV8xtF+8XURB7ezaL2nf/xk/MUOWlMrR7taQWEITx+Q==}
 
   '@next/bundle-analyzer@14.1.4':
     resolution: {integrity: sha512-IpF/18HcAOcfHRr24tqPOUpMmVKIqvkCxIubMeRYWCXs3jm7niPGrt8Mu74yMDzfGlUwgQA6Xd6BUc5+jQxcEg==}
@@ -6312,7 +6315,7 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  '@babel/runtime@7.24.5':
+  '@babel/runtime@7.24.6':
     dependencies:
       regenerator-runtime: 0.14.1
 
@@ -7097,7 +7100,7 @@ snapshots:
   '@dojoengine/utils@file:../../dojo-js/packages/utils(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)(zod@3.22.4)':
     dependencies:
       '@dojoengine/recs': 0.1.35(typescript@5.2.2)(zod@3.22.4)
-      '@latticexyz/utils': 2.0.0-next.12
+      '@latticexyz/utils': 2.0.11
       mathjs: 12.4.2
       micro-starknet: 0.2.3
       starknet: 6.2.0(encoding@0.1.13)
@@ -8113,6 +8116,12 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+
+  '@latticexyz/utils@2.0.11':
+    dependencies:
+      mobx: 6.12.0
+      proxy-deep: 3.1.1
+      rxjs: 7.5.5
 
   '@next/bundle-analyzer@14.1.4':
     dependencies:
@@ -10573,7 +10582,7 @@ snapshots:
 
   mathjs@12.4.2:
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.24.6
       complex.js: 2.1.1
       decimal.js: 10.4.3
       escape-latex: 1.2.0

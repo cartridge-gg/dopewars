@@ -20,7 +20,7 @@ import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
 
 export const ConnectModal = observer(() => {
   const { connect, connectors } = useConnect();
-  const { isRyoDotGame } = useRouterContext();
+  const { isAdmin } = useRouterContext();
 
   const {
     chains: { selectedChain },
@@ -59,7 +59,7 @@ export const ConnectModal = observer(() => {
                 return null;
               }
 
-              if (isRyoDotGame && isPredeployed) {
+              if (!isAdmin && isPredeployed) {
                 return null;
               }
 

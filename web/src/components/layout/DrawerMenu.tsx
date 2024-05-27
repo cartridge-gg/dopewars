@@ -38,7 +38,7 @@ import { shortString } from "starknet";
 import { Calendar } from "../icons/archive";
 
 const DrawerMenu = () => {
-  const { router, gameId, isRyoDotGame } = useRouterContext();
+  const { router, gameId, isAdmin } = useRouterContext();
   const { game } = useGameStore();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -158,25 +158,27 @@ const DrawerMenu = () => {
 
                   {/* DEV */}
 
-                  <DrawerListItem cursor="default" color="neon.500">
-                    <Text> ADMIN </Text>
-                  </DrawerListItem>
-
-                  <DrawerListItem
-                    onClick={() => {
-                      router.push("/devtools");
-                    }}
-                  >
-                    <Cigarette mr={2} /> DEVTOOLS
-                  </DrawerListItem>
-
-                  <DrawerListItem
-                    onClick={() => {
-                      router.push("/admin");
-                    }}
-                  >
-                    <Cigarette mr={2} /> ADMIN
-                  </DrawerListItem>
+                  {isAdmin && (
+                    <>
+                      <DrawerListItem cursor="default" color="neon.500">
+                        <Text> ADMIN </Text>
+                      </DrawerListItem>
+                      <DrawerListItem
+                        onClick={() => {
+                          router.push("/admin");
+                        }}
+                      >
+                        <Cigarette mr={2} /> ADMIN
+                      </DrawerListItem>
+                      <DrawerListItem
+                        onClick={() => {
+                          router.push("/devtools");
+                        }}
+                      >
+                        <Cigarette mr={2} /> DEVTOOLS
+                      </DrawerListItem>
+                    </>
+                  )}
                 </UnorderedList>
               </VStack>
 
