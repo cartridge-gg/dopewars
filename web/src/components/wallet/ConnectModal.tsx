@@ -1,5 +1,5 @@
 import { ExternalLink, /* KatanaIcon */ } from "@/components/icons";
-import { useDojoContext, /* useRouterContext */ } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import {
   Box,
   Button,
@@ -59,7 +59,7 @@ export const ConnectModal = observer(() => {
               //   return null;
               // }
 
-              if (!isAdmin && isPredeployed) {
+              if (!isAdmin /* && isPredeployed */) {
                 return null;
               }
 
@@ -80,11 +80,11 @@ export const ConnectModal = observer(() => {
                   >
                     <HStack w="full" alignItems="center" justifyContent="center" gap={3}>
                       <HStack>
-                        {isBurner || isPredeployed ? (
+                        {/* {isBurner || isPredeployed ? (
                           <KatanaIcon />
-                        ) : (
-                          <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
-                        )}
+                        ) : ( */}
+                        <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                        {/* )} */}
 
                         <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
                         {!connector.available() && <ExternalLink ml="auto" />}

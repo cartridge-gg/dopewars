@@ -16,6 +16,7 @@ import {
 import { ReactNode, useState } from "react";
 import CartridgeConnector from "@cartridge/connector"
 import colors from "@/theme/colors";
+import { RpcProvider } from "starknet";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -63,21 +64,29 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
+const actionContractAddr = process.env.ACTION_CONTRACT_ADDRESS as string;
+
 const cartridgeConnector = new CartridgeConnector(
   [
-    // TODO: Set Policies
-    // {
-    //   target: "0x...",
-    //   method: "todo",
-    // },
+    {
+      target: actionContractAddr,
+      method: "create_game"
+    },
+    {
+      target: actionContractAddr,
+      method: "end_game"
+    },
+    {
+      target: actionContractAddr,
+      method: "travel"
+    },
+    {
+      target: actionContractAddr,
+      method: "decide"
+    }
   ],
   {
     url: "https://x.cartridge.gg",
-    theme: {
-      colors: {
-        // e.g. button bg
-        primary: colors.neon["200"] as string,
-      }
-    },
+    theme: "rollyourown",
   }
 ) as unknown as InjectedConnector
