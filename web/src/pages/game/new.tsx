@@ -231,7 +231,7 @@ const New = observer(() => {
             />
           </HStack>
 
-          {/*!isRyoDotGame &&*/ !isMobile && season.paper_fee > 0 && (
+          {/*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
             <Card p={3}>
               <HStack gap={6} fontSize="14px">
                 <VStack gap={0} alignItems="flex-start" minW="240px">

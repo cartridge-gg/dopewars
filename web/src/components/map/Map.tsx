@@ -2,7 +2,7 @@ import { useConfigStore, useGameStore } from "@/dojo/hooks";
 import { Locations } from "@/dojo/types";
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useAnimate } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HitBox } from "./HitBox";
 import { Outline } from "./Outline";
 import { WantedMarkers } from "./WantedMarkers";
@@ -44,9 +44,14 @@ export const Map = ({
 }) => {
   const [scope, animate] = useAnimate();
   const isMobile = useBreakpointValue([true, false]);
+  const [isFirstTurn, setIsFirstTurn] = useState(false);
 
   const { game } = useGameStore();
   const configStore = useConfigStore();
+
+  useEffect(() => {
+    setIsFirstTurn(game?.player.turn === 0);
+  }, []);
 
   useEffect(() => {
     if (targetId !== undefined) {
@@ -95,6 +100,7 @@ export const Map = ({
           wantedCurrent={
             current ? game.wanted.wantedByLocation.get(configStore.getLocationById(current)?.location) || 0 : 0
           }
+          isFirstTurn={isFirstTurn}
         />
       )}
       <HitBox onSelect={onSelect} />

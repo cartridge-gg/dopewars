@@ -24,11 +24,13 @@ export const Outline = ({
   current,
   wantedTarget,
   wantedCurrent,
+  isFirstTurn,
 }: {
   targetId?: Locations;
   current?: Locations;
   wantedTarget: number;
   wantedCurrent: number;
+  isFirstTurn: boolean;
 }) => {
   if (targetId === undefined) {
     return <></>;
@@ -44,7 +46,7 @@ export const Outline = ({
 
   const fillColorTarget = wantedTarget > 68 ? colors.red : colors.neon[400];
   const fillColorPath = wantedTarget > 68 ? colors.red : colors.yellow[400];
-  
+
   return (
     <>
       <Global
@@ -75,16 +77,25 @@ export const Outline = ({
         <SvgHighlight location={current} fill={colors.yellow[400] as string} />
       </ChakraBox>
 
-      <Icon position="absolute" w="100%" h="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d={getPath(current!, targetId!)}
-          stroke={fillColorPath as string}
-          strokeWidth={0.5}
-          strokeDasharray={"2, 1"}
-          fill="transparent"
-          className="dashAnim"
-        />
-      </Icon>
+      {!isFirstTurn && (
+        <Icon
+          position="absolute"
+          w="100%"
+          h="100%"
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d={getPath(current!, targetId!)}
+            stroke={fillColorPath as string}
+            strokeWidth={0.5}
+            strokeDasharray={"2, 1"}
+            fill="transparent"
+            className="dashAnim"
+          />
+        </Icon>
+      )}
 
       <ChakraBox
         zIndex={9}

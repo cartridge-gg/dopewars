@@ -56,7 +56,7 @@ const DrawerMenu = () => {
         <DrawerContent minW="340px">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
             <Heading color="neon.500" fontWeight="normal">
-              <PaperIcon width="28px" height="28px" /> Roll Your Own
+              <PaperIcon width="28px" height="28px" /> 
             </Heading>
           </DrawerHeader>
           <Close position="absolute" right="16px" top="16px" cursor="pointer" onClick={onClose} />

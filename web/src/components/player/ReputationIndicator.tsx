@@ -14,20 +14,14 @@ const getColor = (rep: number, step: number): string => {
 
 export const ReputationIndicator = ({ reputation, ...props }: { reputation: number } & StyleProps) => {
   return (
-    <Tooltip
-      title={`Reputation: ${reputation}`}
-      text={`Your actions influence your reputation. Do the right things...`}
-      color="yellow.400"
-    >
-      <Card h="40px" px="6px" justify="center" alignItems="center">
-        <HStack>
-          <DynamicReputation value={getRep(reputation, 0)} max={20} color={getColor(reputation, 0)} />
-          <DynamicReputation value={getRep(reputation, 1)} max={20} color={getColor(reputation, 1)} />
-          <DynamicReputation value={getRep(reputation, 2)} max={20} color={getColor(reputation, 2)} />
-          <DynamicReputation value={getRep(reputation, 3)} max={20} color={getColor(reputation, 3)} />
-          <DynamicReputation value={getRep(reputation, 4)} max={20} color={getColor(reputation, 4)} />
-        </HStack>
-      </Card>
-    </Tooltip>
+    <Card h="40px" px="6px" justify="center" alignItems="center">
+      <HStack>
+        <DynamicReputation value={getRep(reputation, 0)} max={20} color={getColor(reputation, 0)} />
+        <DynamicReputation value={getRep(reputation, 1)} max={20} color={getColor(reputation, 1)} />
+        <DynamicReputation value={getRep(reputation, 2)} max={20} color={getColor(reputation, 2)} />
+        <DynamicReputation value={getRep(reputation, 3)} max={20} color={getColor(reputation, 3)} />
+        <DynamicReputation value={getRep(reputation, 4)} max={20} color={getColor(reputation, 4)} />
+      </HStack>
+    </Card>
   );
 };

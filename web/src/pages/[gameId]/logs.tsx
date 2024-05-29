@@ -204,9 +204,9 @@ const CustomLeftPanel = () => {
       marginBottom={["30px", "50px"]}
       gap={0}
     >
-      <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
+      {/* <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
         {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
-      </Text>
+      </Text> */}
       <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name || "")}
       </Heading>
