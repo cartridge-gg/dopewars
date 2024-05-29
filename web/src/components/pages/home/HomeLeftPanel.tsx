@@ -105,11 +105,11 @@ export const HomeLeftPanel = () => {
         }}
       >
         <VStack zIndex="2">
-          <Text textStyle="subheading" fontSize="11px">
+          {/* <Text textStyle="subheading" fontSize="11px">
             DOPE WARS
-          </Text>
+          </Text> */}
           <Heading fontSize={["30px", "48px"]} fontWeight="normal">
-            Roll your Own
+            Dope Wars
           </Heading>
         </VStack>
 

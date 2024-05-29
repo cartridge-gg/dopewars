@@ -1,41 +1,44 @@
 import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { IsMobile } from "@/utils/ui";
+
 import {
-  Button,
-  Card,
-  Divider,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   HStack,
   Heading,
-  ListIcon,
   ListItem,
   ListItemProps,
   StyleProps,
   Text,
   UnorderedList,
   VStack,
+  keyframes,
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
 import { Cigarette, Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
+import { Calendar } from "../icons/archive";
 import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
 import { Burners } from "../wallet/Burners";
 import { Predeployed } from "../wallet/Predeployed";
-import { OnGoingGames } from "../pages/home/OnGoingGames";
-import { ProfileLink, ProfileLinkDrawer } from "../pages/profile/Profile";
+
+import { ProfileLinkDrawer } from "../pages/profile/Profile";
 import { useAccount } from "@starknet-react/core";
-import { HustlerStats } from "../pages/profile/HustlerStats";
-import { BuiltBy } from "../pages/home";
-import { HustlerIcon, Hustlers } from "../hustlers";
-import { shortString } from "starknet";
-import { Calendar } from "../icons/archive";
+
+import colors from "@/theme/colors";
+
+const slideAnim = keyframes`  
+  0% {transform: translateX(0); color: ${colors.neon["500"]};}
+  70% {transform: translateX(-90%); color: ${colors.neon["500"]};}
+  85% {transform: translateX(-72%); color: ${colors.yellow["500"]};}
+  86% {transform: translateX(-72%); color: ${colors.neon["500"]};}
+  95% {transform: translateX(-80%); color: ${colors.neon["500"]};}
+  100% {transform: translateX(-75%); ; color: ${colors.neon["400"]};}
+`;
 
 const DrawerMenu = () => {
   const { router, gameId, isAdmin } = useRouterContext();
@@ -55,8 +58,16 @@ const DrawerMenu = () => {
         <DrawerOverlay onClick={onClose} />
         <DrawerContent minW="340px">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
-            <Heading color="neon.500" fontWeight="normal">
-              <PaperIcon width="28px" height="28px" /> 
+            <Heading
+              color="neon.500"
+              fontWeight="normal"
+              // textAlign="center"
+              position="relative"
+              left="120%"
+              animation={`${slideAnim} .8s ease-out 0.3s 1 normal forwards`}
+              willChange="transform"
+            >
+              <PaperIcon width="28px" height="28px" />
             </Heading>
           </DrawerHeader>
           <Close position="absolute" right="16px" top="16px" cursor="pointer" onClick={onClose} />

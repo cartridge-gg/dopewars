@@ -75,7 +75,7 @@ keystore_path = "/Users/boo/sozo_acc"
 # private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
 
 [tool.dojo.world]
-name = "Roll Your Own"
+name = "Dope Wars"
 description = "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
 website = "https://rollyourown.preview.cartridge.gg/"
 icon_uri = "file://assets/icon.png"

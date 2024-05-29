@@ -1,13 +1,13 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
 const metas = {
-  title: "RollYourOwn",
+  title: "Dope Wars",
   descritpion:
     "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end.",
   image: {
-    url: "/images/play-ryo.png",
+    url: "/images/play-dope-wars.png",
     width: "1200",
-    height: "638",
+    height: "648",
   },
 };
 

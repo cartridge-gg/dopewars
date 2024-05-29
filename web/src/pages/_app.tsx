@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Fonts />
           <GlobalStyles />
           <NextHead>
-            <title>Roll your Own</title>
+            <title>Dope Wars</title>
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"

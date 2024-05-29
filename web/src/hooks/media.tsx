@@ -174,8 +174,8 @@ const updateMetadata = () => {
 
   if ("mediaSession" in navigator && currentMedia) {
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: currentMedia.name || "Roll your own",
-      artist: "Roll your own",
+      title: currentMedia.name || "Dope Wars",
+      artist: "Dope Wars",
       artwork: [
         { src: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
         { src: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
