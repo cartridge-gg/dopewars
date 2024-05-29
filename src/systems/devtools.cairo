@@ -52,6 +52,8 @@ mod devtools {
                 randomizer.between::<u32>(0, 100_000)
             };
 
+            let rand_hustler_id = randomizer.between::<u16>(0, 3);
+
             let mut game = Game {
                 game_id,
                 player_id,
@@ -60,7 +62,7 @@ mod devtools {
                 game_mode: GameMode::Dealer,
                 //
                 player_name: Bytes16Impl::from('fake'),
-                hustler_id: 1,
+                hustler_id: rand_hustler_id,
                 //
                 game_over: true,
                 final_score: 0,

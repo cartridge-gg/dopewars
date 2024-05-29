@@ -17,7 +17,7 @@ export default function SeasonIndex() {
   return (
     <Layout
       leftPanelProps={{
-        prefixTitle: "RYO",
+        prefixTitle: "Dope Wars",
         title: `Seasons`,
         imageSrc: "/images/landing/main.png",
       }}

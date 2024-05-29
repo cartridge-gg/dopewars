@@ -2402,6 +2402,22 @@ export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
 
 export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'DrugConfig' } | { __typename: 'ERC20AllowanceModel' } | { __typename: 'ERC20BalanceModel' } | { __typename: 'ERC20MetadataModel' } | { __typename: 'EncounterStatsConfig' } | { __typename: 'Game' } | { __typename: 'GameConfig' } | { __typename: 'GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'HustlerItemBaseConfig' } | { __typename: 'HustlerItemTiersConfig' } | { __typename: 'InitializableModel' } | { __typename: 'LocationConfig' } | { __typename: 'RyoAddress' } | { __typename: 'RyoConfig' } | { __typename: 'Season' } | { __typename: 'SeasonSettings' } | { __typename: 'SortedList' } | { __typename: 'SortedListItem' } | null> | null } };
 
+export type TravelEncounterByPlayerQueryVariables = Exact<{
+  travelEncounterSelector?: InputMaybe<Scalars['String']>;
+  playerId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type TravelEncounterByPlayerQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null } | null } | null> | null } | null };
+
+export type TravelEncounterResultsByPlayerQueryVariables = Exact<{
+  travelEncounterResultSelector?: InputMaybe<Scalars['String']>;
+  playerId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type TravelEncounterResultsByPlayerQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null } | null } | null> | null } | null };
+
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
   listId?: InputMaybe<Scalars['felt252']>;
@@ -2991,6 +3007,100 @@ export const GameStorePackedSubscriptionDocument = `
   }
 }
     `;
+export const TravelEncounterByPlayerDocument = `
+    query TravelEncounterByPlayer($travelEncounterSelector: String, $playerId: String) {
+  events(limit: 99999, keys: [$travelEncounterSelector, "*", $playerId]) {
+    edges {
+      node {
+        id
+        keys
+        data
+      }
+    }
+  }
+}
+    `;
+export const useTravelEncounterByPlayerQuery = <
+      TData = TravelEncounterByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TravelEncounterByPlayerQueryVariables,
+      options?: UseQueryOptions<TravelEncounterByPlayerQuery, TError, TData>
+    ) =>
+    useQuery<TravelEncounterByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TravelEncounterByPlayer'] : ['TravelEncounterByPlayer', variables],
+      useFetchData<TravelEncounterByPlayerQuery, TravelEncounterByPlayerQueryVariables>(TravelEncounterByPlayerDocument).bind(null, variables),
+      options
+    );
+
+useTravelEncounterByPlayerQuery.getKey = (variables?: TravelEncounterByPlayerQueryVariables) => variables === undefined ? ['TravelEncounterByPlayer'] : ['TravelEncounterByPlayer', variables];
+;
+
+export const useInfiniteTravelEncounterByPlayerQuery = <
+      TData = TravelEncounterByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TravelEncounterByPlayerQueryVariables,
+      options?: UseInfiniteQueryOptions<TravelEncounterByPlayerQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<TravelEncounterByPlayerQuery, TravelEncounterByPlayerQueryVariables>(TravelEncounterByPlayerDocument)
+    return useInfiniteQuery<TravelEncounterByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TravelEncounterByPlayer.infinite'] : ['TravelEncounterByPlayer.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteTravelEncounterByPlayerQuery.getKey = (variables?: TravelEncounterByPlayerQueryVariables) => variables === undefined ? ['TravelEncounterByPlayer.infinite'] : ['TravelEncounterByPlayer.infinite', variables];
+;
+
+export const TravelEncounterResultsByPlayerDocument = `
+    query TravelEncounterResultsByPlayer($travelEncounterResultSelector: String, $playerId: String) {
+  events(limit: 99999, keys: [$travelEncounterResultSelector, "*", $playerId]) {
+    edges {
+      node {
+        id
+        keys
+        data
+      }
+    }
+  }
+}
+    `;
+export const useTravelEncounterResultsByPlayerQuery = <
+      TData = TravelEncounterResultsByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TravelEncounterResultsByPlayerQueryVariables,
+      options?: UseQueryOptions<TravelEncounterResultsByPlayerQuery, TError, TData>
+    ) =>
+    useQuery<TravelEncounterResultsByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TravelEncounterResultsByPlayer'] : ['TravelEncounterResultsByPlayer', variables],
+      useFetchData<TravelEncounterResultsByPlayerQuery, TravelEncounterResultsByPlayerQueryVariables>(TravelEncounterResultsByPlayerDocument).bind(null, variables),
+      options
+    );
+
+useTravelEncounterResultsByPlayerQuery.getKey = (variables?: TravelEncounterResultsByPlayerQueryVariables) => variables === undefined ? ['TravelEncounterResultsByPlayer'] : ['TravelEncounterResultsByPlayer', variables];
+;
+
+export const useInfiniteTravelEncounterResultsByPlayerQuery = <
+      TData = TravelEncounterResultsByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TravelEncounterResultsByPlayerQueryVariables,
+      options?: UseInfiniteQueryOptions<TravelEncounterResultsByPlayerQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<TravelEncounterResultsByPlayerQuery, TravelEncounterResultsByPlayerQueryVariables>(TravelEncounterResultsByPlayerDocument)
+    return useInfiniteQuery<TravelEncounterResultsByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TravelEncounterResultsByPlayer.infinite'] : ['TravelEncounterResultsByPlayer.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteTravelEncounterResultsByPlayerQuery.getKey = (variables?: TravelEncounterResultsByPlayerQueryVariables) => variables === undefined ? ['TravelEncounterResultsByPlayer.infinite'] : ['TravelEncounterResultsByPlayer.infinite', variables];
+;
+
 export const SeasonByVersionDocument = `
     query SeasonByVersion($version: u16, $listId: felt252) {
   seasonModels(where: {version: $version}) {
