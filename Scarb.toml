@@ -74,6 +74,10 @@ keystore_path = "/Users/boo/sozo_acc"
 # account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
 # private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
 
+
+
+[[target.dojo]]
+
 [tool.dojo.world]
 name = "Dope Wars"
 description = "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
@@ -82,8 +86,6 @@ icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"
 socials.x = "https://x.com/TheDopeWars"
 
-
-[[target.dojo]]
 build-external-contracts = [
     "token::components::security::initializable::initializable_model",
     "token::components::token::erc20::erc20_metadata::erc_20_metadata_model",

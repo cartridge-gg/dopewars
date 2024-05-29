@@ -33,11 +33,11 @@ import colors from "@/theme/colors";
 
 const slideAnim = keyframes`  
   0% {transform: translateX(0); color: ${colors.neon["500"]};}
-  70% {transform: translateX(-90%); color: ${colors.neon["500"]};}
-  85% {transform: translateX(-72%); color: ${colors.yellow["500"]};}
-  86% {transform: translateX(-72%); color: ${colors.neon["500"]};}
-  95% {transform: translateX(-80%); color: ${colors.neon["500"]};}
-  100% {transform: translateX(-75%); ; color: ${colors.neon["400"]};}
+  70% {transform: translateX(-125%); color: ${colors.neon["500"]};}
+  85% {transform: translateX(-97%); color: ${colors.yellow["500"]};}
+  86% {transform: translateX(-97%); color: ${colors.neon["500"]};}
+  95% {transform: translateX(-105%); color: ${colors.neon["500"]};}
+  100% {transform: translateX(-100%); ; color: ${colors.neon["400"]};}
 `;
 
 const DrawerMenu = () => {
@@ -63,7 +63,7 @@ const DrawerMenu = () => {
               fontWeight="normal"
               // textAlign="center"
               position="relative"
-              left="120%"
+              left="100%"
               animation={`${slideAnim} .8s ease-out 0.3s 1 normal forwards`}
               willChange="transform"
             >
@@ -152,13 +152,15 @@ const DrawerMenu = () => {
                       <Home mr={2} /> HOME
                     </DrawerListItem>
                   )}
-                  <DrawerListItem
-                    onClick={() => {
-                      router.push("/game/history");
-                    }}
-                  >
-                    <Clock mr={2} /> HISTORY
-                  </DrawerListItem>
+                  {account && (
+                    <DrawerListItem
+                      onClick={() => {
+                        router.push("/game/history");
+                      }}
+                    >
+                      <Clock mr={2} /> HISTORY
+                    </DrawerListItem>
+                  )}
                   <DrawerListItem
                     onClick={() => {
                       router.push("/season");

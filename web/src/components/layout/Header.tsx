@@ -27,7 +27,7 @@ export const Header = observer(() => {
   const { uiStore} = useDojoContext()
   const { game, gameConfig } = useGameStore();
   const { config } = useConfigStore();
-
+  
   useEffect(() => {
     const init = async () => {
       await initSoundStore();
@@ -86,7 +86,7 @@ export const Header = observer(() => {
               <HStack>
                 <CashIndicator cash={formatCashHeader(game.player.cash)} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
-                <HealthIndicator health={game.player.health} maxHealth={100} />
+                <HealthIndicator health={game.player.health} maxHealth={gameConfig?.health} />
                 <Divider orientation="vertical" borderColor="neon.600" h="12px" />
                 <DayIndicator day={game.player.turn} max={gameConfig?.max_turns} />
               </HStack>
