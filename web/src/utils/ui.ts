@@ -235,6 +235,13 @@ export function formatCashHeader(cash: number): string {
       maximumFractionDigits: 1,
     }).format(cash / 1_000_000)}M`;
   }
+  else if (cash < 1_000_000_000_000) {
+    return `${Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 1,
+    }).format(cash / 1_000_000_000)}B`;
+  }
   return "ElonMusk"
 
 }

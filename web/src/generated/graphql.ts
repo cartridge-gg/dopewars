@@ -2418,6 +2418,14 @@ export type TravelEncounterResultsByPlayerQueryVariables = Exact<{
 
 export type TravelEncounterResultsByPlayerQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null } | null } | null> | null } | null };
 
+export type TradedDrugByPlayerQueryVariables = Exact<{
+  tradeDrugSelector?: InputMaybe<Scalars['String']>;
+  playerId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type TradedDrugByPlayerQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null } | null } | null> | null } | null };
+
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
   listId?: InputMaybe<Scalars['felt252']>;
@@ -3099,6 +3107,53 @@ export const useInfiniteTravelEncounterResultsByPlayerQuery = <
 
 
 useInfiniteTravelEncounterResultsByPlayerQuery.getKey = (variables?: TravelEncounterResultsByPlayerQueryVariables) => variables === undefined ? ['TravelEncounterResultsByPlayer.infinite'] : ['TravelEncounterResultsByPlayer.infinite', variables];
+;
+
+export const TradedDrugByPlayerDocument = `
+    query TradedDrugByPlayer($tradeDrugSelector: String, $playerId: String) {
+  events(keys: [$tradeDrugSelector, "*", $playerId]) {
+    edges {
+      node {
+        id
+        keys
+        data
+      }
+    }
+  }
+}
+    `;
+export const useTradedDrugByPlayerQuery = <
+      TData = TradedDrugByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TradedDrugByPlayerQueryVariables,
+      options?: UseQueryOptions<TradedDrugByPlayerQuery, TError, TData>
+    ) =>
+    useQuery<TradedDrugByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TradedDrugByPlayer'] : ['TradedDrugByPlayer', variables],
+      useFetchData<TradedDrugByPlayerQuery, TradedDrugByPlayerQueryVariables>(TradedDrugByPlayerDocument).bind(null, variables),
+      options
+    );
+
+useTradedDrugByPlayerQuery.getKey = (variables?: TradedDrugByPlayerQueryVariables) => variables === undefined ? ['TradedDrugByPlayer'] : ['TradedDrugByPlayer', variables];
+;
+
+export const useInfiniteTradedDrugByPlayerQuery = <
+      TData = TradedDrugByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: TradedDrugByPlayerQueryVariables,
+      options?: UseInfiniteQueryOptions<TradedDrugByPlayerQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<TradedDrugByPlayerQuery, TradedDrugByPlayerQueryVariables>(TradedDrugByPlayerDocument)
+    return useInfiniteQuery<TradedDrugByPlayerQuery, TError, TData>(
+      variables === undefined ? ['TradedDrugByPlayer.infinite'] : ['TradedDrugByPlayer.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteTradedDrugByPlayerQuery.getKey = (variables?: TradedDrugByPlayerQueryVariables) => variables === undefined ? ['TradedDrugByPlayer.infinite'] : ['TradedDrugByPlayer.infinite', variables];
 ;
 
 export const SeasonByVersionDocument = `

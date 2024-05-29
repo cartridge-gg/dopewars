@@ -11,11 +11,15 @@ import {
   PaperIcon,
   Trophy,
 } from "@/components/icons";
+import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 import { AK47, Uzi } from "@/components/icons/items";
+import { Reputation } from "@/components/icons/items/Reputation";
 import { Layout } from "@/components/layout";
+import { ReputationIndicator } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
+import { Drugs } from "@/dojo/types";
 import colors from "@/theme/colors";
 
 import { formatCashHeader } from "@/utils/ui";
@@ -42,6 +46,7 @@ import {
   CardBody,
   Box,
   Flex,
+  Divider,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 
@@ -188,39 +193,72 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
 
       <Box boxSize="full" mt={["0", "30px"]}>
         <VStack gap={6}>
-          <HStack gap="40px">
-            <VStack>
-              <Hustler
-                hustler={Hustlers.Dragon}
-                w="50px"
-                h={playerStats?.mostPlayedHustler[Hustlers.Dragon] ? "125px" : "100px"}
-              />
-              <Text>{playerStats?.gamesByHustler[Hustlers.Dragon]}</Text>
-            </VStack>
+          <Tabs variant="unstyled" w="full">
+            <TabList pb={6}>
+              <Tab>HUSTLERS</Tab>
+              <Tab>GENERAL</Tab>
+              <Tab>ENCOUNTERS</Tab>
+              <Tab>DRUGS</Tab>
+            </TabList>
 
-            <VStack>
-              <Hustler
-                hustler={Hustlers.Monkey}
-                w="50px"
-                h={playerStats?.mostPlayedHustler[Hustlers.Monkey] ? "125px" : "100px"}
-              />
-              <Text>{playerStats?.gamesByHustler[Hustlers.Monkey]}</Text>
-            </VStack>
+            <TabPanels mt={0} /*maxH={["100%", "calc(100vh - 580px)"]} overflowY="scroll"*/>
+              <TabPanel p={0}>
+                <VStack w="full" alignItems="center" gap={3}>
+                  <HStack justify="center" alignItems="center">
+                    <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1} color="yellow.500">
+                      REPUTATION: {Math.floor(playerStats?.averageReputation || 0)}
+                    </Text>
+                  </HStack>
 
-            <VStack>
-              <Hustler
-                hustler={Hustlers.Rabbit}
-                w="50px"
-                h={playerStats?.mostPlayedHustler[Hustlers.Rabbit] ? "125px" : "100px"}
-              />
-              <Text>{playerStats?.gamesByHustler[Hustlers.Rabbit]}</Text>
-            </VStack>
-          </HStack>
+                  <ReputationIndicator reputation={playerStats?.averageReputation || 0} />
+                  <HStack gap="40px" mt={2}>
+                    <VStack>
+                      <Hustler
+                        hustler={Hustlers.Dragon}
+                        w="50px"
+                        h={playerStats?.mostPlayedHustler[Hustlers.Dragon] ? "150px" : "120px"}
+                      />
+                      <Text>{playerStats?.gamesByHustler[Hustlers.Dragon]}</Text>
+                    </VStack>
 
-          <Flex direction={["column", "row"]} gap={3}>
-            <PlayerStatsTable playerStats={playerStats} />
-            <PlayerStatsTable2 playerStats={playerStats} />
-          </Flex>
+                    <VStack>
+                      <Hustler
+                        hustler={Hustlers.Monkey}
+                        w="50px"
+                        h={playerStats?.mostPlayedHustler[Hustlers.Monkey] ? "150px" : "120px"}
+                      />
+                      <Text>{playerStats?.gamesByHustler[Hustlers.Monkey]}</Text>
+                    </VStack>
+
+                    <VStack>
+                      <Hustler
+                        hustler={Hustlers.Rabbit}
+                        w="50px"
+                        h={playerStats?.mostPlayedHustler[Hustlers.Rabbit] ? "150px" : "120px"}
+                      />
+                      <Text>{playerStats?.gamesByHustler[Hustlers.Rabbit]}</Text>
+                    </VStack>
+                  </HStack>
+                </VStack>
+              </TabPanel>
+
+              <TabPanel p={0}>
+                <VStack w="full" alignItems="center">
+                  <PlayerStatsTable playerStats={playerStats} />
+                </VStack>
+              </TabPanel>
+              <TabPanel p={0}>
+                <VStack w="full" alignItems="center">
+                  <PlayerStatsTable2 playerStats={playerStats} />
+                </VStack>
+              </TabPanel>
+              <TabPanel p={0}>
+                <VStack w="full" alignItems="center">
+                  <TradedDrugsTable playerStats={playerStats} />
+                </VStack>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </VStack>
       </Box>
     </VStack>
@@ -330,6 +368,80 @@ export const PlayerStatsTable2 = ({ playerStats }: { playerStats?: PlayerStats }
                   PAY
                 </Td>
                 <Td borderBottomColor="transparent">{playerStats?.totalPay}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </CardBody>
+    </Card>
+  );
+};
+
+export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats }) => {
+  return (
+    <Card>
+      <CardBody>
+        <TableContainer position="relative">
+          <Table size="sm">
+            <Tbody>
+              <Tr>
+                <Td w="30px">
+                  <Ludes width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">LUDES</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ludes] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Speed width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">SPEED</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Speed] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Weed width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">WEED</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Weed] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Shrooms width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">SHROOMS</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Shrooms] || 0)}</Td>
+              </Tr>
+
+              <Tr>
+                <Td w="30px">
+                  <Acid width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">ACID</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Acid] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Ketamine width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">KETAMINE</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ketamine] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px">
+                  <Heroin width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500">HEROIN</Td>
+                <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Heroin] || 0)}</Td>
+              </Tr>
+              <Tr>
+                <Td w="30px" borderBottomColor="transparent">
+                  <Cocaine width="24px" height="24px" />
+                </Td>
+                <Td w="80px" color="neon.500" borderBottomColor="transparent">COCAINE</Td>
+                <Td borderBottomColor="transparent">
+                  {formatCashHeader(playerStats?.tradedDrugs[Drugs.Cocaine] || 0)}
+                </Td>
               </Tr>
             </Tbody>
           </Table>

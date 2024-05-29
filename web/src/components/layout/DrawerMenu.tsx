@@ -33,10 +33,10 @@ import colors from "@/theme/colors";
 
 const slideAnim = keyframes`  
   0% {transform: translateX(0); color: ${colors.neon["500"]};}
-  70% {transform: translateX(-125%); color: ${colors.neon["500"]};}
-  85% {transform: translateX(-97%); color: ${colors.yellow["500"]};}
-  86% {transform: translateX(-97%); color: ${colors.neon["500"]};}
-  95% {transform: translateX(-105%); color: ${colors.neon["500"]};}
+  65% {transform: translateX(-125%); color: ${colors.neon["500"]};}
+  80% {transform: translateX(-97%); color: ${colors.yellow["500"]};}
+  82% {transform: translateX(-97%); color: ${colors.neon["500"]};}
+  92% {transform: translateX(-105%); color: ${colors.neon["500"]};}
   100% {transform: translateX(-100%); ; color: ${colors.neon["400"]};}
 `;
 
@@ -64,7 +64,7 @@ const DrawerMenu = () => {
               // textAlign="center"
               position="relative"
               left="100%"
-              animation={`${slideAnim} .8s ease-out 0.3s 1 normal forwards`}
+              animation={`${slideAnim} .6s ease-out 0.1s 1 normal forwards`}
               willChange="transform"
             >
               <PaperIcon width="28px" height="28px" />
