@@ -212,7 +212,7 @@ export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
 const getTradeTotal = (allTradedDrugByPlayer: TradedDrugByPlayerQuery, drug: Drugs) => {
   return (allTradedDrugByPlayer?.events?.edges || [])
     .map((i) => parseEvent(i?.node) as TradeDrugData)
-    .filter((i) => i.drugId === drug)
+    .filter((i) => i.drugId === drug && !i.isBuy)
     .map((i) => i.price * i.quantity)
     .reduce((p, c) => p + c, 0);
 };
