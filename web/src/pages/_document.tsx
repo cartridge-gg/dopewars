@@ -4,6 +4,7 @@ const metas = {
   title: "Dope Wars",
   descritpion:
     "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO",
+  socialDescription: "Prove you're the ultimate hustler. Move product, stack paper, and rise to the top in Dope Wars. Play now and claim your spot on the leaderboard!",
   image: {
     url: "/images/play-dope-wars.png",
     width: "1200",
@@ -32,7 +33,7 @@ export default function Document() {
 
         {/* Open graph */}
         <meta property="og:title" content={metas.title} />
-        <meta property="og:description" content={metas.descritpion} />
+        <meta property="og:description" content={metas.socialDescription} />
         <meta property="og:locale" content="en" />
         <meta property="og:image" content={metas.image.url} />
         <meta property="og:image:width" content={metas.image.width} />
@@ -43,7 +44,7 @@ export default function Document() {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={metas.title} />
-        <meta name="twitter:description" content={metas.descritpion} />
+        <meta name="twitter:description" content={metas.socialDescription} />
         <meta name="twitter:image" content={metas.image.url} />
         <meta name="twitter:image:width" content={metas.image.width} />
         <meta name="twitter:image:height" content={metas.image.height} />
