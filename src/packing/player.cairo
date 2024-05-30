@@ -20,7 +20,7 @@ use rollyourown::{
 
 
 // TODO : move 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum PlayerStatus {
     Normal,
     BeingArrested,

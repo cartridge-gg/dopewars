@@ -92,7 +92,7 @@ export const ClaimModal = ({
                           <Td>
                             <HStack>
                               <HustlerIcon hustler={game.hustler_id as Hustlers} />
-                              <Text>{shortString.decodeShortString(game.player_name)}</Text>
+                              <Text>{shortString.decodeShortString(game.player_name?.value)}</Text>
                             </HStack>
                           </Td>
                           <Td color="yellow.400" isNumeric>

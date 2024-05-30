@@ -39,7 +39,7 @@ query Config {
         base
         step
         weight
-        name
+        name  { value }
       }
     }
   }
@@ -50,7 +50,7 @@ query Config {
       node {
         location
         location_id
-        name
+        name  { value }
       }
     }
   }
@@ -62,7 +62,7 @@ query Config {
         slot
         id
         slot_id
-        name
+        name 
         initial_tier
       }
     }

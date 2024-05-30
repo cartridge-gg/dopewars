@@ -2,10 +2,11 @@ use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::{Bytes16IntrospectionImpl}}
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}
 };
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct Game {
     #[key]
     game_id: u32,
@@ -26,7 +27,7 @@ struct Game {
     position: u16,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum GameMode {
     Dealer,
     Warrior,

@@ -109,7 +109,7 @@ export const HomeLeftPanel = () => {
             DOPE WARS
           </Text> */}
           <Heading fontSize={["30px", "48px"]} fontWeight="normal">
-            Dope Wars
+            DOPE WARS
           </Heading>
         </VStack>
 

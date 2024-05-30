@@ -259,7 +259,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
                 <Td>
                   <HStack>
                     <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
-                    <Text>{shortString.decodeShortString(game.player_name)}</Text>
+                    <Text>{shortString.decodeShortString(game.player_name?.value)}</Text>
                   </HStack>
                 </Td>
                 <Td isNumeric>{formatCashHeader(game.final_score)}</Td>

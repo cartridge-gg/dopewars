@@ -35,14 +35,16 @@ import {
 } from "../helpers";
 import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
 
-export type DrugConfigFull = DrugConfig & { icon: React.FC };
-export type LocationConfigFull = LocationConfig & { icon: React.FC };
+export type DrugConfigFull = Omit<DrugConfig, 'name'> & { icon: React.FC, name: string} ;
+export type LocationConfigFull = Omit<LocationConfig, 'name'> & { icon: React.FC , name: string};
 
 export type LayoutItem = {
   name: string;
   bits: bigint;
   idx: bigint;
 };
+
+
 
 export type HustlerItemConfig = {
   slot: ItemSlot;
@@ -181,7 +183,7 @@ export class ConfigStoreClass {
     const drugConfigFull = drugConfig.map((i) => {
       return {
         ...i,
-        name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
+        name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
         icon: drugIcons[i.drug as drugIconsKeys],
       } as DrugConfigFull;
     });
@@ -192,7 +194,7 @@ export class ConfigStoreClass {
       return [
         {
           ...i,
-          name: shortString.decodeShortString(i?.name), // todo: remove when bytes31 is supported
+          name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
           icon: locationIcons[i.location as locationIconsKeys],
         },
       ] as LocationConfigFull[];

@@ -140,7 +140,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
           </Tr>
 
           {games.map((game: GameClass, index: number) => {
-            const playerName = shortString.decodeShortString(game.gameInfos.player_name);
+            const playerName = shortString.decodeShortString(game.gameInfos.player_name?.value);
 
             return (
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>

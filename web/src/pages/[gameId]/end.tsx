@@ -172,7 +172,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
           </VStack>
           <VStack flex="1">
             <StatsItem
-              text={shortString.decodeShortString(game.gameInfos.player_name)}
+              text={shortString.decodeShortString(game.gameInfos.player_name?.value)}
               icon={<HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
             />
             <Divider borderColor="neon.600" />

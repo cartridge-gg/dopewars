@@ -340,7 +340,7 @@ const Encounter = observer(
                   <HStack w="full" justifyContent="center">
                     <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
                     {/* <Text>{reputationRanks[game.player.drugLevel as reputationRanksKeys]}</Text> */}
-                    <Text>{shortString.decodeShortString(game.gameInfos.player_name)}</Text>
+                    <Text>{shortString.decodeShortString(game.gameInfos.player_name?.value)}</Text>
                   </HStack>
 
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />

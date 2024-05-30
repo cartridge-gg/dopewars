@@ -9,7 +9,8 @@ use rollyourown::{
 };
 
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct SortedList {
     #[key]
     list_id: felt252,
@@ -22,7 +23,8 @@ struct SortedList {
     process_cursor_k1: ContractAddress,
 }
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct SortedListItem {
     #[key]
     list_id: felt252,
@@ -87,8 +89,8 @@ impl SortedListImpl of SortedListTrait {
             processed: false,
             process_max_size: 0,
             process_size: 0,
-            process_cursor_k0: SortedListImpl::root(),
-            process_cursor_k1: Into::<u32, felt252>::into(SortedListImpl::root())
+            process_cursor_k0: Self::root(),
+            process_cursor_k1: Into::<u32, felt252>::into(Self::root())
                 .try_into()
                 .unwrap(),
         }
@@ -124,7 +126,7 @@ impl SortedListImpl of SortedListTrait {
         let item_value = item.get_value();
 
         assert(
-            item_k0 != SortedListImpl::root() && Zeroable::is_non_zero(item_k1),
+            item_k0 != Self::root() && Zeroable::is_non_zero(item_k1),
             'reserved root value'
         );
 
@@ -162,9 +164,9 @@ impl SortedListImpl of SortedListTrait {
         let mut curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
         let mut next_item = SortableItem::<T>::get_by_keys(world, (next.item_k0, next.item_k1));
 
-        if ((curr.item_k0 == SortedListImpl::root() && Zeroable::is_zero(curr.item_k1))
+        if ((curr.item_k0 == Self::root() && Zeroable::is_zero(curr.item_k1))
             || curr_item.get_value() >= item_value)
-            && ((next.item_k0 == SortedListImpl::root() && Zeroable::is_zero(next.item_k1))
+            && ((next.item_k0 == Self::root() && Zeroable::is_zero(next.item_k1))
                 || next_item.get_value() < item_value) {
             true
         } else {
@@ -232,7 +234,7 @@ impl SortedListImpl of SortedListTrait {
         let mut i = 0;
 
         loop {
-            if curr.next_k0 == SortedListImpl::root() && Zeroable::is_zero(curr.next_k1) {
+            if curr.next_k0 == Self::root() && Zeroable::is_zero(curr.next_k1) {
                 self.processed = true;
                 break;
             }
@@ -265,7 +267,7 @@ impl SortedListImpl of SortedListTrait {
     // fn print_all<T, +SortableItem<T>, +Copy<T>, +Drop<T>, +Destruct<T>>(
     //     self: SortedList, world: IWorldDispatcher,
     // ) {
-    //     let mut root = get!(world, (self.list_id, SortedListImpl::root()), (SortedListItem));
+    //     let mut root = get!(world, (self.list_id, Self::root()), (SortedListItem));
     //     let mut curr_id = root.next_id;
 
     //     loop {
@@ -277,7 +279,7 @@ impl SortedListImpl of SortedListTrait {
 
     //         println!("{} - {} - {}", curr_id, curr_value, curr_position);
 
-    //         if curr.next_id != SortedListImpl::root() {
+    //         if curr.next_id != Self::root() {
     //             curr_id = curr.next_id;
     //         } else {
     //             break;

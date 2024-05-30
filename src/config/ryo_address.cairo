@@ -1,7 +1,8 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct RyoAddress {
     #[key]
     key: u8,

@@ -3,7 +3,7 @@ import { Head, Html, Main, NextScript } from "next/document";
 const metas = {
   title: "Dope Wars",
   descritpion:
-    "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end.",
+    "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO",
   image: {
     url: "/images/play-dope-wars.png",
     width: "1200",

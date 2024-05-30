@@ -2,11 +2,13 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
-use rollyourown::utils::bytes16::{Bytes16, Bytes16Impl, Bytes16Trait};
-use rollyourown::utils::introspect::Bytes16IntrospectionImpl;
+use rollyourown::utils::{
+    introspect::{Bytes31IntrospectionImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,},
+};
 
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct LocationConfig {
     #[key]
     location: Locations,
@@ -15,7 +17,7 @@ struct LocationConfig {
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum Locations {
     Home,
     Queens,

@@ -1,6 +1,7 @@
 use starknet::ContractAddress;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct GameStorePacked {
     #[key]
     game_id: u32,

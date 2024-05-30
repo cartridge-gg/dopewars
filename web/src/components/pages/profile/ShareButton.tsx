@@ -30,7 +30,7 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
 };
 
 const getShareText = (game: GameClass, gameInfos: Game): string => {
-  const playerName = shortString.decodeShortString(gameInfos.player_name)
+  const playerName = shortString.decodeShortString(gameInfos.player_name?.value)
   if (game.player.health > 0) {
     return encodeURIComponent(
       `${playerName} has reached Day ${game.player.turn} with ${formatCash(

@@ -130,7 +130,7 @@ export const ABI = [
       },
       {
         "name": "name",
-        "type": "core::bytes_31::bytes31"
+        "type": "core::felt252"
       },
       {
         "name": "initial_tier",
@@ -644,6 +644,24 @@ export const ABI = [
             "type": "rollyourown::config::drugs::DrugConfig"
           }
         ],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "IDojoInitImpl",
+    "interface_name": "rollyourown::config::config::config::IDojoInit"
+  },
+  {
+    "type": "interface",
+    "name": "rollyourown::config::config::config::IDojoInit",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_init",
+        "inputs": [],
         "outputs": [],
         "state_mutability": "view"
       }

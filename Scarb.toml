@@ -9,8 +9,8 @@ version = "0.1.0"
 [dependencies]
 # dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.0-alpha.1"}
 # token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.0-alpha.1"}
-dojo = { path = "../dojo/crates/dojo-core"}
-token = { path = "../origami"}
+dojo = { path = "../dojo/crates/dojo-core" }
+token = { path = "../origami" }
 
 
 [scripts]
@@ -35,18 +35,29 @@ migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROF
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
-slot_ryo420_katana="slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_420 -b 1000 --disable-fee true  --invoke-max-steps 1000000"
-slot_ryo420_torii="slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
+slot_ryo420_katana = "slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_420 -b 1000 --disable-fee true  --invoke-max-steps 1000000"
+slot_ryo420_torii = "slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
 
 # slot ryo421
-slot_ryo421_katana="slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_421 -b 1000 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo421_torii="slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
- 
+slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_421 -b 1000 --disable-fee true  --invoke-max-steps 2000000"
+slot_ryo421_torii = "slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
+
 # slot ryo_sepolia
-slot_ryosepolia_torii="slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
+slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
 # --index-pending 
 
-[profile.dev.tool.dojo.env]
+
+[[target.dojo]]
+build-external-contracts = [
+    "token::components::security::initializable::initializable_model",
+    "token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
+    "token::components::token::erc20::erc20_balance::erc_20_balance_model",
+    "token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
+    "token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
+    "token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
+]
+
+[tool.dojo.env]
 rpc_url = "http://localhost:5050"
 account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
@@ -75,22 +86,21 @@ keystore_path = "/Users/boo/sozo_acc"
 # private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
 
 
-
-[[target.dojo]]
-
 [tool.dojo.world]
 name = "Dope Wars"
-description = "Onchain adaptation of the classic Drug Wars game. An immersive recreation of the 1999 TI-83 classic where street smarts reign supreme and every choice matters in the end."
+description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 website = "https://rollyourown.preview.cartridge.gg/"
 icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"
 socials.x = "https://x.com/TheDopeWars"
 
-build-external-contracts = [
-    "token::components::security::initializable::initializable_model",
-    "token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
-    "token::components::token::erc20::erc20_balance::erc_20_balance_model",
-    "token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
-    "token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
-    "token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
-]
+
+#  alpha.3
+#  create game  :     Steps: 272281 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 60 | Range Checks: 42093
+#  buy & travel :     Steps: 420350 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3550 | Pedersen: 56 | Poseidon Builtin: 37 | Range Checks: 77213
+#  sell & encounter : Steps: 250413 | Bitwise: 188 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 42965
+
+#  alpha.5
+#  create game :      Steps: 123719 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 74 | Range Checks: 8641
+#  buy & travel :     Steps: 124923 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3548 | Pedersen: 55 | Poseidon Builtin: 37 | Range Checks: 11166
+#  sell & encounter : Steps:  90913 | Bitwise: 190 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 7241

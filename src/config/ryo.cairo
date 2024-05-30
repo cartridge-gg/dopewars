@@ -12,7 +12,8 @@ const SIX_HOUR: u32 = 21_600;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct RyoConfig {
     #[key]
     key: u8,
