@@ -35,8 +35,8 @@ migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROF
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
-slot_ryo420_katana = "slot d create ryo420 katana --seed 420 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_420 -b 1000 --disable-fee true  --invoke-max-steps 1000000"
-slot_ryo420_torii = "slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
+slot_ryo420_katana = "slot d create ryo420 katana --version v0.7.0-alpha.5 -a 4 -b 5000 --disable-fee true  --invoke-max-steps 1000000"
+slot_ryo420_torii = "slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.5 --world 0x78fcdfcc137fa18770f660ba2e8a3cf263907df38dfd462dc4dda048979c011"
 
 # slot ryo421
 slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_421 -b 1000 --disable-fee true  --invoke-max-steps 2000000"
@@ -64,8 +64,8 @@ private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 [profile.ryo420.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
-account_address = "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7"
-private_key = "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c"
+account_address = "0x2ea5a09a95ee73556a3ef6420c11a8df775fe4f06e58fd9f7a21b5d99e0b5ea"
+private_key = "0x18055e629284db77daa8d60e4ca767d65807c3f1690785006e46d6e63a13d54"
 
 [profile.ryo421.tool.dojo.env]
 rpc_url = "https://api.cartridge.gg/x/ryo421/katana"

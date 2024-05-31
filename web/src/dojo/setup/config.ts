@@ -73,8 +73,8 @@ const katanaSlot420: DojoChainConfig = {
   predeployedAccounts: [
     {
       name: "Deployer",
-      address: "0x754d8bc62099e306ab40deb98accc3e717eb1a7b8838060c6312c6e8f8ee1d7",
-      privateKey: "0x2f9a2435c3195dfa3c2f8290de5347e0da48193fd6d6d80320f0201a0964b8c",
+      address: "0x2ea5a09a95ee73556a3ef6420c11a8df775fe4f06e58fd9f7a21b5d99e0b5ea",
+      privateKey: "0x18055e629284db77daa8d60e4ca767d65807c3f1690785006e46d6e63a13d54",
       active: false,
     },
   ],

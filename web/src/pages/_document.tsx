@@ -8,7 +8,7 @@ const metas = {
   image: {
     url: "/images/play-dope-wars.png",
     width: "1200",
-    height: "648",
+    height: "630",
   },
 };
 
