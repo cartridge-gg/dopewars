@@ -85,7 +85,6 @@ keystore_path = "/Users/boo/sozo_acc"
 # account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
 # private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
 
-
 [tool.dojo.world]
 name = "Dope Wars"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
