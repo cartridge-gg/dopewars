@@ -3,7 +3,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::models::game::{Game};
 
 // Game Config for a Season
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct GameConfig {
     #[key]
     season_version: u16,

@@ -1,4 +1,4 @@
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, IntrospectPacked)]
 struct Bytes16 {
     value: u128,
 }

@@ -208,7 +208,7 @@ const CustomLeftPanel = () => {
         {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
       </Text> */}
       <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
-        {shortString.decodeShortString(gameInfos?.player_name || "")}
+        {shortString.decodeShortString(gameInfos?.player_name?.value || "")}
       </Heading>
 
       <Box maxW="350px" w="100%">
@@ -220,7 +220,7 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay( game: GameClass, log: LogByDay) {
+function renderDay(game: GameClass, log: LogByDay) {
   return (
     <>
       {log.location && (
@@ -242,7 +242,7 @@ function renderDay( game: GameClass, log: LogByDay) {
               break;
 
             case WorldEvents.UpgradeItem:
-              return renderUpgradeItem( game, i as UpgradeItemData, key);
+              return renderUpgradeItem(game, i as UpgradeItemData, key);
               break;
 
             case WorldEvents.TravelEncounter:

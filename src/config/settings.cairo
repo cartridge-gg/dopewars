@@ -3,7 +3,8 @@ use rollyourown::{
     traits::{Enumerable, RandomizableImpl}
 };
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct SeasonSettings {
     #[key]
     season_version: u16,
@@ -18,49 +19,49 @@ struct SeasonSettings {
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum CashMode {
     Broke,
     Average,
     Rich,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum HealthMode {
     Junkie,
     Hustler,
     Streetboss,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum TurnsMode {
     OnSpeed,
     OnWeed,
     OnMush
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum EncountersMode {
     Chill,
     NoJokes,
     UltraViolence,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum EncountersOddsMode {
     Easy,
     Normal,
     Hard,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum DrugsMode {
     Cheap,
     Normal,
     Expensive,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum WantedMode {
     KoolAndTheGang,
     ThugLife,

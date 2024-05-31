@@ -103,6 +103,24 @@ export const ABI = [
   },
   {
     "type": "impl",
+    "name": "IDojoInitImpl",
+    "interface_name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit"
+  },
+  {
+    "type": "interface",
+    "name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_init",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "UpgradableImpl",
     "interface_name": "dojo::components::upgradeable::IUpgradeable"
   },

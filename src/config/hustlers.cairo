@@ -2,7 +2,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
 use rollyourown::{
-    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
+    traits::{Enumerable},utils::introspect::{Bytes31IntrospectionImpl},
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 
@@ -43,18 +43,21 @@ impl ItemSlotIntoU8 of Into<ItemSlot, u8> {
 // MODELS
 //
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct HustlerItemBaseConfig {
     #[key]
     slot: ItemSlot,
     #[key]
     id: u32,
     slot_id: u8,
-    name: bytes31,
+    // name: bytes31,
+    name: felt252,
     initial_tier: u8,
 }
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct HustlerItemTiersConfig {
     #[key]
     slot: ItemSlot,

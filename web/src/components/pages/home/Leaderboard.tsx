@@ -153,8 +153,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 const isOwn = game.player_id === account?.address;
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
-                const displayName = game.player_name
-                  ? `${shortString.decodeShortString(game.player_name)}${isOwn ? " (you)" : ""}`
+                const displayName = game.player_name?.value
+                  ? `${shortString.decodeShortString(game.player_name?.value)}${isOwn ? " (you)" : ""}`
                   : "Anonymous";
 
                 return (

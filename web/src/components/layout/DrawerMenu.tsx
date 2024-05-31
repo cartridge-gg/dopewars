@@ -118,7 +118,7 @@ const DrawerMenu = () => {
                         <ProfileLinkDrawer />
                         {/* <HStack w="full">
                           <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
-                          <Text> {shortString.decodeShortString(game.gameInfos.player_name)} </Text>
+                          <Text> {shortString.decodeShortString(game.gameInfos.player_name?.value)} </Text>
                         </HStack> */}
                       </DrawerListItem>
 

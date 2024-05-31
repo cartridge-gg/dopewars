@@ -129,7 +129,7 @@ query HallOfFame {
       node {
         game_id
         player_id
-        player_name
+        player_name { value }
         hustler_id
         season_version
         final_score
@@ -149,7 +149,7 @@ query Claimable($playerId: ContractAddress) {
         game_id
         season_version
         player_id
-        player_name
+        player_name { value }
         hustler_id
         claimed
         claimable

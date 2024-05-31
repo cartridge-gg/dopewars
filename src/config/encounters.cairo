@@ -12,7 +12,8 @@ use rollyourown::{
 };
 
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct EncounterStatsConfig {
     #[key]
     encounter: Encounters,
@@ -139,7 +140,7 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
 //
 //
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum Encounters {
     Cops,
     Gang,
@@ -203,7 +204,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounter(
         ref game_store: GameStore, ref season_settings: SeasonSettings
     ) -> EncounterConfig {
-        let level = EncounterSpawnerImpl::get_encounter_level(
+        let level = Self::get_encounter_level(
             ref season_settings, game_store.player.reputation
         );
 

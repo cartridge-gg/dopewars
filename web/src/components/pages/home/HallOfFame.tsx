@@ -77,7 +77,7 @@ const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterf
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>
-                {shortString.decodeShortString(game?.player_name)} {isSelf && "(you)"}
+                {shortString.decodeShortString(game?.player_name?.value)} {isSelf && "(you)"}
               </Text>
               <Text>{formatCash(game.final_score)}</Text>
             </VStack>

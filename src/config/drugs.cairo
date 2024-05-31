@@ -1,13 +1,13 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::Bytes16IntrospectionImpl},
+    traits::{Enumerable},utils::introspect::{Bytes31IntrospectionImpl},
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait, }},
     config::settings::{DrugsMode}
 };
 
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum Drugs {
     Ludes,
     Speed,
@@ -19,8 +19,8 @@ enum Drugs {
     Cocaine,
 }
 
-
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[dojo::model]
 struct DrugConfig {
     #[key]
     drugs_mode: DrugsMode,

@@ -443,7 +443,7 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn hustler_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let hustler_attack:u8 = ResolutionImpl::plus_or_less_random_pct(
+        let hustler_attack:u8 = Self::plus_or_less_random_pct(
             game_store.items.attack(),
             20,
             ref randomizer
@@ -463,7 +463,7 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let mut encounter_attack = ResolutionImpl::plus_or_less_random_pct(
+        let mut encounter_attack = Self::plus_or_less_random_pct(
             encounter.attack,
             20,
             ref randomizer
@@ -487,7 +487,7 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
-        let mut encounter_attack = ResolutionImpl::plus_or_less_random_pct(
+        let mut encounter_attack = Self::plus_or_less_random_pct(
             encounter.attack,
             20,
             ref randomizer

@@ -33,37 +33,37 @@ export const DrugTable = observer(() => {
     onDispatch: (action) => {
       // console.log(action);
 
-      if (action.type === ActionType.UpdateEditorValue) {
-        const toUpdateIndex = data.findIndex((i) => i.drug_id === action.rowKeyValue);
-        const toUpdate = {
-          ...data[toUpdateIndex],
-          [action.columnKey]: action.value,
-        };
+      // if (action.type === ActionType.UpdateEditorValue) {
+      //   const toUpdateIndex = data.findIndex((i) => i.drug_id === action.rowKeyValue);
+      //   const toUpdate = {
+      //     ...data[toUpdateIndex],
+      //     [action.columnKey]: action.value,
+      //   };
 
-        data.splice(toUpdateIndex, 1, toUpdate);
+      //   data.splice(toUpdateIndex, 1, toUpdate);
 
-        setData(data);
-      }
+      //   setData(data);
+      // }
 
-      // triggered twice ... why ?
-      if (action.type === ActionType.SaveRowEditors) {
-        const update = data.find((i) => i.drug_id === action.rowKeyValue);
-        if (!update) return;
+      // // triggered twice ... why ?
+      // if (action.type === ActionType.SaveRowEditors) {
+      //   const update = data.find((i) => i.drug_id === action.rowKeyValue);
+      //   if (!update) return;
 
-        const newValue = {
-          drug: update.drug_id,
-          drug_id: update.drug_id,
-          base: update.base,
-          step: update.step,
-          weight: update.weight,
-          name: shortString.encodeShortString(update.name),
-        };
-        updateDrugConfig(newValue);
-      }
+      //   const newValue = {
+      //     drug: update.drug_id,
+      //     drug_id: update.drug_id,
+      //     base: update.base,
+      //     step: update.step,
+      //     weight: update.weight,
+      //     name: shortString.encodeShortString(update.name),
+      //   };
+      //   updateDrugConfig(newValue);
+      // }
 
-      if (action.type === ActionType.CloseRowEditors) {
-        setData(config!.drug.map((i, id) => ({ id: id, ...i })));
-      }
+      // if (action.type === ActionType.CloseRowEditors) {
+      //   setData(config!.drug.map((i, id) => ({ id: id, ...i })));
+      // }
     },
   });
 

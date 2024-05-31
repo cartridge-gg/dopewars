@@ -56,7 +56,7 @@ export const ProfileLinkMobile = () => {
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
         <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-        <Text ml="10px">{shortString.decodeShortString(gameInfos.player_name)}</Text>
+        <Text ml="10px">{shortString.decodeShortString(gameInfos.player_name?.value)}</Text>
       </MenuItem>
     </>
   );
@@ -83,7 +83,7 @@ export const ProfileLinkDrawer = () => {
   return (
     <HStack borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
       <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
-      <Text ml="4px">{shortString.decodeShortString(gameInfos.player_name)}</Text>
+      <Text ml="4px">{shortString.decodeShortString(gameInfos.player_name?.value)}</Text>
     </HStack>
   );
 };
