@@ -68,7 +68,7 @@ const New = observer(() => {
     setError("");
     if (name === "" || name.length > 16 || name.length < 3) {
       setError("Invalid name, at least 3 chars, max 16!");
-      inputRef.current && inputRef.current.scrollIntoView()    
+      inputRef.current && inputRef.current.scrollIntoView()
       return;
     }
 
