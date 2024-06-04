@@ -166,7 +166,7 @@ mod paper_mock {
                 Errors::CALLER_IS_NOT_OWNER
             );
 
-            self.erc20_metadata.initialize("fPAPER", "fPAPER", 18);
+            self.erc20_metadata.initialize('fPAPER', 'fPAPER', 18);
             self.erc20_mintable.mint(get_caller_address(), 10_000);
 
             self.initializable.initialize();
