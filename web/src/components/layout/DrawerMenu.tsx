@@ -147,7 +147,7 @@ const DrawerMenu = () => {
                   {account && (
                     <DrawerListItem
                       onClick={() => {
-                        router.push("/game/history");
+                        router.push(`/game/history/${account.address}`);
                       }}
                     >
                       <Clock mr={2} /> HISTORY

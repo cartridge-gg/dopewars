@@ -10,7 +10,6 @@ const Redirector = observer(() => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
-
   const { game } = useGameStore();
 
   useEffect(() => {
@@ -19,14 +18,13 @@ const Redirector = observer(() => {
     if (!game) {
       handle = setTimeout(() => {
         router.push(`/`);
-      }, 2000);
+      }, 2500);
     } else {
       clearTimeout(handle);
 
-      if( game.gameInfos.game_over) {
+      if (game.gameInfos.game_over) {
         router.push(`/${gameId}/end`);
-      } else
-      if (game.player.status === PlayerStatus.Normal) {
+      } else if (game.player.status === PlayerStatus.Normal) {
         if (game.player.location) {
           router.push(`/${gameId}/${game.player.location.location}`);
         } else {

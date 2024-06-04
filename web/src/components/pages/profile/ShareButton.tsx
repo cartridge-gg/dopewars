@@ -33,7 +33,7 @@ const getShareText = (game: GameClass, gameInfos: Game): string => {
   const playerName = shortString.decodeShortString(gameInfos.player_name?.value)
   if (game.player.health > 0) {
     return encodeURIComponent(
-      `${playerName} has reached Day ${game.player.turn} with ${formatCash(
+      `I have reached Day ${game.player.turn} with ${formatCash(
         game.player.cash,
       )} $paper. Think you can out hustle them? #dopewars.\n\n${window.location.origin}`,
     );

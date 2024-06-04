@@ -20,6 +20,7 @@ import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Drugs } from "@/dojo/types";
+import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 
 import { formatCashHeader } from "@/utils/ui";
@@ -53,11 +54,11 @@ import { useAccount } from "@starknet-react/core";
 import { shortString } from "starknet";
 
 export default function History() {
-  const { router } = useRouterContext();
-  const { account } = useAccount();
+  const { router, playerId } = useRouterContext();
+
   const { uiStore } = useDojoContext();
 
-  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(account?.address || "0x0");
+  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(playerId || "0x0");
 
   return (
     <Layout
@@ -71,28 +72,37 @@ export default function History() {
       // rigthPanelScrollable={false}
       footer={<Button onClick={() => router.push("/")}>HOME</Button>}
     >
-      <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
-        <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
-          <CustomLeftPanel playerStats={playerStats} />
-          <VStack boxSize="full" gap="10px" flex={1}>
-            <Tabs variant="unstyled" w="full">
-              <TabList pb={6}>
-                <Tab>ON GOING</Tab>
-                <Tab>ENDED</Tab>
-              </TabList>
 
-              <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
-                <TabPanel p={0}>
-                  <GameList games={onGoingGames} />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <GameList games={endedGames} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </VStack>
+      {games.length === 0 && (
+        <Flex boxSize="full" alignItems="center" justifyContent="center">
+          <Text>No game played yet!</Text>
         </Flex>
-      </VStack>
+      )}
+
+      {games.length > 0 && (
+        <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
+          <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
+            <CustomLeftPanel playerStats={playerStats} playerId={playerId} />
+            <VStack boxSize="full" gap="10px" flex={1}>
+              <Tabs variant="unstyled" w="full">
+                <TabList pb={6}>
+                  <Tab>ON GOING</Tab>
+                  <Tab>ENDED</Tab>
+                </TabList>
+
+                <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
+                  <TabPanel p={0}>
+                    <GameList games={onGoingGames} />
+                  </TabPanel>
+                  <TabPanel p={0}>
+                    <GameList games={endedGames} />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </VStack>
+          </Flex>
+        </VStack>
+      )}
     </Layout>
   );
 }
@@ -171,8 +181,10 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
   );
 };
 
-const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
+const CustomLeftPanel = ({ playerId, playerStats }: { playerId?: string; playerStats?: PlayerStats }) => {
   // const { game, gameInfos } = useGameStore();
+
+  const { toast } = useToast();
 
   return (
     <VStack
@@ -191,7 +203,7 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
         History
       </Heading>
 
-      <Box boxSize="full" mt={["0", "30px"]}>
+      <Box boxSize="full">
         <VStack gap={6}>
           <Tabs variant="unstyled" w="full">
             <TabList pb={6}>
@@ -261,6 +273,20 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
           </Tabs>
         </VStack>
       </Box>
+
+      <Button
+        variant="pixelated"
+        h="48px"
+        onClick={() => {
+          navigator.clipboard.writeText(`${window.location.origin}/game/history/${playerId}`);
+
+          toast({
+            message: "Copied to clipboard",
+          });
+        }}
+      >
+        Profile Link
+      </Button>
     </VStack>
   );
 };
@@ -388,28 +414,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Ludes width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">LUDES</Td>
+                <Td w="80px" color="neon.500">
+                  LUDES
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ludes] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Speed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SPEED</Td>
+                <Td w="80px" color="neon.500">
+                  SPEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Speed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Weed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">WEED</Td>
+                <Td w="80px" color="neon.500">
+                  WEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Weed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Shrooms width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SHROOMS</Td>
+                <Td w="80px" color="neon.500">
+                  SHROOMS
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Shrooms] || 0)}</Td>
               </Tr>
 
@@ -417,28 +451,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Acid width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">ACID</Td>
+                <Td w="80px" color="neon.500">
+                  ACID
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Acid] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Ketamine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">KETAMINE</Td>
+                <Td w="80px" color="neon.500">
+                  KETAMINE
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ketamine] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Heroin width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">HEROIN</Td>
+                <Td w="80px" color="neon.500">
+                  HEROIN
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Heroin] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px" borderBottomColor="transparent">
                   <Cocaine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500" borderBottomColor="transparent">COCAINE</Td>
+                <Td w="80px" color="neon.500" borderBottomColor="transparent">
+                  COCAINE
+                </Td>
                 <Td borderBottomColor="transparent">
                   {formatCashHeader(playerStats?.tradedDrugs[Drugs.Cocaine] || 0)}
                 </Td>
