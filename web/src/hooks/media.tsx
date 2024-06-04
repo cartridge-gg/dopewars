@@ -108,6 +108,8 @@ export const play = () => {
   const currentMedia = state.medias[state.currentIndex];
   if (!currentMedia || !currentMedia?.sound) return;
 
+  if (state.isPlaying) return
+
   // force all other sounds to stop
   for (let media of state.medias) {
     if (media.sound?.playing()) {

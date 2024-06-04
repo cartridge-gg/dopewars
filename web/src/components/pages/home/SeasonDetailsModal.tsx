@@ -49,7 +49,7 @@ export const SeasonDetailsModal = observer(() => {
         <ModalOverlay />
         <ModalContent bg="bg.dark">
           <ModalHeader textAlign="center" pb={0}>
-            Season Informations
+            Season Information
           </ModalHeader>
           <ModalBody py={6} minH={"420px"}>
             <Tabs variant="unstyled" w="full">

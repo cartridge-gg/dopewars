@@ -19,7 +19,7 @@ const Redirector = observer(() => {
     if (!game) {
       handle = setTimeout(() => {
         router.push(`/`);
-      }, 1000);
+      }, 2000);
     } else {
       clearTimeout(handle);
 

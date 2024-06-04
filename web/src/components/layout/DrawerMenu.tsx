@@ -129,13 +129,6 @@ const DrawerMenu = () => {
                       >
                         <Refresh mr={2} /> REFRESH
                       </DrawerListItem>
-                      <DrawerListItem
-                        onClick={() => {
-                          uiStore.openQuitGame();
-                        }}
-                      >
-                        <Home mr={2} /> QUIT GAME
-                      </DrawerListItem>
                     </>
                   )}
 
@@ -143,15 +136,14 @@ const DrawerMenu = () => {
                     <Text> NAVIGATION </Text>
                   </DrawerListItem>
 
-                  {!game && (
-                    <DrawerListItem
-                      onClick={() => {
-                        router.push("/");
-                      }}
-                    >
-                      <Home mr={2} /> HOME
-                    </DrawerListItem>
-                  )}
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/");
+                    }}
+                  >
+                    <Home mr={2} /> HOME
+                  </DrawerListItem>
+
                   {account && (
                     <DrawerListItem
                       onClick={() => {

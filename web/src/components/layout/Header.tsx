@@ -3,7 +3,7 @@ import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Divider, Flex, HStack } from "@chakra-ui/react";
+import { Box, Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
@@ -24,10 +24,10 @@ export const Header = observer(() => {
 
   const { account } = useAccount();
 
-  const { uiStore} = useDojoContext()
+  const { uiStore } = useDojoContext();
   const { game, gameConfig } = useGameStore();
   const { config } = useConfigStore();
-  
+
   useEffect(() => {
     const init = async () => {
       await initSoundStore();
@@ -71,9 +71,15 @@ export const Header = observer(() => {
       </HStack>
 
       {game /*|| router.asPath.includes("logs")*/ && (
-        <HStack flex={["auto", 1]} justify="center" width={["100%", "auto"]} cursor="help" onClick={() => {
-          uiStore.openSeasonDetails()
-        }}>
+        <HStack
+          flex={["auto", 1]}
+          justify="center"
+          width={["100%", "auto"]}
+          cursor="help"
+          onClick={() => {
+            uiStore.openSeasonDetails();
+          }}
+        >
           <HStack
             h="48px"
             width={["100%", "auto"]}
@@ -100,6 +106,11 @@ export const Header = observer(() => {
         {!isMobile && account && game && <ProfileLink />}
 
         {/* {isMobile && <MobileMenu />} */}
+
+        {/* trick to allow autoplay.. */}
+        <Box display="none">
+          <MediaPlayer />
+        </Box>
 
         <DrawerMenu />
       </HStack>

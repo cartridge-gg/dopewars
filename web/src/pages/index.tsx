@@ -7,7 +7,6 @@ import { useConfigStore, useDojoContext, useRouterContext, useSeasonByVersion, u
 import { sleep } from "@/dojo/utils";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
-import { useToast } from "@/hooks/toast";
 import {
   Card,
   Divider,
@@ -26,7 +25,7 @@ import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
 
 export default function Home() {
-  const { router } = useRouterContext();
+  const { router, isLocalhost } = useRouterContext();
   const { account } = useAccount();
   const { uiStore, burnerManager } = useDojoContext();
   const { launder, isPending } = useSystems();
@@ -51,9 +50,6 @@ export default function Home() {
     setProgressPercent(Math.floor(value));
   }, [sortedList]);
 
-  const { toast } = useToast();
-
-  const disableAutoPlay = process.env.NEXT_PUBLIC_DISABLE_MEDIAPLAYER_AUTOPLAY === "true";
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   const onHustle = async () => {
@@ -62,7 +58,7 @@ export default function Home() {
       return;
     }
 
-    if (!disableAutoPlay) {
+    if (!isLocalhost) {
       play();
     }
 
@@ -77,7 +73,7 @@ export default function Home() {
 
     await launder(season?.version);
     await sleep(1000);
-    await refetchSeason()
+    await refetchSeason();
     await configStore.init();
   };
 
@@ -124,7 +120,14 @@ export default function Home() {
                   </Button>
 
                   <VStack w="full" position="relative">
-                    <Progress w="full" colorScheme="neon" isIndeterminate={progressPercent === 0} value={progressPercent} max={100} h="22px" />
+                    <Progress
+                      w="full"
+                      colorScheme="neon"
+                      isIndeterminate={progressPercent === 0}
+                      value={progressPercent}
+                      max={100}
+                      h="22px"
+                    />
                     <Text position="absolute" w="full" textAlign="center">
                       {progressPercent}%
                     </Text>

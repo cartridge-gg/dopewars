@@ -1,3 +1,4 @@
+import { Home } from './../../components/icons/Home';
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DrugConfigFull, LocationConfigFull } from "../stores/config";
@@ -16,6 +17,7 @@ type RouterContext = {
   tradeDirection: TradeDirection | undefined;
   isAdmin: boolean;
   isRyoDotGame: boolean;
+  isLocalhost: boolean;
 };
 
 const password = BigInt("0x03fbe61f91d65aebd1b8e36ad746ea25f8a5e728ab30700acb0f940d05bfcf79");
@@ -36,6 +38,7 @@ export const useRouterContext = (): RouterContext => {
     tradeDirection: undefined,
     isAdmin: false,
     isRyoDotGame: false,
+    isLocalhost: false,
   });
 
   useEffect(() => {
@@ -56,6 +59,7 @@ export const useRouterContext = (): RouterContext => {
         : TradeDirection.Sell
       : undefined;
 
+    const isLocalhost = window.location.host.startsWith("localhost")
     const isRyoDotGame = window.location.host === "ryo.game";
 
     const pass = router.query.admin
@@ -85,6 +89,7 @@ export const useRouterContext = (): RouterContext => {
       tradeDirection,
       isAdmin,
       isRyoDotGame,
+      isLocalhost
     };
 
     setContext(ctx);

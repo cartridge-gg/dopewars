@@ -68,7 +68,7 @@ const New = observer(() => {
     setError("");
     if (name === "" || name.length > 16 || name.length < 3) {
       setError("Invalid name, at least 3 chars, max 16!");
-      inputRef.current && inputRef.current.scrollIntoView()    
+      inputRef.current && inputRef.current.scrollIntoView();
       return;
     }
 
@@ -88,6 +88,17 @@ const New = observer(() => {
       isSinglePanel
       footer={
         <Footer>
+          <Button
+            w={["full", "auto"]}
+            px={["auto", "20px"]}
+            onClick={() => {
+              playSound(Sounds.Ooo, 0.3);
+              router.push("/");
+            }}
+          >
+            Im scared
+          </Button>
+
           <ChildrenOrConnect>
             <Button
               w={["full", "auto"]}
@@ -231,33 +242,35 @@ const New = observer(() => {
             />
           </HStack>
 
-          {/*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
-            <Card p={3}>
-              <HStack gap={6} fontSize="14px">
-                <VStack gap={0} alignItems="flex-start" minW="240px">
-                  <HStack w="full" justifyContent="space-between">
-                    <Text color="yellow.400">ENTRY FEE </Text>
-                    <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
-                  </HStack>
-
-                  {account && (
+          {
+            /*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
+              <Card p={3}>
+                <HStack gap={6} fontSize="14px">
+                  <VStack gap={0} alignItems="flex-start" minW="240px">
                     <HStack w="full" justifyContent="space-between">
-                      <Text>YOU OWN </Text>
-                      <HStack>
-                        <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
-                        <Text>PAPER</Text>
-                      </HStack>
+                      <Text color="yellow.400">ENTRY FEE </Text>
+                      <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
                     </HStack>
-                  )}
-                </VStack>
 
-                <HStack>
-                  {/* <BuyPaper /> */}
-                  {account && <PaperFaucet />}
+                    {account && (
+                      <HStack w="full" justifyContent="space-between">
+                        <Text>YOU OWN </Text>
+                        <HStack>
+                          <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
+                          <Text>PAPER</Text>
+                        </HStack>
+                      </HStack>
+                    )}
+                  </VStack>
+
+                  <HStack>
+                    {/* <BuyPaper /> */}
+                    {account && <PaperFaucet />}
+                  </HStack>
                 </HStack>
-              </HStack>
-            </Card>
-          )}
+              </Card>
+            )
+          }
 
           <VStack w="full" ref={inputRef}>
             <Input
