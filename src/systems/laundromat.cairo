@@ -108,7 +108,7 @@ mod laundromat {
                     self.s().save_ryo_config(ryo_config);
 
                     // create new season
-                    let mut randomizer = RandomImpl::new('laundromat');
+                    let mut randomizer = RandomImpl::new(array!['laundromat', ryo_config.season_version.into()].span());
                     let mut season_manager = SeasonManagerTrait::new(self.s());
                     season_manager.new_season(ref randomizer, ryo_config.season_version);
                 } else {

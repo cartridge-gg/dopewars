@@ -45,7 +45,7 @@ mod devtools {
             let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
-            let mut randomizer = RandomImpl::new('devtools');
+            let mut randomizer = RandomImpl::new(array!['devtools', game_id.into()].span());
             let rand_score: u32 = if final_score > 0 {
                 final_score
             } else {
@@ -100,7 +100,7 @@ mod devtools {
             ryo_config.season_version += 1;
             self.s().save_ryo_config(ryo_config);
 
-            let mut randomizer = RandomImpl::new('devtools');
+            let mut randomizer = RandomImpl::new(array!['devtools', ryo_config.season_version.into()].span());
             let season_manager = SeasonManagerTrait::new(self.s());
             season_manager.new_season(ref randomizer, ryo_config.season_version);
         }

@@ -246,7 +246,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new('travel');
+            let mut randomizer = RandomImpl::new( array!['travel', game_id.into(), game_store.player.turn.into()].span());
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;
@@ -279,7 +279,7 @@ mod game {
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new('decide');
+            let mut randomizer = RandomImpl::new(array!['decide', game_id.into(), game_store.player.turn.into()].span());
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
 
             // // resolve decision
