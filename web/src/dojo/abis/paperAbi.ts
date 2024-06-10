@@ -148,6 +148,24 @@ export const ABI = [
     "interface_name": "token::components::token::erc20::erc20_metadata::IERC20Metadata"
   },
   {
+    "type": "struct",
+    "name": "core::byte_array::ByteArray",
+    "members": [
+      {
+        "name": "data",
+        "type": "core::array::Array::<core::bytes_31::bytes31>"
+      },
+      {
+        "name": "pending_word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "pending_word_len",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
     "type": "interface",
     "name": "token::components::token::erc20::erc20_metadata::IERC20Metadata",
     "items": [
@@ -157,7 +175,7 @@ export const ABI = [
         "inputs": [],
         "outputs": [
           {
-            "type": "core::felt252"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"
@@ -168,7 +186,7 @@ export const ABI = [
         "inputs": [],
         "outputs": [
           {
-            "type": "core::felt252"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"

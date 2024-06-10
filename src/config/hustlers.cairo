@@ -344,7 +344,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Weapon.into(),
             tier: 3,
             stat: 36,
-            cost: 2_600,
+            cost: 2_900,
         }
     );
     set!(
@@ -354,7 +354,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Weapon.into(),
             tier: 4,
             stat: 48,
-            cost: 12_000,
+            cost: 16_900,
         }
     );
     set!(
@@ -364,7 +364,7 @@ fn initialize_weapons_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Weapon.into(),
             tier: 5,
             stat: 60,
-            cost: 75_000,
+            cost: 79_900,
         }
     );
     set!(
@@ -403,7 +403,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Clothes.into(),
             tier: 3,
             stat: 36,
-            cost: 2_800,
+            cost: 2_900,
         }
     );
     set!(
@@ -413,7 +413,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Clothes.into(),
             tier: 4,
             stat: 48,
-            cost: 11_000,
+            cost: 11_900,
         }
     );
     set!(
@@ -423,7 +423,7 @@ fn initialize_clothes_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Clothes.into(),
             tier: 5,
             stat: 60,
-            cost: 65_000,
+            cost: 66_900,
         }
     );
     set!(
@@ -448,25 +448,25 @@ fn initialize_feet_tiers_config(world: IWorldDispatcher) {
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 2, stat: 12, cost: 300,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 2, stat: 10, cost: 300,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 3, stat: 25, cost: 1_600,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 3, stat: 20, cost: 1_800,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 4, stat: 40, cost: 9_600,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 4, stat: 32, cost: 16_900,
         }
     );
     set!(
         world,
         HustlerItemTiersConfig {
-            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 5, stat: 55, cost: 58_000,
+            slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 5, stat: 45, cost: 89_900,
         }
     );
     set!(
@@ -505,7 +505,7 @@ fn initialize_transport_tiers_config(world: IWorldDispatcher) {
             slot_id: ItemSlot::Transport.into(),
             tier: 3,
             stat: 3000,
-            cost: 59_500,
+            cost: 59_900,
         }
     );
     set!(

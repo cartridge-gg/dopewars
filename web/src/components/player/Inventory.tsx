@@ -74,7 +74,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
         </VStack>
       </HStack>
 
-      {!hidePawnshop && (
+      {!hidePawnshop && !game.items.fullStuff && (
         <VStack w="full" alignItems="flex-start" gap={1}>
           <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500" h="24px" lineHeight="24px">
             PAWNSHOP

@@ -973,7 +973,7 @@
     ],
     "address": "0x78fcdfcc137fa18770f660ba2e8a3cf263907df38dfd462dc4dda048979c011",
     "transaction_hash": "0x45dc93450dfc8798cc573d59a119ab7864a6e027caf1364c974a8bae8aadf58",
-    "block_number": 6,
+    "block_number": 118,
     "seed": "rollyourown",
     "metadata": {
       "profile_name": "dev",
@@ -992,8 +992,8 @@
     {
       "kind": "DojoContract",
       "address": "0x48cd76d52ddd7a8d9c77054b1ab6536e47fde29f9f9837a91727d3fe3d8f0d7",
-      "class_hash": "0x3fbe921393a317edbf4ce56ca1f3785cd40f45dbbb636b6972d99e32a654d37",
-      "original_class_hash": "0x3fbe921393a317edbf4ce56ca1f3785cd40f45dbbb636b6972d99e32a654d37",
+      "class_hash": "0x67b738d595272b6f9dbffd2273ca01dd8a89e87e2640463c42a405b5023ab63",
+      "original_class_hash": "0x67b738d595272b6f9dbffd2273ca01dd8a89e87e2640463c42a405b5023ab63",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -1145,6 +1145,24 @@
           "interface_name": "token::components::token::erc20::erc20_metadata::IERC20Metadata"
         },
         {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "token::components::token::erc20::erc20_metadata::IERC20Metadata",
           "items": [
@@ -1154,7 +1172,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::felt252"
+                  "type": "core::byte_array::ByteArray"
                 }
               ],
               "state_mutability": "view"
@@ -1165,7 +1183,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::felt252"
+                  "type": "core::byte_array::ByteArray"
                 }
               ],
               "state_mutability": "view"
@@ -3438,8 +3456,8 @@
     {
       "kind": "DojoContract",
       "address": "0x4c79d8d8c6a764653d4e1b5de2c35b5bd7e4e731201cde4854116a057090c55",
-      "class_hash": "0x77cc89adfed1bd8cf6f93eeacc4410feaf425497107b719f1125e0d8b9818d3",
-      "original_class_hash": "0x77cc89adfed1bd8cf6f93eeacc4410feaf425497107b719f1125e0d8b9818d3",
+      "class_hash": "0x364a1d4bc9c901643b0a0661f9964d667462f4c31d476513527ed82e3489f7f",
+      "original_class_hash": "0x364a1d4bc9c901643b0a0661f9964d667462f4c31d476513527ed82e3489f7f",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -3620,8 +3638,8 @@
     {
       "kind": "DojoContract",
       "address": "0x793d2083f76ef720054addbab143399440bfa039a6cab8b6ec8728fee383fea",
-      "class_hash": "0x32ca39c8e9f56a17aac915c636c5ede4970e53eb58de1c259221ace69b377a6",
-      "original_class_hash": "0x32ca39c8e9f56a17aac915c636c5ede4970e53eb58de1c259221ace69b377a6",
+      "class_hash": "0x474f5bdaddfa2a1818f0977aa475655d5d30402513ad36e3f9a273914454953",
+      "original_class_hash": "0x474f5bdaddfa2a1818f0977aa475655d5d30402513ad36e3f9a273914454953",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4470,8 +4488,8 @@
     {
       "kind": "DojoContract",
       "address": "0x19bbb3492bdd367486d981abcff56da3f199b0c31bca0636c628307664d475a",
-      "class_hash": "0x262bd4da6ff50f24b1e107a7cdb2114983fa190983b2ad594f8ec2f453a8e3f",
-      "original_class_hash": "0x262bd4da6ff50f24b1e107a7cdb2114983fa190983b2ad594f8ec2f453a8e3f",
+      "class_hash": "0x1c4c937b8f635479866b26f6a1688df9232e9f9092254fd0a20f383607f70c3",
+      "original_class_hash": "0x1c4c937b8f635479866b26f6a1688df9232e9f9092254fd0a20f383607f70c3",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4707,8 +4725,8 @@
     {
       "kind": "DojoContract",
       "address": "0x4857efdeae5d9f90744bdc724048d78ed28d22eee11bfe7b8dfcca1481fefbf",
-      "class_hash": "0x3497d49d47949a843f3398e3579dcac7df221da390774f6a64e2e3a37d22476",
-      "original_class_hash": "0x3497d49d47949a843f3398e3579dcac7df221da390774f6a64e2e3a37d22476",
+      "class_hash": "0x59fd2d669bdf8d0b42e2252fe82847837ccc8cf89417c5caef3a0524132cebe",
+      "original_class_hash": "0x59fd2d669bdf8d0b42e2252fe82847837ccc8cf89417c5caef3a0524132cebe",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -12605,12 +12623,12 @@
         },
         {
           "name": "name",
-          "type": "felt252",
+          "type": "ByteArray",
           "key": false
         },
         {
           "name": "symbol",
-          "type": "felt252",
+          "type": "ByteArray",
           "key": false
         },
         {
@@ -12624,8 +12642,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x648f87547cad4c7ff85ab3c422f77850b4a6f0b0f1494011440449a52aa8053",
-      "original_class_hash": "0x648f87547cad4c7ff85ab3c422f77850b4a6f0b0f1494011440449a52aa8053",
+      "class_hash": "0x1f925352eb45c770d7f13d2750ed4f8e58e3fd43000d33ceb845247a5bd7538",
+      "original_class_hash": "0x1f925352eb45c770d7f13d2750ed4f8e58e3fd43000d33ceb845247a5bd7538",
       "abi": [
         {
           "type": "impl",
@@ -12974,11 +12992,11 @@
             },
             {
               "name": "name",
-              "type": "core::felt252"
+              "type": "core::byte_array::ByteArray"
             },
             {
               "name": "symbol",
-              "type": "core::felt252"
+              "type": "core::byte_array::ByteArray"
             },
             {
               "name": "decimals",
