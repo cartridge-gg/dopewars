@@ -445,7 +445,7 @@ impl ResolutionImpl of ResolutionTrait {
     fn hustler_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
         let hustler_attack:u8 = Self::plus_or_less_random_pct(
             game_store.items.attack(),
-            30,
+            20,
             ref randomizer
         );
 
@@ -465,7 +465,7 @@ impl ResolutionImpl of ResolutionTrait {
     fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
             encounter.attack,
-            30,
+            20,
             ref randomizer
         );
 
@@ -489,7 +489,7 @@ impl ResolutionImpl of ResolutionTrait {
     fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
             encounter.attack,
-            30,
+            20,
             ref randomizer
         );
 
@@ -502,9 +502,9 @@ impl ResolutionImpl of ResolutionTrait {
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
 
-        // loss a flat 3 or 5% drug each round xd
-        let loss_pct = drug_unpacked.quantity.pct(3);
-        let possible_drug_loss = MathImpl::max(loss_pct, 5);
+        // loss a 2 or 1% drug each round xd
+        let loss_pct = drug_unpacked.quantity.pct(1);
+        let possible_drug_loss = MathImpl::max(loss_pct, 2);
         let mut drug_loss = 0;
        
         if possible_drug_loss <=  drug_unpacked.quantity{

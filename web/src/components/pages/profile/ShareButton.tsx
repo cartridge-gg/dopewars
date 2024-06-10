@@ -33,15 +33,15 @@ const getShareText = (game: GameClass, gameInfos: Game): string => {
   const playerName = shortString.decodeShortString(gameInfos.player_name?.value)
   if (game.player.health > 0) {
     return encodeURIComponent(
-      `I have reached Day ${game.player.turn} with ${formatCash(
+      `${playerName} has reached Day ${game.player.turn} with ${formatCash(
         game.player.cash,
-      )} $paper. Think you can out hustle me? #dopewars.\n\n${window.location.origin}`,
+      )} $paper. Think you can out hustle them? #dopewars.\n\n${window.location.origin}`,
     );
   } else {
     return encodeURIComponent(
-      `I got dropped on Day ${game.player.turn} but pocketed ${formatCash(
+      `${playerName} got dropped on Day ${game.player.turn} but pocketed ${formatCash(
         game.player.cash,
-      )} $paper before checking out. Think you can out hustle me? #dopewars.\n\n${window.location.origin}`,
+      )} $paper before checking out. Think you can out hustle them? #dopewars.\n\n${window.location.origin}`,
     );
   }
 };

@@ -12,7 +12,7 @@ fn test_random_between_0_2() {
     let (world, contracts) = spawn_world();
 
     starknet::testing::set_contract_address(111.try_into().unwrap());
-    let mut randomizer = RandomImpl::new(array!['world']);
+    let mut randomizer = RandomImpl::new('world');
     let mut i = 0;
     loop {
         if i == 10 {
@@ -32,7 +32,7 @@ fn test_random_u8() {
     let (world, contracts) = spawn_world();
 
     starknet::testing::set_contract_address(111.try_into().unwrap());
-    let mut randomizer = RandomImpl::new(array!['world']);
+    let mut randomizer = RandomImpl::new('world');
     let mut i = 0;
     loop {
         if i == 3 {
@@ -48,7 +48,7 @@ fn test_random_u8() {
     };
 
     starknet::testing::set_contract_address(222.try_into().unwrap());
-    let mut randomizer2 = RandomImpl::new(array!['world']);
+    let mut randomizer2 = RandomImpl::new('world');
     let mut i = 0;
     loop {
         if i == 3 {

@@ -193,7 +193,7 @@ export default observer(Logs);
 
 const CustomLeftPanel = () => {
   const { game, gameInfos } = useGameStore();
-  const { router } = useRouterContext();
+
   return (
     <VStack
       flex={1}
@@ -207,15 +207,7 @@ const CustomLeftPanel = () => {
       {/* <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
         {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
       </Text> */}
-      <Heading
-        fontSize={["30px", "48px"]}
-        fontWeight="400"
-        mb={["0px", "20px"]}
-        cursor="pointer"
-        onClick={() => {
-          router.push(`/game/history/${gameInfos?.player_id}`);
-        }}
-      >
+      <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         {shortString.decodeShortString(gameInfos?.player_name?.value || "")}
       </Heading>
 

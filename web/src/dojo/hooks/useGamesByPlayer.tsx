@@ -17,7 +17,7 @@ import {
   useTravelEncounterByPlayerQuery,
   useTravelEncounterResultsByPlayerQuery,
 } from "@/generated/graphql";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
 import { Hustler, Hustlers } from "@/components/hustlers";
@@ -67,35 +67,30 @@ export interface GamesByPlayerInterface {
   playerStats?: PlayerStats;
 }
 
+// TODO : change to get games by player by Season
 export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
   const { data, isFetched } = useGamesByPlayerQuery({
     playerId,
   });
-  const { configStore } = useDojoContext();
 
   const { data: allSeasonSettings } = useAllSeasonSettingsQuery({});
   const { data: allGameConfig } = useAllGameConfigQuery({});
 
-  const { data: allTravelEncounters, refetch: refetchTravelEncounters } = useTravelEncounterByPlayerQuery({
+  const { data: allTravelEncounters } = useTravelEncounterByPlayerQuery({
     travelEncounterSelector: WorldEvents.TravelEncounter,
     playerId,
   });
-
-  const { data: allTravelEncounterResults, refetch: refetchTravelEncounterResults } = useTravelEncounterResultsByPlayerQuery({
+  const { data: allTravelEncounterResults } = useTravelEncounterResultsByPlayerQuery({
     travelEncounterResultSelector: WorldEvents.TravelEncounterResult,
     playerId,
   });
 
-  const { data: allTradedDrugByPlayer, refetch: refetchTradedDrugs } = useTradedDrugByPlayerQuery({
+  const { data: allTradedDrugByPlayer } = useTradedDrugByPlayerQuery({
     tradeDrugSelector: WorldEvents.TradeDrug,
     playerId,
   });
 
-  // useEffect(() => {
-  //   refetchTravelEncounters()
-  //   refetchTravelEncounterResults()
-  //   refetchTradedDrugs()
-  // }, [playerId])
+  const { configStore } = useDojoContext();
 
   const games = useMemo(() => {
     if (!data || !allGameConfig || !allSeasonSettings) return [];
@@ -203,8 +198,7 @@ export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
     };
 
     return stats;
-  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrugByPlayer]);
-
+  }, [games, allTravelEncounters, allTravelEncounterResults]);
 
   return {
     games: games || [],

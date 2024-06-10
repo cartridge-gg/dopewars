@@ -42,11 +42,11 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
                 health_base: 12 - 2,
                 health_step: 8 - 2,
                 attack_base: 14 - 2,
-                attack_step: 9 - 2,
-                defense_base: 16 - 4,
+                attack_step: 8 - 2,
+                defense_base: 16 - 2,
                 defense_step: 9 - 2,
-                speed_base: 6,
-                speed_step: 9 - 2,
+                speed_base: 6 - 2,
+                speed_step: 8 - 2,
             }
         );
 
@@ -58,11 +58,11 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
                 health_base: 1,
                 health_step: 11 - 2,
                 attack_base: 5,
-                attack_step: 12 - 2,
-                defense_base: 7 - 4,
+                attack_step: 11 - 2,
+                defense_base: 7,
                 defense_step: 8 - 2,
                 speed_base: 2,
-                speed_step: 9 - 2,
+                speed_step: 8 - 2,
             }
         );
 
@@ -76,11 +76,11 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
                 health_base: 12,
                 health_step: 8,
                 attack_base: 14,
-                attack_step: 9,
+                attack_step: 8,
                 defense_base: 16,
                 defense_step: 9,
                 speed_base: 6,
-                speed_step: 9,
+                speed_step: 8,
             }
         );
 
@@ -92,11 +92,11 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
                 health_base: 1,
                 health_step: 11,
                 attack_base: 5,
-                attack_step: 12,
+                attack_step: 11,
                 defense_base: 7,
                 defense_step: 8,
                 speed_base: 2,
-                speed_step: 9,
+                speed_step: 8,
             }
         );
 
@@ -107,14 +107,14 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::UltraViolence,
-                health_base: 12 + 3,
+                health_base: 12 + 2,
                 health_step: 8 + 2,
-                attack_base: 14 + 3,
-                attack_step: 9 + 2,
-                defense_base: 16 + 3,
+                attack_base: 14 + 2,
+                attack_step: 8 + 2,
+                defense_base: 16 + 2,
                 defense_step: 9 + 2,
-                speed_base: 6 + 3,
-                speed_step: 9 + 2,
+                speed_base: 6 + 2,
+                speed_step: 8 + 2,
             }
         );
 
@@ -123,14 +123,14 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::UltraViolence,
-                health_base: 1 + 4,
-                health_step: 11 + 4,
-                attack_base: 5 + 4,
-                attack_step: 12 + 4,
-                defense_base: 7 + 4,
-                defense_step: 8 + 4,
-                speed_base: 2 + 4,
-                speed_step: 9 + 4,
+                health_base: 1 + 3,
+                health_step: 11 + 3,
+                attack_base: 5 + 3,
+                attack_step: 11 + 3,
+                defense_base: 7 + 3,
+                defense_step: 8 + 3,
+                speed_base: 2 + 3,
+                speed_step: 8 + 3,
             }
         );
 }
@@ -194,8 +194,8 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounter_level(ref season_settings: SeasonSettings, reputation: u8) -> u8 {
         let level = match season_settings.encounters_odds_mode {
             EncountersOddsMode::Easy => { reputation / 20 + 1 },
-            EncountersOddsMode::Normal => { reputation / 15 + 1 },
-            EncountersOddsMode::Hard => { reputation / 10 + 1 },
+            EncountersOddsMode::Normal => { reputation / 16 + 1 },
+            EncountersOddsMode::Hard => { reputation / 12 + 1 },
         };
 
         MathImplU8::min(6, level)
@@ -287,8 +287,8 @@ impl EncounterImpl of EncounterTrait {
     }
 
     fn get_payout(self: EncounterConfig, ref game_store: GameStore) -> u32 {
-        let turn_modifer = game_store.player.turn / 3;
-        (self.level.into() * 2 + (turn_modifer.into() * turn_modifer.into())) * 900
+        let turn_modifer = game_store.player.turn / 5;
+        (self.level.into() * 3 + (turn_modifer.into() * turn_modifer.into())) * 1_000
     }
 }
 

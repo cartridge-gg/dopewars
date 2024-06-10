@@ -45,7 +45,7 @@ fn on_turn_end(
     game_store.player.next_location = Locations::Home;
 
     // update turn
-    game_store.player.turn = game_store.player.turn.add_capped(1, game_store.game_config().max_turns);
+    game_store.player.turn += 1;
 
     // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
     let mut game_config = game_store.game_config();

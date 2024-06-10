@@ -98,8 +98,8 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
             rep_drug_step: 20,
             rep_buy_item: 2,
             rep_carry_drugs: 2,
-            rep_hospitalized: 3,
-            rep_jailed: 5,
+            rep_hospitalized: 4,
+            rep_jailed: 6,
         }
     }
 
@@ -125,9 +125,9 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
         match self.turns_mode {
-            TurnsMode::OnSpeed => { 20 },
-            TurnsMode::OnWeed => { 24 },
-            TurnsMode::OnMush => { 28 },
+            TurnsMode::OnSpeed => { 24 },
+            TurnsMode::OnWeed => { 30 },
+            TurnsMode::OnMush => { 36 },
         }
     }
 
