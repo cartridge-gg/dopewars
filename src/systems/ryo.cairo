@@ -6,12 +6,6 @@ use rollyourown::{config::ryo::{RyoConfig}};
 #[starknet::interface]
 trait IRyo<T> {
     //
-    fn initialize(
-        self: @T,
-        paper_address: ContractAddress,
-        treasury_address: ContractAddress,
-        laundromat_address: ContractAddress
-    );
     fn set_paused(self: @T, paused: bool);
     fn update_ryo_config(self: @T, ryo_config: RyoConfig);
 
@@ -42,17 +36,13 @@ mod ryo {
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
     };
 
-
-    #[abi(embed_v0)]
-    impl RyoExternalImpl of super::IRyo<ContractState> {
-        fn initialize(
+    
+    fn dojo_init(
             self: @ContractState,
             paper_address: ContractAddress,
             treasury_address: ContractAddress,
             laundromat_address: ContractAddress
         ) {
-            self.assert_caller_is_owner();
-
             let mut ryo_config = self.s().ryo_config();
 
             assert(ryo_config.initialized == false, 'Already initialized');
@@ -76,11 +66,11 @@ mod ryo {
             let mut randomizer = RandomImpl::new('ryo');
             let season_manager = SeasonManagerTrait::new(self.s());
             season_manager.new_season(ref randomizer, ryo_config.season_version);
-        }
+    }
+   
 
-        //
-        // 
-        //
+    #[abi(embed_v0)]
+    impl RyoExternalImpl of super::IRyo<ContractState> {  
 
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();

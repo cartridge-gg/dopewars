@@ -55,17 +55,22 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "PaperMockInitializerImpl",
-    "interface_name": "rollyourown::_mocks::paper_mock::IPaperMockInitializer"
+    "name": "IDojoInitImpl",
+    "interface_name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "rollyourown::_mocks::paper_mock::IPaperMockInitializer",
+    "name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit",
     "items": [
       {
         "type": "function",
-        "name": "initializer",
-        "inputs": [],
+        "name": "dojo_init",
+        "inputs": [
+          {
+            "name": "faucet_to",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
         "outputs": [],
         "state_mutability": "external"
       }
@@ -98,24 +103,6 @@ export const ABI = [
         ],
         "outputs": [],
         "state_mutability": "external"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "IDojoInitImpl",
-    "interface_name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit"
-  },
-  {
-    "type": "interface",
-    "name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_init",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "view"
       }
     ]
   },

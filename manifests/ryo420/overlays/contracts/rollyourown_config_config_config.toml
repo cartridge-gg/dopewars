@@ -1,0 +1,4 @@
+name = "rollyourown::config::config::config"
+reads = []
+writes = ["GameConfig","DrugConfig","LocationConfig","HustlerItemBaseConfig","HustlerItemTiersConfig","EncounterStatsConfig"]
+init_calldata = []

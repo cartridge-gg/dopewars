@@ -43,14 +43,7 @@ trait IPaperMock<TState> {
 }
 
 
-///
-/// Interface required to remove compiler warnings and future
-/// deprecation.
-///
-#[starknet::interface]
-trait IPaperMockInitializer<TState> {
-    fn initializer(ref self: TState);
-}
+
 
 #[starknet::interface]
 trait IPaperMockFaucet<TState> {
@@ -159,19 +152,15 @@ mod paper_mock {
     //
 
     #[abi(embed_v0)]
-    impl PaperMockInitializerImpl of super::IPaperMockInitializer<ContractState> {
-        fn initializer(ref self: ContractState) {
-            assert(
-                self.world().is_owner(get_caller_address(), get_contract_address().into()),
-                Errors::CALLER_IS_NOT_OWNER
-            );
+       fn dojo_init(ref self: ContractState, faucet_to: ContractAddress) {
 
             self.erc20_metadata.initialize("fPAPER", "fPAPER", 18);
             self.erc20_mintable.mint(get_caller_address(), 10_000);
+            
+            self.faucetTo(faucet_to);
 
             self.initializable.initialize();
         }
-    }
 
     //
     // Faucet

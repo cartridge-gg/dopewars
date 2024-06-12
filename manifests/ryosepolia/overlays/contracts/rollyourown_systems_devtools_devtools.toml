@@ -1,0 +1,4 @@
+name = "rollyourown::systems::devtools::devtools"
+reads = []
+writes = ["SortedList","SortedListItem","Game","GameConfig","GameStorePacked","Season","SeasonSettings","RyoConfig"]
+init_calldata = []
