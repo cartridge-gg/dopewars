@@ -1,7 +1,7 @@
 // TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot420Chain /*, katanaSlot421Chain */, katanaSlot421Chain } from "./chains";
+import { katanaLocalChain, katanaSlot420Chain ,katanaSlot421Chain } from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
 import manifestRyo420 from "../../manifests/ryo420/manifest.json";
@@ -104,10 +104,8 @@ const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
   chainConfig: sepolia,
   rpcUrl: "https://api.cartridge.gg/rpc/starknet-sepolia/v0_7",
-  // toriiUrl: "https://api.cartridge.gg/x/ryosepolia/torii/graphql",
-  // toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia/torii/graphql/ws",
-  toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
-  toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "ws://localhost:8080/graphql/ws",
+  toriiUrl: "https://api.cartridge.gg/x/ryosepolia/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia/torii/graphql/ws",
   masterAddress: undefined,
   masterPrivateKey: undefined,
   accountClassHash: undefined,
@@ -131,17 +129,17 @@ const snMainnet: DojoChainConfig = {
 // keys must match chain.id
 export const dojoContextConfig = {
   KATANA: katanaLocal,
-  KATANA_SLOT_420: katanaSlot420,
-  // "KATANA_SLOT_421": katanaSlot421,
-  // "SN_SEPOLIA": snSepolia,
+  // KATANA_SLOT_420: katanaSlot420,
+  KATANA_SLOT_421: katanaSlot421,
+  SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
 
 export const dojoChains = [
   katanaLocal,
-  katanaSlot420,
-  // katanaSlot421,
-  // snSepolia,
+  // katanaSlot420,
+  katanaSlot421,
+  snSepolia,
   // snMainnet,
 ];
 

@@ -30,8 +30,8 @@ migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate app
 migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE"
 migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
-migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo000"
-migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --name ryo000 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
+migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo002"
+migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --name ryo002 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
@@ -43,8 +43,7 @@ slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.0-al
 slot_ryo421_torii = "slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
 
 # slot ryo_sepolia
-slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 63200 --version v0.7.0-alpha.1 --world 0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
-# --index-pending 
+slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 73184 --index-pending true --version v0.7.0-alpha.5 --world 0x10c26511d4264cf894246bdbe2efc53cf99632d1fcd5fab7283649c34ca0494"
 
 
 [[target.dojo]]
@@ -73,9 +72,9 @@ account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954
 private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
 
 [profile.ryosepolia.tool.dojo.env]
-# world_address= "0x45d3b72e3c6c85c38d43798b9751817f14fac4b14c3645480683f8fae1c6464"
-# rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
+# world_address= "0x10c26511d4264cf894246bdbe2efc53cf99632d1fcd5fab7283649c34ca0494"
 rpc_url = "https://starknet-sepolia.g.alchemy.com/v2/AQxmz1FjMPH2mY7wc3er677SdzOdS1XE"
+# rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia/v0_6"
 account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
 keystore_path = "/Users/boo/sozo_acc"
 # password = "sozo_acc"
@@ -89,6 +88,15 @@ keystore_path = "/Users/boo/sozo_acc"
 name = "Dope Wars"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 website = "https://rollyourown.preview.cartridge.gg/"
+icon_uri = "file://assets/icon.png"
+cover_uri = "file://assets/cover.png"
+socials.x = "https://x.com/TheDopeWars"
+
+
+[profile.ryosepolia.tool.dojo.world]
+name = "Dope Wars"
+description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO.."
+website = "https://dopewars.game/"
 icon_uri = "file://assets/icon.png"
 cover_uri = "file://assets/cover.png"
 socials.x = "https://x.com/TheDopeWars"

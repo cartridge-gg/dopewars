@@ -36,11 +36,11 @@ echo "--------------------------------------------------------------------------
 
 sleep 2
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1 --fee-estimate-multiplier 10 --wait 
+sozo -P $PROFILE execute -vvv --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1  --wait 
 echo "Initialized CONFIG 1!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2 --fee-estimate-multiplier 10 --wait 
+sozo -P $PROFILE execute -vvv --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2  --wait 
 echo "Initialized CONFIG 2!"
 sleep $TX_SLEEP
 

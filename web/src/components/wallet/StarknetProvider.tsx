@@ -3,6 +3,7 @@ import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
   ExplorerFactory,
+  InjectedConnector,
   JsonRpcProviderArgs,
   StarknetConfig,
   argent,
@@ -16,6 +17,7 @@ import {
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 import { RpcProvider } from "starknet";
+import CartridgeConnector from "@cartridge/connector";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -34,10 +36,10 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
     // if(!selectedChain) return undefined
 
     const config = {
-      nodeUrl: selectedChain.rpcUrl || ""
-    } 
+      nodeUrl: selectedChain.rpcUrl || "",
+    };
     // if (!config) return null;
-    const chainId = selectedChain.chainConfig.id || undefined
+    const chainId = selectedChain.chainConfig.id || undefined;
 
     ///@ts-ignore
     const provider = new RpcProvider({ ...selectedChain, ...config, chainId });
@@ -46,22 +48,36 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
   };
 }
 
+function getConnectorsForChain(selectedChain: DojoChainConfig) {
+
+  switch (selectedChain.name) {
+    case "SEPOLIA":
+      return [cartridgeConnector];
+      break;
+
+    default:
+      return [injected({ id: "dojoburner" })];
+      break;
+  }
+}
+
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  const { connectors } = useInjectedConnectors({
-    // Show these connectors if the user has no connector installed.
-    recommended: [argent(), braavos(), injected({ id: "dojoburner" })],
-    // Hide recommended connectors if the user has any connector installed.
-    includeRecommended: "always",
-    // Randomize the order of the connectors.
-    // order: "random"
-  });
+  // const { connectors } = useInjectedConnectors({
+  //   // Show these connectors if the user has no connector installed.
+  //   recommended: [/*argent(), braavos(),*/ injected({ id: "dojoburner" }), cartridgeConnector],
+  //   // Hide recommended connectors if the user has any connector installed.
+  //   includeRecommended: "onlyIfNoConnectors",
+  //   // Randomize the order of the connectors.
+  //   // order: "random"
+  // });
 
   const chains = getStarknetProviderChains();
-  // const connectors = isKatana ? [...listConnectors()] : [argent(), braavos()];
+
+  const connectors = getConnectorsForChain(selectedChain);
 
   // TODO: remove
   // const provider = jsonRpcProvider({ rpc });
-  const provider = customJsonRpcProvider(selectedChain)
+  const provider = customJsonRpcProvider(selectedChain);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
@@ -71,3 +87,31 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
     </StarknetConfig>
   );
 }
+
+import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+
+const cartridgeConnector = new CartridgeConnector(
+  [
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      method: "travel",
+    },
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      method: "decide",
+    },
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      method: "end_game",
+    },
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
+        .address,
+      method: "register_score",
+    },
+  ],
+  {
+    url: "https://x.cartridge.gg",
+    theme: "rollyourown",
+  },
+) as unknown as InjectedConnector;
