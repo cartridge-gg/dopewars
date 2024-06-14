@@ -93,6 +93,10 @@ import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 const cartridgeConnector = new CartridgeConnector(
   [
     {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!.address,
+      method: "faucet",
+    },
+    {
       target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
       method: "travel",
     },
@@ -112,6 +116,6 @@ const cartridgeConnector = new CartridgeConnector(
   ],
   {
     url: "https://x.cartridge.gg",
-    theme: "rollyourown",
+    theme: "dope-wars",
   },
 ) as unknown as InjectedConnector;

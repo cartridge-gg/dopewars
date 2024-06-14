@@ -36,6 +36,11 @@ export const ConnectModal = observer(() => {
     uiStore.closeConnectModal();
   };
 
+  // if (uiStore.modals.connect !== undefined && connectors.length === 1 && connectors[0].available()) {
+  //   connect({ connector: connectors[0] });
+  //   return null
+  // }
+
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={uiStore.modals.connect !== undefined} onClose={onClose}>
       <ModalOverlay />

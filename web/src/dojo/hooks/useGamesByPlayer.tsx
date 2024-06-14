@@ -67,8 +67,8 @@ export interface GamesByPlayerInterface {
   playerStats?: PlayerStats;
 }
 
-// TODO : change to get games by player by Season
-export const useGamesByPlayer = (playerId: string): GamesByPlayerInterface => {
+export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface => {
+  const playerId = `0x${BigInt(playerIdRaw).toString(16)}`; // remove leading zero..
   const { data, isFetched } = useGamesByPlayerQuery({
     playerId,
   });

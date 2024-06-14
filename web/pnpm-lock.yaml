@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cartridge/connector':
-        specifier: ^0.3.26
-        version: 0.3.26(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
+        specifier: ^0.3.27
+        version: 0.3.27(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
       '@chakra-ui/anatomy':
         specifier: ^2.1.1
         version: 2.2.2
@@ -810,11 +810,11 @@ packages:
     resolution: {integrity: sha512-+uarb83brBzPKN38NX1MkB6vb6+mwvR6amUulqAE7ccQw1pEl+bCia9TbdG1lsnFP7lZySvUn37CHyXQdfTwzg==}
     engines: {node: '>=6.9.0'}
 
-  '@cartridge/connector@0.3.26':
-    resolution: {integrity: sha512-zg5Hs59b++yCjLPo/HDLuGwofWUtk9fos0poUXJqyU5QrIwjJXJuDaRFskoGfPGAsAzVqt1AHMpVpLEauxADig==}
+  '@cartridge/connector@0.3.27':
+    resolution: {integrity: sha512-9YO1DO/RTVce8ghlAsgvlE6xBQux7CX5dXIavrvEtXf3hzXKRSJxv3BdhuvJKA+dB0/I/YDdNZJdBjtQNN2WaQ==}
 
-  '@cartridge/controller@0.3.26':
-    resolution: {integrity: sha512-rdvsFszy5bQUlLPXYWbEsOglu6XrmN2RlkGYhzcNccdxey5HicN1xP2lj+I0sBxDJ4WIjl59/hU8Oqw4yFwy8Q==}
+  '@cartridge/controller@0.3.27':
+    resolution: {integrity: sha512-Q4TyY2rr5XcpU4n3uNfENxsgdD1cEM7rPz6ifDkXgaAEzyTnMTgOjPQTKeq0rmvNkQMWMw6JRSPAc92/PISFrQ==}
 
   '@cartridge/penpal@6.2.3':
     resolution: {integrity: sha512-K8h9VqBfFPXcAFQNnvgBnejF/dp7249pS4jXu3NhNYR6JqMQxtcrDqfnPmJvbF4ECEBs+8Z2UiwlRQiKt5nNsg==}
@@ -6544,9 +6544,9 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@cartridge/connector@0.3.26(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
+  '@cartridge/connector@0.3.27(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
     dependencies:
-      '@cartridge/controller': 0.3.26(encoding@0.1.13)
+      '@cartridge/controller': 0.3.27(encoding@0.1.13)
       '@starknet-react/core': 2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.9.0(encoding@0.1.13))
       starknet: 6.9.0(encoding@0.1.13)
       typescript: 5.4.5
@@ -6555,7 +6555,7 @@ snapshots:
       - get-starknet-core
       - react
 
-  '@cartridge/controller@0.3.26(encoding@0.1.13)':
+  '@cartridge/controller@0.3.27(encoding@0.1.13)':
     dependencies:
       '@cartridge/penpal': 6.2.3
       base64url: 3.0.1

@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { ChildrenOrConnect, TokenBalance } from "@/components/wallet";
+import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
 import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
@@ -436,6 +436,7 @@ const RyoSuperchargeCard = observer(() => {
                   SEND
                 </Button>
               </ChildrenOrConnect>
+              <PaperFaucet />
             </HStack>
           </VStack>
         </VStack>

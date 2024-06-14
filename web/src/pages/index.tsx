@@ -20,7 +20,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
+import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
 
@@ -29,6 +29,7 @@ export default function Home() {
   const { account } = useAccount();
   const { uiStore, burnerManager } = useDojoContext();
   const { launder, isPending } = useSystems();
+  const { connectors, connect } = useConnect();
 
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -54,15 +55,24 @@ export default function Home() {
 
   const onHustle = async () => {
     if (!account) {
-      uiStore.openConnectModal();
-      return;
+      if (connectors.length > 1) {
+        uiStore.openConnectModal();
+      } else {
+        connect({ connector: connectors[0] });
+
+        if (connectors[0].id !== "cartridge") {
+          router.push(`/game/new`);
+        }
+      }
     }
 
     if (!isLocalhost) {
       play();
     }
 
-    router.push(`/game/new`);
+    if (account) {
+      router.push(`/game/new`);
+    }
   };
 
   const onLaunder = async () => {

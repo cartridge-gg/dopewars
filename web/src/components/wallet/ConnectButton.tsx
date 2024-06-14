@@ -12,11 +12,19 @@ export const ConnectButton = ({ ...props }) => {
 
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
 
+  const onClick = () => {
+    if (connectors.length > 1) {
+      uiStore.openConnectModal();
+    } else {
+      connect({connector: connectors[0]});
+    }
+  };
+
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="center" {...props}>
         {!account && (
-          <Button variant="pixelated" h="48px" fontSize="14px" onClick={() => uiStore.openConnectModal()} w="full">
+          <Button variant="pixelated" h="48px" fontSize="14px" onClick={onClick} w="full">
             Connect
           </Button>
         )}

@@ -3,8 +3,8 @@ import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
-import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { useConfigStore, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import { ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
+import { useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
@@ -33,6 +33,12 @@ const New = observer(() => {
   const isMobile = IsMobile();
 
   const inputRef = useRef<null | HTMLDivElement>(null);
+
+  const { balance, isInitializing } = useTokenBalance({
+    address: account?.address,
+    token: config?.ryoAddress.paper,
+    refetchInterval: 5_000,
+  });
 
   useEffect(() => {
     const hustler = configStore.getHustlerById(hustlerId);
@@ -100,14 +106,18 @@ const New = observer(() => {
           </Button>
 
           <ChildrenOrConnect>
-            <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isLoading={isPending}
-              onClick={() => create(GameMode.Dealer)}
-            >
-              Play
-            </Button>
+            {balance > 1000 ? (
+              <Button
+                w={["full", "auto"]}
+                px={["auto", "20px"]}
+                isLoading={isPending}
+                onClick={() => create(GameMode.Dealer)}
+              >
+                Play
+              </Button>
+            ) : (
+              <PaperFaucetButton />
+            )}
 
             {/* <Button
               w={["full", "auto"]}
@@ -263,10 +273,10 @@ const New = observer(() => {
                     )}
                   </VStack>
 
-                  <HStack>
-                    {/* <BuyPaper /> */}
+                  {/* <HStack>
+                   <BuyPaper />
                     {account && <PaperFaucet />}
-                  </HStack>
+                  </HStack> */}
                 </HStack>
               </Card>
             )

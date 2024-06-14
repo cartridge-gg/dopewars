@@ -20,7 +20,7 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@cartridge/connector": "^0.3.26",
+    "@cartridge/connector": "^0.3.27",
     "@dojoengine/core": "0.7.0-alpha.0",
     "@dojoengine/create-burner": "0.7.0-alpha.0",
     "@dojoengine/utils": "0.7.0-alpha.0",

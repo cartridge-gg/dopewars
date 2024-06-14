@@ -2,7 +2,7 @@ import { DollarBag, PaperIcon } from "@/components/icons";
 import { useConfigStore } from "@/dojo/hooks";
 
 import { useFaucet } from "@/dojo/hooks/useFaucet";
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 const iconsBySymbol = {
   fPAPER: PaperIcon,
@@ -23,4 +23,22 @@ export const PaperFaucet = () => {
       <DollarBag />
     </Box>
   );
+};
+
+
+export const PaperFaucetButton = () => {
+  const { config } = useConfigStore();
+  const { isPending, faucet } = useFaucet(config?.ryoAddress.paper);
+
+  const onClick = () => {
+    if (isPending) return;
+    faucet();
+  };
+
+  return (
+    <Button onClick={onClick}>
+      <DollarBag /> MINT PAPER
+    </Button>
+  );
+
 };
