@@ -25,7 +25,6 @@ export const PaperFaucet = () => {
   );
 };
 
-
 export const PaperFaucetButton = () => {
   const { config } = useConfigStore();
   const { isPending, faucet } = useFaucet(config?.ryoAddress.paper);
@@ -36,9 +35,8 @@ export const PaperFaucetButton = () => {
   };
 
   return (
-    <Button onClick={onClick}>
+    <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={onClick} isLoading={isPending}>
       <DollarBag /> MINT PAPER
     </Button>
   );
-
 };

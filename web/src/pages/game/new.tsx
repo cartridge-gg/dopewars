@@ -6,6 +6,7 @@ import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
 import { useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
+import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
@@ -15,7 +16,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 
 const New = observer(() => {
-  const { router, isRyoDotGame } = useRouterContext();
+  const { router, isRyoDotGame, isLocalhost } = useRouterContext();
 
   const { account } = useAccount();
 
@@ -79,6 +80,10 @@ const New = observer(() => {
     }
 
     try {
+      if (!isLocalhost) {
+        play();
+      }
+
       const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 
       router.push(`/${gameId}/travel`);

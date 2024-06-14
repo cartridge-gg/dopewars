@@ -66,10 +66,6 @@ export default function Home() {
       }
     }
 
-    if (!isLocalhost) {
-      play();
-    }
-
     if (account) {
       router.push(`/game/new`);
     }

@@ -282,7 +282,7 @@ const Encounter = observer(
           justifyContent="center"
           alignItems="center"
           position="relative"
-          gap={[0, 12]}
+          gap={[2, 12]}
         >
           <Image
             src={imgUrl}
