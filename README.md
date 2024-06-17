@@ -1,4 +1,4 @@
-![Roll Your Own Banner](.github/banner-wide.png)
+![Roll Your Own Banner](.github/banner-wide-2.png)
 
 # Roll Your Own
 
