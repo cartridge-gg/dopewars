@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { Backward, Forward, Note, Pause, Play, Volume } from "../icons";
+import { toggleIsMuted } from "@/hooks/media";
 
 const slideAnim = keyframes`  
   0% {transform: translateX( 0%);}
@@ -134,7 +135,9 @@ export const MediaPlayer = ({ ...props }: StyleProps) => {
       </Flex>
 
       <HStack w="full" px={1}>
-        <Volume />
+        <Box cursor="pointer" onClick={toggleIsMuted}>
+          <Volume muted={mediaStore.volume === 0 || mediaStore.isMuted} />
+        </Box>
 
         <Slider
           variant="small"

@@ -195,7 +195,7 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
       <Box boxSize="full" mt={["0", "30px"]}>
         <VStack gap={6}>
           <Tabs variant="unstyled" w="full">
-            <TabList pb={6}>
+            <TabList pb={6} overflowX="auto">
               <Tab>HUSTLERS</Tab>
               <Tab>GENERAL</Tab>
               <Tab>ENCOUNTERS</Tab>
@@ -262,6 +262,20 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
           </Tabs>
         </VStack>
       </Box>
+
+      {/* <Button
+        variant="pixelated"
+        h="48px"
+        onClick={() => {
+          navigator.clipboard.writeText(`${window.location.origin}/game/history/${playerId}`);
+
+          toast({
+            message: "Copied to clipboard",
+          });
+        }}
+      >
+        Profile Link
+      </Button> */}
     </VStack>
   );
 };

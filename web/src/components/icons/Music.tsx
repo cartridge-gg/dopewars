@@ -43,21 +43,40 @@ export const Forward = (props: IconProps) => {
   );
 };
 
-export const Volume = (props: IconProps) => {
+export const Volume = ({ muted, ...props }: { muted: boolean } & IconProps) => {
   return (
-    <Icon viewBox="0 0 24 24" {...props}>
-      <>
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M9.81765 5.45483V6.90922H8.36324V8.3636H4V15.637H8.36324V17.0914H9.81765V18.5457H14.1823V5.45483H9.81765ZM8.36469 8.36506V9.81944H5.45587V14.1811H8.36469V15.6355H9.81911V17.0899H12.7265V6.91067H9.81911V8.36506H8.36469Z"
-          fill="currentColor"
-        />
-        <path
-          d="M18.4231 11.9996H16.9686V14.9098H19.8789V10.5466H21.3333V9.09079H18.4231V11.9996Z"
-          fill="currentColor"
-        />
-      </>
-    </Icon>
+    <>
+      {muted ? (
+        <Icon viewBox="0 0 24 24" {...props}>
+          <>
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M9.81765 5.45435V6.90876H8.36324V8.36317H4V15.6367H8.36324V17.0911H9.81765V18.5455H14.1823V5.45435H9.81765ZM8.36469 8.36463V9.81904H5.45587V14.1808H8.36469V15.6352H9.81911V17.0897H12.7265V6.91021H9.81911V8.36463H8.36469Z"
+              fill="currentColor"
+            />
+            <path
+              d="M16.9686 12.7264H18.4231V11.2735H16.9686V9.81759H18.4245V11.272H19.8775V9.81759H21.3333V11.2735H19.8789V12.7264H21.3333V14.1823H19.8775V12.7279H18.4245V14.1823H16.9686V12.7264Z"
+              fill="currentColor"
+            />
+          </>
+        </Icon>
+      ) : (
+        <Icon viewBox="0 0 24 24" {...props}>
+          <>
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M9.81765 5.45483V6.90922H8.36324V8.3636H4V15.637H8.36324V17.0914H9.81765V18.5457H14.1823V5.45483H9.81765ZM8.36469 8.36506V9.81944H5.45587V14.1811H8.36469V15.6355H9.81911V17.0899H12.7265V6.91067H9.81911V8.36506H8.36469Z"
+              fill="currentColor"
+            />
+            <path
+              d="M18.4231 11.9996H16.9686V14.9098H19.8789V10.5466H21.3333V9.09079H18.4231V11.9996Z"
+              fill="currentColor"
+            />
+          </>
+        </Icon>
+      )}
+    </>
   );
 };

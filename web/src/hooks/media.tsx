@@ -46,6 +46,7 @@ export interface MediaState {
   currentIndex: number;
   isPlaying: boolean;
   volume: number;
+  isMuted: boolean;
 }
 
 export const useMediaStore = create<MediaState>(() => ({
@@ -53,7 +54,8 @@ export const useMediaStore = create<MediaState>(() => ({
   medias: [],
   currentIndex: 0,
   isPlaying: false,
-  volume: 0.8,
+  volume: 0.7,
+  isMuted: false,
 }));
 
 export const initMediaStore = async () => {
@@ -103,12 +105,20 @@ export const initMediaStore = async () => {
   updateMetadata();
 };
 
+export const toggleIsMuted = () => {
+  const state = useMediaStore.getState();
+
+  if (state.isMuted || state.volume === 0) {
+    volume(0.7);
+  } else {
+    volume(0);
+  }
+};
+
 export const play = () => {
   const state = useMediaStore.getState();
   const currentMedia = state.medias[state.currentIndex];
   if (!currentMedia || !currentMedia?.sound) return;
-
-  if (state.isPlaying) return
 
   // force all other sounds to stop
   for (let media of state.medias) {
@@ -119,7 +129,7 @@ export const play = () => {
 
   // play sound
   if (!currentMedia.sound?.playing()) {
-    currentMedia.sound?.volume(state.volume)
+    currentMedia.sound?.volume(state.volume);
     currentMedia.sound?.play();
   }
 
@@ -142,9 +152,10 @@ export const pause = () => {
 
 export const volume = (v: number) => {
   const state = useMediaStore.getState();
-  state.medias[state.currentIndex].sound?.volume(v)
+  state.medias[state.currentIndex].sound?.volume(v);
   useMediaStore.setState((state) => ({
     volume: v,
+    isMuted: v === 0,
   }));
 };
 
