@@ -26,7 +26,7 @@ export const HallOfFame = observer(() => {
     <>
       <VStack
         boxSize="full"
-        maxH={["calc(100vh - 350px)", "calc(100vh - 480px)"]}
+        maxH={["calc(100dvh - 350px)", "calc(100dvh - 480px)"]}
         sx={{
           overflowY: "scroll",
         }}

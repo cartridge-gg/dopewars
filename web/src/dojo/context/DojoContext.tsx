@@ -172,7 +172,7 @@ export const DojoContextProvider = observer(
     // is initializing
     if (!hasError && !isInitialized)
       return (
-        <Flex minH="100vh" alignItems="center" justifyContent="center">
+        <Flex minH="100dvh" alignItems="center" justifyContent="center">
           <VStack>
             <Loader />
           </VStack>

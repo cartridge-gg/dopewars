@@ -18,7 +18,7 @@ const fallingAnim = keyframes`
 
   100% {
     opacity: 0;
-    transform: translate(150px, 100vh) rotateZ(360deg);
+    transform: translate(150px, 100dvh) rotateZ(360deg);
   }
 `;
 

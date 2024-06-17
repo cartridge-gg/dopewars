@@ -81,18 +81,19 @@ export default function History() {
                 <Tab>ENDED</Tab>
               </TabList>
 
-              <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
-                <TabPanel p={0}>
-                  <GameList games={onGoingGames} />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <GameList games={endedGames} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </VStack>
-        </Flex>
-      </VStack>
+                <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
+                  <TabPanel p={0}>
+                    <GameList games={onGoingGames} />
+                  </TabPanel>
+                  <TabPanel p={0}>
+                    <GameList games={endedGames} />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </VStack>
+          </Flex>
+        </VStack>
+      )}
     </Layout>
   );
 }
@@ -201,7 +202,7 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
               <Tab>DRUGS</Tab>
             </TabList>
 
-            <TabPanels mt={0} /*maxH={["100%", "calc(100vh - 580px)"]} overflowY="scroll"*/>
+            <TabPanels mt={0} /*maxH={["100%", "calc(100dvh - 580px)"]} overflowY="scroll"*/>
               <TabPanel p={0}>
                 <VStack w="full" alignItems="center" gap={3}>
                   <HStack justify="center" alignItems="center">

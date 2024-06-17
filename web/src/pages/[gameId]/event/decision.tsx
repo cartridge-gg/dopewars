@@ -205,7 +205,7 @@ const Decision = observer(() => {
     >
       <VStack
         w="full"
-        h={["calc(100vh - 70px)", "calc(100vh - 120px)"]}
+        h={["calc(100dvh - 70px)", "calc(100dvh - 120px)"]}
         overflowY="scroll"
         sx={{
           "scrollbar-width": "none",
@@ -288,7 +288,7 @@ const Encounter = observer(
             src={imgUrl}
             alt="adverse event"
             // mt={[0, "100px"]}
-            maxH={["30vh", "calc(100vh - 300px)"]}
+            maxH={["30vh", "calc(100dvh - 300px)"]}
             w="auto"
             h={[150, 300]}
           />

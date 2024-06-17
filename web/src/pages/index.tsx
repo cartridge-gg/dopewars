@@ -87,7 +87,7 @@ export default function Home() {
     <Layout
       customLeftPanel={<HomeLeftPanel />}
       rigthPanelScrollable={false}
-      // rigthPanelMaxH="calc(100vh - 230px)"
+      // rigthPanelMaxH="calc(100dvh - 230px)"
     >
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
@@ -150,7 +150,7 @@ export default function Home() {
             <Tab>HALL OF FAME</Tab>
           </TabList>
 
-          <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
+          <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
             <TabPanel p={0}>
               <Leaderboard config={config} />
             </TabPanel>

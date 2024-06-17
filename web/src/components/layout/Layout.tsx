@@ -117,7 +117,7 @@ const RightPanel = ({
           "scrollbar-width": "none",
         }}
         w="full"
-        maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100vh - 70px)" : "calc(100vh - 145px)"}
+        maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100dvh - 70px)" : "calc(100dvh - 145px)"}
       >
         {children}
         {!isSinglePanel && rigthPanelScrollable && (

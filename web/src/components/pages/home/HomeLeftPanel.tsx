@@ -105,14 +105,7 @@ export const HomeLeftPanel = () => {
         }}
       >
         <VStack zIndex="2" position="relative">
-          <Text textStyle="subheading" fontSize="11px">
-            Welcome to
-          </Text>
-          <Heading fontSize={["30px", "48px"]} fontWeight="normal">
-            DOPE WARS
-          </Heading>
-
-          <Box w="full" position={"fixed"} top="-40px" zIndex={-1}>
+          <Box w="full" position={"fixed"} top="-40px" >
             <Image
               position="absolute"
               src={"/images/landing/main.png"}
@@ -125,6 +118,14 @@ export const HomeLeftPanel = () => {
               alt="context"
             />
           </Box>
+
+          <Text textStyle="subheading" fontSize="11px">
+            Welcome to
+          </Text>
+          <Heading fontSize={["30px", "48px"]} fontWeight="normal">
+            DOPE WARS
+          </Heading>
+
         </VStack>
 
         <VStack position="relative" top="-160px" display={["none", "flex"]}>

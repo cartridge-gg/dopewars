@@ -234,7 +234,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
   const { account } = useAccount();
 
   return (
-    <TableContainer position="relative" w="full" maxH="calc(100vh - 300px)" overflow="hidden" overflowY="auto">
+    <TableContainer position="relative" w="full" maxH="calc(100dvh - 300px)" overflow="hidden" overflowY="auto">
       <Table size="sm">
         <Thead position="sticky" top="0" bg="neon.900">
           <Tr>

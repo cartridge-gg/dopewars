@@ -128,8 +128,8 @@ const Logs = () => {
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
-  //const rigthPanelMaxH = isMobile ? (playerId ? "calc(100vh - 140px)" : "calc(100vh - 400px)") : "auto";
-  const rigthPanelMaxH = isMobile ? "calc(100vh - 140px)" : "auto";
+  //const rigthPanelMaxH = isMobile ? (playerId ? "calc(100dvh - 140px)" : "calc(100dvh - 400px)") : "auto";
+  const rigthPanelMaxH = isMobile ? "calc(100dvh - 140px)" : "auto";
 
   if (!logs || !game) {
     return <></>;

@@ -10,7 +10,7 @@ import colors from "./colors";
 export const styles = {
   global: {
     body: {
-      height: "100vh",
+      height: "100dvh",
       bgColor: "neon.900",
       color: "neon.200",
       letterSpacing: "0.04em",

@@ -22,7 +22,7 @@ export default function SeasonIndex() {
         imageSrc: "/images/landing/main.png",
       }}
       rigthPanelScrollable={false}
-      // rigthPanelMaxH="calc(100vh - 230px)"
+      // rigthPanelMaxH="calc(100dvh - 230px)"
       footer={<Button onClick={() => router.push("/")}>HOME</Button>}
     >
       <VStack boxSize="full" gap={6}>
@@ -38,7 +38,7 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
   const { account } = useAccount();
   const { router } = useRouterContext();
   return (
-    <TableContainer position="relative" w="full" maxH="calc(100vh - 300px)" overflow="hidden" overflowY="auto">
+    <TableContainer position="relative" w="full" maxH="calc(100dvh - 300px)" overflow="hidden" overflowY="auto">
       <Table size="sm">
         <Thead position="sticky" top="0" bg="neon.900">
           <Tr>
