@@ -1,6 +1,6 @@
-![Roll Your Own Banner](.github/banner-wide-dw.png)
+![Dope Wars Banner](.github/banner-wide-dw.png)
 
-# Roll Your Own
+# Dope Wars
 
 ![Github Actions][gha-badge]
 
