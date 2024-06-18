@@ -68,6 +68,9 @@ importers:
       howler:
         specifier: ^2.2.3
         version: 2.2.4
+      json-to-csv-export:
+        specifier: ^2.1.1
+        version: 2.1.1
       ka-table:
         specifier: ^8.11.0
         version: 8.11.0(react@18.2.0)
@@ -3985,6 +3988,9 @@ packages:
 
   json-stringify-safe@5.0.1:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
+
+  json-to-csv-export@2.1.1:
+    resolution: {integrity: sha512-JQLYqGfaJP4dVV0zIxH6RmHOdnJ32Qch3yDxDtWQy8KsOv73SthVRo38ANXckJxl/WUfGYvvtOlVwPURMTWqlA==}
 
   json-to-pretty-yaml@1.2.2:
     resolution: {integrity: sha512-rvm6hunfCcqegwYaG5T4yKJWxc9FXFgBVrcTZ4XfSVRwa5HA/Xs+vB/Eo9treYYHCeNM0nrSUr82V/M31Urc7A==}
@@ -10778,6 +10784,8 @@ snapshots:
       object-keys: 1.1.1
 
   json-stringify-safe@5.0.1: {}
+
+  json-to-csv-export@2.1.1: {}
 
   json-to-pretty-yaml@1.2.2:
     dependencies:

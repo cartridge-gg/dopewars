@@ -32,8 +32,11 @@ import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
-import { Bag, Clock, CopsIcon, DollarBag, PaperIcon } from "@/components/icons";
+import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
+import { Ludes } from "@/components/icons/drugs";
+import { Game, GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { shortString } from "starknet";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -66,6 +69,7 @@ const Admin = () => {
               <RyoAddressCard />
               <RyoPauseCard />
               <TreasuryClaimCard />
+              <ExportAllGamesCard />
             </Flex>
           </TabPanel>
 
@@ -250,6 +254,40 @@ const RyoPauseCard = observer(() => {
           <Button isLoading={isPending} onClick={onTogglePause}>
             Toggle pause
           </Button>
+        </ChildrenOrConnect>
+      </CardFooter>
+    </Card>
+  );
+});
+
+import jsonToCsvExport from "json-to-csv-export";
+
+const ExportAllGamesCard = observer(() => {
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const allGames = useGetAllGamesQuery({});
+
+  const onClick = async () => {
+    const games = (allGames.data?.gameModels?.edges || [])
+      .map((i) => i?.node as Game)
+      .map((i) => {
+        return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };
+      })
+      .sort((a, b) => a.game_id - b.game_id);
+
+    jsonToCsvExport({ data: games });
+  };
+
+  return (
+    <Card p={1}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        <Flipflop /> EXPORT
+      </CardHeader>
+      <CardBody></CardBody>
+      <CardFooter>
+        <ChildrenOrConnect>
+          <Button onClick={onClick}>Export</Button>
         </ChildrenOrConnect>
       </CardFooter>
     </Card>

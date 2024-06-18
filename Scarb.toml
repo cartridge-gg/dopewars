@@ -7,8 +7,8 @@ version = "0.1.0"
 # sierra-replace-ids = true
 
 [dependencies]
-# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.0-alpha.1"}
-# token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.0-alpha.1"}
+# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.1"}
+# token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.1"}
 dojo = { path = "../dojo/crates/dojo-core" }
 token = { path = "../origami" }
 
@@ -26,7 +26,7 @@ auth = "./scripts/default_auth.sh"
 
 
 # migrate  && scarb run gendojo $PROFILE
-migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE"
 migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
