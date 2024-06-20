@@ -53,7 +53,7 @@ export const DojoContextProvider = observer(
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
-      process.env.NODE_ENV === "production" ? dojoContextConfig.KATANA_SLOT_420 : dojoContextConfig.KATANA;
+      process.env.NODE_ENV === "production" ? dojoContextConfig.SN_SEPOLIA : dojoContextConfig.SN_SEPOLIA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
@@ -172,7 +172,7 @@ export const DojoContextProvider = observer(
     // is initializing
     if (!hasError && !isInitialized)
       return (
-        <Flex minH="100vh" alignItems="center" justifyContent="center">
+        <Flex minH="100dvh" alignItems="center" justifyContent="center">
           <VStack>
             <Loader />
           </VStack>

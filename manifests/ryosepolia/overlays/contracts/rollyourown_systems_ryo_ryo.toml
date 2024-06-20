@@ -1,0 +1,8 @@
+name = "rollyourown::systems::ryo::ryo"
+reads = []
+writes = ["RyoConfig", "RyoAddress", "Season", "SeasonSettings"]
+init_calldata = [
+    "$contract_address:rollyourown::_mocks::paper_mock::paper_mock",
+    "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936", # treasury address
+    "$contract_address:rollyourown::systems::laundromat::laundromat",
+]

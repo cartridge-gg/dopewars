@@ -104,13 +104,28 @@ export const HomeLeftPanel = () => {
           "scrollbar-width": "none",
         }}
       >
-        <VStack zIndex="2">
-          {/* <Text textStyle="subheading" fontSize="11px">
-            DOPE WARS
-          </Text> */}
+        <VStack zIndex="2" position="relative">
+          <Box w="full" position={"fixed"} top="-40px" >
+            <Image
+              position="absolute"
+              src={"/images/landing/main.png"}
+              opacity={0.25}
+              width="100%"
+              height="194px"
+              objectFit={"cover"}
+              objectPosition={"top"}
+              display={["block", "none"]}
+              alt="context"
+            />
+          </Box>
+
+          <Text textStyle="subheading" fontSize="11px">
+            Welcome to
+          </Text>
           <Heading fontSize={["30px", "48px"]} fontWeight="normal">
             DOPE WARS
           </Heading>
+
         </VStack>
 
         <VStack position="relative" top="-160px" display={["none", "flex"]}>

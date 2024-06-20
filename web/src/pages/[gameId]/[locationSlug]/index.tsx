@@ -32,7 +32,7 @@ const Location = observer(() => {
   const { account } = useAccount();
 
   const configStore = useConfigStore();
-  const { game, gameInfos,gameConfig, gameEvents } = useGameStore();
+  const { game, gameInfos, gameConfig, gameEvents } = useGameStore();
   const { endGame, isPending } = useSystems();
 
   const [prices, setPrices] = useState<DrugMarket[]>([]);
@@ -169,6 +169,8 @@ const Location = observer(() => {
           </SimpleGrid>
         </VStack>
       </VStack>
+
+      {/* <Box h="160px" /> */}
     </Layout>
   );
 });

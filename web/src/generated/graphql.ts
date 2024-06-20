@@ -12,6 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  ByteArray: any;
   ContractAddress: any;
   Cursor: any;
   DateTime: any;
@@ -273,8 +274,8 @@ export type Erc20MetadataModel = {
   __typename?: 'ERC20MetadataModel';
   decimals?: Maybe<Scalars['u8']>;
   entity?: Maybe<World__Entity>;
-  name?: Maybe<Scalars['felt252']>;
-  symbol?: Maybe<Scalars['felt252']>;
+  name?: Maybe<Scalars['ByteArray']>;
+  symbol?: Maybe<Scalars['ByteArray']>;
   token?: Maybe<Scalars['ContractAddress']>;
   total_supply?: Maybe<Scalars['u256']>;
 };
@@ -317,28 +318,28 @@ export type Erc20MetadataModelWhereInput = {
   decimalsNEQ?: InputMaybe<Scalars['u8']>;
   decimalsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   decimalsNOTLIKE?: InputMaybe<Scalars['u8']>;
-  name?: InputMaybe<Scalars['felt252']>;
-  nameEQ?: InputMaybe<Scalars['felt252']>;
-  nameGT?: InputMaybe<Scalars['felt252']>;
-  nameGTE?: InputMaybe<Scalars['felt252']>;
-  nameIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  nameLIKE?: InputMaybe<Scalars['felt252']>;
-  nameLT?: InputMaybe<Scalars['felt252']>;
-  nameLTE?: InputMaybe<Scalars['felt252']>;
-  nameNEQ?: InputMaybe<Scalars['felt252']>;
-  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  symbol?: InputMaybe<Scalars['felt252']>;
-  symbolEQ?: InputMaybe<Scalars['felt252']>;
-  symbolGT?: InputMaybe<Scalars['felt252']>;
-  symbolGTE?: InputMaybe<Scalars['felt252']>;
-  symbolIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  symbolLIKE?: InputMaybe<Scalars['felt252']>;
-  symbolLT?: InputMaybe<Scalars['felt252']>;
-  symbolLTE?: InputMaybe<Scalars['felt252']>;
-  symbolNEQ?: InputMaybe<Scalars['felt252']>;
-  symbolNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  symbolNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  name?: InputMaybe<Scalars['ByteArray']>;
+  nameEQ?: InputMaybe<Scalars['ByteArray']>;
+  nameGT?: InputMaybe<Scalars['ByteArray']>;
+  nameGTE?: InputMaybe<Scalars['ByteArray']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
+  nameLIKE?: InputMaybe<Scalars['ByteArray']>;
+  nameLT?: InputMaybe<Scalars['ByteArray']>;
+  nameLTE?: InputMaybe<Scalars['ByteArray']>;
+  nameNEQ?: InputMaybe<Scalars['ByteArray']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['ByteArray']>;
+  symbol?: InputMaybe<Scalars['ByteArray']>;
+  symbolEQ?: InputMaybe<Scalars['ByteArray']>;
+  symbolGT?: InputMaybe<Scalars['ByteArray']>;
+  symbolGTE?: InputMaybe<Scalars['ByteArray']>;
+  symbolIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
+  symbolLIKE?: InputMaybe<Scalars['ByteArray']>;
+  symbolLT?: InputMaybe<Scalars['ByteArray']>;
+  symbolLTE?: InputMaybe<Scalars['ByteArray']>;
+  symbolNEQ?: InputMaybe<Scalars['ByteArray']>;
+  symbolNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
+  symbolNOTLIKE?: InputMaybe<Scalars['ByteArray']>;
   token?: InputMaybe<Scalars['ContractAddress']>;
   tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
   tokenGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -2408,6 +2409,11 @@ export type TradedDrugByPlayerQueryVariables = Exact<{
 
 export type TradedDrugByPlayerQuery = { __typename?: 'World__Query', events?: { __typename?: 'World__EventConnection', edges?: Array<{ __typename?: 'World__EventEdge', node?: { __typename?: 'World__Event', id?: string | null, keys?: Array<string | null> | null, data?: Array<string | null> | null } | null } | null> | null } | null };
 
+export type GetAllGamesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllGamesQuery = { __typename?: 'World__Query', gameModels?: { __typename?: 'GameConnection', edges?: Array<{ __typename?: 'GameEdge', node?: { __typename?: 'Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, position?: any | null, final_score?: any | null, claimable?: any | null, claimed?: any | null, player_name?: { __typename?: 'Game_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
   listId?: InputMaybe<Scalars['felt252']>;
@@ -3146,6 +3152,60 @@ export const useInfiniteTradedDrugByPlayerQuery = <
 
 
 useInfiniteTradedDrugByPlayerQuery.getKey = (variables?: TradedDrugByPlayerQueryVariables) => variables === undefined ? ['TradedDrugByPlayer.infinite'] : ['TradedDrugByPlayer.infinite', variables];
+;
+
+export const GetAllGamesDocument = `
+    query GetAllGames {
+  gameModels(limit: 9001) {
+    edges {
+      node {
+        game_id
+        player_id
+        season_version
+        position
+        player_name {
+          value
+        }
+        final_score
+        claimable
+        claimed
+      }
+    }
+  }
+}
+    `;
+export const useGetAllGamesQuery = <
+      TData = GetAllGamesQuery,
+      TError = unknown
+    >(
+      variables?: GetAllGamesQueryVariables,
+      options?: UseQueryOptions<GetAllGamesQuery, TError, TData>
+    ) =>
+    useQuery<GetAllGamesQuery, TError, TData>(
+      variables === undefined ? ['GetAllGames'] : ['GetAllGames', variables],
+      useFetchData<GetAllGamesQuery, GetAllGamesQueryVariables>(GetAllGamesDocument).bind(null, variables),
+      options
+    );
+
+useGetAllGamesQuery.getKey = (variables?: GetAllGamesQueryVariables) => variables === undefined ? ['GetAllGames'] : ['GetAllGames', variables];
+;
+
+export const useInfiniteGetAllGamesQuery = <
+      TData = GetAllGamesQuery,
+      TError = unknown
+    >(
+      variables?: GetAllGamesQueryVariables,
+      options?: UseInfiniteQueryOptions<GetAllGamesQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GetAllGamesQuery, GetAllGamesQueryVariables>(GetAllGamesDocument)
+    return useInfiniteQuery<GetAllGamesQuery, TError, TData>(
+      variables === undefined ? ['GetAllGames.infinite'] : ['GetAllGames.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGetAllGamesQuery.getKey = (variables?: GetAllGamesQueryVariables) => variables === undefined ? ['GetAllGames.infinite'] : ['GetAllGames.infinite', variables];
 ;
 
 export const SeasonByVersionDocument = `

@@ -148,3 +148,21 @@ query TradedDrugByPlayer(
     }
   }
 }
+
+
+query GetAllGames{
+  gameModels(limit: 9001) {
+    edges {
+      node {
+        game_id
+        player_id
+        season_version 
+        position
+        player_name {value}
+        final_score
+        claimable
+        claimed
+      }
+    }
+  }
+}

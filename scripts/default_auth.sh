@@ -20,12 +20,6 @@ export DEVTOOLS_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.contr
 
 export PAPER_MOCK_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.contracts[] | select(.name == "rollyourown::_mocks::paper_mock::paper_mock" ).address')
 
-# dev/katana
-export TREASURY_ADDRESS="0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a";
-
-# sepolia deployer
-# export TREASURY_ADDRESS="0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936";
-
 echo "---------------------------------------------------------------------------"
 echo profile    : $PROFILE
 echo "---------------------------------------------------------------------------"
@@ -40,84 +34,14 @@ echo "--------------------------------------------------------------------------
 echo paper      : $PAPER_MOCK_ADDRESS
 echo "---------------------------------------------------------------------------"
 
-sleep 5
+sleep 2
 
-# enable system -> models authorizations
-sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100 --wait writer\
- RyoConfig,$RYO_ADDRESS \
- RyoAddress,$RYO_ADDRESS \
- Season,$RYO_ADDRESS \
- SeasonSettings,$RYO_ADDRESS \
- \
- GameConfig,$CONFIG_ADDRESS \
- DrugConfig,$CONFIG_ADDRESS \
- LocationConfig,$CONFIG_ADDRESS \
- HustlerItemBaseConfig,$CONFIG_ADDRESS \
- HustlerItemTiersConfig,$CONFIG_ADDRESS \
- EncounterStatsConfig,$CONFIG_ADDRESS \
- Game,$GAME_ADDRESS \
- \
- GameStorePacked,$GAME_ADDRESS \
- RyoConfig,$GAME_ADDRESS \
- Season,$GAME_ADDRESS \
- SeasonSettings,$GAME_ADDRESS \
- SortedList,$GAME_ADDRESS \
- SortedListItem,$GAME_ADDRESS \
- \
- SortedList,$LAUNDROMAT_ADDRESS \
- SortedListItem,$LAUNDROMAT_ADDRESS \
- Season,$LAUNDROMAT_ADDRESS \
- SeasonSettings,$LAUNDROMAT_ADDRESS \
- Game,$LAUNDROMAT_ADDRESS \
- GameConfig,$LAUNDROMAT_ADDRESS \
- RyoConfig,$LAUNDROMAT_ADDRESS \
- \
- SortedList,$DEVTOOLS_ADDRESS \
- SortedListItem,$DEVTOOLS_ADDRESS \
- SortedList,$DEVTOOLS_ADDRESS \
- SortedListItem,$DEVTOOLS_ADDRESS \
- Game,$DEVTOOLS_ADDRESS \
- GameConfig,$DEVTOOLS_ADDRESS \
- GameStorePacked,$DEVTOOLS_ADDRESS \
- Season,$DEVTOOLS_ADDRESS \
- SeasonSettings,$DEVTOOLS_ADDRESS \
- RyoConfig,$DEVTOOLS_ADDRESS \
-
-echo "Default authorizations have been successfully set."
-
-echo "Initializing..."
-sozo -P $PROFILE execute  --world $WORLD_ADDRESS $RYO_ADDRESS initialize --calldata $PAPER_MOCK_ADDRESS,$TREASURY_ADDRESS,$LAUNDROMAT_ADDRESS --fee-estimate-multiplier 100  --wait
-echo "Initialized RYO!"
-sleep $TX_SLEEP
-
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1 --fee-estimate-multiplier 10 --wait 
+sozo -P $PROFILE execute -vvv --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_1  --wait 
 echo "Initialized CONFIG 1!"
 sleep $TX_SLEEP
 
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2 --fee-estimate-multiplier 10 --wait 
+sozo -P $PROFILE execute -vvv --world $WORLD_ADDRESS $CONFIG_ADDRESS initialize_2  --wait 
 echo "Initialized CONFIG 2!"
 sleep $TX_SLEEP
 
 
-
-
-
-
-#
-# PAPER MOCK
-# 
-
-sozo -P $PROFILE auth grant --world $WORLD_ADDRESS --fee-estimate-multiplier 100  --wait writer\
- ERC20MetadataModel,$PAPER_MOCK_ADDRESS \
- ERC20BalanceModel,$PAPER_MOCK_ADDRESS \
- ERC20AllowanceModel,$PAPER_MOCK_ADDRESS \
- InitializableModel,$PAPER_MOCK_ADDRESS \
-
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS initializer --fee-estimate-multiplier 10 --wait 
-echo "Initialized PAPER_MOCK!"
-sleep $TX_SLEEP
-
-
-sozo -P $PROFILE execute --world $WORLD_ADDRESS $PAPER_MOCK_ADDRESS faucetTo -c $LAUNDROMAT_ADDRESS --fee-estimate-multiplier 10 --wait 
-echo "Sent some PAPER to LAUNDROMAT!"
-sleep $TX_SLEEP

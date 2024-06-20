@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useMediaStore } from "./media";
 
 /* utils */
 
@@ -23,7 +24,7 @@ export enum Sounds {
   Uzi = "Uzi.wav",
   Run = "Run.mp3",
   Pay = "Pay.wav",
- // Chains = "Chains.mp3",
+  // Chains = "Chains.mp3",
   Chains = "Punch.mp3",
   Ooo = "Ooo.wav",
   Death = "Flatline.mp3",
@@ -64,10 +65,7 @@ export const initSoundStore = async () => {
   for (let sound in Sounds) {
     const soundKey = sound as keyof typeof Sounds;
     try {
-      state.library.buffers[Sounds[soundKey]] = await loadSoundBuffer(
-        `/sounds/${Sounds[soundKey]}`,
-        context,
-      );
+      state.library.buffers[Sounds[soundKey]] = await loadSoundBuffer(`/sounds/${Sounds[soundKey]}`, context);
     } catch (e) {}
   }
 
@@ -90,12 +88,14 @@ export const toggleIsMuted = () =>
 
 export const playSound = async (sound: Sounds, volume = 1, loop = false) => {
   const { context, library, isInitialized } = useSoundStore.getState();
+  const { volume: mediaVolume } = useMediaStore.getState();
+
   if (!isInitialized) return;
 
   if (library.sources[sound]) library.sources[sound].stop();
 
   const gainNode = context.createGain();
-  gainNode.gain.value = volume;
+  gainNode.gain.value = volume * mediaVolume;
 
   const source = context.createBufferSource(); // creates a sound source
   source.buffer = library.buffers[sound]; // tell the source which sound to play
@@ -113,10 +113,7 @@ export const stopSound = (sound: Sounds, delay = 20) => {
   const { library, context } = useSoundStore.getState();
 
   if (!library.gains[sound]) return;
-  library.gains[sound].gain.exponentialRampToValueAtTime(
-    0.001,
-    context.currentTime + delay,
-  );
+  library.gains[sound].gain.exponentialRampToValueAtTime(0.001, context.currentTime + delay);
 
   setTimeout(() => {
     library.sources[sound].stop();

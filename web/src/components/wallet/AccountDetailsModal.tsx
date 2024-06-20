@@ -1,10 +1,11 @@
 import { ExternalLink, PaperIcon } from "@/components/icons";
-import { useConfigStore, useDojoContext, useTokenBalance } from "@/dojo/hooks";
+import { useConfigStore, useControllerUsername, useDojoContext, useTokenBalance } from "@/dojo/hooks";
 import { formatEther, frenlyAddress } from "@/utils/ui";
 import { Button, HStack, Link, Modal, ModalBody, ModalContent, ModalOverlay, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useDisconnect, useExplorer } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { TokenBalance } from "./TokenBalance";
+import { Cartridge } from "../icons/branding/Cartridge";
 
 export const AccountDetailsModal = observer(() => {
   const explorer = useExplorer();
@@ -13,6 +14,7 @@ export const AccountDetailsModal = observer(() => {
   const { disconnect } = useDisconnect();
   const { account } = useAccount();
   const { uiStore } = useDojoContext();
+  const { username, isController } = useControllerUsername();
 
   const onClose = () => {
     uiStore.closeAccountDetails();
@@ -36,18 +38,22 @@ export const AccountDetailsModal = observer(() => {
           <VStack w="full" gap={6}>
             {/* <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} /> */}
 
-            <Link
-              fontSize="18px"
-              textDecoration="none"
-              textTransform="uppercase"
-              isExternal
-              href={explorer.contract(account?.address || "")}
-            >
-              <>
-                {frenlyAddress(account?.address || "")}
-                <ExternalLink />
-              </>
-            </Link>
+            <VStack w="full" gap={1}>
+              {isController && <Text>{username}</Text>}
+
+              <Link
+                fontSize="18px"
+                textDecoration="none"
+                textTransform="uppercase"
+                isExternal
+                href={explorer.contract(account?.address || "")}
+              >
+                <>
+                  {frenlyAddress(account?.address || "")}
+                  <ExternalLink />
+                </>
+              </Link>
+            </VStack>
 
             <VStack w="full" gap={1}>
               <HStack color="yellow.400">

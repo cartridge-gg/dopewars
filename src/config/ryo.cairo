@@ -5,9 +5,9 @@ use rollyourown::{models::{season::{Season, SeasonImpl, SeasonTrait}}};
 
 const TWO_MIN: u16 = 120;
 const TWENTY_MIN: u16 = 1200;
+const ONE_HOUR: u16 = 3600;
 //
 // const TWENTY_MIN: u32 = 1200;
-const ONE_HOUR: u32 = 3600;
 const SIX_HOUR: u32 = 21_600;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
@@ -39,8 +39,8 @@ impl RyoConfigImpl of RyoConfigTrait {
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: SIX_HOUR, // ONE_WEEK 
-            season_time_limit: TWENTY_MIN, // ONE_HOUR 
+            season_duration: ONE_DAY, // ONE_WEEK 
+            season_time_limit: ONE_HOUR, // ONE_HOUR 
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 5,

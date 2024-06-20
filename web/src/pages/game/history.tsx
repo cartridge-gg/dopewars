@@ -81,18 +81,18 @@ export default function History() {
                 <Tab>ENDED</Tab>
               </TabList>
 
-              <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
-                <TabPanel p={0}>
-                  <GameList games={onGoingGames} />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <GameList games={endedGames} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </VStack>
-        </Flex>
-      </VStack>
+                <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
+                  <TabPanel p={0}>
+                    <GameList games={onGoingGames} />
+                  </TabPanel>
+                  <TabPanel p={0}>
+                    <GameList games={endedGames} />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </VStack>
+          </Flex>
+        </VStack>
     </Layout>
   );
 }
@@ -194,14 +194,14 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
       <Box boxSize="full" mt={["0", "30px"]}>
         <VStack gap={6}>
           <Tabs variant="unstyled" w="full">
-            <TabList pb={6}>
+            <TabList pb={6} overflowX="auto">
               <Tab>HUSTLERS</Tab>
               <Tab>GENERAL</Tab>
               <Tab>ENCOUNTERS</Tab>
               <Tab>DRUGS</Tab>
             </TabList>
 
-            <TabPanels mt={0} /*maxH={["100%", "calc(100vh - 580px)"]} overflowY="scroll"*/>
+            <TabPanels mt={0} /*maxH={["100%", "calc(100dvh - 580px)"]} overflowY="scroll"*/>
               <TabPanel p={0}>
                 <VStack w="full" alignItems="center" gap={3}>
                   <HStack justify="center" alignItems="center">
@@ -261,6 +261,20 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
           </Tabs>
         </VStack>
       </Box>
+
+      {/* <Button
+        variant="pixelated"
+        h="48px"
+        onClick={() => {
+          navigator.clipboard.writeText(`${window.location.origin}/game/history/${playerId}`);
+
+          toast({
+            message: "Copied to clipboard",
+          });
+        }}
+      >
+        Profile Link
+      </Button> */}
     </VStack>
   );
 };

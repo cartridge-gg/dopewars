@@ -17,6 +17,7 @@ import { /*useBalance,*/ useConnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
+import { Cartridge } from "../icons/branding/Cartridge";
 
 export const ConnectModal = observer(() => {
   const { connect, connectors } = useConnect();
@@ -36,6 +37,11 @@ export const ConnectModal = observer(() => {
     uiStore.closeConnectModal();
   };
 
+  // if (uiStore.modals.connect !== undefined && connectors.length === 1 && connectors[0].available()) {
+  //   connect({ connector: connectors[0] });
+  //   return null
+  // }
+
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={uiStore.modals.connect !== undefined} onClose={onClose}>
       <ModalOverlay />
@@ -48,13 +54,14 @@ export const ConnectModal = observer(() => {
             {connectors.map((connector) => {
               const isBurner = connector.id === "dojoburner";
               const isPredeployed = connector.id === "dojopredeployed";
+              const isController = connector.id === "cartridge";
 
               if (!isKatana && (isBurner || isPredeployed)) {
                 // burner or predeployed not on katana
                 return null;
               }
 
-              if (isKatana && !(isBurner || isPredeployed)) {
+              if (isKatana && !(isBurner || isPredeployed || isController)) {
                 // not burner or predeployed on katana
                 return null;
               }
@@ -82,13 +89,15 @@ export const ConnectModal = observer(() => {
                       <HStack>
                         {isBurner || isPredeployed ? (
                           <KatanaIcon />
+                        ) : isController ? (
+                          <Cartridge />
                         ) : (
                           <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                         )}
 
                         <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
                         {!connector.available() && <ExternalLink ml="auto" />}
-                      </HStack  >
+                      </HStack>
                     </HStack>
                   </Button>
                 </HStack>

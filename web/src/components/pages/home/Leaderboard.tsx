@@ -137,7 +137,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       <VStack
         boxSize="full"
         gap="20px"
-        maxH={["calc(100vh - 430px)", "calc(100vh - 480px)"]}
+        maxH={["calc(100dvh - 430px)", "calc(100dvh - 480px)"]}
         sx={{
           overflowY: "scroll",
         }}

@@ -69,7 +69,7 @@ export const ClaimModal = ({
               <TableContainer
                 position="relative"
                 w="full"
-                maxH="calc(100vh - 300px)"
+                maxH="calc(100dvh - 300px)"
                 overflow="hidden"
                 overflowY="auto"
               >

@@ -20,7 +20,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
+import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
 
@@ -29,6 +29,7 @@ export default function Home() {
   const { account } = useAccount();
   const { uiStore, burnerManager } = useDojoContext();
   const { launder, isPending } = useSystems();
+  const { connectors, connect } = useConnect();
 
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -54,15 +55,20 @@ export default function Home() {
 
   const onHustle = async () => {
     if (!account) {
-      uiStore.openConnectModal();
-      return;
+      if (connectors.length > 1) {
+        uiStore.openConnectModal();
+      } else {
+        connect({ connector: connectors[0] });
+
+        if (connectors[0].id !== "cartridge") {
+          router.push(`/game/new`);
+        }
+      }
     }
 
-    if (!isLocalhost) {
-      play();
+    if (account) {
+      router.push(`/game/new`);
     }
-
-    router.push(`/game/new`);
   };
 
   const onLaunder = async () => {
@@ -81,7 +87,7 @@ export default function Home() {
     <Layout
       customLeftPanel={<HomeLeftPanel />}
       rigthPanelScrollable={false}
-      // rigthPanelMaxH="calc(100vh - 230px)"
+      // rigthPanelMaxH="calc(100dvh - 230px)"
     >
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
@@ -144,7 +150,7 @@ export default function Home() {
             <Tab>HALL OF FAME</Tab>
           </TabList>
 
-          <TabPanels mt={0} maxH={["100%", "calc(100vh - 380px)"]} overflowY="scroll">
+          <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
             <TabPanel p={0}>
               <Leaderboard config={config} />
             </TabPanel>

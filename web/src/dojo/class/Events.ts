@@ -58,7 +58,8 @@ export class EventClass {
   //
 
   get sortedEvents() {
-    return this.events.slice().sort((a, b) => a.idx - b.idx);
+    return this.events.slice().sort((a, b) => Date.parse(a.raw.createdAt) - Date.parse(b.raw.createdAt));
+    // .sort((a, b) => a.idx - b.idx)
   }
 
   //

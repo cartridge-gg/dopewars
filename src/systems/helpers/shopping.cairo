@@ -44,7 +44,7 @@ fn execute_action(s: IStoreLibraryDispatcher, ref game_store: GameStore, action:
     let next_item = hustler.get_item_config(action.slot, next_level);
 
     // check can buy
-    assert(game_store.player.cash > next_item.tier.cost, 'too poor');
+    assert(game_store.player.cash >= next_item.tier.cost, 'too poor');
 
     // pay item
     game_store.player.cash -= next_item.tier.cost;

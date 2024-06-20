@@ -6,7 +6,7 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
   const router = useRouter();
 
   return (
-    <Flex minH="100vh" alignItems="center" justifyContent="center">
+    <Flex minH="100dvh" alignItems="center" justifyContent="center">
       <VStack>
         <VStack fontSize="16px">
           <VStack fontSize="16px">

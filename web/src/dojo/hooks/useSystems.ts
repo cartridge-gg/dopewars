@@ -30,10 +30,10 @@ export interface SystemsInterface {
   // ryo
   setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
   updateRyoConfig: (ryoConfig: RyoConfig) => Promise<SystemExecuteResult>;
-  
+
   // config
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
-  
+
   // laundromat
   registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
   claim: (playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
@@ -203,7 +203,7 @@ export const useSystems = (): SystemsInterface => {
         contractName: "rollyourown::systems::game::game",
         //  contractAddress: gameAddress,
         entrypoint: "create_game",
-        calldata: [gameMode, hustlerId, shortString.encodeShortString(playerName)],
+        calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName)]),
       };
 
       const { hash, events, parsedEvents } = await executeAndReceipt([approvalCall, createGameCall]);
@@ -213,7 +213,7 @@ export const useSystems = (): SystemsInterface => {
       return {
         hash,
         parsedEvents,
-        gameId: gameCreated.gameId,
+        gameId: gameCreated?.gameId,
       };
     },
     [executeAndReceipt, config?.ryoAddress.paper],
@@ -271,7 +271,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::game::game",
         entrypoint: "decide",
-        calldata: [gameId, action],
+        calldata: CallData.compile([gameId, action]),
       });
 
       const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
@@ -302,7 +302,7 @@ export const useSystems = (): SystemsInterface => {
         contractName: "rollyourown::systems::laundromat::laundromat",
         entrypoint: "register_score",
         // @ts-ignore
-        calldata: [gameId, prevGameId, prevPlayerId],
+        calldata: CallData.compile([gameId, prevGameId, prevPlayerId]),
       });
 
       return {
@@ -317,7 +317,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::laundromat::laundromat",
         entrypoint: "claim",
-        calldata: [playerId, gameIds],
+        calldata: CallData.compile([playerId, gameIds]),
       });
 
       return {
@@ -359,7 +359,7 @@ export const useSystems = (): SystemsInterface => {
         contractName: "rollyourown::systems::laundromat::laundromat",
         //  contractAddress: gameAddress,
         entrypoint: "supercharge_jackpot",
-        calldata: [season, amountEth],
+        calldata: CallData.compile([season, amountEth]),
       };
 
       const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
@@ -376,7 +376,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::laundromat::laundromat",
         entrypoint: "launder",
-        calldata: [season],
+        calldata: CallData.compile([season]),
       });
 
       return {
@@ -405,10 +405,8 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-  
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
-      
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: "rollyourown::systems::ryo::ryo",
         entrypoint: "update_ryo_config",
@@ -421,8 +419,6 @@ export const useSystems = (): SystemsInterface => {
     },
     [executeAndReceipt],
   );
-
-
 
   const updateDrugConfig = useCallback(
     async (drugConfig: DrugConfig) => {
@@ -442,8 +438,6 @@ export const useSystems = (): SystemsInterface => {
   //
   //
   //
-
-
 
   //
   //

@@ -1,0 +1,4 @@
+name = "rollyourown::systems::game::game"
+reads = []
+writes = ["Game","GameStorePacked","RyoConfig","Season","SeasonSettings","SortedList","SortedListItem"]
+init_calldata = []

@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { ChildrenOrConnect, TokenBalance } from "@/components/wallet";
+import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
 import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
@@ -32,8 +32,11 @@ import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
-import { Bag, Clock, CopsIcon, DollarBag, PaperIcon } from "@/components/icons";
+import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
+import { Ludes } from "@/components/icons/drugs";
+import { Game, GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { shortString } from "starknet";
 
 const Admin = () => {
   const { router } = useRouterContext();
@@ -60,12 +63,13 @@ const Admin = () => {
           /> */}
         </TabList>
 
-        <TabPanels mt={0} maxH="calc(100vh - 300px)" overflowY="scroll">
+        <TabPanels mt={0} maxH="calc(100dvh - 300px)" overflowY="scroll">
           <TabPanel p={0}>
             <Flex w="full" alignItems="flex-start" gap={3} flexDirection="row" flexWrap="wrap">
               <RyoAddressCard />
               <RyoPauseCard />
               <TreasuryClaimCard />
+              <ExportAllGamesCard />
             </Flex>
           </TabPanel>
 
@@ -256,6 +260,40 @@ const RyoPauseCard = observer(() => {
   );
 });
 
+import jsonToCsvExport from "json-to-csv-export";
+
+const ExportAllGamesCard = observer(() => {
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const allGames = useGetAllGamesQuery({});
+
+  const onClick = async () => {
+    const games = (allGames.data?.gameModels?.edges || [])
+      .map((i) => i?.node as Game)
+      .map((i) => {
+        return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };
+      })
+      .sort((a, b) => a.game_id - b.game_id);
+
+    jsonToCsvExport({ data: games });
+  };
+
+  return (
+    <Card p={1}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        <Flipflop /> EXPORT
+      </CardHeader>
+      <CardBody></CardBody>
+      <CardFooter>
+        <ChildrenOrConnect>
+          <Button onClick={onClick}>Export</Button>
+        </ChildrenOrConnect>
+      </CardFooter>
+    </Card>
+  );
+});
+
 const RyoSeasonConfigCard = observer(() => {
   const { configStore } = useDojoContext();
   const { config } = configStore;
@@ -436,6 +474,7 @@ const RyoSuperchargeCard = observer(() => {
                   SEND
                 </Button>
               </ChildrenOrConnect>
+              <PaperFaucet />
             </HStack>
           </VStack>
         </VStack>

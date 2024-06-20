@@ -1,8 +1,8 @@
 {
   "world": {
     "kind": "WorldContract",
-    "class_hash": "0x44fe688cc4d46636ffb424972c3510b10c3b1a738f6a6c9885cb7352ac8e5b1",
-    "original_class_hash": "0x44fe688cc4d46636ffb424972c3510b10c3b1a738f6a6c9885cb7352ac8e5b1",
+    "class_hash": "0x6b805e42fea7c91fc4b3362b37e4ddb485ffe08b4124cdefdc0fdfb005bcb48",
+    "original_class_hash": "0x6b805e42fea7c91fc4b3362b37e4ddb485ffe08b4124cdefdc0fdfb005bcb48",
     "abi": [
       {
         "type": "impl",
@@ -490,6 +490,10 @@
               {
                 "name": "program_output",
                 "type": "dojo::interfaces::ProgramOutput"
+              },
+              {
+                "name": "program_hash",
+                "type": "core::felt252"
               }
             ],
             "outputs": [],
@@ -508,7 +512,7 @@
         "items": [
           {
             "type": "function",
-            "name": "set_program_hash",
+            "name": "set_differ_program_hash",
             "inputs": [
               {
                 "name": "program_hash",
@@ -520,7 +524,30 @@
           },
           {
             "type": "function",
-            "name": "get_program_hash",
+            "name": "set_merger_program_hash",
+            "inputs": [
+              {
+                "name": "program_hash",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "get_differ_program_hash",
+            "inputs": [],
+            "outputs": [
+              {
+                "type": "core::felt252"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "get_merger_program_hash",
             "inputs": [],
             "outputs": [
               {
@@ -766,7 +793,19 @@
       },
       {
         "type": "event",
-        "name": "dojo::config::component::Config::ProgramHashUpdate",
+        "name": "dojo::config::component::Config::DifferProgramHashUpdate",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "program_hash",
+            "type": "core::felt252",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::config::component::Config::MergerProgramHashUpdate",
         "kind": "struct",
         "members": [
           {
@@ -794,8 +833,13 @@
         "kind": "enum",
         "variants": [
           {
-            "name": "ProgramHashUpdate",
-            "type": "dojo::config::component::Config::ProgramHashUpdate",
+            "name": "DifferProgramHashUpdate",
+            "type": "dojo::config::component::Config::DifferProgramHashUpdate",
+            "kind": "nested"
+          },
+          {
+            "name": "MergerProgramHashUpdate",
+            "type": "dojo::config::component::Config::MergerProgramHashUpdate",
             "kind": "nested"
           },
           {
@@ -885,9 +929,9 @@
         ]
       }
     ],
-    "address": "0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14",
-    "transaction_hash": "0x5176188a941fc09b570cf9f522b0be830ea6d61ce00a150f6221cb11a5c326",
-    "block_number": 70,
+    "address": "0x2f569ad903a00476656bec6a74c954ef01e48202652bbab0149574d5f6d829",
+    "transaction_hash": "0xb131a46390d17cc48f941e11bf1c9e106e40090358c33afc86adc7aaa07e82",
+    "block_number": 15,
     "seed": "rollyourown",
     "metadata": {
       "profile_name": "ryo421",
@@ -905,9 +949,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x673f6981af3302142f661c8b8177cc979f1d96ede0d7d90f17c9710b072de02",
-      "class_hash": "0x68da37166388a028b1f2cb34a9b058b762590d02045bb8043907e9012eac41a",
-      "original_class_hash": "0x68da37166388a028b1f2cb34a9b058b762590d02045bb8043907e9012eac41a",
+      "address": "0x69aa1a56046877011c8fd04a17fc286d5e97459bb5a6abf36420689dc13c317",
+      "class_hash": "0x21f0d21a982ac5d3a1a2ea821846f32421b88316250364f61a4c96a08ce819f",
+      "original_class_hash": "0x21f0d21a982ac5d3a1a2ea821846f32421b88316250364f61a4c96a08ce819f",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -966,17 +1010,22 @@
         },
         {
           "type": "impl",
-          "name": "PaperMockInitializerImpl",
-          "interface_name": "rollyourown::_mocks::paper_mock::IPaperMockInitializer"
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit"
         },
         {
           "type": "interface",
-          "name": "rollyourown::_mocks::paper_mock::IPaperMockInitializer",
+          "name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit",
           "items": [
             {
               "type": "function",
-              "name": "initializer",
-              "inputs": [],
+              "name": "dojo_init",
+              "inputs": [
+                {
+                  "name": "faucet_to",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
               "outputs": [],
               "state_mutability": "external"
             }
@@ -1484,15 +1533,23 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "ERC20MetadataModel",
+        "ERC20BalanceModel",
+        "ERC20AllowanceModel",
+        "InitializableModel"
+      ],
       "computed": [],
+      "init_calldata": [
+        "$contract_address:rollyourown::systems::laundromat::laundromat"
+      ],
       "name": "rollyourown::_mocks::paper_mock::paper_mock"
     },
     {
       "kind": "DojoContract",
-      "address": "0x478fdd83cec8d174113ab6e4273672886d173fb88efe7d0a3279b8e7993d52f",
-      "class_hash": "0x644bec0a3cac43b2f261d85d8c756ea99305bed28da8a7579da5c556faea352",
-      "original_class_hash": "0x644bec0a3cac43b2f261d85d8c756ea99305bed28da8a7579da5c556faea352",
+      "address": "0x2aac16fac599f6076a975c76e2a39ba3d44aa4b2f8ca5d0da0e985ed929677c",
+      "class_hash": "0x58bee011b225a0c94800611a9a60f7c021d07cfc50993fcbade419d31fd3d4b",
+      "original_class_hash": "0x58bee011b225a0c94800611a9a60f7c021d07cfc50993fcbade419d31fd3d4b",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -2206,15 +2263,22 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "GameConfig",
+        "DrugConfig",
+        "LocationConfig",
+        "HustlerItemBaseConfig",
+        "HustlerItemTiersConfig",
+        "EncounterStatsConfig"
+      ],
       "computed": [],
       "name": "rollyourown::config::config::config"
     },
     {
       "kind": "DojoContract",
-      "address": "0x19fecff4ffe0f2139e91a4da80db26d296e3b8a46f6872eca1cb49756a153a1",
-      "class_hash": "0x288816fc9e9c1c6633b396ba21a30b8f2b04e02f658e8eaf1573424219585ca",
-      "original_class_hash": "0x288816fc9e9c1c6633b396ba21a30b8f2b04e02f658e8eaf1573424219585ca",
+      "address": "0x1533726705c446acd88e4505c25caf6aceff0ea0c5dd1eb6ef83996d1b42b96",
+      "class_hash": "0x425d8e3ec7c2935f527ff4591d1c02ca17bf07b1c6d6f52ca7b952d5adf872f",
+      "original_class_hash": "0x425d8e3ec7c2935f527ff4591d1c02ca17bf07b1c6d6f52ca7b952d5adf872f",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -3294,9 +3358,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x65f1f91178c3f048d4a50643609dd09bcb871519e708a3c8166b8143c7eed5a",
-      "class_hash": "0x67bda7ca090897cfd08546e1eb76fb436fda0ba54ee1182df22db79e7014b98",
-      "original_class_hash": "0x67bda7ca090897cfd08546e1eb76fb436fda0ba54ee1182df22db79e7014b98",
+      "address": "0x2399758c6f6d325212660aa41cbebe17db95ee69d39ead9f81bfa0b24426c5d",
+      "class_hash": "0x79cd441fb29eb79fc0c654aa6975563a7e7b52132f05f9c783e9c4dfa9ee108",
+      "original_class_hash": "0x79cd441fb29eb79fc0c654aa6975563a7e7b52132f05f9c783e9c4dfa9ee108",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -3451,15 +3515,24 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "SortedList",
+        "SortedListItem",
+        "Game",
+        "GameConfig",
+        "GameStorePacked",
+        "Season",
+        "SeasonSettings",
+        "RyoConfig"
+      ],
       "computed": [],
       "name": "rollyourown::systems::devtools::devtools"
     },
     {
       "kind": "DojoContract",
-      "address": "0x494d272e65874b95792a8bf9d726e162d77b6bd2ffa557c286afd2660c27828",
-      "class_hash": "0x588ae342c45e35d4ae92a58273074dd3a32b54338f09448ec0e4afd93728718",
-      "original_class_hash": "0x588ae342c45e35d4ae92a58273074dd3a32b54338f09448ec0e4afd93728718",
+      "address": "0x7b4f11739c0a600fec03b13d90fe348745ff512de83f7402d642d9581e3cde8",
+      "class_hash": "0x2f3b57deb77c7ddf38d948d377df40e413f3633a0f644e0ee2bbaca6caee8e0",
+      "original_class_hash": "0x2f3b57deb77c7ddf38d948d377df40e413f3633a0f644e0ee2bbaca6caee8e0",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4282,15 +4355,23 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "Game",
+        "GameStorePacked",
+        "RyoConfig",
+        "Season",
+        "SeasonSettings",
+        "SortedList",
+        "SortedListItem"
+      ],
       "computed": [],
       "name": "rollyourown::systems::game::game"
     },
     {
       "kind": "DojoContract",
-      "address": "0x665fbbceaab1c1b8458df8d75d93bbbe986c4a9e59ce07665f5cfe4e92188c1",
-      "class_hash": "0x2c02060763ba413c90a3cdff7c6ef04e40f8f3c6396eac104f7a6391aafe589",
-      "original_class_hash": "0x2c02060763ba413c90a3cdff7c6ef04e40f8f3c6396eac104f7a6391aafe589",
+      "address": "0x3da55aedc98cab0d565a9e90484ba41dd4ebb418db78bab84c92d9f8cf8a396",
+      "class_hash": "0x59a4d3ac0cc921511968068372a3c045e8b19edf433dadb65564e4686fb7012",
+      "original_class_hash": "0x59a4d3ac0cc921511968068372a3c045e8b19edf433dadb65564e4686fb7012",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4500,15 +4581,23 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "SortedList",
+        "SortedListItem",
+        "Season",
+        "SeasonSettings",
+        "Game",
+        "GameConfig",
+        "RyoConfig"
+      ],
       "computed": [],
       "name": "rollyourown::systems::laundromat::laundromat"
     },
     {
       "kind": "DojoContract",
-      "address": "0x7ccf33bb6c279a222acf5bba91c93933ea71461670e5cf19a9f6d334bc2e5a9",
-      "class_hash": "0x3a372547c89d22b504731e512327dcb5909668f67f4cbffce0a35163615f409",
-      "original_class_hash": "0x3a372547c89d22b504731e512327dcb5909668f67f4cbffce0a35163615f409",
+      "address": "0x7723ad68899f78cd0b816ec304a462eb62344ef79718e4c5892845a6368db42",
+      "class_hash": "0x115b0de283dafdf392e8c2fdd4c3c95b3721f1131d48c25cdc119fa1c182ea6",
+      "original_class_hash": "0x115b0de283dafdf392e8c2fdd4c3c95b3721f1131d48c25cdc119fa1c182ea6",
       "base_class_hash": "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46",
       "abi": [
         {
@@ -4561,6 +4650,37 @@
                   "type": "dojo::world::IWorldDispatcher"
                 }
               ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::systems::ryo::ryo::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::ryo::ryo::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [
+                {
+                  "name": "paper_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "treasury_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "laundromat_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
               "state_mutability": "view"
             }
           ]
@@ -4634,26 +4754,6 @@
           "type": "interface",
           "name": "rollyourown::systems::ryo::IRyo",
           "items": [
-            {
-              "type": "function",
-              "name": "initialize",
-              "inputs": [
-                {
-                  "name": "paper_address",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "treasury_address",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "laundromat_address",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
             {
               "type": "function",
               "name": "set_paused",
@@ -4807,8 +4907,18 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "RyoConfig",
+        "RyoAddress",
+        "Season",
+        "SeasonSettings"
+      ],
       "computed": [],
+      "init_calldata": [
+        "$contract_address:rollyourown::_mocks::paper_mock::paper_mock",
+        "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
+        "$contract_address:rollyourown::systems::laundromat::laundromat"
+      ],
       "name": "rollyourown::systems::ryo::ryo"
     }
   ],
