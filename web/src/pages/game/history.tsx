@@ -93,7 +93,6 @@ export default function History() {
             </VStack>
           </Flex>
         </VStack>
-      )}
     </Layout>
   );
 }
