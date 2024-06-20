@@ -97,6 +97,14 @@ const cartridgeConnector = new CartridgeConnector(
       method: "faucet",
     },
     {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!.address,
+      method: "approve",
+    },
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      method: "create_game",
+    },
+    {
       target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
       method: "travel",
     },
