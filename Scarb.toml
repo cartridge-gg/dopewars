@@ -30,8 +30,8 @@ migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate app
 migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE"
 migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
 
-migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo002"
-migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --name ryo002 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
+migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo003"
+migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --name ryo003 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
 auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
 
 # slot ryo420
@@ -39,11 +39,11 @@ slot_ryo420_katana = "slot d create ryo420 katana --version v0.7.0-alpha.5 -a 4 
 slot_ryo420_torii = "slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.5 --world 0x78fcdfcc137fa18770f660ba2e8a3cf263907df38dfd462dc4dda048979c011"
 
 # slot ryo421
-slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.0-alpha.3 --chain-id KATANA_SLOT_421 -b 1000 --disable-fee true  --invoke-max-steps 2000000"
-slot_ryo421_torii = "slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.0-alpha.3 --world 0x45780a1a9786ee6bcd2e347d43d717a385dbd72e8282676d891835e0a278d14"
+slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.1 -a 4 -b 5000 --disable-fee true --invoke-max-steps 1000000"
+slot_ryo421_torii = "slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.1 --world 0x2f569ad903a00476656bec6a74c954ef01e48202652bbab0149574d5f6d829"
 
 # slot ryo_sepolia
-slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 73184 --index-pending true --version v0.7.0-alpha.5 --world 0x10c26511d4264cf894246bdbe2efc53cf99632d1fcd5fab7283649c34ca0494"
+slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 75075 --index-pending true --version v0.7.2 --world 0x2fc5b78f171fd1d6a5842276902dcbd91c770fb01e56bc293392e3931ffe817"
 
 
 [[target.dojo]]
@@ -73,8 +73,7 @@ private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515
 
 [profile.ryosepolia.tool.dojo.env]
 # world_address= "0x10c26511d4264cf894246bdbe2efc53cf99632d1fcd5fab7283649c34ca0494"
-rpc_url = "https://starknet-sepolia.g.alchemy.com/v2/AQxmz1FjMPH2mY7wc3er677SdzOdS1XE"
-# rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia/v0_6"
+rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
 account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
 keystore_path = "/Users/boo/sozo_acc"
 # password = "sozo_acc"

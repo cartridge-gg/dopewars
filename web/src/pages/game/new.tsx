@@ -4,7 +4,7 @@ import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
-import { useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
+import { ETHER, useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -86,7 +86,9 @@ const New = observer(() => {
 
       const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 
-      router.push(`/${gameId}/travel`);
+      if (gameId) {
+        router.push(`/${gameId}/travel`);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -111,7 +113,7 @@ const New = observer(() => {
           </Button>
 
           <ChildrenOrConnect>
-            {balance > 1000 ? (
+            {balance > 1000n * ETHER ? (
               <Button
                 w={["full", "auto"]}
                 px={["auto", "20px"]}

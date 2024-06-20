@@ -1,8 +1,10 @@
-import { useDojoContext } from "@/dojo/hooks";
+import { useControllerUsername, useDojoContext } from "@/dojo/hooks";
 import { frenlyAddress } from "@/utils/ui";
 import { Box, Button, HStack, Image, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet-react/core";
 import { KatanaIcon } from "../icons";
+import { useEffect, useState } from "react";
+import { Cartridge } from "../icons/branding/Cartridge";
 
 export const ConnectButton = ({ ...props }) => {
   const { account, address, status } = useAccount();
@@ -10,13 +12,15 @@ export const ConnectButton = ({ ...props }) => {
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
 
+  const { username, isController } = useControllerUsername();
+
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
 
   const onClick = () => {
     if (connectors.length > 1) {
       uiStore.openConnectModal();
     } else {
-      connect({connector: connectors[0]});
+      connect({ connector: connectors[0] });
     }
   };
 
@@ -40,11 +44,11 @@ export const ConnectButton = ({ ...props }) => {
           >
             <HStack>
               {connector && isBurnerOrPredeplyed && <KatanaIcon />}
-              {connector && !isBurnerOrPredeplyed && (
+              {connector && !isBurnerOrPredeplyed && !isController && (
                 <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
               )}
-
-              <Text>{frenlyAddress(account.address || "")}</Text>
+              {connector && isController && <Cartridge />}
+              <Text>{isController ? username : frenlyAddress(account.address || "")}</Text>
             </HStack>
           </Button>
         )}

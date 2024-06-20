@@ -42,6 +42,7 @@ import {
 import { Game, SeasonSettings, SortedList } from "@/generated/graphql";
 
 import { useToast } from "@/hooks/toast";
+import colors from "@/theme/colors";
 import { formatCashHeader } from "@/utils/ui";
 import {
   Table,
@@ -82,7 +83,7 @@ export default function SeasonIndex() {
     refetchRegisteredGames();
   }, [refetchRegisteredGames]);
 
-  if (!season || !seasonSettings ) return null;
+  if (!season || !seasonSettings) return null;
 
   return (
     <Layout
@@ -158,45 +159,48 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <PaperCashIcon />
                 </Td>
                 <Td>Initial Cash</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={cashModeColor[settings?.cash_mode as cashModeColorKeys]}>{settings?.cash_mode}</Td>
+
+                <Td color={cashModeColor[settings?.cash_mode as cashModeColorKeys].toString()}>
+                  {settings?.cash_mode}
+                </Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Heart />
                 </Td>
                 <Td>Initial Health</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={healthModeColor[settings?.health_mode as healthModeColorKeys]}>{settings?.health_mode}</Td>
+
+                <Td color={healthModeColor[settings?.health_mode as healthModeColorKeys].toString()}>
+                  {settings?.health_mode}
+                </Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Clock />
                 </Td>
                 <Td>Max Turns</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={turnsModeColor[settings?.turns_mode as turnsModeColorKeys]}>{settings?.turns_mode}</Td>
+
+                <Td color={turnsModeColor[settings?.turns_mode as turnsModeColorKeys].toString()}>
+                  {settings?.turns_mode}
+                </Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Cigarette />
                 </Td>
                 <Td>Drugs</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys]}>{settings?.drugs_mode}</Td>
+
+                <Td color={drugsModeColor[settings?.drugs_mode as drugsModeColorKeys].toString()}>
+                  {settings?.drugs_mode}
+                </Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <GangIcon />
                 </Td>
                 <Td>Encounters</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={encountersModeColor[settings?.encounters_mode as encountersModeColorKeys]}>
+
+                <Td color={encountersModeColor[settings?.encounters_mode as encountersModeColorKeys].toString()}>
                   {settings?.encounters_mode}
                 </Td>
               </Tr>
@@ -205,9 +209,11 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <CopsIcon />
                 </Td>
                 <Td>Encounters Odds</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={encountersModeOddsColor[settings?.encounters_odds_mode as encountersModeOddsColorKeys]}>
+                <Td
+                  color={encountersModeOddsColor[
+                    settings?.encounters_odds_mode as encountersModeOddsColorKeys
+                  ].toString()}
+                >
                   {settings?.encounters_odds_mode}
                 </Td>
               </Tr>
@@ -216,9 +222,10 @@ export const SeasonSettingsTable = ({ settings }: { settings?: SeasonSettings })
                   <Siren />
                 </Td>
                 <Td borderBottomColor="transparent">Wanted</Td>
-                {/* 
-// @ts-ignore */}
-                <Td color={wantedModeColor[settings?.wanted_mode as wantedModeColorKeys]} borderBottomColor="transparent" >
+                <Td
+                  color={wantedModeColor[settings?.wanted_mode as wantedModeColorKeys].toString()}
+                  borderBottomColor="transparent"
+                >
                   {settings?.wanted_mode}
                 </Td>
               </Tr>
@@ -251,7 +258,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
             if (!game) return;
 
             const isPlayer = game.player_id === account?.address;
-            const color = isPlayer ? "yellow.400" : "neon.400";
+            const color = isPlayer ? colors.yellow["400"].toString() : colors.neon["400"].toString();
             return (
               <Tr color={color} key={idx}>
                 {/* <Td isNumeric>{game.game_id}</Td> */}

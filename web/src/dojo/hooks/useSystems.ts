@@ -213,7 +213,7 @@ export const useSystems = (): SystemsInterface => {
       return {
         hash,
         parsedEvents,
-        gameId: gameCreated.gameId,
+        gameId: gameCreated?.gameId,
       };
     },
     [executeAndReceipt, config?.ryoAddress.paper],

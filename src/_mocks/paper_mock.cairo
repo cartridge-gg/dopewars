@@ -52,7 +52,7 @@ trait IPaperMockFaucet<TState> {
 }
 
 
-#[dojo::contract(allow_ref_self)]
+#[dojo::contract]
 mod paper_mock {
     use integer::BoundedInt;
     use starknet::ContractAddress;
