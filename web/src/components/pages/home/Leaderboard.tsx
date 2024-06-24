@@ -15,11 +15,12 @@ import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
-import { Arrow, InfosIcon, PaperIcon, Skull } from "../../icons";
+import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { SeasonDetailsModal } from "./SeasonDetailsModal";
 import { Game } from "@/generated/graphql";
 import { shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";
+import { getPayedCount } from "@/dojo/helpers";
 
 const renderer = ({
   days,
@@ -71,6 +72,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     isFetching: isFetchingRegisteredGames,
     refetch: refetchRegisteredGames,
   } = useRegisteredGamesBySeason(selectedVersion);
+
+  const payedCount = getPayedCount(registeredGames.length);
 
   useEffect(() => {
     if (!config) return;
@@ -207,7 +210,13 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
                       {game.claimable > 0 && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                          <PaperIcon /> {game.claimable} ...
+                          <PaperIcon /> {game.claimable} ..
+                        </Text>
+                      )}
+
+                      {game.season_version === config.ryo.season_version && index + 1 < payedCount && (
+                        <Text flexShrink={0} fontSize={["12px", "16px"]} >
+                          <Trophy opacity={0.5}/>
                         </Text>
                       )}
 

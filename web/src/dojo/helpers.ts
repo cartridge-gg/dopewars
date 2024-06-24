@@ -362,3 +362,39 @@ export const wantedModeColor = {
   [WantedMode.KoolAndTheGang]: colors.neon["400"],
 };
 export type wantedModeColorKeys = keyof typeof wantedModeColor;
+
+export function getPayedCount(entrants: number): number {
+  if (entrants <= 2) {
+    return 1; // payout_0_2(rank)
+  } else if (entrants <= 10) {
+    return 2; // payout_3_10(rank)
+  } else if (entrants <= 30) {
+    return 3; // payout_11_30(rank)
+  } else if (entrants <= 50) {
+    return 5; // payout_31_50(rank)
+  } else if (entrants <= 75) {
+    return 8; //payout_51_75(rank)
+  } else if (entrants <= 100) {
+    return 10; // payout_76_100(rank)
+  } else if (entrants <= 150) {
+    return 15; // payout_101_150(rank)
+  } else if (entrants <= 200) {
+    return 20; // payout_151_200(rank)
+  } else if (entrants <= 250) {
+    return 25; // payout_201_250(rank)
+  } else if (entrants <= 300) {
+    return 30; // payout_251_300(rank)
+  } else if (entrants <= 350) {
+    return 35; // payout_301_350(rank)
+  } else if (entrants <= 400) {
+    return 40; // payout_351_400(rank)
+  } else if (entrants <= 500) {
+    return 50; // payout_401_500(rank)
+  } else {
+    return 60; // payout_501_700(rank)
+  }
+}
+
+//
+//  payout count
+//
