@@ -53,11 +53,11 @@ import { useAccount } from "@starknet-react/core";
 import { shortString } from "starknet";
 
 export default function History() {
-  const { router } = useRouterContext();
+  const { router, playerId } = useRouterContext();
   const { account } = useAccount();
   const { uiStore } = useDojoContext();
 
-  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(account?.address || "0x0");
+  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(playerId || "0x0");
 
   return (
     <Layout

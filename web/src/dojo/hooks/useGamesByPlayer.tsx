@@ -163,7 +163,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
     const averageReputation =
       games.map((i) => i.player.reputation).reduce((p, c) => p + c, 0) / (games.length > 0 ? games.length : 1);
 
-    const stats = {
+    return {
       totalGamesPlayed,
       totalGamesPaid,
       payRate,
@@ -196,9 +196,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
       },
       averageReputation,
     };
-
-    return stats;
-  }, [games, allTravelEncounters, allTravelEncounterResults]);
+  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrugByPlayer]);
 
   return {
     games: games || [],
