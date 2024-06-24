@@ -16,7 +16,7 @@ import {
   useNetwork,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
-import { RpcProvider } from "starknet";
+import { RpcProvider, shortString } from "starknet";
 import CartridgeConnector from "@cartridge/connector";
 
 export const walletInstallLinks = {
@@ -49,7 +49,6 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
-
   switch (selectedChain.name) {
     case "SEPOLIA":
       return [cartridgeConnector];
@@ -93,11 +92,13 @@ import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 const cartridgeConnector = new CartridgeConnector(
   [
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!.address,
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
+        .address,
       method: "faucet",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!.address,
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
+        .address,
       method: "approve",
     },
     {
@@ -121,9 +122,17 @@ const cartridgeConnector = new CartridgeConnector(
         .address,
       method: "register_score",
     },
+    {
+      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
+        .address,
+      method: "claim",
+    },
   ],
   {
     url: "https://x.cartridge.gg",
     theme: "dope-wars",
+    paymaster: {
+      caller: shortString.encodeShortString("ANY_CALLER"),
+    },
   },
 ) as unknown as InjectedConnector;
