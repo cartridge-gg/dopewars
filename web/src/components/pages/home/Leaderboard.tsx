@@ -161,7 +161,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                   : "Anonymous";
 
                 return (
-                  <ListItem color={color} key={game.game_id} cursor="pointer">
+                  <ListItem color={color} key={game.game_id} >
                     <HStack mr={3}>
                       <Text
                         w={["10px", "30px"]}
@@ -192,6 +192,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                           whiteSpace="nowrap"
                           overflow="hidden"
                           fontSize={["12px", "16px"]}
+                          cursor="pointer"
+                          onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
                         >
                           {displayName}
                         </Text>
