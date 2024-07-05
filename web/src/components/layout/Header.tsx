@@ -10,11 +10,8 @@ import { useEffect } from "react";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
-import { Burners } from "../wallet/Burners";
-import { ChainSelector } from "../wallet/ChainSelector";
 import { ConnectButton } from "../wallet/ConnectButton";
-import { Predeployed } from "../wallet/Predeployed";
-import { OnGoingGames } from "../pages/home/OnGoingGames";
+
 import DrawerMenu from "./DrawerMenu";
 
 export const Header = observer(() => {
@@ -67,7 +64,6 @@ export const Header = observer(() => {
         )} */}
 
         {!gameId && <ClaimReward />}
-        {/* {!gameId && <OnGoingGames />} */}
       </HStack>
 
       {game /*|| router.asPath.includes("logs")*/ && (

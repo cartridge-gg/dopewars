@@ -213,7 +213,7 @@ const CustomLeftPanel = () => {
         mb={["0px", "20px"]}
         cursor="pointer"
         onClick={() => {
-          router.push(`/game/history/${game?.gameInfos.player_id?.toString(16)}`);
+          router.push(`/game/history/0x${BigInt(game?.gameInfos.player_id || 0).toString(16)}`);
         }}
       >
         {shortString.decodeShortString(gameInfos?.player_name?.value || "")}
