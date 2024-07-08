@@ -18,7 +18,7 @@
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
-    "@cartridge/connector": "^0.3.30",
+    "@cartridge/connector": "^0.3.33",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "0.7.4",

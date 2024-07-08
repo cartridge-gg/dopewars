@@ -123,7 +123,8 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
 
       try {
-        tx = await dojoProvider.execute(account!, params);
+    
+        tx = await dojoProvider.execute(account!, params, { maxFee: 1000000000000000n,  });
 
         // toast({
         //   message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
