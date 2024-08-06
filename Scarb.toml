@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.6.3"
+cairo-version = "2.7.0-rc.3"
 name = "rollyourown"
 version = "0.1.0"
 
@@ -9,8 +9,9 @@ version = "0.1.0"
 [dependencies]
 # dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.1"}
 # token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.1"}
-dojo = { path = "../dojo/crates/dojo-core" }
-token = { path = "../origami" }
+# dojo = { path = "../dojo/crates/dojo-core" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.3" }
+origami_token = { path = "../origami-dev/" }
 
 
 [scripts]
@@ -48,12 +49,12 @@ slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartri
 
 [[target.dojo]]
 build-external-contracts = [
-    "token::components::security::initializable::initializable_model",
-    "token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
-    "token::components::token::erc20::erc20_balance::erc_20_balance_model",
-    "token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
-    "token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
-    "token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
+    "origami_token::components::security::initializable::initializable_model",
+    "origami_token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
+    "origami_token::components::token::erc20::erc20_balance::erc_20_balance_model",
+    "origami_token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
+    "origami_token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
+    "origami_token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
 ]
 
 [tool.dojo.env]
@@ -85,28 +86,21 @@ keystore_path = "/Users/boo/sozo_acc"
 
 [tool.dojo.world]
 name = "Dope Wars"
+seed = "dopeseed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
-website = "https://rollyourown.preview.cartridge.gg/"
-icon_uri = "file://assets/icon.png"
-cover_uri = "file://assets/cover.png"
-socials.x = "https://x.com/TheDopeWars"
+# website = "https://rollyourown.preview.cartridge.gg/"
+# icon_uri = "file://assets/icon.png"
+# cover_uri = "file://assets/cover.png"
+# socials.x = "https://x.com/TheDopeWars"
 
+[tool.dojo.world.namespace]
+default = "dopewars"
+mappings = { "origami_token" = "dopewars" }
 
-[profile.ryosepolia.tool.dojo.world]
-name = "Dope Wars"
-description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO.."
-website = "https://dopewars.game/"
-icon_uri = "file://assets/icon.png"
-cover_uri = "file://assets/cover.png"
-socials.x = "https://x.com/TheDopeWars"
-
-
-#  alpha.3
-#  create game  :     Steps: 272281 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 60 | Range Checks: 42093
-#  buy & travel :     Steps: 420350 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3550 | Pedersen: 56 | Poseidon Builtin: 37 | Range Checks: 77213
-#  sell & encounter : Steps: 250413 | Bitwise: 188 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 42965
-
-#  alpha.5
-#  create game :      Steps: 123719 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 74 | Range Checks: 8641
-#  buy & travel :     Steps: 124923 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3548 | Pedersen: 55 | Poseidon Builtin: 37 | Range Checks: 11166
-#  sell & encounter : Steps:  90913 | Bitwise: 190 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 7241
+# [profile.ryosepolia.tool.dojo.world]
+# name = "Dope Wars"
+# description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO.."
+# website = "https://dopewars.game/"
+# icon_uri = "file://assets/icon.png"
+# cover_uri = "file://assets/cover.png"
+# socials.x = "https://x.com/TheDopeWars"

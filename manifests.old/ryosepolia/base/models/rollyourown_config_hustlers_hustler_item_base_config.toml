@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x3e8b16df9230d6a6e6e2b5957fee414fcc196cd2103a80df52d740452d260c2"
+original_class_hash = "0x3e8b16df9230d6a6e6e2b5957fee414fcc196cd2103a80df52d740452d260c2"
+abi = "manifests/ryosepolia/abis/base/models/rollyourown_config_hustlers_hustler_item_base_config.json"
+name = "rollyourown::config::hustlers::hustler_item_base_config"
+
+[[members]]
+name = "slot"
+type = "ItemSlot"
+key = true
+
+[[members]]
+name = "id"
+type = "u32"
+key = true
+
+[[members]]
+name = "slot_id"
+type = "u8"
+key = false
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[members]]
+name = "initial_tier"
+type = "u8"
+key = false

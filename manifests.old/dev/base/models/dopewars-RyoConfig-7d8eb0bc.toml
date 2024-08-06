@@ -1,0 +1,56 @@
+kind = "DojoModel"
+class_hash = "0x4ed0c39183c8677313eeba0b7331f905fffd6f3bf0757764f449329bef3e5dd"
+original_class_hash = "0x4ed0c39183c8677313eeba0b7331f905fffd6f3bf0757764f449329bef3e5dd"
+abi = "manifests/dev/base/abis/models/dopewars-RyoConfig-7d8eb0bc.json"
+tag = "dopewars-RyoConfig"
+manifest_name = "dopewars-RyoConfig-7d8eb0bc"
+
+[[members]]
+name = "key"
+type = "u8"
+key = true
+
+[[members]]
+name = "initialized"
+type = "bool"
+key = false
+
+[[members]]
+name = "paused"
+type = "bool"
+key = false
+
+[[members]]
+name = "season_version"
+type = "u16"
+key = false
+
+[[members]]
+name = "season_duration"
+type = "u32"
+key = false
+
+[[members]]
+name = "season_time_limit"
+type = "u16"
+key = false
+
+[[members]]
+name = "paper_fee"
+type = "u16"
+key = false
+
+[[members]]
+name = "paper_reward_launderer"
+type = "u16"
+key = false
+
+[[members]]
+name = "treasury_fee_pct"
+type = "u8"
+key = false
+
+[[members]]
+name = "treasury_balance"
+type = "u32"
+key = false

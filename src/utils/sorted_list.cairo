@@ -150,7 +150,8 @@ impl SortedListImpl of SortedListTrait {
 
         // update SortedList
         self.size += 1;
-        self.set(world);
+        //self.set(world);
+        Self::set(self, world);
     }
 
 
@@ -206,7 +207,8 @@ impl SortedListImpl of SortedListTrait {
 
         self.process_max_size = process_max_size;
         self.locked = true;
-        self.set(world);
+        //self.set(world);
+        Self::set(self, world);
     }
 
     //
@@ -261,7 +263,8 @@ impl SortedListImpl of SortedListTrait {
         self.process_cursor_k0 = curr.item_k0;
         self.process_cursor_k1 = curr.item_k1;
 
-        self.set(world);
+        // self.set(world);
+        Self::set(self, world);
     }
 
     // fn print_all<T, +SortableItem<T>, +Copy<T>, +Drop<T>, +Destruct<T>>(

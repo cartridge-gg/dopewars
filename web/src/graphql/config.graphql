@@ -1,6 +1,6 @@
 query Config {
   # RyoAddress
-  ryoAddressModels(limit: 1) {
+  dopewarsRyoAddressModels(limit: 1) {
     edges {
       node {
         key
@@ -12,7 +12,7 @@ query Config {
   }
 
   # Ryo
-  ryoConfigModels(limit: 1) {
+  dopewarsRyoConfigModels(limit: 1) {
     edges {
       node {
         key
@@ -30,7 +30,7 @@ query Config {
   }
 
   # Drugs
-  drugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
+  dopewarsDrugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
     edges {
       node {
         drugs_mode
@@ -45,7 +45,7 @@ query Config {
   }
 
   # Locations
-  locationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
+  dopewarsLocationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
     edges {
       node {
         location
@@ -56,7 +56,7 @@ query Config {
   }
 
   # HustlerItemBaseConfig
-  hustlerItemBaseConfigModels {
+  dopewarsHustlerItemBaseConfigModels {
     edges {
       node {
         slot
@@ -69,7 +69,7 @@ query Config {
   }
 
   # HustlerItemTiersConfig
-  hustlerItemTiersConfigModels(limit: 24) {
+  dopewarsHustlerItemTiersConfigModels(limit: 24) {
     edges {
       node {
         slot
@@ -81,7 +81,7 @@ query Config {
     }
   }
 
-  encounterStatsConfigModels(limit: 100) {
+  dopewarsEncounterStatsConfigModels(limit: 100) {
     edges {
       node {
         encounters_mode
@@ -103,7 +103,7 @@ query Config {
 
 
 query GameConfig($version: u16) {
-  gameConfigModels(where: { season_version: $version }) {
+  dopewarsGameConfigModels(where: { season_version: $version }) {
     edges {
       node {
         season_version
@@ -122,7 +122,7 @@ query GameConfig($version: u16) {
 }
 
 query AllGameConfig {
-  gameConfigModels(limit: 420) {
+  dopewarsGameConfigModels(limit: 420) {
     edges {
       node {
         season_version

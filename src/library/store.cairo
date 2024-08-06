@@ -9,8 +9,7 @@ use rollyourown::{
         settings::{SeasonSettings, EncountersMode, DrugsMode}
     },
     models::{game::Game, season::Season, game_store_packed::GameStorePacked,},
-    packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}},
-    traits::{Packable, Packer}
+    packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer}
 };
 
 
@@ -212,7 +211,7 @@ mod store {
     impl InternalImpl of InternalTrait {
         #[inline(always)]
         fn s(self: @ContractState,) -> super::IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
             super::IStoreLibraryDispatcher { class_hash, }
         }
     }

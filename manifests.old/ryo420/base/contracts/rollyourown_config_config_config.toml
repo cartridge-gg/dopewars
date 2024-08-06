@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x2c380db844017db9f09e59595f7f2632804fecd62e5a1d7cb734511cd238a63"
+original_class_hash = "0x2c380db844017db9f09e59595f7f2632804fecd62e5a1d7cb734511cd238a63"
+base_class_hash = "0x0"
+abi = "manifests/ryo420/abis/base/contracts/rollyourown_config_config_config.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "rollyourown::config::config::config"

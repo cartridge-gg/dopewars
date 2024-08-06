@@ -1,0 +1,45 @@
+kind = "DojoModel"
+class_hash = "0x77af82d8b8683a2ed6d17fb5bb20080dfc3575bdf189ba228faf4caf3e181da"
+original_class_hash = "0x77af82d8b8683a2ed6d17fb5bb20080dfc3575bdf189ba228faf4caf3e181da"
+abi = "manifests/ryo420/abis/base/models/rollyourown_models_season_season.json"
+name = "rollyourown::models::season::season"
+
+[[members]]
+name = "version"
+type = "u16"
+key = true
+
+[[members]]
+name = "season_duration"
+type = "u32"
+key = false
+
+[[members]]
+name = "season_time_limit"
+type = "u16"
+key = false
+
+[[members]]
+name = "paper_fee"
+type = "u16"
+key = false
+
+[[members]]
+name = "treasury_fee_pct"
+type = "u8"
+key = false
+
+[[members]]
+name = "next_version_timestamp"
+type = "u64"
+key = false
+
+[[members]]
+name = "paper_balance"
+type = "u32"
+key = false
+
+[[members]]
+name = "high_score"
+type = "u32"
+key = false

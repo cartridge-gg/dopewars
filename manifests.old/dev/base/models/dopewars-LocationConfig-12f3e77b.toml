@@ -1,0 +1,21 @@
+kind = "DojoModel"
+class_hash = "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55"
+original_class_hash = "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55"
+abi = "manifests/dev/base/abis/models/dopewars-LocationConfig-12f3e77b.json"
+tag = "dopewars-LocationConfig"
+manifest_name = "dopewars-LocationConfig-12f3e77b"
+
+[[members]]
+name = "location"
+type = "Locations"
+key = true
+
+[[members]]
+name = "location_id"
+type = "u8"
+key = false
+
+[[members]]
+name = "name"
+type = "Bytes16"
+key = false

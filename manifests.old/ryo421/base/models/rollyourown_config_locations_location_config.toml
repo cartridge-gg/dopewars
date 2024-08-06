@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x667cfefc1e94c89bdf6fc345c86d28f9187ad7f35e22a6a9903d4cb32a20102"
+original_class_hash = "0x667cfefc1e94c89bdf6fc345c86d28f9187ad7f35e22a6a9903d4cb32a20102"
+abi = "manifests/ryo421/abis/base/models/rollyourown_config_locations_location_config.json"
+name = "rollyourown::config::locations::location_config"
+
+[[members]]
+name = "location"
+type = "Locations"
+key = true
+
+[[members]]
+name = "location_id"
+type = "u8"
+key = false
+
+[[members]]
+name = "name"
+type = "Bytes16"
+key = false

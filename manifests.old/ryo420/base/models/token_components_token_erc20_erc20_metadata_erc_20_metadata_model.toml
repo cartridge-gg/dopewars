@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x648f87547cad4c7ff85ab3c422f77850b4a6f0b0f1494011440449a52aa8053"
+original_class_hash = "0x648f87547cad4c7ff85ab3c422f77850b4a6f0b0f1494011440449a52aa8053"
+abi = "manifests/ryo420/abis/base/models/token_components_token_erc20_erc20_metadata_erc_20_metadata_model.json"
+name = "token::components::token::erc20::erc20_metadata::erc_20_metadata_model"
+
+[[members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[members]]
+name = "symbol"
+type = "felt252"
+key = false
+
+[[members]]
+name = "decimals"
+type = "u8"
+key = false
+
+[[members]]
+name = "total_supply"
+type = "u256"
+key = false

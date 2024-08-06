@@ -1,0 +1,55 @@
+kind = "DojoModel"
+class_hash = "0x3ba8161169e57bc5b8f1185cfcf49994fd0b2eb62869b175af514311af7a67b"
+original_class_hash = "0x3ba8161169e57bc5b8f1185cfcf49994fd0b2eb62869b175af514311af7a67b"
+abi = "manifests/ryo420/abis/base/models/rollyourown_config_ryo_ryo_config.json"
+name = "rollyourown::config::ryo::ryo_config"
+
+[[members]]
+name = "key"
+type = "u8"
+key = true
+
+[[members]]
+name = "initialized"
+type = "bool"
+key = false
+
+[[members]]
+name = "paused"
+type = "bool"
+key = false
+
+[[members]]
+name = "season_version"
+type = "u16"
+key = false
+
+[[members]]
+name = "season_duration"
+type = "u32"
+key = false
+
+[[members]]
+name = "season_time_limit"
+type = "u16"
+key = false
+
+[[members]]
+name = "paper_fee"
+type = "u16"
+key = false
+
+[[members]]
+name = "paper_reward_launderer"
+type = "u16"
+key = false
+
+[[members]]
+name = "treasury_fee_pct"
+type = "u8"
+key = false
+
+[[members]]
+name = "treasury_balance"
+type = "u32"
+key = false

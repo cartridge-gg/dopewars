@@ -1,0 +1,40 @@
+kind = "DojoModel"
+class_hash = "0x43ec1a1cd83de2b480bd3695bee9adce6aee21527d7e1e2ce56e54be460c2a4"
+original_class_hash = "0x43ec1a1cd83de2b480bd3695bee9adce6aee21527d7e1e2ce56e54be460c2a4"
+abi = "manifests/ryosepolia/abis/base/models/rollyourown_config_drugs_drug_config.json"
+name = "rollyourown::config::drugs::drug_config"
+
+[[members]]
+name = "drugs_mode"
+type = "DrugsMode"
+key = true
+
+[[members]]
+name = "drug"
+type = "Drugs"
+key = true
+
+[[members]]
+name = "drug_id"
+type = "u8"
+key = false
+
+[[members]]
+name = "base"
+type = "u16"
+key = false
+
+[[members]]
+name = "step"
+type = "u16"
+key = false
+
+[[members]]
+name = "weight"
+type = "u16"
+key = false
+
+[[members]]
+name = "name"
+type = "Bytes16"
+key = false

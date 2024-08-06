@@ -1,16 +1,89 @@
 export const ABI = [
   {
     "type": "impl",
-    "name": "DojoResourceProviderImpl",
-    "interface_name": "dojo::world::IDojoResourceProvider"
+    "name": "ContractImpl",
+    "interface_name": "dojo::contract::contract::IContract"
+  },
+  {
+    "type": "struct",
+    "name": "core::byte_array::ByteArray",
+    "members": [
+      {
+        "name": "data",
+        "type": "core::array::Array::<core::bytes_31::bytes31>"
+      },
+      {
+        "name": "pending_word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "pending_word_len",
+        "type": "core::integer::u32"
+      }
+    ]
   },
   {
     "type": "interface",
-    "name": "dojo::world::IDojoResourceProvider",
+    "name": "dojo::contract::contract::IContract",
     "items": [
       {
         "type": "function",
-        "name": "dojo_resource",
+        "name": "contract_name",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::byte_array::ByteArray"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "namespace",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::byte_array::ByteArray"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "tag",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::byte_array::ByteArray"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "name_hash",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "namespace_hash",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "selector",
         "inputs": [],
         "outputs": [
           {
@@ -24,11 +97,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "WorldProviderImpl",
-    "interface_name": "dojo::world::IWorldProvider"
+    "interface_name": "dojo::world::world_contract::IWorldProvider"
   },
   {
     "type": "struct",
-    "name": "dojo::world::IWorldDispatcher",
+    "name": "dojo::world::world_contract::IWorldDispatcher",
     "members": [
       {
         "name": "contract_address",
@@ -38,7 +111,7 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "dojo::world::IWorldProvider",
+    "name": "dojo::world::world_contract::IWorldProvider",
     "items": [
       {
         "type": "function",
@@ -46,7 +119,7 @@ export const ABI = [
         "inputs": [],
         "outputs": [
           {
-            "type": "dojo::world::IWorldDispatcher"
+            "type": "dojo::world::world_contract::IWorldDispatcher"
           }
         ],
         "state_mutability": "view"
@@ -109,11 +182,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "UpgradableImpl",
-    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+    "interface_name": "dojo::contract::upgradeable::IUpgradeable"
   },
   {
     "type": "interface",
-    "name": "dojo::components::upgradeable::IUpgradeable",
+    "name": "dojo::contract::upgradeable::IUpgradeable",
     "items": [
       {
         "type": "function",
@@ -132,11 +205,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20MetadataImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20Metadata"
+    "interface_name": "origami_token::components::token::erc20::erc20_metadata::IERC20Metadata"
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20Metadata",
+    "name": "origami_token::components::token::erc20::erc20_metadata::IERC20Metadata",
     "items": [
       {
         "type": "function",
@@ -144,7 +217,7 @@ export const ABI = [
         "inputs": [],
         "outputs": [
           {
-            "type": "core::felt252"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"
@@ -155,7 +228,7 @@ export const ABI = [
         "inputs": [],
         "outputs": [
           {
-            "type": "core::felt252"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"
@@ -176,7 +249,7 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20MetadataTotalSupplyImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply"
+    "interface_name": "origami_token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply"
   },
   {
     "type": "struct",
@@ -194,7 +267,7 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply",
+    "name": "origami_token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply",
     "items": [
       {
         "type": "function",
@@ -212,11 +285,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20MetadataTotalSupplyCamelImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel"
+    "interface_name": "origami_token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel"
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel",
+    "name": "origami_token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel",
     "items": [
       {
         "type": "function",
@@ -234,7 +307,7 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20BalanceImpl",
-    "interface_name": "token::components::token::erc20::erc20_balance::IERC20Balance"
+    "interface_name": "origami_token::components::token::erc20::erc20_balance::IERC20Balance"
   },
   {
     "type": "enum",
@@ -252,7 +325,7 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_balance::IERC20Balance",
+    "name": "origami_token::components::token::erc20::erc20_balance::IERC20Balance",
     "items": [
       {
         "type": "function",
@@ -319,11 +392,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20BalanceCamelImpl",
-    "interface_name": "token::components::token::erc20::erc20_balance::IERC20BalanceCamel"
+    "interface_name": "origami_token::components::token::erc20::erc20_balance::IERC20BalanceCamel"
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_balance::IERC20BalanceCamel",
+    "name": "origami_token::components::token::erc20::erc20_balance::IERC20BalanceCamel",
     "items": [
       {
         "type": "function",
@@ -370,11 +443,11 @@ export const ABI = [
   {
     "type": "impl",
     "name": "ERC20AllowanceImpl",
-    "interface_name": "token::components::token::erc20::erc20_allowance::IERC20Allowance"
+    "interface_name": "origami_token::components::token::erc20::erc20_allowance::IERC20Allowance"
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_allowance::IERC20Allowance",
+    "name": "origami_token::components::token::erc20::erc20_allowance::IERC20Allowance",
     "items": [
       {
         "type": "function",
@@ -420,7 +493,7 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "name": "dojo::contract::upgradeable::upgradeable::Upgraded",
     "kind": "struct",
     "members": [
       {
@@ -432,31 +505,31 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "name": "dojo::contract::upgradeable::upgradeable::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Upgraded",
-        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "type": "dojo::contract::upgradeable::upgradeable::Upgraded",
         "kind": "nested"
       }
     ]
   },
   {
     "type": "event",
-    "name": "token::components::security::initializable::initializable_component::Event",
+    "name": "origami_token::components::security::initializable::initializable_component::Event",
     "kind": "enum",
     "variants": []
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
+    "name": "origami_token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
     "kind": "enum",
     "variants": []
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
+    "name": "origami_token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
     "kind": "struct",
     "members": [
       {
@@ -478,19 +551,19 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
+    "name": "origami_token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Transfer",
-        "type": "token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
+        "type": "origami_token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
         "kind": "nested"
       }
     ]
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
+    "name": "origami_token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
     "kind": "struct",
     "members": [
       {
@@ -512,25 +585,25 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
+    "name": "origami_token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Approval",
-        "type": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
+        "type": "origami_token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
         "kind": "nested"
       }
     ]
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
+    "name": "origami_token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
     "kind": "enum",
     "variants": []
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
+    "name": "origami_token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
     "kind": "enum",
     "variants": []
   },
@@ -541,37 +614,37 @@ export const ABI = [
     "variants": [
       {
         "name": "UpgradeableEvent",
-        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "type": "dojo::contract::upgradeable::upgradeable::Event",
         "kind": "nested"
       },
       {
         "name": "InitializableEvent",
-        "type": "token::components::security::initializable::initializable_component::Event",
+        "type": "origami_token::components::security::initializable::initializable_component::Event",
         "kind": "nested"
       },
       {
         "name": "ERC20MetadataEvent",
-        "type": "token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
+        "type": "origami_token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
         "kind": "nested"
       },
       {
         "name": "ERC20BalanceEvent",
-        "type": "token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
+        "type": "origami_token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
         "kind": "nested"
       },
       {
         "name": "ERC20AllowanceEvent",
-        "type": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
+        "type": "origami_token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
         "kind": "nested"
       },
       {
         "name": "ERC20MintableEvent",
-        "type": "token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
+        "type": "origami_token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
         "kind": "nested"
       },
       {
         "name": "ERC20BurnableEvent",
-        "type": "token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
+        "type": "origami_token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
         "kind": "nested"
       }
     ]

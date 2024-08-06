@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x59a4d3ac0cc921511968068372a3c045e8b19edf433dadb65564e4686fb7012"
+original_class_hash = "0x59a4d3ac0cc921511968068372a3c045e8b19edf433dadb65564e4686fb7012"
+base_class_hash = "0x0"
+abi = "manifests/ryo421/abis/base/contracts/rollyourown_systems_laundromat_laundromat.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "rollyourown::systems::laundromat::laundromat"

@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x6b246e4c2142a73be9e9585fa0a2a714a9b1150fd3f36a15025f3bfd757d204"
+original_class_hash = "0x6b246e4c2142a73be9e9585fa0a2a714a9b1150fd3f36a15025f3bfd757d204"
+abi = "manifests/ryo421/abis/base/models/rollyourown_config_ryo_address_ryo_address.json"
+name = "rollyourown::config::ryo_address::ryo_address"
+
+[[members]]
+name = "key"
+type = "u8"
+key = true
+
+[[members]]
+name = "paper"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "treasury"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "laundromat"
+type = "ContractAddress"
+key = false

@@ -1,0 +1,60 @@
+kind = "DojoModel"
+class_hash = "0x75bb457a17fe9b19f25bbf0a3a820cefde7d339e5be06b3fa129517397fd5bc"
+original_class_hash = "0x75bb457a17fe9b19f25bbf0a3a820cefde7d339e5be06b3fa129517397fd5bc"
+abi = "manifests/ryo420/abis/base/models/rollyourown_config_game_game_config.json"
+name = "rollyourown::config::game::game_config"
+
+[[members]]
+name = "season_version"
+type = "u16"
+key = true
+
+[[members]]
+name = "cash"
+type = "u32"
+key = false
+
+[[members]]
+name = "health"
+type = "u8"
+key = false
+
+[[members]]
+name = "max_turns"
+type = "u8"
+key = false
+
+[[members]]
+name = "max_wanted_shopping"
+type = "u8"
+key = false
+
+[[members]]
+name = "max_rounds"
+type = "u8"
+key = false
+
+[[members]]
+name = "rep_drug_step"
+type = "u8"
+key = false
+
+[[members]]
+name = "rep_buy_item"
+type = "u8"
+key = false
+
+[[members]]
+name = "rep_carry_drugs"
+type = "u8"
+key = false
+
+[[members]]
+name = "rep_hospitalized"
+type = "u8"
+key = false
+
+[[members]]
+name = "rep_jailed"
+type = "u8"
+key = false

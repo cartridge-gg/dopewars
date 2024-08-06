@@ -1,0 +1,15 @@
+kind = "DojoModel"
+class_hash = "0x43d32948aa1be53f26e75e04da5ec56796f6e86030084b3ebede98c45ace32a"
+original_class_hash = "0x43d32948aa1be53f26e75e04da5ec56796f6e86030084b3ebede98c45ace32a"
+abi = "manifests/ryo420/abis/base/models/token_components_security_initializable_initializable_model.json"
+name = "token::components::security::initializable::initializable_model"
+
+[[members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "initialized"
+type = "bool"
+key = false

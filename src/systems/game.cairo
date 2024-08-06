@@ -337,7 +337,7 @@ mod game {
 
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
             IStoreLibraryDispatcher { class_hash, }
         }
     }

@@ -1,0 +1,56 @@
+kind = "DojoModel"
+class_hash = "0x25400bf89f347fdde028010db83bfbce42b5c5da8e9d19fb9303be6f9d97e43"
+original_class_hash = "0x25400bf89f347fdde028010db83bfbce42b5c5da8e9d19fb9303be6f9d97e43"
+abi = "manifests/dev/base/abis/models/dopewars-EncounterStatsConfig-23b05ccb.json"
+tag = "dopewars-EncounterStatsConfig"
+manifest_name = "dopewars-EncounterStatsConfig-23b05ccb"
+
+[[members]]
+name = "encounter"
+type = "Encounters"
+key = true
+
+[[members]]
+name = "encounters_mode"
+type = "EncountersMode"
+key = true
+
+[[members]]
+name = "health_base"
+type = "u8"
+key = false
+
+[[members]]
+name = "health_step"
+type = "u8"
+key = false
+
+[[members]]
+name = "attack_base"
+type = "u8"
+key = false
+
+[[members]]
+name = "attack_step"
+type = "u8"
+key = false
+
+[[members]]
+name = "defense_base"
+type = "u8"
+key = false
+
+[[members]]
+name = "defense_step"
+type = "u8"
+key = false
+
+[[members]]
+name = "speed_base"
+type = "u8"
+key = false
+
+[[members]]
+name = "speed_step"
+type = "u8"
+key = false

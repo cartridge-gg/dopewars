@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x3bdf1f27dc98fc67eaf4e8bebc05b7600db838a057131bd67ac216cab803e0f"
+original_class_hash = "0x3bdf1f27dc98fc67eaf4e8bebc05b7600db838a057131bd67ac216cab803e0f"
+abi = "manifests/ryo420/abis/base/models/rollyourown_models_game_store_packed_game_store_packed.json"
+name = "rollyourown::models::game_store_packed::game_store_packed"
+
+[[members]]
+name = "game_id"
+type = "u32"
+key = true
+
+[[members]]
+name = "player_id"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "packed"
+type = "felt252"
+key = false

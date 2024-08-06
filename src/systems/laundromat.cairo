@@ -138,13 +138,13 @@ mod laundromat {
                 .pop_front() {
                     let mut game = self.s().game(*game_id, player_id);
 
-                    // retrieve season
-                    let season = self.s().season(game.season_version);
+                    // // retrieve season
+                    // let season = self.s().season(game.season_version);
 
                     // retrieve Season SortedList   
                     let list_id = game.season_version.into();
                     let mut sorted_list = SortedListImpl::get(world, list_id);
-                    let entrants = sorted_list.size;
+                    // let entrants = sorted_list.size;
 
                     // check season status
                     assert(sorted_list.locked, 'season has not ended');
@@ -156,7 +156,7 @@ mod laundromat {
                     assert(game.position > 0, 'invalid position');
                     assert(!game.claimed, 'already claimed');
 
-                    total_claimable += game.claimable;
+                    total_claimable = total_claimable + game.claimable;
 
                     // update claimed & save
                     game.claimed = true;
@@ -217,7 +217,7 @@ mod laundromat {
     impl InternalImpl of InternalTrait {
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
             IStoreLibraryDispatcher { class_hash, }
         }
     }

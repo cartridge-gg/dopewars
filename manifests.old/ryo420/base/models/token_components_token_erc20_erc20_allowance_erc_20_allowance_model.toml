@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x304439814dd12e69d7898d226219e2fa2a374e82dae38f902c1b6a706bc8e82"
+original_class_hash = "0x304439814dd12e69d7898d226219e2fa2a374e82dae38f902c1b6a706bc8e82"
+abi = "manifests/ryo420/abis/base/models/token_components_token_erc20_erc20_allowance_erc_20_allowance_model.json"
+name = "token::components::token::erc20::erc20_allowance::erc_20_allowance_model"
+
+[[members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "spender"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "amount"
+type = "u256"
+key = false

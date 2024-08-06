@@ -1,0 +1,46 @@
+kind = "DojoModel"
+class_hash = "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f"
+original_class_hash = "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f"
+abi = "manifests/dev/base/abis/models/dopewars-SeasonSettings-3ff184e4.json"
+tag = "dopewars-SeasonSettings"
+manifest_name = "dopewars-SeasonSettings-3ff184e4"
+
+[[members]]
+name = "season_version"
+type = "u16"
+key = true
+
+[[members]]
+name = "cash_mode"
+type = "CashMode"
+key = false
+
+[[members]]
+name = "health_mode"
+type = "HealthMode"
+key = false
+
+[[members]]
+name = "turns_mode"
+type = "TurnsMode"
+key = false
+
+[[members]]
+name = "encounters_mode"
+type = "EncountersMode"
+key = false
+
+[[members]]
+name = "encounters_odds_mode"
+type = "EncountersOddsMode"
+key = false
+
+[[members]]
+name = "drugs_mode"
+type = "DrugsMode"
+key = false
+
+[[members]]
+name = "wanted_mode"
+type = "WantedMode"
+key = false

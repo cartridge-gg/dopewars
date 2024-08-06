@@ -1,0 +1,26 @@
+kind = "DojoModel"
+class_hash = "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830"
+original_class_hash = "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830"
+abi = "manifests/dev/base/abis/models/dopewars-ERC20AllowanceModel-7b756887.json"
+tag = "dopewars-ERC20AllowanceModel"
+manifest_name = "dopewars-ERC20AllowanceModel-7b756887"
+
+[[members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "spender"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "amount"
+type = "u256"
+key = false

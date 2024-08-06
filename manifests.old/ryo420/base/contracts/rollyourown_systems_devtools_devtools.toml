@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x77cc89adfed1bd8cf6f93eeacc4410feaf425497107b719f1125e0d8b9818d3"
+original_class_hash = "0x77cc89adfed1bd8cf6f93eeacc4410feaf425497107b719f1125e0d8b9818d3"
+base_class_hash = "0x0"
+abi = "manifests/ryo420/abis/base/contracts/rollyourown_systems_devtools_devtools.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "rollyourown::systems::devtools::devtools"

@@ -1,0 +1,31 @@
+kind = "DojoModel"
+class_hash = "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24"
+original_class_hash = "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24"
+abi = "manifests/dev/base/abis/models/dopewars-ERC20MetadataModel-67f499cb.json"
+tag = "dopewars-ERC20MetadataModel"
+manifest_name = "dopewars-ERC20MetadataModel-67f499cb"
+
+[[members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "name"
+type = "ByteArray"
+key = false
+
+[[members]]
+name = "symbol"
+type = "ByteArray"
+key = false
+
+[[members]]
+name = "decimals"
+type = "u8"
+key = false
+
+[[members]]
+name = "total_supply"
+type = "u256"
+key = false

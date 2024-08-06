@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x21f0d21a982ac5d3a1a2ea821846f32421b88316250364f61a4c96a08ce819f"
+original_class_hash = "0x21f0d21a982ac5d3a1a2ea821846f32421b88316250364f61a4c96a08ce819f"
+base_class_hash = "0x0"
+abi = "manifests/ryo421/abis/base/contracts/rollyourown__mocks_paper_mock_paper_mock.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "rollyourown::_mocks::paper_mock::paper_mock"

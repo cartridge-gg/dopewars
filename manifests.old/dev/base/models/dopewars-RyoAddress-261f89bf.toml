@@ -1,0 +1,26 @@
+kind = "DojoModel"
+class_hash = "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8"
+original_class_hash = "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8"
+abi = "manifests/dev/base/abis/models/dopewars-RyoAddress-261f89bf.json"
+tag = "dopewars-RyoAddress"
+manifest_name = "dopewars-RyoAddress-261f89bf"
+
+[[members]]
+name = "key"
+type = "u8"
+key = true
+
+[[members]]
+name = "paper"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "treasury"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "laundromat"
+type = "ContractAddress"
+key = false

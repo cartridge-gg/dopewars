@@ -1,0 +1,851 @@
+[world]
+kind = "WorldContract"
+class_hash = "0x32fb65ebfe6d91bb4b7ba0640650722c43ca0c917f5fc0f649ee2ecf720cde"
+original_class_hash = "0x32fb65ebfe6d91bb4b7ba0640650722c43ca0c917f5fc0f649ee2ecf720cde"
+abi = "manifests/dev/deployment/abis/dojo-world.json"
+address = "0x7091f57c5b304b3327c5a93661d3243c254ce3905ce1bf3180cbf417d6914a6"
+transaction_hash = "0x44b8393895652c494bea39af90be22cae6ee4953e94f4e5767262ba2dd4e7ca"
+seed = "dopeseed"
+manifest_name = "dojo-world"
+
+[world.metadata]
+profile_name = "dev"
+rpc_url = "http://localhost:5050/"
+
+[base]
+kind = "Class"
+class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+original_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/dojo-base.json"
+tag = "dojo-base"
+manifest_name = "dojo-base"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x3bd4e21c65eb962f852f2a24894e07ee8a42a961d72ecbc8eeb0b34f1538671"
+class_hash = "0x7d41b99e20ce5dbfd319359cac2e4fc3094244e3550aefbd7cf12b3c6cd3d2d"
+original_class_hash = "0x7d41b99e20ce5dbfd319359cac2e4fc3094244e3550aefbd7cf12b3c6cd3d2d"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-config-45ebce66.json"
+reads = []
+writes = [
+    "dopewars-GameConfig",
+    "dopewars-DrugConfig",
+    "dopewars-LocationConfig",
+    "dopewars-HustlerItemBaseConfig",
+    "dopewars-HustlerItemTiersConfig",
+    "dopewars-EncounterStatsConfig",
+]
+computed = []
+init_calldata = []
+tag = "dopewars-config"
+manifest_name = "dopewars-config-45ebce66"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x1ed4077ad301e6129e0f48621fac08a05c063a880de5fd796343176cefd9505"
+class_hash = "0x5c110a7524e72a341a3573895e01f888adda24439c414ed3e4575321bbf905"
+original_class_hash = "0x5c110a7524e72a341a3573895e01f888adda24439c414ed3e4575321bbf905"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-devtools-dd7a76fa.json"
+reads = []
+writes = [
+    "dopewars-SortedList",
+    "dopewars-SortedListItem",
+    "dopewars-Game",
+    "dopewars-GameConfig",
+    "dopewars-GameStorePacked",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-RyoConfig",
+]
+computed = []
+init_calldata = []
+tag = "dopewars-devtools"
+manifest_name = "dopewars-devtools-dd7a76fa"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x5381d65186b0e384b15dce3521412a7496b3c515b2aae3f2859c24a76cfa897"
+class_hash = "0x248b1168a17c70847374a1fc716504f7d539bdcda8dff0dacc93c160a956bff"
+original_class_hash = "0x248b1168a17c70847374a1fc716504f7d539bdcda8dff0dacc93c160a956bff"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-game-4e7c9d90.json"
+reads = []
+writes = [
+    "dopewars-Game",
+    "dopewars-GameStorePacked",
+    "dopewars-RyoConfig",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-SortedList",
+    "dopewars-SortedListItem",
+]
+computed = []
+init_calldata = []
+tag = "dopewars-game"
+manifest_name = "dopewars-game-4e7c9d90"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x4007c4e9f85ef5973b242b981d252082cf795d8c7bfab392f10f9689febc603"
+class_hash = "0x230690458bf70db96da511aec12adada61d75759c1c5c74923c4f24bc689313"
+original_class_hash = "0x230690458bf70db96da511aec12adada61d75759c1c5c74923c4f24bc689313"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-laundromat-b7341dd0.json"
+reads = []
+writes = [
+    "dopewars-SortedList",
+    "dopewars-SortedListItem",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-Game",
+    "dopewars-GameConfig",
+    "dopewars-RyoConfig",
+]
+computed = []
+init_calldata = []
+tag = "dopewars-laundromat"
+manifest_name = "dopewars-laundromat-b7341dd0"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0xb56a9d906944c84d881e769f51fad8433ab39eb3b0e13f2352a98a5bf25759"
+class_hash = "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee"
+original_class_hash = "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-paper_mock-3534f748.json"
+reads = []
+writes = [
+    "dopewars-ERC20MetadataModel",
+    "dopewars-ERC20BalanceModel",
+    "dopewars-ERC20AllowanceModel",
+    "dopewars-InitializableModel",
+]
+computed = []
+init_calldata = ["$contract_address:dopewars-laundromat"]
+tag = "dopewars-paper_mock"
+manifest_name = "dopewars-paper_mock-3534f748"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x4fa774eadfb8a25666147b6c0b6d5958982c5faf06e80cc1084f15ef6127e72"
+class_hash = "0x5a62bc5cb2d40fcb6415fa7b05b7185d36d4f54f01112471533835e0d12e220"
+original_class_hash = "0x5a62bc5cb2d40fcb6415fa7b05b7185d36d4f54f01112471533835e0d12e220"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/dopewars-store-49cb8012.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+tag = "dopewars-store"
+manifest_name = "dopewars-store-49cb8012"
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x5e2fdb43459c0070413ffaa61d7025a2305455af2a050dd89bd99099dd93d69"
+original_class_hash = "0x5e2fdb43459c0070413ffaa61d7025a2305455af2a050dd89bd99099dd93d69"
+abi = "manifests/dev/deployment/abis/models/dopewars-DrugConfig-7c904f95.json"
+tag = "dopewars-DrugConfig"
+manifest_name = "dopewars-DrugConfig-7c904f95"
+
+[[models.members]]
+name = "drugs_mode"
+type = "DrugsMode"
+key = true
+
+[[models.members]]
+name = "drug"
+type = "Drugs"
+key = true
+
+[[models.members]]
+name = "drug_id"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "base"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "step"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "weight"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "name"
+type = "Bytes16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830"
+original_class_hash = "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830"
+abi = "manifests/dev/deployment/abis/models/dopewars-ERC20AllowanceModel-7b756887.json"
+tag = "dopewars-ERC20AllowanceModel"
+manifest_name = "dopewars-ERC20AllowanceModel-7b756887"
+
+[[models.members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "spender"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "amount"
+type = "u256"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x3db7dbcff42d6c6fd246435b6a57b6e0937b0c72e685714ca21bac675291853"
+original_class_hash = "0x3db7dbcff42d6c6fd246435b6a57b6e0937b0c72e685714ca21bac675291853"
+abi = "manifests/dev/deployment/abis/models/dopewars-ERC20BalanceModel-54504db5.json"
+tag = "dopewars-ERC20BalanceModel"
+manifest_name = "dopewars-ERC20BalanceModel-54504db5"
+
+[[models.members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "account"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "amount"
+type = "u256"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24"
+original_class_hash = "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24"
+abi = "manifests/dev/deployment/abis/models/dopewars-ERC20MetadataModel-67f499cb.json"
+tag = "dopewars-ERC20MetadataModel"
+manifest_name = "dopewars-ERC20MetadataModel-67f499cb"
+
+[[models.members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "name"
+type = "ByteArray"
+key = false
+
+[[models.members]]
+name = "symbol"
+type = "ByteArray"
+key = false
+
+[[models.members]]
+name = "decimals"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "total_supply"
+type = "u256"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x25400bf89f347fdde028010db83bfbce42b5c5da8e9d19fb9303be6f9d97e43"
+original_class_hash = "0x25400bf89f347fdde028010db83bfbce42b5c5da8e9d19fb9303be6f9d97e43"
+abi = "manifests/dev/deployment/abis/models/dopewars-EncounterStatsConfig-23b05ccb.json"
+tag = "dopewars-EncounterStatsConfig"
+manifest_name = "dopewars-EncounterStatsConfig-23b05ccb"
+
+[[models.members]]
+name = "encounter"
+type = "Encounters"
+key = true
+
+[[models.members]]
+name = "encounters_mode"
+type = "EncountersMode"
+key = true
+
+[[models.members]]
+name = "health_base"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "health_step"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "attack_base"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "attack_step"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "defense_base"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "defense_step"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "speed_base"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "speed_step"
+type = "u8"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x8b4ea6dfb414085c2f564de97d8ad1a1baaec39dabab34477903842f324141"
+original_class_hash = "0x8b4ea6dfb414085c2f564de97d8ad1a1baaec39dabab34477903842f324141"
+abi = "manifests/dev/deployment/abis/models/dopewars-Game-4462fb34.json"
+tag = "dopewars-Game"
+manifest_name = "dopewars-Game-4462fb34"
+
+[[models.members]]
+name = "game_id"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "player_id"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "season_version"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "game_mode"
+type = "GameMode"
+key = false
+
+[[models.members]]
+name = "player_name"
+type = "Bytes16"
+key = false
+
+[[models.members]]
+name = "hustler_id"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "game_over"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "final_score"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "registered"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "claimed"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "claimable"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "position"
+type = "u16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x44b2161ca3ccf3a5b9d2b847450df85aa4f225c1744995c7f1051aaf8f0b30b"
+original_class_hash = "0x44b2161ca3ccf3a5b9d2b847450df85aa4f225c1744995c7f1051aaf8f0b30b"
+abi = "manifests/dev/deployment/abis/models/dopewars-GameConfig-7062ea11.json"
+tag = "dopewars-GameConfig"
+manifest_name = "dopewars-GameConfig-7062ea11"
+
+[[models.members]]
+name = "season_version"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "cash"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "health"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "max_turns"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "max_wanted_shopping"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "max_rounds"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rep_drug_step"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rep_buy_item"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rep_carry_drugs"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rep_hospitalized"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rep_jailed"
+type = "u8"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x6090567787eedc8eee8142111952d5aa5c7de6ee0a19b540461ac0ac62125ba"
+original_class_hash = "0x6090567787eedc8eee8142111952d5aa5c7de6ee0a19b540461ac0ac62125ba"
+abi = "manifests/dev/deployment/abis/models/dopewars-GameStorePacked-121912f1.json"
+tag = "dopewars-GameStorePacked"
+manifest_name = "dopewars-GameStorePacked-121912f1"
+
+[[models.members]]
+name = "game_id"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "player_id"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "packed"
+type = "felt252"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x584d1b6dc875bd2ab9e2e9c4630d975b9a9f13e867784221bdb92913f3ac9c3"
+original_class_hash = "0x584d1b6dc875bd2ab9e2e9c4630d975b9a9f13e867784221bdb92913f3ac9c3"
+abi = "manifests/dev/deployment/abis/models/dopewars-HustlerItemBaseConfig-a462eb7d.json"
+tag = "dopewars-HustlerItemBaseConfig"
+manifest_name = "dopewars-HustlerItemBaseConfig-a462eb7d"
+
+[[models.members]]
+name = "slot"
+type = "ItemSlot"
+key = true
+
+[[models.members]]
+name = "id"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "slot_id"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[models.members]]
+name = "initial_tier"
+type = "u8"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x5843b992b183c8bb621c2f87f15fc2ed0cf9518a58adba31b368f9c2dbfa0f7"
+original_class_hash = "0x5843b992b183c8bb621c2f87f15fc2ed0cf9518a58adba31b368f9c2dbfa0f7"
+abi = "manifests/dev/deployment/abis/models/dopewars-HustlerItemTiersConfig-65f9f22c.json"
+tag = "dopewars-HustlerItemTiersConfig"
+manifest_name = "dopewars-HustlerItemTiersConfig-65f9f22c"
+
+[[models.members]]
+name = "slot"
+type = "ItemSlot"
+key = true
+
+[[models.members]]
+name = "tier"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "slot_id"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "cost"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "stat"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4cd9d4399b8abcbafbd6037616783e5d574df1c99fe9e82e61a3dde30ef698"
+original_class_hash = "0x4cd9d4399b8abcbafbd6037616783e5d574df1c99fe9e82e61a3dde30ef698"
+abi = "manifests/dev/deployment/abis/models/dopewars-InitializableModel-11b94f3a.json"
+tag = "dopewars-InitializableModel"
+manifest_name = "dopewars-InitializableModel-11b94f3a"
+
+[[models.members]]
+name = "token"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "initialized"
+type = "bool"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55"
+original_class_hash = "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55"
+abi = "manifests/dev/deployment/abis/models/dopewars-LocationConfig-12f3e77b.json"
+tag = "dopewars-LocationConfig"
+manifest_name = "dopewars-LocationConfig-12f3e77b"
+
+[[models.members]]
+name = "location"
+type = "Locations"
+key = true
+
+[[models.members]]
+name = "location_id"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "name"
+type = "Bytes16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8"
+original_class_hash = "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8"
+abi = "manifests/dev/deployment/abis/models/dopewars-RyoAddress-261f89bf.json"
+tag = "dopewars-RyoAddress"
+manifest_name = "dopewars-RyoAddress-261f89bf"
+
+[[models.members]]
+name = "key"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "paper"
+type = "ContractAddress"
+key = false
+
+[[models.members]]
+name = "treasury"
+type = "ContractAddress"
+key = false
+
+[[models.members]]
+name = "laundromat"
+type = "ContractAddress"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4ed0c39183c8677313eeba0b7331f905fffd6f3bf0757764f449329bef3e5dd"
+original_class_hash = "0x4ed0c39183c8677313eeba0b7331f905fffd6f3bf0757764f449329bef3e5dd"
+abi = "manifests/dev/deployment/abis/models/dopewars-RyoConfig-7d8eb0bc.json"
+tag = "dopewars-RyoConfig"
+manifest_name = "dopewars-RyoConfig-7d8eb0bc"
+
+[[models.members]]
+name = "key"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "initialized"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "paused"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "season_version"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "season_duration"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "season_time_limit"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "paper_fee"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "paper_reward_launderer"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "treasury_fee_pct"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "treasury_balance"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x1ff318053105ed8851a98383eb50b5834c557d66d5d4647f3fb22eec9a1879d"
+original_class_hash = "0x1ff318053105ed8851a98383eb50b5834c557d66d5d4647f3fb22eec9a1879d"
+abi = "manifests/dev/deployment/abis/models/dopewars-Season-57a4b7ad.json"
+tag = "dopewars-Season"
+manifest_name = "dopewars-Season-57a4b7ad"
+
+[[models.members]]
+name = "version"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "season_duration"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "season_time_limit"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "paper_fee"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "treasury_fee_pct"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "next_version_timestamp"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "paper_balance"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "high_score"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f"
+original_class_hash = "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f"
+abi = "manifests/dev/deployment/abis/models/dopewars-SeasonSettings-3ff184e4.json"
+tag = "dopewars-SeasonSettings"
+manifest_name = "dopewars-SeasonSettings-3ff184e4"
+
+[[models.members]]
+name = "season_version"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "cash_mode"
+type = "CashMode"
+key = false
+
+[[models.members]]
+name = "health_mode"
+type = "HealthMode"
+key = false
+
+[[models.members]]
+name = "turns_mode"
+type = "TurnsMode"
+key = false
+
+[[models.members]]
+name = "encounters_mode"
+type = "EncountersMode"
+key = false
+
+[[models.members]]
+name = "encounters_odds_mode"
+type = "EncountersOddsMode"
+key = false
+
+[[models.members]]
+name = "drugs_mode"
+type = "DrugsMode"
+key = false
+
+[[models.members]]
+name = "wanted_mode"
+type = "WantedMode"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4d20c5b72f4977e64a5f213ce489f22af9c3d9a79dddf12809620336f4aac"
+original_class_hash = "0x4d20c5b72f4977e64a5f213ce489f22af9c3d9a79dddf12809620336f4aac"
+abi = "manifests/dev/deployment/abis/models/dopewars-SortedList-4a8a13cf.json"
+tag = "dopewars-SortedList"
+manifest_name = "dopewars-SortedList-4a8a13cf"
+
+[[models.members]]
+name = "list_id"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "size"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "locked"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "processed"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "process_max_size"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "process_size"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "process_cursor_k0"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "process_cursor_k1"
+type = "ContractAddress"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x6153626348c1c1f2c686d5707763e25235ae3ecc6fa192f41f82b6373c17d36"
+original_class_hash = "0x6153626348c1c1f2c686d5707763e25235ae3ecc6fa192f41f82b6373c17d36"
+abi = "manifests/dev/deployment/abis/models/dopewars-SortedListItem-43821237.json"
+tag = "dopewars-SortedListItem"
+manifest_name = "dopewars-SortedListItem-43821237"
+
+[[models.members]]
+name = "list_id"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "item_k0"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "item_k1"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "next_k0"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "next_k1"
+type = "ContractAddress"
+key = false

@@ -112,7 +112,7 @@ mod config {
         }
 
         fn get_config(self: @ContractState) -> Config {
-            let world = self.world();
+            // let world = self.world();
 
             let mut game_store: Array<LayoutItem> = array![];
             let mut game_store_layout_items = GameStoreLayoutEnumerableImpl::all();
@@ -198,16 +198,16 @@ mod config {
         fn assert_caller_is_owner(self: @ContractState) {
             // assert(self.world().is_owner(starknet::get_caller_address(), 0), 'only world owner');
 
-            assert(
-                self.world().is_owner(get_caller_address(), get_contract_address().into()),
-                'not owner'
-            );
+            // assert(
+            //     self.world().is_owner(get_caller_address(), selector_from_tag!("dopewars-config")),
+            //     'not owner'
+            // );
         }
 
 
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
             IStoreLibraryDispatcher { class_hash, }
         }
     }

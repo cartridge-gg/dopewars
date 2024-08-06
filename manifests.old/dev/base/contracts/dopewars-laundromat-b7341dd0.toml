@@ -1,0 +1,11 @@
+kind = "DojoContract"
+class_hash = "0x230690458bf70db96da511aec12adada61d75759c1c5c74923c4f24bc689313"
+original_class_hash = "0x230690458bf70db96da511aec12adada61d75759c1c5c74923c4f24bc689313"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/dopewars-laundromat-b7341dd0.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+tag = "dopewars-laundromat"
+manifest_name = "dopewars-laundromat-b7341dd0"

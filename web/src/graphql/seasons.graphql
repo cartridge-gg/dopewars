@@ -1,5 +1,5 @@
 query SeasonByVersion($version: u16, $listId: felt252) {
-  seasonModels(where: { version: $version }) {
+  dopewarsSeasonModels(where: { version: $version }) {
     edges {
       node {
         version
@@ -13,7 +13,7 @@ query SeasonByVersion($version: u16, $listId: felt252) {
     }
   }
 
-  seasonSettingsModels(where: { season_version: $version }) {
+  dopewarsSeasonSettingsModels(where: { season_version: $version }) {
     edges {
       node {
         season_version
@@ -28,7 +28,7 @@ query SeasonByVersion($version: u16, $listId: felt252) {
     }
   }
 
-  sortedListModels(where: { list_id: $listId }) {
+  dopewarsSortedListModels(where: { list_id: $listId }) {
     edges {
       node {
         list_id
@@ -44,7 +44,7 @@ query SeasonByVersion($version: u16, $listId: felt252) {
 
 
 query Seasons {
-  seasonModels(limit: 420, order: {field: VERSION, direction: DESC}) {
+  dopewarsSeasonModels(limit: 420, order: {field: VERSION, direction: DESC}) {
     edges {
       node {
         version
@@ -58,7 +58,7 @@ query Seasons {
     }
   }
 
-  seasonSettingsModels(limit: 420) {
+  dopewarsSeasonSettingsModels(limit: 420) {
     edges {
       node {
         season_version
@@ -72,7 +72,7 @@ query Seasons {
     }
   }
 
-  sortedListModels(limit: 420) {
+  dopewarsSortedListModels(limit: 420) {
     edges {
       node {
         list_id
@@ -89,7 +89,7 @@ query Seasons {
 
 
 query SeasonSettings($version: u16) {
-  seasonSettingsModels(where: { season_version: $version }) {
+  dopewarsSeasonSettingsModels(where: { season_version: $version }) {
     edges {
       node {
         season_version
@@ -105,7 +105,7 @@ query SeasonSettings($version: u16) {
 }
 
 query AllSeasonSettings {
-  seasonSettingsModels(limit: 420) {
+  dopewarsSeasonSettingsModels(limit: 420) {
     edges {
       node {
         season_version
@@ -124,7 +124,7 @@ query AllSeasonSettings {
 
 
 query HallOfFame {
-  gameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
+  dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
     edges {
       node {
         game_id
@@ -143,7 +143,7 @@ query HallOfFame {
 
 
 query Claimable($playerId: ContractAddress) {
-  gameModels(where: { player_id: $playerId, claimed: false, claimableGT: 0 }) {
+  dopewarsGameModels(where: { player_id: $playerId, claimed: false, claimableGT: 0 }) {
     edges {
       node {
         game_id

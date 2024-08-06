@@ -1,0 +1,31 @@
+kind = "DojoModel"
+class_hash = "0x6153626348c1c1f2c686d5707763e25235ae3ecc6fa192f41f82b6373c17d36"
+original_class_hash = "0x6153626348c1c1f2c686d5707763e25235ae3ecc6fa192f41f82b6373c17d36"
+abi = "manifests/dev/base/abis/models/dopewars-SortedListItem-43821237.json"
+tag = "dopewars-SortedListItem"
+manifest_name = "dopewars-SortedListItem-43821237"
+
+[[members]]
+name = "list_id"
+type = "felt252"
+key = true
+
+[[members]]
+name = "item_k0"
+type = "u32"
+key = true
+
+[[members]]
+name = "item_k1"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "next_k0"
+type = "u32"
+key = false
+
+[[members]]
+name = "next_k1"
+type = "ContractAddress"
+key = false
