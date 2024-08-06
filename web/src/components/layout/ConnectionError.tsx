@@ -11,15 +11,16 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
         <VStack fontSize="16px">
           <VStack fontSize="16px">
             <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
-            <Text>Unable to connect</Text>
+             <Text>Playtest has ended!</Text>
+            {/* <Text>Unable to connect</Text>
             {errors.map((e,key) => {
               if (e) {
                 return <Text key={key}>{e}</Text>;
               }
-            })}
+            })} */}
           </VStack>
 
-          <VStack fontSize="16px" gap={6}>
+          {/* <VStack fontSize="16px" gap={6}>
             <Text>Try to refresh</Text>
             <Button
               variant="pixelated"
@@ -36,7 +37,8 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
                 router.reload();
               }}
             />
-          </VStack>
+          </VStack> */}
+
         </VStack>
       </VStack>
     </Flex>
