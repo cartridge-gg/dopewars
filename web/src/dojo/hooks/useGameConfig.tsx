@@ -1,4 +1,8 @@
-import { Game, GameConfig, GameConfigEdge, GameEdge, useGameByIdQuery, useGameConfigQuery } from "@/generated/graphql";
+import {
+  Dopewars_GameConfig as GameConfig,
+  Dopewars_GameConfigEdge as GameConfigEdge,
+  useGameConfigQuery,
+} from "@/generated/graphql";
 import { useMemo } from "react";
 
 export interface GameConfigInterface {
@@ -12,7 +16,7 @@ export const useGameConfig = (version: number): GameConfigInterface => {
   });
 
   const gameConfig = useMemo(() => {
-    const edges = data?.gameConfigModels?.edges as GameConfigEdge[];
+    const edges = data?.dopewarsGameConfigModels?.edges as GameConfigEdge[];
     return edges?.length > 0 ? (edges[0].node as GameConfig) : undefined;
   }, [data]);
 

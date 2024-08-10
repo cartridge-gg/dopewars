@@ -134,7 +134,7 @@ mod ryo {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
             assert(
-                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                self.world().is_owner(get_contract_address().into(), get_caller_address()),
                 'not owner'
             );
         }

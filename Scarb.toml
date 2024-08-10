@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.7.0-rc.3"
+cairo-version = "2.7.0"
 name = "rollyourown"
 version = "0.1.0"
 
@@ -9,8 +9,8 @@ version = "0.1.0"
 [dependencies]
 # dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.1"}
 # token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.1"}
-# dojo = { path = "../dojo/crates/dojo-core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.3" }
+
+dojo = { path = "../dojo/crates/dojo-core" }
 origami_token = { path = "../origami-dev/" }
 
 

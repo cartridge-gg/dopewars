@@ -1,4 +1,4 @@
-import { DrugConfig, RyoConfig } from "@/generated/graphql";
+import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
@@ -21,6 +21,7 @@ import { DojoCall } from "@dojoengine/core";
 import { sleep } from "../utils";
 
 export const ETHER = 10n ** 18n;
+export const DW_NS = "dopewars";
 
 export interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
@@ -86,7 +87,6 @@ export const useSystems = (): SystemsInterface => {
       selectedChain,
       selectedChain: { manifest },
     },
-    configStore,
   } = useDojoContext();
 
   const { account } = useAccount();
@@ -123,8 +123,7 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
 
       try {
-    
-        tx = await dojoProvider.execute(account!, params, { maxFee: 1000000000000000n,  });
+        tx = await dojoProvider.execute(account!, params, DW_NS /*,  { maxFee: 1000000000000000n }*/);
 
         // toast({
         //   message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
@@ -189,9 +188,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameMode: GameMode, hustlerId: number, playerName: string) => {
       const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
       const paperAddress = config?.ryoAddress.paper;
-      const gameAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.name === "rollyourown::systems::game::game",
-      ).address;
+      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       //
       const approvalCall: Call = {
@@ -201,7 +198,7 @@ export const useSystems = (): SystemsInterface => {
       };
 
       const createGameCall = {
-        contractName: "rollyourown::systems::game::game",
+        contractName: `game`,
         //  contractAddress: gameAddress,
         entrypoint: "create_game",
         calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName)]),
@@ -225,7 +222,7 @@ export const useSystems = (): SystemsInterface => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
 
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
+        contractName: `game`,
         entrypoint: "end_game",
         // @ts-ignore
         calldata: CallData.compile({ gameId, callsEnum }),
@@ -242,7 +239,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameId: string, location: Locations, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
+        contractName: `game`,
         entrypoint: "travel",
         // @ts-ignore
         //  calldata: [gameId, location, callsEnum],
@@ -270,7 +267,7 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::game::game",
+        contractName: `game`,
         entrypoint: "decide",
         calldata: CallData.compile([gameId, action]),
       });
@@ -300,7 +297,7 @@ export const useSystems = (): SystemsInterface => {
   const registerScore = useCallback(
     async (gameId: string, prevGameId: string, prevPlayerId: string) => {
       const { hash } = await executeAndReceipt({
-        contractName: "rollyourown::systems::laundromat::laundromat",
+        contractName: `laundromat`,
         entrypoint: "register_score",
         // @ts-ignore
         calldata: CallData.compile([gameId, prevGameId, prevPlayerId]),
@@ -316,7 +313,7 @@ export const useSystems = (): SystemsInterface => {
   const claim = useCallback(
     async (playerId: string, gameIds: number[]) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::laundromat::laundromat",
+        contractName: `laundromat`,
         entrypoint: "claim",
         calldata: CallData.compile([playerId, gameIds]),
       });
@@ -330,7 +327,7 @@ export const useSystems = (): SystemsInterface => {
 
   const claimTreasury = useCallback(async () => {
     const { hash, events, parsedEvents } = await executeAndReceipt({
-      contractName: "rollyourown::systems::laundromat::laundromat",
+      contractName: `laundromat`,
       entrypoint: "claim_treasury",
       calldata: [],
     });
@@ -344,7 +341,7 @@ export const useSystems = (): SystemsInterface => {
     async (season: number, amountEth: number) => {
       const paperAddress = config?.ryoAddress.paper;
       const laundromatAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.name === "rollyourown::systems::laundromat::laundromat",
+        (i: any) => i.tag === `${DW_NS}-laundromat`,
       ).address;
 
       const amount = BigInt(amountEth) * ETHER;
@@ -357,7 +354,7 @@ export const useSystems = (): SystemsInterface => {
       };
 
       const superchargeJackpotCall = {
-        contractName: "rollyourown::systems::laundromat::laundromat",
+        contractName: `laundromat`,
         //  contractAddress: gameAddress,
         entrypoint: "supercharge_jackpot",
         calldata: CallData.compile([season, amountEth]),
@@ -369,13 +366,13 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, config],
   );
 
   const launder = useCallback(
     async (season: number) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::laundromat::laundromat",
+        contractName: `laundromat`,
         entrypoint: "launder",
         calldata: CallData.compile([season]),
       });
@@ -394,7 +391,7 @@ export const useSystems = (): SystemsInterface => {
   const setPaused = useCallback(
     async (paused: boolean) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::ryo::ryo",
+        contractName: `ryo`,
         entrypoint: "set_paused",
         calldata: [paused ? 0 : 1],
       });
@@ -409,7 +406,7 @@ export const useSystems = (): SystemsInterface => {
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::ryo::ryo",
+        contractName: `ryo`,
         entrypoint: "update_ryo_config",
         calldata: [ryoConfig],
       });
@@ -424,7 +421,7 @@ export const useSystems = (): SystemsInterface => {
   const updateDrugConfig = useCallback(
     async (drugConfig: DrugConfig) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::config::config::config",
+        contractName: `config`,
         entrypoint: "update_drug_config",
         calldata: [drugConfig],
       });
@@ -447,7 +444,7 @@ export const useSystems = (): SystemsInterface => {
   const createFakeGame = useCallback(
     async (finalScore = 0) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::devtools::devtools",
+        contractName: `devtools`,
         entrypoint: "create_fake_game",
         calldata: [finalScore],
       });
@@ -462,7 +459,7 @@ export const useSystems = (): SystemsInterface => {
   const createNewSeason = useCallback(
     async (finalScore = 0) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: "rollyourown::systems::devtools::devtools",
+        contractName: `devtools`,
         entrypoint: "create_new_season",
         calldata: [],
       });
@@ -476,7 +473,7 @@ export const useSystems = (): SystemsInterface => {
 
   const failingTx = useCallback(async () => {
     const { hash, events, parsedEvents } = await executeAndReceipt({
-      contractName: "rollyourown::systems::devtools::devtools",
+      contractName: `devtools`,
       entrypoint: "failing_tx",
       calldata: [],
     });

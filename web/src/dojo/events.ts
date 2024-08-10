@@ -8,7 +8,7 @@ import { Contract } from "starknet";
 // TODO: update
 import manifest from "../manifests/dev/manifest.json";
 
-const contract = manifest.contracts.find((i) => i.name === "rollyourown::systems::game::game")!;
+const contract = manifest.contracts.find((i) => i.tag === "dopewars-game")!;
 const gameContract = new Contract(contract.abi, contract.address);
 
 export interface BaseEventData {

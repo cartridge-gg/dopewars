@@ -1,10 +1,10 @@
 import {
-  Game,
-  GameConfig,
-  GameEdge,
-  GameStorePacked,
+  Dopewars_Game as Game,
+  Dopewars_GameConfig as GameConfig,
+  Dopewars_GameEdge as GameEdge,
+  Dopewars_GameStorePacked as GameStorePacked,
   Maybe,
-  SeasonSettings,
+  Dopewars_SeasonSettings as SeasonSettings,
   TradedDrugByPlayerQuery,
   World__Entity,
   World__EntityEdge,
@@ -99,16 +99,16 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
     const nodes = (edges || []).map((i) => i.node);
 
     const games = nodes.flatMap((i) => {
-      const gameInfos = (i!.models || []).find((i) => i?.__typename === "Game") as Game;
-      const gameStorePacked = (i!.models || []).find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
+      const gameInfos = (i!.models || []).find((i) => i?.__typename === "dopewars_Game") as Game;
+      const gameStorePacked = (i!.models || []).find((i) => i?.__typename === "dopewars_GameStorePacked") as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
 
-      const seasonSettings = allSeasonSettings?.seasonSettingsModels?.edges?.find(
+      const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as SeasonSettings;
 
-      const gameConfig = allGameConfig?.gameConfigModels?.edges?.find(
+      const gameConfig = allGameConfig?.dopewarsGameConfigModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 

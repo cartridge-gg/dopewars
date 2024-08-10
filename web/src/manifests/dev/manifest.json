@@ -1,8 +1,8 @@
 {
   "world": {
     "kind": "WorldContract",
-    "class_hash": "0x32fb65ebfe6d91bb4b7ba0640650722c43ca0c917f5fc0f649ee2ecf720cde",
-    "original_class_hash": "0x32fb65ebfe6d91bb4b7ba0640650722c43ca0c917f5fc0f649ee2ecf720cde",
+    "class_hash": "0x14287624e97e0312d4e680e19071efce983810e909b32afc54cd9c8031f4c1c",
+    "original_class_hash": "0x14287624e97e0312d4e680e19071efce983810e909b32afc54cd9c8031f4c1c",
     "abi": [
       {
         "type": "impl",
@@ -400,12 +400,12 @@
             "name": "is_owner",
             "inputs": [
               {
-                "name": "address",
-                "type": "core::starknet::contract_address::ContractAddress"
-              },
-              {
                 "name": "resource",
                 "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
               }
             ],
             "outputs": [
@@ -420,12 +420,12 @@
             "name": "grant_owner",
             "inputs": [
               {
-                "name": "address",
-                "type": "core::starknet::contract_address::ContractAddress"
-              },
-              {
                 "name": "resource",
                 "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
               }
             ],
             "outputs": [],
@@ -436,12 +436,12 @@
             "name": "revoke_owner",
             "inputs": [
               {
-                "name": "address",
-                "type": "core::starknet::contract_address::ContractAddress"
-              },
-              {
                 "name": "resource",
                 "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
               }
             ],
             "outputs": [],
@@ -982,6 +982,33 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world_contract::world::StoreUpdateMember",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "table",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "member_selector",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
+            "name": "values",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world_contract::world::StoreDelRecord",
         "kind": "struct",
         "members": [
@@ -1162,6 +1189,11 @@
             "kind": "nested"
           },
           {
+            "name": "StoreUpdateMember",
+            "type": "dojo::world::world_contract::world::StoreUpdateMember",
+            "kind": "nested"
+          },
+          {
             "name": "StoreDelRecord",
             "type": "dojo::world::world_contract::world::StoreDelRecord",
             "kind": "nested"
@@ -1189,8 +1221,8 @@
         ]
       }
     ],
-    "address": "0x7091f57c5b304b3327c5a93661d3243c254ce3905ce1bf3180cbf417d6914a6",
-    "transaction_hash": "0x44b8393895652c494bea39af90be22cae6ee4953e94f4e5767262ba2dd4e7ca",
+    "address": "0x4381e65545a503cc8e5efdff03f66a3b296b159b0cd13065d771c8d3ace10d7",
+    "transaction_hash": "0x4156c3e0a1b6779594f543b97c00afaf338b45ae69febf116927c50c53e44e9",
     "block_number": null,
     "seed": "dopeseed",
     "metadata": {
@@ -1210,9 +1242,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x3bd4e21c65eb962f852f2a24894e07ee8a42a961d72ecbc8eeb0b34f1538671",
-      "class_hash": "0x1ff382537b2302053129a893c5b3cfcc85e154b5d7ec45bb463f13bb2ada09d",
-      "original_class_hash": "0x1ff382537b2302053129a893c5b3cfcc85e154b5d7ec45bb463f13bb2ada09d",
+      "address": "0x2be81cd851e426e4c0166611be42bc03524ee981e3d37ea243e01b5bd360f50",
+      "class_hash": "0x78981d19af9e53cb6eaa50cf3125852e00ffae88cf36b605694b2f3b0907e71",
+      "original_class_hash": "0x78981d19af9e53cb6eaa50cf3125852e00ffae88cf36b605694b2f3b0907e71",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2032,9 +2064,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x1ed4077ad301e6129e0f48621fac08a05c063a880de5fd796343176cefd9505",
-      "class_hash": "0x3937b0ad0a1afb22ede5350cc0c186f599fc84763cedc915e44940d0756de52",
-      "original_class_hash": "0x3937b0ad0a1afb22ede5350cc0c186f599fc84763cedc915e44940d0756de52",
+      "address": "0x2734f43d24475a1dd675e04c4c9a05e55f076495e4d6bcd02e3e3d0bc51e1a6",
+      "class_hash": "0x68612f253347d1f52d62c16aecb5c0a428e2255959657f6277b8ac50631ac57",
+      "original_class_hash": "0x68612f253347d1f52d62c16aecb5c0a428e2255959657f6277b8ac50631ac57",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2297,9 +2329,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x5381d65186b0e384b15dce3521412a7496b3c515b2aae3f2859c24a76cfa897",
-      "class_hash": "0xb8387318da77aa5dcdc3c666ca94d2c0727260e80808c831c9921e04296104",
-      "original_class_hash": "0xb8387318da77aa5dcdc3c666ca94d2c0727260e80808c831c9921e04296104",
+      "address": "0x2370a380c978f0adceab10f48b96d8094cf00311fd3d2c2c3770b61ddf443dd",
+      "class_hash": "0x91c4c2ae3d01a0fb40101c621fe1698ac51954296e01c007d0678be871f0f4",
+      "original_class_hash": "0x91c4c2ae3d01a0fb40101c621fe1698ac51954296e01c007d0678be871f0f4",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3229,9 +3261,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x4007c4e9f85ef5973b242b981d252082cf795d8c7bfab392f10f9689febc603",
-      "class_hash": "0x2fc1fd74a54156acef1a1dafe24807a077fc414a1360ef6e014f9376f319fa7",
-      "original_class_hash": "0x2fc1fd74a54156acef1a1dafe24807a077fc414a1360ef6e014f9376f319fa7",
+      "address": "0xe88ccce056d609df7ab5383cc41d967285062403371193f3a03a7b9fddbda0",
+      "class_hash": "0x797214511a8cfa45b3aaa6a8b7c3e38cfbe501b878ac0e27f245500d11c75a3",
+      "original_class_hash": "0x797214511a8cfa45b3aaa6a8b7c3e38cfbe501b878ac0e27f245500d11c75a3",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3548,7 +3580,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0xb56a9d906944c84d881e769f51fad8433ab39eb3b0e13f2352a98a5bf25759",
+      "address": "0x543bd55b92ef211ca41df66fbaa026cf429b7950697ae8f68b2772981ded834",
       "class_hash": "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee",
       "original_class_hash": "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4220,9 +4252,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x535174811c48985cc400738d3d0367ff39df25e6ca68bb011b5e943807ec825",
-      "class_hash": "0x4033fc934e41ba7032dc48fc769ae4bee2477f49289885cac6a85651f6c2afe",
-      "original_class_hash": "0x4033fc934e41ba7032dc48fc769ae4bee2477f49289885cac6a85651f6c2afe",
+      "address": "0x32d7efe3f6efab28c4e87937bc0eac358258fa311a59e646343d6452ed9660c",
+      "class_hash": "0x79514151dd9aea101180cd0bd62a7c182a4910fbc9e8803618b2b4ebc3b64",
+      "original_class_hash": "0x79514151dd9aea101180cd0bd62a7c182a4910fbc9e8803618b2b4ebc3b64",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4622,7 +4654,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x4fa774eadfb8a25666147b6c0b6d5958982c5faf06e80cc1084f15ef6127e72",
+      "address": "0x402b067a7d7aa5d2ddff8c9edce5f0a1b880fdd2a14497ed3ab590ef90e7084",
       "class_hash": "0x5a62bc5cb2d40fcb6415fa7b05b7185d36d4f54f01112471533835e0d12e220",
       "original_class_hash": "0x5a62bc5cb2d40fcb6415fa7b05b7185d36d4f54f01112471533835e0d12e220",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -5836,8 +5868,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x5e2fdb43459c0070413ffaa61d7025a2305455af2a050dd89bd99099dd93d69",
-      "original_class_hash": "0x5e2fdb43459c0070413ffaa61d7025a2305455af2a050dd89bd99099dd93d69",
+      "class_hash": "0x35eaf0c0a2146d2498ed091958fe1145eb081ae4bf0af6387dbc99ede825974",
+      "original_class_hash": "0x35eaf0c0a2146d2498ed091958fe1145eb081ae4bf0af6387dbc99ede825974",
       "abi": [
         {
           "type": "impl",
@@ -8302,8 +8334,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x8b4ea6dfb414085c2f564de97d8ad1a1baaec39dabab34477903842f324141",
-      "original_class_hash": "0x8b4ea6dfb414085c2f564de97d8ad1a1baaec39dabab34477903842f324141",
+      "class_hash": "0x5881c4da0898f457e7c553bd8dd7565ee05f732c0ab37e5135e8d753e3e37ac",
+      "original_class_hash": "0x5881c4da0898f457e7c553bd8dd7565ee05f732c0ab37e5135e8d753e3e37ac",
       "abi": [
         {
           "type": "impl",
@@ -11143,8 +11175,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55",
-      "original_class_hash": "0x15325f8f18319dd865a9d8702a245a99e7255db2bd2771c9a96766e2cf3dd55",
+      "class_hash": "0x1ef56070c0852635cf6d1a8790edc02aa2472f9c3c1f17909cf6b32fd5875fb",
+      "original_class_hash": "0x1ef56070c0852635cf6d1a8790edc02aa2472f9c3c1f17909cf6b32fd5875fb",
       "abi": [
         {
           "type": "impl",
@@ -13083,8 +13115,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f",
-      "original_class_hash": "0x169cf837e90a0b89f2113a6a1c97b4c66aa07e574f6be4984e7a9d6947577f",
+      "class_hash": "0x4b5b2b754ec5e33007ee5759b42be4f371cbe6715671f5703df5d5ec94828de",
+      "original_class_hash": "0x4b5b2b754ec5e33007ee5759b42be4f371cbe6715671f5703df5d5ec94828de",
       "abi": [
         {
           "type": "impl",

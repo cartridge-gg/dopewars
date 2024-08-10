@@ -3,20 +3,20 @@ import { GraphQLClient } from "graphql-request";
 import { Client } from "graphql-ws";
 
 import {
-  Game,
+  Dopewars_Game as Game,
   GameByIdDocument,
   GameByIdQuery,
-  GameConfig,
+  Dopewars_GameConfig as GameConfig,
   GameConfigDocument,
   GameConfigQuery,
   GameEventsDocument,
   GameEventsQuery,
   GameEventsSubscriptionDocument,
-  GameStorePacked,
+  Dopewars_GameStorePacked as GameStorePacked,
   GameStorePackedDocument,
   GameStorePackedQuery,
   GameStorePackedSubscriptionDocument,
-  SeasonSettings,
+  Dopewars_SeasonSettings as SeasonSettings,
   SeasonSettingsDocument,
   SeasonSettingsQuery,
   World__EntityEdge,
@@ -154,7 +154,7 @@ export class GameStoreClass {
     })) as GameByIdQuery;
 
     // parse gameInfosData
-    const gameEdges = gameInfosData!.gameModels!.edges as World__ModelEdge[];
+    const gameEdges = gameInfosData!.dopewarsGameModels!.edges as World__ModelEdge[];
     if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
     let gameInfos = gameEdges[0].node as Game;
     if (!gameInfos) return;
@@ -169,7 +169,7 @@ export class GameStoreClass {
     })) as SeasonSettingsQuery;
 
     // parse seasonSettingsData
-    const seasonSettingsEdges = seasonSettingsData!.seasonSettingsModels!.edges as World__ModelEdge[];
+    const seasonSettingsEdges = seasonSettingsData!.dopewarsSeasonSettingsModels!.edges as World__ModelEdge[];
     if (!seasonSettingsEdges || !seasonSettingsEdges[0] || !seasonSettingsEdges[0].node) return;
     let seasonSettings = seasonSettingsEdges[0].node as SeasonSettings;
     if (!seasonSettings) return;
@@ -184,7 +184,7 @@ export class GameStoreClass {
     })) as GameConfigQuery;
 
     // parse gameConfigData
-    const gameConfigEdges = gameConfigData!.gameConfigModels!.edges as World__ModelEdge[];
+    const gameConfigEdges = gameConfigData!.dopewarsGameConfigModels!.edges as World__ModelEdge[];
     if (!gameConfigEdges || !gameConfigEdges[0] || !gameConfigEdges[0].node) return;
     let gameConfig = gameConfigEdges[0].node as GameConfig;
     if (!gameConfig) return;
@@ -207,7 +207,7 @@ export class GameStoreClass {
     if (!edges || !edges[0] || !edges[0].node || !edges[0].node.models) return;
 
     // parse gameStorePacked
-    let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
+    let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "dopewars_GameStorePacked") as GameStorePacked;
     if (!gameStorePacked) return;
 
     // parse gameEvent
@@ -231,7 +231,7 @@ export class GameStoreClass {
     if (!data?.entityUpdated?.models) return;
 
     let gameStorePacked = data?.entityUpdated?.models.find(
-      (i) => i?.__typename === "GameStorePacked",
+      (i) => i?.__typename === "dopewars_GameStorePacked",
     ) as GameStorePacked;
 
     if (gameStorePacked) {
