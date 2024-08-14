@@ -582,6 +582,7 @@ export type Dopewars_DrugConfig = {
   drug_id?: Maybe<Scalars['u8']>;
   drugs_mode?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   name?: Maybe<Dopewars_DrugConfig_Bytes16>;
   step?: Maybe<Scalars['u16']>;
   weight?: Maybe<Scalars['u16']>;
@@ -673,6 +674,7 @@ export type Dopewars_Erc20AllowanceModel = {
   __typename?: 'dopewars_ERC20AllowanceModel';
   amount?: Maybe<Scalars['u256']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   owner?: Maybe<Scalars['ContractAddress']>;
   spender?: Maybe<Scalars['ContractAddress']>;
   token?: Maybe<Scalars['ContractAddress']>;
@@ -755,6 +757,7 @@ export type Dopewars_Erc20BalanceModel = {
   account?: Maybe<Scalars['ContractAddress']>;
   amount?: Maybe<Scalars['u256']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   token?: Maybe<Scalars['ContractAddress']>;
 };
 
@@ -822,6 +825,7 @@ export type Dopewars_Erc20MetadataModel = {
   __typename?: 'dopewars_ERC20MetadataModel';
   decimals?: Maybe<Scalars['u8']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   name?: Maybe<Scalars['ByteArray']>;
   symbol?: Maybe<Scalars['ByteArray']>;
   token?: Maybe<Scalars['ContractAddress']>;
@@ -921,6 +925,7 @@ export type Dopewars_EncounterStatsConfig = {
   encounter?: Maybe<Scalars['Enum']>;
   encounters_mode?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   health_base?: Maybe<Scalars['u8']>;
   health_step?: Maybe<Scalars['u8']>;
   speed_base?: Maybe<Scalars['u8']>;
@@ -1056,6 +1061,7 @@ export type Dopewars_Game = {
   claimable?: Maybe<Scalars['u32']>;
   claimed?: Maybe<Scalars['bool']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   final_score?: Maybe<Scalars['u32']>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
@@ -1072,6 +1078,7 @@ export type Dopewars_GameConfig = {
   __typename?: 'dopewars_GameConfig';
   cash?: Maybe<Scalars['u32']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   health?: Maybe<Scalars['u8']>;
   max_rounds?: Maybe<Scalars['u8']>;
   max_turns?: Maybe<Scalars['u8']>;
@@ -1276,6 +1283,7 @@ export enum Dopewars_GameOrderField {
 export type Dopewars_GameStorePacked = {
   __typename?: 'dopewars_GameStorePacked';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   game_id?: Maybe<Scalars['u32']>;
   packed?: Maybe<Scalars['felt252']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
@@ -1433,6 +1441,7 @@ export type Dopewars_Game_Bytes16 = {
 export type Dopewars_HustlerItemBaseConfig = {
   __typename?: 'dopewars_HustlerItemBaseConfig';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   id?: Maybe<Scalars['u32']>;
   initial_tier?: Maybe<Scalars['u8']>;
   name?: Maybe<Scalars['felt252']>;
@@ -1518,6 +1527,7 @@ export type Dopewars_HustlerItemTiersConfig = {
   __typename?: 'dopewars_HustlerItemTiersConfig';
   cost?: Maybe<Scalars['u32']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   slot?: Maybe<Scalars['Enum']>;
   slot_id?: Maybe<Scalars['u8']>;
   stat?: Maybe<Scalars['u32']>;
@@ -1601,6 +1611,7 @@ export type Dopewars_HustlerItemTiersConfigWhereInput = {
 export type Dopewars_InitializableModel = {
   __typename?: 'dopewars_InitializableModel';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   initialized?: Maybe<Scalars['bool']>;
   token?: Maybe<Scalars['ContractAddress']>;
 };
@@ -1646,6 +1657,7 @@ export type Dopewars_InitializableModelWhereInput = {
 export type Dopewars_LocationConfig = {
   __typename?: 'dopewars_LocationConfig';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   location?: Maybe<Scalars['Enum']>;
   location_id?: Maybe<Scalars['u8']>;
   name?: Maybe<Dopewars_LocationConfig_Bytes16>;
@@ -1698,6 +1710,7 @@ export type Dopewars_LocationConfig_Bytes16 = {
 export type Dopewars_RyoAddress = {
   __typename?: 'dopewars_RyoAddress';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   key?: Maybe<Scalars['u8']>;
   laundromat?: Maybe<Scalars['ContractAddress']>;
   paper?: Maybe<Scalars['ContractAddress']>;
@@ -1779,6 +1792,7 @@ export type Dopewars_RyoAddressWhereInput = {
 export type Dopewars_RyoConfig = {
   __typename?: 'dopewars_RyoConfig';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   initialized?: Maybe<Scalars['bool']>;
   key?: Maybe<Scalars['u8']>;
   paper_fee?: Maybe<Scalars['u16']>;
@@ -1918,6 +1932,7 @@ export type Dopewars_RyoConfigWhereInput = {
 export type Dopewars_Season = {
   __typename?: 'dopewars_Season';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   high_score?: Maybe<Scalars['u32']>;
   next_version_timestamp?: Maybe<Scalars['u64']>;
   paper_balance?: Maybe<Scalars['u32']>;
@@ -1964,6 +1979,7 @@ export type Dopewars_SeasonSettings = {
   encounters_mode?: Maybe<Scalars['Enum']>;
   encounters_odds_mode?: Maybe<Scalars['Enum']>;
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   health_mode?: Maybe<Scalars['Enum']>;
   season_version?: Maybe<Scalars['u16']>;
   turns_mode?: Maybe<Scalars['Enum']>;
@@ -2114,6 +2130,7 @@ export type Dopewars_SeasonWhereInput = {
 export type Dopewars_SortedList = {
   __typename?: 'dopewars_SortedList';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   list_id?: Maybe<Scalars['felt252']>;
   locked?: Maybe<Scalars['bool']>;
   process_cursor_k0?: Maybe<Scalars['u32']>;
@@ -2140,6 +2157,7 @@ export type Dopewars_SortedListEdge = {
 export type Dopewars_SortedListItem = {
   __typename?: 'dopewars_SortedListItem';
   entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   item_k0?: Maybe<Scalars['u32']>;
   item_k1?: Maybe<Scalars['ContractAddress']>;
   list_id?: Maybe<Scalars['felt252']>;

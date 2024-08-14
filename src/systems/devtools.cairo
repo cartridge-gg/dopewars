@@ -121,7 +121,9 @@ mod devtools {
 
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
+            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
+                self.world(), selector_from_tag!("dopewars-store")
+            );
             IStoreLibraryDispatcher { class_hash, }
         }
     }

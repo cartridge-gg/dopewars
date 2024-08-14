@@ -1,11 +1,12 @@
 // TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot420Chain ,katanaSlot421Chain } from "./chains";
+import { katanaLocalChain, katanaSlot1Chain, katanaSlot420Chain ,katanaSlot421Chain } from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
 import manifestRyo420 from "../../manifests/ryo420/manifest.json";
 import manifestRyo421 from "../../manifests/ryo421/manifest.json";
+import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
@@ -100,6 +101,19 @@ const katanaSlot421: DojoChainConfig = {
   ],
 };
 
+const katanaSlot1: DojoChainConfig = {
+  name: "SLOT 1",
+  chainConfig: katanaSlot1Chain,
+  rpcUrl: "https://api.cartridge.gg/x/ryo1/katana",
+  toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
+  masterAddress: undefined,
+  masterPrivateKey: undefined,
+  accountClassHash: undefined,
+  manifest: manifestRyo1,
+  predeployedAccounts: [],
+};
+
 const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
   chainConfig: sepolia,
@@ -131,7 +145,8 @@ export const dojoContextConfig = {
   KATANA: katanaLocal,
   // KATANA_SLOT_420: katanaSlot420,
   // KATANA_SLOT_421: katanaSlot421,
-  SN_SEPOLIA: snSepolia,
+  WP_RYO1: katanaSlot1,
+  // SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
 
@@ -139,7 +154,8 @@ export const dojoChains = [
   katanaLocal,
   // katanaSlot420,
   // katanaSlot421,
-  snSepolia,
+  katanaSlot1,
+  // snSepolia,
   // snMainnet,
 ];
 

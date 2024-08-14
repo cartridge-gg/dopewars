@@ -49,8 +49,13 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
+  // console.log(selectedChain.name)
   switch (selectedChain.name) {
     case "SEPOLIA":
+      return [cartridgeConnector];
+      break;
+
+    case "SLOT 1":
       return [cartridgeConnector];
       break;
 
@@ -88,48 +93,46 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 }
 
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 
 const cartridgeConnector = new CartridgeConnector(
   [
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-paper_mock")!.address,
       method: "faucet",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-paper_mock")!.address,
       method: "approve",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-game")!.address,
       method: "create_game",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-game")!.address,
       method: "travel",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-game")!.address,
       method: "decide",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-game")!.address,
       method: "end_game",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-laundromat")!.address,
       method: "register_score",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
+      target: manifestRyo1.contracts.find((c) => c.tag === "dopewars-laundromat")!.address,
       method: "claim",
     },
   ],
   {
     url: "https://x.cartridge.gg",
+    rpc: "https://api.cartridge.gg/x/ryo1/katana",
     theme: "dope-wars",
     paymaster: {
       caller: shortString.encodeShortString("ANY_CALLER"),

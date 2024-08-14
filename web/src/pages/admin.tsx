@@ -35,7 +35,7 @@ import { Dropdown } from "@/components/common";
 import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 import { Ludes } from "@/components/icons/drugs";
-import { Game, GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
 
 const Admin = () => {
@@ -269,7 +269,7 @@ const ExportAllGamesCard = observer(() => {
   const allGames = useGetAllGamesQuery({});
 
   const onClick = async () => {
-    const games = (allGames.data?.gameModels?.edges || [])
+    const games = (allGames.data?.dopewarsGameModels?.edges || [])
       .map((i) => i?.node as Game)
       .map((i) => {
         return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };

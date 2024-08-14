@@ -53,7 +53,7 @@ export const DojoContextProvider = observer(
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
-      process.env.NODE_ENV === "production" ? dojoContextConfig.SN_SEPOLIA : dojoContextConfig.SN_SEPOLIA;
+      process.env.NODE_ENV === "production" ? dojoContextConfig.WP_RYO1 : dojoContextConfig.KATANA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;

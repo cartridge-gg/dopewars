@@ -1230,12 +1230,12 @@
       }
     ],
     "address": "0x19b2720ebf8d310dbd41c8000f56821d1ee2983f3ad422a3f0f183588eb302",
-    "transaction_hash": "0x575d14e4ba8e8034246f03a6e8b60be459d710c2b964c778feee604b7d2da27",
-    "block_number": 3,
+    "transaction_hash": "0x4aa143923f263534e933888121a9eca289621e9959a54adbe2820c7f3921741",
+    "block_number": 955,
     "seed": "dopeseed",
     "metadata": {
-      "profile_name": "dev",
-      "rpc_url": "http://localhost:5050/"
+      "profile_name": "ryo1",
+      "rpc_url": "https://api.cartridge.gg/x/ryo1/katana"
     },
     "manifest_name": "dojo-world"
   },
@@ -1243,7 +1243,7 @@
     "kind": "Class",
     "class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
     "original_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
-    "abi": "manifests/dev/deployment/abis/dojo-base.json",
+    "abi": "manifests/ryo1/deployment/abis/dojo-base.json",
     "tag": "dojo-base",
     "manifest_name": "dojo-base"
   },

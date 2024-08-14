@@ -42,7 +42,7 @@ import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { GameClass } from "@/dojo/class/Game";
-import { Game } from "@/generated/graphql";
+import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { Reputation } from "@/components/icons/items/Reputation";
 import { sleep } from "@/dojo/utils";

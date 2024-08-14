@@ -1,4 +1,4 @@
-import { Game, World__Event } from "@/generated/graphql";
+import { Dopewars_Game as Game, World__Event } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { BaseEventData, GameCreatedData, ParseEventResult, parseEvent } from "../events";
 import { WorldEvents } from "../generated/contractEvents";

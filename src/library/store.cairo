@@ -137,7 +137,8 @@ mod store {
             get!(self.world(), (game_id, player_id), Game)
         }
 
-        // fn game_store(self: @ContractState, game_id: u32, player_id: ContractAddress) -> GameStore {
+        // fn game_store(self: @ContractState, game_id: u32, player_id: ContractAddress) ->
+        // GameStore {
         //     let game = self.game(game_id, player_id);
         //     let game_store_packed = get!(self.world(), (game_id, player_id), GameStorePacked);
         //     let game_store: GameStore = game_store_packed.unpack(self.s(), game);
@@ -211,7 +212,9 @@ mod store {
     impl InternalImpl of InternalTrait {
         #[inline(always)]
         fn s(self: @ContractState,) -> super::IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract(selector_from_tag!("dopewars-store"));
+            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
+                self.world(), selector_from_tag!("dopewars-store")
+            );
             super::IStoreLibraryDispatcher { class_hash, }
         }
     }
