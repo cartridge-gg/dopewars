@@ -1,8 +1,8 @@
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/ryo1/katana"
-account_address = "0xfdcd6f69c605ce011a7c05da4a145401873ab5115bdb4703730c262aab110e"
-private_key = "0x6771b2c3c863b67c6b1cd60951622a599ff7a4d504dab7c9c6e7a41cdc43e3"
+account_address = "0x5087ef27f2ae9d2d88f5e5d9bf25b62afcc7a17f62aee5bd99654683f7e97"
+private_key = "0x592b2452182f46d4fd9ddc01d42f72b24ad33f51df4e1dbf1b1abece5dbed24"
 
 
 [world]
@@ -17,3 +17,8 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 [namespace]
 default = "dopewars"
 mappings = { "origami_token" = "dopewars" }
+
+[migration]
+skip_contracts = [
+    "dopewars-devtools",
+]

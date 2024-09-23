@@ -60,7 +60,7 @@ export default function Home() {
       } else {
         connect({ connector: connectors[0] });
 
-        if (connectors[0].id !== "cartridge") {
+        if (connectors[0].id !== "controller") {
           router.push(`/game/new`);
         }
       }

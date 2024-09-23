@@ -81,9 +81,6 @@ export const katanaSlot421Chain = {
 
 
 
-
-
-
 export const katanaSlot1Chain = {
     id: BigInt(shortString.encodeShortString("WP_RYO1")),
     network: "katana",

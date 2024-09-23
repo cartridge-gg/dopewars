@@ -1,4 +1,0 @@
-name = "rollyourown::systems::laundromat::laundromat"
-reads = []
-writes = ["SortedList","SortedListItem","Season","SeasonSettings","Game","GameConfig","RyoConfig"]
-init_calldata = []

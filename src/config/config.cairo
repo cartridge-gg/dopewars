@@ -6,8 +6,7 @@ use rollyourown::config::{
 
 #[starknet::interface]
 trait IConfig<T> {
-    fn initialize_1(self: @T);
-    fn initialize_2(self: @T);
+    // fn initialize_1(self: @T);
     fn get_config(self: @T) -> Config;
     // fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
@@ -17,7 +16,6 @@ trait IConfig<T> {
 struct Config {
     layouts: LayoutsConfig,
     hustlers: Array<HustlerConfig>,
-    // game_config: GameConfig, // TODO: query torii instead ?
     ryo_config: RyoConfig,
     season_settings_modes: SeasonSettingsModes,
 }
@@ -74,12 +72,8 @@ mod config {
 
     use super::{Config, LayoutsConfig, LayoutItem};
 
-    #[abi(embed_v0)]
-    impl ConfigImpl of super::IConfig<ContractState> {
-        fn initialize_1(self: @ContractState) {
-            // TODO checks
-            self.assert_caller_is_owner();
 
+    fn dojo_init(ref self: ContractState) {
             let world = self.world();
 
             initialize_drug_config_normal(world);
@@ -99,17 +93,43 @@ mod config {
             initialize_clothes_tiers_config(world);
             initialize_feet_tiers_config(world);
             initialize_transport_tiers_config(world);
-        }
-
-        fn initialize_2(self: @ContractState) {
-            // TODO checks
-            self.assert_caller_is_owner();
 
             // encounters
             initialize_encounter_stats_config(self.s());
-        // initialize_encounter_config(self.s());
-        // initialize_encounter_config_extra(self.s());
-        }
+    }
+    
+
+    #[abi(embed_v0)]
+    impl ConfigImpl of super::IConfig<ContractState> {
+        // fn initialize_1(self: @ContractState) {
+        //     // TODO checks
+        //     self.assert_caller_is_owner();
+
+        //     let world = self.world();
+
+        //     initialize_drug_config_normal(world);
+        //     initialize_drug_config_cheap(world);
+        //     initialize_drug_config_expensive(world);
+
+        //     initialize_location_config(world);
+
+        //     // hustlers items
+        //     initialize_weapons_config(world);
+        //     initialize_clothes_config(world);
+        //     initialize_feet_config(world);
+        //     initialize_transport_config(world);
+
+        //     // hutlsers items tiers
+        //     initialize_weapons_tiers_config(world);
+        //     initialize_clothes_tiers_config(world);
+        //     initialize_feet_tiers_config(world);
+        //     initialize_transport_tiers_config(world);
+
+        //     // encounters
+        //     initialize_encounter_stats_config(self.s());
+
+        // }
+
 
         fn get_config(self: @ContractState) -> Config {
             // let world = self.world();
@@ -196,6 +216,8 @@ mod config {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn assert_caller_is_owner(self: @ContractState) {
+            // TODO: checks
+
             // assert(self.world().is_owner(starknet::get_caller_address(), 0), 'only world owner');
 
             // assert(

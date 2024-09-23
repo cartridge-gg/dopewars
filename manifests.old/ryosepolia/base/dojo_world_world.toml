@@ -1,5 +1,0 @@
-kind = "Class"
-class_hash = "0x6b805e42fea7c91fc4b3362b37e4ddb485ffe08b4124cdefdc0fdfb005bcb48"
-original_class_hash = "0x6b805e42fea7c91fc4b3362b37e4ddb485ffe08b4124cdefdc0fdfb005bcb48"
-abi = "manifests/ryosepolia/abis/base/dojo_world_world.json"
-name = "dojo::world::world"

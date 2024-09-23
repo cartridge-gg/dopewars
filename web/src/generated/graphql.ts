@@ -149,6 +149,7 @@ export type World__Model = {
   executedAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
   transactionHash?: Maybe<Scalars['felt252']>;
 };
 

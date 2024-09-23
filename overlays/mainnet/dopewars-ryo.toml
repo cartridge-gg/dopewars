@@ -1,0 +1,9 @@
+tag = "dopewars-ryo"
+reads = []
+writes = ["dopewars-RyoConfig", "dopewars-RyoAddress", "dopewars-Season", "dopewars-SeasonSettings", "dopewars-GameConfig"]
+init_calldata = [
+    "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113", # PAPER address
+    "0x026C8df51A3b2652b6FaFD2d38ea0639f9131Ef097507758adef6E983Bcb7106", # treasury / multisig address
+    "$contract_address:dopewars-laundromat",
+]
+

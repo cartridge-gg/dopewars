@@ -43,6 +43,9 @@ mod ryo {
         treasury_address: ContractAddress,
         laundromat_address: ContractAddress
     ) {
+        // consume first ID = 0
+        let _ = self.world().uuid();
+
         let mut ryo_config = self.s().ryo_config();
 
         assert(ryo_config.initialized == false, 'Already initialized');

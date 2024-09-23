@@ -1,8 +1,8 @@
 {
   "world": {
     "kind": "WorldContract",
-    "class_hash": "0x76ced5a15cb43c7be7176cff4779cd57c56638a46ddf2c9da709d22298c5e5a",
-    "original_class_hash": "0x76ced5a15cb43c7be7176cff4779cd57c56638a46ddf2c9da709d22298c5e5a",
+    "class_hash": "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e",
+    "original_class_hash": "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e",
     "abi": [
       {
         "type": "impl",
@@ -945,6 +945,11 @@
             "kind": "data"
           },
           {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "data"
+          },
+          {
             "name": "keys",
             "type": "core::array::Span::<core::felt252>",
             "kind": "data"
@@ -1229,9 +1234,9 @@
         ]
       }
     ],
-    "address": "0x19b2720ebf8d310dbd41c8000f56821d1ee2983f3ad422a3f0f183588eb302",
-    "transaction_hash": "0x575d14e4ba8e8034246f03a6e8b60be459d710c2b964c778feee604b7d2da27",
-    "block_number": 3,
+    "address": "0x2a14035379afa97a1327658615112c0512a82a9770ecde18235d38c0a0f589f",
+    "transaction_hash": "0x780735dd38118f1545bbae6ebab5e0b00329bffbff353850ba5cf5bb76e71be",
+    "block_number": 63,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -1250,9 +1255,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x27e2954798fd5f6b3b2781d971784be1536ee7df99ef65caf14bc6c7c6a30e2",
-      "class_hash": "0x6a3a72aee3025006d2685bbd4279c0fd56677084783178734774577a8f928a3",
-      "original_class_hash": "0x6a3a72aee3025006d2685bbd4279c0fd56677084783178734774577a8f928a3",
+      "address": "0x66c57c2689ae722c7173bf5ce450da07ca442162fcd9bcdcd6c9b83b30bfbaa",
+      "class_hash": "0x18e436763ad5caa8449d9fb2f7f2386b03b6376ed94119c3e9df1fc6c2f16ac",
+      "original_class_hash": "0x18e436763ad5caa8449d9fb2f7f2386b03b6376ed94119c3e9df1fc6c2f16ac",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -1379,6 +1384,24 @@
                 }
               ],
               "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::config::config::config::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::config::config::config::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
             }
           ]
         },
@@ -1941,20 +1964,6 @@
           "items": [
             {
               "type": "function",
-              "name": "initialize_1",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "initialize_2",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
               "name": "get_config",
               "inputs": [],
               "outputs": [
@@ -1973,24 +1982,6 @@
                   "type": "rollyourown::config::drugs::DrugConfig"
                 }
               ],
-              "outputs": [],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "IDojoInitImpl",
-          "interface_name": "rollyourown::config::config::config::IDojoInit"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::config::config::config::IDojoInit",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_init",
-              "inputs": [],
               "outputs": [],
               "state_mutability": "view"
             }
@@ -2067,13 +2058,16 @@
       ],
       "init_calldata": [],
       "tag": "dopewars-config",
+      "systems": [
+        "update_drug_config"
+      ],
       "manifest_name": "dopewars-config-45ebce66"
     },
     {
       "kind": "DojoContract",
-      "address": "0x69677e08349162b49884c60af36c691412abd7c2941ed19b77a786422092dc2",
-      "class_hash": "0x5a24688b82af4aff898f65283ec67d9fa4c3ee9913accfa8c8a06805a90e6d1",
-      "original_class_hash": "0x5a24688b82af4aff898f65283ec67d9fa4c3ee9913accfa8c8a06805a90e6d1",
+      "address": "0x5114491bbf82d1c357e238099280032d6752716d4cb0deba89baad3521b2b9d",
+      "class_hash": "0x208f1157d50dbfe8bb76d80ee20be338d468ead30155453d4be4fd0118ad088",
+      "original_class_hash": "0x208f1157d50dbfe8bb76d80ee20be338d468ead30155453d4be4fd0118ad088",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2331,13 +2325,18 @@
       ],
       "init_calldata": [],
       "tag": "dopewars-devtools",
+      "systems": [
+        "create_fake_game",
+        "create_new_season",
+        "failing_tx"
+      ],
       "manifest_name": "dopewars-devtools-dd7a76fa"
     },
     {
       "kind": "DojoContract",
-      "address": "0xa07f548ac2e597c0bd17963f76b0bd546348964698511ca1c69b7492751d55",
-      "class_hash": "0x641b24b9fb20e1a0dc62631290a7d800e8a952284a1c1e3c6819c724ce28e32",
-      "original_class_hash": "0x641b24b9fb20e1a0dc62631290a7d800e8a952284a1c1e3c6819c724ce28e32",
+      "address": "0x237ed81aa02b55c87716de0b6f6e7415fa92340b83088687cfccd88e22c482a",
+      "class_hash": "0xb86b0c228c33b19dc166963808f5f40e87c1d261a1d3500613ac7812197380",
+      "original_class_hash": "0xb86b0c228c33b19dc166963808f5f40e87c1d261a1d3500613ac7812197380",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3262,13 +3261,19 @@
       ],
       "init_calldata": [],
       "tag": "dopewars-game",
+      "systems": [
+        "create_game",
+        "end_game",
+        "travel",
+        "decide"
+      ],
       "manifest_name": "dopewars-game-4e7c9d90"
     },
     {
       "kind": "DojoContract",
-      "address": "0x5c890194a3221e48317b1f26a06b0564380a9e2380f1b53bd98605ac2aeebb2",
-      "class_hash": "0x49614f979f770c3252b9c6cc08bec32ccb78842da0d5bb932a9db436fa0d9ac",
-      "original_class_hash": "0x49614f979f770c3252b9c6cc08bec32ccb78842da0d5bb932a9db436fa0d9ac",
+      "address": "0x29d892ccdb6506fffa349845cbeacbc03c0efc5cec2239be6a22936700eeeb",
+      "class_hash": "0x2a87e72ed94dd11b33fd61688055b10281fae646da978fa8f798770f95bed2d",
+      "original_class_hash": "0x2a87e72ed94dd11b33fd61688055b10281fae646da978fa8f798770f95bed2d",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3580,13 +3585,20 @@
       ],
       "init_calldata": [],
       "tag": "dopewars-laundromat",
+      "systems": [
+        "register_score",
+        "launder",
+        "claim",
+        "claim_treasury",
+        "supercharge_jackpot"
+      ],
       "manifest_name": "dopewars-laundromat-b7341dd0"
     },
     {
       "kind": "DojoContract",
-      "address": "0x6428a41b979d012c80c37e0e9f3cf43a29ad570ed41f16cda9c1ea640b1108c",
-      "class_hash": "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee",
-      "original_class_hash": "0x53e5576693e2a8e889c296aa3c85c0ea72b549010fc2c6aa951a44afbe4e8ee",
+      "address": "0x7d387c1fa15781c3aa2cd8155717bb0bc19f1f03d657fc6cffd6fb5f3733985",
+      "class_hash": "0xf584630145ac53cc5a0f3b8358e3aba6652c7c583b70aea89e57079b8180b6",
+      "original_class_hash": "0xf584630145ac53cc5a0f3b8358e3aba6652c7c583b70aea89e57079b8180b6",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4251,13 +4263,17 @@
         "$contract_address:dopewars-laundromat"
       ],
       "tag": "dopewars-paper_mock",
+      "systems": [
+        "faucet",
+        "faucetTo"
+      ],
       "manifest_name": "dopewars-paper_mock-3534f748"
     },
     {
       "kind": "DojoContract",
-      "address": "0x18bb5b77c3a82c577f535fea02e852b724e8e8a44e5e562f85d36ce20b976b4",
-      "class_hash": "0x52f43aef984262e7840735ae1ef4421881a0f90cb14ef74dd3597890d17bb73",
-      "original_class_hash": "0x52f43aef984262e7840735ae1ef4421881a0f90cb14ef74dd3597890d17bb73",
+      "address": "0x4323eccfe9a8a8c8a7d2a44771bec27138ed558f064f8fc9ddb1fb7bad28de",
+      "class_hash": "0x2c39ffc66d85d3073d67848d241c17384d642f9b4f81f84b65263e57948e51a",
+      "original_class_hash": "0x2c39ffc66d85d3073d67848d241c17384d642f9b4f81f84b65263e57948e51a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4653,13 +4669,17 @@
         "$contract_address:dopewars-laundromat"
       ],
       "tag": "dopewars-ryo",
+      "systems": [
+        "set_paused",
+        "update_ryo_config"
+      ],
       "manifest_name": "dopewars-ryo-32b65ba7"
     },
     {
       "kind": "DojoContract",
-      "address": "0x66b3f6b5dfcfa779d0008ecabeb91d39dd5bfa032d79b64d3c8b6a141d12579",
-      "class_hash": "0x48dc153edc56df974fee835e6ffa67ae35a53a66617dc384c8ccc3adc52f3b8",
-      "original_class_hash": "0x48dc153edc56df974fee835e6ffa67ae35a53a66617dc384c8ccc3adc52f3b8",
+      "address": "0x18897d288fe4b0ddff964609945df4a92914293bcd06288f0d8170e29c4b773",
+      "class_hash": "0x67d8d1415de244a7bfad582b026e75599f6098887c4922355f4edd1f8471118",
+      "original_class_hash": "0x67d8d1415de244a7bfad582b026e75599f6098887c4922355f4edd1f8471118",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -5827,6 +5847,17 @@
       "writes": [],
       "init_calldata": [],
       "tag": "dopewars-store",
+      "systems": [
+        "save_ryo_config",
+        "save_ryo_addresses",
+        "save_game_config",
+        "save_encounter_stats_config",
+        "save_drug_config",
+        "save_season",
+        "save_season_settings",
+        "set_game",
+        "set_game_store_packed"
+      ],
       "manifest_name": "dopewars-store-49cb8012"
     }
   ],
@@ -6366,6 +6397,7 @@
         }
       ],
       "tag": "dopewars-DrugConfig",
+      "qualified_path": "rollyourown::config::drugs::drug_config",
       "manifest_name": "dopewars-DrugConfig-7c904f95"
     },
     {
@@ -6392,8 +6424,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830",
-      "original_class_hash": "0x7787792ae8c0cf14fd4691986951b59cf9e36e848fb9375d41100f9a4b58830",
+      "class_hash": "0x6e3dfec0e3be6553f6253cc4a7a987a78dcda908d2292fcbc27bee8f2b00b12",
+      "original_class_hash": "0x6e3dfec0e3be6553f6253cc4a7a987a78dcda908d2292fcbc27bee8f2b00b12",
       "abi": [
         {
           "type": "impl",
@@ -6824,6 +6856,7 @@
         }
       ],
       "tag": "dopewars-ERC20AllowanceModel",
+      "qualified_path": "origami_token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
       "manifest_name": "dopewars-ERC20AllowanceModel-7b756887"
     },
     {
@@ -6845,8 +6878,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x3db7dbcff42d6c6fd246435b6a57b6e0937b0c72e685714ca21bac675291853",
-      "original_class_hash": "0x3db7dbcff42d6c6fd246435b6a57b6e0937b0c72e685714ca21bac675291853",
+      "class_hash": "0x7742392ca4a44e74bbdb31fc7736cf46353a3bed2d0b1d0ce1306b1376429be",
+      "original_class_hash": "0x7742392ca4a44e74bbdb31fc7736cf46353a3bed2d0b1d0ce1306b1376429be",
       "abi": [
         {
           "type": "impl",
@@ -7273,6 +7306,7 @@
         }
       ],
       "tag": "dopewars-ERC20BalanceModel",
+      "qualified_path": "origami_token::components::token::erc20::erc20_balance::erc_20_balance_model",
       "manifest_name": "dopewars-ERC20BalanceModel-54504db5"
     },
     {
@@ -7304,8 +7338,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24",
-      "original_class_hash": "0x79231718f51d68992d0eff40cdb16cb4de961e43b501851469aad870a5e7d24",
+      "class_hash": "0x366dc9f3053ac04f77302d04adcfae7722bf08835c9538e1db13ac014ae426c",
+      "original_class_hash": "0x366dc9f3053ac04f77302d04adcfae7722bf08835c9538e1db13ac014ae426c",
       "abi": [
         {
           "type": "impl",
@@ -7740,6 +7774,7 @@
         }
       ],
       "tag": "dopewars-ERC20MetadataModel",
+      "qualified_path": "origami_token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
       "manifest_name": "dopewars-ERC20MetadataModel-67f499cb"
     },
     {
@@ -8270,6 +8305,7 @@
         }
       ],
       "tag": "dopewars-EncounterStatsConfig",
+      "qualified_path": "rollyourown::config::encounters::encounter_stats_config",
       "manifest_name": "dopewars-EncounterStatsConfig-23b05ccb"
     },
     {
@@ -8824,6 +8860,7 @@
         }
       ],
       "tag": "dopewars-Game",
+      "qualified_path": "rollyourown::models::game::game",
       "manifest_name": "dopewars-Game-4462fb34"
     },
     {
@@ -9331,6 +9368,7 @@
         }
       ],
       "tag": "dopewars-GameConfig",
+      "qualified_path": "rollyourown::config::game::game_config",
       "manifest_name": "dopewars-GameConfig-7062ea11"
     },
     {
@@ -9766,6 +9804,7 @@
         }
       ],
       "tag": "dopewars-GameStorePacked",
+      "qualified_path": "rollyourown::models::game_store_packed::game_store_packed",
       "manifest_name": "dopewars-GameStorePacked-121912f1"
     },
     {
@@ -10241,6 +10280,7 @@
         }
       ],
       "tag": "dopewars-HustlerItemBaseConfig",
+      "qualified_path": "rollyourown::config::hustlers::hustler_item_base_config",
       "manifest_name": "dopewars-HustlerItemBaseConfig-a462eb7d"
     },
     {
@@ -10716,6 +10756,7 @@
         }
       ],
       "tag": "dopewars-HustlerItemTiersConfig",
+      "qualified_path": "rollyourown::config::hustlers::hustler_item_tiers_config",
       "manifest_name": "dopewars-HustlerItemTiersConfig-65f9f22c"
     },
     {
@@ -10732,8 +10773,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x4cd9d4399b8abcbafbd6037616783e5d574df1c99fe9e82e61a3dde30ef698",
-      "original_class_hash": "0x4cd9d4399b8abcbafbd6037616783e5d574df1c99fe9e82e61a3dde30ef698",
+      "class_hash": "0x7f2fec48ba393e2b4c8f395addcebd4225109adc49fc63314f39ec504771fe0",
+      "original_class_hash": "0x7f2fec48ba393e2b4c8f395addcebd4225109adc49fc63314f39ec504771fe0",
       "abi": [
         {
           "type": "impl",
@@ -11156,6 +11197,7 @@
         }
       ],
       "tag": "dopewars-InitializableModel",
+      "qualified_path": "origami_token::components::security::initializable::initializable_model",
       "manifest_name": "dopewars-InitializableModel-11b94f3a"
     },
     {
@@ -11635,6 +11677,7 @@
         }
       ],
       "tag": "dopewars-LocationConfig",
+      "qualified_path": "rollyourown::config::locations::location_config",
       "manifest_name": "dopewars-LocationConfig-12f3e77b"
     },
     {
@@ -12079,6 +12122,7 @@
         }
       ],
       "tag": "dopewars-RyoAddress",
+      "qualified_path": "rollyourown::config::ryo_address::ryo_address",
       "manifest_name": "dopewars-RyoAddress-261f89bf"
     },
     {
@@ -12591,6 +12635,7 @@
         }
       ],
       "tag": "dopewars-RyoConfig",
+      "qualified_path": "rollyourown::config::ryo::ryo_config",
       "manifest_name": "dopewars-RyoConfig-7d8eb0bc"
     },
     {
@@ -13071,6 +13116,7 @@
         }
       ],
       "tag": "dopewars-Season",
+      "qualified_path": "rollyourown::models::season::season",
       "manifest_name": "dopewars-Season-57a4b7ad"
     },
     {
@@ -13677,6 +13723,7 @@
         }
       ],
       "tag": "dopewars-SeasonSettings",
+      "qualified_path": "rollyourown::config::settings::season_settings",
       "manifest_name": "dopewars-SeasonSettings-3ff184e4"
     },
     {
@@ -14171,6 +14218,7 @@
         }
       ],
       "tag": "dopewars-SortedList",
+      "qualified_path": "rollyourown::utils::sorted_list::sorted_list",
       "manifest_name": "dopewars-SortedList-4a8a13cf"
     },
     {
@@ -14624,6 +14672,7 @@
         }
       ],
       "tag": "dopewars-SortedListItem",
+      "qualified_path": "rollyourown::utils::sorted_list::sorted_list_item",
       "manifest_name": "dopewars-SortedListItem-43821237"
     }
   ]

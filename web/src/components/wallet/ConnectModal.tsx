@@ -54,17 +54,19 @@ export const ConnectModal = observer(() => {
             {connectors.map((connector) => {
               const isBurner = connector.id === "dojoburner";
               const isPredeployed = connector.id === "dojopredeployed";
-              const isController = connector.id === "cartridge";
+              // const isController = connector.id === "cartridge";
+              const isController = connector.id === "controller";
 
+              // console.log(connector)
               if (!isKatana && (isBurner || isPredeployed)) {
                 // burner or predeployed not on katana
                 return null;
               }
 
-              if (isKatana && !(isBurner || isPredeployed || isController)) {
-                // not burner or predeployed on katana
-                return null;
-              }
+              // if (isKatana && !(isBurner || isPredeployed || isController)) {
+              //   // not burner or predeployed on katana
+              //   return null;
+              // }
 
               if (!isAdmin && isPredeployed) {
                 return null;

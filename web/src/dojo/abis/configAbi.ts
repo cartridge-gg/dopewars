@@ -128,6 +128,24 @@ export const ABI = [
   },
   {
     "type": "impl",
+    "name": "IDojoInitImpl",
+    "interface_name": "rollyourown::config::config::config::IDojoInit"
+  },
+  {
+    "type": "interface",
+    "name": "rollyourown::config::config::config::IDojoInit",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_init",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "ConfigImpl",
     "interface_name": "rollyourown::config::config::IConfig"
   },
@@ -685,20 +703,6 @@ export const ABI = [
     "items": [
       {
         "type": "function",
-        "name": "initialize_1",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "initialize_2",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
         "name": "get_config",
         "inputs": [],
         "outputs": [
@@ -717,24 +721,6 @@ export const ABI = [
             "type": "rollyourown::config::drugs::DrugConfig"
           }
         ],
-        "outputs": [],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "IDojoInitImpl",
-    "interface_name": "rollyourown::config::config::config::IDojoInit"
-  },
-  {
-    "type": "interface",
-    "name": "rollyourown::config::config::config::IDojoInit",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_init",
-        "inputs": [],
         "outputs": [],
         "state_mutability": "view"
       }
