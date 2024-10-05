@@ -218,11 +218,16 @@ const TreasuryClaimCard = observer(() => {
         </VStack>
       </CardBody>
       <CardFooter>
-        <ChildrenOrConnect>
-          <Button isLoading={isPending} onClick={onClaim}>
-            Claim
-          </Button>
-        </ChildrenOrConnect>
+        <VStack>
+          <Text w="220px" flexShrink={0} color="neon.500">
+            Claiming send claimable PAPER balance to Treasury
+          </Text>
+          <ChildrenOrConnect>
+            <Button isLoading={isPending} onClick={onClaim}>
+              Claim
+            </Button>
+          </ChildrenOrConnect>
+        </VStack>
       </CardFooter>
     </Card>
   );

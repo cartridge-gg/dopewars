@@ -96,6 +96,11 @@ export interface GameOverData extends BaseEventData {
   reputation: number;
 }
 
+export interface PredictoorResultData extends BaseEventData {
+  value: number;
+  win: boolean;
+}
+
 export const parseAllEvents = (receipt?: GetTransactionReceiptResponse) => {
   if (!receipt || receipt.execution_status !== "SUCCEEDED") {
     return [];
@@ -244,6 +249,15 @@ export const parseEvent = (raw: any) => {
         health: Number(raw.data[4]),
         reputation: Number(raw.data[5]),
       } as GameOverData;
+
+    case WorldEvents.PredictoorResultEvent:
+      return {
+        eventType: WorldEvents.PredictoorResultEvent,
+        eventName: "PredictoorResultEvent",
+        gameId: num.toHexString(0),
+        value: Number(raw.data[0]),
+        win: raw.data[1] === "0x0" ? false : true,
+      } as PredictoorResultData;
 
     // case WorldEvents.MeetOG:
     //   return {

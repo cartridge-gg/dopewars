@@ -5,6 +5,7 @@ import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet
 import { KatanaIcon } from "../icons";
 import { useEffect, useState } from "react";
 import { Cartridge } from "../icons/branding/Cartridge";
+import CartridgeConnector from "@cartridge/connector";
 
 export const ConnectButton = ({ ...props }) => {
   const { account, address, status } = useAccount();
@@ -37,7 +38,13 @@ export const ConnectButton = ({ ...props }) => {
             variant="pixelated"
             h="48px"
             fontSize="14px"
-            onClick={() => uiStore.openAccountDetails()}
+            onClick={() => {
+              if (connector?.id === "controller") {
+                (connector as unknown as CartridgeConnector).openMenu();
+              } else {
+                uiStore.openAccountDetails();
+              }
+            }}
             w="full"
             alignItems="center"
             justifyContent="center"

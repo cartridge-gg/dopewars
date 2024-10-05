@@ -1,13 +1,13 @@
 // TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot1Chain, katanaSlot420Chain ,katanaSlot421Chain } from "./chains";
+import { katanaInternalChain, katanaLocalChain, katanaSlot1Chain } from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
-import manifestRyo420 from "../../manifests/ryo420/manifest.json";
-import manifestRyo421 from "../../manifests/ryo421/manifest.json";
+import manifestInternal from "../../manifests/internal/manifest.json";
 import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+import { DW_NS } from "../hooks";
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 
@@ -24,6 +24,8 @@ export type DojoChainConfig = {
   accountClassHash?: string;
   manifest: any;
   predeployedAccounts: PredeployedAccount[];
+  vrfProviderAddress: string;
+  vrfProviderSecret?: string;
 };
 
 const katanaLocal: DojoChainConfig = {
@@ -33,9 +35,9 @@ const katanaLocal: DojoChainConfig = {
   toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
   toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "ws://localhost:8080/graphql/ws",
   masterAddress:
-    process.env.NEXT_PUBLIC_ADMIN_ADDRESS || "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03",
+    process.env.NEXT_PUBLIC_ADMIN_ADDRESS || "0x6b86e40118f29ebe393a75469b4d926c7a44c2e2681b6d319520b7c1156d114",
   masterPrivateKey:
-    process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY || "0x1800000000300000180000000000030000000000003006001800006600",
+    process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY || "0x1c9053c053edf324aec366a34c6901b1095b07af69495bffec7d7fe21effb1b",
   accountClassHash:
     process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH || "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
   manifest: manifestDev,
@@ -59,46 +61,30 @@ const katanaLocal: DojoChainConfig = {
       active: false,
     },
   ],
+  vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  vrfProviderSecret: "0x420",
 };
 
-const katanaSlot420: DojoChainConfig = {
-  name: "SLOT 420",
-  chainConfig: katanaSlot420Chain,
-  rpcUrl: "https://us-east.api.cartridge.gg/x/ryo420/katana",
-  toriiUrl: "https://api.cartridge.gg/x/ryo420/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryo420/torii/graphql/ws",
-  masterAddress: "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266",
-  masterPrivateKey: "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78",
+const katanaInternal: DojoChainConfig = {
+  name: "INTERNAL",
+  chainConfig: katanaInternalChain,
+  rpcUrl: "http://localhost:8001/x/starknet/sepolia",
+  toriiUrl: "http://localhost:8080/graphql",
+  toriiWsUrl: "wss://localhost:8080/graphql/ws",
+  masterAddress: "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021",
+  masterPrivateKey: "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650",
   accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-  manifest: manifestRyo420,
+  manifest: manifestInternal,
   predeployedAccounts: [
     {
       name: "Deployer",
-      address: "0x2ea5a09a95ee73556a3ef6420c11a8df775fe4f06e58fd9f7a21b5d99e0b5ea",
-      privateKey: "0x18055e629284db77daa8d60e4ca767d65807c3f1690785006e46d6e63a13d54",
+      address: "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021",
+      privateKey: "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650",
       active: false,
     },
   ],
-};
-
-const katanaSlot421: DojoChainConfig = {
-  name: "SLOT 421",
-  chainConfig: katanaSlot421Chain,
-  rpcUrl: "https://api.cartridge.gg/x/ryo421/katana",
-  toriiUrl: "https://api.cartridge.gg/x/ryo421/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryo421/torii/graphql/ws",
-  masterAddress: "0x7baae2348f94122027a90480a0724da3710533145738177dbe79f6f8f606eaf",
-  masterPrivateKey: "0x5b59606be97709903b509a13666b194f23849c7243c074b26b826405bec2eb0",
-  accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-  manifest: manifestRyo421,
-  predeployedAccounts: [
-    {
-      name: "Deployer",
-      address: "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034",
-      privateKey: "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515",
-      active: false,
-    },
-  ],
+  vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  vrfProviderSecret: "0x420",
 };
 
 const katanaSlot1: DojoChainConfig = {
@@ -112,6 +98,8 @@ const katanaSlot1: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestRyo1,
   predeployedAccounts: [],
+  vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  vrfProviderSecret: "0x420",
 };
 
 const snSepolia: DojoChainConfig = {
@@ -125,6 +113,8 @@ const snSepolia: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestRyoSepolia,
   predeployedAccounts: [],
+  vrfProviderAddress: "0x0",
+  vrfProviderSecret: undefined,
 };
 
 const snMainnet: DojoChainConfig = {
@@ -138,11 +128,14 @@ const snMainnet: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestDev, // TODO
   predeployedAccounts: [],
+  vrfProviderAddress: "0x0",
+  vrfProviderSecret: undefined,
 };
 
 // keys must match chain.id
 export const dojoContextConfig = {
   KATANA: katanaLocal,
+  INTERNAL: katanaInternal,
   // KATANA_SLOT_420: katanaSlot420,
   // KATANA_SLOT_421: katanaSlot421,
   WP_RYO1: katanaSlot1,
@@ -152,6 +145,7 @@ export const dojoContextConfig = {
 
 export const dojoChains = [
   katanaLocal,
+  katanaInternal,
   // katanaSlot420,
   // katanaSlot421,
   katanaSlot1,

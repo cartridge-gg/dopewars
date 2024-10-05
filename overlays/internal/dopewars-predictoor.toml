@@ -1,0 +1,5 @@
+tag = "dopewars-predictoor"
+reads = []
+writes = []
+init_calldata = ["$contract_address:dopewars-vrf_provider_mock"]
+# should use other address mainnet

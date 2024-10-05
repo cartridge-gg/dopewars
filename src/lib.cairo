@@ -42,16 +42,16 @@ mod systems {
     mod ryo;
     mod game;
     mod laundromat;
-
-
+    
     mod helpers {
         mod game_loop;
-
+        
         mod trading;
         mod shopping;
         mod traveling; 
     }
-
+    
+    mod predictoor;
     mod devtools;
 }
 
@@ -73,6 +73,7 @@ mod interfaces {
 
 mod _mocks {
     mod paper_mock;
+    mod vrf_provider_mock;
 }
 
 mod traits;

@@ -7,7 +7,7 @@ const TWO_MIN: u16 = 120;
 const TWENTY_MIN: u16 = 1200;
 const ONE_HOUR: u16 = 3600;
 //
-// const TWENTY_MIN: u32 = 1200;
+const HALF_HOUR: u32 = 1800;
 const SIX_HOUR: u32 = 21_600;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
@@ -33,14 +33,15 @@ struct RyoConfig {
 
 #[generate_trait]
 impl RyoConfigImpl of RyoConfigTrait {
+    // TODO: move to overlay / initializers
     fn build_initial_ryo_config() -> RyoConfig {
         RyoConfig {
             key: 0,
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: ONE_DAY, // ONE_WEEK 
-            season_time_limit: ONE_HOUR, // ONE_HOUR 
+            season_duration: HALF_HOUR, // ONE_WEEK 
+            season_time_limit: TWO_MIN, // ONE_HOUR 
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 5,

@@ -65,7 +65,7 @@ mod ryo {
         // save
         self.s().save_ryo_addresses(ryo_addresses);
 
-        // Season
+        // Create first season
         let mut randomizer = RandomImpl::new('ryo');
         let season_manager = SeasonManagerTrait::new(self.s());
         season_manager.new_season(ref randomizer, ryo_config.season_version);

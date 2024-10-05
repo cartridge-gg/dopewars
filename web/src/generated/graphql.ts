@@ -27,6 +27,32 @@ export type Scalars = {
   u256: any;
 };
 
+export type Erc__Balance = {
+  __typename?: 'ERC__Balance';
+  balance?: Maybe<Scalars['String']>;
+  token_metadata?: Maybe<Erc__Token>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type Erc__Token = {
+  __typename?: 'ERC__Token';
+  contract_address?: Maybe<Scalars['String']>;
+  decimals?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
+  token_id?: Maybe<Scalars['String']>;
+};
+
+export type Erc__Transfer = {
+  __typename?: 'ERC__Transfer';
+  amount?: Maybe<Scalars['String']>;
+  executed_at?: Maybe<Scalars['String']>;
+  from?: Maybe<Scalars['String']>;
+  to?: Maybe<Scalars['String']>;
+  token_metadata?: Maybe<Erc__Token>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type ModelUnion = Dopewars_DrugConfig | Dopewars_Erc20AllowanceModel | Dopewars_Erc20BalanceModel | Dopewars_Erc20MetadataModel | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameStorePacked | Dopewars_HustlerItemBaseConfig | Dopewars_HustlerItemTiersConfig | Dopewars_InitializableModel | Dopewars_LocationConfig | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem;
 
 export enum OrderDirection {
@@ -206,6 +232,8 @@ export type World__Query = {
   dopewarsSortedListModels?: Maybe<Dopewars_SortedListConnection>;
   entities?: Maybe<World__EntityConnection>;
   entity: World__Entity;
+  ercBalance?: Maybe<Array<Maybe<Erc__Balance>>>;
+  ercTransfer?: Maybe<Array<Maybe<Erc__Transfer>>>;
   eventMessage: World__EventMessage;
   eventMessages?: Maybe<World__EventMessageConnection>;
   events?: Maybe<World__EventConnection>;
@@ -446,6 +474,17 @@ export type World__QueryEntitiesArgs = {
 
 export type World__QueryEntityArgs = {
   id: Scalars['ID'];
+};
+
+
+export type World__QueryErcBalanceArgs = {
+  accountAddress: Scalars['String'];
+};
+
+
+export type World__QueryErcTransferArgs = {
+  accountAddress: Scalars['String'];
+  limit: Scalars['Int'];
 };
 
 

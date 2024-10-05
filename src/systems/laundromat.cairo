@@ -27,10 +27,32 @@ mod laundromat {
         packing::game_store::{GameStore, GameStoreImpl}
     };
 
+    use vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
+
+    component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
+
+    #[abi(embed_v0)]
+    impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
+
+    impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
+
+    #[storage]
+    struct Storage {
+        #[substorage(v0)]
+        vrf_consumer: VrfConsumerComponent::Storage,
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {}
+    enum Event {
+        #[flat]
+        VrfConsumerEvent: VrfConsumerComponent::Event,
+    }
+
+    #[abi(embed_v0)]
+    fn dojo_init(ref self: ContractState, vrf_provider: ContractAddress) {
+        self.vrf_consumer.initializer(vrf_provider);
+    }
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
@@ -53,7 +75,7 @@ mod laundromat {
             assert(season.is_open(), 'season has closed');
 
             // register final_score
-            let mut game_store = GameStoreImpl::load(self.s(),game_id, player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
             self.s().set_game(game);
@@ -68,8 +90,11 @@ mod laundromat {
         }
 
         fn launder(self: @ContractState, season_version: u16) {
+            let player_id = get_caller_address();
+            let random = self.vrf_consumer.consume_random(player_id);
+
             let world = self.world();
-            let process_batch_size = 10; // around 620k steps
+            let process_batch_size = 10; // around 276k steps / 10
 
             let season = self.s().season(season_version);
 
@@ -108,7 +133,7 @@ mod laundromat {
                     self.s().save_ryo_config(ryo_config);
 
                     // create new season
-                    let mut randomizer = RandomImpl::new('laundromat');
+                    let mut randomizer = RandomImpl::new(random);
                     let mut season_manager = SeasonManagerTrait::new(self.s());
                     season_manager.new_season(ref randomizer, ryo_config.season_version);
                 } else {

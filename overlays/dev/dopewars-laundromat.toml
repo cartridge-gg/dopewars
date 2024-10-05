@@ -1,4 +1,13 @@
 tag = "dopewars-laundromat"
 reads = []
-writes = ["dopewars-SortedList","dopewars-SortedListItem","dopewars-Season","dopewars-SeasonSettings","dopewars-Game","dopewars-GameConfig","dopewars-RyoConfig"]
-init_calldata = []
+writes = [
+    "dopewars-SortedList",
+    "dopewars-SortedListItem",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-Game",
+    "dopewars-GameConfig",
+    "dopewars-RyoConfig",
+]
+init_calldata = ["$contract_address:dopewars-vrf_provider_mock"]
+# should use other address mainnet

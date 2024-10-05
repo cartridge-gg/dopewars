@@ -8,11 +8,15 @@ version = "0.1.0"
 
 [dependencies]
 # dojo = { path = "../dojo/crates/dojo-core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
-origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.11" }
-
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.15" }
+# origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.15" }
+origami_token = { path = "../origami-dev/" }
+starknet = "2.7.0"
+vrf_contracts = { path = "../vrf-server/contracts" }
 
 [scripts]
+katana = "katana --allowed-origins \"*\" -b 2000 --disable-fee --dev"
+torii = "torii --allowed-origins \"*\" --index-pending true --polling-interval 1000 --index-raw-events true --world 0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14"
 
 # common
 copy_manifest = "./scripts/copy_manifest.sh"
@@ -21,11 +25,12 @@ gendojo = "./scripts/gen.sh"
 # migrate  && scarb run gendojo $PROFILE
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE"
 migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE"
+migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE"
 
 
 # slot ryo1
-slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.11 -b 2000 -a 10 --disable-fee true"
-slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana -s 0 --index-pending true --version 1.0.0-alpha.11 --world 0x2a14035379afa97a1327658615112c0512a82a9770ecde18235d38c0a0f589f"
+slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee true"
+slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana -s 0 --index-pending true --version 1.0.0-alpha.15 --world 0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14"
 
 
 [[target.dojo]]
@@ -36,7 +41,9 @@ build-external-contracts = [
     "origami_token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
     "origami_token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
     "origami_token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
+    "vrf_contracts::vrf_provider::vrf_provider::VrfProvider",
 ]
 
+[profile.internal]
 [profile.ryo1]
 [profile.mainnet]

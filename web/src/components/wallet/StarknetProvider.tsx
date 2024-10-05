@@ -48,28 +48,27 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
   };
 }
 
-import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
-import manifestRyo1 from "../../manifests/ryo1/manifest.json";
-import manifestDev from "../../manifests/dev/manifest.json";
-
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
-  // console.log(selectedChain.name)
+  const controller = cartridgeConnector({ rpc: selectedChain.rpcUrl, manifest: selectedChain.manifest });
+
   switch (selectedChain.name) {
-    case "SEPOLIA":
-      return [
-        cartridgeConnector({ rpc: "https://api.cartridge.gg/x/ryosepolia/katana", manifest: manifestRyoSepolia }),
-      ];
+    case "KATANA":
+      return [controller, injected({ id: "dojoburner" })];
       break;
 
-    case "SLOT 1":
-      return [cartridgeConnector({ rpc: "https://api.cartridge.gg/x/ryo1/katana", manifest: manifestRyo1 })];
+    case "INTERNAL":
+      return [
+        cartridgeConnector({
+          keychain: "http://localhost:3001",
+          rpc: selectedChain.rpcUrl,
+          manifest: selectedChain.manifest,
+        }),
+        // injected({ id: "dojoburner" }),
+      ];
       break;
 
     default:
-      return [
-        cartridgeConnector({ rpc: "https://localhost:5050", manifest: manifestDev }),
-        injected({ id: "dojoburner" }),
-      ];
+      return [controller];
       break;
   }
 }
@@ -101,10 +100,10 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
-const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rpc: string; manifest: any }) =>
-  new CartridgeConnector({
+const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rpc?: string; manifest: any }) => {
+  return new CartridgeConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
-    rpc,
+    rpc: rpc ? rpc : "http://localhost:5050",
     theme: "dope-wars",
     paymaster: {
       caller: shortString.encodeShortString("ANY_CALLER"),
@@ -144,3 +143,4 @@ const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rp
       },
     ],
   }) as unknown as InjectedConnector;
+};

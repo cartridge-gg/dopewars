@@ -49,10 +49,26 @@ mod game {
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
 
+    use vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
+
+    component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
+
+    #[abi(embed_v0)]
+    impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
+   
+    impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
+
+    #[storage]
+    struct Storage {
+        #[substorage(v0)]
+        vrf_consumer: VrfConsumerComponent::Storage,
+    }
 
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
+        #[flat]
+        VrfConsumerEvent: VrfConsumerComponent::Event,
         GameCreated: GameCreated,
         Traveled: Traveled,
         TradeDrug: TradeDrug,
@@ -171,6 +187,16 @@ mod game {
         reputation: u8,
     }
 
+    pub mod Entrypoints {
+        pub const travel: felt252 = 'travel';
+        pub const decide: felt252 = 'decide';
+    }
+
+
+    #[abi(embed_v0)]
+    fn dojo_init(ref self: ContractState, vrf_provider: ContractAddress) {
+        self.vrf_consumer.initializer(vrf_provider);
+    }
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
@@ -232,9 +258,10 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            // let world = self.world();
             let player_id = get_caller_address();
+            let random = self.vrf_consumer.consume_random(player_id);
 
+            //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check if can travel
@@ -246,7 +273,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new('travel');
+            let mut randomizer = RandomImpl::new(random);
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;
@@ -273,13 +300,15 @@ mod game {
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
             let player_id = get_caller_address();
+            let random = self.vrf_consumer.consume_random(player_id);
 
+            //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new('decide');
+            let mut randomizer = RandomImpl::new(random);
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
 
             // // resolve decision
@@ -297,6 +326,7 @@ mod game {
             };
         }
     }
+
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {

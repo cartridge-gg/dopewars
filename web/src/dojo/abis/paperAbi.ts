@@ -28,7 +28,7 @@ export const ABI = [
     "items": [
       {
         "type": "function",
-        "name": "contract_name",
+        "name": "name",
         "inputs": [],
         "outputs": [
           {
@@ -213,7 +213,7 @@ export const ABI = [
     "items": [
       {
         "type": "function",
-        "name": "name",
+        "name": "nameXXX",
         "inputs": [],
         "outputs": [
           {

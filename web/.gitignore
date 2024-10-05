@@ -42,3 +42,5 @@ next-env.d.ts
 
 # editor configuration
 .vscode
+
+certificates

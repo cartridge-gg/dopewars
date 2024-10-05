@@ -18,7 +18,7 @@ import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall } from "@dojoengine/core";
-import { sleep } from "../utils";
+import { buildVrfCalls, sleep } from "../utils";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
@@ -41,6 +41,8 @@ export interface SystemsInterface {
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
+  // predictoor
+  predictoor: (drug: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
@@ -102,7 +104,7 @@ export const useSystems = (): SystemsInterface => {
   //
 
   const executeAndReceipt = useCallback(
-    async (params: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
+    async (calls: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
       if (!account) {
         toast({
           message: `not connected`,
@@ -123,13 +125,7 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
 
       try {
-        tx = await dojoProvider.execute(account!, params, DW_NS /*,  { maxFee: 1000000000000000n }*/);
-
-        // toast({
-        //   message: `tx sent ${tx.transaction_hash.substring(0, 4)}...${tx.transaction_hash.slice(-4)}`,
-        //   duration: 5_000,
-        //   isError: false
-        // })
+        tx = await dojoProvider.execute(account!, calls, DW_NS);
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 500,
@@ -236,15 +232,25 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Locations, calls: Array<PendingCall>) => {
-      const callsEnum = calls.map(pendingCallToCairoEnum);
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: `game`,
+    async (gameId: string, location: Locations, pending_calls: Array<PendingCall>) => {
+      const callsEnum = pending_calls.map(pendingCallToCairoEnum);
+      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
+
+      const call = {
+        contractAddress: gameAddress,
         entrypoint: "travel",
         // @ts-ignore
-        //  calldata: [gameId, location, callsEnum],
         calldata: CallData.compile({ gameId, location, callsEnum }),
+      };
+
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
 
       const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
 
@@ -266,11 +272,22 @@ export const useSystems = (): SystemsInterface => {
 
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: `game`,
+      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
+
+      const call = {
+        contractAddress: gameAddress,
         entrypoint: "decide",
         calldata: CallData.compile([gameId, action]),
+      };
+
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
 
       const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
 
@@ -371,11 +388,23 @@ export const useSystems = (): SystemsInterface => {
 
   const launder = useCallback(
     async (season: number) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
-        contractName: `laundromat`,
+      const laundromatAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.tag === `${DW_NS}-laundromat`,
+      ).address;
+
+      const call = {
+        contractAddress: laundromatAddress,
         entrypoint: "launder",
         calldata: CallData.compile([season]),
+      };
+
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
 
       return {
         hash,
@@ -436,6 +465,35 @@ export const useSystems = (): SystemsInterface => {
   //
   //
   //
+
+  const predictoor = useCallback(
+    async (drug: number) => {
+      const predictoorAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.tag === `${DW_NS}-predictoor`,
+      ).address;
+
+      const call = {
+        contractAddress: predictoorAddress,
+        entrypoint: "predictoor",
+        calldata: [drug],
+      };
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+
+      return {
+        hash,
+        events,
+        parsedEvents,
+      };
+    },
+    [executeAndReceipt],
+  );
 
   //
   //
@@ -499,6 +557,8 @@ export const useSystems = (): SystemsInterface => {
     updateRyoConfig,
     //
     updateDrugConfig,
+    //
+    predictoor,
     //
     failingTx,
     createFakeGame,

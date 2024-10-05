@@ -10,7 +10,6 @@ export const useControllerUsername = () => {
 
   useEffect(() => {
     const init = async () => {
-      // console.log("useControllerUsername connector:", connector)
       const username = await (connector as unknown as CartridgeConnector).username();
       setUsername(username || "");
     };
