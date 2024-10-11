@@ -67,6 +67,8 @@ mod laundromat {
 
             // check if valid game
             assert(game.exists(), 'invalid game');
+            // check if ranked game
+            assert(game.is_ranked(), 'game is not ranked');
             // check dat game exists & is game_over
             assert(game.game_over, 'game is not over');
             // check not already registered

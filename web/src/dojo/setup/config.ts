@@ -99,7 +99,7 @@ const katanaSlot1: DojoChainConfig = {
   manifest: manifestRyo1,
   predeployedAccounts: [],
   vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
-  vrfProviderSecret: "0x420",
+  vrfProviderSecret: undefined,
 };
 
 const snSepolia: DojoChainConfig = {

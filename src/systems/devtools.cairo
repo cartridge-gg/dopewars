@@ -59,7 +59,7 @@ mod devtools {
                 player_id,
                 //
                 season_version,
-                game_mode: GameMode::Dealer,
+                game_mode: GameMode::Ranked,
                 //
                 player_name: Bytes16Impl::from('fake'),
                 hustler_id: rand_hustler_id,

@@ -213,8 +213,10 @@ mod game {
             let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
-            // pay paper_fee
-            season_manager.on_game_start();
+            // if ranked pay paper_fee
+            if game_mode == GameMode::Ranked {
+                season_manager.on_game_start();
+            }
 
             // create game
             let mut game_config = self.s().game_config(season_version);

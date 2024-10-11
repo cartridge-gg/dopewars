@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
+import { Flipflop, LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
@@ -23,6 +23,9 @@ import {
 import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
+import { GameMode } from "@/dojo/types";
+import { Glock } from "@/components/icons/items";
+import { gameModeName } from "@/dojo/helpers";
 
 export default function Home() {
   const { router, isLocalhost } = useRouterContext();
@@ -53,7 +56,8 @@ export default function Home() {
 
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
-  const onHustle = async () => {
+  const onHustle = async (gameMode: GameMode) => {
+    const mode = gameModeName[gameMode];
     if (!account) {
       if (connectors.length > 1) {
         uiStore.openConnectModal();
@@ -61,13 +65,13 @@ export default function Home() {
         connect({ connector: connectors[0] });
 
         if (connectors[0].id !== "controller") {
-          router.push(`/game/new`);
+          router.push(`/game/${mode}`);
         }
       }
     }
 
     if (account) {
-      router.push(`/game/new`);
+      router.push(`/game/${mode}`);
     }
   };
 
@@ -93,8 +97,13 @@ export default function Home() {
         <Card variant="pixelated">
           <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
             {isSeasonOpen && canCreateGame && (
-              <Button flex="1" onClick={onHustle}>
-                Hustle
+              <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
+                <Flipflop /> Play as guest
+              </Button>
+            )}
+            {isSeasonOpen && canCreateGame && (
+              <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
+                <Glock /> Play Ranked
               </Button>
             )}
 

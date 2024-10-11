@@ -87,7 +87,7 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
 // -> (is_dead, has_encounter)
 fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random) -> (bool, bool) {
     let has_encounter = match game_store.game.game_mode {
-        GameMode::Dealer => {
+        GameMode::Ranked | GameMode::Noob => {
             // get wanted level at destination 0-7
             let wanted_risk = game_store.get_wanted_risk(game_store.player.next_location);
             randomizer.occurs(wanted_risk)

@@ -392,18 +392,18 @@ export const useSystems = (): SystemsInterface => {
         (i: any) => i.tag === `${DW_NS}-laundromat`,
       ).address;
 
-      const call = {
+      const calls = {
         contractAddress: laundromatAddress,
         entrypoint: "launder",
         calldata: CallData.compile([season]),
       };
 
-      const calls = await buildVrfCalls({
-        account: account!,
-        call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
-      });
+      // const calls = await buildVrfCalls({
+      //   account: account!,
+      //   call,
+      //   vrfProviderAddress: selectedChain.vrfProviderAddress,
+      //   vrfProviderSecret: selectedChain.vrfProviderSecret,
+      // });
       const { hash, events, parsedEvents } = await executeAndReceipt(calls);
 
       return {

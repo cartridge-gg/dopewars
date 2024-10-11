@@ -1,13 +1,10 @@
-import { Alert, Arrest, DollarBag, PaperCashIcon, Pistol, Roll, Trophy, Warning } from "@/components/icons";
-import { Header, Layout } from "@/components/layout";
+import { PaperCashIcon, Roll, Trophy, Warning } from "@/components/icons";
+import { Layout } from "@/components/layout";
 
 import {
   Card,
-  Container,
   Divider,
-  Flex,
   HStack,
-  Heading,
   Image,
   Link,
   ListItem,
@@ -17,7 +14,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Spacer,
   Text,
   UnorderedList,
   VStack,
@@ -25,7 +21,6 @@ import {
 
 import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
-import { Calendar } from "@/components/icons/archive";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import {
   useGameStore,
@@ -34,19 +29,16 @@ import {
   useSeasonByVersion,
   useSystems,
 } from "@/dojo/hooks";
-import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
 import { useAccount } from "@starknet-react/core";
-import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { GameClass } from "@/dojo/class/Game";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
-import { Reputation } from "@/components/icons/items/Reputation";
 import { sleep } from "@/dojo/utils";
-import { ReputationIndicator } from "@/components/player";
+import { GameMode } from "@/dojo/types";
 
 const End = observer(() => {
   const { game } = useGameStore();
@@ -80,7 +72,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
   useEffect(() => {
     refetchSeason();
     refetchRegisteredGame();
-  }, [refetchSeason,refetchRegisteredGame ]);
+  }, [refetchSeason, refetchRegisteredGame]);
 
   useEffect(() => {
     if (game) {
@@ -104,7 +96,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
     setPrev(prev);
 
     if (game.gameInfos.registered) {
-      setPosition(sorted.length );
+      setPosition(sorted.length);
     } else {
       setPosition(sorted.length + 1);
     }
@@ -128,7 +120,6 @@ const EndContent = ({ game }: { game: GameClass }) => {
 
         await sleep(1000);
         router.push(`/`);
-      
       }
     } catch (e: any) {
       console.log(e);
@@ -144,7 +135,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
       }}
       footer={
         <>
-          {!game.gameInfos.registered ? (
+          {game.gameInfos.game_mode == GameMode.Ranked && !game.gameInfos.registered ? (
             <VStack w="full" gap={3}>
               <Card p={3}>
                 <HStack color="yellow.400">
@@ -213,15 +204,6 @@ const EndContent = ({ game }: { game: GameClass }) => {
             </Button>
           </Link>
         </HStack>
-
-        {/* {!game.gameInfos.registered && (
-          <Card p={3} mt={[3, 0]}>
-            <HStack color="yellow.400">
-              <Warning mr={2} color="yellow.400" />
-              <Text maxW="340px">You must register your score in order to be eligible for season rewards</Text>
-            </HStack>
-          </Card>
-        )} */}
       </VStack>
 
       <Modal isOpen={isCreditOpen} onClose={onCreditClose} isCentered>

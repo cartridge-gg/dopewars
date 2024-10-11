@@ -4,6 +4,7 @@ import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
 import { ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
+import { gameModeFromName, gameModeFromNameKeys } from "@/dojo/helpers";
 import { ETHER, useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
@@ -16,7 +17,8 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 
 const New = observer(() => {
-  const { router, isRyoDotGame, isLocalhost } = useRouterContext();
+  const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
+  const gameMode = gameModeFromName[gameModeName as gameModeFromNameKeys] as GameMode;
 
   const { account } = useAccount();
 
@@ -112,21 +114,30 @@ const New = observer(() => {
             Im scared
           </Button>
 
-          <ChildrenOrConnect>
-            {balance > 1000n * ETHER ? (
-              <Button
-                w={["full", "auto"]}
-                px={["auto", "20px"]}
-                isLoading={isPending}
-                onClick={() => create(GameMode.Dealer)}
-              >
+          <ChildrenOrConnect variant="primary" h="35px">
+            {gameMode == GameMode.Ranked && (
+              <>
+                {balance > 1000n * ETHER ? (
+                  <Button
+                    w={["full", "auto"]}
+                    px={["auto", "20px"]}
+                    isLoading={isPending}
+                    onClick={() => create(gameMode)}
+                  >
+                    Play
+                  </Button>
+                ) : (
+                  <PaperFaucetButton />
+                )}
+              </>
+            )}
+            {gameMode == GameMode.Noob && (
+              <Button w={["full", "auto"]} px={["auto", "20px"]} isLoading={isPending} onClick={() => create(gameMode)}>
                 Play
               </Button>
-            ) : (
-              <PaperFaucetButton />
             )}
-
-            {/* <Button
+          </ChildrenOrConnect>
+          {/* <Button
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isLoading={isPending}
@@ -134,7 +145,6 @@ const New = observer(() => {
             >
               Play Warrior
             </Button> */}
-          </ChildrenOrConnect>
         </Footer>
       }
     >
@@ -265,8 +275,18 @@ const New = observer(() => {
                 <HStack gap={6} fontSize="14px">
                   <VStack gap={0} alignItems="flex-start" minW="240px">
                     <HStack w="full" justifyContent="space-between">
-                      <Text color="yellow.400">ENTRY FEE </Text>
-                      <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
+                      <Text color="yellow.400">ENTRY FEE</Text>
+                      {gameMode == GameMode.Ranked && (
+                        <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
+                      )}
+                      {gameMode != GameMode.Ranked && (
+                        <Text color="yellow.400">
+                          <span style={{ textDecoration: "line-through" }}>
+                            {formatCash(season.paper_fee).replace("$", "")}
+                          </span>{" "}
+                          PAPER
+                        </Text>
+                      )}
                     </HStack>
 
                     {account && (
