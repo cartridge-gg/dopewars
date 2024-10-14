@@ -1,13 +1,10 @@
 
 [env]
-rpc_url = "https://api.cartridge.gg/x/ryo1/katana"
-# account_address = "0x5087ef27f2ae9d2d88f5e5d9bf25b62afcc7a17f62aee5bd99654683f7e97"
-# private_key = "0x592b2452182f46d4fd9ddc01d42f72b24ad33f51df4e1dbf1b1abece5dbed24"
-
+rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
 
 [world]
 name = "Dope Wars"
-seed = "dopeseed"
+seed = "seposeed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 # website = "https://rollyourown.preview.cartridge.gg/"
 # icon_uri = "file://assets/icon.png"
@@ -18,7 +15,6 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 default = "dopewars"
 mappings = { "origami_token" = "dopewars" }
 
+
 [migration]
-skip_contracts = [
-    "dopewars-devtools",
-]
+skip_contracts = ["dopewars-vrf_provider_mock"]

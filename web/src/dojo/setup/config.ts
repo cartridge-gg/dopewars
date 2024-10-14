@@ -9,6 +9,9 @@ import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 import { DW_NS } from "../hooks";
 
+export const VRF_PROVIDER_SEPOLIA = "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48";
+export const VRF_PROVIDER_MAINNET = "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48";
+
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 
 export type DojoContextConfig = typeof dojoContextConfig;
@@ -106,14 +109,14 @@ const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
   chainConfig: sepolia,
   rpcUrl: "https://api.cartridge.gg/rpc/starknet-sepolia/v0_7",
-  toriiUrl: "https://api.cartridge.gg/x/ryosepolia/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia/torii/graphql/ws",
+  toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
   masterAddress: undefined,
   masterPrivateKey: undefined,
   accountClassHash: undefined,
   manifest: manifestRyoSepolia,
   predeployedAccounts: [],
-  vrfProviderAddress: "0x0",
+  vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
   vrfProviderSecret: undefined,
 };
 
@@ -128,28 +131,28 @@ const snMainnet: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestDev, // TODO
   predeployedAccounts: [],
-  vrfProviderAddress: "0x0",
+  vrfProviderAddress: VRF_PROVIDER_MAINNET,
   vrfProviderSecret: undefined,
 };
 
 // keys must match chain.id
 export const dojoContextConfig = {
   KATANA: katanaLocal,
-  INTERNAL: katanaInternal,
+  // INTERNAL: katanaInternal,
   // KATANA_SLOT_420: katanaSlot420,
   // KATANA_SLOT_421: katanaSlot421,
-  WP_RYO1: katanaSlot1,
-  // SN_SEPOLIA: snSepolia,
+  // WP_RYO1: katanaSlot1,
+  SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
 
 export const dojoChains = [
   katanaLocal,
-  katanaInternal,
+  // katanaInternal,
   // katanaSlot420,
   // katanaSlot421,
-  katanaSlot1,
-  // snSepolia,
+  // katanaSlot1,
+  snSepolia,
   // snMainnet,
 ];
 

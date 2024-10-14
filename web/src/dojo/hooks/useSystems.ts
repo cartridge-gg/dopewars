@@ -128,11 +128,11 @@ export const useSystems = (): SystemsInterface => {
         tx = await dojoProvider.execute(account!, calls, DW_NS);
 
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 500,
+          retryInterval: 200,
         });
 
-        // chill waiting torii indexing
-        await sleep(1000);
+        // chill a bit waiting torii indexing
+        await sleep(500);
       } catch (e: any) {
         setIsPending(false);
         setError(e.toString());
@@ -392,18 +392,18 @@ export const useSystems = (): SystemsInterface => {
         (i: any) => i.tag === `${DW_NS}-laundromat`,
       ).address;
 
-      const calls = {
+      const call = {
         contractAddress: laundromatAddress,
         entrypoint: "launder",
         calldata: CallData.compile([season]),
       };
 
-      // const calls = await buildVrfCalls({
-      //   account: account!,
-      //   call,
-      //   vrfProviderAddress: selectedChain.vrfProviderAddress,
-      //   vrfProviderSecret: selectedChain.vrfProviderSecret,
-      // });
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
       const { hash, events, parsedEvents } = await executeAndReceipt(calls);
 
       return {

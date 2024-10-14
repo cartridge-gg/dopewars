@@ -62,7 +62,7 @@ const Decision = observer(() => {
 
   useEffect(() => {
     if (game && gameEvents ) {
-      const encounterEvent = gameEvents?.lastEncounter!.parsed as TravelEncounterData;
+      const encounterEvent = gameEvents?.lastEncounter?.parsed as TravelEncounterData;
       setEncounterEvent(encounterEvent);
     }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);

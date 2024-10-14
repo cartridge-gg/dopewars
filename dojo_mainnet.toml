@@ -23,6 +23,7 @@ default = "dopewars"
 skip_contracts = [
     "dopewars-devtools",
     "dopewars-paper_mock",
+    "dopewars-vrf_provider_mock",
     "origami_token-ERC20MetadataModel",
     "origami_token-ERC20BalanceModel",
     "origami_token-ERC20AllowanceModel",

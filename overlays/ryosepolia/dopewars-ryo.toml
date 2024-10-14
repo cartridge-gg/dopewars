@@ -3,8 +3,8 @@ reads = []
 writes = ["dopewars-RyoConfig", "dopewars-RyoAddress", "dopewars-Season", "dopewars-SeasonSettings", "dopewars-GameConfig"]
 init_calldata = [
     "$contract_address:dopewars-paper_mock",
-    "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
+    "0x4fcb420d3fe574305268cece10571522bdb56981553d7450187e6f29c66e34e",
     "$contract_address:dopewars-laundromat",
-    "$contract_address:dopewars-vrf_provider_mock",
+    "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48", # vrf
 ]
 

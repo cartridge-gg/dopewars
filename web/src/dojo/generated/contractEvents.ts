@@ -4,7 +4,6 @@ import { num, GetTransactionReceiptResponse, InvokeTransactionReceiptResponse, C
 
 export enum WorldEvents {
   Upgraded = "0x2db340e6c609371026731f47050d3976552c89b4fbb012941663841c59d1af3",
-  VrfProviderChanged = "0x2830a3b1ac4319eabe81c3a532ca71696972c44dbe652c6fd1231a522f01f44",
   GameCreated = "0x230f942bb2087887c3b1dd964c716614bb6df172214f22409fefb734d96a4d2",
   Traveled = "0x2c4d9d5da873550ed167876bf0bc2ae300ce1db2eeff67927a85693680a2328",
   TradeDrug = "0x168c796c89bf587204933184c04f932929cb578ea082f44a918b4251706f902",
@@ -19,7 +18,6 @@ export enum WorldEvents {
   OwnershipTransferred = "0x1390fd803c110ac71730ece1decfc34eb1d0088e295d4f1b125dda1e0c5b9ff",
   OwnershipTransferStarted = "0x264029018ff7e3c0552db60eb00dd04eddf84c86e9b06640ce3731b70dc0bd7",
   PublicKeyChanged = "0x16c8b31f7af929aa279692efc7d32070b422eb4e6f5b6812b1c48f1a307e3ee",
-  RequestRandom = "0x21f618e82f50a46a803baa6d942b5ca4f765700b2ccc4322ec81d9eaffc4c99",
   SubmitRandom = "0x178cb81b0d146e06862f5058263b5f4aabc132c03456a207484c6d425282af8",
 }
 
@@ -30,10 +28,6 @@ export enum WorldEvents {
         event_name: string;
       }
 
-
-export interface VrfProviderChangedData extends BaseEventData {
-        address: string;
-        }
 
 export interface GameCreatedData extends BaseEventData {
         game_id: number;
@@ -149,11 +143,6 @@ export interface PublicKeyChangedData extends BaseEventData {
         pubkey: String;
         }
 
-export interface RequestRandomData extends BaseEventData {
-        caller: string;
-seed: string;
-        }
-
 export interface SubmitRandomData extends BaseEventData {
         seed: string;
 proof: String;
@@ -181,13 +170,6 @@ proof: String;
     export const parseEvent = (raw: any) => {
       switch (raw.keys[0]) {
           
-case WorldEvents.VrfProviderChanged:
-return {
-event_type: WorldEvents.VrfProviderChanged,
-event_name: "VrfProviderChanged",
-address: num.toHexString(raw.data[0]),
-} as VrfProviderChangedData;
-
 case WorldEvents.GameCreated:
 return {
 event_type: WorldEvents.GameCreated,
@@ -343,14 +325,6 @@ event_type: WorldEvents.PublicKeyChanged,
 event_name: "PublicKeyChanged",
 pubkey: num.toHexString(raw.data[0]),
 } as PublicKeyChangedData;
-
-case WorldEvents.RequestRandom:
-return {
-event_type: WorldEvents.RequestRandom,
-event_name: "RequestRandom",
-caller: num.toHexString(raw.keys[1]),
-seed: num.toHexString(raw.data[0]),
-} as RequestRandomData;
 
 case WorldEvents.SubmitRandom:
 return {

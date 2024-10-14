@@ -45,30 +45,14 @@ mod game {
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
             sorted_list::{SortedListImpl, SortedListTrait},
+            vrf_consumer::{VrfImpl, Source},
         },
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
 
-    use vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
-
-    component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
-
-    #[abi(embed_v0)]
-    impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
-   
-    impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
-
-    #[storage]
-    struct Storage {
-        #[substorage(v0)]
-        vrf_consumer: VrfConsumerComponent::Storage,
-    }
-
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
-        #[flat]
-        VrfConsumerEvent: VrfConsumerComponent::Event,
         GameCreated: GameCreated,
         Traveled: Traveled,
         TradeDrug: TradeDrug,
@@ -78,7 +62,6 @@ mod game {
         TravelEncounterResult: TravelEncounterResult,
         GameOver: GameOver,
     }
-
 
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
@@ -192,12 +175,6 @@ mod game {
         pub const decide: felt252 = 'decide';
     }
 
-
-    #[abi(embed_v0)]
-    fn dojo_init(ref self: ContractState, vrf_provider: ContractAddress) {
-        self.vrf_consumer.initializer(vrf_provider);
-    }
-
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
         fn create_game(
@@ -260,8 +237,9 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
+            let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = self.vrf_consumer.consume_random(player_id);
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
@@ -301,8 +279,9 @@ mod game {
         }
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
+            let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = self.vrf_consumer.consume_random(player_id);
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);

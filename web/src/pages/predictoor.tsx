@@ -1,6 +1,7 @@
 import { Arrow, Cigarette, DollarBag } from "@/components/icons";
 import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 import { Layout } from "@/components/layout";
+import { PredictoorResultData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useSystems } from "@/dojo/hooks";
 import { sleep } from "@/dojo/utils";
@@ -85,7 +86,7 @@ export default function Predictoor() {
         // const tx = await account.execute(calls, undefined, { maxFee: 10e16 });
         const { parsedEvents } = await predictoor(drug);
 
-        const { value, win } = parsedEvents!.find((i: any) => i.eventType === WorldEvents.PredictoorResultEvent);
+        const { value, win } = parsedEvents!.find((i: PredictoorResultData) => i.eventType === WorldEvents.PredictoorResultEvent);
 
         setRandValue(Number(value));
         setIsWin(Number(win) === 1);
@@ -119,7 +120,7 @@ export default function Predictoor() {
           <>
             {drugs.map((drug, idx) => {
               return (
-                <HStack>
+                <HStack key={idx}>
                   <VStack>
                     <Cigarette direction="down" w="40px" h="40px" visibility={result === idx ? "visible" : "hidden"} />
                     <Button isDisabled={isLoading} w={160} h={160} onClick={() => onPredict(idx)}>

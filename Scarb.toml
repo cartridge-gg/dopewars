@@ -24,13 +24,17 @@ gendojo = "./scripts/gen.sh"
 
 # migrate  && scarb run gendojo $PROFILE
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE"
-migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE"
-migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE"
+migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
+migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
+migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
 
+# slot ryosepolia 
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.15 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
 
 # slot ryo1
-slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee true"
-slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana -s 0 --index-pending true --version 1.0.0-alpha.15 --world 0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14"
+# slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee true"
+slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee false"
+slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version 1.0.0-alpha.15 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
 
 
 [[target.dojo]]
@@ -46,4 +50,5 @@ build-external-contracts = [
 
 [profile.internal]
 [profile.ryo1]
+[profile.ryosepolia]
 [profile.mainnet]

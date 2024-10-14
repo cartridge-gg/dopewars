@@ -22,37 +22,11 @@ mod laundromat {
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
         utils::{
             sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl}
+            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl},
+            vrf_consumer::{VrfImpl, Source},
         },
         packing::game_store::{GameStore, GameStoreImpl}
     };
-
-    use vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent;
-
-    component!(path: VrfConsumerComponent, storage: vrf_consumer, event: VrfConsumerEvent);
-
-    #[abi(embed_v0)]
-    impl VrfConsumerImpl = VrfConsumerComponent::VrfConsumerImpl<ContractState>;
-
-    impl VrfConsumerInternalImpl = VrfConsumerComponent::InternalImpl<ContractState>;
-
-    #[storage]
-    struct Storage {
-        #[substorage(v0)]
-        vrf_consumer: VrfConsumerComponent::Storage,
-    }
-
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        #[flat]
-        VrfConsumerEvent: VrfConsumerComponent::Event,
-    }
-
-    #[abi(embed_v0)]
-    fn dojo_init(ref self: ContractState, vrf_provider: ContractAddress) {
-        self.vrf_consumer.initializer(vrf_provider);
-    }
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
@@ -92,8 +66,9 @@ mod laundromat {
         }
 
         fn launder(self: @ContractState, season_version: u16) {
+            let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = self.vrf_consumer.consume_random(player_id);
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
             let world = self.world();
             let process_batch_size = 10; // around 276k steps / 10

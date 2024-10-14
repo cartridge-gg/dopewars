@@ -41,7 +41,8 @@ mod ryo {
         self: @ContractState,
         paper_address: ContractAddress,
         treasury_address: ContractAddress,
-        laundromat_address: ContractAddress
+        laundromat_address: ContractAddress,
+        vrf_address: ContractAddress,
     ) {
         // consume first ID = 0
         let _ = self.world().uuid();
@@ -61,6 +62,7 @@ mod ryo {
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address; // could be removed
         ryo_addresses.laundromat = laundromat_address; // could be removed
+        ryo_addresses.vrf = vrf_address; // could be removed
 
         // save
         self.s().save_ryo_addresses(ryo_addresses);

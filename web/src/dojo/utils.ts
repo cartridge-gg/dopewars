@@ -3,7 +3,15 @@ export const sleep = (ms: number) => {
 };
 
 import { StarkVRF } from "stark-vrf-wasm";
-import { AccountInterface, Call, CallData } from "starknet";
+import { AccountInterface, BlockTag, Call, CallData, hash, selector } from "starknet";
+
+enum Source {
+  Nonce = 0x0,
+  Salt = 0x1,
+}
+
+const SOURCE_NONCE = 0x0;
+const SOURCE_SALT = 0x1;
 
 export const buildVrfCalls = async ({
   account,
@@ -16,23 +24,31 @@ export const buildVrfCalls = async ({
   vrfProviderAddress: string;
   vrfProviderSecret?: string;
 }): Promise<Call[]> => {
-  //   fn request_random() -> felt252;
+  //   fn request_random(caller: ContractAddress, source: Source) -> felt252;
   const requestRandomCall: Call = {
     contractAddress: vrfProviderAddress,
     entrypoint: "request_random",
-    calldata: [],
+    calldata: [call.contractAddress, Source.Nonce, account.address],
   };
 
   let submitRandomCall = undefined;
   let assertConsumedCall = undefined;
 
   if (vrfProviderSecret) {
-    const [seed] = await account.callContract({
-      contractAddress: vrfProviderAddress,
-      entrypoint: "get_next_seed",
-      calldata: [account.address],
-    });
+    const chainId = await account.getChainId();
+ 
+    const nonceStorageSlot = hash.computePedersenHash(
+      selector.getSelectorFromName("VrfProvider_nonces"),
+      account.address,
+    );
 
+    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.pending);
+    const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
+    console.log(chainId);
+    console.log(nonceStorageSlot);
+    console.log(nonce);
+    console.log(seed);
+  
     const vrf = StarkVRF.new(vrfProviderSecret);
     const proof = vrf.prove(vrfProviderSecret, seed);
     const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);

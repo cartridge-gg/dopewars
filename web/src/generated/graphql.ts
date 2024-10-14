@@ -1755,6 +1755,7 @@ export type Dopewars_RyoAddress = {
   laundromat?: Maybe<Scalars['ContractAddress']>;
   paper?: Maybe<Scalars['ContractAddress']>;
   treasury?: Maybe<Scalars['ContractAddress']>;
+  vrf?: Maybe<Scalars['ContractAddress']>;
 };
 
 export type Dopewars_RyoAddressConnection = {
@@ -1779,7 +1780,8 @@ export enum Dopewars_RyoAddressOrderField {
   Key = 'KEY',
   Laundromat = 'LAUNDROMAT',
   Paper = 'PAPER',
-  Treasury = 'TREASURY'
+  Treasury = 'TREASURY',
+  Vrf = 'VRF'
 }
 
 export type Dopewars_RyoAddressWhereInput = {
@@ -1827,6 +1829,17 @@ export type Dopewars_RyoAddressWhereInput = {
   treasuryNEQ?: InputMaybe<Scalars['ContractAddress']>;
   treasuryNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
   treasuryNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  vrf?: InputMaybe<Scalars['ContractAddress']>;
+  vrfEQ?: InputMaybe<Scalars['ContractAddress']>;
+  vrfGT?: InputMaybe<Scalars['ContractAddress']>;
+  vrfGTE?: InputMaybe<Scalars['ContractAddress']>;
+  vrfIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  vrfLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  vrfLT?: InputMaybe<Scalars['ContractAddress']>;
+  vrfLTE?: InputMaybe<Scalars['ContractAddress']>;
+  vrfNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  vrfNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  vrfNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type Dopewars_RyoConfig = {

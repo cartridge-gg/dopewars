@@ -1236,7 +1236,7 @@
     ],
     "address": "0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14",
     "transaction_hash": "0x520053a922adbabcb0e174eae54e866ed5539ab13fa4217bc8b0daa2061336f",
-    "block_number": 42,
+    "block_number": 41,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -2066,8 +2066,8 @@
     {
       "kind": "DojoContract",
       "address": "0x38c735c7169bc4412c4ab5fa78ab1ce7352ba67389c3951aac339affc30dfcd",
-      "class_hash": "0x65a8fe74103fb1df634a4615692f662f8c1331b38acf39dbbbb30a0662aa221",
-      "original_class_hash": "0x65a8fe74103fb1df634a4615692f662f8c1331b38acf39dbbbb30a0662aa221",
+      "class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
+      "original_class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2335,8 +2335,8 @@
     {
       "kind": "DojoContract",
       "address": "0x70bebb66fc335f1d472fc7ec96a99a3e7280aefe03df2e697c399155d958e40",
-      "class_hash": "0x669b45ad9a73ae18a364bbc9133dab7f175fbf832dd8755ad42e21ef114ea3f",
-      "original_class_hash": "0x669b45ad9a73ae18a364bbc9133dab7f175fbf832dd8755ad42e21ef114ea3f",
+      "class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
+      "original_class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2468,29 +2468,6 @@
         },
         {
           "type": "impl",
-          "name": "IDojoInitImpl",
-          "interface_name": "rollyourown::systems::game::game::IDojoInit"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::game::game::IDojoInit",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_init",
-              "inputs": [
-                {
-                  "name": "vrf_provider",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
           "name": "GameActionsImpl",
           "interface_name": "rollyourown::systems::game::IGameActions"
         },
@@ -2499,7 +2476,11 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Dealer",
+              "name": "Ranked",
+              "type": "()"
+            },
+            {
+              "name": "Noob",
               "type": "()"
             },
             {
@@ -2766,6 +2747,24 @@
         },
         {
           "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::systems::game::game::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::game::game::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
           "name": "UpgradableImpl",
           "interface_name": "dojo::contract::upgradeable::IUpgradeable"
         },
@@ -2784,53 +2783,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "VrfConsumerImpl",
-          "interface_name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer"
-        },
-        {
-          "type": "struct",
-          "name": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::felt252"
-            },
-            {
-              "name": "y",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer",
-          "items": [
-            {
-              "type": "function",
-              "name": "get_vrf_provider",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_vrf_provider_public_key",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey"
-                }
-              ],
-              "state_mutability": "view"
             }
           ]
         },
@@ -2854,30 +2806,6 @@
             {
               "name": "Upgraded",
               "type": "dojo::contract::upgradeable::upgradeable::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "address",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "VrfProviderChanged",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
               "kind": "nested"
             }
           ]
@@ -3283,11 +3211,6 @@
               "kind": "nested"
             },
             {
-              "name": "VrfConsumerEvent",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-              "kind": "flat"
-            },
-            {
               "name": "GameCreated",
               "type": "rollyourown::systems::game::game::GameCreated",
               "kind": "nested"
@@ -3340,9 +3263,7 @@
         "dopewars-SortedList",
         "dopewars-SortedListItem"
       ],
-      "init_calldata": [
-        "$contract_address:dopewars-vrf_provider_mock"
-      ],
+      "init_calldata": [],
       "tag": "dopewars-game",
       "systems": [
         "create_game",
@@ -3355,8 +3276,8 @@
     {
       "kind": "DojoContract",
       "address": "0x479a4355f72f4d49ceb4166c79540abf2a83cbeac0f4508df255b06f9c8cdfe",
-      "class_hash": "0x7c404978a6afb1714e86089686682ddae0d82a9ab28106d47934276431b4ab2",
-      "original_class_hash": "0x7c404978a6afb1714e86089686682ddae0d82a9ab28106d47934276431b4ab2",
+      "class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
+      "original_class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3488,29 +3409,6 @@
         },
         {
           "type": "impl",
-          "name": "IDojoInitImpl",
-          "interface_name": "rollyourown::systems::laundromat::laundromat::IDojoInit"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::laundromat::laundromat::IDojoInit",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_init",
-              "inputs": [
-                {
-                  "name": "vrf_provider",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
           "name": "LaundromatImpl",
           "interface_name": "rollyourown::systems::laundromat::ILaundromat"
         },
@@ -3603,6 +3501,24 @@
         },
         {
           "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::systems::laundromat::laundromat::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::laundromat::laundromat::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
           "name": "UpgradableImpl",
           "interface_name": "dojo::contract::upgradeable::IUpgradeable"
         },
@@ -3621,53 +3537,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "VrfConsumerImpl",
-          "interface_name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer"
-        },
-        {
-          "type": "struct",
-          "name": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::felt252"
-            },
-            {
-              "name": "y",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer",
-          "items": [
-            {
-              "type": "function",
-              "name": "get_vrf_provider",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_vrf_provider_public_key",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey"
-                }
-              ],
-              "state_mutability": "view"
             }
           ]
         },
@@ -3697,30 +3566,6 @@
         },
         {
           "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "address",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "VrfProviderChanged",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
           "name": "rollyourown::systems::laundromat::laundromat::Event",
           "kind": "enum",
           "variants": [
@@ -3728,11 +3573,6 @@
               "name": "UpgradeableEvent",
               "type": "dojo::contract::upgradeable::upgradeable::Event",
               "kind": "nested"
-            },
-            {
-              "name": "VrfConsumerEvent",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-              "kind": "flat"
             }
           ]
         }
@@ -3747,9 +3587,7 @@
         "dopewars-GameConfig",
         "dopewars-RyoConfig"
       ],
-      "init_calldata": [
-        "$contract_address:dopewars-vrf_provider_mock"
-      ],
+      "init_calldata": [],
       "tag": "dopewars-laundromat",
       "systems": [
         "register_score",
@@ -4438,8 +4276,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2ba0ca86ce335d8f716abc8f1f965efa42e6293f062d4496b4ae109045230c6",
-      "class_hash": "0x4bd52f73cbdbbb539160f17ee4af53c2979756e7d1e409da8ef9ffb654c29b4",
-      "original_class_hash": "0x4bd52f73cbdbbb539160f17ee4af53c2979756e7d1e409da8ef9ffb654c29b4",
+      "class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
+      "original_class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4571,29 +4409,6 @@
         },
         {
           "type": "impl",
-          "name": "IDojoInitImpl",
-          "interface_name": "rollyourown::systems::predictoor::predictoor::IDojoInit"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::predictoor::predictoor::IDojoInit",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_init",
-              "inputs": [
-                {
-                  "name": "vrf_provider",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
           "name": "PredictoorImpl",
           "interface_name": "rollyourown::systems::predictoor::IPredictoor"
         },
@@ -4645,6 +4460,24 @@
         },
         {
           "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::systems::predictoor::predictoor::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::predictoor::predictoor::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
           "name": "UpgradableImpl",
           "interface_name": "dojo::contract::upgradeable::IUpgradeable"
         },
@@ -4663,53 +4496,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "VrfConsumerImpl",
-          "interface_name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer"
-        },
-        {
-          "type": "struct",
-          "name": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::felt252"
-            },
-            {
-              "name": "y",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::IVrfConsumer",
-          "items": [
-            {
-              "type": "function",
-              "name": "get_vrf_provider",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_vrf_provider_public_key",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "vrf_contracts::vrf_provider::vrf_provider_component::PublicKey"
-                }
-              ],
-              "state_mutability": "view"
             }
           ]
         },
@@ -4733,30 +4519,6 @@
             {
               "name": "Upgraded",
               "type": "dojo::contract::upgradeable::upgradeable::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "address",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "VrfProviderChanged",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::VrfProviderChanged",
               "kind": "nested"
             }
           ]
@@ -4794,11 +4556,6 @@
               "kind": "nested"
             },
             {
-              "name": "VrfConsumerEvent",
-              "type": "vrf_contracts::vrf_consumer::vrf_consumer_component::VrfConsumerComponent::Event",
-              "kind": "flat"
-            },
-            {
               "name": "PredictoorResultEvent",
               "type": "rollyourown::systems::predictoor::predictoor::PredictoorResultEvent",
               "kind": "nested"
@@ -4808,9 +4565,7 @@
       ],
       "reads": [],
       "writes": [],
-      "init_calldata": [
-        "$contract_address:dopewars-vrf_provider_mock"
-      ],
+      "init_calldata": [],
       "tag": "dopewars-predictoor",
       "systems": [],
       "manifest_name": "dopewars-predictoor-22879699"
@@ -4818,8 +4573,8 @@
     {
       "kind": "DojoContract",
       "address": "0x480d8b52befdcc16cddde91353c1aafd9b303915bfee3647e8da7a0a7ae6631",
-      "class_hash": "0x615c056f0f570b2f99fa633a838252a214e809fe088f006fb3dcc1f77f1ea9a",
-      "original_class_hash": "0x615c056f0f570b2f99fa633a838252a214e809fe088f006fb3dcc1f77f1ea9a",
+      "class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
+      "original_class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4972,6 +4727,10 @@
                 },
                 {
                   "name": "laundromat_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "vrf_address",
                   "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
@@ -5212,7 +4971,8 @@
       "init_calldata": [
         "$contract_address:dopewars-paper_mock",
         "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
-        "$contract_address:dopewars-laundromat"
+        "$contract_address:dopewars-laundromat",
+        "$contract_address:dopewars-vrf_provider_mock"
       ],
       "tag": "dopewars-ryo",
       "systems": [
@@ -5224,8 +4984,8 @@
     {
       "kind": "DojoContract",
       "address": "0x483a6e78ee78188e6adaa161829748a408ab179e84a02e41cc7cafeff1eb2e4",
-      "class_hash": "0x39dfdd0bf47789d917d153c55c8cbd3794936bd93baad1885a79ae87195d107",
-      "original_class_hash": "0x39dfdd0bf47789d917d153c55c8cbd3794936bd93baad1885a79ae87195d107",
+      "class_hash": "0x27aa0c66f08a32efea5dc6b8901412b1b8de8591a9c04054e21671ce139e339",
+      "original_class_hash": "0x27aa0c66f08a32efea5dc6b8901412b1b8de8591a9c04054e21671ce139e339",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -5434,6 +5194,10 @@
             },
             {
               "name": "treasury",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "vrf",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
@@ -5915,7 +5679,11 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Dealer",
+              "name": "Ranked",
+              "type": "()"
+            },
+            {
+              "name": "Noob",
               "type": "()"
             },
             {
@@ -6409,8 +6177,8 @@
     {
       "kind": "DojoContract",
       "address": "0x61ea5f7ebeed84fa95b19d53d362ec786620953a99b298fe25925abb145e377",
-      "class_hash": "0x8db9737b51b278f3df308518eb6375ab26ec4616861f2c2001fe47c7f0d9bd",
-      "original_class_hash": "0x8db9737b51b278f3df308518eb6375ab26ec4616861f2c2001fe47c7f0d9bd",
+      "class_hash": "0x4199e0320b462e78fbd4c50556b91f5a8c2fa578e58e041caea0a53d8b54f40",
+      "original_class_hash": "0x4199e0320b462e78fbd4c50556b91f5a8c2fa578e58e041caea0a53d8b54f40",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -6596,6 +6364,20 @@
           "interface_name": "vrf_contracts::vrf_provider::vrf_provider_component::IVrfProvider"
         },
         {
+          "type": "enum",
+          "name": "vrf_contracts::vrf_provider::vrf_provider_component::Source",
+          "variants": [
+            {
+              "name": "Nonce",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "Salt",
+              "type": "core::felt252"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "stark_vrf::ecvrf::Point",
           "members": [
@@ -6652,13 +6434,18 @@
             {
               "type": "function",
               "name": "request_random",
-              "inputs": [],
-              "outputs": [
+              "inputs": [
                 {
-                  "type": "core::felt252"
+                  "name": "caller",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "source",
+                  "type": "vrf_contracts::vrf_provider::vrf_provider_component::Source"
                 }
               ],
-              "state_mutability": "external"
+              "outputs": [],
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -6678,43 +6465,11 @@
             },
             {
               "type": "function",
-              "name": "submit_random_no_proof",
-              "inputs": [
-                {
-                  "name": "seed",
-                  "type": "core::felt252"
-                },
-                {
-                  "name": "random",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "get_next_seed",
-              "inputs": [
-                {
-                  "name": "caller",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::felt252"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
               "name": "consume_random",
               "inputs": [
                 {
-                  "name": "caller",
-                  "type": "core::starknet::contract_address::ContractAddress"
+                  "name": "source",
+                  "type": "vrf_contracts::vrf_provider::vrf_provider_component::Source"
                 }
               ],
               "outputs": [
@@ -6850,23 +6605,6 @@
         },
         {
           "type": "event",
-          "name": "vrf_contracts::vrf_provider::vrf_provider_component::VrfProviderComponent::RequestRandom",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "caller",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "seed",
-              "type": "core::felt252",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
           "name": "vrf_contracts::vrf_provider::vrf_provider_component::VrfProviderComponent::SubmitRandom",
           "kind": "struct",
           "members": [
@@ -6890,11 +6628,6 @@
             {
               "name": "PublicKeyChanged",
               "type": "vrf_contracts::vrf_provider::vrf_provider_component::VrfProviderComponent::PublicKeyChanged",
-              "kind": "nested"
-            },
-            {
-              "name": "RequestRandom",
-              "type": "vrf_contracts::vrf_provider::vrf_provider_component::VrfProviderComponent::RequestRandom",
               "kind": "nested"
             },
             {
@@ -9449,8 +9182,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x5881c4da0898f457e7c553bd8dd7565ee05f732c0ab37e5135e8d753e3e37ac",
-      "original_class_hash": "0x5881c4da0898f457e7c553bd8dd7565ee05f732c0ab37e5135e8d753e3e37ac",
+      "class_hash": "0x636a807123381c76309b3292d8aa9a6ad9ae423ba2e94a331a997f621424b58",
+      "original_class_hash": "0x636a807123381c76309b3292d8aa9a6ad9ae423ba2e94a331a997f621424b58",
       "abi": [
         {
           "type": "impl",
@@ -9824,7 +9557,11 @@
           "name": "rollyourown::models::game::GameMode",
           "variants": [
             {
-              "name": "Dealer",
+              "name": "Ranked",
+              "type": "()"
+            },
+            {
+              "name": "Noob",
               "type": "()"
             },
             {
@@ -12776,13 +12513,18 @@
           "key": false
         },
         {
+          "name": "vrf",
+          "type": "ContractAddress",
+          "key": false
+        },
+        {
           "name": "laundromat",
           "type": "ContractAddress",
           "key": false
         }
       ],
-      "class_hash": "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8",
-      "original_class_hash": "0x7a7aefd159bc75fbc5974c1e98b5b49df907d83156e701b173fa4b1d068bbd8",
+      "class_hash": "0x14202cf070a9b27ef3282e97ddf5050f512fa4b63e8def12dd713dd31a364c8",
+      "original_class_hash": "0x14202cf070a9b27ef3282e97ddf5050f512fa4b63e8def12dd713dd31a364c8",
       "abi": [
         {
           "type": "impl",
@@ -13165,6 +12907,10 @@
             },
             {
               "name": "treasury",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "vrf",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {

@@ -1,8 +1,8 @@
 
 [env]
 rpc_url = "http://localhost:8001/x/starknet/sepolia"
-account_address = "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021"
-private_key = "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650"
+# account_address = "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021"
+# private_key = "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650"
 
 
 [world]
