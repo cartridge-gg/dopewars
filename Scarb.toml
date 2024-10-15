@@ -8,8 +8,8 @@ version = "0.1.0"
 
 [dependencies]
 # dojo = { path = "../dojo/crates/dojo-core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.15" }
-# origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.15" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.16" }
+# origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.16" }
 origami_token = { path = "../origami-dev/" }
 starknet = "2.7.0"
 vrf_contracts = { path = "../vrf-server/contracts" }
@@ -26,15 +26,15 @@ gendojo = "./scripts/gen.sh"
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE"
 migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
 migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
-migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --slot.controller && scarb run copy_manifest $PROFILE"
+migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE"
 
 # slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.15 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.16 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
 
 # slot ryo1
-# slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee true"
-slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.15 -b 2000 -a 10 --disable-fee false"
-slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version 1.0.0-alpha.15 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
+# slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee true"
+slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee false"
+slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version 1.0.0-alpha.16 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
 
 
 [[target.dojo]]

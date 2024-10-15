@@ -4,7 +4,7 @@ version = 1
 [[package]]
 name = "dojo"
 version = "1.0.0-alpha.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.15#f56c4f90eca84b92f348303dc85ff6e126609f16"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.16#3b3a78cd8239ca2ee524c49c83f36db4d79cb4bc"
 
 [[package]]
 name = "openzeppelin"
@@ -94,7 +94,7 @@ source = "git+https://github.com/OpenZeppelin/cairo-contracts.git?rev=a13bae3#a1
 
 [[package]]
 name = "origami_token"
-version = "1.0.0-alpha.15"
+version = "1.0.0-alpha.16"
 dependencies = [
  "dojo",
 ]

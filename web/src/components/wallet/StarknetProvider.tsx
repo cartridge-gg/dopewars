@@ -1,4 +1,4 @@
-import { DojoChainConfig, getStarknetProviderChains } from "@/dojo/setup/config";
+import { DojoChainConfig, getStarknetProviderChains, VRF_PROVIDER_SEPOLIA } from "@/dojo/setup/config";
 import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
@@ -110,6 +110,10 @@ const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rp
     },
     policies: [
       {
+        target: VRF_PROVIDER_SEPOLIA,
+        method: "request_random",
+      },
+      {
         target: manifest.contracts.find((c: any) => c.tag === "dopewars-paper_mock")!.address,
         method: "faucet",
       },
@@ -140,6 +144,12 @@ const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rp
       {
         target: manifest.contracts.find((c: any) => c.tag === "dopewars-laundromat")!.address,
         method: "claim",
+      },
+      //
+    
+      {
+        target: manifest.contracts.find((c: any) => c.tag === "dopewars-predictoor")!.address,
+        method: "predictoor",
       },
     ],
   }) as unknown as InjectedConnector;

@@ -52,6 +52,7 @@ mod systems {
     }
     
     mod predictoor;
+    mod slot;
     mod devtools;
 }
 

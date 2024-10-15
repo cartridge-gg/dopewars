@@ -1,6 +1,8 @@
 
 [env]
-rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
+rpc_url = "https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_7"
+account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
+keystore = "../../../sozo_acc"
 
 [world]
 name = "Dope Wars"

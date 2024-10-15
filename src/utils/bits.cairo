@@ -66,21 +66,7 @@ impl BitsImpl of BitsTrait {
 
 #[generate_trait]
 impl BitsMathImpl of BitsMathTrait {
-    // fn fpow(x: u256, n: u8) -> u256 {
-    //     let y = x;
-    //     if n == 0 {
-    //         return 1;
-    //     }
-    //     if n == 1 {
-    //         return x;
-    //     }
-    //     let double = Self::fpow(y * x, n / 2);
-    //     if (n % 2) == 1 {
-    //         return x * double;
-    //     }
-    //     return double;
-    // }
-
+   
     fn mask<T, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(size: u8) -> T {
         let mask = pow2_const(size) - 1;
         mask.try_into().unwrap()

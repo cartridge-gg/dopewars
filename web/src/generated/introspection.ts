@@ -23,6 +23,7 @@
       "dopewars_RyoConfig",
       "dopewars_Season",
       "dopewars_SeasonSettings",
+      "dopewars_SlotMachine",
       "dopewars_SortedList",
       "dopewars_SortedListItem"
     ]

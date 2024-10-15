@@ -208,6 +208,8 @@ export class ConfigStoreClass {
       calldata: [],
     });
 
+    // getConfig = 
+
     // const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
 
     // const contract: TypedContractV2<typeof configAbi> = new Contract(

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cartridge/connector':
-        specifier: ^0.3.44
-        version: 0.3.44(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
+        specifier: ^0.3.46
+        version: 0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
       '@chakra-ui/anatomy':
         specifier: ^2.1.1
         version: 2.2.2
@@ -18,14 +18,14 @@ importers:
         specifier: ^2.8.1
         version: 2.8.2(@emotion/react@11.11.3(@types/react@18.0.28)(react@18.2.0))(@emotion/styled@11.11.0(@emotion/react@11.11.3(@types/react@18.0.28)(react@18.2.0))(@types/react@18.0.28)(react@18.2.0))(@types/react@18.0.28)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@dojoengine/core':
-        specifier: v1.0.0-alpha.12
-        version: 1.0.0-alpha.12(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
+        specifier: v1.0.0-alpha.17
+        version: 1.0.0-alpha.17(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
       '@dojoengine/create-burner':
-        specifier: v1.0.0-alpha.12
-        version: 1.0.0-alpha.12(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
+        specifier: v1.0.0-alpha.17
+        version: 1.0.0-alpha.17(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
       '@dojoengine/utils':
-        specifier: v1.0.0-alpha.12
-        version: 1.0.0-alpha.12(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)(zod@3.22.4)
+        specifier: v1.0.0-alpha.17
+        version: 1.0.0-alpha.17(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)(zod@3.23.8)
       '@emotion/react':
         specifier: ^11.10.6
         version: 11.11.3(@types/react@18.0.28)(react@18.2.0)
@@ -816,14 +816,14 @@ packages:
     resolution: {integrity: sha512-+uarb83brBzPKN38NX1MkB6vb6+mwvR6amUulqAE7ccQw1pEl+bCia9TbdG1lsnFP7lZySvUn37CHyXQdfTwzg==}
     engines: {node: '>=6.9.0'}
 
-  '@cartridge/account-wasm@0.3.44':
-    resolution: {integrity: sha512-nC4nSk1P9FIHzbTnjNxhU0ChwjQ6NUJTOUgRHt6l3390W5sNEL7rbXMi6gWox3780C5NGd+G+Z38iZ9zXYTsHg==}
+  '@cartridge/account-wasm@0.3.46':
+    resolution: {integrity: sha512-XK/1yE0U/4v9UXelkOEmW1DNbFXikWnifm9aZQ9JfT2SrNcOM3DTMHQZXMbL217RzxM7yE8KqDVVGwN0//Ya7Q==}
 
-  '@cartridge/connector@0.3.44':
-    resolution: {integrity: sha512-aF3VSJauX+G717X/7iIGsVj48mGAZTKws+aIgrOZDf2Tp0mHNo4AaCZSvFAdhobyyz/YZqagEOzAjGZd2hzshA==}
+  '@cartridge/connector@0.3.46':
+    resolution: {integrity: sha512-iYfYdp6gaFJ8sKSFE4DpdVQJZj1tMroaeES76nC6U5aVQM8uz8OLtFB2AdNx/VO5QoGBB+6YbHyFffRCuVeaOg==}
 
-  '@cartridge/controller@0.3.44':
-    resolution: {integrity: sha512-T4KBdf8L3Z5Lk4Q0njnOXN/Kn9Rm1nF8abc7vKJIikiOCK2Sq0bzVpKoQBkUGmbJbu8m71rE+pf1qX8VWNuKYA==}
+  '@cartridge/controller@0.3.46':
+    resolution: {integrity: sha512-xTr6u0dMIf6oYBf8PeF6edVND2QWWrjrHb+qUJ3taco6OEUFR0uEc2TfEr/PS7tTA1rIlgXJIeWP3VLRHz+IBg==}
 
   '@cartridge/penpal@6.2.3':
     resolution: {integrity: sha512-K8h9VqBfFPXcAFQNnvgBnejF/dp7249pS4jXu3NhNYR6JqMQxtcrDqfnPmJvbF4ECEBs+8Z2UiwlRQiKt5nNsg==}
@@ -1335,14 +1335,14 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dojoengine/core@1.0.0-alpha.12':
-    resolution: {integrity: sha512-KuinebMRPrsGebpQqW8oXVYRaCiUOdngjr4vN6WaWkUcyvFRfeJqzCemQdgqtOwvZZKjo6UIQNvYWPsuzjcxnA==}
+  '@dojoengine/core@1.0.0-alpha.17':
+    resolution: {integrity: sha512-P9RXZQjNdWMh6mgUYLJ8okWI/KLt57VK73XgJRRqU1yWcQgR/f9OYXDTYKpvlHcZ2rmevOVB6KW5VNXl9KTmSA==}
     hasBin: true
     peerDependencies:
       starknet: 6.11.0
 
-  '@dojoengine/create-burner@1.0.0-alpha.12':
-    resolution: {integrity: sha512-+kXiu1iwif/P9RlG/+jmZDFiS3Xz0wLINZx3+pv7jKcG2Vuxxxdiq4YfHlgAnHXQVvGbeVf/PLD7MCgdMbCiPA==}
+  '@dojoengine/create-burner@1.0.0-alpha.17':
+    resolution: {integrity: sha512-/zeGpTe3m8nB5pm+y2dhjpGVjjfSSxa4VKhtq9Tu8FcknkDG72BN/tKiAdeuMYdnUGApY5XZE7HcY64KdkU8LQ==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -1351,8 +1351,8 @@ packages:
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
 
-  '@dojoengine/utils@1.0.0-alpha.12':
-    resolution: {integrity: sha512-l2+mFzDYZwTZsCqkmmu07ImN25qzTjQ7rTOz5UzCrrPkb1tQMBvK8137Ufict5ABBIvZyOExS6QVYKe++Bu5YQ==}
+  '@dojoengine/utils@1.0.0-alpha.17':
+    resolution: {integrity: sha512-S2+ch6+9A3N2bJz4r1zwXfNehZkJIqYjRkSoPkLLEi2ucgWtwneUbsLkgHKkxDuTZCTvFKFWCfjRYHgV9472Fg==}
     peerDependencies:
       starknet: 6.11.0
 
@@ -1832,6 +1832,15 @@ packages:
   '@latticexyz/utils@2.0.12':
     resolution: {integrity: sha512-AwniovUlWY7YL92Mjz/3R0V9g8c5wYg5t3agRmMZ9wgktUB6BYZC65n+sKp88wUuN3DrMLb51UFZOycGh0JD2w==}
 
+  '@latticexyz/utils@2.2.11':
+    resolution: {integrity: sha512-EQkGpHUUSfN0i51d3tOUUP/bDZcFJxiG/i264s+qaeMSHKveirn3GvYDxH6WC375Srb6zSWbCGNRD8STFv5LLw==}
+
+  '@module-federation/runtime@0.1.21':
+    resolution: {integrity: sha512-/p4BhZ0SnjJuiL0wwu+FebFgIUJ9vM+oCY7CyprUHImyi/Y23ulI61WNWMVrKQGgdMoXQDQCL8RH4EnrVP2ZFw==}
+
+  '@module-federation/sdk@0.1.21':
+    resolution: {integrity: sha512-r7xPiAm+O4e+8Zvw+8b4ToeD0D0VJD004nHmt+Y8r/l98J2eA6di72Vn1FeyjtQbCrFtiMw3ts/dlqtcmIBipw==}
+
   '@next/bundle-analyzer@14.1.4':
     resolution: {integrity: sha512-IpF/18HcAOcfHRr24tqPOUpMmVKIqvkCxIubMeRYWCXs3jm7niPGrt8Mu74yMDzfGlUwgQA6Xd6BUc5+jQxcEg==}
 
@@ -1907,6 +1916,10 @@ packages:
   '@noble/curves@1.4.0':
     resolution: {integrity: sha512-p+4cb332SFCrReJkCYe8Xzm0OWi4Jji5jVdIZRL/PmacmDkFNw6MrrV+gGpiPxLHbV+zKFRywUWbaseT+tZRXg==}
 
+  '@noble/curves@1.6.0':
+    resolution: {integrity: sha512-TlaHRXDehJuRNR9TfZDNQ45mMEd5dwUwmicsafcIX4SsNiqnCHKjE/1alYPd/lDRVhxdhUAlv8uEhMCI5zjIJQ==}
+    engines: {node: ^14.21.3 || >=16}
+
   '@noble/hashes@1.3.0':
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
 
@@ -1921,6 +1934,10 @@ packages:
   '@noble/hashes@1.4.0':
     resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
+
+  '@noble/hashes@1.5.0':
+    resolution: {integrity: sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==}
+    engines: {node: ^14.21.3 || >=16}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2082,11 +2099,14 @@ packages:
   '@scure/base@1.1.6':
     resolution: {integrity: sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==}
 
+  '@scure/base@1.1.9':
+    resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
+
   '@scure/bip32@1.3.2':
     resolution: {integrity: sha512-N1ZhksgwD3OBlwTv3R6KFEcPojl/W4ElJOeCZdi+vuI5QmTFwLq3OFf2zd2ROpKvxFdgZ6hUpb0dx9bVNEwYCA==}
 
-  '@scure/bip32@1.4.0':
-    resolution: {integrity: sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==}
+  '@scure/bip32@1.5.0':
+    resolution: {integrity: sha512-8EnFYkqEQdnkuGBVpCzKxyIwDCBLDVj3oiX0EKUFre/tOjL/Hqba1D6n/8RcmaQy4f95qQFrO2A8Sr6ybh4NRw==}
 
   '@scure/bip39@1.2.1':
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
@@ -3366,6 +3386,11 @@ packages:
     peerDependencies:
       starknet: ^5.18.0
 
+  get-starknet-core@3.3.3:
+    resolution: {integrity: sha512-IscL4lAigJpc/9Idkg07sdyUOXkB+/goTDQm8EhMGn/nIAW4rn04d+D47ils75drNQIfZZKDIIZrWrbIKvjoWA==}
+    peerDependencies:
+      starknet: ^5.18.0
+
   get-starknet-core@4.0.0-next.5:
     resolution: {integrity: sha512-zZ3i4E5UYF1f04fgkwfaVC0uj1pvdBlzsDqXEAfb4jc1WO4zM7rIm4XAUqdMwVSr4CBend5RM7U+zv166fBNYg==}
 
@@ -4052,8 +4077,8 @@ packages:
   match-sorter@6.3.3:
     resolution: {integrity: sha512-sgiXxrRijEe0SzHKGX4HouCpfHRPnqteH42UdMEW7BlWy990ZkzcvonJGv4Uu9WE7Y1f8Yocm91+4qFPCbmNww==}
 
-  mathjs@12.4.2:
-    resolution: {integrity: sha512-lW14EzwAFgbNN7AZikxplmhs7wiXDhMphBOGCA3KS6T29ECEkHJsBtbEW5cnCz7sXtl4nDyvTdR+DqVsZyiiEw==}
+  mathjs@12.4.3:
+    resolution: {integrity: sha512-oHdGPDbp7gO873xxG90RLq36IuicuKvbpr/bBG5g9c8Obm/VsKVrK9uoRZZHUodohzlnmCEqfDzbR3LH6m+aAQ==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -5605,6 +5630,9 @@ packages:
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
   zustand@4.4.7:
     resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
     engines: {node: '>=12.7.0'}
@@ -6434,11 +6462,11 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@cartridge/account-wasm@0.3.44': {}
+  '@cartridge/account-wasm@0.3.46': {}
 
-  '@cartridge/connector@0.3.44(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
+  '@cartridge/connector@0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
     dependencies:
-      '@cartridge/controller': 0.3.44(encoding@0.1.13)
+      '@cartridge/controller': 0.3.46(encoding@0.1.13)
       '@starknet-react/core': 2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.11.0(encoding@0.1.13))
       starknet: 6.11.0(encoding@0.1.13)
     transitivePeerDependencies:
@@ -6446,9 +6474,9 @@ snapshots:
       - get-starknet-core
       - react
 
-  '@cartridge/controller@0.3.44(encoding@0.1.13)':
+  '@cartridge/controller@0.3.46(encoding@0.1.13)':
     dependencies:
-      '@cartridge/account-wasm': 0.3.44
+      '@cartridge/account-wasm': 0.3.46
       '@cartridge/penpal': 6.2.3
       base64url: 3.0.1
       cbor-x: 1.5.9
@@ -7181,23 +7209,23 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dojoengine/core@1.0.0-alpha.12(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)':
+  '@dojoengine/core@1.0.0-alpha.17(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)':
     dependencies:
-      '@dojoengine/recs': 2.0.13(typescript@5.2.2)(zod@3.22.4)
+      '@dojoengine/recs': 2.0.13(typescript@5.2.2)(zod@3.23.8)
       starknet: 6.2.0(encoding@0.1.13)
-      zod: 3.22.4
+      zod: 3.23.8
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
 
-  '@dojoengine/create-burner@1.0.0-alpha.12(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)':
+  '@dojoengine/create-burner@1.0.0-alpha.17(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)':
     dependencies:
-      '@dojoengine/core': 1.0.0-alpha.12(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
-      '@scure/bip32': 1.4.0
-      '@starknet-react/core': 2.3.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))
+      '@dojoengine/core': 1.0.0-alpha.17(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)
+      '@scure/bip32': 1.5.0
+      '@starknet-react/core': 2.3.0(get-starknet-core@3.3.3(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))
       encoding: 0.1.13
-      get-starknet-core: 3.2.0(starknet@6.2.0(encoding@0.1.13))
+      get-starknet-core: 3.3.3(starknet@6.2.0(encoding@0.1.13))
       js-cookie: 3.0.5
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -7207,9 +7235,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@dojoengine/recs@2.0.13(typescript@5.2.2)(zod@3.22.4)':
+  '@dojoengine/recs@2.0.13(typescript@5.2.2)(zod@3.23.8)':
     dependencies:
-      '@latticexyz/schema-type': 2.0.12(typescript@5.2.2)(zod@3.22.4)
+      '@latticexyz/schema-type': 2.0.12(typescript@5.2.2)(zod@3.23.8)
       '@latticexyz/utils': 2.0.12
       mobx: 6.12.0
       rxjs: 7.5.5
@@ -7219,11 +7247,11 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@dojoengine/utils@1.0.0-alpha.12(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)(zod@3.22.4)':
+  '@dojoengine/utils@1.0.0-alpha.17(starknet@6.2.0(encoding@0.1.13))(typescript@5.2.2)(zod@3.23.8)':
     dependencies:
-      '@dojoengine/recs': 2.0.13(typescript@5.2.2)(zod@3.22.4)
-      '@latticexyz/utils': 2.0.12
-      mathjs: 12.4.2
+      '@dojoengine/recs': 2.0.13(typescript@5.2.2)(zod@3.23.8)
+      '@latticexyz/utils': 2.2.11
+      mathjs: 12.4.3
       micro-starknet: 0.2.3
       starknet: 6.2.0(encoding@0.1.13)
     transitivePeerDependencies:
@@ -7964,10 +7992,10 @@ snapshots:
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
-  '@latticexyz/schema-type@2.0.12(typescript@5.2.2)(zod@3.22.4)':
+  '@latticexyz/schema-type@2.0.12(typescript@5.2.2)(zod@3.23.8)':
     dependencies:
-      abitype: 1.0.0(typescript@5.2.2)(zod@3.22.4)
-      viem: 2.9.20(typescript@5.2.2)(zod@3.22.4)
+      abitype: 1.0.0(typescript@5.2.2)(zod@3.23.8)
+      viem: 2.9.20(typescript@5.2.2)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -7979,6 +8007,18 @@ snapshots:
       mobx: 6.12.0
       proxy-deep: 3.1.1
       rxjs: 7.5.5
+
+  '@latticexyz/utils@2.2.11':
+    dependencies:
+      mobx: 6.12.0
+      proxy-deep: 3.1.1
+      rxjs: 7.5.5
+
+  '@module-federation/runtime@0.1.21':
+    dependencies:
+      '@module-federation/sdk': 0.1.21
+
+  '@module-federation/sdk@0.1.21': {}
 
   '@next/bundle-analyzer@14.1.4':
     dependencies:
@@ -8036,6 +8076,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.4.0
 
+  '@noble/curves@1.6.0':
+    dependencies:
+      '@noble/hashes': 1.5.0
+
   '@noble/hashes@1.3.0': {}
 
   '@noble/hashes@1.3.2': {}
@@ -8043,6 +8087,8 @@ snapshots:
   '@noble/hashes@1.3.3': {}
 
   '@noble/hashes@1.4.0': {}
+
+  '@noble/hashes@1.5.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -8251,17 +8297,19 @@ snapshots:
 
   '@scure/base@1.1.6': {}
 
+  '@scure/base@1.1.9': {}
+
   '@scure/bip32@1.3.2':
     dependencies:
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.3
       '@scure/base': 1.1.6
 
-  '@scure/bip32@1.4.0':
+  '@scure/bip32@1.5.0':
     dependencies:
-      '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
-      '@scure/base': 1.1.6
+      '@noble/curves': 1.6.0
+      '@noble/hashes': 1.5.0
+      '@scure/base': 1.1.9
 
   '@scure/bip39@1.2.1':
     dependencies:
@@ -8283,12 +8331,12 @@ snapshots:
 
   '@starknet-react/chains@0.1.7': {}
 
-  '@starknet-react/core@2.3.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))':
+  '@starknet-react/core@2.3.0(get-starknet-core@3.3.3(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))':
     dependencies:
       '@starknet-react/chains': 0.1.7
       '@tanstack/react-query': 5.24.1(react@18.2.0)
       eventemitter3: 5.0.1
-      get-starknet-core: 3.2.0(starknet@6.2.0(encoding@0.1.13))
+      get-starknet-core: 3.3.3(starknet@6.2.0(encoding@0.1.13))
       immutable: 4.3.4
       react: 18.2.0
       starknet: 6.2.0(encoding@0.1.13)
@@ -8587,10 +8635,10 @@ snapshots:
       fs-extra: 10.1.0
       yargs: 17.7.2
 
-  abitype@1.0.0(typescript@5.2.2)(zod@3.22.4):
+  abitype@1.0.0(typescript@5.2.2)(zod@3.23.8):
     optionalDependencies:
       typescript: 5.2.2
-      zod: 3.22.4
+      zod: 3.23.8
 
   acorn-import-assertions@1.9.0(acorn@8.11.3):
     dependencies:
@@ -9434,7 +9482,7 @@ snapshots:
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.36.0)
       eslint-plugin-react: 7.34.1(eslint@8.36.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.36.0)
@@ -9458,7 +9506,7 @@ snapshots:
       enhanced-resolve: 5.16.0
       eslint: 8.36.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.3
       is-core-module: 2.13.1
@@ -9480,7 +9528,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -9829,6 +9877,11 @@ snapshots:
 
   get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)):
     dependencies:
+      starknet: 6.2.0(encoding@0.1.13)
+
+  get-starknet-core@3.3.3(starknet@6.2.0(encoding@0.1.13)):
+    dependencies:
+      '@module-federation/runtime': 0.1.21
       starknet: 6.2.0(encoding@0.1.13)
 
   get-starknet-core@4.0.0-next.5:
@@ -10531,7 +10584,7 @@ snapshots:
       '@babel/runtime': 7.23.8
       remove-accents: 0.5.0
 
-  mathjs@12.4.2:
+  mathjs@12.4.3:
     dependencies:
       '@babel/runtime': 7.24.6
       complex.js: 2.1.1
@@ -11863,14 +11916,14 @@ snapshots:
     dependencies:
       semver: 7.6.0
 
-  viem@2.9.20(typescript@5.2.2)(zod@3.22.4):
+  viem@2.9.20(typescript@5.2.2)(zod@3.23.8):
     dependencies:
       '@adraffy/ens-normalize': 1.10.0
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
       '@scure/bip32': 1.3.2
       '@scure/bip39': 1.2.1
-      abitype: 1.0.0(typescript@5.2.2)(zod@3.22.4)
+      abitype: 1.0.0(typescript@5.2.2)(zod@3.23.8)
       isows: 1.0.3(ws@8.13.0)
       ws: 8.13.0
     optionalDependencies:
@@ -12226,6 +12279,8 @@ snapshots:
       zod: 3.22.4
 
   zod@3.22.4: {}
+
+  zod@3.23.8: {}
 
   zustand@4.4.7(@types/react@18.0.28)(react@18.2.0):
     dependencies:

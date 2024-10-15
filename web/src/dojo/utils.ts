@@ -2,7 +2,7 @@ export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-import { StarkVRF } from "stark-vrf-wasm";
+// import { StarkVRF } from "stark-vrf-wasm";
 import { AccountInterface, BlockTag, Call, CallData, hash, selector } from "starknet";
 
 enum Source {
@@ -36,7 +36,7 @@ export const buildVrfCalls = async ({
 
   if (vrfProviderSecret) {
     const chainId = await account.getChainId();
- 
+
     const nonceStorageSlot = hash.computePedersenHash(
       selector.getSelectorFromName("VrfProvider_nonces"),
       account.address,
@@ -48,8 +48,10 @@ export const buildVrfCalls = async ({
     console.log(nonceStorageSlot);
     console.log(nonce);
     console.log(seed);
-  
-    const vrf = StarkVRF.new(vrfProviderSecret);
+
+    // const vrf = StarkVRF.new(vrfProviderSecret);
+
+    const vrf = (await import("stark-vrf-wasm")).StarkVRF.new(vrfProviderSecret);
     const proof = vrf.prove(vrfProviderSecret, seed);
     const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);
 

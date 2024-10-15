@@ -468,6 +468,7 @@ export const useSystems = (): SystemsInterface => {
 
   const predictoor = useCallback(
     async (drug: number) => {
+ 
       const predictoorAddress = dojoProvider.manifest.contracts.find(
         (i: any) => i.tag === `${DW_NS}-predictoor`,
       ).address;

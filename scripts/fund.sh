@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+pushd $(dirname "$0")/..
+
+sozo execute --world 0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14 \
+ --account-address 0x6b86e40118f29ebe393a75469b4d926c7a44c2e2681b6d319520b7c1156d114 \
+ --private-key 0x1c9053c053edf324aec366a34c6901b1095b07af69495bffec7d7fe21effb1b \
+ 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7 transfer \
+ -c 0x4898bcbd19688e76a62f28c735ede49513bdc9e5721d2fc611e36933c6b690f,u256:10000000000000000 -vvv

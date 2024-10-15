@@ -40,7 +40,8 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
             fontSize="14px"
             onClick={() => {
               if (connector?.id === "controller") {
-                (connector as unknown as CartridgeConnector).openMenu();
+                // broken..
+                (connector as unknown as CartridgeConnector).controller.openProfile()
               } else {
                 uiStore.openAccountDetails();
               }
