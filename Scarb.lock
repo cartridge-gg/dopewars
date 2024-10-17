@@ -2,6 +2,15 @@
 version = 1
 
 [[package]]
+name = "cartridge_vrf"
+version = "0.1.0"
+dependencies = [
+ "openzeppelin",
+ "snforge_std",
+ "stark_vrf",
+]
+
+[[package]]
 name = "dojo"
 version = "1.0.0-alpha.4"
 source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.16#3b3a78cd8239ca2ee524c49c83f36db4d79cb4bc"
@@ -103,9 +112,9 @@ dependencies = [
 name = "rollyourown"
 version = "0.1.0"
 dependencies = [
+ "cartridge_vrf",
  "dojo",
  "origami_token",
- "vrf_contracts",
 ]
 
 [[package]]
@@ -117,12 +126,3 @@ source = "git+https://github.com/foundry-rs/starknet-foundry.git?tag=v0.26.0#50e
 name = "stark_vrf"
 version = "0.1.0"
 source = "git+https://github.com/dojoengine/stark-vrf.git#96d6d2a88b1ef46c4a285d0ccc334237205edae3"
-
-[[package]]
-name = "vrf_contracts"
-version = "0.1.0"
-dependencies = [
- "openzeppelin",
- "snforge_std",
- "stark_vrf",
-]

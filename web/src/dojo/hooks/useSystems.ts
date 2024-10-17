@@ -43,6 +43,10 @@ export interface SystemsInterface {
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
   // predictoor
   predictoor: (drug: number) => Promise<SystemExecuteResult>;
+  // slot
+  createSlot: (gameId: number) => Promise<SystemExecuteResult>;
+  rollSlot: (gameId: number) => Promise<SystemExecuteResult>;
+  cheatSlot: (gameId: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
@@ -194,14 +198,23 @@ export const useSystems = (): SystemsInterface => {
       };
 
       const createGameCall = {
-        contractName: `game`,
-        //  contractAddress: gameAddress,
+        contractAddress: gameAddress,
         entrypoint: "create_game",
         calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName)]),
       };
 
-      const { hash, events, parsedEvents } = await executeAndReceipt([approvalCall, createGameCall]);
+      const createGameCalls = await buildVrfCalls({
+        account: account!,
+        call: createGameCall,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
 
+      const calls = [approvalCall, ...createGameCalls];
+      console.log(calls);
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+      console.log(parsedEvents);
       const gameCreated = parsedEvents.find((e) => e.eventType === WorldEvents.GameCreated) as GameCreatedData;
 
       return {
@@ -468,7 +481,6 @@ export const useSystems = (): SystemsInterface => {
 
   const predictoor = useCallback(
     async (drug: number) => {
- 
       const predictoorAddress = dojoProvider.manifest.contracts.find(
         (i: any) => i.tag === `${DW_NS}-predictoor`,
       ).address;
@@ -477,6 +489,97 @@ export const useSystems = (): SystemsInterface => {
         contractAddress: predictoorAddress,
         entrypoint: "predictoor",
         calldata: [drug],
+      };
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+
+      return {
+        hash,
+        events,
+        parsedEvents,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  //
+  //
+  //
+
+  const createSlot = useCallback(
+    async (gameId: number) => {
+      const slotMachineAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.tag === `${DW_NS}-slotmachine`,
+      ).address;
+
+      const call = {
+        contractAddress: slotMachineAddress,
+        entrypoint: "create",
+        calldata: [gameId],
+      };
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+
+      return {
+        hash,
+        events,
+        parsedEvents,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  const rollSlot = useCallback(
+    async (gameId: number) => {
+      const slotMachineAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.tag === `${DW_NS}-slotmachine`,
+      ).address;
+
+      const call = {
+        contractAddress: slotMachineAddress,
+        entrypoint: "roll",
+        calldata: [gameId],
+      };
+      const calls = await buildVrfCalls({
+        account: account!,
+        call,
+        vrfProviderAddress: selectedChain.vrfProviderAddress,
+        vrfProviderSecret: selectedChain.vrfProviderSecret,
+      });
+
+      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+
+      return {
+        hash,
+        events,
+        parsedEvents,
+      };
+    },
+    [executeAndReceipt],
+  );
+
+  const cheatSlot = useCallback(
+    async (gameId: number) => {
+      const slotMachineAddress = dojoProvider.manifest.contracts.find(
+        (i: any) => i.tag === `${DW_NS}-slotmachine`,
+      ).address;
+
+      const call = {
+        contractAddress: slotMachineAddress,
+        entrypoint: "cheat",
+        calldata: [gameId],
       };
       const calls = await buildVrfCalls({
         account: account!,
@@ -560,6 +663,10 @@ export const useSystems = (): SystemsInterface => {
     updateDrugConfig,
     //
     predictoor,
+    //
+    createSlot,
+    rollSlot,
+    cheatSlot,
     //
     failingTx,
     createFakeGame,

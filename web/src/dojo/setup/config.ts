@@ -9,8 +9,8 @@ import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 import { DW_NS } from "../hooks";
 
-export const VRF_PROVIDER_SEPOLIA = "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48";
-export const VRF_PROVIDER_MAINNET = "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48";
+export const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
+export const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 

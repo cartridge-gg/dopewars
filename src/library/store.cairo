@@ -9,7 +9,8 @@ use rollyourown::{
         settings::{SeasonSettings, EncountersMode, DrugsMode}
     },
     models::{game::Game, season::Season, game_store_packed::GameStorePacked,},
-    packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer}
+    packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer},
+    systems::slot::SlotMachine
 };
 
 
@@ -32,6 +33,7 @@ trait IStore<T> {
     fn season_settings(self: @T, version: u16) -> SeasonSettings;
     fn game(self: @T, game_id: u32, player_id: ContractAddress) -> Game;
     fn game_store_packed(self: @T, game_id: u32, player_id: ContractAddress) -> GameStorePacked;
+    fn slot_machine(self: @T, game_id: u32) -> SlotMachine;
     //
     //
     //
@@ -46,6 +48,7 @@ trait IStore<T> {
     fn save_season_settings(self: @T, season_settings: SeasonSettings);
     fn set_game(self: @T, game: Game);
     fn set_game_store_packed(self: @T, game_store_packed: GameStorePacked);
+    fn set_slot_machine(self: @T, machine: SlotMachine);
 }
 
 const UNIVERSAL_ANSWER: u8 = 0; //42;
@@ -67,7 +70,7 @@ mod store {
             game_store::{GameStore, GameStorePackerImpl, GameStoreUnpackerImpl, GameMode},
             player::{Player, PlayerImpl},
         },
-        traits::Packer
+        traits::Packer, systems::slot::SlotMachine
     };
 
     use debug::PrintTrait;
@@ -151,6 +154,10 @@ mod store {
             get!(self.world(), (game_id, player_id), GameStorePacked)
         }
 
+        fn slot_machine(self: @ContractState, game_id: u32) -> SlotMachine {
+            get!(self.world(), (game_id), SlotMachine)
+        }
+       
         //
         // setter
         //
@@ -205,6 +212,10 @@ mod store {
 
         fn set_game_store_packed(self: @ContractState, game_store_packed: GameStorePacked) {
             set!(self.world(), (game_store_packed));
+        }
+
+        fn set_slot_machine(self: @ContractState, machine: SlotMachine) {
+            set!(self.world(), (machine))
         }
     }
 

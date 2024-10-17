@@ -151,6 +151,14 @@ const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rp
         target: manifest.contracts.find((c: any) => c.tag === "dopewars-predictoor")!.address,
         method: "predictoor",
       },
+      {
+        target: manifest.contracts.find((c: any) => c.tag === "dopewars-slotmachine")!.address,
+        method: "create",
+      },
+      {
+        target: manifest.contracts.find((c: any) => c.tag === "dopewars-slotmachine")!.address,
+        method: "roll",
+      },
     ],
   }) as unknown as InjectedConnector;
 };

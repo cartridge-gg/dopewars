@@ -1234,10 +1234,10 @@
         ]
       }
     ],
-    "address": "0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe",
-    "transaction_hash": "0x3647a1c9dcf2e57634088023effe5b4667904812d5e7b00bf9e0523df4cb8ce",
-    "block_number": 237481,
-    "seed": "seposeed",
+    "address": "0x3c546d141a8727eabfd4c91cbb8e8bac7f698b98e1e42069d0f3ce29db8abf6",
+    "transaction_hash": "0xc943f9e96c6f3e431b627099ce0969a291d5978871b73d2f191986352948d1",
+    "block_number": null,
+    "seed": "sepo2seed",
     "metadata": {
       "profile_name": "ryosepolia",
       "rpc_url": "https://api.cartridge.gg/x/starknet/sepolia"
@@ -1255,7 +1255,7 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x3c4a35b562d1126b1b7b6e5741a699a258bdf55903d747cfdcc3e5748070e45",
+      "address": "0x382bcef3c035f9e8d71032def5b8097166e0008f73c9245140e8521b529118f",
       "class_hash": "0x7ce534a34689d75505c1d6abcf1111b971bc225a06e9ba4cde9375a75c91868",
       "original_class_hash": "0x7ce534a34689d75505c1d6abcf1111b971bc225a06e9ba4cde9375a75c91868",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -2065,7 +2065,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x1584c84c0574f09a1ed65284ccf58d0fe48835cd59b007117d9ea876d03e846",
+      "address": "0xe40a987288f6b80ad13e07b685cee5208d1df578a2232797536592827a0ffd",
       "class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
       "original_class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -2334,7 +2334,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x3729fd1cbcd302f6e3df68e46af7dd0c4f0b0f0d2c56a454d55ec1a38f3a8b3",
+      "address": "0x138ebc68d9c752896da534e0fe00a132d883761924a5145e49d068fa1f422da",
       "class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
       "original_class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -3275,7 +3275,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x18e10ed8dd1fa00ea7d8136e054a447555291774737d88f2de10278ec028ecd",
+      "address": "0x45590b09ff85ede5b9ce47410b1c2fc7fd05ef581956208ccdf177b4d5fbd65",
       "class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
       "original_class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -3600,7 +3600,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x7bb65c0f5f840b3c95e7c0ae01aaf0402003807c33db00ea83cbff970b418eb",
+      "address": "0x2217a939c540786eaadd1b1e947468d1ded3e679f3c5cdc16fc3897a063100",
       "class_hash": "0x6546d78818627094a4104ad8e7f2ab28774ced3135270f182a37278ea82d72d",
       "original_class_hash": "0x6546d78818627094a4104ad8e7f2ab28774ced3135270f182a37278ea82d72d",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4275,7 +4275,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x5a46afd0c940d58e619a98cdba41e850dba812f84dc9cbe92a3a0b502c41b17",
+      "address": "0x1020355bf7b629360e109fdbdab23b8a8e90af97b31b28046c4dc18eb568c83",
       "class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
       "original_class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4572,7 +4572,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x9c34b77a4d38d990914ad4b2079022cbcfe33de4432ed42f56dd87066a8da9",
+      "address": "0x457a1cfb8ae6390325256f015c88c84ac6c210ce4d67bc0099e4f869ed8c8e0",
       "class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
       "original_class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4972,7 +4972,7 @@
         "$contract_address:dopewars-paper_mock",
         "0x4fcb420d3fe574305268cece10571522bdb56981553d7450187e6f29c66e34e",
         "$contract_address:dopewars-laundromat",
-        "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48"
+        "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f"
       ],
       "tag": "dopewars-ryo",
       "systems": [
@@ -4983,9 +4983,313 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0xddc40156a82ab5e9ba2daddf59e0cd93f76c86ba69b80b064295ec35b763be",
-      "class_hash": "0x27aa0c66f08a32efea5dc6b8901412b1b8de8591a9c04054e21671ce139e339",
-      "original_class_hash": "0x27aa0c66f08a32efea5dc6b8901412b1b8de8591a9c04054e21671ce139e339",
+      "address": "0x65b10c67ecd26c25e50c2f239130c770457048e559b1cb19222cc526c92144e",
+      "class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
+      "original_class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
+      "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "ContractImpl",
+          "interface_name": "dojo::contract::contract::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::contract::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "namespace",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "tag",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "name_hash",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "namespace_hash",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "selector",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::world::world_contract::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::world_contract::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::world::world_contract::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::world_contract::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "SlotMachineImp",
+          "interface_name": "rollyourown::systems::slot::ISlotMachine"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::slot::ISlotMachine",
+          "items": [
+            {
+              "type": "function",
+              "name": "create",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "roll",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "cheat",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "IDojoInitImpl",
+          "interface_name": "rollyourown::systems::slot::slotmachine::IDojoInit"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::slot::slotmachine::IDojoInit",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_init",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradableImpl",
+          "interface_name": "dojo::contract::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::upgradeable::upgradeable::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::upgradeable::upgradeable::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::upgradeable::upgradeable::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "combi",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::slot::slotmachine::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::upgradeable::upgradeable::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "SlotMachineEvent",
+              "type": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "reads": [],
+      "writes": [
+        "dopewars-SlotMachine"
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-slotmachine",
+      "systems": [
+        "create",
+        "roll",
+        "cheat"
+      ],
+      "manifest_name": "dopewars-slotmachine-3a78d50e"
+    },
+    {
+      "kind": "DojoContract",
+      "address": "0x1b373388a72667af799f0d493dcf84c523e771807f3950cdfca8a941da007e1",
+      "class_hash": "0x432d5bd2bb5409d864c24890a986d93dacda03d089e0c7889220a7c9eafebaa",
+      "original_class_hash": "0x432d5bd2bb5409d864c24890a986d93dacda03d089e0c7889220a7c9eafebaa",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -5765,6 +6069,32 @@
           ]
         },
         {
+          "type": "struct",
+          "name": "rollyourown::systems::slot::SlotMachine",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "offset_r",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "offset_y",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "offset_o",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "credits",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::library::store::IStore",
           "items": [
@@ -5971,6 +6301,22 @@
             },
             {
               "type": "function",
+              "name": "slot_machine",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "rollyourown::systems::slot::SlotMachine"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "save_ryo_config",
               "inputs": [
                 {
@@ -6076,6 +6422,18 @@
               ],
               "outputs": [],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_slot_machine",
+              "inputs": [
+                {
+                  "name": "machine",
+                  "type": "rollyourown::systems::slot::SlotMachine"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
             }
           ]
         },
@@ -6170,7 +6528,8 @@
         "save_season",
         "save_season_settings",
         "set_game",
-        "set_game_store_packed"
+        "set_game_store_packed",
+        "set_slot_machine"
       ],
       "manifest_name": "dopewars-store-49cb8012"
     }

@@ -24,6 +24,7 @@ export const buildVrfCalls = async ({
   vrfProviderAddress: string;
   vrfProviderSecret?: string;
 }): Promise<Call[]> => {
+  if (!account) return [];
   //   fn request_random(caller: ContractAddress, source: Source) -> felt252;
   const requestRandomCall: Call = {
     contractAddress: vrfProviderAddress,
@@ -44,10 +45,10 @@ export const buildVrfCalls = async ({
 
     const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.pending);
     const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
-    console.log(chainId);
-    console.log(nonceStorageSlot);
-    console.log(nonce);
-    console.log(seed);
+    // console.log(chainId);
+    // console.log(nonceStorageSlot);
+    // console.log(nonce);
+    // console.log(seed);
 
     // const vrf = StarkVRF.new(vrfProviderSecret);
 
@@ -81,7 +82,6 @@ export const buildVrfCalls = async ({
   if (vrfProviderSecret) {
     calls.push(assertConsumedCall as Call);
   }
-
-  console.log("calls", calls);
+  // console.log("calls", calls);
   return calls;
 };

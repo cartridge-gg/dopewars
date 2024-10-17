@@ -17,7 +17,6 @@ export interface FaucetInterface {
 
 export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   const { account } = useAccount()
-  // const { clients: {dojoProvider}} = useDojoContext()
 
   const { toast } = useToast();
 

@@ -4,8 +4,8 @@ mod vrf_provider_mock {
 
     use openzeppelin::access::ownable::OwnableComponent;
 
-    use vrf_contracts::vrf_provider::vrf_provider_component::VrfProviderComponent;
-    use vrf_contracts::vrf_provider::vrf_provider_component::PublicKey;
+    use cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent;
+    use cartridge_vrf::PublicKey;
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
     component!(path: VrfProviderComponent, storage: vrf_provider, event: VrfProviderEvent);

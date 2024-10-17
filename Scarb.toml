@@ -12,7 +12,7 @@ dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.16" }
 # origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.16" }
 origami_token = { path = "../origami-dev/" }
 starknet = "2.7.0"
-vrf_contracts = { path = "../vrf-server/contracts" }
+cartridge_vrf = { path = "../vrf-server" }
 
 [scripts]
 katana = "katana --allowed-origins \"*\" -b 2000 --disable-fee --dev"
@@ -29,7 +29,7 @@ migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFI
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE"
 
 # slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.16 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.16 --world 0x3c546d141a8727eabfd4c91cbb8e8bac7f698b98e1e42069d0f3ce29db8abf6"
 
 # slot ryo1
 # slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee true"
@@ -45,7 +45,7 @@ build-external-contracts = [
     "origami_token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
     "origami_token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
     "origami_token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
-    "vrf_contracts::vrf_provider::vrf_provider::VrfProvider",
+    "cartridge_vrf::vrf_provider::vrf_provider::VrfProvider",
 ]
 
 [profile.internal]

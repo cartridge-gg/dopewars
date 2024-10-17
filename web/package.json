@@ -24,6 +24,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.17",
     "@dojoengine/create-burner": "v1.0.0-alpha.17",
+    "@dojoengine/torii-client": "v1.0.0-alpha.17",
     "@dojoengine/utils": "v1.0.0-alpha.17",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",

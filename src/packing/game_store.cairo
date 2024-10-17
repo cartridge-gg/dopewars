@@ -20,7 +20,10 @@ use rollyourown::{
         player::{Player, PlayerStatus, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
     },
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
-    utils::{bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, math::{MathTrait, MathImplU8},},
+    utils::{
+        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, math::{MathTrait, MathImplU8},
+        random::{Random, RandomImpl,}
+    },
     traits::{Packable, Packer}
 };
 
@@ -42,17 +45,22 @@ struct GameStore {
 // init new game state
 #[generate_trait]
 impl GameStoreImpl of GameStoreTrait {
-    fn new(s: IStoreLibraryDispatcher, ref game: Game, ref game_config: GameConfig) -> GameStore {
+    fn new(
+        s: IStoreLibraryDispatcher,
+        ref game: Game,
+        ref game_config: GameConfig,
+        ref randomizer: Random
+    ) -> GameStore {
         GameStore {
             s,
             game,
             game_config: Option::Some(game_config),
             season_settings: Option::None,
             //
-            markets: MarketsPackedImpl::new(game.game_id),
+            markets: MarketsPackedImpl::new(randomizer.next().into()),
             items: ItemsPackedImpl::new(s, game.hustler_id),
             drugs: DrugsPackedImpl::new(),
-            wanted: WantedPackedImpl::new(game.game_id + 1),
+            wanted: WantedPackedImpl::new(randomizer.next().into()),
             player: PlayerImpl::new(ref game_config),
         }
     }

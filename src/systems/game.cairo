@@ -170,10 +170,6 @@ mod game {
         reputation: u8,
     }
 
-    pub mod Entrypoints {
-        pub const travel: felt252 = 'travel';
-        pub const decide: felt252 = 'decide';
-    }
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
@@ -182,9 +178,13 @@ mod game {
         ) {
             self.assert_not_paused();
 
+            let ryo_addresses = self.s().ryo_addresses();
+            let player_id = get_caller_address();
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let mut randomizer = RandomImpl::new(random);
+
             let world = self.world();
             let game_id = world.uuid();
-            let player_id = get_caller_address();
 
             // get season version 
             let season_manager = SeasonManagerTrait::new(self.s());
@@ -205,7 +205,7 @@ mod game {
             self.s().set_game(game);
 
             // create & save GameStorePacked
-            let game_store = GameStoreImpl::new(self.s(), ref game, ref game_config);
+            let game_store = GameStoreImpl::new(self.s(), ref game, ref game_config, ref randomizer);
             game_store.save();
 
             // emit GameCreated

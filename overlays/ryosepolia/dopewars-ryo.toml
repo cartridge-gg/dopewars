@@ -5,6 +5,6 @@ init_calldata = [
     "$contract_address:dopewars-paper_mock",
     "0x4fcb420d3fe574305268cece10571522bdb56981553d7450187e6f29c66e34e",
     "$contract_address:dopewars-laundromat",
-    "0x01adc338cc62119923df67f4b8984767f9bef92dd99bd97ea88d8d01f0e45b48", # vrf
+    "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f", # vrf
 ]
 

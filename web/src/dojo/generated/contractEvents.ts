@@ -15,6 +15,7 @@ export enum WorldEvents {
   Transfer = "0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
   Approval = "0x134692b230b9e1ffa39098904722134159652b09c5bc41d88d6698779d228ff",
   PredictoorResultEvent = "0x169abbab21cb67f3b81d2a26b8dd34d5c2628cc98b6cead6589de6235234b54",
+  SlotMachineEvent = "0x332681bdc8d1199fb3f1efdb14fa7cac585849b8c3a62acaf8f023336fb8f1a",
   OwnershipTransferred = "0x1390fd803c110ac71730ece1decfc34eb1d0088e295d4f1b125dda1e0c5b9ff",
   OwnershipTransferStarted = "0x264029018ff7e3c0552db60eb00dd04eddf84c86e9b06640ce3731b70dc0bd7",
   PublicKeyChanged = "0x16c8b31f7af929aa279692efc7d32070b422eb4e6f5b6812b1c48f1a307e3ee",
@@ -127,6 +128,13 @@ export interface PredictoorResultEventData extends BaseEventData {
         player_id: string;
 value: string;
 win: boolean;
+        }
+
+export interface SlotMachineEventData extends BaseEventData {
+        game_id: number;
+player_id: string;
+combi: string;
+payout: number;
         }
 
 export interface OwnershipTransferredData extends BaseEventData {
@@ -302,6 +310,16 @@ player_id: num.toHexString(raw.keys[1]),
 value: num.toHexString(raw.data[0]),
 win: raw.data[1] === "0x0" ? false : true,
 } as PredictoorResultEventData;
+
+case WorldEvents.SlotMachineEvent:
+return {
+event_type: WorldEvents.SlotMachineEvent,
+event_name: "SlotMachineEvent",
+game_id: Number(raw.keys[1]),
+player_id: num.toHexString(raw.keys[2]),
+combi: num.toHexString(raw.data[0]),
+payout: Number(raw.data[1]),
+} as SlotMachineEventData;
 
 case WorldEvents.OwnershipTransferred:
 return {
