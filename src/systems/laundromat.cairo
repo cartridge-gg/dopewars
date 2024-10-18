@@ -28,6 +28,28 @@ mod laundromat {
         packing::game_store::{GameStore, GameStoreImpl}
     };
 
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        NewHighScore: NewHighScore,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct NewHighScore {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        #[key]
+        season_version: u16,
+        player_name: felt252,
+        hustler_id: u16,
+        cash: u32,
+        health: u8,
+        reputation: u8,
+    }
+
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
         fn register_score(
@@ -66,7 +88,6 @@ mod laundromat {
 
             // add Game to sorted_list
             sorted_list.add(world, game, (prev_game_id, prev_player_id));
-        // TODO : emit event 
         }
 
         fn launder(self: @ContractState, season_version: u16) {
@@ -75,7 +96,7 @@ mod laundromat {
             let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
             let world = self.world();
-            let process_batch_size = 10; // around 276k steps / 10
+            let process_batch_size = 20; // around 276k steps / 10
 
             let season = self.s().season(season_version);
 
@@ -98,7 +119,7 @@ mod laundromat {
 
             // if not process, process batch_size items
             if !sorted_list.processed {
-                sorted_list.process::<Game>(world, process_batch_size); // TODO: change batch_size
+                sorted_list.process::<Game>(world, process_batch_size); 
             }
 
             // if process, create new season

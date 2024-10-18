@@ -9,7 +9,10 @@ use rollyourown::{
     },
     models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
     interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-    utils::{math::{MathImpl, MathTrait}, random::{Random, RandomTrait}},
+    utils::{
+        math::{MathImpl, MathTrait}, random::{Random, RandomTrait},
+        events::{RawEventEmitterTrait, RawEventEmitterImpl}
+    },
     library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
 };
 
@@ -57,7 +60,6 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         self.s.save_game_config(game_config);
     }
 
-    // TODO : move somewhere else
     fn on_game_start(self: SeasonManager) {
         let mut ryo_config = self.s.ryo_config();
 
@@ -108,7 +110,27 @@ impl SeasonManagerImpl of SeasonManagerTrait {
 
             // save season
             self.s.save_season(season);
-            // trigger NewHighScore event ?
+
+            // emit NewHighScore
+            self
+                .s
+                .w()
+                .emit_raw(
+                    array![
+                        selector!("NewHighScore"),
+                        Into::<u32, felt252>::into(game_store.game.game_id),
+                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+                            .into(),
+                        Into::<u16, felt252>::into(game_store.game.season_version),
+                    ],
+                    array![
+                        game_store.game.player_name.into(),
+                        Into::<u16, felt252>::into(game_store.game.hustler_id),
+                        Into::<u32, felt252>::into(game_store.player.cash),
+                        Into::<u8, felt252>::into(game_store.player.health),
+                        Into::<u8, felt252>::into(game_store.player.reputation),
+                    ]
+                );
             true
         } else {
             false

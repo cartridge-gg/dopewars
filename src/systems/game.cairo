@@ -343,7 +343,6 @@ mod game {
                         },
                     };
                 };
-        // TODO handle price impact ?
         }
 
         #[inline(always)]
