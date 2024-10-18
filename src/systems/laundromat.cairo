@@ -33,6 +33,7 @@ mod laundromat {
     #[derive(Drop, starknet::Event)]
     enum Event {
         NewHighScore: NewHighScore,
+        Claimed: Claimed,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -48,6 +49,17 @@ mod laundromat {
         cash: u32,
         health: u8,
         reputation: u8,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Claimed {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        #[key]
+        season_version: u16,
+        paper: u32,
     }
 
     #[abi(embed_v0)]
@@ -119,7 +131,7 @@ mod laundromat {
 
             // if not process, process batch_size items
             if !sorted_list.processed {
-                sorted_list.process::<Game>(world, process_batch_size); 
+                sorted_list.process::<Game>(world, process_batch_size);
             }
 
             // if process, create new season
@@ -165,20 +177,15 @@ mod laundromat {
                 .pop_front() {
                     let mut game = self.s().game(*game_id, player_id);
 
-                    // // retrieve season
-                    // let season = self.s().season(game.season_version);
-
                     // retrieve Season SortedList   
                     let list_id = game.season_version.into();
                     let mut sorted_list = SortedListImpl::get(world, list_id);
-                    // let entrants = sorted_list.size;
 
                     // check season status
                     assert(sorted_list.locked, 'season has not ended');
                     assert(sorted_list.processed, 'need more launder');
 
                     // any other check missing ?
-
                     assert(game.registered, 'unregistered game');
                     assert(game.position > 0, 'invalid position');
                     assert(!game.claimed, 'already claimed');
@@ -188,6 +195,19 @@ mod laundromat {
                     // update claimed & save
                     game.claimed = true;
                     self.s().set_game(game);
+
+                    // emit Claimed event
+                    emit!(
+                        world,
+                        (Event::Claimed(
+                            Claimed {
+                                game_id: game.game_id,
+                                player_id,
+                                season_version: game.season_version,
+                                paper: game.claimable
+                            }
+                        ))
+                    );
                 };
 
             // retrieve paper address 
@@ -197,7 +217,6 @@ mod laundromat {
             // transfer reward to player_id
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(player_id, total_claimable);
-        // TODO: event ?
         }
 
         fn claim_treasury(self: @ContractState) {
