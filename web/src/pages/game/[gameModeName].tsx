@@ -3,9 +3,17 @@ import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
 import { Arrow } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter } from "@/components/player";
-import { ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
+import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
 import { gameModeFromName, gameModeFromNameKeys } from "@/dojo/helpers";
-import { ETHER, useConfigStore, useRouterContext, useSeasonByVersion, useSystems, useTokenBalance } from "@/dojo/hooks";
+import {
+  ETHER,
+  useConfigStore,
+  useDojoContext,
+  useRouterContext,
+  useSeasonByVersion,
+  useSystems,
+  useTokenBalance,
+} from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -19,6 +27,9 @@ import { useEffect, useRef, useState } from "react";
 const New = observer(() => {
   const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
   const gameMode = gameModeFromName[gameModeName as gameModeFromNameKeys] as GameMode;
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
 
   const { account } = useAccount();
 
@@ -127,7 +138,7 @@ const New = observer(() => {
                     Play
                   </Button>
                 ) : (
-                  <PaperFaucetButton />
+                  <>{selectedChain.name != "MAINNET" && <PaperFaucetButton />}</>
                 )}
               </>
             )}
@@ -273,7 +284,7 @@ const New = observer(() => {
             /*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
               <Card p={3}>
                 <HStack gap={6} fontSize="14px">
-                  <VStack gap={0} alignItems="flex-start" minW="240px">
+                  <VStack gap={0} alignItems="center" minW="240px">
                     <HStack w="full" justifyContent="space-between">
                       <Text color="yellow.400">ENTRY FEE</Text>
                       {gameMode == GameMode.Ranked && (
@@ -298,12 +309,8 @@ const New = observer(() => {
                         </HStack>
                       </HStack>
                     )}
+                    {selectedChain.name === "MAINNET" && <BuyPaper />}
                   </VStack>
-
-                  {/* <HStack>
-                   <BuyPaper />
-                    {account && <PaperFaucet />}
-                  </HStack> */}
                 </HStack>
               </Card>
             )
