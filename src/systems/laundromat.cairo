@@ -56,6 +56,10 @@ mod laundromat {
             game.registered = true;
             self.s().set_game(game);
 
+            // handle new highscore & season version
+            let season_manager = SeasonManagerTrait::new(self.s());
+            season_manager.on_register_score(ref game_store);
+
             // retrieve Season SortedList 
             let list_id = game.season_version.into();
             let mut sorted_list = SortedListImpl::get(world, list_id);

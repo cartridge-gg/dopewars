@@ -25,7 +25,7 @@ trait SeasonManagerTrait {
     fn get_next_version_timestamp(self: SeasonManager) -> u64;
     fn new_season(self: SeasonManager, ref randomizer: Random, version: u16);
     fn on_game_start(self: SeasonManager);
-    fn on_game_over(self: SeasonManager, ref game_store: GameStore) -> bool;
+    fn on_register_score(self: SeasonManager, ref game_store: GameStore) -> bool;
 }
 
 impl SeasonManagerImpl of SeasonManagerTrait {
@@ -48,10 +48,10 @@ impl SeasonManagerImpl of SeasonManagerTrait {
     fn new_season(self: SeasonManager, ref randomizer: Random, version: u16) {
         let ryo_config = self.s.ryo_config();
 
-        let season = ryo_config.build_season(version); 
+        let season = ryo_config.build_season(version);
         let season_settings = SeasonSettingsImpl::random(ref randomizer, version);
         let game_config = season_settings.build_game_config();
-        
+
         self.s.save_season(season);
         self.s.save_season_settings(season_settings);
         self.s.save_game_config(game_config);
@@ -59,7 +59,6 @@ impl SeasonManagerImpl of SeasonManagerTrait {
 
     // TODO : move somewhere else
     fn on_game_start(self: SeasonManager) {
-        // check if current season should be historized and return season version  NOT ANYMORE
         let mut ryo_config = self.s.ryo_config();
 
         // get current season infos
@@ -94,8 +93,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
             .transfer_from(get_caller_address(), ryo_addresses.laundromat, paper_fee_eth);
     }
 
-    // rename on_register_score
-    fn on_game_over(self: SeasonManager, ref game_store: GameStore) -> bool {
+    fn on_register_score(self: SeasonManager, ref game_store: GameStore) -> bool {
         // check if new high_score & update high_score & next_version_timestamp if necessary
         let current_version = self.get_current_version();
         let mut season = self.s.season(current_version);
