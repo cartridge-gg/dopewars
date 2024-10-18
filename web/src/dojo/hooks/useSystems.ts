@@ -78,7 +78,7 @@ const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");
   if (failureReasonIndex > 0) {
     let betterMsg = msg.substring(failureReasonIndex);
-    const cairoTracebackIndex = betterMsg.indexOf("Cairo traceback");
+    const cairoTracebackIndex = betterMsg.indexOf('\\n","transaction_index');
     betterMsg = betterMsg.substring(0, cairoTracebackIndex);
     return betterMsg;
   }
@@ -138,6 +138,7 @@ export const useSystems = (): SystemsInterface => {
         // chill a bit waiting torii indexing
         await sleep(500);
       } catch (e: any) {
+        debugger;
         setIsPending(false);
         setError(e.toString());
         toast({
@@ -170,7 +171,7 @@ export const useSystems = (): SystemsInterface => {
       }
 
       const events = receipt ? getEvents(receipt) : [];
-      const parsedEvents = parseAllEvents(receipt);
+      const parsedEvents = parseAllEvents(selectedChain.manifest, receipt);
 
       setIsPending(false);
 
@@ -181,7 +182,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [dojoProvider, account, toast],
+    [rpcProvider, dojoProvider, account, selectedChain, toast],
   );
 
   const createGame = useCallback(
@@ -223,7 +224,7 @@ export const useSystems = (): SystemsInterface => {
         gameId: gameCreated?.gameId,
       };
     },
-    [executeAndReceipt, config?.ryoAddress.paper],
+    [executeAndReceipt, config?.ryoAddress.paper, selectedChain],
   );
 
   const endGame = useCallback(
@@ -280,7 +281,7 @@ export const useSystems = (): SystemsInterface => {
           .map((e) => e as HighVolatilityData),
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   const decide = useCallback(
@@ -317,7 +318,7 @@ export const useSystems = (): SystemsInterface => {
           .map((e) => e as HighVolatilityData),
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   //
@@ -423,7 +424,7 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   //
@@ -505,7 +506,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   //
@@ -538,7 +539,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   const rollSlot = useCallback(
@@ -567,7 +568,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   const cheatSlot = useCallback(
@@ -596,7 +597,7 @@ export const useSystems = (): SystemsInterface => {
         parsedEvents,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, selectedChain],
   );
 
   //

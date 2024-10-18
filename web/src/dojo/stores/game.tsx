@@ -221,6 +221,7 @@ export class GameStoreClass {
       this.gameConfig!,
       gameStorePacked,
     );
+    this.configStore.manifest
     const gameEvents = new EventClass(this.configStore, this.gameInfos!, eventsNodes);
 
     this.game = game;

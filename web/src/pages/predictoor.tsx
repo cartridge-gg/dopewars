@@ -107,7 +107,7 @@ export default function Predictoor() {
       setSelected(undefined);
       setIsLoading(false);
     },
-    [account, total, score],
+    [account, total, score, predictoor],
   );
 
   return (

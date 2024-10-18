@@ -1,4 +1,3 @@
-// TODO import manifest by chain
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
 import { katanaInternalChain, katanaLocalChain, katanaSlot1Chain } from "./chains";
@@ -7,6 +6,8 @@ import manifestDev from "../../manifests/dev/manifest.json";
 import manifestInternal from "../../manifests/internal/manifest.json";
 import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+import manifestMainnet from "../../manifests/mainnet/manifest.json";
+
 import { DW_NS } from "../hooks";
 
 export const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
@@ -130,7 +131,7 @@ const snMainnet: DojoChainConfig = {
   masterAddress: undefined,
   masterPrivateKey: undefined,
   accountClassHash: undefined,
-  manifest: manifestDev, // TODO
+  manifest: manifestMainnet,
   predeployedAccounts: [],
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
   vrfProviderSecret: undefined,

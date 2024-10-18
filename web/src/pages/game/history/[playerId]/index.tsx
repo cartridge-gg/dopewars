@@ -55,9 +55,14 @@ import { shortString } from "starknet";
 export default function History() {
   const { router, playerId } = useRouterContext();
   const { account } = useAccount();
-  const { uiStore } = useDojoContext();
+  const {
+    uiStore,
+    chains: {
+      selectedChain: { manifest },
+    },
+  } = useDojoContext();
 
-  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(playerId || "0x0");
+  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(playerId || "0x0", manifest);
 
   return (
     <Layout
@@ -81,18 +86,18 @@ export default function History() {
                 <Tab>ENDED</Tab>
               </TabList>
 
-                <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
-                  <TabPanel p={0}>
-                    <GameList games={onGoingGames} />
-                  </TabPanel>
-                  <TabPanel p={0}>
-                    <GameList games={endedGames} />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </VStack>
-          </Flex>
-        </VStack>
+              <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
+                <TabPanel p={0}>
+                  <GameList games={onGoingGames} />
+                </TabPanel>
+                <TabPanel p={0}>
+                  <GameList games={endedGames} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </VStack>
+        </Flex>
+      </VStack>
     </Layout>
   );
 }
@@ -402,28 +407,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Ludes width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">LUDES</Td>
+                <Td w="80px" color="neon.500">
+                  LUDES
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ludes] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Speed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SPEED</Td>
+                <Td w="80px" color="neon.500">
+                  SPEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Speed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Weed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">WEED</Td>
+                <Td w="80px" color="neon.500">
+                  WEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Weed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Shrooms width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SHROOMS</Td>
+                <Td w="80px" color="neon.500">
+                  SHROOMS
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Shrooms] || 0)}</Td>
               </Tr>
 
@@ -431,28 +444,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Acid width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">ACID</Td>
+                <Td w="80px" color="neon.500">
+                  ACID
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Acid] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Ketamine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">KETAMINE</Td>
+                <Td w="80px" color="neon.500">
+                  KETAMINE
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ketamine] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Heroin width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">HEROIN</Td>
+                <Td w="80px" color="neon.500">
+                  HEROIN
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Heroin] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px" borderBottomColor="transparent">
                   <Cocaine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500" borderBottomColor="transparent">COCAINE</Td>
+                <Td w="80px" color="neon.500" borderBottomColor="transparent">
+                  COCAINE
+                </Td>
                 <Td borderBottomColor="transparent">
                   {formatCashHeader(playerStats?.tradedDrugs[Drugs.Cocaine] || 0)}
                 </Td>

@@ -18,14 +18,16 @@ export type DojoEvent = {
 
 export class EventClass {
   gameInfos: Game;
+  configStore: ConfigStoreClass;
 
   events: Array<DojoEvent>;
 
   constructor(configStore: ConfigStoreClass, gameInfos: Game, events: World__Event[]) {
     this.gameInfos = gameInfos;
+    this.configStore = configStore;
     //
 
-    this.events = events.map((i) => EventClass.parseWorldEvent(i));
+    this.events = events.map((i) => EventClass.parseWorldEvent(this.configStore.manifest, i));
 
     makeObservable(this, {
       events: observable,
@@ -38,7 +40,7 @@ export class EventClass {
     // console.log("Events", this)
   }
 
-  public static parseWorldEvent(event: World__Event): DojoEvent {
+  public static parseWorldEvent(manifest: any, event: World__Event, ): DojoEvent {
     const id = event.id?.split(":")!;
     const blocknumber = Number(id[0]);
     const eventIdx = Number(id[2]);
@@ -49,7 +51,7 @@ export class EventClass {
       blocknumber,
       eventIdx,
       raw: event,
-      parsed: parseEvent(event),
+      parsed: parseEvent(manifest, event),
     };
   }
 
@@ -61,13 +63,13 @@ export class EventClass {
     return this.events.slice().sort((a, b) => Date.parse(a.raw.createdAt) - Date.parse(b.raw.createdAt));
     // .sort((a, b) => a.idx - b.idx)
   }
-
+   
   //
   //
   //
 
   addEvent(event: World__Event) {
-    this.events.push(EventClass.parseWorldEvent(event));
+    this.events.push(EventClass.parseWorldEvent(this.configStore.manifest, event));
   }
 
   get lastEncounter() {

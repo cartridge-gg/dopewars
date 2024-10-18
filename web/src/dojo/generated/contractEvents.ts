@@ -12,6 +12,8 @@ export enum WorldEvents {
   TravelEncounter = "0x211a1369d28745f22bfe7e3e7e8e9d671f904ea80596d1fab13bfa9c16c1c57",
   TravelEncounterResult = "0x4c25d590d9373d60632194fce3d4237e3ccb1d31738c1f881045e495e04b35",
   GameOver = "0x165460ded86991fa560a0d331810f83651da90c5df6d4b61357c3b3807ff41c",
+  NewHighScore = "0x2326b9588750a7ce7c31809060a0123a05a60ae7eaa478d5cb01f3f797cb216",
+  Claimed = "0x35cc0235f835cc84da50813dc84eb10a75e24a21d74d6d86278c0f037cb7429",
   Transfer = "0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
   Approval = "0x134692b230b9e1ffa39098904722134159652b09c5bc41d88d6698779d228ff",
   PredictoorResultEvent = "0x169abbab21cb67f3b81d2a26b8dd34d5c2628cc98b6cead6589de6235234b54",
@@ -110,6 +112,24 @@ turn: number;
 cash: number;
 health: number;
 reputation: number;
+        }
+
+export interface NewHighScoreData extends BaseEventData {
+        game_id: number;
+player_id: string;
+season_version: number;
+player_name: string;
+hustler_id: number;
+cash: number;
+health: number;
+reputation: number;
+        }
+
+export interface ClaimedData extends BaseEventData {
+        game_id: number;
+player_id: string;
+season_version: number;
+paper: number;
         }
 
 export interface TransferData extends BaseEventData {
@@ -283,6 +303,30 @@ cash: Number(raw.data[3]),
 health: Number(raw.data[4]),
 reputation: Number(raw.data[5]),
 } as GameOverData;
+
+case WorldEvents.NewHighScore:
+return {
+event_type: WorldEvents.NewHighScore,
+event_name: "NewHighScore",
+game_id: Number(raw.keys[1]),
+player_id: num.toHexString(raw.keys[2]),
+season_version: Number(raw.keys[3]),
+player_name: num.toHexString(raw.data[0]),
+hustler_id: Number(raw.data[1]),
+cash: Number(raw.data[2]),
+health: Number(raw.data[3]),
+reputation: Number(raw.data[4]),
+} as NewHighScoreData;
+
+case WorldEvents.Claimed:
+return {
+event_type: WorldEvents.Claimed,
+event_name: "Claimed",
+game_id: Number(raw.keys[1]),
+player_id: num.toHexString(raw.keys[2]),
+season_version: Number(raw.keys[3]),
+paper: Number(raw.data[0]),
+} as ClaimedData;
 
 case WorldEvents.Transfer:
 return {

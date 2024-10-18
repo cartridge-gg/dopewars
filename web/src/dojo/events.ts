@@ -4,12 +4,9 @@ import { GetTransactionReceiptResponse, num, shortString } from "starknet";
 import { WorldEvents } from "./generated/contractEvents";
 
 import { Contract } from "starknet";
-
-// TODO: update
-import manifest from "../manifests/dev/manifest.json";
-
-const contract = manifest.contracts.find((i) => i.tag === "dopewars-game")!;
-const gameContract = new Contract(contract.abi, contract.address);
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "./hooks";
+import { DojoChainConfig } from "./setup/config";
 
 export interface BaseEventData {
   gameId: string;
@@ -87,9 +84,9 @@ export interface MeetOGData extends BaseEventData {
 
 export interface GameOverData extends BaseEventData {
   playerId: string;
+  seasonVersion: string;
   playerName: string;
-  leaderboardVersion: string;
-  avatarId: number; // TODO: change to hustlerId
+  hustlerId: number;
   turn: number;
   cash: number;
   health: number;
@@ -101,29 +98,33 @@ export interface PredictoorResultData extends BaseEventData {
   win: boolean;
 }
 
-export const parseAllEvents = (receipt?: GetTransactionReceiptResponse) => {
+export const parseAllEvents = (manifest: any, receipt?: GetTransactionReceiptResponse) => {
   if (!receipt || receipt.execution_status !== "SUCCEEDED") {
     return [];
   }
 
-  const flatEvents = parseEvents(receipt as GetTransactionReceiptResponse);
+  const flatEvents = parseEvents(manifest, receipt as GetTransactionReceiptResponse);
   return flatEvents;
 };
 
-export const parseEvents = (receipt: GetTransactionReceiptResponse) => {
-  const parsed = receipt.events.map((e) => parseEvent(e));
+export const parseEvents = (manifest: any, receipt: GetTransactionReceiptResponse) => {
+  const parsed = receipt.events.map((e) => parseEvent(manifest, e));
   return parsed;
 };
 
-export const parseEventsByEventType = (receipt: GetTransactionReceiptResponse, eventType: WorldEvents) => {
-  const events = receipt.events.filter((e) => e.keys[0] === eventType);
-  const parsed = events.map((e) => parseEvent(e));
-  return parsed;
-};
+// export const parseEventsByEventType = (
+//   selectedChain: DojoChainConfig,
+//   receipt: GetTransactionReceiptResponse,
+//   eventType: WorldEvents,
+// ) => {
+//   const events = receipt.events.filter((e) => e.keys[0] === eventType);
+//   const parsed = events.map((e) => parseEvent(manifest, e));
+//   return parsed;
+// };
 
 export type ParseEventResult = ReturnType<typeof parseEvent>;
 
-export const parseEvent = (raw: any) => {
+export const parseEvent = (manifest: any, raw: any) => {
   switch (raw.keys[0]) {
     case WorldEvents.GameCreated:
       return {
@@ -199,6 +200,9 @@ export const parseEvent = (raw: any) => {
 
     case WorldEvents.TravelEncounterResult:
       // use gameContract to parseEvents  (Array<(u8,u8)>...)
+      // TODO: update
+      const gameManifest = getContractByName(manifest, DW_NS, "game")!;
+      const gameContract = new Contract(gameManifest.abi, gameManifest.address);
 
       //@ts-ignore
       const parsedEvents = gameContract.parseEvents({
@@ -241,9 +245,9 @@ export const parseEvent = (raw: any) => {
         eventName: "GameOver",
         gameId: num.toHexString(raw.keys[1]),
         playerId: num.toHexString(raw.keys[2]),
-        leaderboardVersion: num.toHexString(raw.keys[3]),
+        seasonVersion: num.toHexString(raw.keys[3]),
         playerName: shortString.decodeShortString(raw.data[0]),
-        avatarId: Number(raw.data[1]),
+        hustlerId: Number(raw.data[1]),
         turn: Number(raw.data[2]),
         cash: Number(raw.data[3]),
         health: Number(raw.data[4]),

@@ -1,23 +1,17 @@
-import { DojoChainConfig, getStarknetProviderChains, VRF_PROVIDER_SEPOLIA } from "@/dojo/setup/config";
-import { Chain } from "@starknet-react/chains";
+import { DojoChainConfig, getStarknetProviderChains } from "@/dojo/setup/config";
 import {
   ChainProviderFactory,
   ExplorerFactory,
   InjectedConnector,
-  JsonRpcProviderArgs,
   StarknetConfig,
-  argent,
-  braavos,
   injected,
-  jsonRpcProvider,
-  starknetChainId,
   starkscan,
-  useInjectedConnectors,
-  useNetwork,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 import { RpcProvider, shortString } from "starknet";
 import CartridgeConnector from "@cartridge/connector";
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "@/dojo/hooks";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -25,20 +19,11 @@ export const walletInstallLinks = {
 };
 export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
-function rpc(chain: Chain) {
-  return {
-    nodeUrl: chain.rpcUrls.default.http[0],
-  };
-}
-
 export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProviderFactory<RpcProvider> {
   return function (chain) {
-    // if(!selectedChain) return undefined
-
     const config = {
       nodeUrl: selectedChain.rpcUrl || "",
     };
-    // if (!config) return null;
     const chainId = selectedChain.chainConfig.id || undefined;
 
     ///@ts-ignore
@@ -49,46 +34,29 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
-  const controller = cartridgeConnector({ rpc: selectedChain.rpcUrl, manifest: selectedChain.manifest });
+  const controller = cartridgeConnector({ selectedChain });
 
   switch (selectedChain.name) {
     case "KATANA":
       return [controller, injected({ id: "dojoburner" })];
-      break;
 
     case "INTERNAL":
       return [
         cartridgeConnector({
           keychain: "http://localhost:3001",
-          rpc: selectedChain.rpcUrl,
-          manifest: selectedChain.manifest,
+          selectedChain,
         }),
-        // injected({ id: "dojoburner" }),
+        injected({ id: "dojoburner" }),
       ];
-      break;
 
     default:
       return [controller];
-      break;
   }
 }
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  // const { connectors } = useInjectedConnectors({
-  //   // Show these connectors if the user has no connector installed.
-  //   recommended: [/*argent(), braavos(),*/ injected({ id: "dojoburner" }), cartridgeConnector],
-  //   // Hide recommended connectors if the user has any connector installed.
-  //   includeRecommended: "onlyIfNoConnectors",
-  //   // Randomize the order of the connectors.
-  //   // order: "random"
-  // });
-
   const chains = getStarknetProviderChains();
-
   const connectors = getConnectorsForChain(selectedChain);
-
-  // TODO: remove
-  // const provider = jsonRpcProvider({ rpc });
   const provider = customJsonRpcProvider(selectedChain);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
@@ -100,63 +68,70 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
-const cartridgeConnector = ({ keychain, rpc, manifest }: { keychain?: string; rpc?: string; manifest: any }) => {
+const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
+  // TODO handle mainnet
+  const paperAddress = getContractByName(selectedChain.manifest, DW_NS, "paper_mock").address;
+  const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
+  const predictoorAddress = getContractByName(selectedChain.manifest, DW_NS, "predictoor").address;
+  const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
+
   return new CartridgeConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
-    rpc: rpc ? rpc : "http://localhost:5050",
+    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     theme: "dope-wars",
     paymaster: {
       caller: shortString.encodeShortString("ANY_CALLER"),
     },
     policies: [
       {
-        target: VRF_PROVIDER_SEPOLIA,
+        target: selectedChain.vrfProviderAddress,
         method: "request_random",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-paper_mock")!.address,
+        target: paperAddress,
         method: "faucet",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-paper_mock")!.address,
+        target: paperAddress,
         method: "approve",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-game")!.address,
+        target: gameAddress,
         method: "create_game",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-game")!.address,
+        target: gameAddress,
         method: "travel",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-game")!.address,
+        target: gameAddress,
         method: "decide",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-game")!.address,
+        target: gameAddress,
         method: "end_game",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-laundromat")!.address,
+        target: laundromatAddress,
         method: "register_score",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-laundromat")!.address,
+        target: laundromatAddress,
         method: "claim",
       },
       //
-    
+
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-predictoor")!.address,
+        target: predictoorAddress,
         method: "predictoor",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-slotmachine")!.address,
+        target: slotmachineAddress,
         method: "create",
       },
       {
-        target: manifest.contracts.find((c: any) => c.tag === "dopewars-slotmachine")!.address,
+        target: slotmachineAddress,
         method: "roll",
       },
     ],

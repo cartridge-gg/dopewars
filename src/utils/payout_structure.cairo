@@ -1,8 +1,6 @@
 // https://www.wsop.com/how-to-play-poker/mtt-tournament-payouts/
 // MTT Payout Structure (top 10% paid)
 
-// TODO add more payout & add binary search
-
 fn get_payed_count(entrants: u32) -> u32 {
     if entrants <= 200 {
         if entrants <= 2 {

@@ -277,7 +277,6 @@ export class ConfigStoreClass {
       (i) => Number(i.id) === Number(id) && Number(i.slot_id) === Number(slot_id),
     )!;
 
-    // // TODO remove with starknet.js 6
     const tier = base_config.initial_tier + level;
     const tier_config = this.config?.tiers.find(
       (i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier),

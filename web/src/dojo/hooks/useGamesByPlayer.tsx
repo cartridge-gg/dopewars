@@ -67,7 +67,7 @@ export interface GamesByPlayerInterface {
   playerStats?: PlayerStats;
 }
 
-export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface => {
+export const useGamesByPlayer = (playerIdRaw: string, manifest: any): GamesByPlayerInterface => {
   const playerId = `0x${BigInt(playerIdRaw).toString(16)}`; // remove leading zero..
   const { data, isFetched } = useGamesByPlayerQuery({
     playerId,
@@ -100,7 +100,9 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
 
     const games = nodes.flatMap((i) => {
       const gameInfos = (i!.models || []).find((i) => i?.__typename === "dopewars_Game") as Game;
-      const gameStorePacked = (i!.models || []).find((i) => i?.__typename === "dopewars_GameStorePacked") as GameStorePacked;
+      const gameStorePacked = (i!.models || []).find(
+        (i) => i?.__typename === "dopewars_GameStorePacked",
+      ) as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
 
@@ -116,8 +118,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
     });
 
     return games;
-    return [];
-  }, [data, allSeasonSettings, allGameConfig]);
+  }, [data, allSeasonSettings, allGameConfig, configStore]);
 
   const onGoingGames = useMemo(() => {
     return games.filter((i: GameClass) => !i.gameInfos.game_over);
@@ -185,18 +186,18 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
       totalRun,
       totalPay,
       tradedDrugs: {
-        [Drugs.Ludes]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ludes),
-        [Drugs.Speed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Speed),
-        [Drugs.Weed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Weed),
-        [Drugs.Shrooms]: getTradeTotal(allTradedDrugByPlayer, Drugs.Shrooms),
-        [Drugs.Acid]: getTradeTotal(allTradedDrugByPlayer, Drugs.Acid),
-        [Drugs.Ketamine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ketamine),
-        [Drugs.Heroin]: getTradeTotal(allTradedDrugByPlayer, Drugs.Heroin),
-        [Drugs.Cocaine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Cocaine),
+        [Drugs.Ludes]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ludes, manifest),
+        [Drugs.Speed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Speed, manifest),
+        [Drugs.Weed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Weed, manifest),
+        [Drugs.Shrooms]: getTradeTotal(allTradedDrugByPlayer, Drugs.Shrooms, manifest),
+        [Drugs.Acid]: getTradeTotal(allTradedDrugByPlayer, Drugs.Acid, manifest),
+        [Drugs.Ketamine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ketamine, manifest),
+        [Drugs.Heroin]: getTradeTotal(allTradedDrugByPlayer, Drugs.Heroin, manifest),
+        [Drugs.Cocaine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Cocaine, manifest),
       },
       averageReputation,
     };
-  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrugByPlayer]);
+  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrugByPlayer, manifest]);
 
   return {
     games: games || [],
@@ -207,9 +208,9 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
   };
 };
 
-const getTradeTotal = (allTradedDrugByPlayer: TradedDrugByPlayerQuery, drug: Drugs) => {
+const getTradeTotal = (allTradedDrugByPlayer: TradedDrugByPlayerQuery, drug: Drugs, manifest: any) => {
   return (allTradedDrugByPlayer?.events?.edges || [])
-    .map((i) => parseEvent(i?.node) as TradeDrugData)
+    .map((i) => parseEvent(manifest, i?.node) as TradeDrugData)
     .filter((i) => i.drugId === drug && !i.isBuy)
     .map((i) => i.price * i.quantity)
     .reduce((p, c) => p + c, 0);

@@ -242,7 +242,7 @@ export default function Slot() {
     };
 
     init();
-  }, [selectedChain, account, gameId]);
+  }, [selectedChain, account, gameId, createSlot]);
 
   const onEntityUpdated = useCallback(
     async (entity: string, update: any) => {
@@ -259,7 +259,7 @@ export default function Slot() {
       const { type, creditsChange, win } = checkCombination(newOffsets);
       const elasped = Date.now() - startAt.current;
       const delay = elasped > 1_000 ? 0 : 1_000 - elasped;
-    
+
       setTimeout(() => {
         setOffsets(newOffsets);
       }, delay);
@@ -340,7 +340,7 @@ export default function Slot() {
     setTimeout(() => {
       setIsRolling(false);
     }, 5_000);
-  }, [isRolling, credits, setIsWin, setIsRolling, setCredits]);
+  }, [isRolling, credits, offsets, rollSlot, setIsWin, setIsRolling, setCredits]);
 
   return (
     <Layout isSinglePanel={true}>

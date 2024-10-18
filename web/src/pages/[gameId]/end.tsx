@@ -104,8 +104,6 @@ const EndContent = ({ game }: { game: GameClass }) => {
 
   const onRegister = async () => {
     try {
-      // TODO: should retrieve prev just before submitting tx
-
       const prevGameId = prev ? prev.game_id : 0;
       const prevPlayerId = prev ? prev.player_id : 0;
 
@@ -135,7 +133,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
       }}
       footer={
         <>
-          {game.gameInfos.game_mode == GameMode.Ranked && !game.gameInfos.registered ? (
+          {game.gameInfos.game_mode == "Ranked" && !game.gameInfos.registered ? (
             <VStack w="full" gap={3}>
               <Card p={3}>
                 <HStack color="yellow.400">
