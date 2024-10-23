@@ -1,9 +1,8 @@
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaInternalChain, katanaLocalChain, katanaSlot1Chain } from "./chains";
+import {  katanaLocalChain, katanaSlot1Chain } from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
-import manifestInternal from "../../manifests/internal/manifest.json";
 import manifestRyo1 from "../../manifests/ryo1/manifest.json";
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 import manifestMainnet from "../../manifests/mainnet/manifest.json";
@@ -69,27 +68,6 @@ const katanaLocal: DojoChainConfig = {
   vrfProviderSecret: "0x420",
 };
 
-const katanaInternal: DojoChainConfig = {
-  name: "INTERNAL",
-  chainConfig: katanaInternalChain,
-  rpcUrl: "http://localhost:8001/x/starknet/sepolia",
-  toriiUrl: "http://localhost:8080/graphql",
-  toriiWsUrl: "wss://localhost:8080/graphql/ws",
-  masterAddress: "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021",
-  masterPrivateKey: "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650",
-  accountClassHash: "0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c",
-  manifest: manifestInternal,
-  predeployedAccounts: [
-    {
-      name: "Deployer",
-      address: "0x41b6dab3967eaaee4cfecdc950079aee353afd96bcf0628bf84fc64a43c3021",
-      privateKey: "0x60daf368ad686f192614eb8785e50ab3cd6168d3243a00e3e864576ac66b650",
-      active: false,
-    },
-  ],
-  vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
-  vrfProviderSecret: "0x420",
-};
 
 const katanaSlot1: DojoChainConfig = {
   name: "SLOT 1",
@@ -140,7 +118,6 @@ const snMainnet: DojoChainConfig = {
 // keys must match chain.id
 export const dojoContextConfig = {
   KATANA: katanaLocal,
-  // INTERNAL: katanaInternal,
   // KATANA_SLOT_420: katanaSlot420,
   // KATANA_SLOT_421: katanaSlot421,
   // WP_RYO1: katanaSlot1,
@@ -150,7 +127,6 @@ export const dojoContextConfig = {
 
 export const dojoChains = [
   katanaLocal,
-  // katanaInternal,
   // katanaSlot420,
   // katanaSlot421,
   // katanaSlot1,

@@ -6,7 +6,7 @@ keystore = "../../../sozo_acc"
 
 [world]
 name = "Dope Wars"
-seed = "sepo2seed"
+seed = "sepo3seed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 # website = "https://rollyourown.preview.cartridge.gg/"
 # icon_uri = "file://assets/icon.png"

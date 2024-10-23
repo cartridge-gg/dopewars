@@ -1236,7 +1236,7 @@
     ],
     "address": "0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14",
     "transaction_hash": "0x520053a922adbabcb0e174eae54e866ed5539ab13fa4217bc8b0daa2061336f",
-    "block_number": 35,
+    "block_number": 31,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -2335,8 +2335,8 @@
     {
       "kind": "DojoContract",
       "address": "0x70bebb66fc335f1d472fc7ec96a99a3e7280aefe03df2e697c399155d958e40",
-      "class_hash": "0x16bf34a18cc929a44e431a92566a53670fd342a451eb8cbc53b1aa1775eb3a5",
-      "original_class_hash": "0x16bf34a18cc929a44e431a92566a53670fd342a451eb8cbc53b1aa1775eb3a5",
+      "class_hash": "0x7c54deeb6170ecde2c3498d0eda9ffab7d85d1083deff5f26fdcae95a188670",
+      "original_class_hash": "0x7c54deeb6170ecde2c3498d0eda9ffab7d85d1083deff5f26fdcae95a188670",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3255,6 +3255,7 @@
       ],
       "reads": [],
       "writes": [
+        "dopewars-SlotMachine",
         "dopewars-Game",
         "dopewars-GameStorePacked",
         "dopewars-RyoConfig",
@@ -5068,8 +5069,8 @@
     {
       "kind": "DojoContract",
       "address": "0x58bb85d742e58b46f6f53eaf938a79e769ac0bc7c9f6ef4fb666b3026e1ac8a",
-      "class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
-      "original_class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
+      "class_hash": "0x41d938ca2407188d38e615d40fc2f4105ded9d5da4ead6c16028db5cacd2d28",
+      "original_class_hash": "0x41d938ca2407188d38e615d40fc2f4105ded9d5da4ead6c16028db5cacd2d28",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -5210,31 +5211,7 @@
           "items": [
             {
               "type": "function",
-              "name": "create",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
               "name": "roll",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "cheat",
               "inputs": [
                 {
                   "name": "game_id",
@@ -5363,9 +5340,7 @@
       "init_calldata": [],
       "tag": "dopewars-slotmachine",
       "systems": [
-        "create",
-        "roll",
-        "cheat"
+        "roll"
       ],
       "manifest_name": "dopewars-slotmachine-3a78d50e"
     },

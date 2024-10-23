@@ -119,7 +119,7 @@ impl SlotMachineImpl of SlotMachineTrait {
             offset_r: bits.extract_into::<u8>(0, 8) % SLOT_BY_ROLL,
             offset_y: bits.extract_into::<u8>(8, 8) % SLOT_BY_ROLL,
             offset_o: bits.extract_into::<u8>(16, 8) % SLOT_BY_ROLL,
-            credits
+            credits,
         }
     }
 
@@ -157,9 +157,6 @@ impl SlotMachineImpl of SlotMachineTrait {
         (get_slot(0, *self.offset_r), get_slot(1, *self.offset_y), get_slot(2, *self.offset_o))
     }
 
-    fn cheat(ref self: SlotMachine) {
-        self.credits += 10;
-    }
 }
 
 // #[cfg(test)]
@@ -181,9 +178,7 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait ISlotMachine<T> {
-    fn create(ref self: T, game_id: u32);
     fn roll(ref self: T, game_id: u32);
-    fn cheat(ref self: T, game_id: u32);
 }
 
 
@@ -212,20 +207,11 @@ mod slotmachine {
         #[key]
         player_id: ContractAddress,
         combi: felt252,
-        payout: u32
+        payout: u32,
     }
 
     #[abi(embed_v0)]
     impl SlotMachineImp of super::ISlotMachine<ContractState> {
-        fn create(ref self: ContractState, game_id: u32) {
-            let ryo_addresses = self.s().ryo_addresses();
-            let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
-
-            let machine = SlotMachineImpl::new(game_id, 5, random);
-            self.s().set_slot_machine(machine);
-        }
-
         fn roll(ref self: ContractState, game_id: u32) {
             // TODO: checks
 
@@ -241,12 +227,6 @@ mod slotmachine {
                 self.emit(SlotMachineEvent { game_id, player_id, combi, payout });
             }
 
-            self.s().set_slot_machine(machine);
-        }
-
-        fn cheat(ref self: ContractState, game_id: u32) {
-            let mut machine = self.s().slot_machine(game_id);
-            machine.cheat();
             self.s().set_slot_machine(machine);
         }
     }

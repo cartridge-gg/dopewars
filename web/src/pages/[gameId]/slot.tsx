@@ -2,16 +2,15 @@ import { Cigarette, Flipflop, PaperIcon } from "@/components/icons";
 import { Cocaine, Shrooms, Weed } from "@/components/icons/drugs";
 import { AK47, Glock } from "@/components/icons/items";
 import { Layout } from "@/components/layout";
-import { useDojoChains, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
-import { Dopewars_SlotMachine } from "@/generated/graphql";
+import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { playSound, Sounds } from "@/hooks/sound";
 import { IsMobile } from "@/utils/ui";
 import { HStack, VStack, Text, Box, Image, keyframes, Button, Spacer } from "@chakra-ui/react";
-import { Model, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// import * as torii from "@dojoengine/torii-client";
+// import { Model, Subscription, ToriiClient } from "@dojoengine/torii-client";
+import { Model, Subscription, ToriiClient } from "../../../../../dojo.c/pkg";
 
 const onRollAnim = keyframes`  
   0% {transform: rotateX(0deg)}   
@@ -155,19 +154,19 @@ const translateRadius = (slotSize - 4) / 2 / Math.tan(Math.PI / slotByRoll);
 
 export default function Slot() {
   const { account } = useAccount();
-  const { createSlot, rollSlot, cheatSlot } = useSystems();
+  const { rollSlot } = useSystems();
   const {
     chains: { selectedChain },
   } = useDojoContext();
   const { gameId } = useRouterContext();
   const isMobile = IsMobile();
 
-  const [offsets, setOffsets] = useState([0, 0, 0]);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(Date.now());
   const [isWin, setIsWin] = useState(false);
   const [isRolling, setIsRolling] = useState(false);
   const [credits, setCredits] = useState(0);
   const startAt = useRef(Date.now());
+  const offsets = useRef([0, 0, 0]);
 
   const [toriiClient, setToriiClient] = useState<ToriiClient>();
   const [subscription, setSubscription] = useState<Subscription>();
@@ -177,7 +176,8 @@ export default function Slot() {
       if (!gameId) return;
 
       setIsRolling(true);
-      const torii = await import("@dojoengine/torii-client");
+      // const torii = await import("@dojoengine/torii-client");
+      const torii = await import("../../../../../dojo.c/pkg");
       const client = await torii.createClient({
         rpcUrl: selectedChain.rpcUrl!,
         toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
@@ -208,10 +208,10 @@ export default function Slot() {
         offset: 0,
       });
 
+      console.log(entities);
+
       if (Object.keys(entities).length === 0) {
-        if (account) {
-          await createSlot(Number(gameId));
-        }
+        // ???
       } else {
         const machine = entities[Object.keys(entities)[0]]["dopewars-SlotMachine"] as Model;
         setCredits(Number(machine.credits.value));
@@ -220,7 +220,7 @@ export default function Slot() {
           Number(machine.offset_y.value),
           Number(machine.offset_o.value),
         ];
-        setOffsets(newOffsets);
+        offsets.current = newOffsets;
 
         setIsRolling(false);
       }
@@ -239,13 +239,27 @@ export default function Slot() {
         onEntityUpdated,
       );
       setSubscription(sub);
+
+      setIsRolling(false);
     };
 
     init();
-  }, [selectedChain, account, gameId, createSlot]);
+
+    return () => {
+      subscription && subscription.cancel();
+    };
+  }, [selectedChain, account, gameId]);
+
+  const getNewOffset = (current: number, newOffset: number) => {
+    let a = current % slotByRoll;
+    let b = (current - a) / slotByRoll;
+    let c = (b - 2) * slotByRoll + (newOffset - slotByRoll);
+    return c;
+  };
 
   const onEntityUpdated = useCallback(
     async (entity: string, update: any) => {
+      console.log("onEntityUpdated");
       const machine = update["dopewars-SlotMachine"] as Model;
       if (!machine) return;
       const newOffsets = [
@@ -256,12 +270,17 @@ export default function Slot() {
       // console.log("onEntityUpdated", update);
       // console.log("newOffsets", newOffsets);
 
-      const { type, creditsChange, win } = checkCombination(newOffsets);
+      const { type, win } = checkCombination(newOffsets);
       const elasped = Date.now() - startAt.current;
-      const delay = elasped > 1_000 ? 0 : 1_000 - elasped;
-
+      const delay = elasped > 1_000 ? 1 : 1_000 - elasped;
+      console.log(delay);
       setTimeout(() => {
-        setOffsets(newOffsets);
+        offsets.current = [
+          getNewOffset(offsets.current[0], Number(machine.offset_r.value)),
+          getNewOffset(offsets.current[1], Number(machine.offset_y.value)),
+          getNewOffset(offsets.current[2], Number(machine.offset_o.value)),
+        ];
+        setRefresh(Date.now());
       }, delay);
 
       setTimeout(() => {
@@ -272,7 +291,7 @@ export default function Slot() {
         }
       }, delay + 3_600);
     },
-    [startAt, setOffsets, setCredits, setIsWin],
+    [startAt, offsets, setCredits, setIsWin],
   );
 
   const checkCombination = (offests: number[]) => {
@@ -291,27 +310,19 @@ export default function Slot() {
       return {
         win: true,
         type: "ALL",
-        creditsChange: 420,
       };
     }
     if (twoEqual) {
       return {
         win: true,
         type: "TWO",
-        creditsChange: 3,
       };
     }
 
     return {
       win: false,
       type: "LOSER",
-      creditsChange: 0,
     };
-  };
-
-  const onCheat = async () => {
-    const result = await cheatSlot(Number(gameId));
-    console.log(result);
   };
 
   const onRoll = useCallback(async () => {
@@ -326,16 +337,12 @@ export default function Slot() {
     startAt.current = Date.now();
 
     // fake roll waiting results
-    let newOffests = offsets;
     for (let i = 0; i < 3; i++) {
-      const random = Math.floor(Math.random() * slotByRoll) + 3 * slotByRoll;
-      newOffests[i] += random;
+      offsets.current[i] -= 3 * slotByRoll;
     }
-    setOffsets(newOffests);
+    setRefresh(Date.now());
 
     const result = await rollSlot(Number(gameId));
-
-    setRefresh(!refresh);
 
     setTimeout(() => {
       setIsRolling(false);
@@ -348,18 +355,7 @@ export default function Slot() {
         <VStack position="relative" transform={isMobile ? "scale(0.7)" : ""}>
           {refresh && <></>}
 
-          <Box
-            position="absolute"
-            left="-3px"
-            top="55px"
-            w="3px"
-            h="20px"
-            bg="neon.600"
-            cursor="pointer"
-            onClick={async () => {
-              await createSlot(Number(gameId));
-            }}
-          ></Box>
+          <Box position="absolute" left="-3px" top="55px" w="3px" h="20px" bg="neon.600" cursor="pointer"></Box>
 
           <Box
             position="absolute"
@@ -426,8 +422,6 @@ export default function Slot() {
             gap={0}
             border="solid 20px"
             borderColor="neon.600"
-            // borderTopRadius="120px"
-            // borderBottomRadius="6px"
             borderRadius="6px"
             backgroundColor="neon.800"
             overflow="hidden"
@@ -564,14 +558,14 @@ export default function Slot() {
                         left={`${ri * (slotSize + 10) - 20}px`}
                         style={{
                           transformStyle: "preserve-3d",
-                          transform: `rotateX(${-offsets[ri] * slotAngle}deg)`,
-                          transition: `${4 + ri / 3}s`,
-                          // transitionTimingFunction: "ease-in-out",
-                          transitionTimingFunction: "cubic-bezier(.1,-0.3,.3,1.1)",
+                          transform: `rotateX(${-offsets.current[ri] * slotAngle}deg)`,
+                          // transition: `0s`,
+                          transition: `${3 + ri / 3}s`,
+                          transitionTimingFunction: "cubic-bezier(.05,-0.3,.3,1.05)",
                         }}
                       >
                         {roll.map((v, i) => {
-                          let isCurrent = (offsets[ri] - i) % slotByRoll === 0;
+                          let isCurrent = (offsets.current[ri] - i) % slotByRoll === 0;
                           return (
                             <Box
                               key={`i-${i}`}
@@ -595,7 +589,7 @@ export default function Slot() {
                               <VStack gap={0}>
                                 {allDrugs[v].icon}
                                 <Text textTransform="uppercase" fontSize="12px">
-                                  {/* {i} */}
+                                  {/* {i} - */}
                                   {allDrugs[v].name}
                                 </Text>
                               </VStack>
@@ -608,17 +602,6 @@ export default function Slot() {
                 </HStack>
               </Box>
             </Box>
-
-            {/* <Button
-              isDisabled={isRolling}
-              onClick={onRoll}
-              w="100%"
-              _disabled={{ background: "neon.800" }}
-              _hover={{ background: "neon.800" }}
-              // marginBottom="10px"
-            >
-              ROLL
-            </Button> */}
           </VStack>
         </VStack>
       </VStack>

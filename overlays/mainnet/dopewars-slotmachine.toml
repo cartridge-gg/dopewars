@@ -1,0 +1,4 @@
+tag = "dopewars-slotmachine"
+reads = []
+writes = ["dopewars-SlotMachine"]
+init_calldata = []

@@ -38,14 +38,13 @@ mod game {
         packing::{game_store::{GameStore, GameStoreImpl, GameMode}, player::{Player, PlayerImpl},},
         systems::{
             helpers::{trading, shopping, traveling, traveling::EncounterOutcomes, game_loop},
-            game::EncounterActions,
+            game::EncounterActions, slot::{SlotMachineImpl, SlotMachineTrait}
         },
         library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         helpers::season_manager::{SeasonManagerTrait},
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            sorted_list::{SortedListImpl, SortedListTrait},
-            vrf_consumer::{VrfImpl, Source},
+            sorted_list::{SortedListImpl, SortedListTrait}, vrf_consumer::{VrfImpl, Source},
         },
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
@@ -190,9 +189,15 @@ mod game {
             let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
-            // if ranked pay paper_fee
+            // if RANKED 
             if game_mode == GameMode::Ranked {
+                // pay paper_fee
                 season_manager.on_game_start();
+
+                // TODO: Move in register_score
+                // create a slot machine
+                let machine = SlotMachineImpl::new(game_id, 10, randomizer.next());
+                self.s().set_slot_machine(machine);
             }
 
             // create game
@@ -205,7 +210,9 @@ mod game {
             self.s().set_game(game);
 
             // create & save GameStorePacked
-            let game_store = GameStoreImpl::new(self.s(), ref game, ref game_config, ref randomizer);
+            let game_store = GameStoreImpl::new(
+                self.s(), ref game, ref game_config, ref randomizer
+            );
             game_store.save();
 
             // emit GameCreated

@@ -26,29 +26,6 @@ export const katanaLocalChain = {
   },
 } as const satisfies Chain;
 
-export const katanaInternalChain = {
-  id: BigInt(shortString.encodeShortString("INTERNAL")),
-  network: "katana",
-  name: "Katana Internal",
-  nativeCurrency: {
-    address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-    name: "Ether",
-    symbol: "ETH",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["http://localhost:8001/x/starknet/sepolia"],
-    },
-    public: {
-      http: ["http://localhost:8001/x/starknet/sepolia"],
-    },
-  },
-  explorers: {
-    worlds: ["https://worlds.dev"],
-  },
-} as const satisfies Chain;
-
 export const katanaSlot1Chain = {
   id: BigInt(shortString.encodeShortString("WP_RYO1")),
   network: "katana",

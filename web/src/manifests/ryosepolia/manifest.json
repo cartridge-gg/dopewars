@@ -1234,10 +1234,10 @@
         ]
       }
     ],
-    "address": "0x3c546d141a8727eabfd4c91cbb8e8bac7f698b98e1e42069d0f3ce29db8abf6",
-    "transaction_hash": "0xc943f9e96c6f3e431b627099ce0969a291d5978871b73d2f191986352948d1",
+    "address": "0x5a69a866c1e74ddf5f17f44ff2ced68e7b8e2bb4e93a208ec07f51218bcb7b2",
+    "transaction_hash": "0x137ac1d65647dbb2db6ea3cc6b1a15046ff99e3f1e41858768c81c06c07c73e",
     "block_number": null,
-    "seed": "sepo2seed",
+    "seed": "sepo3seed",
     "metadata": {
       "profile_name": "ryosepolia",
       "rpc_url": "https://api.cartridge.gg/x/starknet/sepolia"
@@ -1255,9 +1255,9 @@
   "contracts": [
     {
       "kind": "DojoContract",
-      "address": "0x382bcef3c035f9e8d71032def5b8097166e0008f73c9245140e8521b529118f",
-      "class_hash": "0x7ce534a34689d75505c1d6abcf1111b971bc225a06e9ba4cde9375a75c91868",
-      "original_class_hash": "0x7ce534a34689d75505c1d6abcf1111b971bc225a06e9ba4cde9375a75c91868",
+      "address": "0xe0860c0fa50f50cd912e19e104d5805cd19f316c163d993c69e01b2ca22b6",
+      "class_hash": "0x5b0d79079827c12667081ae8c6d210f7cb0f26e9f06c8b07b0f3434e2ec7cae",
+      "original_class_hash": "0x5b0d79079827c12667081ae8c6d210f7cb0f26e9f06c8b07b0f3434e2ec7cae",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2065,7 +2065,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0xe40a987288f6b80ad13e07b685cee5208d1df578a2232797536592827a0ffd",
+      "address": "0x37948f978c63ce7ec677993a7f8070ac6281e0ad06b17a8b44aa1c35b3070e1",
       "class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
       "original_class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -2334,9 +2334,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x138ebc68d9c752896da534e0fe00a132d883761924a5145e49d068fa1f422da",
-      "class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
-      "original_class_hash": "0x7f580fbfd2ea42576c27d5cd42e1aba0128f73ea5eb93b549aef51d103a64d5",
+      "address": "0x19c8bbbb0a92e21d9997392d0f32f04dc79b5e113c2ac70b31f5e28b12b9ec5",
+      "class_hash": "0x6ed656567d6a0c6ee7d8573d3e0492029cc39da24bf10185d183bfcc10cc167",
+      "original_class_hash": "0x6ed656567d6a0c6ee7d8573d3e0492029cc39da24bf10185d183bfcc10cc167",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3255,6 +3255,7 @@
       ],
       "reads": [],
       "writes": [
+        "dopewars-SlotMachine",
         "dopewars-Game",
         "dopewars-GameStorePacked",
         "dopewars-RyoConfig",
@@ -3275,9 +3276,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x45590b09ff85ede5b9ce47410b1c2fc7fd05ef581956208ccdf177b4d5fbd65",
-      "class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
-      "original_class_hash": "0x69d82daf47627464c3b1f6e76509a8e131413b0ced4af5f02244703071bfc1a",
+      "address": "0x408390c0efcdef2ef14b3738791bd6f07068c624ac0738dbdb5f519dd6726c4",
+      "class_hash": "0x59a6672ed49e9094373128f171c475ab69d7622a5822797161e279bafe15eb2",
+      "original_class_hash": "0x59a6672ed49e9094373128f171c475ab69d7622a5822797161e279bafe15eb2",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3566,12 +3567,96 @@
         },
         {
           "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::NewHighScore",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16",
+              "kind": "data"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "reputation",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::Claimed",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "paper",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::laundromat::laundromat::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "UpgradeableEvent",
               "type": "dojo::contract::upgradeable::upgradeable::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "NewHighScore",
+              "type": "rollyourown::systems::laundromat::laundromat::NewHighScore",
+              "kind": "nested"
+            },
+            {
+              "name": "Claimed",
+              "type": "rollyourown::systems::laundromat::laundromat::Claimed",
               "kind": "nested"
             }
           ]
@@ -3600,7 +3685,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x2217a939c540786eaadd1b1e947468d1ded3e679f3c5cdc16fc3897a063100",
+      "address": "0x168fb85355e1c9eb7ce4a21599ecaf8cc39fde633ee9f7a34984b1bddd29a2c",
       "class_hash": "0x6546d78818627094a4104ad8e7f2ab28774ced3135270f182a37278ea82d72d",
       "original_class_hash": "0x6546d78818627094a4104ad8e7f2ab28774ced3135270f182a37278ea82d72d",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4275,7 +4360,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x1020355bf7b629360e109fdbdab23b8a8e90af97b31b28046c4dc18eb568c83",
+      "address": "0x3883aeb790842caca6c2be8b0339bc631208cb3690652278bedcf02a60b7539",
       "class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
       "original_class_hash": "0x38593b8e8ae4504ae09ef00f4fa02d835a8c6a9edd2758c36c5ed52cb4ccbac",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4572,7 +4657,7 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x457a1cfb8ae6390325256f015c88c84ac6c210ce4d67bc0099e4f869ed8c8e0",
+      "address": "0x76a7bc68f18c1a6e871116fd2186449574842a270674c815095da4a0891dbfa",
       "class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
       "original_class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
@@ -4983,9 +5068,9 @@
     },
     {
       "kind": "DojoContract",
-      "address": "0x65b10c67ecd26c25e50c2f239130c770457048e559b1cb19222cc526c92144e",
-      "class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
-      "original_class_hash": "0x627a7fa4eaf8281c7cc2c1d752dd15b2a8773c97f52ace281b1841f2046d34",
+      "address": "0x14f0aa413075c83c8854617dd066aeac02b2b44618fb3cc60711b3a3c67253e",
+      "class_hash": "0x41d938ca2407188d38e615d40fc2f4105ded9d5da4ead6c16028db5cacd2d28",
+      "original_class_hash": "0x41d938ca2407188d38e615d40fc2f4105ded9d5da4ead6c16028db5cacd2d28",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -5126,31 +5211,7 @@
           "items": [
             {
               "type": "function",
-              "name": "create",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
               "name": "roll",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "cheat",
               "inputs": [
                 {
                   "name": "game_id",
@@ -5279,15 +5340,13 @@
       "init_calldata": [],
       "tag": "dopewars-slotmachine",
       "systems": [
-        "create",
-        "roll",
-        "cheat"
+        "roll"
       ],
       "manifest_name": "dopewars-slotmachine-3a78d50e"
     },
     {
       "kind": "DojoContract",
-      "address": "0x1b373388a72667af799f0d493dcf84c523e771807f3950cdfca8a941da007e1",
+      "address": "0x1ef8f1c3720e86e5cbde82e4852a0fae3ac5a0c2cfe1f18b3e66a6a3379d652",
       "class_hash": "0x432d5bd2bb5409d864c24890a986d93dacda03d089e0c7889220a7c9eafebaa",
       "original_class_hash": "0x432d5bd2bb5409d864c24890a986d93dacda03d089e0c7889220a7c9eafebaa",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",

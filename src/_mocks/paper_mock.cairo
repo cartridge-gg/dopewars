@@ -43,8 +43,6 @@ trait IPaperMock<TState> {
 }
 
 
-
-
 #[starknet::interface]
 trait IPaperMockFaucet<TState> {
     fn faucet(ref self: TState,);
@@ -151,15 +149,14 @@ mod paper_mock {
     //
 
     #[abi(embed_v0)]
-       fn dojo_init(ref self: ContractState, faucet_to: ContractAddress) {
+    fn dojo_init(ref self: ContractState, faucet_to: ContractAddress) {
+        self.erc20_metadata.initialize("fPAPER", "fPAPER", 18);
+        self.erc20_mintable.mint(get_caller_address(), 10_000);
 
-            self.erc20_metadata.initialize("fPAPER", "fPAPER", 18);
-            self.erc20_mintable.mint(get_caller_address(), 10_000);
-            
-            self.faucetTo(faucet_to);
+        self.faucetTo(faucet_to);
 
-            self.initializable.initialize();
-        }
+        self.initializable.initialize();
+    }
 
     //
     // Faucet

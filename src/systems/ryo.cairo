@@ -60,9 +60,9 @@ mod ryo {
         let mut ryo_addresses = self.s().ryo_addresses();
 
         ryo_addresses.paper = paper_address;
-        ryo_addresses.treasury = treasury_address; // could be removed
+        ryo_addresses.treasury = treasury_address;
         ryo_addresses.laundromat = laundromat_address; // could be removed
-        ryo_addresses.vrf = vrf_address; // could be removed
+        ryo_addresses.vrf = vrf_address; 
 
         // save
         self.s().save_ryo_addresses(ryo_addresses);
