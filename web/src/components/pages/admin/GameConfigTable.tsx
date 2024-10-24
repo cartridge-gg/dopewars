@@ -6,7 +6,7 @@ import { ActionType, DataType, SortingMode } from "ka-table/enums";
 import { useEffect, useState } from "react";
 import { editComponents } from "./tables";
 import { useGameConfig } from "@/dojo/hooks/useGameConfig";
-import { GameConfig } from "@/generated/graphql";
+import { Dopewars_GameConfig as GameConfig } from "@/generated/graphql";
 
 const columns = [
   { key: "season_version", title: "season", dataType: DataType.Number },

@@ -12,6 +12,7 @@ import {
   EncountersAction,
   EncountersMode,
   EncountersOddsMode,
+  GameMode,
   HealthMode,
   ItemSlot,
   OutcomeInfo,
@@ -24,6 +25,20 @@ import { AK47, BaseballBat, Boots, Kevlar, Leatherjacket, PlasticBag, Shirt, Sho
 import { Chain } from "@/components/icons/items/Chain";
 import { Shoes2 } from "@/components/icons/items/Shoes2";
 import colors from "@/theme/colors";
+
+export const gameModeName = {
+  [GameMode.Ranked]: "Ranked",
+  [GameMode.Noob]: "Guest",
+  [GameMode.Warrior]: "Warrior",
+};
+export type gameModeNameKeys = keyof typeof gameModeName;
+
+export const gameModeFromName = {
+  Ranked: GameMode.Ranked,
+  Guest: GameMode.Noob,
+  Warrior: GameMode.Warrior,
+};
+export type gameModeFromNameKeys = keyof typeof gameModeFromName;
 
 export const encountersActionName = {
   [EncountersAction.Run]: "Run",

@@ -62,7 +62,8 @@ export enum EncounterOutcomes {
 }
 
 export enum GameMode {
-  Dealer,
+  Ranked,
+  Noob,
   Warrior,
 }
 

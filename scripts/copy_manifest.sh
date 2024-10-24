@@ -8,6 +8,6 @@ else
 fi
 
 mkdir -p ./web/src/manifests/$PROFILE
-cp ./manifests/$PROFILE/manifest.json ./web/src/manifests/$PROFILE/manifest.json 
+cp ./manifests/$PROFILE/deployment/manifest.json ./web/src/manifests/$PROFILE/manifest.json 
 
 

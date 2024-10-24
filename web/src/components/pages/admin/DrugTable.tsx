@@ -17,7 +17,7 @@ const columns = [
   { key: "base", title: "base", dataType: DataType.Number },
   { key: "step", title: "step", dataType: DataType.Number },
   { key: "weight", title: "weight", dataType: DataType.Number },
-  { key: "editColumn", width: 80 },
+  // { key: "editColumn", width: 80 },
 ];
 
 export const DrugTable = observer(() => {
@@ -32,24 +32,19 @@ export const DrugTable = observer(() => {
   const table = useTable({
     onDispatch: (action) => {
       // console.log(action);
-
       // if (action.type === ActionType.UpdateEditorValue) {
       //   const toUpdateIndex = data.findIndex((i) => i.drug_id === action.rowKeyValue);
       //   const toUpdate = {
       //     ...data[toUpdateIndex],
       //     [action.columnKey]: action.value,
       //   };
-
       //   data.splice(toUpdateIndex, 1, toUpdate);
-
       //   setData(data);
       // }
-
       // // triggered twice ... why ?
       // if (action.type === ActionType.SaveRowEditors) {
       //   const update = data.find((i) => i.drug_id === action.rowKeyValue);
       //   if (!update) return;
-
       //   const newValue = {
       //     drug: update.drug_id,
       //     drug_id: update.drug_id,
@@ -60,7 +55,6 @@ export const DrugTable = observer(() => {
       //   };
       //   updateDrugConfig(newValue);
       // }
-
       // if (action.type === ActionType.CloseRowEditors) {
       //   setData(config!.drug.map((i, id) => ({ id: id, ...i })));
       // }

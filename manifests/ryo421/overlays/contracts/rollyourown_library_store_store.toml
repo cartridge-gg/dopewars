@@ -1,4 +1,0 @@
-name = "rollyourown::library::store::store"
-reads = []
-writes = []
-init_calldata = []

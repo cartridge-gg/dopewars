@@ -62,7 +62,7 @@ const Decision = observer(() => {
 
   useEffect(() => {
     if (game && gameEvents ) {
-      const encounterEvent = gameEvents?.lastEncounter!.parsed as TravelEncounterData;
+      const encounterEvent = gameEvents?.lastEncounter?.parsed as TravelEncounterData;
       setEncounterEvent(encounterEvent);
     }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
@@ -99,7 +99,7 @@ const Decision = observer(() => {
     if (game?.player.status == PlayerStatus.BeingMugged) {
       playSound(Sounds.Gang);
     }
-  }, [game, game?.player.status]);
+  }, [ game?.player.status]);
 
   useEffect(() => {
     if (!isPending) {

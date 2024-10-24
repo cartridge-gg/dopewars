@@ -103,13 +103,7 @@ fn on_game_over(ref game_store: GameStore, s: IStoreLibraryDispatcher) {
     // save game
     s.set_game(game_store.game);
 
-    let season_manager = SeasonManagerTrait::new(s);
-
-    // handle new highscore & season version
-    season_manager.on_game_over(ref game_store);
-
     // emit GameOver
-
     s
         .w()
         .emit_raw(

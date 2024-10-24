@@ -26,6 +26,8 @@ export enum Sounds {
   Pay = "Pay.wav",
   // Chains = "Chains.mp3",
   Chains = "Punch.mp3",
+  Roll = "Roll.mp3",
+  SlotJackpot = "SlotJackpot.mp3",
   Ooo = "Ooo.wav",
   Death = "Flatline.mp3",
   Punch = "Punch.mp3",

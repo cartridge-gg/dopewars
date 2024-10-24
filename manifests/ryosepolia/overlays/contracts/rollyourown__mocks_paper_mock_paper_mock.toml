@@ -1,9 +1,0 @@
-name = "rollyourown::_mocks::paper_mock::paper_mock"
-reads = []
-writes = [
-    "ERC20MetadataModel",
-    "ERC20BalanceModel",
-    "ERC20AllowanceModel",
-    "InitializableModel",
-]
-init_calldata = ["$contract_address:rollyourown::systems::laundromat::laundromat"]

@@ -19,8 +19,6 @@ const columns = [
   { key: "defense_step", title: "DEF step", dataType: DataType.Number },
   { key: "speed_base", title: "SPD base", dataType: DataType.Number },
   { key: "speed_step", title: "SPD step", dataType: DataType.Number },
-
-  { key: "editColumn", width: 80 },
 ];
 
 export const EncounterTable = observer(() => {
@@ -28,38 +26,9 @@ export const EncounterTable = observer(() => {
     configStore: { config },
   } = useDojoContext();
 
- 
   const [data, setData] = useState(config?.encounterStats || []);
 
-  const table = useTable({
-    // onDispatch: (action) => {
-    //   // triggered on cell modifs
-    //   if (action.type === ActionType.UpdateEditorValue) {
-    //     const toUpdateIndex = data.findIndex((i) => i.id === action.rowKeyValue);
-    //     const toUpdate = {
-    //       ...data[toUpdateIndex],
-    //       [action.columnKey]: action.value,
-    //     };
-    //     data.splice(toUpdateIndex, 1, toUpdate);
-    //     setData(data);
-    //   }
-    //   // triggered twice ... why ?
-    //   if (action.type === ActionType.SaveRowEditors) {
-    //     const update = data.find((i) => i.id === action.rowKeyValue);
-    //     if (!update) return;
-    //     const newValue = {
-    //       ...update,
-    //       encounter: update.encounter === "Cops" ? 0 : 1,
-    //     };
-    //     delete newValue.image;
-    //   //  console.log(newValue)
-    //     updateEncounterConfig(newValue);
-    //   }
-    //   if (action.type === ActionType.CloseRowEditors) {
-    //     setData(config!.encounters);
-    //   }
-    // },
-  });
+  const table = useTable({});
 
   return (
     <Table

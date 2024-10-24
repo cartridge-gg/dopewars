@@ -22,7 +22,8 @@ mod laundromat {
         library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
         utils::{
             sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl}
+            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl},
+            vrf_consumer::{VrfImpl, Source},
         },
         packing::game_store::{GameStore, GameStoreImpl}
     };
@@ -30,7 +31,36 @@ mod laundromat {
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {}
+    enum Event {
+        NewHighScore: NewHighScore,
+        Claimed: Claimed,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct NewHighScore {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        #[key]
+        season_version: u16,
+        player_name: felt252,
+        hustler_id: u16,
+        cash: u32,
+        health: u8,
+        reputation: u8,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Claimed {
+        #[key]
+        game_id: u32,
+        #[key]
+        player_id: ContractAddress,
+        #[key]
+        season_version: u16,
+        paper: u32,
+    }
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
@@ -45,6 +75,8 @@ mod laundromat {
 
             // check if valid game
             assert(game.exists(), 'invalid game');
+            // check if ranked game
+            assert(game.is_ranked(), 'game is not ranked');
             // check dat game exists & is game_over
             assert(game.game_over, 'game is not over');
             // check not already registered
@@ -53,10 +85,14 @@ mod laundromat {
             assert(season.is_open(), 'season has closed');
 
             // register final_score
-            let mut game_store = GameStoreImpl::load(self.s(),game_id, player_id);
+            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
             self.s().set_game(game);
+
+            // handle new highscore & season version
+            let season_manager = SeasonManagerTrait::new(self.s());
+            season_manager.on_register_score(ref game_store);
 
             // retrieve Season SortedList 
             let list_id = game.season_version.into();
@@ -64,12 +100,15 @@ mod laundromat {
 
             // add Game to sorted_list
             sorted_list.add(world, game, (prev_game_id, prev_player_id));
-        // TODO : emit event 
         }
 
         fn launder(self: @ContractState, season_version: u16) {
+            let ryo_addresses = self.s().ryo_addresses();
+            let player_id = get_caller_address();
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+
             let world = self.world();
-            let process_batch_size = 10; // around 620k steps
+            let process_batch_size = 20; // around 276k steps / 10
 
             let season = self.s().season(season_version);
 
@@ -92,7 +131,7 @@ mod laundromat {
 
             // if not process, process batch_size items
             if !sorted_list.processed {
-                sorted_list.process::<Game>(world, process_batch_size); // TODO: change batch_size
+                sorted_list.process::<Game>(world, process_batch_size);
             }
 
             // if process, create new season
@@ -108,7 +147,7 @@ mod laundromat {
                     self.s().save_ryo_config(ryo_config);
 
                     // create new season
-                    let mut randomizer = RandomImpl::new('laundromat');
+                    let mut randomizer = RandomImpl::new(random);
                     let mut season_manager = SeasonManagerTrait::new(self.s());
                     season_manager.new_season(ref randomizer, ryo_config.season_version);
                 } else {
@@ -138,29 +177,37 @@ mod laundromat {
                 .pop_front() {
                     let mut game = self.s().game(*game_id, player_id);
 
-                    // retrieve season
-                    let season = self.s().season(game.season_version);
-
                     // retrieve Season SortedList   
                     let list_id = game.season_version.into();
                     let mut sorted_list = SortedListImpl::get(world, list_id);
-                    let entrants = sorted_list.size;
 
                     // check season status
                     assert(sorted_list.locked, 'season has not ended');
                     assert(sorted_list.processed, 'need more launder');
 
                     // any other check missing ?
-
                     assert(game.registered, 'unregistered game');
                     assert(game.position > 0, 'invalid position');
                     assert(!game.claimed, 'already claimed');
 
-                    total_claimable += game.claimable;
+                    total_claimable = total_claimable + game.claimable;
 
                     // update claimed & save
                     game.claimed = true;
                     self.s().set_game(game);
+
+                    // emit Claimed event
+                    emit!(
+                        world,
+                        (Event::Claimed(
+                            Claimed {
+                                game_id: game.game_id,
+                                player_id,
+                                season_version: game.season_version,
+                                paper: game.claimable
+                            }
+                        ))
+                    );
                 };
 
             // retrieve paper address 
@@ -170,7 +217,6 @@ mod laundromat {
             // transfer reward to player_id
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(player_id, total_claimable);
-        // TODO: event ?
         }
 
         fn claim_treasury(self: @ContractState) {
@@ -217,7 +263,9 @@ mod laundromat {
     impl InternalImpl of InternalTrait {
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
+                self.world(), selector_from_tag!("dopewars-store")
+            );
             IStoreLibraryDispatcher { class_hash, }
         }
     }

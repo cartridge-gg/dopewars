@@ -8,8 +8,15 @@ use rollyourown::{
         settings::{SeasonSettingsImpl, SeasonSettings, SeasonSettingsTrait}
     },
     models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
-    interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-    utils::{math::{MathImpl, MathTrait}, random::{Random, RandomTrait}},
+    interfaces::{
+        paper::{IPaperDispatcher, IPaperDispatcherTrait},
+        chips::{IChips, IChipsDispatcher, IChipsDispatcherTrait}
+    },
+    constants::{ETHER},
+    utils::{
+        math::{MathImpl, MathTrait}, random::{Random, RandomTrait},
+        events::{RawEventEmitterTrait, RawEventEmitterImpl}
+    },
     library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
 };
 
@@ -25,7 +32,7 @@ trait SeasonManagerTrait {
     fn get_next_version_timestamp(self: SeasonManager) -> u64;
     fn new_season(self: SeasonManager, ref randomizer: Random, version: u16);
     fn on_game_start(self: SeasonManager);
-    fn on_game_over(self: SeasonManager, ref game_store: GameStore) -> bool;
+    fn on_register_score(self: SeasonManager, ref game_store: GameStore) -> bool;
 }
 
 impl SeasonManagerImpl of SeasonManagerTrait {
@@ -48,18 +55,16 @@ impl SeasonManagerImpl of SeasonManagerTrait {
     fn new_season(self: SeasonManager, ref randomizer: Random, version: u16) {
         let ryo_config = self.s.ryo_config();
 
-        let season = ryo_config.build_season(version); 
+        let season = ryo_config.build_season(version);
         let season_settings = SeasonSettingsImpl::random(ref randomizer, version);
         let game_config = season_settings.build_game_config();
-        
+
         self.s.save_season(season);
         self.s.save_season_settings(season_settings);
         self.s.save_game_config(game_config);
     }
 
-    // TODO : move somewhere else
     fn on_game_start(self: SeasonManager) {
-        // check if current season should be historized and return season version  NOT ANYMORE
         let mut ryo_config = self.s.ryo_config();
 
         // get current season infos
@@ -94,8 +99,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
             .transfer_from(get_caller_address(), ryo_addresses.laundromat, paper_fee_eth);
     }
 
-    // rename on_register_score
-    fn on_game_over(self: SeasonManager, ref game_store: GameStore) -> bool {
+    fn on_register_score(self: SeasonManager, ref game_store: GameStore) -> bool {
         // check if new high_score & update high_score & next_version_timestamp if necessary
         let current_version = self.get_current_version();
         let mut season = self.s.season(current_version);
@@ -110,7 +114,27 @@ impl SeasonManagerImpl of SeasonManagerTrait {
 
             // save season
             self.s.save_season(season);
-            // trigger NewHighScore event ?
+
+            // emit NewHighScore
+            self
+                .s
+                .w()
+                .emit_raw(
+                    array![
+                        selector!("NewHighScore"),
+                        Into::<u32, felt252>::into(game_store.game.game_id),
+                        Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id)
+                            .into(),
+                        Into::<u16, felt252>::into(game_store.game.season_version),
+                    ],
+                    array![
+                        game_store.game.player_name.into(),
+                        Into::<u16, felt252>::into(game_store.game.hustler_id),
+                        Into::<u32, felt252>::into(game_store.player.cash),
+                        Into::<u8, felt252>::into(game_store.player.health),
+                        Into::<u8, felt252>::into(game_store.player.reputation),
+                    ]
+                );
             true
         } else {
             false

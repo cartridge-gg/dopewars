@@ -5,16 +5,14 @@ const nextConfig = {
   images: {
     domains: ["static.cartridge.gg", "static.localhost"],
   },
-  // "dev": "NODE_OPTIONS=--experimental-wasm-modules next dev",
-  // webpack: (config, options) => {
-  //   config.experiments = {
-  //     asyncWebAssembly: true,
-  //   };
-  //   return config
-  // },
-
+  dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
+  webpack: (config, options) => {
+    config.experiments = {
+      asyncWebAssembly: true,
+    };
+    return config;
+  },
 };
-
 
 import nextPWA from "next-pwa";
 
@@ -23,12 +21,10 @@ const withPWA = nextPWA({
   register: true,
   skipWaiting: true,
   disableDevLogs: true,
-  disable: process.env.NODE_ENV === 'development'
-})
+  disable: process.env.NODE_ENV === "development",
+});
 
-
-export default withPWA(nextConfig)
-
+export default withPWA(nextConfig);
 
 // "@next/bundle-analyzer": "^14.1.1",
 // import bundleAnalyzer from "@next/bundle-analyzer";

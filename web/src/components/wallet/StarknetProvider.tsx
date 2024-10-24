@@ -1,23 +1,17 @@
 import { DojoChainConfig, getStarknetProviderChains } from "@/dojo/setup/config";
-import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
   ExplorerFactory,
   InjectedConnector,
-  JsonRpcProviderArgs,
   StarknetConfig,
-  argent,
-  braavos,
   injected,
-  jsonRpcProvider,
-  starknetChainId,
   starkscan,
-  useInjectedConnectors,
-  useNetwork,
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 import { RpcProvider, shortString } from "starknet";
 import CartridgeConnector from "@cartridge/connector";
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "@/dojo/hooks";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -25,20 +19,11 @@ export const walletInstallLinks = {
 };
 export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
-function rpc(chain: Chain) {
-  return {
-    nodeUrl: chain.rpcUrls.default.http[0],
-  };
-}
-
 export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProviderFactory<RpcProvider> {
   return function (chain) {
-    // if(!selectedChain) return undefined
-
     const config = {
       nodeUrl: selectedChain.rpcUrl || "",
     };
-    // if (!config) return null;
     const chainId = selectedChain.chainConfig.id || undefined;
 
     ///@ts-ignore
@@ -49,33 +34,29 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
+  const controller = cartridgeConnector({ selectedChain });
+
   switch (selectedChain.name) {
-    case "SEPOLIA":
-      return [cartridgeConnector];
-      break;
+    case "KATANA":
+      return [controller, injected({ id: "dojoburner" })];
+
+    case "INTERNAL":
+      return [
+        cartridgeConnector({
+          keychain: "http://localhost:3001",
+          selectedChain,
+        }),
+        injected({ id: "dojoburner" }),
+      ];
 
     default:
-      return [injected({ id: "dojoburner" })];
-      break;
+      return [controller];
   }
 }
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  // const { connectors } = useInjectedConnectors({
-  //   // Show these connectors if the user has no connector installed.
-  //   recommended: [/*argent(), braavos(),*/ injected({ id: "dojoburner" }), cartridgeConnector],
-  //   // Hide recommended connectors if the user has any connector installed.
-  //   includeRecommended: "onlyIfNoConnectors",
-  //   // Randomize the order of the connectors.
-  //   // order: "random"
-  // });
-
   const chains = getStarknetProviderChains();
-
   const connectors = getConnectorsForChain(selectedChain);
-
-  // TODO: remove
-  // const provider = jsonRpcProvider({ rpc });
   const provider = customJsonRpcProvider(selectedChain);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
@@ -87,52 +68,62 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
-import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
+  // TODO handle mainnet
+  const paperAddress = getContractByName(selectedChain.manifest, DW_NS, "paper_mock").address;
+  const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
+  // const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
 
-const cartridgeConnector = new CartridgeConnector(
-  [
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
-      method: "faucet",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
-      method: "approve",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
-      method: "create_game",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
-      method: "travel",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
-      method: "decide",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
-      method: "end_game",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
-      method: "register_score",
-    },
-    {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
-      method: "claim",
-    },
-  ],
-  {
-    url: "https://x.cartridge.gg",
+  return new CartridgeConnector({
+    url: keychain ? keychain : "https://x.cartridge.gg",
+    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     theme: "dope-wars",
     paymaster: {
       caller: shortString.encodeShortString("ANY_CALLER"),
     },
-  },
-) as unknown as InjectedConnector;
+    policies: [
+      {
+        target: selectedChain.vrfProviderAddress,
+        method: "request_random",
+      },
+      {
+        target: paperAddress,
+        method: "faucet",
+      },
+      {
+        target: paperAddress,
+        method: "approve",
+      },
+      {
+        target: gameAddress,
+        method: "create_game",
+      },
+      {
+        target: gameAddress,
+        method: "travel",
+      },
+      {
+        target: gameAddress,
+        method: "decide",
+      },
+      {
+        target: gameAddress,
+        method: "end_game",
+      },
+      {
+        target: laundromatAddress,
+        method: "register_score",
+      },
+      {
+        target: laundromatAddress,
+        method: "claim",
+      },
+      //
+      // {
+      //   target: slotmachineAddress,
+      //   method: "roll",
+      // },
+    ],
+  }) as unknown as InjectedConnector;
+};

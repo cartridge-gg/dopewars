@@ -1,4 +1,5 @@
-use dojo::database::introspect::{Enum, Member, Ty, Introspect, Layout};
+use dojo::model::introspect::{Enum, Member, Ty, Introspect};
+use dojo::model::layout::Layout;
 
 use rollyourown::utils::bytes16::Bytes16;
 

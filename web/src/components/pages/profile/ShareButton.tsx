@@ -1,7 +1,7 @@
 import { Button } from "@/components/common";
 import { GameClass } from "@/dojo/class/Game";
 import { useGameStore } from "@/dojo/hooks";
-import { Game } from "@/generated/graphql";
+import { Dopewars_Game as Game } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import { Link as ChakraLink, StyleProps } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";

@@ -59,7 +59,7 @@ mod devtools {
                 player_id,
                 //
                 season_version,
-                game_mode: GameMode::Dealer,
+                game_mode: GameMode::Ranked,
                 //
                 player_name: Bytes16Impl::from('fake'),
                 hustler_id: rand_hustler_id,
@@ -121,7 +121,9 @@ mod devtools {
 
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
+                self.world(), selector_from_tag!("dopewars-store")
+            );
             IStoreLibraryDispatcher { class_hash, }
         }
     }

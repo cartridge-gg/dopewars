@@ -38,17 +38,16 @@ mod game {
         packing::{game_store::{GameStore, GameStoreImpl, GameMode}, player::{Player, PlayerImpl},},
         systems::{
             helpers::{trading, shopping, traveling, traveling::EncounterOutcomes, game_loop},
-            game::EncounterActions,
+            game::EncounterActions, slot::{SlotMachineImpl, SlotMachineTrait}
         },
         library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
         helpers::season_manager::{SeasonManagerTrait},
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            sorted_list::{SortedListImpl, SortedListTrait},
+            sorted_list::{SortedListImpl, SortedListTrait}, vrf_consumer::{VrfImpl, Source},
         },
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
-
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -62,7 +61,6 @@ mod game {
         TravelEncounterResult: TravelEncounterResult,
         GameOver: GameOver,
     }
-
 
     #[derive(Drop, starknet::Event)]
     struct GameCreated {
@@ -179,16 +177,23 @@ mod game {
         ) {
             self.assert_not_paused();
 
+            let ryo_addresses = self.s().ryo_addresses();
+            let player_id = get_caller_address();
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let mut randomizer = RandomImpl::new(random);
+
             let world = self.world();
             let game_id = world.uuid();
-            let player_id = get_caller_address();
 
             // get season version 
             let season_manager = SeasonManagerTrait::new(self.s());
             let season_version = season_manager.get_current_version();
 
-            // pay paper_fee
-            season_manager.on_game_start();
+            // if RANKED 
+            if game_mode == GameMode::Ranked {
+                // pay paper_fee
+                season_manager.on_game_start();
+            }
 
             // create game
             let mut game_config = self.s().game_config(season_version);
@@ -200,7 +205,9 @@ mod game {
             self.s().set_game(game);
 
             // create & save GameStorePacked
-            let game_store = GameStoreImpl::new(self.s(), ref game, ref game_config);
+            let game_store = GameStoreImpl::new(
+                self.s(), ref game, ref game_config, ref randomizer
+            );
             game_store.save();
 
             // emit GameCreated
@@ -232,9 +239,11 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            // let world = self.world();
+            let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
+            //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check if can travel
@@ -246,7 +255,7 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new('travel');
+            let mut randomizer = RandomImpl::new(random);
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;
@@ -272,14 +281,17 @@ mod game {
         }
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
+            let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
+            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
 
+            //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new('decide');
+            let mut randomizer = RandomImpl::new(random);
             let mut season_settings = self.s().season_settings(game_store.game.season_version);
 
             // // resolve decision
@@ -298,6 +310,7 @@ mod game {
         }
     }
 
+
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         // #[inline(always)]
@@ -309,7 +322,7 @@ mod game {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
             assert(
-                self.world().is_owner(get_caller_address(), get_contract_address().into()),
+                self.world().is_owner(get_contract_address().into(), get_caller_address()),
                 'not owner'
             );
         }
@@ -332,12 +345,13 @@ mod game {
                         },
                     };
                 };
-        // TODO handle price impact ?
         }
 
         #[inline(always)]
         fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
+            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
+                self.world(), selector_from_tag!("dopewars-store")
+            );
             IStoreLibraryDispatcher { class_hash, }
         }
     }

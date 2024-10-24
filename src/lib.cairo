@@ -43,16 +43,20 @@ mod systems {
     mod game;
     mod laundromat;
 
-
     mod helpers {
         mod game_loop;
 
         mod trading;
         mod shopping;
-        mod traveling; 
+        mod traveling;
     }
 
+    mod slot;
     mod devtools;
+}
+
+mod tokens {
+    mod chips;
 }
 
 mod utils {
@@ -64,14 +68,18 @@ mod utils {
     mod introspect;
     mod payout_structure;
     mod sorted_list;
+    mod world_utils;
+    mod vrf_consumer;
 }
 
 mod interfaces {
+    mod chips;
     mod paper;
 }
 
 mod _mocks {
     mod paper_mock;
+    mod vrf_provider_mock;
 }
 
 mod traits;

@@ -5,8 +5,9 @@ import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet
 import { KatanaIcon } from "../icons";
 import { useEffect, useState } from "react";
 import { Cartridge } from "../icons/branding/Cartridge";
+import CartridgeConnector from "@cartridge/connector";
 
-export const ConnectButton = ({ ...props }) => {
+export const ConnectButton = ({ variant = "pixelated", ...props }) => {
   const { account, address, status } = useAccount();
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
@@ -28,16 +29,23 @@ export const ConnectButton = ({ ...props }) => {
     <>
       <Box display="flex" alignItems="center" justifyContent="center" {...props}>
         {!account && (
-          <Button variant="pixelated" h="48px" fontSize="14px" onClick={onClick} w="full">
+          <Button variant={variant} h={props.h ? props.h : "48px"} fontSize="14px" onClick={onClick} w="full">
             Connect
           </Button>
         )}
         {account && (
           <Button
-            variant="pixelated"
+            variant={variant}
             h="48px"
             fontSize="14px"
-            onClick={() => uiStore.openAccountDetails()}
+            onClick={() => {
+              if (connector?.id === "controller") {
+                // broken..
+                (connector as unknown as CartridgeConnector).controller.openProfile()
+              } else {
+                uiStore.openAccountDetails();
+              }
+            }}
             w="full"
             alignItems="center"
             justifyContent="center"

@@ -26,13 +26,9 @@ struct MarketsPacked {
 #[generate_trait]
 impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
-    fn new(salt: u32) -> MarketsPacked {
-        let packed: u256 = core::pedersen::pedersen(
-            salt.into(), starknet::get_caller_address().into()
-        )
-            .into();
+    fn new(rand: u256) -> MarketsPacked {
         let mask = BitsMathImpl::mask::<u256>(GameStoreLayout::Markets.bits());
-        let safe_packed: felt252 = (packed & mask).try_into().unwrap();
+        let safe_packed: felt252 = (rand & mask).try_into().unwrap();
         MarketsPacked { packed: safe_packed }
     }
 
@@ -46,7 +42,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         6
     }
 
-  
+
     fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
         let bits = BitsImpl::from_felt(self.packed);
 
@@ -88,7 +84,9 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     //
     //
 
-    fn market_variations(ref self: MarketsPacked, world: IWorldDispatcher, ref randomizer: Random, ref game: Game,) {
+    fn market_variations(
+        ref self: MarketsPacked, world: IWorldDispatcher, ref randomizer: Random, ref game: Game,
+    ) {
         let mut locations = LocationsEnumerableImpl::all();
 
         loop {

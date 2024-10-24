@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { SeasonDetailsModal } from "./SeasonDetailsModal";
-import { Game } from "@/generated/graphql";
+import { Dopewars_Game as Game } from "@/generated/graphql";
 import { shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";
 import { getPayedCount } from "@/dojo/helpers";

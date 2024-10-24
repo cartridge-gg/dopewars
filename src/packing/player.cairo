@@ -161,6 +161,7 @@ impl PlayerImpl of PlayerTrait {
         // update drug level
         game_store.player.drug_level = drug_level;
 
+        // TODO: fix lvl up / down
         // randomize price for new drug
         let drug_slot = drug_level.sub_capped(1, 0);
         game_store.markets.shuffle_drug_prices(ref randomizer, drug_slot);

@@ -1,8 +1,0 @@
-name = "rollyourown::systems::ryo::ryo"
-reads = []
-writes = ["RyoConfig", "RyoAddress", "Season", "SeasonSettings"]
-init_calldata = [
-    "$contract_address:rollyourown::_mocks::paper_mock::paper_mock",
-    "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
-    "$contract_address:rollyourown::systems::laundromat::laundromat",
-]

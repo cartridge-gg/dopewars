@@ -21,18 +21,3 @@ struct GameConfig {
     rep_hospitalized: u8, // reputation earn when Hospitalized
     rep_jailed: u8, // reputation earn when Jailed
 }
-
-
-// #[generate_trait]
-// impl GameConfigImpl of GameConfigTrait {
-//     fn build_game(
-//         self: GameConfig,
-//         game_id: u32,
-//         player_id: ContractAddress,
-//         hustler_id: u16,
-//         player_name: felt252
-//     ) -> Game {}
-// }
-
-
-

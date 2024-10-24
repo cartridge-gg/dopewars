@@ -8,5 +8,6 @@ struct RyoAddress {
     key: u8,
     paper: ContractAddress,
     treasury: ContractAddress,
-    laundromat: ContractAddress,
+    vrf: ContractAddress,
+    laundromat: ContractAddress, // should be removed
 }
