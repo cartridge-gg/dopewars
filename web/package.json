@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -18,8 +18,7 @@
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
-    "stark-vrf-wasm": "file:../../stark-vrf/wasm/pkg/",
-    "@cartridge/connector": "^0.4.0",
+    "@cartridge/connector": "0.3.46",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.17",
@@ -44,13 +43,14 @@
     "ka-table": "^8.11.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
-    "next": "v14.3.0-canary.50",
+    "next": "v15.0.1",
     "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-json-view-lite": "^1.2.1",
     "react-query": "^3.39.2",
+    "stark-vrf-wasm": "file:../../stark-vrf/wasm/pkg/",
     "starknet": "6.2.0",
     "use-caret-position": "^0.0.2",
     "zustand": "^4.3.7"
