@@ -6,9 +6,7 @@ use rollyourown::config::{
 
 #[starknet::interface]
 trait IConfig<T> {
-    // fn initialize_1(self: @T);
     fn get_config(self: @T) -> Config;
-    // fn update_game_config(self: @T, game_config: GameConfig);
     fn update_drug_config(self: @T, drug_config: DrugConfig);
 }
 
@@ -33,7 +31,6 @@ struct LayoutItem {
     idx: u8,
     bits: u8,
 }
-
 
 #[dojo::contract]
 mod config {

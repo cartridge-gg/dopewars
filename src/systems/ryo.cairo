@@ -8,8 +8,8 @@ trait IRyo<T> {
     //
     fn set_paused(self: @T, paused: bool);
     fn update_ryo_config(self: @T, ryo_config: RyoConfig);
-
-
+    fn set_paper(self: @T, paper_address: ContractAddress);
+    fn set_treasury(self: @T, treasury_address: ContractAddress);
     //
     fn paper(self: @T) -> ContractAddress;
     fn treasury(self: @T) -> ContractAddress;
@@ -99,6 +99,21 @@ mod ryo {
             self.s().save_ryo_config(ryo_config);
         }
 
+        fn set_paper(self: @ContractState, paper_address: ContractAddress) {
+            self.assert_caller_is_owner();
+           
+            let mut ryo_addresses = self.s().ryo_addresses();
+            ryo_addresses.paper = paper_address;
+            self.s().save_ryo_addresses(ryo_addresses);
+        }
+
+        fn set_treasury(self: @ContractState, treasury_address: ContractAddress) {
+            self.assert_caller_is_owner();
+           
+            let mut ryo_addresses = self.s().ryo_addresses();
+            ryo_addresses.treasury = treasury_address;
+            self.s().save_ryo_addresses(ryo_addresses);
+        }
 
         //
         // getters
