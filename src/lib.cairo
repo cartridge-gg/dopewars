@@ -42,16 +42,15 @@ mod systems {
     mod ryo;
     mod game;
     mod laundromat;
-    
+
     mod helpers {
         mod game_loop;
-        
+
         mod trading;
         mod shopping;
-        mod traveling; 
+        mod traveling;
     }
 
-    mod predictoor;
     mod slot;
     mod devtools;
 }

@@ -204,16 +204,14 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounter(
         ref game_store: GameStore, ref season_settings: SeasonSettings
     ) -> EncounterConfig {
-        let level = Self::get_encounter_level(
-            ref season_settings, game_store.player.reputation
-        );
+        let level = Self::get_encounter_level(ref season_settings, game_store.player.reputation);
 
         let rand_from_game_store: u256 = pedersen::pedersen(
             game_store.markets.packed, game_store.markets.packed
         )
             .into() % 2;
 
-        let rand_felt252: felt252 = rand_from_game_store.try_into().unwrap(); 
+        let rand_felt252: felt252 = rand_from_game_store.try_into().unwrap();
 
         let encounter_type = match rand_felt252 {
             0 => Encounters::Cops,
@@ -244,8 +242,8 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     }
 
     fn get_random_demand_pct(ref game_store: GameStore) -> u8 {
-        let rand_from_game_store: u256 = pedersen::pedersen(
-            game_store.markets.packed, game_store.game.game_id.into()
+        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+            array![game_store.markets.packed, game_store.game.game_id.into()].span()
         )
             .into();
 

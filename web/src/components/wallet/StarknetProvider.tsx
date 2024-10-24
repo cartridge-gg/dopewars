@@ -73,8 +73,7 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
   const paperAddress = getContractByName(selectedChain.manifest, DW_NS, "paper_mock").address;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
-  const predictoorAddress = getContractByName(selectedChain.manifest, DW_NS, "predictoor").address;
-  const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
+  // const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
 
   return new CartridgeConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
@@ -121,19 +120,10 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
         method: "claim",
       },
       //
-
-      {
-        target: predictoorAddress,
-        method: "predictoor",
-      },
-      {
-        target: slotmachineAddress,
-        method: "create",
-      },
-      {
-        target: slotmachineAddress,
-        method: "roll",
-      },
+      // {
+      //   target: slotmachineAddress,
+      //   method: "roll",
+      // },
     ],
   }) as unknown as InjectedConnector;
 };

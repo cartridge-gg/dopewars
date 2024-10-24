@@ -9,6 +9,7 @@
     "ModelUnion": [
       "dopewars_DrugConfig",
       "dopewars_ERC20AllowanceModel",
+      "dopewars_ERC20BalanceEvent",
       "dopewars_ERC20BalanceModel",
       "dopewars_ERC20MetadataModel",
       "dopewars_EncounterStatsConfig",
@@ -23,7 +24,6 @@
       "dopewars_RyoConfig",
       "dopewars_Season",
       "dopewars_SeasonSettings",
-      "dopewars_SlotMachine",
       "dopewars_SortedList",
       "dopewars_SortedListItem"
     ]

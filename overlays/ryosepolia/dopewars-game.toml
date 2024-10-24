@@ -1,4 +1,12 @@
 tag = "dopewars-game"
 reads = []
-writes = ["dopewars-SlotMachine","dopewars-Game","dopewars-GameStorePacked","dopewars-RyoConfig","dopewars-Season","dopewars-SeasonSettings","dopewars-SortedList","dopewars-SortedListItem"]
+writes = [
+    "dopewars-Game",
+    "dopewars-GameStorePacked",
+    "dopewars-RyoConfig",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-SortedList",
+    "dopewars-SortedListItem",
+]
 init_calldata = []

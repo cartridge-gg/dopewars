@@ -5,12 +5,14 @@ import { Layout } from "@/components/layout";
 import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { playSound, Sounds } from "@/hooks/sound";
 import { IsMobile } from "@/utils/ui";
-import { HStack, VStack, Text, Box, Image, keyframes, Button, Spacer } from "@chakra-ui/react";
+import { HStack, VStack, Text, Box, Image, keyframes } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // import { Model, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { Model, Subscription, ToriiClient } from "../../../../../dojo.c/pkg";
+import { useToast } from "@/hooks/toast";
+import { shortString } from "starknet";
 
 const onRollAnim = keyframes`  
   0% {transform: rotateX(0deg)}   
@@ -158,6 +160,7 @@ export default function Slot() {
   const {
     chains: { selectedChain },
   } = useDojoContext();
+  const { toast } = useToast();
   const { gameId } = useRouterContext();
   const isMobile = IsMobile();
 
@@ -170,6 +173,7 @@ export default function Slot() {
 
   const [toriiClient, setToriiClient] = useState<ToriiClient>();
   const [subscription, setSubscription] = useState<Subscription>();
+  const [subscriptionEvents, setSubscriptionEvents] = useState<Subscription>();
 
   useEffect(() => {
     const init = async () => {
@@ -225,20 +229,39 @@ export default function Slot() {
         setIsRolling(false);
       }
 
-      // subscribe to changes
-      const sub = await client.onEntityUpdated(
-        [
-          {
-            Keys: {
-              keys: [gameId],
-              models: ["dopewars-SlotMachine"],
-              pattern_matching: "FixedLen",
+      if (!subscription) {
+        // subscribe to changes
+        const sub = await client.onEntityUpdated(
+          [
+            {
+              Keys: {
+                keys: [gameId],
+                models: ["dopewars-SlotMachine"],
+                pattern_matching: "FixedLen",
+              },
             },
-          },
-        ],
-        onEntityUpdated,
-      );
-      setSubscription(sub);
+          ],
+          onEntityUpdated,
+        );
+        setSubscription(sub);
+      }
+
+      if (!subscriptionEvents) {
+        // subscribe to changes
+        const subEvents = await client.onEventMessageUpdated(
+          [
+            {
+              Keys: {
+                keys: [account?.address],
+                models: ["dopewars-SlotMachineCombination"],
+                pattern_matching: "FixedLen",
+              },
+            },
+          ],
+          onEventMessageUpdated,
+        );
+        setSubscriptionEvents(subEvents);
+      }
 
       setIsRolling(false);
     };
@@ -246,9 +269,24 @@ export default function Slot() {
     init();
 
     return () => {
-      subscription && subscription.cancel();
+      if (subscription) subscription.cancel();
+      if (subscriptionEvents) subscriptionEvents.cancel();
     };
   }, [selectedChain, account, gameId]);
+
+  const onEventMessageUpdated = useCallback(
+    async (entity: string, update: any) => {
+      console.log("onEventMessageUpdated", entity, update);
+      const combination = update["dopewars-SlotMachineCombination"] as Model;
+      if (!combination) return;
+
+      const name = shortString.decodeShortString(combination.name.value!.toString());
+      const payout = Number(combination.payout.value);
+      console.log("onEventMessageUpdated", combination);
+      toast({ message: `${name}  +${payout} $CHIPS !!!`, duration: 1_500 });
+    },
+    [toast],
+  );
 
   const getNewOffset = (current: number, newOffset: number) => {
     let a = current % slotByRoll;
@@ -273,7 +311,7 @@ export default function Slot() {
       const { type, win } = checkCombination(newOffsets);
       const elasped = Date.now() - startAt.current;
       const delay = elasped > 1_000 ? 1 : 1_000 - elasped;
-      console.log(delay);
+      // console.log(delay);
       setTimeout(() => {
         offsets.current = [
           getNewOffset(offsets.current[0], Number(machine.offset_r.value)),

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cartridge/connector':
-        specifier: ^0.3.46
-        version: 0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
+        specifier: ^0.4.0
+        version: 0.4.0(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
       '@chakra-ui/anatomy':
         specifier: ^2.1.1
         version: 2.2.2
@@ -819,14 +819,14 @@ packages:
     resolution: {integrity: sha512-+uarb83brBzPKN38NX1MkB6vb6+mwvR6amUulqAE7ccQw1pEl+bCia9TbdG1lsnFP7lZySvUn37CHyXQdfTwzg==}
     engines: {node: '>=6.9.0'}
 
-  '@cartridge/account-wasm@0.3.46':
-    resolution: {integrity: sha512-XK/1yE0U/4v9UXelkOEmW1DNbFXikWnifm9aZQ9JfT2SrNcOM3DTMHQZXMbL217RzxM7yE8KqDVVGwN0//Ya7Q==}
+  '@cartridge/account-wasm@0.4.0':
+    resolution: {integrity: sha512-slkZhkgAPMhh2sXa2GNeidighPjjjiTA4hpi5yqEJIbMV7SnoHZGBqBZC9oDiDWGnCGVeClwF5+YPdkxZMGhYA==}
 
-  '@cartridge/connector@0.3.46':
-    resolution: {integrity: sha512-iYfYdp6gaFJ8sKSFE4DpdVQJZj1tMroaeES76nC6U5aVQM8uz8OLtFB2AdNx/VO5QoGBB+6YbHyFffRCuVeaOg==}
+  '@cartridge/connector@0.4.0':
+    resolution: {integrity: sha512-Yv4phu5LODD2RP/1BiVKmBvCvfCiZDYAqw80CEyYKfduR0oh3qsv8BCTypQULeuDP+Ufm6mVihw5X+/ATT2LoQ==}
 
-  '@cartridge/controller@0.3.46':
-    resolution: {integrity: sha512-xTr6u0dMIf6oYBf8PeF6edVND2QWWrjrHb+qUJ3taco6OEUFR0uEc2TfEr/PS7tTA1rIlgXJIeWP3VLRHz+IBg==}
+  '@cartridge/controller@0.4.0':
+    resolution: {integrity: sha512-2ZhKE9FBO8lN4QeS0bfVURc8XmJ7DVnpae7WZHnkc9DVCjAPZdliFp/Zgzdq7OsCu64zIAgwe7EPPdBHAmvI4w==}
 
   '@cartridge/penpal@6.2.3':
     resolution: {integrity: sha512-K8h9VqBfFPXcAFQNnvgBnejF/dp7249pS4jXu3NhNYR6JqMQxtcrDqfnPmJvbF4ECEBs+8Z2UiwlRQiKt5nNsg==}
@@ -2105,9 +2105,6 @@ packages:
   '@scure/base@1.1.5':
     resolution: {integrity: sha512-Brj9FiG2W1MRQSTB212YVPRrcbjkv48FoZi/u4l/zds/ieRrqsh7aUf6CLwkAq61oKXr/ZlTzlY66gLIj3TFTQ==}
 
-  '@scure/base@1.1.6':
-    resolution: {integrity: sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==}
-
   '@scure/base@1.1.9':
     resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
 
@@ -2161,6 +2158,27 @@ packages:
     resolution: {integrity: sha512-4+09JEdO4d6+Gc8Y/g2M/MuxDK5IY0QV8+2wL2304wPKJgJ54cBbULd3nciJ5uvh/as8rrxx6s0mtIwpRuGd1g==}
     peerDependencies:
       react: ^18.0.0
+
+  '@telegram-apps/bridge@1.3.0':
+    resolution: {integrity: sha512-9P2SEhr1SSo8JQsbfm4fIzYhZY0wwH6PEOmSZ0kNXZ4xX1iSftJ3T7kSbcaQL2zIVrKO8PJxKeH4Etmkk9Oqgg==}
+
+  '@telegram-apps/navigation@1.0.4':
+    resolution: {integrity: sha512-I+wwfhR7O29ofzJ+x4HzErDbvYGjXlJaeaTxwYLCvcS014pv4+5ijbfKSBAmNIxWZC+s97+WzTD86jeze79K3w==}
+
+  '@telegram-apps/sdk@2.5.2':
+    resolution: {integrity: sha512-LlK07tFeL4QNJt/5dO/yh7ilWuqr3ja+Nr9xnDvQsxO7NroldC7moEqAzGnTq8Fu7mu1WFf/UMkmZnOMkK8OWw==}
+
+  '@telegram-apps/signals@1.0.1':
+    resolution: {integrity: sha512-+DAltcPtLBeNPjX+BxEh9smh0cbxCXuEcsOEyDCovp6HJHusWFv1tDyJuV0/rXFmcDs+VwU7SjmINdjld2nFHw==}
+
+  '@telegram-apps/toolkit@1.0.0':
+    resolution: {integrity: sha512-fSVoveLuMzwRKWeXEufMSXxH+HvjsFKb1DeT3pG5qLpnb2rdtejnNcwAt6WEPtiZ3a4YntYaFuR3KYgVv0ZxeQ==}
+
+  '@telegram-apps/transformers@1.0.1':
+    resolution: {integrity: sha512-SsI+FhCOkkZFUPqr+ib11Fi25fRCpdMsI2Flp51NrdtKaPDnKFkBBG4GcSEaGL8sXquW9uAANjc499jSaZK5jQ==}
+
+  '@telegram-apps/types@1.0.1':
+    resolution: {integrity: sha512-8tGy1zG/1MEt0KF8nR0ffZ93whKveEJIkBI+qxHCRgatKwKVJV2dVSXrrBspFKn7FIIo1/CvmB8zP4vKPzglbg==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -6471,21 +6489,22 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@cartridge/account-wasm@0.3.46': {}
+  '@cartridge/account-wasm@0.4.0': {}
 
-  '@cartridge/connector@0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
+  '@cartridge/connector@0.4.0(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
     dependencies:
-      '@cartridge/controller': 0.3.46(encoding@0.1.13)
+      '@cartridge/controller': 0.4.0(encoding@0.1.13)
       '@starknet-react/core': 2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.11.0(encoding@0.1.13))
+      '@telegram-apps/sdk': 2.5.2
       starknet: 6.11.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - get-starknet-core
       - react
 
-  '@cartridge/controller@0.3.46(encoding@0.1.13)':
+  '@cartridge/controller@0.4.0(encoding@0.1.13)':
     dependencies:
-      '@cartridge/account-wasm': 0.3.46
+      '@cartridge/account-wasm': 0.4.0
       '@cartridge/penpal': 6.2.3
       base64url: 3.0.1
       cbor-x: 1.5.9
@@ -8310,15 +8329,13 @@ snapshots:
 
   '@scure/base@1.1.5': {}
 
-  '@scure/base@1.1.6': {}
-
   '@scure/base@1.1.9': {}
 
   '@scure/bip32@1.3.2':
     dependencies:
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.6
+      '@scure/base': 1.1.9
 
   '@scure/bip32@1.5.0':
     dependencies:
@@ -8329,7 +8346,7 @@ snapshots:
   '@scure/bip39@1.2.1':
     dependencies:
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.6
+      '@scure/base': 1.1.9
 
   '@scure/starknet@1.0.0':
     dependencies:
@@ -8396,6 +8413,37 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.24.1
       react: 18.2.0
+
+  '@telegram-apps/bridge@1.3.0':
+    dependencies:
+      '@telegram-apps/signals': 1.0.1
+      '@telegram-apps/toolkit': 1.0.0
+      '@telegram-apps/transformers': 1.0.1
+      '@telegram-apps/types': 1.0.1
+
+  '@telegram-apps/navigation@1.0.4':
+    dependencies:
+      '@telegram-apps/bridge': 1.3.0
+      '@telegram-apps/signals': 1.0.1
+      '@telegram-apps/toolkit': 1.0.0
+
+  '@telegram-apps/sdk@2.5.2':
+    dependencies:
+      '@telegram-apps/bridge': 1.3.0
+      '@telegram-apps/navigation': 1.0.4
+      '@telegram-apps/signals': 1.0.1
+      '@telegram-apps/transformers': 1.0.1
+
+  '@telegram-apps/signals@1.0.1': {}
+
+  '@telegram-apps/toolkit@1.0.0': {}
+
+  '@telegram-apps/transformers@1.0.1':
+    dependencies:
+      '@telegram-apps/toolkit': 1.0.0
+      '@telegram-apps/types': 1.0.1
+
+  '@telegram-apps/types@1.0.1': {}
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -9497,7 +9545,7 @@ snapshots:
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.36.0)
       eslint-plugin-react: 7.34.1(eslint@8.36.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.36.0)
@@ -9521,7 +9569,7 @@ snapshots:
       enhanced-resolve: 5.16.0
       eslint: 8.36.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.3
       is-core-module: 2.13.1
@@ -9543,7 +9591,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -11523,8 +11571,8 @@ snapshots:
   starknet@6.11.0(encoding@0.1.13):
     dependencies:
       '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
-      '@scure/base': 1.1.6
+      '@noble/hashes': 1.5.0
+      '@scure/base': 1.1.9
       '@scure/starknet': 1.0.0
       abi-wan-kanabi: 2.2.2
       fetch-cookie: 3.0.1

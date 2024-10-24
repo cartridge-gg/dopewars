@@ -4,9 +4,9 @@
 #[dojo::contract]
 mod chips {
     use openzeppelin::token::erc20::ERC20Component;
-    use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
+    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use openzeppelin::token::erc20::interface::IERC20Metadata;
-    use starknet::ContractAddress;
+    use starknet::{ContractAddress};
 
     use rollyourown::{library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},};
 
@@ -28,6 +28,17 @@ mod chips {
     enum Event {
         #[flat]
         ERC20Event: ERC20Component::Event,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::model]
+    #[dojo::event]
+    struct ERC20BalanceEvent {
+        #[key]
+        token_address: ContractAddress,
+        #[key]
+        owner: ContractAddress,
+        balance: u256
     }
 
     #[abi(embed_v0)]
@@ -93,6 +104,47 @@ mod chips {
                 self.world(), selector_from_tag!("dopewars-store")
             );
             IStoreLibraryDispatcher { class_hash, }
+        }
+    }
+
+    pub impl ERC20HooksImpl<
+        ContractState, +IWorldProvider
+    > of ERC20Component::ERC20HooksTrait<ContractState> {
+        fn before_update(
+            ref self: ERC20Component::ComponentState<ContractState>,
+            from: ContractAddress,
+            recipient: ContractAddress,
+            amount: u256
+        ) {}
+
+        fn after_update(
+            ref self: ERC20Component::ComponentState<ContractState>,
+            from: ContractAddress,
+            recipient: ContractAddress,
+            amount: u256
+        ) {
+            let contract_state = self.get_contract();
+
+            let balance_from = contract_state.erc20.balance_of(from);
+            let balance_recipient = contract_state.erc20.balance_of(recipient);
+
+            emit!(
+                contract_state.world(),
+                (ERC20BalanceEvent {
+                    token_address: starknet::get_contract_address(),
+                    owner: from,
+                    balance: balance_from
+                })
+            );
+
+            emit!(
+                contract_state.world(),
+                (ERC20BalanceEvent {
+                    token_address: starknet::get_contract_address(),
+                    owner: recipient,
+                    balance: balance_recipient
+                })
+            );
         }
     }
 }

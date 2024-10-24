@@ -19,4 +19,10 @@ mappings = { "origami_token" = "dopewars" }
 
 
 [migration]
-skip_contracts = ["dopewars-vrf_provider_mock"]
+skip_contracts = [
+    "dopewars-slotmachine",
+    "dopewars-SlotMachine",
+    "dopewars-SlotMachineCombination",
+    "dopewars-chips",
+    "dopewars-vrf_provider_mock",
+]

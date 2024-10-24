@@ -193,11 +193,6 @@ mod game {
             if game_mode == GameMode::Ranked {
                 // pay paper_fee
                 season_manager.on_game_start();
-
-                // TODO: Move in register_score
-                // create a slot machine
-                let machine = SlotMachineImpl::new(game_id, 10, randomizer.next());
-                self.s().set_slot_machine(machine);
             }
 
             // create game

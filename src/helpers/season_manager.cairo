@@ -97,12 +97,6 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         // transfer paper_fee_ether from user to laundromat ( user approved game contract to spend paper before)
         IPaperDispatcher { contract_address: ryo_addresses.paper }
             .transfer_from(get_caller_address(), ryo_addresses.laundromat, paper_fee_eth);
-
-        // mint 1 $CHIPS for user
-        let (_, chips_address) = rollyourown::utils::world_utils::get_contract_infos(
-            self.s.w(), selector_from_tag!("dopewars-chips")
-        );
-        IChipsDispatcher { contract_address: chips_address }.mint(get_caller_address(), 1);
     }
 
     fn on_register_score(self: SeasonManager, ref game_store: GameStore) -> bool {

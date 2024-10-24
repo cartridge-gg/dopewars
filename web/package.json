@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "stark-vrf-wasm": "file:../../stark-vrf/wasm/pkg/",
-    "@cartridge/connector": "^0.3.46",
+    "@cartridge/connector": "^0.4.0",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.17",

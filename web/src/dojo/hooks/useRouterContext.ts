@@ -1,11 +1,9 @@
-import { Home } from "./../../components/icons/Home";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { DrugConfigFull, LocationConfigFull } from "../stores/config";
-import { GameMode, TradeDirection } from "../types";
+import {  LocationConfigFull } from "../stores/config";
+import { TradeDirection } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { selector } from "starknet";
-import { gameModeFromName, gameModeFromNameKeys } from "../helpers";
 
 type RouterContext = {
   router: NextRouter;
@@ -23,7 +21,7 @@ type RouterContext = {
 };
 
 const password = BigInt("0x03fbe61f91d65aebd1b8e36ad746ea25f8a5e728ab30700acb0f940d05bfcf79");
-const restrictedPages = ["/admin", "/devtools"];
+const restrictedPages = ["/admin", "/devtools", "/slot"];
 
 export const useRouterContext = (): RouterContext => {
   const router = useRouter();

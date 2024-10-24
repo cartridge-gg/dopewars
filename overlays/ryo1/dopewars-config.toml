@@ -1,5 +1,12 @@
 tag = "dopewars-config"
 reads = []
-writes = ["dopewars-GameConfig","dopewars-DrugConfig","dopewars-LocationConfig","dopewars-HustlerItemBaseConfig","dopewars-HustlerItemTiersConfig","dopewars-EncounterStatsConfig"]
+writes = [
+    "dopewars-GameConfig",
+    "dopewars-DrugConfig",
+    "dopewars-LocationConfig",
+    "dopewars-HustlerItemBaseConfig",
+    "dopewars-HustlerItemTiersConfig",
+    "dopewars-EncounterStatsConfig",
+]
 computed = []
 init_calldata = []

@@ -20,5 +20,9 @@ mappings = { "origami_token" = "dopewars" }
 
 [migration]
 skip_contracts = [
+    "dopewars-slotmachine",
+    "dopewars-SlotMachine",
+    "dopewars-SlotMachineCombination",
+    "dopewars-chips",
     "dopewars-devtools",
 ]

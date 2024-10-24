@@ -21,6 +21,10 @@ default = "dopewars"
 
 [migration]
 skip_contracts = [
+    "dopewars-slotmachine",
+    "dopewars-SlotMachine",
+    "dopewars-SlotMachineCombination",
+    "dopewars-chips",
     "dopewars-devtools",
     "dopewars-paper_mock",
     "dopewars-vrf_provider_mock",

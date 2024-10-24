@@ -52,43 +52,44 @@ pub fn get_XX_payout(value: u8) -> u32 {
 }
 
 
-pub fn check_combinations(values: (u8, u8, u8)) -> Option<(felt252, u32)> {
+pub fn check_combinations(values: (u8, u8, u8)) -> Option<(felt252, (u8, u8, u8), u32)> {
     if values == (7, 7, 7) {
-        return Option::Some(('7,7,7', 50));
+        return Option::Some(('7,7,7', values, 50));
     }
     if values == (6, 6, 6) {
-        return Option::Some(('6,6,6', 25));
+        return Option::Some(('6,6,6', values, 25));
     }
     if values == (5, 5, 5) {
-        return Option::Some(('5,5,5', 10));
+        return Option::Some(('5,5,5', values, 10));
     }
     if values == (4, 4, 4) {
-        return Option::Some(('4,4,4', 9));
+        return Option::Some(('4,4,4', values, 9));
     }
     if values == (3, 3, 3) {
-        return Option::Some(('3,3,3', 8));
+        return Option::Some(('3,3,3', values, 8));
     }
     if values == (2, 2, 2) {
-        return Option::Some(('2,2,2', 7));
+        return Option::Some(('2,2,2', values, 7));
     }
     if values == (1, 1, 1) {
-        return Option::Some(('1,1,1', 6));
+        return Option::Some(('1,1,1', values, 6));
     }
     if values == (0, 0, 0) {
-        return Option::Some(('0,0,0', 5));
+        return Option::Some(('0,0,0', values, 5));
     }
 
     match is_XXW(values) {
-        Option::Some(v) => { return Option::Some(('X,X,W', get_XX_payout(v))); },
+        Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
         Option::None => {}
     };
 
     match is_XWX(values) {
-        Option::Some(v) => { return Option::Some(('X,W,X', get_XX_payout(v))); },
+        Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
         Option::None => {}
     };
+
     match is_WXX(values) {
-        Option::Some(v) => { return Option::Some(('W,X,X', get_XX_payout(v))); },
+        Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
         Option::None => {}
     };
 
@@ -124,7 +125,7 @@ impl SlotMachineImpl of SlotMachineTrait {
     }
 
 
-    fn roll(ref self: SlotMachine, seed: felt252) -> Option<(felt252, u32)> {
+    fn roll(ref self: SlotMachine, seed: felt252) -> Option<(felt252, (u8, u8, u8), u32)> {
         assert(self.can_roll(), 'no credit no roll');
 
         // pay 1 credit
@@ -141,7 +142,7 @@ impl SlotMachineImpl of SlotMachineTrait {
         self.offset_o = (self.offset_o + o) % SLOT_BY_ROLL;
 
         let result = check_combinations(self.get_values());
-        if let Option::Some((_, payout)) = result {
+        if let Option::Some((_, _, payout)) = result {
             // earn credits
             self.credits += payout;
         };
@@ -156,7 +157,6 @@ impl SlotMachineImpl of SlotMachineTrait {
     fn get_values(self: @SlotMachine) -> (u8, u8, u8) {
         (get_slot(0, *self.offset_r), get_slot(1, *self.offset_y), get_slot(2, *self.offset_o))
     }
-
 }
 
 // #[cfg(test)]
@@ -206,7 +206,21 @@ mod slotmachine {
         game_id: u32,
         #[key]
         player_id: ContractAddress,
-        combi: felt252,
+        name: felt252,
+        values: (u8, u8, u8),
+        payout: u32,
+    }
+
+    // Event message
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::model]
+    #[dojo::event]
+    struct SlotMachineCombination {
+        #[key]
+        player_id: ContractAddress,
+        name: felt252,
+        values: (u8, u8, u8),
         payout: u32,
     }
 
@@ -223,8 +237,14 @@ mod slotmachine {
 
             let result = machine.roll(random);
 
-            if let Option::Some((combi, payout)) = result {
-                self.emit(SlotMachineEvent { game_id, player_id, combi, payout });
+            if let Option::Some((name, values, payout)) = result {
+                emit!(
+                    self.world(),
+                    (Event::SlotMachineEvent(
+                        SlotMachineEvent { game_id, player_id, name, values, payout }
+                    ))
+                );
+                emit!(self.world(), (SlotMachineCombination { player_id, name, values, payout }));
             }
 
             self.s().set_slot_machine(machine);

@@ -41,8 +41,6 @@ export interface SystemsInterface {
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
-  // predictoor
-  predictoor: (drug: number) => Promise<SystemExecuteResult>;
   // slot
   rollSlot: (gameId: number) => Promise<SystemExecuteResult>;
   // dev
@@ -480,39 +478,6 @@ export const useSystems = (): SystemsInterface => {
   //
   //
 
-  const predictoor = useCallback(
-    async (drug: number) => {
-      const predictoorAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.tag === `${DW_NS}-predictoor`,
-      ).address;
-
-      const call = {
-        contractAddress: predictoorAddress,
-        entrypoint: "predictoor",
-        calldata: [drug],
-      };
-      const calls = await buildVrfCalls({
-        account: account!,
-        call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
-      });
-
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
-
-      return {
-        hash,
-        events,
-        parsedEvents,
-      };
-    },
-    [executeAndReceipt, selectedChain],
-  );
-
-  //
-  //
-  //
-
   const rollSlot = useCallback(
     async (gameId: number) => {
       const slotMachineAddress = dojoProvider.manifest.contracts.find(
@@ -604,8 +569,6 @@ export const useSystems = (): SystemsInterface => {
     updateRyoConfig,
     //
     updateDrugConfig,
-    //
-    predictoor,
     //
     rollSlot,
     //
