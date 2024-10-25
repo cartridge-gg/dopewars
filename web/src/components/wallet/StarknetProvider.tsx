@@ -89,8 +89,8 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 
 import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
 
-const cartridgeConnector = new CartridgeConnector(
-  [
+const cartridgeConnector = new CartridgeConnector({
+  policies: [
     {
       target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
         .address,
@@ -128,11 +128,10 @@ const cartridgeConnector = new CartridgeConnector(
       method: "claim",
     },
   ],
-  {
-    url: "https://x.cartridge.gg",
-    theme: "dope-wars",
-    paymaster: {
-      caller: shortString.encodeShortString("ANY_CALLER"),
-    },
+  url: "https://x.cartridge.gg",
+  rpc: "https://api.cartridge.gg/x/starknet/sepolia",
+  theme: "dope-wars",
+  paymaster: {
+    caller: shortString.encodeShortString("ANY_CALLER"),
   },
-) as unknown as InjectedConnector;
+}) as unknown as InjectedConnector;

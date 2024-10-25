@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cartridge/connector':
-        specifier: ^0.3.33
-        version: 0.3.33(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
+        specifier: ^0.3.46
+        version: 0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)
       '@chakra-ui/anatomy':
         specifier: ^2.1.1
         version: 2.2.2
@@ -813,11 +813,14 @@ packages:
     resolution: {integrity: sha512-+uarb83brBzPKN38NX1MkB6vb6+mwvR6amUulqAE7ccQw1pEl+bCia9TbdG1lsnFP7lZySvUn37CHyXQdfTwzg==}
     engines: {node: '>=6.9.0'}
 
-  '@cartridge/connector@0.3.33':
-    resolution: {integrity: sha512-xsDd4KuDpbldDzcKUd1f++1QJ0T+3c7KZ4ES58COveDwR1MiGl9dbVIy7+YrA9fRQwu2ANI/iRgV6INSu/XZFg==}
+  '@cartridge/account-wasm@0.3.46':
+    resolution: {integrity: sha512-XK/1yE0U/4v9UXelkOEmW1DNbFXikWnifm9aZQ9JfT2SrNcOM3DTMHQZXMbL217RzxM7yE8KqDVVGwN0//Ya7Q==}
 
-  '@cartridge/controller@0.3.33':
-    resolution: {integrity: sha512-41Rtwojt/Zumoi09GH2Tjcim6fPKwxMHFIarfdiSi6UlO3do3DkZIOOnusxEsRcf5IpHLblJZL8xTYvxZE6Smg==}
+  '@cartridge/connector@0.3.46':
+    resolution: {integrity: sha512-iYfYdp6gaFJ8sKSFE4DpdVQJZj1tMroaeES76nC6U5aVQM8uz8OLtFB2AdNx/VO5QoGBB+6YbHyFffRCuVeaOg==}
+
+  '@cartridge/controller@0.3.46':
+    resolution: {integrity: sha512-xTr6u0dMIf6oYBf8PeF6edVND2QWWrjrHb+qUJ3taco6OEUFR0uEc2TfEr/PS7tTA1rIlgXJIeWP3VLRHz+IBg==}
 
   '@cartridge/penpal@6.2.3':
     resolution: {integrity: sha512-K8h9VqBfFPXcAFQNnvgBnejF/dp7249pS4jXu3NhNYR6JqMQxtcrDqfnPmJvbF4ECEBs+8Z2UiwlRQiKt5nNsg==}
@@ -2094,6 +2097,9 @@ packages:
     resolution: {integrity: sha512-lGFf08pbkEac0NYgVf4hdANpAgApRjNByLXB+WBip3qj1iendOIyAwP2GKkKbQMNVy2r1xxDf0ssfWscoiC+Vw==}
     engines: {node: '>=8.10'}
     hasBin: true
+
+  '@starknet-io/types-js@0.7.7':
+    resolution: {integrity: sha512-WLrpK7LIaIb8Ymxu6KF/6JkGW1sso988DweWu7p5QY/3y7waBIiPvzh27D9bX5KIJNRDyOoOVoHVEKYUYWZ/RQ==}
 
   '@starknet-react/chains@0.1.7':
     resolution: {integrity: sha512-UNh97I1SvuJKaAhKOmpEk8JcWuZWMlPG/ba2HcvFYL9x/47BKndJ+Da9V+iJFtkHUjreVnajT1snsaz1XMG+UQ==}
@@ -4939,11 +4945,11 @@ packages:
     resolution: {integrity: sha512-r3JJ0rrK0g3FnVRGcFiLY+9YT5WZgxB4TKBfR44wYGevHtKEM6BM5B+Gn1eou1zV7xEAwz3GpmvLSQTUAzDhsw==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
+  starknet@6.11.0:
+    resolution: {integrity: sha512-u50KrGDi9fbu1Ogu7ynwF/tSeFlp3mzOg1/Y5x50tYFICImo3OfY4lOz9OtYDk404HK4eUujKkhov9tG7GAKlg==}
+
   starknet@6.2.0:
     resolution: {integrity: sha512-uxmTewT676hkxrA48Ds8sZyBks2ZdANUSA7UNwsb+ccDybGUFYwXpqftB9F6HVEulTAdJMEdiJYRiPPbLEerrg==}
-
-  starknet@6.9.0:
-    resolution: {integrity: sha512-8860J7sGUr5UO/BDl3pjCZNUs/vgUM75wVoI93iOYLbTGF0f6MvFZsMOd73tsPKjEcG8V5BTSx6I7seDhQ9osw==}
 
   streamsearch@1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
@@ -5213,11 +5219,6 @@ packages:
 
   typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
-  typescript@5.4.5:
-    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -6429,25 +6430,27 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@cartridge/connector@0.3.33(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
+  '@cartridge/account-wasm@0.3.46': {}
+
+  '@cartridge/connector@0.3.46(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)':
     dependencies:
-      '@cartridge/controller': 0.3.33(encoding@0.1.13)
-      '@starknet-react/core': 2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.9.0(encoding@0.1.13))
-      starknet: 6.9.0(encoding@0.1.13)
-      typescript: 5.4.5
+      '@cartridge/controller': 0.3.46(encoding@0.1.13)
+      '@starknet-react/core': 2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.11.0(encoding@0.1.13))
+      starknet: 6.11.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - get-starknet-core
       - react
 
-  '@cartridge/controller@0.3.33(encoding@0.1.13)':
+  '@cartridge/controller@0.3.46(encoding@0.1.13)':
     dependencies:
+      '@cartridge/account-wasm': 0.3.46
       '@cartridge/penpal': 6.2.3
       base64url: 3.0.1
       cbor-x: 1.5.9
       fast-deep-equal: 3.1.3
       query-string: 7.1.3
-      starknet: 6.9.0(encoding@0.1.13)
+      starknet: 6.11.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -8277,6 +8280,8 @@ snapshots:
       ignore: 5.3.1
       p-map: 4.0.0
 
+  '@starknet-io/types-js@0.7.7': {}
+
   '@starknet-react/chains@0.1.7': {}
 
   '@starknet-react/core@2.3.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))':
@@ -8290,6 +8295,17 @@ snapshots:
       starknet: 6.2.0(encoding@0.1.13)
       zod: 3.22.4
 
+  '@starknet-react/core@2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.11.0(encoding@0.1.13))':
+    dependencies:
+      '@starknet-react/chains': 0.1.7
+      '@tanstack/react-query': 5.24.1(react@18.2.0)
+      eventemitter3: 5.0.1
+      get-starknet-core: 3.2.0(starknet@6.2.0(encoding@0.1.13))
+      immutable: 4.3.4
+      react: 18.2.0
+      starknet: 6.11.0(encoding@0.1.13)
+      zod: 3.22.4
+
   '@starknet-react/core@2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))':
     dependencies:
       '@starknet-react/chains': 0.1.7
@@ -8299,17 +8315,6 @@ snapshots:
       immutable: 4.3.4
       react: 18.2.0
       starknet: 6.2.0(encoding@0.1.13)
-      zod: 3.22.4
-
-  '@starknet-react/core@2.4.0(get-starknet-core@3.2.0(starknet@6.2.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.9.0(encoding@0.1.13))':
-    dependencies:
-      '@starknet-react/chains': 0.1.7
-      '@tanstack/react-query': 5.24.1(react@18.2.0)
-      eventemitter3: 5.0.1
-      get-starknet-core: 3.2.0(starknet@6.2.0(encoding@0.1.13))
-      immutable: 4.3.4
-      react: 18.2.0
-      starknet: 6.9.0(encoding@0.1.13)
       zod: 3.22.4
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
@@ -9453,7 +9458,7 @@ snapshots:
       debug: 4.3.4
       enhanced-resolve: 5.16.0
       eslint: 8.36.0
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.3
@@ -9465,7 +9470,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -9486,7 +9491,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
       hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -11446,22 +11451,7 @@ snapshots:
 
   starknet-types@0.7.2: {}
 
-  starknet@6.2.0(encoding@0.1.13):
-    dependencies:
-      '@noble/curves': 1.3.0
-      '@scure/base': 1.1.5
-      '@scure/starknet': 1.0.0
-      abi-wan-kanabi: 2.2.1
-      fetch-cookie: 3.0.1
-      isomorphic-fetch: 3.0.0(encoding@0.1.13)
-      lossless-json: 4.0.1
-      pako: 2.1.0
-      ts-mixer: 6.0.4
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-
-  starknet@6.9.0(encoding@0.1.13):
+  starknet@6.11.0(encoding@0.1.13):
     dependencies:
       '@noble/curves': 1.4.0
       '@noble/hashes': 1.4.0
@@ -11473,7 +11463,22 @@ snapshots:
       isomorphic-fetch: 3.0.0(encoding@0.1.13)
       lossless-json: 4.0.1
       pako: 2.1.0
-      starknet-types-07: starknet-types@0.7.2
+      starknet-types-07: '@starknet-io/types-js@0.7.7'
+      ts-mixer: 6.0.4
+      url-join: 4.0.1
+    transitivePeerDependencies:
+      - encoding
+
+  starknet@6.2.0(encoding@0.1.13):
+    dependencies:
+      '@noble/curves': 1.3.0
+      '@scure/base': 1.1.5
+      '@scure/starknet': 1.0.0
+      abi-wan-kanabi: 2.2.1
+      fetch-cookie: 3.0.1
+      isomorphic-fetch: 3.0.0(encoding@0.1.13)
+      lossless-json: 4.0.1
+      pako: 2.1.0
       ts-mixer: 6.0.4
       url-join: 4.0.1
     transitivePeerDependencies:
@@ -11740,8 +11745,6 @@ snapshots:
   typed-function@4.1.1: {}
 
   typescript@5.2.2: {}
-
-  typescript@5.4.5: {}
 
   ua-parser-js@1.0.37: {}
 
