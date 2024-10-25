@@ -52,15 +52,15 @@ export const buildVrfCalls = async ({
 
     // const vrf = StarkVRF.new(vrfProviderSecret);
 
-    const vrf = (await import("stark-vrf-wasm")).StarkVRF.new(vrfProviderSecret);
-    const proof = vrf.prove(vrfProviderSecret, seed);
-    const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);
+    // const vrf = (await import("stark-vrf-wasm")).StarkVRF.new(vrfProviderSecret);
+    // const proof = vrf.prove(vrfProviderSecret, seed);
+    // const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);
 
     // fn submit_random( seed: felt252, proof: Proof);
     submitRandomCall = {
       contractAddress: vrfProviderAddress,
       entrypoint: "submit_random",
-      calldata: CallData.compile([seed, proof, sqrt_ratio_hint]),
+      // calldata: CallData.compile([seed, proof, sqrt_ratio_hint]),
     };
 
     // fn assert_consumed( seed: felt252,);

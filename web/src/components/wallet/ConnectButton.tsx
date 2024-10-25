@@ -5,7 +5,7 @@ import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet
 import { KatanaIcon } from "../icons";
 import { useEffect, useState } from "react";
 import { Cartridge } from "../icons/branding/Cartridge";
-import CartridgeConnector from "@cartridge/connector";
+import { ControllerConnector } from "@cartridge/connector";
 
 export const ConnectButton = ({ variant = "pixelated", ...props }) => {
   const { account, address, status } = useAccount();
@@ -41,7 +41,7 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
             onClick={() => {
               if (connector?.id === "controller") {
                 // broken..
-                (connector as unknown as CartridgeConnector).controller.openProfile()
+                (connector as unknown as ControllerConnector).controller.openProfile()
               } else {
                 uiStore.openAccountDetails();
               }
