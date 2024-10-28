@@ -434,7 +434,7 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "set_paused",
-        calldata: [paused ? 0 : 1],
+        calldata: [paused ? 1 : 0],
       });
 
       return {

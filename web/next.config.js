@@ -2,12 +2,18 @@
 const nextConfig = {
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
-  images: {
-    domains: ["static.cartridge.gg", "static.localhost"],
-  },
-  dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
+  // images: {
+  //   domains: ["static.cartridge.gg", "static.localhost"],
+  // },
+  // dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
+  // transpilePackages: [ // build but this is shit
+  //   "@cartridge/connector",
+  //   "@cartridge/controller",
+  // ], 
   webpack: (config, options) => {
+    // console.log(config)
     config.experiments = {
+      ...config.experiments,
       asyncWebAssembly: true,
     };
     return config;

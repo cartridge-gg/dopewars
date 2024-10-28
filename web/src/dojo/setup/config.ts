@@ -1,6 +1,6 @@
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import {  katanaLocalChain, katanaSlot1Chain } from "./chains";
+import { katanaLocalChain, katanaSlot1Chain } from "./chains";
 
 import manifestDev from "../../manifests/dev/manifest.json";
 import manifestRyo1 from "../../manifests/ryo1/manifest.json";
@@ -47,8 +47,8 @@ const katanaLocal: DojoChainConfig = {
   predeployedAccounts: [
     {
       name: "Deployer",
-      address: "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03",
-      privateKey: "0x1800000000300000180000000000030000000000003006001800006600",
+      address: "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca",
+      privateKey: "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a",
       active: false,
     },
     {
@@ -67,7 +67,6 @@ const katanaLocal: DojoChainConfig = {
   vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
 };
-
 
 const katanaSlot1: DojoChainConfig = {
   name: "SLOT 1",

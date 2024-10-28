@@ -319,13 +319,13 @@ mod game {
             assert(!ryo_config.paused, 'game is paused');
         }
 
-        #[inline(always)]
-        fn assert_caller_is_owner(self: @ContractState) {
-            assert(
-                self.world().is_owner(get_contract_address().into(), get_caller_address()),
-                'not owner'
-            );
-        }
+        // #[inline(always)]
+        // fn assert_caller_is_owner(self: @ContractState) {
+        //     assert(
+        //         self.world().is_owner(self.selector(), get_caller_address()),
+        //         'not owner'
+        //     );
+        // }
 
         fn execute_actions(
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>

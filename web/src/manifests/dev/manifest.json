@@ -1236,7 +1236,7 @@
     ],
     "address": "0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14",
     "transaction_hash": "0x520053a922adbabcb0e174eae54e866ed5539ab13fa4217bc8b0daa2061336f",
-    "block_number": 30,
+    "block_number": 37,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -1256,8 +1256,8 @@
     {
       "kind": "DojoContract",
       "address": "0x717b5229b8ea2dda2c1168184ff1a74a9f9490cfdc6fb7d04fb33e0c89fc797",
-      "class_hash": "0x5b0d79079827c12667081ae8c6d210f7cb0f26e9f06c8b07b0f3434e2ec7cae",
-      "original_class_hash": "0x5b0d79079827c12667081ae8c6d210f7cb0f26e9f06c8b07b0f3434e2ec7cae",
+      "class_hash": "0x52d971d7760ca96713ba7c4fa02e63c22031db3554f11c5577b93066246295a",
+      "original_class_hash": "0x52d971d7760ca96713ba7c4fa02e63c22031db3554f11c5577b93066246295a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4360,8 +4360,8 @@
     {
       "kind": "DojoContract",
       "address": "0x480d8b52befdcc16cddde91353c1aafd9b303915bfee3647e8da7a0a7ae6631",
-      "class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
-      "original_class_hash": "0x5dce0219af556a0b97b7b8af241690f7acc0130170d82bf3cb941b030629ac9",
+      "class_hash": "0x257a48834ba1d7744478e696d1a6f2940675871678d11dd825004d057d5e5be",
+      "original_class_hash": "0x257a48834ba1d7744478e696d1a6f2940675871678d11dd825004d057d5e5be",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4621,6 +4621,30 @@
             },
             {
               "type": "function",
+              "name": "set_paper",
+              "inputs": [
+                {
+                  "name": "paper_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_treasury",
+              "inputs": [
+                {
+                  "name": "treasury_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "paper",
               "inputs": [],
               "outputs": [
@@ -4764,7 +4788,9 @@
       "tag": "dopewars-ryo",
       "systems": [
         "set_paused",
-        "update_ryo_config"
+        "update_ryo_config",
+        "set_paper",
+        "set_treasury"
       ],
       "manifest_name": "dopewars-ryo-32b65ba7"
     },

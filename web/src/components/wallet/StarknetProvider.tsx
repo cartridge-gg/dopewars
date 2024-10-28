@@ -38,7 +38,7 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
 
   switch (selectedChain.name) {
     case "KATANA":
-      return [controller, injected({ id: "dojoburner" })];
+      return [controller, injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
 
     case "INTERNAL":
       return [

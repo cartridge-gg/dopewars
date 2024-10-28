@@ -177,7 +177,10 @@ mod config {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn assert_caller_is_owner(self: @ContractState) {
-            assert(self.world().is_owner(0, starknet::get_caller_address()), 'only world owner');
+            // assert(self.world().is_owner(0, starknet::get_caller_address()), 'only world owner');
+            assert(
+                self.world().is_owner(self.selector(), starknet::get_caller_address()), 'not owner'
+            );
         }
 
 
