@@ -1236,7 +1236,7 @@
     ],
     "address": "0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14",
     "transaction_hash": "0x520053a922adbabcb0e174eae54e866ed5539ab13fa4217bc8b0daa2061336f",
-    "block_number": 37,
+    "block_number": 252,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -1256,8 +1256,8 @@
     {
       "kind": "DojoContract",
       "address": "0x717b5229b8ea2dda2c1168184ff1a74a9f9490cfdc6fb7d04fb33e0c89fc797",
-      "class_hash": "0x52d971d7760ca96713ba7c4fa02e63c22031db3554f11c5577b93066246295a",
-      "original_class_hash": "0x52d971d7760ca96713ba7c4fa02e63c22031db3554f11c5577b93066246295a",
+      "class_hash": "0x65e0d0fb46edd76ef0f6b097c83b64ba4af7254b16758c5df4e8a757e8f194f",
+      "original_class_hash": "0x65e0d0fb46edd76ef0f6b097c83b64ba4af7254b16758c5df4e8a757e8f194f",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -1877,88 +1877,6 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::config::drugs::Drugs",
-          "variants": [
-            {
-              "name": "Ludes",
-              "type": "()"
-            },
-            {
-              "name": "Speed",
-              "type": "()"
-            },
-            {
-              "name": "Weed",
-              "type": "()"
-            },
-            {
-              "name": "Shrooms",
-              "type": "()"
-            },
-            {
-              "name": "Acid",
-              "type": "()"
-            },
-            {
-              "name": "Ketamine",
-              "type": "()"
-            },
-            {
-              "name": "Heroin",
-              "type": "()"
-            },
-            {
-              "name": "Cocaine",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::utils::bytes16::Bytes16",
-          "members": [
-            {
-              "name": "value",
-              "type": "core::integer::u128"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "rollyourown::config::drugs::DrugConfig",
-          "members": [
-            {
-              "name": "drugs_mode",
-              "type": "rollyourown::config::settings::DrugsMode"
-            },
-            {
-              "name": "drug",
-              "type": "rollyourown::config::drugs::Drugs"
-            },
-            {
-              "name": "drug_id",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "base",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "step",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "weight",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "name",
-              "type": "rollyourown::utils::bytes16::Bytes16"
-            }
-          ]
-        },
-        {
           "type": "interface",
           "name": "rollyourown::config::config::IConfig",
           "items": [
@@ -1971,18 +1889,6 @@
                   "type": "rollyourown::config::config::Config"
                 }
               ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "update_drug_config",
-              "inputs": [
-                {
-                  "name": "drug_config",
-                  "type": "rollyourown::config::drugs::DrugConfig"
-                }
-              ],
-              "outputs": [],
               "state_mutability": "view"
             }
           ]
@@ -2058,16 +1964,14 @@
       ],
       "init_calldata": [],
       "tag": "dopewars-config",
-      "systems": [
-        "update_drug_config"
-      ],
+      "systems": [],
       "manifest_name": "dopewars-config-45ebce66"
     },
     {
       "kind": "DojoContract",
       "address": "0x38c735c7169bc4412c4ab5fa78ab1ce7352ba67389c3951aac339affc30dfcd",
-      "class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
-      "original_class_hash": "0xa937c81d36051e602714ff3512c849338afd24b255d29b38aa0187468b9f89",
+      "class_hash": "0x70380c0d5b7324b4eefa6b5dab699994a087110d5281cb08ad502a8ae3af31e",
+      "original_class_hash": "0x70380c0d5b7324b4eefa6b5dab699994a087110d5281cb08ad502a8ae3af31e",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2335,8 +2239,8 @@
     {
       "kind": "DojoContract",
       "address": "0x70bebb66fc335f1d472fc7ec96a99a3e7280aefe03df2e697c399155d958e40",
-      "class_hash": "0xf808ad1cb1f04b875f6990374c416ef7d5089f8befa8dda648ee67e7d71404",
-      "original_class_hash": "0xf808ad1cb1f04b875f6990374c416ef7d5089f8befa8dda648ee67e7d71404",
+      "class_hash": "0x4bc48fc9f22ff3cd2121f739f52e4c88a33aa42e7186c8a15541446ef152e20",
+      "original_class_hash": "0x4bc48fc9f22ff3cd2121f739f52e4c88a33aa42e7186c8a15541446ef152e20",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3276,8 +3180,8 @@
     {
       "kind": "DojoContract",
       "address": "0x479a4355f72f4d49ceb4166c79540abf2a83cbeac0f4508df255b06f9c8cdfe",
-      "class_hash": "0x59a6672ed49e9094373128f171c475ab69d7622a5822797161e279bafe15eb2",
-      "original_class_hash": "0x59a6672ed49e9094373128f171c475ab69d7622a5822797161e279bafe15eb2",
+      "class_hash": "0x25c4ebff2943fc242a9648afef347abf2e3d268c3319bec9ff892a4f51c995e",
+      "original_class_hash": "0x25c4ebff2943fc242a9648afef347abf2e3d268c3319bec9ff892a4f51c995e",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4360,8 +4264,8 @@
     {
       "kind": "DojoContract",
       "address": "0x480d8b52befdcc16cddde91353c1aafd9b303915bfee3647e8da7a0a7ae6631",
-      "class_hash": "0x706d92368eb8cbaa1e402b4c466ddc335617d37f3f27d57468f9ac3e3fa3e1e",
-      "original_class_hash": "0x706d92368eb8cbaa1e402b4c466ddc335617d37f3f27d57468f9ac3e3fa3e1e",
+      "class_hash": "0x415a4ecc9a61fe2e603880e0e107521d44b355982da11222308b26df8fa3b08",
+      "original_class_hash": "0x415a4ecc9a61fe2e603880e0e107521d44b355982da11222308b26df8fa3b08",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {

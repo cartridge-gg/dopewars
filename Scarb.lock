@@ -4,6 +4,7 @@ version = 1
 [[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
+source = "git+https://github.com/cartridge-gg/vrf#3fc02297d2444392b08d1445054fa5be97dac5ac"
 dependencies = [
  "openzeppelin",
  "snforge_std",
@@ -13,7 +14,7 @@ dependencies = [
 [[package]]
 name = "dojo"
 version = "1.0.0-alpha.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.16#3b3a78cd8239ca2ee524c49c83f36db4d79cb4bc"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.19#ef696ea9bbaa22d3f6db392d9692b4821578c23c"
 
 [[package]]
 name = "openzeppelin"
@@ -103,7 +104,7 @@ source = "git+https://github.com/OpenZeppelin/cairo-contracts.git?rev=a13bae3#a1
 
 [[package]]
 name = "origami_token"
-version = "1.0.0-alpha.16"
+version = "1.0.0-alpha.19"
 dependencies = [
  "dojo",
 ]

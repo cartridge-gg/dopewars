@@ -8,11 +8,12 @@ version = "0.1.0"
 
 [dependencies]
 # dojo = { path = "../dojo/crates/dojo-core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.16" }
-# origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.16" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.19" }
+# origami_token = { git = "https://github.com/dojoengine/origami", tag = "v1.0.0-alpha.19" }
 origami_token = { path = "../origami-dev/" }
 starknet = "2.7.0"
-cartridge_vrf = { path = "../vrf-server" }
+# cartridge_vrf = { path = "../vrf-server" }
+cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 
 [scripts]
 katana = "katana --allowed-origins \"*\" -b 2000 --disable-fee --dev"
@@ -30,7 +31,7 @@ migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFI
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE"
 
 # slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.16 --world 0x5a69a866c1e74ddf5f17f44ff2ced68e7b8e2bb4e93a208ec07f51218bcb7b2"
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.19 --world 0x5a69a866c1e74ddf5f17f44ff2ced68e7b8e2bb4e93a208ec07f51218bcb7b2"
 
 # slot ryo1
 # slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee true"
