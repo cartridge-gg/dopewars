@@ -58,4 +58,3 @@ impl RandomImpl of RandomTrait {
     }
 }
 
-

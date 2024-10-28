@@ -2,7 +2,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
 
 use rollyourown::{
-    traits::{Enumerable},utils::introspect::{Bytes31IntrospectionImpl},
+    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 

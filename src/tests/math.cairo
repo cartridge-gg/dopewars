@@ -5,7 +5,6 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::utils::math::{MathTrait, MathImplU8};
 
 use debug::PrintTrait;
-
 // #[test]
 // fn test_math_pct() {
 //     let (world, contracts) = spawn_world();
@@ -21,4 +20,5 @@ use debug::PrintTrait;
 
 //     assert(value_250.pct(20) == 50, 'invalid pct 20');
 // }
+
 

@@ -49,6 +49,5 @@ impl WantedPackedImpl of WantedPackedTrait {
 
         self.packed = bits.into_felt();
     }
-
 }
 

@@ -7,7 +7,7 @@ use rollyourown::config::{
 #[starknet::interface]
 trait IConfig<T> {
     fn get_config(self: @T) -> Config;
-    // fn update_drug_config(self: @T, drug_config: DrugConfig);
+// fn update_drug_config(self: @T, drug_config: DrugConfig);
 }
 
 #[derive(Drop, Serde)]
@@ -157,20 +157,19 @@ mod config {
                 layouts: LayoutsConfig { game_store, player }
             }
         }
+    // fn update_drug_config(self: @ContractState, drug_config: DrugConfig) {
+    //     self.assert_caller_is_owner();
 
-        // fn update_drug_config(self: @ContractState, drug_config: DrugConfig) {
-        //     self.assert_caller_is_owner();
+    //     let drug: Drugs = drug_config.drug_id.into();
+    //     let mut to_update = self.s().drug_config(drug_config.drugs_mode, drug);
 
-        //     let drug: Drugs = drug_config.drug_id.into();
-        //     let mut to_update = self.s().drug_config(drug_config.drugs_mode, drug);
+    //     to_update.base = drug_config.base;
+    //     to_update.step = drug_config.step;
+    //     to_update.weight = drug_config.weight;
+    //     to_update.name = drug_config.name;
 
-        //     to_update.base = drug_config.base;
-        //     to_update.step = drug_config.step;
-        //     to_update.weight = drug_config.weight;
-        //     to_update.name = drug_config.name;
-
-        //     self.s().save_drug_config(to_update);
-        // }
+    //     self.s().save_drug_config(to_update);
+    // }
     }
 
     #[generate_trait]

@@ -8,13 +8,15 @@ use rollyourown::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
     config::{
-        hustlers::{HustlerItemConfig,HustlerItemTiersConfig, ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
+        hustlers::{HustlerItemConfig, HustlerItemTiersConfig, ItemSlot},
+        locations::{Locations, LocationsRandomizableImpl},
         encounters::{Encounters, EncounterSpawnerImpl, EncounterConfig, EncounterImpl},
         game::{GameConfig}, settings::{SeasonSettings}
     },
     packing::{
-        game_store::{GameStore,GameStoreImpl}, player::{PlayerImpl, PlayerStatus},
-        wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl, ItemsPackedTrait},
+        game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl, PlayerStatus},
+        wanted_packed::{WantedPacked, WantedPackedImpl},
+        items_packed::{ItemsPackedImpl, ItemsPackedTrait},
         drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
     systems::game::{EncounterActions, game::TravelEncounter, game::TravelEncounterResult},
@@ -85,16 +87,17 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
 //
 
 // -> (is_dead, has_encounter)
-fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random) -> (bool, bool) {
+fn on_travel(
+    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
+) -> (bool, bool) {
     let has_encounter = match game_store.game.game_mode {
-        GameMode::Ranked | GameMode::Noob => {
+        GameMode::Ranked |
+        GameMode::Noob => {
             // get wanted level at destination 0-7
             let wanted_risk = game_store.get_wanted_risk(game_store.player.next_location);
             randomizer.occurs(wanted_risk)
         },
-        GameMode::Warrior => {
-            true
-        }
+        GameMode::Warrior => { true }
     };
 
     if has_encounter {
@@ -107,20 +110,23 @@ fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref
             Encounters::Gang => PlayerStatus::BeingMugged,
         };
 
-        emit!(game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounter(
-            TravelEncounter {
-                game_id: game_store.game.game_id,
-                player_id: game_store.game.player_id,
-                encounter: encounter.encounter.into(),
-                level: encounter.level,
-                health: encounter.health,
-                attack: encounter.attack,
-                defense: encounter.defense,
-                speed: encounter.speed,
-                demand_pct: encounter.get_demand_pct(ref game_store),
-                payout: encounter.get_payout(ref game_store),
-            }
-        )));
+        emit!(
+            game_store.s.w(),
+            (rollyourown::systems::game::game::Event::TravelEncounter(
+                TravelEncounter {
+                    game_id: game_store.game.game_id,
+                    player_id: game_store.game.player_id,
+                    encounter: encounter.encounter.into(),
+                    level: encounter.level,
+                    health: encounter.health,
+                    attack: encounter.attack,
+                    defense: encounter.defense,
+                    speed: encounter.speed,
+                    demand_pct: encounter.get_demand_pct(ref game_store),
+                    payout: encounter.get_payout(ref game_store),
+                }
+            ))
+        );
 
         (game_store.player.is_dead(), true)
     } else {
@@ -132,46 +138,60 @@ fn on_travel(ref game_store: GameStore, ref season_settings: SeasonSettings, ref
 //  DECIDE
 //
 
-
-fn decide(s: IStoreLibraryDispatcher, ref game_store: GameStore,ref season_settings: SeasonSettings, ref randomizer: Random, action: EncounterActions) -> bool {
+fn decide(
+    s: IStoreLibraryDispatcher,
+    ref game_store: GameStore,
+    ref season_settings: SeasonSettings,
+    ref randomizer: Random,
+    action: EncounterActions
+) -> bool {
     // get encounter
-    let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store,ref season_settings);
+    let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store, ref season_settings);
 
     // run action
     let mut result = match action {
-        EncounterActions::Run => { on_run(s, ref game_store, ref randomizer,ref encounter) },
-        EncounterActions::Pay => { on_pay(ref game_store, ref randomizer,ref  encounter) },
-        EncounterActions::Fight => { on_fight(ref game_store, ref randomizer,ref  encounter) },
+        EncounterActions::Run => { on_run(s, ref game_store, ref randomizer, ref encounter) },
+        EncounterActions::Pay => { on_pay(ref game_store, ref randomizer, ref encounter) },
+        EncounterActions::Fight => { on_fight(ref game_store, ref randomizer, ref encounter) },
     };
-  
+
     if game_store.game.game_mode == GameMode::Warrior {
         result.rep_pos = result.rep_pos * 2;
         result.rep_neg = result.rep_neg * 2;
     };
 
     // update reputation
-    game_store.player.reputation = game_store.player.reputation.add_capped(result.rep_pos,100);
-    game_store.player.reputation = game_store.player.reputation.sub_capped(result.rep_neg,0);
+    game_store.player.reputation = game_store.player.reputation.add_capped(result.rep_pos, 100);
+    game_store.player.reputation = game_store.player.reputation.sub_capped(result.rep_neg, 0);
 
     // update turns with turn_loss 
-    game_store.player.turn = game_store.player.turn.add_capped(result.turn_loss, game_store.game_config().max_turns);
+    game_store
+        .player
+        .turn = game_store
+        .player
+        .turn
+        .add_capped(result.turn_loss, game_store.game_config().max_turns);
 
-    emit!(game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounterResult(result)));
-    
+    emit!(
+        game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounterResult(result))
+    );
+
     if !game_store.player.is_dead() {
         // update player status
         game_store.player.status = PlayerStatus::Normal;
     }
 
     game_store.player.is_dead()
-    // game_store
+// game_store
 }
 
 //
 //
 //
 
-fn create_travel_encounter_result(ref game_store: GameStore, action: EncounterActions ) -> TravelEncounterResult {
+fn create_travel_encounter_result(
+    ref game_store: GameStore, action: EncounterActions
+) -> TravelEncounterResult {
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
@@ -180,7 +200,7 @@ fn create_travel_encounter_result(ref game_store: GameStore, action: EncounterAc
         rounds: 0,
         dmg_dealt: array![], // Array<(u8,u8)> ?
         dmg_taken: array![], // Array<(u8,u8)>
-        cash_earnt: 0, 
+        cash_earnt: 0,
         cash_loss: 0,
         drug_id: 0,
         drug_loss: array![], // Array<u32>
@@ -198,7 +218,6 @@ fn create_travel_encounter_result(ref game_store: GameStore, action: EncounterAc
 fn on_pay(
     ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
-
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Pay);
 
     result.outcome = EncounterOutcomes::Paid;
@@ -208,11 +227,13 @@ fn on_pay(
         Encounters::Cops => {
             // pay demand_pct drugs
             let mut drug_unpacked = game_store.drugs.get();
-            let quantity_lost = drug_unpacked.quantity.pct(encounter.get_demand_pct(ref game_store).into());
-           
+            let quantity_lost = drug_unpacked
+                .quantity
+                .pct(encounter.get_demand_pct(ref game_store).into());
+
             // can't pay
             assert(quantity_lost > 0, 'you cant pay!');
-           
+
             result.drug_id = drug_unpacked.drug.into();
             result.drug_loss.append(quantity_lost);
             drug_unpacked.quantity -= quantity_lost;
@@ -222,25 +243,28 @@ fn on_pay(
         },
         Encounters::Gang => {
             // calc cash_loss
-            result.cash_loss = game_store.player.cash.pct(encounter.get_demand_pct(ref game_store).into());
+            result
+                .cash_loss = game_store
+                .player
+                .cash
+                .pct(encounter.get_demand_pct(ref game_store).into());
 
             // can't pay
             assert(result.cash_loss > 0, 'you cant pay!');
-           
+
             // gang make u lose 1 extra hp (but can't die)
             if game_store.player.health > 1 {
                 // update player health
                 game_store.player.health -= 1;
-                result.dmg_taken.append((1,0));
+                result.dmg_taken.append((1, 0));
             }
 
             // update player cash
             game_store.player.cash -= result.cash_loss;
         },
     };
-   
-   result
-    
+
+    result
 }
 
 //
@@ -248,11 +272,13 @@ fn on_pay(
 //
 
 fn on_run(
-   s: IStoreLibraryDispatcher, ref game_store: GameStore, ref randomizer: Random,ref encounter: EncounterConfig
+    s: IStoreLibraryDispatcher,
+    ref game_store: GameStore,
+    ref randomizer: Random,
+    ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
-
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Run);
-  
+
     let mut drug_unpacked = game_store.drugs.get();
     result.drug_id = drug_unpacked.drug.into();
 
@@ -262,21 +288,26 @@ fn on_run(
     loop {
         result.rounds += 1;
 
-        let is_captured = match ResolutionImpl::race(ref game_store, ref encounter, ref randomizer).winner {
-            Fighters::Hustler => {false},
-            Fighters::Encounter => {true},
+        let is_captured =
+            match ResolutionImpl::race(ref game_store, ref encounter, ref randomizer).winner {
+            Fighters::Hustler => { false },
+            Fighters::Encounter => { true },
         };
 
         if is_captured {
+            let encounter_win_result = ResolutionImpl::encounter_race_win(
+                ref game_store, ref encounter, ref randomizer, ref drug_unpacked
+            );
 
-            let encounter_win_result = ResolutionImpl::encounter_race_win(ref game_store, ref encounter, ref randomizer, ref drug_unpacked);
-           
-            result.dmg_taken.append((encounter_win_result.dmg_dealt, encounter_win_result.dmg_shield));
+            result
+                .dmg_taken
+                .append((encounter_win_result.dmg_dealt, encounter_win_result.dmg_shield));
             result.drug_loss.append(encounter_win_result.drug_loss);
 
             // check if dead
-            if encounter_win_result.killed { break; }
-
+            if encounter_win_result.killed {
+                break;
+            }
         } else {
             break;
         };
@@ -291,37 +322,39 @@ fn on_run(
 
     let game_config = game_store.game_config();
 
-    result.outcome = if game_store.player.is_dead() {
-        EncounterOutcomes::Died
-    } else {
-        if !is_caught {
-            result.rep_pos += encounter.rep_run;
-            EncounterOutcomes::Escaped
-        } else {
-            match encounter.encounter {
-                Encounters::Cops => {
-                    // Jailed for 2 days
-                    result.turn_loss = 2;
-                    
-                    // REP +2
-                    result.rep_pos += game_config.rep_jailed;
-                    result.rep_neg += encounter.rep_run;
+    result
+        .outcome =
+            if game_store.player.is_dead() {
+                EncounterOutcomes::Died
+            } else {
+                if !is_caught {
+                    result.rep_pos += encounter.rep_run;
+                    EncounterOutcomes::Escaped
+                } else {
+                    match encounter.encounter {
+                        Encounters::Cops => {
+                            // Jailed for 2 days
+                            result.turn_loss = 2;
 
-                    EncounterOutcomes::Jailed
-                },
-                Encounters::Gang => {
-                    // Hospitalized for 1 days
-                    result.turn_loss = 1;
-                                       
-                    // REP +2
-                    result.rep_pos += game_config.rep_hospitalized;
-                    result.rep_neg += encounter.rep_run;
+                            // REP +2
+                            result.rep_pos += game_config.rep_jailed;
+                            result.rep_neg += encounter.rep_run;
 
-                    EncounterOutcomes::Hospitalized
+                            EncounterOutcomes::Jailed
+                        },
+                        Encounters::Gang => {
+                            // Hospitalized for 1 days
+                            result.turn_loss = 1;
+
+                            // REP +2
+                            result.rep_pos += game_config.rep_hospitalized;
+                            result.rep_neg += encounter.rep_run;
+
+                            EncounterOutcomes::Hospitalized
+                        }
+                    }
                 }
-            }
-        }
-    };
+            };
 
     result
 }
@@ -331,9 +364,8 @@ fn on_run(
 //
 
 fn on_fight(
-    ref game_store: GameStore, ref randomizer: Random,ref  encounter: EncounterConfig
+    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
-
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Fight);
 
     let initiator = ResolutionImpl::race(ref game_store, ref encounter, ref randomizer).winner;
@@ -344,50 +376,66 @@ fn on_fight(
 
         match initiator {
             Fighters::Hustler => {
-                let hustler_result = ResolutionImpl::hustler_attack(ref game_store, ref encounter, ref randomizer);
+                let hustler_result = ResolutionImpl::hustler_attack(
+                    ref game_store, ref encounter, ref randomizer
+                );
                 result.dmg_dealt.append((hustler_result.dmg_dealt, hustler_result.dmg_shield));
-                if hustler_result.killed { break; }
+                if hustler_result.killed {
+                    break;
+                }
 
-                let encounter_result =  ResolutionImpl::encounter_attack(ref game_store, ref encounter, ref randomizer);
+                let encounter_result = ResolutionImpl::encounter_attack(
+                    ref game_store, ref encounter, ref randomizer
+                );
                 result.dmg_taken.append((encounter_result.dmg_dealt, encounter_result.dmg_shield));
-                if encounter_result.killed { break; }
-
+                if encounter_result.killed {
+                    break;
+                }
             },
             Fighters::Encounter => {
-                let encounter_result =  ResolutionImpl::encounter_attack(ref game_store, ref encounter, ref randomizer);
+                let encounter_result = ResolutionImpl::encounter_attack(
+                    ref game_store, ref encounter, ref randomizer
+                );
                 result.dmg_taken.append((encounter_result.dmg_dealt, encounter_result.dmg_shield));
-                if encounter_result.killed { break; }
+                if encounter_result.killed {
+                    break;
+                }
 
-                let hustler_result = ResolutionImpl::hustler_attack(ref game_store, ref encounter, ref randomizer);
+                let hustler_result = ResolutionImpl::hustler_attack(
+                    ref game_store, ref encounter, ref randomizer
+                );
                 result.dmg_dealt.append((hustler_result.dmg_dealt, hustler_result.dmg_shield));
-                if hustler_result.killed { break; }
+                if hustler_result.killed {
+                    break;
+                }
             },
         };
-
     };
 
-    result.cash_earnt = if game_store.player.is_dead() {
-        0
-    } else {
-        encounter.get_payout(ref game_store)
-    };
+    result
+        .cash_earnt =
+            if game_store.player.is_dead() {
+                0
+            } else {
+                encounter.get_payout(ref game_store)
+            };
 
     // player get money
     game_store.player.cash += result.cash_earnt;
 
-    result.outcome = if game_store.player.is_dead() {
-        EncounterOutcomes::Died
-    } else {
-        EncounterOutcomes::Victorious
-    };
+    result
+        .outcome =
+            if game_store.player.is_dead() {
+                EncounterOutcomes::Died
+            } else {
+                EncounterOutcomes::Victorious
+            };
 
     // reputation
     result.rep_pos = encounter.rep_fight;
 
     result
-
 }
-
 
 
 //
@@ -401,30 +449,28 @@ enum Fighters {
 }
 
 #[derive(Copy, Drop)]
-struct RaceResult{
+struct RaceResult {
     winner: Fighters,
 }
 
 #[derive(Copy, Drop)]
-struct AttackResult{
-   dmg_dealt: u8,
-   dmg_shield: u8,
-   killed: bool,
+struct AttackResult {
+    dmg_dealt: u8,
+    dmg_shield: u8,
+    killed: bool,
 }
 
 #[derive(Copy, Drop)]
 struct EncounterRaceWinResult {
-   dmg_dealt: u8,
-   dmg_shield: u8,
-   killed: bool,
-   drug_loss: u32,
+    dmg_dealt: u8,
+    dmg_shield: u8,
+    killed: bool,
+    drug_loss: u32,
 }
-
 
 
 #[generate_trait]
 impl ResolutionImpl of ResolutionTrait {
-
     fn plus_or_less_random_pct(value: u8, pct: u8, ref randomizer: Random) -> u8 {
         let value_pct = value.pct(pct.into());
         let rand = randomizer.between::<u8>(0, value_pct * 2);
@@ -432,21 +478,23 @@ impl ResolutionImpl of ResolutionTrait {
         value + rand - value_pct
     }
 
-    fn race(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> RaceResult {
-        let rand_player = randomizer.between::<u8>(0,game_store.items.speed());
-        let rand_encounter = randomizer.between::<u8>(0,encounter.speed);
+    fn race(
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+    ) -> RaceResult {
+        let rand_player = randomizer.between::<u8>(0, game_store.items.speed());
+        let rand_encounter = randomizer.between::<u8>(0, encounter.speed);
 
         match rand_player <= rand_encounter {
-            true => { RaceResult { winner: Fighters::Encounter} },
-            false => { RaceResult { winner: Fighters::Hustler} },
+            true => { RaceResult { winner: Fighters::Encounter } },
+            false => { RaceResult { winner: Fighters::Hustler } },
         }
     }
 
-    fn hustler_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
-        let hustler_attack:u8 = Self::plus_or_less_random_pct(
-            game_store.items.attack(),
-            20,
-            ref randomizer
+    fn hustler_attack(
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+    ) -> AttackResult {
+        let hustler_attack: u8 = Self::plus_or_less_random_pct(
+            game_store.items.attack(), 20, ref randomizer
         );
 
         let dmg_shield = hustler_attack.pct(encounter.defense.into());
@@ -455,18 +503,14 @@ impl ResolutionImpl of ResolutionTrait {
         // encounter lose HP
         encounter.health_loss(dmg_dealt);
 
-        AttackResult {
-            dmg_dealt,
-            dmg_shield,
-            killed: encounter.is_dead()
-        }
+        AttackResult { dmg_dealt, dmg_shield, killed: encounter.is_dead() }
     }
 
-    fn encounter_attack(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random) -> AttackResult {
+    fn encounter_attack(
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+    ) -> AttackResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
-            encounter.attack,
-            20,
-            ref randomizer
+            encounter.attack, 20, ref randomizer
         );
 
         encounter_attack = encounter.attack / 3; // TODO: config ***
@@ -478,26 +522,24 @@ impl ResolutionImpl of ResolutionTrait {
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
 
-        AttackResult {
-            dmg_dealt,
-            dmg_shield,
-            killed: game_store.player.is_dead()
-        }
-
+        AttackResult { dmg_dealt, dmg_shield, killed: game_store.player.is_dead() }
     }
 
-    fn encounter_race_win(ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random, ref drug_unpacked: DrugsUnpacked) -> EncounterRaceWinResult {
+    fn encounter_race_win(
+        ref game_store: GameStore,
+        ref encounter: EncounterConfig,
+        ref randomizer: Random,
+        ref drug_unpacked: DrugsUnpacked
+    ) -> EncounterRaceWinResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
-            encounter.attack,
-            20,
-            ref randomizer
+            encounter.attack, 20, ref randomizer
         );
 
         encounter_attack = encounter.attack / 5; // TODO: config ***
         let hustler_defense = game_store.items.defense();
 
         let dmg_shield = encounter_attack.pct(hustler_defense.into());
-        let dmg_dealt = encounter_attack - dmg_shield; 
+        let dmg_dealt = encounter_attack - dmg_shield;
 
         // player lose HP
         game_store.player.health_loss(dmg_dealt);
@@ -506,8 +548,8 @@ impl ResolutionImpl of ResolutionTrait {
         let loss_pct = drug_unpacked.quantity.pct(1);
         let possible_drug_loss = MathImpl::max(loss_pct, 2);
         let mut drug_loss = 0;
-       
-        if possible_drug_loss <=  drug_unpacked.quantity{
+
+        if possible_drug_loss <= drug_unpacked.quantity {
             drug_unpacked.quantity -= possible_drug_loss;
             drug_loss = possible_drug_loss;
         };
@@ -516,12 +558,7 @@ impl ResolutionImpl of ResolutionTrait {
         game_store.drugs.set(drug_unpacked);
 
         EncounterRaceWinResult {
-            dmg_dealt,
-            dmg_shield,
-            killed: game_store.player.is_dead(),
-            drug_loss,
+            dmg_dealt, dmg_shield, killed: game_store.player.is_dead(), drug_loss,
         }
     }
-
-
 }

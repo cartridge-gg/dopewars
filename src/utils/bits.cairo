@@ -66,7 +66,6 @@ impl BitsImpl of BitsTrait {
 
 #[generate_trait]
 impl BitsMathImpl of BitsMathTrait {
-   
     fn mask<T, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(size: u8) -> T {
         let mask = pow2_const(size) - 1;
         mask.try_into().unwrap()

@@ -38,13 +38,20 @@ impl MathImpl<
     }
 
     fn min(lhs: T, rhs: T) -> T {
-        if lhs < rhs { lhs } else { rhs }
+        if lhs < rhs {
+            lhs
+        } else {
+            rhs
+        }
     }
 
     fn max(lhs: T, rhs: T) -> T {
-        if lhs > rhs { lhs } else { rhs }
+        if lhs > rhs {
+            lhs
+        } else {
+            rhs
+        }
     }
-
 }
 
 

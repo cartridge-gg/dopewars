@@ -144,7 +144,7 @@ mod store {
         fn slot_machine(self: @ContractState, game_id: u32) -> SlotMachine {
             get!(self.world(), (game_id), SlotMachine)
         }
-       
+
         //
         // setter
         //

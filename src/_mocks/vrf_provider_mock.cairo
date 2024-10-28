@@ -11,7 +11,7 @@ mod vrf_provider_mock {
     component!(path: VrfProviderComponent, storage: vrf_provider, event: VrfProviderEvent);
 
     impl OwnableInternalImpl = OwnableComponent::InternalImpl<ContractState>;
-   
+
     #[abi(embed_v0)]
     impl VrfProviderImpl = VrfProviderComponent::VrfProviderImpl<ContractState>;
 

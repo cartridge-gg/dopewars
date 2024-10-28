@@ -11,7 +11,7 @@ use rollyourown::{
     library::{store::{IStoreLibraryDispatcher, IStoreLibraryDispatcherImpl},},
     config::{locations::{Locations}, settings::{SeasonSettings}},
     packing::{
-        game_store::{GameStore,GameStoreImpl, GameStorePackerImpl},
+        game_store::{GameStore, GameStoreImpl, GameStorePackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
         markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
         drugs_packed::{DrugsPackedTrait}

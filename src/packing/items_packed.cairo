@@ -1,10 +1,8 @@
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
-    models::game::{Game, GameMode},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
-    packing::game_store::{GameStore},
+    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
     library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
 

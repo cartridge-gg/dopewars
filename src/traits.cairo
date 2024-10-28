@@ -33,8 +33,8 @@ trait Packable<T, +Enumerable<T>> {
 trait Packer<Unpacked, Packed> {
     fn pack(self: Unpacked) -> Packed;
 }
-
 // trait Unpacker<Packed, Unpacked> {
 //     fn unpack(self: Packed, s: IStoreLibraryDispatcher, game: Game) -> Unpacked;
 // }
+
 

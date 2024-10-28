@@ -64,7 +64,7 @@ mod ryo {
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address;
         ryo_addresses.laundromat = laundromat_address; // could be removed
-        ryo_addresses.vrf = vrf_address; 
+        ryo_addresses.vrf = vrf_address;
 
         // save
         self.s().save_ryo_addresses(ryo_addresses);
@@ -103,7 +103,7 @@ mod ryo {
 
         fn set_paper(self: @ContractState, paper_address: ContractAddress) {
             self.assert_caller_is_owner();
-           
+
             let mut ryo_addresses = self.s().ryo_addresses();
             ryo_addresses.paper = paper_address;
             self.s().save_ryo_addresses(ryo_addresses);
@@ -111,7 +111,7 @@ mod ryo {
 
         fn set_treasury(self: @ContractState, treasury_address: ContractAddress) {
             self.assert_caller_is_owner();
-           
+
             let mut ryo_addresses = self.s().ryo_addresses();
             ryo_addresses.treasury = treasury_address;
             self.s().save_ryo_addresses(ryo_addresses);
@@ -119,7 +119,7 @@ mod ryo {
 
         fn set_vrf(self: @ContractState, vrf_address: ContractAddress) {
             self.assert_caller_is_owner();
-           
+
             let mut ryo_addresses = self.s().ryo_addresses();
             ryo_addresses.vrf = vrf_address;
             self.s().save_ryo_addresses(ryo_addresses);
@@ -167,10 +167,7 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
-            assert(
-                self.world().is_owner(self.selector(), get_caller_address()),
-                'not owner'
-            );
+            assert(self.world().is_owner(self.selector(), get_caller_address()), 'not owner');
         }
 
         #[inline(always)]
