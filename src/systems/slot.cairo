@@ -186,10 +186,8 @@ trait ISlotMachine<T> {
 mod slotmachine {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use rollyourown::{
-        library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
-        utils::vrf_consumer::{VrfImpl, Source}
-    };
+    use rollyourown::{library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},};
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
 
     use super::{SlotMachine, SlotMachineImpl, SlotMachineTrait};
 
@@ -231,7 +229,8 @@ mod slotmachine {
 
             let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+                .consume_random(Source::Nonce(player_id));
 
             let mut machine = self.s().slot_machine(game_id);
 

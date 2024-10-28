@@ -4360,8 +4360,8 @@
     {
       "kind": "DojoContract",
       "address": "0x480d8b52befdcc16cddde91353c1aafd9b303915bfee3647e8da7a0a7ae6631",
-      "class_hash": "0x257a48834ba1d7744478e696d1a6f2940675871678d11dd825004d057d5e5be",
-      "original_class_hash": "0x257a48834ba1d7744478e696d1a6f2940675871678d11dd825004d057d5e5be",
+      "class_hash": "0x706d92368eb8cbaa1e402b4c466ddc335617d37f3f27d57468f9ac3e3fa3e1e",
+      "original_class_hash": "0x706d92368eb8cbaa1e402b4c466ddc335617d37f3f27d57468f9ac3e3fa3e1e",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -4645,6 +4645,18 @@
             },
             {
               "type": "function",
+              "name": "set_vrf",
+              "inputs": [
+                {
+                  "name": "vrf_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "paper",
               "inputs": [],
               "outputs": [
@@ -4657,6 +4669,17 @@
             {
               "type": "function",
               "name": "treasury",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "vrf",
               "inputs": [],
               "outputs": [
                 {
@@ -4790,7 +4813,8 @@
         "set_paused",
         "update_ryo_config",
         "set_paper",
-        "set_treasury"
+        "set_treasury",
+        "set_vrf"
       ],
       "manifest_name": "dopewars-ryo-32b65ba7"
     },

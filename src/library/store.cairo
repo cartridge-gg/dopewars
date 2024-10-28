@@ -103,10 +103,6 @@ mod store {
             get!(self.world(), (drugs_mode, drug), DrugConfig)
         }
 
-        // fn encounter_config(self: @ContractState, id: u8) -> EncounterConfig {
-        //     get!(self.world(), (id), EncounterConfig)
-        // }
-
         fn encounter_stats_config(
             self: @ContractState, encounter: Encounters, encounters_mode: EncountersMode
         ) -> EncounterStatsConfig {
@@ -125,7 +121,6 @@ mod store {
             get!(self.world(), (slot, tiers), HustlerItemTiersConfig)
         }
 
-
         //
 
         fn season(self: @ContractState, version: u16) -> Season {
@@ -139,14 +134,6 @@ mod store {
         fn game(self: @ContractState, game_id: u32, player_id: ContractAddress) -> Game {
             get!(self.world(), (game_id, player_id), Game)
         }
-
-        // fn game_store(self: @ContractState, game_id: u32, player_id: ContractAddress) ->
-        // GameStore {
-        //     let game = self.game(game_id, player_id);
-        //     let game_store_packed = get!(self.world(), (game_id, player_id), GameStorePacked);
-        //     let game_store: GameStore = game_store_packed.unpack(self.s(), game);
-        //     game_store
-        // }
 
         fn game_store_packed(
             self: @ContractState, game_id: u32, player_id: ContractAddress
@@ -179,10 +166,6 @@ mod store {
 
         //
 
-        // fn save_encounter_config(self: @ContractState, config: EncounterConfig) {
-        //     set!(self.world(), (config))
-        // }
-
         fn save_encounter_stats_config(self: @ContractState, config: EncounterStatsConfig) {
             set!(self.world(), (config))
         }
@@ -204,11 +187,6 @@ mod store {
         fn set_game(self: @ContractState, game: Game) {
             set!(self.world(), (game));
         }
-
-        // fn set_game_store(self: @ContractState, game_store: GameStore) {
-        //     let game_store_packed = game_store.pack();
-        //     set!(self.world(), (game_store_packed));
-        // }
 
         fn set_game_store_packed(self: @ContractState, game_store_packed: GameStorePacked) {
             set!(self.world(), (game_store_packed));

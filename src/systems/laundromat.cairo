@@ -23,11 +23,10 @@ mod laundromat {
         utils::{
             sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
             payout_structure::{get_payout, get_payed_count}, random::{RandomImpl},
-            vrf_consumer::{VrfImpl, Source},
         },
         packing::game_store::{GameStore, GameStoreImpl}
     };
-
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -105,7 +104,8 @@ mod laundromat {
         fn launder(self: @ContractState, season_version: u16) {
             let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+                .consume_random(Source::Nonce(player_id));
 
             let world = self.world();
             let process_batch_size = 20; // around 276k steps / 10

@@ -233,7 +233,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
             defense: encounter_stats.defense_base + level * encounter_stats.defense_step,
             speed: encounter_stats.speed_base + level * encounter_stats.speed_step,
             //
-            rep_pay: (level * 3) * 2, // reputation modifier for paying NEGATIVE
+            rep_pay: level * 5, //(level * 3) * 2, // reputation modifier for paying NEGATIVE
             rep_run: level * 2, // reputation modifier for running POSITIVE(success)
             rep_fight: level * 3, // reputation modifier for fighting
         };

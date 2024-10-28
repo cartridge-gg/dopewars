@@ -69,7 +69,6 @@ mod utils {
     mod payout_structure;
     mod sorted_list;
     mod world_utils;
-    mod vrf_consumer;
 }
 
 mod interfaces {

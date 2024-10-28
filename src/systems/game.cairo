@@ -44,10 +44,12 @@ mod game {
         helpers::season_manager::{SeasonManagerTrait},
         utils::{
             random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            sorted_list::{SortedListImpl, SortedListTrait}, vrf_consumer::{VrfImpl, Source},
+            sorted_list::{SortedListImpl, SortedListTrait}
         },
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
     };
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -179,7 +181,8 @@ mod game {
 
             let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+                .consume_random(Source::Nonce(player_id));
             let mut randomizer = RandomImpl::new(random);
 
             let world = self.world();
@@ -241,7 +244,8 @@ mod game {
         ) {
             let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+                .consume_random(Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
@@ -283,7 +287,8 @@ mod game {
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
             let ryo_addresses = self.s().ryo_addresses();
             let player_id = get_caller_address();
-            let random = VrfImpl::consume(ryo_addresses.vrf, Source::Nonce(player_id));
+            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+                .consume_random(Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
@@ -318,14 +323,6 @@ mod game {
             let ryo_config = self.s().ryo_config();
             assert(!ryo_config.paused, 'game is paused');
         }
-
-        // #[inline(always)]
-        // fn assert_caller_is_owner(self: @ContractState) {
-        //     assert(
-        //         self.world().is_owner(self.selector(), get_caller_address()),
-        //         'not owner'
-        //     );
-        // }
 
         fn execute_actions(
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>

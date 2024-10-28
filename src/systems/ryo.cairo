@@ -10,9 +10,11 @@ trait IRyo<T> {
     fn update_ryo_config(self: @T, ryo_config: RyoConfig);
     fn set_paper(self: @T, paper_address: ContractAddress);
     fn set_treasury(self: @T, treasury_address: ContractAddress);
+    fn set_vrf(self: @T, vrf_address: ContractAddress);
     //
     fn paper(self: @T) -> ContractAddress;
     fn treasury(self: @T) -> ContractAddress;
+    fn vrf(self: @T) -> ContractAddress;
     fn laundromat(self: @T) -> ContractAddress;
 
     fn paused(self: @T) -> bool;
@@ -115,6 +117,15 @@ mod ryo {
             self.s().save_ryo_addresses(ryo_addresses);
         }
 
+        fn set_vrf(self: @ContractState, vrf_address: ContractAddress) {
+            self.assert_caller_is_owner();
+           
+            let mut ryo_addresses = self.s().ryo_addresses();
+            ryo_addresses.vrf = vrf_address;
+            self.s().save_ryo_addresses(ryo_addresses);
+        }
+
+
         //
         // getters
         //
@@ -125,6 +136,10 @@ mod ryo {
 
         fn treasury(self: @ContractState) -> ContractAddress {
             self.s().ryo_addresses().treasury
+        }
+
+        fn vrf(self: @ContractState) -> ContractAddress {
+            self.s().ryo_addresses().vrf
         }
 
         fn laundromat(self: @ContractState) -> ContractAddress {
