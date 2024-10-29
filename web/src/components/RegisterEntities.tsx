@@ -7,7 +7,7 @@ import { ToastType, useToast } from "@/hooks/toast";
 import { Box } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Siren, Truck } from "./icons";
 import { OG } from "./layout";
 import { GameClass } from "@/dojo/class/Game";
@@ -26,17 +26,29 @@ const RegisterEntities = observer(() => {
 
   const [ogId, setOgId] = useState<number | undefined>();
   const [lastEvent, setLastEvent] = useState<DojoEvent | undefined>();
+  const [retry, setRetry] = useState(0);
   const toaster = useToast();
 
   useEffect(() => {
     console.log("RegisterEntities", gameId);
 
-    if (gameStore && gameId) {
-      gameStore.init(gameId);
-    } else {
-      gameStore.reset();
-    }
-  }, [gameId, gameStore]);
+    const init = async () => {
+      try {
+        if (gameStore && gameId) {
+          await gameStore.init(gameId);
+        } else {
+          gameStore.reset();
+        }
+      } catch (e) {
+        console.log(e);
+        setTimeout(() => {
+          setRetry(Date.now())
+        }, 200);
+      }
+    };
+
+    init();
+  }, [gameId, gameStore, retry]);
 
   //
   useEffect(() => {

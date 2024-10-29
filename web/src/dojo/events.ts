@@ -93,6 +93,28 @@ export interface GameOverData extends BaseEventData {
   reputation: number;
 }
 
+export interface NewHighScoreData extends BaseEventData {
+  playerId: string;
+  seasonVersion: string;
+  playerName: string;
+  hustlerId: number;
+  cash: number;
+  health: number;
+  reputation: number;
+}
+
+export interface ClaimedData extends BaseEventData {
+  playerId: string;
+  seasonVersion: string;
+  paper: number;
+  rank:number;
+}
+
+export interface NewSeasonData {
+  eventType: WorldEvents;
+  eventName: string;
+  seasonVersion: number;
+}
 
 export const parseAllEvents = (manifest: any, receipt?: GetTransactionReceiptResponse) => {
   if (!receipt || receipt.execution_status !== "SUCCEEDED") {
@@ -250,7 +272,40 @@ export const parseEvent = (manifest: any, raw: any) => {
         reputation: Number(raw.data[5]),
       } as GameOverData;
 
-  
+    case WorldEvents.NewHighScore:
+      return {
+        eventType: WorldEvents.NewHighScore,
+        eventName: "NewHighScore",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        seasonVersion: num.toHexString(raw.keys[3]),
+
+        playerName: shortString.decodeShortString(raw.data[0]),
+        hustlerId: Number(raw.data[1]),
+        cash: Number(raw.data[2]),
+        health: Number(raw.data[3]),
+        reputation: Number(raw.data[4]),
+      } as NewHighScoreData;
+
+    case WorldEvents.Claimed:
+      return {
+        eventType: WorldEvents.Claimed,
+        eventName: "Claimed",
+        gameId: num.toHexString(raw.keys[1]),
+        playerId: num.toHexString(raw.keys[2]),
+        seasonVersion: num.toHexString(raw.keys[3]),
+
+        paper: Number(raw.data[0]),
+        rank: Number(raw.data[1]),
+      } as ClaimedData;
+
+    case WorldEvents.NewSeason:
+      return {
+        eventType: WorldEvents.NewSeason,
+        eventName: "NewSeason",
+        seasonVersion: Number(raw.keys[1]),
+      } as NewSeasonData;
+
     // case WorldEvents.MeetOG:
     //   return {
     //     eventType: WorldEvents.MeetOG,

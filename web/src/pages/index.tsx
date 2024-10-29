@@ -109,9 +109,12 @@ export default function Home() {
 
             {isSeasonOpen && !canCreateGame && (
               <HStack w="full" color="yellow.400" justifyContent="center" gap={3}>
-                <Warning color="yellow.400" />
+                <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
+                  <Flipflop /> Play as guest
+                </Button>
 
-                <VStack h="full">
+                <Warning color="yellow.400" />
+                <VStack flex="1" h="full">
                   <Text>Waiting for season end ...</Text>
                 </VStack>
               </HStack>

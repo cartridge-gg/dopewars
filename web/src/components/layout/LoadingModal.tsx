@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Loader } from "./Loader";
 
 export const LoadingModal = observer(() => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, _setIsLoading] = useState(false);
 
   // useLayoutEffect(() => {
   //   const onDOMContentLoaded = (event: any) => {

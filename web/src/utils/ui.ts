@@ -242,6 +242,6 @@ export function formatCashHeader(cash: number): string {
       maximumFractionDigits: 1,
     }).format(cash / 1_000_000_000)}B`;
   }
-  return "ElonMusk"
+  return "Ca$hOverflow"
 
 }

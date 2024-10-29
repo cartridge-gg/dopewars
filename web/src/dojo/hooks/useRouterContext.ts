@@ -1,6 +1,6 @@
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {  LocationConfigFull } from "../stores/config";
+import { LocationConfigFull } from "../stores/config";
 import { TradeDirection } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { selector } from "starknet";
@@ -45,6 +45,7 @@ export const useRouterContext = (): RouterContext => {
   useEffect(() => {
     if (!router || !router.isReady || !configStore || !configStore.config) return;
 
+    // console.log("useRouterContext", router.isReady, router.asPath);
     const gameId = router.query.gameId ? (router.query.gameId as string) : undefined;
     const playerId = router.query.playerId ? (router.query.playerId as string) : undefined;
     const seasonId = router.query.seasonId ? Number(router.query.seasonId) : undefined;
@@ -96,7 +97,11 @@ export const useRouterContext = (): RouterContext => {
     };
 
     setContext(ctx);
-  }, [router, router.isReady, configStore, configStore.config]);
+  }, [
+    router.asPath,
+    router.isReady,
+    //  configStore, configStore.config
+  ]);
 
   return context;
 };

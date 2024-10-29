@@ -40,7 +40,7 @@ const Location = observer(() => {
   const [greetings, setGreetings] = useState("");
 
   useEffect(() => {
-    if (game && gameConfig && location) {
+    if (game && gameConfig && location && game.player.location?.location) {
       // check if player at right location
       if (location?.location !== game.player.location?.location) {
         // router.replace(`/${gameId}/${game.player.location?.location}`);
@@ -51,7 +51,7 @@ const Location = observer(() => {
       setGreetings(getRandomGreeting(game.player.turn));
       setIsLastDay(game.player.turn === gameConfig.max_turns);
     }
-  }, [location, game, router, gameId, gameConfig?.max_turns]);
+  }, [location, game, router, gameId, gameConfig?.max_turns, game?.player.location]);
 
   useEffect(() => {
     if (game && game.markets.marketsByLocation && location) {

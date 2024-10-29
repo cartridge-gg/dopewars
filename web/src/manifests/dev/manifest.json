@@ -1236,7 +1236,7 @@
     ],
     "address": "0x78e507a8cbba3ea8f74a7aabc732da3e2adfa81ff46c4cfb2141ff4a3514a14",
     "transaction_hash": "0x520053a922adbabcb0e174eae54e866ed5539ab13fa4217bc8b0daa2061336f",
-    "block_number": 252,
+    "block_number": 92,
     "seed": "dopeseed",
     "metadata": {
       "profile_name": "dev",
@@ -1970,8 +1970,8 @@
     {
       "kind": "DojoContract",
       "address": "0x38c735c7169bc4412c4ab5fa78ab1ce7352ba67389c3951aac339affc30dfcd",
-      "class_hash": "0x70380c0d5b7324b4eefa6b5dab699994a087110d5281cb08ad502a8ae3af31e",
-      "original_class_hash": "0x70380c0d5b7324b4eefa6b5dab699994a087110d5281cb08ad502a8ae3af31e",
+      "class_hash": "0x2d9109fedd0e845d057a4f66a45711178cd93c9d34849198f375fa3d930523",
+      "original_class_hash": "0x2d9109fedd0e845d057a4f66a45711178cd93c9d34849198f375fa3d930523",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3180,8 +3180,8 @@
     {
       "kind": "DojoContract",
       "address": "0x479a4355f72f4d49ceb4166c79540abf2a83cbeac0f4508df255b06f9c8cdfe",
-      "class_hash": "0x25c4ebff2943fc242a9648afef347abf2e3d268c3319bec9ff892a4f51c995e",
-      "original_class_hash": "0x25c4ebff2943fc242a9648afef347abf2e3d268c3319bec9ff892a4f51c995e",
+      "class_hash": "0x58cbee2d6f635c4c63664ae6a0858b7e4bed0c7d3e3c09945ab5de42f9a92e0",
+      "original_class_hash": "0x58cbee2d6f635c4c63664ae6a0858b7e4bed0c7d3e3c09945ab5de42f9a92e0",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3539,6 +3539,28 @@
               "name": "paper",
               "type": "core::integer::u32",
               "kind": "data"
+            },
+            {
+              "name": "rank",
+              "type": "core::integer::u16",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::NewSeason",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "data"
             }
           ]
         },
@@ -3560,6 +3582,11 @@
             {
               "name": "Claimed",
               "type": "rollyourown::systems::laundromat::laundromat::Claimed",
+              "kind": "nested"
+            },
+            {
+              "name": "NewSeason",
+              "type": "rollyourown::systems::laundromat::laundromat::NewSeason",
               "kind": "nested"
             }
           ]
@@ -4264,8 +4291,8 @@
     {
       "kind": "DojoContract",
       "address": "0x480d8b52befdcc16cddde91353c1aafd9b303915bfee3647e8da7a0a7ae6631",
-      "class_hash": "0x415a4ecc9a61fe2e603880e0e107521d44b355982da11222308b26df8fa3b08",
-      "original_class_hash": "0x415a4ecc9a61fe2e603880e0e107521d44b355982da11222308b26df8fa3b08",
+      "class_hash": "0xa11e7965b6230d2a3439cc567ecf682b2059caac9a157fe785eb29f0584edf",
+      "original_class_hash": "0xa11e7965b6230d2a3439cc567ecf682b2059caac9a157fe785eb29f0584edf",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {

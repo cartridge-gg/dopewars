@@ -131,8 +131,9 @@ export const useSystems = (): SystemsInterface => {
           retryInterval: 200,
         });
 
-        // chill a bit waiting torii indexing
-        await sleep(500);
+        // // chill a bit waiting torii indexing
+        // await sleep(500);
+
       } catch (e: any) {
         setIsPending(false);
         setError(e.toString());
@@ -210,10 +211,10 @@ export const useSystems = (): SystemsInterface => {
         createGameCalls.length === 2
           ? [createGameCalls[0], approvalCall, createGameCalls[1]]
           : [approvalCall, ...createGameCalls];
-      console.log(calls);
+      // console.log(calls);
 
       const { hash, events, parsedEvents } = await executeAndReceipt(calls);
-      console.log(parsedEvents);
+      // console.log(parsedEvents);
       const gameCreated = parsedEvents.find((e) => e.eventType === WorldEvents.GameCreated) as GameCreatedData;
 
       return {

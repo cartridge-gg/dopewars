@@ -77,7 +77,6 @@ export class EventClass {
       (i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounter,
     );
 
-    console.log(last);
     return last;
   }
 

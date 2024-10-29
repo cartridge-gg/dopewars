@@ -20,8 +20,9 @@ import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
+import { ToriiClient } from "../../../../../dojo.c/pkg/dojo_c";
 
-interface DojoContextType {
+export interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
   masterAccount?: AccountInterface;
@@ -31,6 +32,7 @@ interface DojoContextType {
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
   uiStore: UiStore;
+  toriiClient: ToriiClient;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -52,7 +54,8 @@ export const DojoContextProvider = observer(
 
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
-    const defaultChain = process.env.NODE_ENV === "production" ? dojoContextConfig.SN_SEPOLIA : dojoContextConfig.KATANA;
+    const defaultChain =
+      process.env.NODE_ENV === "production" ? dojoContextConfig.SN_SEPOLIA : dojoContextConfig.KATANA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
@@ -159,9 +162,27 @@ export const DojoContextProvider = observer(
       initAsync();
     }, [configStore]);
 
+    const [toriiClient, setToriiClient] = useState<ToriiClient>();
+
+    useEffect(() => {
+      const initAsync = async () => {
+        const torii = await import("../../../../../dojo.c/pkg");
+        const client = await torii.createClient({
+          rpcUrl: selectedChain.rpcUrl!,
+          toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
+          relayUrl: "",
+          worldAddress: selectedChain.manifest.world.address || "",
+        });
+
+        setToriiClient(client);
+      };
+      initAsync();
+    }, [selectedChain]);
+
     const uiStore = new UiStore();
 
-    const isInitialized = burnerSWOIsInitialized && predeployedSWOIsInitialized && configStoreState.isInitialized;
+    const isInitialized =
+      burnerSWOIsInitialized && predeployedSWOIsInitialized && configStoreState.isInitialized && toriiClient;
     const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
     const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
 
@@ -202,6 +223,7 @@ export const DojoContextProvider = observer(
           configStore,
           gameStore,
           uiStore,
+          toriiClient: toriiClient!,
         }}
       >
         <StarknetProvider selectedChain={selectedChain}>

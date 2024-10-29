@@ -33,6 +33,14 @@ mod laundromat {
     enum Event {
         NewHighScore: NewHighScore,
         Claimed: Claimed,
+        NewSeason: NewSeason,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct NewSeason {
+        #[key]
+        key: u16,
+        season_version: u16,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -59,6 +67,7 @@ mod laundromat {
         #[key]
         season_version: u16,
         paper: u32,
+        rank: u16,
     }
 
     #[abi(embed_v0)]
@@ -150,6 +159,16 @@ mod laundromat {
                     let mut randomizer = RandomImpl::new(random);
                     let mut season_manager = SeasonManagerTrait::new(self.s());
                     season_manager.new_season(ref randomizer, ryo_config.season_version);
+
+                    emit!(
+                        self.world(),
+                        (Event::NewSeason(
+                            NewSeason {
+                                key: ryo_config.season_version,
+                                season_version: ryo_config.season_version
+                            }
+                        ))
+                    )
                 } else {
                     assert(false, 'launder already ended');
                 }
@@ -204,7 +223,8 @@ mod laundromat {
                                 game_id: game.game_id,
                                 player_id,
                                 season_version: game.season_version,
-                                paper: game.claimable
+                                paper: game.claimable,
+                                rank: game.position
                             }
                         ))
                     );

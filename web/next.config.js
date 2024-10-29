@@ -10,6 +10,9 @@ const nextConfig = {
   //   "@cartridge/connector",
   //   "@cartridge/controller",
   // ], 
+  // experimental: {
+  //   externalDir: true,
+  // },
   webpack: (config, options) => {
     // console.log(config)
     config.experiments = {

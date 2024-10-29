@@ -1,4 +1,3 @@
-import { background } from "@chakra-ui/react";
 import { Icon, IconProps } from ".";
 
 export const DynamicReputation = (props: IconProps & { value: number; max: number; color: string }) => {

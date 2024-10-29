@@ -39,7 +39,7 @@ export const useToast = () => {
           <Toast
             message={message}
             icon={icon}
-            link={link}
+            // link={link}
             isError={isError}
             onClose={() => {
               // TODO: target close toast by id

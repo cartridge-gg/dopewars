@@ -18,6 +18,7 @@ import theme from "../theme";
 // should avoid mobx memory leaks / GC issue..
 import { enableStaticRendering } from "mobx-react-lite";
 import { SeasonDetailsModal } from "@/components/pages/home/SeasonDetailsModal";
+import { Alerter } from "@/components/layout/Alerter";
 enableStaticRendering(typeof window === "undefined");
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -61,6 +62,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <QuitGameModal />
           <RefreshGameModal />
           <SeasonDetailsModal />
+          
+          <Alerter />
         </DojoContextProvider>
       </ChakraProvider>
     </>

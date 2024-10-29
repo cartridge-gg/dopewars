@@ -159,6 +159,7 @@ export default function Slot() {
   const { rollSlot } = useSystems();
   const {
     chains: { selectedChain },
+    toriiClient,
   } = useDojoContext();
   const { toast } = useToast();
   const { gameId } = useRouterContext();
@@ -171,7 +172,6 @@ export default function Slot() {
   const startAt = useRef(Date.now());
   const offsets = useRef([0, 0, 0]);
 
-  const [toriiClient, setToriiClient] = useState<ToriiClient>();
   const [subscription, setSubscription] = useState<Subscription>();
   const [subscriptionEvents, setSubscriptionEvents] = useState<Subscription>();
 
@@ -180,17 +180,8 @@ export default function Slot() {
       if (!gameId) return;
 
       setIsRolling(true);
-      // const torii = await import("@dojoengine/torii-client");
-      const torii = await import("../../../../../dojo.c/pkg");
-      const client = await torii.createClient({
-        rpcUrl: selectedChain.rpcUrl!,
-        toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
-        relayUrl: "",
-        worldAddress: selectedChain.manifest.world.address || "",
-      });
-      setToriiClient(client);
 
-      const entities = await client.getEntities({
+      const entities = await toriiClient.getEntities({
         // clause: {
         //   Member: {
         //     member: "game_id",
@@ -210,6 +201,7 @@ export default function Slot() {
         },
         limit: 1,
         offset: 0,
+        dont_include_hashed_keys: false,
       });
 
       console.log(entities);
@@ -231,7 +223,7 @@ export default function Slot() {
 
       if (!subscription) {
         // subscribe to changes
-        const sub = await client.onEntityUpdated(
+        const sub = await toriiClient.onEntityUpdated(
           [
             {
               Keys: {
@@ -248,7 +240,7 @@ export default function Slot() {
 
       if (!subscriptionEvents) {
         // subscribe to changes
-        const subEvents = await client.onEventMessageUpdated(
+        const subEvents = await toriiClient.onEventMessageUpdated(
           [
             {
               Keys: {
@@ -646,3 +638,31 @@ export default function Slot() {
     </Layout>
   );
 }
+
+// NewSeason ( without data )
+// Processing event update. target="torii::grpc::server::subscriptions::event" error=Parsing error: Failed to create Felt from string
+
+// create game
+// Transaction resource usage. usage="steps: 149081 | memory holes: 5635 | bitwise_builtin: 194 | ec_op_builtin: 7 | pedersen_builtin: 98 | poseidon_builtin: 96 | range_check_builtin: 8973 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
+
+// buy & travel
+// Transaction resource usage. usage="steps: 139930 | memory holes: 6912 | bitwise_builtin: 296 | ec_op_builtin: 7 | pedersen_builtin: 59 | poseidon_builtin: 105 | range_check_builtin: 11367 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0
+
+// sell & buy & encounter
+// Transaction resource usage. usage="steps: 131935 | memory holes: 5200 | bitwise_builtin: 234 | ec_op_builtin: 7 | pedersen_builtin: 63 | poseidon_builtin: 67 | range_check_builtin: 9177 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
+
+// fight
+// Transaction resource usage. usage="steps: 142980 | memory holes: 6239 | bitwise_builtin: 264 | ec_op_builtin: 7 | pedersen_builtin: 56 | poseidon_builtin: 120 | range_check_builtin: 10911 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
+
+// sell & buy & travel
+// Transaction resource usage. usage="steps: 150732 | memory holes: 7254 | bitwise_builtin: 316 | ec_op_builtin: 7 | pedersen_builtin: 63 | poseidon_builtin: 107 | range_check_builtin: 12102 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
+
+// sepolia
+// create game                535430 / L1 1024
+// https://sepolia.starkscan.co/tx/0x02145c633dc206ed39cb31dc0238d1afe3122d0648336482f1873e7798e760d6
+
+// buy / travel / encounter   136235 / L1 512
+// https://sepolia.starkscan.co/tx/0x00dde6af9fc2334c817c61198db3faae9b273993b0f9d934f9653c18ae940c0d
+
+// decide                     187342 / L1 512
+// https://sepolia.starkscan.co/tx/0x004de1a8f87895a92977e3cdf160ef82abcf4ca24146e8c6807f2994a2a4d01a

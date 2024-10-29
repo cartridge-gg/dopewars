@@ -5,13 +5,13 @@ import { Cigarette, Close } from "../icons";
 export const Toast = ({
   message,
   icon,
-  link,
+  // link,
   onClose,
   isError,
 }: {
   message: string;
   icon?: React.FC;
-  link?: string;
+  // link?: string;
   onClose: () => void;
   isError: boolean;
 }) => {
