@@ -9,9 +9,10 @@ import {
 } from "@starknet-react/core";
 import { ReactNode, useState } from "react";
 import { RpcProvider, shortString } from "starknet";
-import CartridgeConnector from "@cartridge/connector";
 import { getContractByName } from "@dojoengine/core";
 import { DW_NS } from "@/dojo/hooks";
+import { ControllerConnector } from "@cartridge/connector";
+
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -75,13 +76,13 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
   // const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
 
-  return new CartridgeConnector({
+  return new ControllerConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     theme: "dope-wars",
-    paymaster: {
-      caller: shortString.encodeShortString("ANY_CALLER"),
-    },
+    // paymaster: {
+    //   caller: shortString.encodeShortString("ANY_CALLER"),
+    // },
     policies: [
       {
         target: selectedChain.vrfProviderAddress,

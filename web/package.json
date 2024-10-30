@@ -19,7 +19,7 @@
     "create-events": "./bin/generateEvents.cjs"
   },
   "dependencies": {
-    "@cartridge/connector": "0.3.46",
+    "@cartridge/connector": "../../controller/packages/connector",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.24",
@@ -67,8 +67,8 @@
     "@graphql-codegen/typescript-react-query": "^3.5.9",
     "@types/howler": "^2.2.7",
     "@types/node": "18.15.3",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "knip": "^4.5.0",
     "prettier": "^2.8.8",
     "typescript": "^5.4.5"

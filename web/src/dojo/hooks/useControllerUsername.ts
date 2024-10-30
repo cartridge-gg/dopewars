@@ -1,6 +1,6 @@
-import CartridgeConnector from "@cartridge/connector";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
+import { ControllerConnector } from "@cartridge/connector";
 
 export const useControllerUsername = () => {
   const { connector } = useConnect();
@@ -10,7 +10,7 @@ export const useControllerUsername = () => {
 
   useEffect(() => {
     const init = async () => {
-      const username = await (connector as unknown as CartridgeConnector).username();
+      const username = await (connector as unknown as ControllerConnector).username();
       setUsername(username || "");
     };
     if (connector?.id.includes("controller")) {

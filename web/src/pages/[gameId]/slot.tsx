@@ -237,7 +237,7 @@ export default function Slot() {
         );
         setSubscription(sub);
       }
-
+      
       if (!subscriptionEvents) {
         // subscribe to changes
         const subEvents = await toriiClient.onEventMessageUpdated(
