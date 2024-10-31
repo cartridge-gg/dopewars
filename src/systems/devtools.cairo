@@ -11,16 +11,10 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 mod devtools {
-    use rollyourown::config::config::config::InternalTrait;
-    use core::traits::TryInto;
     use core::traits::Into;
-    use starknet::ContractAddress;
-    use starknet::get_caller_address;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::info::get_tx_info;
+    use core::traits::TryInto;
     use dojo::world::IWorldDispatcherTrait;
-
-    use super::IDevtools;
+    use rollyourown::config::config::config::InternalTrait;
 
     use rollyourown::{
         models::{season::{Season}, game::{Game}, game_store_packed::{GameStorePacked}},
@@ -31,8 +25,14 @@ mod devtools {
         },
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
-        store::{Store,StoreImpl,StoreTrait}
+        store::{Store, StoreImpl, StoreTrait}
     };
+    use starknet::ContractAddress;
+    use starknet::contract_address::Felt252TryIntoContractAddress;
+    use starknet::get_caller_address;
+    use starknet::info::get_tx_info;
+
+    use super::IDevtools;
 
 
     #[abi(embed_v0)]
@@ -119,8 +119,6 @@ mod devtools {
         fn check_chain(self: @ContractState) { // let chain_id = get_tx_info().unbox().chain_id;
         // assert(chain_id != 'KATANA', 'wrong chain_id');
         }
-
-       
     }
 }
 

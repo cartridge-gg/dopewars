@@ -1,6 +1,5 @@
-use starknet::ContractAddress;
-use dojo::world::{WorldStorage, IWorldDispatcher};
 use dojo::model::{ModelStorage, ModelValueStorage, ModelStorageTest};
+use dojo::world::{WorldStorage, IWorldDispatcher};
 
 use rollyourown::{
     config::{
@@ -14,6 +13,7 @@ use rollyourown::{
     packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer},
     utils::sorted_list::{SortedList, SortedListItem}
 };
+use starknet::ContractAddress;
 
 const UNIVERSAL_ANSWER: u8 = 0; //42;
 
@@ -147,7 +147,7 @@ impl StoreImpl of StoreTrait {
         self.world.write_model(item)
     }
     // fn set_slot_machine(ref self: Store, machine: @SlotMachine) {
-    //     self.world.write_model(machine)
-    // }
+//     self.world.write_model(machine)
+// }
 }
 

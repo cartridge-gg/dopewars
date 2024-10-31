@@ -1,11 +1,11 @@
 #[dojo::contract]
 mod vrf_provider_mock {
-    use starknet::{ContractAddress, ClassHash};
-
-    use openzeppelin::access::ownable::OwnableComponent;
+    use cartridge_vrf::PublicKey;
 
     use cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent;
-    use cartridge_vrf::PublicKey;
+
+    use openzeppelin::access::ownable::OwnableComponent;
+    use starknet::{ContractAddress, ClassHash};
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
     component!(path: VrfProviderComponent, storage: vrf_provider, event: VrfProviderEvent);

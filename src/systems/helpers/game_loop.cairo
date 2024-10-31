@@ -1,6 +1,5 @@
-use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::event::EventStorage;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game},
@@ -19,6 +18,7 @@ use rollyourown::{
     events::{GameOver, Traveled}, systems::helpers::{traveling},
     helpers::season_manager::{SeasonManager, SeasonManagerTrait}
 };
+use starknet::ContractAddress;
 
 
 // -> (is_dead, has_encounter)

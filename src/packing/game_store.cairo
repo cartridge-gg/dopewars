@@ -1,5 +1,4 @@
 use core::traits::TryInto;
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
@@ -26,6 +25,7 @@ use rollyourown::{
     },
     traits::{Packable, Packer}
 };
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop)]
@@ -272,7 +272,8 @@ impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
             match *item {
                 GameStoreLayout::Markets => { game_store.markets = MarketsPacked { packed }; },
                 GameStoreLayout::Items => {
-                    game_store.items = ItemsPacked { store: @store, hustler_id: game.hustler_id, packed };
+                    game_store
+                        .items = ItemsPacked { store: @store, hustler_id: game.hustler_id, packed };
                 },
                 GameStoreLayout::Drugs => { game_store.drugs = DrugsPacked { packed }; },
                 GameStoreLayout::Wanted => { game_store.wanted = WantedPacked { packed }; },

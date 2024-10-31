@@ -1,5 +1,12 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
+
+
+//
+// ITEMS
+//
+
+use dojo::model::{ModelStorage};
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
@@ -202,13 +209,6 @@ impl HustlerImpl of HustlerTrait {
         HustlerItemConfig { slot, level, base: base_config, tier: tier_config, }
     }
 }
-
-
-//
-// ITEMS
-//
-
-use dojo::model::{ModelStorage};
 fn initialize_weapons_config(ref store: Store) {
     store
         .world

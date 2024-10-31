@@ -3,12 +3,12 @@
 
 #[dojo::contract]
 mod chips {
+    use dojo::world::{WorldStorage, WorldStorageTrait};
     use openzeppelin::token::erc20::ERC20Component;
     use openzeppelin::token::erc20::interface::IERC20Metadata;
+    use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use starknet::{ContractAddress};
-    use dojo::world::{WorldStorage, WorldStorageTrait};
-    use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);
 

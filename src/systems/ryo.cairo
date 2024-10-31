@@ -1,7 +1,7 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{config::ryo::{RyoConfig}};
+use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IRyo<T> {
@@ -25,10 +25,6 @@ trait IRyo<T> {
 #[dojo::contract]
 mod ryo {
     use core::traits::Into;
-    use starknet::ContractAddress;
-    use starknet::{get_caller_address, get_contract_address};
-    use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::info::get_tx_info;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
 
@@ -39,6 +35,10 @@ mod ryo {
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         store::{Store, StoreImpl, StoreTrait},
     };
+    use starknet::ContractAddress;
+    use starknet::contract_address::Felt252TryIntoContractAddress;
+    use starknet::info::get_tx_info;
+    use starknet::{get_caller_address, get_contract_address};
 
     fn dojo_init(
         self: @ContractState, paper_address: ContractAddress, treasury_address: ContractAddress,

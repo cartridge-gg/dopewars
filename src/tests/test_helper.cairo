@@ -1,9 +1,5 @@
 use debug::PrintTrait;
 
-use starknet::ContractAddress;
-use starknet::contract_address_const;
-use starknet::class_hash::Felt252TryIntoClassHash;
-
 use dojo::test_utils::{spawn_test_world};
 
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -22,6 +18,10 @@ use rollyourown::systems::{
     trade::{trade, ITradeDispatcher, ITradeDispatcherTrait},
     travel::{travel, ITravelDispatcher, ITravelDispatcherTrait}
 };
+
+use starknet::ContractAddress;
+use starknet::class_hash::Felt252TryIntoClassHash;
+use starknet::contract_address_const;
 
 
 fn ZERO() -> ContractAddress {

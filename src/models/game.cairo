@@ -1,7 +1,7 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}};
+use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -16,7 +16,7 @@ struct Game {
     //
     player_name: Bytes16,
     hustler_id: u16,
-    // 
+    //
     game_over: bool,
     final_score: u32,
     registered: bool,

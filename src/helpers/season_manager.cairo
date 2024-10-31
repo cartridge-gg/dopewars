@@ -1,10 +1,9 @@
-use starknet::{get_caller_address, get_contract_address};
-use dojo::world::{WorldStorage, IWorldDispatcher};
 use dojo::event::EventStorage;
+use dojo::world::{WorldStorage, IWorldDispatcher};
 
 use rollyourown::{
     config::{
-        ryo::{RyoConfig,RyoConfigTrait}, ryo_address::{RyoAddress},
+        ryo::{RyoConfig, RyoConfigTrait}, ryo_address::{RyoAddress},
         settings::{SeasonSettingsImpl, SeasonSettings, SeasonSettingsTrait}
     },
     models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
@@ -17,9 +16,9 @@ use rollyourown::{
         math::{MathImpl, MathTrait}, random::{Random, RandomTrait},
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
-    store::{Store, StoreImpl, StoreTrait},
-    events::NewHighScore
+    store::{Store, StoreImpl, StoreTrait}, events::NewHighScore
 };
+use starknet::{get_caller_address, get_contract_address};
 
 #[derive(Drop, Copy)]
 struct SeasonManager {
@@ -120,17 +119,21 @@ impl SeasonManagerImpl of SeasonManagerTrait {
             store.save_season(@season);
 
             // // emit NewHighScore
-            store.world.emit_event(@NewHighScore{
-                game_id: game_store.game.game_id,
-                player_id: game_store.game.player_id,
-                season_version: game_store.game.season_version,
-                player_name: game_store.game.player_name.into(),
-                hustler_id: game_store.game.hustler_id,
-                cash: game_store.player.cash,
-                health: game_store.player.health,
-                reputation: game_store.player.reputation,
-            });
-     
+            store
+                .world
+                .emit_event(
+                    @NewHighScore {
+                        game_id: game_store.game.game_id,
+                        player_id: game_store.game.player_id,
+                        season_version: game_store.game.season_version,
+                        player_name: game_store.game.player_name.into(),
+                        hustler_id: game_store.game.hustler_id,
+                        cash: game_store.player.cash,
+                        health: game_store.player.health,
+                        reputation: game_store.player.reputation,
+                    }
+                );
+
             true
         } else {
             false

@@ -14,7 +14,7 @@ struct Season {
     next_version_timestamp: u64, // updated on new highscore
     paper_balance: u32,
     high_score: u32,
-//
+    //
 }
 
 

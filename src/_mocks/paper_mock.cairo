@@ -1,5 +1,5 @@
-use starknet::{ContractAddress, ClassHash};
 use dojo::world::IWorldDispatcher;
+use starknet::{ContractAddress, ClassHash};
 
 #[starknet::interface]
 trait IPaperMock<TState> {
@@ -48,14 +48,14 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
-    use starknet::{ContractAddress, get_caller_address};
-    use openzeppelin::token::erc20::ERC20Component;
-    use openzeppelin::token::erc20::interface::IERC20Metadata;
+    use dojo::event::EventStorage;
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
 
     use dojo::world::{WorldStorage, WorldStorageTrait};
-    use dojo::event::EventStorage;
+    use openzeppelin::token::erc20::ERC20Component;
+    use openzeppelin::token::erc20::interface::IERC20Metadata;
     use rollyourown::store::{Store, StoreImpl, StoreTrait};
+    use starknet::{ContractAddress, get_caller_address};
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);
 

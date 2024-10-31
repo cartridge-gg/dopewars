@@ -1,4 +1,3 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
@@ -6,6 +5,7 @@ use rollyourown::{
     utils::bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl},
     models::game::{Game, GameMode, GameImpl},
 };
+use starknet::ContractAddress;
 
 // 16 bits : 3 bits for Drugs, 13 bits for quantity
 #[derive(Copy, Drop, Serde)]

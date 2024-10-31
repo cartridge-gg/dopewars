@@ -1,9 +1,8 @@
+use debug::PrintTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::tests::test_helper::{spawn_world, SystemDispatchers};
 use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
-
-use debug::PrintTrait;
 
 
 #[test]

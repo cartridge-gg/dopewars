@@ -1,6 +1,6 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::event::EventStorage;
 use dojo::meta::introspect::Introspect;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game, GameMode},

@@ -1,8 +1,8 @@
-use starknet::ContractAddress;
 use dojo::meta::introspect::Introspect;
 use rollyourown::packing::game_store::{GameMode};
-use rollyourown::systems::helpers::traveling::{EncounterOutcomes,};
 use rollyourown::systems::game::{EncounterActions,};
+use rollyourown::systems::helpers::traveling::{EncounterOutcomes,};
+use starknet::ContractAddress;
 
 #[derive(Drop, Serde)]
 #[dojo::event(historical: true)]
@@ -99,7 +99,7 @@ struct TravelEncounter {
     payout: u32,
 }
 
-#[derive(Drop,Introspect)]
+#[derive(Drop, Introspect)]
 #[dojo::event(historical: true)]
 struct TravelEncounterResult {
     #[key]

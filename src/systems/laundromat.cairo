@@ -12,9 +12,9 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 mod laundromat {
-    use starknet::{ContractAddress, get_caller_address, get_contract_address};
-    use dojo::world::IWorldDispatcherTrait;
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
+    use dojo::world::IWorldDispatcherTrait;
 
     use rollyourown::{
         config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},},
@@ -28,7 +28,7 @@ mod laundromat {
         },
         packing::game_store::{GameStore, GameStoreImpl}, events::{NewSeason, Claimed}
     };
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {

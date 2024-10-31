@@ -1,12 +1,12 @@
 use core::traits::TryInto;
-use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use debug::PrintTrait;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::{game::Game, season::Season}, utils::payout_structure::{get_payout},
     store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
@@ -177,7 +177,8 @@ impl SortedListImpl of SortedListTrait {
         let mut curr = store.sorted_list_item(self.list_id, start_item_k0, start_item_k1);
 
         loop {
-            let mut next: SortedListItem = store.sorted_list_item(self.list_id, curr.next_k0, curr.next_k1 );
+            let mut next: SortedListItem = store
+                .sorted_list_item(self.list_id, curr.next_k0, curr.next_k1);
 
             if self.is_correct_position::<T>(ref store, ref curr, ref next, item_value) {
                 break (curr.item_k0, curr.item_k1);
@@ -191,14 +192,14 @@ impl SortedListImpl of SortedListTrait {
     //
     //
 
-    fn lock(ref self: SortedList,ref store: Store, process_max_size: u32) {
+    fn lock(ref self: SortedList, ref store: Store, process_max_size: u32) {
         assert(!self.locked, 'list already locked');
         assert(process_max_size > 0, 'invalid process_max_size');
 
         self.process_max_size = process_max_size;
         self.locked = true;
         //self.set(world);
-        Self::set(self,ref store);
+        Self::set(self, ref store);
     }
 
     //
@@ -220,7 +221,7 @@ impl SortedListImpl of SortedListTrait {
         let curr_k1 = self.process_cursor_k1;
 
         let mut curr = store.sorted_list_item(self.list_id, curr_k0, curr_k1);
-        let mut curr_item = SortableItem::<T>::get_by_keys( @store, (curr.item_k0, curr.item_k1));
+        let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
         let mut curr_position: u16 = self
             .process_size
             .try_into()

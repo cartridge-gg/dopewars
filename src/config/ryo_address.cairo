@@ -1,5 +1,5 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]

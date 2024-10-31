@@ -1,10 +1,10 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
-    store::{Store,StoreImpl,StoreTrait}
+    store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop)]
@@ -19,7 +19,7 @@ struct ItemsPacked {
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
     fn new(s: @Store, hustler_id: u16) -> ItemsPacked {
-        ItemsPacked { store:s, hustler_id, packed: 0 }
+        ItemsPacked { store: s, hustler_id, packed: 0 }
     }
 
     #[inline(always)]

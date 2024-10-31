@@ -1,4 +1,3 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game, GameImpl, GameMode,},
@@ -9,6 +8,7 @@ use rollyourown::{
     },
     packing::{game_store::{GameStore}, drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}}
 };
+use starknet::ContractAddress;
 
 
 // 18 bits : 3 bits x 6 locations

@@ -1,6 +1,5 @@
-use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::event::EventStorage;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::{game::{GameMode}}, config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
     packing::{
@@ -12,6 +11,7 @@ use rollyourown::{
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}},
     events::{TradeDrug}
 };
+use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 enum TradeDirection {

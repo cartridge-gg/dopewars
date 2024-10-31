@@ -1,7 +1,6 @@
 use core::traits::TryInto;
-use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::event::EventStorage;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     models::game::{Game, GameMode}, events::HighVolatility,
@@ -17,6 +16,7 @@ use rollyourown::{
     store::{Store, StoreImpl, StoreTrait},
     packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl},
 };
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde)]

@@ -1,5 +1,22 @@
 use rollyourown::utils::bits::{BitsImpl, BitsTrait};
 
+// #[cfg(test)]
+// mod tests {
+//     use super::{MACHINE, get_slot};
+
+//     #[test]
+//     fn test_slot() {
+//         println!("0,3: {}", get_slot(0, 3));
+//         println!("1,21: {}", get_slot(1, 21));
+//     }
+// }
+
+//
+// Contract
+//
+
+use starknet::ContractAddress;
+
 pub const SLOT_BY_ROLL: u8 = 22;
 pub const ROLL_R: [u8; 22] = [2, 0, 1, 7, 2, 4, 0, 1, 0, 3, 2, 0, 2, 5, 0, 1, 0, 6, 0, 3, 2, 1];
 pub const ROLL_Y: [u8; 22] = [7, 5, 0, 2, 0, 1, 4, 2, 5, 0, 3, 0, 6, 1, 3, 2, 0, 1, 6, 0, 1, 4];
@@ -159,23 +176,6 @@ impl SlotMachineImpl of SlotMachineTrait {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::{MACHINE, get_slot};
-
-//     #[test]
-//     fn test_slot() {
-//         println!("0,3: {}", get_slot(0, 3));
-//         println!("1,21: {}", get_slot(1, 21));
-//     }
-// }
-
-//
-// Contract
-//
-
-use starknet::ContractAddress;
-
 #[starknet::interface]
 trait ISlotMachine<T> {
     fn roll(ref self: T, game_id: u32);
@@ -184,11 +184,11 @@ trait ISlotMachine<T> {
 
 #[dojo::contract]
 mod slotmachine {
-    use starknet::ContractAddress;
-    use starknet::get_caller_address;
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::world::IWorldDispatcherTrait;
     use rollyourown::{store::{Store, StoreImpl, StoreTrait},};
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    use starknet::ContractAddress;
+    use starknet::get_caller_address;
 
     use super::{SlotMachine, SlotMachineImpl, SlotMachineTrait};
 

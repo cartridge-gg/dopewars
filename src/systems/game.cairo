@@ -1,10 +1,10 @@
-use starknet::ContractAddress;
 use dojo::meta::introspect::Introspect;
 
 use rollyourown::{
     config::{locations::{Locations}, hustlers::{ItemSlot}}, packing::game_store::{GameMode},
     systems::helpers::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
 };
+use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
@@ -12,7 +12,7 @@ pub enum Actions {
     Shop: shopping::Action,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect )]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
 pub enum EncounterActions {
     Run,
     Pay,
@@ -29,9 +29,9 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
-    use starknet::{ContractAddress, get_caller_address, get_contract_address};
-    use dojo::world::IWorldDispatcherTrait;
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
+    use dojo::world::IWorldDispatcherTrait;
 
     use rollyourown::{
         config::{
@@ -49,7 +49,7 @@ mod game {
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
         store::{Store, StoreImpl, StoreTrait}, events::{GameCreated}
     };
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {

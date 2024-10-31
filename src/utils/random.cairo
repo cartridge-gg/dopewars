@@ -1,7 +1,6 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use starknet::ContractAddress;
 use starknet::get_contract_address;
-
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[derive(Copy, Drop, Serde)]
 struct Random {

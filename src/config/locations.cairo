@@ -1,3 +1,8 @@
+//
+//
+//
+
+use dojo::model::{ModelStorage};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
@@ -105,13 +110,6 @@ impl U8IntoLocations of Into<u8, Locations> {
         }
     }
 }
-
-//
-//
-//
-
-
-use dojo::model::{ModelStorage};
 fn initialize_location_config(ref store: Store) {
     store
         .world

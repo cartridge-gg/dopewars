@@ -1,4 +1,3 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     config::{game::{GameConfig}, settings::{SeasonSettings, EncountersMode, EncountersOddsMode}},
@@ -9,6 +8,7 @@ use rollyourown::{
     },
     packing::{game_store::{GameStore},}, store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]

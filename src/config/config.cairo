@@ -31,7 +31,6 @@ struct LayoutItem {
 
 #[dojo::contract]
 mod config {
-    use starknet::{get_caller_address, get_contract_address};
     use dojo::world::IWorldDispatcherTrait;
 
     use rollyourown::{
@@ -65,6 +64,7 @@ mod config {
             }
         },
     };
+    use starknet::{get_caller_address, get_contract_address};
 
     use super::{Config, LayoutsConfig, LayoutItem};
 
@@ -158,6 +158,5 @@ mod config {
                 layouts: LayoutsConfig { game_store, player }
             }
         }
-      
     }
 }
