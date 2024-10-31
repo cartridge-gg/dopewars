@@ -4,11 +4,11 @@
 #[dojo::contract]
 mod chips {
     use openzeppelin::token::erc20::ERC20Component;
-    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use openzeppelin::token::erc20::interface::IERC20Metadata;
+    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use starknet::{ContractAddress};
-
-    use rollyourown::{library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},};
+    use dojo::world::{WorldStorage, WorldStorageTrait};
+    use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);
 
@@ -31,7 +31,6 @@ mod chips {
     }
 
     #[derive(Copy, Drop, Serde)]
-    #[dojo::model]
     #[dojo::event]
     struct ERC20BalanceEvent {
         #[key]
@@ -83,33 +82,18 @@ mod chips {
     impl ChipsInternalImpl of ChipsInternalTrait {
         fn assert_only_minter(self: @ContractState) {
             let caller = starknet::get_caller_address();
-            let (_, game_address) = rollyourown::utils::world_utils::get_contract_infos(
-                self.world(), selector_from_tag!("dopewars-game")
-            );
-
+            let game_address = self.world(@"dopewars").dns(@"game").unwrap();
             assert(caller == game_address, 'not minter!');
         }
 
         fn assert_only_burner(self: @ContractState) {
             let caller = starknet::get_caller_address();
-            let (_, slot_address) = rollyourown::utils::world_utils::get_contract_infos(
-                self.world(), selector_from_tag!("dopewars-slot")
-            );
+            let slot_address = self.world(@"dopewars").dns(@"slot").unwrap();
             assert(caller == slot_address, 'not burner!');
-        }
-
-        #[inline(always)]
-        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
-                self.world(), selector_from_tag!("dopewars-store")
-            );
-            IStoreLibraryDispatcher { class_hash, }
         }
     }
 
-    pub impl ERC20HooksImpl<
-        ContractState, +IWorldProvider
-    > of ERC20Component::ERC20HooksTrait<ContractState> {
+    pub impl ERC20HooksImpl of ERC20Component::ERC20HooksTrait<ContractState> {
         fn before_update(
             ref self: ERC20Component::ComponentState<ContractState>,
             from: ContractAddress,
@@ -124,27 +108,27 @@ mod chips {
             amount: u256
         ) {
             let contract_state = self.get_contract();
-
             let balance_from = contract_state.erc20.balance_of(from);
             let balance_recipient = contract_state.erc20.balance_of(recipient);
 
-            emit!(
-                contract_state.world(),
-                (ERC20BalanceEvent {
-                    token_address: starknet::get_contract_address(),
-                    owner: from,
-                    balance: balance_from
-                })
-            );
+            let mut world = contract_state.world(@"dopewars");
 
-            emit!(
-                contract_state.world(),
-                (ERC20BalanceEvent {
-                    token_address: starknet::get_contract_address(),
-                    owner: recipient,
-                    balance: balance_recipient
-                })
-            );
+            world
+                .emit_event(
+                    @ERC20BalanceEvent {
+                        token_address: starknet::get_contract_address(),
+                        owner: from,
+                        balance: balance_from
+                    }
+                );
+            world
+                .emit_event(
+                    @ERC20BalanceEvent {
+                        token_address: starknet::get_contract_address(),
+                        owner: recipient,
+                        balance: balance_recipient
+                    }
+                );
         }
     }
 }

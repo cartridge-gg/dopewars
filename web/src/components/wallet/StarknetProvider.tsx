@@ -13,7 +13,6 @@ import { getContractByName } from "@dojoengine/core";
 import { DW_NS } from "@/dojo/hooks";
 import { ControllerConnector } from "@cartridge/connector";
 
-
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
   braavos: "https://braavos.app/download-braavos-wallet/",
@@ -35,22 +34,12 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
-  const controller = cartridgeConnector({ selectedChain });
-
   switch (selectedChain.name) {
     case "KATANA":
-      return [controller, injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
-
-    case "INTERNAL":
-      return [
-        cartridgeConnector({
-          keychain: "http://localhost:3001",
-          selectedChain,
-        }),
-        injected({ id: "dojoburner" }),
-      ];
+      return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
 
     default:
+      const controller = cartridgeConnector({ selectedChain });
       return [controller];
   }
 }
@@ -80,6 +69,7 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
     url: keychain ? keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     theme: "dope-wars",
+  
     // paymaster: {
     //   caller: shortString.encodeShortString("ANY_CALLER"),
     // },

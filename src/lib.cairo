@@ -10,13 +10,13 @@ mod config {
     mod settings;
 }
 
+mod events;
+
 mod helpers {
     mod season_manager;
 }
 
-mod library {
-    mod store;
-}
+mod store;
 
 mod models {
     mod game;
@@ -51,12 +51,12 @@ mod systems {
         mod traveling;
     }
 
-    mod slot;
-    mod devtools;
+    // mod slot;
+    // mod devtools;
 }
 
 mod tokens {
-    mod chips;
+    // mod chips;
 }
 
 mod utils {
@@ -68,7 +68,6 @@ mod utils {
     mod introspect;
     mod payout_structure;
     mod sorted_list;
-    mod world_utils;
 }
 
 mod interfaces {

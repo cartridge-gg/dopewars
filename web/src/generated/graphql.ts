@@ -12,7 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  ByteArray: any;
   ContractAddress: any;
   Cursor: any;
   DateTime: any;
@@ -54,7 +53,7 @@ export type Erc__Transfer = {
   type: Scalars['String'];
 };
 
-export type ModelUnion = Dopewars_DrugConfig | Dopewars_Erc20AllowanceModel | Dopewars_Erc20BalanceEvent | Dopewars_Erc20BalanceModel | Dopewars_Erc20MetadataModel | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameStorePacked | Dopewars_HustlerItemBaseConfig | Dopewars_HustlerItemTiersConfig | Dopewars_InitializableModel | Dopewars_LocationConfig | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem;
+export type ModelUnion = Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameStorePacked | Dopewars_HustlerItemBaseConfig | Dopewars_HustlerItemTiersConfig | Dopewars_LocationConfig | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SlotMachine | Dopewars_SlotMachineCombination | Dopewars_SortedList | Dopewars_SortedListItem;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -215,21 +214,19 @@ export type World__Query = {
   __typename?: 'World__Query';
   dopewarsDrugConfigModels?: Maybe<Dopewars_DrugConfigConnection>;
   dopewarsEncounterStatsConfigModels?: Maybe<Dopewars_EncounterStatsConfigConnection>;
-  dopewarsErc20AllowanceModelModels?: Maybe<Dopewars_Erc20AllowanceModelConnection>;
   dopewarsErc20BalanceEventModels?: Maybe<Dopewars_Erc20BalanceEventConnection>;
-  dopewarsErc20BalanceModelModels?: Maybe<Dopewars_Erc20BalanceModelConnection>;
-  dopewarsErc20MetadataModelModels?: Maybe<Dopewars_Erc20MetadataModelConnection>;
   dopewarsGameConfigModels?: Maybe<Dopewars_GameConfigConnection>;
   dopewarsGameModels?: Maybe<Dopewars_GameConnection>;
   dopewarsGameStorePackedModels?: Maybe<Dopewars_GameStorePackedConnection>;
   dopewarsHustlerItemBaseConfigModels?: Maybe<Dopewars_HustlerItemBaseConfigConnection>;
   dopewarsHustlerItemTiersConfigModels?: Maybe<Dopewars_HustlerItemTiersConfigConnection>;
-  dopewarsInitializableModelModels?: Maybe<Dopewars_InitializableModelConnection>;
   dopewarsLocationConfigModels?: Maybe<Dopewars_LocationConfigConnection>;
   dopewarsRyoAddressModels?: Maybe<Dopewars_RyoAddressConnection>;
   dopewarsRyoConfigModels?: Maybe<Dopewars_RyoConfigConnection>;
   dopewarsSeasonModels?: Maybe<Dopewars_SeasonConnection>;
   dopewarsSeasonSettingsModels?: Maybe<Dopewars_SeasonSettingsConnection>;
+  dopewarsSlotMachineCombinationModels?: Maybe<Dopewars_SlotMachineCombinationConnection>;
+  dopewarsSlotMachineModels?: Maybe<Dopewars_SlotMachineConnection>;
   dopewarsSortedListItemModels?: Maybe<Dopewars_SortedListItemConnection>;
   dopewarsSortedListModels?: Maybe<Dopewars_SortedListConnection>;
   entities?: Maybe<World__EntityConnection>;
@@ -271,18 +268,6 @@ export type World__QueryDopewarsEncounterStatsConfigModelsArgs = {
 };
 
 
-export type World__QueryDopewarsErc20AllowanceModelModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_Erc20AllowanceModelOrder>;
-  where?: InputMaybe<Dopewars_Erc20AllowanceModelWhereInput>;
-};
-
-
 export type World__QueryDopewarsErc20BalanceEventModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -292,30 +277,6 @@ export type World__QueryDopewarsErc20BalanceEventModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Dopewars_Erc20BalanceEventOrder>;
   where?: InputMaybe<Dopewars_Erc20BalanceEventWhereInput>;
-};
-
-
-export type World__QueryDopewarsErc20BalanceModelModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_Erc20BalanceModelOrder>;
-  where?: InputMaybe<Dopewars_Erc20BalanceModelWhereInput>;
-};
-
-
-export type World__QueryDopewarsErc20MetadataModelModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_Erc20MetadataModelOrder>;
-  where?: InputMaybe<Dopewars_Erc20MetadataModelWhereInput>;
 };
 
 
@@ -379,18 +340,6 @@ export type World__QueryDopewarsHustlerItemTiersConfigModelsArgs = {
 };
 
 
-export type World__QueryDopewarsInitializableModelModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_InitializableModelOrder>;
-  where?: InputMaybe<Dopewars_InitializableModelWhereInput>;
-};
-
-
 export type World__QueryDopewarsLocationConfigModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -448,6 +397,30 @@ export type World__QueryDopewarsSeasonSettingsModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Dopewars_SeasonSettingsOrder>;
   where?: InputMaybe<Dopewars_SeasonSettingsWhereInput>;
+};
+
+
+export type World__QueryDopewarsSlotMachineCombinationModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Dopewars_SlotMachineCombinationOrder>;
+  where?: InputMaybe<Dopewars_SlotMachineCombinationWhereInput>;
+};
+
+
+export type World__QueryDopewarsSlotMachineModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Dopewars_SlotMachineOrder>;
+  where?: InputMaybe<Dopewars_SlotMachineWhereInput>;
 };
 
 
@@ -724,88 +697,6 @@ export type Dopewars_DrugConfig_Bytes16 = {
   value?: Maybe<Scalars['u128']>;
 };
 
-export type Dopewars_Erc20AllowanceModel = {
-  __typename?: 'dopewars_ERC20AllowanceModel';
-  amount?: Maybe<Scalars['u256']>;
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  owner?: Maybe<Scalars['ContractAddress']>;
-  spender?: Maybe<Scalars['ContractAddress']>;
-  token?: Maybe<Scalars['ContractAddress']>;
-};
-
-export type Dopewars_Erc20AllowanceModelConnection = {
-  __typename?: 'dopewars_ERC20AllowanceModelConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_Erc20AllowanceModelEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_Erc20AllowanceModelEdge = {
-  __typename?: 'dopewars_ERC20AllowanceModelEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_Erc20AllowanceModel>;
-};
-
-export type Dopewars_Erc20AllowanceModelOrder = {
-  direction: OrderDirection;
-  field: Dopewars_Erc20AllowanceModelOrderField;
-};
-
-export enum Dopewars_Erc20AllowanceModelOrderField {
-  Amount = 'AMOUNT',
-  Owner = 'OWNER',
-  Spender = 'SPENDER',
-  Token = 'TOKEN'
-}
-
-export type Dopewars_Erc20AllowanceModelWhereInput = {
-  amount?: InputMaybe<Scalars['u256']>;
-  amountEQ?: InputMaybe<Scalars['u256']>;
-  amountGT?: InputMaybe<Scalars['u256']>;
-  amountGTE?: InputMaybe<Scalars['u256']>;
-  amountIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  amountLIKE?: InputMaybe<Scalars['u256']>;
-  amountLT?: InputMaybe<Scalars['u256']>;
-  amountLTE?: InputMaybe<Scalars['u256']>;
-  amountNEQ?: InputMaybe<Scalars['u256']>;
-  amountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  amountNOTLIKE?: InputMaybe<Scalars['u256']>;
-  owner?: InputMaybe<Scalars['ContractAddress']>;
-  ownerEQ?: InputMaybe<Scalars['ContractAddress']>;
-  ownerGT?: InputMaybe<Scalars['ContractAddress']>;
-  ownerGTE?: InputMaybe<Scalars['ContractAddress']>;
-  ownerIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  ownerLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  ownerLT?: InputMaybe<Scalars['ContractAddress']>;
-  ownerLTE?: InputMaybe<Scalars['ContractAddress']>;
-  ownerNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  ownerNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  ownerNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  spender?: InputMaybe<Scalars['ContractAddress']>;
-  spenderEQ?: InputMaybe<Scalars['ContractAddress']>;
-  spenderGT?: InputMaybe<Scalars['ContractAddress']>;
-  spenderGTE?: InputMaybe<Scalars['ContractAddress']>;
-  spenderIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  spenderLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  spenderLT?: InputMaybe<Scalars['ContractAddress']>;
-  spenderLTE?: InputMaybe<Scalars['ContractAddress']>;
-  spenderNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  spenderNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  spenderNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  token?: InputMaybe<Scalars['ContractAddress']>;
-  tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-};
-
 export type Dopewars_Erc20BalanceEvent = {
   __typename?: 'dopewars_ERC20BalanceEvent';
   balance?: Maybe<Scalars['u256']>;
@@ -873,170 +764,6 @@ export type Dopewars_Erc20BalanceEventWhereInput = {
   token_addressNEQ?: InputMaybe<Scalars['ContractAddress']>;
   token_addressNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
   token_addressNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-};
-
-export type Dopewars_Erc20BalanceModel = {
-  __typename?: 'dopewars_ERC20BalanceModel';
-  account?: Maybe<Scalars['ContractAddress']>;
-  amount?: Maybe<Scalars['u256']>;
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  token?: Maybe<Scalars['ContractAddress']>;
-};
-
-export type Dopewars_Erc20BalanceModelConnection = {
-  __typename?: 'dopewars_ERC20BalanceModelConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_Erc20BalanceModelEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_Erc20BalanceModelEdge = {
-  __typename?: 'dopewars_ERC20BalanceModelEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_Erc20BalanceModel>;
-};
-
-export type Dopewars_Erc20BalanceModelOrder = {
-  direction: OrderDirection;
-  field: Dopewars_Erc20BalanceModelOrderField;
-};
-
-export enum Dopewars_Erc20BalanceModelOrderField {
-  Account = 'ACCOUNT',
-  Amount = 'AMOUNT',
-  Token = 'TOKEN'
-}
-
-export type Dopewars_Erc20BalanceModelWhereInput = {
-  account?: InputMaybe<Scalars['ContractAddress']>;
-  accountEQ?: InputMaybe<Scalars['ContractAddress']>;
-  accountGT?: InputMaybe<Scalars['ContractAddress']>;
-  accountGTE?: InputMaybe<Scalars['ContractAddress']>;
-  accountIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  accountLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  accountLT?: InputMaybe<Scalars['ContractAddress']>;
-  accountLTE?: InputMaybe<Scalars['ContractAddress']>;
-  accountNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  accountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  accountNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  amount?: InputMaybe<Scalars['u256']>;
-  amountEQ?: InputMaybe<Scalars['u256']>;
-  amountGT?: InputMaybe<Scalars['u256']>;
-  amountGTE?: InputMaybe<Scalars['u256']>;
-  amountIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  amountLIKE?: InputMaybe<Scalars['u256']>;
-  amountLT?: InputMaybe<Scalars['u256']>;
-  amountLTE?: InputMaybe<Scalars['u256']>;
-  amountNEQ?: InputMaybe<Scalars['u256']>;
-  amountNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  amountNOTLIKE?: InputMaybe<Scalars['u256']>;
-  token?: InputMaybe<Scalars['ContractAddress']>;
-  tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-};
-
-export type Dopewars_Erc20MetadataModel = {
-  __typename?: 'dopewars_ERC20MetadataModel';
-  decimals?: Maybe<Scalars['u8']>;
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  name?: Maybe<Scalars['ByteArray']>;
-  symbol?: Maybe<Scalars['ByteArray']>;
-  token?: Maybe<Scalars['ContractAddress']>;
-  total_supply?: Maybe<Scalars['u256']>;
-};
-
-export type Dopewars_Erc20MetadataModelConnection = {
-  __typename?: 'dopewars_ERC20MetadataModelConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_Erc20MetadataModelEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_Erc20MetadataModelEdge = {
-  __typename?: 'dopewars_ERC20MetadataModelEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_Erc20MetadataModel>;
-};
-
-export type Dopewars_Erc20MetadataModelOrder = {
-  direction: OrderDirection;
-  field: Dopewars_Erc20MetadataModelOrderField;
-};
-
-export enum Dopewars_Erc20MetadataModelOrderField {
-  Decimals = 'DECIMALS',
-  Name = 'NAME',
-  Symbol = 'SYMBOL',
-  Token = 'TOKEN',
-  TotalSupply = 'TOTAL_SUPPLY'
-}
-
-export type Dopewars_Erc20MetadataModelWhereInput = {
-  decimals?: InputMaybe<Scalars['u8']>;
-  decimalsEQ?: InputMaybe<Scalars['u8']>;
-  decimalsGT?: InputMaybe<Scalars['u8']>;
-  decimalsGTE?: InputMaybe<Scalars['u8']>;
-  decimalsIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  decimalsLIKE?: InputMaybe<Scalars['u8']>;
-  decimalsLT?: InputMaybe<Scalars['u8']>;
-  decimalsLTE?: InputMaybe<Scalars['u8']>;
-  decimalsNEQ?: InputMaybe<Scalars['u8']>;
-  decimalsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  decimalsNOTLIKE?: InputMaybe<Scalars['u8']>;
-  name?: InputMaybe<Scalars['ByteArray']>;
-  nameEQ?: InputMaybe<Scalars['ByteArray']>;
-  nameGT?: InputMaybe<Scalars['ByteArray']>;
-  nameGTE?: InputMaybe<Scalars['ByteArray']>;
-  nameIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
-  nameLIKE?: InputMaybe<Scalars['ByteArray']>;
-  nameLT?: InputMaybe<Scalars['ByteArray']>;
-  nameLTE?: InputMaybe<Scalars['ByteArray']>;
-  nameNEQ?: InputMaybe<Scalars['ByteArray']>;
-  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
-  nameNOTLIKE?: InputMaybe<Scalars['ByteArray']>;
-  symbol?: InputMaybe<Scalars['ByteArray']>;
-  symbolEQ?: InputMaybe<Scalars['ByteArray']>;
-  symbolGT?: InputMaybe<Scalars['ByteArray']>;
-  symbolGTE?: InputMaybe<Scalars['ByteArray']>;
-  symbolIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
-  symbolLIKE?: InputMaybe<Scalars['ByteArray']>;
-  symbolLT?: InputMaybe<Scalars['ByteArray']>;
-  symbolLTE?: InputMaybe<Scalars['ByteArray']>;
-  symbolNEQ?: InputMaybe<Scalars['ByteArray']>;
-  symbolNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ByteArray']>>>;
-  symbolNOTLIKE?: InputMaybe<Scalars['ByteArray']>;
-  token?: InputMaybe<Scalars['ContractAddress']>;
-  tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  total_supply?: InputMaybe<Scalars['u256']>;
-  total_supplyEQ?: InputMaybe<Scalars['u256']>;
-  total_supplyGT?: InputMaybe<Scalars['u256']>;
-  total_supplyGTE?: InputMaybe<Scalars['u256']>;
-  total_supplyIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  total_supplyLIKE?: InputMaybe<Scalars['u256']>;
-  total_supplyLT?: InputMaybe<Scalars['u256']>;
-  total_supplyLTE?: InputMaybe<Scalars['u256']>;
-  total_supplyNEQ?: InputMaybe<Scalars['u256']>;
-  total_supplyNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
-  total_supplyNOTLIKE?: InputMaybe<Scalars['u256']>;
 };
 
 export type Dopewars_EncounterStatsConfig = {
@@ -1731,52 +1458,6 @@ export type Dopewars_HustlerItemTiersConfigWhereInput = {
   tierNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
-export type Dopewars_InitializableModel = {
-  __typename?: 'dopewars_InitializableModel';
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  initialized?: Maybe<Scalars['bool']>;
-  token?: Maybe<Scalars['ContractAddress']>;
-};
-
-export type Dopewars_InitializableModelConnection = {
-  __typename?: 'dopewars_InitializableModelConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_InitializableModelEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_InitializableModelEdge = {
-  __typename?: 'dopewars_InitializableModelEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_InitializableModel>;
-};
-
-export type Dopewars_InitializableModelOrder = {
-  direction: OrderDirection;
-  field: Dopewars_InitializableModelOrderField;
-};
-
-export enum Dopewars_InitializableModelOrderField {
-  Initialized = 'INITIALIZED',
-  Token = 'TOKEN'
-}
-
-export type Dopewars_InitializableModelWhereInput = {
-  initialized?: InputMaybe<Scalars['bool']>;
-  token?: InputMaybe<Scalars['ContractAddress']>;
-  tokenEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenGTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLT?: InputMaybe<Scalars['ContractAddress']>;
-  tokenLTE?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  tokenNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  tokenNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-};
-
 export type Dopewars_LocationConfig = {
   __typename?: 'dopewars_LocationConfig';
   entity?: Maybe<World__Entity>;
@@ -2263,6 +1944,179 @@ export type Dopewars_SeasonWhereInput = {
   versionNOTLIKE?: InputMaybe<Scalars['u16']>;
 };
 
+export type Dopewars_SlotMachine = {
+  __typename?: 'dopewars_SlotMachine';
+  credits?: Maybe<Scalars['u32']>;
+  entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
+  game_id?: Maybe<Scalars['u32']>;
+  offset_o?: Maybe<Scalars['u8']>;
+  offset_r?: Maybe<Scalars['u8']>;
+  offset_y?: Maybe<Scalars['u8']>;
+};
+
+export type Dopewars_SlotMachineCombination = {
+  __typename?: 'dopewars_SlotMachineCombination';
+  entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
+  name?: Maybe<Scalars['felt252']>;
+  payout?: Maybe<Scalars['u32']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
+  values?: Maybe<Dopewars_SlotMachineCombination_U8u8u8>;
+};
+
+export type Dopewars_SlotMachineCombinationConnection = {
+  __typename?: 'dopewars_SlotMachineCombinationConnection';
+  edges?: Maybe<Array<Maybe<Dopewars_SlotMachineCombinationEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type Dopewars_SlotMachineCombinationEdge = {
+  __typename?: 'dopewars_SlotMachineCombinationEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Dopewars_SlotMachineCombination>;
+};
+
+export type Dopewars_SlotMachineCombinationOrder = {
+  direction: OrderDirection;
+  field: Dopewars_SlotMachineCombinationOrderField;
+};
+
+export enum Dopewars_SlotMachineCombinationOrderField {
+  Name = 'NAME',
+  Payout = 'PAYOUT',
+  PlayerId = 'PLAYER_ID',
+  Values = 'VALUES'
+}
+
+export type Dopewars_SlotMachineCombinationWhereInput = {
+  name?: InputMaybe<Scalars['felt252']>;
+  nameEQ?: InputMaybe<Scalars['felt252']>;
+  nameGT?: InputMaybe<Scalars['felt252']>;
+  nameGTE?: InputMaybe<Scalars['felt252']>;
+  nameIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameLIKE?: InputMaybe<Scalars['felt252']>;
+  nameLT?: InputMaybe<Scalars['felt252']>;
+  nameLTE?: InputMaybe<Scalars['felt252']>;
+  nameNEQ?: InputMaybe<Scalars['felt252']>;
+  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  payout?: InputMaybe<Scalars['u32']>;
+  payoutEQ?: InputMaybe<Scalars['u32']>;
+  payoutGT?: InputMaybe<Scalars['u32']>;
+  payoutGTE?: InputMaybe<Scalars['u32']>;
+  payoutIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  payoutLIKE?: InputMaybe<Scalars['u32']>;
+  payoutLT?: InputMaybe<Scalars['u32']>;
+  payoutLTE?: InputMaybe<Scalars['u32']>;
+  payoutNEQ?: InputMaybe<Scalars['u32']>;
+  payoutNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  payoutNOTLIKE?: InputMaybe<Scalars['u32']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
+};
+
+export type Dopewars_SlotMachineCombination_U8u8u8 = {
+  __typename?: 'dopewars_SlotMachineCombination_u8u8u8';
+  _0?: Maybe<Scalars['u8']>;
+  _1?: Maybe<Scalars['u8']>;
+  _2?: Maybe<Scalars['u8']>;
+};
+
+export type Dopewars_SlotMachineConnection = {
+  __typename?: 'dopewars_SlotMachineConnection';
+  edges?: Maybe<Array<Maybe<Dopewars_SlotMachineEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type Dopewars_SlotMachineEdge = {
+  __typename?: 'dopewars_SlotMachineEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Dopewars_SlotMachine>;
+};
+
+export type Dopewars_SlotMachineOrder = {
+  direction: OrderDirection;
+  field: Dopewars_SlotMachineOrderField;
+};
+
+export enum Dopewars_SlotMachineOrderField {
+  Credits = 'CREDITS',
+  GameId = 'GAME_ID',
+  OffsetO = 'OFFSET_O',
+  OffsetR = 'OFFSET_R',
+  OffsetY = 'OFFSET_Y'
+}
+
+export type Dopewars_SlotMachineWhereInput = {
+  credits?: InputMaybe<Scalars['u32']>;
+  creditsEQ?: InputMaybe<Scalars['u32']>;
+  creditsGT?: InputMaybe<Scalars['u32']>;
+  creditsGTE?: InputMaybe<Scalars['u32']>;
+  creditsIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  creditsLIKE?: InputMaybe<Scalars['u32']>;
+  creditsLT?: InputMaybe<Scalars['u32']>;
+  creditsLTE?: InputMaybe<Scalars['u32']>;
+  creditsNEQ?: InputMaybe<Scalars['u32']>;
+  creditsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  creditsNOTLIKE?: InputMaybe<Scalars['u32']>;
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idLIKE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
+  offset_o?: InputMaybe<Scalars['u8']>;
+  offset_oEQ?: InputMaybe<Scalars['u8']>;
+  offset_oGT?: InputMaybe<Scalars['u8']>;
+  offset_oGTE?: InputMaybe<Scalars['u8']>;
+  offset_oIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_oLIKE?: InputMaybe<Scalars['u8']>;
+  offset_oLT?: InputMaybe<Scalars['u8']>;
+  offset_oLTE?: InputMaybe<Scalars['u8']>;
+  offset_oNEQ?: InputMaybe<Scalars['u8']>;
+  offset_oNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_oNOTLIKE?: InputMaybe<Scalars['u8']>;
+  offset_r?: InputMaybe<Scalars['u8']>;
+  offset_rEQ?: InputMaybe<Scalars['u8']>;
+  offset_rGT?: InputMaybe<Scalars['u8']>;
+  offset_rGTE?: InputMaybe<Scalars['u8']>;
+  offset_rIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_rLIKE?: InputMaybe<Scalars['u8']>;
+  offset_rLT?: InputMaybe<Scalars['u8']>;
+  offset_rLTE?: InputMaybe<Scalars['u8']>;
+  offset_rNEQ?: InputMaybe<Scalars['u8']>;
+  offset_rNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_rNOTLIKE?: InputMaybe<Scalars['u8']>;
+  offset_y?: InputMaybe<Scalars['u8']>;
+  offset_yEQ?: InputMaybe<Scalars['u8']>;
+  offset_yGT?: InputMaybe<Scalars['u8']>;
+  offset_yGTE?: InputMaybe<Scalars['u8']>;
+  offset_yIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_yLIKE?: InputMaybe<Scalars['u8']>;
+  offset_yLT?: InputMaybe<Scalars['u8']>;
+  offset_yLTE?: InputMaybe<Scalars['u8']>;
+  offset_yNEQ?: InputMaybe<Scalars['u8']>;
+  offset_yNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  offset_yNOTLIKE?: InputMaybe<Scalars['u8']>;
+};
+
 export type Dopewars_SortedList = {
   __typename?: 'dopewars_SortedList';
   entity?: Maybe<World__Entity>;
@@ -2522,7 +2376,7 @@ export type GamesByPlayerQueryVariables = Exact<{
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20AllowanceModel' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_ERC20BalanceModel' } | { __typename: 'dopewars_ERC20MetadataModel' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, player_name?: { __typename?: 'dopewars_Game_Bytes16', value?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_InitializableModel' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, player_name?: { __typename?: 'dopewars_Game_Bytes16', value?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SlotMachine' } | { __typename: 'dopewars_SlotMachineCombination' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -2530,14 +2384,14 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20AllowanceModel' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_ERC20BalanceModel' } | { __typename: 'dopewars_ERC20MetadataModel' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_InitializableModel' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SlotMachine' } | { __typename: 'dopewars_SlotMachineCombination' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20AllowanceModel' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_ERC20BalanceModel' } | { __typename: 'dopewars_ERC20MetadataModel' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_InitializableModel' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SlotMachine' } | { __typename: 'dopewars_SlotMachineCombination' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | null> | null } };
 
 export type TravelEncounterByPlayerQueryVariables = Exact<{
   travelEncounterSelector?: InputMaybe<Scalars['String']>;

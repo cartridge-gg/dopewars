@@ -1,6 +1,7 @@
-use rollyourown::packing::game_store::GameStoreTrait;
-use core::traits::TryInto;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::event::EventStorage;
+use dojo::meta::introspect::Introspect;
+
 use rollyourown::{
     models::game::{Game, GameMode},
     utils::{
@@ -14,18 +15,18 @@ use rollyourown::{
         game::{GameConfig}, settings::{SeasonSettings}
     },
     packing::{
-        game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl, PlayerStatus},
+        game_store::{GameStore, GameStoreImpl, GameStoreTrait}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl},
         items_packed::{ItemsPackedImpl, ItemsPackedTrait},
         drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
     },
-    systems::game::{EncounterActions, game::TravelEncounter, game::TravelEncounterResult},
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
+    systems::game::{EncounterActions,}, store::{Store, StoreImpl, StoreTrait},
+    events::{TravelEncounter, TravelEncounterResult}
 };
 
 
-#[derive(Copy, Drop, Serde, PartialEq)]
-enum EncounterOutcomes {
+#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+pub enum EncounterOutcomes {
     Died,
     Paid,
     Escaped,
@@ -81,7 +82,6 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
     }
 }
 
-
 //
 //
 //
@@ -110,10 +110,11 @@ fn on_travel(
             Encounters::Gang => PlayerStatus::BeingMugged,
         };
 
-        emit!(
-            game_store.s.w(),
-            (rollyourown::systems::game::game::Event::TravelEncounter(
-                TravelEncounter {
+        game_store
+            .store
+            .world
+            .emit_event(
+                @TravelEncounter {
                     game_id: game_store.game.game_id,
                     player_id: game_store.game.player_id,
                     encounter: encounter.encounter.into(),
@@ -125,8 +126,7 @@ fn on_travel(
                     demand_pct: encounter.get_demand_pct(ref game_store),
                     payout: encounter.get_payout(ref game_store),
                 }
-            ))
-        );
+            );
 
         (game_store.player.is_dead(), true)
     } else {
@@ -139,7 +139,7 @@ fn on_travel(
 //
 
 fn decide(
-    s: IStoreLibraryDispatcher,
+    s: @Store,
     ref game_store: GameStore,
     ref season_settings: SeasonSettings,
     ref randomizer: Random,
@@ -149,7 +149,7 @@ fn decide(
     let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store, ref season_settings);
 
     // run action
-    let mut result = match action {
+    let mut result: TravelEncounterResult = match action {
         EncounterActions::Run => { on_run(s, ref game_store, ref randomizer, ref encounter) },
         EncounterActions::Pay => { on_pay(ref game_store, ref randomizer, ref encounter) },
         EncounterActions::Fight => { on_fight(ref game_store, ref randomizer, ref encounter) },
@@ -164,7 +164,7 @@ fn decide(
     game_store.player.reputation = game_store.player.reputation.add_capped(result.rep_pos, 100);
     game_store.player.reputation = game_store.player.reputation.sub_capped(result.rep_neg, 0);
 
-    // update turns with turn_loss 
+    // update turns with turn_loss
     game_store
         .player
         .turn = game_store
@@ -172,9 +172,8 @@ fn decide(
         .turn
         .add_capped(result.turn_loss, game_store.game_config().max_turns);
 
-    emit!(
-        game_store.s.w(), (rollyourown::systems::game::game::Event::TravelEncounterResult(result))
-    );
+    // emit TravelEncounterResult
+    game_store.store.world.emit_event(@result);
 
     if !game_store.player.is_dead() {
         // update player status
@@ -182,7 +181,7 @@ fn decide(
     }
 
     game_store.player.is_dead()
-// game_store
+    // game_store
 }
 
 //
@@ -218,7 +217,9 @@ fn create_travel_encounter_result(
 fn on_pay(
     ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
-    let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Pay);
+    let mut result: TravelEncounterResult = create_travel_encounter_result(
+        ref game_store, EncounterActions::Pay
+    );
 
     result.outcome = EncounterOutcomes::Paid;
     result.rep_neg = encounter.rep_pay;
@@ -272,10 +273,7 @@ fn on_pay(
 //
 
 fn on_run(
-    s: IStoreLibraryDispatcher,
-    ref game_store: GameStore,
-    ref randomizer: Random,
-    ref encounter: EncounterConfig
+    s: @Store, ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Run);
 

@@ -13,8 +13,14 @@ dependencies = [
 
 [[package]]
 name = "dojo"
-version = "1.0.0-alpha.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.19#ef696ea9bbaa22d3f6db392d9692b4821578c23c"
+version = "1.0.0-rc.0"
+dependencies = [
+ "dojo_plugin",
+]
+
+[[package]]
+name = "dojo_plugin"
+version = "2.8.4"
 
 [[package]]
 name = "openzeppelin"
@@ -103,19 +109,11 @@ version = "0.15.0-rc.0"
 source = "git+https://github.com/OpenZeppelin/cairo-contracts.git?rev=a13bae3#a13bae3390a7114a8c14c0352c6898eff5f4f5d7"
 
 [[package]]
-name = "origami_token"
-version = "1.0.0-alpha.19"
-dependencies = [
- "dojo",
-]
-
-[[package]]
 name = "rollyourown"
 version = "0.1.0"
 dependencies = [
  "cartridge_vrf",
  "dojo",
- "origami_token",
 ]
 
 [[package]]

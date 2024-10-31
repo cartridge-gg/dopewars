@@ -1,10 +1,8 @@
 
 [env]
 rpc_url = "http://localhost:5050"
-# rpc_url = "http://localhost:8888"
-account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca"
-private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
-
+account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
+private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 
 [world]
 name = "Dope Wars"
@@ -17,13 +15,118 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 
 [namespace]
 default = "dopewars"
-mappings = { "origami_token" = "dopewars" }
-
 
 [migration]
 skip_contracts = [
-    "dopewars-slotmachine",
-    "dopewars-SlotMachine",
-    "dopewars-SlotMachineCombination",
-    "dopewars-chips",
+    # "dopewars-slotmachine",
+    # "dopewars-SlotMachine",
+    # "dopewars-SlotMachineCombination",
+    # "dopewars-chips",
 ]
+
+[init_call_args]
+"dopewars-vrf_provider_mock" = [
+    "0x6b0aab388dc7b240801b5aa0722bfcd39a1f397e83d5c032c198b18594b665e",
+    "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204",
+]
+"dopewars-ryo" = [
+    "0x0",                                                              # paper address, 0x0 = use dns world to retrieve paper_mock
+    "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
+]
+
+[writers]
+"dopewars" = [
+    "dopewars-config",
+    "dopewars-laundromat",
+    "dopewars-game",
+    "dopewars-ryo",
+    "dopewars-paper_mock",
+]
+
+# "dopewars" = [
+#     "dopewars-SortedList",
+#     "dopewars-SortedListItem",
+#     "dopewars-Game",
+#     "dopewars-GameConfig",
+#     "dopewars-DrugConfig",
+#     "dopewars-LocationConfig",
+#     "dopewars-HustlerItemBaseConfig",
+#     "dopewars-HustlerItemTiersConfig",
+#     "dopewars-EncounterStatsConfig",
+#     "dopewars-GameStorePacked",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-RyoConfig",
+#     "dopewars-RyoAddress",
+# ]
+
+# "dopewars-GameConfig" = [
+#     "dopewars-config",
+#     "dopewars-laundromat",
+#     "dopewars-ryo",
+# ]
+
+# "dopewars" = [
+#     "dopewars-SortedList",
+#     "dopewars-SortedListItem",
+#     "dopewars-Game",
+#     "dopewars-GameConfig",
+#     "dopewars-DrugConfig",
+#     "dopewars-LocationConfig",
+#     "dopewars-HustlerItemBaseConfig",
+#     "dopewars-HustlerItemTiersConfig",
+#     "dopewars-EncounterStatsConfig",
+#     "dopewars-GameStorePacked",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-RyoConfig",
+#     "dopewars-RyoAddress",
+# ]
+
+# "dopewars-config" = [
+#     "dopewars-GameConfig",
+#     "dopewars-DrugConfig",
+#     "dopewars-LocationConfig",
+#     "dopewars-HustlerItemBaseConfig",
+#     "dopewars-HustlerItemTiersConfig",
+#     "dopewars-EncounterStatsConfig",
+# ]
+
+# "dopewars-devtools" = [
+#     "dopewars-SortedList",
+#     "dopewars-SortedListItem",
+#     "dopewars-Game",
+#     "dopewars-GameConfig",
+#     "dopewars-GameStorePacked",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-RyoConfig",
+# ]
+
+# "dopewars-game" = [
+#     "dopewars-Game",
+#     "dopewars-GameStorePacked",
+#     "dopewars-RyoConfig",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-SortedList",
+#     "dopewars-SortedListItem",
+# ]
+
+# "dopewars-laundromat" = [
+#     "dopewars-SortedList",
+#     "dopewars-SortedListItem",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-Game",
+#     "dopewars-GameConfig",
+#     "dopewars-RyoConfig",
+# ]
+
+# "dopewars-ryo" = [
+#     "dopewars-RyoConfig",
+#     "dopewars-RyoAddress",
+#     "dopewars-Season",
+#     "dopewars-SeasonSettings",
+#     "dopewars-GameConfig",
+# ]

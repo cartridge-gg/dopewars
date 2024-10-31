@@ -1,0 +1,4557 @@
+{
+  "world": {
+    "class_hash": "0x139239a99d627697b19b9856beaef7896fc75375caf3d750dd76982a7afeb78",
+    "address": "0x4fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705",
+    "seed": "dopeseed",
+    "name": "Dope Wars",
+    "abi": [
+      {
+        "type": "impl",
+        "name": "World",
+        "interface_name": "dojo::world::iworld::IWorld"
+      },
+      {
+        "type": "struct",
+        "name": "core::byte_array::ByteArray",
+        "members": [
+          {
+            "name": "data",
+            "type": "core::array::Array::<core::bytes_31::bytes31>"
+          },
+          {
+            "name": "pending_word",
+            "type": "core::felt252"
+          },
+          {
+            "name": "pending_word_len",
+            "type": "core::integer::u32"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::world::resource::Resource",
+        "variants": [
+          {
+            "name": "Model",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Event",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Contract",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Namespace",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "World",
+            "type": "()"
+          },
+          {
+            "name": "Unregistered",
+            "type": "()"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::model::metadata::ResourceMetadata",
+        "members": [
+          {
+            "name": "resource_id",
+            "type": "core::felt252"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "core::byte_array::ByteArray"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::felt252>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::felt252>"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "core::bool",
+        "variants": [
+          {
+            "name": "False",
+            "type": "()"
+          },
+          {
+            "name": "True",
+            "type": "()"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::model::definition::ModelIndex",
+        "variants": [
+          {
+            "name": "Keys",
+            "type": "core::array::Span::<core::felt252>"
+          },
+          {
+            "name": "Id",
+            "type": "core::felt252"
+          },
+          {
+            "name": "MemberId",
+            "type": "(core::felt252, core::felt252)"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::integer::u8>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::integer::u8>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::meta::layout::FieldLayout",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252"
+          },
+          {
+            "name": "layout",
+            "type": "dojo::meta::layout::Layout"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<dojo::meta::layout::FieldLayout>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<dojo::meta::layout::FieldLayout>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<dojo::meta::layout::Layout>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<dojo::meta::layout::Layout>"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::meta::layout::Layout",
+        "variants": [
+          {
+            "name": "Fixed",
+            "type": "core::array::Span::<core::integer::u8>"
+          },
+          {
+            "name": "Struct",
+            "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
+          },
+          {
+            "name": "Tuple",
+            "type": "core::array::Span::<dojo::meta::layout::Layout>"
+          },
+          {
+            "name": "Array",
+            "type": "core::array::Span::<dojo::meta::layout::Layout>"
+          },
+          {
+            "name": "ByteArray",
+            "type": "()"
+          },
+          {
+            "name": "Enum",
+            "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
+          }
+        ]
+      },
+      {
+        "type": "interface",
+        "name": "dojo::world::iworld::IWorld",
+        "items": [
+          {
+            "type": "function",
+            "name": "resource",
+            "inputs": [
+              {
+                "name": "selector",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "dojo::world::resource::Resource"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "uuid",
+            "inputs": [],
+            "outputs": [
+              {
+                "type": "core::integer::u32"
+              }
+            ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "metadata",
+            "inputs": [
+              {
+                "name": "resource_selector",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "dojo::model::metadata::ResourceMetadata"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "set_metadata",
+            "inputs": [
+              {
+                "name": "metadata",
+                "type": "dojo::model::metadata::ResourceMetadata"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "register_namespace",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "register_event",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "register_model",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "register_contract",
+            "inputs": [
+              {
+                "name": "salt",
+                "type": "core::felt252"
+              },
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "init_contract",
+            "inputs": [
+              {
+                "name": "selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "init_calldata",
+                "type": "core::array::Span::<core::felt252>"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_event",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_model",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_contract",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "emit_event",
+            "inputs": [
+              {
+                "name": "event_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "keys",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "values",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "historical",
+                "type": "core::bool"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "entity",
+            "inputs": [
+              {
+                "name": "model_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "index",
+                "type": "dojo::model::definition::ModelIndex"
+              },
+              {
+                "name": "layout",
+                "type": "dojo::meta::layout::Layout"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::array::Span::<core::felt252>"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "set_entity",
+            "inputs": [
+              {
+                "name": "model_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "index",
+                "type": "dojo::model::definition::ModelIndex"
+              },
+              {
+                "name": "values",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "layout",
+                "type": "dojo::meta::layout::Layout"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "delete_entity",
+            "inputs": [
+              {
+                "name": "model_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "index",
+                "type": "dojo::model::definition::ModelIndex"
+              },
+              {
+                "name": "layout",
+                "type": "dojo::meta::layout::Layout"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "is_owner",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::bool"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "grant_owner",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "revoke_owner",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "is_writer",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "contract",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::bool"
+              }
+            ],
+            "state_mutability": "view"
+          },
+          {
+            "type": "function",
+            "name": "grant_writer",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "contract",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "revoke_writer",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              },
+              {
+                "name": "contract",
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          }
+        ]
+      },
+      {
+        "type": "impl",
+        "name": "UpgradeableWorld",
+        "interface_name": "dojo::world::iworld::IUpgradeableWorld"
+      },
+      {
+        "type": "interface",
+        "name": "dojo::world::iworld::IUpgradeableWorld",
+        "items": [
+          {
+            "type": "function",
+            "name": "upgrade",
+            "inputs": [
+              {
+                "name": "new_class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          }
+        ]
+      },
+      {
+        "type": "constructor",
+        "name": "constructor",
+        "inputs": [
+          {
+            "name": "world_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::WorldSpawned",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "creator",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::WorldUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::NamespaceRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "hash",
+            "type": "core::felt252",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ModelRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::EventRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ContractRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "salt",
+            "type": "core::felt252",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ModelUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "prev_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::EventUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "prev_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ContractUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ContractInitialized",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "init_calldata",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::EventEmitted",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "system_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "key"
+          },
+          {
+            "name": "historical",
+            "type": "core::bool",
+            "kind": "key"
+          },
+          {
+            "name": "keys",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          },
+          {
+            "name": "values",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::MetadataUpdate",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "resource",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "uri",
+            "type": "core::byte_array::ByteArray",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::StoreSetRecord",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "keys",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          },
+          {
+            "name": "values",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::StoreUpdateRecord",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "values",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::StoreUpdateMember",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "member_selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "values",
+            "type": "core::array::Span::<core::felt252>",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::StoreDelRecord",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "entity_id",
+            "type": "core::felt252",
+            "kind": "key"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::WriterUpdated",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "resource",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "contract",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "key"
+          },
+          {
+            "name": "value",
+            "type": "core::bool",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::OwnerUpdated",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "resource",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "contract",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "key"
+          },
+          {
+            "name": "value",
+            "type": "core::bool",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::Event",
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "WorldSpawned",
+            "type": "dojo::world::world_contract::world::WorldSpawned",
+            "kind": "nested"
+          },
+          {
+            "name": "WorldUpgraded",
+            "type": "dojo::world::world_contract::world::WorldUpgraded",
+            "kind": "nested"
+          },
+          {
+            "name": "NamespaceRegistered",
+            "type": "dojo::world::world_contract::world::NamespaceRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "ModelRegistered",
+            "type": "dojo::world::world_contract::world::ModelRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "EventRegistered",
+            "type": "dojo::world::world_contract::world::EventRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "ContractRegistered",
+            "type": "dojo::world::world_contract::world::ContractRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "ModelUpgraded",
+            "type": "dojo::world::world_contract::world::ModelUpgraded",
+            "kind": "nested"
+          },
+          {
+            "name": "EventUpgraded",
+            "type": "dojo::world::world_contract::world::EventUpgraded",
+            "kind": "nested"
+          },
+          {
+            "name": "ContractUpgraded",
+            "type": "dojo::world::world_contract::world::ContractUpgraded",
+            "kind": "nested"
+          },
+          {
+            "name": "ContractInitialized",
+            "type": "dojo::world::world_contract::world::ContractInitialized",
+            "kind": "nested"
+          },
+          {
+            "name": "EventEmitted",
+            "type": "dojo::world::world_contract::world::EventEmitted",
+            "kind": "nested"
+          },
+          {
+            "name": "MetadataUpdate",
+            "type": "dojo::world::world_contract::world::MetadataUpdate",
+            "kind": "nested"
+          },
+          {
+            "name": "StoreSetRecord",
+            "type": "dojo::world::world_contract::world::StoreSetRecord",
+            "kind": "nested"
+          },
+          {
+            "name": "StoreUpdateRecord",
+            "type": "dojo::world::world_contract::world::StoreUpdateRecord",
+            "kind": "nested"
+          },
+          {
+            "name": "StoreUpdateMember",
+            "type": "dojo::world::world_contract::world::StoreUpdateMember",
+            "kind": "nested"
+          },
+          {
+            "name": "StoreDelRecord",
+            "type": "dojo::world::world_contract::world::StoreDelRecord",
+            "kind": "nested"
+          },
+          {
+            "name": "WriterUpdated",
+            "type": "dojo::world::world_contract::world::WriterUpdated",
+            "kind": "nested"
+          },
+          {
+            "name": "OwnerUpdated",
+            "type": "dojo::world::world_contract::world::OwnerUpdated",
+            "kind": "nested"
+          }
+        ]
+      }
+    ]
+  },
+  "contracts": [
+    {
+      "address": "0x79100248fbc37fd5edfdbf114eb9f6958707bd26b693ceba5b188d8944f72d6",
+      "class_hash": "0xa251d8b43a5a03224933c0e56231163988b92041418337238a4dc2616d6a2",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "config__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "type": "impl",
+          "name": "ConfigImpl",
+          "interface_name": "rollyourown::config::config::IConfig"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::LayoutItem",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::bytes_31::bytes31"
+            },
+            {
+              "name": "idx",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "bits",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::LayoutsConfig",
+          "members": [
+            {
+              "name": "game_store",
+              "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
+            },
+            {
+              "name": "player",
+              "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::hustlers::ItemSlot",
+          "variants": [
+            {
+              "name": "Weapon",
+              "type": "()"
+            },
+            {
+              "name": "Clothes",
+              "type": "()"
+            },
+            {
+              "name": "Feet",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "initial_tier",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "tier",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "slot_id",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "stat",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerItemConfig",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "base",
+              "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
+            },
+            {
+              "name": "tier",
+              "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::hustlers::HustlerConfig",
+          "members": [
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "weapon",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "clothes",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "feet",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            },
+            {
+              "name": "transport",
+              "type": "rollyourown::config::hustlers::HustlerItemConfig"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::ryo::RyoConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "initialized",
+              "type": "core::bool"
+            },
+            {
+              "name": "paused",
+              "type": "core::bool"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "season_time_limit",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_fee",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_reward_launderer",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "treasury_balance",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::CashMode",
+          "variants": [
+            {
+              "name": "Broke",
+              "type": "()"
+            },
+            {
+              "name": "Average",
+              "type": "()"
+            },
+            {
+              "name": "Rich",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::CashMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::CashMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::HealthMode",
+          "variants": [
+            {
+              "name": "Junkie",
+              "type": "()"
+            },
+            {
+              "name": "Hustler",
+              "type": "()"
+            },
+            {
+              "name": "Streetboss",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::HealthMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::HealthMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::TurnsMode",
+          "variants": [
+            {
+              "name": "OnSpeed",
+              "type": "()"
+            },
+            {
+              "name": "OnWeed",
+              "type": "()"
+            },
+            {
+              "name": "OnMush",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::TurnsMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::TurnsMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::EncountersMode",
+          "variants": [
+            {
+              "name": "Chill",
+              "type": "()"
+            },
+            {
+              "name": "NoJokes",
+              "type": "()"
+            },
+            {
+              "name": "UltraViolence",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::EncountersMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::EncountersMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::EncountersOddsMode",
+          "variants": [
+            {
+              "name": "Easy",
+              "type": "()"
+            },
+            {
+              "name": "Normal",
+              "type": "()"
+            },
+            {
+              "name": "Hard",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::EncountersOddsMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::DrugsMode",
+          "variants": [
+            {
+              "name": "Cheap",
+              "type": "()"
+            },
+            {
+              "name": "Normal",
+              "type": "()"
+            },
+            {
+              "name": "Expensive",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::DrugsMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::DrugsMode>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::settings::WantedMode",
+          "variants": [
+            {
+              "name": "KoolAndTheGang",
+              "type": "()"
+            },
+            {
+              "name": "ThugLife",
+              "type": "()"
+            },
+            {
+              "name": "MostWanted",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::config::settings::WantedMode>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::config::settings::WantedMode>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::settings::SeasonSettingsModes",
+          "members": [
+            {
+              "name": "cash_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::CashMode>"
+            },
+            {
+              "name": "health_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::HealthMode>"
+            },
+            {
+              "name": "turns_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::TurnsMode>"
+            },
+            {
+              "name": "encounters_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::EncountersMode>"
+            },
+            {
+              "name": "encounters_odds_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>"
+            },
+            {
+              "name": "drugs_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::DrugsMode>"
+            },
+            {
+              "name": "wanted_modes",
+              "type": "core::array::Span::<rollyourown::config::settings::WantedMode>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::config::Config",
+          "members": [
+            {
+              "name": "layouts",
+              "type": "rollyourown::config::config::LayoutsConfig"
+            },
+            {
+              "name": "hustlers",
+              "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
+            },
+            {
+              "name": "ryo_config",
+              "type": "rollyourown::config::ryo::RyoConfig"
+            },
+            {
+              "name": "season_settings_modes",
+              "type": "rollyourown::config::settings::SeasonSettingsModes"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::config::config::IConfig",
+          "items": [
+            {
+              "type": "function",
+              "name": "get_config",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "rollyourown::config::config::Config"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::config::config::config::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-config",
+      "systems": []
+    },
+    {
+      "address": "0x1e01fc00ce8d08ab665bc69eca4b99ff0b7c192d531eec2b37cb0524bce41a6",
+      "class_hash": "0xc568234269b7754e2f4c629e692434b3271f4606c4f64a8e1a3ab401dd7e88",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "game__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "GameActionsImpl",
+          "interface_name": "rollyourown::systems::game::IGameActions"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::game::GameMode",
+          "variants": [
+            {
+              "name": "Ranked",
+              "type": "()"
+            },
+            {
+              "name": "Noob",
+              "type": "()"
+            },
+            {
+              "name": "Warrior",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::helpers::trading::TradeDirection",
+          "variants": [
+            {
+              "name": "Sell",
+              "type": "()"
+            },
+            {
+              "name": "Buy",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::drugs::Drugs",
+          "variants": [
+            {
+              "name": "Ludes",
+              "type": "()"
+            },
+            {
+              "name": "Speed",
+              "type": "()"
+            },
+            {
+              "name": "Weed",
+              "type": "()"
+            },
+            {
+              "name": "Shrooms",
+              "type": "()"
+            },
+            {
+              "name": "Acid",
+              "type": "()"
+            },
+            {
+              "name": "Ketamine",
+              "type": "()"
+            },
+            {
+              "name": "Heroin",
+              "type": "()"
+            },
+            {
+              "name": "Cocaine",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::helpers::trading::Trade",
+          "members": [
+            {
+              "name": "direction",
+              "type": "rollyourown::systems::helpers::trading::TradeDirection"
+            },
+            {
+              "name": "drug",
+              "type": "rollyourown::config::drugs::Drugs"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::hustlers::ItemSlot",
+          "variants": [
+            {
+              "name": "Weapon",
+              "type": "()"
+            },
+            {
+              "name": "Clothes",
+              "type": "()"
+            },
+            {
+              "name": "Feet",
+              "type": "()"
+            },
+            {
+              "name": "Transport",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::systems::helpers::shopping::Action",
+          "members": [
+            {
+              "name": "slot",
+              "type": "rollyourown::config::hustlers::ItemSlot"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::game::Actions",
+          "variants": [
+            {
+              "name": "Trade",
+              "type": "rollyourown::systems::helpers::trading::Trade"
+            },
+            {
+              "name": "Shop",
+              "type": "rollyourown::systems::helpers::shopping::Action"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<rollyourown::systems::game::Actions>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<rollyourown::systems::game::Actions>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::config::locations::Locations",
+          "variants": [
+            {
+              "name": "Home",
+              "type": "()"
+            },
+            {
+              "name": "Queens",
+              "type": "()"
+            },
+            {
+              "name": "Bronx",
+              "type": "()"
+            },
+            {
+              "name": "Brooklyn",
+              "type": "()"
+            },
+            {
+              "name": "Jersey",
+              "type": "()"
+            },
+            {
+              "name": "Central",
+              "type": "()"
+            },
+            {
+              "name": "Coney",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::game::EncounterActions",
+          "variants": [
+            {
+              "name": "Run",
+              "type": "()"
+            },
+            {
+              "name": "Pay",
+              "type": "()"
+            },
+            {
+              "name": "Fight",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::game::IGameActions",
+          "items": [
+            {
+              "type": "function",
+              "name": "create_game",
+              "inputs": [
+                {
+                  "name": "game_mode",
+                  "type": "rollyourown::models::game::GameMode"
+                },
+                {
+                  "name": "hustler_id",
+                  "type": "core::integer::u16"
+                },
+                {
+                  "name": "player_name",
+                  "type": "core::felt252"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "end_game",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "actions",
+                  "type": "core::array::Span::<rollyourown::systems::game::Actions>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "travel",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "next_location",
+                  "type": "rollyourown::config::locations::Locations"
+                },
+                {
+                  "name": "actions",
+                  "type": "core::array::Span::<rollyourown::systems::game::Actions>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "decide",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "action",
+                  "type": "rollyourown::systems::game::EncounterActions"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::GameCreated",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "game_mode",
+              "type": "rollyourown::models::game::GameMode",
+              "kind": "data"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::Traveled",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "from_location_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "to_location_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::TradeDrug",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "quantity",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "price",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "is_buy",
+              "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::HighVolatility",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "location_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "increase",
+              "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::UpgradeItem",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "item_slot",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "item_level",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::TravelEncounter",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "encounter",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "level",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "attack",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "defense",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "speed",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "demand_pct",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
+          "variants": [
+            {
+              "name": "Died",
+              "type": "()"
+            },
+            {
+              "name": "Paid",
+              "type": "()"
+            },
+            {
+              "name": "Escaped",
+              "type": "()"
+            },
+            {
+              "name": "Victorious",
+              "type": "()"
+            },
+            {
+              "name": "Jailed",
+              "type": "()"
+            },
+            {
+              "name": "Hospitalized",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::TravelEncounterResult",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "action",
+              "type": "rollyourown::systems::game::EncounterActions",
+              "kind": "data"
+            },
+            {
+              "name": "outcome",
+              "type": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
+              "kind": "data"
+            },
+            {
+              "name": "rounds",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "dmg_dealt",
+              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
+              "kind": "data"
+            },
+            {
+              "name": "dmg_taken",
+              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
+              "kind": "data"
+            },
+            {
+              "name": "cash_earnt",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "cash_loss",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "drug_id",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "drug_loss",
+              "type": "core::array::Array::<core::integer::u32>",
+              "kind": "data"
+            },
+            {
+              "name": "turn_loss",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "rep_pos",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "rep_neg",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::GameOver",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16",
+              "kind": "data"
+            },
+            {
+              "name": "turn",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "reputation",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::game::game::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "GameCreated",
+              "type": "rollyourown::systems::game::game::GameCreated",
+              "kind": "nested"
+            },
+            {
+              "name": "Traveled",
+              "type": "rollyourown::systems::game::game::Traveled",
+              "kind": "nested"
+            },
+            {
+              "name": "TradeDrug",
+              "type": "rollyourown::systems::game::game::TradeDrug",
+              "kind": "nested"
+            },
+            {
+              "name": "HighVolatility",
+              "type": "rollyourown::systems::game::game::HighVolatility",
+              "kind": "nested"
+            },
+            {
+              "name": "UpgradeItem",
+              "type": "rollyourown::systems::game::game::UpgradeItem",
+              "kind": "nested"
+            },
+            {
+              "name": "TravelEncounter",
+              "type": "rollyourown::systems::game::game::TravelEncounter",
+              "kind": "nested"
+            },
+            {
+              "name": "TravelEncounterResult",
+              "type": "rollyourown::systems::game::game::TravelEncounterResult",
+              "kind": "nested"
+            },
+            {
+              "name": "GameOver",
+              "type": "rollyourown::systems::game::game::GameOver",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-game",
+      "systems": []
+    },
+    {
+      "address": "0x12dbbb89256da170f4631b931baf87e4a28c1bc9007736267ab91ac13dead17",
+      "class_hash": "0x3c036e023cccbb129bc0bf9dfc390495b4385bdc5512ebaf03bf56c5ebdba11",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "laundromat__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "LaundromatImpl",
+          "interface_name": "rollyourown::systems::laundromat::ILaundromat"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u32>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u32>"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::laundromat::ILaundromat",
+          "items": [
+            {
+              "type": "function",
+              "name": "register_score",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "prev_game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "prev_player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "launder",
+              "inputs": [
+                {
+                  "name": "season_version",
+                  "type": "core::integer::u16"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "claim",
+              "inputs": [
+                {
+                  "name": "player_id",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "game_ids",
+                  "type": "core::array::Span::<core::integer::u32>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "claim_treasury",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "supercharge_jackpot",
+              "inputs": [
+                {
+                  "name": "season_version",
+                  "type": "core::integer::u16"
+                },
+                {
+                  "name": "amount_eth",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::NewHighScore",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "player_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "hustler_id",
+              "type": "core::integer::u16",
+              "kind": "data"
+            },
+            {
+              "name": "cash",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "health",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "reputation",
+              "type": "core::integer::u8",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::Claimed",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "paper",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "rank",
+              "type": "core::integer::u16",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::NewSeason",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u16",
+              "kind": "key"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::laundromat::laundromat::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "NewHighScore",
+              "type": "rollyourown::systems::laundromat::laundromat::NewHighScore",
+              "kind": "nested"
+            },
+            {
+              "name": "Claimed",
+              "type": "rollyourown::systems::laundromat::laundromat::Claimed",
+              "kind": "nested"
+            },
+            {
+              "name": "NewSeason",
+              "type": "rollyourown::systems::laundromat::laundromat::NewSeason",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-laundromat",
+      "systems": []
+    },
+    {
+      "address": "0x4608216eb4ff1b73565d17dcf13f586914818265f9ae1f528fae2e51d0763a4",
+      "class_hash": "0x4ebf5dcac42f52d9fa1e8583504240d75af8f1d647c5712979ca66e728cd895",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "paper_mock__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "type": "impl",
+          "name": "PaperMockFaucetImpl",
+          "interface_name": "rollyourown::_mocks::paper_mock::IPaperMockFaucet"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::_mocks::paper_mock::IPaperMockFaucet",
+          "items": [
+            {
+              "type": "function",
+              "name": "faucet",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "faucetTo",
+              "inputs": [
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "ERC20Impl",
+          "interface_name": "openzeppelin_token::erc20::interface::IERC20"
+        },
+        {
+          "type": "struct",
+          "name": "core::integer::u256",
+          "members": [
+            {
+              "name": "low",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "high",
+              "type": "core::integer::u128"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "openzeppelin_token::erc20::interface::IERC20",
+          "items": [
+            {
+              "type": "function",
+              "name": "total_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "balance_of",
+              "inputs": [
+                {
+                  "name": "account",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "allowance",
+              "inputs": [
+                {
+                  "name": "owner",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "spender",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "transfer",
+              "inputs": [
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "amount",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "transfer_from",
+              "inputs": [
+                {
+                  "name": "sender",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "amount",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "approve",
+              "inputs": [
+                {
+                  "name": "spender",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "amount",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_token::erc20::erc20::ERC20Component::Transfer",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "from",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "to",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "value",
+              "type": "core::integer::u256",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_token::erc20::erc20::ERC20Component::Approval",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "owner",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "spender",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "value",
+              "type": "core::integer::u256",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_token::erc20::erc20::ERC20Component::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Transfer",
+              "type": "openzeppelin_token::erc20::erc20::ERC20Component::Transfer",
+              "kind": "nested"
+            },
+            {
+              "name": "Approval",
+              "type": "openzeppelin_token::erc20::erc20::ERC20Component::Approval",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::_mocks::paper_mock::paper_mock::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "ERC20Event",
+              "type": "openzeppelin_token::erc20::erc20::ERC20Component::Event",
+              "kind": "flat"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-paper_mock",
+      "systems": []
+    },
+    {
+      "address": "0x44075c236212bac50b27027064e67f52b7993c48ff37b2161365eedcd6c45b5",
+      "class_hash": "0xb6b84815a98b239cd6cac19cf9ba52a918ba9c16441991bae39729d89d0d8b",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "ryo__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [
+            {
+              "name": "paper_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "treasury_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "RyoExternalImpl",
+          "interface_name": "rollyourown::systems::ryo::IRyo"
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::config::ryo::RyoConfig",
+          "members": [
+            {
+              "name": "key",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "initialized",
+              "type": "core::bool"
+            },
+            {
+              "name": "paused",
+              "type": "core::bool"
+            },
+            {
+              "name": "season_version",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "season_time_limit",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_fee",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "paper_reward_launderer",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "treasury_fee_pct",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "treasury_balance",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::ryo::IRyo",
+          "items": [
+            {
+              "type": "function",
+              "name": "set_paused",
+              "inputs": [
+                {
+                  "name": "paused",
+                  "type": "core::bool"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "update_ryo_config",
+              "inputs": [
+                {
+                  "name": "ryo_config",
+                  "type": "rollyourown::config::ryo::RyoConfig"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_paper",
+              "inputs": [
+                {
+                  "name": "paper_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_treasury",
+              "inputs": [
+                {
+                  "name": "treasury_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_vrf",
+              "inputs": [
+                {
+                  "name": "vrf_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "paper",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "treasury",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "vrf",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "laundromat",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "paused",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "paper_fee",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u16"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "season_duration",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::ryo::ryo::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [
+        "0x0",
+        "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"
+      ],
+      "tag": "dopewars-ryo",
+      "systems": []
+    },
+    {
+      "address": "0x2cbf7e389146659511486c3c1bc1ee95a1a3217b02727d33bac0ce02b9132f9",
+      "class_hash": "0x7445f4877fc073aa6c644a22c840c321212a9ced7351a47db6c570a33c17d7b",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "slotmachine__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "SlotMachineImp",
+          "interface_name": "rollyourown::systems::slot::ISlotMachine"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::slot::ISlotMachine",
+          "items": [
+            {
+              "type": "function",
+              "name": "roll",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "key"
+            },
+            {
+              "name": "player_id",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "values",
+              "type": "(core::integer::u8, core::integer::u8, core::integer::u8)",
+              "kind": "data"
+            },
+            {
+              "name": "payout",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::slot::slotmachine::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "SlotMachineEvent",
+              "type": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-slotmachine",
+      "systems": []
+    },
+    {
+      "address": "0x6334218e9205940793fa93608e6ff8c51290a9fbde03dc19fb35ab86a7cafaa",
+      "class_hash": "0x45576827f29386075d14b4bfd0dbf4221b726b0ce1a1d63a478baa2a3eaf54c",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "vrf_provider_mock__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [
+            {
+              "name": "pubkey_x",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pubkey_y",
+              "type": "core::felt252"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "VrfProviderImpl",
+          "interface_name": "cartridge_vrf::vrf_provider::vrf_provider_component::IVrfProvider"
+        },
+        {
+          "type": "enum",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::Source",
+          "variants": [
+            {
+              "name": "Nonce",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "Salt",
+              "type": "core::felt252"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "stark_vrf::ecvrf::Point",
+          "members": [
+            {
+              "name": "x",
+              "type": "core::felt252"
+            },
+            {
+              "name": "y",
+              "type": "core::felt252"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "stark_vrf::ecvrf::Proof",
+          "members": [
+            {
+              "name": "gamma",
+              "type": "stark_vrf::ecvrf::Point"
+            },
+            {
+              "name": "c",
+              "type": "core::felt252"
+            },
+            {
+              "name": "s",
+              "type": "core::felt252"
+            },
+            {
+              "name": "sqrt_ratio_hint",
+              "type": "core::felt252"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey",
+          "members": [
+            {
+              "name": "x",
+              "type": "core::felt252"
+            },
+            {
+              "name": "y",
+              "type": "core::felt252"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::IVrfProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "request_random",
+              "inputs": [
+                {
+                  "name": "caller",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "source",
+                  "type": "cartridge_vrf::vrf_provider::vrf_provider_component::Source"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "submit_random",
+              "inputs": [
+                {
+                  "name": "seed",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "proof",
+                  "type": "stark_vrf::ecvrf::Proof"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "consume_random",
+              "inputs": [
+                {
+                  "name": "source",
+                  "type": "cartridge_vrf::vrf_provider::vrf_provider_component::Source"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "assert_consumed",
+              "inputs": [
+                {
+                  "name": "seed",
+                  "type": "core::felt252"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_public_key",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_public_key",
+              "inputs": [
+                {
+                  "name": "new_pubkey",
+                  "type": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "previous_owner",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "new_owner",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "previous_owner",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "new_owner",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "OwnershipTransferred",
+              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
+              "kind": "nested"
+            },
+            {
+              "name": "OwnershipTransferStarted",
+              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::PublicKeyChanged",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "pubkey",
+              "type": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::SubmitRandom",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "seed",
+              "type": "core::felt252",
+              "kind": "key"
+            },
+            {
+              "name": "proof",
+              "type": "stark_vrf::ecvrf::Proof",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "PublicKeyChanged",
+              "type": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::PublicKeyChanged",
+              "kind": "nested"
+            },
+            {
+              "name": "SubmitRandom",
+              "type": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::SubmitRandom",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::_mocks::vrf_provider_mock::vrf_provider_mock::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "OwnableEvent",
+              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
+              "kind": "flat"
+            },
+            {
+              "name": "VrfProviderEvent",
+              "type": "cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent::Event",
+              "kind": "flat"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [
+        "0x6b0aab388dc7b240801b5aa0722bfcd39a1f397e83d5c032c198b18594b665e",
+        "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204"
+      ],
+      "tag": "dopewars-vrf_provider_mock",
+      "systems": []
+    }
+  ],
+  "models": [
+    {
+      "members": [],
+      "class_hash": "0x5e64289371d059523f34f41cf4a508b72fa09876fb3002d46375f17a54397d3",
+      "tag": "dopewars-DrugConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x6e887f2aa1ae19f1fca559193da0ae4d167d2bbcc6815358f9ea0375e606e59",
+      "tag": "dopewars-EncounterStatsConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x819c5dc8dbae7d3234c3a06e92066b4a52916c6f978bed2c3a416f35029716",
+      "tag": "dopewars-Game"
+    },
+    {
+      "members": [],
+      "class_hash": "0x76f0eef9dd670f9d4a28a811ac7f05f7fdcb11658c1eb9f3a3b247e5c7d8c48",
+      "tag": "dopewars-GameConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x2ba91e249a0f85b864d72a9e68cc223ed39621683ffb5740d2c59ec87e57e0b",
+      "tag": "dopewars-GameStorePacked"
+    },
+    {
+      "members": [],
+      "class_hash": "0x5175bfa842f8c6e9cca2de64240816a755f879ed2aecb216924636247d90281",
+      "tag": "dopewars-HustlerItemBaseConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7f354e30f680042ab23101d436a559aea09aedc5e1a46e5edeb02a298cab647",
+      "tag": "dopewars-HustlerItemTiersConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x5168b1c9b333b821fdce0f2c256d98b607ef4fc5382c7bba5d2f224d15d6485",
+      "tag": "dopewars-LocationConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x6fcd97c2405225f4ce33fc634b0f5c401e1fe25b134d708989cb89631964aa3",
+      "tag": "dopewars-RyoAddress"
+    },
+    {
+      "members": [],
+      "class_hash": "0x623e6721708364f2f5ad3e9ad69409e986a0e959bf7eb98be701a6cf0e2f668",
+      "tag": "dopewars-RyoConfig"
+    },
+    {
+      "members": [],
+      "class_hash": "0x388d681521cc18d6224a84f2b049746b16fa19b260df787574aa331b85a1c7e",
+      "tag": "dopewars-Season"
+    },
+    {
+      "members": [],
+      "class_hash": "0x68ebae473046a0bd2504964f8f6390d6a52eed168f3cfdbc636b2e2973dc9f4",
+      "tag": "dopewars-SeasonSettings"
+    },
+    {
+      "members": [],
+      "class_hash": "0x6791ede41900419a7af849943cb81b1356521a5b3d0e68bc873967d07206ade",
+      "tag": "dopewars-SlotMachine"
+    },
+    {
+      "members": [],
+      "class_hash": "0x70307b6c0bb63267416083457439e46f26d395c39f7ba000e016a8f464ab540",
+      "tag": "dopewars-SortedList"
+    },
+    {
+      "members": [],
+      "class_hash": "0x35aa3f10786452ff3e88b2fc9ce515356d48059e193cd223f1a379c1ff3607d",
+      "tag": "dopewars-SortedListItem"
+    }
+  ],
+  "events": [
+    {
+      "members": [],
+      "class_hash": "0x7ef9410bcbd8afa6202e493188b8aa11a1c3d1e59c5ef2f1756a972be0b6772",
+      "tag": "dopewars-ERC20BalanceEvent"
+    },
+    {
+      "members": [],
+      "class_hash": "0x4168797f1ab31210f0674b54eb2f9a05a3d0661236e592b7212d3fe6082e62f",
+      "tag": "dopewars-SlotMachineCombination"
+    }
+  ]
+}

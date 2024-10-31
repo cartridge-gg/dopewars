@@ -7,8 +7,7 @@ use rollyourown::{
         bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
         bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
     },
-    packing::{game_store::{GameStore},},
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
+    packing::{game_store::{GameStore},}, store::{Store, StoreImpl, StoreTrait}
 };
 
 
@@ -31,12 +30,12 @@ struct EncounterStatsConfig {
 }
 
 
-fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
+fn initialize_encounter_stats_config(ref store: Store) {
     // Chill
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::Chill,
                 health_base: 12 - 2,
@@ -50,9 +49,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::Chill,
                 health_base: 1,
@@ -68,9 +67,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
 
     // NoJokes
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::NoJokes,
                 health_base: 12,
@@ -84,9 +83,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::NoJokes,
                 health_base: 1,
@@ -102,9 +101,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
 
     // UltraViolence
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::UltraViolence,
                 health_base: 12 + 2,
@@ -118,9 +117,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::UltraViolence,
                 health_base: 1 + 3,
@@ -185,7 +184,7 @@ struct EncounterConfig {
 }
 
 
-// 
+//
 //
 //
 
@@ -219,7 +218,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
         };
 
         let mut encounter_stats = game_store
-            .s
+            .store
             .encounter_stats_config(encounter_type, season_settings.encounters_mode);
 
         //   let mut encounter = game_store.s.encounter_config(rand_id);

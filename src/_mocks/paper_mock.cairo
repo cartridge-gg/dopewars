@@ -36,10 +36,6 @@ trait IPaperMock<TState> {
     // IERC20Allowance
     fn allowance(self: @TState, owner: ContractAddress, spender: ContractAddress) -> u256;
     fn approve(ref self: TState, spender: ContractAddress, amount: u256) -> bool;
-
-    // WITHOUT INTERFACE !!!
-    fn initializer(ref self: TState);
-    fn dojo_resource(self: @TState,) -> felt252;
 }
 
 
@@ -52,110 +48,51 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
-    use starknet::ContractAddress;
-    use starknet::{get_caller_address, get_contract_address};
-    use zeroable::Zeroable;
+    use starknet::{ContractAddress, get_caller_address};
+    use openzeppelin::token::erc20::ERC20Component;
+    use openzeppelin::token::erc20::interface::IERC20Metadata;
+    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
 
-    use origami_token::components::security::initializable::initializable_component;
+    use dojo::world::{WorldStorage, WorldStorageTrait};
+    use dojo::event::EventStorage;
+    use rollyourown::store::{Store, StoreImpl, StoreTrait};
 
-    use origami_token::components::token::erc20::erc20_metadata::erc20_metadata_component;
-    use origami_token::components::token::erc20::erc20_balance::erc20_balance_component;
-    use origami_token::components::token::erc20::erc20_allowance::erc20_allowance_component;
-    use origami_token::components::token::erc20::erc20_mintable::erc20_mintable_component;
-    use origami_token::components::token::erc20::erc20_burnable::erc20_burnable_component;
+    component!(path: ERC20Component, storage: erc20, event: ERC20Event);
 
-    component!(path: initializable_component, storage: initializable, event: InitializableEvent);
+    #[abi(embed_v0)]
+    impl ERC20Impl = ERC20Component::ERC20Impl<ContractState>;
 
-    component!(path: erc20_metadata_component, storage: erc20_metadata, event: ERC20MetadataEvent);
-    component!(path: erc20_balance_component, storage: erc20_balance, event: ERC20BalanceEvent);
-    component!(
-        path: erc20_allowance_component, storage: erc20_allowance, event: ERC20AllowanceEvent
-    );
-    component!(path: erc20_mintable_component, storage: erc20_mintable, event: ERC20MintableEvent);
-    component!(path: erc20_burnable_component, storage: erc20_burnable, event: ERC20BurnableEvent);
-
+    impl ERC20InternalImpl = ERC20Component::InternalImpl<ContractState>;
 
     #[storage]
     struct Storage {
         #[substorage(v0)]
-        initializable: initializable_component::Storage,
-        #[substorage(v0)]
-        erc20_metadata: erc20_metadata_component::Storage,
-        #[substorage(v0)]
-        erc20_balance: erc20_balance_component::Storage,
-        #[substorage(v0)]
-        erc20_allowance: erc20_allowance_component::Storage,
-        #[substorage(v0)]
-        erc20_mintable: erc20_mintable_component::Storage,
-        #[substorage(v0)]
-        erc20_burnable: erc20_burnable_component::Storage,
+        erc20: ERC20Component::Storage,
     }
 
     #[event]
-    #[derive(Copy, Drop, starknet::Event)]
+    #[derive(Drop, starknet::Event)]
     enum Event {
-        InitializableEvent: initializable_component::Event,
-        ERC20MetadataEvent: erc20_metadata_component::Event,
-        ERC20BalanceEvent: erc20_balance_component::Event,
-        ERC20AllowanceEvent: erc20_allowance_component::Event,
-        ERC20MintableEvent: erc20_mintable_component::Event,
-        ERC20BurnableEvent: erc20_burnable_component::Event,
+        #[flat]
+        ERC20Event: ERC20Component::Event,
     }
 
-    mod Errors {
-        const CALLER_IS_NOT_OWNER: felt252 = 'ERC20: caller is not owner';
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    struct ERC20BalanceEvent {
+        #[key]
+        token_address: ContractAddress,
+        #[key]
+        owner: ContractAddress,
+        balance: u256
     }
 
-
-    impl InitializableImpl = initializable_component::InitializableImpl<ContractState>;
-
     #[abi(embed_v0)]
-    impl ERC20MetadataImpl =
-        erc20_metadata_component::ERC20MetadataImpl<ContractState>;
+    fn dojo_init(ref self: ContractState) {
+        self.erc20.initializer("fPaper", "fPAPER");
 
-    #[abi(embed_v0)]
-    impl ERC20MetadataTotalSupplyImpl =
-        erc20_metadata_component::ERC20MetadataTotalSupplyImpl<ContractState>;
-
-    #[abi(embed_v0)]
-    impl ERC20MetadataTotalSupplyCamelImpl =
-        erc20_metadata_component::ERC20MetadataTotalSupplyCamelImpl<ContractState>;
-
-    #[abi(embed_v0)]
-    impl ERC20BalanceImpl =
-        erc20_balance_component::ERC20BalanceImpl<ContractState>;
-
-    #[abi(embed_v0)]
-    impl ERC20BalanceCamelImpl =
-        erc20_balance_component::ERC20BalanceCamelImpl<ContractState>;
-
-    #[abi(embed_v0)]
-    impl ERC20AllowanceImpl =
-        erc20_allowance_component::ERC20AllowanceImpl<ContractState>;
-
-    //
-    // Internal Impls
-    //
-
-    impl InitializableInternalImpl = initializable_component::InternalImpl<ContractState>;
-    impl ERC20MetadataInternalImpl = erc20_metadata_component::InternalImpl<ContractState>;
-    impl ERC20BalanceInternalImpl = erc20_balance_component::InternalImpl<ContractState>;
-    impl ERC20AllowanceInternalImpl = erc20_allowance_component::InternalImpl<ContractState>;
-    impl ERC20MintableInternalImpl = erc20_mintable_component::InternalImpl<ContractState>;
-    impl ERC20BurnableInternalImpl = erc20_burnable_component::InternalImpl<ContractState>;
-
-    //
-    // Initializer
-    //
-
-    #[abi(embed_v0)]
-    fn dojo_init(ref self: ContractState, faucet_to: ContractAddress) {
-        self.erc20_metadata.initialize("fPAPER", "fPAPER", 18);
-        self.erc20_mintable.mint(get_caller_address(), 10_000);
-
-        self.faucetTo(faucet_to);
-
-        self.initializable.initialize();
+        let (laundromat_address, _) = self.world(@"dopewars").dns(@"laundromat").unwrap();
+        self.faucetTo(laundromat_address);
     }
 
     //
@@ -167,10 +104,50 @@ mod paper_mock {
     #[abi(embed_v0)]
     impl PaperMockFaucetImpl of super::IPaperMockFaucet<ContractState> {
         fn faucet(ref self: ContractState) {
-            self.erc20_mintable.mint(get_caller_address(), 10_000 * ETHER);
+            self.erc20.mint(get_caller_address(), 10_000 * ETHER);
         }
         fn faucetTo(ref self: ContractState, recipient: ContractAddress) {
-            self.erc20_mintable.mint(recipient, 10_000 * ETHER);
+            self.erc20.mint(recipient, 10_000 * ETHER);
+        }
+    }
+
+    pub impl ERC20HooksImpl of ERC20Component::ERC20HooksTrait<ContractState> {
+        fn before_update(
+            ref self: ERC20Component::ComponentState<ContractState>,
+            from: ContractAddress,
+            recipient: ContractAddress,
+            amount: u256
+        ) {}
+
+        fn after_update(
+            ref self: ERC20Component::ComponentState<ContractState>,
+            from: ContractAddress,
+            recipient: ContractAddress,
+            amount: u256
+        ) {
+            let contract_state = self.get_contract();
+            let balance_from = contract_state.erc20.balance_of(from);
+            let balance_recipient = contract_state.erc20.balance_of(recipient);
+
+            let mut world = contract_state.world(@"dopewars");
+
+            world
+                .emit_event(
+                    @ERC20BalanceEvent {
+                        token_address: starknet::get_contract_address(),
+                        owner: from,
+                        balance: balance_from
+                    }
+                );
+            world
+                .emit_event(
+                    @ERC20BalanceEvent {
+                        token_address: starknet::get_contract_address(),
+                        owner: recipient,
+                        balance: balance_recipient
+                    }
+                );
         }
     }
 }
+

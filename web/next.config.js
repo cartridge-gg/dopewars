@@ -6,18 +6,12 @@ const nextConfig = {
   //   domains: ["static.cartridge.gg", "static.localhost"],
   // },
   // dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
-  // transpilePackages: [ // build but this is shit
-  //   "@cartridge/connector",
-  //   "@cartridge/controller",
-  // ], 
-  // experimental: {
-  //   externalDir: true,
-  // },
   webpack: (config, options) => {
     // console.log(config)
     config.experiments = {
       ...config.experiments,
       asyncWebAssembly: true,
+      topLevelAwait: true,
     };
     return config;
   },

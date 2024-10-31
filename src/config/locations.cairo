@@ -2,10 +2,10 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
-use rollyourown::utils::{
-    introspect::{Bytes31IntrospectionImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,},
+use rollyourown::{
+    utils::{introspect::{Bytes31IntrospectionImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,}},
+    store::{Store, StoreImpl, StoreTrait}
 };
-
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -15,7 +15,6 @@ struct LocationConfig {
     location_id: u8,
     name: Bytes16,
 }
-
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum Locations {
@@ -107,73 +106,81 @@ impl U8IntoLocations of Into<u8, Locations> {
     }
 }
 
-
 //
 //
 //
 
-fn initialize_location_config(world: IWorldDispatcher) {
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Home,
-            location_id: Locations::Home.into(),
-            name: Bytes16Impl::from('Home')
-        }
-    );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Queens,
-            location_id: Locations::Queens.into(),
-            name: Bytes16Impl::from('Queens')
-        }
-    );
+use dojo::model::{ModelStorage};
+fn initialize_location_config(ref store: Store) {
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Home,
+                location_id: Locations::Home.into(),
+                name: Bytes16Impl::from('Home')
+            }
+        );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Bronx,
-            location_id: Locations::Bronx.into(),
-            name: Bytes16Impl::from('The Bronx')
-        }
-    );
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Queens,
+                location_id: Locations::Queens.into(),
+                name: Bytes16Impl::from('Queens')
+            }
+        );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Brooklyn,
-            location_id: Locations::Brooklyn.into(),
-            name: Bytes16Impl::from('Brooklyn')
-        }
-    );
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Bronx,
+                location_id: Locations::Bronx.into(),
+                name: Bytes16Impl::from('The Bronx')
+            }
+        );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Jersey,
-            location_id: Locations::Jersey.into(),
-            name: Bytes16Impl::from('Jersey City')
-        }
-    );
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Brooklyn,
+                location_id: Locations::Brooklyn.into(),
+                name: Bytes16Impl::from('Brooklyn')
+            }
+        );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Central,
-            location_id: Locations::Central.into(),
-            name: Bytes16Impl::from('Central Park')
-        }
-    );
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Jersey,
+                location_id: Locations::Jersey.into(),
+                name: Bytes16Impl::from('Jersey City')
+            }
+        );
 
-    set!(
-        world,
-        LocationConfig {
-            location: Locations::Coney,
-            location_id: Locations::Coney.into(),
-            name: Bytes16Impl::from('Coney Island')
-        }
-    );
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Central,
+                location_id: Locations::Central.into(),
+                name: Bytes16Impl::from('Central Park')
+            }
+        );
+
+    store
+        .world
+        .write_model(
+            @LocationConfig {
+                location: Locations::Coney,
+                location_id: Locations::Coney.into(),
+                name: Bytes16Impl::from('Coney Island')
+            }
+        );
 }
 

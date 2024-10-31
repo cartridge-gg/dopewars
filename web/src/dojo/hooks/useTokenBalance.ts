@@ -23,7 +23,7 @@ export const useTokenBalance = ({ address, token, refetchInterval }: { address?:
   const refresh = useCallback(async () => {
     if (!contract || !address) return
 
-    const bal = await contract.balanceOf(address);
+    const bal = await contract.balance_of(address);
     //@ts-ignore   returns a bigint
     setBalance(bal)
     setIsInitializing(false)

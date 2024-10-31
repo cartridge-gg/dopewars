@@ -30,36 +30,45 @@ mod ryo {
     use starknet::contract_address::Felt252TryIntoContractAddress;
     use starknet::info::get_tx_info;
 
+    use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
+
     use rollyourown::{
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
         config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress},},
         models::{season::Season,}, utils::random::{RandomImpl},
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
+        store::{Store, StoreImpl, StoreTrait},
     };
 
-
     fn dojo_init(
-        self: @ContractState,
-        paper_address: ContractAddress,
-        treasury_address: ContractAddress,
-        laundromat_address: ContractAddress,
-        vrf_address: ContractAddress,
+        self: @ContractState, paper_address: ContractAddress, treasury_address: ContractAddress,
     ) {
         // consume first ID = 0
-        let _ = self.world().uuid();
+        let _ = self.world_dispatcher().uuid();
 
-        let mut ryo_config = self.s().ryo_config();
+        let world = self.world(@"dopewars");
+        let mut store = StoreImpl::new(world);
+
+        let mut ryo_config = store.ryo_config();
 
         assert(ryo_config.initialized == false, 'Already initialized');
 
         // initial config
         ryo_config = RyoConfigImpl::build_initial_ryo_config();
         // save
-        self.s().save_ryo_config(ryo_config);
+        store.save_ryo_config(@ryo_config);
 
         // RyoAddresses
-        let mut ryo_addresses = self.s().ryo_addresses();
+        let mut ryo_addresses = store.ryo_addresses();
+
+        let paper_address = if paper_address.is_zero() {
+            let (paper_mock_address, _) = world.dns(@"paper_mock").unwrap();
+            paper_mock_address
+        } else {
+            paper_address
+        };
+        let (laundromat_address, _) = world.dns(@"laundromat").unwrap();
+        let (vrf_address, _) = world.dns(@"vrf_provider_mock").unwrap();
 
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address;
@@ -67,11 +76,11 @@ mod ryo {
         ryo_addresses.vrf = vrf_address;
 
         // save
-        self.s().save_ryo_addresses(ryo_addresses);
+        store.save_ryo_addresses(@ryo_addresses);
 
         // Create first season
         let mut randomizer = RandomImpl::new('ryo');
-        let season_manager = SeasonManagerTrait::new(self.s());
+        let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
     }
 
@@ -81,16 +90,18 @@ mod ryo {
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();
 
-            let mut ryo_config = self.s().ryo_config();
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut ryo_config = store.ryo_config();
 
             ryo_config.paused = paused;
-            self.s().save_ryo_config(ryo_config);
+            store.save_ryo_config(@ryo_config);
         }
 
         fn update_ryo_config(self: @ContractState, ryo_config: RyoConfig) {
             self.assert_caller_is_owner();
 
-            let mut new_ryo_config = self.s().ryo_config();
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut new_ryo_config = store.ryo_config();
 
             new_ryo_config.season_duration = ryo_config.season_duration;
             new_ryo_config.season_time_limit = ryo_config.season_time_limit;
@@ -98,68 +109,74 @@ mod ryo {
             new_ryo_config.paper_reward_launderer = ryo_config.paper_reward_launderer;
             new_ryo_config.treasury_fee_pct = ryo_config.treasury_fee_pct;
 
-            self.s().save_ryo_config(ryo_config);
+            store.save_ryo_config(@ryo_config);
         }
 
         fn set_paper(self: @ContractState, paper_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut ryo_addresses = self.s().ryo_addresses();
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.paper = paper_address;
-            self.s().save_ryo_addresses(ryo_addresses);
+            store.save_ryo_addresses(@ryo_addresses);
         }
 
         fn set_treasury(self: @ContractState, treasury_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut ryo_addresses = self.s().ryo_addresses();
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.treasury = treasury_address;
-            self.s().save_ryo_addresses(ryo_addresses);
+            store.save_ryo_addresses(@ryo_addresses);
         }
 
         fn set_vrf(self: @ContractState, vrf_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut ryo_addresses = self.s().ryo_addresses();
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.vrf = vrf_address;
-            self.s().save_ryo_addresses(ryo_addresses);
+            store.save_ryo_addresses(@ryo_addresses);
         }
-
 
         //
         // getters
         //
 
         fn paper(self: @ContractState) -> ContractAddress {
-            self.s().ryo_addresses().paper
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_addresses().paper
         }
 
         fn treasury(self: @ContractState) -> ContractAddress {
-            self.s().ryo_addresses().treasury
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_addresses().treasury
         }
 
         fn vrf(self: @ContractState) -> ContractAddress {
-            self.s().ryo_addresses().vrf
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_addresses().vrf
         }
 
         fn laundromat(self: @ContractState) -> ContractAddress {
-            self.s().ryo_addresses().laundromat
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_addresses().laundromat
         }
 
 
         fn paused(self: @ContractState) -> bool {
-            let ryo_config = self.s().ryo_config();
-            ryo_config.paused
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().paused
         }
 
         fn paper_fee(self: @ContractState) -> u16 {
-            let ryo_config = self.s().ryo_config();
-            ryo_config.paper_fee
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().paper_fee
         }
 
         fn season_duration(self: @ContractState) -> u32 {
-            let ryo_config = self.s().ryo_config();
-            ryo_config.season_duration
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().season_duration
         }
     }
 
@@ -167,15 +184,13 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
-            assert(self.world().is_owner(self.selector(), get_caller_address()), 'not owner');
-        }
-
-        #[inline(always)]
-        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
-                self.world(), selector_from_tag!("dopewars-store")
+            assert(
+                self
+                    .world(@"dopewars")
+                    .dispatcher
+                    .is_owner(selector_from_tag!("dopewars-ryo"), get_caller_address()),
+                'not owner'
             );
-            IStoreLibraryDispatcher { class_hash, }
         }
     }
 }

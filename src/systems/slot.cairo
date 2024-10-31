@@ -186,33 +186,15 @@ trait ISlotMachine<T> {
 mod slotmachine {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-    use rollyourown::{library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},};
+    use dojo::world::IWorldDispatcherTrait;
+    use rollyourown::{store::{Store, StoreImpl, StoreTrait},};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
 
     use super::{SlotMachine, SlotMachineImpl, SlotMachineTrait};
 
-
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        SlotMachineEvent: SlotMachineEvent,
-    }
-
-    #[derive(Drop, starknet::Event)]
-    struct SlotMachineEvent {
-        #[key]
-        game_id: u32,
-        #[key]
-        player_id: ContractAddress,
-        name: felt252,
-        values: (u8, u8, u8),
-        payout: u32,
-    }
-
     // Event message
 
     #[derive(Copy, Drop, Serde)]
-    #[dojo::model]
     #[dojo::event]
     struct SlotMachineCombination {
         #[key]
@@ -226,37 +208,31 @@ mod slotmachine {
     impl SlotMachineImp of super::ISlotMachine<ContractState> {
         fn roll(ref self: ContractState, game_id: u32) {
             // TODO: checks
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
 
-            let ryo_addresses = self.s().ryo_addresses();
+            let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
                 .consume_random(Source::Nonce(player_id));
 
-            let mut machine = self.s().slot_machine(game_id);
+            let mut machine = store.slot_machine(game_id);
 
-            let result = machine.roll(random);
+            let _result = machine.roll(random);
 
-            if let Option::Some((name, values, payout)) = result {
-                emit!(
-                    self.world(),
-                    (Event::SlotMachineEvent(
-                        SlotMachineEvent { game_id, player_id, name, values, payout }
-                    ))
-                );
-                emit!(self.world(), (SlotMachineCombination { player_id, name, values, payout }));
-            }
+            // if let Option::Some((name, values, payout)) = result {
+            //     // emit!(
+            //     //     self.world_dispatcher(),
+            //     //     (Event::SlotMachineEvent(
+            //     //         SlotMachineEvent { game_id, player_id, name, values, payout }
+            //     //     ))
+            //     // );
+            //     // emit!(
+            //     //     self.world_dispatcher(),
+            //     //     (SlotMachineCombination { player_id, name, values, payout })
+            //     // );
+            // }
 
-            self.s().set_slot_machine(machine);
-        }
-    }
-
-    #[generate_trait]
-    impl SlotMachineInternalImpl of SlotMachineInternalTrait { // #[inline(always)]
-        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = rollyourown::utils::world_utils::get_contract_infos(
-                self.world(), selector_from_tag!("dopewars-store")
-            );
-            IStoreLibraryDispatcher { class_hash, }
+            store.set_slot_machine(@machine);
         }
     }
 }

@@ -17,7 +17,6 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 
 [namespace]
 default = "dopewars"
-# mappings = { "origami_token" = "dopewars" }
 
 [migration]
 skip_contracts = [
@@ -28,8 +27,18 @@ skip_contracts = [
     "dopewars-devtools",
     "dopewars-paper_mock",
     "dopewars-vrf_provider_mock",
-    "origami_token-ERC20MetadataModel",
-    "origami_token-ERC20BalanceModel",
-    "origami_token-ERC20AllowanceModel",
-    "origami_token-InitializableModel",
+]
+
+[init_call_args]
+"dopewars-ryo" = [
+    "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",  # PAPER address
+    "0x026C8df51A3b2652b6FaFD2d38ea0639f9131Ef097507758adef6E983Bcb7106", # treasury / multisig address
+]
+
+[writers]
+"dopewars" = [
+    "dopewars-config",
+    "dopewars-laundromat",
+    "dopewars-game",
+    "dopewars-ryo",
 ]
