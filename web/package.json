@@ -13,7 +13,7 @@
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
     "gen:dojo": "pnpm gen && pnpm gen:events",
-    "gen:events": "npx create-events ./src/manifests/dev/manifest.json ./src/dojo/generated/contractEvents.ts"
+    "gen:events": "npx create-events ./src/manifests/manifest_dev.json000 ./src/dojo/generated/contractEvents.ts"
   },
   "bin": {
     "create-events": "./bin/generateEvents.cjs"
@@ -24,6 +24,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.24",
     "@dojoengine/create-burner": "v1.0.0-alpha.24",
+    "@dojoengine/sdk": "v1.0.0-alpha.24",
     "@dojoengine/torii-client": "v1.0.0-alpha.24",
     "@dojoengine/utils": "v1.0.0-alpha.24",
     "@emotion/react": "^11.10.6",

@@ -21,6 +21,7 @@ import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
 import { ToriiClient } from "../../../../../dojo.c/pkg/dojo_c";
+import { useRouter } from "next/router";
 
 export interface DojoContextType {
   chains: DojoChainsResult;
@@ -32,7 +33,6 @@ export interface DojoContextType {
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
   uiStore: UiStore;
-  toriiClient: ToriiClient;
 }
 
 export const DojoContext = createContext<DojoContextType | null>(null);
@@ -67,7 +67,8 @@ export const DojoContextProvider = observer(
 
     const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig, intialChain);
 
-    const { dojoProvider, queryClient, graphqlClient, graphqlWsClient, rpcProvider } = useDojoClients(selectedChain);
+    const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } =
+      useDojoClients(selectedChain);
 
     const masterAccount = useMemo(() => {
       if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
@@ -133,13 +134,16 @@ export const DojoContextProvider = observer(
       });
     }, [graphqlClient, dojoProvider, selectedChain.manifest]);
 
+    const router = useRouter()
+    
     const gameStore = useMemo(() => {
       return new GameStoreClass({
+        toriiClient,
         client: graphqlClient,
-        wsClient: graphqlWsClient,
         configStore,
+        router
       });
-    }, [graphqlClient, graphqlWsClient, configStore]);
+    }, [graphqlClient, configStore, toriiClient]);
 
     useEffect(() => {
       const initAsync = async () => {
@@ -162,33 +166,18 @@ export const DojoContextProvider = observer(
       initAsync();
     }, [configStore]);
 
-    const [toriiClient, setToriiClient] = useState<ToriiClient>();
-
-    useEffect(() => {
-      const initAsync = async () => {
-        const torii = await import("../../../../../dojo.c/pkg");
-        const client = await torii.createClient({
-          rpcUrl: selectedChain.rpcUrl!,
-          toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
-          relayUrl: "",
-          worldAddress: selectedChain.manifest.world.address || "",
-        });
-
-        setToriiClient(client);
-      };
-      initAsync();
-    }, [selectedChain]);
-
     const uiStore = new UiStore();
 
     const isInitialized =
-      burnerSWOIsInitialized && predeployedSWOIsInitialized && configStoreState.isInitialized && toriiClient;
+      burnerSWOIsInitialized &&
+      predeployedSWOIsInitialized &&
+      configStoreState.isInitialized &&
+      toriiClient !== undefined;
     const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
     const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
 
     // console.log("isInitialized", isInitialized);
     // console.log("hasError", hasError);
-
     // is initializing
     if (!hasError && !isInitialized)
       return (
@@ -213,8 +202,8 @@ export const DojoContextProvider = observer(
             dojoProvider,
             queryClient,
             graphqlClient,
-            graphqlWsClient,
             rpcProvider,
+            toriiClient,
           },
           burnerManager,
           isPrefundingPaper,
@@ -223,7 +212,6 @@ export const DojoContextProvider = observer(
           configStore,
           gameStore,
           uiStore,
-          toriiClient: toriiClient!,
         }}
       >
         <StarknetProvider selectedChain={selectedChain}>

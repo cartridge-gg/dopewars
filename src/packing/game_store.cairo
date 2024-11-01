@@ -143,7 +143,7 @@ impl GameStoreImpl of GameStoreTrait {
             return false;
         }
 
-        if self.player.turn == self.game_config().max_turns {
+        if self.player.turn >= self.game_config().max_turns {
             return false;
         }
 

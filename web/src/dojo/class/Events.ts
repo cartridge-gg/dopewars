@@ -1,88 +1,149 @@
-import { Dopewars_Game as Game, World__Event } from "@/generated/graphql";
-import { computed, makeObservable, observable } from "mobx";
-import { BaseEventData, GameCreatedData, ParseEventResult, parseEvent } from "../events";
-import { WorldEvents } from "../generated/contractEvents";
+import { Dopewars_Game as Game } from "@/generated/graphql";
+import { action, computed, makeObservable, observable } from "mobx";
 import { ConfigStoreClass } from "../stores/config";
+import { Entity } from "../../../../../dojo.c/pkg/dojo_c";
+import { parseStruct } from "../utils";
+import {
+  GameCreated,
+  GameOver,
+  HighVolatility,
+  TradeDrug,
+  Traveled,
+  TravelEncounter,
+  TravelEncounterResult,
+  UpgradeItem,
+} from "@/components/layout/GlobalEvents";
+import { num, shortString } from "starknet";
 
-export type DojoEvent = {
+export interface DojoEvent {
+  eventName: string;
+  event: any;
   idx: number;
-  blocknumber: number;
-  eventIdx: number;
-  raw: any;
-  parsed: ParseEventResult;
-};
-
-//
-//
-//
+}
 
 export class EventClass {
   gameInfos: Game;
   configStore: ConfigStoreClass;
 
-  events: Array<DojoEvent>;
+  events: DojoEvent[];
 
-  constructor(configStore: ConfigStoreClass, gameInfos: Game, events: World__Event[]) {
+  constructor(configStore: ConfigStoreClass, gameInfos: Game, entity: Entity) {
     this.gameInfos = gameInfos;
     this.configStore = configStore;
-    //
-
-    this.events = events.map((i) => EventClass.parseWorldEvent(this.configStore.manifest, i));
+    this.events = EventClass.parseEntity(entity);
 
     makeObservable(this, {
       events: observable,
-      // playerName: computed,
+      addEvent: action,
       sortedEvents: computed,
+      isGameOver: computed,
       lastEncounter: computed,
       lastEncounterResult: computed,
     });
-
-    // console.log("Events", this)
   }
 
-  public static parseWorldEvent(manifest: any, event: World__Event, ): DojoEvent {
-    const id = event.id?.split(":")!;
-    const blocknumber = Number(id[0]);
-    const eventIdx = Number(id[2]);
-    const idx = blocknumber * 10_000 + eventIdx;
+  public static parseEntity(entity: Entity): DojoEvent[] {
+    const events = Object.keys(entity).map((key, i) => {
+      if (key.startsWith("dopewars-GameCreated")) {
+        return {
+          eventName: "GameCreated",
+          event: parseStruct(entity[key]) as GameCreated,
+          idx: i,
+        };
+      }
 
-    return {
-      idx,
-      blocknumber,
-      eventIdx,
-      raw: event,
-      parsed: parseEvent(manifest, event),
-    };
+      if (key.startsWith("dopewars-GameOver")) {
+        return {
+          eventName: "GameOver",
+          event: parseStruct(entity[key]) as GameOver,
+          idx: i,
+        };
+      }
+
+      if (key === "dopewars-Traveled" || key.startsWith("dopewars-Traveled-")) {
+        const event = parseStruct(entity[key]) as Traveled;
+        return {
+          eventName: "Traveled",
+          event,
+          idx: key === "dopewars-Traveled" ? 0 : Number(key.replace("dopewars-Traveled-", "")),
+        };
+      }
+
+      if (key === "dopewars-TradeDrug" || key.startsWith("dopewars-TradeDrug-")) {
+        const event = parseStruct(entity[key]) as TradeDrug;
+        return {
+          eventName: "TradeDrug",
+          event,
+          idx: key === "dopewars-TradeDrug" ? 0 : Number(key.replace("dopewars-TradeDrug-", "")),
+        };
+      }
+
+      if (key === "dopewars-UpgradeItem" || key.startsWith("dopewars-UpgradeItem-")) {
+        const event = parseStruct(entity[key]) as UpgradeItem;
+        return {
+          eventName: "UpgradeItem",
+          event,
+          idx: key === "dopewars-UpgradeItem" ? 0 : Number(key.replace("dopewars-UpgradeItem-", "")),
+        };
+      }
+
+      if (key === "dopewars-TravelEncounter" || key.startsWith("dopewars-TravelEncounter-")) {
+        const event = parseStruct(entity[key]) as TravelEncounter;
+        event.encounter = shortString.decodeShortString(num.toHexString(Number(event.encounter)));
+        return {
+          eventName: "TravelEncounter",
+          event,
+          idx: key === "dopewars-TravelEncounter" ? 0 : Number(key.replace("dopewars-TravelEncounter-", "")),
+        };
+      }
+
+      if (key === "dopewars-TravelEncounterResult" || key.startsWith("dopewars-TravelEncounterResult-")) {
+        return {
+          eventName: "TravelEncounterResult",
+          event: parseStruct(entity[key]) as TravelEncounterResult,
+          idx:
+            key === "dopewars-TravelEncounterResult" ? 0 : Number(key.replace("dopewars-TravelEncounterResult-", "")),
+        };
+      }
+
+      if (key === "dopewars-HighVolatility" || key.startsWith("dopewars-HighVolatility-")) {
+        return {
+          eventName: "HighVolatility",
+          event: parseStruct(entity[key]) as HighVolatility,
+          idx: key === "dopewars-HighVolatility" ? 0 : Number(key.replace("dopewars-HighVolatility-", "")),
+        };
+      }
+
+      return {
+        eventName: key,
+        event: parseStruct(entity[key]),
+        idx: i,
+      };
+    });
+
+    return events || [];
   }
 
-  //
-  //
-  //
+  get isGameOver() {
+    return this.events.find((i: DojoEvent) => i?.eventName === "GameOver") !== undefined;
+  }
+
+  addEvent(entity: any) {
+    // console.log("addEvent", entity);
+    const event = EventClass.parseEntity(entity)[0];
+    this.events.push(event);
+  }
 
   get sortedEvents() {
-    return this.events.slice().sort((a, b) => Date.parse(a.raw.createdAt) - Date.parse(b.raw.createdAt));
-    // .sort((a, b) => a.idx - b.idx)
+    return this.events.slice();
   }
-   
-  //
-  //
-  //
-
-  addEvent(event: World__Event) {
-    this.events.push(EventClass.parseWorldEvent(this.configStore.manifest, event));
-  }
-
   get lastEncounter() {
-    const last = this.sortedEvents.findLast(
-      (i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounter,
-    );
-
-    return last;
+    return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounter");
+    // return this.events.find((i: DojoEvent) => i.eventName === "TravelEncounter");
   }
 
   get lastEncounterResult() {
-    return this.sortedEvents.findLast(
-      (i: DojoEvent) => (i.parsed as BaseEventData).eventType === WorldEvents.TravelEncounterResult,
-    );
+    return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounterResult");
+    // return this.events.find((i: DojoEvent) => i.eventName === "TravelEncounterResult");
   }
 }

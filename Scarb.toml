@@ -9,6 +9,7 @@ version = "0.1.0"
 [tool.fmt]
 sort-module-level-items = true
 max-line-length = 100
+tab-size = 4
 
 [[target.starknet-contract]]
 build-external-contracts = [ "dojo::world::world_contract::world" ]

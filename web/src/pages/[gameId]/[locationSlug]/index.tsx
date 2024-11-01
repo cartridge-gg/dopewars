@@ -49,7 +49,7 @@ const Location = observer(() => {
       }
 
       setGreetings(getRandomGreeting(game.player.turn));
-      setIsLastDay(game.player.turn === gameConfig.max_turns);
+      setIsLastDay(game.player.turn >= gameConfig.max_turns);
     }
   }, [location, game, router, gameId, gameConfig?.max_turns, game?.player.location]);
 

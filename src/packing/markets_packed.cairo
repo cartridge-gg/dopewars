@@ -110,9 +110,9 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                     1_u32
                                 } else if rand <= 350 || rand >= 649 {
                                     2_u32
-                                } else if rand <= 475 || rand >= 524 {
+                                } else if rand <= 470 || rand >= 529 {
                                     4_u32
-                                } else if rand <= 495 || rand >= 504 {
+                                } else if rand <= 493 || rand >= 506 {
                                     6_u32
                                 } else {
                                     12_u32

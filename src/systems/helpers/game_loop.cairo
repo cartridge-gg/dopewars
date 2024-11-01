@@ -44,7 +44,13 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
     game_store.player.next_location = Locations::Home;
 
     // update turn
-    game_store.player.turn += 1;
+    // game_store.player.turn += 1;
+    game_store
+        .player
+        .turn = game_store
+        .player
+        .turn
+        .add_capped(1, game_store.game_config().max_turns);
 
     // increase reputation by rep_carry_drugs if carrying drugs, 1 otherwise
     let mut game_config = game_store.game_config();
@@ -73,7 +79,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
     }
 
     // level up drug_level if possible
-    game_store.player.level_up_drug(ref game_store, ref randomizer, ref game_config);
+    game_store.player.level_up_drug(ref game_store, ref randomizer);
 
     // markets variations
     game_store.markets.market_variations(ref store, ref randomizer, ref game_store.game);

@@ -1,15 +1,10 @@
 import {
   Dopewars_Game as Game,
   Dopewars_GameConfig as GameConfig,
-  Dopewars_GameEdge as GameEdge,
   Dopewars_GameStorePacked as GameStorePacked,
-  Maybe,
   Dopewars_SeasonSettings as SeasonSettings,
   TradedDrugByPlayerQuery,
-  World__Entity,
   World__EntityEdge,
-  World__Event,
-  World__EventEdge,
   useAllGameConfigQuery,
   useAllSeasonSettingsQuery,
   useGamesByPlayerQuery,
@@ -20,10 +15,9 @@ import {
 import { useMemo } from "react";
 import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
-import { Hustler, Hustlers } from "@/components/hustlers";
+import { Hustlers } from "@/components/hustlers";
 import { WorldEvents } from "../generated/contractEvents";
 import { Drugs } from "../types";
-import { TradeDrugData, parseEvent } from "../events";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -209,9 +203,11 @@ export const useGamesByPlayer = (playerIdRaw: string, manifest: any): GamesByPla
 };
 
 const getTradeTotal = (allTradedDrugByPlayer: TradedDrugByPlayerQuery, drug: Drugs, manifest: any) => {
-  return (allTradedDrugByPlayer?.events?.edges || [])
-    .map((i) => parseEvent(manifest, i?.node) as TradeDrugData)
-    .filter((i) => i.drugId === drug && !i.isBuy)
-    .map((i) => i.price * i.quantity)
-    .reduce((p, c) => p + c, 0);
+  // return (allTradedDrugByPlayer?.events?.edges || [])
+  //   .map((i) => parseEvent(manifest, i?.node) as TradeDrugData)
+  //   .filter((i) => i.drugId === drug && !i.isBuy)
+  //   .map((i) => i.price * i.quantity)
+  //   .reduce((p, c) => p + c, 0);
+
+  return 420
 };

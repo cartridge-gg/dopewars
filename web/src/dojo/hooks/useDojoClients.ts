@@ -1,10 +1,11 @@
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
 import { createClient } from "graphql-ws";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { QueryClient } from "react-query";
 import { RpcProvider } from "starknet";
 import { DojoChainConfig } from "../setup/config";
+import { ToriiClient } from "../../../../../dojo.c/pkg";
 
 export type DojoClientsResult = ReturnType<typeof useDojoClients>;
 
@@ -32,12 +33,6 @@ export const useDojoClients = (selectedChain: DojoChainConfig) => {
     return new GraphQLClient(selectedChain.toriiUrl);
   }, [selectedChain]);
 
-  const graphqlWsClient = useMemo(() => {
-    return createClient({
-      url: selectedChain.toriiWsUrl,
-    });
-  }, [selectedChain]);
-
   const rpcProvider = useMemo(
     () =>
       new RpcProvider({
@@ -46,11 +41,28 @@ export const useDojoClients = (selectedChain: DojoChainConfig) => {
     [selectedChain],
   );
 
+  const [toriiClient, setToriiClient] = useState<ToriiClient>();
+
+  useEffect(() => {
+    const initAsync = async () => {
+      const torii = await import("../../../../../dojo.c/pkg");
+      const client = await torii.createClient({
+        rpcUrl: selectedChain.rpcUrl!,
+        toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
+        relayUrl: "",
+        worldAddress: selectedChain.manifest.world.address || "",
+      });
+
+      setToriiClient(client);
+    };
+    initAsync();
+  }, [selectedChain]);
+
   return {
     dojoProvider,
     queryClient,
     graphqlClient,
-    graphqlWsClient,
     rpcProvider,
+    toriiClient: toriiClient!,
   };
 };

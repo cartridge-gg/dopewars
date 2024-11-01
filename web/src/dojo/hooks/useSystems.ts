@@ -5,15 +5,6 @@ import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
-import {
-  BaseEventData,
-  GameCreatedData,
-  HighVolatilityData,
-  TravelEncounterData,
-  TravelEncounterResultData,
-  parseAllEvents,
-} from "../events";
-import { WorldEvents } from "../generated/contractEvents";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
@@ -55,20 +46,10 @@ export interface SystemsInterface {
 export interface SystemExecuteResult {
   hash: string;
   receipt?: GetTransactionReceiptResponse;
-  event?: BaseEventData;
-  parsedEvents?: any[];
-  isGameOver?: BaseEventData;
   [key: string]: any;
 }
 
-export interface ExecuteAndReceiptResult {
-  hash: string;
-  receipt?: GetTransactionReceiptResponse;
-  event?: BaseEventData;
-  parsedEvents: any[];
-  isGameOver?: BaseEventData;
-  [key: string]: any;
-}
+export interface ExecuteAndReceiptResult extends SystemExecuteResult {}
 
 const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");
@@ -85,10 +66,7 @@ const tryBetterErrorMsg = (msg: string): string => {
 export const useSystems = (): SystemsInterface => {
   const {
     clients: { dojoProvider, rpcProvider },
-    chains: {
-      selectedChain,
-      selectedChain: { manifest },
-    },
+    chains: { selectedChain },
   } = useDojoContext();
 
   const { account } = useAccount();
@@ -98,10 +76,6 @@ export const useSystems = (): SystemsInterface => {
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
-
-  //
-  //
-  //
 
   const executeAndReceipt = useCallback(
     async (calls: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
@@ -130,10 +104,6 @@ export const useSystems = (): SystemsInterface => {
         receipt = await account!.waitForTransaction(tx.transaction_hash, {
           retryInterval: 200,
         });
-
-        // // chill a bit waiting torii indexing
-        // await sleep(500);
-
       } catch (e: any) {
         setIsPending(false);
         setError(e.toString());
@@ -166,16 +136,11 @@ export const useSystems = (): SystemsInterface => {
         }
       }
 
-      const events = receipt ? getEvents(receipt) : [];
-      const parsedEvents = parseAllEvents(selectedChain.manifest, receipt);
-
       setIsPending(false);
 
       return {
         hash: tx?.transaction_hash || "",
         receipt,
-        events,
-        parsedEvents,
       };
     },
     [rpcProvider, dojoProvider, account, selectedChain, toast],
@@ -213,14 +178,10 @@ export const useSystems = (): SystemsInterface => {
           : [approvalCall, ...createGameCalls];
       // console.log(calls);
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
-      // console.log(parsedEvents);
-      const gameCreated = parsedEvents.find((e) => e.eventType === WorldEvents.GameCreated) as GameCreatedData;
+      const { hash } = await executeAndReceipt(calls);
 
       return {
         hash,
-        parsedEvents,
-        gameId: gameCreated?.gameId,
       };
     },
     [executeAndReceipt, config?.ryoAddress.paper, selectedChain],
@@ -230,7 +191,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameId: string, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
 
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `game`,
         entrypoint: "end_game",
         // @ts-ignore
@@ -263,21 +224,10 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
-
-      const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
-
-      const travelEncounter = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.TravelEncounter,
-      ) as TravelEncounterData;
+      const { hash } = await executeAndReceipt(calls);
 
       return {
         hash,
-        isGameOver,
-        event: travelEncounter,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.HighVolatility)
-          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt, selectedChain],
@@ -300,21 +250,10 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
-
-      const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
-
-      const travelEncounterResult = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.TravelEncounterResult,
-      ) as TravelEncounterResultData;
+      const { hash } = await executeAndReceipt(calls);
 
       return {
         hash,
-        isGameOver,
-        event: travelEncounterResult,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.HighVolatility)
-          .map((e) => e as HighVolatilityData),
       };
     },
     [executeAndReceipt, selectedChain],
@@ -417,7 +356,7 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderAddress: selectedChain.vrfProviderAddress,
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+      const { hash } = await executeAndReceipt(calls);
 
       return {
         hash,
@@ -432,7 +371,7 @@ export const useSystems = (): SystemsInterface => {
 
   const setPaused = useCallback(
     async (paused: boolean) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "set_paused",
         calldata: [paused ? 1 : 0],
@@ -447,7 +386,7 @@ export const useSystems = (): SystemsInterface => {
 
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "update_ryo_config",
         calldata: [ryoConfig],
@@ -462,7 +401,7 @@ export const useSystems = (): SystemsInterface => {
 
   const updateDrugConfig = useCallback(
     async (drugConfig: DrugConfig) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `config`,
         entrypoint: "update_drug_config",
         calldata: [drugConfig],
@@ -497,12 +436,10 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
 
-      const { hash, events, parsedEvents } = await executeAndReceipt(calls);
+      const { hash } = await executeAndReceipt(calls);
 
       return {
         hash,
-        events,
-        parsedEvents,
       };
     },
     [executeAndReceipt, selectedChain],
@@ -514,7 +451,7 @@ export const useSystems = (): SystemsInterface => {
 
   const createFakeGame = useCallback(
     async (finalScore = 0) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `devtools`,
         entrypoint: "create_fake_game",
         calldata: [finalScore],
@@ -529,7 +466,7 @@ export const useSystems = (): SystemsInterface => {
 
   const createNewSeason = useCallback(
     async (finalScore = 0) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash } = await executeAndReceipt({
         contractName: `devtools`,
         entrypoint: "create_new_season",
         calldata: [],
@@ -543,7 +480,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const failingTx = useCallback(async () => {
-    const { hash, events, parsedEvents } = await executeAndReceipt({
+    const { hash } = await executeAndReceipt({
       contractName: `devtools`,
       entrypoint: "failing_tx",
       calldata: [],

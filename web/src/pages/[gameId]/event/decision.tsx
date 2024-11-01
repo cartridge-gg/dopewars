@@ -3,26 +3,16 @@ import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { Footer, Layout } from "@/components/layout";
+import { TravelEncounter } from "@/components/layout/GlobalEvents";
 import { HustlerStats } from "@/components/pages/profile/HustlerStats";
 import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { TravelEncounterData } from "@/dojo/events";
-import {
-  copsRanks,
-  copsRanksKeys,
-  gangRanks,
-  gangRanksKeys,
-  reputationRanks,
-  reputationRanksKeys,
-} from "@/dojo/helpers";
+import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys } from "@/dojo/helpers";
 import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
-
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { getSentence } from "@/responses";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, formatCashHeader } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
@@ -31,24 +21,16 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { shortString } from "starknet";
 
-type CombatLog = {
-  text: string;
-  color: string;
-  icon?: React.FC;
-};
-
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { account } = useAccount();
   const { game, gameInfos, gameEvents } = useGameStore();
   const { decide, isPending } = useSystems();
-  const { configStore } = useDojoContext();
 
   const [prefixTitle, setPrefixTitle] = useState("");
   const [title, setTitle] = useState("");
   const [demand, setDemand] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [encounterEvent, setEncounterEvent] = useState<TravelEncounterData | undefined>(undefined);
+  const [encounterEvent, setEncounterEvent] = useState<TravelEncounter | undefined>(undefined);
 
   const [isPaying, setIsPaying] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -56,25 +38,24 @@ const Decision = observer(() => {
 
   const [canPay, setCanPay] = useState(true);
 
-  const toaster = useToast();
-
-  const isMobile = IsMobile();
-
   useEffect(() => {
-    if (game && gameEvents ) {
-      const encounterEvent = gameEvents?.lastEncounter?.parsed as TravelEncounterData;
+    if (game && gameEvents) {
+      const encounterEvent = gameEvents?.lastEncounter?.event as TravelEncounter;
+
+      // console.log("***** DECISION");
+      // console.log("gameEvents?.lastEncounter", encounterEvent);
+
       setEncounterEvent(encounterEvent);
     }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
 
   useEffect(() => {
-   
     if (game && gameEvents && encounterEvent) {
       switch (game.player.status) {
         case PlayerStatus.BeingMugged:
           setPrefixTitle("You encountered a...");
           setTitle("Gang!");
-          const cashAmount = Math.ceil((game.player.cash * encounterEvent!.demandPct) / 100);
+          const cashAmount = Math.floor((game.player.cash * encounterEvent!.demand_pct) / 100);
           setCanPay(cashAmount > 0);
           setDemand(`They want ${formatCash(cashAmount)} PAPER!`);
 
@@ -82,7 +63,7 @@ const Decision = observer(() => {
         case PlayerStatus.BeingArrested:
           setPrefixTitle("You encountered the...");
           setTitle("Cops!");
-          const drugAmount = Math.ceil((game.drugs.quantity * encounterEvent!.demandPct) / 100);
+          const drugAmount = Math.floor((game.drugs.quantity * encounterEvent!.demand_pct) / 100);
           const drugName = game.drugs.drug?.name || "you";
           setCanPay(drugAmount > 0);
           setDemand(`They want ${drugAmount ? drugAmount : ""} ${drugName}!`);
@@ -99,7 +80,7 @@ const Decision = observer(() => {
     if (game?.player.status == PlayerStatus.BeingMugged) {
       playSound(Sounds.Gang);
     }
-  }, [ game?.player.status]);
+  }, [game?.player.status]);
 
   useEffect(() => {
     if (!isPending) {
@@ -137,18 +118,11 @@ const Decision = observer(() => {
         break;
     }
 
-    //try {
-    const { event, events, isGameOver } = await decide(gameId!, action);
-    // if (isGameOver) {
-    //   router.replace(`/${gameId}/end`);
-    // } else {
-    if (event) {
+    const { hash } = await decide(gameId!, action);
+
+    if (hash) {
       router.push(`/${gameId}/event/consequence`);
     }
-    // }
-    // } catch (e) {
-    //   console.log(e);
-    // }
   };
 
   if (!game || !router.isReady || isRedirecting || !encounterEvent) {
@@ -241,7 +215,7 @@ const Encounter = observer(
     title?: string;
     demand?: string;
     game: GameClass;
-    encounterEvent: TravelEncounterData;
+    encounterEvent: TravelEncounter;
   } & StyleProps) => {
     const { gameInfos } = useGameStore();
 
@@ -263,7 +237,7 @@ const Encounter = observer(
       } else {
         setImgUrl(url);
       }
-    }, [encounterEvent, /*game.player.status*/]);
+    }, [encounterEvent /*game.player.status*/]);
 
     return (
       <VStack {...props}>
@@ -294,23 +268,12 @@ const Encounter = observer(
           />
 
           <VStack w="320px" gap={[0, 3]}>
-            {/* <Card alignItems="center" w={"auto"} justify="center">
-              <HStack w="full" px="16px" py="8px" justifyContent="center">
-                <Text>id: {encounter?.id}</Text>
-                <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
-                <Text>
-                  min/max rep: {encounter?.min_rep}/{encounter?.max_rep}
-                </Text>
-              </HStack>
-            </Card> */}
-
             <Card alignItems="center" w="full" justify="center">
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="center">
                   <HStack flex="1" justifyContent="center" alignItems="center">
                     {encounterEvent.encounter === Encounters.Cops ? <CopsIcon /> : <GangIcon />}
                     <Text>
-                      {/* {encounter?.encounter} lvl {encounter?.level} */}
                       {encounterEvent?.encounter === Encounters.Cops
                         ? copsRanks[encounterEvent?.level as copsRanksKeys]
                         : gangRanks[encounterEvent?.level as gangRanksKeys]}
@@ -339,7 +302,6 @@ const Encounter = observer(
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
                     <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
-                    {/* <Text>{reputationRanks[game.player.drugLevel as reputationRanksKeys]}</Text> */}
                     <Text>{shortString.decodeShortString(game.gameInfos.player_name?.value)}</Text>
                   </HStack>
 
@@ -372,7 +334,7 @@ const Encounter = observer(
   },
 );
 
-export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: TravelEncounterData }) => {
+export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: TravelEncounter }) => {
   if (!encounterEvent) return null;
   return (
     <HStack flexDirection="row" w="full" px="10px" py="6px" justifyContent="center">

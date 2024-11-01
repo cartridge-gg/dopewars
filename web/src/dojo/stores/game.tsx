@@ -4,55 +4,50 @@ import { Client } from "graphql-ws";
 
 import {
   Dopewars_Game as Game,
-  GameByIdDocument,
-  GameByIdQuery,
   Dopewars_GameConfig as GameConfig,
-  GameConfigDocument,
-  GameConfigQuery,
-  GameEventsDocument,
-  GameEventsQuery,
-  GameEventsSubscriptionDocument,
   Dopewars_GameStorePacked as GameStorePacked,
-  GameStorePackedDocument,
-  GameStorePackedQuery,
-  GameStorePackedSubscriptionDocument,
   Dopewars_SeasonSettings as SeasonSettings,
-  SeasonSettingsDocument,
-  SeasonSettingsQuery,
-  World__EntityEdge,
   World__Event,
-  World__EventEdge,
-  World__ModelEdge,
   World__Subscription,
 } from "@/generated/graphql";
 import { action, flow, makeObservable, observable } from "mobx";
 import { EventClass } from "../class/Events";
 import { GameClass } from "../class/Game";
 import { ConfigStoreClass } from "./config";
+import { Entities, Entity, Model, Subscription, ToriiClient, Ty } from "../../../../../dojo.c/pkg/dojo_c";
+import { parseStruct } from "../utils";
+import { num, shortString } from "starknet";
+import { NextRouter } from "next/router";
+import { PlayerStatus } from "../types";
+import { GameCreated, TravelEncounter } from "@/components/layout/GlobalEvents";
 
 type GameStoreProps = {
+  toriiClient: ToriiClient;
   client: GraphQLClient;
-  wsClient: Client;
   configStore: ConfigStoreClass;
+  router: NextRouter;
 };
 
 export class GameStoreClass {
+  toriiClient: ToriiClient;
   client: GraphQLClient;
-  wsClient: Client;
   configStore: ConfigStoreClass;
-  //  id: string = null;
+  router: NextRouter;
+
   isInitialized = false;
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
   gameInfos: Game | null = null;
+  gameStorePacked: GameStorePacked | null = null;
   gameConfig: GameConfig | null = null;
   seasonSettings: SeasonSettings | null = null;
-  handles: Array<() => void> = [];
+  subscriptions: Array<Subscription> = [];
 
-  constructor({ client, wsClient, configStore }: GameStoreProps) {
+  constructor({ toriiClient, client, configStore, router }: GameStoreProps) {
+    this.toriiClient = toriiClient;
     this.client = client;
-    this.wsClient = wsClient;
     this.configStore = configStore;
+    this.router = router;
 
     makeObservable(this, {
       game: observable,
@@ -63,193 +58,193 @@ export class GameStoreClass {
       reset: action,
       init: flow,
       loadGameInfos: flow,
-      loadGameConfig: flow,
+      loadGameEvents: flow,
       loadSeasonSettings: flow,
-      execute: flow,
-      onGameStorePacked: action,
-      onGameEvent: action,
+      subscribe: flow,
+      initGameStore: action,
+      onEntityUpdated: action,
+      onEventMessage: action,
     });
   }
 
   reset() {
-    for (let unsubscribe of this.handles) {
-      unsubscribe();
+    for (let subscription of this.subscriptions) {
+      subscription.cancel();
     }
+
     this.game = null;
     this.gameInfos = null;
     this.gameConfig = null;
     this.gameEvents = null;
     this.seasonSettings = null;
-    this.handles = [];
+    this.subscriptions = [];
     this.isInitialized = false;
   }
 
-  *init(gameId: string /*, playerId: string*/) {
-    //this.reset()
-
-    // if(this.isInitialized){
-    //   return
-    // }
-
+  *init(gameId: string) {
     yield this.loadGameInfos(gameId);
-    yield this.loadGameConfig(this.gameInfos?.season_version);
     yield this.loadSeasonSettings(this.gameInfos?.season_version);
+    yield this.loadGameEvents();
 
-    // retrieve playerId from gameInfos
-    const playerId = this.gameInfos?.player_id || "0x0";
+    this.initGameStore();
 
-    const id = getEntityIdFromKeys([BigInt(gameId), BigInt(playerId)]);
-
-    yield this.execute(gameId, playerId);
-
-    // subscribe to GameStorePacked updates
-    this.handles.push(
-      this.wsClient.subscribe(
-        {
-          query: GameStorePackedSubscriptionDocument,
-          variables: {
-            id,
-          },
-        },
-        {
-          next: ({ data }) => {
-            return this.onGameStorePacked({
-              data: data as World__Subscription,
-            });
-          },
-          error: (error) => console.log({ error }),
-          complete: () => console.log("complete"),
-        },
-      ),
-    );
-
-    // subscribe to GameEvents updates
-    this.handles.push(
-      this.wsClient.subscribe(
-        {
-          query: GameEventsSubscriptionDocument,
-          variables: {
-            gameId: `0x${Number(gameId).toString(16)}`,
-          },
-        },
-        {
-          next: ({ data }) => {
-            return this.onGameEvent({
-              data: data as World__Subscription,
-            });
-          },
-          error: (error) => console.log({ error }),
-          complete: () => console.log("complete"),
-        },
-      ),
-    );
+    yield this.subscribe();
 
     this.isInitialized = true;
   }
 
-  *loadGameInfos(gameId: string) {
-    // gameInfos dont change, no need to subscribe to updates
-    const gameInfosData = (yield this.client.request(GameByIdDocument, {
-      gameId: Number(gameId),
-    })) as GameByIdQuery;
+  *subscribe() {
+    for (let subscription of this.subscriptions) {
+      subscription.cancel();
+    }
+    const subEntities: Subscription = yield this.toriiClient.onEntityUpdated(
+      [
+        {
+          Keys: {
+            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+            models: ["dopewars-GameStorePacked"],
+            pattern_matching: "VariableLen",
+          },
+        },
+      ],
+      (entity: any, update: any) => this.onEntityUpdated(entity, update),
+    );
+    this.subscriptions.push(subEntities);
 
-    // parse gameInfosData
-    const gameEdges = gameInfosData!.dopewarsGameModels!.edges as World__ModelEdge[];
-    if (!gameEdges || !gameEdges[0] || !gameEdges[0].node) return;
-    let gameInfos = gameEdges[0].node as Game;
-    if (!gameInfos) return;
-
-    this.gameInfos = gameInfos;
+    const subEvent: Subscription = yield this.toriiClient.onEventMessageUpdated(
+      [
+        {
+          Keys: {
+            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+            models: ["dopewars-*"],
+            pattern_matching: "VariableLen",
+          },
+        },
+      ],
+      true,
+      (entity: any, update: any) => this.onEventMessage(entity, update),
+    );
+    this.subscriptions.push(subEvent);
   }
 
-  *loadSeasonSettings(season_version: string) {
-    // gameInfos dont change, no need to subscribe to updates
-    const seasonSettingsData = (yield this.client.request(SeasonSettingsDocument, {
-      version: Number(season_version),
-    })) as SeasonSettingsQuery;
-
-    // parse seasonSettingsData
-    const seasonSettingsEdges = seasonSettingsData!.dopewarsSeasonSettingsModels!.edges as World__ModelEdge[];
-    if (!seasonSettingsEdges || !seasonSettingsEdges[0] || !seasonSettingsEdges[0].node) return;
-    let seasonSettings = seasonSettingsEdges[0].node as SeasonSettings;
-    if (!seasonSettings) return;
-
-    this.seasonSettings = seasonSettings;
-  }
-
-  *loadGameConfig(season_version: string) {
-    // gameInfos dont change, no need to subscribe to updates
-    const gameConfigData = (yield this.client.request(GameConfigDocument, {
-      version: Number(season_version),
-    })) as GameConfigQuery;
-
-    // parse gameConfigData
-    const gameConfigEdges = gameConfigData!.dopewarsGameConfigModels!.edges as World__ModelEdge[];
-    if (!gameConfigEdges || !gameConfigEdges[0] || !gameConfigEdges[0].node) return;
-    let gameConfig = gameConfigEdges[0].node as GameConfig;
-    if (!gameConfig) return;
-
-    this.gameConfig = gameConfig;
-  }
-
-  *execute(gameId: string, playerId: string) {
-    const gameData = (yield this.client.request(GameStorePackedDocument, {
-      gameId: gameId,
-      playerId: playerId,
-    })) as GameStorePackedQuery;
-
-    const gameEventsData = (yield this.client.request(GameEventsDocument, {
-      gameId: gameId,
-    })) as GameEventsQuery;
-
-    // parse gameData
-    const edges = gameData!.entities!.edges as World__EntityEdge[];
-    if (!edges || !edges[0] || !edges[0].node || !edges[0].node.models) return;
-
-    // parse gameStorePacked
-    let gameStorePacked = edges[0]?.node.models.find((i) => i?.__typename === "dopewars_GameStorePacked") as GameStorePacked;
-    if (!gameStorePacked) return;
-
-    // parse gameEvent
-    const eventsEdges = gameEventsData.events?.edges as World__EventEdge[];
-    const eventsNodes = eventsEdges.map((i) => i.node as World__Event);
-
+  initGameStore() {
     const game = new GameClass(
       this.configStore,
       this.gameInfos!,
       this.seasonSettings!,
       this.gameConfig!,
-      gameStorePacked,
+      this.gameStorePacked!,
     );
-    this.configStore.manifest
-    const gameEvents = new EventClass(this.configStore, this.gameInfos!, eventsNodes);
 
     this.game = game;
-    this.gameEvents = gameEvents;
   }
 
-  onGameStorePacked = ({ data }: { data: World__Subscription }) => {
-    if (!data?.entityUpdated?.models) return;
+  *loadGameEvents() {
+    const entities: Entities = yield this.toriiClient.getEventMessages(
+      {
+        clause: {
+          Keys: {
+            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+            models: [],
+            pattern_matching: "FixedLen",
+          },
+        },
+        limit: 1000,
+        offset: 0,
+        dont_include_hashed_keys: true,
+      },
+      true,
+    );
+    //console.log(entities);
+    const gameEntity = Object.values(entities)[0];
 
-    let gameStorePacked = data?.entityUpdated?.models.find(
-      (i) => i?.__typename === "dopewars_GameStorePacked",
-    ) as GameStorePacked;
+    this.gameEvents = new EventClass(this.configStore, this.gameInfos!, gameEntity);
+  }
 
-    if (gameStorePacked) {
-      this.game = new GameClass(
-        this.configStore,
-        this.gameInfos!,
-        this.seasonSettings!,
-        this.gameConfig!,
-        gameStorePacked,
-      );
+  *loadGameInfos(gameId: string) {
+    const entities: Entities = yield this.toriiClient.getEntities({
+      clause: {
+        Member: {
+          member: "game_id",
+          model: "dopewars-Game",
+          operator: "Eq",
+          value: { Primitive: { U32: Number(gameId) } },
+        },
+      },
+      limit: 1,
+      offset: 0,
+      dont_include_hashed_keys: true,
+    });
+    const gameEntity = Object.values(entities)[0];
+
+    const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
+    const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
+
+    // console.log("gameInfos", gameInfos);
+    // console.log("gameStorePacked", gameStorePacked);
+
+    this.gameInfos = gameInfos;
+    this.gameStorePacked = gameStorePacked;
+  }
+
+  *loadSeasonSettings(season_version: string) {
+    const entities: Entities = yield this.toriiClient.getEntities({
+      clause: {
+        Keys: {
+          keys: [num.toHexString(season_version)],
+          models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+          pattern_matching: "VariableLen",
+        },
+      },
+      limit: 1,
+      offset: 0,
+      dont_include_hashed_keys: true,
+    });
+    const seasonEntity = Object.values(entities)[0];
+    const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
+    const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;
+
+    // console.log("seasonSettings", seasonSettings);
+    // console.log("gameConfig", gameConfig);
+
+    this.seasonSettings = seasonSettings;
+    this.gameConfig = gameConfig;
+  }
+
+  onEventMessage(entity: any, update: any) {
+    // console.log("onEventMessage", entity, update);
+    this.gameEvents!.addEvent(update);
+  }
+
+  onEntityUpdated(entity: any, update: any) {
+    // console.log("onEntityUpdated", entity, update);
+    const gameId = num.toHexString(this.gameInfos?.game_id);
+
+    const prevState = this.game?.player;
+
+    if (update["dopewars-GameStorePacked"]) {
+      this.gameStorePacked = parseStruct(update["dopewars-GameStorePacked"]);
+      this.initGameStore();
+
+      if (this.gameEvents?.isGameOver) {
+        return this.router.push(`/${gameId}/end`);
+        // return this.router.push(`/${gameId}/logs`);
+      }
+
+      if (this.game?.player.status === PlayerStatus.Normal) {
+        const location = this.configStore
+          .getLocationById(this.game.player.location.location_id)!
+          .location.toLowerCase();
+        if (prevState?.status !== PlayerStatus.Normal) {
+          // decision -> consequence
+          this.router.push(`/${gameId}/event/consequence`);
+        } else {
+          // normal travel
+          this.router.push(`/${gameId}/${location}`);
+        }
+      } else {
+        this.router.push(`/${gameId}/event/decision`);
+      }
     }
-  };
-
-  onGameEvent = ({ data }: { data: World__Subscription }) => {
-    if (!data?.eventEmitted) return;
-
-    const worldEvent = data.eventEmitted as World__Event;
-    this.gameEvents!.addEvent(worldEvent);
-  };
+  }
 }

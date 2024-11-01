@@ -2,8 +2,8 @@ export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-// import { StarkVRF } from "stark-vrf-wasm";
 import { AccountInterface, BlockTag, Call, CallData, hash, selector } from "starknet";
+import { EnumValue, Ty } from "../../../../dojo.c/pkg/dojo_c";
 
 enum Source {
   Nonce = 0x0,
@@ -85,3 +85,23 @@ export const buildVrfCalls = async ({
   // console.log("calls", calls);
   return calls;
 };
+
+export function parseValue(value: Ty): any {
+  switch (value.type) {
+    case "primitive":
+      return value.value;
+    case "struct":
+      return parseStruct(value.value as Record<string, Ty> | Map<string, Ty>);
+    case "enum":
+      return (value.value as EnumValue).option;
+    case "array":
+      return (value.value as Ty[]).map(parseValue);
+    default:
+      return value.value;
+  }
+}
+
+export function parseStruct(struct: Record<string, Ty> | Map<string, Ty>): any {
+  const entries = struct instanceof Map ? Array.from(struct.entries()) : Object.entries(struct);
+  return Object.fromEntries(entries.map(([key, value]) => [key, parseValue(value)]));
+}

@@ -182,7 +182,7 @@ export class ConfigStoreClass {
     const drugConfigFull = drugConfig.map((i) => {
       return {
         ...i,
-        name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
+        name: shortString.decodeShortString(i?.name?.value), 
         icon: drugIcons[i.drug as drugIconsKeys],
       } as DrugConfigFull;
     });
@@ -193,7 +193,7 @@ export class ConfigStoreClass {
       return [
         {
           ...i,
-          name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
+          name: shortString.decodeShortString(i?.name?.value),
           icon: locationIcons[i.location as locationIconsKeys],
         },
       ] as LocationConfigFull[];
@@ -207,19 +207,6 @@ export class ConfigStoreClass {
       entrypoint: "get_config",
       calldata: [],
     });
-
-    // getConfig = 
-
-    // const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
-
-    // const contract: TypedContractV2<typeof configAbi> = new Contract(
-    //   contractInfos.abi,
-    //   contractInfos.address,
-    //   this.dojoProvider.provider,
-    // ).typedv2(configAbi);
-
-    // ///@ts-ignore
-    // const getConfig = yield contract.get_config();
 
     /*************************************************** */
 

@@ -5,7 +5,6 @@ import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { parseEvent, TraveledData } from "@/dojo/events";
 import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
@@ -15,8 +14,7 @@ import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Subscription, Event } from "../../../../../dojo.c/pkg/dojo_c";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface MarketPriceInfo {
   drug: string;
@@ -27,17 +25,10 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { account } = useAccount();
-  const { game, gameConfig } = useGameStore();
+  const { game, gameConfig, gameEvents } = useGameStore();
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
-  const {
-    chains: { selectedChain },
-    toriiClient,
-  } = useDojoContext();
-
-  const toaster = useToast();
 
   const [targetLocation, setTargetLocation] = useState<string>("");
   const [currentLocation, setCurrentLocation] = useState<string>();
@@ -131,70 +122,13 @@ const Travel = observer(() => {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { event, events, hash, isGameOver } = await travel(gameId!, locationId, game.getPendingCalls());
-
-        if (isGameOver) {
-          return router.replace(`/${gameId}/end`);
-        }
-
-        if (event) {
-          if (event.eventType === WorldEvents.TravelEncounter) {
-            return router.push(`/${gameId}/event/decision`);
-          }
-        }
-
-        // use subscription instead
-        // router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
+        const { hash } = await travel(gameId!, locationId, game.getPendingCalls());
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);
       }
     }
   }, [targetLocation, router, gameId, travel, game, configStore]);
-
-  const subscription = useRef<Subscription>();
-
-  useEffect(() => {
-    const init = async () => {
-      if (account?.address && !subscription.current) {
-        // subscribe to changes
-        subscription.current = await toriiClient.onStarknetEvent(
-          [
-            {
-              Keys: {
-                keys: [WorldEvents.Traveled, undefined, account?.address],
-                models: [],
-                pattern_matching: "VariableLen",
-              },
-            },
-          ],
-          onStarknetEvent,
-        );
-      }
-    };
-
-    init();
-
-    return () => {
-      if (subscription.current) subscription.current.cancel();
-    };
-  }, [selectedChain, account?.address]);
-
-  const onStarknetEvent = (event: Event) => {
-    if (Number(event.transaction_hash) === 0) return;
-
-    const e = parseEvent(selectedChain.manifest, event);
-
-    switch (e.eventType) {
-      case WorldEvents.Traveled:
-        const traveled = e as TraveledData;
-        router.push(`/${gameId}/${configStore.getLocationById(traveled.toLocationId)!.location.toLowerCase()}`);
-        break;
-
-      default:
-        break;
-    }
-  };
 
   if (!game) return <></>;
 
@@ -225,7 +159,7 @@ const Travel = observer(() => {
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isDisabled={!targetLocation || targetLocation === currentLocation}
-              isLoading={isPending /*&& !txError*/}
+              isLoading={isPending}
               onClick={onContinue}
             >
               Travel
@@ -377,6 +311,3 @@ const LocationSelectBar = ({ name, onNext, onBack }: { name?: string; onNext: ()
     </HStack>
   );
 };
-function toast(arg0: { icon: () => JSX.Element; message: string }) {
-  throw new Error("Function not implemented.");
-}

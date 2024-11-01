@@ -159,7 +159,7 @@ export default function Slot() {
   const { rollSlot } = useSystems();
   const {
     chains: { selectedChain },
-    toriiClient,
+    clients: { toriiClient },
   } = useDojoContext();
   const { toast } = useToast();
   const { gameId } = useRouterContext();
@@ -250,6 +250,7 @@ export default function Slot() {
               },
             },
           ],
+          false,
           onEventMessageUpdated,
         );
         setSubscriptionEvents(subEvents);

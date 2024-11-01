@@ -9,7 +9,7 @@ use rollyourown::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}
     },
     packing::{
-        game_store::{GameStore,},
+        game_store::{GameStore, GameStoreTrait},
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
         markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
@@ -129,14 +129,11 @@ impl PlayerImpl of PlayerTrait {
         self.health = self.health.sub_capped(amount, 0);
     }
 
-    fn level_up_drug(
-        ref self: Player,
-        ref game_store: GameStore,
-        ref randomizer: Random,
-        ref game_config: GameConfig
-    ) {
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random,) {
         // level up each rep_drug_step capped to 4
-        let mut drug_level: u8 = MathImpl::min(self.reputation / game_config.rep_drug_step, 4);
+        let mut drug_level: u8 = MathImpl::min(
+            self.reputation / game_store.game_config().rep_drug_step, 4
+        );
 
         // check if already the right level
         if self.drug_level == drug_level {

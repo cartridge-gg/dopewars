@@ -208,7 +208,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Paid the Cop",
-    encounterOutcome: EncounterOutcomes.Paid,
+    encounterOutcome: "Paid",
     encounter: Encounters.Cops,
     imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
@@ -218,7 +218,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Paid the Gang",
-    encounterOutcome: EncounterOutcomes.Paid,
+    encounterOutcome: "Paid",
     encounter: Encounters.Gang,
     imageSrc: "/images/events/paid.png",
     description: "You paid the gang off",
@@ -228,7 +228,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Escaped",
-    encounterOutcome: EncounterOutcomes.Escaped,
+    encounterOutcome: "Escaped",
     encounter: Encounters.Cops,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Escaped, isInitial),
@@ -238,7 +238,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Escaped",
-    encounterOutcome: EncounterOutcomes.Escaped,
+    encounterOutcome: "Escaped",
     encounter: Encounters.Gang,
     imageSrc: "/images/events/escaped.png",
     getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Escaped, isInitial),
@@ -248,7 +248,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Got killed by the Cops",
-    encounterOutcome: EncounterOutcomes.Died,
+    encounterOutcome: "Died",
     encounter: Encounters.Cops,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Died, isInitial),
@@ -257,7 +257,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You",
     name: "Got killed by the Gang",
-    encounterOutcome: EncounterOutcomes.Died,
+    encounterOutcome: "Died",
     encounter: Encounters.Gang,
     imageSrc: "/images/events/fought.png",
     getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Died, isInitial),
@@ -266,7 +266,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Victorious!",
-    encounterOutcome: EncounterOutcomes.Victorious,
+    encounterOutcome: "Victorious",
     encounter: Encounters.Cops,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Victorious, isInitial),
@@ -275,7 +275,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Victorious!",
-    encounterOutcome: EncounterOutcomes.Victorious,
+    encounterOutcome: "Victorious",
     encounter: Encounters.Gang,
     imageSrc: "/images/events/victorious.png",
     getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Victorious, isInitial),
@@ -284,7 +284,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Jailed!",
-    encounterOutcome: EncounterOutcomes.Jailed,
+    encounterOutcome: "Jailed",
     encounter: Encounters.Cops,
     imageSrc: "/images/events/police_cruiser.gif",
     getResponse: (isInitial: boolean) => getCopResponses(EncounterOutcomes.Jailed, isInitial),
@@ -293,7 +293,7 @@ export const outcomes: OutcomeInfo[] = [
   {
     title: "You are",
     name: "Hospitalized!",
-    encounterOutcome: EncounterOutcomes.Hospitalized,
+    encounterOutcome: "Hospitalized",
     encounter: Encounters.Gang,
     imageSrc: "/images/events/hospital.png",
     getResponse: (isInitial: boolean) => getMuggerResponses(EncounterOutcomes.Hospitalized, isInitial),
@@ -311,7 +311,7 @@ export const outcomeNames = {
 };
 export type outcomeNamesKeys = keyof typeof outcomeNames;
 
-export function getOutcomeInfo(encounter: Encounters, encounterOutcome: EncounterOutcomes): OutcomeInfo {
+export function getOutcomeInfo(encounter: Encounters, encounterOutcome: string): OutcomeInfo {
   const found = outcomes.find((i) => {
     return i.encounter === encounter && i.encounterOutcome === encounterOutcome;
   });

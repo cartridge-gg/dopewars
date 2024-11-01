@@ -1,31 +1,23 @@
 import { Button } from "@/components/common";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
+import {
+  GameCreated,
+  GameOver,
+  TradeDrug,
+  Traveled,
+  TravelEncounter,
+  TravelEncounterResult,
+  UpgradeItem,
+} from "@/components/layout/GlobalEvents";
 import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
 import { Loadout } from "@/components/pages/profile/Loadout";
 import { Inventory } from "@/components/player";
+import { DojoEvent } from "@/dojo/class/Events";
 import { GameClass } from "@/dojo/class/Game";
-import {
-  GameCreatedData,
-  GameOverData,
-  ParseEventResult,
-  TradeDrugData,
-  TravelEncounterData,
-  TravelEncounterResultData,
-  TraveledData,
-  UpgradeItemData,
-} from "@/dojo/events";
-import { WorldEvents } from "@/dojo/generated/contractEvents";
-import {
-  encountersActionName,
-  encountersActionNameKeys,
-  outcomeNames,
-  outcomeNamesKeys,
-  reputationRanks,
-  reputationRanksKeys,
-} from "@/dojo/helpers";
+import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { ConfigStoreClass, LocationConfigFull } from "@/dojo/stores/config";
+import { LocationConfigFull } from "@/dojo/stores/config";
 import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
 import { IsMobile, formatCash } from "@/utils/ui";
 import {
@@ -53,7 +45,7 @@ import { shortString } from "starknet";
 type LogByDay = {
   day: number;
   location: LocationConfigFull | undefined;
-  logs: ParseEventResult[];
+  logs: DojoEvent[];
 };
 
 const Logs = () => {
@@ -73,6 +65,8 @@ const Logs = () => {
   useEffect(() => {
     if (!gameEvents?.sortedEvents) return;
 
+    console.log("LOGSSS");
+
     const logsByDay = [];
 
     let dayLogs: LogByDay = {
@@ -81,45 +75,47 @@ const Logs = () => {
       logs: [],
     };
 
-    for (let log of gameEvents?.sortedEvents) {
-      if (log.parsed.eventType === WorldEvents.GameCreated) {
+    for (let log of gameEvents?.sortedEvents.reverse()) {
+      if (!log) continue;
+      if (log.eventName === "GameCreated") {
         // setPlayerName((log.parsed as GameCreatedData).playerName);
-        setPlayerHustlerId((log.parsed as GameCreatedData).hustlerId);
+        setPlayerHustlerId((log.event as GameCreated).hustler_id);
       }
 
-      if (log.parsed.eventType === WorldEvents.Traveled) {
+      if (log.eventName === "Traveled") {
         // create new day
         logsByDay.push(dayLogs);
 
-        const travelEvent = log.parsed as TraveledData;
+        const travelEvent = log.event as Traveled;
 
         dayLogs = {
           day: travelEvent.turn,
-          location: configStore.getLocationById(travelEvent.toLocationId),
+          location: configStore.getLocationById(travelEvent.to_location_id),
           logs: [],
         };
       } else {
         // push other events in dayLogs
-        dayLogs.logs.push(log.parsed);
+        dayLogs.logs.push(log);
       }
     }
     logsByDay.push(dayLogs);
+    console.log(logsByDay);
 
-    // move day 0 hood events to day 0 location events
-    const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && !i.location);
-    const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location);
+    // // move day 0 hood events to day 0 location events
+    // const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && !i.location);
+    // const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location);
 
-    if (day0HoodIndex > -1 && day0Index > -1) {
-      const day0Hood = logsByDay[day0HoodIndex];
-      const day0 = logsByDay[day0Index];
-      day0.logs.unshift(...day0Hood.logs);
-      day0Hood.logs = [];
-      logsByDay[day0HoodIndex] = day0Hood;
-      logsByDay[day0Index] = day0;
-    }
+    // if (day0HoodIndex > -1 && day0Index > -1) {
+    //   const day0Hood = logsByDay[day0HoodIndex];
+    //   const day0 = logsByDay[day0Index];
+    //   day0.logs.unshift(...day0Hood.logs);
+    //   day0Hood.logs = [];
+    //   logsByDay[day0HoodIndex] = day0Hood;
+    //   logsByDay[day0Index] = day0;
+    // }
 
     setLogs(logsByDay);
-  }, [gameEvents?.sortedEvents, configStore]);
+  }, [gameEvents?.sortedEvents, gameEvents?.sortedEvents.length, configStore]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -129,7 +125,7 @@ const Logs = () => {
   }, [logs]);
 
   //const rigthPanelMaxH = isMobile ? (playerId ? "calc(100dvh - 140px)" : "calc(100dvh - 400px)") : "auto";
-  const rigthPanelMaxH = isMobile ? "calc(100dvh - 140px)" : "auto";
+  // const rigthPanelMaxH = isMobile ? "calc(100dvh - 140px)" : "auto";
 
   if (!logs || !game) {
     return <></>;
@@ -156,8 +152,6 @@ const Logs = () => {
         </Footer>
       }
       isSinglePanel={true}
-      // CustomLeftPanel={CustomLeftPanel}
-      // rigthPanelMaxH={rigthPanelMaxH}
     >
       <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
         <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
@@ -204,9 +198,6 @@ const CustomLeftPanel = () => {
       marginBottom={["30px", "50px"]}
       gap={0}
     >
-      {/* <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
-        {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
-      </Text> */}
       <Heading
         fontSize={["30px", "48px"]}
         fontWeight="400"
@@ -244,24 +235,26 @@ function renderDay(game: GameClass, log: LogByDay) {
         {log.logs.map((i, idx) => {
           const key = `key-${log.day}-${idx}`;
 
-          switch (i.eventType) {
-            case WorldEvents.TradeDrug:
-              return renderTradeDrug(game, i as TradeDrugData, key);
+          switch (i.eventName) {
+            case "TradeDrug":
+              return renderTradeDrug(game, i.event as TradeDrug, key);
               break;
 
-            case WorldEvents.UpgradeItem:
-              return renderUpgradeItem(game, i as UpgradeItemData, key);
+            case "UpgradeItem":
+              return renderUpgradeItem(game, i.event as UpgradeItem, key);
               break;
 
-            case WorldEvents.TravelEncounter:
-              return renderTravelEncounter(game, i as TravelEncounterData, log, key);
+            case "TravelEncounter":
+              return renderTravelEncounter(game, i.event as TravelEncounter, log, key);
               break;
 
-            case WorldEvents.GameOver:
-              return renderGameOver(i as GameOverData, key);
+            case "GameOver":
+              debugger
+              return renderGameOver(i.event as GameOver, key);
               break;
 
             default:
+              return <></>;
               break;
           }
         })}
@@ -270,10 +263,10 @@ function renderDay(game: GameClass, log: LogByDay) {
   );
 }
 
-function renderTradeDrug(game: GameClass, log: TradeDrugData, key: string) {
-  const drug = game.configStore.getDrugById(game.seasonSettings.drugs_mode, Number(log.drugId))!;
-  const action = log.isBuy ? "Bought" : "Sold";
-  const sign = log.isBuy ? "-" : "+";
+function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
+  const drug = game.configStore.getDrugById(game.seasonSettings.drugs_mode, Number(log.drug_id))!;
+  const action = log.is_buy ? "Bought" : "Sold";
+  const sign = log.is_buy ? "-" : "+";
   const totalPrice = log.price * log.quantity;
   return (
     <Line
@@ -286,9 +279,9 @@ function renderTradeDrug(game: GameClass, log: TradeDrugData, key: string) {
   );
 }
 
-function renderUpgradeItem(game: GameClass, log: UpgradeItemData, key: string) {
+function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
   let item_id = 0;
-  switch (log.itemSlot) {
+  switch (log.item_slot) {
     case ItemSlot.Weapon:
       item_id = game.items.hustlerConfig.weapon.base.id;
       break;
@@ -306,7 +299,7 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItemData, key: string) {
       break;
   }
 
-  const item = game.configStore.getHustlerItemByIds(item_id, log.itemSlot, log.itemLevel);
+  const item = game.configStore.getHustlerItemByIds(item_id, log.item_slot, log.item_level);
 
   return (
     <Line
@@ -320,12 +313,12 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItemData, key: string) {
   );
 }
 
-function renderTravelEncounter(game: GameClass, log: TravelEncounterData, dayLog: LogByDay, key: string) {
+function renderTravelEncounter(game: GameClass, log: TravelEncounter, dayLog: LogByDay, key: string) {
   const icon = log.encounter === Encounters.Cops ? CopsIcon : GangIcon;
 
   const results = dayLog.logs
-    .filter((i) => i.eventType === WorldEvents.TravelEncounterResult)
-    .map((i) => i as TravelEncounterResultData);
+    .filter((i) => i.eventName === "TravelEncounterResult")
+    .map((i) => i as unknown as TravelEncounterResult);
 
   const lastEncounterResult = results.length > 0 ? results[results.length - 1] : undefined;
   const lastEncounterResultName = lastEncounterResult
@@ -333,7 +326,7 @@ function renderTravelEncounter(game: GameClass, log: TravelEncounterData, dayLog
     : "";
 
   const action = lastEncounterResult?.action;
-  const totalHpLoss = lastEncounterResult?.dmgTaken.map((i) => i[0]).reduce((p, c) => p + c, 0) || 0;
+  const totalHpLoss = lastEncounterResult?.dmg_taken.map((i) => i[0]).reduce((p, c) => p + c.value, 0) || 0;
 
   return (
     <FightLine
@@ -349,11 +342,11 @@ function renderTravelEncounter(game: GameClass, log: TravelEncounterData, dayLog
   );
 }
 
-function renderGameOver(log: GameOverData, key: string) {
+function renderGameOver(log: GameOver, key: string) {
   return (
     <ListItem key={key} w="full" mt="40px">
       <Text w="full" fontStyle="headings" fontSize={["16px", "20px"]} textTransform="uppercase" textAlign="center">
-        WP <br /> ~ {log.playerName} ~
+        WP <br /> ~ {log.player_name} ~
       </Text>
       <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
     </ListItem>
@@ -411,7 +404,7 @@ const FightLine = ({
   icon?: React.FC;
   text?: string;
   result?: string;
-  resultInfos?: TravelEncounterResultData;
+  resultInfos?: TravelEncounterResult;
   consequence?: string;
   action?: EncountersAction;
   lineKey: string;
@@ -421,12 +414,12 @@ const FightLine = ({
 
   useEffect(() => {
     if (resultInfos && resultInfos.outcome === EncounterOutcomes.Victorious) {
-      setResultTooltip(`+ ${formatCash(resultInfos.cashEarnt)}`);
+      setResultTooltip(`+ ${formatCash(resultInfos.cash_earnt)}`);
     } else if (resultInfos && resultInfos.outcome === EncounterOutcomes.Paid) {
-      if (resultInfos.cashLoss > 0) {
-        setResultTooltip(`- ${formatCash(resultInfos.cashLoss)}`);
+      if (resultInfos.cash_loss > 0) {
+        setResultTooltip(`- ${formatCash(resultInfos.cash_loss)}`);
       } else {
-        setResultTooltip(`- ${resultInfos.drugLoss.reduce((p, c) => p + c, 0)} Drugs`);
+        setResultTooltip(`- ${resultInfos.drug_loss.reduce((p, c) => p + c, 0)} Drugs`);
       }
     } else {
       setResultTooltip("");
