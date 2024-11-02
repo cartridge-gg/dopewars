@@ -72,6 +72,7 @@ fn execute_action(ref game_store: GameStore, action: Action) {
             @UpgradeItem {
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
                 item_slot: action.slot.into(),
                 item_level: next_level,
             }

@@ -1,8 +1,8 @@
 export const ABI = [
   {
     "type": "impl",
-    "name": "ContractImpl",
-    "interface_name": "dojo::contract::contract::IContract"
+    "name": "config__ContractImpl",
+    "interface_name": "dojo::contract::interface::IContract"
   },
   {
     "type": "struct",
@@ -24,11 +24,11 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "dojo::contract::contract::IContract",
+    "name": "dojo::contract::interface::IContract",
     "items": [
       {
         "type": "function",
-        "name": "name",
+        "name": "dojo_name",
         "inputs": [],
         "outputs": [
           {
@@ -36,113 +36,15 @@ export const ABI = [
           }
         ],
         "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "namespace",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::byte_array::ByteArray"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "tag",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::byte_array::ByteArray"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "name_hash",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "namespace_hash",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "selector",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
       }
     ]
   },
   {
-    "type": "impl",
-    "name": "WorldProviderImpl",
-    "interface_name": "dojo::world::world_contract::IWorldProvider"
-  },
-  {
-    "type": "struct",
-    "name": "dojo::world::world_contract::IWorldDispatcher",
-    "members": [
-      {
-        "name": "contract_address",
-        "type": "core::starknet::contract_address::ContractAddress"
-      }
-    ]
-  },
-  {
-    "type": "interface",
-    "name": "dojo::world::world_contract::IWorldProvider",
-    "items": [
-      {
-        "type": "function",
-        "name": "world",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "dojo::world::world_contract::IWorldDispatcher"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "IDojoInitImpl",
-    "interface_name": "rollyourown::config::config::config::IDojoInit"
-  },
-  {
-    "type": "interface",
-    "name": "rollyourown::config::config::config::IDojoInit",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_init",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "external"
-      }
-    ]
+    "type": "function",
+    "name": "dojo_init",
+    "inputs": [],
+    "outputs": [],
+    "state_mutability": "external"
   },
   {
     "type": "impl",
@@ -634,12 +536,44 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "UpgradableImpl",
-    "interface_name": "dojo::contract::upgradeable::IUpgradeable"
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::iworld::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
   },
   {
     "type": "interface",
-    "name": "dojo::contract::upgradeable::IUpgradeable",
+    "name": "dojo::contract::components::world_provider::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world_dispatcher",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::iworld::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradeableImpl",
+    "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::contract::components::upgradeable::IUpgradeable",
     "items": [
       {
         "type": "function",
@@ -656,8 +590,13 @@ export const ABI = [
     ]
   },
   {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": []
+  },
+  {
     "type": "event",
-    "name": "dojo::contract::upgradeable::upgradeable::Upgraded",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
     "kind": "struct",
     "members": [
       {
@@ -669,15 +608,21 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "dojo::contract::upgradeable::upgradeable::Event",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Upgraded",
-        "type": "dojo::contract::upgradeable::upgradeable::Upgraded",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
         "kind": "nested"
       }
     ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+    "kind": "enum",
+    "variants": []
   },
   {
     "type": "event",
@@ -686,7 +631,12 @@ export const ABI = [
     "variants": [
       {
         "name": "UpgradeableEvent",
-        "type": "dojo::contract::upgradeable::upgradeable::Event",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+        "kind": "nested"
+      },
+      {
+        "name": "WorldProviderEvent",
+        "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
         "kind": "nested"
       }
     ]

@@ -83,6 +83,7 @@ fn buy(ref game_store: GameStore, trade: Trade,) {
             @TradeDrug {
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
                 drug_id: Into::<Drugs, u8>::into(trade.drug).into(),
                 quantity: trade.quantity,
                 price: market_price,
@@ -123,6 +124,7 @@ fn sell(ref game_store: GameStore, trade: Trade) {
             @TradeDrug {
                 game_id: game_store.game.game_id,
                 player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
                 drug_id: Into::<Drugs, u8>::into(trade.drug).into(),
                 quantity: trade.quantity,
                 price: market_price,

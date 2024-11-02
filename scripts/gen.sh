@@ -7,8 +7,8 @@ else
     export PROFILE="dev"
 fi
 
-npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/contracts/dopewars-config-45ebce66.json --output ./web/src/dojo/abis/configAbi.ts
-npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/contracts/dopewars-paper_mock-3534f748.json --output ./web/src/dojo/abis/paperAbi.ts
+npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/rollyourown_config.contract_class.json --output ./web/src/dojo/abis/configAbi.ts
+npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/rollyourown_paper_mock.contract_class.json --output ./web/src/dojo/abis/paperAbi.ts
 
 pushd $(dirname "$0")/../web
 

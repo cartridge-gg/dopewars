@@ -117,6 +117,7 @@ fn on_travel(
                 @TravelEncounter {
                     game_id: game_store.game.game_id,
                     player_id: game_store.game.player_id,
+                    turn: game_store.player.turn,
                     encounter: encounter.encounter.into(),
                     level: encounter.level,
                     health: encounter.health,
@@ -194,6 +195,7 @@ fn create_travel_encounter_result(
     TravelEncounterResult {
         game_id: game_store.game.game_id,
         player_id: game_store.game.player_id,
+        turn: game_store.player.turn,
         action: action,
         outcome: EncounterOutcomes::Paid, // must be overrided after
         rounds: 0,

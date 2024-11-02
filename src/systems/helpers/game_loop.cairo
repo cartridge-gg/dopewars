@@ -71,9 +71,9 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
                 @Traveled {
                     game_id: game_store.game.game_id,
                     player_id: game_store.game.player_id,
-                    turn: game_store.player.turn - 1,
+                    turn: game_store.player.turn,
                     from_location_id: game_store.player.prev_location.into(),
-                    to_location_id: game_store.player.prev_location.into(),
+                    to_location_id: game_store.player.location.into(),
                 }
             );
     }

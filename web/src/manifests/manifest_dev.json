@@ -1772,8 +1772,8 @@
       "systems": []
     },
     {
-      "address": "0x66a2b5e7a3aa9e46dba4d8045c3ea6cf74ac1f5b3a780fb26a62c92f6802138",
-      "class_hash": "0x5c98e3a494ccf7889faab0856514e2e151e1b8401084be8c7db740311894ebb",
+      "address": "0x52acc11916545f9f10cac55433ffecc5d6d7732e03cecce6150f4a1a84f9e63",
+      "class_hash": "0x26823c59646e92287c24f230c8dc0dea9b038a4aa2a1332335ead2bbf5dd2d8",
       "abi": [
         {
           "type": "impl",
@@ -2214,8 +2214,8 @@
       "systems": []
     },
     {
-      "address": "0x5933df764b64e25647a32f78aeaafa7e363d29994efa511d882d11fc36f4929",
-      "class_hash": "0x501db6ccd582d12235fde6e07500d9193898dbc0ea0d268bc6f5ae43fac8894",
+      "address": "0x3db25eda3739adba432711d54124d4a47db47817e4b91fdbb0fda92caa0bf82",
+      "class_hash": "0x6e8962b0a34b668652e251e77745d3697d11ea9b9f3f0e474c958f31eab36a5",
       "abi": [
         {
           "type": "impl",
@@ -2878,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0x3d43e4b074f548ae6adcbc228e1d15269975caef1f00f34c1262082b515a83a",
-      "class_hash": "0x775dcc52afd8156c943c46422e42b9a4d05677e3e45d15ba4e0a7d9fb064951",
+      "address": "0x7b9d9e4bb6f4ca2976d3bbdcaa956beca43c46494fec77a73c04dd29b3d0516",
+      "class_hash": "0x5860abdd3915db19e54f1a82feca98372b6aa628e17ce5b7f7225d8f959645b",
       "abi": [
         {
           "type": "impl",
@@ -3811,17 +3811,17 @@
     },
     {
       "members": [],
-      "class_hash": "0x9852a1cde70f0b0c55dae3f8ca1bad5f06c3fa02503fd5492969b17a84f307",
+      "class_hash": "0x1204dfd315529756a88b616fdfc47c80933f8befa73618ef7f4d7c033400f7c",
       "tag": "TradeDrug"
     },
     {
       "members": [],
-      "class_hash": "0x5977ee4eabc52c7c017d3fada397af080ab8ed7f89f0a4629e211bd8d311f81",
+      "class_hash": "0x4d5f4c75db689da2ff22256d05db35bce62b9d3bab31ec5e6ee3131f9b61f29",
       "tag": "TravelEncounter"
     },
     {
       "members": [],
-      "class_hash": "0x6a281067c3ce103639302f31c05316109689eddf5016e374635ad4f97dade32",
+      "class_hash": "0x1b949e600fddc505d6280aa83087396100c6e9fb60923cb27a268ba73a321af",
       "tag": "TravelEncounterResult"
     },
     {
@@ -3831,7 +3831,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x330b2c10008dc5b0f5d2d0444aad006f98c789d82eb74c35204b9679afe49f4",
+      "class_hash": "0x4e7b79b879df1deb45ee3b8218b6a3961e1d2d9d828595f19ce38573becffd2",
       "tag": "UpgradeItem"
     }
   ]

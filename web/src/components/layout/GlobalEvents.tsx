@@ -200,6 +200,7 @@ export interface GameOver {
 export interface TravelEncounter {
   game_id: number;
   player_id: string;
+  turn: number;
   encounter: string;
   level: number;
   health: number;
@@ -213,6 +214,7 @@ export interface TravelEncounter {
 export interface TravelEncounterResult {
   game_id: number;
   player_id: string;
+  turn: number;
   action: any;
   outcome: any;
   rounds: number;
@@ -232,6 +234,7 @@ export interface TravelEncounterResult {
 export interface TradeDrug {
   game_id: number;
   player_id: string;
+  turn: number;
   drug_id: number;
   quantity: number;
   price: number;
@@ -248,6 +251,7 @@ export interface HighVolatility {
 export interface UpgradeItem {
   game_id: number;
   player_id: string;
+  turn: number;
   item_slot: number;
   item_level: number;
 }

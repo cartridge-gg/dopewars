@@ -2,7 +2,6 @@ import { Button } from "@/components/common";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import {
-  GameCreated,
   GameOver,
   TradeDrug,
   Traveled,
@@ -17,9 +16,8 @@ import { DojoEvent } from "@/dojo/class/Events";
 import { GameClass } from "@/dojo/class/Game";
 import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { LocationConfigFull } from "@/dojo/stores/config";
-import { EncounterOutcomes, Encounters, EncountersAction, ItemSlot } from "@/dojo/types";
-import { IsMobile, formatCash } from "@/utils/ui";
+import { EncounterOutcomes, EncountersAction, ItemSlot } from "@/dojo/types";
+import { formatCash } from "@/utils/ui";
 import {
   Box,
   Flex,
@@ -42,79 +40,85 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { shortString } from "starknet";
 
-type LogByDay = {
-  day: number;
-  location: LocationConfigFull | undefined;
-  logs: DojoEvent[];
+type IndexedDojoEvent = {
+  index: number;
+  dojoEvent: DojoEvent;
 };
 
 const Logs = () => {
-  const { router, gameId } = useRouterContext();
+  const { router } = useRouterContext();
 
   const { account } = useAccount();
   const configStore = useConfigStore();
-  const { game, gameInfos, gameConfig, gameEvents } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
 
-  const [playerHustlerId, setPlayerHustlerId] = useState(0);
-
-  const [logs, setLogs] = useState<LogByDay[]>([]);
+  const [sortedEvents, setSortedEvents] = useState<IndexedDojoEvent[]>([]);
   const listRef = useRef(null);
-
-  const isMobile = IsMobile();
 
   useEffect(() => {
     if (!gameEvents?.sortedEvents) return;
 
-    console.log("LOGSSS");
+    const sortedEvents = gameEvents?.sortedEvents
+      .flatMap((event: DojoEvent) => {
+        switch (event.eventName) {
+          case "Traveled":
+            return [
+              {
+                index: (event.event as Traveled).turn * 100,
+                dojoEvent: event,
+              },
+            ];
 
-    const logsByDay = [];
+          case "TradeDrug":
+            return [
+              {
+                index: (event.event as TradeDrug).turn * 100 + event.idx + ((event.event as TradeDrug).is_buy ? 30 : 1),
+                dojoEvent: event,
+              },
+            ];
 
-    let dayLogs: LogByDay = {
-      day: 0,
-      location: undefined,
-      logs: [],
-    };
+          case "UpgradeItem":
+            return [
+              {
+                index: (event.event as UpgradeItem).turn * 100 + event.idx + 20,
+                dojoEvent: event,
+              },
+            ];
 
-    for (let log of gameEvents?.sortedEvents.reverse()) {
-      if (!log) continue;
-      if (log.eventName === "GameCreated") {
-        // setPlayerName((log.parsed as GameCreatedData).playerName);
-        setPlayerHustlerId((log.event as GameCreated).hustler_id);
-      }
+          case "TravelEncounter":
+            return [
+              {
+                index: (event.event as TravelEncounter).turn * 100 + event.idx + 50,
+                dojoEvent: event,
+              },
+            ];
 
-      if (log.eventName === "Traveled") {
-        // create new day
-        logsByDay.push(dayLogs);
+          case "TravelEncounterResult":
+            return [
+              {
+                index: (event.event as TravelEncounterResult).turn * 100 + event.idx + 50 + 1,
+                dojoEvent: event,
+              },
+            ];
+          case "GameOver":
+            return [
+              {
+                index: (event.event as GameOver).turn * 100 + event.idx + 69 + 1,
+                dojoEvent: event,
+              },
+            ];
 
-        const travelEvent = log.event as Traveled;
+          default:
+            return [];
+        }
+      })
+      .sort((a, b) => a.index - b.index);
 
-        dayLogs = {
-          day: travelEvent.turn,
-          location: configStore.getLocationById(travelEvent.to_location_id),
-          logs: [],
-        };
-      } else {
-        // push other events in dayLogs
-        dayLogs.logs.push(log);
-      }
-    }
-    logsByDay.push(dayLogs);
-    console.log(logsByDay);
-
-    // // move day 0 hood events to day 0 location events
-    // const day0HoodIndex = logsByDay.findIndex((i) => i.day === 0 && !i.location);
-    // const day0Index = logsByDay.findIndex((i) => i.day === 0 && i.location);
-
-    // if (day0HoodIndex > -1 && day0Index > -1) {
-    //   const day0Hood = logsByDay[day0HoodIndex];
-    //   const day0 = logsByDay[day0Index];
-    //   day0.logs.unshift(...day0Hood.logs);
-    //   day0Hood.logs = [];
-    //   logsByDay[day0HoodIndex] = day0Hood;
-    //   logsByDay[day0Index] = day0;
+    // for (const e of sortedEvents) {
+    //   console.log(e.index, e.dojoEvent.eventName, e.dojoEvent.event);
     // }
 
-    setLogs(logsByDay);
+    setSortedEvents(sortedEvents);
   }, [gameEvents?.sortedEvents, gameEvents?.sortedEvents.length, configStore]);
 
   useEffect(() => {
@@ -122,12 +126,9 @@ const Logs = () => {
     const lastEl = listRef.current["lastElementChild"];
     // @ts-ignore
     lastEl && lastEl.scrollIntoView({ behavior: "smooth" });
-  }, [logs]);
+  }, [sortedEvents]);
 
-  //const rigthPanelMaxH = isMobile ? (playerId ? "calc(100dvh - 140px)" : "calc(100dvh - 400px)") : "auto";
-  // const rigthPanelMaxH = isMobile ? "calc(100dvh - 140px)" : "auto";
-
-  if (!logs || !game) {
+  if (!sortedEvents || !game) {
     return <></>;
   }
 
@@ -142,7 +143,6 @@ const Logs = () => {
               if (gameInfos?.game_over || !account || account.address !== gameInfos?.player_id) {
                 router.push("/");
               } else {
-                // return to game
                 router.back();
               }
             }}
@@ -153,7 +153,7 @@ const Logs = () => {
       }
       isSinglePanel={true}
     >
-      <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
+      <VStack w="full" h={["100%", "calc(100% - 120px)"]}>
         <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
           <CustomLeftPanel />
 
@@ -171,13 +171,23 @@ const Logs = () => {
               </TabPanel>
               <TabPanel w="full" maxH="600px" h={["auto", "100%"]} overflowY={["auto", "scroll"]}>
                 <VStack w="full" mt={["-20px", "-30px"]} ref={listRef}>
-                  {logs && logs.map((log) => renderDay(game, log))}
+                  <UnorderedList listStyleType={"none"} w="full">
+                    {sortedEvents &&
+                      sortedEvents.map((dojoEvent) => {
+                        const related =
+                          dojoEvent.dojoEvent.eventName === "TravelEncounter"
+                            ? sortedEvents.find((i) => i.index === dojoEvent.index + 1)
+                            : undefined;
+
+                        return renderEvent(game, dojoEvent, related);
+                      })}
+                  </UnorderedList>
                 </VStack>
               </TabPanel>
             </TabPanels>
           </Tabs>
         </Flex>
-        {isMobile && <Box display="block" minH={"80px"} w="full" />}
+        <Box display="block" minH={"80px"} w="full" />
       </VStack>
     </Layout>
   );
@@ -219,47 +229,43 @@ const CustomLeftPanel = () => {
   );
 };
 
-function renderDay(game: GameClass, log: LogByDay) {
+function renderEvent(game: GameClass, indexedEvent: IndexedDojoEvent, relatedEvent?: IndexedDojoEvent) {
+  switch (indexedEvent.dojoEvent.eventName) {
+    case "Traveled":
+      return renderTraveled(game, indexedEvent.dojoEvent.event as Traveled, `ak-${indexedEvent.index}`);
+
+    case "TradeDrug":
+      return renderTradeDrug(game, indexedEvent.dojoEvent.event as TradeDrug, `ak-${indexedEvent.index}`);
+
+    case "UpgradeItem":
+      return renderUpgradeItem(game, indexedEvent.dojoEvent.event as UpgradeItem, `ak-${indexedEvent.index}`);
+
+    case "TravelEncounter":
+      return renderTravelEncounter(
+        game,
+        indexedEvent.dojoEvent.event as TravelEncounter,
+        relatedEvent!.dojoEvent.event as TravelEncounterResult,
+        `ak-${indexedEvent.index}`,
+      );
+
+    case "GameOver":
+      return renderGameOver(indexedEvent.dojoEvent.event as GameOver, `ak-${indexedEvent.index}`);
+
+    default:
+      return <></>;
+  }
+}
+
+function renderTraveled(game: GameClass, log: Traveled, key: string) {
+  const location = game.configStore.getLocationById(log.to_location_id);
+  if (!location) return null;
   return (
-    <>
-      {log.location && (
-        <HStack w="full" mt={["20px", "30px"]}>
-          {log.location.icon({ color: "neon.500" })}
-          <Text fontSize={["10px", "12px"]} w="full" textStyle="subheading" color="neon.500">
-            DAY {log.day + 1} - {log.location.name}
-          </Text>
-        </HStack>
-      )}
-
-      <UnorderedList listStyleType="none" w="full">
-        {log.logs.map((i, idx) => {
-          const key = `key-${log.day}-${idx}`;
-
-          switch (i.eventName) {
-            case "TradeDrug":
-              return renderTradeDrug(game, i.event as TradeDrug, key);
-              break;
-
-            case "UpgradeItem":
-              return renderUpgradeItem(game, i.event as UpgradeItem, key);
-              break;
-
-            case "TravelEncounter":
-              return renderTravelEncounter(game, i.event as TravelEncounter, log, key);
-              break;
-
-            case "GameOver":
-              debugger
-              return renderGameOver(i.event as GameOver, key);
-              break;
-
-            default:
-              return <></>;
-              break;
-          }
-        })}
-      </UnorderedList>
-    </>
+    <ListItem w="full" display="flex" alignItems="center" flexDirection="row" key={key} py="6px" mt={["30px", "20px"]}>
+      <Box mr="12px">{location.icon({ color: "neon.500" })}</Box>
+      <Text fontSize={["10px", "12px"]} w="full" textStyle="subheading" color="neon.500">
+        DAY {log.turn} - {location.name}
+      </Text>
+    </ListItem>
   );
 }
 
@@ -313,18 +319,13 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
   );
 }
 
-function renderTravelEncounter(game: GameClass, log: TravelEncounter, dayLog: LogByDay, key: string) {
-  const icon = log.encounter === Encounters.Cops ? CopsIcon : GangIcon;
-
-  const results = dayLog.logs
-    .filter((i) => i.eventName === "TravelEncounterResult")
-    .map((i) => i as unknown as TravelEncounterResult);
-
-  const lastEncounterResult = results.length > 0 ? results[results.length - 1] : undefined;
-  const lastEncounterResultName = lastEncounterResult
-    ? outcomeNames[lastEncounterResult.outcome as outcomeNamesKeys]
-    : "";
-
+function renderTravelEncounter(
+  game: GameClass,
+  log: TravelEncounter,
+  lastEncounterResult: TravelEncounterResult,
+  key: string,
+) {
+  const icon = log.encounter === "Cops" ? CopsIcon : GangIcon;
   const action = lastEncounterResult?.action;
   const totalHpLoss = lastEncounterResult?.dmg_taken.map((i) => i[0]).reduce((p, c) => p + c.value, 0) || 0;
 
@@ -333,7 +334,7 @@ function renderTravelEncounter(game: GameClass, log: TravelEncounter, dayLog: Lo
       lineKey={key}
       icon={icon}
       text={`Meet ${log.encounter} Lvl ${log.level}`}
-      result={lastEncounterResultName}
+      result={lastEncounterResult.outcome}
       resultInfos={lastEncounterResult}
       consequence={totalHpLoss > 0 ? `-${totalHpLoss} HP` : ""}
       action={action}
@@ -413,9 +414,9 @@ const FightLine = ({
   const [resultTooltip, setResultTooltip] = useState("");
 
   useEffect(() => {
-    if (resultInfos && resultInfos.outcome === EncounterOutcomes.Victorious) {
+    if (resultInfos && resultInfos.outcome === "Victorious") {
       setResultTooltip(`+ ${formatCash(resultInfos.cash_earnt)}`);
-    } else if (resultInfos && resultInfos.outcome === EncounterOutcomes.Paid) {
+    } else if (resultInfos && resultInfos.outcome === "Paid") {
       if (resultInfos.cash_loss > 0) {
         setResultTooltip(`- ${formatCash(resultInfos.cash_loss)}`);
       } else {

@@ -36,7 +36,6 @@ struct GameOver {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    #[key]
     season_version: u16,
     player_name: felt252,
     hustler_id: u16,
@@ -53,6 +52,7 @@ struct TradeDrug {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    turn: u8,
     drug_id: u8,
     quantity: u32,
     price: u32,
@@ -78,6 +78,7 @@ struct UpgradeItem {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    turn: u8,
     item_slot: u8,
     item_level: u8,
 }
@@ -89,6 +90,7 @@ struct TravelEncounter {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    turn: u8,
     encounter: felt252,
     level: u8,
     health: u8,
@@ -106,6 +108,7 @@ struct TravelEncounterResult {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
+    turn: u8,
     action: EncounterActions,
     outcome: EncounterOutcomes,
     rounds: u8,

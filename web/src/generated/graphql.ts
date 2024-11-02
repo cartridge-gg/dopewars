@@ -2882,6 +2882,7 @@ export type Dopewars_TradeDrug = {
   player_id?: Maybe<Scalars['ContractAddress']>;
   price?: Maybe<Scalars['u32']>;
   quantity?: Maybe<Scalars['u32']>;
+  turn?: Maybe<Scalars['u8']>;
 };
 
 export type Dopewars_TradeDrugConnection = {
@@ -2908,7 +2909,8 @@ export enum Dopewars_TradeDrugOrderField {
   IsBuy = 'IS_BUY',
   PlayerId = 'PLAYER_ID',
   Price = 'PRICE',
-  Quantity = 'QUANTITY'
+  Quantity = 'QUANTITY',
+  Turn = 'TURN'
 }
 
 export type Dopewars_TradeDrugWhereInput = {
@@ -2968,6 +2970,17 @@ export type Dopewars_TradeDrugWhereInput = {
   quantityNEQ?: InputMaybe<Scalars['u32']>;
   quantityNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
   quantityNOTLIKE?: InputMaybe<Scalars['u32']>;
+  turn?: InputMaybe<Scalars['u8']>;
+  turnEQ?: InputMaybe<Scalars['u8']>;
+  turnGT?: InputMaybe<Scalars['u8']>;
+  turnGTE?: InputMaybe<Scalars['u8']>;
+  turnIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnLIKE?: InputMaybe<Scalars['u8']>;
+  turnLT?: InputMaybe<Scalars['u8']>;
+  turnLTE?: InputMaybe<Scalars['u8']>;
+  turnNEQ?: InputMaybe<Scalars['u8']>;
+  turnNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type Dopewars_TravelEncounter = {
@@ -2984,6 +2997,7 @@ export type Dopewars_TravelEncounter = {
   payout?: Maybe<Scalars['u32']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   speed?: Maybe<Scalars['u8']>;
+  turn?: Maybe<Scalars['u8']>;
 };
 
 export type Dopewars_TravelEncounterConnection = {
@@ -3014,7 +3028,8 @@ export enum Dopewars_TravelEncounterOrderField {
   Level = 'LEVEL',
   Payout = 'PAYOUT',
   PlayerId = 'PLAYER_ID',
-  Speed = 'SPEED'
+  Speed = 'SPEED',
+  Turn = 'TURN'
 }
 
 export type Dopewars_TravelEncounterResult = {
@@ -3034,6 +3049,7 @@ export type Dopewars_TravelEncounterResult = {
   rep_neg?: Maybe<Scalars['u8']>;
   rep_pos?: Maybe<Scalars['u8']>;
   rounds?: Maybe<Scalars['u8']>;
+  turn?: Maybe<Scalars['u8']>;
   turn_loss?: Maybe<Scalars['u8']>;
 };
 
@@ -3069,6 +3085,7 @@ export enum Dopewars_TravelEncounterResultOrderField {
   RepNeg = 'REP_NEG',
   RepPos = 'REP_POS',
   Rounds = 'ROUNDS',
+  Turn = 'TURN',
   TurnLoss = 'TURN_LOSS'
 }
 
@@ -3163,6 +3180,17 @@ export type Dopewars_TravelEncounterResultWhereInput = {
   roundsNEQ?: InputMaybe<Scalars['u8']>;
   roundsNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   roundsNOTLIKE?: InputMaybe<Scalars['u8']>;
+  turn?: InputMaybe<Scalars['u8']>;
+  turnEQ?: InputMaybe<Scalars['u8']>;
+  turnGT?: InputMaybe<Scalars['u8']>;
+  turnGTE?: InputMaybe<Scalars['u8']>;
+  turnIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnLIKE?: InputMaybe<Scalars['u8']>;
+  turnLT?: InputMaybe<Scalars['u8']>;
+  turnLTE?: InputMaybe<Scalars['u8']>;
+  turnNEQ?: InputMaybe<Scalars['u8']>;
+  turnNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnNOTLIKE?: InputMaybe<Scalars['u8']>;
   turn_loss?: InputMaybe<Scalars['u8']>;
   turn_lossEQ?: InputMaybe<Scalars['u8']>;
   turn_lossGT?: InputMaybe<Scalars['u8']>;
@@ -3293,6 +3321,17 @@ export type Dopewars_TravelEncounterWhereInput = {
   speedNEQ?: InputMaybe<Scalars['u8']>;
   speedNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   speedNOTLIKE?: InputMaybe<Scalars['u8']>;
+  turn?: InputMaybe<Scalars['u8']>;
+  turnEQ?: InputMaybe<Scalars['u8']>;
+  turnGT?: InputMaybe<Scalars['u8']>;
+  turnGTE?: InputMaybe<Scalars['u8']>;
+  turnIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnLIKE?: InputMaybe<Scalars['u8']>;
+  turnLT?: InputMaybe<Scalars['u8']>;
+  turnLTE?: InputMaybe<Scalars['u8']>;
+  turnNEQ?: InputMaybe<Scalars['u8']>;
+  turnNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type Dopewars_Traveled = {
@@ -3398,6 +3437,7 @@ export type Dopewars_UpgradeItem = {
   item_level?: Maybe<Scalars['u8']>;
   item_slot?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
+  turn?: Maybe<Scalars['u8']>;
 };
 
 export type Dopewars_UpgradeItemConnection = {
@@ -3422,7 +3462,8 @@ export enum Dopewars_UpgradeItemOrderField {
   GameId = 'GAME_ID',
   ItemLevel = 'ITEM_LEVEL',
   ItemSlot = 'ITEM_SLOT',
-  PlayerId = 'PLAYER_ID'
+  PlayerId = 'PLAYER_ID',
+  Turn = 'TURN'
 }
 
 export type Dopewars_UpgradeItemWhereInput = {
@@ -3470,6 +3511,17 @@ export type Dopewars_UpgradeItemWhereInput = {
   player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
   player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  turn?: InputMaybe<Scalars['u8']>;
+  turnEQ?: InputMaybe<Scalars['u8']>;
+  turnGT?: InputMaybe<Scalars['u8']>;
+  turnGTE?: InputMaybe<Scalars['u8']>;
+  turnIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnLIKE?: InputMaybe<Scalars['u8']>;
+  turnLT?: InputMaybe<Scalars['u8']>;
+  turnLTE?: InputMaybe<Scalars['u8']>;
+  turnNEQ?: InputMaybe<Scalars['u8']>;
+  turnNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  turnNOTLIKE?: InputMaybe<Scalars['u8']>;
 };
 
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;

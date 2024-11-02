@@ -131,6 +131,7 @@ export class EventClass {
   addEvent(entity: any) {
     // console.log("addEvent", entity);
     const event = EventClass.parseEntity(entity)[0];
+    if(!event) return
     this.events.push(event);
   }
 

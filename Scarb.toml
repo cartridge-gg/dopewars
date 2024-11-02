@@ -29,7 +29,7 @@ copy_manifest = "./scripts/copy_manifest.sh"
 gendojo = "./scripts/gen.sh"
 
 # migrate  && scarb run gendojo $PROFILE
-migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE"
+migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv --slot.controller && scarb run copy_manifest $PROFILE"
 migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv --slot.controller && scarb run copy_manifest $PROFILE"
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE"
