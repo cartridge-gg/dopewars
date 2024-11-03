@@ -13,4 +13,3 @@ npx abi-wan-kanabi@2.2.0 --input ./target/$PROFILE/rollyourown_paper_mock.contra
 pushd $(dirname "$0")/../web
 
 pnpm run gen:dojo
-pnpm exec prettier --write ./src/dojo/generated

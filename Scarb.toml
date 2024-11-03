@@ -16,8 +16,8 @@ build-external-contracts = [ "dojo::world::world_contract::world" ]
 
 [dependencies]
 starknet = "2.8.4"
-dojo = { path = "../dojo/crates/dojo/core" }
-# dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.0" }
+# dojo = { path = "../dojo/crates/dojo/core" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.1" }
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 
 [scripts]
@@ -35,12 +35,12 @@ migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFI
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE"
 
 # slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version 1.0.0-alpha.19 --world 0x5a69a866c1e74ddf5f17f44ff2ced68e7b8e2bb4e93a208ec07f51218bcb7b2"
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version v1.0.0-rc.1 --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
 
 # slot ryo1
 # slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee true"
-slot_ryo1_katana = "slot d create ryo1 katana -v 1.0.0-alpha.16 -b 2000 -a 10 --disable-fee false"
-slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version 1.0.0-alpha.16 --world 0x38573380cb5200376caaef0dfd9b0dee41aa62869c5964b526cf1bc45ca09fe"
+slot_ryo1_katana = "slot d create ryo1 katana -v v1.0.0-rc.1 -b 2000 -a 10 --disable-fee false"
+slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version v1.0.0-rc.1 --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
 
 
 # [[target.dojo]]
