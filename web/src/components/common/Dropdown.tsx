@@ -2,13 +2,13 @@ import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { ArrowInput } from "../icons";
 
-export interface DropdownOptionProps {
+interface DropdownOptionProps {
   label?: string;
   text: string;
   value: number | string;
 }
 
-export interface DropdownProps {
+interface DropdownProps {
   options: DropdownOptionProps[];
   value: DropdownOptionProps;
 }

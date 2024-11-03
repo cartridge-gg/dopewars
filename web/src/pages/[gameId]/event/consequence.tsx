@@ -94,7 +94,7 @@ const Consequence = () => {
                 {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}
                 {[...Array(encounterResult.rounds)].map((i, idx) => {
                   return (
-                    <>
+                    <Box key={`zz-${idx}`} w="full">
                       {encounterResult.dmg_dealt[idx] && (
                         <Line
                           icon={game.items.attack.icon({ color: "yellow.400" })}
@@ -139,7 +139,7 @@ const Consequence = () => {
                       ) : (
                         <></>
                       )}
-                    </>
+                    </Box>
                   );
                 })}
 
@@ -201,9 +201,9 @@ const Consequence = () => {
 
 export default observer(Consequence);
 
-const Line = ({ icon, text }: { icon: ReactNode; text: ReactNode }) => {
+const Line = ({ icon, text, ...props }: { icon: ReactNode; text: ReactNode }) => {
   return (
-    <HStack w="full" gap={2}>
+    <HStack w="full" gap={2} {...props}>
       {icon}
       {text}
     </HStack>

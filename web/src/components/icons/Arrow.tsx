@@ -13,7 +13,7 @@ const rotate: RotateType = {
 
 type StyleType = "line" | "outline" | "pixel";
 
-export interface ArrowProps {
+interface ArrowProps {
   direction?: string;
   style?: StyleType;
 }

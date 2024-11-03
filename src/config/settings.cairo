@@ -117,18 +117,17 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
 
     fn get_initial_health(self: SeasonSettings) -> u8 {
         match self.health_mode {
-            HealthMode::Junkie => { 80 },
-            HealthMode::Hustler => { 100 },
-            HealthMode::Streetboss => { 111 },
+            HealthMode::Junkie => { 69 },
+            HealthMode::Hustler => { 90 },
+            HealthMode::Streetboss => { 100 },
         }
     }
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
-        return 4;
         match self.turns_mode {
-            TurnsMode::OnSpeed => { 18 },
-            TurnsMode::OnWeed => { 20 },
-            TurnsMode::OnMush => { 22 },
+            TurnsMode::OnSpeed => { 16 },
+            TurnsMode::OnWeed => { 18 },
+            TurnsMode::OnMush => { 20 },
         }
     }
 

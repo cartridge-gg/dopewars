@@ -58,6 +58,10 @@ const Logs = () => {
   useEffect(() => {
     if (!gameEvents?.sortedEvents) return;
 
+    // for (const e of gameEvents?.sortedEvents) {
+    //   console.log(e.eventName, e.event);
+    // }
+
     const sortedEvents = gameEvents?.sortedEvents
       .flatMap((event: DojoEvent) => {
         switch (event.eventName) {
@@ -100,6 +104,7 @@ const Logs = () => {
                 dojoEvent: event,
               },
             ];
+
           case "GameOver":
             return [
               {
@@ -232,27 +237,27 @@ const CustomLeftPanel = () => {
 function renderEvent(game: GameClass, indexedEvent: IndexedDojoEvent, relatedEvent?: IndexedDojoEvent) {
   switch (indexedEvent.dojoEvent.eventName) {
     case "Traveled":
-      return renderTraveled(game, indexedEvent.dojoEvent.event as Traveled, `ak-${indexedEvent.index}`);
+      return renderTraveled(game, indexedEvent.dojoEvent.event as Traveled, `tr-${indexedEvent.index}`);
 
     case "TradeDrug":
-      return renderTradeDrug(game, indexedEvent.dojoEvent.event as TradeDrug, `ak-${indexedEvent.index}`);
+      return renderTradeDrug(game, indexedEvent.dojoEvent.event as TradeDrug, `td-${indexedEvent.index}`);
 
     case "UpgradeItem":
-      return renderUpgradeItem(game, indexedEvent.dojoEvent.event as UpgradeItem, `ak-${indexedEvent.index}`);
+      return renderUpgradeItem(game, indexedEvent.dojoEvent.event as UpgradeItem, `ui-${indexedEvent.index}`);
 
     case "TravelEncounter":
       return renderTravelEncounter(
         game,
         indexedEvent.dojoEvent.event as TravelEncounter,
         relatedEvent!.dojoEvent.event as TravelEncounterResult,
-        `ak-${indexedEvent.index}`,
+        `te-${indexedEvent.index}`,
       );
 
     case "GameOver":
-      return renderGameOver(indexedEvent.dojoEvent.event as GameOver, `ak-${indexedEvent.index}`);
+      return renderGameOver(indexedEvent.dojoEvent.event as GameOver, `go-${indexedEvent.index}`);
 
     default:
-      return <></>;
+      return null;
   }
 }
 
@@ -276,7 +281,7 @@ function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
   const totalPrice = log.price * log.quantity;
   return (
     <Line
-      lineKey={key}
+      key={key}
       icon={drug.icon}
       text={`${action} ${drug.name}`}
       quantity={log.quantity}
@@ -309,7 +314,7 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
 
   return (
     <Line
-      lineKey={key}
+      key={key}
       icon={item.icon}
       text={`Bought ${item.upgradeName}`}
       total={`- ${formatCash(item.tier.cost)}`}
@@ -331,7 +336,7 @@ function renderTravelEncounter(
 
   return (
     <FightLine
-      lineKey={key}
+      key={key}
       icon={icon}
       text={`Meet ${log.encounter} Lvl ${log.level}`}
       result={lastEncounterResult.outcome}
@@ -361,7 +366,6 @@ const Line = ({
   text,
   quantity,
   total,
-  lineKey,
   color = "neon.400",
   iconColor = "neon.400",
 }: {
@@ -369,12 +373,11 @@ const Line = ({
   text?: string;
   quantity?: number | string;
   total?: number | string;
-  lineKey: string;
   color?: string;
   iconColor?: string;
 }) => {
   return (
-    <ListItem w="full" key={lineKey} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
+    <ListItem w="full" py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
         <HStack flex="4" color={color}>
           <Box w="30px">{icon && icon({ boxSize: "24px", color: iconColor })}</Box>
@@ -399,7 +402,6 @@ const FightLine = ({
   resultInfos,
   consequence,
   action,
-  lineKey,
   color,
 }: {
   icon?: React.FC;
@@ -408,7 +410,6 @@ const FightLine = ({
   resultInfos?: TravelEncounterResult;
   consequence?: string;
   action?: EncountersAction;
-  lineKey: string;
   color?: string;
 }) => {
   const [resultTooltip, setResultTooltip] = useState("");
@@ -428,7 +429,7 @@ const FightLine = ({
   }, [resultInfos, result]);
 
   return (
-    <ListItem w="full" key={lineKey} py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
+    <ListItem w="full" py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>

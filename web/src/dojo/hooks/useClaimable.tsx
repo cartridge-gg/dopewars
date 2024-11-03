@@ -2,7 +2,7 @@ import { Dopewars_Game as Game, World__ModelEdge, useClaimableQuery } from "@/ge
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export type ClaimableResult = ReturnType<typeof useClaimable>;
+type ClaimableResult = ReturnType<typeof useClaimable>;
 
 export const useClaimable = (playerId: string) => {
   const {

@@ -1,7 +1,7 @@
 import {Dopewars_Game as Game,Dopewars_GameEdge as GameEdge, useGameByIdQuery, useRegisteredGamesBySeasonQuery } from "@/generated/graphql";
 import { useMemo } from "react";
 
-export interface RegisteredGamesBySeasonInterface {
+interface RegisteredGamesBySeasonInterface {
   registeredGames: Game[];
   isFetched: boolean;
   isFetching: boolean;

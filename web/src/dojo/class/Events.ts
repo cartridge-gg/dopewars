@@ -53,9 +53,11 @@ export class EventClass {
       }
 
       if (key.startsWith("dopewars-GameOver")) {
+        const event = parseStruct(entity[key]) as GameOver;
+        event.player_name = shortString.decodeShortString(num.toHexString(Number(event.player_name)));
         return {
           eventName: "GameOver",
-          event: parseStruct(entity[key]) as GameOver,
+          event,
           idx: i,
         };
       }
@@ -131,7 +133,7 @@ export class EventClass {
   addEvent(entity: any) {
     // console.log("addEvent", entity);
     const event = EventClass.parseEntity(entity)[0];
-    if(!event) return
+    if (!event) return;
     this.events.push(event);
   }
 

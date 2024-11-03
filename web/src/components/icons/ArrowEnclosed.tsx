@@ -11,7 +11,7 @@ const rotate: RotateType = {
   left: "rotate(270deg)",
 };
 
-export interface ArrowEnclosedProps {
+interface ArrowEnclosedProps {
   direction?: string;
   variant?: "arrow" | "caret" | string;
 }

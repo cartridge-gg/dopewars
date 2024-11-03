@@ -5,14 +5,11 @@ import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { WorldEvents } from "@/dojo/generated/contractEvents";
-import { useConfigStore, useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
-import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useMemo, useState } from "react";
 

@@ -2,7 +2,7 @@ import { Dopewars_Game as Game, World__ModelEdge, useHallOfFameQuery } from "@/g
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export type HallOfFameResult = ReturnType<typeof useHallOfFame>;
+type HallOfFameResult = ReturnType<typeof useHallOfFame>;
 
 export const useHallOfFame = () => {
   const {

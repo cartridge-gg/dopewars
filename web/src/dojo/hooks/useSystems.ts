@@ -14,7 +14,7 @@ import { buildVrfCalls, sleep } from "../utils";
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
 
-export interface SystemsInterface {
+interface SystemsInterface {
   createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
@@ -43,13 +43,13 @@ export interface SystemsInterface {
   error?: string;
 }
 
-export interface SystemExecuteResult {
+interface SystemExecuteResult {
   hash: string;
   receipt?: GetTransactionReceiptResponse;
   [key: string]: any;
 }
 
-export interface ExecuteAndReceiptResult extends SystemExecuteResult {}
+interface ExecuteAndReceiptResult extends SystemExecuteResult {}
 
 const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");

@@ -1772,8 +1772,8 @@
       "systems": []
     },
     {
-      "address": "0x52acc11916545f9f10cac55433ffecc5d6d7732e03cecce6150f4a1a84f9e63",
-      "class_hash": "0x26823c59646e92287c24f230c8dc0dea9b038a4aa2a1332335ead2bbf5dd2d8",
+      "address": "0x3d9aa5cbb743e0a7ebcdbc0b17b4e021dc90aaab74831a007de5029eaa99fb2",
+      "class_hash": "0x39c6de802fe717141a661b7dcf5d1ec2a159c78315d92b3ae2a4cedb6dd806e",
       "abi": [
         {
           "type": "impl",
@@ -2214,8 +2214,8 @@
       "systems": []
     },
     {
-      "address": "0x3db25eda3739adba432711d54124d4a47db47817e4b91fdbb0fda92caa0bf82",
-      "class_hash": "0x6e8962b0a34b668652e251e77745d3697d11ea9b9f3f0e474c958f31eab36a5",
+      "address": "0x32f54d0bdf1da2b5b697d649810031a1243baa569ab41bada05db090d7df8a3",
+      "class_hash": "0x714a4dbc9eb65ed9061719638f09363fcdf8ec739f17a7c1379cb9f24c91422",
       "abi": [
         {
           "type": "impl",
@@ -2878,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0x7b9d9e4bb6f4ca2976d3bbdcaa956beca43c46494fec77a73c04dd29b3d0516",
-      "class_hash": "0x5860abdd3915db19e54f1a82feca98372b6aa628e17ce5b7f7225d8f959645b",
+      "address": "0x4d74c1e7b2185c0d96252537e630ef6717032612bd210122365f09722a56095",
+      "class_hash": "0x68461d6049d20f853f0bb096653d683e47ff57a66079e8710e94a77f04d8ce",
       "abi": [
         {
           "type": "impl",
@@ -3791,7 +3791,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x3ecbb251c03aad33d49f42699c3ef9541e8b66a012c7502a538d9a0200d0965",
+      "class_hash": "0x7d6d387619bfb481cc865a0e948c8e574bcce4730af7ef50a46ffc9ec8cfeb3",
       "tag": "GameOver"
     },
     {

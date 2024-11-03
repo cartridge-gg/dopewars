@@ -12,23 +12,14 @@ const rotate: RotateType = {
   left: "rotate(270deg)",
 };
 
-export interface ArrowInputProps {
+interface ArrowInputProps {
   direction?: string;
   disabled?: boolean;
 }
 
-export const ArrowInput = ({
-  direction,
-  disabled,
-  ...props
-}: ArrowInputProps & IconProps) => {
+export const ArrowInput = ({ direction, disabled, ...props }: ArrowInputProps & IconProps) => {
   return (
-    <Icon
-      transform={rotate[direction || "up"]}
-      role="group"
-      pointerEvents={disabled ? "none" : "auto"}
-      {...props}
-    >
+    <Icon transform={rotate[direction || "up"]} role="group" pointerEvents={disabled ? "none" : "auto"} {...props}>
       <>
         <Box
           as="path"

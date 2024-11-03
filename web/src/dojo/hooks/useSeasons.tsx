@@ -9,13 +9,13 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 
-export interface SeasonInfos {
+interface SeasonInfos {
   season: Season;
   seasonSettings?: SeasonSettings;
   sortedList?: SortedList;
 }
 
-export interface SeasonsInterface {
+interface SeasonsInterface {
   seasons: SeasonInfos[];
   isFetched: boolean;
   refetch: any;

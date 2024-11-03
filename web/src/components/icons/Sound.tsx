@@ -1,6 +1,6 @@
 import { Icon, IconProps } from ".";
 
-export interface SoundProps {
+interface SoundProps {
   isMuted?: boolean;
 }
 
