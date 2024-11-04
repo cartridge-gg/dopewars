@@ -30,7 +30,11 @@ export const ConnectModal = observer(() => {
   } = useDojoContext();
 
   const isKatana = useMemo(() => {
-    return selectedChain.chainConfig.network === "katana";
+    return selectedChain.name === "KATANA";
+  }, [selectedChain]);
+
+  const isSlot = useMemo(() => {
+    return selectedChain.name.startsWith("WP_");
   }, [selectedChain]);
 
   const onClose = () => {
@@ -58,7 +62,7 @@ export const ConnectModal = observer(() => {
               const isController = connector.id === "controller";
 
               // console.log(connector)
-              if (!isKatana && (isBurner || isPredeployed)) {
+              if (!(isKatana || isSlot) && (isBurner || isPredeployed)) {
                 // burner or predeployed not on katana
                 return null;
               }

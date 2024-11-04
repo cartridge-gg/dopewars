@@ -177,7 +177,11 @@ const Logs = () => {
                       sortedEvents.map((dojoEvent) => {
                         const related =
                           dojoEvent.dojoEvent.eventName === "TravelEncounter"
-                            ? sortedEvents.find((i) => i.index === dojoEvent.index + 1)
+                            ? sortedEvents.find(
+                                (i) =>
+                                  i.dojoEvent.eventName === "TravelEncounterResult" &&
+                                  i.dojoEvent.event.turn === dojoEvent.dojoEvent.event.turn,
+                              )
                             : undefined;
 
                         return renderEvent(game, dojoEvent, related);

@@ -9,7 +9,6 @@ import { HStack, VStack, Text, Box, Image, keyframes } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// import { Model, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { Model, Subscription, ToriiClient } from "../../../../../dojo.c/pkg";
 import { useToast } from "@/hooks/toast";
 import { shortString } from "starknet";

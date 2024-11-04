@@ -13,7 +13,7 @@ import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
 import { Hustlers } from "@/components/hustlers";
 import { Drugs } from "../types";
-import { Entities, ToriiClient } from "../../../../../dojo.c/pkg/dojo_c";
+import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
 

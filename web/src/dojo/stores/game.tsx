@@ -1,25 +1,20 @@
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { GraphQLClient } from "graphql-request";
-import { Client } from "graphql-ws";
 
 import {
   Dopewars_Game as Game,
   Dopewars_GameConfig as GameConfig,
   Dopewars_GameStorePacked as GameStorePacked,
   Dopewars_SeasonSettings as SeasonSettings,
-  World__Event,
-  World__Subscription,
 } from "@/generated/graphql";
 import { action, flow, makeObservable, observable } from "mobx";
 import { EventClass } from "../class/Events";
 import { GameClass } from "../class/Game";
 import { ConfigStoreClass } from "./config";
-import { Entities, Entity, Model, Subscription, ToriiClient, Ty } from "../../../../../dojo.c/pkg/dojo_c";
+import { Entities, Subscription, ToriiClient, Ty } from "@dojoengine/torii-client";
 import { parseStruct } from "../utils";
-import { num, shortString } from "starknet";
+import { num } from "starknet";
 import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
-import { GameCreated, TravelEncounter } from "@/components/layout/GlobalEvents";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;

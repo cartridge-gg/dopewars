@@ -1,7 +1,7 @@
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { action, computed, makeObservable, observable } from "mobx";
 import { ConfigStoreClass } from "../stores/config";
-import { Entity } from "../../../../../dojo.c/pkg/dojo_c";
+import { Entity } from "@dojoengine/torii-client";
 import { parseStruct } from "../utils";
 import {
   GameCreated,

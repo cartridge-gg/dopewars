@@ -1,4 +1,4 @@
-import { Subscription, Event, Ty, EnumValue, Model } from "../../../../../dojo.c/pkg/dojo_c";
+import { Subscription } from "@dojoengine/torii-client";
 import { useEffect, useRef } from "react";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";

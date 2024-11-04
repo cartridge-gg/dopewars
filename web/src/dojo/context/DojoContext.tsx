@@ -20,7 +20,7 @@ import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
-import { ToriiClient } from "../../../../../dojo.c/pkg/dojo_c";
+import { ToriiClient } from "@dojoengine/torii-client";
 import { useRouter } from "next/router";
 
 export interface DojoContextType {
