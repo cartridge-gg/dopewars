@@ -41,7 +41,7 @@ mod ryo {
     use starknet::{get_caller_address, get_contract_address};
 
     fn dojo_init(
-        self: @ContractState, paper_address: ContractAddress, treasury_address: ContractAddress,
+        self: @ContractState, paper_address: ContractAddress, vrf_address: ContractAddress, treasury_address: ContractAddress,
     ) {
         // consume first ID = 0
         let _ = self.world_dispatcher().uuid();
@@ -67,8 +67,15 @@ mod ryo {
         } else {
             paper_address
         };
+        
+        let vrf_address = if paper_address.is_zero() {
+            let (vrf_mock_address, _) = world.dns(@"vrf_provider_mock").unwrap();
+            vrf_mock_address
+        } else {
+            vrf_address
+        };
+
         let (laundromat_address, _) = world.dns(@"laundromat").unwrap();
-        let (vrf_address, _) = world.dns(@"vrf_provider_mock").unwrap();
 
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address;

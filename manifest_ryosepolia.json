@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x139239a99d627697b19b9856beaef7896fc75375caf3d750dd76982a7afeb78",
-    "address": "0x4fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705",
-    "seed": "dopeseed",
+    "address": "0x7c0f2757ae2445f2433b86e9b10537b190971b6dc38357634a158acf7385898",
+    "seed": "sepo5seed",
     "name": "Dope Wars",
     "abi": [
       {
@@ -1121,7 +1121,7 @@
   },
   "contracts": [
     {
-      "address": "0x79100248fbc37fd5edfdbf114eb9f6958707bd26b693ceba5b188d8944f72d6",
+      "address": "0x1c97f26567ae974963c0d21ca7eadda2f955ea80f0a683772a05d291fce1bee",
       "class_hash": "0xa251d8b43a5a03224933c0e56231163988b92041418337238a4dc2616d6a2",
       "abi": [
         {
@@ -1772,8 +1772,8 @@
       "systems": []
     },
     {
-      "address": "0x1e01fc00ce8d08ab665bc69eca4b99ff0b7c192d531eec2b37cb0524bce41a6",
-      "class_hash": "0xc568234269b7754e2f4c629e692434b3271f4606c4f64a8e1a3ab401dd7e88",
+      "address": "0x30d88cba9f690584e379563ad16bea38f019f152154af2110f77924c853ab8",
+      "class_hash": "0x39c6de802fe717141a661b7dcf5d1ec2a159c78315d92b3ae2a4cedb6dd806e",
       "abi": [
         {
           "type": "impl",
@@ -2193,396 +2193,6 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::systems::game::game::GameCreated",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "game_mode",
-              "type": "rollyourown::models::game::GameMode",
-              "kind": "data"
-            },
-            {
-              "name": "player_name",
-              "type": "core::felt252",
-              "kind": "data"
-            },
-            {
-              "name": "hustler_id",
-              "type": "core::integer::u16",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::Traveled",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "turn",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "from_location_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "to_location_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::TradeDrug",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "drug_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "quantity",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "price",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "is_buy",
-              "type": "core::bool",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::HighVolatility",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "location_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "drug_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "increase",
-              "type": "core::bool",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::UpgradeItem",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "item_slot",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "item_level",
-              "type": "core::integer::u8",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::TravelEncounter",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "encounter",
-              "type": "core::felt252",
-              "kind": "data"
-            },
-            {
-              "name": "level",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "attack",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "defense",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "speed",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "demand_pct",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "payout",
-              "type": "core::integer::u32",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
-          "variants": [
-            {
-              "name": "Died",
-              "type": "()"
-            },
-            {
-              "name": "Paid",
-              "type": "()"
-            },
-            {
-              "name": "Escaped",
-              "type": "()"
-            },
-            {
-              "name": "Victorious",
-              "type": "()"
-            },
-            {
-              "name": "Jailed",
-              "type": "()"
-            },
-            {
-              "name": "Hospitalized",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::TravelEncounterResult",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "action",
-              "type": "rollyourown::systems::game::EncounterActions",
-              "kind": "data"
-            },
-            {
-              "name": "outcome",
-              "type": "rollyourown::systems::helpers::traveling::EncounterOutcomes",
-              "kind": "data"
-            },
-            {
-              "name": "rounds",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "dmg_dealt",
-              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
-              "kind": "data"
-            },
-            {
-              "name": "dmg_taken",
-              "type": "core::array::Array::<(core::integer::u8, core::integer::u8)>",
-              "kind": "data"
-            },
-            {
-              "name": "cash_earnt",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "cash_loss",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "drug_id",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "drug_loss",
-              "type": "core::array::Array::<core::integer::u32>",
-              "kind": "data"
-            },
-            {
-              "name": "turn_loss",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "rep_pos",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "rep_neg",
-              "type": "core::integer::u8",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::game::game::GameOver",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "season_version",
-              "type": "core::integer::u16",
-              "kind": "key"
-            },
-            {
-              "name": "player_name",
-              "type": "core::felt252",
-              "kind": "data"
-            },
-            {
-              "name": "hustler_id",
-              "type": "core::integer::u16",
-              "kind": "data"
-            },
-            {
-              "name": "turn",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "reputation",
-              "type": "core::integer::u8",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
           "name": "rollyourown::systems::game::game::Event",
           "kind": "enum",
           "variants": [
@@ -2595,46 +2205,6 @@
               "name": "WorldProviderEvent",
               "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
               "kind": "nested"
-            },
-            {
-              "name": "GameCreated",
-              "type": "rollyourown::systems::game::game::GameCreated",
-              "kind": "nested"
-            },
-            {
-              "name": "Traveled",
-              "type": "rollyourown::systems::game::game::Traveled",
-              "kind": "nested"
-            },
-            {
-              "name": "TradeDrug",
-              "type": "rollyourown::systems::game::game::TradeDrug",
-              "kind": "nested"
-            },
-            {
-              "name": "HighVolatility",
-              "type": "rollyourown::systems::game::game::HighVolatility",
-              "kind": "nested"
-            },
-            {
-              "name": "UpgradeItem",
-              "type": "rollyourown::systems::game::game::UpgradeItem",
-              "kind": "nested"
-            },
-            {
-              "name": "TravelEncounter",
-              "type": "rollyourown::systems::game::game::TravelEncounter",
-              "kind": "nested"
-            },
-            {
-              "name": "TravelEncounterResult",
-              "type": "rollyourown::systems::game::game::TravelEncounterResult",
-              "kind": "nested"
-            },
-            {
-              "name": "GameOver",
-              "type": "rollyourown::systems::game::game::GameOver",
-              "kind": "nested"
             }
           ]
         }
@@ -2644,8 +2214,8 @@
       "systems": []
     },
     {
-      "address": "0x12dbbb89256da170f4631b931baf87e4a28c1bc9007736267ab91ac13dead17",
-      "class_hash": "0x3c036e023cccbb129bc0bf9dfc390495b4385bdc5512ebaf03bf56c5ebdba11",
+      "address": "0x7de27e781f7253c1ec6e032daf08ca607d1fedb4b0590f88bca02e5afeb2d9c",
+      "class_hash": "0x6ea798424a8c5535f8e8cd14954c1f4daa7eff1d322b1dd533999d1f7fd344",
       "abi": [
         {
           "type": "impl",
@@ -2878,102 +2448,6 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::systems::laundromat::laundromat::NewHighScore",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "season_version",
-              "type": "core::integer::u16",
-              "kind": "key"
-            },
-            {
-              "name": "player_name",
-              "type": "core::felt252",
-              "kind": "data"
-            },
-            {
-              "name": "hustler_id",
-              "type": "core::integer::u16",
-              "kind": "data"
-            },
-            {
-              "name": "cash",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "health",
-              "type": "core::integer::u8",
-              "kind": "data"
-            },
-            {
-              "name": "reputation",
-              "type": "core::integer::u8",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::laundromat::laundromat::Claimed",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "season_version",
-              "type": "core::integer::u16",
-              "kind": "key"
-            },
-            {
-              "name": "paper",
-              "type": "core::integer::u32",
-              "kind": "data"
-            },
-            {
-              "name": "rank",
-              "type": "core::integer::u16",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::laundromat::laundromat::NewSeason",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "key",
-              "type": "core::integer::u16",
-              "kind": "key"
-            },
-            {
-              "name": "season_version",
-              "type": "core::integer::u16",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
           "name": "rollyourown::systems::laundromat::laundromat::Event",
           "kind": "enum",
           "variants": [
@@ -2986,21 +2460,6 @@
               "name": "WorldProviderEvent",
               "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
               "kind": "nested"
-            },
-            {
-              "name": "NewHighScore",
-              "type": "rollyourown::systems::laundromat::laundromat::NewHighScore",
-              "kind": "nested"
-            },
-            {
-              "name": "Claimed",
-              "type": "rollyourown::systems::laundromat::laundromat::Claimed",
-              "kind": "nested"
-            },
-            {
-              "name": "NewSeason",
-              "type": "rollyourown::systems::laundromat::laundromat::NewSeason",
-              "kind": "nested"
             }
           ]
         }
@@ -3010,8 +2469,8 @@
       "systems": []
     },
     {
-      "address": "0x4608216eb4ff1b73565d17dcf13f586914818265f9ae1f528fae2e51d0763a4",
-      "class_hash": "0x4ebf5dcac42f52d9fa1e8583504240d75af8f1d647c5712979ca66e728cd895",
+      "address": "0x1ea41b33ffe0cf60902f3e4b7e26e2b2f1360fa775c389d29d6b7ab2bb5142a",
+      "class_hash": "0x357c8e68556de391373b4066d6cbaee2c8b3d4303e72924c421ebba4ac1363f",
       "abi": [
         {
           "type": "impl",
@@ -3419,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0x44075c236212bac50b27027064e67f52b7993c48ff37b2161365eedcd6c45b5",
-      "class_hash": "0xb6b84815a98b239cd6cac19cf9ba52a918ba9c16441991bae39729d89d0d8b",
+      "address": "0x3ea831684ab15c78882e1e86d3dd045bad7fe7f12e1b80a87f9881a3659fa5d",
+      "class_hash": "0x6d858a42d5b73f7ff0ae828d6ba1a78c2c62b78d6a2f4b8566c9f5fc2c3c85b",
       "abi": [
         {
           "type": "impl",
@@ -3468,6 +2927,10 @@
           "inputs": [
             {
               "name": "paper_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "vrf_address",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
@@ -3794,235 +3257,16 @@
           ]
         }
       ],
-      "init_calldata": ["0x0", "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"],
+      "init_calldata": [
+        "0x0",
+        "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f",
+        "0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface"
+      ],
       "tag": "dopewars-ryo",
       "systems": []
     },
     {
-      "address": "0x2cbf7e389146659511486c3c1bc1ee95a1a3217b02727d33bac0ce02b9132f9",
-      "class_hash": "0x7445f4877fc073aa6c644a22c840c321212a9ced7351a47db6c570a33c17d7b",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "slotmachine__ContractImpl",
-          "interface_name": "dojo::contract::interface::IContract"
-        },
-        {
-          "type": "struct",
-          "name": "core::byte_array::ByteArray",
-          "members": [
-            {
-              "name": "data",
-              "type": "core::array::Array::<core::bytes_31::bytes31>"
-            },
-            {
-              "name": "pending_word",
-              "type": "core::felt252"
-            },
-            {
-              "name": "pending_word_len",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::interface::IContract",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "SlotMachineImp",
-          "interface_name": "rollyourown::systems::slot::ISlotMachine"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::slot::ISlotMachine",
-          "items": [
-            {
-              "type": "function",
-              "name": "roll",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "dojo_init",
-          "inputs": [],
-          "outputs": [],
-          "state_mutability": "view"
-        },
-        {
-          "type": "impl",
-          "name": "WorldProviderImpl",
-          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
-        },
-        {
-          "type": "struct",
-          "name": "dojo::world::iworld::IWorldDispatcher",
-          "members": [
-            {
-              "name": "contract_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::world_provider::IWorldProvider",
-          "items": [
-            {
-              "type": "function",
-              "name": "world_dispatcher",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::world::iworld::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "UpgradeableImpl",
-          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::upgradeable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "constructor",
-          "name": "constructor",
-          "inputs": []
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "class_hash",
-              "type": "core::starknet::class_hash::ClassHash",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Upgraded",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-          "kind": "enum",
-          "variants": []
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32",
-              "kind": "key"
-            },
-            {
-              "name": "player_id",
-              "type": "core::starknet::contract_address::ContractAddress",
-              "kind": "key"
-            },
-            {
-              "name": "name",
-              "type": "core::felt252",
-              "kind": "data"
-            },
-            {
-              "name": "values",
-              "type": "(core::integer::u8, core::integer::u8, core::integer::u8)",
-              "kind": "data"
-            },
-            {
-              "name": "payout",
-              "type": "core::integer::u32",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "rollyourown::systems::slot::slotmachine::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "UpgradeableEvent",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-              "kind": "nested"
-            },
-            {
-              "name": "WorldProviderEvent",
-              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-              "kind": "nested"
-            },
-            {
-              "name": "SlotMachineEvent",
-              "type": "rollyourown::systems::slot::slotmachine::SlotMachineEvent",
-              "kind": "nested"
-            }
-          ]
-        }
-      ],
-      "init_calldata": [],
-      "tag": "dopewars-slotmachine",
-      "systems": []
-    },
-    {
-      "address": "0x6334218e9205940793fa93608e6ff8c51290a9fbde03dc19fb35ab86a7cafaa",
+      "address": "0x40adfd6a46f49b19d305403403d64d9e7fd15138cd723c198c94fdff36b92ca",
       "class_hash": "0x45576827f29386075d14b4bfd0dbf4221b726b0ce1a1d63a478baa2a3eaf54c",
       "abi": [
         {
@@ -4454,10 +3698,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x6b0aab388dc7b240801b5aa0722bfcd39a1f397e83d5c032c198b18594b665e",
-        "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204"
-      ],
+      "init_calldata": [],
       "tag": "dopewars-vrf_provider_mock",
       "systems": []
     }
@@ -4466,89 +3707,134 @@
     {
       "members": [],
       "class_hash": "0x5e64289371d059523f34f41cf4a508b72fa09876fb3002d46375f17a54397d3",
-      "tag": "dopewars-DrugConfig"
+      "tag": "DrugConfig"
     },
     {
       "members": [],
       "class_hash": "0x6e887f2aa1ae19f1fca559193da0ae4d167d2bbcc6815358f9ea0375e606e59",
-      "tag": "dopewars-EncounterStatsConfig"
+      "tag": "EncounterStatsConfig"
     },
     {
       "members": [],
       "class_hash": "0x819c5dc8dbae7d3234c3a06e92066b4a52916c6f978bed2c3a416f35029716",
-      "tag": "dopewars-Game"
+      "tag": "Game"
     },
     {
       "members": [],
       "class_hash": "0x76f0eef9dd670f9d4a28a811ac7f05f7fdcb11658c1eb9f3a3b247e5c7d8c48",
-      "tag": "dopewars-GameConfig"
+      "tag": "GameConfig"
     },
     {
       "members": [],
       "class_hash": "0x2ba91e249a0f85b864d72a9e68cc223ed39621683ffb5740d2c59ec87e57e0b",
-      "tag": "dopewars-GameStorePacked"
+      "tag": "GameStorePacked"
     },
     {
       "members": [],
       "class_hash": "0x5175bfa842f8c6e9cca2de64240816a755f879ed2aecb216924636247d90281",
-      "tag": "dopewars-HustlerItemBaseConfig"
+      "tag": "HustlerItemBaseConfig"
     },
     {
       "members": [],
       "class_hash": "0x7f354e30f680042ab23101d436a559aea09aedc5e1a46e5edeb02a298cab647",
-      "tag": "dopewars-HustlerItemTiersConfig"
+      "tag": "HustlerItemTiersConfig"
     },
     {
       "members": [],
       "class_hash": "0x5168b1c9b333b821fdce0f2c256d98b607ef4fc5382c7bba5d2f224d15d6485",
-      "tag": "dopewars-LocationConfig"
+      "tag": "LocationConfig"
     },
     {
       "members": [],
       "class_hash": "0x6fcd97c2405225f4ce33fc634b0f5c401e1fe25b134d708989cb89631964aa3",
-      "tag": "dopewars-RyoAddress"
+      "tag": "RyoAddress"
     },
     {
       "members": [],
       "class_hash": "0x623e6721708364f2f5ad3e9ad69409e986a0e959bf7eb98be701a6cf0e2f668",
-      "tag": "dopewars-RyoConfig"
+      "tag": "RyoConfig"
     },
     {
       "members": [],
       "class_hash": "0x388d681521cc18d6224a84f2b049746b16fa19b260df787574aa331b85a1c7e",
-      "tag": "dopewars-Season"
+      "tag": "Season"
     },
     {
       "members": [],
       "class_hash": "0x68ebae473046a0bd2504964f8f6390d6a52eed168f3cfdbc636b2e2973dc9f4",
-      "tag": "dopewars-SeasonSettings"
-    },
-    {
-      "members": [],
-      "class_hash": "0x6791ede41900419a7af849943cb81b1356521a5b3d0e68bc873967d07206ade",
-      "tag": "dopewars-SlotMachine"
+      "tag": "SeasonSettings"
     },
     {
       "members": [],
       "class_hash": "0x70307b6c0bb63267416083457439e46f26d395c39f7ba000e016a8f464ab540",
-      "tag": "dopewars-SortedList"
+      "tag": "SortedList"
     },
     {
       "members": [],
       "class_hash": "0x35aa3f10786452ff3e88b2fc9ce515356d48059e193cd223f1a379c1ff3607d",
-      "tag": "dopewars-SortedListItem"
+      "tag": "SortedListItem"
     }
   ],
   "events": [
     {
       "members": [],
-      "class_hash": "0x7ef9410bcbd8afa6202e493188b8aa11a1c3d1e59c5ef2f1756a972be0b6772",
-      "tag": "dopewars-ERC20BalanceEvent"
+      "class_hash": "0x65cd1eed6359896069f60812944f284d09c210b0bd0aec04d2a3d79eb20cb3e",
+      "tag": "Claimed"
     },
     {
       "members": [],
-      "class_hash": "0x4168797f1ab31210f0674b54eb2f9a05a3d0661236e592b7212d3fe6082e62f",
-      "tag": "dopewars-SlotMachineCombination"
+      "class_hash": "0x7ef9410bcbd8afa6202e493188b8aa11a1c3d1e59c5ef2f1756a972be0b6772",
+      "tag": "ERC20BalanceEvent"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7553d1774f8ce4df56e686807d5226a20bc85b91b8226cc3da689b1953f446a",
+      "tag": "GameCreated"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7d6d387619bfb481cc865a0e948c8e574bcce4730af7ef50a46ffc9ec8cfeb3",
+      "tag": "GameOver"
+    },
+    {
+      "members": [],
+      "class_hash": "0xb79585e773a2e33d7d9b21970331de3793b5ffc90982c335313ad08469ee09",
+      "tag": "HighVolatility"
+    },
+    {
+      "members": [],
+      "class_hash": "0x2ab19228c9d4c21a1c7a0b1d3560e69409b807098a82d6dacbfad7bf0112551",
+      "tag": "NewHighScore"
+    },
+    {
+      "members": [],
+      "class_hash": "0x225d8dec3e7c148c4327bfd9e247928627ab6880a44997667d47fcb8d96747e",
+      "tag": "NewSeason"
+    },
+    {
+      "members": [],
+      "class_hash": "0x1204dfd315529756a88b616fdfc47c80933f8befa73618ef7f4d7c033400f7c",
+      "tag": "TradeDrug"
+    },
+    {
+      "members": [],
+      "class_hash": "0x4d5f4c75db689da2ff22256d05db35bce62b9d3bab31ec5e6ee3131f9b61f29",
+      "tag": "TravelEncounter"
+    },
+    {
+      "members": [],
+      "class_hash": "0x1b949e600fddc505d6280aa83087396100c6e9fb60923cb27a268ba73a321af",
+      "tag": "TravelEncounterResult"
+    },
+    {
+      "members": [],
+      "class_hash": "0x1c75f1b960145adc824ebfb461a7d4a2530875dee80fe386d940bb9f885c250",
+      "tag": "Traveled"
+    },
+    {
+      "members": [],
+      "class_hash": "0x4e7b79b879df1deb45ee3b8218b6a3961e1d2d9d828595f19ce38573becffd2",
+      "tag": "UpgradeItem"
     }
   ]
 }

@@ -149,7 +149,7 @@ export const useSystems = (): SystemsInterface => {
   const createGame = useCallback(
     async (gameMode: GameMode, hustlerId: number, playerName: string) => {
       const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
-      const paperAddress = config?.ryoAddress.paper;
+      const paperAddress = selectedChain.paperAddress;
       const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       //
@@ -308,7 +308,8 @@ export const useSystems = (): SystemsInterface => {
 
   const superchargeJackpot = useCallback(
     async (season: number, amountEth: number) => {
-      const paperAddress = config?.ryoAddress.paper;
+      // const paperAddress = config?.ryoAddress.paper;
+      const paperAddress = selectedChain.paperAddress;
       const laundromatAddress = dojoProvider.manifest.contracts.find(
         (i: any) => i.tag === `${DW_NS}-laundromat`,
       ).address;

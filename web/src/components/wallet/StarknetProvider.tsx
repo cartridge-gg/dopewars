@@ -7,8 +7,8 @@ import {
   injected,
   starkscan,
 } from "@starknet-react/core";
-import { ReactNode, useState } from "react";
-import { RpcProvider, shortString } from "starknet";
+import { ReactNode, useMemo, useState } from "react";
+import { RpcProvider } from "starknet";
 import { getContractByName } from "@dojoengine/core";
 import { DW_NS } from "@/dojo/hooks";
 import { ControllerConnector } from "@cartridge/connector";
@@ -27,7 +27,7 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
     const chainId = selectedChain.chainConfig.id || undefined;
 
     ///@ts-ignore
-    const provider = new RpcProvider({ ...selectedChain, ...config, chainId });
+    const provider = new RpcProvider({ ...config, chainId });
 
     return provider;
   };
@@ -53,8 +53,14 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
   const chains = getStarknetProviderChains();
-  const connectors = getConnectorsForChain(selectedChain);
-  const provider = customJsonRpcProvider(selectedChain);
+
+  const provider = useMemo(() => {
+    return customJsonRpcProvider(selectedChain);
+  }, [selectedChain]);
+
+  const connectors = useMemo(() => {
+    return getConnectorsForChain(selectedChain);
+  }, [selectedChain]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
@@ -66,21 +72,15 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 }
 
 const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
-  // TODO handle mainnet
-  const paperAddress = getContractByName(selectedChain.manifest, DW_NS, "paper_mock").address;
-
+  const paperAddress = selectedChain.paperAddress;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
-  // const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
 
   return new ControllerConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    tokens: { erc20: [paperAddress] },
     theme: "dope-wars",
-
-    // paymaster: {
-    //   caller: shortString.encodeShortString("ANY_CALLER"),
-    // },
     policies: [
       {
         target: selectedChain.vrfProviderAddress,
@@ -118,11 +118,6 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
         target: laundromatAddress,
         method: "claim",
       },
-      //
-      // {
-      //   target: slotmachineAddress,
-      //   method: "roll",
-      // },
     ],
   }) as unknown as InjectedConnector;
 };

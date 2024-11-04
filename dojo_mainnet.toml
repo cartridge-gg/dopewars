@@ -20,10 +20,6 @@ default = "dopewars"
 
 [migration]
 skip_contracts = [
-    "dopewars-slotmachine",
-    "dopewars-SlotMachine",
-    "dopewars-SlotMachineCombination",
-    "dopewars-chips",
     "dopewars-devtools",
     "dopewars-paper_mock",
     "dopewars-vrf_provider_mock",
@@ -32,8 +28,11 @@ skip_contracts = [
 [init_call_args]
 "dopewars-ryo" = [
     "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",  # PAPER address
+    "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f", # vrf address
     "0x026C8df51A3b2652b6FaFD2d38ea0639f9131Ef097507758adef6E983Bcb7106", # treasury / multisig address
 ]
+
+# TODO: grant writer / contract
 
 [writers]
 "dopewars" = [

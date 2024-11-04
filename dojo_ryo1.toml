@@ -27,6 +27,7 @@ skip_contracts = []
 ]
 "dopewars-ryo" = [
     "0x0",                                                              # paper address, 0x0 = use dns world to retrieve paper_mock
+    "0x0",                                                              # vrf address, 0x0 = use world.dns
     "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481", # treasury / multisig address
 ]
 

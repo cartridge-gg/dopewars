@@ -4,13 +4,14 @@ import { katanaLocalChain, katanaSlot1Chain } from "./chains";
 
 import manifestDev from "../../manifests/manifest_dev.json";
 import manifestRyo1 from "../../manifests/manifest_ryo1.json";
-import manifestRyoSepolia from "../../manifests/manifest_sepolia.json";
+import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
 
 import { DW_NS } from "../hooks";
 
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
+const PAPER_MAINNET = "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113";
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 
@@ -27,6 +28,7 @@ export type DojoChainConfig = {
   accountClassHash?: string;
   manifest: any;
   predeployedAccounts: PredeployedAccount[];
+  paperAddress: string;
   vrfProviderAddress: string;
   vrfProviderSecret?: string;
 };
@@ -64,6 +66,7 @@ const katanaLocal: DojoChainConfig = {
       active: false,
     },
   ],
+  paperAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
 };
@@ -89,6 +92,7 @@ const katanaSlot1: DojoChainConfig = {
       active: false,
     },
   ],
+  paperAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
 };
@@ -105,6 +109,7 @@ const snSepolia: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestRyoSepolia,
   predeployedAccounts: [],
+  paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
   vrfProviderSecret: undefined,
 };
@@ -120,6 +125,7 @@ const snMainnet: DojoChainConfig = {
   accountClassHash: undefined,
   manifest: manifestMainnet,
   predeployedAccounts: [],
+  paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
   vrfProviderSecret: undefined,
 };
@@ -127,18 +133,14 @@ const snMainnet: DojoChainConfig = {
 // keys must match chain.id
 export const dojoContextConfig = {
   KATANA: katanaLocal,
-  // KATANA_SLOT_420: katanaSlot420,
-  // KATANA_SLOT_421: katanaSlot421,
-  WP_RYO1: katanaSlot1,
+  // WP_RYO1: katanaSlot1,
   SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
 
 export const dojoChains = [
   katanaLocal,
-  // katanaSlot420,
-  // katanaSlot421,
-  katanaSlot1,
+  // katanaSlot1,
   snSepolia,
   // snMainnet,
 ];
