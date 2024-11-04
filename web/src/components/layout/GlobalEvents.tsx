@@ -103,7 +103,7 @@ export const GlobalEvents = () => {
     if (update["dopewars-GameCreated"]) {
       const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
       console.log(gameCreated);
-      gameCreated.player_name = shortString.decodeShortString(gameCreated.player_name);
+      gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
       if (BigInt(gameCreated.player_id) !== accountAddress.current) {
         toast({
           icon: () => <HustlerIcon hustler={gameCreated.hustler_id as Hustlers} />,
@@ -128,7 +128,7 @@ export const GlobalEvents = () => {
 
     if (update["dopewars-NewHighScore"]) {
       const newHighScore = parseStruct(update["dopewars-NewHighScore"]) as NewHighScore;
-      newHighScore.player_name = shortString.decodeShortString(newHighScore.player_name);
+      newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
       toast({
         icon: () => <HustlerIcon hustler={newHighScore.hustler_id as Hustlers} />,
         message: `${newHighScore.player_name} rules with ${formatCashHeader(newHighScore.cash)}!`,
@@ -137,7 +137,7 @@ export const GlobalEvents = () => {
 
     if (update["dopewars-GameOver"]) {
       const gameOver = parseStruct(update["dopewars-GameOver"]) as GameOver;
-      gameOver.player_name = shortString.decodeShortString(gameOver.player_name);
+      gameOver.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameOver.player_name)));
       if (BigInt(gameOver.player_id) !== accountAddress.current) {
         if (gameOver.health === 0) {
           playSound(Sounds.Magnum357);

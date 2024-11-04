@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 
-import { JsonView, darkStyles } from "react-json-view-lite";
-import "react-json-view-lite/dist/index.css";
+// import { JsonView, darkStyles } from "react-json-view-lite";
+// import "react-json-view-lite/dist/index.css";
 
 const Debug = () => {
 
@@ -33,13 +33,13 @@ const Debug = () => {
           {/* <DrawerHeader>State</DrawerHeader> */}
 
           <DrawerBody fontFamily="consolas" fontSize="12px" p={0}>
-            <JsonView
+            {/* <JsonView
               data={game as Object}
               style={darkStyles}
               shouldExpandNode={(level) => {
                 return level <= 1;
-              }} /*shouldExpandNode={allExpanded}*/
-            />
+              }}
+            /> */}
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

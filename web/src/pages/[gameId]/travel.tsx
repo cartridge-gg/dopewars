@@ -125,7 +125,7 @@ const Travel = observer(() => {
         console.log(e);
       }
     }
-  }, [targetLocation, router, gameId, travel, game, configStore]);
+  }, [targetLocation, gameId, travel, game, configStore]);
 
   if (!game) return <></>;
 

@@ -59,7 +59,11 @@ const Consequence = () => {
                 w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
-                  router.push(`/${gameId}/${game.player.location.location}`);
+                  if (gameEvents.isGameOver) {
+                    router.push(`/${gameId}/end`);
+                  } else {
+                    router.push(`/${gameId}/${game.player.location.location}`);
+                  }
                 }}
               >
                 Continue

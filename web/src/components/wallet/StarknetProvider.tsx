@@ -38,6 +38,13 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
     case "KATANA":
       return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
 
+    case "WP_RYO1":
+      return [
+        injected({ id: "dojoburner" }),
+        injected({ id: "dojopredeployed" }),
+        cartridgeConnector({ selectedChain }),
+      ];
+
     default:
       const controller = cartridgeConnector({ selectedChain });
       return [controller];
@@ -61,6 +68,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
   // TODO handle mainnet
   const paperAddress = getContractByName(selectedChain.manifest, DW_NS, "paper_mock").address;
+
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
   // const slotmachineAddress = getContractByName(selectedChain.manifest, DW_NS, "slotmachine").address;
@@ -69,7 +77,7 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
     url: keychain ? keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     theme: "dope-wars",
-  
+
     // paymaster: {
     //   caller: shortString.encodeShortString("ANY_CALLER"),
     // },

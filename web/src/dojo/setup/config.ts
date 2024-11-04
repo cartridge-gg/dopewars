@@ -69,18 +69,28 @@ const katanaLocal: DojoChainConfig = {
 };
 
 const katanaSlot1: DojoChainConfig = {
-  name: "SLOT 1",
+  name: "WP_RYO1",
   chainConfig: katanaSlot1Chain,
   rpcUrl: "https://api.cartridge.gg/x/ryo1/katana",
   toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
-  masterAddress: undefined,
-  masterPrivateKey: undefined,
-  accountClassHash: undefined,
+  masterAddress:
+    process.env.NEXT_PUBLIC_ADMIN_ADDRESS || "0x785fe50c1b58d7610c40ff85ff579a8037b168c37316f12536cafaec30976a4",
+  masterPrivateKey:
+    process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY || "0x5c5ecc80873547a8535051c92f216c9b11f921226b6265f9eb5fb67ba844bf7",
+  accountClassHash:
+    process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH || "0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2",
   manifest: manifestRyo1,
-  predeployedAccounts: [],
-  vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
-  vrfProviderSecret: undefined,
+  predeployedAccounts: [
+    {
+      name: "Deployer",
+      address: "0x4be62b3e01cb9ddca21ef418dca601952c33cb6411cc06ff59fdbb7ed5bf75",
+      privateKey: "0x660dd722665a19eec32efe0994921573f990d626f6c20db482bed32ce2847ab",
+      active: false,
+    },
+  ],
+  vrfProviderAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  vrfProviderSecret: "0x420",
 };
 
 const snSepolia: DojoChainConfig = {
@@ -119,7 +129,7 @@ export const dojoContextConfig = {
   KATANA: katanaLocal,
   // KATANA_SLOT_420: katanaSlot420,
   // KATANA_SLOT_421: katanaSlot421,
-  // WP_RYO1: katanaSlot1,
+  WP_RYO1: katanaSlot1,
   SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
@@ -128,7 +138,7 @@ export const dojoChains = [
   katanaLocal,
   // katanaSlot420,
   // katanaSlot421,
-  // katanaSlot1,
+  katanaSlot1,
   snSepolia,
   // snMainnet,
 ];

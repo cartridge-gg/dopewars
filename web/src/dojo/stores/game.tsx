@@ -226,9 +226,9 @@ export class GameStoreClass {
       this.gameStorePacked = parseStruct(update["dopewars-GameStorePacked"]);
       this.initGameStore();
 
-      if (this.gameEvents?.isGameOver) {
+      // if dead, handled in /event/consequence
+      if (this.gameEvents?.isGameOver && this.game!.player!.health > 0) {
         return this.router.push(`/${gameId}/end`);
-        // return this.router.push(`/${gameId}/logs`);
       }
 
       if (this.game?.player.status === PlayerStatus.Normal) {

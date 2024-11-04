@@ -23,9 +23,6 @@ importers:
       '@dojoengine/create-burner':
         specifier: v1.0.0-alpha.24
         version: 1.0.0-alpha.24(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.6.3)
-      '@dojoengine/sdk':
-        specifier: v1.0.0-alpha.24
-        version: 1.0.0-alpha.24(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.6.3)
       '@dojoengine/torii-client':
         specifier: v1.0.0-alpha.24
         version: 1.0.0-alpha.24
@@ -101,9 +98,6 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      react-json-view-lite:
-        specifier: ^1.2.1
-        version: 1.2.1(react@18.2.0)
       react-query:
         specifier: ^3.39.2
         version: 3.39.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1314,12 +1308,6 @@ packages:
 
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
-
-  '@dojoengine/sdk@1.0.0-alpha.24':
-    resolution: {integrity: sha512-h6oapX/+HSe/Pj2xQ4Exmp53Sc57SLMGSHs2I/wamyjj8j9FQRUJDOw5zBOIw2bmv9WORSq+6/jC72/b3dT5Ag==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      starknet: 6.11.0
 
   '@dojoengine/torii-client@1.0.0-alpha.24':
     resolution: {integrity: sha512-CzKv8SS8/nZm+/snVU//rCtLnhLToWlrZetWYiXn/4qlxLpfg5ODHi+8/Fcr5S+lSoRojBax3C8PE2AusbpG5g==}
@@ -4522,12 +4510,6 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
-  react-json-view-lite@1.2.1:
-    resolution: {integrity: sha512-Itc0g86fytOmKZoIoJyGgvNqohWSbh3NXIKNgH6W6FT9PC1ck4xas1tT3Rr/b3UlFXyA9Jjaw9QSXdZy2JwGMQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      react: ^16.13.1 || ^17.0.0 || ^18.0.0
-
   react-query@3.39.3:
     resolution: {integrity: sha512-nLfLz7GiohKTJDuT4us4X3h/8unOh+00MLb2yJoGTPjxKs2bc1iDhkNx2bd5MKklXnOD3NrVZ+J2UXujA5In4g==}
     peerDependencies:
@@ -5273,11 +5255,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-sync-external-store@1.2.2:
-    resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -5559,21 +5536,6 @@ packages:
     peerDependencies:
       '@types/react': '>=16.8'
       immer: '>=9.0'
-      react: '>=16.8'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      immer:
-        optional: true
-      react:
-        optional: true
-
-  zustand@4.5.5:
-    resolution: {integrity: sha512-+0PALYNJNgK6hldkgDq2vLrw5f6g/jCInz52n9RTpropGgeAf/ioFUCdtsjCqu4gNhW9D01rUQBROoRjdzyn2Q==}
-    engines: {node: '>=12.7.0'}
-    peerDependencies:
-      '@types/react': '>=16.8'
-      immer: '>=9.0.6'
       react: '>=16.8'
     peerDependenciesMeta:
       '@types/react':
@@ -7137,22 +7099,6 @@ snapshots:
       - typescript
       - utf-8-validate
       - zod
-
-  '@dojoengine/sdk@1.0.0-alpha.24(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.6.3)':
-    dependencies:
-      '@dojoengine/core': 1.0.0-alpha.24(starknet@6.2.0(encoding@0.1.13))(typescript@5.6.3)
-      '@dojoengine/create-burner': 1.0.0-alpha.24(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(starknet@6.2.0(encoding@0.1.13))(typescript@5.6.3)
-      '@dojoengine/torii-client': 1.0.0-alpha.24
-      immer: 10.1.1
-      starknet: 6.2.0(encoding@0.1.13)
-      zustand: 4.5.5(@types/react@18.3.12)(immer@10.1.1)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - bufferutil
-      - react
-      - react-dom
-      - typescript
-      - utf-8-validate
 
   '@dojoengine/torii-client@1.0.0-alpha.24':
     dependencies:
@@ -9948,7 +9894,8 @@ snapshots:
 
   ignore@5.3.1: {}
 
-  immer@10.1.1: {}
+  immer@10.1.1:
+    optional: true
 
   immutable@3.7.6: {}
 
@@ -10943,10 +10890,6 @@ snapshots:
 
   react-is@16.13.1: {}
 
-  react-json-view-lite@1.2.1(react@18.2.0):
-    dependencies:
-      react: 18.2.0
-
   react-query@3.39.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime': 7.23.8
@@ -11720,10 +11663,6 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  use-sync-external-store@1.2.2(react@18.2.0):
-    dependencies:
-      react: 18.2.0
-
   util-deprecate@1.0.2: {}
 
   validate-npm-package-license@3.0.4:
@@ -12114,14 +12053,6 @@ snapshots:
   zustand@4.4.7(@types/react@18.3.12)(immer@10.1.1)(react@18.2.0):
     dependencies:
       use-sync-external-store: 1.2.0(react@18.2.0)
-    optionalDependencies:
-      '@types/react': 18.3.12
-      immer: 10.1.1
-      react: 18.2.0
-
-  zustand@4.5.5(@types/react@18.3.12)(immer@10.1.1)(react@18.2.0):
-    dependencies:
-      use-sync-external-store: 1.2.2(react@18.2.0)
     optionalDependencies:
       '@types/react': 18.3.12
       immer: 10.1.1

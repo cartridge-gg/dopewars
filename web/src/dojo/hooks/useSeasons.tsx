@@ -9,7 +9,7 @@ import {
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 
-interface SeasonInfos {
+export interface SeasonInfos {
   season: Season;
   seasonSettings?: SeasonSettings;
   sortedList?: SortedList;

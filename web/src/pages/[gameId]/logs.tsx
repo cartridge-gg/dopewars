@@ -145,11 +145,7 @@ const Logs = () => {
             w={["full", "auto"]}
             px={["auto", "20px"]}
             onClick={() => {
-              if (gameInfos?.game_over || !account || account.address !== gameInfos?.player_id) {
-                router.push("/");
-              } else {
-                router.back();
-              }
+              router.back();
             }}
           >
             Back

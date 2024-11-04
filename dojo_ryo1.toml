@@ -1,8 +1,8 @@
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/ryo1/katana"
-# account_address = "0x5087ef27f2ae9d2d88f5e5d9bf25b62afcc7a17f62aee5bd99654683f7e97"
-# private_key = "0x592b2452182f46d4fd9ddc01d42f72b24ad33f51df4e1dbf1b1abece5dbed24"
+account_address = "0x4be62b3e01cb9ddca21ef418dca601952c33cb6411cc06ff59fdbb7ed5bf75"
+private_key = "0x660dd722665a19eec32efe0994921573f990d626f6c20db482bed32ce2847ab"
 
 
 [world]
@@ -18,13 +18,7 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 default = "dopewars"
 
 [migration]
-skip_contracts = [
-    "dopewars-slotmachine",
-    "dopewars-SlotMachine",
-    "dopewars-SlotMachineCombination",
-    "dopewars-chips",
-    "dopewars-devtools",
-]
+skip_contracts = []
 
 [init_call_args]
 "dopewars-vrf_provider_mock" = [
@@ -32,8 +26,8 @@ skip_contracts = [
     "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204",
 ]
 "dopewars-ryo" = [
-    "0x0", # paper address, 0x0 = use dns world to retrieve paper_mock
-    "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
+    "0x0",                                                              # paper address, 0x0 = use dns world to retrieve paper_mock
+    "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481", # treasury / multisig address
 ]
 
 [writers]
@@ -42,4 +36,5 @@ skip_contracts = [
     "dopewars-laundromat",
     "dopewars-game",
     "dopewars-ryo",
+    "dopewars-paper_mock",
 ]
