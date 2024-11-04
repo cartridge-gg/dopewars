@@ -106,7 +106,7 @@ export const useSystems = (): SystemsInterface => {
         });
       } catch (e: any) {
         setIsPending(false);
-        setError(e.toString());
+        //setError(e.toString());
         toast({
           message: tryBetterErrorMsg(e.toString()),
           duration: 20_000,

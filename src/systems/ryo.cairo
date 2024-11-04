@@ -68,7 +68,7 @@ mod ryo {
             paper_address
         };
         
-        let vrf_address = if paper_address.is_zero() {
+        let vrf_address = if vrf_address.is_zero() {
             let (vrf_mock_address, _) = world.dns(@"vrf_provider_mock").unwrap();
             vrf_mock_address
         } else {

@@ -12,7 +12,6 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
-
   const { username, isController } = useControllerUsername();
 
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
@@ -41,7 +40,8 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
             onClick={() => {
               if (connector?.id === "controller") {
                 // broken..
-                (connector as unknown as ControllerConnector).controller.openProfile();
+                (connector as unknown as ControllerConnector).controller.openProfile("inventory") // "trophies"
+                // (connector as unknown as ControllerConnector).controller.openSettings()
               } else {
                 uiStore.openAccountDetails();
               }

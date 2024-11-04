@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
-  reactStrictMode: true,
+  // https://rishabhsharma.bio/next-js-issue-useeffect-hook-running-twice-in-client-9fb6712f6362
+  reactStrictMode: false, // disable double rendering in dev mode, causing issues with controller
   // images: {
   //   domains: ["static.cartridge.gg", "static.localhost"],
   // },

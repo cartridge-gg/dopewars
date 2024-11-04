@@ -8,7 +8,7 @@ export const useAutoBurner = () => {
     const lastUsedConnector = window.localStorage.getItem("lastUsedConnector");
 
     if (!lastSelectedChainId) {
-      window.localStorage.setItem("lastSelectedChainId", "KATANA_SLOT_420");
+      window.localStorage.setItem("lastSelectedChainId", "KATANA");
     }
     if (!lastUsedConnector) {
       window.localStorage.setItem("lastUsedConnector", "dojoburner");

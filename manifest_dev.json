@@ -2878,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0x7a578aa01828601a5ab46604ac6704fd7d202df0e6d887abc6bd3adf76b997f",
-      "class_hash": "0x2cf595b26c140faf92b8508d8c4bc2bf9f6775e232c86be354e8b1d821099a8",
+      "address": "0xfa882fef7863a2a03954f7d90cbe92bc7b2f0c712e6ad7b4ec749d7763bc8d",
+      "class_hash": "0x2365633ba52ad53cff1491874aa1978c41cff8545d3cf064e126f3e530bbdd9",
       "abi": [
         {
           "type": "impl",
@@ -2927,6 +2927,10 @@
           "inputs": [
             {
               "name": "paper_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "vrf_address",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
@@ -3254,6 +3258,7 @@
         }
       ],
       "init_calldata": [
+        "0x0",
         "0x0",
         "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"
       ],

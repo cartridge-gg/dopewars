@@ -34,6 +34,8 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 }
 
 function getConnectorsForChain(selectedChain: DojoChainConfig) {
+  const controller = cartridgeConnector({ selectedChain });
+
   switch (selectedChain.name) {
     case "KATANA":
       return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
@@ -42,11 +44,12 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
       return [
         injected({ id: "dojoburner" }),
         injected({ id: "dojopredeployed" }),
-        cartridgeConnector({ selectedChain }),
+        controller,
+        // cartridgeConnector({ selectedChain }),
       ];
 
     default:
-      const controller = cartridgeConnector({ selectedChain });
+      // const controller = cartridgeConnector({ selectedChain });
       return [controller];
   }
 }
@@ -72,6 +75,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 }
 
 const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
+  console.log("cartridgeConnector", selectedChain.name);
   const paperAddress = selectedChain.paperAddress;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
@@ -79,6 +83,7 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
   return new ControllerConnector({
     url: keychain ? keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    // profileUrl: "https://profile.cartridge.gg/",
     tokens: { erc20: [paperAddress] },
     theme: "dope-wars",
     policies: [
@@ -117,6 +122,10 @@ const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; se
       {
         target: laundromatAddress,
         method: "claim",
+      },
+      {
+        target: laundromatAddress,
+        method: "launder",
       },
     ],
   }) as unknown as InjectedConnector;

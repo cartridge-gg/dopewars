@@ -1,644 +1,644 @@
 export const ABI = [
   {
-    type: "impl",
-    name: "config__ContractImpl",
-    interface_name: "dojo::contract::interface::IContract",
+    "type": "impl",
+    "name": "config__ContractImpl",
+    "interface_name": "dojo::contract::interface::IContract"
   },
   {
-    type: "struct",
-    name: "core::byte_array::ByteArray",
-    members: [
+    "type": "struct",
+    "name": "core::byte_array::ByteArray",
+    "members": [
       {
-        name: "data",
-        type: "core::array::Array::<core::bytes_31::bytes31>",
+        "name": "data",
+        "type": "core::array::Array::<core::bytes_31::bytes31>"
       },
       {
-        name: "pending_word",
-        type: "core::felt252",
+        "name": "pending_word",
+        "type": "core::felt252"
       },
       {
-        name: "pending_word_len",
-        type: "core::integer::u32",
-      },
-    ],
+        "name": "pending_word_len",
+        "type": "core::integer::u32"
+      }
+    ]
   },
   {
-    type: "interface",
-    name: "dojo::contract::interface::IContract",
-    items: [
+    "type": "interface",
+    "name": "dojo::contract::interface::IContract",
+    "items": [
       {
-        type: "function",
-        name: "dojo_name",
-        inputs: [],
-        outputs: [
+        "type": "function",
+        "name": "dojo_name",
+        "inputs": [],
+        "outputs": [
           {
-            type: "core::byte_array::ByteArray",
-          },
+            "type": "core::byte_array::ByteArray"
+          }
         ],
-        state_mutability: "view",
-      },
-    ],
+        "state_mutability": "view"
+      }
+    ]
   },
   {
-    type: "function",
-    name: "dojo_init",
-    inputs: [],
-    outputs: [],
-    state_mutability: "external",
+    "type": "function",
+    "name": "dojo_init",
+    "inputs": [],
+    "outputs": [],
+    "state_mutability": "external"
   },
   {
-    type: "impl",
-    name: "ConfigImpl",
-    interface_name: "rollyourown::config::config::IConfig",
+    "type": "impl",
+    "name": "ConfigImpl",
+    "interface_name": "rollyourown::config::config::IConfig"
   },
   {
-    type: "struct",
-    name: "rollyourown::config::config::LayoutItem",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::config::LayoutItem",
+    "members": [
       {
-        name: "name",
-        type: "core::bytes_31::bytes31",
+        "name": "name",
+        "type": "core::bytes_31::bytes31"
       },
       {
-        name: "idx",
-        type: "core::integer::u8",
+        "name": "idx",
+        "type": "core::integer::u8"
       },
       {
-        name: "bits",
-        type: "core::integer::u8",
-      },
-    ],
+        "name": "bits",
+        "type": "core::integer::u8"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::config::LayoutsConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::config::LayoutsConfig",
+    "members": [
       {
-        name: "game_store",
-        type: "core::array::Array::<rollyourown::config::config::LayoutItem>",
+        "name": "game_store",
+        "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
       },
       {
-        name: "player",
-        type: "core::array::Array::<rollyourown::config::config::LayoutItem>",
-      },
-    ],
+        "name": "player",
+        "type": "core::array::Array::<rollyourown::config::config::LayoutItem>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::hustlers::ItemSlot",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::hustlers::ItemSlot",
+    "variants": [
       {
-        name: "Weapon",
-        type: "()",
+        "name": "Weapon",
+        "type": "()"
       },
       {
-        name: "Clothes",
-        type: "()",
+        "name": "Clothes",
+        "type": "()"
       },
       {
-        name: "Feet",
-        type: "()",
+        "name": "Feet",
+        "type": "()"
       },
       {
-        name: "Transport",
-        type: "()",
-      },
-    ],
+        "name": "Transport",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::hustlers::HustlerItemBaseConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
+    "members": [
       {
-        name: "slot",
-        type: "rollyourown::config::hustlers::ItemSlot",
+        "name": "slot",
+        "type": "rollyourown::config::hustlers::ItemSlot"
       },
       {
-        name: "id",
-        type: "core::integer::u32",
+        "name": "id",
+        "type": "core::integer::u32"
       },
       {
-        name: "slot_id",
-        type: "core::integer::u8",
+        "name": "slot_id",
+        "type": "core::integer::u8"
       },
       {
-        name: "name",
-        type: "core::felt252",
+        "name": "name",
+        "type": "core::felt252"
       },
       {
-        name: "initial_tier",
-        type: "core::integer::u8",
-      },
-    ],
+        "name": "initial_tier",
+        "type": "core::integer::u8"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::hustlers::HustlerItemTiersConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
+    "members": [
       {
-        name: "slot",
-        type: "rollyourown::config::hustlers::ItemSlot",
+        "name": "slot",
+        "type": "rollyourown::config::hustlers::ItemSlot"
       },
       {
-        name: "tier",
-        type: "core::integer::u8",
+        "name": "tier",
+        "type": "core::integer::u8"
       },
       {
-        name: "slot_id",
-        type: "core::integer::u8",
+        "name": "slot_id",
+        "type": "core::integer::u8"
       },
       {
-        name: "cost",
-        type: "core::integer::u32",
+        "name": "cost",
+        "type": "core::integer::u32"
       },
       {
-        name: "stat",
-        type: "core::integer::u32",
-      },
-    ],
+        "name": "stat",
+        "type": "core::integer::u32"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::hustlers::HustlerItemConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::hustlers::HustlerItemConfig",
+    "members": [
       {
-        name: "slot",
-        type: "rollyourown::config::hustlers::ItemSlot",
+        "name": "slot",
+        "type": "rollyourown::config::hustlers::ItemSlot"
       },
       {
-        name: "level",
-        type: "core::integer::u8",
+        "name": "level",
+        "type": "core::integer::u8"
       },
       {
-        name: "base",
-        type: "rollyourown::config::hustlers::HustlerItemBaseConfig",
+        "name": "base",
+        "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
       },
       {
-        name: "tier",
-        type: "rollyourown::config::hustlers::HustlerItemTiersConfig",
-      },
-    ],
+        "name": "tier",
+        "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::hustlers::HustlerConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::hustlers::HustlerConfig",
+    "members": [
       {
-        name: "hustler_id",
-        type: "core::integer::u16",
+        "name": "hustler_id",
+        "type": "core::integer::u16"
       },
       {
-        name: "weapon",
-        type: "rollyourown::config::hustlers::HustlerItemConfig",
+        "name": "weapon",
+        "type": "rollyourown::config::hustlers::HustlerItemConfig"
       },
       {
-        name: "clothes",
-        type: "rollyourown::config::hustlers::HustlerItemConfig",
+        "name": "clothes",
+        "type": "rollyourown::config::hustlers::HustlerItemConfig"
       },
       {
-        name: "feet",
-        type: "rollyourown::config::hustlers::HustlerItemConfig",
+        "name": "feet",
+        "type": "rollyourown::config::hustlers::HustlerItemConfig"
       },
       {
-        name: "transport",
-        type: "rollyourown::config::hustlers::HustlerItemConfig",
-      },
-    ],
+        "name": "transport",
+        "type": "rollyourown::config::hustlers::HustlerItemConfig"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "core::bool",
-    variants: [
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
       {
-        name: "False",
-        type: "()",
+        "name": "False",
+        "type": "()"
       },
       {
-        name: "True",
-        type: "()",
-      },
-    ],
+        "name": "True",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::ryo::RyoConfig",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::ryo::RyoConfig",
+    "members": [
       {
-        name: "key",
-        type: "core::integer::u8",
+        "name": "key",
+        "type": "core::integer::u8"
       },
       {
-        name: "initialized",
-        type: "core::bool",
+        "name": "initialized",
+        "type": "core::bool"
       },
       {
-        name: "paused",
-        type: "core::bool",
+        "name": "paused",
+        "type": "core::bool"
       },
       {
-        name: "season_version",
-        type: "core::integer::u16",
+        "name": "season_version",
+        "type": "core::integer::u16"
       },
       {
-        name: "season_duration",
-        type: "core::integer::u32",
+        "name": "season_duration",
+        "type": "core::integer::u32"
       },
       {
-        name: "season_time_limit",
-        type: "core::integer::u16",
+        "name": "season_time_limit",
+        "type": "core::integer::u16"
       },
       {
-        name: "paper_fee",
-        type: "core::integer::u16",
+        "name": "paper_fee",
+        "type": "core::integer::u16"
       },
       {
-        name: "paper_reward_launderer",
-        type: "core::integer::u16",
+        "name": "paper_reward_launderer",
+        "type": "core::integer::u16"
       },
       {
-        name: "treasury_fee_pct",
-        type: "core::integer::u8",
+        "name": "treasury_fee_pct",
+        "type": "core::integer::u8"
       },
       {
-        name: "treasury_balance",
-        type: "core::integer::u32",
-      },
-    ],
+        "name": "treasury_balance",
+        "type": "core::integer::u32"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::CashMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::CashMode",
+    "variants": [
       {
-        name: "Broke",
-        type: "()",
+        "name": "Broke",
+        "type": "()"
       },
       {
-        name: "Average",
-        type: "()",
+        "name": "Average",
+        "type": "()"
       },
       {
-        name: "Rich",
-        type: "()",
-      },
-    ],
+        "name": "Rich",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::CashMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::CashMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::CashMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::CashMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::HealthMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::HealthMode",
+    "variants": [
       {
-        name: "Junkie",
-        type: "()",
+        "name": "Junkie",
+        "type": "()"
       },
       {
-        name: "Hustler",
-        type: "()",
+        "name": "Hustler",
+        "type": "()"
       },
       {
-        name: "Streetboss",
-        type: "()",
-      },
-    ],
+        "name": "Streetboss",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::HealthMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::HealthMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::HealthMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::HealthMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::TurnsMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::TurnsMode",
+    "variants": [
       {
-        name: "OnSpeed",
-        type: "()",
+        "name": "OnSpeed",
+        "type": "()"
       },
       {
-        name: "OnWeed",
-        type: "()",
+        "name": "OnWeed",
+        "type": "()"
       },
       {
-        name: "OnMush",
-        type: "()",
-      },
-    ],
+        "name": "OnMush",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::TurnsMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::TurnsMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::TurnsMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::TurnsMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::EncountersMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::EncountersMode",
+    "variants": [
       {
-        name: "Chill",
-        type: "()",
+        "name": "Chill",
+        "type": "()"
       },
       {
-        name: "NoJokes",
-        type: "()",
+        "name": "NoJokes",
+        "type": "()"
       },
       {
-        name: "UltraViolence",
-        type: "()",
-      },
-    ],
+        "name": "UltraViolence",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::EncountersMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::EncountersMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::EncountersMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::EncountersMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::EncountersOddsMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::EncountersOddsMode",
+    "variants": [
       {
-        name: "Easy",
-        type: "()",
+        "name": "Easy",
+        "type": "()"
       },
       {
-        name: "Normal",
-        type: "()",
+        "name": "Normal",
+        "type": "()"
       },
       {
-        name: "Hard",
-        type: "()",
-      },
-    ],
+        "name": "Hard",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::EncountersOddsMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::EncountersOddsMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::DrugsMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::DrugsMode",
+    "variants": [
       {
-        name: "Cheap",
-        type: "()",
+        "name": "Cheap",
+        "type": "()"
       },
       {
-        name: "Normal",
-        type: "()",
+        "name": "Normal",
+        "type": "()"
       },
       {
-        name: "Expensive",
-        type: "()",
-      },
-    ],
+        "name": "Expensive",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::DrugsMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::DrugsMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::DrugsMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::DrugsMode>"
+      }
+    ]
   },
   {
-    type: "enum",
-    name: "rollyourown::config::settings::WantedMode",
-    variants: [
+    "type": "enum",
+    "name": "rollyourown::config::settings::WantedMode",
+    "variants": [
       {
-        name: "KoolAndTheGang",
-        type: "()",
+        "name": "KoolAndTheGang",
+        "type": "()"
       },
       {
-        name: "ThugLife",
-        type: "()",
+        "name": "ThugLife",
+        "type": "()"
       },
       {
-        name: "MostWanted",
-        type: "()",
-      },
-    ],
+        "name": "MostWanted",
+        "type": "()"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "core::array::Span::<rollyourown::config::settings::WantedMode>",
-    members: [
+    "type": "struct",
+    "name": "core::array::Span::<rollyourown::config::settings::WantedMode>",
+    "members": [
       {
-        name: "snapshot",
-        type: "@core::array::Array::<rollyourown::config::settings::WantedMode>",
-      },
-    ],
+        "name": "snapshot",
+        "type": "@core::array::Array::<rollyourown::config::settings::WantedMode>"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::settings::SeasonSettingsModes",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::settings::SeasonSettingsModes",
+    "members": [
       {
-        name: "cash_modes",
-        type: "core::array::Span::<rollyourown::config::settings::CashMode>",
+        "name": "cash_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::CashMode>"
       },
       {
-        name: "health_modes",
-        type: "core::array::Span::<rollyourown::config::settings::HealthMode>",
+        "name": "health_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::HealthMode>"
       },
       {
-        name: "turns_modes",
-        type: "core::array::Span::<rollyourown::config::settings::TurnsMode>",
+        "name": "turns_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::TurnsMode>"
       },
       {
-        name: "encounters_modes",
-        type: "core::array::Span::<rollyourown::config::settings::EncountersMode>",
+        "name": "encounters_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::EncountersMode>"
       },
       {
-        name: "encounters_odds_modes",
-        type: "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>",
+        "name": "encounters_odds_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::EncountersOddsMode>"
       },
       {
-        name: "drugs_modes",
-        type: "core::array::Span::<rollyourown::config::settings::DrugsMode>",
+        "name": "drugs_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::DrugsMode>"
       },
       {
-        name: "wanted_modes",
-        type: "core::array::Span::<rollyourown::config::settings::WantedMode>",
-      },
-    ],
+        "name": "wanted_modes",
+        "type": "core::array::Span::<rollyourown::config::settings::WantedMode>"
+      }
+    ]
   },
   {
-    type: "struct",
-    name: "rollyourown::config::config::Config",
-    members: [
+    "type": "struct",
+    "name": "rollyourown::config::config::Config",
+    "members": [
       {
-        name: "layouts",
-        type: "rollyourown::config::config::LayoutsConfig",
+        "name": "layouts",
+        "type": "rollyourown::config::config::LayoutsConfig"
       },
       {
-        name: "hustlers",
-        type: "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>",
+        "name": "hustlers",
+        "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
       },
       {
-        name: "ryo_config",
-        type: "rollyourown::config::ryo::RyoConfig",
+        "name": "ryo_config",
+        "type": "rollyourown::config::ryo::RyoConfig"
       },
       {
-        name: "season_settings_modes",
-        type: "rollyourown::config::settings::SeasonSettingsModes",
-      },
-    ],
+        "name": "season_settings_modes",
+        "type": "rollyourown::config::settings::SeasonSettingsModes"
+      }
+    ]
   },
   {
-    type: "interface",
-    name: "rollyourown::config::config::IConfig",
-    items: [
+    "type": "interface",
+    "name": "rollyourown::config::config::IConfig",
+    "items": [
       {
-        type: "function",
-        name: "get_config",
-        inputs: [],
-        outputs: [
+        "type": "function",
+        "name": "get_config",
+        "inputs": [],
+        "outputs": [
           {
-            type: "rollyourown::config::config::Config",
-          },
+            "type": "rollyourown::config::config::Config"
+          }
         ],
-        state_mutability: "view",
-      },
-    ],
+        "state_mutability": "view"
+      }
+    ]
   },
   {
-    type: "impl",
-    name: "WorldProviderImpl",
-    interface_name: "dojo::contract::components::world_provider::IWorldProvider",
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
   },
   {
-    type: "struct",
-    name: "dojo::world::iworld::IWorldDispatcher",
-    members: [
+    "type": "struct",
+    "name": "dojo::world::iworld::IWorldDispatcher",
+    "members": [
       {
-        name: "contract_address",
-        type: "core::starknet::contract_address::ContractAddress",
-      },
-    ],
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
   },
   {
-    type: "interface",
-    name: "dojo::contract::components::world_provider::IWorldProvider",
-    items: [
+    "type": "interface",
+    "name": "dojo::contract::components::world_provider::IWorldProvider",
+    "items": [
       {
-        type: "function",
-        name: "world_dispatcher",
-        inputs: [],
-        outputs: [
+        "type": "function",
+        "name": "world_dispatcher",
+        "inputs": [],
+        "outputs": [
           {
-            type: "dojo::world::iworld::IWorldDispatcher",
-          },
+            "type": "dojo::world::iworld::IWorldDispatcher"
+          }
         ],
-        state_mutability: "view",
-      },
-    ],
+        "state_mutability": "view"
+      }
+    ]
   },
   {
-    type: "impl",
-    name: "UpgradeableImpl",
-    interface_name: "dojo::contract::components::upgradeable::IUpgradeable",
+    "type": "impl",
+    "name": "UpgradeableImpl",
+    "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
   },
   {
-    type: "interface",
-    name: "dojo::contract::components::upgradeable::IUpgradeable",
-    items: [
+    "type": "interface",
+    "name": "dojo::contract::components::upgradeable::IUpgradeable",
+    "items": [
       {
-        type: "function",
-        name: "upgrade",
-        inputs: [
+        "type": "function",
+        "name": "upgrade",
+        "inputs": [
           {
-            name: "new_class_hash",
-            type: "core::starknet::class_hash::ClassHash",
-          },
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
         ],
-        outputs: [],
-        state_mutability: "external",
-      },
-    ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
   },
   {
-    type: "constructor",
-    name: "constructor",
-    inputs: [],
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": []
   },
   {
-    type: "event",
-    name: "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-    kind: "struct",
-    members: [
+    "type": "event",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+    "kind": "struct",
+    "members": [
       {
-        name: "class_hash",
-        type: "core::starknet::class_hash::ClassHash",
-        kind: "data",
-      },
-    ],
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
   },
   {
-    type: "event",
-    name: "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-    kind: "enum",
-    variants: [
+    "type": "event",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+    "kind": "enum",
+    "variants": [
       {
-        name: "Upgraded",
-        type: "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-        kind: "nested",
-      },
-    ],
+        "name": "Upgraded",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+        "kind": "nested"
+      }
+    ]
   },
   {
-    type: "event",
-    name: "dojo::contract::components::world_provider::world_provider_cpt::Event",
-    kind: "enum",
-    variants: [],
+    "type": "event",
+    "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+    "kind": "enum",
+    "variants": []
   },
   {
-    type: "event",
-    name: "rollyourown::config::config::config::Event",
-    kind: "enum",
-    variants: [
+    "type": "event",
+    "name": "rollyourown::config::config::config::Event",
+    "kind": "enum",
+    "variants": [
       {
-        name: "UpgradeableEvent",
-        type: "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-        kind: "nested",
+        "name": "UpgradeableEvent",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+        "kind": "nested"
       },
       {
-        name: "WorldProviderEvent",
-        type: "dojo::contract::components::world_provider::world_provider_cpt::Event",
-        kind: "nested",
-      },
-    ],
-  },
+        "name": "WorldProviderEvent",
+        "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+        "kind": "nested"
+      }
+    ]
+  }
 ] as const;

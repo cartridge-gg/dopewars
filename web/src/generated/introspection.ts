@@ -1,11 +1,12 @@
-export interface PossibleTypesResultData {
-  possibleTypes: {
-    [key: string]: string[];
-  };
-}
-const result: PossibleTypesResultData = {
-  possibleTypes: {
-    ModelUnion: [
+
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
+      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "ModelUnion": [
       "dopewars_Claimed",
       "dopewars_DrugConfig",
       "dopewars_ERC20BalanceEvent",
@@ -31,8 +32,9 @@ const result: PossibleTypesResultData = {
       "dopewars_TravelEncounter",
       "dopewars_TravelEncounterResult",
       "dopewars_Traveled",
-      "dopewars_UpgradeItem",
-    ],
-  },
+      "dopewars_UpgradeItem"
+    ]
+  }
 };
-export default result;
+      export default result;
+    
