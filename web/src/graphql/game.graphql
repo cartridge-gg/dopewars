@@ -6,7 +6,9 @@ query GameById($gameId: u32) {
         game_id
         game_mode
         hustler_id
-        player_name { value }
+        player_name {
+          value
+        }
         player_id
         game_over
         final_score
@@ -30,7 +32,9 @@ query RegisteredGamesBySeason($version: u16) {
         season_version
         game_id
         player_id
-        player_name { value }
+        player_name {
+          value
+        }
         hustler_id
         final_score
         registered
@@ -56,7 +60,9 @@ query GamesByPlayer($playerId: String) {
             season_version
             game_mode
             hustler_id
-            player_name { value }
+            player_name {
+              value
+            }
             game_over
             final_score
             registered
@@ -110,7 +116,7 @@ subscription GameStorePackedSubscription($id: ID) {
 }
 
 query TravelEncounterByPlayer($travelEncounterSelector: String, $playerId: String) {
-  events(limit: 99999,keys: [$travelEncounterSelector, "*", $playerId]) {
+  events(limit: 99999, keys: [$travelEncounterSelector, "*", $playerId]) {
     edges {
       node {
         id
@@ -133,11 +139,7 @@ query TravelEncounterResultsByPlayer($travelEncounterResultSelector: String, $pl
   }
 }
 
-
-query TradedDrugByPlayer(
-  $tradeDrugSelector: String
-  $playerId: String
-) {
+query TradedDrugByPlayer($tradeDrugSelector: String, $playerId: String) {
   events(limit: 99999, keys: [$tradeDrugSelector, "*", $playerId]) {
     edges {
       node {
@@ -149,16 +151,17 @@ query TradedDrugByPlayer(
   }
 }
 
-
-query GetAllGames{
+query GetAllGames {
   dopewarsGameModels(limit: 9001) {
     edges {
       node {
         game_id
         player_id
-        season_version 
+        season_version
         position
-        player_name {value}
+        player_name {
+          value
+        }
         final_score
         claimable
         claimed

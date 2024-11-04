@@ -1,16 +1,9 @@
-import {
-  Icon as ChakraIcon,
-  IconProps as ChakraIconProps,
-  ThemingProps,
-} from "@chakra-ui/react";
+import { Icon as ChakraIcon, IconProps as ChakraIconProps, ThemingProps } from "@chakra-ui/react";
 import React from "react";
 
 export interface IconProps extends ChakraIconProps, ThemingProps {}
 
-export const Icon = ({
-  children,
-  ...rest
-}: { children: React.ReactElement<SVGPathElement> } & IconProps) => {
+export const Icon = ({ children, ...rest }: { children: React.ReactElement<SVGPathElement> } & IconProps) => {
   return (
     <ChakraIcon viewBox="0 0 24 24" fill="currentColor" {...rest}>
       {children}

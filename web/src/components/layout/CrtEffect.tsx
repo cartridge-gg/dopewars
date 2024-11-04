@@ -81,5 +81,3 @@ const flicker = keyframes`
   100% {
     opacity: 0.6;
   }`;
-
-

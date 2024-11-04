@@ -55,7 +55,7 @@ export class EventClass {
       if (key.startsWith("dopewars-GameOver")) {
         const event = parseStruct(entity[key]) as GameOver;
         event.player_name = shortString.decodeShortString(num.toHexString(BigInt(event.player_name)));
-         return {
+        return {
           eventName: "GameOver",
           event,
           idx: i,
@@ -138,7 +138,7 @@ export class EventClass {
   }
 
   get sortedEvents() {
-    return this.events.slice().sort((a,b)=> b.idx - a.idx);
+    return this.events.slice().sort((a, b) => b.idx - a.idx);
   }
   get lastEncounter() {
     return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounter");

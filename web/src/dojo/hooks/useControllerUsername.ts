@@ -14,11 +14,11 @@ export const useControllerUsername = () => {
       setUsername(username || "");
     };
     if (connector?.id.includes("controller")) {
-        setIsController(true)
+      setIsController(true);
       init();
-    }else {
-        setIsController(false)
-        setUsername("")
+    } else {
+      setIsController(false);
+      setUsername("");
     }
   }, [connector]);
 

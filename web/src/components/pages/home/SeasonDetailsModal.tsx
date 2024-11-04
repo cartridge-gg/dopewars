@@ -71,9 +71,7 @@ export const SeasonDetailsModal = observer(() => {
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <Pistol />
-                        <Text>
-                          When a player sets a new high score, the season countdown timer resets
-                        </Text>
+                        <Text>When a player sets a new high score, the season countdown timer resets</Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <DollarBag />

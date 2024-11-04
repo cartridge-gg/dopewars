@@ -66,10 +66,10 @@ export const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void
   const { router } = useRouterContext();
 
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   const onNext = async () => {
     if (currentStep == steps.length) {
-          router.push(`/game/new`);
+      router.push(`/game/new`);
 
       close();
     } else {

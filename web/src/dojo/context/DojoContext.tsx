@@ -20,7 +20,6 @@ import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
-import { ToriiClient } from "@dojoengine/torii-client";
 import { useRouter } from "next/router";
 
 export interface DojoContextType {
@@ -54,8 +53,7 @@ export const DojoContextProvider = observer(
 
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
-    const defaultChain =
-      process.env.NODE_ENV === "production" ? dojoContextConfig.WP_RYO1 : dojoContextConfig.KATANA;
+    const defaultChain = process.env.NODE_ENV === "production" ? dojoContextConfig.WP_RYO1 : dojoContextConfig.KATANA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
@@ -67,8 +65,7 @@ export const DojoContextProvider = observer(
 
     const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig, intialChain);
 
-    const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } =
-      useDojoClients(selectedChain);
+    const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } = useDojoClients(selectedChain);
 
     const masterAccount = useMemo(() => {
       if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
@@ -134,14 +131,14 @@ export const DojoContextProvider = observer(
       });
     }, [graphqlClient, dojoProvider, selectedChain.manifest]);
 
-    const router = useRouter()
-    
+    const router = useRouter();
+
     const gameStore = useMemo(() => {
       return new GameStoreClass({
         toriiClient,
         client: graphqlClient,
         configStore,
-        router
+        router,
       });
     }, [graphqlClient, configStore, toriiClient]);
 

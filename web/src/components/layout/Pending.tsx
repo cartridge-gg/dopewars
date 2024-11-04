@@ -3,8 +3,8 @@ import { Box } from "@chakra-ui/react";
 import { blinkAnim } from "../player";
 
 export const Pending = () => {
-  const {isPending} = useSystems()
-  if(!isPending) return null
+  const { isPending } = useSystems();
+  if (!isPending) return null;
   return (
     <>
       <Box

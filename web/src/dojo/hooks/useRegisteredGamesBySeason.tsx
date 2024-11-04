@@ -1,4 +1,9 @@
-import {Dopewars_Game as Game,Dopewars_GameEdge as GameEdge, useGameByIdQuery, useRegisteredGamesBySeasonQuery } from "@/generated/graphql";
+import {
+  Dopewars_Game as Game,
+  Dopewars_GameEdge as GameEdge,
+  useGameByIdQuery,
+  useRegisteredGamesBySeasonQuery,
+} from "@/generated/graphql";
 import { useMemo } from "react";
 
 interface RegisteredGamesBySeasonInterface {

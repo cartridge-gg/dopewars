@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { DojoContext } from "../context/DojoContext";
 import { ConfigStoreClass } from "../stores/config";
@@ -8,6 +7,5 @@ export const useConfigStore = (): ConfigStoreClass => {
   if (!value) {
     throw new Error("useConfigStore must be used within a DojoProvider");
   }
-  return value.configStore
-}
-
+  return value.configStore;
+};

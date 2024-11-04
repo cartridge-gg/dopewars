@@ -12,7 +12,7 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
           <VStack fontSize="16px">
             <Image src="/images/events/smoking_gun.gif" alt="rip" w="200px" h="200px" mx="auto" />
             <Text>Unable to connect</Text>
-            {errors.map((e,key) => {
+            {errors.map((e, key) => {
               if (e) {
                 return <Text key={key}>{e}</Text>;
               }

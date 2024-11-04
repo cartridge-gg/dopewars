@@ -17,7 +17,7 @@ import DrawerMenu from "./DrawerMenu";
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const {  gameId } = useRouterContext();
+  const { gameId } = useRouterContext();
 
   const { account } = useAccount();
 

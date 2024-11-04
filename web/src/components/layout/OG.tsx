@@ -23,7 +23,7 @@ export const OG = ({ id }: { id: number }) => {
         h="300px"
         css={{
           imageRendering: "pixelated",
-     
+
           background: `url(https://api.dopewars.gg/hustlers/${id}/sprites/composite.png) 0% 0% / auto 800%`,
           animation: "walk 1s steps(8) infinite",
         }}

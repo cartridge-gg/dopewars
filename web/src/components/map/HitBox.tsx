@@ -1,11 +1,7 @@
 import { Locations } from "@/dojo/types";
 import { Icon } from "@chakra-ui/react";
 
-export const HitBox = ({
-  onSelect,
-}: {
-  onSelect: (target: Locations) => void;
-}) => (
+export const HitBox = ({ onSelect }: { onSelect: (target: Locations) => void }) => (
   <Icon
     boxSize="full"
     viewBox="0 0 256 256"

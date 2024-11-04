@@ -3,5 +3,3 @@ export const BorderImage = ({ color }: { color: string }) => {
     color,
   )}' /></svg>`;
 };
-
-

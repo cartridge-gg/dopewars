@@ -16,8 +16,8 @@ const PawnShop = observer(() => {
 
   const { account } = useAccount();
   const configStore = useConfigStore();
-  const {config } = configStore;
-  const { game , gameConfig} = useGameStore();
+  const { config } = configStore;
+  const { game, gameConfig } = useGameStore();
 
   const toaster = useToast();
 
@@ -32,7 +32,7 @@ const PawnShop = observer(() => {
   };
 
   const onBack = () => {
-    playSound(Sounds.Door, 0.3)
+    playSound(Sounds.Door, 0.3);
     if (!game?.player.location) {
       return router.push(`/${gameId}/travel`);
     }
@@ -43,7 +43,7 @@ const PawnShop = observer(() => {
     if (!game || !selectedShopItem) return;
     if (game.player!.cash < selectedShopItem.tier.cost) return;
 
-    playSound(Sounds.Trade)
+    playSound(Sounds.Trade);
     game.pushCall({ slot: selectedShopItem.slot as number, cost: selectedShopItem?.tier.cost });
 
     toaster.toast({
@@ -145,7 +145,7 @@ const ShopItem = observer(
     isActive: boolean;
     isDisabled: boolean;
   }) => {
-    const isMobile = IsMobile()
+    const isMobile = IsMobile();
     return (
       <Button
         w="full"
@@ -159,11 +159,11 @@ const ShopItem = observer(
         isDisabled={isDisabled}
       >
         <HStack w="full" gap="20px">
-          {item.icon({ width: isMobile ? "32px" : "40px", height: isMobile ? "32px" : "40px"})}
+          {item.icon({ width: isMobile ? "32px" : "40px", height: isMobile ? "32px" : "40px" })}
 
           <HStack w="full" justify="space-between">
             <VStack w="full" alignItems="flex-start">
-              <Text textStyle="subheading" fontSize={["9px","11px"]} opacity="0.5">
+              <Text textStyle="subheading" fontSize={["9px", "11px"]} opacity="0.5">
                 {title}
               </Text>
               <Text textStyle="heading" textTransform="uppercase" fontSize={["16px", "18px"]}>

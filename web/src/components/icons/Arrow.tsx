@@ -18,11 +18,7 @@ interface ArrowProps {
   style?: StyleType;
 }
 
-export const Arrow = ({
-  direction,
-  style,
-  ...props
-}: ArrowProps & IconProps) => {
+export const Arrow = ({ direction, style, ...props }: ArrowProps & IconProps) => {
   let path;
   switch (style) {
     case "pixel":

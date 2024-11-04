@@ -3253,10 +3253,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x0",
-        "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481"
-      ],
+      "init_calldata": ["0x0", "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481"],
       "tag": "dopewars-ryo",
       "systems": []
     },

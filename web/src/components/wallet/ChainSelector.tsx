@@ -39,7 +39,7 @@ export const ChainSelector = ({ canChange = false, onChange = () => {} }: ChainS
             title={getInfos(selectedChain)}
             as={Button}
             variant="pixelated"
-             h="40px" /*rightIcon={<Arrow direction='down' />}*/
+            h="40px" /*rightIcon={<Arrow direction='down' />}*/
           >
             {selectedChain.name}
           </MenuButton>

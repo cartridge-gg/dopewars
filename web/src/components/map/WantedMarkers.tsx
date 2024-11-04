@@ -7,7 +7,7 @@ import { Alert } from "../icons";
 import { coordinatePercent } from "./Map";
 
 export const WantedMarkers = ({ targetId, current }: { targetId?: Locations; current?: Locations }) => {
-  const { game , gameConfig} = useGameStore();
+  const { game, gameConfig } = useGameStore();
   const configStore = useConfigStore();
   const { config } = configStore;
 

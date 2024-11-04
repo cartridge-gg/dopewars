@@ -17,10 +17,7 @@ export const PersonH = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 30H40.05V40.05H35V30Z" fill="#00743E" />
           <path d="M25.05 35H20V40.05H25.05V35Z" fill="#00743E" />
           <path d="M25 45H30.05V50H40.05V60.05H25V45Z" fill="#00743E" />
-          <path
-            d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z"
-            fill="#114329"
-          />
+          <path d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z" fill="#114329" />
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#114329" />
           <path d="M30 40V45.05H40.05V40H30Z" fill="#114329" />
           <path d="M45.05 30H40V35.05H45.05V30Z" fill="#114329" />
@@ -48,10 +45,7 @@ export const PersonH = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 30H40.05V40.05H35V30Z" fill="#00743E" />
           <path d="M25.05 35H20V40.05H25.05V35Z" fill="#00743E" />
           <path d="M25 45H30.05V50H40.05V60.05H25V45Z" fill="#00743E" />
-          <path
-            d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z"
-            fill="#114329"
-          />
+          <path d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z" fill="#114329" />
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#114329" />
           <path d="M30 40V45.05H40.05V40H30Z" fill="#114329" />
           <path d="M45.05 30H40V35.05H45.05V30Z" fill="#114329" />
@@ -73,10 +67,7 @@ export const PersonH = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 30H40.05V40.05H35V30Z" fill="#A78C44" />
           <path d="M25.05 35H20V40.05H25.05V35Z" fill="#A78C44" />
           <path d="M25 45H30.05V50H40.05V60.05H25V45Z" fill="#A78C44" />
-          <path
-            d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z"
-            fill="#5E4E26"
-          />
+          <path d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z" fill="#5E4E26" />
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#5E4E26" />
           <path d="M30 40V45.05H40.05V40H30Z" fill="#5E4E26" />
           <path d="M45.05 30H40V35.05H45.05V30Z" fill="#5E4E26" />
@@ -104,10 +95,7 @@ export const PersonH = ({ color, hasCrown }: AvatarPathProps) => {
           <path d="M35 30H40.05V40.05H35V30Z" fill="#A78C44" />
           <path d="M25.05 35H20V40.05H25.05V35Z" fill="#A78C44" />
           <path d="M25 45H30.05V50H40.05V60.05H25V45Z" fill="#A78C44" />
-          <path
-            d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z"
-            fill="#5E4E26"
-          />
+          <path d="M25 15V20H20V30.05H25V35.05H30.05V30H25.05V20.05H40V25.05H50.05V20H45.05V15H25Z" fill="#5E4E26" />
           <path d="M15 55H20V50H25.05V60.05H15V55Z" fill="#5E4E26" />
           <path d="M30 40V45.05H40.05V40H30Z" fill="#5E4E26" />
           <path d="M45.05 30H40V35.05H45.05V30Z" fill="#5E4E26" />

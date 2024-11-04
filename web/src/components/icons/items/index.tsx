@@ -17,4 +17,3 @@ export * from "./Shoes";
 export * from "./Skateboard";
 export * from "./Trenchcoat";
 export * from "./Uzi";
-

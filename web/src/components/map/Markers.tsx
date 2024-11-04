@@ -3,12 +3,7 @@ import { Icon } from "@chakra-ui/react";
 
 export const Markers = ({ location }: { location?: Locations }) => {
   return (
-    <Icon
-      layerStyle="fill"
-      zIndex="1"
-      viewBox="0 0 256 256"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <Icon layerStyle="fill" zIndex="1" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
       <g visibility={Locations.Central != location ? "visibile" : "hidden"}>
         <path
           d="M120 115.996H124.01V116.996H125.01V121.006H124.01V122.006H120V121.006H119V116.996H120V115.996Z"

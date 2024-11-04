@@ -29,10 +29,9 @@ export const PredeployedManagerUi = observer(({ predeployedManager }: { predeplo
     connect({ connector });
   };
 
-
   if (!predeployedManager) return null;
-  if( !connector ) return null;
-  if( connector && connector?.id !== "dojopredeployed") return null;
+  if (!connector) return null;
+  if (connector && connector?.id !== "dojopredeployed") return null;
 
   return (
     <VStack w="full" p={3}>
@@ -52,7 +51,11 @@ export const PredeployedManagerUi = observer(({ predeployedManager }: { predeplo
                     mb={1}
                     _last={{ borderBottom: 0 }}
                   >
-                    <HStack w="full" color={predeployed.active ? "yellow.400" : "neon.400"} justifyContent="space-between">
+                    <HStack
+                      w="full"
+                      color={predeployed.active ? "yellow.400" : "neon.400"}
+                      justifyContent="space-between"
+                    >
                       <Text textTransform="uppercase" cursor="pointer" onClick={() => onSelect(predeployed)}>
                         {frenlyAddress(predeployed.address)} ({predeployed.name})
                       </Text>
@@ -63,7 +66,6 @@ export const PredeployedManagerUi = observer(({ predeployedManager }: { predeplo
             </List>
           </>
         )}
-      
       </>
     </VStack>
   );

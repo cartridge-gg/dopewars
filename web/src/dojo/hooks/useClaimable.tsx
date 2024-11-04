@@ -10,7 +10,7 @@ export const useClaimable = (playerId: string) => {
   } = useDojoContext();
 
   const { data, isFetching, isRefetching, isError, refetch } = useClaimableQuery({
-    playerId
+    playerId,
   });
 
   useEffect(() => {

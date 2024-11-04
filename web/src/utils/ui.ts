@@ -15,17 +15,9 @@ export function generatePixelBorderPath(radius = 4, pixelSize = 4) {
   return generatePath(flipped);
 }
 
-function generateInnerPath(
-  radius: number,
-  pixelSize: number,
-  offset: number,
-  reverse = false,
-) {
+function generateInnerPath(radius: number, pixelSize: number, offset: number, reverse = false) {
   const points = generatePoints(radius, pixelSize);
-  const inset =
-    offset < radius
-      ? insetCoords(points, pixelSize, offset)
-      : generatePoints(2, pixelSize, offset);
+  const inset = offset < radius ? insetCoords(points, pixelSize, offset) : generatePoints(2, pixelSize, offset);
   const flipped = flipCoords(inset);
   const corners = addCorners(flipped);
 
@@ -51,12 +43,8 @@ function generatePoints(radius: number, pixelSize: number, offset = 0) {
   };
 
   for (let i = 270; i > 225; i--) {
-    const x =
-      Math.floor(radius * Math.sin((2 * Math.PI * i) / 360) + radius + 0.5) *
-      pixelSize;
-    const y =
-      Math.floor(radius * Math.cos((2 * Math.PI * i) / 360) + radius + 0.5) *
-      pixelSize;
+    const x = Math.floor(radius * Math.sin((2 * Math.PI * i) / 360) + radius + 0.5) * pixelSize;
+    const y = Math.floor(radius * Math.cos((2 * Math.PI * i) / 360) + radius + 0.5) * pixelSize;
 
     if (x !== lastCoords.x || y !== lastCoords.y) {
       lastCoords.x = x;
@@ -76,10 +64,7 @@ function generatePoints(radius: number, pixelSize: number, offset = 0) {
 }
 
 function flipCoords(coords: Point[]) {
-  return [
-    ...coords,
-    ...coords.map(({ x, y }) => ({ x: y, y: x })).reverse(),
-  ].filter(({ x, y }, i, arr) => {
+  return [...coords, ...coords.map(({ x, y }) => ({ x: y, y: x })).reverse()].filter(({ x, y }, i, arr) => {
     return !i || arr[i - 1].x !== x || arr[i - 1].y !== y;
   });
 }
@@ -103,11 +88,7 @@ function insetCoords(coords: Point[], pixelSize: number, offset: number) {
 
 function mergeCoords(coords: Point[]) {
   return coords.reduce((result: Point[], point: Point, index: number) => {
-    if (
-      index !== coords.length - 1 &&
-      point.x === 0 &&
-      coords[index + 1].x === 0
-    ) {
+    if (index !== coords.length - 1 && point.x === 0 && coords[index + 1].x === 0) {
       return result;
     }
 
@@ -133,12 +114,7 @@ function addCorners(coords: Point[]) {
   return coords.reduce((result: Point[], point: Point, i: number) => {
     result.push(point);
 
-    if (
-      coords.length > 1 &&
-      i < coords.length - 1 &&
-      coords[i + 1].x !== point.x &&
-      coords[i + 1].y !== point.y
-    ) {
+    if (coords.length > 1 && i < coords.length - 1 && coords[i + 1].x !== point.x && coords[i + 1].y !== point.y) {
       result.push({
         x: coords[i + 1].x,
         y: point.y,
@@ -172,15 +148,11 @@ function mirrorCoords(coords: Point[], offset = 0) {
 
 function edgeCoord(n: number, offset: number) {
   if (offset) {
-    return n === 0
-      ? `calc(100% - ${offset}px)`
-      : `calc(100% - ${offset + n}px)`;
+    return n === 0 ? `calc(100% - ${offset}px)` : `calc(100% - ${offset + n}px)`;
   }
 
   return n === 0 ? "100%" : `calc(100% - ${n}px)`;
 }
-
-
 
 //
 //
@@ -190,7 +162,6 @@ export const frenlyAddress = (address: string) => {
   return address.substring(0, 4) + "..." + address.substring(address.length - 4, address.length);
 };
 
-
 export function formatQuantity(quantity: number): string {
   return Intl.NumberFormat("en-US", {
     notation: "compact",
@@ -198,11 +169,8 @@ export function formatQuantity(quantity: number): string {
   }).format(quantity);
 }
 
-
 export function formatEther(value: BigNumberish): number {
-  return Number(
-    BigInt(value.toString()) * 10n ** 4n / 10n ** 18n
-  ) / 10 ** 4
+  return Number((BigInt(value.toString()) * 10n ** 4n) / 10n ** 18n) / 10 ** 4;
 }
 
 export function formatCash(cash: number): string {
@@ -227,21 +195,18 @@ export function formatCashHeader(cash: number): string {
       currency: "USD",
       maximumFractionDigits: 1,
     }).format(cash / 1_000)}k`;
-  }
-  else if (cash < 1_000_000_000) {
+  } else if (cash < 1_000_000_000) {
     return `${Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 1,
     }).format(cash / 1_000_000)}M`;
-  }
-  else if (cash < 1_000_000_000_000) {
+  } else if (cash < 1_000_000_000_000) {
     return `${Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 1,
     }).format(cash / 1_000_000_000)}B`;
   }
-  return "Ca$hOverflow"
-
+  return "Ca$hOverflow";
 }

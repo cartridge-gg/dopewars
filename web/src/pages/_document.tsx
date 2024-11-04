@@ -4,7 +4,8 @@ const metas = {
   title: "Dope Wars",
   descritpion:
     "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO",
-  socialDescription: "Prove you're the ultimate hustler. Move product, stack paper, and rise to the top in Dope Wars. Play now and claim your spot on the leaderboard!",
+  socialDescription:
+    "Prove you're the ultimate hustler. Move product, stack paper, and rise to the top in Dope Wars. Play now and claim your spot on the leaderboard!",
   image: {
     url: "/images/play-dope-wars.png",
     width: "1200",

@@ -182,7 +182,7 @@ export class ConfigStoreClass {
     const drugConfigFull = drugConfig.map((i) => {
       return {
         ...i,
-        name: shortString.decodeShortString(i?.name?.value), 
+        name: shortString.decodeShortString(i?.name?.value),
         icon: drugIcons[i.drug as drugIconsKeys],
       } as DrugConfigFull;
     });

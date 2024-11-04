@@ -16,11 +16,7 @@ interface ArrowEnclosedProps {
   variant?: "arrow" | "caret" | string;
 }
 
-export const ArrowEnclosed = ({
-  direction,
-  variant,
-  ...props
-}: ArrowEnclosedProps & IconProps) => {
+export const ArrowEnclosed = ({ direction, variant, ...props }: ArrowEnclosedProps & IconProps) => {
   let path;
   switch (variant) {
     case "caret":

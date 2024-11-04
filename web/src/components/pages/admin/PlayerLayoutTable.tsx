@@ -26,6 +26,3 @@ export const PlayerLayoutTable = observer(() => {
     />
   );
 });
-
-
-

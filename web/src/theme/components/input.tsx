@@ -16,12 +16,12 @@ const primaryStyle = definePartsStyle({
   field: {
     border: 0,
     borderWidth: 0,
-    
+
     ...cardStyle,
 
     bgColor: "transparent",
-    borderRadius:"12px",
-    overflow:"hidden",
+    borderRadius: "12px",
+    overflow: "hidden",
 
     _focus: {
       bgColor: "neon.700",

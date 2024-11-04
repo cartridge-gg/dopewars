@@ -13,7 +13,10 @@ export const BuyPaper = () => {
     >
       {/* <Button variant="pixelated" h="36px" fontSize="14px"> */}
       <Ekubo />
-      <Text ml={1} fontSize="12px" textTransform="uppercase"> Buy PAPER on Ekubo</Text>
+      <Text ml={1} fontSize="12px" textTransform="uppercase">
+        {" "}
+        Buy PAPER on Ekubo
+      </Text>
       {/* </Button> */}
     </Link>
   );

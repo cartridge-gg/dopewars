@@ -14,7 +14,6 @@ import NextHead from "next/head";
 import { useEffect } from "react";
 import theme from "../theme";
 
-
 // should avoid mobx memory leaks / GC issue..
 import { enableStaticRendering } from "mobx-react-lite";
 import { SeasonDetailsModal } from "@/components/pages/home/SeasonDetailsModal";
@@ -34,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  useAutoBurner()
+  useAutoBurner();
 
   return (
     <>
@@ -62,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <QuitGameModal />
           <RefreshGameModal />
           <SeasonDetailsModal />
-          
+
           <GlobalEvents />
         </DojoContextProvider>
       </ChakraProvider>

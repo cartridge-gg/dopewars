@@ -64,7 +64,11 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
                       SEASON {season.season.version}
                     </Text>
 
-                    <Text>{"\""}{seasonName}{"\""}</Text>
+                    <Text>
+                      {'"'}
+                      {seasonName}
+                      {'"'}
+                    </Text>
                   </VStack>
                 </Td>
 

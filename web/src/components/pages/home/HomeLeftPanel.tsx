@@ -105,7 +105,7 @@ export const HomeLeftPanel = () => {
         }}
       >
         <VStack zIndex="2" position="relative">
-          <Box w="full" position={"fixed"} top="-40px" >
+          <Box w="full" position={"fixed"} top="-40px">
             <Image
               position="absolute"
               src={"/images/landing/main.png"}
@@ -125,7 +125,6 @@ export const HomeLeftPanel = () => {
           <Heading fontSize={["30px", "48px"]} fontWeight="normal">
             DOPE WARS
           </Heading>
-
         </VStack>
 
         <VStack position="relative" top="-160px" display={["none", "flex"]}>

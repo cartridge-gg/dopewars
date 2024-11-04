@@ -42,9 +42,8 @@ query SeasonByVersion($version: u16, $listId: felt252) {
   }
 }
 
-
 query Seasons {
-  dopewarsSeasonModels(limit: 420, order: {field: VERSION, direction: DESC}) {
+  dopewarsSeasonModels(limit: 420, order: { field: VERSION, direction: DESC }) {
     edges {
       node {
         version
@@ -86,8 +85,6 @@ query Seasons {
   }
 }
 
-
-
 query SeasonSettings($version: u16) {
   dopewarsSeasonSettingsModels(where: { season_version: $version }) {
     edges {
@@ -120,16 +117,15 @@ query AllSeasonSettings {
   }
 }
 
-
-
-
 query HallOfFame {
   dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
     edges {
       node {
         game_id
         player_id
-        player_name { value }
+        player_name {
+          value
+        }
         hustler_id
         season_version
         final_score
@@ -140,8 +136,6 @@ query HallOfFame {
   }
 }
 
-
-
 query Claimable($playerId: ContractAddress) {
   dopewarsGameModels(where: { player_id: $playerId, claimed: false, claimableGT: 0 }) {
     edges {
@@ -149,7 +143,9 @@ query Claimable($playerId: ContractAddress) {
         game_id
         season_version
         player_id
-        player_name { value }
+        player_name {
+          value
+        }
         hustler_id
         claimed
         claimable
@@ -159,9 +155,6 @@ query Claimable($playerId: ContractAddress) {
     }
   }
 }
-
-
-
 
 # remove ?
 

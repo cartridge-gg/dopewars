@@ -10,11 +10,18 @@ interface PowerMeterProps {
   bg?: string;
 }
 
-export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower, bg="neon.800" }: PowerMeterProps) => {
+export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower, bg = "neon.800" }: PowerMeterProps) => {
   return (
     <HStack p={2} bg={bg} clipPath={`polygon(${generatePixelBorderPath(4, 2)})`} alignItems="center" spacing={3}>
       {text && text !== "" && (
-        <Text fontFamily="broken-console" fontSize={["9px","10px"]} color="neon.500" lineHeight="14px" marginBottom={-1} minW="30px">
+        <Text
+          fontFamily="broken-console"
+          fontSize={["9px", "10px"]}
+          color="neon.500"
+          lineHeight="14px"
+          marginBottom={-1}
+          minW="30px"
+        >
           {text}
         </Text>
       )}

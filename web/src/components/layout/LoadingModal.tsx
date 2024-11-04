@@ -22,7 +22,7 @@ export const LoadingModal = observer(() => {
   // }, []);
 
   return (
-    <Modal motionPreset="slideInBottom" isCentered isOpen={isLoading} onClose={() =>{}}>
+    <Modal motionPreset="slideInBottom" isCentered isOpen={isLoading} onClose={() => {}}>
       <ModalOverlay />
       <ModalContent bg="bg.dark" maxW="360px">
         <ModalBody p={6}>
