@@ -43,7 +43,7 @@ export const buildVrfCalls = async ({
       account.address,
     );
 
-    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.pending);
+    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PENDING);
     const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
     // console.log(chainId);
     // console.log(nonceStorageSlot);

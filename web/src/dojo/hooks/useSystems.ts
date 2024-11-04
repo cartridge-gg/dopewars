@@ -101,7 +101,7 @@ export const useSystems = (): SystemsInterface => {
       try {
         tx = await dojoProvider.execute(account!, calls, DW_NS);
 
-        receipt = await account!.waitForTransaction(tx.transaction_hash, {
+        receipt = await rpcProvider.waitForTransaction(tx.transaction_hash, {
           retryInterval: 200,
         });
       } catch (e: any) {

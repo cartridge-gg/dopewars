@@ -53,6 +53,7 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
             <HStack>
               {connector && isBurnerOrPredeplyed && <KatanaIcon />}
               {connector && !isBurnerOrPredeplyed && !isController && (
+                /// @ts-ignore
                 <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
               )}
               {connector && isController && <Cartridge />}
@@ -81,6 +82,7 @@ export const ConnectButtonMobile = ({ ...props }) => {
       {account && (
         <MenuItem h="48px" borderRadius={0} onClick={() => uiStore.openAccountDetails()}>
           <HStack w="full" /*justifyContent="center"*/>
+            {/* @ts-ignore */}
             {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}
             <Text>{frenlyAddress(account.address || "")}</Text>
           </HStack>

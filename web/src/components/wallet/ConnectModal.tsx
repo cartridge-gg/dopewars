@@ -98,6 +98,7 @@ export const ConnectModal = observer(() => {
                         ) : isController ? (
                           <Cartridge />
                         ) : (
+                          /// @ts-ignore
                           <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
                         )}
 
