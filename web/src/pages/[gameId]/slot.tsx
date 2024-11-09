@@ -639,6 +639,24 @@ export default function Slot() {
   );
 }
 
+
+// create game
+// Transaction resource usage. usage="steps: 103983 | memory holes: 4108 | bitwise_builtin: 174 | ec_op_builtin: 7 | pedersen_builtin: 134 | poseidon_builtin: 116 | range_check_builtin: 7366"
+
+// travel
+// Transaction resource usage. usage="steps: 102491 | memory holes: 5433 | bitwise_builtin: 252 | ec_op_builtin: 7 | pedersen_builtin: 76 | poseidon_builtin: 125 | range_check_builtin: 9451"
+
+// buy & travel
+// Transaction resource usage. usage="steps: 122797 | memory holes: 6480 | bitwise_builtin: 296 | ec_op_builtin: 7 | pedersen_builtin: 80 | poseidon_builtin: 157 | range_check_builtin: 10965"
+
+// travel & encounter
+// Transaction resource usage. usage="steps: 116004 | memory holes: 4751 | bitwise_builtin: 234 | ec_op_builtin: 7 | pedersen_builtin: 94 | poseidon_builtin: 135 | range_check_builtin: 8832"
+
+
+
+
+// OLD
+
 // NewSeason ( without data )
 // Processing event update. target="torii::grpc::server::subscriptions::event" error=Parsing error: Failed to create Felt from string
 
@@ -656,6 +674,11 @@ export default function Slot() {
 
 // sell & buy & travel
 // Transaction resource usage. usage="steps: 150732 | memory holes: 7254 | bitwise_builtin: 316 | ec_op_builtin: 7 | pedersen_builtin: 63 | poseidon_builtin: 107 | range_check_builtin: 12102 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
+
+// decide
+// Transaction resource usage. usage="steps: 151146 | memory holes: 7437 | bitwise_builtin: 300 | ec_op_builtin: 7 | pedersen_builtin: 85 | poseidon_builtin: 242 | range_check_builtin: 12052"
+
+
 
 // sepolia
 // create game                535430 / L1 1024

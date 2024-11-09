@@ -95,7 +95,7 @@ mod laundromat {
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
                 .consume_random(Source::Nonce(player_id));
 
-            let process_batch_size = 20; // around 276k steps / 10
+            let process_batch_size = 10; // around 276k steps / 10
 
             let season = store.season(season_version);
 

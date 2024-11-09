@@ -24,9 +24,9 @@ impl Cops of TrophyTrait {
     #[inline]
     fn points(level: u8) -> u16 {
         match level {
-            0 => 20,
-            1 => 60,
-            2 => 100,
+            0 => 10,
+            1 => 25,
+            2 => 50,
             _ => 0,
         }
     }
@@ -54,31 +54,30 @@ impl Cops of TrophyTrait {
             2 => 'fa-helicopter',
             _ => 'fa-helicopter'
         }
-        
     }
 
     #[inline]
     fn title(level: u8) -> felt252 {
         match level {
-            0 => 'Cops hater',
-            1 => 'Cops terror',
-            2 => 'Cops killer',
+            0 => 'Patrol Buster',
+            1 => 'Precinct Nightmare',
+            2 => 'Five-O Reaper',
             _ => '',
         }
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Cops description"
+        "When the streets talk back, the law listens"
     }
 
     #[inline]
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 3,
-            1 => 10,
-            2 => 20,
+            0 => 10,
+            1 => 100,
+            2 => 500,
             _ => 0,
         };
         Quest::Cops.tasks(level, difficulty, count)

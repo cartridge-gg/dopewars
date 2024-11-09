@@ -24,9 +24,9 @@ impl Gangs of TrophyTrait {
     #[inline]
     fn points(level: u8) -> u16 {
         match level {
-            0 => 20,
-            1 => 60,
-            2 => 100,
+            0 => 10,
+            1 => 25,
+            2 => 50,
             _ => 0,
         }
     }
@@ -59,25 +59,25 @@ impl Gangs of TrophyTrait {
     #[inline]
     fn title(level: u8) -> felt252 {
         match level {
-            0 => 'Gangs hater',
-            1 => 'Gangs terror',
-            2 => 'Gangs killer',
+            0 => 'Turf Taker',
+            1 => 'Block Boss',
+            2 => 'Syndicate Slayer',
             _ => '',
         }
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Gangs description"
+        "Your rep is your currency and every shot fired is an investment"
     }
 
     #[inline]
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 3,
-            1 => 5,
-            2 => 10,
+            0 => 10,
+            1 => 100,
+            2 => 500,
             _ => 0,
         };
         Quest::Gangs.tasks(level, difficulty, count)

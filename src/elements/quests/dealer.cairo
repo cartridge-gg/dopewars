@@ -8,6 +8,6 @@ impl Dealer of QuestTrait {
 
     #[inline]
     fn description(difficulty: u8, count: u32) -> ByteArray {
-       format!("Make {} deals worth over a million", count)
+        format!("Make {} deals worth over a million", count)
     }
 }

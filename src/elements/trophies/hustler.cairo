@@ -25,8 +25,8 @@ impl Hustler of TrophyTrait {
     fn points(level: u8) -> u16 {
         match level {
             0 => 20,
-            1 => 60,
-            2 => 100,
+            1 => 50,
+            2 => 75,
             _ => 0,
         }
     }
@@ -43,7 +43,7 @@ impl Hustler of TrophyTrait {
 
     #[inline]
     fn group() -> felt252 {
-        'Hustler'
+        'BLOCK AMBITION'
     }
 
     #[inline]
@@ -59,8 +59,8 @@ impl Hustler of TrophyTrait {
     #[inline]
     fn title(level: u8) -> felt252 {
         match level {
-            0 => 'Hustler',
-            1 => 'Streetboss',
+            0 => 'Slinger',
+            1 => 'Hustler',
             2 => 'OG',
             _ => '',
         }
@@ -68,16 +68,16 @@ impl Hustler of TrophyTrait {
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Every day im hustlin'"
+        "It's not about becoming someone. It's about becoming someone they can't ignore"
     }
 
     #[inline]
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 1,
-            1 => 3,
-            2 => 5,
+            0 => 5,
+            1 => 20,
+            2 => 50,
             _ => 0,
         };
         Quest::Hustler.tasks(level, difficulty, count)

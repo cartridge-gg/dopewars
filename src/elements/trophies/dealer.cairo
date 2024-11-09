@@ -24,9 +24,9 @@ impl Dealer of TrophyTrait {
     #[inline]
     fn points(level: u8) -> u16 {
         match level {
-            0 => 20,
-            1 => 60,
-            2 => 100,
+            0 => 10,
+            1 => 30,
+            2 => 75,
             _ => 0,
         }
     }

@@ -3,13 +3,13 @@ use rollyourown::elements::trophies::interface::{TrophyTrait, Task, Quest, Quest
 impl Famous of TrophyTrait {
     #[inline]
     fn identifier(level: u8) -> felt252 {
-       'FAMOUS'
+        'FAMOUS'
     }
 
     #[inline]
     fn hidden(level: u8) -> bool {
         false
-       // true
+        // true
     }
 
     #[inline]
@@ -19,7 +19,7 @@ impl Famous of TrophyTrait {
 
     #[inline]
     fn points(level: u8) -> u16 {
-        100
+        80
     }
 
     #[inline]
@@ -34,7 +34,7 @@ impl Famous of TrophyTrait {
 
     #[inline]
     fn group() -> felt252 {
-        'Famous'
+        'Notorious'
     }
 
     #[inline]
@@ -44,12 +44,13 @@ impl Famous of TrophyTrait {
 
     #[inline]
     fn title(level: u8) -> felt252 {
-       'Famous'
+        'Notorious'
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "It takes many good deals to build a good reputation, and only one bad one to lose it."
+        "The game is the game. Always."
+        // "It takes many good deals to build a good reputation, and only one bad one to lose it."
     }
 
     #[inline]

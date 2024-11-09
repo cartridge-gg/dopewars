@@ -3,13 +3,12 @@ use rollyourown::elements::trophies::interface::{TrophyTrait, Task, Quest, Quest
 impl Launderer of TrophyTrait {
     #[inline]
     fn identifier(level: u8) -> felt252 {
-       'LAUNDERER'
+        'LAUNDERER'
     }
 
     #[inline]
     fn hidden(level: u8) -> bool {
-       false
-        // true
+        true
     }
 
     #[inline]
@@ -19,7 +18,7 @@ impl Launderer of TrophyTrait {
 
     #[inline]
     fn points(level: u8) -> u16 {
-        100
+        50
     }
 
     #[inline]
@@ -44,12 +43,12 @@ impl Launderer of TrophyTrait {
 
     #[inline]
     fn title(level: u8) -> felt252 {
-       'Launderer'
+        'The Cleaner'
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Dirty, dirty, dirtyyy"
+        "Mixing the dirt with the dough"
     }
 
     #[inline]

@@ -3,7 +3,7 @@ use rollyourown::elements::trophies::interface::{TrophyTrait, Task, Quest, Quest
 impl Kingpin of TrophyTrait {
     #[inline]
     fn identifier(level: u8) -> felt252 {
-       'KINGPIN'
+        'KINGPIN'
     }
 
     #[inline]
@@ -43,12 +43,13 @@ impl Kingpin of TrophyTrait {
 
     #[inline]
     fn title(level: u8) -> felt252 {
-       'Kingpin'
+        'Kingpin'
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "There can be only one"
+        "In the boss's domain, every decision is a command, every order, law."
+        // "There can be only one"
     }
 
     #[inline]

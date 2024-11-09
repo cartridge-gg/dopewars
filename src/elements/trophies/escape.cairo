@@ -24,9 +24,9 @@ impl Escape of TrophyTrait {
     #[inline]
     fn points(level: u8) -> u16 {
         match level {
-            0 => 20,
-            1 => 60,
-            2 => 100,
+            0 => 10,
+            1 => 25,
+            2 => 50,
             _ => 0,
         }
     }
@@ -59,8 +59,8 @@ impl Escape of TrophyTrait {
     #[inline]
     fn title(level: u8) -> felt252 {
         match level {
-            0 => 'Fast runner',
-            1 => 'Elusive gangster',
+            0 => 'Quickstep',
+            1 => 'Shadow',
             2 => 'Eel',
             _ => '',
         }
@@ -68,16 +68,16 @@ impl Escape of TrophyTrait {
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Escaping is an art..."
+        "It's not outrunning them, it's outsmarting them."
     }
 
     #[inline]
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 1,
-            1 => 3,
-            2 => 5,
+            0 => 3,
+            1 => 10,
+            2 => 50,
             _ => 0,
         };
         Quest::Escape.tasks(level, difficulty, count)

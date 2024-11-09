@@ -1121,8 +1121,8 @@
   },
   "contracts": [
     {
-      "address": "0x79100248fbc37fd5edfdbf114eb9f6958707bd26b693ceba5b188d8944f72d6",
-      "class_hash": "0xa251d8b43a5a03224933c0e56231163988b92041418337238a4dc2616d6a2",
+      "address": "0x2a2b09d638a4c5371546ad151abcf8b2742e4f80598cb68db29c6caa4b6b004",
+      "class_hash": "0x2fac673549575d62ba4c8852bcdea7a242f4b90c8b811a51ba8a6c98d8ec367",
       "abi": [
         {
           "type": "impl",
@@ -1772,8 +1772,8 @@
       "systems": []
     },
     {
-      "address": "0x3d9aa5cbb743e0a7ebcdbc0b17b4e021dc90aaab74831a007de5029eaa99fb2",
-      "class_hash": "0x39c6de802fe717141a661b7dcf5d1ec2a159c78315d92b3ae2a4cedb6dd806e",
+      "address": "0x27c7c0e00c9fdf88e7117be063a3caca7a3d4d95df30c33c5d5980abdecd815",
+      "class_hash": "0x24f66a8f50f3d4366f125422789b18d23f5b83fa082bf2b5736294100f81c59",
       "abi": [
         {
           "type": "impl",
@@ -2214,8 +2214,8 @@
       "systems": []
     },
     {
-      "address": "0x66eda8874cc06f450addab568d6672b3ac968df8b7a74db33442b9d18e109a1",
-      "class_hash": "0x6ea798424a8c5535f8e8cd14954c1f4daa7eff1d322b1dd533999d1f7fd344",
+      "address": "0x1fe68051c44b65d26aca8e0b15691f2b6302e55c54ad3e893322e9c611e9aa8",
+      "class_hash": "0xa6b736f902113eab419ff292c24256ba37585cf7a21f85978408170108df32",
       "abi": [
         {
           "type": "impl",
@@ -2878,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0xfa882fef7863a2a03954f7d90cbe92bc7b2f0c712e6ad7b4ec749d7763bc8d",
-      "class_hash": "0x2365633ba52ad53cff1491874aa1978c41cff8545d3cf064e126f3e530bbdd9",
+      "address": "0x5c1ebf3950ad6e114def317978df69209095e52a6495c45bc2ffc5084cf59f9",
+      "class_hash": "0x3f0ce44a32fc5aa9d041602548e501b821a359e65a929d7529e2c7e52eace09",
       "abi": [
         {
           "type": "impl",
@@ -3072,6 +3072,13 @@
             },
             {
               "type": "function",
+              "name": "update_quests",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "paper",
               "inputs": [],
               "outputs": [
@@ -3241,6 +3248,12 @@
         },
         {
           "type": "event",
+          "name": "bushido_trophy::components::achievable::AchievableComponent::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::ryo::ryo::Event",
           "kind": "enum",
           "variants": [
@@ -3253,6 +3266,11 @@
               "name": "WorldProviderEvent",
               "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
               "kind": "nested"
+            },
+            {
+              "name": "AchievableEvent",
+              "type": "bushido_trophy::components::achievable::AchievableComponent::Event",
+              "kind": "flat"
             }
           ]
         }
@@ -3833,6 +3851,16 @@
       "members": [],
       "class_hash": "0x1c75f1b960145adc824ebfb461a7d4a2530875dee80fe386d940bb9f885c250",
       "tag": "Traveled"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7d1eae19bd12943f7daaa86ee1913c8adef2503afb3f7cb10e0a71cb1aa0664",
+      "tag": "TrophyCreation"
+    },
+    {
+      "members": [],
+      "class_hash": "0x40ef1802df969e831f1b60284cf482243f6715b5eafdeb7ad37e2979fce9cee",
+      "tag": "TrophyProgression"
     },
     {
       "members": [],

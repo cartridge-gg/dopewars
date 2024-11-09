@@ -1,6 +1,32 @@
 use bushido_trophy::types::task::Task;
 use rollyourown::elements::trophies;
 
+#[cfg(test)]
+mod tests {
+    use super::{Trophy, TrophyTrait, TrophyImpl, TROPHY_COUNT};
+
+    #[test]
+    fn list_and_sum() {
+        let mut trophy_id: u8 = TROPHY_COUNT;
+        let mut total: u32 = 0;
+        while trophy_id > 0 {
+            let trophy: Trophy = trophy_id.into();
+
+            let mut id: ByteArray = "";
+            id.append_word(trophy.identifier(), 12);
+            let mut group: ByteArray = "";
+            group.append_word(trophy.group(), 15);
+
+            println!("{} - {} - {}", id, group, trophy.points());
+
+            trophy_id -= 1;
+            total += trophy.points().into();
+        };
+        println!("total {} points", total);
+    }
+}
+
+
 // Constants
 
 pub const TROPHY_COUNT: u8 = 24;

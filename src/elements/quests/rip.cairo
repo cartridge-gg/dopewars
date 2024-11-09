@@ -8,6 +8,6 @@ impl Rip of QuestTrait {
 
     #[inline]
     fn description(difficulty: u8, count: u32) -> ByteArray {
-        "RIP BROTHER"
+        "Die"
     }
 }

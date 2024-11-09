@@ -18,6 +18,9 @@ build-external-contracts = [
     "bushido_trophy::events::index::e_TrophyProgression",
 ]
 
+[dev-dependencies]
+cairo_test = "2.8.4"
+
 [dependencies]
 starknet = "2.8.4"
 # dojo = { path = "../dojo/crates/dojo/core" }
@@ -60,8 +63,12 @@ slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartr
 [profile.mainnet]
 
 
-
 #  "@dojoengine/core": "file:../../dojo-js/packages/core",
 #     "@dojoengine/create-burner": "file:../../dojo-js/packages/create-burner",
 #     "@dojoengine/torii-client": "file:../../dojo-js/packages/torii-client",
 #     "@dojoengine/utils": "file:../../dojo-js/packages/utils",
+
+#  "@dojoengine/core": "v1.0.0-alpha.30",
+#     "@dojoengine/create-burner": "v1.0.0-alpha.30",
+#     "@dojoengine/torii-client": "v1.0.0-alpha.30",
+#     "@dojoengine/utils": "v1.0.0-alpha.30",

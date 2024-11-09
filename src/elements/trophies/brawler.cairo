@@ -18,7 +18,7 @@ impl Brawler of TrophyTrait {
 
     #[inline]
     fn points(level: u8) -> u16 {
-        100
+        80
     }
 
     #[inline]

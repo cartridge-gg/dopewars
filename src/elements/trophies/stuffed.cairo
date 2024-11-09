@@ -19,7 +19,7 @@ impl Stuffed of TrophyTrait {
 
     #[inline]
     fn points(level: u8) -> u16 {
-        50
+        80
     }
 
     #[inline]
@@ -34,7 +34,7 @@ impl Stuffed of TrophyTrait {
 
     #[inline]
     fn group() -> felt252 {
-        'Stuffed'
+        'Fully Loaded'
     }
 
     #[inline]
@@ -44,12 +44,12 @@ impl Stuffed of TrophyTrait {
 
     #[inline]
     fn title(level: u8) -> felt252 {
-        'Stuffed'
+        'Fully Loaded'
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Need all of them"
+        "If they bring a knife to the fight, we bring a gun"
     }
 
     #[inline]

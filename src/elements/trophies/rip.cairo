@@ -8,8 +8,7 @@ impl Rip of TrophyTrait {
 
     #[inline]
     fn hidden(level: u8) -> bool {
-       false
-        // true
+        true
     }
 
     #[inline]
@@ -19,7 +18,7 @@ impl Rip of TrophyTrait {
 
     #[inline]
     fn points(level: u8) -> u16 {
-        50
+        10
     }
 
     #[inline]
@@ -44,12 +43,12 @@ impl Rip of TrophyTrait {
 
     #[inline]
     fn title(level: u8) -> felt252 {
-        'RIP Brother'
+        'Flatliner'
     }
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "RIP Legend"
+        "We all got a number, and it's not the one you dial"
     }
 
     #[inline]

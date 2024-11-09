@@ -32,6 +32,8 @@
       "dopewars_TravelEncounter",
       "dopewars_TravelEncounterResult",
       "dopewars_Traveled",
+      "dopewars_TrophyCreation",
+      "dopewars_TrophyProgression",
       "dopewars_UpgradeItem"
     ]
   }

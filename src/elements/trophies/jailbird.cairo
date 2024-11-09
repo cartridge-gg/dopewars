@@ -13,8 +13,7 @@ impl Jailbird of TrophyTrait {
 
     #[inline]
     fn hidden(level: u8) -> bool {
-        false
-        // true
+        true
     }
 
     #[inline]
@@ -25,9 +24,9 @@ impl Jailbird of TrophyTrait {
     #[inline]
     fn points(level: u8) -> u16 {
         match level {
-            0 => 20,
-            1 => 60,
-            2 => 100,
+            0 => 10,
+            1 => 25,
+            2 => 50,
             _ => 0,
         }
     }
@@ -49,11 +48,11 @@ impl Jailbird of TrophyTrait {
 
     #[inline]
     fn icon(level: u8) -> felt252 {
-        match level{
+        match level {
             0 => 'fa-hands-bound',
             1 => 'fa-handcuffs',
             2 => 'fa-dungeon',
-            _ =>  'fa-dungeon',
+            _ => 'fa-dungeon',
         }
     }
 
@@ -69,7 +68,9 @@ impl Jailbird of TrophyTrait {
 
     #[inline]
     fn description(level: u8) -> ByteArray {
-        "Every true hustler knows that you cannot hustle forever. You will go to jail eventually."
+        "The walls have ears, and they've heard enough"
+        // "Every true hustler knows that you cannot hustle forever. You will go to jail
+    // eventually."
     }
 
     #[inline]
@@ -77,8 +78,8 @@ impl Jailbird of TrophyTrait {
         let difficulty: u8 = 0;
         let count: u32 = match level {
             0 => 1,
-            1 => 2,
-            2 => 3,
+            1 => 3,
+            2 => 10,
             _ => 0,
         };
         Quest::Jailbird.tasks(level, difficulty, count)
