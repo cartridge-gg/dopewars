@@ -1,9 +1,10 @@
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot1Chain } from "./chains";
+import { katanaLocalChain, katanaSlot1Chain, katanaSlot2Chain } from "./chains";
 
 import manifestDev from "../../manifests/manifest_dev.json";
 import manifestRyo1 from "../../manifests/manifest_ryo1.json";
+import manifestRyo2 from "../../manifests/manifest_ryo2.json";
 import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
 
@@ -14,7 +15,6 @@ const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c6142
 const PAPER_MAINNET = "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113";
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
-
 export type DojoContextConfig = typeof dojoContextConfig;
 
 export type DojoChainConfig = {
@@ -23,6 +23,8 @@ export type DojoChainConfig = {
   rpcUrl?: string;
   toriiUrl: string;
   toriiWsUrl: string;
+  keychain?: string;
+  profileUrl?: string;
   masterAddress?: string;
   masterPrivateKey?: string;
   accountClassHash?: string;
@@ -77,36 +79,34 @@ const katanaSlot1: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/ryo1/katana",
   toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
-  masterAddress:
-    process.env.NEXT_PUBLIC_ADMIN_ADDRESS || "0x785fe50c1b58d7610c40ff85ff579a8037b168c37316f12536cafaec30976a4",
-  masterPrivateKey:
-    process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY || "0x5c5ecc80873547a8535051c92f216c9b11f921226b6265f9eb5fb67ba844bf7",
-  accountClassHash:
-    process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH || "0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2",
   manifest: manifestRyo1,
-  predeployedAccounts: [
-    {
-      name: "Deployer",
-      address: "0x4be62b3e01cb9ddca21ef418dca601952c33cb6411cc06ff59fdbb7ed5bf75",
-      privateKey: "0x660dd722665a19eec32efe0994921573f990d626f6c20db482bed32ce2847ab",
-      active: false,
-    },
-  ],
+  profileUrl: "https://profile.cartridge.gg",
+  predeployedAccounts: [],
   paperAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  vrfProviderSecret: "0x420",
+};
+
+const katanaSlot2: DojoChainConfig = {
+  name: "WP_RYO2",
+  chainConfig: katanaSlot2Chain,
+  rpcUrl: "https://api.cartridge.gg/x/ryo2/katana",
+  toriiUrl: "https://api.cartridge.gg/x/ryo2/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryo2/torii/graphql/ws",
+  manifest: manifestRyo2,
+  profileUrl: "https://profile.cartridge.gg",
+  predeployedAccounts: [],
+  paperAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
+  vrfProviderAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
 };
 
 const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
   chainConfig: sepolia,
-  // rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_7",
   rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
   toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
-  masterAddress: undefined,
-  masterPrivateKey: undefined,
-  accountClassHash: undefined,
   manifest: manifestRyoSepolia,
   predeployedAccounts: [],
   paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
@@ -117,12 +117,9 @@ const snSepolia: DojoChainConfig = {
 const snMainnet: DojoChainConfig = {
   name: "MAINNET",
   chainConfig: mainnet,
-  rpcUrl: undefined,
+  rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
   toriiUrl: "https://api.cartridge.gg/x/ryo/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo/torii/graphql/ws",
-  masterAddress: undefined,
-  masterPrivateKey: undefined,
-  accountClassHash: undefined,
   manifest: manifestMainnet,
   predeployedAccounts: [],
   paperAddress: PAPER_MAINNET,
@@ -132,18 +129,13 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  KATANA: katanaLocal,
-  // WP_RYO1: katanaSlot1,
+  // KATANA: katanaLocal,
+  WP_RYO1: katanaSlot1,
   SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
 };
 
-export const dojoChains = [
-  katanaLocal,
-  // katanaSlot1,
-  snSepolia,
-  // snMainnet,
-];
+export const dojoChains = Object.values(dojoContextConfig);
 
 export const getStarknetProviderChains = (): Chain[] => {
   return Object.keys(dojoContextConfig).map((key) => {

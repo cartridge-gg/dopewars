@@ -135,6 +135,8 @@ export class EventClass {
     const event = EventClass.parseEntity(entity)[0];
     if (!event) return;
     this.events.push(event);
+
+    // console.log(this.sortedEvents)
   }
 
   get sortedEvents() {

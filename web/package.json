@@ -15,13 +15,13 @@
     "gen:dojo": "pnpm gen"
   },
   "dependencies": {
-    "@cartridge/connector": "0.5.0-alpha.6",
+    "@cartridge/connector": "0.5.0-alpha.7",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "file:../../dojo-js/packages/core",
-    "@dojoengine/create-burner": "file:../../dojo-js/packages/create-burner",
-    "@dojoengine/torii-client": "file:../../dojo-js/packages/torii-client",
-    "@dojoengine/utils": "file:../../dojo-js/packages/utils",
+    "@dojoengine/core": "v1.0.0-alpha.30",
+    "@dojoengine/create-burner": "v1.0.0-alpha.30",
+    "@dojoengine/torii-client": "v1.0.0-alpha.30",
+    "@dojoengine/utils": "v1.0.0-alpha.30",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@next/bundle-analyzer": "^14.1.4",

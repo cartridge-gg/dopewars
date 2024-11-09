@@ -1122,7 +1122,7 @@
   "contracts": [
     {
       "address": "0x79100248fbc37fd5edfdbf114eb9f6958707bd26b693ceba5b188d8944f72d6",
-      "class_hash": "0xa251d8b43a5a03224933c0e56231163988b92041418337238a4dc2616d6a2",
+      "class_hash": "0x31314dd907dc07c4096e8e9b39b90938ac31f9a27a7e977c6ae8dd698bb5ef5",
       "abi": [
         {
           "type": "impl",
@@ -1772,8 +1772,8 @@
       "systems": []
     },
     {
-      "address": "0x3d9aa5cbb743e0a7ebcdbc0b17b4e021dc90aaab74831a007de5029eaa99fb2",
-      "class_hash": "0x39c6de802fe717141a661b7dcf5d1ec2a159c78315d92b3ae2a4cedb6dd806e",
+      "address": "0x281d4399a76c8e04d17988208750d54c37eefaf79bfb58af9ea7dce956cea77",
+      "class_hash": "0x54a55f3b3e28b8b659a910670490202a23a24f2985ddeba415ccdac2f2ccf4",
       "abi": [
         {
           "type": "impl",
@@ -2214,8 +2214,8 @@
       "systems": []
     },
     {
-      "address": "0x66eda8874cc06f450addab568d6672b3ac968df8b7a74db33442b9d18e109a1",
-      "class_hash": "0x6ea798424a8c5535f8e8cd14954c1f4daa7eff1d322b1dd533999d1f7fd344",
+      "address": "0x55a11d676914bccc00235493e9405f11291ef4cbe1495b353953f6c8a13bfd7",
+      "class_hash": "0x1458d079c907aefc9bdfb2a21e5b7c5ca46c4f54a9482bedfcfcf0398193ffa",
       "abi": [
         {
           "type": "impl",
@@ -2878,8 +2878,8 @@
       "systems": []
     },
     {
-      "address": "0x7a578aa01828601a5ab46604ac6704fd7d202df0e6d887abc6bd3adf76b997f",
-      "class_hash": "0x2cf595b26c140faf92b8508d8c4bc2bf9f6775e232c86be354e8b1d821099a8",
+      "address": "0x48234f99656e79a3a298d9e2f4560abbb813f388c79c91e160dd1c18c063848",
+      "class_hash": "0x479b8c3b1125a57d61b91117a36f660818a7bd7dcc7206ee29e0913438e56cd",
       "abi": [
         {
           "type": "impl",
@@ -2927,6 +2927,10 @@
           "inputs": [
             {
               "name": "paper_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "vrf_address",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
@@ -3063,6 +3067,13 @@
                   "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "update_quests",
+              "inputs": [],
               "outputs": [],
               "state_mutability": "view"
             },
@@ -3237,6 +3248,12 @@
         },
         {
           "type": "event",
+          "name": "bushido_trophy::components::achievable::AchievableComponent::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
           "name": "rollyourown::systems::ryo::ryo::Event",
           "kind": "enum",
           "variants": [
@@ -3249,11 +3266,20 @@
               "name": "WorldProviderEvent",
               "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
               "kind": "nested"
+            },
+            {
+              "name": "AchievableEvent",
+              "type": "bushido_trophy::components::achievable::AchievableComponent::Event",
+              "kind": "flat"
             }
           ]
         }
       ],
-      "init_calldata": ["0x0", "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481"],
+      "init_calldata": [
+        "0x0",
+        "0x0",
+        "0xed0a4c7d45e004e0b1efc4d09c7bfd62a24a78b3fa18ec2627549cea8a4481"
+      ],
       "tag": "dopewars-ryo",
       "systems": []
     },
@@ -3825,6 +3851,16 @@
       "members": [],
       "class_hash": "0x1c75f1b960145adc824ebfb461a7d4a2530875dee80fe386d940bb9f885c250",
       "tag": "Traveled"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7d1eae19bd12943f7daaa86ee1913c8adef2503afb3f7cb10e0a71cb1aa0664",
+      "tag": "TrophyCreation"
+    },
+    {
+      "members": [],
+      "class_hash": "0x40ef1802df969e831f1b60284cf482243f6715b5eafdeb7ad37e2979fce9cee",
+      "tag": "TrophyProgression"
     },
     {
       "members": [],

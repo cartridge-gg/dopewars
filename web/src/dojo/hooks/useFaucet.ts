@@ -20,10 +20,10 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   const { toast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | undefined>(undefined);
+  // const [error, setError] = useState<string | undefined>(undefined);
 
   const faucet = useCallback(async (): Promise<FaucetExecuteResult> => {
-    setError(undefined);
+    // setError(undefined);
     setIsPending(true);
 
     let tx, receipt;
@@ -46,10 +46,11 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
         retryInterval: 500,
       });
     } catch (e: any) {
+      console.log(e);
       setIsPending(false);
-      setError(e.toString());
+      // setError(e.toString());
       toast({
-        message: e.toString(),
+        message: e ? e.toString() : "unknown error",
         duration: 20_000,
         isError: true,
       });
@@ -65,7 +66,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
   return {
     faucet,
     //
-    error,
+    // error,
     isPending,
   };
 };

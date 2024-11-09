@@ -98,7 +98,7 @@ export default function Home() {
           <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
             {isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
-                <Flipflop /> Play as guest
+                <Flipflop /> Play guest
               </Button>
             )}
             {isSeasonOpen && canCreateGame && (
@@ -110,7 +110,7 @@ export default function Home() {
             {isSeasonOpen && !canCreateGame && (
               <HStack w="full" color="yellow.400" justifyContent="center" gap={3}>
                 <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
-                  <Flipflop /> Play as guest
+                  <Flipflop /> Play guest
                 </Button>
 
                 <Warning color="yellow.400" />

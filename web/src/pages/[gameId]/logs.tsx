@@ -249,8 +249,8 @@ function renderEvent(game: GameClass, indexedEvent: IndexedDojoEvent, relatedEve
       return renderTravelEncounter(
         game,
         indexedEvent.dojoEvent.event as TravelEncounter,
-        relatedEvent!.dojoEvent.event as TravelEncounterResult,
         `te-${indexedEvent.index}`,
+        relatedEvent?.dojoEvent.event as TravelEncounterResult,
       );
 
     case "GameOver":
@@ -327,8 +327,8 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
 function renderTravelEncounter(
   game: GameClass,
   log: TravelEncounter,
-  lastEncounterResult: TravelEncounterResult,
   key: string,
+  lastEncounterResult?: TravelEncounterResult,
 ) {
   const icon = log.encounter === "Cops" ? CopsIcon : GangIcon;
   const action = lastEncounterResult?.action;
@@ -339,7 +339,7 @@ function renderTravelEncounter(
       key={key}
       icon={icon}
       text={`Meet ${log.encounter} Lvl ${log.level}`}
-      result={lastEncounterResult.outcome}
+      result={lastEncounterResult?.outcome}
       resultInfos={lastEncounterResult}
       consequence={totalHpLoss > 0 ? `-${totalHpLoss} HP` : ""}
       action={action}

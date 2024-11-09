@@ -108,7 +108,7 @@ export const useSystems = (): SystemsInterface => {
         setIsPending(false);
         //setError(e.toString());
         toast({
-          message: tryBetterErrorMsg(e.toString()),
+          message: e ? tryBetterErrorMsg(e.toString()) : "unknown error",
           duration: 20_000,
           isError: true,
         });

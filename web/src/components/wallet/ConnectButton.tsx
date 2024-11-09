@@ -2,7 +2,7 @@ import { useControllerUsername, useDojoContext } from "@/dojo/hooks";
 import { frenlyAddress } from "@/utils/ui";
 import { Box, Button, HStack, Image, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet-react/core";
-import { KatanaIcon } from "../icons";
+import { ExternalLink, KatanaIcon, Trophy } from "../icons";
 import { useEffect, useState } from "react";
 import { Cartridge } from "../icons/branding/Cartridge";
 import { ControllerConnector } from "@cartridge/connector";
@@ -33,24 +33,12 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
           </Button>
         )}
         {account && (
-          <Button
-            variant={variant}
-            h="48px"
-            fontSize="14px"
-            onClick={() => {
-              if (connector?.id === "controller") {
-                // broken..
-                (connector as unknown as ControllerConnector).controller.openProfile("inventory") // "trophies"
-                // (connector as unknown as ControllerConnector).controller.openSettings()
-              } else {
+          <Button variant={variant} h="48px" fontSize="14px" w="full" alignItems="center" justifyContent="center">
+            <HStack
+              onClick={() => {
                 uiStore.openAccountDetails();
-              }
-            }}
-            w="full"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <HStack>
+              }}
+            >
               {connector && isBurnerOrPredeplyed && <KatanaIcon />}
               {connector && !isBurnerOrPredeplyed && !isController && (
                 /// @ts-ignore
@@ -59,6 +47,16 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
               {connector && isController && <Cartridge />}
               <Text>{isController ? username : frenlyAddress(account.address || "")}</Text>
             </HStack>
+            {isController && (
+              <Trophy
+                mb={1}
+                _hover={{ backgroundColor: "neon.500" }}
+                borderRadius={3}
+                onClick={() => {
+                  (connector as unknown as ControllerConnector).controller.openProfile("trophies"); // "trophies"
+                }}
+              />
+            )}
           </Button>
         )}
       </Box>

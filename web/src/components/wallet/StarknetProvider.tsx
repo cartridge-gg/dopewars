@@ -40,11 +40,15 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
     case "KATANA":
       return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
 
-    case "WP_RYO1":
+    // case "SN_SEPOLIA":
+    //   return [cartridgeConnector({ selectedChain })];
+
+    case  "WP_RYO1":
+    case  "WP_RYO2":
       return [
-        injected({ id: "dojoburner" }),
-        injected({ id: "dojopredeployed" }),
         controller,
+        // injected({ id: "dojoburner" }),
+        // injected({ id: "dojopredeployed" }),
         // cartridgeConnector({ selectedChain }),
       ];
 
@@ -74,19 +78,35 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
-const cartridgeConnector = ({ keychain, selectedChain }: { keychain?: string; selectedChain: DojoChainConfig }) => {
-  console.log("cartridgeConnector", selectedChain.name);
+const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig }) => {
+  // console.log("cartridgeConnector", selectedChain.name);
   const paperAddress = selectedChain.paperAddress;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
   return new ControllerConnector({
-    url: keychain ? keychain : "https://x.cartridge.gg",
+    url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
-    // profileUrl: "https://profile.cartridge.gg/",
-    tokens: { erc20: [paperAddress] },
+    profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
+    namespace: "dopewars",
+    slot: "ryo1",
+    tokens: {
+      erc20: [
+        // paperAddress
+        "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
+      ],
+    },
     theme: "dope-wars",
+    colorMode: "dark",
     policies: [
+      {
+        target: selectedChain.vrfProviderAddress,
+        method: "submit_random",
+      },
+      {
+        target: selectedChain.vrfProviderAddress,
+        method: "assert_consumed",
+      },
       {
         target: selectedChain.vrfProviderAddress,
         method: "request_random",
