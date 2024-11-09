@@ -1,7 +1,8 @@
+use starknet::ContractAddress;
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    models::{game::{GameMode}}, config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
+    models::{game::{GameMode, GameTrait}}, config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
     packing::{
         game_store::{GameStore, GameStoreTrait}, player::{PlayerImpl},
         drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, items_packed::{ItemsPackedImpl},
@@ -11,7 +12,10 @@ use rollyourown::{
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}},
     events::{TradeDrug}
 };
-use starknet::ContractAddress;
+
+use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+
 
 #[derive(Copy, Drop, Serde)]
 enum TradeDirection {
@@ -131,4 +135,15 @@ fn sell(ref game_store: GameStore, trade: Trade) {
                 is_buy: false,
             }
         );
+
+    if game_store.game.is_ranked() && total > 99_999_999 && !game_store.player.traded_million {
+        game_store.player.traded_million = true;
+
+        let bushido_store = BushidoStoreTrait::new(store.world);
+        let quest_id = Quest::Dealer.identifier(0);
+        bushido_store
+            .progress(
+                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp()
+            );
+    }
 }

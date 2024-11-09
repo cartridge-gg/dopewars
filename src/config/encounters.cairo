@@ -205,8 +205,8 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     ) -> EncounterConfig {
         let level = Self::get_encounter_level(ref season_settings, game_store.player.reputation);
 
-        let rand_from_game_store: u256 = pedersen::pedersen(
-            game_store.markets.packed, game_store.markets.packed
+        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+            array![game_store.markets.packed, game_store.game.game_id.into()].span()
         )
             .into() % 2;
 

@@ -3,7 +3,7 @@ use dojo::meta::introspect::Introspect;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game, GameMode},
+    models::game::{Game, GameMode, GameTrait},
     utils::{
         random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImpl, MathImplU8},
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
@@ -23,6 +23,9 @@ use rollyourown::{
     systems::game::{EncounterActions,}, store::{Store, StoreImpl, StoreTrait},
     events::{TravelEncounter, TravelEncounterResult}
 };
+
+use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -140,7 +143,6 @@ fn on_travel(
 //
 
 fn decide(
-    s: @Store,
     ref game_store: GameStore,
     ref season_settings: SeasonSettings,
     ref randomizer: Random,
@@ -151,7 +153,7 @@ fn decide(
 
     // run action
     let mut result: TravelEncounterResult = match action {
-        EncounterActions::Run => { on_run(s, ref game_store, ref randomizer, ref encounter) },
+        EncounterActions::Run => { on_run(ref game_store, ref randomizer, ref encounter) },
         EncounterActions::Pay => { on_pay(ref game_store, ref randomizer, ref encounter) },
         EncounterActions::Fight => { on_fight(ref game_store, ref randomizer, ref encounter) },
     };
@@ -175,6 +177,49 @@ fn decide(
 
     // emit TravelEncounterResult
     game_store.store.world.emit_event(@result);
+
+    if game_store.game.is_ranked() {
+        let bushido_store = BushidoStoreTrait::new(game_store.store.world);
+        let player_id: felt252 = game_store.game.player_id.into();
+
+        if result.outcome == EncounterOutcomes::Jailed {
+
+            let quest_id = Quest::Jailbird.identifier(0);
+            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+
+        } else if result.outcome == EncounterOutcomes::Died {
+
+            let quest_id = Quest::Rip.identifier(0);
+            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+
+        } else if result.outcome == EncounterOutcomes::Escaped {
+
+            let quest_id = Quest::Escape.identifier(0);
+            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+
+        } else if result.outcome == EncounterOutcomes::Victorious {
+
+            if encounter.encounter == Encounters::Cops {
+                let quest_id = Quest::Cops.identifier(0);
+                bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+
+                if encounter.level == 6 {
+                    let quest_id = Quest::BrawlerC.identifier(0);
+                    bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                }
+            }
+            
+            if encounter.encounter == Encounters::Gang {
+                let quest_id = Quest::Gangs.identifier(0);
+                bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+
+                if encounter.level == 6 {
+                    let quest_id = Quest::BrawlerG.identifier(0);
+                    bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                }
+            }
+        }
+    }
 
     if !game_store.player.is_dead() {
         // update player status
@@ -275,7 +320,7 @@ fn on_pay(
 //
 
 fn on_run(
-    s: @Store, ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
+    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
 ) -> TravelEncounterResult {
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Run);
 

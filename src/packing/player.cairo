@@ -73,6 +73,7 @@ struct Player {
     next_location: Locations,
     drug_level: u8,
     reputation: u8,
+    traded_million: bool,
 }
 
 
@@ -89,7 +90,8 @@ impl PlayerImpl of PlayerTrait {
             location: Locations::Home,
             next_location: Locations::Home,
             drug_level: 0,
-            reputation: 0,
+            reputation: 0, 
+            traded_million: false,
         }
     }
 
@@ -104,6 +106,7 @@ impl PlayerImpl of PlayerTrait {
             next_location: Locations::Home,
             drug_level: 0,
             reputation: 0,
+            traded_million: false,
         }
     }
 

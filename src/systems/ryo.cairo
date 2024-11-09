@@ -12,6 +12,8 @@ trait IRyo<T> {
     fn set_treasury(self: @T, treasury_address: ContractAddress);
     fn set_vrf(self: @T, vrf_address: ContractAddress);
     //
+    fn update_quests(self: @T);
+    //
     fn paper(self: @T) -> ContractAddress;
     fn treasury(self: @T) -> ContractAddress;
     fn vrf(self: @T) -> ContractAddress;
@@ -40,8 +42,32 @@ mod ryo {
     use starknet::info::get_tx_info;
     use starknet::{get_caller_address, get_contract_address};
 
+    use bushido_trophy::components::achievable::AchievableComponent;
+    use rollyourown::elements::trophies::types::{Trophy, TrophyTrait, TROPHY_COUNT};
+
+    component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
+    impl AchievableInternalImpl = AchievableComponent::InternalImpl<ContractState>;
+
+    // Storage
+    #[storage]
+    struct Storage {
+        #[substorage(v0)]
+        achievable: AchievableComponent::Storage,
+    }
+
+    // Events
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        #[flat]
+        AchievableEvent: AchievableComponent::Event,
+    }
+
     fn dojo_init(
-        self: @ContractState, paper_address: ContractAddress, vrf_address: ContractAddress, treasury_address: ContractAddress,
+        self: @ContractState,
+        paper_address: ContractAddress,
+        vrf_address: ContractAddress,
+        treasury_address: ContractAddress,
     ) {
         // consume first ID = 0
         let _ = self.world_dispatcher().uuid();
@@ -67,7 +93,7 @@ mod ryo {
         } else {
             paper_address
         };
-        
+
         let vrf_address = if vrf_address.is_zero() {
             let (vrf_mock_address, _) = world.dns(@"vrf_provider_mock").unwrap();
             vrf_mock_address
@@ -89,11 +115,42 @@ mod ryo {
         let mut randomizer = RandomImpl::new('ryo');
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
+        //
+        //
+        //
+        self.update_quests();
     }
 
 
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
+        fn update_quests(self: @ContractState) {
+            // [Event] Emit all Trophy events
+            let world = self.world(@"dopewars");
+            let mut trophy_id: u8 = TROPHY_COUNT;
+            while trophy_id > 0 {
+                let trophy: Trophy = trophy_id.into();
+                self
+                    .achievable
+                    .create(
+                        world,
+                        id: trophy.identifier(),
+                        hidden: trophy.hidden(),
+                        index: trophy.index(),
+                        points: trophy.points(),
+                        start: trophy.start(),
+                        end: trophy.end(),
+                        group: trophy.group(),
+                        icon: trophy.icon(),
+                        title: trophy.title(),
+                        description: trophy.description(),
+                        tasks: trophy.tasks(),
+                        data: trophy.data(),
+                    );
+                trophy_id -= 1;
+            }
+        }
+
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();
 

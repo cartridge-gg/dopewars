@@ -57,6 +57,7 @@ mod game {
             self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
             self.assert_not_paused();
+            // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game mode!');
 
             let mut world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
@@ -183,7 +184,7 @@ mod game {
 
             // // resolve decision
             let is_dead = traveling::decide(
-                @store, ref game_store, ref season_settings, ref randomizer, action
+               ref game_store, ref season_settings, ref randomizer, action
             );
 
             // check if dead
@@ -214,12 +215,12 @@ mod game {
 
             while let Option::Some(action) = actions.pop_front() {
                 match action {
-                    super::Actions::Trade(tradeAction) => {
-                        trading::execute_trade(ref game_store, *tradeAction);
+                    super::Actions::Trade(trade_action) => {
+                        trading::execute_trade(ref game_store, *trade_action);
                     },
-                    super::Actions::Shop(shopAction) => {
+                    super::Actions::Shop(shop_action) => {
                         assert(has_shopped == false, 'one upgrade by turn');
-                        shopping::execute_action(ref game_store, *shopAction);
+                        shopping::execute_action(ref game_store, *shop_action);
                         has_shopped = true;
                     },
                 };

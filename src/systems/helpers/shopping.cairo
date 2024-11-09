@@ -3,7 +3,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
-    models::game::{Game},
+    models::game::{Game, GameImpl, GameTrait},
     config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations},},
     packing::{
         game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl},
@@ -13,6 +13,10 @@ use rollyourown::{
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
     events::{UpgradeItem}
 };
+
+use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+
 
 #[derive(Copy, Drop, Serde)]
 struct Action {
@@ -77,5 +81,14 @@ fn execute_action(ref game_store: GameStore, action: Action) {
                 item_level: next_level,
             }
         );
+
+    if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
+        let quest_id = Quest::Stuffed.identifier(0);
+        let bushido_store = BushidoStoreTrait::new(game_store.store.world);
+        bushido_store
+            .progress(
+                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp()
+            );
+    }
 }
 

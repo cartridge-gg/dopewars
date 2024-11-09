@@ -2,6 +2,14 @@
 version = 1
 
 [[package]]
+name = "bushido_trophy"
+version = "0.0.0"
+source = "git+https://github.com/cartridge-gg/bushido#47eb7c1a09250eb364153b15b68077ee58852ae3"
+dependencies = [
+ "dojo",
+]
+
+[[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
 source = "git+https://github.com/cartridge-gg/vrf#3fc02297d2444392b08d1445054fa5be97dac5ac"
@@ -114,6 +122,7 @@ source = "git+https://github.com/OpenZeppelin/cairo-contracts.git?rev=a13bae3#a1
 name = "rollyourown"
 version = "0.1.0"
 dependencies = [
+ "bushido_trophy",
  "cartridge_vrf",
  "dojo",
 ]

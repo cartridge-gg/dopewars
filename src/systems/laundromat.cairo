@@ -30,12 +30,16 @@ mod laundromat {
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
+    use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+    use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
         fn register_score(
             self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress
         ) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let world = self.world(@"dopewars");
+            let mut store = StoreImpl::new(world);
 
             let player_id = get_caller_address();
 
@@ -69,10 +73,22 @@ mod laundromat {
 
             // add Game to sorted_list
             sorted_list.add(ref store, game, (prev_game_id, prev_player_id));
+
+            // quests
+            let bushido_store = BushidoStoreTrait::new(world);
+            let quest_id = Quest::Hustler.identifier(0);
+            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+
+            if game_store.player.reputation == 100 {
+                let quest_id = Quest::Famous.identifier(0);
+                bushido_store
+                    .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+            }
         }
 
         fn launder(self: @ContractState, season_version: u16) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let world = self.world(@"dopewars");
+            let mut store = StoreImpl::new(world);
 
             let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();
@@ -143,12 +159,16 @@ mod laundromat {
             // reward launderer with some clean paper
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(get_caller_address(), paper_reward_launderer);
+
+            let quest_id = Quest::Launderer.identifier(0);
+            let bushido_store = BushidoStoreTrait::new(world);
+            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
         }
 
         fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>,) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let world = self.world(@"dopewars");
+            let mut store = StoreImpl::new(world);
 
-            let _world = self.world_dispatcher();
             let mut game_ids = game_ids;
 
             // check max batch size
@@ -191,6 +211,14 @@ mod laundromat {
                             rank: game.position
                         }
                     );
+
+                if game.position == 1 {
+                    //
+                    let quest_id = Quest::Kingpin.identifier(0);
+                    let bushido_store = BushidoStoreTrait::new(world);
+                    bushido_store
+                        .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+                }
             };
 
             // retrieve paper address

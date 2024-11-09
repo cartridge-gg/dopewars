@@ -20,6 +20,44 @@ mod config {
     mod settings;
 }
 
+mod elements {
+    mod quests {
+        mod interface;
+        mod types;
+
+        mod brawlerC;
+        mod brawlerG;
+        mod cops;
+        mod dealer;
+        mod escape;
+        mod famous;
+        mod gangs;
+        mod hustler;
+        mod jailbird;
+        mod kingpin;
+        mod rip;
+        mod stuffed;
+        mod launderer;
+    }
+    mod trophies{
+        mod interface;
+        mod types;
+
+        mod brawler;
+        mod cops;
+        mod dealer;
+        mod escape;
+        mod famous;
+        mod gangs;
+        mod hustler;
+        mod jailbird;
+        mod kingpin;
+        mod rip;
+        mod stuffed;
+        mod launderer;
+    }
+}
+
 mod helpers {
     mod season_manager;
 }

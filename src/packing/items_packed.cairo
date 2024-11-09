@@ -57,6 +57,11 @@ impl ItemsPackedImpl of ItemsPackedTrait {
     //
 
     #[inline(always)]
+    fn is_maxed_out(self: ItemsPacked) -> bool {
+        self.packed == 0b11111111
+    }
+
+    #[inline(always)]
     fn attack_item(self: ItemsPacked) -> HustlerItemConfig {
         self.get_item(ItemSlot::Weapon)
     }

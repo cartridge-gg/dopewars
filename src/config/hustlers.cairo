@@ -399,7 +399,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 slot_id: ItemSlot::Weapon.into(),
                 tier: 6,
                 stat: 72,
-                cost: 420_000,
+                cost: 320_000,
             }
         );
 }
@@ -468,7 +468,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 slot_id: ItemSlot::Clothes.into(),
                 tier: 6,
                 stat: 72,
-                cost: 388_000,
+                cost: 288_000,
             }
         );
 }
@@ -576,7 +576,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 slot_id: ItemSlot::Transport.into(),
                 tier: 4,
                 stat: 5000,
-                cost: 420_000,
+                cost: 220_000,
             }
         );
     store
