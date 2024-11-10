@@ -1,0 +1,20 @@
+allowed_origins = ["*"]
+world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"
+index_pending = true
+polling_interval = 1000
+historical_events = [
+    "dopewars-GameCreated",
+    "dopewars-Traveled",
+    "dopewars-GameOver",
+    "dopewars-TradeDrug",
+    "dopewars-HighVolatility",
+    "dopewars-UpgradeItem",
+    "dopewars-TravelEncounter",
+    "dopewars-TravelEncounterResult",
+    "dopewars-NewSeason",
+    "dopewars-NewHighScore",
+    "dopewars-Claimed",
+    # bushido 
+    "dopewars-TrophyCreation",
+    "dopewars-TrophyProgression",
+]

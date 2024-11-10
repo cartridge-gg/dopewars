@@ -1,5 +1,7 @@
+use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
@@ -13,9 +15,6 @@ use rollyourown::{
     utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
     events::{UpgradeItem}
 };
-
-use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
-use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 
 
 #[derive(Copy, Drop, Serde)]

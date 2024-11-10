@@ -28,8 +28,10 @@ export type DojoChainConfig = {
   masterAddress?: string;
   masterPrivateKey?: string;
   accountClassHash?: string;
-  manifest: any;
   predeployedAccounts: PredeployedAccount[];
+  manifest: any;
+  namespace?: string;
+  slot?: string;
   paperAddress: string;
   vrfProviderAddress: string;
   vrfProviderSecret?: string;
@@ -80,6 +82,7 @@ const katanaSlot1: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
   manifest: manifestRyo1,
+  slot: "ryo1",
   profileUrl: "https://profile.cartridge.gg",
   predeployedAccounts: [],
   paperAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
@@ -94,6 +97,7 @@ const katanaSlot2: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryo2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo2/torii/graphql/ws",
   manifest: manifestRyo2,
+  slot: "ryo2",
   profileUrl: "https://profile.cartridge.gg",
   predeployedAccounts: [],
   paperAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
@@ -108,6 +112,7 @@ const snSepolia: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
   manifest: manifestRyoSepolia,
+  slot: "ryosepolia",
   predeployedAccounts: [],
   paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
@@ -121,6 +126,7 @@ const snMainnet: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryo/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo/torii/graphql/ws",
   manifest: manifestMainnet,
+  slot: "ryo",
   predeployedAccounts: [],
   paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
@@ -129,10 +135,11 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  KATANA: katanaLocal,
+  WP_RYO2: katanaSlot2,
   WP_RYO1: katanaSlot1,
   SN_SEPOLIA: snSepolia,
   // "SN_MAIN": snMainnet,
+  KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

@@ -26,11 +26,58 @@ skip_contracts = ["dopewars-vrf_provider_mock"]
     "0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface",  # treasury: click_save controller address
 ]
 
+
+# [writers]
+# "dopewars" = [
+#     "dopewars-config",
+#     "dopewars-laundromat",
+#     "dopewars-game",
+#     "dopewars-ryo",
+#     "dopewars-paper_mock",
+# ]
+
 [writers]
-"dopewars" = [
+"dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
+"dopewars-GameConfig" = [
     "dopewars-config",
     "dopewars-laundromat",
-    "dopewars-game",
     "dopewars-ryo",
-    "dopewars-paper_mock",
 ]
+
+"dopewars-DrugConfig" = ["dopewars-config"]
+"dopewars-LocationConfig" = ["dopewars-config"]
+"dopewars-HustlerItemBaseConfig" = ["dopewars-config"]
+"dopewars-HustlerItemTiersConfig" = ["dopewars-config"]
+"dopewars-EncounterStatsConfig" = ["dopewars-config"]
+
+"dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-GameStorePacked" = ["dopewars-game"]
+"dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
+"dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
+"dopewars-SeasonSettings" = [
+    "dopewars-game",
+    "dopewars-laundromat",
+    "dopewars-ryo",
+]
+
+"dopewars-SortedList" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-SortedListItem" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-RyoAddress" = ["dopewars-ryo"]
+
+# events
+"dopewars-GameCreated" = ["dopewars-game"]
+"dopewars-Traveled" = ["dopewars-game"]
+"dopewars-GameOver" = ["dopewars-game"]
+"dopewars-TradeDrug" = ["dopewars-game"]
+"dopewars-UpgradeItem" = ["dopewars-game"]
+"dopewars-HighVolatility" = ["dopewars-game"]
+"dopewars-TravelEncounter" = ["dopewars-game"]
+"dopewars-TravelEncounterResult" = ["dopewars-game"]
+#
+"dopewars-NewSeason" = ["dopewars-laundromat"]
+"dopewars-NewHighScore" = ["dopewars-laundromat"]
+"dopewars-Claimed" = ["dopewars-laundromat"]
+
+# bushido
+"dopewars-TrophyProgression" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-TrophyCreation" = ["dopewars-ryo"]

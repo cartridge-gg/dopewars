@@ -48,9 +48,8 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
-    use dojo::event::EventStorage;
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
-
+    use dojo::event::EventStorage;
     use dojo::world::{WorldStorage, WorldStorageTrait};
     use openzeppelin::token::erc20::ERC20Component;
     use openzeppelin::token::erc20::interface::IERC20Metadata;

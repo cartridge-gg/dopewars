@@ -88,8 +88,8 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
-    namespace: "dopewars",
-    slot: "ryo1",
+    namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
+    slot: selectedChain.slot ? selectedChain.slot : "ryo",
     tokens: {
       erc20: [
         // paperAddress

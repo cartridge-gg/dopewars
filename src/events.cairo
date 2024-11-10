@@ -5,7 +5,7 @@ use rollyourown::systems::helpers::traveling::{EncounterOutcomes,};
 use starknet::ContractAddress;
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 pub struct GameCreated {
     #[key]
     game_id: u32,
@@ -17,7 +17,7 @@ pub struct GameCreated {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 pub struct Traveled {
     #[key]
     game_id: u32,
@@ -30,7 +30,7 @@ pub struct Traveled {
 
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct GameOver {
     #[key]
     game_id: u32,
@@ -46,7 +46,7 @@ struct GameOver {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct TradeDrug {
     #[key]
     game_id: u32,
@@ -60,7 +60,7 @@ struct TradeDrug {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct HighVolatility {
     #[key]
     game_id: u32,
@@ -72,7 +72,7 @@ struct HighVolatility {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct UpgradeItem {
     #[key]
     game_id: u32,
@@ -84,7 +84,7 @@ struct UpgradeItem {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct TravelEncounter {
     #[key]
     game_id: u32,
@@ -101,8 +101,9 @@ struct TravelEncounter {
     payout: u32,
 }
 
-#[derive(Drop, Introspect)]
-#[dojo::event(historical: true)]
+// #[derive(Drop, Introspect)]
+#[derive(Drop, Serde, Introspect)]
+#[dojo::event]
 struct TravelEncounterResult {
     #[key]
     game_id: u32,
@@ -128,7 +129,7 @@ struct TravelEncounterResult {
 //
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct NewSeason {
     #[key]
     key: u16,
@@ -136,7 +137,7 @@ struct NewSeason {
 }
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct NewHighScore {
     #[key]
     game_id: u32,
@@ -153,7 +154,7 @@ struct NewHighScore {
 
 
 #[derive(Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 struct Claimed {
     #[key]
     game_id: u32,

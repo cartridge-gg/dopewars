@@ -5,6 +5,16 @@ export const ABI = [
     "interface_name": "dojo::contract::interface::IContract"
   },
   {
+    "type": "interface",
+    "name": "dojo::contract::interface::IContract",
+    "items": []
+  },
+  {
+    "type": "impl",
+    "name": "paper_mock__DeployedContractImpl",
+    "interface_name": "dojo::meta::interface::IDeployedResource"
+  },
+  {
     "type": "struct",
     "name": "core::byte_array::ByteArray",
     "members": [
@@ -24,7 +34,7 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "dojo::contract::interface::IContract",
+    "name": "dojo::meta::interface::IDeployedResource",
     "items": [
       {
         "type": "function",

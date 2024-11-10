@@ -22,9 +22,6 @@ mod config {
 
 mod elements {
     mod quests {
-        mod interface;
-        mod types;
-
         mod brawlerC;
         mod brawlerG;
         mod cops;
@@ -33,16 +30,15 @@ mod elements {
         mod famous;
         mod gangs;
         mod hustler;
+        mod interface;
         mod jailbird;
         mod kingpin;
+        mod launderer;
         mod rip;
         mod stuffed;
-        mod launderer;
-    }
-    mod trophies{
-        mod interface;
         mod types;
-
+    }
+    mod trophies {
         mod brawler;
         mod cops;
         mod dealer;
@@ -50,11 +46,13 @@ mod elements {
         mod famous;
         mod gangs;
         mod hustler;
+        mod interface;
         mod jailbird;
         mod kingpin;
+        mod launderer;
         mod rip;
         mod stuffed;
-        mod launderer;
+        mod types;
     }
 }
 

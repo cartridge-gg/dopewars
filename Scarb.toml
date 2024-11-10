@@ -23,15 +23,15 @@ cairo_test = "2.8.4"
 
 [dependencies]
 starknet = "2.8.4"
-# dojo = { path = "../dojo/crates/dojo/core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.1" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.2" }
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
-bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
+bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
+# bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
+# dojo = { path = "../dojo/crates/dojo/core" }
 
 [scripts]
-katana = "katana --allowed-origins \"*\" -b 2000 --disable-fee --dev"
-torii = "torii --allowed-origins \"*\" --index-pending true --polling-interval 1000 --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
-torii_internal = "torii --allowed-origins \"*\" --index-pending true --polling-interval 1000 --rpc http://localhost:8001/x/starknet/sepolia --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
+katana = "katana --config ./katana_dev.toml"
+torii = "torii --config ./torii_dev.toml"
 
 # common
 copy_manifest = "./scripts/copy_manifest.sh"
@@ -42,19 +42,18 @@ auth = "./scripts/auth.sh"
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryo2 = "PROFILE=ryo2 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
-migrate_internal = "PROFILE=internal && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot ryo1
-slot_ryo1_katana = "slot d create ryo1 katana -v v1.0.0-rc.1 -b 2000 -a 10 --disable-fee false --seed 0 --dev"
-slot_ryo1_torii = "slot d create ryo1 torii --rpc  https://api.cartridge.gg/x/ryo1/katana --index-pending true --version v1.0.0-rc.1 --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
+slot_ryo1_katana = "slot d create ryo1 katana -v v1.0.0-rc.2 --config-file ./katana_ryo1.toml"
+slot_ryo1_torii = "slot d create ryo1 torii  -v v1.0.0-rc.2 --config-file ./torii_ryo1.toml"
 # slot ryo2
-slot_ryo2_katana = "slot d create ryo2 katana -v v1.0.0-rc.1 -b 2000 -a 10 --disable-fee false --seed 0 --dev"
-slot_ryo2_torii = "slot d create ryo2 torii --rpc  https://api.cartridge.gg/x/ryo2/katana --index-pending true --version v1.0.0-rc.1 --world 0x04fc1ccab8ac4ce48480a8fbb3d0628e6e52ecc63ca5a3c0dc8a2161a9b01705"
+slot_ryo2_katana = "slot d create ryo2 katana -v v1.0.0-rc.2 --config-file ./katana_ryo2.toml --dev --accounts 10"
+slot_ryo2_torii = "slot d create ryo2 torii -v v1.0.0-rc.2 --config-file ./torii_ryo2.toml"
 
 # slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version v1.0.0-rc.1 --world 0x07c0f2757ae2445f2433b86e9b10537b190971b6dc38357634a158acf7385898"
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii --rpc https://api.cartridge.gg/x/starknet/sepolia --index-pending true --version v1.0.0-rc.2 --world 0x07c0f2757ae2445f2433b86e9b10537b190971b6dc38357634a158acf7385898"
 
 [profile.ryo1]
 [profile.ryo2]

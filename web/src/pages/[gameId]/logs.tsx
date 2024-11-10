@@ -434,7 +434,7 @@ const FightLine = ({
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
           <Tooltip
-            label={action !== undefined ? encountersActionName[action as encountersActionNameKeys] : ""}
+            label={action}
             placement="right-end"
           >
             <Text>{text}</Text>

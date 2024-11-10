@@ -12,9 +12,11 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 mod laundromat {
+    use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
+    use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 
     use rollyourown::{
         config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},},
@@ -29,9 +31,6 @@ mod laundromat {
         packing::game_store::{GameStore, GameStoreImpl}, events::{NewSeason, Claimed}
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
-
-    use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
-    use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {

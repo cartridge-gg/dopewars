@@ -57,7 +57,8 @@ mod game {
             self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
         ) {
             self.assert_not_paused();
-            // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game mode!');
+            // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
+            // mode!');
 
             let mut world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
@@ -184,7 +185,7 @@ mod game {
 
             // // resolve decision
             let is_dead = traveling::decide(
-               ref game_store, ref season_settings, ref randomizer, action
+                ref game_store, ref season_settings, ref randomizer, action
             );
 
             // check if dead

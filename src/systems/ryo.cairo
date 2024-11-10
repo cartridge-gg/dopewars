@@ -26,9 +26,11 @@ trait IRyo<T> {
 
 #[dojo::contract]
 mod ryo {
+    use bushido_trophy::components::achievable::AchievableComponent;
     use core::traits::Into;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
+    use rollyourown::elements::trophies::types::{Trophy, TrophyTrait, TROPHY_COUNT};
 
     use rollyourown::{
         interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
@@ -41,9 +43,6 @@ mod ryo {
     use starknet::contract_address::Felt252TryIntoContractAddress;
     use starknet::info::get_tx_info;
     use starknet::{get_caller_address, get_contract_address};
-
-    use bushido_trophy::components::achievable::AchievableComponent;
-    use rollyourown::elements::trophies::types::{Trophy, TrophyTrait, TROPHY_COUNT};
 
     component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
     impl AchievableInternalImpl = AchievableComponent::InternalImpl<ContractState>;
