@@ -2,7 +2,7 @@ import { useControllerUsername, useDojoContext } from "@/dojo/hooks";
 import { frenlyAddress } from "@/utils/ui";
 import { Box, Button, HStack, Image, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount, /*useBalance,*/ useConnect, useDisconnect } from "@starknet-react/core";
-import { ExternalLink, KatanaIcon, Trophy } from "../icons";
+import { ExternalLink, KatanaIcon, Trophy, WalletModal } from "../icons";
 import { useEffect, useState } from "react";
 import { Cartridge } from "../icons/branding/Cartridge";
 import { ControllerConnector } from "@cartridge/connector";
@@ -36,7 +36,11 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
           <Button variant={variant} h="48px" fontSize="14px" w="full" alignItems="center" justifyContent="center">
             <HStack
               onClick={() => {
-                uiStore.openAccountDetails();
+                if (isController) {
+                  (connector as unknown as ControllerConnector).controller.openProfile("trophies"); // "trophies"
+                } else {
+                  uiStore.openAccountDetails();
+                }
               }}
             >
               {connector && isBurnerOrPredeplyed && <KatanaIcon />}
@@ -48,12 +52,12 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
               <Text>{isController ? username : frenlyAddress(account.address || "")}</Text>
             </HStack>
             {isController && (
-              <Trophy
+              <WalletModal
                 mb={1}
                 _hover={{ backgroundColor: "neon.500" }}
                 borderRadius={3}
                 onClick={() => {
-                  (connector as unknown as ControllerConnector).controller.openProfile("trophies"); // "trophies"
+                  uiStore.openAccountDetails();
                 }}
               />
             )}

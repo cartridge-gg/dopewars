@@ -13,7 +13,7 @@ type iconsBySymbolKeys = keyof typeof iconsBySymbol;
 export const TokenBalance = ({ address, token, icon }: { address?: string; token?: string; icon?: React.FC }) => {
   // infinite loop with sn.js 6
   // const { data: balance } = useBalance({ address, token, /*watch: true, refetchInterval:5_000*/ });
-  const { balance, isInitializing } = useTokenBalance({ address, token, refetchInterval: 5_000 });
+  const { balance, isInitializing } = useTokenBalance({ address, token, refetchInterval: 10_000 });
 
   if (!address || !token) return null;
   return (

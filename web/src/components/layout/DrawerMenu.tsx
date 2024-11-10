@@ -56,7 +56,7 @@ const DrawerMenu = () => {
       </HeaderButton>
       <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} finalFocusRef={btnRef} trapFocus={false}>
         <DrawerOverlay onClick={onClose} />
-        <DrawerContent minW="340px">
+        <DrawerContent minW="340px" overflowX="hidden">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
             <Heading
               color="neon.500"
@@ -80,7 +80,7 @@ const DrawerMenu = () => {
               gap={6}
             >
               <VStack w="full" alignItems="flex-start" gap={12}>
-                <UnorderedList w="full" listStyleType="none">
+                <UnorderedList w="full" listStyleType="none" marginInlineStart="0">
                   <DrawerListItem cursor="default">
                     <MediaPlayer />
                   </DrawerListItem>

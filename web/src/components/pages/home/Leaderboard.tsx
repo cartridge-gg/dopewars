@@ -1,9 +1,7 @@
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
 import {
-  useConfigStore,
   useDojoContext,
-  useHallOfFame,
   useRegisteredGamesBySeason,
   useRouterContext,
   useSeasonByVersion,
@@ -16,7 +14,6 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
-import { SeasonDetailsModal } from "./SeasonDetailsModal";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";

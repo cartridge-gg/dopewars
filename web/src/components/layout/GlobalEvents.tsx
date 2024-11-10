@@ -102,7 +102,6 @@ export const GlobalEvents = () => {
 
     if (update["dopewars-GameCreated"]) {
       const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
-      console.log(gameCreated);
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
       if (BigInt(gameCreated.player_id) !== accountAddress.current) {
         toast({
