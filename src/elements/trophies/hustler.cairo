@@ -75,9 +75,9 @@ impl Hustler of TrophyTrait {
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 5,
-            1 => 20,
-            2 => 50,
+            0 => 10,
+            1 => 50,
+            2 => 100,
             _ => 0,
         };
         Quest::Hustler.tasks(level, difficulty, count)

@@ -8,6 +8,10 @@ impl Jailbird of QuestTrait {
 
     #[inline]
     fn description(difficulty: u8, count: u32) -> ByteArray {
-        "Get jailed"
+        match count {
+            0 => "",
+            1 => "Get jailed",
+            _ => format!("Get jailed {} times", count),
+        }
     }
 }

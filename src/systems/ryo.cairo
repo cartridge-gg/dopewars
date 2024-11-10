@@ -124,10 +124,12 @@ mod ryo {
     #[abi(embed_v0)]
     impl RyoExternalImpl of super::IRyo<ContractState> {
         fn update_quests(self: @ContractState) {
+            self.assert_caller_is_owner();
+
             // [Event] Emit all Trophy events
             let world = self.world(@"dopewars");
-            let mut trophy_id: u8 = TROPHY_COUNT;
-            while trophy_id > 0 {
+            let mut trophy_id: u8 = 1;
+            while trophy_id <= TROPHY_COUNT {
                 let trophy: Trophy = trophy_id.into();
                 self
                     .achievable
@@ -146,7 +148,7 @@ mod ryo {
                         tasks: trophy.tasks(),
                         data: trophy.data(),
                     );
-                trophy_id -= 1;
+                trophy_id += 1;
             }
         }
 
@@ -247,11 +249,12 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
+            let account_contract_address = get_tx_info().unbox().account_contract_address;
             assert(
                 self
                     .world(@"dopewars")
                     .dispatcher
-                    .is_owner(selector_from_tag!("dopewars-ryo"), get_caller_address()),
+                    .is_owner(selector_from_tag!("dopewars-ryo"), account_contract_address),
                 'not owner'
             );
         }

@@ -110,40 +110,25 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
     fn get_initial_cash(self: SeasonSettings) -> u32 {
         match self.cash_mode {
             CashMode::Broke => { 420 },
-            CashMode::Average => { 10000 },
-            CashMode::Rich => { 169000 },
+            CashMode::Average => { 1000 },
+            CashMode::Rich => { 2600 },
         }
-        // match self.cash_mode {
-    //     CashMode::Broke => { 420 },
-    //     CashMode::Average => { 1000 },
-    //     CashMode::Rich => { 1690 },
-    // }
     }
 
     fn get_initial_health(self: SeasonSettings) -> u8 {
         match self.health_mode {
-            HealthMode::Junkie => { 20 },
-            HealthMode::Hustler => { 50 },
+            HealthMode::Junkie => { 70 },
+            HealthMode::Hustler => { 90 },
             HealthMode::Streetboss => { 110 },
         }
-        // match self.health_mode {
-    //     HealthMode::Junkie => { 69 },
-    //     HealthMode::Hustler => { 90 },
-    //     HealthMode::Streetboss => { 100 },
-    // }
     }
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
         match self.turns_mode {
-            TurnsMode::OnSpeed => { 5 },
-            TurnsMode::OnWeed => { 10 },
-            TurnsMode::OnMush => { 18 },
+            TurnsMode::OnSpeed => { 16 },
+            TurnsMode::OnWeed => { 18 },
+            TurnsMode::OnMush => { 20 },
         }
-        // match self.turns_mode {
-    //     TurnsMode::OnSpeed => { 16 },
-    //     TurnsMode::OnWeed => { 18 },
-    //     TurnsMode::OnMush => { 22 },
-    // }
     }
 
     //

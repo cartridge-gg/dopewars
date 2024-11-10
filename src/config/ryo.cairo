@@ -34,7 +34,7 @@ struct RyoConfig {
 
 #[generate_trait]
 impl RyoConfigImpl of RyoConfigTrait {
-    // TODO: move to overlay / initializers
+    // TODO: SET RIGHT PARAMS
     fn build_initial_ryo_config() -> RyoConfig {
         RyoConfig {
             key: 0,

@@ -1,6 +1,6 @@
-rpc = "https://api.cartridge.gg/x/ryo1/katana"
+rpc = "https://api.cartridge.gg/x/starknet/sepolia"
 
-world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"
+world_address = "0x0191249cc14cd1c84f80a0e7be0661b0788f5e01a51786664e15c5693e787a5d"
 allowed_origins = ["*"]
 index_pending = true
 polling_interval = 1000
@@ -20,3 +20,9 @@ historical_events = [
     "dopewars-TrophyCreation",
     "dopewars-TrophyProgression",
 ]
+
+contracts = []
+
+# [[contracts]]
+# type = "WORLD"
+# address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"

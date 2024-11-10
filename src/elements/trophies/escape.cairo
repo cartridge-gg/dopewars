@@ -75,8 +75,8 @@ impl Escape of TrophyTrait {
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 3,
-            1 => 10,
+            0 => 10,
+            1 => 20,
             2 => 50,
             _ => 0,
         };

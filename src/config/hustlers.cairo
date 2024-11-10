@@ -529,7 +529,7 @@ fn initialize_feet_tiers_config(ref store: Store) {
                 slot_id: ItemSlot::Feet.into(),
                 tier: 6,
                 stat: 69,
-                cost: 345_000,
+                cost: 285_000,
             }
         );
 }

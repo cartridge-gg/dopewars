@@ -9,5 +9,5 @@ struct RyoAddress {
     paper: ContractAddress,
     treasury: ContractAddress,
     vrf: ContractAddress,
-    laundromat: ContractAddress, // should be removed
+    laundromat: ContractAddress, // could be removed
 }

@@ -8,7 +8,7 @@ impl Launderer of TrophyTrait {
 
     #[inline]
     fn hidden(level: u8) -> bool {
-        true
+       true
     }
 
     #[inline]

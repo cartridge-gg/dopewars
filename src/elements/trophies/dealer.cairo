@@ -59,9 +59,9 @@ impl Dealer of TrophyTrait {
     #[inline]
     fn title(level: u8) -> felt252 {
         match level {
-            0 => 'Tony Katana',
-            1 => 'Kaizer Sozo',
-            2 => 'Pablo EscFooBar',
+            0 => 'Operator',
+            1 => 'Broker',
+            2 => 'Cartel',
             _ => '',
         }
     }
@@ -76,9 +76,9 @@ impl Dealer of TrophyTrait {
     fn tasks(level: u8) -> Span<Task> {
         let difficulty: u8 = 0;
         let count: u32 = match level {
-            0 => 1,
-            1 => 3,
-            2 => 5,
+            0 => 100,
+            1 => 200,
+            2 => 500,
             _ => 0,
         };
         Quest::Dealer.tasks(level, difficulty, count)

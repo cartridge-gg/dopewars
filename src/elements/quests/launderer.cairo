@@ -8,6 +8,6 @@ impl Launderer of QuestTrait {
 
     #[inline]
     fn description(difficulty: u8, count: u32) -> ByteArray {
-        "On season end, $PAPER have to be washed..."
+        "Launder the results at the end of a season."
     }
 }

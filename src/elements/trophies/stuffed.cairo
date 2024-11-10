@@ -8,8 +8,7 @@ impl Stuffed of TrophyTrait {
 
     #[inline]
     fn hidden(level: u8) -> bool {
-        false
-        // true
+        true
     }
 
     #[inline]

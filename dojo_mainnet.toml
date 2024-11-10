@@ -1,19 +1,18 @@
 
 [env]
-# rpc_url = "https://api.cartridge.gg/x/starknet/mainnet"
-rpc_url = "http://localhost:5050"
-account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca"
-private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
+rpc_url = "https://api.cartridge.gg/x/starknet/mainnet"
+account_address = "0x"
+keystore = "../../../dw_mainnet"
 
 
 [world]
 name = "Dope Wars"
 seed = "dopeseed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
-# website = "https://rollyourown.preview.cartridge.gg/"
-# icon_uri = "file://assets/icon.png"
-# cover_uri = "file://assets/cover.png"
-# socials.x = "https://x.com/TheDopeWars"
+website = "https://rollyourown.preview.cartridge.gg/"
+icon_uri = "file://assets/icon.png"
+cover_uri = "file://assets/cover.png"
+socials.x = "https://x.com/TheDopeWars"
 
 [namespace]
 default = "dopewars"
@@ -45,7 +44,8 @@ skip_contracts = [
 # ]
 
 [writers]
-"dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
+# "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
+
 "dopewars-GameConfig" = [
     "dopewars-config",
     "dopewars-laundromat",

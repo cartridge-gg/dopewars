@@ -112,7 +112,7 @@ const snSepolia: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
   manifest: manifestRyoSepolia,
-  slot: "ryosepolia",
+  slot: "ryosepolia2",
   predeployedAccounts: [],
   paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
@@ -135,9 +135,9 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  WP_RYO2: katanaSlot2,
-  WP_RYO1: katanaSlot1,
   SN_SEPOLIA: snSepolia,
+  // WP_RYO2: katanaSlot2,
+  // WP_RYO1: katanaSlot1,
   // "SN_MAIN": snMainnet,
   KATANA: katanaLocal,
 };

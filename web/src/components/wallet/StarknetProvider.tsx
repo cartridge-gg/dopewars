@@ -43,8 +43,8 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
     // case "SN_SEPOLIA":
     //   return [cartridgeConnector({ selectedChain })];
 
-    case  "WP_RYO1":
-    case  "WP_RYO2":
+    case "WP_RYO1":
+    case "WP_RYO2":
       return [
         controller,
         // injected({ id: "dojoburner" }),
@@ -84,6 +84,61 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
+  const policies = [
+    {
+      target: selectedChain.vrfProviderAddress,
+      method: "request_random",
+    },
+    {
+      target: paperAddress,
+      method: "faucet",
+    },
+    {
+      target: paperAddress,
+      method: "approve",
+    },
+    {
+      target: gameAddress,
+      method: "create_game",
+    },
+    {
+      target: gameAddress,
+      method: "travel",
+    },
+    {
+      target: gameAddress,
+      method: "decide",
+    },
+    {
+      target: gameAddress,
+      method: "end_game",
+    },
+    {
+      target: laundromatAddress,
+      method: "register_score",
+    },
+    {
+      target: laundromatAddress,
+      method: "claim",
+    },
+    {
+      target: laundromatAddress,
+      method: "launder",
+    },
+  ];
+
+  if (selectedChain.name !== "MAINNET") {
+    policies.push({
+      target: selectedChain.vrfProviderAddress,
+      method: "submit_random",
+    });
+
+    policies.push({
+      target: selectedChain.vrfProviderAddress,
+      method: "assert_consumed",
+    });
+  }
+
   return new ControllerConnector({
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
     rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
@@ -98,55 +153,6 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     },
     theme: "dope-wars",
     colorMode: "dark",
-    policies: [
-      {
-        target: selectedChain.vrfProviderAddress,
-        method: "submit_random",
-      },
-      {
-        target: selectedChain.vrfProviderAddress,
-        method: "assert_consumed",
-      },
-      {
-        target: selectedChain.vrfProviderAddress,
-        method: "request_random",
-      },
-      {
-        target: paperAddress,
-        method: "faucet",
-      },
-      {
-        target: paperAddress,
-        method: "approve",
-      },
-      {
-        target: gameAddress,
-        method: "create_game",
-      },
-      {
-        target: gameAddress,
-        method: "travel",
-      },
-      {
-        target: gameAddress,
-        method: "decide",
-      },
-      {
-        target: gameAddress,
-        method: "end_game",
-      },
-      {
-        target: laundromatAddress,
-        method: "register_score",
-      },
-      {
-        target: laundromatAddress,
-        method: "claim",
-      },
-      {
-        target: laundromatAddress,
-        method: "launder",
-      },
-    ],
+    policies,
   }) as unknown as InjectedConnector;
 };
