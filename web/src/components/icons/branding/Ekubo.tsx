@@ -13,7 +13,7 @@ export const Ekubo = (props: IconProps) => {
         />
         <defs>
           <linearGradient id="paint0_linear_1_30" x1="0" y1="0" x2="134" y2="134" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#202F20" />
+            <stop stopColor="#202F20" />
             <stop offset="1" />
           </linearGradient>
         </defs>

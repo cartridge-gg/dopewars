@@ -128,18 +128,18 @@ const New = observer(() => {
           <ChildrenOrConnect variant="primary" h="35px">
             {gameMode == GameMode.Ranked && (
               <>
-                {balance > 1000n * ETHER ? (
-                  <Button
-                    w={["full", "auto"]}
-                    px={["auto", "20px"]}
-                    isLoading={isPending}
-                    onClick={() => create(gameMode)}
-                  >
-                    Play
-                  </Button>
-                ) : (
+                <Button
+                  w={["full", "auto"]}
+                  px={["auto", "20px"]}
+                  isLoading={isPending}
+                  onClick={() => create(gameMode)}
+                  isDisabled={balance < 1000n * ETHER}
+                >
+                  Play
+                </Button>
+                {/* ) : (
                   <>{selectedChain.name != "MAINNET" && <PaperFaucetButton />}</>
-                )}
+                )} */}
               </>
             )}
             {gameMode == GameMode.Noob && (
