@@ -16,7 +16,7 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
               if (e) {
                 return <Text key={key}>{e}</Text>;
               }
-            })} */}
+            })}
           </VStack>
 
           {/* <VStack fontSize="16px" gap={6}>
@@ -37,7 +37,6 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
               }}
             />
           </VStack> */}
-
         </VStack>
       </VStack>
     </Flex>

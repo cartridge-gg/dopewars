@@ -32,9 +32,7 @@ export default withPWA(nextConfig);
 
 // "@next/bundle-analyzer": "^14.1.1",
 // import bundleAnalyzer from "@next/bundle-analyzer";
-
 // const withBundleAnalyzer = bundleAnalyzer({
 //   enabled: true//process.env.ANALYZE === 'true',
 // })
-
 // export default withBundleAnalyzer(withPWA(nextConfig))
