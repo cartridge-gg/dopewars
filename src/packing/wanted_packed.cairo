@@ -1,4 +1,3 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     models::game::{Game, GameImpl, GameMode,},
@@ -9,6 +8,7 @@ use rollyourown::{
     },
     packing::{game_store::{GameStore}, drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}}
 };
+use starknet::ContractAddress;
 
 
 // 18 bits : 3 bits x 6 locations
@@ -20,11 +20,9 @@ struct WantedPacked {
 
 #[generate_trait]
 impl WantedPackedImpl of WantedPackedTrait {
-    fn new(salt: u32) -> WantedPacked {
-        let packed: u256 = core::pedersen::pedersen(salt.into(),starknet::get_caller_address().into())
-            .into();
+    fn new(rand: u256) -> WantedPacked {
         let mask = BitsMathImpl::mask::<u256>(18);
-        let safe_packed: felt252 = (packed & mask).try_into().unwrap();
+        let safe_packed: felt252 = (rand & mask).try_into().unwrap();
 
         WantedPacked { packed: safe_packed }
     }
@@ -51,6 +49,5 @@ impl WantedPackedImpl of WantedPackedTrait {
 
         self.packed = bits.into_felt();
     }
-
 }
 

@@ -51,7 +51,7 @@ const small = definePartsStyle({
   },
   thumb: {
     bg: "neon.400",
-    borderRadius:0,
+    borderRadius: 0,
     clipPath: `polygon(${generatePixelBorderPath(2, 2)})`,
   },
   mark: {

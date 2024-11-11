@@ -35,7 +35,7 @@ import { Dropdown } from "@/components/common";
 import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 import { Ludes } from "@/components/icons/drugs";
-import { Game, GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
 
 const Admin = () => {
@@ -218,11 +218,16 @@ const TreasuryClaimCard = observer(() => {
         </VStack>
       </CardBody>
       <CardFooter>
-        <ChildrenOrConnect>
-          <Button isLoading={isPending} onClick={onClaim}>
-            Claim
-          </Button>
-        </ChildrenOrConnect>
+        <VStack>
+          <Text w="220px" flexShrink={0} color="neon.500">
+            Claiming send claimable PAPER balance to Treasury
+          </Text>
+          <ChildrenOrConnect>
+            <Button isLoading={isPending} onClick={onClaim}>
+              Claim
+            </Button>
+          </ChildrenOrConnect>
+        </VStack>
       </CardFooter>
     </Card>
   );
@@ -269,7 +274,7 @@ const ExportAllGamesCard = observer(() => {
   const allGames = useGetAllGamesQuery({});
 
   const onClick = async () => {
-    const games = (allGames.data?.gameModels?.edges || [])
+    const games = (allGames.data?.dopewarsGameModels?.edges || [])
       .map((i) => i?.node as Game)
       .map((i) => {
         return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };

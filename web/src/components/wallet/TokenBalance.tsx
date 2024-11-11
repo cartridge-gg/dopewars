@@ -10,20 +10,20 @@ const iconsBySymbol = {
 };
 type iconsBySymbolKeys = keyof typeof iconsBySymbol;
 
-export const TokenBalance = ({ address, token, icon }: { address?: string; token?: string, icon?: React.FC }) => {
+export const TokenBalance = ({ address, token, icon }: { address?: string; token?: string; icon?: React.FC }) => {
   // infinite loop with sn.js 6
   // const { data: balance } = useBalance({ address, token, /*watch: true, refetchInterval:5_000*/ });
-  const { balance, isInitializing } = useTokenBalance({ address, token, refetchInterval: 5_000 });
+  const { balance, isInitializing } = useTokenBalance({ address, token, refetchInterval: 10_000 });
 
-  if (!address || !token ) return null;
+  if (!address || !token) return null;
   return (
     <HStack>
       {isInitializing ? (
-        <Skeleton startColor='neon.800' endColor='neon.700' height='20px' w="80px" />
+        <Skeleton startColor="neon.800" endColor="neon.700" height="20px" w="80px" />
       ) : (
         <>
-        {icon && icon({width:"16px", height:"16px"})}
-        <Text>{formatCash(formatEther(balance)).replace("$", "") || 0}</Text>
+          {icon && icon({ width: "16px", height: "16px" })}
+          <Text>{formatCash(formatEther(balance)).replace("$", "") || 0}</Text>
         </>
       )}
       {/* {iconsBySymbol[balance?.symbol as iconsBySymbolKeys] && iconsBySymbol[balance?.symbol as iconsBySymbolKeys]({})} */}

@@ -25,6 +25,10 @@ export const ChainSelector = ({ canChange = false, onChange = () => {} }: ChainS
     return `RPC: ${chain.rpcUrl}\nTORII: ${chain.toriiUrl}\nTORII WS: ${chain.toriiWsUrl}`;
   };
 
+  const isSingleChain = Object.keys(dojoContextConfig).length === 1;
+
+  if (isSingleChain) return null;
+
   return (
     <>
       {!canChange && (
@@ -39,7 +43,7 @@ export const ChainSelector = ({ canChange = false, onChange = () => {} }: ChainS
             title={getInfos(selectedChain)}
             as={Button}
             variant="pixelated"
-             h="40px" /*rightIcon={<Arrow direction='down' />}*/
+            h="40px" /*rightIcon={<Arrow direction='down' />}*/
           >
             {selectedChain.name}
           </MenuButton>
@@ -49,12 +53,9 @@ export const ChainSelector = ({ canChange = false, onChange = () => {} }: ChainS
               const dojoChainConfig: DojoChainConfig = dojoContextConfig[key as SupportedChainIds];
 
               if (dojoChainConfig === selectedChain) return;
-              const isMainnet = dojoChainConfig.chainConfig.network === "mainnet";
               return (
                 <MenuItem key={key} onClick={() => onSelectChain(dojoChainConfig)}>
-                  <Text>
-                    {dojoChainConfig.name} ({isMainnet ? "RANKED" : "FREE"})
-                  </Text>
+                  <Text>{dojoChainConfig.name}</Text>
                 </MenuItem>
               );
             })}

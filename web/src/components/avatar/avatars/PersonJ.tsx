@@ -8,10 +8,7 @@ export const PersonJ = ({ color, hasCrown }: AvatarPathProps) => {
       path = hasCrown ? (
         <g>
           <path d="M25 30H30.05V35.05H25V30Z" fill="#00743E" />
-          <path
-            d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z"
-            fill="#00743E"
-          />
+          <path d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z" fill="#00743E" />
           <path d="M40 30H45.05V35.05H40V30Z" fill="#00743E" />
           <path
             fillRule="evenodd"
@@ -44,10 +41,7 @@ export const PersonJ = ({ color, hasCrown }: AvatarPathProps) => {
       ) : (
         <g>
           <path d="M25 30H30.05V35.05H25V30Z" fill="#00743E" />
-          <path
-            d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z"
-            fill="#00743E"
-          />
+          <path d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z" fill="#00743E" />
           <path d="M40 30H45.05V35.05H40V30Z" fill="#00743E" />
           <path
             fillRule="evenodd"
@@ -74,10 +68,7 @@ export const PersonJ = ({ color, hasCrown }: AvatarPathProps) => {
       path = hasCrown ? (
         <g>
           <path d="M25 30H30.05V35.05H25V30Z" fill="#A78C44" />
-          <path
-            d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z"
-            fill="#A78C44"
-          />
+          <path d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z" fill="#A78C44" />
           <path d="M40 30H45.05V35.05H40V30Z" fill="#A78C44" />
           <path
             fillRule="evenodd"
@@ -110,10 +101,7 @@ export const PersonJ = ({ color, hasCrown }: AvatarPathProps) => {
       ) : (
         <g>
           <path d="M25 30H30.05V35.05H25V30Z" fill="#A78C44" />
-          <path
-            d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z"
-            fill="#A78C44"
-          />
+          <path d="M30.05 45.05H40.05V40H30V45H25V60.05H40.05V50H30.05V45.05Z" fill="#A78C44" />
           <path d="M40 30H45.05V35.05H40V30Z" fill="#A78C44" />
           <path
             fillRule="evenodd"

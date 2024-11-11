@@ -1,7 +1,4 @@
-import {
-  Icon as ChakraIcon,
-  IconProps as ChakraIconProps,
-} from "@chakra-ui/react";
+import { Icon as ChakraIcon } from "@chakra-ui/react";
 import { IconProps } from ".";
 
 export const ScrollDown = ({ ...props }: IconProps) => {

@@ -1,5 +1,5 @@
-import { MediaPlayer, MobileMenu } from "@/components/layout";
-import { useConfigStore, useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
+import { MediaPlayer } from "@/components/layout";
+import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
@@ -17,13 +17,12 @@ import DrawerMenu from "./DrawerMenu";
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { router, gameId, isAdmin } = useRouterContext();
+  const { gameId } = useRouterContext();
 
   const { account } = useAccount();
 
   const { uiStore } = useDojoContext();
   const { game, gameConfig } = useGameStore();
-  const { config } = useConfigStore();
 
   useEffect(() => {
     const init = async () => {

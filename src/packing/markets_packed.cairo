@@ -1,9 +1,9 @@
 use core::traits::TryInto;
-use starknet::ContractAddress;
+use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game, GameMode}, systems::game::game::HighVolatility,
+    models::game::{Game, GameMode}, events::HighVolatility,
     utils::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl},
         random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
@@ -13,9 +13,10 @@ use rollyourown::{
         drugs::{Drugs, DrugsEnumerableImpl, DrugConfig},
         locations::{Locations, LocationsEnumerableImpl},
     },
+    store::{Store, StoreImpl, StoreTrait},
     packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl},
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
 };
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde)]
@@ -26,13 +27,9 @@ struct MarketsPacked {
 #[generate_trait]
 impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
-    fn new(salt: u32) -> MarketsPacked {
-        let packed: u256 = core::pedersen::pedersen(
-            salt.into(), starknet::get_caller_address().into()
-        )
-            .into();
+    fn new(rand: u256) -> MarketsPacked {
         let mask = BitsMathImpl::mask::<u256>(GameStoreLayout::Markets.bits());
-        let safe_packed: felt252 = (packed & mask).try_into().unwrap();
+        let safe_packed: felt252 = (rand & mask).try_into().unwrap();
         MarketsPacked { packed: safe_packed }
     }
 
@@ -46,7 +43,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
         6
     }
 
-  
+
     fn get_tick(ref self: MarketsPacked, location: Locations, drug: Drugs) -> usize {
         let bits = BitsImpl::from_felt(self.packed);
 
@@ -60,7 +57,8 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     }
 
 
-    // fn get_drug_price( ref self: MarketsPacked,s: IStoreLibraryDispatcher, location: Locations, drug: Drugs) -> usize {
+    // fn get_drug_price( ref self: MarketsPacked,s: IStoreLibraryDispatcher, location: Locations,
+    // drug: Drugs) -> usize {
     //     let drug_config = s.drug_config(drug);
     //     let tick = self.get_tick(location, drug);
 
@@ -88,7 +86,9 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     //
     //
 
-    fn market_variations(ref self: MarketsPacked, world: IWorldDispatcher, ref randomizer: Random, ref game: Game,) {
+    fn market_variations(
+        ref self: MarketsPacked, ref store: Store, ref randomizer: Random, ref game: Game,
+    ) {
         let mut locations = LocationsEnumerableImpl::all();
 
         loop {
@@ -110,9 +110,9 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                     1_u32
                                 } else if rand <= 350 || rand >= 649 {
                                     2_u32
-                                } else if rand <= 475 || rand >= 524 {
+                                } else if rand <= 470 || rand >= 529 {
                                     4_u32
-                                } else if rand <= 495 || rand >= 504 {
+                                } else if rand <= 493 || rand >= 506 {
                                     6_u32
                                 } else {
                                     12_u32
@@ -127,22 +127,17 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                 self.set_tick(*location, *drug, new_tick);
 
                                 if variation == 12_u32 {
-                                    // emit HighVolatility
-                                    world
-                                        .emit_raw(
-                                            array![
-                                                selector!("HighVolatility"),
-                                                Into::<u32, felt252>::into(game.game_id),
-                                                Into::<
-                                                    ContractAddress, felt252
-                                                >::into(game.player_id),
-                                            ],
-                                            array![
-                                                Into::<Locations, u8>::into(*location).into(),
-                                                Into::<Drugs, u8>::into(*drug).into(),
-                                                Into::<bool, felt252>::into(direction),
-                                            ],
-                                        );
+                                    store
+                                        .world
+                                        .emit_event(
+                                            @HighVolatility {
+                                                game_id: game.game_id,
+                                                player_id: game.player_id,
+                                                location_id: (*location).into(),
+                                                drug_id: (*drug).into(),
+                                                increase: direction.into(),
+                                            }
+                                        )
                                 }
                             },
                             Option::None => { break; }
@@ -181,12 +176,12 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 mod tests {
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::{MarketsPacked, MarketsPackedImpl, RandomImpl};
-// #[test]
+    // #[test]
 // #[available_gas(100000000)]
 // fn test_markets_variations_v1() {
 //     let world = dojo::test_utils::spawn_test_world(array![]);
 
-//     let mut market_packed = MarketsPackedImpl::new(world, 0, 0.try_into().unwrap());
+    //     let mut market_packed = MarketsPackedImpl::new(world, 0, 0.try_into().unwrap());
 //     let mut randomizer = RandomImpl::new('world');
 //     market_packed.market_variations(ref randomizer);
 // }

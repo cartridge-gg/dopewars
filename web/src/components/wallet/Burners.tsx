@@ -9,7 +9,6 @@ export const Burners = () => {
   const { connector } = useConnect();
   const { account } = useAccount();
 
-
   if (!burnerManager) return null;
   if (!account) return null;
   if (!connector) return null;

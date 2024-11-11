@@ -1,7 +1,6 @@
 import { useDojoContext } from "@/dojo/hooks";
 import { useCallback } from "react";
 
-
 export const useFetchData = <TData, TVariables>(query: string): ((variables?: TVariables) => Promise<TData>) => {
   const {
     chains: {
@@ -11,9 +10,8 @@ export const useFetchData = <TData, TVariables>(query: string): ((variables?: TV
 
   return useCallback(
     async (variables?: TVariables) => {
-     
       // console.log("fetcher", toriiUrl);
-     
+
       const res = await fetch(toriiUrl, {
         method: "POST",
         headers: {

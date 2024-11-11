@@ -1,9 +1,7 @@
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
 import {
-  useConfigStore,
   useDojoContext,
-  useHallOfFame,
   useRegisteredGamesBySeason,
   useRouterContext,
   useSeasonByVersion,
@@ -16,8 +14,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
-import { SeasonDetailsModal } from "./SeasonDetailsModal";
-import { Game } from "@/generated/graphql";
+import { Dopewars_Game as Game } from "@/generated/graphql";
 import { shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";
 import { getPayedCount } from "@/dojo/helpers";
@@ -161,7 +158,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                   : "Anonymous";
 
                 return (
-                  <ListItem color={color} key={game.game_id} >
+                  <ListItem color={color} key={game.game_id}>
                     <HStack mr={3}>
                       <Text
                         w={["10px", "30px"]}
@@ -217,8 +214,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                       )}
 
                       {game.season_version === config.ryo.season_version && index + 1 < payedCount && (
-                        <Text flexShrink={0} fontSize={["12px", "16px"]} >
-                          <Trophy opacity={0.5}/>
+                        <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                          <Trophy opacity={0.5} />
                         </Text>
                       )}
 

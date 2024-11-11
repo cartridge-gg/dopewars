@@ -2,22 +2,18 @@ import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { ArrowInput } from "../icons";
 
-export interface DropdownOptionProps {
+interface DropdownOptionProps {
   label?: string;
   text: string;
   value: number | string;
 }
 
-export interface DropdownProps {
+interface DropdownProps {
   options: DropdownOptionProps[];
   value: DropdownOptionProps;
 }
 
-export const Dropdown = ({
-  options,
-  value,
-  ...props
-}: DropdownProps & StyleProps) => {
+export const Dropdown = ({ options, value, ...props }: DropdownProps & StyleProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(value);
 
@@ -32,9 +28,7 @@ export const Dropdown = ({
     <VStack position="relative" {...props}>
       <HStack w="full" onClick={toggleOpen}>
         <Text>{selectedOption.text}</Text>
-        {selectedOption.label && (
-          <Text color="yellow.400">{selectedOption.label}</Text>
-        )}
+        {selectedOption.label && <Text color="yellow.400">{selectedOption.label}</Text>}
         <Spacer />
         <ArrowInput direction="down" size="md" />
       </HStack>
@@ -45,23 +39,14 @@ export const Dropdown = ({
             {options.map(
               (option) =>
                 option.value === selectedOption.value && (
-                  <DropdownOption
-                    option={option}
-                    active
-                    onClick={onOptionClicked(option)}
-                    key={option.value}
-                  />
+                  <DropdownOption option={option} active onClick={onOptionClicked(option)} key={option.value} />
                 ),
             )}
             {/* Other options */}
             {options.map(
               (option) =>
                 option.value != selectedOption.value && (
-                  <DropdownOption
-                    option={option}
-                    onClick={onOptionClicked(option)}
-                    key={option.value}
-                  />
+                  <DropdownOption option={option} onClick={onOptionClicked(option)} key={option.value} />
                 ),
             )}
           </VStack>
@@ -70,8 +55,6 @@ export const Dropdown = ({
     </VStack>
   );
 };
-
-
 
 const DropdownOption = ({
   active,
@@ -97,10 +80,7 @@ const DropdownOption = ({
   >
     <Text>{option.text}</Text>
     {option.label && (
-      <Text
-        color={active ? "yellow.400" : "neon.500"}
-        _groupHover={{ color: "neon.900" }}
-      >
+      <Text color={active ? "yellow.400" : "neon.500"} _groupHover={{ color: "neon.900" }}>
         {option.label}
       </Text>
     )}

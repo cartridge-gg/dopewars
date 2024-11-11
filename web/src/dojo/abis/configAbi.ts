@@ -1,57 +1,60 @@
 export const ABI = [
   {
     "type": "impl",
-    "name": "DojoResourceProviderImpl",
-    "interface_name": "dojo::world::IDojoResourceProvider"
+    "name": "config__ContractImpl",
+    "interface_name": "dojo::contract::interface::IContract"
   },
   {
     "type": "interface",
-    "name": "dojo::world::IDojoResourceProvider",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_resource",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
+    "name": "dojo::contract::interface::IContract",
+    "items": []
   },
   {
     "type": "impl",
-    "name": "WorldProviderImpl",
-    "interface_name": "dojo::world::IWorldProvider"
+    "name": "config__DeployedContractImpl",
+    "interface_name": "dojo::meta::interface::IDeployedResource"
   },
   {
     "type": "struct",
-    "name": "dojo::world::IWorldDispatcher",
+    "name": "core::byte_array::ByteArray",
     "members": [
       {
-        "name": "contract_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "data",
+        "type": "core::array::Array::<core::bytes_31::bytes31>"
+      },
+      {
+        "name": "pending_word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "pending_word_len",
+        "type": "core::integer::u32"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "dojo::world::IWorldProvider",
+    "name": "dojo::meta::interface::IDeployedResource",
     "items": [
       {
         "type": "function",
-        "name": "world",
+        "name": "dojo_name",
         "inputs": [],
         "outputs": [
           {
-            "type": "dojo::world::IWorldDispatcher"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"
       }
     ]
+  },
+  {
+    "type": "function",
+    "name": "dojo_init",
+    "inputs": [],
+    "outputs": [],
+    "state_mutability": "external"
   },
   {
     "type": "impl",
@@ -525,105 +528,9 @@ export const ABI = [
     ]
   },
   {
-    "type": "enum",
-    "name": "rollyourown::config::drugs::Drugs",
-    "variants": [
-      {
-        "name": "Ludes",
-        "type": "()"
-      },
-      {
-        "name": "Speed",
-        "type": "()"
-      },
-      {
-        "name": "Weed",
-        "type": "()"
-      },
-      {
-        "name": "Shrooms",
-        "type": "()"
-      },
-      {
-        "name": "Acid",
-        "type": "()"
-      },
-      {
-        "name": "Ketamine",
-        "type": "()"
-      },
-      {
-        "name": "Heroin",
-        "type": "()"
-      },
-      {
-        "name": "Cocaine",
-        "type": "()"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::utils::bytes16::Bytes16",
-    "members": [
-      {
-        "name": "value",
-        "type": "core::integer::u128"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::drugs::DrugConfig",
-    "members": [
-      {
-        "name": "drugs_mode",
-        "type": "rollyourown::config::settings::DrugsMode"
-      },
-      {
-        "name": "drug",
-        "type": "rollyourown::config::drugs::Drugs"
-      },
-      {
-        "name": "drug_id",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "base",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "step",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "weight",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "name",
-        "type": "rollyourown::utils::bytes16::Bytes16"
-      }
-    ]
-  },
-  {
     "type": "interface",
     "name": "rollyourown::config::config::IConfig",
     "items": [
-      {
-        "type": "function",
-        "name": "initialize_1",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "initialize_2",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "view"
-      },
       {
         "type": "function",
         "name": "get_config",
@@ -634,47 +541,49 @@ export const ABI = [
           }
         ],
         "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "update_drug_config",
-        "inputs": [
-          {
-            "name": "drug_config",
-            "type": "rollyourown::config::drugs::DrugConfig"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "view"
       }
     ]
   },
   {
     "type": "impl",
-    "name": "IDojoInitImpl",
-    "interface_name": "rollyourown::config::config::config::IDojoInit"
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::iworld::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
   },
   {
     "type": "interface",
-    "name": "rollyourown::config::config::config::IDojoInit",
+    "name": "dojo::contract::components::world_provider::IWorldProvider",
     "items": [
       {
         "type": "function",
-        "name": "dojo_init",
+        "name": "world_dispatcher",
         "inputs": [],
-        "outputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::iworld::IWorldDispatcher"
+          }
+        ],
         "state_mutability": "view"
       }
     ]
   },
   {
     "type": "impl",
-    "name": "UpgradableImpl",
-    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+    "name": "UpgradeableImpl",
+    "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
   },
   {
     "type": "interface",
-    "name": "dojo::components::upgradeable::IUpgradeable",
+    "name": "dojo::contract::components::upgradeable::IUpgradeable",
     "items": [
       {
         "type": "function",
@@ -691,8 +600,13 @@ export const ABI = [
     ]
   },
   {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": []
+  },
+  {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
     "kind": "struct",
     "members": [
       {
@@ -704,15 +618,21 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Upgraded",
-        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
         "kind": "nested"
       }
     ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+    "kind": "enum",
+    "variants": []
   },
   {
     "type": "event",
@@ -721,7 +641,12 @@ export const ABI = [
     "variants": [
       {
         "name": "UpgradeableEvent",
-        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+        "kind": "nested"
+      },
+      {
+        "name": "WorldProviderEvent",
+        "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
         "kind": "nested"
       }
     ]

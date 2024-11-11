@@ -1,20 +1,11 @@
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import {
-  Button,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  VStack
-} from "@chakra-ui/react";
+import { Button, HStack, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 
 export const RefreshGameModal = observer(() => {
   const { router, gameId } = useRouterContext();
   const { uiStore } = useDojoContext();
-  const { game } = useGameStore()
+  const { game } = useGameStore();
 
   return (
     <Modal motionPreset="slideInBottom" isCentered isOpen={uiStore.modals.refreshGame !== undefined} onClose={() => {}}>

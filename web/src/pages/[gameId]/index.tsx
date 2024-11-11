@@ -1,7 +1,8 @@
 import { Layout } from "@/components/layout";
-import { Loader } from "@/components/layout/Loader";
+import { Loader, OGLoader } from "@/components/layout/Loader";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { PlayerStatus } from "@/dojo/types";
+import { HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
@@ -23,10 +24,9 @@ const Redirector = observer(() => {
     } else {
       clearTimeout(handle);
 
-      if( game.gameInfos.game_over) {
+      if (game.gameInfos.game_over) {
         router.push(`/${gameId}/end`);
-      } else
-      if (game.player.status === PlayerStatus.Normal) {
+      } else if (game.player.status === PlayerStatus.Normal) {
         if (game.player.location) {
           router.push(`/${gameId}/${game.player.location.location}`);
         } else {
@@ -43,7 +43,10 @@ const Redirector = observer(() => {
 
   return (
     <Layout isSinglePanel>
-      <Loader />
+      <HStack h="full" alignItems="center" justifyContent="center">
+        {/* <OGLoader /> */}
+        <Loader />
+      </HStack>
     </Layout>
   );
 });

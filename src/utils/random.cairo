@@ -1,7 +1,6 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use starknet::ContractAddress;
 use starknet::get_contract_address;
-
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 #[derive(Copy, Drop, Serde)]
 struct Random {
@@ -11,26 +10,18 @@ struct Random {
 
 #[generate_trait]
 impl RandomImpl of RandomTrait {
-    // one instance by contract, then passed by ref to sub fns
-    fn new(salt: felt252) -> Random {
-        Random { seed: seed(salt), nonce: 0 }
+    fn new(seed: felt252) -> Random {
+        Random { seed, nonce: 0 }
     }
 
-    fn next_seed(ref self: Random) -> felt252 {
+    fn next(ref self: Random) -> felt252 {
         self.nonce += 1;
-        self.seed = pedersen::pedersen(self.seed, self.nonce.into());
-        self.seed
+        poseidon::poseidon_hash_span(array![self.seed, self.nonce.into()].span())
     }
 
     fn bool(ref self: Random) -> bool {
-        let seed: u256 = self.next_seed().into();
+        let seed: u256 = self.next().into();
         seed.low % 2 == 0
-    }
-
-    fn felt(ref self: Random) -> felt252 {
-        let tx_hash = starknet::get_tx_info().unbox().transaction_hash;
-        let seed = self.next_seed();
-        pedersen::pedersen(tx_hash, seed)
     }
 
     fn occurs(ref self: Random, likelihood: u8) -> bool {
@@ -54,7 +45,7 @@ impl RandomImpl of RandomTrait {
     >(
         ref self: Random, min: T, max: T
     ) -> T {
-        let seed: u256 = self.next_seed().into();
+        let seed: u256 = self.next().into();
 
         if min >= max {
             return Zeroable::zero();
@@ -64,9 +55,5 @@ impl RandomImpl of RandomTrait {
         let rand = (seed.low % range) + min.into();
         rand.try_into().unwrap()
     }
-}
-
-fn seed(salt: felt252) -> felt252 {
-    pedersen::pedersen(starknet::get_tx_info().unbox().transaction_hash, salt)
 }
 

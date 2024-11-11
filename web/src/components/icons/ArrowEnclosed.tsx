@@ -11,16 +11,12 @@ const rotate: RotateType = {
   left: "rotate(270deg)",
 };
 
-export interface ArrowEnclosedProps {
+interface ArrowEnclosedProps {
   direction?: string;
   variant?: "arrow" | "caret" | string;
 }
 
-export const ArrowEnclosed = ({
-  direction,
-  variant,
-  ...props
-}: ArrowEnclosedProps & IconProps) => {
+export const ArrowEnclosed = ({ direction, variant, ...props }: ArrowEnclosedProps & IconProps) => {
   let path;
   switch (variant) {
     case "caret":

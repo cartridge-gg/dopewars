@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 const TOAST_DURATION = 3500;
 
-export type ToastType = ReturnType<typeof useToast>
+export type ToastType = ReturnType<typeof useToast>;
 
 export const useToast = () => {
   const chakraToast = useChakraToast();
@@ -15,7 +15,7 @@ export const useToast = () => {
       icon,
       link,
       duration = TOAST_DURATION,
-      isError = false
+      isError = false,
     }: {
       message: string;
       icon?: React.FC;
@@ -39,7 +39,7 @@ export const useToast = () => {
           <Toast
             message={message}
             icon={icon}
-            link={link}
+            // link={link}
             isError={isError}
             onClose={() => {
               // TODO: target close toast by id

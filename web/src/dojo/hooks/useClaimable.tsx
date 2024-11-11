@@ -1,8 +1,8 @@
-import { Game, Season, World__ModelEdge, useClaimableQuery } from "@/generated/graphql";
+import { Dopewars_Game as Game, World__ModelEdge, useClaimableQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export type ClaimableResult = ReturnType<typeof useClaimable>;
+type ClaimableResult = ReturnType<typeof useClaimable>;
 
 export const useClaimable = (playerId: string) => {
   const {
@@ -10,7 +10,7 @@ export const useClaimable = (playerId: string) => {
   } = useDojoContext();
 
   const { data, isFetching, isRefetching, isError, refetch } = useClaimableQuery({
-    playerId
+    playerId,
   });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const useClaimable = (playerId: string) => {
   const claimable = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];
 
-    const edges = data.gameModels?.edges as World__ModelEdge[];
+    const edges = data.dopewarsGameModels?.edges as World__ModelEdge[];
     return edges.map((i: World__ModelEdge) => i.node as Game);
   }, [data, isFetching, isRefetching, isError]);
 

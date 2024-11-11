@@ -1,52 +1,48 @@
 export const ABI = [
   {
     "type": "impl",
-    "name": "DojoResourceProviderImpl",
-    "interface_name": "dojo::world::IDojoResourceProvider"
+    "name": "paper_mock__ContractImpl",
+    "interface_name": "dojo::contract::interface::IContract"
   },
   {
     "type": "interface",
-    "name": "dojo::world::IDojoResourceProvider",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_resource",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
+    "name": "dojo::contract::interface::IContract",
+    "items": []
   },
   {
     "type": "impl",
-    "name": "WorldProviderImpl",
-    "interface_name": "dojo::world::IWorldProvider"
+    "name": "paper_mock__DeployedContractImpl",
+    "interface_name": "dojo::meta::interface::IDeployedResource"
   },
   {
     "type": "struct",
-    "name": "dojo::world::IWorldDispatcher",
+    "name": "core::byte_array::ByteArray",
     "members": [
       {
-        "name": "contract_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "data",
+        "type": "core::array::Array::<core::bytes_31::bytes31>"
+      },
+      {
+        "name": "pending_word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "pending_word_len",
+        "type": "core::integer::u32"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "dojo::world::IWorldProvider",
+    "name": "dojo::meta::interface::IDeployedResource",
     "items": [
       {
         "type": "function",
-        "name": "world",
+        "name": "dojo_name",
         "inputs": [],
         "outputs": [
           {
-            "type": "dojo::world::IWorldDispatcher"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "state_mutability": "view"
@@ -54,27 +50,11 @@ export const ABI = [
     ]
   },
   {
-    "type": "impl",
-    "name": "IDojoInitImpl",
-    "interface_name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit"
-  },
-  {
-    "type": "interface",
-    "name": "rollyourown::_mocks::paper_mock::paper_mock::IDojoInit",
-    "items": [
-      {
-        "type": "function",
-        "name": "dojo_init",
-        "inputs": [
-          {
-            "name": "faucet_to",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      }
-    ]
+    "type": "function",
+    "name": "dojo_init",
+    "inputs": [],
+    "outputs": [],
+    "state_mutability": "external"
   },
   {
     "type": "impl",
@@ -108,12 +88,44 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "UpgradableImpl",
-    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::iworld::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
   },
   {
     "type": "interface",
-    "name": "dojo::components::upgradeable::IUpgradeable",
+    "name": "dojo::contract::components::world_provider::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world_dispatcher",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::iworld::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradeableImpl",
+    "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::contract::components::upgradeable::IUpgradeable",
     "items": [
       {
         "type": "function",
@@ -131,52 +143,8 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "ERC20MetadataImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20Metadata"
-  },
-  {
-    "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20Metadata",
-    "items": [
-      {
-        "type": "function",
-        "name": "name",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "symbol",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::felt252"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "decimals",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u8"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ERC20MetadataTotalSupplyImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply"
+    "name": "ERC20Impl",
+    "interface_name": "openzeppelin_token::erc20::interface::IERC20"
   },
   {
     "type": "struct",
@@ -191,50 +159,6 @@ export const ABI = [
         "type": "core::integer::u128"
       }
     ]
-  },
-  {
-    "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupply",
-    "items": [
-      {
-        "type": "function",
-        "name": "total_supply",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u256"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ERC20MetadataTotalSupplyCamelImpl",
-    "interface_name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel"
-  },
-  {
-    "type": "interface",
-    "name": "token::components::token::erc20::erc20_metadata::IERC20MetadataTotalSupplyCamel",
-    "items": [
-      {
-        "type": "function",
-        "name": "totalSupply",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u256"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ERC20BalanceImpl",
-    "interface_name": "token::components::token::erc20::erc20_balance::IERC20Balance"
   },
   {
     "type": "enum",
@@ -252,14 +176,45 @@ export const ABI = [
   },
   {
     "type": "interface",
-    "name": "token::components::token::erc20::erc20_balance::IERC20Balance",
+    "name": "openzeppelin_token::erc20::interface::IERC20",
     "items": [
+      {
+        "type": "function",
+        "name": "total_supply",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "view"
+      },
       {
         "type": "function",
         "name": "balance_of",
         "inputs": [
           {
             "name": "account",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "allowance",
+        "inputs": [
+          {
+            "name": "owner",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "spender",
             "type": "core::starknet::contract_address::ContractAddress"
           }
         ],
@@ -313,88 +268,6 @@ export const ABI = [
           }
         ],
         "state_mutability": "external"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ERC20BalanceCamelImpl",
-    "interface_name": "token::components::token::erc20::erc20_balance::IERC20BalanceCamel"
-  },
-  {
-    "type": "interface",
-    "name": "token::components::token::erc20::erc20_balance::IERC20BalanceCamel",
-    "items": [
-      {
-        "type": "function",
-        "name": "balanceOf",
-        "inputs": [
-          {
-            "name": "account",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::integer::u256"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "transferFrom",
-        "inputs": [
-          {
-            "name": "sender",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "recipient",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "amount",
-            "type": "core::integer::u256"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::bool"
-          }
-        ],
-        "state_mutability": "external"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ERC20AllowanceImpl",
-    "interface_name": "token::components::token::erc20::erc20_allowance::IERC20Allowance"
-  },
-  {
-    "type": "interface",
-    "name": "token::components::token::erc20::erc20_allowance::IERC20Allowance",
-    "items": [
-      {
-        "type": "function",
-        "name": "allowance",
-        "inputs": [
-          {
-            "name": "owner",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "spender",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::integer::u256"
-          }
-        ],
-        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -419,8 +292,13 @@ export const ABI = [
     ]
   },
   {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": []
+  },
+  {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
     "kind": "struct",
     "members": [
       {
@@ -432,42 +310,36 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "Upgraded",
-        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
         "kind": "nested"
       }
     ]
   },
   {
     "type": "event",
-    "name": "token::components::security::initializable::initializable_component::Event",
+    "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
     "kind": "enum",
     "variants": []
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
-    "kind": "enum",
-    "variants": []
-  },
-  {
-    "type": "event",
-    "name": "token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
+    "name": "openzeppelin_token::erc20::erc20::ERC20Component::Transfer",
     "kind": "struct",
     "members": [
       {
         "name": "from",
         "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "kind": "key"
       },
       {
         "name": "to",
         "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "kind": "key"
       },
       {
         "name": "value",
@@ -478,30 +350,18 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
-    "kind": "enum",
-    "variants": [
-      {
-        "name": "Transfer",
-        "type": "token::components::token::erc20::erc20_balance::erc20_balance_component::Transfer",
-        "kind": "nested"
-      }
-    ]
-  },
-  {
-    "type": "event",
-    "name": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
+    "name": "openzeppelin_token::erc20::erc20::ERC20Component::Approval",
     "kind": "struct",
     "members": [
       {
         "name": "owner",
         "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "kind": "key"
       },
       {
         "name": "spender",
         "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "kind": "key"
       },
       {
         "name": "value",
@@ -512,27 +372,20 @@ export const ABI = [
   },
   {
     "type": "event",
-    "name": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
+    "name": "openzeppelin_token::erc20::erc20::ERC20Component::Event",
     "kind": "enum",
     "variants": [
       {
+        "name": "Transfer",
+        "type": "openzeppelin_token::erc20::erc20::ERC20Component::Transfer",
+        "kind": "nested"
+      },
+      {
         "name": "Approval",
-        "type": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Approval",
+        "type": "openzeppelin_token::erc20::erc20::ERC20Component::Approval",
         "kind": "nested"
       }
     ]
-  },
-  {
-    "type": "event",
-    "name": "token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
-    "kind": "enum",
-    "variants": []
-  },
-  {
-    "type": "event",
-    "name": "token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
-    "kind": "enum",
-    "variants": []
   },
   {
     "type": "event",
@@ -541,38 +394,18 @@ export const ABI = [
     "variants": [
       {
         "name": "UpgradeableEvent",
-        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
         "kind": "nested"
       },
       {
-        "name": "InitializableEvent",
-        "type": "token::components::security::initializable::initializable_component::Event",
+        "name": "WorldProviderEvent",
+        "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
         "kind": "nested"
       },
       {
-        "name": "ERC20MetadataEvent",
-        "type": "token::components::token::erc20::erc20_metadata::erc20_metadata_component::Event",
-        "kind": "nested"
-      },
-      {
-        "name": "ERC20BalanceEvent",
-        "type": "token::components::token::erc20::erc20_balance::erc20_balance_component::Event",
-        "kind": "nested"
-      },
-      {
-        "name": "ERC20AllowanceEvent",
-        "type": "token::components::token::erc20::erc20_allowance::erc20_allowance_component::Event",
-        "kind": "nested"
-      },
-      {
-        "name": "ERC20MintableEvent",
-        "type": "token::components::token::erc20::erc20_mintable::erc20_mintable_component::Event",
-        "kind": "nested"
-      },
-      {
-        "name": "ERC20BurnableEvent",
-        "type": "token::components::token::erc20::erc20_burnable::erc20_burnable_component::Event",
-        "kind": "nested"
+        "name": "ERC20Event",
+        "type": "openzeppelin_token::erc20::erc20::ERC20Component::Event",
+        "kind": "flat"
       }
     ]
   }

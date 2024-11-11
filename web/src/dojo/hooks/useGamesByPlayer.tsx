@@ -1,29 +1,21 @@
 import {
-  Game,
-  GameConfig,
-  GameEdge,
-  GameStorePacked,
-  Maybe,
-  SeasonSettings,
-  TradedDrugByPlayerQuery,
-  World__Entity,
+  Dopewars_Game as Game,
+  Dopewars_GameConfig as GameConfig,
+  Dopewars_GameStorePacked as GameStorePacked,
+  Dopewars_SeasonSettings as SeasonSettings,
   World__EntityEdge,
-  World__Event,
-  World__EventEdge,
   useAllGameConfigQuery,
   useAllSeasonSettingsQuery,
   useGamesByPlayerQuery,
-  useTradedDrugByPlayerQuery,
-  useTravelEncounterByPlayerQuery,
-  useTravelEncounterResultsByPlayerQuery,
 } from "@/generated/graphql";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
-import { Hustler, Hustlers } from "@/components/hustlers";
-import { WorldEvents } from "../generated/contractEvents";
+import { Hustlers } from "@/components/hustlers";
 import { Drugs } from "../types";
-import { TradeDrugData, parseEvent } from "../events";
+import { Entities, ToriiClient } from "@dojoengine/torii-client";
+import { DojoEvent, EventClass } from "../class/Events";
+import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -67,7 +59,58 @@ export interface GamesByPlayerInterface {
   playerStats?: PlayerStats;
 }
 
-export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface => {
+export interface PlayerGameInfosInterface {
+  allTradedDrug: TradeDrug[];
+  allTravelEncounters: TravelEncounter[];
+  allTravelEncounterResults: TravelEncounterResult[];
+}
+
+export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): PlayerGameInfosInterface => {
+  const [allTradedDrug, setAllTradedDrug] = useState<TradeDrug[]>([]);
+  const [allTravelEncounters, setAllTravelEncounters] = useState<TravelEncounter[]>([]);
+  const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
+  useEffect(() => {
+    const init = async () => {
+      const entities: Entities = await toriiClient.getEventMessages(
+        {
+          clause: {
+            Keys: {
+              keys: [undefined, playerId],
+              models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
+              pattern_matching: "FixedLen",
+            },
+          },
+          limit: 10000,
+          offset: 0,
+          dont_include_hashed_keys: true,
+        },
+        true,
+      );
+
+      //  console.log(entities);
+      const allEvents = Object.values(entities).flatMap((entity) => EventClass.parseEntity(entity));
+
+      setAllTradedDrug(allEvents.filter((i) => i.eventName === "TradeDrug").map((i) => i.event as TradeDrug));
+      setAllTravelEncounters(
+        allEvents.filter((i) => i.eventName === "TravelEncounter").map((i) => i.event as TravelEncounter),
+      );
+      setAllTravelEncounterResults(
+        allEvents.filter((i) => i.eventName === "TravelEncounterResult").map((i) => i.event as TravelEncounterResult),
+      );
+    };
+
+    if (toriiClient && Number(playerId) !== 0) {
+      init();
+    }
+  }, [toriiClient, playerId]);
+  return {
+    allTradedDrug,
+    allTravelEncounters: allTravelEncounters,
+    allTravelEncounterResults: allTravelEncounterResults,
+  };
+};
+
+export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string): GamesByPlayerInterface => {
   const playerId = `0x${BigInt(playerIdRaw).toString(16)}`; // remove leading zero..
   const { data, isFetched } = useGamesByPlayerQuery({
     playerId,
@@ -76,19 +119,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
   const { data: allSeasonSettings } = useAllSeasonSettingsQuery({});
   const { data: allGameConfig } = useAllGameConfigQuery({});
 
-  const { data: allTravelEncounters } = useTravelEncounterByPlayerQuery({
-    travelEncounterSelector: WorldEvents.TravelEncounter,
-    playerId,
-  });
-  const { data: allTravelEncounterResults } = useTravelEncounterResultsByPlayerQuery({
-    travelEncounterResultSelector: WorldEvents.TravelEncounterResult,
-    playerId,
-  });
-
-  const { data: allTradedDrugByPlayer } = useTradedDrugByPlayerQuery({
-    tradeDrugSelector: WorldEvents.TradeDrug,
-    playerId,
-  });
+  const { allTradedDrug, allTravelEncounters, allTravelEncounterResults } = usePlayerGameInfos(toriiClient, playerId);
 
   const { configStore } = useDojoContext();
 
@@ -99,16 +130,18 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
     const nodes = (edges || []).map((i) => i.node);
 
     const games = nodes.flatMap((i) => {
-      const gameInfos = (i!.models || []).find((i) => i?.__typename === "Game") as Game;
-      const gameStorePacked = (i!.models || []).find((i) => i?.__typename === "GameStorePacked") as GameStorePacked;
+      const gameInfos = (i!.models || []).find((i) => i?.__typename === "dopewars_Game") as Game;
+      const gameStorePacked = (i!.models || []).find(
+        (i) => i?.__typename === "dopewars_GameStorePacked",
+      ) as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
 
-      const seasonSettings = allSeasonSettings?.seasonSettingsModels?.edges?.find(
+      const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as SeasonSettings;
 
-      const gameConfig = allGameConfig?.gameConfigModels?.edges?.find(
+      const gameConfig = allGameConfig?.dopewarsGameConfigModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 
@@ -116,8 +149,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
     });
 
     return games;
-    return [];
-  }, [data, allSeasonSettings, allGameConfig]);
+  }, [data, allSeasonSettings, allGameConfig, configStore]);
 
   const onGoingGames = useMemo(() => {
     return games.filter((i: GameClass) => !i.gameInfos.game_over);
@@ -128,7 +160,7 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
   }, [games]);
 
   const playerStats = useMemo(() => {
-    if (!games || !allTravelEncounters || !allTravelEncounterResults || !allTradedDrugByPlayer) return undefined;
+    if (!games || !allTravelEncounters || !allTravelEncounterResults || !allTradedDrug) return undefined;
 
     //  return games.filter((i: GameClass) => i.gameInfos.game_over);
     const paidGames = games.filter((i: GameClass) => i.gameInfos.claimable > 0);
@@ -147,18 +179,11 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
 
     const maxPlayed = Math.max(dragonGames, monkeyGames, rabbitGames);
 
-    const totalCopsEncounter =
-      (allTravelEncounters?.events?.edges || []).filter((i) => i?.node?.data![0] === "0x436f7073").length || 0;
-
-    const totalGangEncounter =
-      (allTravelEncounters?.events?.edges || []).filter((i) => i?.node?.data![0] === "0x47616e67").length || 0;
-
-    const totalFight =
-      (allTravelEncounterResults?.events?.edges || []).filter((i) => i?.node?.data![0] === "0x2").length || 0;
-    const totalRun =
-      (allTravelEncounterResults?.events?.edges || []).filter((i) => i?.node?.data![0] === "0x0").length || 0;
-    const totalPay =
-      (allTravelEncounterResults?.events?.edges || []).filter((i) => i?.node?.data![0] === "0x1").length || 0;
+    const totalCopsEncounter = allTravelEncounters.filter((i) => i.encounter === "Cops").length || 0;
+    const totalGangEncounter = allTravelEncounters.filter((i) => i.encounter === "Gang").length || 0;
+    const totalFight = allTravelEncounterResults.filter((i) => i.action === "Fight").length || 0;
+    const totalRun = allTravelEncounterResults.filter((i) => i.action === "Run").length || 0;
+    const totalPay = allTravelEncounterResults.filter((i) => i.action === "Pay").length || 0;
 
     const averageReputation =
       games.map((i) => i.player.reputation).reduce((p, c) => p + c, 0) / (games.length > 0 ? games.length : 1);
@@ -185,18 +210,18 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
       totalRun,
       totalPay,
       tradedDrugs: {
-        [Drugs.Ludes]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ludes),
-        [Drugs.Speed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Speed),
-        [Drugs.Weed]: getTradeTotal(allTradedDrugByPlayer, Drugs.Weed),
-        [Drugs.Shrooms]: getTradeTotal(allTradedDrugByPlayer, Drugs.Shrooms),
-        [Drugs.Acid]: getTradeTotal(allTradedDrugByPlayer, Drugs.Acid),
-        [Drugs.Ketamine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Ketamine),
-        [Drugs.Heroin]: getTradeTotal(allTradedDrugByPlayer, Drugs.Heroin),
-        [Drugs.Cocaine]: getTradeTotal(allTradedDrugByPlayer, Drugs.Cocaine),
+        [Drugs.Ludes]: getTradeTotal(allTradedDrug, Drugs.Ludes),
+        [Drugs.Speed]: getTradeTotal(allTradedDrug, Drugs.Speed),
+        [Drugs.Weed]: getTradeTotal(allTradedDrug, Drugs.Weed),
+        [Drugs.Shrooms]: getTradeTotal(allTradedDrug, Drugs.Shrooms),
+        [Drugs.Acid]: getTradeTotal(allTradedDrug, Drugs.Acid),
+        [Drugs.Ketamine]: getTradeTotal(allTradedDrug, Drugs.Ketamine),
+        [Drugs.Heroin]: getTradeTotal(allTradedDrug, Drugs.Heroin),
+        [Drugs.Cocaine]: getTradeTotal(allTradedDrug, Drugs.Cocaine),
       },
       averageReputation,
     };
-  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrugByPlayer]);
+  }, [games, allTravelEncounters, allTravelEncounterResults, allTradedDrug]);
 
   return {
     games: games || [],
@@ -207,10 +232,9 @@ export const useGamesByPlayer = (playerIdRaw: string): GamesByPlayerInterface =>
   };
 };
 
-const getTradeTotal = (allTradedDrugByPlayer: TradedDrugByPlayerQuery, drug: Drugs) => {
-  return (allTradedDrugByPlayer?.events?.edges || [])
-    .map((i) => parseEvent(i?.node) as TradeDrugData)
-    .filter((i) => i.drugId === drug && !i.isBuy)
+const getTradeTotal = (allTradedDrugByPlayer: TradeDrug[], drug: Drugs) => {
+  return allTradedDrugByPlayer
+    .filter((i) => i.drug_id === drug && !i.is_buy)
     .map((i) => i.price * i.quantity)
     .reduce((p, c) => p + c, 0);
 };

@@ -1,4 +1,4 @@
-import 'ka-table/style.css';
+import "ka-table/style.css";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { Button, Image } from "@chakra-ui/react";
 import { closeRowEditors, openRowEditors, saveRowEditors } from "ka-table/actionCreators";

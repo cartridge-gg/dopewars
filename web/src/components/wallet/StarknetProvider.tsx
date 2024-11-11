@@ -1,23 +1,19 @@
 import { DojoChainConfig, getStarknetProviderChains } from "@/dojo/setup/config";
-import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
   ExplorerFactory,
   InjectedConnector,
-  JsonRpcProviderArgs,
   StarknetConfig,
   argent,
-  braavos,
   injected,
-  jsonRpcProvider,
-  starknetChainId,
   starkscan,
-  useInjectedConnectors,
-  useNetwork,
 } from "@starknet-react/core";
-import { ReactNode, useState } from "react";
-import { RpcProvider, shortString } from "starknet";
-import CartridgeConnector from "@cartridge/connector";
+import { ReactNode, useMemo, useState } from "react";
+import { RpcProvider } from "starknet";
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "@/dojo/hooks";
+import { ControllerConnector } from "@cartridge/connector";
+import { useRouter } from "next/router";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -25,58 +21,60 @@ export const walletInstallLinks = {
 };
 export type walletInstallLinksKeys = keyof typeof walletInstallLinks;
 
-function rpc(chain: Chain) {
-  return {
-    nodeUrl: chain.rpcUrls.default.http[0],
-  };
-}
-
 export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProviderFactory<RpcProvider> {
   return function (chain) {
-    // if(!selectedChain) return undefined
-
     const config = {
       nodeUrl: selectedChain.rpcUrl || "",
     };
-    // if (!config) return null;
     const chainId = selectedChain.chainConfig.id || undefined;
 
     ///@ts-ignore
-    const provider = new RpcProvider({ ...selectedChain, ...config, chainId });
+    const provider = new RpcProvider({ ...config, chainId });
 
     return provider;
   };
 }
 
-function getConnectorsForChain(selectedChain: DojoChainConfig) {
+function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
+  const controller = cartridgeConnector({ selectedChain });
+
+  if (path.startsWith("/admin")) {
+    return [controller, argent()];
+  }
+
   switch (selectedChain.name) {
-    case "SEPOLIA":
-      return [cartridgeConnector];
-      break;
+    case "KATANA":
+      return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
+
+    // case "SN_SEPOLIA":
+    //   return [cartridgeConnector({ selectedChain })];
+
+    case "WP_RYO1":
+    case "WP_RYO2":
+      return [
+        controller,
+        // injected({ id: "dojoburner" }),
+        // injected({ id: "dojopredeployed" }),
+        // cartridgeConnector({ selectedChain }),
+      ];
 
     default:
-      return [injected({ id: "dojoburner" })];
-      break;
+      // const controller = cartridgeConnector({ selectedChain });
+      return [controller];
   }
 }
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  // const { connectors } = useInjectedConnectors({
-  //   // Show these connectors if the user has no connector installed.
-  //   recommended: [/*argent(), braavos(),*/ injected({ id: "dojoburner" }), cartridgeConnector],
-  //   // Hide recommended connectors if the user has any connector installed.
-  //   includeRecommended: "onlyIfNoConnectors",
-  //   // Randomize the order of the connectors.
-  //   // order: "random"
-  // });
-
+  const router = useRouter();
   const chains = getStarknetProviderChains();
 
-  const connectors = getConnectorsForChain(selectedChain);
+  const provider = useMemo(() => {
+    return customJsonRpcProvider(selectedChain);
+  }, [selectedChain]);
 
-  // TODO: remove
-  // const provider = jsonRpcProvider({ rpc });
-  const provider = customJsonRpcProvider(selectedChain);
+  const connectors = useMemo(() => {
+    return getConnectorsForChain(selectedChain, router.asPath);
+  }, [selectedChain]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
@@ -87,51 +85,84 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   );
 }
 
-import manifestRyoSepolia from "../../manifests/ryosepolia/manifest.json";
+const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig }) => {
+  // console.log("cartridgeConnector", selectedChain.name);
+  const paperAddress = selectedChain.paperAddress;
+  const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
-const cartridgeConnector = new CartridgeConnector({
-  policies: [
+  const policies = [
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
-      method: "faucet",
+      target: selectedChain.vrfProviderAddress,
+      method: "request_random",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::_mocks::paper_mock::paper_mock")!
-        .address,
+      target: paperAddress,
       method: "approve",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: gameAddress,
       method: "create_game",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: gameAddress,
       method: "travel",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: gameAddress,
       method: "decide",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::game::game")!.address,
+      target: gameAddress,
       method: "end_game",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
+      target: laundromatAddress,
       method: "register_score",
     },
     {
-      target: manifestRyoSepolia.contracts.find((c) => c.name === "rollyourown::systems::laundromat::laundromat")!
-        .address,
+      target: laundromatAddress,
       method: "claim",
     },
-  ],
-  url: "https://x.cartridge.gg",
-  rpc: "https://api.cartridge.gg/x/starknet/sepolia",
-  theme: "dope-wars",
-  paymaster: {
-    caller: shortString.encodeShortString("ANY_CALLER"),
-  },
-}) as unknown as InjectedConnector;
+    {
+      target: laundromatAddress,
+      method: "launder",
+    },
+  ];
+
+  if (selectedChain.name !== "MAINNET") {
+    policies.push({
+      target: paperAddress,
+      method: "faucet",
+    });
+
+    policies.push({
+      target: selectedChain.vrfProviderAddress,
+      method: "submit_random",
+    });
+
+    policies.push({
+      target: selectedChain.vrfProviderAddress,
+      method: "assert_consumed",
+    });
+  }
+
+  // console.log(policies);
+
+  return new ControllerConnector({
+    url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
+    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
+    namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
+    slot: selectedChain.slot ? selectedChain.slot : "ryo",
+    tokens: {
+      erc20: [
+        // paperAddress
+        "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
+      ],
+    },
+    theme: "dope-wars",
+    colorMode: "dark",
+    policies,
+  }) as unknown as InjectedConnector;
+};

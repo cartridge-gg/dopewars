@@ -20,12 +20,10 @@ import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Drugs } from "@/dojo/types";
-import colors from "@/theme/colors";
 
 import { formatCashHeader } from "@/utils/ui";
 import {
   HStack,
-  ListItem,
   Tab,
   TabList,
   TabPanel,
@@ -35,9 +33,7 @@ import {
   Tbody,
   Td,
   Text,
-  Th,
   Tr,
-  UnorderedList,
   VStack,
   Table,
   Button,
@@ -46,31 +42,20 @@ import {
   CardBody,
   Box,
   Flex,
-  Divider,
 } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
 
 import { shortString } from "starknet";
 
 export default function History() {
   const { router, playerId } = useRouterContext();
-  const { account } = useAccount();
-  const { uiStore } = useDojoContext();
+  const {
+    clients: { toriiClient },
+  } = useDojoContext();
 
-  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(playerId || "0x0");
+  const { games, onGoingGames, endedGames, playerStats } = useGamesByPlayer(toriiClient, playerId || "0x0");
 
   return (
-    <Layout
-      // leftPanelProps={{
-      //   prefixTitle: "",
-      //   title: "History",
-      //   imageSrc: "/images/will-smith-with-attitude.png",
-      // }}
-
-      isSinglePanel={true}
-      // rigthPanelScrollable={false}
-      footer={<Button onClick={() => router.push("/")}>HOME</Button>}
-    >
+    <Layout isSinglePanel={true} footer={<Button onClick={() => router.push("/")}>HOME</Button>}>
       <VStack w="full" h={["100%", "calc(100% - 100px)"]}>
         <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
           <CustomLeftPanel playerStats={playerStats} />
@@ -81,18 +66,18 @@ export default function History() {
                 <Tab>ENDED</Tab>
               </TabList>
 
-                <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
-                  <TabPanel p={0}>
-                    <GameList games={onGoingGames} />
-                  </TabPanel>
-                  <TabPanel p={0}>
-                    <GameList games={endedGames} />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </VStack>
-          </Flex>
-        </VStack>
+              <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
+                <TabPanel p={0}>
+                  <GameList games={onGoingGames} />
+                </TabPanel>
+                <TabPanel p={0}>
+                  <GameList games={endedGames} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </VStack>
+        </Flex>
+      </VStack>
     </Layout>
   );
 }
@@ -111,19 +96,19 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
   if (!games) return null;
   return (
     <TableContainer position="relative">
-      <Table size="sm">
+      <Table size="sm" variant="tiny">
         <Tbody>
           <Tr>
+            <Td w="40px"></Td>
             <Td w="40px" textAlign="right">
               Season
             </Td>
-            <Td w="40px"></Td>
             <Td w="80px" textAlign="right">
               Identity
             </Td>
-            {/* <Td w="50px" textAlign="right">
+            <Td w="50px" textAlign="right">
               Turn
-            </Td> */}
+            </Td>
             <Td w="120px" textAlign="right">
               Location
             </Td>
@@ -144,13 +129,13 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
 
             return (
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>
-                <Td textAlign="center">{game.gameInfos.season_version}</Td>
                 <Td>
                   <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
                 </Td>
+                <Td textAlign="center">{game.gameInfos.season_version}</Td>
 
                 <Td>{playerName}</Td>
-                {/* <Td textAlign="right">{game.player.turn}</Td> */}
+                <Td textAlign="right">{game.player.turn}</Td>
                 <Td textAlign="right">{game.player.location?.name}</Td>
                 {/* <Td textAlign="right">{game.player.health}</Td> */}
                 <Td textAlign="right">{formatCashHeader(game.player.cash)}</Td>
@@ -184,9 +169,6 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
       marginBottom={["30px", "50px"]}
       gap={3}
     >
-      {/* <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
-        {game ? reputationRanks[game.player.drugLevel as reputationRanksKeys] : ""}
-      </Text> */}
       <Heading fontSize={["30px", "48px"]} fontWeight="400" mb={["0px", "20px"]}>
         History
       </Heading>
@@ -261,20 +243,6 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
           </Tabs>
         </VStack>
       </Box>
-
-      {/* <Button
-        variant="pixelated"
-        h="48px"
-        onClick={() => {
-          navigator.clipboard.writeText(`${window.location.origin}/game/history/${playerId}`);
-
-          toast({
-            message: "Copied to clipboard",
-          });
-        }}
-      >
-        Profile Link
-      </Button> */}
     </VStack>
   );
 };
@@ -402,28 +370,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Ludes width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">LUDES</Td>
+                <Td w="80px" color="neon.500">
+                  LUDES
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ludes] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Speed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SPEED</Td>
+                <Td w="80px" color="neon.500">
+                  SPEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Speed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Weed width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">WEED</Td>
+                <Td w="80px" color="neon.500">
+                  WEED
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Weed] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Shrooms width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">SHROOMS</Td>
+                <Td w="80px" color="neon.500">
+                  SHROOMS
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Shrooms] || 0)}</Td>
               </Tr>
 
@@ -431,28 +407,36 @@ export const TradedDrugsTable = ({ playerStats }: { playerStats?: PlayerStats })
                 <Td w="30px">
                   <Acid width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">ACID</Td>
+                <Td w="80px" color="neon.500">
+                  ACID
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Acid] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Ketamine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">KETAMINE</Td>
+                <Td w="80px" color="neon.500">
+                  KETAMINE
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Ketamine] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px">
                   <Heroin width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500">HEROIN</Td>
+                <Td w="80px" color="neon.500">
+                  HEROIN
+                </Td>
                 <Td>{formatCashHeader(playerStats?.tradedDrugs[Drugs.Heroin] || 0)}</Td>
               </Tr>
               <Tr>
                 <Td w="30px" borderBottomColor="transparent">
                   <Cocaine width="24px" height="24px" />
                 </Td>
-                <Td w="80px" color="neon.500" borderBottomColor="transparent">COCAINE</Td>
+                <Td w="80px" color="neon.500" borderBottomColor="transparent">
+                  COCAINE
+                </Td>
                 <Td borderBottomColor="transparent">
                   {formatCashHeader(playerStats?.tradedDrugs[Drugs.Cocaine] || 0)}
                 </Td>

@@ -1,0 +1,6 @@
+tag = "dopewars-paper_mock"
+reads = []
+writes = [
+
+]
+init_calldata = ["$contract_address:dopewars-laundromat"]

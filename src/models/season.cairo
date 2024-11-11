@@ -14,7 +14,7 @@ struct Season {
     next_version_timestamp: u64, // updated on new highscore
     paper_balance: u32,
     high_score: u32,
-//
+    //
 }
 
 
@@ -25,10 +25,10 @@ impl SeasonImpl of SeasonTrait {
     }
 
     fn is_open(self: Season) -> bool {
-        let current_timestamp = starknet::info::get_block_timestamp();      
+        let current_timestamp = starknet::info::get_block_timestamp();
         current_timestamp < self.next_version_timestamp
     }
-   
+
     fn can_create_game(self: Season) -> bool {
         let current_timestamp = starknet::info::get_block_timestamp();
         current_timestamp < self.next_version_timestamp - self.season_time_limit.into()

@@ -5,30 +5,28 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "turbo": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "knip": "knip",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:dojo": "pnpm gen && pnpm gen:events",
-    "gen:events": "npx create-events ./src/manifests/dev/manifest.json ./src/dojo/generated/contractEvents.ts"
-  },
-  "bin": {
-    "create-events": "./bin/generateEvents.cjs"
+    "gen:dojo": "pnpm gen"
   },
   "dependencies": {
-    "@cartridge/connector": "^0.3.46",
+    "@cartridge/connector": "0.5.0-alpha.7",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
-    "@dojoengine/core": "0.7.4",
-    "@dojoengine/create-burner": "0.7.4",
-    "@dojoengine/utils": "0.7.4",
+    "@dojoengine/core": "v1.0.0-alpha.30",
+    "@dojoengine/create-burner": "v1.0.0-alpha.30",
+    "@dojoengine/torii-client": "v1.0.0-alpha.30",
+    "@dojoengine/utils": "v1.0.0-alpha.30",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@next/bundle-analyzer": "^14.1.4",
-    "@starknet-react/chains": "^0.1.7",
-    "@starknet-react/core": "^2.4.0",
+    "@starknet-react/chains": "^3.0.2",
+    "@starknet-react/core": "^3.0.3",
     "@vercel/speed-insights": "^1.0.10",
     "eslint": "8.36.0",
     "eslint-config-next": "14.1.4",
@@ -42,14 +40,13 @@
     "ka-table": "^8.11.0",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
-    "next": "v14.3.0-canary.50",
+    "next": "v15.0.1",
     "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
-    "react-json-view-lite": "^1.2.1",
     "react-query": "^3.39.2",
-    "starknet": "6.2.0",
+    "starknet": "^6.7.0",
     "use-caret-position": "^0.0.2",
     "zustand": "^4.3.7"
   },
@@ -64,10 +61,10 @@
     "@graphql-codegen/typescript-react-query": "^3.5.9",
     "@types/howler": "^2.2.7",
     "@types/node": "18.15.3",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "knip": "^4.5.0",
     "prettier": "^2.8.8",
-    "typescript": "5.2.2"
+    "typescript": "^5.4.5"
   }
 }

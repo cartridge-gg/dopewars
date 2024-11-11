@@ -1,4 +1,3 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
     config::{game::{GameConfig}, settings::{SeasonSettings, EncountersMode, EncountersOddsMode}},
@@ -7,9 +6,9 @@ use rollyourown::{
         bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
         bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
     },
-    packing::{game_store::{GameStore},},
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
+    packing::{game_store::{GameStore},}, store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
@@ -31,12 +30,12 @@ struct EncounterStatsConfig {
 }
 
 
-fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
+fn initialize_encounter_stats_config(ref store: Store) {
     // Chill
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::Chill,
                 health_base: 12 - 2,
@@ -50,9 +49,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::Chill,
                 health_base: 1,
@@ -68,9 +67,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
 
     // NoJokes
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::NoJokes,
                 health_base: 12,
@@ -84,9 +83,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::NoJokes,
                 health_base: 1,
@@ -102,9 +101,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
 
     // UltraViolence
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Cops,
                 encounters_mode: EncountersMode::UltraViolence,
                 health_base: 12 + 2,
@@ -118,9 +117,9 @@ fn initialize_encounter_stats_config(s: IStoreLibraryDispatcher) {
             }
         );
 
-    s
+    store
         .save_encounter_stats_config(
-            EncounterStatsConfig {
+            @EncounterStatsConfig {
                 encounter: Encounters::Gang,
                 encounters_mode: EncountersMode::UltraViolence,
                 health_base: 1 + 3,
@@ -185,7 +184,7 @@ struct EncounterConfig {
 }
 
 
-// 
+//
 //
 //
 
@@ -204,16 +203,14 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounter(
         ref game_store: GameStore, ref season_settings: SeasonSettings
     ) -> EncounterConfig {
-        let level = Self::get_encounter_level(
-            ref season_settings, game_store.player.reputation
-        );
+        let level = Self::get_encounter_level(ref season_settings, game_store.player.reputation);
 
-        let rand_from_game_store: u256 = pedersen::pedersen(
-            game_store.markets.packed, game_store.markets.packed
+        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+            array![game_store.markets.packed, game_store.game.game_id.into()].span()
         )
             .into() % 2;
 
-        let rand_felt252: felt252 = rand_from_game_store.try_into().unwrap(); 
+        let rand_felt252: felt252 = rand_from_game_store.try_into().unwrap();
 
         let encounter_type = match rand_felt252 {
             0 => Encounters::Cops,
@@ -221,7 +218,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
         };
 
         let mut encounter_stats = game_store
-            .s
+            .store
             .encounter_stats_config(encounter_type, season_settings.encounters_mode);
 
         //   let mut encounter = game_store.s.encounter_config(rand_id);
@@ -235,7 +232,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
             defense: encounter_stats.defense_base + level * encounter_stats.defense_step,
             speed: encounter_stats.speed_base + level * encounter_stats.speed_step,
             //
-            rep_pay: (level * 3) * 2, // reputation modifier for paying NEGATIVE
+            rep_pay: level * 5, //(level * 3) * 2, // reputation modifier for paying NEGATIVE
             rep_run: level * 2, // reputation modifier for running POSITIVE(success)
             rep_fight: level * 3, // reputation modifier for fighting
         };
@@ -244,8 +241,8 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     }
 
     fn get_random_demand_pct(ref game_store: GameStore) -> u8 {
-        let rand_from_game_store: u256 = pedersen::pedersen(
-            game_store.markets.packed, game_store.game.game_id.into()
+        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+            array![game_store.markets.packed, game_store.game.game_id.into()].span()
         )
             .into();
 

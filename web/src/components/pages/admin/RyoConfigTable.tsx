@@ -27,7 +27,7 @@ export const RyoConfigTable = observer(() => {
 
   // const { updateGameConfig } = useSystems();
 
-  const [data, setData] = useState([config?.config.ryo_config] || []);
+  const [data, setData] = useState([config?.config.ryo_config]);
 
   const table = useTable();
 

@@ -1,11 +1,7 @@
-
 // https://www.wsop.com/how-to-play-poker/mtt-tournament-payouts/
 // MTT Payout Structure (top 10% paid)
 
-// TODO add more payout & add binary search
-
 fn get_payed_count(entrants: u32) -> u32 {
-
     if entrants <= 200 {
         if entrants <= 2 {
             1 // payout_0_2(rank)
@@ -446,15 +442,14 @@ fn payout_501_700(rank: u32) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_payout, get_payout_pct, get_payed_count, payout_0_2, payout_3_10, payout_11_30, payout_31_50,
-        payout_51_75, payout_76_100, payout_101_150, payout_151_200, payout_201_250, payout_251_300,
-        payout_301_350, payout_351_400, payout_401_500, payout_501_700
+        get_payout, get_payout_pct, get_payed_count, payout_0_2, payout_3_10, payout_11_30,
+        payout_31_50, payout_51_75, payout_76_100, payout_101_150, payout_151_200, payout_201_250,
+        payout_251_300, payout_301_350, payout_351_400, payout_401_500, payout_501_700
     };
 
 
     #[test]
     fn test_pedersen() {
-        
         let a = poseidon::poseidon_hash_span(array![1].span());
         let aa = 0x579e8877c7755365d5ec1ec7d3a94a457eff5d1f40482bbe9729c064cdead2;
         let b = poseidon::poseidon_hash_span(array![2].span());
@@ -464,7 +459,6 @@ mod tests {
         println!("{:?}", aa);
         println!("{:?}", b);
         println!("{:?}", bb);
-
     }
 
     #[test]
@@ -497,7 +491,7 @@ mod tests {
     fn test_payout_0_2() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -516,7 +510,7 @@ mod tests {
     fn test_payout_3_10() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -535,7 +529,7 @@ mod tests {
     fn test_payout_11_30() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -554,7 +548,7 @@ mod tests {
     fn test_payout_31_50() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -573,7 +567,7 @@ mod tests {
     fn test_payout_51_75() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -592,7 +586,7 @@ mod tests {
     fn test_payout_76_100() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -611,7 +605,7 @@ mod tests {
     fn test_payout_101_150() {
         let mut rank = 1;
         let mut max = 20;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -630,7 +624,7 @@ mod tests {
     fn test_payout_151_200() {
         let mut rank = 1;
         let mut max = 25;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -649,7 +643,7 @@ mod tests {
     fn test_payout_201_250() {
         let mut rank = 1;
         let mut max = 30;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -668,7 +662,7 @@ mod tests {
     fn test_payout_251_300() {
         let mut rank = 1;
         let mut max = 40;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -687,7 +681,7 @@ mod tests {
     fn test_payout_301_350() {
         let mut rank = 1;
         let mut max = 50;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -706,7 +700,7 @@ mod tests {
     fn test_payout_351_400() {
         let mut rank = 1;
         let mut max = 50;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -725,7 +719,7 @@ mod tests {
     fn test_payout_401_500() {
         let mut rank = 1;
         let mut max = 60;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {
@@ -744,7 +738,7 @@ mod tests {
     fn test_payout_501_700() {
         let mut rank = 1;
         let mut max = 75;
-        let mut total = 0;
+        let mut total: u32 = 0;
 
         loop {
             if rank == max {

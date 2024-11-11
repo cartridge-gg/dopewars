@@ -39,7 +39,11 @@ import {
   useSeasonByVersion,
   useSystems,
 } from "@/dojo/hooks";
-import { Game, SeasonSettings, SortedList } from "@/generated/graphql";
+import {
+  Dopewars_Game as Game,
+  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_SortedList as SortedList,
+} from "@/generated/graphql";
 
 import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";

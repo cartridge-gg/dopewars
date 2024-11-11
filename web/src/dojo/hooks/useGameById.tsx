@@ -1,7 +1,7 @@
-import { Game, GameEdge, useGameByIdQuery } from "@/generated/graphql";
+import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGameByIdQuery } from "@/generated/graphql";
 import { useMemo } from "react";
 
-export interface GameByIdInterface {
+interface GameByIdInterface {
   game?: Game;
   isFetched: boolean;
 }
@@ -12,7 +12,7 @@ export const useGameById = (gameId: number): GameByIdInterface => {
   });
 
   const game = useMemo(() => {
-    const edges = data?.gameModels?.edges as GameEdge[];
+    const edges = data?.dopewarsGameModels?.edges as GameEdge[];
     return edges?.length > 0 ? (edges[0].node as Game) : undefined;
   }, [data]);
 

@@ -20,8 +20,9 @@ import { DojoContextConfig, SupportedChainIds } from "../setup/config";
 import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
+import { useRouter } from "next/router";
 
-interface DojoContextType {
+export interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
   masterAccount?: AccountInterface;
@@ -53,7 +54,11 @@ export const DojoContextProvider = observer(
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
-      process.env.NODE_ENV === "production" ? dojoContextConfig.SN_SEPOLIA : dojoContextConfig.SN_SEPOLIA;
+      process.env.NODE_ENV === "production"
+        ? Object.values(dojoContextConfig)[0]
+        : Object.values(dojoContextConfig)[1]
+        ? Object.values(dojoContextConfig)[1]
+        : Object.values(dojoContextConfig)[0]; //dojoContextConfig.KATANA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
@@ -65,7 +70,7 @@ export const DojoContextProvider = observer(
 
     const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig, intialChain);
 
-    const { dojoProvider, queryClient, graphqlClient, graphqlWsClient, rpcProvider } = useDojoClients(selectedChain);
+    const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } = useDojoClients(selectedChain);
 
     const masterAccount = useMemo(() => {
       if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
@@ -131,13 +136,16 @@ export const DojoContextProvider = observer(
       });
     }, [graphqlClient, dojoProvider, selectedChain.manifest]);
 
+    const router = useRouter();
+
     const gameStore = useMemo(() => {
       return new GameStoreClass({
+        toriiClient,
         client: graphqlClient,
-        wsClient: graphqlWsClient,
         configStore,
+        router,
       });
-    }, [graphqlClient, graphqlWsClient, configStore]);
+    }, [graphqlClient, configStore, toriiClient]);
 
     useEffect(() => {
       const initAsync = async () => {
@@ -162,13 +170,16 @@ export const DojoContextProvider = observer(
 
     const uiStore = new UiStore();
 
-    const isInitialized = burnerSWOIsInitialized && predeployedSWOIsInitialized && configStoreState.isInitialized;
+    const isInitialized =
+      burnerSWOIsInitialized &&
+      predeployedSWOIsInitialized &&
+      configStoreState.isInitialized &&
+      toriiClient !== undefined;
     const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
     const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
 
     // console.log("isInitialized", isInitialized);
     // console.log("hasError", hasError);
-
     // is initializing
     if (!hasError && !isInitialized)
       return (
@@ -193,8 +204,8 @@ export const DojoContextProvider = observer(
             dojoProvider,
             queryClient,
             graphqlClient,
-            graphqlWsClient,
             rpcProvider,
+            toriiClient,
           },
           burnerManager,
           isPrefundingPaper,

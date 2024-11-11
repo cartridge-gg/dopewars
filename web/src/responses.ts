@@ -2,7 +2,6 @@ import { EncounterOutcomes, EncountersAction, PlayerStatus } from "./dojo/types"
 
 type Encounter = "initial" | "repeat";
 
-
 const muggerResponses: Record<EncounterOutcomes, Record<Encounter, string[]>> = {
   [EncounterOutcomes.Escaped]: {
     initial: [
@@ -141,18 +140,13 @@ function getResponse(
   return lines[getRandomIdx(lines.length)];
 }
 
-export function getMuggerResponses(
-  outcome: EncounterOutcomes,
-  isInitial: boolean,
-): string {
+export function getMuggerResponses(outcome: EncounterOutcomes, isInitial: boolean): string {
   return getResponse(outcome, isInitial, muggerResponses);
 }
 
 export function getCopResponses(outcome: EncounterOutcomes, isInitial: boolean): string {
   return getResponse(outcome, isInitial, copResponses);
 }
-
-
 
 const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]>> = {
   [PlayerStatus.Normal]: {
@@ -172,7 +166,7 @@ const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]
       "You'll be seeing me again real soon to collect. Count on it.",
       "Don't go thinking this payment buys you protection. It don't.",
       "This payment don't even begin to make up for what you owe me.",
-      "This is just a down payment on the beating I still owe you."
+      "This is just a down payment on the beating I still owe you.",
     ],
     [EncountersAction.Run]: [
       "Go ahead and run you slippery rat bastard!",
@@ -189,8 +183,7 @@ const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]
       "The streets talk, and word travels fast. I'll find you.",
       "You'll regret the day you tried to hustle on my block.",
       "My reach extends farther than you can imagine. Nowhere is safe.",
-      "I'm gonna make you regret ever stepping foot in my territory."
-
+      "I'm gonna make you regret ever stepping foot in my territory.",
     ],
     [EncountersAction.Fight]: [
       "Give me what you have before I turn yo ass to swiss cheese.",
@@ -206,9 +199,8 @@ const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]
       "Trying to hustle on my block right under my nose?! You got guts, I'll give you that.",
       "The boys and I are gonna have fun teaching you what happens when you steal from us.",
       "I'll make an example out of you. Show everyone what happens when they cross us.",
-      "Stealing business and disrespecting me in my own neighborhood? Huge mistake."
+      "Stealing business and disrespecting me in my own neighborhood? Huge mistake.",
     ],
-
   },
   [PlayerStatus.BeingArrested]: {
     [EncountersAction.Pay]: [
@@ -230,7 +222,6 @@ const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]
       "You ain't getting far, punk. I'll hunt you down if it's the last thing I do!",
       "Don't get too comfortable out there. We know these streets better than you.",
       "Run all you want, but next time I'm letting the police dogs off the leash to hunt you down.",
-
     ],
     [EncountersAction.Fight]: [
       "You have the right to remain silent. Anything you say can and will be used against you in a court of law.",
@@ -243,16 +234,10 @@ const encounterSentences: Record<PlayerStatus, Record<EncountersAction, string[]
       "And you call yourself a drug dealer? Pathetic.",
       "My grandma could sling better than you. You're a joke.",
     ],
-
   },
+};
 
-}
-
-export function getSentence(
-  status: PlayerStatus,
-  action: EncountersAction
-): string {
-
-  const sentences = encounterSentences[status][action]
-  return sentences[getRandomIdx(sentences.length)]
+export function getSentence(status: PlayerStatus, action: EncountersAction): string {
+  const sentences = encounterSentences[status][action];
+  return sentences[getRandomIdx(sentences.length)];
 }

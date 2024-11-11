@@ -62,7 +62,8 @@ export enum EncounterOutcomes {
 }
 
 export enum GameMode {
-  Dealer,
+  Ranked,
+  Noob,
   Warrior,
 }
 
@@ -95,7 +96,7 @@ export interface ShopItemInfo {
 
 export interface OutcomeInfo {
   title: string;
-  encounterOutcome: EncounterOutcomes;
+  encounterOutcome: string; //EncounterOutcomes;
   encounter: Encounters;
   name: string;
   imageSrc: string;

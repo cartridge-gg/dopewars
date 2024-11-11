@@ -9,7 +9,11 @@ export const blinkAnim = keyframes`
   100% {opacity: 0;}   
 `;
 
-export const HealthIndicator = ({ health, maxHealth, ...props }: { health: number; maxHealth: number } & StyleProps) => {
+export const HealthIndicator = ({
+  health,
+  maxHealth,
+  ...props
+}: { health: number; maxHealth: number } & StyleProps) => {
   const healthColor = getHealthColor(health, maxHealth);
   return (
     <HStack color={healthColor} animation={getHealthAnimation(health, maxHealth)} {...props}>

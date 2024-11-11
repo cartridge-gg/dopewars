@@ -1,0 +1,13 @@
+tag = "dopewars-vrf_provider_mock"
+reads = []
+writes = []
+init_calldata = [
+    "0x6b0aab388dc7b240801b5aa0722bfcd39a1f397e83d5c032c198b18594b665e",
+    "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204",
+]
+
+# seed : 0x420
+# {
+# "public_key_x":"0x6b0aab388dc7b240801b5aa0722bfcd39a1f397e83d5c032c198b18594b665e",
+# "public_key_y":"0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204"
+# }

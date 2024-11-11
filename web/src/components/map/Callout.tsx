@@ -3,12 +3,7 @@ import { Icon } from "@chakra-ui/react";
 
 export const Callout = ({ location }: { location?: Locations }) => {
   return (
-    <Icon
-      layerStyle="fill"
-      zIndex="overlay"
-      viewBox="0 0 256 256"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <Icon layerStyle="fill" zIndex="overlay" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
       <g visibility={Locations.Central == location ? "visible" : "hidden"}>
         <path d="M125.01 115.997H124V117.007H125.01V115.997Z" fill="#0CA85D" />
         <path
@@ -61,10 +56,7 @@ export const Callout = ({ location }: { location?: Locations }) => {
         />
       </g>
       <g visibility={Locations.Queens == location ? "visible" : "hidden"}>
-        <path
-          d="M193.014 134.994H192.004V136.004H193.014V134.994Z"
-          fill="#0CA85D"
-        />
+        <path d="M193.014 134.994H192.004V136.004H193.014V134.994Z" fill="#0CA85D" />
         <path
           d="M188.004 128.994H192.014V129.994H193.014V134.004H192.014V135.004H191.014V137.004H189.004V135.004H188.004V134.004H187.004V129.994H188.004V128.994ZM191.004 133.994V133.004H189.014V133.994H191.004ZM192.004 132.994V131.004H191.014V132.994H192.004ZM188.014 132.994H189.004V131.004H188.014V132.994ZM191.004 130.004V130.994H189.014V130.004H191.004Z"
           fill="#0F380F"

@@ -1,16 +1,21 @@
-use rollyourown::packing::markets_packed::MarketsPackedTrait;
-use starknet::ContractAddress;
+use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use dojo::event::EventStorage;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 use rollyourown::{
-    models::{game::{GameMode}}, config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
+    models::{game::{GameMode, GameTrait}},
+    config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
     packing::{
         game_store::{GameStore, GameStoreTrait}, player::{PlayerImpl},
         drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, items_packed::{ItemsPackedImpl},
-        markets_packed::{MarketsPackedImpl}
+        markets_packed::{MarketsPackedImpl, MarketsPackedTrait}
     },
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
-    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}}
+    store::{Store, StoreImpl, StoreTrait},
+    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}},
+    events::{TradeDrug}
 };
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use starknet::ContractAddress;
+
 
 #[derive(Copy, Drop, Serde)]
 enum TradeDirection {
@@ -29,23 +34,8 @@ struct Trade {
 //
 //
 
-// fn execute_price_impact(ref game_store: GameStore, trade: Trade) {
-//     let tick = game_store.markets.get_tick(game_store.player.location, trade.drug);
-
-//     let new_tick = match trade.direction {
-//         TradeDirection::Sell => { tick.sub_capped(2, 0) },
-//         TradeDirection::Buy => { tick.add_capped(2, 63) },
-//     };
-
-//     game_store.markets.set_tick(game_store.player.location, trade.drug, new_tick);
-// }
-
-//
-//
-//
-
 fn execute_trade(ref game_store: GameStore, trade: Trade) {
-    // check if can trade 
+    // check if can trade
     assert(game_store.can_trade(), 'player cannot trade');
 
     // check not warrior mode
@@ -70,13 +60,13 @@ fn buy(ref game_store: GameStore, trade: Trade,) {
     // get transport
     let transport = game_store.items.transport();
     let season_settings = game_store.season_settings();
-    let drug_config = game_store.s.drug_config(season_settings.drugs_mode, trade.drug);
+    let drug_config = game_store.store.drug_config(season_settings.drugs_mode, trade.drug);
 
     // check quantity
     let max_transport = transport - (drugs.quantity * drug_config.weight.into());
     assert(trade.quantity <= max_transport, 'not enought space');
 
-    // check cash 
+    // check cash
     let market_price = game_store.get_drug_price(game_store.player.location, trade.drug);
     let total_cost = market_price * trade.quantity;
     assert(game_store.player.cash >= total_cost, 'not enought ca$h');
@@ -89,22 +79,20 @@ fn buy(ref game_store: GameStore, trade: Trade,) {
     // update cash
     game_store.player.cash -= total_cost;
 
-    // emit event
-    game_store
-        .s
-        .w()
-        .emit_raw(
-            array![
-                selector!("TradeDrug"),
-                Into::<u32, felt252>::into(game_store.game.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
-            ],
-            array![
-                Into::<Drugs, u8>::into(trade.drug).into(),
-                Into::<u32, felt252>::into(trade.quantity),
-                Into::<u32, felt252>::into(market_price),
-                true.into()
-            ]
+    // emit TradeDrug
+    let mut store = game_store.store;
+    store
+        .world
+        .emit_event(
+            @TradeDrug {
+                game_id: game_store.game.game_id,
+                player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
+                drug_id: Into::<Drugs, u8>::into(trade.drug).into(),
+                quantity: trade.quantity,
+                price: market_price,
+                is_buy: true,
+            }
         );
 }
 
@@ -132,21 +120,30 @@ fn sell(ref game_store: GameStore, trade: Trade) {
     // update cash
     game_store.player.cash += total;
 
-    // emit event
-    game_store
-        .s
-        .w()
-        .emit_raw(
-            array![
-                selector!("TradeDrug"),
-                Into::<u32, felt252>::into(game_store.game.game_id),
-                Into::<starknet::ContractAddress, felt252>::into(game_store.game.player_id).into()
-            ],
-            array![
-                Into::<Drugs, u8>::into(trade.drug).into(),
-                Into::<u32, felt252>::into(trade.quantity),
-                Into::<u32, felt252>::into(market_price),
-                false.into()
-            ]
+    // emit TradeDrug
+    let mut store = game_store.store;
+    store
+        .world
+        .emit_event(
+            @TradeDrug {
+                game_id: game_store.game.game_id,
+                player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
+                drug_id: Into::<Drugs, u8>::into(trade.drug).into(),
+                quantity: trade.quantity,
+                price: market_price,
+                is_buy: false,
+            }
         );
+
+    if game_store.game.is_ranked() && total > 99_999_999 && !game_store.player.traded_million {
+        game_store.player.traded_million = true;
+
+        let bushido_store = BushidoStoreTrait::new(store.world);
+        let quest_id = Quest::Dealer.identifier(0);
+        bushido_store
+            .progress(
+                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp()
+            );
+    }
 }

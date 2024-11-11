@@ -61,14 +61,7 @@ export const ChatEvent = ({
       break;
     case "game":
       chatEvent = (
-        <HStack
-          w="full"
-          spacing="6px"
-          color="neon.500"
-          justify="center"
-          fontSize="16px"
-          {...props}
-        >
+        <HStack w="full" spacing="6px" color="neon.500" justify="center" fontSize="16px" {...props}>
           <Sparkles />
           <Text>{children}</Text>
           <Sparkles inverted />

@@ -1,24 +1,5 @@
 target
 abis
 
+genesis
 genesis.json
-
-/manifests/*
-
-!/manifests/dev
-/manifests/dev/*
-!/manifests/dev/overlays
-
-!/manifests/ryo420
-/manifests/ryo420/*
-!/manifests/ryo420/overlays
-
-!/manifests/ryo421
-/manifests/ryo421/*
-!/manifests/ryo421/overlays
-
-!/manifests/ryosepolia
-/manifests/ryosepolia/*
-!/manifests/ryosepolia/overlays
-
-

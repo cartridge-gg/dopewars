@@ -13,16 +13,12 @@ const rotate: RotateType = {
 
 type StyleType = "line" | "outline" | "pixel";
 
-export interface ArrowProps {
+interface ArrowProps {
   direction?: string;
   style?: StyleType;
 }
 
-export const Arrow = ({
-  direction,
-  style,
-  ...props
-}: ArrowProps & IconProps) => {
+export const Arrow = ({ direction, style, ...props }: ArrowProps & IconProps) => {
   let path;
   switch (style) {
     case "pixel":

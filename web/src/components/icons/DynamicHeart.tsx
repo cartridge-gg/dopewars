@@ -1,4 +1,3 @@
-import { background } from "@chakra-ui/react";
 import { Icon, IconProps } from ".";
 
 export const DynamicHeart = (props: IconProps & { health: number; maxHealth: number; color: string }) => {

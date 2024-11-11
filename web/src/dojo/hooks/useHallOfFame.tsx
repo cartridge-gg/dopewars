@@ -1,8 +1,8 @@
-import { Game, Season, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
+import { Dopewars_Game as Game, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 
-export type HallOfFameResult = ReturnType<typeof useHallOfFame>;
+type HallOfFameResult = ReturnType<typeof useHallOfFame>;
 
 export const useHallOfFame = () => {
   const {
@@ -18,7 +18,7 @@ export const useHallOfFame = () => {
   const hallOfFame = useMemo(() => {
     if (isError || isFetching || isRefetching || !data) return [];
 
-    const edges = data.gameModels?.edges as World__ModelEdge[];
+    const edges = data.dopewarsGameModels?.edges as World__ModelEdge[];
     return edges.map((i: World__ModelEdge) => i.node as Game);
   }, [data, isFetching, isRefetching, isError]);
 
@@ -28,4 +28,3 @@ export const useHallOfFame = () => {
     refetchHallOfFame: refetch,
   };
 };
-

@@ -2,8 +2,7 @@ import { menuAnatomy } from "@chakra-ui/anatomy";
 import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 import { cardPixelatedStyle } from "../styles";
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(menuAnatomy.keys);
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(menuAnatomy.keys);
 
 const baseStyle = definePartsStyle({
   button: {
@@ -11,22 +10,22 @@ const baseStyle = definePartsStyle({
   },
   list: {
     // this will style the MenuList component
-    ... cardPixelatedStyle({}),
-    bg:"neon.700",
-    p:0,
-    overflow:"hidden"
+    ...cardPixelatedStyle({}),
+    bg: "neon.700",
+    p: 0,
+    overflow: "hidden",
   },
   item: {
     // this will style the MenuItem and MenuItemOption components
-    bg:"neon.700",
+    bg: "neon.700",
     _hover: {
       bg: "neon.600",
     },
     _focus: {
       bg: "transparent",
     },
-    borderBottom:"solid 2px",
-    borderColor:"neon.900"
+    borderBottom: "solid 2px",
+    borderColor: "neon.900",
   },
   groupTitle: {
     // this will style the text defined by the title prop

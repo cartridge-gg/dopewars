@@ -1,0 +1,15 @@
+tag = "dopewars-ryo"
+reads = []
+writes = [
+    "dopewars-RyoConfig",
+    "dopewars-RyoAddress",
+    "dopewars-Season",
+    "dopewars-SeasonSettings",
+    "dopewars-GameConfig",
+]
+init_calldata = [
+    "$contract_address:dopewars-paper_mock",
+    "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
+    "$contract_address:dopewars-laundromat",
+    "$contract_address:dopewars-vrf_provider_mock",
+]

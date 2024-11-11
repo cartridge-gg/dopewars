@@ -11,15 +11,10 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 mod devtools {
-    use rollyourown::config::config::config::InternalTrait;
-    use core::traits::TryInto;
     use core::traits::Into;
-    use starknet::ContractAddress;
-    use starknet::get_caller_address;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::info::get_tx_info;
-
-    use super::IDevtools;
+    use core::traits::TryInto;
+    use dojo::world::IWorldDispatcherTrait;
+    use rollyourown::config::config::config::InternalTrait;
 
     use rollyourown::{
         models::{season::{Season}, game::{Game}, game_store_packed::{GameStorePacked}},
@@ -30,14 +25,20 @@ mod devtools {
         },
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
         packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
-        library::store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},
+        store::{Store, StoreImpl, StoreTrait}
     };
+    use starknet::ContractAddress;
+    use starknet::contract_address::Felt252TryIntoContractAddress;
+    use starknet::get_caller_address;
+    use starknet::info::get_tx_info;
+
+    use super::IDevtools;
 
 
     #[abi(embed_v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
         fn create_fake_game(self: @ContractState, final_score: u32) {
-            let world = self.world();
+            let world = self.world_dispatcher();
             let game_id = world.uuid();
             let player_id = get_caller_address();
 
@@ -59,7 +60,7 @@ mod devtools {
                 player_id,
                 //
                 season_version,
-                game_mode: GameMode::Dealer,
+                game_mode: GameMode::Ranked,
                 //
                 player_name: Bytes16Impl::from('fake'),
                 hustler_id: rand_hustler_id,
@@ -76,7 +77,7 @@ mod devtools {
             game_store.player.cash = rand_score;
 
             // save Game & GameStorePacked
-            self.s().set_game(game);
+            self.s().set_game(@game);
             game_store.save();
 
             // simulate register_score
@@ -85,7 +86,7 @@ mod devtools {
             let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
-            self.s().set_game(game);
+            self.s().set_game(@game);
 
             // retrieve Season Sorted List   TODO: check season_version / status
             let list_id = game.season_version.into();
@@ -98,7 +99,7 @@ mod devtools {
         fn create_new_season(self: @ContractState,) {
             let mut ryo_config = self.s().ryo_config();
             ryo_config.season_version += 1;
-            self.s().save_ryo_config(ryo_config);
+            self.s().save_ryo_config(@ryo_config);
 
             let mut randomizer = RandomImpl::new('devtools');
             let season_manager = SeasonManagerTrait::new(self.s());
@@ -117,12 +118,6 @@ mod devtools {
     impl DevtoolsInternalImpl of DevtoolsInternalTrait {
         fn check_chain(self: @ContractState) { // let chain_id = get_tx_info().unbox().chain_id;
         // assert(chain_id != 'KATANA', 'wrong chain_id');
-        }
-
-        #[inline(always)]
-        fn s(self: @ContractState,) -> IStoreLibraryDispatcher {
-            let (class_hash, _) = self.world().contract('store');
-            IStoreLibraryDispatcher { class_hash, }
         }
     }
 }

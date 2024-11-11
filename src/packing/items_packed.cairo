@@ -1,17 +1,15 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
-    models::game::{Game, GameMode},
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
-    packing::game_store::{GameStore},
-    library::{store::{IStoreLibraryDispatcher, IStoreDispatcherTrait},},
+    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
+    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
+    store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop)]
 struct ItemsPacked {
-    s: IStoreLibraryDispatcher,
+    store: @Store,
     hustler_id: u16,
     //
     packed: felt252
@@ -20,8 +18,8 @@ struct ItemsPacked {
 
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
-    fn new(s: IStoreLibraryDispatcher, hustler_id: u16) -> ItemsPacked {
-        ItemsPacked { s, hustler_id, packed: 0 }
+    fn new(s: @Store, hustler_id: u16) -> ItemsPacked {
+        ItemsPacked { store: s, hustler_id, packed: 0 }
     }
 
     #[inline(always)]
@@ -36,7 +34,7 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         let index: u8 = slot.into() * size;
         let level: u8 = bits.extract_into::<u8>(index, size).into();
 
-        let hustler = HustlerImpl::get(self.s, self.hustler_id);
+        let hustler = HustlerImpl::get(self.store, self.hustler_id);
         hustler.get_item_config(slot, level)
     }
 
@@ -57,6 +55,11 @@ impl ItemsPackedImpl of ItemsPackedTrait {
     //
     //
     //
+
+    #[inline(always)]
+    fn is_maxed_out(self: ItemsPacked) -> bool {
+        self.packed == 0b11111111
+    }
 
     #[inline(always)]
     fn attack_item(self: ItemsPacked) -> HustlerItemConfig {

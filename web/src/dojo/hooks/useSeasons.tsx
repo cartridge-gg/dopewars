@@ -1,14 +1,10 @@
 import {
-  Game,
-  GameEdge,
-  Season,
-  SeasonEdge,
-  SeasonSettings,
-  SeasonSettingsEdge,
-  SortedList,
-  SortedListEdge,
-  useGameByIdQuery,
-  useSeasonByVersionQuery,
+  Dopewars_Season as Season,
+  Dopewars_SeasonEdge as SeasonEdge,
+  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_SeasonSettingsEdge as SeasonSettingsEdge,
+  Dopewars_SortedList as SortedList,
+  Dopewars_SortedListEdge as SortedListEdge,
   useSeasonsQuery,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
@@ -19,7 +15,7 @@ export interface SeasonInfos {
   sortedList?: SortedList;
 }
 
-export interface SeasonsInterface {
+interface SeasonsInterface {
   seasons: SeasonInfos[];
   isFetched: boolean;
   refetch: any;
@@ -31,9 +27,9 @@ export const useSeasons = (): SeasonsInterface => {
   const seasons = useMemo(() => {
     if (!data) return [];
 
-    const seasonEdges = data?.seasonModels?.edges as SeasonEdge[];
-    const sortedListEdges = data?.sortedListModels?.edges as SortedListEdge[];
-    const seasonSettingsEdges = data?.seasonSettingsModels?.edges as SeasonSettingsEdge[];
+    const seasonEdges = data?.dopewarsSeasonModels?.edges as SeasonEdge[];
+    const sortedListEdges = data?.dopewarsSortedListModels?.edges as SortedListEdge[];
+    const seasonSettingsEdges = data?.dopewarsSeasonSettingsModels?.edges as SeasonSettingsEdge[];
 
     return seasonEdges.map((i: SeasonEdge) => {
       const season = i.node as Season;

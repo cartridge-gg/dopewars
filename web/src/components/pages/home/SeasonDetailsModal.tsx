@@ -49,7 +49,7 @@ export const SeasonDetailsModal = observer(() => {
         <ModalOverlay />
         <ModalContent bg="bg.dark">
           <ModalHeader textAlign="center" pb={0}>
-            Season Information
+            Season {seasonVersion} Information
           </ModalHeader>
           <ModalBody py={6} minH={"420px"}>
             <Tabs variant="unstyled" w="full">
@@ -71,9 +71,7 @@ export const SeasonDetailsModal = observer(() => {
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <Pistol />
-                        <Text>
-                          When a player sets a new high score, the season countdown timer resets
-                        </Text>
+                        <Text>When a player sets a new high score, the season countdown timer resets</Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
                         <DollarBag />

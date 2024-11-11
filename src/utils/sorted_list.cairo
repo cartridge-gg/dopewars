@@ -1,12 +1,12 @@
 use core::traits::TryInto;
-use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use debug::PrintTrait;
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::{game::Game, season::Season},
-    utils::payout_structure::{get_payout}
+    models::{game::Game, season::Season}, utils::payout_structure::{get_payout},
+    store::{Store, StoreImpl, StoreTrait}
 };
+use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
@@ -32,26 +32,20 @@ struct SortedListItem {
     item_k0: u32,
     #[key]
     item_k1: ContractAddress,
-    //  
+    //
     next_k0: u32,
     next_k1: ContractAddress,
-}
-
-impl DisplaySortedListItem of PrintTrait<SortedListItem> {
-    fn print(self: SortedListItem) {
-        println!(
-            "DisplaySortedListItem : TODO" // "list_id: {} - item_id: {} - next_id: {} ", self.list_id, self.item_id, self.next_id,
-        );
-    }
 }
 
 
 trait SortableItem<T> {
     fn get_keys(self: T) -> (u32, ContractAddress);
     fn get_value(self: T) -> u32;
-    fn get_by_keys(world: IWorldDispatcher, keys: (u32, ContractAddress)) -> T;
+    fn get_by_keys(store: @Store, keys: (u32, ContractAddress)) -> T;
     // fn get_position(self: T) -> u16;
-    fn set_position(ref self: T, world: IWorldDispatcher, position: u16, entrants: u32, paper_balance: u32);
+    fn set_position(
+        ref self: T, ref store: Store, position: u16, entrants: u32, paper_balance: u32
+    );
 }
 
 
@@ -62,18 +56,20 @@ impl SortableItemGameImpl of SortableItem<Game> {
     fn get_value(self: Game) -> u32 {
         self.final_score
     }
-    fn get_by_keys(world: IWorldDispatcher, keys: (u32, ContractAddress)) -> Game {
-        get!(world, keys, Game)
+    fn get_by_keys(store: @Store, keys: (u32, ContractAddress)) -> Game {
+        // get!(world, keys, Game)
+        let (game_id, player_id) = keys;
+        store.game(game_id, player_id)
     }
-    // fn get_position(self: Game) -> u16 {
-    //     self.position
-    // }
-    fn set_position(ref self: Game, world: IWorldDispatcher, position: u16, entrants: u32, paper_balance: u32) {
+    fn set_position(
+        ref self: Game, ref store: Store, position: u16, entrants: u32, paper_balance: u32
+    ) {
         // calc payout for this game
         let payout = get_payout(position.into(), entrants, paper_balance);
         self.position = position;
         self.claimable = payout;
-        set!(world, (self));
+        // set!(world, (self));
+        store.set_game(@self)
     }
 }
 
@@ -90,9 +86,7 @@ impl SortedListImpl of SortedListTrait {
             process_max_size: 0,
             process_size: 0,
             process_cursor_k0: Self::root(),
-            process_cursor_k1: Into::<u32, felt252>::into(Self::root())
-                .try_into()
-                .unwrap(),
+            process_cursor_k1: Into::<u32, felt252>::into(Self::root()).try_into().unwrap(),
         }
     }
 
@@ -101,12 +95,13 @@ impl SortedListImpl of SortedListTrait {
         0
     }
 
-    fn get(world: IWorldDispatcher, list_id: felt252) -> SortedList {
-        get!(world, (list_id), (SortedList))
+    fn get(store: @Store, list_id: felt252) -> SortedList {
+        // get!(world, (list_id), (SortedList))
+        store.sorted_list(list_id)
     }
 
-    fn set(self: SortedList, world: IWorldDispatcher) {
-        set!(world, (self))
+    fn set(self: SortedList, ref store: Store) {
+        store.set_sorted_list(@self)
     }
 
     //
@@ -114,10 +109,7 @@ impl SortedListImpl of SortedListTrait {
     //
 
     fn add<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
-        ref self: SortedList,
-        world: IWorldDispatcher,
-        item: T,
-        prev_item_keys: (u32, ContractAddress),
+        ref self: SortedList, ref store: Store, item: T, prev_item_keys: (u32, ContractAddress),
     ) {
         assert(!self.locked, 'cannot add to locked list');
 
@@ -125,13 +117,11 @@ impl SortedListImpl of SortedListTrait {
         let (item_k0, item_k1) = item.get_keys();
         let item_value = item.get_value();
 
-        assert(
-            item_k0 != Self::root() && Zeroable::is_non_zero(item_k1),
-            'reserved root value'
-        );
+        assert(item_k0 != Self::root() && Zeroable::is_non_zero(item_k1), 'reserved root value');
 
-        let (prev_k0, prev_k1) = self.find_prev_keys::<T>(world, item_value, prev_item_keys);
-        let mut prev = get!(world, (self.list_id, prev_k0, prev_k1), (SortedListItem));
+        let (prev_k0, prev_k1) = self.find_prev_keys::<T>(ref store, item_value, prev_item_keys);
+        // let mut prev = get!(world, (self.list_id, prev_k0, prev_k1), (SortedListItem));
+        let mut prev: SortedListItem = store.sorted_list_item(self.list_id, prev_k0, prev_k1);
 
         // add new SortedListItem
         let sorted_item = SortedListItem {
@@ -141,28 +131,31 @@ impl SortedListImpl of SortedListTrait {
             next_k0: prev.next_k0,
             next_k1: prev.next_k1,
         };
-        set!(world, (sorted_item,));
+        // set!(world, (sorted_item,));
+        store.set_sorted_list_item(@sorted_item);
 
         // update prev SortedListItem
         prev.next_k0 = item_k0;
         prev.next_k1 = item_k1;
-        set!(world, (prev));
+        //set!(world, (prev));
+        store.set_sorted_list_item(@prev);
 
         // update SortedList
         self.size += 1;
-        self.set(world);
+        //self.set(world);
+        Self::set(self, ref store);
     }
 
 
     fn is_correct_position<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
         self: SortedList,
-        world: IWorldDispatcher,
+        ref store: Store,
         ref curr: SortedListItem,
         ref next: SortedListItem,
         item_value: u32,
     ) -> bool {
-        let mut curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
-        let mut next_item = SortableItem::<T>::get_by_keys(world, (next.item_k0, next.item_k1));
+        let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
+        let mut next_item = SortableItem::<T>::get_by_keys(@store, (next.item_k0, next.item_k1));
 
         if ((curr.item_k0 == Self::root() && Zeroable::is_zero(curr.item_k1))
             || curr_item.get_value() >= item_value)
@@ -176,19 +169,18 @@ impl SortedListImpl of SortedListTrait {
 
     fn find_prev_keys<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
         self: SortedList,
-        world: IWorldDispatcher,
+        ref store: Store,
         item_value: u32,
         start_item_keys: (u32, ContractAddress),
     ) -> (u32, ContractAddress) {
-        let (start_item_k0, start_item_k1) = start_item_keys;   
-        let mut curr = get!(world, (self.list_id, start_item_k0, start_item_k1), (SortedListItem));
- 
-        loop {
-            let mut next = get!(
-                world, (self.list_id, curr.next_k0, curr.next_k1), (SortedListItem)
-            );
+        let (start_item_k0, start_item_k1) = start_item_keys;
+        let mut curr = store.sorted_list_item(self.list_id, start_item_k0, start_item_k1);
 
-            if self.is_correct_position::<T>(world, ref curr, ref next, item_value) {
+        loop {
+            let mut next: SortedListItem = store
+                .sorted_list_item(self.list_id, curr.next_k0, curr.next_k1);
+
+            if self.is_correct_position::<T>(ref store, ref curr, ref next, item_value) {
                 break (curr.item_k0, curr.item_k1);
             } else {
                 curr = next;
@@ -200,13 +192,14 @@ impl SortedListImpl of SortedListTrait {
     //
     //
 
-    fn lock(ref self: SortedList, world: IWorldDispatcher, process_max_size: u32) {
+    fn lock(ref self: SortedList, ref store: Store, process_max_size: u32) {
         assert(!self.locked, 'list already locked');
-        assert( process_max_size > 0, 'invalid process_max_size');
+        assert(process_max_size > 0, 'invalid process_max_size');
 
         self.process_max_size = process_max_size;
         self.locked = true;
-        self.set(world);
+        //self.set(world);
+        Self::set(self, ref store);
     }
 
     //
@@ -214,22 +207,25 @@ impl SortedListImpl of SortedListTrait {
     //
 
     fn process<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
-        ref self: SortedList, world: IWorldDispatcher, batch_size: u8
+        ref self: SortedList, ref store: Store, batch_size: u8
     ) {
         assert(self.locked, 'list must be locked');
         assert(!self.processed, 'list already processed');
         assert(batch_size > 0, 'invalid batch_size');
 
-        let season = get!(world, (self.list_id), (Season));
+        let season = store.season(self.list_id.try_into().unwrap());
         let paper_balance = season.paper_balance;
         let entrants = self.size;
-       
+
         let curr_k0 = self.process_cursor_k0;
         let curr_k1 = self.process_cursor_k1;
 
-        let mut curr = get!(world, (self.list_id, curr_k0, curr_k1), (SortedListItem));
-        let mut curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
-        let mut curr_position: u16 = self.process_size.try_into().unwrap();//curr_item.get_position();
+        let mut curr = store.sorted_list_item(self.list_id, curr_k0, curr_k1);
+        let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
+        let mut curr_position: u16 = self
+            .process_size
+            .try_into()
+            .unwrap(); //curr_item.get_position();
 
         let mut i = 0;
 
@@ -248,10 +244,10 @@ impl SortedListImpl of SortedListTrait {
                 break;
             }
 
-            curr = get!(world, (self.list_id, curr.next_k0, curr.next_k1), (SortedListItem));
-            curr_item = SortableItem::<T>::get_by_keys(world, (curr.item_k0, curr.item_k1));
+            curr = store.sorted_list_item(self.list_id, curr.next_k0, curr.next_k1);
+            curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
             curr_position += 1;
-            curr_item.set_position(world, curr_position, entrants, paper_balance);
+            curr_item.set_position(ref store, curr_position, entrants, paper_balance);
 
             self.process_size += 1;
 
@@ -261,31 +257,9 @@ impl SortedListImpl of SortedListTrait {
         self.process_cursor_k0 = curr.item_k0;
         self.process_cursor_k1 = curr.item_k1;
 
-        self.set(world);
+        // self.set(world);
+        Self::set(self, ref store);
     }
-
-    // fn print_all<T, +SortableItem<T>, +Copy<T>, +Drop<T>, +Destruct<T>>(
-    //     self: SortedList, world: IWorldDispatcher,
-    // ) {
-    //     let mut root = get!(world, (self.list_id, Self::root()), (SortedListItem));
-    //     let mut curr_id = root.next_id;
-
-    //     loop {
-    //         let mut curr = get!(world, (self.list_id, curr_id), (SortedListItem));
-
-    //         let curr_item = SortableItem::<T>::get_by_id(world, curr.item_id);
-    //         let curr_value = curr_item.get_value();
-    //         let curr_position = curr_item.get_position();
-
-    //         println!("{} - {} - {}", curr_id, curr_value, curr_position);
-
-    //         if curr.next_id != Self::root() {
-    //             curr_id = curr.next_id;
-    //         } else {
-    //             break;
-    //         }
-    //     }
-    // }
 
     fn print(self: SortedList) {
         println!("------------");
@@ -296,6 +270,6 @@ impl SortedListImpl of SortedListTrait {
         println!("process_max_size  : {}", self.process_max_size);
         println!("process_size      : {}", self.process_size);
         println!("process_cursor_k0 : {}", self.process_cursor_k0);
-    // println!("process_cursor_k1 : {}", self.process_cursor_k1);
+        // println!("process_cursor_k1 : {}", self.process_cursor_k1);
     }
 }

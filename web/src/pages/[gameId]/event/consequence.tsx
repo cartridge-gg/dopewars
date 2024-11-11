@@ -2,43 +2,40 @@ import { Button } from "@/components/common";
 import { Heart } from "@/components/icons";
 import { Reputation } from "@/components/icons/items/Reputation";
 import { Footer, Layout } from "@/components/layout";
-import { TravelEncounterData, TravelEncounterResultData } from "@/dojo/events";
+import { TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
 import { getOutcomeInfo } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { EncounterOutcomes, Encounters, EncountersAction, OutcomeInfo } from "@/dojo/types";
+import { EncounterOutcomes, Encounters, OutcomeInfo } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash } from "@/utils/ui";
-import { Box, Card, HStack, Heading, Image, Text, VStack } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
+import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useEffect, useState } from "react";
 
 const Consequence = () => {
   const { router, gameId } = useRouterContext();
-  const { account } = useAccount();
   const configStore = useConfigStore();
   const { game, gameEvents } = useGameStore();
 
   const [isDead, setIsDead] = useState(false);
-  const [encounterResult, setEncounterResult] = useState<TravelEncounterResultData | undefined>(undefined);
+  const [encounterResult, setEncounterResult] = useState<TravelEncounterResult | undefined>(undefined);
   const [outcomeInfos, setOutcomeInfos] = useState<OutcomeInfo | undefined>();
-
-  //const response = useMemo(() => outcome?.getResponse(true), [outcome]);
 
   useEffect(() => {
     if (!(game && gameEvents && gameEvents?.events && gameEvents?.lastEncounter && gameEvents?.lastEncounterResult))
       return;
+    const encounterResultEvent = gameEvents?.lastEncounterResult.event as TravelEncounterResult;
+    setEncounterResult(encounterResultEvent);
+    const lastEncounterEvent = gameEvents?.lastEncounter.event as TravelEncounter;
 
-    setEncounterResult(gameEvents?.lastEncounterResult.parsed as TravelEncounterResultData);
-    const lastEncounterEvent = gameEvents?.lastEncounter.parsed as TravelEncounterData;
+    // console.log("***** CONSEQUENCES");
+    // console.log("encounterResultEvent", encounterResultEvent);
+    // console.log("lastEncounterEvent", lastEncounterEvent);
 
-    const outcome = getOutcomeInfo(
-      lastEncounterEvent.encounter as Encounters,
-      (gameEvents?.lastEncounterResult?.parsed as TravelEncounterResultData).outcome as EncounterOutcomes,
-    );
+    const outcome = getOutcomeInfo(lastEncounterEvent.encounter as Encounters, encounterResultEvent.outcome);
 
     setOutcomeInfos(outcome);
-  }, [game, gameEvents, gameEvents?.sortedEvents, gameEvents?.lastEncounter, gameEvents?.lastEncounterResult]);
+  }, [game, gameEvents, gameEvents?.events, gameEvents?.lastEncounter, gameEvents?.lastEncounterResult]);
 
   useEffect(() => {
     if (encounterResult && encounterResult.outcome === EncounterOutcomes.Died) {
@@ -62,7 +59,11 @@ const Consequence = () => {
                 w={["full", "auto"]}
                 px={["auto", "20px"]}
                 onClick={() => {
-                  router.push(`/${gameId}/${game.player.location.location}`);
+                  if (gameEvents.isGameOver) {
+                    router.push(`/${gameId}/end`);
+                  } else {
+                    router.push(`/${gameId}/${game.player.location.location}`);
+                  }
                 }}
               >
                 Continue
@@ -97,58 +98,63 @@ const Consequence = () => {
                 {/* <Text>{JSON.stringify(encounterResult, 0, 2)}</Text> */}
                 {[...Array(encounterResult.rounds)].map((i, idx) => {
                   return (
-                    <>
-                      {encounterResult.dmgDealt[idx] && (
+                    <Box key={`zz-${idx}`} w="full">
+                      {encounterResult.dmg_dealt[idx] && (
                         <Line
                           icon={game.items.attack.icon({ color: "yellow.400" })}
                           text={
                             <Text color="yellow.400">
-                              You hit for {encounterResult.dmgDealt[idx][0]} DMG{" "}
-                              {encounterResult.dmgDealt[idx][1] > 0 && <>(-{encounterResult.dmgDealt[idx][1]})</>}
+                              You hit for {encounterResult.dmg_dealt[idx][0].value} DMG{" "}
+                              {encounterResult.dmg_dealt[idx][1].value > 0 && (
+                                <>(-{encounterResult.dmg_dealt[idx][1].value})</>
+                              )}
                             </Text>
                           }
                         />
                       )}
 
-                      {encounterResult.dmgTaken[idx] && (
+                      {encounterResult.dmg_taken[idx] && (
                         <Line
                           icon={<Heart color="red" />}
                           text={
                             <Text color="red">
-                              You took {encounterResult.dmgTaken[idx][0]} DMG{" "}
-                              {encounterResult.dmgTaken[idx][1] > 0 && <>(-{encounterResult.dmgTaken[idx][1]})</>}
+                              You took {encounterResult.dmg_taken[idx][0].value} DMG{" "}
+                              {encounterResult.dmg_taken[idx][1].value > 0 && (
+                                <>(-{encounterResult.dmg_taken[idx][1].value})</>
+                              )}
                             </Text>
                           }
                         />
                       )}
 
-                      {encounterResult.drugLoss[idx] ? (
+                      {encounterResult.drug_loss[idx] ? (
                         <Line
                           icon={configStore
-                            .getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId)
+                            .getDrugById(game.seasonSettings.drugs_mode, encounterResult.drug_id)
                             .icon({ color: "yellow.400", width: "24px", height: "24px" })}
                           text={
                             <Text color="yellow.400">
-                              You lost {encounterResult.drugLoss[idx]}{" "}
-                              {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId).name} on the run
+                              You lost {encounterResult.drug_loss[idx]}{" "}
+                              {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drug_id).name} on
+                              the run
                             </Text>
                           }
                         />
                       ) : (
                         <></>
                       )}
-                    </>
+                    </Box>
                   );
                 })}
 
-                {encounterResult.repPos > 0 && (
-                  <Line icon={<Reputation />} text={<Text color="neon.400"> +{encounterResult.repPos} REP</Text>} />
+                {encounterResult.rep_pos > 0 && (
+                  <Line icon={<Reputation />} text={<Text color="neon.400"> +{encounterResult.rep_pos} REP</Text>} />
                 )}
 
-                {encounterResult.repNeg > 0 && (
+                {encounterResult.rep_neg > 0 && (
                   <Line
                     icon={<Reputation color="yellow.400" />}
-                    text={<Text color="yellow.400"> -{encounterResult.repNeg} REP</Text>}
+                    text={<Text color="yellow.400"> -{encounterResult.rep_neg} REP</Text>}
                   />
                 )}
               </VStack>
@@ -163,30 +169,29 @@ const Consequence = () => {
                 {outcomeInfos.description && `* ${outcomeInfos.description} *`}
               </Text>
 
-              {encounterResult.cashEarnt > 0 && (
+              {encounterResult.cash_earnt > 0 && (
                 <Text color="yellow.400" textAlign="center">{`You confiscated ${formatCash(
-                  encounterResult.cashEarnt,
+                  encounterResult.cash_earnt,
                 )}`}</Text>
               )}
 
-              {encounterResult.cashLoss > 0 && (
+              {encounterResult.cash_loss > 0 && (
                 <Text color="yellow.400" textAlign="center">
-                  You lost {formatCash(encounterResult.cashLoss)}
+                  You lost {formatCash(encounterResult.cash_loss)}
                 </Text>
               )}
 
-              {encounterResult.action === EncountersAction.Pay &&
-                encounterResult.drugLoss.reduce((p, c) => p + c, 0) > 0 && (
-                  <Text color="yellow.400">
-                    You lost {encounterResult.drugLoss.reduce((p, c) => p + c, 0)}{" "}
-                    {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drugId).name}
-                  </Text>
-                )}
-
-              {encounterResult.turnLoss > 0 && (
+              {encounterResult.action === "Pay" && encounterResult.drug_loss.reduce((p, c) => p + c, 0) > 0 && (
                 <Text color="yellow.400">
-                  You spent {encounterResult.turnLoss} day{encounterResult.turnLoss > 1 ? "s" : ""} in{" "}
-                  {outcomeInfos.encounterOutcome === EncounterOutcomes.Hospitalized ? "the hospital" : "jail"}!
+                  You lost {encounterResult.drug_loss.reduce((p, c) => p + c, 0)}{" "}
+                  {configStore.getDrugById(game.seasonSettings.drugs_mode, encounterResult.drug_id).name}
+                </Text>
+              )}
+
+              {encounterResult.turn_loss > 0 && (
+                <Text color="yellow.400">
+                  You spent {encounterResult.turn_loss} day{encounterResult.turn_loss > 1 ? "s" : ""} in{" "}
+                  {outcomeInfos.encounterOutcome === "Hospitalized" ? "the hospital" : "jail"}!
                 </Text>
               )}
             </VStack>
@@ -200,9 +205,9 @@ const Consequence = () => {
 
 export default observer(Consequence);
 
-const Line = ({ icon, text }: { icon: ReactNode; text: ReactNode }) => {
+const Line = ({ icon, text, ...props }: { icon: ReactNode; text: ReactNode }) => {
   return (
-    <HStack w="full" gap={2}>
+    <HStack w="full" gap={2} {...props}>
       {icon}
       {text}
     </HStack>

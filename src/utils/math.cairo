@@ -10,9 +10,7 @@ impl MathImpl<
     T,
     +PartialOrd<T>,
     +Add<T>,
-    +AddEq<T>,
     +Sub<T>,
-    +SubEq<T>,
     +Zeroable<T>,
     +Into<T, u128>,
     +TryInto<u128, T>,
@@ -40,13 +38,20 @@ impl MathImpl<
     }
 
     fn min(lhs: T, rhs: T) -> T {
-        if lhs < rhs { lhs } else { rhs }
+        if lhs < rhs {
+            lhs
+        } else {
+            rhs
+        }
     }
 
     fn max(lhs: T, rhs: T) -> T {
-        if lhs > rhs { lhs } else { rhs }
+        if lhs > rhs {
+            lhs
+        } else {
+            rhs
+        }
     }
-
 }
 
 

@@ -1,112 +1,67 @@
 [package]
-cairo-version = "2.6.3"
+cairo-version = "=2.8.4"
 name = "rollyourown"
 version = "0.1.0"
 
 [cairo]
 # sierra-replace-ids = true
 
-[dependencies]
-# dojo = {git = "https://github.com/dojoengine/dojo", tag = "v0.7.1"}
-# token = { git = "https://github.com/dojoengine/origami", tag = "v0.7.1"}
-dojo = { path = "../dojo/crates/dojo-core" }
-token = { path = "../origami" }
+[tool.fmt]
+sort-module-level-items = true
+max-line-length = 100
+tab-size = 4
 
+[[target.starknet-contract]]
+build-external-contracts = [
+    "dojo::world::world_contract::world",
+    "bushido_trophy::events::index::e_TrophyCreation",
+    "bushido_trophy::events::index::e_TrophyProgression",
+]
+
+[dev-dependencies]
+cairo_test = "2.8.4"
+
+[dependencies]
+starknet = "2.8.4"
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.2" }
+cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
+bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
+# bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
+# dojo = { path = "../dojo/crates/dojo/core" }
 
 [scripts]
-
-# 
-katana = "katana --disable-fee --invoke-max-steps 2000000"
-build = "sozo build && scarb run gendojo"
+katana = "katana --config ./katana_dev.toml"
+torii = "torii --config ./torii_dev.toml"
 
 # common
 copy_manifest = "./scripts/copy_manifest.sh"
 gendojo = "./scripts/gen.sh"
-auth = "./scripts/default_auth.sh"
-
+auth = "./scripts/auth.sh"
 
 # migrate  && scarb run gendojo $PROFILE
-migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
-migrate_ryo420 = "PROFILE=ryo420 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE"
-migrate_ryo421 = "PROFILE=ryo421 && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE"
+migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryo2 = "PROFILE=ryo2 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
-migrateplan_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate plan --name ryo003"
-migrate_sepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate apply -vvv --name ryo003 --fee-estimate-multiplier 5 && scarb run copy_manifest $PROFILE"
-auth_sepolia = "PROFILE=ryosepolia && scarb run auth $PROFILE"
+# slot ryo1
+slot_ryo1_katana = "slot d create ryo1 katana -v v1.0.0-rc.2 --config-file ./katana_ryo1.toml"
+slot_ryo1_torii = "slot d create ryo1 torii  -v v1.0.0-rc.2 --config-file ./torii_ryo1.toml"
+# slot ryo2
+slot_ryo2_katana = "slot d create ryo2 katana -v v1.0.0-rc.2 --config-file ./katana_ryo2.toml --dev --accounts 10"
+slot_ryo2_torii = "slot d create ryo2 torii -v v1.0.0-rc.2 --config-file ./torii_ryo2.toml"
 
-# slot ryo420
-slot_ryo420_katana = "slot d create ryo420 katana --version v0.7.0-alpha.5 -a 4 -b 5000 --disable-fee true  --invoke-max-steps 1000000"
-slot_ryo420_torii = "slot d create ryo420 torii --rpc  https://api.cartridge.gg/x/ryo420/katana -s 0 --index-pending true --version v0.7.0-alpha.5 --world 0x78fcdfcc137fa18770f660ba2e8a3cf263907df38dfd462dc4dda048979c011"
+# slot ryosepolia 
+slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"
 
-# slot ryo421
-slot_ryo421_katana = "slot d create ryo421 katana --seed 421 --version v0.7.1 -a 4 -b 5000 --disable-fee true --invoke-max-steps 1000000"
-slot_ryo421_torii = "slot d create ryo421 torii --rpc  https://api.cartridge.gg/x/ryo421/katana -s 0 --index-pending true --version v0.7.1 --world 0x2f569ad903a00476656bec6a74c954ef01e48202652bbab0149574d5f6d829"
+# slot ryomainnet
+slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.0-rc.2 --config-file ./torii_mainnet.toml"
 
-# slot ryo_sepolia
-slot_ryosepolia_torii = "slot d create ryosepolia torii --rpc https://api.cartridge.gg/rpc/starknet-sepolia -s 75075 --index-pending true --version v0.7.2 --world 0x2fc5b78f171fd1d6a5842276902dcbd91c770fb01e56bc293392e3931ffe817"
+[profile.ryo1]
+[profile.ryo2]
+[profile.internal]
+[profile.ryosepolia]
+[profile.mainnet]
 
-
-[[target.dojo]]
-build-external-contracts = [
-    "token::components::security::initializable::initializable_model",
-    "token::components::token::erc20::erc20_metadata::erc_20_metadata_model",
-    "token::components::token::erc20::erc20_balance::erc_20_balance_model",
-    "token::components::token::erc20::erc20_allowance::erc_20_allowance_model",
-    "token::components::token::erc20::erc20_mintable::erc_20_mintable_model",
-    "token::components::token::erc20::erc20_burnable::erc_20_burnable_model",
-]
-
-[tool.dojo.env]
-rpc_url = "http://localhost:5050"
-account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03"
-private_key = "0x1800000000300000180000000000030000000000003006001800006600"
-
-[profile.ryo420.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
-account_address = "0x2ea5a09a95ee73556a3ef6420c11a8df775fe4f06e58fd9f7a21b5d99e0b5ea"
-private_key = "0x18055e629284db77daa8d60e4ca767d65807c3f1690785006e46d6e63a13d54"
-
-[profile.ryo421.tool.dojo.env]
-rpc_url = "https://api.cartridge.gg/x/ryo421/katana"
-account_address = "0x7d806fc9478c73c60fac37c27888771bdb3092c21eb93452277e7673954d034"
-private_key = "0x784b1dd14d761c414c6394fccca3ca1d1b0cac187e88122e4b06378f9e8c515"
-
-[profile.ryosepolia.tool.dojo.env]
-# world_address= "0x10c26511d4264cf894246bdbe2efc53cf99632d1fcd5fab7283649c34ca0494"
-rpc_url = "https://api.cartridge.gg/rpc/starknet-sepolia"
-account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
-keystore_path = "/Users/boo/sozo_acc"
-# password = "sozo_acc"
-
-# [profile.prod.tool.dojo.env]
-# rpc_url = "https://api.cartridge.gg/x/ryo420/katana"
-# account_address = "0x795abc2a2d5866f75c58025741329973db20966d1add5dd2a9fbdf0bb8a0266"
-# private_key = "0x2e8ac99614186737cefc47effe03134f5a19c6dc2443c16510d3384769f9c78"
-
-[tool.dojo.world]
-name = "Dope Wars"
-description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
-website = "https://rollyourown.preview.cartridge.gg/"
-icon_uri = "file://assets/icon.png"
-cover_uri = "file://assets/cover.png"
-socials.x = "https://x.com/TheDopeWars"
-
-
-[profile.ryosepolia.tool.dojo.world]
-name = "Dope Wars"
-description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO.."
-website = "https://dopewars.game/"
-icon_uri = "file://assets/icon.png"
-cover_uri = "file://assets/cover.png"
-socials.x = "https://x.com/TheDopeWars"
-
-
-#  alpha.3
-#  create game  :     Steps: 272281 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 60 | Range Checks: 42093
-#  buy & travel :     Steps: 420350 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3550 | Pedersen: 56 | Poseidon Builtin: 37 | Range Checks: 77213
-#  sell & encounter : Steps: 250413 | Bitwise: 188 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 42965
-
-#  alpha.5
-#  create game :      Steps: 123719 | Bitwise: 194 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 10176 | Pedersen: 50 | Poseidon Builtin: 74 | Range Checks: 8641
-#  buy & travel :     Steps: 124923 | Bitwise: 296 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3548 | Pedersen: 55 | Poseidon Builtin: 37 | Range Checks: 11166
-#  sell & encounter : Steps:  90913 | Bitwise: 190 | Ec Op Builtin: 3 | L 1 Blob Gas Usage: 0 | L1 Gas: 3549 | Pedersen: 33 | Poseidon Builtin: 29 | Range Checks: 7241

@@ -7,7 +7,7 @@ else
     export PROFILE="dev"
 fi
 
-mkdir -p ./web/src/manifests/$PROFILE
-cp ./manifests/$PROFILE/manifest.json ./web/src/manifests/$PROFILE/manifest.json 
+mkdir -p ./web/src/manifests
+cp ./manifest_$PROFILE.json ./web/src/manifests/
 
 

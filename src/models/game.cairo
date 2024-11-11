@@ -1,9 +1,7 @@
-use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
-use rollyourown::{
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}
-};
+use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}};
+use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -18,7 +16,7 @@ struct Game {
     //
     player_name: Bytes16,
     hustler_id: u16,
-    // 
+    //
     game_over: bool,
     final_score: u32,
     registered: bool,
@@ -29,7 +27,8 @@ struct Game {
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum GameMode {
-    Dealer,
+    Ranked,
+    Noob,
     Warrior,
 }
 
@@ -64,5 +63,9 @@ impl GameImpl of GameTrait {
 
     fn exists(self: Game) -> bool {
         self.season_version > 0
+    }
+
+    fn is_ranked(self: Game) -> bool {
+        self.game_mode == GameMode::Ranked
     }
 }

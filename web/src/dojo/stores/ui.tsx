@@ -66,7 +66,7 @@ export class UiStore {
   }
 
   //
-  
+
   openQuitGame() {
     this.modals.quitGame = {};
   }
@@ -82,5 +82,4 @@ export class UiStore {
   closeRefreshGame() {
     this.modals.refreshGame = undefined;
   }
-
 }

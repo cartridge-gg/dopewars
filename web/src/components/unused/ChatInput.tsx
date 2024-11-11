@@ -8,12 +8,7 @@ export interface ChatInputProps {
   onSend: () => void;
 }
 
-export const ChatInput = ({
-  value,
-  onChange,
-  onSend,
-  ...props
-}: ChatInputProps & StyleProps) => {
+export const ChatInput = ({ value, onChange, onSend, ...props }: ChatInputProps & StyleProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value) {
       onSend();

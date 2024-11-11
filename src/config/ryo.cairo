@@ -1,14 +1,13 @@
-use starknet::ContractAddress;
-use starknet::info::get_block_timestamp;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{models::{season::{Season, SeasonImpl, SeasonTrait}}};
+use starknet::ContractAddress;
+use starknet::info::get_block_timestamp;
 
 const TWO_MIN: u16 = 120;
-const TWENTY_MIN: u16 = 1200;
 const ONE_HOUR: u16 = 3600;
+const HALF_HOUR: u16 = 1800;
 //
-// const TWENTY_MIN: u32 = 1200;
-const SIX_HOUR: u32 = 21_600;
+// const HALF_HOUR: u32 = 1800;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
 
@@ -39,8 +38,8 @@ impl RyoConfigImpl of RyoConfigTrait {
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: ONE_DAY, // ONE_WEEK 
-            season_time_limit: ONE_HOUR, // ONE_HOUR 
+            season_duration: ONE_DAY, // ONE_HOUR, 
+            season_time_limit: HALF_HOUR, // TWENTY_MIN,
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 5,

@@ -14,34 +14,34 @@ const blinkAnim = keyframes`
 export const Input = ({ ...props }: StyleProps & InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
-  const { x, y, getPosition, getSelection } = useCaretPosition(inputRef);
+  const { x, y, getPosition } = useCaretPosition(inputRef);
 
-  const updateCaretPosition = useCallback((e: any) => {
+  const updateCaretPosition = useCallback(() => {
     setTimeout(() => {
       getPosition(inputRef);
     }, 10);
   }, [getPosition]);
 
-  const onFocus = (e: any) => {
-    updateCaretPosition(e);
+  const onFocus = () => {
+    updateCaretPosition();
     setIsFocused(true);
   };
 
-  const onBlur = (e: any) => {
-    updateCaretPosition(e);
+  const onBlur = () => {
+    updateCaretPosition();
     setIsFocused(false);
   };
 
   const handleKeyDown = (e: any) => {
-    updateCaretPosition(e);
+    updateCaretPosition();
     if (props.onKeyDown) {
       props.onKeyDown(e);
     }
   };
 
   useEffect(() => {
-    const onScroll = (e: any) => {
-      updateCaretPosition(e);
+    const onScroll = () => {
+      updateCaretPosition();
     };
 
     window.addEventListener("scroll", onScroll, true); // use capturing, not bubbling

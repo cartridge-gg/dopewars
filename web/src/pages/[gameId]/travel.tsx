@@ -5,14 +5,11 @@ import { Map as MapSvg } from "@/components/map";
 import { Inventory, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { WorldEvents } from "@/dojo/generated/contractEvents";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
-import { useToast } from "@/hooks/toast";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -25,13 +22,10 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { account } = useAccount();
-  const { game, gameConfig } = useGameStore();
+  const { game, gameConfig, gameEvents } = useGameStore();
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
-
-  const toaster = useToast();
 
   const [targetLocation, setTargetLocation] = useState<string>("");
   const [currentLocation, setCurrentLocation] = useState<string>();
@@ -125,25 +119,13 @@ const Travel = observer(() => {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { event, events, hash, isGameOver } = await travel(gameId!, locationId, game.getPendingCalls());
-
-        if (isGameOver) {
-          return router.replace(`/${gameId}/end`);
-        }
-
-        if (event) {
-          if (event.eventType === WorldEvents.TravelEncounter) {
-            return router.push(`/${gameId}/event/decision`);
-          }
-        }
-
-        router.push(`/${gameId}/${configStore.getLocation(targetLocation)!.location.toLowerCase()}`);
+        const { hash } = await travel(gameId!, locationId, game.getPendingCalls());
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);
       }
     }
-  }, [targetLocation, router, gameId, travel, game, configStore]);
+  }, [targetLocation, gameId, travel, game, configStore]);
 
   if (!game) return <></>;
 
@@ -174,7 +156,7 @@ const Travel = observer(() => {
               w={["full", "auto"]}
               px={["auto", "20px"]}
               isDisabled={!targetLocation || targetLocation === currentLocation}
-              isLoading={isPending /*&& !txError*/}
+              isLoading={isPending}
               onClick={onContinue}
             >
               Travel

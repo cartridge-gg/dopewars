@@ -55,7 +55,7 @@ const ClickFeedback = ({
   );
 };
 
-export const MediaPlayer = ({ ...props }: StyleProps) => {
+export const MediaPlayer = () => {
   const mediaStore = useMediaStore();
   const songTitle = mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
   const height = "48px";

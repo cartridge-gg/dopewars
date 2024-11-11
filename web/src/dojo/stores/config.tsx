@@ -1,22 +1,22 @@
 import {
   ConfigDocument,
   ConfigQuery,
-  DrugConfig,
-  DrugConfigEdge,
-  EncounterStatsConfig,
-  EncounterStatsConfigEdge,
-  GameConfig,
-  HustlerItemBaseConfig,
-  HustlerItemBaseConfigEdge,
-  HustlerItemTiersConfig,
-  HustlerItemTiersConfigEdge,
-  LocationConfig,
-  LocationConfigEdge,
-  RyoAddress,
-  RyoAddressEdge,
-  RyoConfig,
-  RyoConfigEdge,
-  SeasonSettings,
+  Dopewars_DrugConfig as DrugConfig,
+  Dopewars_DrugConfigEdge as DrugConfigEdge,
+  Dopewars_EncounterStatsConfig as EncounterStatsConfig,
+  Dopewars_EncounterStatsConfigEdge as EncounterStatsConfigEdge,
+  Dopewars_GameConfig as GameConfig,
+  Dopewars_HustlerItemBaseConfig as HustlerItemBaseConfig,
+  Dopewars_HustlerItemBaseConfigEdge as HustlerItemBaseConfigEdge,
+  Dopewars_HustlerItemTiersConfig as HustlerItemTiersConfig,
+  Dopewars_HustlerItemTiersConfigEdge as HustlerItemTiersConfigEdge,
+  Dopewars_LocationConfig as LocationConfig,
+  Dopewars_LocationConfigEdge as LocationConfigEdge,
+  Dopewars_RyoAddress as RyoAddress,
+  Dopewars_RyoAddressEdge as RyoAddressEdge,
+  Dopewars_RyoConfig as RyoConfig,
+  Dopewars_RyoConfigEdge as RyoConfigEdge,
+  Dopewars_SeasonSettings as SeasonSettings,
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -35,16 +35,14 @@ import {
 } from "../helpers";
 import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
 
-export type DrugConfigFull = Omit<DrugConfig, 'name'> & { icon: React.FC, name: string} ;
-export type LocationConfigFull = Omit<LocationConfig, 'name'> & { icon: React.FC , name: string};
+export type DrugConfigFull = Omit<DrugConfig, "name"> & { icon: React.FC; name: string };
+export type LocationConfigFull = Omit<LocationConfig, "name"> & { icon: React.FC; name: string };
 
 export type LayoutItem = {
   name: string;
   bits: bigint;
   idx: bigint;
 };
-
-
 
 export type HustlerItemConfig = {
   slot: ItemSlot;
@@ -71,13 +69,13 @@ export type HustlerConfig = {
 };
 
 export type SeasonSettingsModes = {
-  cash_modes: Array<CashMode>,
-  health_modes: Array<HealthMode>,
-  turns_modes: Array<TurnsMode>,
+  cash_modes: Array<CashMode>;
+  health_modes: Array<HealthMode>;
+  turns_modes: Array<TurnsMode>;
   //
-  encounters_modes: Array<EncountersMode>,
-  encounters_odds_modes: Array<EncountersOddsMode>,
-  drugs_modes: Array<DrugsMode>,
+  encounters_modes: Array<EncountersMode>;
+  encounters_odds_modes: Array<EncountersOddsMode>;
+  drugs_modes: Array<DrugsMode>;
 };
 
 export type GetConfig = {
@@ -87,7 +85,7 @@ export type GetConfig = {
   };
   hustlers: Array<HustlerConfig>;
   ryo_config: RyoConfig;
-  season_settings_modes: SeasonSettingsModes,
+  season_settings_modes: SeasonSettingsModes;
 };
 
 export type Config = {
@@ -141,25 +139,25 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-    const ryoConfigEdges = data.ryoConfigModels!.edges as RyoConfigEdge[];
+    const ryoConfigEdges = data.dopewarsRyoConfigModels!.edges as RyoConfigEdge[];
     const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
 
-    const ryoAddressEdges = data.ryoAddressModels!.edges as RyoAddressEdge[];
+    const ryoAddressEdges = data.dopewarsRyoAddressModels!.edges as RyoAddressEdge[];
     const ryoAddress = ryoAddressEdges[0]!.node as RyoAddress;
 
     /*************************************************** */
 
-    const drugConfigEdges = data.drugConfigModels!.edges as DrugConfigEdge[];
+    const drugConfigEdges = data.dopewarsDrugConfigModels!.edges as DrugConfigEdge[];
     const drugConfig = drugConfigEdges.map((i) => i.node as DrugConfig);
 
     //
 
-    const locationConfigEdges = data.locationConfigModels!.edges as LocationConfigEdge[];
+    const locationConfigEdges = data.dopewarsLocationConfigModels!.edges as LocationConfigEdge[];
     const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
 
     //
 
-    const hustlerItemBaseConfigEdges = data.hustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
+    const hustlerItemBaseConfigEdges = data.dopewarsHustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
     const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
       return {
         ...i.node,
@@ -170,12 +168,13 @@ export class ConfigStoreClass {
 
     //
 
-    const hustlerItemTiersConfigEdges = data.hustlerItemTiersConfigModels!.edges as HustlerItemTiersConfigEdge[];
+    const hustlerItemTiersConfigEdges = data.dopewarsHustlerItemTiersConfigModels!
+      .edges as HustlerItemTiersConfigEdge[];
     const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
 
     //
 
-    const encounterStatsConfigEdges = data.encounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
+    const encounterStatsConfigEdges = data.dopewarsEncounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
     const encounterStatsConfig = encounterStatsConfigEdges.map((i) => i.node as EncounterStatsConfig);
 
     /*************************************************** */
@@ -183,7 +182,7 @@ export class ConfigStoreClass {
     const drugConfigFull = drugConfig.map((i) => {
       return {
         ...i,
-        name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
+        name: shortString.decodeShortString(i?.name?.value),
         icon: drugIcons[i.drug as drugIconsKeys],
       } as DrugConfigFull;
     });
@@ -194,7 +193,7 @@ export class ConfigStoreClass {
       return [
         {
           ...i,
-          name: shortString.decodeShortString(i?.name?.value), // todo: remove when bytes31 is supported
+          name: shortString.decodeShortString(i?.name?.value),
           icon: locationIcons[i.location as locationIconsKeys],
         },
       ] as LocationConfigFull[];
@@ -203,23 +202,11 @@ export class ConfigStoreClass {
     /*************************************************** */
 
     ///@ts-ignore
-    const getConfig = yield this.dojoProvider.call({
-      contractName: "rollyourown::config::config::config",
+    const getConfig = yield this.dojoProvider.call("dopewars", {
+      contractName: "config",
       entrypoint: "get_config",
       calldata: [],
     });
-
-
-    // const contractInfos = this.manifest.contracts.find((i: any) => i.name === "rollyourown::config::config::config")!;
-
-    // const contract: TypedContractV2<typeof configAbi> = new Contract(
-    //   contractInfos.abi,
-    //   contractInfos.address,
-    //   this.dojoProvider.provider,
-    // ).typedv2(configAbi);
-
-    // ///@ts-ignore
-    // const getConfig = yield contract.get_config();
 
     /*************************************************** */
 
@@ -240,7 +227,7 @@ export class ConfigStoreClass {
   }
 
   getDrug(drugs_mode: string, drug: string): DrugConfigFull {
-    return this.config?.drug.find((i) =>i.drugs_mode === drugs_mode && i.drug.toLowerCase() === drug.toLowerCase())!;
+    return this.config?.drug.find((i) => i.drugs_mode === drugs_mode && i.drug.toLowerCase() === drug.toLowerCase())!;
   }
 
   getDrugById(drugs_mode: string, drug_id: number): DrugConfigFull {
@@ -277,7 +264,6 @@ export class ConfigStoreClass {
       (i) => Number(i.id) === Number(id) && Number(i.slot_id) === Number(slot_id),
     )!;
 
-    // // TODO remove with starknet.js 6
     const tier = base_config.initial_tier + level;
     const tier_config = this.config?.tiers.find(
       (i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier),

@@ -1,11 +1,7 @@
 import { Icon, IconProps } from ".";
 import { AvatarPathProps } from "@/components/avatar/Avatar";
 
-export const Skull = ({
-  hasCrown,
-  color,
-  ...props
-}: IconProps & AvatarPathProps) => {
+export const Skull = ({ hasCrown, color, ...props }: IconProps & AvatarPathProps) => {
   return (
     <Icon {...props}>
       <>

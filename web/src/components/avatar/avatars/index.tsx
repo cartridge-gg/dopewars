@@ -19,7 +19,6 @@ import { PersonR } from "./PersonR";
 import { PersonS } from "./PersonS";
 import { PersonT } from "./PersonT";
 
-
 export const avatars = {
   PersonA: PersonA,
   PersonB: PersonB,
@@ -40,8 +39,7 @@ export const avatars = {
   PersonQ: PersonQ,
   PersonR: PersonR,
   PersonS: PersonS,
-  PersonT: PersonT
-
+  PersonT: PersonT,
 };
 
 export type AvatarName = keyof typeof avatars;
@@ -51,8 +49,8 @@ export type AvatarName = keyof typeof avatars;
 
 export const getAvatarCount = () => {
   const avatarKeys = Object.keys(avatars);
-  return avatarKeys.length
-}
+  return avatarKeys.length;
+};
 
 export const genAvatarFromAddress = (address: String) => {
   const avatarKeys = Object.keys(avatars);

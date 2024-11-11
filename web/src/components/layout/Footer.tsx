@@ -21,10 +21,9 @@ export const Footer = ({
       pointerEvents="none"
       {...props}
     >
-      <HStack w="full" mb={["20px","0px"]} px={["10px","0px"]} justify="center" align="flex-end" pointerEvents="all">
+      <HStack w="full" mb={["20px", "0px"]} px={["10px", "0px"]} justify="center" align="flex-end" pointerEvents="all">
         {children}
       </HStack>
     </HStack>
   );
 };
-

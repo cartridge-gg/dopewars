@@ -22,7 +22,7 @@ import {
 import { useAccount } from "@starknet-react/core";
 import { Claimable } from "./ClaimReward";
 import { PaperIcon } from "@/components/icons";
-import { Game } from "@/generated/graphql";
+import { Dopewars_Game as Game } from "@/generated/graphql";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { shortString } from "starknet";
 

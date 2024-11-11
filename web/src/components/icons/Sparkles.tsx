@@ -1,6 +1,6 @@
 import { Icon, IconProps } from ".";
 
-export interface SparklesProps {
+interface SparklesProps {
   inverted?: boolean;
 }
 
