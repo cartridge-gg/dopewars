@@ -16,10 +16,10 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
               if (e) {
                 return <Text key={key}>{e}</Text>;
               }
-            })}
+            })} */}
           </VStack>
 
-          <VStack fontSize="16px" gap={6}>
+          {/* <VStack fontSize="16px" gap={6}>
             <Text>Try to refresh</Text>
             <Button
               variant="pixelated"
@@ -36,7 +36,8 @@ const ConnectionError = ({ errors }: { errors: (string | undefined)[] }) => {
                 router.reload();
               }}
             />
-          </VStack>
+          </VStack> */}
+
         </VStack>
       </VStack>
     </Flex>
