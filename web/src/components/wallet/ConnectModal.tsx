@@ -18,10 +18,12 @@ import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { walletInstallLinks, walletInstallLinksKeys } from "./StarknetProvider";
 import { Cartridge } from "../icons/branding/Cartridge";
+import { useRouter } from "next/router";
 
 export const ConnectModal = observer(() => {
   const { connect, connectors } = useConnect();
   const { isAdmin } = useRouterContext();
+  const router = useRouter();
 
   const {
     chains: { selectedChain },
@@ -60,7 +62,11 @@ export const ConnectModal = observer(() => {
               const isPredeployed = connector.id === "dojopredeployed";
               // const isController = connector.id === "cartridge";
               const isController = connector.id === "controller";
+              const isArgent = connector.id === "argentX";
 
+              if (!router.asPath.startsWith("/admin") && isArgent) {
+                return null;
+              }
               // console.log(connector)
               if (!(isKatana || isSlot) && (isBurner || isPredeployed)) {
                 // burner or predeployed not on katana
@@ -99,7 +105,7 @@ export const ConnectModal = observer(() => {
                           <Cartridge />
                         ) : (
                           /// @ts-ignore
-                          <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
+                          <Image src={connector.icon} width="24px" height="24px" alt={connector.name} />
                         )}
 
                         <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>

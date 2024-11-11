@@ -44,6 +44,7 @@ migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migra
 migrate_ryo2 = "PROFILE=ryo2 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot ryo1
 slot_ryo1_katana = "slot d create ryo1 katana -v v1.0.0-rc.2 --config-file ./katana_ryo1.toml"
@@ -55,19 +56,12 @@ slot_ryo2_torii = "slot d create ryo2 torii -v v1.0.0-rc.2 --config-file ./torii
 # slot ryosepolia 
 slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"
 
+# slot ryomainnet
+slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.0-rc.2 --config-file ./torii_mainnet.toml"
+
 [profile.ryo1]
 [profile.ryo2]
 [profile.internal]
 [profile.ryosepolia]
 [profile.mainnet]
 
-
-#  "@dojoengine/core": "file:../../dojo-js/packages/core",
-#     "@dojoengine/create-burner": "file:../../dojo-js/packages/create-burner",
-#     "@dojoengine/torii-client": "file:../../dojo-js/packages/torii-client",
-#     "@dojoengine/utils": "file:../../dojo-js/packages/utils",
-
-#  "@dojoengine/core": "v1.0.0-alpha.30",
-#     "@dojoengine/create-burner": "v1.0.0-alpha.30",
-#     "@dojoengine/torii-client": "v1.0.0-alpha.30",
-#     "@dojoengine/utils": "v1.0.0-alpha.30",

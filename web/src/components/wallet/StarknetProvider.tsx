@@ -4,6 +4,7 @@ import {
   ExplorerFactory,
   InjectedConnector,
   StarknetConfig,
+  argent,
   injected,
   starkscan,
 } from "@starknet-react/core";
@@ -12,6 +13,7 @@ import { RpcProvider } from "starknet";
 import { getContractByName } from "@dojoengine/core";
 import { DW_NS } from "@/dojo/hooks";
 import { ControllerConnector } from "@cartridge/connector";
+import { useRouter } from "next/router";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -33,8 +35,12 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
   };
 }
 
-function getConnectorsForChain(selectedChain: DojoChainConfig) {
+function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
   const controller = cartridgeConnector({ selectedChain });
+
+  if (path.startsWith("/admin")) {
+    return [controller, argent()];
+  }
 
   switch (selectedChain.name) {
     case "KATANA":
@@ -59,6 +65,7 @@ function getConnectorsForChain(selectedChain: DojoChainConfig) {
 }
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
+  const router = useRouter();
   const chains = getStarknetProviderChains();
 
   const provider = useMemo(() => {
@@ -66,7 +73,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   }, [selectedChain]);
 
   const connectors = useMemo(() => {
-    return getConnectorsForChain(selectedChain);
+    return getConnectorsForChain(selectedChain, router.asPath);
   }, [selectedChain]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
@@ -88,10 +95,6 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     {
       target: selectedChain.vrfProviderAddress,
       method: "request_random",
-    },
-    {
-      target: paperAddress,
-      method: "faucet",
     },
     {
       target: paperAddress,
@@ -129,6 +132,11 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
 
   if (selectedChain.name !== "MAINNET") {
     policies.push({
+      target: paperAddress,
+      method: "faucet",
+    });
+
+    policies.push({
       target: selectedChain.vrfProviderAddress,
       method: "submit_random",
     });
@@ -138,6 +146,8 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       method: "assert_consumed",
     });
   }
+
+  // console.log(policies);
 
   return new ControllerConnector({
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",

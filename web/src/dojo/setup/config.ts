@@ -123,10 +123,10 @@ const snMainnet: DojoChainConfig = {
   name: "MAINNET",
   chainConfig: mainnet,
   rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
-  toriiUrl: "https://api.cartridge.gg/x/ryo/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryo/torii/graphql/ws",
+  toriiUrl: "https://api.cartridge.gg/x/ryomainnet/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryomainnet/torii/graphql/ws",
   manifest: manifestMainnet,
-  slot: "ryo",
+  slot: "ryomainnet",
   predeployedAccounts: [],
   paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
@@ -135,11 +135,11 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  SN_SEPOLIA: snSepolia,
+  SN_MAIN: snMainnet,
+  // SN_SEPOLIA: snSepolia,
   // WP_RYO2: katanaSlot2,
   // WP_RYO1: katanaSlot1,
-  // "SN_MAIN": snMainnet,
-  KATANA: katanaLocal,
+  // KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

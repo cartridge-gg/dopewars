@@ -9,7 +9,7 @@ import { HStack, VStack, Text, Box, Image, keyframes } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Model, Subscription, ToriiClient } from "../../../../../dojo.c/pkg";
+import { Model, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { useToast } from "@/hooks/toast";
 import { shortString } from "starknet";
 
@@ -639,53 +639,3 @@ export default function Slot() {
   );
 }
 
-
-// create game
-// Transaction resource usage. usage="steps: 103983 | memory holes: 4108 | bitwise_builtin: 174 | ec_op_builtin: 7 | pedersen_builtin: 134 | poseidon_builtin: 116 | range_check_builtin: 7366"
-
-// travel
-// Transaction resource usage. usage="steps: 102491 | memory holes: 5433 | bitwise_builtin: 252 | ec_op_builtin: 7 | pedersen_builtin: 76 | poseidon_builtin: 125 | range_check_builtin: 9451"
-
-// buy & travel
-// Transaction resource usage. usage="steps: 122797 | memory holes: 6480 | bitwise_builtin: 296 | ec_op_builtin: 7 | pedersen_builtin: 80 | poseidon_builtin: 157 | range_check_builtin: 10965"
-
-// travel & encounter
-// Transaction resource usage. usage="steps: 116004 | memory holes: 4751 | bitwise_builtin: 234 | ec_op_builtin: 7 | pedersen_builtin: 94 | poseidon_builtin: 135 | range_check_builtin: 8832"
-
-
-
-
-// OLD
-
-// NewSeason ( without data )
-// Processing event update. target="torii::grpc::server::subscriptions::event" error=Parsing error: Failed to create Felt from string
-
-// create game
-// Transaction resource usage. usage="steps: 149081 | memory holes: 5635 | bitwise_builtin: 194 | ec_op_builtin: 7 | pedersen_builtin: 98 | poseidon_builtin: 96 | range_check_builtin: 8973 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
-
-// buy & travel
-// Transaction resource usage. usage="steps: 139930 | memory holes: 6912 | bitwise_builtin: 296 | ec_op_builtin: 7 | pedersen_builtin: 59 | poseidon_builtin: 105 | range_check_builtin: 11367 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0
-
-// sell & buy & encounter
-// Transaction resource usage. usage="steps: 131935 | memory holes: 5200 | bitwise_builtin: 234 | ec_op_builtin: 7 | pedersen_builtin: 63 | poseidon_builtin: 67 | range_check_builtin: 9177 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
-
-// fight
-// Transaction resource usage. usage="steps: 142980 | memory holes: 6239 | bitwise_builtin: 264 | ec_op_builtin: 7 | pedersen_builtin: 56 | poseidon_builtin: 120 | range_check_builtin: 10911 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
-
-// sell & buy & travel
-// Transaction resource usage. usage="steps: 150732 | memory holes: 7254 | bitwise_builtin: 316 | ec_op_builtin: 7 | pedersen_builtin: 63 | poseidon_builtin: 107 | range_check_builtin: 12102 | DA L1 gas: 0 | DA L1 data gas: 0 | total L1 gas: 0 | total L1 data gas: 0"
-
-// decide
-// Transaction resource usage. usage="steps: 151146 | memory holes: 7437 | bitwise_builtin: 300 | ec_op_builtin: 7 | pedersen_builtin: 85 | poseidon_builtin: 242 | range_check_builtin: 12052"
-
-
-
-// sepolia
-// create game                535430 / L1 1024
-// https://sepolia.starkscan.co/tx/0x02145c633dc206ed39cb31dc0238d1afe3122d0648336482f1873e7798e760d6
-
-// buy / travel / encounter   136235 / L1 512
-// https://sepolia.starkscan.co/tx/0x00dde6af9fc2334c817c61198db3faae9b273993b0f9d934f9653c18ae940c0d
-
-// decide                     187342 / L1 512
-// https://sepolia.starkscan.co/tx/0x004de1a8f87895a92977e3cdf160ef82abcf4ca24146e8c6807f2994a2a4d01a

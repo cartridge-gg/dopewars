@@ -54,7 +54,11 @@ export const DojoContextProvider = observer(
     const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
-      process.env.NODE_ENV === "production" ? Object.values(dojoContextConfig)[0] : Object.values(dojoContextConfig)[1] ; //dojoContextConfig.KATANA;
+      process.env.NODE_ENV === "production"
+        ? Object.values(dojoContextConfig)[0]
+        : Object.values(dojoContextConfig)[1]
+        ? Object.values(dojoContextConfig)[1]
+        : Object.values(dojoContextConfig)[0]; //dojoContextConfig.KATANA;
 
     const lastSelectedChainId =
       typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;

@@ -109,7 +109,7 @@ export const useSystems = (): SystemsInterface => {
         //setError(e.toString());
         toast({
           message: e ? tryBetterErrorMsg(e.toString()) : "unknown error",
-          duration: 20_000,
+          duration: 10_000,
           isError: true,
         });
         // throw Error(e.toString());
@@ -130,7 +130,7 @@ export const useSystems = (): SystemsInterface => {
 
           toast({
             message: tryBetterErrorMsg(receipt_error.message || ""),
-            duration: 20_000,
+            duration: 10_000,
             isError: true,
           });
         }

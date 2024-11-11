@@ -152,6 +152,7 @@ export class GameStoreClass {
     );
     //console.log(entities);
     const gameEntity = Object.values(entities)[0];
+    if (!gameEntity) return;
 
     this.gameEvents = new EventClass(this.configStore, this.gameInfos!, gameEntity);
   }
@@ -171,6 +172,7 @@ export class GameStoreClass {
       dont_include_hashed_keys: true,
     });
     const gameEntity = Object.values(entities)[0];
+    if (!gameEntity) return;
 
     const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
     const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
@@ -196,6 +198,9 @@ export class GameStoreClass {
       dont_include_hashed_keys: true,
     });
     const seasonEntity = Object.values(entities)[0];
+    if (!seasonEntity) return;
+
+
     const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
     const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;
 
