@@ -33,7 +33,7 @@ import { formatCash } from "@/utils/ui";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 import { GameClass } from "@/dojo/class/Game";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
@@ -161,7 +161,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
           </VStack>
           <VStack flex="1">
             <StatsItem
-              text={shortString.decodeShortString(game.gameInfos.player_name?.value)}
+              text={shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}
               icon={<HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
             />
             {game.gameInfos.game_mode == "Ranked" && (

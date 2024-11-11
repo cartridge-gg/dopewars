@@ -11,7 +11,7 @@ import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
-import { AccountInterface, shortString } from "starknet";
+import { AccountInterface, num, shortString } from "starknet";
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
@@ -77,7 +77,7 @@ const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterf
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>
-                {shortString.decodeShortString(game?.player_name?.value)} {isSelf && "(you)"}
+                {shortString.decodeShortString(num.toHexString(BigInt(game?.player_name?.value)))} {isSelf && "(you)"}
               </Text>
               <Text>{formatCash(game.final_score)}</Text>
             </VStack>

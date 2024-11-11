@@ -44,7 +44,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 
 export default function History() {
   const { router, playerId } = useRouterContext();
@@ -125,7 +125,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
           </Tr>
 
           {games.map((game: GameClass, index: number) => {
-            const playerName = shortString.decodeShortString(game.gameInfos.player_name?.value);
+            const playerName = shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)));
 
             return (
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>

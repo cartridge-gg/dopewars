@@ -38,7 +38,7 @@ import {
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 
 type IndexedDojoEvent = {
   index: number;
@@ -203,6 +203,7 @@ export default observer(Logs);
 const CustomLeftPanel = () => {
   const { game, gameInfos } = useGameStore();
   const { router } = useRouterContext();
+
   return (
     <VStack
       flex={1}
@@ -222,7 +223,7 @@ const CustomLeftPanel = () => {
           router.push(`/game/history/0x${BigInt(game?.gameInfos.player_id || 0).toString(16)}`);
         }}
       >
-        {shortString.decodeShortString(gameInfos?.player_name?.value || "")}
+        {shortString.decodeShortString(num.toHexString(BigInt(gameInfos?.player_name?.value)) || "")}
       </Heading>
 
       <Box maxW="350px" w="100%">
@@ -433,10 +434,7 @@ const FightLine = ({
       <HStack w="full">
         <HStack flex="4" color="yellow.400">
           <Box w="30px">{icon && icon({ boxSize: "24px" })}</Box>
-          <Tooltip
-            label={action}
-            placement="right-end"
-          >
+          <Tooltip label={action} placement="right-end">
             <Text>{text}</Text>
           </Tooltip>
         </HStack>

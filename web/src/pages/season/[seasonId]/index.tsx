@@ -69,7 +69,7 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 
 interface Claimable {
   totalClaimable: number;
@@ -270,7 +270,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
                 <Td>
                   <HStack>
                     <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
-                    <Text>{shortString.decodeShortString(game.player_name?.value)}</Text>
+                    <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}</Text>
                   </HStack>
                 </Td>
                 <Td isNumeric>{formatCashHeader(game.final_score)}</Td>

@@ -174,11 +174,9 @@ export class GameStoreClass {
     const gameEntity = Object.values(entities)[0];
     if (!gameEntity) return;
 
+ 
     const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
     const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
-
-    // console.log("gameInfos", gameInfos);
-    // console.log("gameStorePacked", gameStorePacked);
 
     this.gameInfos = gameInfos;
     this.gameStorePacked = gameStorePacked;

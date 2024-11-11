@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";
 import { getPayedCount } from "@/dojo/helpers";
 
@@ -145,6 +145,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           "scrollbar-width": "none",
         }}
       >
+        
         {isFetchingRegisteredGames && <Loader />}
         {!isFetchingRegisteredGames && (
           <UnorderedList boxSize="full" variant="dotted" h="auto">
@@ -154,7 +155,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
                 const displayName = game.player_name?.value
-                  ? `${shortString.decodeShortString(game.player_name?.value)}${isOwn ? " (you)" : ""}`
+                  ? `${shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}${isOwn ? " (you)" : ""}`
                   : "Anonymous";
 
                 return (

@@ -17,7 +17,7 @@ import { formatCash, formatCashHeader } from "@/utils/ui";
 import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -300,7 +300,7 @@ const Encounter = observer(
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
                     <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
-                    <Text>{shortString.decodeShortString(game.gameInfos.player_name?.value)}</Text>
+                    <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}</Text>
                   </HStack>
 
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />

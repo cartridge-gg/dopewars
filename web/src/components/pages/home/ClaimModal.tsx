@@ -24,7 +24,7 @@ import { Claimable } from "./ClaimReward";
 import { PaperIcon } from "@/components/icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
-import { shortString } from "starknet";
+import { num, shortString } from "starknet";
 
 export const ClaimModal = ({
   claimable,
@@ -92,7 +92,7 @@ export const ClaimModal = ({
                           <Td>
                             <HStack>
                               <HustlerIcon hustler={game.hustler_id as Hustlers} />
-                              <Text>{shortString.decodeShortString(game.player_name?.value)}</Text>
+                              <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}</Text>
                             </HStack>
                           </Td>
                           <Td color="yellow.400" isNumeric>
