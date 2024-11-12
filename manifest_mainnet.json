@@ -1909,7 +1909,7 @@
     },
     {
       "address": "0x44a23bbfe03ffe90d3c23fb6e5a8ad0341036c039363dfa6f3513278aa51fca",
-      "class_hash": "0x6d4a2dc65947a9648b9657f93bad66fde5c188a23bbf8dd90620519673ebf3",
+      "class_hash": "0x22cb7fbd5865cfe96a9b6582eae5fa508c9af1b0563a004e881f171948dac28",
       "abi": [
         {
           "type": "impl",

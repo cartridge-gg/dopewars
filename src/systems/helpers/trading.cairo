@@ -136,7 +136,7 @@ fn sell(ref game_store: GameStore, trade: Trade) {
             }
         );
 
-    if game_store.game.is_ranked() && total > 99_999_999 && !game_store.player.traded_million {
+    if game_store.game.is_ranked() && total > 999_999 && !game_store.player.traded_million {
         game_store.player.traded_million = true;
 
         let bushido_store = BushidoStoreTrait::new(store.world);
