@@ -1,6 +1,5 @@
 import { PaperCashIcon, Roll, Trophy, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
-
 import {
   Card,
   Divider,
@@ -18,7 +17,6 @@ import {
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
-
 import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import ShareButton from "@/components/pages/profile/ShareButton";
@@ -30,15 +28,12 @@ import {
   useSystems,
 } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
-import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { num, shortString } from "starknet";
 import { GameClass } from "@/dojo/class/Game";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
-import { sleep } from "@/dojo/utils";
-import { GameMode } from "@/dojo/types";
 
 const End = observer(() => {
   const { game } = useGameStore();
@@ -56,10 +51,10 @@ const EndContent = ({ game }: { game: GameClass }) => {
   const [position, setPosition] = useState(0);
   const [prev, setPrev] = useState<Game | undefined>(undefined);
 
-  const { account } = useAccount();
   const { toast } = useToast();
 
   const { isPending, registerScore } = useSystems();
+  const gameStore = useGameStore();
 
   const {
     registeredGames,
@@ -115,9 +110,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
           duration: 5_000,
           isError: false,
         });
-
-        await sleep(1000);
-        router.push(`/`);
+        gameStore.init(game.gameInfos.game_id!);
       }
     } catch (e: any) {
       console.log(e);
