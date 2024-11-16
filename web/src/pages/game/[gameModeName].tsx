@@ -137,9 +137,7 @@ const New = observer(() => {
                 >
                   Play
                 </Button>
-                {/* ) : (
-                  <>{selectedChain.name != "MAINNET" && <PaperFaucetButton />}</>
-                )} */}
+                {selectedChain.name !== "MAINNET" && balance < 1000n * ETHER && <PaperFaucetButton />}
               </>
             )}
             {gameMode == GameMode.Noob && (

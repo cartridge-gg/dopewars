@@ -51,6 +51,7 @@ export class GameStoreClass {
       gameConfig: observable,
       seasonSettings: observable,
       reset: action,
+      cleanSubscriptions: action,
       init: flow,
       loadGameInfos: flow,
       loadGameEvents: flow,
@@ -63,9 +64,7 @@ export class GameStoreClass {
   }
 
   reset() {
-    for (let subscription of this.subscriptions) {
-      subscription.cancel();
-    }
+    this.cleanSubscriptions();
 
     this.game = null;
     this.gameInfos = null;
@@ -88,10 +87,18 @@ export class GameStoreClass {
     this.isInitialized = true;
   }
 
-  *subscribe() {
+  cleanSubscriptions() {
     for (let subscription of this.subscriptions) {
+      // cancel subscription
       subscription.cancel();
     }
+    // clean subscriptions array
+    this.subscriptions = [];
+  }
+
+  *subscribe() {
+    yield this.cleanSubscriptions();
+
     const subEntities: Subscription = yield this.toriiClient.onEntityUpdated(
       [
         {
@@ -174,7 +181,6 @@ export class GameStoreClass {
     const gameEntity = Object.values(entities)[0];
     if (!gameEntity) return;
 
- 
     const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
     const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
 
@@ -197,7 +203,6 @@ export class GameStoreClass {
     });
     const seasonEntity = Object.values(entities)[0];
     if (!seasonEntity) return;
-
 
     const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
     const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;

@@ -1,0 +1,16 @@
+{
+  "name": "stark-vrf-wasm",
+  "version": "0.1.0",
+  "files": [
+    "stark_vrf_wasm_bg.wasm",
+    "stark_vrf_wasm.js",
+    "stark_vrf_wasm_bg.js",
+    "stark_vrf_wasm.d.ts"
+  ],
+  "module": "stark_vrf_wasm.js",
+  "types": "stark_vrf_wasm.d.ts",
+  "sideEffects": [
+    "./stark_vrf_wasm.js",
+    "./snippets/*"
+  ]
+}

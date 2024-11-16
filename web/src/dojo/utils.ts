@@ -10,9 +10,6 @@ enum Source {
   Salt = 0x1,
 }
 
-const SOURCE_NONCE = 0x0;
-const SOURCE_SALT = 0x1;
-
 export const buildVrfCalls = async ({
   account,
   call,
@@ -35,49 +32,47 @@ export const buildVrfCalls = async ({
   let submitRandomCall = undefined;
   let assertConsumedCall = undefined;
 
-  // "stark-vrf-wasm": "file:../../stark-vrf/wasm/pkg/",
+  if (vrfProviderSecret) {
+    const chainId = await account.getChainId();
 
-  // if (vrfProviderSecret) {
-  //   const chainId = await account.getChainId();
+    const nonceStorageSlot = hash.computePedersenHash(
+      selector.getSelectorFromName("VrfProvider_nonces"),
+      account.address,
+    );
 
-  //   const nonceStorageSlot = hash.computePedersenHash(
-  //     selector.getSelectorFromName("VrfProvider_nonces"),
-  //     account.address,
-  //   );
+    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PENDING);
+    const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
 
-  //   const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PENDING);
-  //   const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
+    const vrf = (await import("../lib/stark-vrf/pkg")).StarkVRF.new(vrfProviderSecret);
+    const proof = vrf.prove(vrfProviderSecret, seed);
+    const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);
 
-  //   const vrf = (await import("stark-vrf-wasm")).StarkVRF.new(vrfProviderSecret);
-  //   const proof = vrf.prove(vrfProviderSecret, seed);
-  //   const sqrt_ratio_hint = vrf.hashToSqrtRatioHint(seed);
+    // fn submit_random( seed: felt252, proof: Proof);
+    submitRandomCall = {
+      contractAddress: vrfProviderAddress,
+      entrypoint: "submit_random",
+      calldata: CallData.compile([seed, proof, sqrt_ratio_hint]),
+    };
 
-  //   // fn submit_random( seed: felt252, proof: Proof);
-  //   submitRandomCall = {
-  //     contractAddress: vrfProviderAddress,
-  //     entrypoint: "submit_random",
-  //     calldata: CallData.compile([seed, proof, sqrt_ratio_hint]),
-  //   };
-
-  //   // fn assert_consumed( seed: felt252,);
-  //   assertConsumedCall = {
-  //     contractAddress: vrfProviderAddress,
-  //     entrypoint: "assert_consumed",
-  //     calldata: [seed],
-  //   };
-  // }
+    // fn assert_consumed( seed: felt252,);
+    assertConsumedCall = {
+      contractAddress: vrfProviderAddress,
+      entrypoint: "assert_consumed",
+      calldata: [seed],
+    };
+  }
 
   let calls = [];
-  // if (vrfProviderSecret) {
-  //   calls.push(submitRandomCall as Call);
-  // }
+  if (vrfProviderSecret) {
+    calls.push(submitRandomCall as Call);
+  }
 
   calls.push(requestRandomCall);
   calls.push(call);
 
-  // if (vrfProviderSecret) {
-  //   calls.push(assertConsumedCall as Call);
-  // }
+  if (vrfProviderSecret) {
+    calls.push(assertConsumedCall as Call);
+  }
   // console.log("calls", calls);
   return calls;
 };
