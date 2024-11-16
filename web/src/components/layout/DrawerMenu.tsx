@@ -91,8 +91,13 @@ const DrawerMenu = () => {
 
                   <DrawerListItem cursor="default">
                     <HStack w="full" justifyContent="space-between">
-                      <ConnectButton /> <ChainSelector canChange={!gameId} /> <Burners />
-                      <Predeployed />
+                      <ConnectButton />
+                      {process.env.NODE_ENV !== "production" && (
+                        <>
+                          <ChainSelector canChange={!gameId} /> <Burners />
+                          <Predeployed />
+                        </>
+                      )}
                     </HStack>
                   </DrawerListItem>
 
