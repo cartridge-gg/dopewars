@@ -139,7 +139,7 @@ export const dojoContextConfig = {
   // SN_SEPOLIA: snSepolia,
   // WP_RYO2: katanaSlot2,
   // WP_RYO1: katanaSlot1,
-  // KATANA: katanaLocal,
+  KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

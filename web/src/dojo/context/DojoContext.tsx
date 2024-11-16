@@ -58,10 +58,12 @@ export const DojoContextProvider = observer(
         ? Object.values(dojoContextConfig)[0]
         : Object.values(dojoContextConfig)[1]
         ? Object.values(dojoContextConfig)[1]
-        : Object.values(dojoContextConfig)[0]; //dojoContextConfig.KATANA;
+        : Object.values(dojoContextConfig)[0];
 
     const lastSelectedChainId =
-      typeof window !== "undefined" ? window?.localStorage?.getItem("lastSelectedChainId") : undefined;
+      typeof window !== "undefined" && process.env.NODE_ENV !== "production"
+        ? window?.localStorage?.getItem("lastSelectedChainId")
+        : undefined;
 
     const intialChain =
       lastSelectedChainId && dojoContextConfig[lastSelectedChainId as SupportedChainIds]
