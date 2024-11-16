@@ -1,6 +1,8 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "";
+
+const baseUrl = process.env.NODE_ENV === "production" ? "https://dopewars.game" : "";
+
 const metas = {
   title: "Dope Wars",
   descritpion:
