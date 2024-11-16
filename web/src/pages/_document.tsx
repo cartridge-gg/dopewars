@@ -1,5 +1,6 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
+const baseUrl = process.env.NODE_ENV === "production" ? "https://dopewars.game" : "";
 const metas = {
   title: "Dope Wars",
   descritpion:
@@ -7,7 +8,7 @@ const metas = {
   socialDescription:
     "Prove you're the ultimate hustler. Move product, stack paper, and rise to the top in Dope Wars. Play now and claim your spot on the leaderboard!",
   image: {
-    url: "/images/play-dope-wars.png",
+    url: `${baseUrl}/images/play-dope-wars.png`,
     width: "1200",
     height: "630",
   },
