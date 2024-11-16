@@ -21,6 +21,7 @@ import { Button } from "@/components/common";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import {
+  useDojoContext,
   useGameStore,
   useRegisteredGamesBySeason,
   useRouterContext,
@@ -31,38 +32,32 @@ import { formatCash } from "@/utils/ui";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { num, shortString } from "starknet";
-import { GameClass } from "@/dojo/class/Game";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
+import { ChildrenOrConnect } from "@/components/wallet";
 
-const End = observer(() => {
-  const { game } = useGameStore();
-
-  if (!game) return null;
-  return <EndContent game={game} />;
-});
-
-export default End;
-
-const EndContent = ({ game }: { game: GameClass }) => {
+const End = () => {
+  const gameStore = useGameStore();
+  const { game, gameInfos } = gameStore;
   const { router, gameId } = useRouterContext();
+  const {
+    clients: { rpcProvider },
+  } = useDojoContext();
 
   const [isCreditOpen, setIsCreditOpen] = useState<boolean>(false);
   const [position, setPosition] = useState(0);
   const [prev, setPrev] = useState<Game | undefined>(undefined);
 
   const { toast } = useToast();
-
   const { isPending, registerScore } = useSystems();
-  const gameStore = useGameStore();
 
   const {
     registeredGames,
     isFetched,
     refetch: refetchRegisteredGame,
-  } = useRegisteredGamesBySeason(game.gameInfos.season_version);
+  } = useRegisteredGamesBySeason(game?.gameInfos.season_version);
 
-  const { season, sortedList, refetch: refetchSeason } = useSeasonByVersion(game.gameInfos.season_version);
+  const { season, sortedList, refetch: refetchSeason } = useSeasonByVersion(game?.gameInfos.season_version);
 
   useEffect(() => {
     refetchSeason();
@@ -90,7 +85,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
 
     setPrev(prev);
 
-    if (game.gameInfos.registered) {
+    if (gameInfos?.registered) {
       setPosition(sorted.length);
     } else {
       setPosition(sorted.length + 1);
@@ -102,7 +97,7 @@ const EndContent = ({ game }: { game: GameClass }) => {
       const prevGameId = prev ? prev.game_id : 0;
       const prevPlayerId = prev ? prev.player_id : 0;
 
-      const { hash } = await registerScore(game.gameInfos.game_id!, prevGameId, prevPlayerId);
+      const { hash } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
 
       if (hash !== "") {
         toast({
@@ -110,23 +105,30 @@ const EndContent = ({ game }: { game: GameClass }) => {
           duration: 5_000,
           isError: false,
         });
-        gameStore.init(game.gameInfos.game_id!);
+        await rpcProvider.waitForTransaction(hash, {
+          retryInterval: 200,
+        });
+        setTimeout(() => {
+          gameStore.init(gameInfos?.game_id!);
+        }, 1_000);
       }
     } catch (e: any) {
       console.log(e);
     }
   };
 
+  if (!game || !gameInfos) return null;
+
   return (
     <Layout
       leftPanelProps={{
         title: "Game Over",
-        prefixTitle: game.player?.health === 0 ? "You died" : "You survived",
+        prefixTitle: game?.player?.health === 0 ? "You died" : "You survived",
         imageSrc: "/images/sunset.png",
       }}
       footer={
         <>
-          {game.gameInfos.game_mode == "Ranked" && !game.gameInfos.registered ? (
+          {gameInfos?.game_mode == "Ranked" && !gameInfos?.registered ? (
             <VStack w="full" gap={3}>
               <Card p={3}>
                 <HStack color="yellow.400">
@@ -135,9 +137,11 @@ const EndContent = ({ game }: { game: GameClass }) => {
                 </HStack>
               </Card>
 
-              <Button isLoading={isPending} onClick={() => onRegister()}>
-                Register you score
-              </Button>
+              <ChildrenOrConnect>
+                <Button isLoading={isPending} onClick={() => onRegister()}>
+                  Register you score
+                </Button>
+              </ChildrenOrConnect>
             </VStack>
           ) : (
             <Button onClick={() => router.push("/")}>Lobby</Button>
@@ -154,10 +158,10 @@ const EndContent = ({ game }: { game: GameClass }) => {
           </VStack>
           <VStack flex="1">
             <StatsItem
-              text={shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}
-              icon={<HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
+              text={shortString.decodeShortString(num.toHexString(BigInt(game?.gameInfos.player_name?.value)))}
+              icon={<HustlerIcon hustler={game?.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
             />
-            {game.gameInfos.game_mode == "Ranked" && (
+            {game?.gameInfos.game_mode == "Ranked" && (
               <>
                 <Divider borderColor="neon.600" />
                 <StatsItem text={`Rank ${position}`} icon={<Trophy />} />
@@ -253,6 +257,8 @@ const EndContent = ({ game }: { game: GameClass }) => {
     </Layout>
   );
 };
+
+export default observer(End);
 
 const StatsItem = ({ text, icon }: { text: string; icon: ReactNode }) => {
   return (
