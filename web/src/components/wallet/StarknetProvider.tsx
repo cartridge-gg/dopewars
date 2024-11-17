@@ -38,9 +38,7 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
   const controller = cartridgeConnector({ selectedChain });
 
-  if (path.startsWith("/admin")) {
-    return [controller, argent()];
-  }
+
 
   switch (selectedChain.name) {
     case "KATANA":
@@ -60,6 +58,9 @@ function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
 
     default:
       // const controller = cartridgeConnector({ selectedChain });
+      if (path.startsWith("/admin")) {
+        return [controller, argent()];
+      }
       return [controller];
   }
 }
