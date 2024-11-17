@@ -388,30 +388,27 @@ export const useSystems = (): SystemsInterface => {
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
 
-      // const { hash } = await executeAndReceipt({
-      //   contractName: `ryo`,
-      //   entrypoint: "update_ryo_config",
-      //   calldata: CallData.compile({
-      //     key: 0, // ignored in contract
-      //     initialized: 1, // ignored in contract
-      //     paused: 0, // ignored in contract
-      //     season_version: 3, // ignored in contract
-      //     season_duration: ryoConfig.season_duration,
-      //     season_time_limit: ryoConfig.season_time_limit,
-      //     paper_fee: ryoConfig.paper_fee,
-      //     paper_reward_launderer: ryoConfig.paper_reward_launderer,
-      //     treasury_fee_pct: ryoConfig.treasury_fee_pct,
-      //     treasury_balance: 0, // ignored in contract
-      //   }),
-      // });
+      const { hash } = await executeAndReceipt({
+        contractName: `ryo`,
+        entrypoint: "update_ryo_config",
+        calldata: CallData.compile({
+          key: 0, // ignored in contract
+          initialized: 1, // ignored in contract
+          paused: 0, // ignored in contract
+          season_version: 0, // ignored in contract
+          season_duration: ryoConfig.season_duration,
+          season_time_limit: ryoConfig.season_time_limit,
+          paper_fee: ryoConfig.paper_fee,
+          paper_reward_launderer: ryoConfig.paper_reward_launderer,
+          treasury_fee_pct: ryoConfig.treasury_fee_pct,
+          treasury_balance: 0, // ignored in contract
+        }),
+      });
 
-      // return {
-      //   hash,
-      // };
+       return {
+         hash,
+       };
 
-      return {
-        hash: "0x0"
-      }
     },
     [executeAndReceipt],
   );
