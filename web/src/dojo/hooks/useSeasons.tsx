@@ -31,7 +31,7 @@ export const useSeasons = (): SeasonsInterface => {
     const sortedListEdges = data?.dopewarsSortedListModels?.edges as SortedListEdge[];
     const seasonSettingsEdges = data?.dopewarsSeasonSettingsModels?.edges as SeasonSettingsEdge[];
 
-    return seasonEdges.map((i: SeasonEdge) => {
+    return seasonEdges.flatMap((i: SeasonEdge) => {
       const season = i.node as Season;
 
       const sortedListEdge = sortedListEdges.find((i) => Number(i.node?.list_id) === season.version);
@@ -40,11 +40,12 @@ export const useSeasons = (): SeasonsInterface => {
       const seasonSettingsEdge = seasonSettingsEdges.find((i) => Number(i.node?.season_version) === season.version);
       const seasonSettings = seasonSettingsEdge ? (seasonSettingsEdge.node as SeasonSettings) : undefined;
 
-      return {
+      if(season.version === 0 ) return []
+      return [{
         season,
         seasonSettings,
         sortedList,
-      };
+      }];
     });
   }, [data]);
 
