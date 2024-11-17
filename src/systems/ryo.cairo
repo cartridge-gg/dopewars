@@ -174,7 +174,7 @@ mod ryo {
             new_ryo_config.paper_reward_launderer = ryo_config.paper_reward_launderer;
             new_ryo_config.treasury_fee_pct = ryo_config.treasury_fee_pct;
 
-            store.save_ryo_config(@ryo_config);
+            store.save_ryo_config(@new_ryo_config);
         }
 
         fn set_paper(self: @ContractState, paper_address: ContractAddress) {

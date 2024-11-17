@@ -3060,7 +3060,7 @@
     },
     {
       "address": "0x610212857b3970aaf82ecd3b143a79fddf3948a6c6e05937ad5c7b93556eb71",
-      "class_hash": "0xab105d475a61ac9c1e9f99adec8be974924c2decd4788b201f1ece4b9ec9bc",
+      "class_hash": "0x1359c4c178a30c144626649e3d8c005b79b55222cc46f0352cf745b40ad683c",
       "abi": [
         {
           "type": "impl",
