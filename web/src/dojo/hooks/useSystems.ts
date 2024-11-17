@@ -387,6 +387,7 @@ export const useSystems = (): SystemsInterface => {
 
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
+
       const { hash } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "update_ryo_config",
@@ -404,9 +405,10 @@ export const useSystems = (): SystemsInterface => {
         }),
       });
 
-      return {
-        hash,
-      };
+       return {
+         hash,
+       };
+
     },
     [executeAndReceipt],
   );
