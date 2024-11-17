@@ -392,9 +392,9 @@ export const useSystems = (): SystemsInterface => {
         entrypoint: "update_ryo_config",
         calldata: CallData.compile({
           key: 0, // ignored in contract
-          initialized: 0, // ignored in contract
+          initialized: 1, // ignored in contract
           paused: 0, // ignored in contract
-          season_version: 0, // ignored in contract
+          season_version: 3, // ignored in contract
           season_duration: ryoConfig.season_duration,
           season_time_limit: ryoConfig.season_time_limit,
           paper_fee: ryoConfig.paper_fee,
