@@ -1,25 +1,11 @@
 import { Button } from "@/components/common";
-import { Flipflop, LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
+import { CopsIcon, Flipflop, LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
 import { useConfigStore, useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import { sleep } from "@/dojo/utils";
-import { play } from "@/hooks/media";
-import { Sounds, playSound } from "@/hooks/sound";
-import {
-  Card,
-  Divider,
-  HStack,
-  Progress,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Card, HStack, Progress, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import colors from "@/theme/colors";
@@ -30,7 +16,7 @@ import { gameModeName } from "@/dojo/helpers";
 export default function Home() {
   const { router, isLocalhost } = useRouterContext();
   const { account } = useAccount();
-  const { uiStore, burnerManager } = useDojoContext();
+  const { uiStore } = useDojoContext();
   const { launder, isPending } = useSystems();
   const { connectors, connect } = useConnect();
 
@@ -46,6 +32,8 @@ export default function Home() {
   } = useSeasonByVersion(config?.ryo.season_version);
 
   const [progressPercent, setProgressPercent] = useState(0);
+
+  const isPaused = config?.ryo.paused;
 
   useEffect(() => {
     if (!sortedList || sortedList.process_max_size === 0) return;
@@ -96,18 +84,27 @@ export default function Home() {
       <VStack boxSize="full" gap="10px">
         <Card variant="pixelated">
           <HStack w="full" p={["10px", "20px"]} gap="10px" justify="center">
-            {isSeasonOpen && canCreateGame && (
+            {isPaused && (
+              <HStack w="full" color="yellow.400" justifyContent="center" alignItems="center" gap={6}>
+                <CopsIcon color="yellow.400" />
+                <VStack flexDirection={["column", "row"]}>
+                  <Text>Game under arrest.</Text>
+                  <Text>The streets are silent...</Text>
+                </VStack>
+              </HStack>
+            )}
+            {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
                 <Flipflop /> Play guest
               </Button>
             )}
-            {isSeasonOpen && canCreateGame && (
+            {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
                 <Glock /> Play Ranked
               </Button>
             )}
 
-            {isSeasonOpen && !canCreateGame && (
+            {!isPaused && isSeasonOpen && !canCreateGame && (
               <HStack w="full" color="yellow.400" justifyContent="center" gap={3}>
                 <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
                   <Flipflop /> Play guest
@@ -120,7 +117,7 @@ export default function Home() {
               </HStack>
             )}
 
-            {!isSeasonOpen && !isSeasonWashed && (
+            {!isPaused && !isSeasonOpen && !isSeasonWashed && (
               <HStack w="full">
                 <LaundromatIcon isWashing={isPending} />
 

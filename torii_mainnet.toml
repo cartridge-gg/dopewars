@@ -1,10 +1,17 @@
 rpc = "https://api.cartridge.gg/x/starknet/mainnet"
 
 world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"
+
+[indexing]
 allowed_origins = ["*"]
 index_pending = true
+index_transactions = false
 polling_interval = 1000
-historical_events = [
+contracts = []
+
+[events]
+raw = false    
+historical = [
     "dopewars-GameCreated",
     "dopewars-Traveled",
     "dopewars-GameOver",
@@ -20,5 +27,3 @@ historical_events = [
     "dopewars-TrophyCreation",
     "dopewars-TrophyProgression",
 ]
-
-contracts = []
