@@ -246,7 +246,11 @@ export class GameStoreClass {
           this.router.push(`/${gameId}/${location}`);
         }
       } else {
-        this.router.push(`/${gameId}/event/decision`);
+        if (this.gameEvents?.isGameOver) {
+          this.router.push(`/${gameId}/event/consequence`);
+        } else {
+          this.router.push(`/${gameId}/event/decision`);
+        }
       }
     }
   }

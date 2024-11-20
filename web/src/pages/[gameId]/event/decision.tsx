@@ -118,9 +118,7 @@ const Decision = observer(() => {
 
     const { hash } = await decide(gameId!, action);
 
-    if (hash) {
-      router.push(`/${gameId}/event/consequence`);
-    }
+
   };
 
   if (!game || !router.isReady || isRedirecting || !encounterEvent) {
