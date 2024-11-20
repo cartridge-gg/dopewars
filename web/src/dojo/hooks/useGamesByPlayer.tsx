@@ -136,6 +136,7 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       ) as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
+      if (gameInfos.season_version === 0) return [];
 
       const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,

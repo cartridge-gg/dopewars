@@ -10,7 +10,7 @@ polling_interval = 1000
 contracts = []
 
 [events]
-raw = false    
+raw = true    
 historical = [
     "dopewars-GameCreated",
     "dopewars-Traveled",
