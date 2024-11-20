@@ -27,32 +27,29 @@ export type Scalars = {
   u256: any;
 };
 
-export type Erc__Balance = {
-  __typename?: 'ERC__Balance';
-  balance: Scalars['String'];
-  tokenMetadata: Erc__Token;
-  type: Scalars['String'];
-};
-
-export type Erc__Token = {
-  __typename?: 'ERC__Token';
+export type Erc20__Token = {
+  __typename?: 'ERC20__Token';
+  amount: Scalars['String'];
   contractAddress: Scalars['String'];
   decimals: Scalars['String'];
+  name: Scalars['String'];
+  symbol: Scalars['String'];
+};
+
+export type Erc721__Token = {
+  __typename?: 'ERC721__Token';
+  contractAddress: Scalars['String'];
+  imagePath: Scalars['String'];
+  metadata: Scalars['String'];
+  metadataAttributes: Scalars['String'];
+  metadataDescription: Scalars['String'];
+  metadataName: Scalars['String'];
   name: Scalars['String'];
   symbol: Scalars['String'];
   tokenId: Scalars['String'];
 };
 
-export type Erc__Transfer = {
-  __typename?: 'ERC__Transfer';
-  amount: Scalars['String'];
-  executedAt: Scalars['String'];
-  from: Scalars['String'];
-  to: Scalars['String'];
-  tokenMetadata: Erc__Token;
-  transactionHash: Scalars['String'];
-  type: Scalars['String'];
-};
+export type Erc__Token = Erc20__Token | Erc721__Token;
 
 export type ModelUnion = Dopewars_Claimed | Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameCreated | Dopewars_GameOver | Dopewars_GameStorePacked | Dopewars_HighVolatility | Dopewars_HustlerItemBaseConfig | Dopewars_HustlerItemTiersConfig | Dopewars_LocationConfig | Dopewars_NewHighScore | Dopewars_NewSeason | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem | Dopewars_TradeDrug | Dopewars_TravelEncounter | Dopewars_TravelEncounterResult | Dopewars_Traveled | Dopewars_TrophyCreation | Dopewars_TrophyProgression | Dopewars_UpgradeItem;
 
@@ -60,6 +57,46 @@ export enum OrderDirection {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type Token__Balance = {
+  __typename?: 'Token__Balance';
+  tokenMetadata: Erc__Token;
+};
+
+export type Token__BalanceConnection = {
+  __typename?: 'Token__BalanceConnection';
+  edges?: Maybe<Array<Maybe<Token__BalanceEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type Token__BalanceEdge = {
+  __typename?: 'Token__BalanceEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Token__Balance>;
+};
+
+export type Token__Transfer = {
+  __typename?: 'Token__Transfer';
+  executedAt: Scalars['String'];
+  from: Scalars['String'];
+  to: Scalars['String'];
+  tokenMetadata: Erc__Token;
+  transactionHash: Scalars['String'];
+};
+
+export type Token__TransferConnection = {
+  __typename?: 'Token__TransferConnection';
+  edges?: Maybe<Array<Maybe<Token__TransferEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type Token__TransferEdge = {
+  __typename?: 'Token__TransferEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Token__Transfer>;
+};
 
 export type World__Content = {
   __typename?: 'World__Content';
@@ -243,14 +280,14 @@ export type World__Query = {
   dopewarsUpgradeItemModels?: Maybe<Dopewars_UpgradeItemConnection>;
   entities?: Maybe<World__EntityConnection>;
   entity: World__Entity;
-  ercBalance?: Maybe<Array<Maybe<Erc__Balance>>>;
-  ercTransfer?: Maybe<Array<Maybe<Erc__Transfer>>>;
   eventMessage: World__EventMessage;
   eventMessages?: Maybe<World__EventMessageConnection>;
   events?: Maybe<World__EventConnection>;
   metadatas?: Maybe<World__MetadataConnection>;
   model: World__Model;
   models?: Maybe<World__ModelConnection>;
+  tokenBalances?: Maybe<Token__BalanceConnection>;
+  tokenTransfers?: Maybe<Token__TransferConnection>;
   transaction: World__Transaction;
   transactions?: Maybe<World__TransactionConnection>;
 };
@@ -608,17 +645,6 @@ export type World__QueryEntityArgs = {
 };
 
 
-export type World__QueryErcBalanceArgs = {
-  accountAddress: Scalars['String'];
-};
-
-
-export type World__QueryErcTransferArgs = {
-  accountAddress: Scalars['String'];
-  limit: Scalars['Int'];
-};
-
-
 export type World__QueryEventMessageArgs = {
   id: Scalars['ID'];
 };
@@ -669,6 +695,28 @@ export type World__QueryModelsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<World__ModelOrder>;
+};
+
+
+export type World__QueryTokenBalancesArgs = {
+  accountAddress: Scalars['String'];
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type World__QueryTokenTransfersArgs = {
+  accountAddress: Scalars['String'];
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 

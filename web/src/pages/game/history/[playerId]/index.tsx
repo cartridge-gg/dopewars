@@ -1,19 +1,16 @@
 import { Hustler, HustlerIcon, Hustlers } from "@/components/hustlers";
 import {
-  Bag,
   Cigarette,
   CopsIcon,
   DollarBag,
   Flipflop,
   GangIcon,
-  Gem,
   PaperCashIcon,
   PaperIcon,
   Trophy,
 } from "@/components/icons";
 import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 import { AK47, Uzi } from "@/components/icons/items";
-import { Reputation } from "@/components/icons/items/Reputation";
 import { Layout } from "@/components/layout";
 import { ReputationIndicator } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
@@ -22,6 +19,7 @@ import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Drugs } from "@/dojo/types";
 
 import { formatCashHeader } from "@/utils/ui";
+import { ControllerConnector } from "@cartridge/connector";
 import {
   HStack,
   Tab,
@@ -43,6 +41,8 @@ import {
   Box,
   Flex,
 } from "@chakra-ui/react";
+import { useConnect } from "@starknet-react/core";
+import { useEffect, useState } from "react";
 
 import { num, shortString } from "starknet";
 
@@ -125,7 +125,9 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
           </Tr>
 
           {games.map((game: GameClass, index: number) => {
-            const playerName = shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)));
+            const playerName = shortString.decodeShortString(
+              num.toHexString(BigInt(game.gameInfos.player_name?.value)),
+            );
 
             return (
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>
@@ -143,9 +145,15 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
                 <Td
                   onClick={() => router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`)}
                   textAlign="right"
-                  color={game.gameInfos.registered ? "neon.400" : "yellow.400"}
+                  color={
+                    game.gameInfos.game_mode === "Ranked"
+                      ? game.gameInfos.registered
+                        ? "neon.400"
+                        : "yellow.400"
+                      : "neon.400"
+                  }
                 >
-                  {game.gameInfos.registered ? "Yes" : "No"}
+                  {game.gameInfos.game_mode === "Ranked" ? (game.gameInfos.registered ? "Yes" : "No") : "Unranked"}
                 </Td>
               </Tr>
             );
@@ -157,8 +165,6 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
 };
 
 const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
-  // const { game, gameInfos } = useGameStore();
-
   return (
     <VStack
       flex={1}

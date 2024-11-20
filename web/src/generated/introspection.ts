@@ -6,6 +6,10 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "ERC__Token": [
+      "ERC20__Token",
+      "ERC721__Token"
+    ],
     "ModelUnion": [
       "dopewars_Claimed",
       "dopewars_DrugConfig",
