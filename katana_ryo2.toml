@@ -1,9 +1,0 @@
-block_time = 2000
-
-[server]
-http_cors_origins = ["*"]
-
-[dev]
-seed = "0"
-dev=true
-no_fee = true
