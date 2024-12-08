@@ -4,8 +4,8 @@ world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb253
 
 [indexing]
 allowed_origins = ["*"]
-index_pending = true
-index_transactions = false
+pending = true
+transactions = true
 polling_interval = 1000
 contracts = []
 
