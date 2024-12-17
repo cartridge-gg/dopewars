@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cartridge/connector':
-        specifier: 0.5.4
-        version: 0.5.4(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.11.0(encoding@0.1.13)))(react@18.2.0)(typescript@5.6.3)
+        specifier: 0.5.6
+        version: 0.5.6(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.11.0(encoding@0.1.13)))(react@18.2.0)(typescript@5.6.3)
       '@chakra-ui/anatomy':
         specifier: ^2.1.1
         version: 2.2.1
@@ -816,20 +816,17 @@ packages:
     resolution: {integrity: sha512-+uarb83brBzPKN38NX1MkB6vb6+mwvR6amUulqAE7ccQw1pEl+bCia9TbdG1lsnFP7lZySvUn37CHyXQdfTwzg==}
     engines: {node: '>=6.9.0'}
 
-  '@cartridge/account-wasm@0.5.4':
-    resolution: {integrity: sha512-vi08BWNp2kflrEWLsqaIwrMajUOtIeRZlTFAGyJ3ejcaFNMlx0VzgwRCTiRtoh6MSa/WtUIlTjshmFUyHMd/CQ==}
+  '@cartridge/account-wasm@0.5.6':
+    resolution: {integrity: sha512-2mNuFkRqePe5PiJP0ReZVgiIv41o7KOLzY0/eDtDWKXqOZW6PHkEyaFTXvircyHncfwSsGyPoWg+Z1B//D9H+w==}
 
-  '@cartridge/connector@0.5.4':
-    resolution: {integrity: sha512-UqOGzRqP2rLsw1TQ6ZswUM/Uf35IFKTOZBkshenVOS6n4QEdgQKUVKDKW71lr6O2/w0uXU6fGxiBSQ3V+Pn23A==}
+  '@cartridge/connector@0.5.6':
+    resolution: {integrity: sha512-MqmWlAuvWYWJroB8xvQb/rXFqfqV2YwuuLIT/Sw1bCUAhHlDI62xC1oS7JN+ojVe76Poqob8fw/ZW/VHtz8BxA==}
 
-  '@cartridge/controller@0.5.4':
-    resolution: {integrity: sha512-8wwcA8GwLTWf/uNU5kf07BoLj1SYRR0EdRCBx55FQmc6MxX1TNto6H0shLIAV2iehXYE/zjqX24GN930gSqm7Q==}
+  '@cartridge/controller@0.5.6':
+    resolution: {integrity: sha512-TJO0irbbwsBlJQcBmf2Szo33qIpKkMLVaYfqQ3sqtp23TE/QSxvPxB3NI3hbW27k0xdziOBwXjPI5NEhPptuqg==}
 
   '@cartridge/penpal@6.2.3':
     resolution: {integrity: sha512-K8h9VqBfFPXcAFQNnvgBnejF/dp7249pS4jXu3NhNYR6JqMQxtcrDqfnPmJvbF4ECEBs+8Z2UiwlRQiKt5nNsg==}
-
-  '@cartridge/presets@0.5.4':
-    resolution: {integrity: sha512-kC2tcZ+dBv6NoQOnlWrb+WroulVWYVjQy7PP5v1+Q07LjJujzjNlyXG1pPU1BpJCGDbE16/qlbUujhYbBvnVgQ==}
 
   '@cbor-extract/cbor-extract-darwin-arm64@2.2.0':
     resolution: {integrity: sha512-P7swiOAdF7aSi0H+tHtHtr6zrpF3aAq/W9FXx5HektRvLTM2O89xCyXF3pk7pLc7QpaY7AoaE8UowVf9QBdh3w==}
@@ -6511,11 +6508,11 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@cartridge/account-wasm@0.5.4': {}
+  '@cartridge/account-wasm@0.5.6': {}
 
-  '@cartridge/connector@0.5.4(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.11.0(encoding@0.1.13)))(react@18.2.0)(typescript@5.6.3)':
+  '@cartridge/connector@0.5.6(encoding@0.1.13)(get-starknet-core@3.2.0(starknet@6.11.0(encoding@0.1.13)))(react@18.2.0)(typescript@5.6.3)':
     dependencies:
-      '@cartridge/controller': 0.5.4(encoding@0.1.13)
+      '@cartridge/controller': 0.5.6(encoding@0.1.13)
       '@starknet-react/core': 3.5.0(get-starknet-core@3.2.0(starknet@6.11.0(encoding@0.1.13)))(react@18.2.0)(starknet@6.11.0(encoding@0.1.13))(typescript@5.6.3)
       starknet: 6.11.0(encoding@0.1.13)
     transitivePeerDependencies:
@@ -6526,11 +6523,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@cartridge/controller@0.5.4(encoding@0.1.13)':
+  '@cartridge/controller@0.5.6(encoding@0.1.13)':
     dependencies:
-      '@cartridge/account-wasm': 0.5.4
+      '@cartridge/account-wasm': 0.5.6
       '@cartridge/penpal': 6.2.3
-      '@cartridge/presets': 0.5.4
       '@starknet-io/types-js': 0.7.7
       '@telegram-apps/sdk': 2.9.1
       base64url: 3.0.1
@@ -6542,10 +6538,6 @@ snapshots:
       - encoding
 
   '@cartridge/penpal@6.2.3': {}
-
-  '@cartridge/presets@0.5.4':
-    dependencies:
-      '@starknet-io/types-js': 0.7.7
 
   '@cbor-extract/cbor-extract-darwin-arm64@2.2.0':
     optional: true
@@ -9570,7 +9562,7 @@ snapshots:
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.36.0)
       eslint-plugin-react: 7.34.1(eslint@8.36.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.36.0)
@@ -9593,8 +9585,8 @@ snapshots:
       debug: 4.3.4
       enhanced-resolve: 5.16.0
       eslint: 8.36.0
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.3
       is-core-module: 2.13.1
@@ -9605,7 +9597,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -9616,7 +9608,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -9626,7 +9618,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.36.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.36.0)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.36.0))(eslint@8.36.0))(eslint@8.36.0)
       hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
