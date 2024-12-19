@@ -162,8 +162,8 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
       ],
     },
-    theme: "dope-wars",
+    preset: "dope-wars",
     colorMode: "dark",
-    policies,
+    policies: selectedChain.name === "MAINNET" ? undefined : policies,
   }) as unknown as InjectedConnector;
 };
