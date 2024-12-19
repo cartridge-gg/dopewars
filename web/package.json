@@ -15,7 +15,7 @@
     "gen:dojo": "pnpm gen"
   },
   "dependencies": {
-    "@cartridge/connector": "0.5.6",
+    "@cartridge/connector": "0.5.7",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@dojoengine/core": "v1.0.0-alpha.30",
