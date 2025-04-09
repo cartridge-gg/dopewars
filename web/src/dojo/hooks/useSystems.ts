@@ -190,9 +190,10 @@ export const useSystems = (): SystemsInterface => {
   const endGame = useCallback(
     async (gameId: string, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
+      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       const { hash } = await executeAndReceipt({
-        contractName: `game`,
+        contractAddress: gameAddress,
         entrypoint: "end_game",
         // @ts-ignore
         calldata: CallData.compile({ gameId, callsEnum }),

@@ -7,8 +7,18 @@ http_cors_origins = ["*"]
 
 
 [indexing]
-index_pending = true
+pending = true
 polling_interval = 1000
+
+max_concurrent_tasks = 2
+contracts = [
+    "ERC721:0x01d082b40902a1f4bc92e054d2e06014091dfd93fb476c8652d65e787e38df6c", # dope_loot
+    "ERC721:0x07de16f0faf7ef5469a310c0faa702087b3c9bb7e87b0466c3e9f8eb3c52b065", # dope_hustlers
+    "ERC1155:0x01167ccc71087888b9fcf986101a42eb09994701c1818e86278f945d01293938", # dope_gear
+]
+
+
+[sql]
 historical = [
     "dopewars-GameCreated",
     "dopewars-Traveled",

@@ -97,11 +97,13 @@ const New = observer(() => {
         play();
       }
 
-      const { hash, gameId } = await createGame(gameMode, hustlerId, name);
+      await createGame(gameMode, hustlerId, name);
 
-      if (gameId) {
-        router.push(`/${gameId}/travel`);
-      }
+      // const { hash, gameId } = await createGame(gameMode, hustlerId, name);
+
+      // if (gameId) {
+      //   router.push(`/${gameId}/travel`);
+      // }
     } catch (e) {
       console.log(e);
     }

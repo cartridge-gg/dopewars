@@ -37,7 +37,7 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
             <HStack
               onClick={() => {
                 if (isController) {
-                  (connector as unknown as ControllerConnector).controller.openProfile("trophies"); // "trophies"
+                  (connector as unknown as ControllerConnector).controller.openProfile("achievements"); // "trophies"
                 } else {
                   uiStore.openAccountDetails();
                 }

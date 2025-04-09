@@ -201,6 +201,10 @@ export default function Slot() {
         limit: 1,
         offset: 0,
         dont_include_hashed_keys: false,
+        entity_models:[],
+        // entity_models:["dopewars-SlotMachine"],
+        entity_updated_after:0,
+        order_by:[]
       });
 
       console.log(entities);

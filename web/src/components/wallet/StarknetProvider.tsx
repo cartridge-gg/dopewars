@@ -14,6 +14,7 @@ import { getContractByName } from "@dojoengine/core";
 import { DW_NS } from "@/dojo/hooks";
 import { ControllerConnector } from "@cartridge/connector";
 import { useRouter } from "next/router";
+import { SessionPolicies } from "@cartridge/presets";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -38,11 +39,9 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
 function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
   const controller = cartridgeConnector({ selectedChain });
 
-
-
   switch (selectedChain.name) {
     case "KATANA":
-      return [injected({ id: "dojoburner" }), injected({ id: "dojopredeployed" })];
+      return [controller, /*injected({ id: "dojoburner" }), */injected({ id: "dojopredeployed" })];
 
     // case "SN_SEPOLIA":
     //   return [cartridgeConnector({ selectedChain })];
@@ -92,68 +91,60 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
-  const policies = [
-    {
-      target: selectedChain.vrfProviderAddress,
-      method: "request_random",
+  const policies: SessionPolicies = {
+    contracts: {
+      [selectedChain.vrfProviderAddress]: {
+        methods: [{ entrypoint: "request_random" }],
+      },
+      [paperAddress]: {
+        methods: [{ entrypoint: "approve" }],
+      },
+      [gameAddress]: {
+        methods: [
+          { entrypoint: "create_game" },
+          { entrypoint: "travel" },
+          { entrypoint: "decide" },
+          { entrypoint: "end_game" },
+          { entrypoint: "travel" },
+        ],
+      },
+      [laundromatAddress]: {
+        methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
+      },
     },
-    {
-      target: paperAddress,
-      method: "approve",
-    },
-    {
-      target: gameAddress,
-      method: "create_game",
-    },
-    {
-      target: gameAddress,
-      method: "travel",
-    },
-    {
-      target: gameAddress,
-      method: "decide",
-    },
-    {
-      target: gameAddress,
-      method: "end_game",
-    },
-    {
-      target: laundromatAddress,
-      method: "register_score",
-    },
-    {
-      target: laundromatAddress,
-      method: "claim",
-    },
-    {
-      target: laundromatAddress,
-      method: "launder",
-    },
-  ];
+  };
 
   if (selectedChain.name !== "MAINNET") {
-    policies.push({
-      target: paperAddress,
-      method: "faucet",
+    policies.contracts![paperAddress].methods.push({
+      entrypoint: "faucet",
     });
 
-    policies.push({
-      target: selectedChain.vrfProviderAddress,
-      method: "submit_random",
+    policies.contracts![selectedChain.vrfProviderAddress].methods.push({
+      entrypoint: "submit_random",
     });
-
-    policies.push({
-      target: selectedChain.vrfProviderAddress,
-      method: "assert_consumed",
+    policies.contracts![selectedChain.vrfProviderAddress].methods.push({
+      entrypoint: "assert_consumed",
     });
   }
 
   // console.log(policies);
 
   return new ControllerConnector({
+    chains: [
+      {
+        rpcUrl: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+      },
+      {
+        rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
+      },
+      {
+        rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
+      },
+    ],
+    defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
-    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
-    profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
+    // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
     namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
     slot: selectedChain.slot ? selectedChain.slot : "ryo",
     tokens: {
@@ -163,7 +154,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       ],
     },
     preset: "dope-wars",
-    colorMode: "dark",
-    policies: selectedChain.name === "MAINNET" ? undefined : policies,
+    // colorMode: "dark",
+    policies,
   }) as unknown as InjectedConnector;
 };

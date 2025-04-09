@@ -83,6 +83,9 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
           limit: 10000,
           offset: 0,
           dont_include_hashed_keys: true,
+          entity_models:[],
+          entity_updated_after:0,
+          order_by:[]
         },
         true,
       );
