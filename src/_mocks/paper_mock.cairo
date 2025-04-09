@@ -51,8 +51,8 @@ mod paper_mock {
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
     use dojo::world::{WorldStorage, WorldStorageTrait};
-    use openzeppelin::token::erc20::ERC20Component;
-    use openzeppelin::token::erc20::interface::IERC20Metadata;
+    use openzeppelin_token::erc20::ERC20Component;
+    use openzeppelin_token::erc20::interface::IERC20Metadata;
     use rollyourown::store::{Store, StoreImpl, StoreTrait};
     use starknet::{ContractAddress, get_caller_address};
 

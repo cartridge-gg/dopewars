@@ -8,7 +8,8 @@
   "possibleTypes": {
     "ERC__Token": [
       "ERC20__Token",
-      "ERC721__Token"
+      "ERC721__Token",
+      "ERC1155__Token"
     ],
     "ModelUnion": [
       "dopewars_Claimed",

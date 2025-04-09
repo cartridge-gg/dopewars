@@ -1,8 +1,15 @@
-allowed_origins = ["*"]
-world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"
+
+
+world_address = "0x0685b5da23a2ca5714afb4304797f08102d4232cf1d5afdde1f0a8cc1b0a5c6e"
+
+[server]
+http_cors_origins = ["*"]
+
+
+[indexing]
 index_pending = true
 polling_interval = 1000
-historical_events = [
+historical = [
     "dopewars-GameCreated",
     "dopewars-Traveled",
     "dopewars-GameOver",

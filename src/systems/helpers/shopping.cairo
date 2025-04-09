@@ -1,4 +1,4 @@
-use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::elements::quests::{types::{Quest, QuestTrait}};

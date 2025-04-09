@@ -12,7 +12,7 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 mod laundromat {
-    use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+    use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;

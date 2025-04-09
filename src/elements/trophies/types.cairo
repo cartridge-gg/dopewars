@@ -1,4 +1,4 @@
-use bushido_trophy::types::task::Task;
+use achievement::types::task::Task;
 use rollyourown::elements::trophies;
 
 #[cfg(test)]

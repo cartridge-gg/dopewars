@@ -26,7 +26,7 @@ trait IRyo<T> {
 
 #[dojo::contract]
 mod ryo {
-    use bushido_trophy::components::achievable::AchievableComponent;
+    use achievement::components::achievable::AchievableComponent;
     use core::traits::Into;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};

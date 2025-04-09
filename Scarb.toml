@@ -1,7 +1,8 @@
 [package]
-cairo-version = "=2.8.4"
+cairo-version = "=2.9.4"
 name = "rollyourown"
 version = "0.1.0"
+# edition = "2024_07"
 
 [cairo]
 # sierra-replace-ids = true
@@ -14,23 +15,28 @@ tab-size = 4
 [[target.starknet-contract]]
 build-external-contracts = [
     "dojo::world::world_contract::world",
-    "bushido_trophy::events::index::e_TrophyCreation",
-    "bushido_trophy::events::index::e_TrophyProgression",
+    "achievement::events::index::e_TrophyCreation",
+    "achievement::events::index::e_TrophyProgression",
 ]
 
 [dev-dependencies]
-cairo_test = "2.8.4"
+cairo_test = "2.9.4"
 
 [dependencies]
-starknet = "2.8.4"
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-rc.2" }
+starknet = "2.9.4"
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.4.0" }
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
-bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
+achievement = { git = "https://github.com/cartridge-gg/bushido", rev = "0b658f495885f387bf56d6a27e76514b9b4b772f" }
+# bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
 # bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
 # dojo = { path = "../dojo/crates/dojo/core" }
 
+openzeppelin_access = "0.18.0" 
+openzeppelin_token = "0.18.0"
+
 [scripts]
 katana = "katana --config ./katana_dev.toml"
+katana_with_db = "katana --config ./katana_dev.toml --db-dir db"
 torii = "torii --config ./torii_dev.toml"
 
 # common
@@ -39,7 +45,7 @@ gendojo = "./scripts/gen.sh"
 auth = "./scripts/auth.sh"
 
 # migrate  && scarb run gendojo $PROFILE
-migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate && scarb run copy_manifest $PROFILE && scarb run gendojo $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryo1 = "PROFILE=ryo1 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryo2 = "PROFILE=ryo2 && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"

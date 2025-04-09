@@ -4,7 +4,7 @@ mod vrf_provider_mock {
 
     use cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent;
 
-    use openzeppelin::access::ownable::OwnableComponent;
+    use openzeppelin_access::ownable::OwnableComponent;
     use starknet::{ContractAddress, ClassHash};
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
