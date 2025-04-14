@@ -8,7 +8,15 @@ import manifestRyo2 from "../../manifests/manifest_ryo2.json";
 import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
 
+import {
+  manifestDev as manifestDopeDev,
+  manifestDope as manifestDopeDope,
+  manifestSepolia as manifestDopeSepolia,
+  manifestMainnet as manifestDopeMainnet,
+} from "@dope/dope-sdk/manifests";
+
 import { DW_NS } from "../hooks";
+import { mergeManifests } from "@dope/dope-sdk/helpers";
 
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
@@ -37,6 +45,7 @@ export type DojoChainConfig = {
   vrfProviderSecret?: string;
 };
 
+
 const katanaLocal: DojoChainConfig = {
   name: "KATANA",
   chainConfig: katanaLocalChain,
@@ -49,7 +58,7 @@ const katanaLocal: DojoChainConfig = {
     process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY || "0x1800000000300000180000000000030000000000003006001800006600",
   accountClassHash:
     process.env.NEXT_PUBLIC_ACCOUNT_CLASS_HASH || "0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2",
-  manifest: manifestDev,
+  manifest: mergeManifests(manifestDev, [manifestDopeDev]),
   predeployedAccounts: [
     {
       name: "Deployer",
@@ -81,7 +90,7 @@ const katanaSlot1: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/ryo1/katana",
   toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
-  manifest: manifestRyo1,
+  manifest: mergeManifests(manifestRyo1, [manifestDopeDope]),
   slot: "ryo1",
   profileUrl: "https://profile.cartridge.gg",
   predeployedAccounts: [],
@@ -90,20 +99,20 @@ const katanaSlot1: DojoChainConfig = {
   vrfProviderSecret: "0x420",
 };
 
-const katanaSlot2: DojoChainConfig = {
-  name: "WP_RYO2",
-  chainConfig: katanaSlot2Chain,
-  rpcUrl: "https://api.cartridge.gg/x/ryo2/katana",
-  toriiUrl: "https://api.cartridge.gg/x/ryo2/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryo2/torii/graphql/ws",
-  manifest: manifestRyo2,
-  slot: "ryo2",
-  profileUrl: "https://profile.cartridge.gg",
-  predeployedAccounts: [],
-  paperAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
-  vrfProviderAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
-  vrfProviderSecret: "0x420",
-};
+// const katanaSlot2: DojoChainConfig = {
+//   name: "WP_RYO2",
+//   chainConfig: katanaSlot2Chain,
+//   rpcUrl: "https://api.cartridge.gg/x/ryo2/katana",
+//   toriiUrl: "https://api.cartridge.gg/x/ryo2/torii/graphql",
+//   toriiWsUrl: "wss://api.cartridge.gg/x/ryo2/torii/graphql/ws",
+//   manifest: manifestRyo2,
+//   slot: "ryo2",
+//   profileUrl: "https://profile.cartridge.gg",
+//   predeployedAccounts: [],
+//   paperAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
+//   vrfProviderAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+//   vrfProviderSecret: "0x420",
+// };
 
 const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
@@ -111,7 +120,7 @@ const snSepolia: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
   toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
-  manifest: manifestRyoSepolia,
+  manifest: mergeManifests(manifestRyoSepolia, [manifestDopeSepolia]),
   slot: "ryosepolia2",
   predeployedAccounts: [],
   paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
@@ -125,7 +134,7 @@ const snMainnet: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
   toriiUrl: "https://api.cartridge.gg/x/ryomainnet/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryomainnet/torii/graphql/ws",
-  manifest: manifestMainnet,
+  manifest: mergeManifests(manifestMainnet, [manifestDopeMainnet]),
   slot: "ryomainnet",
   predeployedAccounts: [],
   paperAddress: PAPER_MAINNET,

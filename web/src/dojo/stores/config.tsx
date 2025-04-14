@@ -21,7 +21,7 @@ import {
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
 import { flow, makeObservable, observable } from "mobx";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Contract, TypedContractV2, shortString } from "starknet";
 import { ABI as configAbi } from "../abis/configAbi";
 import {
@@ -159,13 +159,15 @@ export class ConfigStoreClass {
 
     const hustlerItemBaseConfigEdges = data.dopewarsHustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
     const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
+
+      const name = shortString.decodeShortString(i.node?.name)
       return {
         ...i.node,
-        name: shortString.decodeShortString(i.node?.name),
+        name,
         icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys],
       } as HustlerItemBaseConfigFull;
     });
-
+console.log(hustlerItemBaseConfig)
     //
 
     const hustlerItemTiersConfigEdges = data.dopewarsHustlerItemTiersConfigModels!

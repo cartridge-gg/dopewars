@@ -2,13 +2,13 @@ import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } fr
 import { useToast } from "@/hooks/toast";
 import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
-import { DojoCall } from "@dojoengine/core";
+import { DojoCall, getContractByName } from "@dojoengine/core";
 import { buildVrfCalls, sleep } from "../utils";
 
 export const ETHER = 10n ** 18n;
@@ -77,6 +77,13 @@ export const useSystems = (): SystemsInterface => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
+  const { gameAddress, laundromatAddress } = useMemo(() => {
+    const gameAddress = getContractByName(dojoProvider.manifest, DW_NS, "game").address;
+    const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
+
+    return { gameAddress, laundromatAddress };
+  }, [dojoProvider]);
+
   const executeAndReceipt = useCallback(
     async (calls: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
       if (!account) {
@@ -99,6 +106,7 @@ export const useSystems = (): SystemsInterface => {
       let tx, receipt;
 
       try {
+        ///@ts-ignore
         tx = await dojoProvider.execute(account!, calls, DW_NS);
 
         receipt = await rpcProvider.waitForTransaction(tx.transaction_hash, {
@@ -150,7 +158,6 @@ export const useSystems = (): SystemsInterface => {
     async (gameMode: GameMode, hustlerId: number, playerName: string) => {
       const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
       const paperAddress = selectedChain.paperAddress;
-      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       //
       const approvalCall: Call = {
@@ -190,7 +197,6 @@ export const useSystems = (): SystemsInterface => {
   const endGame = useCallback(
     async (gameId: string, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
-      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       const { hash } = await executeAndReceipt({
         contractAddress: gameAddress,
@@ -209,7 +215,6 @@ export const useSystems = (): SystemsInterface => {
   const travel = useCallback(
     async (gameId: string, location: Locations, pending_calls: Array<PendingCall>) => {
       const callsEnum = pending_calls.map(pendingCallToCairoEnum);
-      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       const call = {
         contractAddress: gameAddress,
@@ -236,7 +241,6 @@ export const useSystems = (): SystemsInterface => {
 
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
-      const gameAddress = dojoProvider.manifest.contracts.find((i: any) => i.tag === `${DW_NS}-game`).address;
 
       const call = {
         contractAddress: gameAddress,
@@ -309,12 +313,7 @@ export const useSystems = (): SystemsInterface => {
 
   const superchargeJackpot = useCallback(
     async (season: number, amountEth: number) => {
-      // const paperAddress = config?.ryoAddress.paper;
       const paperAddress = selectedChain.paperAddress;
-      const laundromatAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.tag === `${DW_NS}-laundromat`,
-      ).address;
-
       const amount = BigInt(amountEth) * ETHER;
 
       //
@@ -326,7 +325,6 @@ export const useSystems = (): SystemsInterface => {
 
       const superchargeJackpotCall = {
         contractName: `laundromat`,
-        //  contractAddress: gameAddress,
         entrypoint: "supercharge_jackpot",
         calldata: CallData.compile([season, amountEth]),
       };
@@ -342,10 +340,6 @@ export const useSystems = (): SystemsInterface => {
 
   const launder = useCallback(
     async (season: number) => {
-      const laundromatAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.tag === `${DW_NS}-laundromat`,
-      ).address;
-
       const call = {
         contractAddress: laundromatAddress,
         entrypoint: "launder",
@@ -388,7 +382,6 @@ export const useSystems = (): SystemsInterface => {
 
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
-
       const { hash } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "update_ryo_config",
@@ -406,10 +399,9 @@ export const useSystems = (): SystemsInterface => {
         }),
       });
 
-       return {
-         hash,
-       };
-
+      return {
+        hash,
+      };
     },
     [executeAndReceipt],
   );

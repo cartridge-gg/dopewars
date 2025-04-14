@@ -54,7 +54,7 @@ const DrawerMenu = () => {
       <HeaderButton ref={btnRef} onClick={onOpen} w="48px">
         <Dots />
       </HeaderButton>
-      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} finalFocusRef={btnRef} trapFocus={false}>
+      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} /*finalFocusRef={btnRef} */ trapFocus={false}>
         <DrawerOverlay onClick={onClose} />
         <DrawerContent minW="340px" overflowX="hidden">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>

@@ -21,6 +21,8 @@ import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
 import { useRouter } from "next/router";
+import { CollectionProvider } from "@dope/dope-sdk/store";
+
 
 export interface DojoContextType {
   chains: DojoChainsResult;
@@ -223,10 +225,12 @@ export const DojoContextProvider = observer(
             <ConnectionError errors={errors} />
           ) : (
             <>
-              <QueryClientProvider client={queryClient}>
-                <RegisterEntities />
-                {children}
-              </QueryClientProvider>
+              <CollectionProvider toriiClient={toriiClient}>
+                <QueryClientProvider client={queryClient}>
+                  <RegisterEntities />
+                  {children}
+                </QueryClientProvider>
+              </CollectionProvider>
             </>
           )}
         </StarknetProvider>

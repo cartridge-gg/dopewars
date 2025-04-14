@@ -21,7 +21,7 @@ export const GlobalEvents = () => {
     clients: { toriiClient },
   } = useDojoContext();
 
-  const subscription = useRef<Subscription>();
+  const subscription = useRef<Subscription|undefined>(undefined);
   const accountAddress = useRef(0n);
 
   useEffect(() => {

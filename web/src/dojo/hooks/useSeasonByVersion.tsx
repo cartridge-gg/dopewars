@@ -58,7 +58,7 @@ export const useSeasonByVersion = (seasonId: number): SeasonByVersionInterface =
   useEffect(() => {
     const handle = setInterval(() => {
       setTimestamp(Date.now());
-    }, 1_000);
+    }, 5_000);
 
     return () => clearInterval(handle);
   }, []);

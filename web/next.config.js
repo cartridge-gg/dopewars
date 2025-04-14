@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+
+import path from "path";
 const nextConfig = {
   productionBrowserSourceMaps: true,
   // https://rishabhsharma.bio/next-js-issue-useeffect-hook-running-twice-in-client-9fb6712f6362
@@ -13,6 +15,12 @@ const nextConfig = {
       ...config.experiments,
       asyncWebAssembly: true,
       topLevelAwait: true,
+    };
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "react": path.resolve("./node_modules/react"),
+      "react-dom": path.resolve("./node_modules/react-dom"),
+      // starknet: path.resolve("./node_modules/starknet"),
     };
     return config;
   },

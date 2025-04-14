@@ -10,8 +10,6 @@ import { useAccount } from "@starknet-react/core";
 
 export default function SeasonIndex() {
   const { router, seasonId } = useRouterContext();
-  const { account } = useAccount();
-
   const { seasons, refetch } = useSeasons();
 
   return (

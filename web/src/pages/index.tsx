@@ -14,6 +14,7 @@ import { Glock } from "@/components/icons/items";
 import { gameModeName } from "@/dojo/helpers";
 
 export default function Home() {
+  
   const { router, isLocalhost } = useRouterContext();
   const { account } = useAccount();
   const { uiStore } = useDojoContext();
