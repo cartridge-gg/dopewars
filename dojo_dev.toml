@@ -62,6 +62,7 @@ skip_contracts = [
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
 "dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-GameWithLoot" = ["dopewars-game"]
 "dopewars-GameStorePacked" = ["dopewars-game"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]

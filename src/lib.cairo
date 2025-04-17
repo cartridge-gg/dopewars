@@ -113,6 +113,7 @@ mod utils {
 mod interfaces {
     mod chips;
     mod paper;
+    mod erc721;
 }
 
 mod _mocks {

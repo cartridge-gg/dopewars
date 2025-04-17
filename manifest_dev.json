@@ -1977,8 +1977,8 @@
       ]
     },
     {
-      "address": "0x751bc62b9704da891ff980b7fc900671ac864d68ba33a0a6c90aed59efbb3db",
-      "class_hash": "0x6ec030766a98150a119414ae1e3891e585adb9985fa2a987294812641600579",
+      "address": "0x281de72fce57ec3802947210f1f53a2a1ecd2167400ba76d33c78135fcbaf79",
+      "class_hash": "0x70b74cac9ac2573d142e1204c2fe2e7eab97f7186429049d3b2bb7d371ebeeb",
       "abi": [
         {
           "type": "impl",
@@ -2250,6 +2250,10 @@
                 {
                   "name": "player_name",
                   "type": "core::felt252"
+                },
+                {
+                  "name": "loot_id",
+                  "type": "core::integer::u16"
                 }
               ],
               "outputs": [],
@@ -2432,8 +2436,8 @@
       ]
     },
     {
-      "address": "0x2c520b6bd71b265f69f0cbb973cf697ad07af0eac8169c078ec721419a45ecb",
-      "class_hash": "0x51051c3a99f0882a367a2439e3246736883c8c1f46877093a71616b417830c9",
+      "address": "0x17be4ffa3839bcb12dbae41021bdc5af2624caf8e06709c6217d7c1fa3ce36f",
+      "class_hash": "0x3fc6b84625a6f8e6f0ca129f329f078642be114180948686a5fe5f679802bdb",
       "abi": [
         {
           "type": "impl",
@@ -3128,8 +3132,8 @@
       ]
     },
     {
-      "address": "0xa3e97ab469d1f43e70574dc35d9c728f734f7a18fb7f8a2a7b0bb2528f7b7",
-      "class_hash": "0x110c3bdb86821fbb22703f8e323eb43f0ceda5ab553c33be52373064d0f3673",
+      "address": "0x53755e5be73a422dcbe264db460133e2e675f6e0f4b44c21e5e8e46c2e213be",
+      "class_hash": "0x27edbd797bec7c6a5af26cbcddf99c0f399f65620f01919c8d80b2bf668cb28",
       "abi": [
         {
           "type": "impl",
@@ -4036,6 +4040,12 @@
       "class_hash": "0x88f89eae45f163391d10d28b66c6d49c06b83869fe406428523a677ce91e37",
       "tag": "dopewars-GameStorePacked",
       "selector": "0x121912f143c6df44026c9949fd2c3ecd303fd602c1c5da61e206a79ce86e13f"
+    },
+    {
+      "members": [],
+      "class_hash": "0x3d5af0bd9f0e61dd3d20ac2edefcc539495157ab0cac3079ed7792acbe17137",
+      "tag": "dopewars-GameWithLoot",
+      "selector": "0x40ce22f46bafa07c78de6c6f28e790b6e5859b8b4c548378dcb7d93bf7c33bc"
     },
     {
       "members": [],

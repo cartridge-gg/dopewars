@@ -19,7 +19,7 @@ import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { Box, Card, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, HStack, Heading, Text, VStack, Image } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -27,6 +27,7 @@ import { shortString } from "starknet";
 import { useDojoTokens } from "@dope/dope-sdk/hooks";
 import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { getContractByName } from "@dojoengine/core";
+import { useCollectionContext } from "@dope/dope-sdk/store";
 
 const New = observer(() => {
   const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
@@ -38,18 +39,17 @@ const New = observer(() => {
 
   const { account } = useAccount();
   const addresses = useMemo(() => {
-    return [
-      getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address,
-    ];
+    return [getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address];
   }, []);
 
   const { tokens, tokensBalances, accountTokens } = useDojoTokens(toriiClient, addresses, account);
 
+  const ownLoot = useMemo(() => {
+    return accountTokens && accountTokens?.length > 0;
+  }, [accountTokens]);
   // todo: filter accountTokens
-
-  // console.log(tokens);
-  // console.log(tokensBalances);
-  console.log(accountTokens);
+  // console.log(tokens)
+  // console.log(accountTokens)
 
   const { createGame, isPending } = useSystems();
   const configStore = useConfigStore();
@@ -66,13 +66,15 @@ const New = observer(() => {
 
   const inputRef = useRef<null | HTMLDivElement>(null);
 
-  const [selectedAccountToken, setSelectedAccountToken] = useState(0);
+  const [selectedLootToken, setSelectedLootToken] = useState(0);
 
   const { balance, isInitializing } = useTokenBalance({
     address: account?.address,
     token: config?.ryoAddress.paper,
     refetchInterval: 5_000,
   });
+
+  const dopeLootClaimState = useCollectionContext((state) => state.dopeLootClaimState);
 
   useEffect(() => {
     const hustler = configStore.getHustlerById(hustlerId);
@@ -104,6 +106,13 @@ const New = observer(() => {
     setHustlerStats(stats);
   }, [hustlerId, configStore, configStore?.config, configStore?.config?.items, configStore?.config?.tiers]);
 
+  useEffect(() => {
+    if (accountTokens && accountTokens[selectedLootToken]) {
+      const lootId = accountTokens ? Number(accountTokens[selectedLootToken].token_id) : 0;
+      setHustlerId(lootId % 3);
+    }
+  }, [selectedLootToken, accountTokens]);
+
   const create = async (gameMode: GameMode) => {
     setError("");
     if (name === "" || name.length > 16 || name.length < 3) {
@@ -117,7 +126,9 @@ const New = observer(() => {
         play();
       }
 
-      await createGame(gameMode, hustlerId, name);
+      const selectedLootTokenId = accountTokens!.length > 0 ? Number(accountTokens![selectedLootToken].token_id) : 0;
+
+      await createGame(gameMode, hustlerId, name, selectedLootTokenId);
 
       // const { hash, gameId } = await createGame(gameMode, hustlerId, name);
 
@@ -128,6 +139,9 @@ const New = observer(() => {
       console.log(e);
     }
   };
+
+  // console.log(selectedLootToken)
+  // console.log(accountTokens && accountTokens[selectedLootToken])
 
   if (!configStore || !hustlerStats || !season) return null;
 
@@ -190,18 +204,6 @@ const New = observer(() => {
             </Heading>
           </VStack>
 
-          {/* <HStack flexWrap={"wrap"}>
-            {accountTokens?.map((t) => {
-              // return <img src={t.metadata.image} width={100} />;
-              return (
-                <Box width="160px" height="160px">
-                  <HustlerPreviewFromLoot tokenId={Number(t.token_id)} />
-                </Box>
-              );
-            })}
-          </HStack> */}
-          {/* setSelectedAccountToken
-           */}
           {accountTokens && accountTokens?.length > 0 && (
             <HStack align="center" justify="center">
               <Arrow
@@ -212,17 +214,34 @@ const New = observer(() => {
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3);
-                  selectedAccountToken > 0
-                    ? setSelectedAccountToken((selectedAccountToken - 1) % accountTokens.length)
-                    : setSelectedAccountToken(accountTokens.length - 1);
+                  selectedLootToken > 0
+                    ? setSelectedLootToken((selectedLootToken - 1) % accountTokens.length)
+                    : setSelectedLootToken(accountTokens.length - 1);
                 }}
               />
 
-              {/* <HStack> */}
-              <Box width="300px" height="300px">
-                <HustlerPreviewFromLoot tokenId={Number(accountTokens[selectedAccountToken].token_id)} />
+              <Box position="relative" width="200px" height="200px">
+                <HustlerPreviewFromLoot tokenId={Number(accountTokens[selectedLootToken].token_id)} />
+                {!dopeLootClaimState[Number(accountTokens[selectedLootToken].token_id)]?.isReleased ? (
+                  <Image
+                    src="/images/prisonbar.png"
+                    style={{ imageRendering: "pixelated" }}
+                    top={0}
+                    width="full"
+                    height="full"
+                    position="absolute"
+                  />
+                ) : (
+                  <Image
+                    src="/images/prisonbar-released.png"
+                    style={{ imageRendering: "pixelated", zIndex: -1, margin: "auto" }}
+                    top={0}
+                    width="70%"
+                    height="70%"
+                    position="absolute"
+                  />
+                )}
               </Box>
-              {/* </HStack> */}
 
               <Arrow
                 style="outline"
@@ -232,7 +251,7 @@ const New = observer(() => {
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3);
-                  setSelectedAccountToken((selectedAccountToken + 1) % accountTokens.length);
+                  setSelectedLootToken((selectedLootToken + 1) % accountTokens.length);
                 }}
               />
             </HStack>
@@ -245,7 +264,9 @@ const New = observer(() => {
               boxSize="48px"
               userSelect="none"
               cursor="pointer"
+              visibility={ownLoot ? "hidden" : "visible"}
               onClick={() => {
+                if (ownLoot) return;
                 playSound(Sounds.HoverClick, 0.3);
                 hustlerId > 0 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount - 1);
               }}
@@ -341,7 +362,9 @@ const New = observer(() => {
               boxSize="48px"
               userSelect="none"
               cursor="pointer"
+              visibility={ownLoot ? "hidden" : "visible"}
               onClick={() => {
+                if (ownLoot) return;
                 playSound(Sounds.HoverClick, 0.3);
                 setHustlerId((hustlerId + 1) % hustlersCount);
               }}

@@ -10,12 +10,14 @@ import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { buildVrfCalls, sleep } from "../utils";
+import { Model } from "@dojoengine/torii-client";
+import { useCollectionContext } from "@dope/dope-sdk/store";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
 
 interface SystemsInterface {
-  createGame: (gameMode: number, hustlerId: number, playerName: string) => Promise<SystemExecuteResult>;
+  createGame: (gameMode: number, hustlerId: number, playerName: string, lootId: number) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
@@ -56,7 +58,9 @@ const tryBetterErrorMsg = (msg: string): string => {
   if (failureReasonIndex > 0) {
     let betterMsg = msg.substring(failureReasonIndex);
     const cairoTracebackIndex = betterMsg.indexOf('\\n","transaction_index');
-    betterMsg = betterMsg.substring(0, cairoTracebackIndex);
+    if (cairoTracebackIndex > -1) {
+      betterMsg = betterMsg.substring(0, cairoTracebackIndex);
+    }
     return betterMsg;
   }
 
@@ -65,7 +69,7 @@ const tryBetterErrorMsg = (msg: string): string => {
 
 export const useSystems = (): SystemsInterface => {
   const {
-    clients: { dojoProvider, rpcProvider },
+    clients: { dojoProvider, rpcProvider, toriiClient },
     chains: { selectedChain },
   } = useDojoContext();
 
@@ -77,12 +81,16 @@ export const useSystems = (): SystemsInterface => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const { gameAddress, laundromatAddress } = useMemo(() => {
+  const { gameAddress, laundromatAddress, dopeLootClaimAddress } = useMemo(() => {
     const gameAddress = getContractByName(dojoProvider.manifest, DW_NS, "game").address;
     const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
+    const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dojo", "DopeLootClaim").address;
 
-    return { gameAddress, laundromatAddress };
+    return { gameAddress, laundromatAddress, dopeLootClaimAddress };
   }, [dojoProvider]);
+
+  const dopeLootClaimState = useCollectionContext((state) => state.dopeLootClaimState);
+  const initDopeLootClaimState = useCollectionContext((state) => state.initDopeLootClaimState);
 
   const executeAndReceipt = useCallback(
     async (calls: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
@@ -155,7 +163,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, hustlerId: number, playerName: string) => {
+    async (gameMode: GameMode, hustlerId: number, playerName: string, lootId: number) => {
       const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
       const paperAddress = selectedChain.paperAddress;
 
@@ -169,7 +177,7 @@ export const useSystems = (): SystemsInterface => {
       const createGameCall = {
         contractAddress: gameAddress,
         entrypoint: "create_game",
-        calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName)]),
+        calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName), lootId]),
       };
 
       const createGameCalls = await buildVrfCalls({
@@ -241,7 +249,6 @@ export const useSystems = (): SystemsInterface => {
 
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
-
       const call = {
         contractAddress: gameAddress,
         entrypoint: "decide",
@@ -270,12 +277,61 @@ export const useSystems = (): SystemsInterface => {
 
   const registerScore = useCallback(
     async (gameId: string, prevGameId: string, prevPlayerId: string) => {
-      const { hash } = await executeAndReceipt({
-        contractName: `laundromat`,
-        entrypoint: "register_score",
-        // @ts-ignore
-        calldata: CallData.compile([gameId, prevGameId, prevPlayerId]),
+      const calls = [
+        {
+          contractName: `laundromat`,
+          entrypoint: "register_score",
+          // @ts-ignore
+          calldata: CallData.compile([gameId, prevGameId, prevPlayerId]),
+        },
+      ];
+
+      const playerId = account?.address;
+      const gameWithLootEntities = await toriiClient.getEntities({
+        clause: {
+          Keys: {
+            keys: [Number(gameId).toString(), playerId],
+            models: ["dopewars-GameWithLoot"],
+            pattern_matching: "FixedLen",
+          },
+        },
+        limit: 1,
+        offset: 0,
+        dont_include_hashed_keys: false,
+        entity_models: ["dopewars-GameWithLoot"],
+        entity_updated_after: 0,
+        order_by: [],
       });
+
+      if (Object.keys(gameWithLootEntities).length > 0) {
+        // retrieve loot_id used with game_id
+        const gameWithLoot = gameWithLootEntities[Object.keys(gameWithLootEntities)[0]][
+          "dopewars-GameWithLoot"
+        ] as Model;
+        const lootId = Number(gameWithLoot.loot_id.value);
+
+        if (lootId > 0) {
+          const isReleased = dopeLootClaimState[lootId].isReleased;
+          if (!isReleased) {
+            const lootIdU256 = uint256.bnToUint256(lootId);
+
+            calls.push({
+              //@ts-ignore
+              contractAddress: dopeLootClaimAddress,
+              entrypoint: "release",
+              // @ts-ignore
+              calldata: CallData.compile([lootIdU256.low, lootIdU256.high, gameId]),
+            });
+          }
+        }
+      }
+
+      // console.log(calls);
+
+      const { hash } = await executeAndReceipt(calls);
+      setTimeout(() => {
+        initDopeLootClaimState();
+      }, 1_000);
 
       return {
         hash,

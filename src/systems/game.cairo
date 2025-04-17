@@ -21,7 +21,9 @@ pub enum EncounterActions {
 
 #[starknet::interface]
 trait IGameActions<T> {
-    fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
+    fn create_game(
+        self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252, loot_id: u16
+    );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
     fn decide(self: @T, game_id: u32, action: EncounterActions);
@@ -31,6 +33,7 @@ trait IGameActions<T> {
 mod game {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
+    use dojo::world::WorldStorageTrait;
     use dojo::world::IWorldDispatcherTrait;
 
     use rollyourown::{
@@ -46,15 +49,22 @@ mod game {
         },
         helpers::season_manager::{SeasonManagerTrait},
         utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        store::{Store, StoreImpl, StoreTrait}, events::{GameCreated}
+        interfaces::{
+            erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
+            paper::{IPaperDispatcher, IPaperDispatcherTrait}
+        },
+        constants::{ETHER}, store::{Store, StoreImpl, StoreTrait}, events::{GameCreated}
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
+            self: @ContractState,
+            game_mode: GameMode,
+            hustler_id: u16,
+            player_name: felt252,
+            loot_id: u16,
         ) {
             self.assert_not_paused();
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
@@ -81,10 +91,36 @@ mod game {
                 season_manager.on_game_start();
             }
 
+            // check if owner of loot_id
+            let mut dope_world = self.world(@"dojo");
+            if loot_id > 0 {
+                let loot_dispatcher = IERC721ABIDispatcher {
+                    contract_address: dope_world.dns_address(@"DopeLoot").unwrap()
+                };
+                assert(
+                    player_id == loot_dispatcher.owner_of(loot_id.into()),
+                    'caller is not loot owner'
+                );
+
+                // create a GameWithLoot if not exists
+                let mut game_with_loot = store.game_with_loot(game_id, player_id);
+                if game_with_loot.loot_id.is_zero() {
+                    game_with_loot.loot_id = loot_id.into();
+                    store.set_game_with_loot(@game_with_loot);
+                }
+            }
+
+            // overrider hustler_id if playing with loot_id
+            let hustler_id: u16 = if loot_id > 0 {
+                (loot_id % 3).into()
+            } else {
+                hustler_id
+            };
+
             // create game
             let mut game_config = store.game_config(season_version);
             let mut game = GameImpl::new(
-                game_id, player_id, season_version, game_mode, player_name, hustler_id
+                game_id, player_id, season_version, game_mode, player_name, hustler_id, loot_id
             );
 
             // save Game

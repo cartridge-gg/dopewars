@@ -9,7 +9,7 @@ use rollyourown::{
         game::{GameConfig}, ryo_address::{RyoAddress},
         settings::{SeasonSettings, EncountersMode, DrugsMode}
     },
-    models::{game::Game, season::Season, game_store_packed::GameStorePacked,},
+    models::{game::Game, game::GameWithLoot, season::Season, game_store_packed::GameStorePacked,},
     packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer},
     utils::sorted_list::{SortedList, SortedListItem}
 };
@@ -146,6 +146,17 @@ impl StoreImpl of StoreTrait {
     fn set_sorted_list_item(ref self: Store, item: @SortedListItem) {
         self.world.write_model(item)
     }
+
+    //
+
+    fn game_with_loot(self: @Store, game_id: u32, player_id: ContractAddress) -> GameWithLoot {
+        self.world.read_model((game_id, player_id))
+    }
+    
+    fn set_game_with_loot(ref self: Store, game_with_loot: @GameWithLoot) {
+        self.world.write_model(game_with_loot);
+    }
+    //
     // fn set_slot_machine(ref self: Store, machine: @SlotMachine) {
 //     self.world.write_model(machine)
 // }

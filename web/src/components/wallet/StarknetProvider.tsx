@@ -41,7 +41,7 @@ function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
 
   switch (selectedChain.name) {
     case "KATANA":
-      return [controller, /*injected({ id: "dojoburner" }), */injected({ id: "dojopredeployed" })];
+      return [controller, /*injected({ id: "dojoburner" }), */ injected({ id: "dojopredeployed" })];
 
     // case "SN_SEPOLIA":
     //   return [cartridgeConnector({ selectedChain })];
@@ -90,6 +90,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const paperAddress = selectedChain.paperAddress;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
+  const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dojo", "DopeLootClaim").address;
 
   const policies: SessionPolicies = {
     contracts: {
@@ -110,6 +111,9 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       },
       [laundromatAddress]: {
         methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
+      },
+      [dopeLootClaimAddress]: {
+        methods: [{ entrypoint: "release" }],
       },
     },
   };

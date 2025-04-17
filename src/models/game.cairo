@@ -25,6 +25,17 @@ struct Game {
     position: u16,
 }
 
+
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
+struct GameWithLoot {
+    #[key]
+    game_id: u32,
+    #[key]
+    player_id: ContractAddress,
+    loot_id: felt252
+}
+
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum GameMode {
     Ranked,
@@ -40,7 +51,8 @@ impl GameImpl of GameTrait {
         season_version: u16,
         game_mode: GameMode,
         player_name: felt252,
-        hustler_id: u16
+        hustler_id: u16,
+        loot_id: u16,
     ) -> Game {
         Game {
             game_id,
