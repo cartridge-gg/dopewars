@@ -80,8 +80,15 @@ export const GlobalEvents = () => {
                 pattern_matching: "FixedLen",
               },
             },
+            //
+            {
+              Keys: {
+                keys: [undefined,undefined], // u256
+                models: ["dojo-DopeLootReleasedEvent"],
+                pattern_matching: "FixedLen",
+              },
+            },
           ],
-          true,
           onEventMessage,
         );
       }
@@ -98,7 +105,7 @@ export const GlobalEvents = () => {
   }, [selectedChain, accountAddress.current]);
 
   const onEventMessage = (entity: any, update: any) => {
-    // console.log("globalEvents::onEventMessage", entity, update);
+    console.log("globalEvents::onEventMessage", entity, update);
 
     if (update["dopewars-GameCreated"]) {
       const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
@@ -146,6 +153,15 @@ export const GlobalEvents = () => {
           message: gameOver.health === 0 ? `RIP ${gameOver.player_name}!` : `${gameOver.player_name} survived!`,
         });
       }
+    }
+
+    if(update["dojo-DopeLootReleasedEvent"]) {
+      const released = parseStruct(update["dojo-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
+      const id = Number(released.id)
+      toast({
+        icon: () => <PaperIcon width="16px" height="16px" />,
+        message: `#${id} has been released!`,
+      });
     }
   };
 
@@ -253,4 +269,9 @@ export interface UpgradeItem {
   turn: number;
   item_slot: number;
   item_level: number;
+}
+
+export interface DopeLootReleasedEvent {
+  id: bigint;
+  address: string;
 }

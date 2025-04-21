@@ -27,7 +27,7 @@ import { shortString } from "starknet";
 import { useDojoTokens } from "@dope/dope-sdk/hooks";
 import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { getContractByName } from "@dojoengine/core";
-import { useCollectionContext } from "@dope/dope-sdk/store";
+import { useDopeStore } from "@dope/dope-sdk/store";
 
 const New = observer(() => {
   const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
@@ -74,7 +74,7 @@ const New = observer(() => {
     refetchInterval: 5_000,
   });
 
-  const dopeLootClaimState = useCollectionContext((state) => state.dopeLootClaimState);
+  const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
   useEffect(() => {
     const hustler = configStore.getHustlerById(hustlerId);
@@ -129,19 +129,10 @@ const New = observer(() => {
       const selectedLootTokenId = accountTokens!.length > 0 ? Number(accountTokens![selectedLootToken].token_id) : 0;
 
       await createGame(gameMode, hustlerId, name, selectedLootTokenId);
-
-      // const { hash, gameId } = await createGame(gameMode, hustlerId, name);
-
-      // if (gameId) {
-      //   router.push(`/${gameId}/travel`);
-      // }
     } catch (e) {
       console.log(e);
     }
   };
-
-  // console.log(selectedLootToken)
-  // console.log(accountTokens && accountTokens[selectedLootToken])
 
   if (!configStore || !hustlerStats || !season) return null;
 

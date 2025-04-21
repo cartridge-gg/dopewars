@@ -26,7 +26,9 @@ cairo_test = "2.9.4"
 starknet = "2.9.4"
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.4.0" }
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
+# achievement = { path = "../arcade/packages/achievement" }
 achievement = { git = "https://github.com/cartridge-gg/bushido", rev = "0b658f495885f387bf56d6a27e76514b9b4b772f" }
+
 # bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
 # bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
 # dojo = { path = "../dojo/crates/dojo/core" }

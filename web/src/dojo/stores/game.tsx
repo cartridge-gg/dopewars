@@ -123,7 +123,6 @@ export class GameStoreClass {
           },
         },
       ],
-      true,
       (entity: any, update: any) => this.onEventMessage(entity, update),
     );
     this.subscriptions.push(subEvent);
@@ -184,7 +183,7 @@ export class GameStoreClass {
       // entity_models:["dopewars-Game"],
       entity_updated_after:0,
       order_by:[]
-    });
+    }, false);
 
     // console.log(entities)
     const gameEntity = Object.values(entities)[0];
@@ -213,7 +212,7 @@ export class GameStoreClass {
       entity_models:["dopewars-SeasonSettings", "dopewars-GameConfig"],
       entity_updated_after:0,
       order_by:[]
-    });
+    },false);
     const seasonEntity = Object.values(entities)[0];
     if (!seasonEntity) return;
 

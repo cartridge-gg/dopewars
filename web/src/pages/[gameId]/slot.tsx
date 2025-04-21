@@ -205,7 +205,7 @@ export default function Slot() {
         // entity_models:["dopewars-SlotMachine"],
         entity_updated_after:0,
         order_by:[]
-      });
+      }, false);
 
       console.log(entities);
 
@@ -253,7 +253,6 @@ export default function Slot() {
               },
             },
           ],
-          false,
           onEventMessageUpdated,
         );
         setSubscriptionEvents(subEvents);

@@ -11,7 +11,7 @@ import { useDojoContext } from "./useDojoContext";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { buildVrfCalls, sleep } from "../utils";
 import { Model } from "@dojoengine/torii-client";
-import { useCollectionContext } from "@dope/dope-sdk/store";
+import { useDopeStore } from "@dope/dope-sdk/store";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
@@ -89,8 +89,7 @@ export const useSystems = (): SystemsInterface => {
     return { gameAddress, laundromatAddress, dopeLootClaimAddress };
   }, [dojoProvider]);
 
-  const dopeLootClaimState = useCollectionContext((state) => state.dopeLootClaimState);
-  const initDopeLootClaimState = useCollectionContext((state) => state.initDopeLootClaimState);
+  const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
   const executeAndReceipt = useCallback(
     async (calls: AllowArray<DojoCall | Call>): Promise<ExecuteAndReceiptResult> => {
@@ -301,7 +300,7 @@ export const useSystems = (): SystemsInterface => {
         entity_models: ["dopewars-GameWithLoot"],
         entity_updated_after: 0,
         order_by: [],
-      });
+      }, false);
 
       if (Object.keys(gameWithLootEntities).length > 0) {
         // retrieve loot_id used with game_id
@@ -329,10 +328,7 @@ export const useSystems = (): SystemsInterface => {
       // console.log(calls);
 
       const { hash } = await executeAndReceipt(calls);
-      setTimeout(() => {
-        initDopeLootClaimState();
-      }, 1_000);
-
+ 
       return {
         hash,
       };

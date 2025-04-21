@@ -167,7 +167,6 @@ export class ConfigStoreClass {
         icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys],
       } as HustlerItemBaseConfigFull;
     });
-console.log(hustlerItemBaseConfig)
     //
 
     const hustlerItemTiersConfigEdges = data.dopewarsHustlerItemTiersConfigModels!
