@@ -1,57 +1,161 @@
+import { GearItemFull, HustlerItemConfigFull } from "@/dojo/stores/config";
 import { computed, makeObservable, observable } from "mobx";
 import { ConfigStoreClass, HustlerConfig } from "../stores/config";
 import { ItemSlot, ShopAction } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isShopAction } from "./Game";
 import Bits from "./utils/Bits";
+import { GearItem, getGearItem } from "@dope/dope-sdk/helpers";
+import { Car, Cigarette } from "@/components/icons";
+import { Kevlar, Knife, Shoes } from "@/components/icons/items";
+import { dopeLootSlotIdToItemSlot } from "../helpers";
+
+export interface ItemInfos {
+  icon: React.FC;
+  level: number;
+  slot: ItemSlot;
+  stat: number;
+  cost: number;
+  name: string;
+  id?: number;
+  tier?: number;
+}
+
+const hustlerItemConfigFullToItemInfos = (level: number, item: HustlerItemConfigFull): ItemInfos => {
+  return {
+    icon: item.icon,
+    level: level,
+    slot: item.slot,
+    stat: item.tier.stat,
+    cost: item.tier.cost,
+    name: item.base.name,
+  };
+};
+const gearItemFullToItemInfos = (level: number, item: GearItemFull, icon: React.FC): ItemInfos => {
+  return {
+    icon,
+    level,
+    slot: dopeLootSlotIdToItemSlot[item.gearItem.slot as keyof typeof dopeLootSlotIdToItemSlot],
+    stat: item.levels[level].stat,
+    cost: item.levels[level].cost,
+    name: item.name,
+    tier: item.tier,
+    id: item.gearItem.item,
+  };
+};
 
 export class ItemsClass extends GamePropertyClass {
   bitsSize = 2n;
   maxLevel = 3;
   //
-  attackLevel: number;
-  defenseLevel: number;
-  speedLevel: number;
-  transportLevel: number;
+  attackLevelInit: number;
+  defenseLevelInit: number;
+  speedLevelInit: number;
+  transportLevelInit: number;
+  levelByItemSlot: number[];
   //
   hustlerConfig: HustlerConfig;
+  //
+  gearItems: GearItem[];
 
   constructor(game: GameClass, packed: bigint) {
     super(game, packed);
 
     this.hustlerConfig = game.configStore.getHustlerById(this.game.gameInfos.hustler_id);
 
-    this.attackLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Weapon) * this.bitsSize, this.bitsSize));
-    this.defenseLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Clothes) * this.bitsSize, this.bitsSize));
-    this.speedLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Feet) * this.bitsSize, this.bitsSize));
-    this.transportLevel = Number(Bits.extract(this.packed, BigInt(ItemSlot.Transport) * this.bitsSize, this.bitsSize));
+    this.attackLevelInit = Number(Bits.extract(this.packed, BigInt(ItemSlot.Weapon) * this.bitsSize, this.bitsSize));
+    this.defenseLevelInit = Number(Bits.extract(this.packed, BigInt(ItemSlot.Clothes) * this.bitsSize, this.bitsSize));
+    this.speedLevelInit = Number(Bits.extract(this.packed, BigInt(ItemSlot.Feet) * this.bitsSize, this.bitsSize));
+    this.transportLevelInit = Number(
+      Bits.extract(this.packed, BigInt(ItemSlot.Transport) * this.bitsSize, this.bitsSize),
+    );
+
+    this.levelByItemSlot = [this.attackLevelInit, this.defenseLevelInit, this.speedLevelInit, this.transportLevelInit];
+
+    this.gearItems = [];
+    if (game.gameWithTokenId) {
+      this.gearItems = game.gameWithTokenId.equipment_by_slot.map((gearItemId) => {
+        return getGearItem(BigInt(gearItemId));
+      });
+    }
 
     makeObservable(this, {
+      attackLevel: computed,
+      defenseLevel: computed,
+      speedLevel: computed,
+      transportLevel: computed,
       attack: computed,
       defense: computed,
       speed: computed,
       transport: computed,
-      attackUpgrade: computed,
-      defenseUpgrade: computed,
-      speedUpgrade: computed,
-      transportUpgrade: computed,
       game: observable,
     });
   }
 
-  get attack() {
-    let level = this.attackLevel;
+  get attackLevel() {
+    let level = this.attackLevelInit;
     if (this.game?.pending && this.game?.pending?.length > 0) {
       level += this.game.pending
         .filter(isShopAction)
         .map((i) => i as ShopAction)
         .filter((i) => i.slot === ItemSlot.Weapon).length;
     }
-    return this.game.configStore.getHustlerItemByIds(this.hustlerConfig.weapon.base.id, ItemSlot.Weapon, level);
+    return level;
+  }
+
+  get defenseLevel() {
+    let level = this.defenseLevelInit;
+    if (this.game?.pending && this.game?.pending?.length > 0) {
+      level += this.game.pending
+        .filter(isShopAction)
+        .map((i) => i as ShopAction)
+        .filter((i) => i.slot === ItemSlot.Clothes).length;
+    }
+    return level;
+  }
+
+  get speedLevel() {
+    let level = this.speedLevelInit;
+    if (this.game?.pending && this.game?.pending?.length > 0) {
+      level += this.game.pending
+        .filter(isShopAction)
+        .map((i) => i as ShopAction)
+        .filter((i) => i.slot === ItemSlot.Feet).length;
+    }
+    return level;
+  }
+
+  get transportLevel() {
+    let level = this.transportLevelInit;
+    if (this.game?.pending && this.game?.pending?.length > 0) {
+      level += this.game.pending
+        .filter(isShopAction)
+        .map((i) => i as ShopAction)
+        .filter((i) => i.slot === ItemSlot.Transport).length;
+    }
+    return level;
+  }
+
+  get attack() {
+    let level = this.attackLevelInit;
+    if (this.game?.pending && this.game?.pending?.length > 0) {
+      level += this.game.pending
+        .filter(isShopAction)
+        .map((i) => i as ShopAction)
+        .filter((i) => i.slot === ItemSlot.Weapon).length;
+    }
+
+    if (!this.game.gameWithTokenId) {
+      const item = this.game.configStore.getHustlerItemByIds(this.hustlerConfig.weapon.base.id, ItemSlot.Weapon, level);
+      return hustlerItemConfigFullToItemInfos(level, item);
+    } else {
+      const item = this.game.configStore.getGearItemFull(this.gearItems[ItemSlot.Weapon]);
+      return gearItemFullToItemInfos(level, item, Knife);
+    }
   }
 
   get defense() {
-    let level = this.defenseLevel;
+    let level = this.defenseLevelInit;
     if (this.game?.pending && this.game?.pending?.length > 0) {
       level += this.game.pending
         .filter(isShopAction)
@@ -59,73 +163,54 @@ export class ItemsClass extends GamePropertyClass {
         .filter((i) => i.slot === ItemSlot.Clothes).length;
     }
 
-    return this.game.configStore.getHustlerItemByIds(this.hustlerConfig.clothes.base.id, ItemSlot.Clothes, level);
+    if (!this.game.gameWithTokenId) {
+      const item = this.game.configStore.getHustlerItemByIds(
+        this.hustlerConfig.clothes.base.id,
+        ItemSlot.Clothes,
+        level,
+      );
+      return hustlerItemConfigFullToItemInfos(level, item);
+    } else {
+      const item = this.game.configStore.getGearItemFull(this.gearItems[ItemSlot.Clothes]);
+      return gearItemFullToItemInfos(level, item, Kevlar);
+    }
   }
 
   get speed() {
-    let level = this.speedLevel;
+    let level = this.speedLevelInit;
     if (this.game?.pending && this.game?.pending?.length > 0) {
       level += this.game.pending
         .filter(isShopAction)
         .map((i) => i as ShopAction)
         .filter((i) => i.slot === ItemSlot.Feet).length;
     }
-
-    return this.game.configStore.getHustlerItemByIds(this.hustlerConfig.feet.base.id, ItemSlot.Feet, level);
+    if (!this.game.gameWithTokenId) {
+      const item = this.game.configStore.getHustlerItemByIds(this.hustlerConfig.feet.base.id, ItemSlot.Feet, level);
+      return hustlerItemConfigFullToItemInfos(level, item);
+    } else {
+      const item = this.game.configStore.getGearItemFull(this.gearItems[ItemSlot.Feet]);
+      return gearItemFullToItemInfos(level, item, Shoes);
+    }
   }
 
   get transport() {
-    let level = this.transportLevel;
+    let level = this.transportLevelInit;
     if (this.game?.pending && this.game?.pending?.length > 0) {
       level += this.game.pending
         .filter(isShopAction)
         .map((i) => i as ShopAction)
         .filter((i) => i.slot === ItemSlot.Transport).length;
     }
-    return this.game.configStore.getHustlerItemByIds(this.hustlerConfig.transport.base.id, ItemSlot.Transport, level);
-  }
-
-  get attackUpgrade() {
-    if (this.attack!.level < this.maxLevel) {
-      return this.game.configStore.getHustlerItemByIds(
-        this.hustlerConfig.weapon.base.id,
-        ItemSlot.Weapon,
-        this.attack!.level + 1,
-      );
-    }
-    return undefined;
-  }
-
-  get defenseUpgrade() {
-    if (this.defense!.level < this.maxLevel) {
-      return this.game.configStore.getHustlerItemByIds(
-        this.hustlerConfig.clothes.base.id,
-        ItemSlot.Clothes,
-        this.defense!.level + 1,
-      );
-    }
-    return undefined;
-  }
-
-  get speedUpgrade() {
-    if (this.speed!.level < this.maxLevel) {
-      return this.game.configStore.getHustlerItemByIds(
-        this.hustlerConfig.feet.base.id,
-        ItemSlot.Feet,
-        this.speed!.level + 1,
-      );
-    }
-    return undefined;
-  }
-
-  get transportUpgrade() {
-    if (this.transport!.level < this.maxLevel) {
-      return this.game.configStore.getHustlerItemByIds(
+    if (!this.game.gameWithTokenId) {
+      const item = this.game.configStore.getHustlerItemByIds(
         this.hustlerConfig.transport.base.id,
         ItemSlot.Transport,
-        this.transport!.level + 1,
+        level,
       );
+      return hustlerItemConfigFullToItemInfos(level, item);
+    } else {
+      const item = this.game.configStore.getGearItemFull(this.gearItems[ItemSlot.Transport]);
+      return gearItemFullToItemInfos(level, item, Car);
     }
-    return undefined;
   }
 }

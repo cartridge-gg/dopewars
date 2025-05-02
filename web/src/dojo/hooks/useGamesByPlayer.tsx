@@ -1,5 +1,6 @@
 import {
   Dopewars_Game as Game,
+  Dopewars_GameWithTokenId as GameWithTokenIdRaw,
   Dopewars_GameConfig as GameConfig,
   Dopewars_GameStorePacked as GameStorePacked,
   Dopewars_SeasonSettings as SeasonSettings,
@@ -16,6 +17,7 @@ import { Drugs } from "../types";
 import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
+import { GameWithTokenId } from "../stores/game";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -83,9 +85,9 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
           limit: 10000,
           offset: 0,
           dont_include_hashed_keys: true,
-          entity_models:[],
-          entity_updated_after:0,
-          order_by:[]
+          entity_models: [],
+          entity_updated_after: 0,
+          order_by: [],
         },
         true,
       );
@@ -138,6 +140,24 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
         (i) => i?.__typename === "dopewars_GameStorePacked",
       ) as GameStorePacked;
 
+      const gameWithTokenIdRaw = (i!.models || []).find(
+        (i) => i?.__typename === "dopewars_GameWithTokenId",
+      ) as GameWithTokenIdRaw;
+
+      const gameWithTokenId = gameWithTokenIdRaw
+        ? ({
+            game_id: gameWithTokenIdRaw.game_id,
+            player_id: gameWithTokenIdRaw.player_id,
+            token_id_type: gameWithTokenIdRaw.token_id?.option,
+            token_id: Number(
+              gameWithTokenIdRaw.token_id![
+                gameWithTokenIdRaw.token_id?.option as keyof typeof gameWithTokenIdRaw.token_id
+              ],
+            ),
+            equipment_by_slot: gameWithTokenIdRaw.equipment_by_slot,
+          } as GameWithTokenId)
+        : undefined;
+
       if (!gameInfos || !gameStorePacked) return [];
       if (gameInfos.season_version === 0) return [];
 
@@ -149,7 +169,7 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 
-      return [new GameClass(configStore, gameInfos, seasonSettings, gameConfig, gameStorePacked)];
+      return [new GameClass(configStore, gameInfos, seasonSettings, gameConfig, gameStorePacked, gameWithTokenId)];
     });
 
     return games;

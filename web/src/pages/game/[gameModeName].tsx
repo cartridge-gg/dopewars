@@ -1,10 +1,9 @@
 import { Button, Input } from "@/components/common";
-import { Hustler, Hustlers, hustlersCount } from "@/components/hustlers";
-import { Arrow } from "@/components/icons";
+import { Arrow, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
-import { PowerMeter } from "@/components/player";
+import { TierIndicator } from "@/components/player";
 import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
-import { gameModeFromName, gameModeFromNameKeys } from "@/dojo/helpers";
+import { gameModeFromName, gameModeFromNameKeys, itemSlotToDopeLootSlotId } from "@/dojo/helpers";
 import {
   ETHER,
   useConfigStore,
@@ -19,15 +18,22 @@ import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { Box, Card, HStack, Heading, Text, VStack, Image } from "@chakra-ui/react";
+import { Box, Card, HStack, Heading, Text, VStack, Image, Flex, Tooltip } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { shortString } from "starknet";
-import { useDojoTokens } from "@dope/dope-sdk/hooks";
-import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { useDojoTokens, useLootEquipment, useEquipment } from "@dope/dope-sdk/hooks";
+import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
 import { getContractByName } from "@dojoengine/core";
 import { useDopeStore } from "@dope/dope-sdk/store";
+import { hash } from "starknet";
+import { getGearItem } from "@dope/dope-sdk/helpers";
+
+export enum TokenIdType {
+  GuestLootId,
+  LootId,
+  HustlerId,
+}
 
 const New = observer(() => {
   const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
@@ -38,19 +44,6 @@ const New = observer(() => {
   } = useDojoContext();
 
   const { account } = useAccount();
-  const addresses = useMemo(() => {
-    return [getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address];
-  }, []);
-
-  const { tokens, tokensBalances, accountTokens } = useDojoTokens(toriiClient, addresses, account);
-
-  const ownLoot = useMemo(() => {
-    return accountTokens && accountTokens?.length > 0;
-  }, [accountTokens]);
-  // todo: filter accountTokens
-  // console.log(tokens)
-  // console.log(accountTokens)
-
   const { createGame, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -58,60 +51,168 @@ const New = observer(() => {
 
   const { toast } = useToast();
 
-  const [error, setError] = useState("");
-  const [name, setName] = useState("");
-  const [hustlerId, setHustlerId] = useState(Math.floor(Math.random() * 3));
-  const [hustlerStats, setHustlerStats] = useState<any>();
-  const isMobile = IsMobile();
+  const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
+
+  const addresses = useMemo(() => {
+    return [
+      getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address,
+      getContractByName(selectedChain.manifest, "dojo", "DopeHustlers")!.address,
+    ];
+  }, [selectedChain.manifest]);
+
+  const { tokens, tokensBalances, accountTokens } = useDojoTokens(toriiClient, addresses, account?.address);
+
+  const freeToPlay = useMemo(() => {
+    if (!config?.ryo.season_version) return [];
+    const tokens = [];
+    for (let i = 0; i < 8; i++) {
+      let h = BigInt(hash.computePoseidonHashOnElements([config?.ryo.season_version.toString(), i.toString()]));
+      const token_id = (h % 8000n) + 1n;
+      tokens.push({ token_id });
+    }
+    return tokens;
+  }, [config?.ryo.season_version]);
+
+  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  const selectableTokens = useMemo(() => {
+    setSelectedTokenIndex(0);
+    switch (selectedTokenIdType) {
+      case TokenIdType.GuestLootId:
+        return freeToPlay;
+      case TokenIdType.LootId:
+        return (accountTokens || []).filter(
+          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address,
+        );
+      case TokenIdType.HustlerId:
+        return (accountTokens || []).filter(
+          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dojo", "DopeHustlers")!.address,
+        );
+    }
+  }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
 
   const inputRef = useRef<null | HTMLDivElement>(null);
+  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const isMobile = IsMobile();
 
-  const [selectedLootToken, setSelectedLootToken] = useState(0);
+  const selectedToken = useMemo(() => {
+    return selectableTokens[selectedTokenIndex];
+  }, [selectableTokens, selectedTokenIndex]);
 
   const { balance, isInitializing } = useTokenBalance({
     address: account?.address,
     token: config?.ryoAddress.paper,
-    refetchInterval: 5_000,
+    refetchInterval: 10_000,
   });
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
-  useEffect(() => {
-    const hustler = configStore.getHustlerById(hustlerId);
-    if (!hustler) return;
+  const isReleased = useMemo(() => {
+    if (selectedTokenIdType !== TokenIdType.LootId) return true;
+    return (
+      selectableTokens[selectedTokenIndex] &&
+      dopeLootClaimState[Number(selectableTokens[selectedTokenIndex].token_id)]?.isReleased
+    );
+  }, [dopeLootClaimState, selectedToken, selectedTokenIdType]);
 
-    const stats = {
-      [ItemSlot.Weapon]: {
-        name: shortString.decodeShortString(hustler.weapon.base.name),
-        // name: hustler.weapon.base.name,
-        initialTier: Number(hustler.weapon.base.initial_tier),
-      },
-      [ItemSlot.Clothes]: {
-        name: shortString.decodeShortString(hustler.clothes.base.name),
-        // name: hustler.clothes.base.name,
-        initialTier: Number(hustler.clothes.base.initial_tier),
-      },
-      [ItemSlot.Feet]: {
-        name: shortString.decodeShortString(hustler.feet.base.name),
-        // name: hustler.feet.base.name,
-        initialTier: Number(hustler.feet.base.initial_tier),
-      },
-      [ItemSlot.Transport]: {
-        name: shortString.decodeShortString(hustler.transport.base.name),
-        // name: hustler.transport.base.name,
-        initialTier: Number(hustler.transport.base.initial_tier),
-      },
-    };
+  const { equipment: lootEquipment } = useLootEquipment(Number(selectedToken?.token_id));
+  const { equipment: hustlerEquipment } = useEquipment(toriiClient, Number(selectedToken?.token_id).toString());
 
-    setHustlerStats(stats);
-  }, [hustlerId, configStore, configStore?.config, configStore?.config?.items, configStore?.config?.tiers]);
+  const equipmentStats = useMemo(() => {
+    const equipment = {
+      [ItemSlot.Weapon]: undefined,
+      [ItemSlot.Clothes]: undefined,
+      [ItemSlot.Feet]: undefined,
+      [ItemSlot.Transport]: undefined,
+    } as any;
 
-  useEffect(() => {
-    if (accountTokens && accountTokens[selectedLootToken]) {
-      const lootId = accountTokens ? Number(accountTokens[selectedLootToken].token_id) : 0;
-      setHustlerId(lootId % 3);
+    if (
+      (selectedTokenIdType === TokenIdType.LootId || selectedTokenIdType === TokenIdType.GuestLootId) &&
+      lootEquipment
+    ) {
+      const weapon_component_id = itemSlotToDopeLootSlotId[ItemSlot.Weapon];
+      const clothe_component_id = itemSlotToDopeLootSlotId[ItemSlot.Clothes];
+      const foot_component_id = itemSlotToDopeLootSlotId[ItemSlot.Feet];
+      const vehicle_component_id = itemSlotToDopeLootSlotId[ItemSlot.Transport];
+
+      const weapon = lootEquipment?.find((i) => i.gearItem.slot === weapon_component_id);
+      const clothe = lootEquipment?.find((i) => i.gearItem.slot === clothe_component_id);
+      const foot = lootEquipment?.find((i) => i.gearItem.slot === foot_component_id);
+      const vehicle = lootEquipment?.find((i) => i.gearItem.slot === vehicle_component_id);
+
+      const weaponFull = weapon && configStore.getGearItemFull(weapon.gearItem);
+      const clotheFull = clothe && configStore.getGearItemFull(clothe.gearItem);
+      const footFull = foot && configStore.getGearItemFull(foot.gearItem);
+      const vehicleFull = vehicle && configStore.getGearItemFull(vehicle.gearItem);
+
+      if (weaponFull) {
+        equipment[ItemSlot.Weapon] = {
+          name: weaponFull?.name,
+          tier: weaponFull?.tier,
+        };
+      }
+      if (clotheFull) {
+        equipment[ItemSlot.Clothes] = {
+          name: clotheFull?.name,
+          tier: clotheFull?.tier,
+        };
+      }
+      if (footFull) {
+        equipment[ItemSlot.Feet] = {
+          name: footFull?.name,
+          tier: footFull?.tier,
+        };
+      }
+      if (vehicleFull) {
+        equipment[ItemSlot.Transport] = {
+          name: vehicleFull?.name,
+          tier: vehicleFull?.tier,
+        };
+      }
+    } else if (selectedTokenIdType === TokenIdType.HustlerId && hustlerEquipment) {
+      const weapon = hustlerEquipment?.find((i) => i.slot === "Weapon");
+      const clothe = hustlerEquipment?.find((i) => i.slot === "Clothe");
+      const foot = hustlerEquipment?.find((i) => i.slot === "Foot");
+      const vehicle = hustlerEquipment?.find((i) => i.slot === "Vehicle");
+
+      const weaponFull =
+        weapon && weapon.gear_item_id !== undefined && configStore.getGearItemFull(getGearItem(weapon.gear_item_id!));
+      const clotheFull =
+        clothe && clothe.gear_item_id !== undefined && configStore.getGearItemFull(getGearItem(clothe.gear_item_id!));
+      const footFull =
+        foot && foot.gear_item_id !== undefined && configStore.getGearItemFull(getGearItem(foot.gear_item_id!));
+      const vehicleFull =
+        vehicle &&
+        vehicle.gear_item_id !== undefined &&
+        configStore.getGearItemFull(getGearItem(vehicle.gear_item_id!));
+
+      if (weaponFull) {
+        equipment[ItemSlot.Weapon] = {
+          name: weaponFull?.name,
+          tier: weaponFull?.tier,
+        };
+      }
+      if (clotheFull) {
+        equipment[ItemSlot.Clothes] = {
+          name: clotheFull?.name,
+          tier: clotheFull?.tier,
+        };
+      }
+      if (footFull) {
+        equipment[ItemSlot.Feet] = {
+          name: footFull?.name,
+          tier: footFull?.tier,
+        };
+      }
+      if (vehicleFull) {
+        equipment[ItemSlot.Transport] = {
+          name: vehicleFull?.name,
+          tier: vehicleFull?.tier,
+        };
+      }
     }
-  }, [selectedLootToken, accountTokens]);
+    return equipment;
+  }, [lootEquipment, hustlerEquipment, selectedTokenIdType]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -126,15 +227,17 @@ const New = observer(() => {
         play();
       }
 
-      const selectedLootTokenId = accountTokens!.length > 0 ? Number(accountTokens![selectedLootToken].token_id) : 0;
+      const selectedLootTokenId = selectableTokens!.length > 0 ? Number(selectedToken.token_id) : 0;
+      const tokenIdType = selectedTokenIdType;
 
-      await createGame(gameMode, hustlerId, name, selectedLootTokenId);
+      const hustlerId = 420;
+      await createGame(gameMode, hustlerId, name, tokenIdType, selectedLootTokenId);
     } catch (e) {
       console.log(e);
     }
   };
 
-  if (!configStore || !hustlerStats || !season) return null;
+  if (!configStore || !season) return null;
 
   return (
     <Layout
@@ -195,8 +298,38 @@ const New = observer(() => {
             </Heading>
           </VStack>
 
-          {accountTokens && accountTokens?.length > 0 && (
-            <HStack align="center" justify="center">
+          <HStack gap={1}>
+            <Button
+              fontSize="11px"
+              h="30px"
+              variant="selectable"
+              isActive={selectedTokenIdType === TokenIdType.GuestLootId}
+              onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
+            >
+              S{season.version} HUSTLERS
+            </Button>
+            <Button
+              fontSize="11px"
+              h="30px"
+              variant="selectable"
+              isActive={selectedTokenIdType === TokenIdType.LootId}
+              onClick={() => setSelectedTokenIdType(TokenIdType.LootId)}
+            >
+              MY DOPE
+            </Button>
+            <Button
+              fontSize="11px"
+              h="30px"
+              variant="selectable"
+              isActive={selectedTokenIdType === TokenIdType.HustlerId}
+              onClick={() => setSelectedTokenIdType(TokenIdType.HustlerId)}
+            >
+              MY HUSTLERS
+            </Button>
+          </HStack>
+
+          {selectableTokens && selectableTokens?.length > 0 && selectedToken ? (
+            <HStack align="center" justify="center" gap={[0, 9]} marginTop={"-30px"}>
               <Arrow
                 style="outline"
                 direction="left"
@@ -205,34 +338,137 @@ const New = observer(() => {
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3);
-                  selectedLootToken > 0
-                    ? setSelectedLootToken((selectedLootToken - 1) % accountTokens.length)
-                    : setSelectedLootToken(accountTokens.length - 1);
+                  selectedTokenIndex > 0
+                    ? setSelectedTokenIndex((selectedTokenIndex - 1) % selectableTokens.length)
+                    : setSelectedTokenIndex(selectableTokens.length - 1);
                 }}
               />
 
-              <Box position="relative" width="200px" height="200px">
-                <HustlerPreviewFromLoot tokenId={Number(accountTokens[selectedLootToken].token_id)} />
-                {!dopeLootClaimState[Number(accountTokens[selectedLootToken].token_id)]?.isReleased ? (
-                  <Image
-                    src="/images/prisonbar.png"
-                    style={{ imageRendering: "pixelated" }}
-                    top={0}
-                    width="full"
-                    height="full"
-                    position="absolute"
-                  />
-                ) : (
-                  <Image
-                    src="/images/prisonbar-released.png"
-                    style={{ imageRendering: "pixelated", zIndex: -1, margin: "auto" }}
-                    top={0}
-                    width="70%"
-                    height="70%"
-                    position="absolute"
-                  />
+              <VStack gap={3}>
+                <Box
+                  position="relative"
+                  width={["220px", "280px"]}
+                  height={["220px", "280px"]}
+                  transform={["scale(1.7)", "scale(1.5)"]}
+                  pointerEvents={"none"}
+                  // style={{ filter: "grayscale(50%) sepia(80%) hue-rotate(60deg)" }}
+                >
+                  {selectedTokenIdType === TokenIdType.HustlerId ? (
+                    <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                  ) : (
+                    <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                  )}
+                  {/* {ownLoot && !dopeLootClaimState[Number(selectableTokens[selectedLootToken].token_id)]?.isReleased && (
+                    <Image
+                      src="/images/prisonbar.png"
+                      style={{ imageRendering: "pixelated" }}
+                      top={0}
+                      width="full"
+                      height="full"
+                      position="absolute"
+                    />
+                  )}
+                  {ownLoot && dopeLootClaimState[Number(selectableTokens[selectedLootToken].token_id)]?.isReleased && (
+                    <Image
+                      src="/images/prisonbar-released.png"
+                      style={{ imageRendering: "pixelated", zIndex: -1, margin: "auto" }}
+                      top={0}
+                      width="70%"
+                      height="70%"
+                      position="absolute"
+                    />
+                  )} */}
+                </Box>
+
+                {isMobile && equipmentStats && (
+                  <HStack gap={3}>
+                    <VStack gap={0}>
+                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                        WEAPON
+                      </Text>
+                      <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
+                    </VStack>
+                    <VStack gap={0}>
+                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                        CLOTHES
+                      </Text>
+                      <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
+                    </VStack>
+                    <VStack gap={0}>
+                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                        FEET
+                      </Text>
+                      <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
+                    </VStack>
+                    <VStack gap={0}>
+                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                        TRANSPORT
+                      </Text>
+                      <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
+                    </VStack>
+                  </HStack>
                 )}
-              </Box>
+              </VStack>
+
+              {!isMobile && equipmentStats && (
+                <VStack w="full" gap={3} zIndex={1}>
+                  <HStack w="full">
+                    <VStack alignItems="flex-start" w="180px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        WEAPON
+                      </Text>
+                      {equipmentStats![ItemSlot.Weapon] ? (
+                        <Text>{equipmentStats![ItemSlot.Weapon].name}</Text>
+                      ) : (
+                        <Text color={"red"}>No Weapon Equipped!</Text>
+                      )}
+                    </VStack>
+                    <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
+                  </HStack>
+
+                  <HStack w="full">
+                    <VStack alignItems="flex-start" w="180px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        CLOTHES
+                      </Text>
+                      {equipmentStats![ItemSlot.Clothes] ? (
+                        <Text>{equipmentStats![ItemSlot.Clothes].name}</Text>
+                      ) : (
+                        <Text color={"red"}>No Clothes Equipped!</Text>
+                      )}
+                    </VStack>
+                    <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
+                  </HStack>
+
+                  <HStack w="full">
+                    <VStack alignItems="flex-start" w="180px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        FEET
+                      </Text>
+                      {equipmentStats![ItemSlot.Feet] ? (
+                        <Text>{equipmentStats![ItemSlot.Feet].name}</Text>
+                      ) : (
+                        <Text color={"red"}>No Shoe Equipped!</Text>
+                      )}
+                    </VStack>
+                    <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
+                  </HStack>
+
+                  <HStack w="full">
+                    <VStack alignItems="flex-start" w="180px" gap={0}>
+                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                        TRANSPORT
+                      </Text>
+                      {equipmentStats![ItemSlot.Transport] ? (
+                        <Text>{equipmentStats![ItemSlot.Transport].name}</Text>
+                      ) : (
+                        <Text color={"red"}>No Vehicle Equipped!</Text>
+                      )}
+                    </VStack>
+                    <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
+                  </HStack>
+                </VStack>
+              )}
 
               <Arrow
                 style="outline"
@@ -242,125 +478,43 @@ const New = observer(() => {
                 cursor="pointer"
                 onClick={() => {
                   playSound(Sounds.HoverClick, 0.3);
-                  setSelectedLootToken((selectedLootToken + 1) % accountTokens.length);
+                  setSelectedTokenIndex((selectedTokenIndex + 1) % selectableTokens.length);
                 }}
               />
             </HStack>
+          ) : (
+            <VStack minH={"250px"} alignItems="center" justifyContent="center">
+              <Text>ERROR 420: {selectedTokenIdType === TokenIdType.HustlerId ? "Hustler" : "Dope"} not found</Text>
+            </VStack>
           )}
 
-          <HStack /*my="30px"*/ align="center" justify="center">
-            <Arrow
-              style="outline"
-              direction="left"
-              boxSize="48px"
-              userSelect="none"
-              cursor="pointer"
-              visibility={ownLoot ? "hidden" : "visible"}
-              onClick={() => {
-                if (ownLoot) return;
-                playSound(Sounds.HoverClick, 0.3);
-                hustlerId > 0 ? setHustlerId(hustlerId - 1) : setHustlerId(hustlersCount - 1);
-              }}
-            />
-
-            <HStack p={["10px 0", "10px"]}>
-              <Box>
-                <Hustler hustler={hustlerId as Hustlers} w={["80px", "160px"]} h={["180px", "250px"]} />
-              </Box>
-
-              <VStack w="full" gap={3}>
-                <HStack w="full">
-                  {!isMobile && (
-                    <VStack alignItems="flex-start" w="200px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        WEAPON
-                      </Text>
-                      <Text>{hustlerStats[ItemSlot.Weapon].name}</Text>
-                    </VStack>
-                  )}
-
-                  <PowerMeter
-                    basePower={hustlerStats[ItemSlot.Weapon].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Weapon].initialTier + 3}
-                    power={hustlerStats[ItemSlot.Weapon].initialTier}
-                    displayedPower={6}
-                    text="ATK"
-                  />
-                </HStack>
-
-                <HStack w="full">
-                  {!isMobile && (
-                    <VStack alignItems="flex-start" w="200px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        CLOTHES
-                      </Text>
-                      <Text>{hustlerStats[ItemSlot.Clothes].name}</Text>
-                    </VStack>
-                  )}
-
-                  <PowerMeter
-                    basePower={hustlerStats[ItemSlot.Clothes].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Clothes].initialTier + 3}
-                    power={hustlerStats[ItemSlot.Clothes].initialTier}
-                    displayedPower={6}
-                    text="DEF"
-                  />
-                </HStack>
-
-                <HStack w="full">
-                  {!isMobile && (
-                    <VStack alignItems="flex-start" w="200px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        FEET
-                      </Text>
-                      <Text>{hustlerStats[ItemSlot.Feet].name}</Text>
-                    </VStack>
-                  )}
-
-                  <PowerMeter
-                    basePower={hustlerStats[ItemSlot.Feet].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Feet].initialTier + 3}
-                    power={hustlerStats[ItemSlot.Feet].initialTier}
-                    displayedPower={6}
-                    text="SPD"
-                  />
-                </HStack>
-
-                <HStack w="full">
-                  {!isMobile && (
-                    <VStack alignItems="flex-start" w="200px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        BAG
-                      </Text>
-                      <Text>{hustlerStats[ItemSlot.Transport].name}</Text>
-                    </VStack>
-                  )}
-
-                  <PowerMeter
-                    basePower={hustlerStats[ItemSlot.Transport].initialTier}
-                    maxPower={hustlerStats[ItemSlot.Transport].initialTier + 3}
-                    power={hustlerStats[ItemSlot.Transport].initialTier}
-                    displayedPower={6}
-                    text="INV"
-                  />
-                </HStack>
-              </VStack>
-            </HStack>
-
-            <Arrow
-              style="outline"
-              direction="right"
-              boxSize="48px"
-              userSelect="none"
-              cursor="pointer"
-              visibility={ownLoot ? "hidden" : "visible"}
-              onClick={() => {
-                if (ownLoot) return;
-                playSound(Sounds.HoverClick, 0.3);
-                setHustlerId((hustlerId + 1) % hustlersCount);
-              }}
-            />
-          </HStack>
+          <VStack alignItems="center" marginTop="-40px" gap={0}>
+            <Text>
+              {selectedTokenIndex + 1}/{selectableTokens.length}{" "}
+            </Text>
+            {selectedToken ? (
+              <HStack position="relative">
+                {!isReleased && (
+                  <Tooltip
+                    color="yellow.400"
+                    title="DopeLoot Migration"
+                    label="Play a game with this DopeLoot to release it!"
+                    placement="top"
+                  >
+                    <span>
+                      <Warning color="yellow.400" ml={2} height={"16px"} width={"16px"} />
+                    </span>
+                  </Tooltip>
+                )}
+                <Text>
+                  {selectedTokenIdType === TokenIdType.HustlerId ? "HUSTLER" : "DOPE"} #
+                  {Number(selectedToken?.token_id)}
+                </Text>
+              </HStack>
+            ) : (
+              <Text>ERR #420</Text>
+            )}
+          </VStack>
 
           {
             /*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (

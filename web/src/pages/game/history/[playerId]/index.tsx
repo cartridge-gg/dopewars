@@ -12,6 +12,7 @@ import {
 import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
 import { AK47, Uzi } from "@/components/icons/items";
 import { Layout } from "@/components/layout";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 import { ReputationIndicator } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
@@ -41,8 +42,6 @@ import {
   Box,
   Flex,
 } from "@chakra-ui/react";
-import { useConnect } from "@starknet-react/core";
-import { useEffect, useState } from "react";
 
 import { num, shortString } from "starknet";
 
@@ -132,7 +131,11 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
             return (
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>
                 <Td>
-                  <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
+                  <HustlerAvatarIcon
+                    hustlerId={game.gameInfos.hustler_id}
+                    tokenIdType={game?.gameWithTokenId?.token_id_type}
+                    tokenId={game?.gameWithTokenId?.token_id}
+                  />
                 </Td>
                 <Td textAlign="center">{game.gameInfos.season_version}</Td>
 
@@ -183,22 +186,15 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
         <VStack gap={6}>
           <Tabs variant="unstyled" w="full">
             <TabList pb={6} overflowX="auto">
-              <Tab>HUSTLERS</Tab>
+              {/* <Tab>HUSTLERS</Tab> */}
               <Tab>GENERAL</Tab>
               <Tab>ENCOUNTERS</Tab>
               <Tab>DRUGS</Tab>
             </TabList>
 
             <TabPanels mt={0} /*maxH={["100%", "calc(100dvh - 580px)"]} overflowY="scroll"*/>
-              <TabPanel p={0}>
+              {/* <TabPanel p={0}>
                 <VStack w="full" alignItems="center" gap={3}>
-                  <HStack justify="center" alignItems="center">
-                    <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1} color="yellow.500">
-                      REPUTATION: {Math.floor(playerStats?.averageReputation || 0)}
-                    </Text>
-                  </HStack>
-
-                  <ReputationIndicator reputation={playerStats?.averageReputation || 0} />
                   <HStack gap="40px" mt={2}>
                     <VStack>
                       <Hustler
@@ -228,10 +224,17 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
                     </VStack>
                   </HStack>
                 </VStack>
-              </TabPanel>
+              </TabPanel> */}
 
               <TabPanel p={0}>
                 <VStack w="full" alignItems="center">
+                  <HStack justify="center" alignItems="center">
+                    <Text textStyle="subheading" fontSize={["9px", "11px"]} lineHeight={1} color="yellow.500">
+                      REPUTATION: {Math.floor(playerStats?.averageReputation || 0)}
+                    </Text>
+                  </HStack>
+
+                  <ReputationIndicator reputation={playerStats?.averageReputation || 0} />
                   <PlayerStatsTable playerStats={playerStats} />
                 </VStack>
               </TabPanel>

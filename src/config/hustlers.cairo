@@ -10,20 +10,35 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    store::{Store, StoreImpl, StoreTrait}
+    store::{Store, StoreImpl, StoreTrait},
 };
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
-enum ItemSlot {
+pub enum ItemSlot {
     Weapon,
     Clothes,
     Feet,
     Transport,
 }
 
+#[generate_trait]
+pub impl ItemSlotImpl of ItemSlotTrait {
+    fn from_dope_slot_id(slot_id: u8) -> ItemSlot {
+        match slot_id {
+            0 => ItemSlot::Weapon,
+            1 => ItemSlot::Clothes,
+            2 => ItemSlot::Transport,
+            3 => panic!("not supported"),
+            4 => panic!("not supported"),
+            5 => ItemSlot::Feet,
+            _ => panic!("not supported"),
+        }
+    }
+}
 
-impl ItemSlotIntoFelt252 of Into<ItemSlot, felt252> {
+
+pub impl ItemSlotIntoFelt252 of Into<ItemSlot, felt252> {
     fn into(self: ItemSlot) -> felt252 {
         match self {
             ItemSlot::Weapon => 'Weapon',
@@ -34,7 +49,7 @@ impl ItemSlotIntoFelt252 of Into<ItemSlot, felt252> {
     }
 }
 
-impl ItemSlotIntoU8 of Into<ItemSlot, u8> {
+pub impl ItemSlotIntoU8 of Into<ItemSlot, u8> {
     fn into(self: ItemSlot) -> u8 {
         match self {
             ItemSlot::Weapon => 0,
@@ -206,9 +221,11 @@ impl HustlerImpl of HustlerTrait {
         // get tier config
         let tier_config = self.store.item_tiers_config(slot, tier);
 
-        HustlerItemConfig { slot, level, base: base_config, tier: tier_config, }
+        HustlerItemConfig { slot, level, base: base_config, tier: tier_config }
     }
 }
+
+
 fn initialize_weapons_config(ref store: Store) {
     store
         .world
@@ -218,8 +235,8 @@ fn initialize_weapons_config(ref store: Store) {
                 slot_id: ItemSlot::Weapon.into(),
                 id: 0,
                 name: 'AK47'.try_into().unwrap(),
-                initial_tier: 3
-            }
+                initial_tier: 3,
+            },
         );
     store
         .world
@@ -229,8 +246,8 @@ fn initialize_weapons_config(ref store: Store) {
                 slot_id: ItemSlot::Weapon.into(),
                 id: 1,
                 name: 'Chain'.try_into().unwrap(),
-                initial_tier: 1
-            }
+                initial_tier: 1,
+            },
         );
     store
         .world
@@ -240,8 +257,8 @@ fn initialize_weapons_config(ref store: Store) {
                 slot_id: ItemSlot::Weapon.into(),
                 id: 2,
                 name: 'Baseball Bat'.try_into().unwrap(),
-                initial_tier: 2
-            }
+                initial_tier: 2,
+            },
         );
 }
 
@@ -254,8 +271,8 @@ fn initialize_clothes_config(ref store: Store) {
                 slot_id: ItemSlot::Clothes.into(),
                 id: 0,
                 name: 'Blood-Stained Shirt'.try_into().unwrap(),
-                initial_tier: 1
-            }
+                initial_tier: 1,
+            },
         );
     store
         .world
@@ -265,8 +282,8 @@ fn initialize_clothes_config(ref store: Store) {
                 slot_id: ItemSlot::Clothes.into(),
                 id: 1,
                 name: 'Bullet Proof Vest'.try_into().unwrap(),
-                initial_tier: 3
-            }
+                initial_tier: 3,
+            },
         );
     store
         .world
@@ -276,8 +293,8 @@ fn initialize_clothes_config(ref store: Store) {
                 slot_id: ItemSlot::Clothes.into(),
                 id: 2,
                 name: 'Trench Coat'.try_into().unwrap(),
-                initial_tier: 2
-            }
+                initial_tier: 2,
+            },
         );
 }
 
@@ -290,8 +307,8 @@ fn initialize_feet_config(ref store: Store) {
                 slot_id: ItemSlot::Feet.into(),
                 id: 0,
                 name: 'All-Black Sneakers'.try_into().unwrap(),
-                initial_tier: 2
-            }
+                initial_tier: 2,
+            },
         );
     store
         .world
@@ -301,8 +318,8 @@ fn initialize_feet_config(ref store: Store) {
                 slot_id: ItemSlot::Feet.into(),
                 id: 1,
                 name: 'Athletic Trainers'.try_into().unwrap(),
-                initial_tier: 2
-            }
+                initial_tier: 2,
+            },
         );
     store
         .world
@@ -312,8 +329,8 @@ fn initialize_feet_config(ref store: Store) {
                 slot_id: ItemSlot::Feet.into(),
                 id: 2,
                 name: 'Work Boots'.try_into().unwrap(),
-                initial_tier: 2
-            }
+                initial_tier: 2,
+            },
         );
 }
 
@@ -326,8 +343,8 @@ fn initialize_transport_config(ref store: Store) {
                 slot_id: ItemSlot::Transport.into(),
                 id: 0,
                 name: 'Plastic bag'.try_into().unwrap(),
-                initial_tier: 1
-            }
+                initial_tier: 1,
+            },
         );
 }
 
@@ -345,7 +362,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 1,
                 stat: 12,
                 cost: 0,
-            }
+            },
         );
     store
         .world
@@ -356,7 +373,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 2,
                 stat: 24,
                 cost: 420,
-            }
+            },
         );
     store
         .world
@@ -367,7 +384,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 3,
                 stat: 36,
                 cost: 2_600,
-            }
+            },
         );
     store
         .world
@@ -378,7 +395,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 4,
                 stat: 48,
                 cost: 12_000,
-            }
+            },
         );
     store
         .world
@@ -389,7 +406,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 5,
                 stat: 60,
                 cost: 75_000,
-            }
+            },
         );
     store
         .world
@@ -400,7 +417,7 @@ fn initialize_weapons_tiers_config(ref store: Store) {
                 tier: 6,
                 stat: 72,
                 cost: 320_000,
-            }
+            },
         );
 }
 
@@ -414,7 +431,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 1,
                 stat: 12,
                 cost: 0,
-            }
+            },
         );
     store
         .world
@@ -425,7 +442,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 2,
                 stat: 24,
                 cost: 390,
-            }
+            },
         );
     store
         .world
@@ -436,7 +453,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 3,
                 stat: 36,
                 cost: 2_800,
-            }
+            },
         );
     store
         .world
@@ -447,7 +464,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 4,
                 stat: 48,
                 cost: 11_000,
-            }
+            },
         );
     store
         .world
@@ -458,7 +475,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 5,
                 stat: 60,
                 cost: 65_000,
-            }
+            },
         );
     store
         .world
@@ -469,7 +486,7 @@ fn initialize_clothes_tiers_config(ref store: Store) {
                 tier: 6,
                 stat: 72,
                 cost: 288_000,
-            }
+            },
         );
 }
 
@@ -479,14 +496,14 @@ fn initialize_feet_tiers_config(ref store: Store) {
         .write_model(
             @HustlerItemTiersConfig {
                 slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 1, stat: 6, cost: 0,
-            }
+            },
         );
     store
         .world
         .write_model(
             @HustlerItemTiersConfig {
                 slot: ItemSlot::Feet, slot_id: ItemSlot::Feet.into(), tier: 2, stat: 12, cost: 300,
-            }
+            },
         );
     store
         .world
@@ -497,7 +514,7 @@ fn initialize_feet_tiers_config(ref store: Store) {
                 tier: 3,
                 stat: 25,
                 cost: 1_600,
-            }
+            },
         );
     store
         .world
@@ -508,7 +525,7 @@ fn initialize_feet_tiers_config(ref store: Store) {
                 tier: 4,
                 stat: 40,
                 cost: 9_600,
-            }
+            },
         );
     store
         .world
@@ -519,7 +536,7 @@ fn initialize_feet_tiers_config(ref store: Store) {
                 tier: 5,
                 stat: 55,
                 cost: 58_000,
-            }
+            },
         );
     store
         .world
@@ -530,7 +547,7 @@ fn initialize_feet_tiers_config(ref store: Store) {
                 tier: 6,
                 stat: 69,
                 cost: 285_000,
-            }
+            },
         );
 }
 
@@ -544,7 +561,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 1,
                 stat: 1000,
                 cost: 0,
-            }
+            },
         );
     store
         .world
@@ -555,7 +572,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 2,
                 stat: 1500,
                 cost: 1500,
-            }
+            },
         );
     store
         .world
@@ -566,7 +583,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 3,
                 stat: 3000,
                 cost: 59_500,
-            }
+            },
         );
     store
         .world
@@ -577,7 +594,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 4,
                 stat: 5000,
                 cost: 220_000,
-            }
+            },
         );
     store
         .world
@@ -588,7 +605,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 5,
                 stat: 6000,
                 cost: 1_690_000,
-            }
+            },
         );
     store
         .world
@@ -599,7 +616,7 @@ fn initialize_transport_tiers_config(ref store: Store) {
                 tier: 6,
                 stat: 7000,
                 cost: 4_200_000,
-            }
+            },
         );
 }
 

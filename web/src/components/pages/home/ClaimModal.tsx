@@ -25,6 +25,7 @@ import { PaperIcon } from "@/components/icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { num, shortString } from "starknet";
+import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 
 export const ClaimModal = ({
   claimable,
@@ -91,8 +92,16 @@ export const ClaimModal = ({
                           <Td isNumeric>{game.position}</Td>
                           <Td>
                             <HStack>
-                              <HustlerIcon hustler={game.hustler_id as Hustlers} />
-                              <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}</Text>
+                              <HustlerAvatarIcon
+                                hustlerId={game.hustler_id % 3}
+                                // @ts-ignore
+                                tokenIdType={game.token_id_type}
+                                // @ts-ignore
+                                tokenId={game.token_id}
+                                display="flex"
+                                flexShrink={0}
+                              />
+                              <Text>{game.player_name as string}</Text>
                             </HStack>
                           </Td>
                           <Td color="yellow.400" isNumeric>

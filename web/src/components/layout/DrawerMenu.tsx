@@ -54,14 +54,13 @@ const DrawerMenu = () => {
       <HeaderButton ref={btnRef} onClick={onOpen} w="48px">
         <Dots />
       </HeaderButton>
-      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} /*finalFocusRef={btnRef} */ trapFocus={false}>
+      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} trapFocus={false}>
         <DrawerOverlay onClick={onClose} />
         <DrawerContent minW="340px" overflowX="hidden">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
             <Heading
               color="neon.500"
               fontWeight="normal"
-              // textAlign="center"
               position="relative"
               left="100%"
               animation={`${slideAnim} .6s ease-out 0.1s 1 normal forwards`}
@@ -121,10 +120,6 @@ const DrawerMenu = () => {
 
                       <DrawerListItem>
                         <ProfileLinkDrawer />
-                        {/* <HStack w="full">
-                          <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
-                          <Text> {shortString.decodeShortString(game.gameInfos.player_name?.value)} </Text>
-                        </HStack> */}
                       </DrawerListItem>
 
                       <DrawerListItem

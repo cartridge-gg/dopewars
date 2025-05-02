@@ -1,11 +1,6 @@
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
-import {
-  useDojoContext,
-  useRegisteredGamesBySeason,
-  useRouterContext,
-  useSeasonByVersion,
-} from "@/dojo/hooks";
+import { useDojoContext, useRegisteredGamesBySeason, useRouterContext, useSeasonByVersion } from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
@@ -18,6 +13,7 @@ import { Dopewars_Game as Game } from "@/generated/graphql";
 import { num, shortString } from "starknet";
 import { Config, ConfigStoreClass } from "@/dojo/stores/config";
 import { getPayedCount } from "@/dojo/helpers";
+import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 
 const renderer = ({
   days,
@@ -145,7 +141,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           "scrollbar-width": "none",
         }}
       >
-        
         {isFetchingRegisteredGames && <Loader />}
         {!isFetchingRegisteredGames && (
           <UnorderedList boxSize="full" variant="dotted" h="auto">
@@ -154,10 +149,9 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 const isOwn = game.player_id === account?.address;
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
-                const displayName = game.player_name?.value
-                  ? `${shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}${isOwn ? " (you)" : ""}`
-                  : "Anonymous";
-
+                const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
+                // @ts-ignore
+                const isGameWithTokenId = game.token_id !== undefined;
                 return (
                   <ListItem color={color} key={game.game_id}>
                     <HStack mr={3}>
@@ -176,11 +170,13 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         cursor="pointer"
                         onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
                       >
-                        {/* {game.health === 0 ? (
-                          <Skull color={avatarColor} hasCrown={index === 0} />
-                        ) : ( */}
-                        <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
-                        {/* )} */}
+                        <HustlerAvatarIcon
+                          hustlerId={game.hustler_id}
+                          // @ts-ignore
+                          tokenIdType={game.token_id_type}
+                          // @ts-ignore
+                          tokenId={game.token_id}
+                        />
                       </Box>
 
                       <HStack>

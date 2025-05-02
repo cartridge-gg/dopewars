@@ -21,7 +21,7 @@ export const GlobalEvents = () => {
     clients: { toriiClient },
   } = useDojoContext();
 
-  const subscription = useRef<Subscription|undefined>(undefined);
+  const subscription = useRef<Subscription | undefined>(undefined);
   const accountAddress = useRef(0n);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export const GlobalEvents = () => {
             //
             {
               Keys: {
-                keys: [undefined,undefined], // u256
+                keys: [undefined, undefined], // u256
                 models: ["dojo-DopeLootReleasedEvent"],
                 pattern_matching: "FixedLen",
               },
@@ -110,16 +110,17 @@ export const GlobalEvents = () => {
     if (update["dopewars-GameCreated"]) {
       const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
+
       if (BigInt(gameCreated.player_id) !== accountAddress.current) {
-        toast({
-          icon: () => <HustlerIcon hustler={gameCreated.hustler_id as Hustlers} />,
-          message:
-            gameCreated.game_mode === "Ranked"
-              ? `${gameCreated.player_name} is ready to hustle...`
-              : `${gameCreated.player_name} is training...`,
-        });
+      toast({
+        icon: () => <HustlerIcon hustler={(gameCreated.hustler_id % 3) as Hustlers} />,
+        message:
+          gameCreated.game_mode === "Ranked"
+            ? `${gameCreated.player_name} is ready to hustle...`
+            : `${gameCreated.player_name} is training...`,
+      });
       } else {
-        router.push(`/${num.toHexString(gameCreated.game_id)}`);
+      router.push(`/${num.toHexString(gameCreated.game_id)}`);
       }
     }
 
@@ -136,7 +137,7 @@ export const GlobalEvents = () => {
       const newHighScore = parseStruct(update["dopewars-NewHighScore"]) as NewHighScore;
       newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
       toast({
-        icon: () => <HustlerIcon hustler={newHighScore.hustler_id as Hustlers} />,
+        icon: () => <HustlerIcon hustler={(newHighScore.hustler_id % 3) as Hustlers} />,
         message: `${newHighScore.player_name} rules with ${formatCashHeader(newHighScore.cash)}!`,
       });
     }
@@ -149,15 +150,15 @@ export const GlobalEvents = () => {
           playSound(Sounds.Magnum357);
         }
         toast({
-          icon: () => <HustlerIcon hustler={gameOver.hustler_id as Hustlers} />,
+          icon: () => <HustlerIcon hustler={(gameOver.hustler_id % 3) as Hustlers} />,
           message: gameOver.health === 0 ? `RIP ${gameOver.player_name}!` : `${gameOver.player_name} survived!`,
         });
       }
     }
 
-    if(update["dojo-DopeLootReleasedEvent"]) {
+    if (update["dojo-DopeLootReleasedEvent"]) {
       const released = parseStruct(update["dojo-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
-      const id = Number(released.id)
+      const id = Number(released.id);
       toast({
         icon: () => <PaperIcon width="16px" height="16px" />,
         message: `#${id} has been released!`,

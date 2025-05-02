@@ -86,6 +86,26 @@ export const gangRanks = {
 };
 export type gangRanksKeys = keyof typeof gangRanks;
 
+export const itemSlotToDopeLootSlotId = {
+  [ItemSlot.Weapon]: 0,
+  [ItemSlot.Clothes]: 1,
+  [ItemSlot.Feet]: 5,
+  [ItemSlot.Transport]: 2,
+};
+export const itemSlotToSlotSlug = {
+  [ItemSlot.Weapon]: "Weapon",
+  [ItemSlot.Clothes]: "Clothe",
+  [ItemSlot.Feet]: "Foot",
+  [ItemSlot.Transport]: "Vehicle",
+};
+export const dopeLootSlotIdToItemSlot = {
+  0: ItemSlot.Weapon,
+  1: ItemSlot.Clothes,
+  5: ItemSlot.Feet,
+  2: ItemSlot.Transport,
+};
+
+
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
     0: {
@@ -159,7 +179,7 @@ export const slotName = {
   [ItemSlot.Weapon]: "WEAPON",
   [ItemSlot.Clothes]: "SHIRT",
   [ItemSlot.Feet]: "SHOES",
-  [ItemSlot.Transport]: "BAG",
+  [ItemSlot.Transport]: "TRANSPORT",
 };
 export type slotNameKeys = keyof typeof slotName;
 

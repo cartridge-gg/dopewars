@@ -2,25 +2,25 @@ import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { ControllerConnector } from "@cartridge/connector";
 
-export const useControllerUsername = () => {
+export const useControllerUsername = (address: string) => {
   const { connector } = useConnect();
 
   const [username, setUsername] = useState("");
   const [isController, setIsController] = useState(false);
 
+  const refetch = async () => {
+    const username = await (connector as unknown as ControllerConnector).username();
+    setUsername(username || "");
+  };
   useEffect(() => {
-    const init = async () => {
-      const username = await (connector as unknown as ControllerConnector).username();
-      setUsername(username || "");
-    };
     if (connector?.id.includes("controller")) {
       setIsController(true);
-      init();
+      refetch();
     } else {
       setIsController(false);
       setUsername("");
     }
-  }, [connector]);
+  }, [connector, address]);
 
-  return { username, isController };
+  return { username, isController, refetch };
 };

@@ -1,0 +1,40 @@
+
+rpc = "https://api.cartridge.gg/x/dopewars/katana"
+
+world_address = "0x0685b5da23a2ca5714afb4304797f08102d4232cf1d5afdde1f0a8cc1b0a5c6e"
+
+[server]
+http_cors_origins = ["*"]
+
+
+[indexing]
+pending = true
+polling_interval = 1000
+
+max_concurrent_tasks = 2
+contracts = [
+    "ERC721:0x061750bde692dc101abb345ed5d66fee9a1867efcef806b80785241c14d83d78", # dope_loot
+    "ERC721:0x0658a1ce68ae9ac5e5241b093d528cccc1832f0a5c24bfe4cadcb403869bd394", # dope_hustlers
+    "ERC1155:0x075d3f8184f68f7de9ee82c9d8c407290964112af0f41248357c79bd23e1d460", # dope_gear
+]
+
+[erc]
+max_metadata_tasks = 2
+
+[sql]
+historical = [
+    "dopewars-GameCreated",
+    "dopewars-Traveled",
+    "dopewars-GameOver",
+    "dopewars-TradeDrug",
+    "dopewars-HighVolatility",
+    "dopewars-UpgradeItem",
+    "dopewars-TravelEncounter",
+    "dopewars-TravelEncounterResult",
+    "dopewars-NewSeason",
+    "dopewars-NewHighScore",
+    "dopewars-Claimed",
+    # bushido 
+    "dopewars-TrophyCreation",
+    "dopewars-TrophyProgression",
+]

@@ -1,123 +1,131 @@
-mod constants;
+pub mod constants;
 
-mod events;
+pub mod events;
 
-mod store;
+pub mod store;
 
 #[cfg(test)]
-mod tests;
+pub mod tests;
 
-mod traits;
-mod config {
-    mod config;
-    mod drugs;
-    mod encounters;
-    mod game;
-    mod hustlers;
-    mod locations;
-    mod ryo;
-    mod ryo_address;
-    mod settings;
+pub mod traits;
+pub mod config {
+    pub mod config;
+    pub mod drugs;
+    pub mod encounters;
+    pub mod game;
+    pub mod gear;
+    pub mod hustlers;
+    pub mod locations;
+    pub mod ryo;
+    pub mod ryo_address;
+    pub mod settings;
 }
 
-mod elements {
-    mod quests {
-        mod brawlerC;
-        mod brawlerG;
-        mod cops;
-        mod dealer;
-        mod escape;
-        mod famous;
-        mod gangs;
-        mod hustler;
-        mod interface;
-        mod jailbird;
-        mod kingpin;
-        mod launderer;
-        mod rip;
-        mod stuffed;
-        mod types;
+pub mod elements {
+    pub mod quests {
+        pub mod brawlerC;
+        pub mod brawlerG;
+        pub mod cops;
+        pub mod dealer;
+        pub mod escape;
+        pub mod famous;
+        pub mod gangs;
+        pub mod hustler;
+        pub mod interface;
+        pub mod jailbird;
+        pub mod kingpin;
+        pub mod launderer;
+        pub mod rip;
+        pub mod stuffed;
+        pub mod types;
     }
-    mod trophies {
-        mod brawler;
-        mod cops;
-        mod dealer;
-        mod escape;
-        mod famous;
-        mod gangs;
-        mod hustler;
-        mod interface;
-        mod jailbird;
-        mod kingpin;
-        mod launderer;
-        mod rip;
-        mod stuffed;
-        mod types;
+    pub mod trophies {
+        pub mod brawler;
+        pub mod cops;
+        pub mod dealer;
+        pub mod escape;
+        pub mod famous;
+        pub mod gangs;
+        pub mod hustler;
+        pub mod interface;
+        pub mod jailbird;
+        pub mod kingpin;
+        pub mod launderer;
+        pub mod rip;
+        pub mod stuffed;
+        pub mod types;
     }
 }
 
-mod helpers {
-    mod season_manager;
+pub mod helpers {
+    pub mod season_manager;
 }
 
-mod models {
-    mod game;
-    mod game_store_packed;
+pub mod models {
+    pub mod game;
+    pub mod game_store_packed;
+    pub mod game_with_token_id;
 
-    mod season;
+    pub mod season;
 }
 
-mod packing {
-    mod drugs_packed;
-    mod game_store;
-    mod game_store_layout;
-    mod items_packed;
-    mod markets_packed;
+pub mod packing {
+    pub mod drugs_packed;
+    pub mod game_store;
+    pub mod game_store_layout;
+    pub mod items_packed;
+    pub mod markets_packed;
 
-    mod player;
-    mod player_layout;
-    mod wanted_packed;
+    pub mod player;
+    pub mod player_layout;
+    pub mod wanted_packed;
 }
 
-mod systems {
-    mod game;
-    mod laundromat;
-    mod ryo;
+pub mod systems {
+    pub mod game;
+    pub mod laundromat;
+    pub mod ryo;
 
-    mod helpers {
-        mod game_loop;
-        mod shopping;
+    pub mod helpers {
+        pub mod game_loop;
+        pub mod shopping;
 
-        mod trading;
-        mod traveling;
+        pub mod trading;
+        pub mod traveling;
     }
-    // mod slot;
-// mod devtools;
+    // pub mod slot;
+// pub mod devtools;
 }
 
-mod tokens {
-    // mod chips;
+pub mod tokens {
+    // pub mod chips;
 }
 
-mod utils {
-    mod bits;
-    mod bytes16;
-    mod events;
-    mod introspect;
-    mod math;
-    mod payout_structure;
-    mod random;
-    mod sorted_list;
+pub mod utils {
+    pub mod bits;
+    pub mod bytes16;
+    pub mod events;
+    pub mod introspect;
+    pub mod math;
+    pub mod payout_structure;
+    pub mod random;
+    pub mod sorted_list;
 }
 
-mod interfaces {
-    mod chips;
-    mod paper;
-    mod erc721;
+pub mod interfaces {
+    pub mod chips;
+    pub mod paper;
+    pub mod erc721;
+    pub mod dope_hustlers;
+    pub mod dope_loot;
 }
 
-mod _mocks {
-    mod paper_mock;
-    mod vrf_provider_mock;
+pub mod _mocks {
+    pub mod paper_mock;
+    pub mod vrf_provider_mock;
 }
 
+
+pub mod libraries {
+    pub mod dopewars_items;
+}

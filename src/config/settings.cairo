@@ -108,6 +108,7 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
     //
 
     fn get_initial_cash(self: SeasonSettings) -> u32 {
+        // 42_000
         match self.cash_mode {
             CashMode::Broke => { 420 },
             CashMode::Average => { 1000 },
@@ -124,12 +125,12 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
     }
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
-        4
-        // match self.turns_mode {
-        //     TurnsMode::OnSpeed => { 14 },
-        //     TurnsMode::OnWeed => { 16 },
-        //     TurnsMode::OnMush => { 18 },
-        // }
+        // 10
+        match self.turns_mode {
+            TurnsMode::OnSpeed => { 14 },
+            TurnsMode::OnWeed => { 16 },
+            TurnsMode::OnMush => { 18 },
+        }
     }
 
     //

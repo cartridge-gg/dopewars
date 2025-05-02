@@ -1,7 +1,10 @@
+use starknet::ContractAddress;
+use dojo::world::WorldStorageTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}};
-use starknet::ContractAddress;
+use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
+
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -26,16 +29,6 @@ struct Game {
 }
 
 
-#[derive(Copy, Drop, Serde)]
-#[dojo::model]
-struct GameWithLoot {
-    #[key]
-    game_id: u32,
-    #[key]
-    player_id: ContractAddress,
-    loot_id: felt252
-}
-
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
 enum GameMode {
     Ranked,
@@ -52,7 +45,6 @@ impl GameImpl of GameTrait {
         game_mode: GameMode,
         player_name: felt252,
         hustler_id: u16,
-        loot_id: u16,
     ) -> Game {
         Game {
             game_id,
@@ -81,3 +73,5 @@ impl GameImpl of GameTrait {
         self.game_mode == GameMode::Ranked
     }
 }
+
+

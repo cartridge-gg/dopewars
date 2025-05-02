@@ -6,12 +6,14 @@ import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
 import { HustlerIcon, Hustlers } from "../../hustlers";
 import { num, shortString } from "starknet";
+import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
 
 export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
-  const { gameInfos } = useGameStore();
+  const { gameInfos, gameWithTokenId } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +30,11 @@ export const ProfileLink = () => {
   return (
     <>
       <Button cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
-        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+        <HustlerAvatarIcon
+          hustlerId={gameInfos.hustler_id}
+          tokenIdType={gameWithTokenId?.token_id_type}
+          tokenId={gameWithTokenId?.token_id}
+        />
       </Button>
     </>
   );
@@ -38,7 +44,7 @@ export const ProfileLinkMobile = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
-  const { gameEvents, gameInfos } = useGameStore();
+  const { gameEvents, gameInfos, gameWithTokenId } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -54,8 +60,12 @@ export const ProfileLinkMobile = () => {
 
   return (
     <>
-      <MenuItem h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
-        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+      <MenuItem h="48px" borderRadius={0} onClick={onClick}>
+        <HustlerAvatarIcon
+          hustlerId={gameInfos.hustler_id}
+          tokenIdType={gameWithTokenId?.token_id_type}
+          tokenId={gameWithTokenId?.token_id}
+        />
         <Text ml="10px">{shortString.decodeShortString(num.toHexString(BigInt(gameInfos.player_name?.value)))}</Text>
       </MenuItem>
     </>
@@ -66,7 +76,7 @@ export const ProfileLinkDrawer = () => {
   const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
-  const { gameEvents, gameInfos } = useGameStore();
+  const { gameEvents, gameInfos, gameWithTokenId } = useGameStore();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -78,10 +88,14 @@ export const ProfileLinkDrawer = () => {
     }
   };
 
-  if (!account || !gameInfos /*|| !gameEvents*/) return null;
+  if (!account || !gameInfos) return null;
   return (
-    <HStack borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
-      <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+    <HStack borderRadius={0} onClick={onClick}>
+      <HustlerAvatarIcon
+        hustlerId={gameInfos.hustler_id}
+        tokenIdType={gameWithTokenId?.token_id_type}
+        tokenId={gameWithTokenId?.token_id}
+      />
       <Text ml="4px">{shortString.decodeShortString(num.toHexString(BigInt(gameInfos.player_name?.value)))}</Text>
     </HStack>
   );

@@ -110,7 +110,7 @@ const Location = observer(() => {
             {prices.map((drug, index) => {
               const drugConfig = configStore.getDrug(game.seasonSettings.drugs_mode, drug.drug)!;
 
-              const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
+              const freeSpace = game.items.transport.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
               const hasFreeSpace = freeSpace >= drug.weight;
               const hasMinCash = game.player.cash >= drug.price;
 

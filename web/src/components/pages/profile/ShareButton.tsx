@@ -4,15 +4,13 @@ import { useGameStore } from "@/dojo/hooks";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { formatCash } from "@/utils/ui";
 import { Link as ChakraLink, StyleProps } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
 import { num, shortString } from "starknet";
 import { Twitter } from "../../icons";
 
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
-  const { account } = useAccount();
   const { game, gameInfos } = useGameStore();
 
-  if (!account || !game || !gameInfos) return null;
+  if ( !game || !gameInfos) return null;
 
   return (
     <ChakraLink

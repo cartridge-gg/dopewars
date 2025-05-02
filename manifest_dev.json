@@ -1312,8 +1312,8 @@
   },
   "contracts": [
     {
-      "address": "0x606d5d8c75aa5dd26cd556df4b1812351f8c60ed32f45661d0c8a80adcf4fa0",
-      "class_hash": "0x3478eb8e7bace3adb3d33ecc8fb6a130dde9f670b6868b72cb831942b834acd",
+      "address": "0x4e9fad7ad1c66a29f33b2050078fd5cc94f4f477b73af2621574f2ff94b6428",
+      "class_hash": "0x23bbbcac9e313b1ace5bb09b17a8396756e592aea746ff14920ea5c0d9953b1",
       "abi": [
         {
           "type": "impl",
@@ -1857,6 +1857,13 @@
                 }
               ],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "emit_items_config",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "view"
             }
           ]
         },
@@ -1977,8 +1984,8 @@
       ]
     },
     {
-      "address": "0x281de72fce57ec3802947210f1f53a2a1ecd2167400ba76d33c78135fcbaf79",
-      "class_hash": "0x70b74cac9ac2573d142e1204c2fe2e7eab97f7186429049d3b2bb7d371ebeeb",
+      "address": "0x345c93fc2b63266aeeb2c0fbce659e00a55932057c392244a40a0311e47e3eb",
+      "class_hash": "0x1d0810b4e242617597b335d1b11eb023af922dcab77761a2f11b3b4e3510f8f",
       "abi": [
         {
           "type": "impl",
@@ -2050,6 +2057,24 @@
             {
               "name": "Warrior",
               "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::models::game_with_token_id::TokenId",
+          "variants": [
+            {
+              "name": "GuestLootId",
+              "type": "core::felt252"
+            },
+            {
+              "name": "LootId",
+              "type": "core::felt252"
+            },
+            {
+              "name": "HustlerId",
+              "type": "core::felt252"
             }
           ]
         },
@@ -2252,8 +2277,8 @@
                   "type": "core::felt252"
                 },
                 {
-                  "name": "loot_id",
-                  "type": "core::integer::u16"
+                  "name": "token_id",
+                  "type": "rollyourown::models::game_with_token_id::TokenId"
                 }
               ],
               "outputs": [],
@@ -2436,8 +2461,8 @@
       ]
     },
     {
-      "address": "0x17be4ffa3839bcb12dbae41021bdc5af2624caf8e06709c6217d7c1fa3ce36f",
-      "class_hash": "0x3fc6b84625a6f8e6f0ca129f329f078642be114180948686a5fe5f679802bdb",
+      "address": "0x78f02349b1a7db50c763084634a40833ad1b7f3fab3f6ddd97098a12028008c",
+      "class_hash": "0x1f9f3f05b4fed007928b7fbd41b2f68412a230fda14ae07b63878c3e0735579",
       "abi": [
         {
           "type": "impl",
@@ -3132,8 +3157,8 @@
       ]
     },
     {
-      "address": "0x53755e5be73a422dcbe264db460133e2e675f6e0f4b44c21e5e8e46c2e213be",
-      "class_hash": "0x27edbd797bec7c6a5af26cbcddf99c0f399f65620f01919c8d80b2bf668cb28",
+      "address": "0x7ac76552b06296db95954571f2087fd6a576f17fe163d57cfa3884c2716cc97",
+      "class_hash": "0xc5bdd82a3f7057df07bc5fac1a07610537823c61c9302a68fd60d63384c7b8",
       "abi": [
         {
           "type": "impl",
@@ -4009,7 +4034,182 @@
       ]
     }
   ],
-  "libraries": [],
+  "libraries": [
+    {
+      "class_hash": "0x4511d5f87cdbd40a00aaed453bb317aeb39170fbecded7c44025f23818eff57",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "DopewarsItems__LibraryImpl",
+          "interface_name": "dojo::contract::interface::ILibrary"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::ILibrary",
+          "items": []
+        },
+        {
+          "type": "impl",
+          "name": "DopewarsItems__DeployedLibraryImpl",
+          "interface_name": "dojo::meta::interface::IDeployedResource"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::meta::interface::IDeployedResource",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "DopewarsItemsImpl",
+          "interface_name": "rollyourown::libraries::dopewars_items::IDopewarsItems"
+        },
+        {
+          "type": "struct",
+          "name": "rollyourown::libraries::dopewars_items::ItemTierConfig",
+          "members": [
+            {
+              "name": "stat",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "cost",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::libraries::dopewars_items::IDopewarsItems",
+          "items": [
+            {
+              "type": "function",
+              "name": "get_item_tier",
+              "inputs": [
+                {
+                  "name": "slot_id",
+                  "type": "core::integer::u8"
+                },
+                {
+                  "name": "item_id",
+                  "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u8"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "get_tier_config",
+              "inputs": [
+                {
+                  "name": "slot_id",
+                  "type": "core::integer::u8"
+                },
+                {
+                  "name": "tier",
+                  "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::array::Array::<rollyourown::libraries::dopewars_items::ItemTierConfig>"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::libraries::dopewars_items::DopewarsItems::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "flat"
+            }
+          ]
+        }
+      ],
+      "tag": "dopewars-DopewarsItems_v0",
+      "selector": "0xb4eb1c2e9851b81b3ba0a025c453a55f9cb897c1fe5984084f76b48226ccf1",
+      "systems": [],
+      "version": "0"
+    }
+  ],
   "models": [
     {
       "members": [],
@@ -4043,9 +4243,9 @@
     },
     {
       "members": [],
-      "class_hash": "0x3d5af0bd9f0e61dd3d20ac2edefcc539495157ab0cac3079ed7792acbe17137",
-      "tag": "dopewars-GameWithLoot",
-      "selector": "0x40ce22f46bafa07c78de6c6f28e790b6e5859b8b4c548378dcb7d93bf7c33bc"
+      "class_hash": "0x2afeb12a92e81dcf36af9a1a98f64c4045663ef804c10910251a84d19b9263a",
+      "tag": "dopewars-GameWithTokenId",
+      "selector": "0x687df0f249cc7c80fcba2556c2ef1c0567694b350dac98327c2c8b2f5053fd7"
     },
     {
       "members": [],
@@ -4111,13 +4311,25 @@
     },
     {
       "members": [],
+      "class_hash": "0x4b579ed0a1a23b76abdfd6c8d6aab8975885fc48f2d3524833a11f8640de766",
+      "tag": "dopewars-DopewarsItemTier",
+      "selector": "0x37ed07308c80da10bfd8290337a7d4b0125afc86a80818fa61cd2e73302e088"
+    },
+    {
+      "members": [],
+      "class_hash": "0x4d7ed997597381c8ef14a554e0893223a49287e704fa00250cc8d4ba5cdd129",
+      "tag": "dopewars-DopewarsItemTierConfig",
+      "selector": "0xc8501e77426e074d09f53dea849371ed304aa71b5b4b6440d1665bcec2c33f"
+    },
+    {
+      "members": [],
       "class_hash": "0x234c0cda7cfc61d8d3c8912313088f1eaa6f6ddecbd5ac8d1433886bc0e150e",
       "tag": "dopewars-ERC20BalanceEvent",
       "selector": "0x4ced94cbf9afb761b2b382d1c6ae289a8b261b1aea0eb5714bf5c107e3e383f"
     },
     {
       "members": [],
-      "class_hash": "0x68d66d08cb798629f2d1e0e9da05c417956336f9f4e86d24c586e5635012f7b",
+      "class_hash": "0x313d724f242b6617f6d382aca50ac5ef1770f70d68c1a8a690a8749d04154a0",
       "tag": "dopewars-GameCreated",
       "selector": "0xb6cb757d1b16685bd607281240d13dc1c6d6ab51eec461848f216405223cd"
     },

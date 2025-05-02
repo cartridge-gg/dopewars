@@ -1,6 +1,7 @@
 import { PaperCashIcon, Roll, Trophy, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import {
+  Box,
   Card,
   Divider,
   HStack,
@@ -35,10 +36,12 @@ import { num, shortString } from "starknet";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { ChildrenOrConnect } from "@/components/wallet";
+import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 
 const End = () => {
   const gameStore = useGameStore();
-  const { game, gameInfos } = gameStore;
+  const { game, gameInfos, gameWithTokenId } = gameStore;
   const { router, gameId } = useRouterContext();
   const {
     clients: { rpcProvider },
@@ -59,10 +62,10 @@ const End = () => {
 
   const { season, sortedList, refetch: refetchSeason } = useSeasonByVersion(game?.gameInfos.season_version);
 
-  useEffect(() => {
-    refetchSeason();
-    refetchRegisteredGame();
-  }, [refetchSeason, refetchRegisteredGame]);
+  // useEffect(() => {
+  //   refetchSeason();
+  //   refetchRegisteredGame();
+  // }, [refetchSeason, refetchRegisteredGame]);
 
   useEffect(() => {
     if (game) {
@@ -108,8 +111,11 @@ const End = () => {
         await rpcProvider.waitForTransaction(hash, {
           retryInterval: 200,
         });
-        setTimeout(() => {
-          gameStore.init(gameInfos?.game_id!);
+        setTimeout(async () => {
+          await gameStore.init(gameInfos?.game_id!);
+          setTimeout(() => {
+            refetchRegisteredGame();
+          }, 500);
         }, 1_000);
       }
     } catch (e: any) {
@@ -159,8 +165,15 @@ const End = () => {
           <VStack flex="1">
             <StatsItem
               text={shortString.decodeShortString(num.toHexString(BigInt(game?.gameInfos.player_name?.value)))}
-              icon={<HustlerIcon hustler={game?.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
+              icon={
+                <HustlerAvatarIcon
+                  hustlerId={gameInfos.hustler_id}
+                  tokenIdType={gameWithTokenId?.token_id_type}
+                  tokenId={gameWithTokenId?.token_id}
+                />
+              }
             />
+
             {game?.gameInfos.game_mode == "Ranked" && (
               <>
                 <Divider borderColor="neon.600" />

@@ -41,27 +41,7 @@ export const Header = observer(() => {
       py={["0", "20px"]}
       fontSize={["14px", "16px"]}
     >
-      <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        {/* {!isMobile && (
-          <>
-            <Burners />
-            <Predeployed />
-            <ChainSelector canChange={!gameId} />
-          </>
-        )} */}
-
-        {/* {!gameId && account && (
-          <Card h="48px" p={2} display="flex" justifyContent="center">
-            <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
-          </Card>
-        )} */}
-
-        {/* {!isMobile && (
-          <>
-            <MediaPlayer />
-          </>
-        )} */}
-
+      <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
       </HStack>
 
@@ -99,8 +79,6 @@ export const Header = observer(() => {
       <HStack flex="1" justify="right">
         {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
-
-        {/* {isMobile && <MobileMenu />} */}
 
         {/* trick to allow autoplay.. */}
         <Box display="none">

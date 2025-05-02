@@ -1,26 +1,88 @@
-import { itemUpgrades, slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
+import { PowerMeter, TierIndicator } from "@/components/player";
+import { dopeLootSlotIdToItemSlot, itemUpgrades, slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
 import { useGameStore } from "@/dojo/hooks";
-import { HustlerItemConfigFull } from "@/dojo/stores/config";
+import { GearItemFull, HustlerItemConfigFull } from "@/dojo/stores/config";
 import { IsMobile } from "@/utils/ui";
 import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { getGearItem } from "@dope/dope-sdk/helpers";
 import { observer } from "mobx-react-lite";
+import { DopeGearItem } from "./DopeGearItem";
+import { ItemSlot } from "@/dojo/types";
+import { ItemInfos } from "@/dojo/class/Items";
 
 export const Loadout = () => {
-  const { game, gameInfos } = useGameStore();
+  const { game, gameInfos, gameWithTokenId, configStore } = useGameStore();
 
   if (!game || !gameInfos) return null;
 
-  return (
-    <VStack w="full" gap={6}>
-      <Item item={game.items.attack} stat={game?.items.attack.tier.stat} />
-      <Item item={game.items.defense} stat={game?.items.defense.tier.stat} />
-      <Item item={game.items.speed} stat={game?.items.speed.tier.stat} />
-      <Item item={game.items.transport} stat={game?.items.transport.tier.stat} />
-    </VStack>
-  );
+  if (!gameWithTokenId) {
+    return (
+      <VStack w="full" gap={6}>
+        <Item item={game.items.attack} stat={game?.items.attack.stat} />
+        <Item item={game.items.defense} stat={game?.items.defense.stat} />
+        <Item item={game.items.speed} stat={game?.items.speed.stat} />
+        <Item item={game.items.transport} stat={game?.items.transport.stat} />
+      </VStack>
+    );
+  }
+
+  if (gameWithTokenId) {
+    return (
+      <VStack w="full" gap={6}>
+        <GearItemInfos slot={ItemSlot.Weapon} item={game?.items.attack} level={game?.items.attackLevel} />
+        <GearItemInfos slot={ItemSlot.Clothes} item={game?.items.defense} level={game?.items.defenseLevel} />
+        <GearItemInfos slot={ItemSlot.Feet} item={game?.items.speed} level={game?.items.speedLevel} />
+        <GearItemInfos slot={ItemSlot.Transport} item={game?.items.transport} level={game?.items.transportLevel} />
+      </VStack>
+    );
+  }
 };
 
-const Item = observer(({ item, stat }: { item: HustlerItemConfigFull; stat: number }) => {
+const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: ItemInfos; level: number }) => {
+  return (
+    <HStack
+      w="full"
+      gap={[2, 9]}
+      fontSize="14px"
+      borderBottom="solid 1px"
+      borderColor="neon.800"
+      paddingBottom="20px"
+      marginLeft="-20px"
+      _last={{
+        borderBottom: "none",
+      }}
+    >
+      <Flex w="full" flexDirection={"row"} gap={[2, 9]} justifyContent={"space-between"}>
+        <HStack w="full" gap={[3, 9]}>
+          <DopeGearItem itemSlot={slot} id={item.id!} />
+          <VStack alignItems="flex-start" gap={1}>
+            <HStack
+              w={["120px", "180px"]}
+              fontSize="12px"
+              justifyContent="space-between"
+              fontFamily="broken-console"
+              color="neon.500"
+              gap={0}
+            >
+              <Text>{slotName[item.slot as slotNameKeys]}</Text>
+            </HStack>
+            <Text>{item.name}</Text>
+            <Text color="neon.500" fontFamily="broken-console" fontSize="11px">
+              {item.stat} {statName[item.slot as statNameKeys]}
+            </Text>
+          </VStack>
+        </HStack>
+
+        <VStack alignItems={"center"}>
+          <TierIndicator tier={item.tier!} />
+          <PowerMeter basePower={0} maxPower={3} displayedPower={3} power={level} text={`LVL`} />
+        </VStack>
+      </Flex>
+    </HStack>
+  );
+});
+
+const Item = observer(({ item, stat }: { item: ItemInfos; stat: number }) => {
   /// @ts-ignore
   const upgrades = itemUpgrades[item.slot][Number(item.base.id)];
   const isMobile = IsMobile();
@@ -33,7 +95,6 @@ const Item = observer(({ item, stat }: { item: HustlerItemConfigFull; stat: numb
       borderBottom="solid 1px"
       borderColor="neon.800"
       paddingBottom="20px"
-      marginLeft="-20px"
       _last={{
         borderBottom: "none",
       }}
@@ -52,7 +113,7 @@ const Item = observer(({ item, stat }: { item: HustlerItemConfigFull; stat: numb
           >
             <Text>{slotName[item.slot as slotNameKeys]}</Text>
           </HStack>
-          <Text>{item.base.name}</Text>
+          <Text>{item.name}</Text>
           <Text color="neon.500" fontFamily="broken-console" fontSize="11px">
             {stat} {statName[item.slot as statNameKeys]}
           </Text>

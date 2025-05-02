@@ -62,7 +62,7 @@ skip_contracts = [
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
 "dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-GameWithLoot" = ["dopewars-game"]
+"dopewars-GameWithTokenId" = ["dopewars-game"]
 "dopewars-GameStorePacked" = ["dopewars-game"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
@@ -76,7 +76,10 @@ skip_contracts = [
 "dopewars-SortedListItem" = ["dopewars-game", "dopewars-laundromat"]
 "dopewars-RyoAddress" = ["dopewars-ryo"]
 
+#
 # events
+#
+
 "dopewars-GameCreated" = ["dopewars-game"]
 "dopewars-Traveled" = ["dopewars-game"]
 "dopewars-GameOver" = ["dopewars-game"]
@@ -94,3 +97,14 @@ skip_contracts = [
 "dopewars-TrophyProgression" = ["dopewars-game", "dopewars-laundromat"]
 "dopewars-TrophyCreation" = ["dopewars-ryo"]
 
+# items
+"dopewars-DopewarsItemTier" = ["dopewars-config"]
+"dopewars-DopewarsItemTierConfig" = ["dopewars-config"]
+
+#
+# libraries
+#
+
+[lib_versions]
+
+"dopewars-DopewarsItems" = "0"

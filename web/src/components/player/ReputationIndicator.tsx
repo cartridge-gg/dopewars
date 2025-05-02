@@ -1,6 +1,5 @@
 import { Card, HStack, StyleProps, Text } from "@chakra-ui/react";
 import { DynamicReputation } from "../icons";
-import { Tooltip } from "../common";
 import colors from "@/theme/colors";
 
 const getRep = (rep: number, step: number): number => {

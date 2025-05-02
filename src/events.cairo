@@ -2,6 +2,7 @@ use dojo::meta::introspect::Introspect;
 use rollyourown::packing::game_store::{GameMode};
 use rollyourown::systems::game::{EncounterActions,};
 use rollyourown::systems::helpers::traveling::{EncounterOutcomes,};
+use rollyourown::models::game_with_token_id::{TokenId};
 use starknet::ContractAddress;
 
 #[derive(Drop, Serde)]
@@ -13,9 +14,11 @@ pub struct GameCreated {
     player_id: ContractAddress,
     game_mode: GameMode,
     player_name: felt252,
-    hustler_id: u16
-}
+    hustler_id: u16,
+    // token_id: TokenId,
 
+}
+ 
 #[derive(Drop, Serde)]
 #[dojo::event]
 pub struct Traveled {

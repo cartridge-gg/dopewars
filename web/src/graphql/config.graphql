@@ -101,6 +101,44 @@ query Config {
       }
     }
   }
+
+  # DopewarsItemTierModels
+  dopewarsDopewarsItemTierModels(limit: 1000) {
+    edges {
+      node {
+        slot_id
+        item_id
+        tier
+      }
+    }
+  }
+
+  # DopewarsItemTierConfigModels
+  dopewarsDopewarsItemTierConfigModels(limit: 1000) {
+    edges {
+      node {
+        slot_id
+        tier
+        levels {
+          stat
+          cost
+        }
+      }
+    }
+  }
+
+  dojoComponentValueEventModels(where: { collection_idEQ: "0x446f706547656172" }, limit: 1000) {
+    edges {
+      node {
+        collection_id
+        component_slug
+        component_id
+        component_slug
+        id
+        value
+      }
+    }
+  }
 }
 
 query GameConfig($version: u16) {

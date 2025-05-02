@@ -13,3 +13,4 @@ export * from "./useSeasonByVersion";
 export * from "./useClaimable";
 export * from "./useSeasons";
 export * from "./useControllerUsername";
+export * from "./useSql";

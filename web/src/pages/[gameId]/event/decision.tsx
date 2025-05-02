@@ -14,7 +14,8 @@ import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import colors from "@/theme/colors";
 import { formatCash, formatCashHeader } from "@/utils/ui";
-import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, Divider, Flex, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { HustlerPreviewFromHustler, HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { num, shortString } from "starknet";
@@ -39,10 +40,6 @@ const Decision = observer(() => {
   useEffect(() => {
     if (game && gameEvents) {
       const encounterEvent = gameEvents?.lastEncounter?.event as TravelEncounter;
-
-      // console.log("***** DECISION");
-      // console.log("gameEvents?.lastEncounter", encounterEvent);
-
       setEncounterEvent(encounterEvent);
     }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
@@ -117,8 +114,6 @@ const Decision = observer(() => {
     }
 
     const { hash } = await decide(gameId!, action);
-
-
   };
 
   if (!game || !router.isReady || isRedirecting || !encounterEvent) {
@@ -191,6 +186,7 @@ const Decision = observer(() => {
           mb={0}
           w="full"
         />
+
         <Box minH="100px" />
       </VStack>
     </Layout>
@@ -213,8 +209,7 @@ const Encounter = observer(
     game: GameClass;
     encounterEvent: TravelEncounter;
   } & StyleProps) => {
-    const { gameInfos } = useGameStore();
-
+    const { gameInfos, gameWithTokenId } = useGameStore();
     const [imgUrl, setImgUrl] = useState<string | undefined>("");
 
     useEffect(() => {
@@ -254,14 +249,31 @@ const Encounter = observer(
           position="relative"
           gap={[2, 12]}
         >
-          <Image
-            src={imgUrl}
-            alt="adverse event"
-            // mt={[0, "100px"]}
-            maxH={["30vh", "calc(100dvh - 300px)"]}
-            w="auto"
-            h={[150, 300]}
-          />
+          <HStack>
+            <Image
+              src={imgUrl}
+              alt="adverse event"
+              maxH={["30vh", "calc(100dvh - 300px)"]}
+              w="auto"
+              h={[150, 300]}
+            />
+
+            <Box
+              w="170px"
+              h="160px"
+              maxH={["30vh", "calc(100dvh - 300px)"]}
+              transform={["rotateY(180deg)", "scale(2) rotateY(180deg)"]}
+            >
+              {gameWithTokenId &&
+                (gameWithTokenId.token_id_type === "LootId" || gameWithTokenId.token_id_type === "GuestLootId") && (
+                  <HustlerPreviewFromLoot tokenId={gameWithTokenId.token_id} renderMode={0} />
+                )}
+              {gameWithTokenId &&
+                gameWithTokenId.token_id_type === "HustlerId" && (
+                  <HustlerPreviewFromHustler tokenId={gameWithTokenId.token_id} renderMode={0} />
+                )}
+            </Box>
+          </HStack>
 
           <VStack w="320px" gap={[0, 3]}>
             <Card alignItems="center" w="full" justify="center">
@@ -297,8 +309,9 @@ const Encounter = observer(
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
-                    <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
-                    <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}</Text>
+                    <Text>
+                      {shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}
+                    </Text>
                   </HStack>
 
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
@@ -352,12 +365,3 @@ export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: Tr
   );
 });
 
-// /// TODO: move this in a relevant place
-// function getEncounterNPCMaxHealth(level: number, turn: number) {
-//   // Calculate initial health based on level and turn.
-//   let health = level * 8 + turn;
-//   // Ensure health does not exceed 100.
-//   health = Math.min(health, 100);
-
-//   return health;
-// }

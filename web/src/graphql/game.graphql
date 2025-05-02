@@ -75,6 +75,17 @@ query GamesByPlayer($playerId: String) {
             player_id
             packed
           }
+          ... on dopewars_GameWithTokenId {
+            game_id
+            player_id
+            token_id {
+              option
+              GuestLootId
+              LootId
+              HustlerId
+            }
+            equipment_by_slot
+          }
         }
       }
     }

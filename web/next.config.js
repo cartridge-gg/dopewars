@@ -9,6 +9,10 @@ const nextConfig = {
   //   domains: ["static.cartridge.gg", "static.localhost"],
   // },
   // dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
+  // outputFileTracingRoot: import.meta.dirname,
+  // outputFileTracingIncludes: {
+  //    "/": ["./node_modules/@dope/dope-sdk/**"],
+  // },
   webpack: (config, options) => {
     // console.log(config)
     config.experiments = {
@@ -18,12 +22,20 @@ const nextConfig = {
     };
     config.resolve.alias = {
       ...config.resolve.alias,
-      "react": path.resolve("./node_modules/react"),
+      react: path.resolve("./node_modules/react"),
       "react-dom": path.resolve("./node_modules/react-dom"),
       // starknet: path.resolve("./node_modules/starknet"),
     };
     return config;
   },
+  // turbopack: {
+  //   root: import.meta.dirname,
+  //   // root: path.resolve( import.meta.dirname,".."),
+  //   resolveExtensions: [".tsx", ".ts", ".jsx", ".js", ".mjs", ".json", ".wasm"],
+  //   resolveAlias: {
+  //     "@dope/dope-sdk": "./node_modules/@dope/dope-sdk",
+  //   },
+  // },
 };
 
 import nextPWA from "next-pwa";

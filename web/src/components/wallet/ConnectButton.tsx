@@ -12,7 +12,7 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
-  const { username, isController } = useControllerUsername();
+  const { username, isController } = useControllerUsername(address as string);
 
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
 

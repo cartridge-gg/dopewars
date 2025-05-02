@@ -1,8 +1,15 @@
+use super::super::config::gear::GearItemConfigTrait;
+use dojo::world::WorldStorageTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, models::game::{Game, GameMode},
+    config::gear::{GearItemConfig}, config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
+    models::game::{Game, GameMode}, models::game_with_token_id::{GameWithTokenId},
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
-    store::{Store, StoreImpl, StoreTrait}
+    store::{Store, StoreImpl, StoreTrait},
+    libraries::dopewars_items::{
+        IDopewarsItemsLibraryDispatcher, IDopewarsItemsDispatcherTrait, DopewarsItemTier,
+        DopewarsItemTierConfig,
+    },
 };
 use starknet::ContractAddress;
 
@@ -10,16 +17,18 @@ use starknet::ContractAddress;
 #[derive(Copy, Drop)]
 struct ItemsPacked {
     store: @Store,
-    hustler_id: u16,
+    game_with_token_id: GameWithTokenId,
     //
-    packed: felt252
+    packed: felt252,
 }
 
 
+const DW_SLOT_IDS: [u8; 4] = [0, 1, 5, 2];
+
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
-    fn new(s: @Store, hustler_id: u16) -> ItemsPacked {
-        ItemsPacked { store: s, hustler_id, packed: 0 }
+    fn new(s: @Store, game_with_token_id: GameWithTokenId) -> ItemsPacked {
+        ItemsPacked { store: s, game_with_token_id, packed: 0 }
     }
 
     #[inline(always)]
@@ -27,15 +36,29 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         2
     }
 
-    fn get_item(self: ItemsPacked, slot: ItemSlot) -> HustlerItemConfig {
+    fn get_item(self: ItemsPacked, slot: ItemSlot) -> GearItemConfig {
         let bits = BitsImpl::from_felt(self.packed);
 
         let size: u8 = self.get_slot_size();
         let index: u8 = slot.into() * size;
         let level: u8 = bits.extract_into::<u8>(index, size).into();
 
-        let hustler = HustlerImpl::get(self.store, self.hustler_id);
-        hustler.get_item_config(slot, level)
+        let slot_u8: u8 = slot.into();
+        let gear_id: u256 = (*self.game_with_token_id.equipment_by_slot.at(slot_u8.into())).into();
+        let item_id: u8 = (gear_id & 0xff).try_into().unwrap();
+
+        // TODO: set dispatcher in storage ?
+
+        let items_disp = IDopewarsItemsLibraryDispatcher {
+            class_hash: self.store.world.dns_class_hash(@"DopewarsItems_v0").unwrap(),
+        };
+        let dw_slot: u8 = *DW_SLOT_IDS.span().at(slot_u8.into());
+        let tier = items_disp.get_item_tier(dw_slot, item_id);
+        let levels = items_disp.get_tier_config(dw_slot, tier).span();
+
+        GearItemConfig { slot, item_id, level, levels }
+
+
     }
 
     // assume you checked its possible or overflow crack boom OD
@@ -62,22 +85,22 @@ impl ItemsPackedImpl of ItemsPackedTrait {
     }
 
     #[inline(always)]
-    fn attack_item(self: ItemsPacked) -> HustlerItemConfig {
+    fn attack_item(self: ItemsPacked) -> GearItemConfig {
         self.get_item(ItemSlot::Weapon)
     }
 
     #[inline(always)]
-    fn defense_item(self: ItemsPacked) -> HustlerItemConfig {
+    fn defense_item(self: ItemsPacked) -> GearItemConfig {
         self.get_item(ItemSlot::Clothes)
     }
 
     #[inline(always)]
-    fn speed_item(self: ItemsPacked) -> HustlerItemConfig {
+    fn speed_item(self: ItemsPacked) -> GearItemConfig {
         self.get_item(ItemSlot::Feet)
     }
 
     #[inline(always)]
-    fn transport_item(self: ItemsPacked) -> HustlerItemConfig {
+    fn transport_item(self: ItemsPacked) -> GearItemConfig {
         self.get_item(ItemSlot::Transport)
     }
 
@@ -85,22 +108,22 @@ impl ItemsPackedImpl of ItemsPackedTrait {
 
     #[inline(always)]
     fn attack(self: ItemsPacked) -> u8 {
-        self.attack_item().tier.stat.try_into().unwrap()
+        (*self.attack_item().level_config().stat).try_into().unwrap()
     }
 
     #[inline(always)]
     fn defense(self: ItemsPacked) -> u8 {
-        self.defense_item().tier.stat.try_into().unwrap()
+        (*self.defense_item().level_config().stat).try_into().unwrap()
     }
 
     #[inline(always)]
     fn speed(self: ItemsPacked) -> u8 {
-        self.speed_item().tier.stat.try_into().unwrap()
+        (*self.speed_item().level_config().stat).try_into().unwrap()
     }
 
     #[inline(always)]
     fn transport(self: ItemsPacked) -> u32 {
-        self.transport_item().tier.stat
+        (*self.transport_item().level_config().stat).try_into().unwrap()
     }
 }
 

@@ -23,6 +23,14 @@ type GameStoreProps = {
   router: NextRouter;
 };
 
+export type GameWithTokenId = {
+  game_id: number;
+  player_id: bigint;
+  token_id: number;
+  token_id_type: string;
+  equipment_by_slot: number[];
+};
+
 export class GameStoreClass {
   toriiClient: ToriiClient;
   client: GraphQLClient;
@@ -33,6 +41,7 @@ export class GameStoreClass {
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
   gameInfos: Game | null = null;
+  gameWithTokenId: GameWithTokenId | undefined = undefined;
   gameStorePacked: GameStorePacked | null = null;
   gameConfig: GameConfig | null = null;
   seasonSettings: SeasonSettings | null = null;
@@ -48,12 +57,14 @@ export class GameStoreClass {
       game: observable,
       gameEvents: observable,
       gameInfos: observable,
+      gameWithTokenId: observable,
       gameConfig: observable,
       seasonSettings: observable,
       reset: action,
       cleanSubscriptions: action,
       init: flow,
       loadGameInfos: flow,
+      loadGameWithTokenId: flow,
       loadGameEvents: flow,
       loadSeasonSettings: flow,
       subscribe: flow,
@@ -77,6 +88,7 @@ export class GameStoreClass {
 
   *init(gameId: string) {
     yield this.loadGameInfos(gameId);
+    yield this.loadGameWithTokenId(gameId);
     yield this.loadSeasonSettings(this.gameInfos?.season_version);
     yield this.loadGameEvents();
 
@@ -135,6 +147,7 @@ export class GameStoreClass {
       this.seasonSettings!,
       this.gameConfig!,
       this.gameStorePacked!,
+      this.gameWithTokenId,
     );
 
     this.game = game;
@@ -153,13 +166,13 @@ export class GameStoreClass {
         limit: 1000,
         offset: 0,
         dont_include_hashed_keys: true,
-        entity_models:[],
-        entity_updated_after:0,
-        order_by:[]
+        entity_models: [],
+        entity_updated_after: 0,
+        order_by: [],
       },
       true,
     );
-    //console.log(entities);
+    console.log(entities);
     const gameEntity = Object.values(entities)[0];
     if (!gameEntity) return;
 
@@ -167,23 +180,26 @@ export class GameStoreClass {
   }
 
   *loadGameInfos(gameId: string) {
-   const entities: Entities = yield this.toriiClient.getEntities({
-      clause: {
-        Member: {
-          member: "game_id",
-          model: "dopewars-Game",
-          operator: "Eq",
-          value: { Primitive: { U32: Number(gameId) } },
+    const entities: Entities = yield this.toriiClient.getEntities(
+      {
+        clause: {
+          Member: {
+            member: "game_id",
+            model: "dopewars-Game",
+            operator: "Eq",
+            value: { Primitive: { U32: Number(gameId) } },
+          },
         },
+        limit: 1,
+        offset: 0,
+        dont_include_hashed_keys: true,
+        entity_models: [],
+        // entity_models:["dopewars-Game"],
+        entity_updated_after: 0,
+        order_by: [],
       },
-      limit: 1,
-      offset: 0,
-      dont_include_hashed_keys: true,
-      entity_models:[],
-      // entity_models:["dopewars-Game"],
-      entity_updated_after:0,
-      order_by:[]
-    }, false);
+      false,
+    );
 
     // console.log(entities)
     const gameEntity = Object.values(entities)[0];
@@ -196,23 +212,63 @@ export class GameStoreClass {
     this.gameStorePacked = gameStorePacked;
   }
 
-  *loadSeasonSettings(season_version: string) {
-    const entities: Entities = yield this.toriiClient.getEntities({
-      clause: {
-        Keys: {
-          keys: [num.toHexString(season_version)],
-          models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
-          pattern_matching: "VariableLen",
+  *loadGameWithTokenId(gameId: string) {
+    const entities: Entities = yield this.toriiClient.getEntities(
+      {
+        clause: {
+          Member: {
+            member: "game_id",
+            model: "dopewars-GameWithTokenId",
+            operator: "Eq",
+            value: { Primitive: { U32: Number(gameId) } },
+          },
         },
+        limit: 1,
+        offset: 0,
+        dont_include_hashed_keys: true,
+        // entity_models: [],
+        entity_models: ["dopewars-GameWithTokenId"],
+        entity_updated_after: 0,
+        order_by: [],
       },
-      limit: 1,
-      offset: 0,
-      dont_include_hashed_keys: true,
-      // entity_models:[],
-      entity_models:["dopewars-SeasonSettings", "dopewars-GameConfig"],
-      entity_updated_after:0,
-      order_by:[]
-    },false);
+      false,
+    );
+
+    // console.log(entities)
+    const gameEntity = Object.values(entities)[0];
+    if (!gameEntity) return;
+
+    const gameWithTokenId = parseStruct(gameEntity["dopewars-GameWithTokenId"]) as GameWithTokenId;
+
+    gameWithTokenId.equipment_by_slot = gameWithTokenId.equipment_by_slot.map((i) => Number(i));
+    // @ts-ignore
+    gameWithTokenId.token_id_type = gameEntity["dopewars-GameWithTokenId"].token_id.value?.option;
+    // @ts-ignore
+    gameWithTokenId.token_id = Number(gameEntity["dopewars-GameWithTokenId"].token_id.value?.value?.value);
+
+    this.gameWithTokenId = gameWithTokenId;
+  }
+
+  *loadSeasonSettings(season_version: string) {
+    const entities: Entities = yield this.toriiClient.getEntities(
+      {
+        clause: {
+          Keys: {
+            keys: [num.toHexString(season_version)],
+            models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+            pattern_matching: "VariableLen",
+          },
+        },
+        limit: 1,
+        offset: 0,
+        dont_include_hashed_keys: true,
+        // entity_models:[],
+        entity_models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+        entity_updated_after: 0,
+        order_by: [],
+      },
+      false,
+    );
     const seasonEntity = Object.values(entities)[0];
     if (!seasonEntity) return;
 

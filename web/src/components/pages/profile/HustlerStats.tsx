@@ -10,15 +10,15 @@ export const HustlerStats = observer(() => {
   return (
     <HStack flexDirection="row" w="full" px="10px" py="6px" justifyContent="center">
       <HStack flex="1">
-        {game?.items.attack.icon({})} <Text>{game?.items.attack.tier.stat}</Text>
+        {game?.items.attack.icon({})} <Text>{game?.items.attack.stat}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
       <HStack flex="1">
-        {game?.items.defense.icon({})} <Text>{game?.items.defense.tier.stat}</Text>
+        {game?.items.defense.icon({})} <Text>{game?.items.defense.stat}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
       <HStack flex="1">
-        {game?.items.speed.icon({})} <Text>{game?.items.speed.tier.stat}</Text>
+        {game?.items.speed.icon({})} <Text>{game?.items.speed.stat}</Text>
       </HStack>
       <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
       <HealthIndicator health={game?.player.health} maxHealth={gameConfig?.health} flex="1" />

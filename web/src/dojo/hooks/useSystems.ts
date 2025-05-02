@@ -17,7 +17,13 @@ export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
 
 interface SystemsInterface {
-  createGame: (gameMode: number, hustlerId: number, playerName: string, lootId: number) => Promise<SystemExecuteResult>;
+  createGame: (
+    gameMode: number,
+    hustlerId: number,
+    playerName: string,
+    tokenIdType: number,
+    tokenId: number,
+  ) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
@@ -162,7 +168,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, hustlerId: number, playerName: string, lootId: number) => {
+    async (gameMode: GameMode, hustlerId: number, playerName: string, tokenIdType: number, tokenId: number) => {
       const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
       const paperAddress = selectedChain.paperAddress;
 
@@ -176,7 +182,13 @@ export const useSystems = (): SystemsInterface => {
       const createGameCall = {
         contractAddress: gameAddress,
         entrypoint: "create_game",
-        calldata: CallData.compile([gameMode, hustlerId, shortString.encodeShortString(playerName), lootId]),
+        calldata: CallData.compile([
+          gameMode,
+          hustlerId,
+          shortString.encodeShortString(playerName),
+          tokenIdType,
+          tokenId,
+        ]),
       };
 
       const createGameCalls = await buildVrfCalls({
@@ -286,28 +298,37 @@ export const useSystems = (): SystemsInterface => {
       ];
 
       const playerId = account?.address;
-      const gameWithLootEntities = await toriiClient.getEntities({
-        clause: {
-          Keys: {
-            keys: [Number(gameId).toString(), playerId],
-            models: ["dopewars-GameWithLoot"],
-            pattern_matching: "FixedLen",
+      const gameWithTokenIdEntities = await toriiClient.getEntities(
+        {
+          clause: {
+            Keys: {
+              keys: [Number(gameId).toString(), playerId],
+              models: ["dopewars-GameWithTokenId"],
+              pattern_matching: "FixedLen",
+            },
           },
+          limit: 1,
+          offset: 0,
+          dont_include_hashed_keys: false,
+          entity_models: ["dopewars-GameWithTokenId"],
+          entity_updated_after: 0,
+          order_by: [],
         },
-        limit: 1,
-        offset: 0,
-        dont_include_hashed_keys: false,
-        entity_models: ["dopewars-GameWithLoot"],
-        entity_updated_after: 0,
-        order_by: [],
-      }, false);
+        false,
+      );
 
-      if (Object.keys(gameWithLootEntities).length > 0) {
+      if (Object.keys(gameWithTokenIdEntities).length > 0) {
         // retrieve loot_id used with game_id
-        const gameWithLoot = gameWithLootEntities[Object.keys(gameWithLootEntities)[0]][
-          "dopewars-GameWithLoot"
+        const gameWithTokenId = gameWithTokenIdEntities[Object.keys(gameWithTokenIdEntities)[0]][
+          "dopewars-GameWithTokenId"
         ] as Model;
-        const lootId = Number(gameWithLoot.loot_id.value);
+
+        let lootId = 0;
+        // @ts-ignore
+        if (gameWithTokenId.token_id.value.option === "LootId") {
+          // @ts-ignore
+          lootId = Number(gameWithTokenId.token_id.value?.value?.value);
+        }
 
         if (lootId > 0) {
           const isReleased = dopeLootClaimState[lootId].isReleased;
@@ -328,7 +349,7 @@ export const useSystems = (): SystemsInterface => {
       // console.log(calls);
 
       const { hash } = await executeAndReceipt(calls);
- 
+
       return {
         hash,
       };

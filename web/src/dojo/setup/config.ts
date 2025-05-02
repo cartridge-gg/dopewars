@@ -1,16 +1,16 @@
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { katanaLocalChain, katanaSlot1Chain, katanaSlot2Chain } from "./chains";
+import { katanaLocalChain, katanaSlotDopewarsChain } from "./chains";
 
 import manifestDev from "../../manifests/manifest_dev.json";
-import manifestRyo1 from "../../manifests/manifest_ryo1.json";
-import manifestRyo2 from "../../manifests/manifest_ryo2.json";
+import manifestDopewars from "../../manifests/manifest_dopewars.json";
 import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
 
 import {
   manifestDev as manifestDopeDev,
   manifestDope as manifestDopeDope,
+  manifestDopewars as manifestDopeDopewars,
   manifestSepolia as manifestDopeSepolia,
   manifestMainnet as manifestDopeMainnet,
 } from "@dope/dope-sdk/manifests";
@@ -84,35 +84,21 @@ const katanaLocal: DojoChainConfig = {
   vrfProviderSecret: "0x420",
 };
 
-const katanaSlot1: DojoChainConfig = {
-  name: "WP_RYO1",
-  chainConfig: katanaSlot1Chain,
-  rpcUrl: "https://api.cartridge.gg/x/ryo1/katana",
-  toriiUrl: "https://api.cartridge.gg/x/ryo1/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryo1/torii/graphql/ws",
-  manifest: mergeManifests(manifestRyo1, [manifestDopeDope]),
-  slot: "ryo1",
+const katanaSlotDopewars: DojoChainConfig = {
+  name: "WP_DOPEWARS",
+  chainConfig: katanaSlotDopewarsChain,
+  rpcUrl: "https://api.cartridge.gg/x/dopewars/katana",
+  toriiUrl: "https://api.cartridge.gg/x/dopewars/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/dopewars/torii/graphql/ws",
+  manifest: mergeManifests(manifestDopewars, [manifestDopeDopewars]),
+  slot: "dopewars",
   profileUrl: "https://profile.cartridge.gg",
   predeployedAccounts: [],
-  paperAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
-  vrfProviderAddress: manifestRyo1.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
+  paperAddress: manifestDopewars.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
+  vrfProviderAddress: manifestDopewars.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
 };
 
-// const katanaSlot2: DojoChainConfig = {
-//   name: "WP_RYO2",
-//   chainConfig: katanaSlot2Chain,
-//   rpcUrl: "https://api.cartridge.gg/x/ryo2/katana",
-//   toriiUrl: "https://api.cartridge.gg/x/ryo2/torii/graphql",
-//   toriiWsUrl: "wss://api.cartridge.gg/x/ryo2/torii/graphql/ws",
-//   manifest: manifestRyo2,
-//   slot: "ryo2",
-//   profileUrl: "https://profile.cartridge.gg",
-//   predeployedAccounts: [],
-//   paperAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
-//   vrfProviderAddress: manifestRyo2.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
-//   vrfProviderSecret: "0x420",
-// };
 
 const snSepolia: DojoChainConfig = {
   name: "SEPOLIA",
@@ -144,10 +130,9 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  SN_MAIN: snMainnet,
+  // SN_MAIN: snMainnet,
   // SN_SEPOLIA: snSepolia,
-  // WP_RYO2: katanaSlot2,
-  // WP_RYO1: katanaSlot1,
+  WP_DOPEWARS: katanaSlotDopewars,
   KATANA: katanaLocal,
 };
 

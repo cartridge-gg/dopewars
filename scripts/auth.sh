@@ -11,11 +11,13 @@ export WORLD_ADDRESS=$(cat ./manifest_$PROFILE.json | jq -r '.world.address')
 export RYO_ADDRESS=$(cat ./manifest_$PROFILE.json | jq -r '.contracts[] | select(.tag == "dopewars-ryo" ).address')
 
 if [ $PROFILE == "dev" ]; then
-    echo "do nothing"
+    echo "emit items config"
+    sozo -P $PROFILE execute dopewars-config emit_items_config
 fi;
 
-if [ $PROFILE == "ryo1" ]; then
-    echo "do nothing"
+if [ $PROFILE == "dopewars" ]; then
+    echo "emit items config"
+    sozo -P $PROFILE execute dopewars-config emit_items_config
 fi;
 
 if [ $PROFILE == "ryosepolia" ]; then

@@ -117,25 +117,27 @@ query AllSeasonSettings {
   }
 }
 
-query HallOfFame {
-  dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
-    edges {
-      node {
-        game_id
-        player_id
-        player_name {
-          value
-        }
-        hustler_id
-        season_version
-        final_score
-        position
-        claimable
-      }
-    }
-  }
-}
+# use sql
+# query HallOfFame {
+#   dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
+#     edges {
+#       node {
+#         game_id
+#         player_id
+#         player_name {
+#           value
+#         }
+#         hustler_id
+#         season_version
+#         final_score
+#         position
+#         claimable
+#       }
+#     }
+#   }
+# }
 
+# use sql
 query Claimable($playerId: ContractAddress) {
   dopewarsGameModels(where: { player_id: $playerId, claimed: false, claimableGT: 0 }) {
     edges {
