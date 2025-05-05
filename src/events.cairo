@@ -9,122 +9,147 @@ use starknet::ContractAddress;
 #[dojo::event]
 pub struct GameCreated {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    game_mode: GameMode,
-    player_name: felt252,
-    hustler_id: u16,
-    // token_id: TokenId,
-
+    pub player_id: ContractAddress,
+    pub game_mode: GameMode,
+    pub player_name: felt252,
+    pub hustler_id: u16,
 }
- 
+
+#[derive(Debug, Drop, Serde, Introspect)]
+pub struct HustlerBody {
+    pub token_id: felt252,
+    pub slot: felt252,
+    pub value: u8,
+}
+
+#[derive(Debug, Drop, Serde, Introspect)]
+pub struct HustlerSlot {
+    pub token_id: felt252,
+    pub slot: felt252,
+    pub gear_item_id: Option<u256>, 
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct GameWithTokenIdCreated {
+    #[key]
+    pub game_id: u32,
+    #[key]
+    pub player_id: ContractAddress,
+    pub token_id: TokenId,
+    pub hustler_equipment: Span<HustlerSlot>,
+    pub hustler_body: Span<HustlerBody>,
+}
+
+
 #[derive(Drop, Serde)]
 #[dojo::event]
 pub struct Traveled {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    turn: u8,
-    from_location_id: u8,
-    to_location_id: u8,
+    pub player_id: ContractAddress,
+    pub turn: u8,
+    pub from_location_id: u8,
+    pub to_location_id: u8,
 }
 
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct GameOver {
+pub struct GameOver {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    season_version: u16,
-    player_name: felt252,
-    hustler_id: u16,
-    turn: u8,
-    cash: u32,
-    health: u8,
-    reputation: u8,
+    pub player_id: ContractAddress,
+    pub season_version: u16,
+    pub player_name: felt252,
+    pub hustler_id: u16,
+    pub turn: u8,
+    pub cash: u32,
+    pub health: u8,
+    pub reputation: u8,
 }
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct TradeDrug {
+pub struct TradeDrug {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    turn: u8,
-    drug_id: u8,
-    quantity: u32,
-    price: u32,
-    is_buy: bool,
+    pub player_id: ContractAddress,
+    pub turn: u8,
+    pub drug_id: u8,
+    pub quantity: u32,
+    pub price: u32,
+    pub is_buy: bool,
 }
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct HighVolatility {
+pub struct HighVolatility {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    location_id: u8,
-    drug_id: u8,
-    increase: bool,
+    pub player_id: ContractAddress,
+    pub location_id: u8,
+    pub drug_id: u8,
+    pub increase: bool,
 }
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct UpgradeItem {
+pub struct UpgradeItem {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    turn: u8,
-    item_slot: u8,
-    item_level: u8,
+    pub player_id: ContractAddress,
+    pub turn: u8,
+    pub item_slot: u8,
+    pub item_level: u8,
 }
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct TravelEncounter {
+pub struct TravelEncounter {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    turn: u8,
-    encounter: felt252,
-    level: u8,
-    health: u8,
-    attack: u8,
-    defense: u8,
-    speed: u8,
-    demand_pct: u8,
-    payout: u32,
+    pub player_id: ContractAddress,
+    pub turn: u8,
+    pub encounter: felt252,
+    pub level: u8,
+    pub health: u8,
+    pub attack: u8,
+    pub defense: u8,
+    pub speed: u8,
+    pub demand_pct: u8,
+    pub payout: u32,
 }
 
 // #[derive(Drop, Introspect)]
 #[derive(Drop, Serde, Introspect)]
 #[dojo::event]
-struct TravelEncounterResult {
+pub struct TravelEncounterResult {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    turn: u8,
-    action: EncounterActions,
-    outcome: EncounterOutcomes,
-    rounds: u8,
-    dmg_dealt: Array<(u8, u8)>,
-    dmg_taken: Array<(u8, u8)>,
-    cash_earnt: u32,
-    cash_loss: u32,
-    drug_id: u8,
-    drug_loss: Array<u32>,
-    turn_loss: u8,
-    rep_pos: u8,
-    rep_neg: u8,
+    pub player_id: ContractAddress,
+    pub turn: u8,
+    pub action: EncounterActions,
+    pub outcome: EncounterOutcomes,
+    pub rounds: u8,
+    pub dmg_dealt: Array<(u8, u8)>,
+    pub dmg_taken: Array<(u8, u8)>,
+    pub cash_earnt: u32,
+    pub cash_loss: u32,
+    pub drug_id: u8,
+    pub drug_loss: Array<u32>,
+    pub turn_loss: u8,
+    pub rep_pos: u8,
+    pub rep_neg: u8,
 }
 
 //
@@ -133,38 +158,38 @@ struct TravelEncounterResult {
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct NewSeason {
+pub struct NewSeason {
     #[key]
-    key: u16,
-    season_version: u16,
+    pub key: u16,
+    pub season_version: u16,
 }
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct NewHighScore {
+pub struct NewHighScore {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
+    pub player_id: ContractAddress,
     #[key]
-    season_version: u16,
-    player_name: felt252,
-    hustler_id: u16,
-    cash: u32,
-    health: u8,
-    reputation: u8,
+    pub season_version: u16,
+    pub player_name: felt252,
+    pub hustler_id: u16,
+    pub cash: u32,
+    pub health: u8,
+    pub reputation: u8,
 }
 
 
 #[derive(Drop, Serde)]
 #[dojo::event]
-struct Claimed {
+pub struct Claimed {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
+    pub player_id: ContractAddress,
     #[key]
-    season_version: u16,
-    paper: u32,
-    rank: u16,
+    pub season_version: u16,
+    pub paper: u32,
+    pub rank: u16,
 }

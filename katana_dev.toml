@@ -5,10 +5,9 @@
 http_addr = "0.0.0.0"
 http_port = 5050
 http_cors_origins = "*"
-
-[rpc]
+max_call_gas = 100000000000 # 100B
 max_connections = 100
-max_call_gas = 100000000000
+
 
 [dev]
 seed = "0"
@@ -22,6 +21,7 @@ total_accounts = 30
 env.invoke_max_steps = 4200000000
 
 [cartridge]
+controllers = true
 paymaster = true
 
 

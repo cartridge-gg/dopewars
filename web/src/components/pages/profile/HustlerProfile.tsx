@@ -12,9 +12,11 @@ import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
 
 export const HustlerProfile = observer(() => {
   const { gameId } = useRouterContext();
-  const { game, gameInfos, gameWithTokenId } = useGameStore();
+  const { game, gameInfos, gameWithTokenId, gameEvents } = useGameStore();
   const configStore = useConfigStore();
   const { toast } = useToast();
+
+  // console.log(gameEvents?.gameWithTokenIdCreated);
 
   const hustlerStats = useMemo(() => {
     const hustler = configStore?.getHustlerById(gameInfos?.hustler_id);

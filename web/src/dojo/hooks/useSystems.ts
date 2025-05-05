@@ -1,6 +1,5 @@
 import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
-import { getEvents } from "@dojoengine/utils";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
 import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
@@ -10,8 +9,8 @@ import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { buildVrfCalls, sleep } from "../utils";
-import { Model } from "@dojoengine/torii-client";
 import { useDopeStore } from "@dope/dope-sdk/store";
+import { parseModels } from "@dope/dope-sdk";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
@@ -298,40 +297,38 @@ export const useSystems = (): SystemsInterface => {
       ];
 
       const playerId = account?.address;
-      const gameWithTokenIdEntities = await toriiClient.getEntities(
-        {
-          clause: {
-            Keys: {
-              keys: [Number(gameId).toString(), playerId],
-              models: ["dopewars-GameWithTokenId"],
-              pattern_matching: "FixedLen",
-            },
+      const gameWithTokenIdEntities = await toriiClient.getEntities({
+        clause: {
+          Keys: {
+            keys: [Number(gameId).toString(), playerId],
+            models: ["dopewars-GameWithTokenId"],
+            pattern_matching: "FixedLen",
           },
+        },
+        pagination: {
           limit: 1,
-          offset: 0,
-          dont_include_hashed_keys: false,
-          entity_models: ["dopewars-GameWithTokenId"],
-          entity_updated_after: 0,
+          cursor: undefined,
+          direction: "Forward",
           order_by: [],
         },
-        false,
-      );
+        no_hashed_keys: true,
+        models: ["dopewars-GameWithTokenId"],
+        historical: false,
+      });
 
       if (Object.keys(gameWithTokenIdEntities).length > 0) {
         // retrieve loot_id used with game_id
-        const gameWithTokenId = gameWithTokenIdEntities[Object.keys(gameWithTokenIdEntities)[0]][
-          "dopewars-GameWithTokenId"
-        ] as Model;
+        const gameWithTokenId = parseModels(gameWithTokenIdEntities, "dopewars-GameWithTokenId")[0];
 
         let lootId = 0;
         // @ts-ignore
-        if (gameWithTokenId.token_id.value.option === "LootId") {
+        if (gameWithTokenId.token_id.activeVariant() === "LootId") {
           // @ts-ignore
-          lootId = Number(gameWithTokenId.token_id.value?.value?.value);
+          lootId = Number(gameWithTokenId.token_id.unwrap());
         }
 
         if (lootId > 0) {
-          const isReleased = dopeLootClaimState[lootId].isReleased;
+          const isReleased = dopeLootClaimState[lootId]?.isReleased;
           if (!isReleased) {
             const lootIdU256 = uint256.bnToUint256(lootId);
 

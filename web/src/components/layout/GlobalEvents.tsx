@@ -1,4 +1,4 @@
-import { Subscription } from "@dojoengine/torii-client";
+import { Entity, Subscription } from "@dojoengine/torii-client";
 import { useEffect, useRef } from "react";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
@@ -50,42 +50,60 @@ export const GlobalEvents = () => {
   useEffect(() => {
     const init = async () => {
       if (!subscription.current) {
+        // subscription.current = await toriiClient.onEventMessageUpdated(
+        //   [
+        //     {
+        //       Keys: {
+        //         keys: [undefined, undefined],
+        //         models: ["dopewars-GameCreated"],
+        //         pattern_matching: "FixedLen",
+        //       },
+        //     },
+        //     {
+        //       Keys: {
+        //         keys: [undefined],
+        //         models: ["dopewars-NewSeason"],
+        //         pattern_matching: "FixedLen",
+        //       },
+        //     },
+        //     {
+        //       Keys: {
+        //         keys: [undefined, undefined, undefined],
+        //         models: ["dopewars-NewHighScore"],
+        //         pattern_matching: "FixedLen",
+        //       },
+        //     },
+        //     {
+        //       Keys: {
+        //         keys: [undefined, undefined, undefined],
+        //         models: ["dopewars-GameOver"],
+        //         pattern_matching: "FixedLen",
+        //       },
+        //     },
+        //     //
+        //     {
+        //       Keys: {
+        //         keys: [undefined, undefined], // u256
+        //         models: ["dojo-DopeLootReleasedEvent"],
+        //         pattern_matching: "FixedLen",
+        //       },
+        //     },
+        //   ],
+        //   onEventMessage,
+        // );
         subscription.current = await toriiClient.onEventMessageUpdated(
           [
             {
               Keys: {
-                keys: [undefined, undefined],
-                models: ["dopewars-GameCreated"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            {
-              Keys: {
                 keys: [undefined],
-                models: ["dopewars-NewSeason"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            {
-              Keys: {
-                keys: [undefined, undefined, undefined],
-                models: ["dopewars-NewHighScore"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            {
-              Keys: {
-                keys: [undefined, undefined, undefined],
-                models: ["dopewars-GameOver"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            //
-            {
-              Keys: {
-                keys: [undefined, undefined], // u256
-                models: ["dojo-DopeLootReleasedEvent"],
-                pattern_matching: "FixedLen",
+                models: [
+                  "dopewars-GameCreated",
+                  "dopewars-NewSeason",
+                  "dopewars-NewHighScore",
+                  "dopewars-GameOver",
+                  "dojo-DopeLootReleasedEvent",
+                ],
+                pattern_matching: "VariableLen",
               },
             },
           ],
@@ -104,28 +122,28 @@ export const GlobalEvents = () => {
     };
   }, [selectedChain, accountAddress.current]);
 
-  const onEventMessage = (entity: any, update: any) => {
-    console.log("globalEvents::onEventMessage", entity, update);
+  const onEventMessage = (key: string, entity: Entity) => {
+    // console.log("globalEvents::onEventMessage", key, entity);
 
-    if (update["dopewars-GameCreated"]) {
-      const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
+    if (entity.models["dopewars-GameCreated"]) {
+      const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
 
       if (BigInt(gameCreated.player_id) !== accountAddress.current) {
-      toast({
-        icon: () => <HustlerIcon hustler={(gameCreated.hustler_id % 3) as Hustlers} />,
-        message:
-          gameCreated.game_mode === "Ranked"
-            ? `${gameCreated.player_name} is ready to hustle...`
-            : `${gameCreated.player_name} is training...`,
-      });
+        toast({
+          icon: () => <HustlerIcon hustler={(gameCreated.hustler_id % 3) as Hustlers} />,
+          message:
+            gameCreated.game_mode === "Ranked"
+              ? `${gameCreated.player_name} is ready to hustle...`
+              : `${gameCreated.player_name} is training...`,
+        });
       } else {
-      router.push(`/${num.toHexString(gameCreated.game_id)}`);
+        router.push(`/${num.toHexString(gameCreated.game_id)}`);
       }
     }
 
-    if (update["dopewars-NewSeason"]) {
-      const newSeason = parseStruct(update["dopewars-NewSeason"]) as NewSeason;
+    if (entity.models["dopewars-NewSeason"]) {
+      const newSeason = parseStruct(entity.models["dopewars-NewSeason"]) as NewSeason;
       playSound(Sounds.Uzi);
       toast({
         icon: () => <PaperIcon width="16px" height="16px" />,
@@ -133,8 +151,8 @@ export const GlobalEvents = () => {
       });
     }
 
-    if (update["dopewars-NewHighScore"]) {
-      const newHighScore = parseStruct(update["dopewars-NewHighScore"]) as NewHighScore;
+    if (entity.models["dopewars-NewHighScore"]) {
+      const newHighScore = parseStruct(entity.models["dopewars-NewHighScore"]) as NewHighScore;
       newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
       toast({
         icon: () => <HustlerIcon hustler={(newHighScore.hustler_id % 3) as Hustlers} />,
@@ -142,8 +160,8 @@ export const GlobalEvents = () => {
       });
     }
 
-    if (update["dopewars-GameOver"]) {
-      const gameOver = parseStruct(update["dopewars-GameOver"]) as GameOver;
+    if (entity.models["dopewars-GameOver"]) {
+      const gameOver = parseStruct(entity.models["dopewars-GameOver"]) as GameOver;
       gameOver.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameOver.player_name)));
       if (BigInt(gameOver.player_id) !== accountAddress.current) {
         if (gameOver.health === 0) {
@@ -156,8 +174,8 @@ export const GlobalEvents = () => {
       }
     }
 
-    if (update["dojo-DopeLootReleasedEvent"]) {
-      const released = parseStruct(update["dojo-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
+    if (entity.models["dojo-DopeLootReleasedEvent"]) {
+      const released = parseStruct(entity.models["dojo-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
       const id = Number(released.id);
       toast({
         icon: () => <PaperIcon width="16px" height="16px" />,
@@ -175,6 +193,16 @@ export interface GameCreated {
   game_mode: string;
   player_name: string;
   hustler_id: number;
+}
+
+
+export interface GameWithTokenIdCreated {
+  game_id: number;
+  player_id: string;
+  token_id_type: string;
+  token_id: bigint;
+  hustler_equipment: any[];
+  hustler_body: any[];
 }
 
 export interface Traveled {

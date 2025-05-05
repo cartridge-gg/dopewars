@@ -6,6 +6,7 @@ import { parseStruct } from "../utils";
 import {
   GameCreated,
   GameOver,
+  GameWithTokenIdCreated,
   HighVolatility,
   TradeDrug,
   Traveled,
@@ -14,6 +15,7 @@ import {
   UpgradeItem,
 } from "@/components/layout/GlobalEvents";
 import { num, shortString } from "starknet";
+import { parseModels } from "@dope/dope-sdk";
 
 export interface DojoEvent {
   eventName: string;
@@ -27,10 +29,10 @@ export class EventClass {
 
   events: DojoEvent[];
 
-  constructor(configStore: ConfigStoreClass, gameInfos: Game, entity: Entity) {
+  constructor(configStore: ConfigStoreClass, gameInfos: Game, entities: Entity[]) {
     this.gameInfos = gameInfos;
     this.configStore = configStore;
-    this.events = EventClass.parseEntity(entity);
+    this.events = EventClass.parseEntities(entities);
 
     makeObservable(this, {
       events: observable,
@@ -39,21 +41,43 @@ export class EventClass {
       isGameOver: computed,
       lastEncounter: computed,
       lastEncounterResult: computed,
+      gameWithTokenIdCreated: computed,
+    });
+  }
+
+  public static parseEntities(entities: Entity[]): DojoEvent[] {
+    return entities.flatMap((entity) => {
+      return EventClass.parseEntity(entity);
     });
   }
 
   public static parseEntity(entity: Entity): DojoEvent[] {
-    const events = Object.keys(entity).map((key, i) => {
+    const models = entity.models;
+    const events = Object.keys(models).map((key, i) => {
       if (key.startsWith("dopewars-GameCreated")) {
         return {
           eventName: "GameCreated",
-          event: parseStruct(entity[key]) as GameCreated,
+          event: parseStruct(models[key]) as GameCreated,
+          idx: i,
+        };
+      }
+
+      if (key.startsWith("dopewars-GameWithTokenIdCreated")) {
+        const parsed = parseModels({ items: [entity], next_cursor: undefined }, "dopewars-GameWithTokenIdCreated")[0];
+        const gameWithTokenIdCreated = {
+          ...parsed,
+          token_id_type: parsed.token_id.activeVariant(),
+          token_id: Number(parsed.token_id.unwrap()),
+        };
+        return {
+          eventName: "GameWithTokenIdCreated",
+          event: gameWithTokenIdCreated as GameWithTokenIdCreated,
           idx: i,
         };
       }
 
       if (key.startsWith("dopewars-GameOver")) {
-        const event = parseStruct(entity[key]) as GameOver;
+        const event = parseStruct(models[key]) as GameOver;
         event.player_name = shortString.decodeShortString(num.toHexString(BigInt(event.player_name)));
         return {
           eventName: "GameOver",
@@ -63,7 +87,7 @@ export class EventClass {
       }
 
       if (key === "dopewars-Traveled" || key.startsWith("dopewars-Traveled-")) {
-        const event = parseStruct(entity[key]) as Traveled;
+        const event = parseStruct(models[key]) as Traveled;
         return {
           eventName: "Traveled",
           event,
@@ -72,7 +96,7 @@ export class EventClass {
       }
 
       if (key === "dopewars-TradeDrug" || key.startsWith("dopewars-TradeDrug-")) {
-        const event = parseStruct(entity[key]) as TradeDrug;
+        const event = parseStruct(models[key]) as TradeDrug;
         return {
           eventName: "TradeDrug",
           event,
@@ -81,7 +105,7 @@ export class EventClass {
       }
 
       if (key === "dopewars-UpgradeItem" || key.startsWith("dopewars-UpgradeItem-")) {
-        const event = parseStruct(entity[key]) as UpgradeItem;
+        const event = parseStruct(models[key]) as UpgradeItem;
         return {
           eventName: "UpgradeItem",
           event,
@@ -90,7 +114,7 @@ export class EventClass {
       }
 
       if (key === "dopewars-TravelEncounter" || key.startsWith("dopewars-TravelEncounter-")) {
-        const event = parseStruct(entity[key]) as TravelEncounter;
+        const event = parseStruct(models[key]) as TravelEncounter;
         event.encounter = shortString.decodeShortString(num.toHexString(Number(event.encounter)));
         return {
           eventName: "TravelEncounter",
@@ -102,7 +126,7 @@ export class EventClass {
       if (key === "dopewars-TravelEncounterResult" || key.startsWith("dopewars-TravelEncounterResult-")) {
         return {
           eventName: "TravelEncounterResult",
-          event: parseStruct(entity[key]) as TravelEncounterResult,
+          event: parseStruct(models[key]) as TravelEncounterResult,
           idx:
             key === "dopewars-TravelEncounterResult" ? 0 : Number(key.replace("dopewars-TravelEncounterResult-", "")),
         };
@@ -111,14 +135,14 @@ export class EventClass {
       if (key === "dopewars-HighVolatility" || key.startsWith("dopewars-HighVolatility-")) {
         return {
           eventName: "HighVolatility",
-          event: parseStruct(entity[key]) as HighVolatility,
+          event: parseStruct(models[key]) as HighVolatility,
           idx: key === "dopewars-HighVolatility" ? 0 : Number(key.replace("dopewars-HighVolatility-", "")),
         };
       }
 
       return {
         eventName: key,
-        event: parseStruct(entity[key]),
+        event: parseStruct(models[key]),
         idx: i,
       };
     });
@@ -130,23 +154,25 @@ export class EventClass {
     return this.events.find((i: DojoEvent) => i?.eventName === "GameOver") !== undefined;
   }
 
-  addEvent(entity: any) {
-    // console.log("addEvent", entity);
-    const event = EventClass.parseEntity(entity)[0];
-    if (!event) return;
-    this.events.push(event);
-
-    // console.log(this.sortedEvents)
+  addEvent(entity: Entity) {
+    const event = EventClass.parseEntity(entity);
+    if (event.length === 0) return;
+    this.events.push(event[0]);
   }
 
   get sortedEvents() {
     return this.events.slice().sort((a, b) => b.idx - a.idx);
   }
+
   get lastEncounter() {
     return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounter");
   }
 
   get lastEncounterResult() {
     return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounterResult");
+  }
+
+  get gameWithTokenIdCreated() {
+    return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "GameWithTokenIdCreated");
   }
 }

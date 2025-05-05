@@ -81,6 +81,8 @@ skip_contracts = [
 #
 
 "dopewars-GameCreated" = ["dopewars-game"]
+"dopewars-GameWithTokenIdCreated" = ["dopewars-game"]
+
 "dopewars-Traveled" = ["dopewars-game"]
 "dopewars-GameOver" = ["dopewars-game"]
 "dopewars-TradeDrug" = ["dopewars-game"]

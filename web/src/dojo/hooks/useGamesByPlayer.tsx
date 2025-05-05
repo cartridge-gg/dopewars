@@ -73,27 +73,27 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
   const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
   useEffect(() => {
     const init = async () => {
-      const entities: Entities = await toriiClient.getEventMessages(
-        {
-          clause: {
-            Keys: {
-              keys: [undefined, playerId],
-              models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
-              pattern_matching: "FixedLen",
-            },
+      const entities = await toriiClient.getEventMessages({
+        clause: {
+          Keys: {
+            keys: [undefined, playerId],
+            models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
+            pattern_matching: "FixedLen",
           },
-          limit: 10000,
-          offset: 0,
-          dont_include_hashed_keys: true,
-          entity_models: [],
-          entity_updated_after: 0,
+        },
+        pagination: {
+          limit: 10_000,
+          cursor: undefined,
+          direction: "Forward",
           order_by: [],
         },
-        true,
-      );
+        no_hashed_keys: true,
+        models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
+        historical: false,
+      });
 
       //  console.log(entities);
-      const allEvents = Object.values(entities).flatMap((entity) => EventClass.parseEntity(entity));
+      const allEvents = EventClass.parseEntities(entities.items);
 
       setAllTradedDrug(allEvents.filter((i) => i.eventName === "TradeDrug").map((i) => i.event as TradeDrug));
       setAllTravelEncounters(

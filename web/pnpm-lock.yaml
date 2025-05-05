@@ -24,23 +24,23 @@ importers:
         specifier: ^2.8.1
         version: 2.8.1(@emotion/react@11.11.3(@types/react@18.3.20)(react@18.3.1))(@emotion/styled@11.11.0(@emotion/react@11.11.3(@types/react@18.3.20)(react@18.3.1))(@types/react@18.3.20)(react@18.3.1))(@types/react@18.3.20)(framer-motion@10.18.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dojoengine/core':
-        specifier: 1.4.3
-        version: 1.4.3(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 1.5.0
+        version: 1.5.0(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@dojoengine/create-burner':
-        specifier: 1.4.3
-        version: 1.4.3(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 1.5.0
+        version: 1.5.0(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@dojoengine/predeployed-connector':
-        specifier: 1.4.3
-        version: 1.4.3(@starknet-react/core@3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))
+        specifier: 1.5.0
+        version: 1.5.0(@starknet-react/core@3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))
       '@dojoengine/torii-client':
-        specifier: 1.4.3
-        version: 1.4.3
+        specifier: 1.5.0
+        version: 1.5.0
       '@dojoengine/torii-wasm':
-        specifier: 1.4.3
-        version: 1.4.3
+        specifier: 1.5.0
+        version: 1.5.0
       '@dojoengine/utils':
-        specifier: 1.4.3
-        version: 1.4.3(bufferutil@4.0.9)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 1.5.0
+        version: 1.5.0(bufferutil@4.0.9)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@dope/dope-sdk':
         specifier: ../../dope-migration/dope-sdk
         version: link:../../dope-migration/dope-sdk
@@ -61,7 +61,7 @@ importers:
         version: 3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@vercel/speed-insights':
         specifier: ^1.0.10
-        version: 1.0.10(next@15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.0.10(next@15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       eslint:
         specifier: 8.36.0
         version: 8.36.0
@@ -99,11 +99,11 @@ importers:
         specifier: ^4.0.5
         version: 4.0.5(mobx@6.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next:
-        specifier: v15.3.0
-        version: 15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: v15.3.1
+        version: 15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-pwa:
         specifier: ^5.6.0
-        version: 5.6.0(@babel/core@7.23.7)(next@15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.91.0)
+        version: 5.6.0(@babel/core@7.23.7)(next@15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.91.0)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -1365,18 +1365,18 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dojoengine/core@1.4.3':
-    resolution: {integrity: sha512-BYokW98NNO5bCchJ/q2B/pKa2XRzG+WmpFHaSCm/Y8yWV2yaRxZWsd3QeUGWGFruUkF57Gxr2UU0jCN3SRfwPQ==}
+  '@dojoengine/core@1.5.0':
+    resolution: {integrity: sha512-jfkQ5CBAlZE7jY4OlS4Y+u8MOVIVBigm4TbesyrHxQG/CUuvWXyusr9YUpjKD8txNjhFEvAoFZMeZKC3cPaUaw==}
 
-  '@dojoengine/create-burner@1.4.3':
-    resolution: {integrity: sha512-h2FO9b+6/oCJMkE8/J2zmji2y3eYY2Q5HWxT74LJdXCddiXOMlpUPyFH87TRAPTkKmTPkNvDmPN5sYjHlkxqXQ==}
+  '@dojoengine/create-burner@1.5.0':
+    resolution: {integrity: sha512-1GPOJh6yYngMJpPRNDodUOXOUFCBA4kkAguo1J5DUtGzP6BV68azzTE2O2i+cxJB5De+eAeDZd5rRZx5Aq0qiw==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
       starknet: 6.23.1
 
-  '@dojoengine/predeployed-connector@1.4.3':
-    resolution: {integrity: sha512-iH9BPCdpZRRvqOA26gDH5VtyktF29AyN+8yE/cFBwFAq6WouNDZmmO+XqhMkwewb3yHmgRau8DeBMCWBJKr69A==}
+  '@dojoengine/predeployed-connector@1.5.0':
+    resolution: {integrity: sha512-AZxbmlLyY1YfBg4682hizqa4RcS49D7yU6dBBI5io3cIGJGjvdbJ92QQ3plujmpYfwI+ogRgKtT7upS1NnnO1A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@starknet-react/core': ^3.6.2
@@ -1387,14 +1387,14 @@ packages:
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
 
-  '@dojoengine/torii-client@1.4.3':
-    resolution: {integrity: sha512-HJk1S/bCcvgrDvykIPmnn+QEnDI3XmwV3h3enUQsNhHtnF+ZGzizcToPgmUBNNEWrwfOjU4Iw6NtrE8KD8R4nw==}
+  '@dojoengine/torii-client@1.5.0':
+    resolution: {integrity: sha512-bfGWTIjwuENj1mu795N61zQDfDlkGo+LQsBDju1G76BiPSs64B2PjuRdsR/7qu2fcHcpWa92+P9plFFwt176ew==}
 
-  '@dojoengine/torii-wasm@1.4.3':
-    resolution: {integrity: sha512-jexV7B/+UlZ5nJwUNywGAcXE7iamU2o69nvoE8KM/0aKnNqhnWqdZpuNWwN5ysSeZ6XHh0l3bOT/0upQGNkAnA==}
+  '@dojoengine/torii-wasm@1.5.0':
+    resolution: {integrity: sha512-iWqqY3mTM23St1dwDZ+23bPTDcGkA9zOnXdUcLmVDDYxz/Fe5xJuJGPTEAJKbOfuyJdf1Buyoq6mEQyNPs3Vpw==}
 
-  '@dojoengine/utils@1.4.3':
-    resolution: {integrity: sha512-aJ2Go2ZU8L/1vLBgnvT7jvhb9SY5G2o5l0Bf1nlnbYA90sJ8qDjOHbZhHiQnKawWu1ASy6KVh4iQkDpPTdnwxg==}
+  '@dojoengine/utils@1.5.0':
+    resolution: {integrity: sha512-18FxEKGDGLx5WvgUZDymIXnEmKc9Y2lmHZj5uUhxZ7jNfmKljsMvUAC/YOSdN/SzlDBjh+panevyL5tShloiUA==}
     peerDependencies:
       starknet: 6.23.1
 
@@ -1959,56 +1959,56 @@ packages:
   '@next/bundle-analyzer@14.1.4':
     resolution: {integrity: sha512-IpF/18HcAOcfHRr24tqPOUpMmVKIqvkCxIubMeRYWCXs3jm7niPGrt8Mu74yMDzfGlUwgQA6Xd6BUc5+jQxcEg==}
 
-  '@next/env@15.3.0':
-    resolution: {integrity: sha512-6mDmHX24nWlHOlbwUiAOmMyY7KELimmi+ed8qWcJYjqXeC+G6JzPZ3QosOAfjNwgMIzwhXBiRiCgdh8axTTdTA==}
+  '@next/env@15.3.1':
+    resolution: {integrity: sha512-cwK27QdzrMblHSn9DZRV+DQscHXRuJv6MydlJRpFSqJWZrTYMLzKDeyueJNN9MGd8NNiUKzDQADAf+dMLXX7YQ==}
 
   '@next/eslint-plugin-next@14.1.4':
     resolution: {integrity: sha512-n4zYNLSyCo0Ln5b7qxqQeQ34OZKXwgbdcx6kmkQbywr+0k6M3Vinft0T72R6CDAcDrne2IAgSud4uWCzFgc5HA==}
 
-  '@next/swc-darwin-arm64@15.3.0':
-    resolution: {integrity: sha512-PDQcByT0ZfF2q7QR9d+PNj3wlNN4K6Q8JoHMwFyk252gWo4gKt7BF8Y2+KBgDjTFBETXZ/TkBEUY7NIIY7A/Kw==}
+  '@next/swc-darwin-arm64@15.3.1':
+    resolution: {integrity: sha512-hjDw4f4/nla+6wysBL07z52Gs55Gttp5Bsk5/8AncQLJoisvTBP0pRIBK/B16/KqQyH+uN4Ww8KkcAqJODYH3w==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@15.3.0':
-    resolution: {integrity: sha512-m+eO21yg80En8HJ5c49AOQpFDq+nP51nu88ZOMCorvw3g//8g1JSUsEiPSiFpJo1KCTQ+jm9H0hwXK49H/RmXg==}
+  '@next/swc-darwin-x64@15.3.1':
+    resolution: {integrity: sha512-q+aw+cJ2ooVYdCEqZVk+T4Ni10jF6Fo5DfpEV51OupMaV5XL6pf3GCzrk6kSSZBsMKZtVC1Zm/xaNBFpA6bJ2g==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.3.0':
-    resolution: {integrity: sha512-H0Kk04ZNzb6Aq/G6e0un4B3HekPnyy6D+eUBYPJv9Abx8KDYgNMWzKt4Qhj57HXV3sTTjsfc1Trc1SxuhQB+Tg==}
+  '@next/swc-linux-arm64-gnu@15.3.1':
+    resolution: {integrity: sha512-wBQ+jGUI3N0QZyWmmvRHjXjTWFy8o+zPFLSOyAyGFI94oJi+kK/LIZFJXeykvgXUk1NLDAEFDZw/NVINhdk9FQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@15.3.0':
-    resolution: {integrity: sha512-k8GVkdMrh/+J9uIv/GpnHakzgDQhrprJ/FbGQvwWmstaeFG06nnAoZCJV+wO/bb603iKV1BXt4gHG+s2buJqZA==}
+  '@next/swc-linux-arm64-musl@15.3.1':
+    resolution: {integrity: sha512-IIxXEXRti/AulO9lWRHiCpUUR8AR/ZYLPALgiIg/9ENzMzLn3l0NSxVdva7R/VDcuSEBo0eGVCe3evSIHNz0Hg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@15.3.0':
-    resolution: {integrity: sha512-ZMQ9yzDEts/vkpFLRAqfYO1wSpIJGlQNK9gZ09PgyjBJUmg8F/bb8fw2EXKgEaHbCc4gmqMpDfh+T07qUphp9A==}
+  '@next/swc-linux-x64-gnu@15.3.1':
+    resolution: {integrity: sha512-bfI4AMhySJbyXQIKH5rmLJ5/BP7bPwuxauTvVEiJ/ADoddaA9fgyNNCcsbu9SlqfHDoZmfI6g2EjzLwbsVTr5A==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@15.3.0':
-    resolution: {integrity: sha512-RFwq5VKYTw9TMr4T3e5HRP6T4RiAzfDJ6XsxH8j/ZeYq2aLsBqCkFzwMI0FmnSsLaUbOb46Uov0VvN3UciHX5A==}
+  '@next/swc-linux-x64-musl@15.3.1':
+    resolution: {integrity: sha512-FeAbR7FYMWR+Z+M5iSGytVryKHiAsc0x3Nc3J+FD5NVbD5Mqz7fTSy8CYliXinn7T26nDMbpExRUI/4ekTvoiA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@15.3.0':
-    resolution: {integrity: sha512-a7kUbqa/k09xPjfCl0RSVAvEjAkYBYxUzSVAzk2ptXiNEL+4bDBo9wNC43G/osLA/EOGzG4CuNRFnQyIHfkRgQ==}
+  '@next/swc-win32-arm64-msvc@15.3.1':
+    resolution: {integrity: sha512-yP7FueWjphQEPpJQ2oKmshk/ppOt+0/bB8JC8svPUZNy0Pi3KbPx2Llkzv1p8CoQa+D2wknINlJpHf3vtChVBw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@15.3.0':
-    resolution: {integrity: sha512-vHUQS4YVGJPmpjn7r5lEZuMhK5UQBNBRSB+iGDvJjaNk649pTIcRluDWNb9siunyLLiu/LDPHfvxBtNamyuLTw==}
+  '@next/swc-win32-x64-msvc@15.3.1':
+    resolution: {integrity: sha512-3PMvF2zRJAifcRNni9uMk/gulWfWS+qVI/pagd+4yLF5bcXPZPPH2xlYRYOsUjmCJOXSTAC2PjRzbhsRzR2fDQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -4741,8 +4741,8 @@ packages:
     peerDependencies:
       next: '>=9.0.0'
 
-  next@15.3.0:
-    resolution: {integrity: sha512-k0MgP6BsK8cZ73wRjMazl2y2UcXj49ZXLDEgx6BikWuby/CN+nh81qFFI16edgd7xYpe/jj2OZEIwCoqnzz0bQ==}
+  next@15.3.1:
+    resolution: {integrity: sha512-8+dDV0xNLOgHlyBxP1GwHGVaNXsmp+2NhZEYrXr24GWLHtt27YrBPbPuHvzlhi7kZNYjeJNR93IF5zfFu5UL0g==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
@@ -8018,7 +8018,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dojoengine/core@1.4.3(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@dojoengine/core@1.5.0(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@dojoengine/recs': 2.0.13(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       starknet: 6.23.1(encoding@0.1.13)
@@ -8029,9 +8029,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@dojoengine/create-burner@1.4.3(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@dojoengine/create-burner@1.5.0(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@dojoengine/core': 1.4.3(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@dojoengine/core': 1.5.0(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@scure/bip32': 1.6.2
       '@starknet-react/core': 3.7.2(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)
       encoding: 0.1.13
@@ -8045,7 +8045,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@dojoengine/predeployed-connector@1.4.3(@starknet-react/core@3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))':
+  '@dojoengine/predeployed-connector@1.5.0(@starknet-react/core@3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))':
     dependencies:
       '@starknet-io/types-js': 0.7.10
       '@starknet-react/core': 3.7.2(bufferutil@4.0.9)(get-starknet-core@3.2.0(starknet@6.24.1(encoding@0.1.13)))(react@18.3.1)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -8065,13 +8065,13 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@dojoengine/torii-client@1.4.3':
+  '@dojoengine/torii-client@1.5.0':
     dependencies:
-      '@dojoengine/torii-wasm': 1.4.3
+      '@dojoengine/torii-wasm': 1.5.0
 
-  '@dojoengine/torii-wasm@1.4.3': {}
+  '@dojoengine/torii-wasm@1.5.0': {}
 
-  '@dojoengine/utils@1.4.3(bufferutil@4.0.9)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@dojoengine/utils@1.5.0(bufferutil@4.0.9)(starknet@6.24.1(encoding@0.1.13))(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@dojoengine/recs': 2.0.13(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/utils': 2.2.14
@@ -8090,7 +8090,7 @@ snapshots:
 
   '@emnapi/runtime@1.4.0':
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.8.1
     optional: true
 
   '@emotion/babel-plugin@11.11.0':
@@ -9006,34 +9006,34 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@next/env@15.3.0': {}
+  '@next/env@15.3.1': {}
 
   '@next/eslint-plugin-next@14.1.4':
     dependencies:
       glob: 10.3.10
 
-  '@next/swc-darwin-arm64@15.3.0':
+  '@next/swc-darwin-arm64@15.3.1':
     optional: true
 
-  '@next/swc-darwin-x64@15.3.0':
+  '@next/swc-darwin-x64@15.3.1':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.3.0':
+  '@next/swc-linux-arm64-gnu@15.3.1':
     optional: true
 
-  '@next/swc-linux-arm64-musl@15.3.0':
+  '@next/swc-linux-arm64-musl@15.3.1':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.3.0':
+  '@next/swc-linux-x64-gnu@15.3.1':
     optional: true
 
-  '@next/swc-linux-x64-musl@15.3.0':
+  '@next/swc-linux-x64-musl@15.3.1':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.3.0':
+  '@next/swc-win32-arm64-msvc@15.3.1':
     optional: true
 
-  '@next/swc-win32-x64-msvc@15.3.0':
+  '@next/swc-win32-x64-msvc@15.3.1':
     optional: true
 
   '@noble/ciphers@1.2.1': {}
@@ -9590,9 +9590,9 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       eslint-visitor-keys: 3.4.3
 
-  '@vercel/speed-insights@1.0.10(next@15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@vercel/speed-insights@1.0.10(next@15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     optionalDependencies:
-      next: 15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
   '@walletconnect/core@2.19.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
@@ -12333,12 +12333,12 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next-pwa@5.6.0(@babel/core@7.23.7)(next@15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.91.0):
+  next-pwa@5.6.0(@babel/core@7.23.7)(next@15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.91.0):
     dependencies:
       babel-loader: 8.3.0(@babel/core@7.23.7)(webpack@5.91.0)
       clean-webpack-plugin: 4.0.0(webpack@5.91.0)
       globby: 11.1.0
-      next: 15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       terser-webpack-plugin: 5.3.10(webpack@5.91.0)
       workbox-webpack-plugin: 6.6.0(webpack@5.91.0)
       workbox-window: 6.6.0
@@ -12351,9 +12351,9 @@ snapshots:
       - uglify-js
       - webpack
 
-  next@15.3.0(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@15.3.1(@babel/core@7.23.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@next/env': 15.3.0
+      '@next/env': 15.3.1
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.15
       busboy: 1.6.0
@@ -12363,14 +12363,14 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       styled-jsx: 5.1.6(@babel/core@7.23.7)(react@18.3.1)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.3.0
-      '@next/swc-darwin-x64': 15.3.0
-      '@next/swc-linux-arm64-gnu': 15.3.0
-      '@next/swc-linux-arm64-musl': 15.3.0
-      '@next/swc-linux-x64-gnu': 15.3.0
-      '@next/swc-linux-x64-musl': 15.3.0
-      '@next/swc-win32-arm64-msvc': 15.3.0
-      '@next/swc-win32-x64-msvc': 15.3.0
+      '@next/swc-darwin-arm64': 15.3.1
+      '@next/swc-darwin-x64': 15.3.1
+      '@next/swc-linux-arm64-gnu': 15.3.1
+      '@next/swc-linux-arm64-musl': 15.3.1
+      '@next/swc-linux-x64-gnu': 15.3.1
+      '@next/swc-linux-x64-musl': 15.3.1
+      '@next/swc-win32-arm64-msvc': 15.3.1
+      '@next/swc-win32-x64-msvc': 15.3.1
       sharp: 0.34.1
     transitivePeerDependencies:
       - '@babel/core'

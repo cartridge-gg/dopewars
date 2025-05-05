@@ -9,10 +9,6 @@ const nextConfig = {
   //   domains: ["static.cartridge.gg", "static.localhost"],
   // },
   // dev: "NODE_OPTIONS=--experimental-wasm-modules next dev",
-  // outputFileTracingRoot: import.meta.dirname,
-  // outputFileTracingIncludes: {
-  //    "/": ["./node_modules/@dope/dope-sdk/**"],
-  // },
   webpack: (config, options) => {
     // console.log(config)
     config.experiments = {

@@ -10,11 +10,12 @@ import { action, flow, makeObservable, observable } from "mobx";
 import { EventClass } from "../class/Events";
 import { GameClass } from "../class/Game";
 import { ConfigStoreClass } from "./config";
-import { Entities, Subscription, ToriiClient, Ty } from "@dojoengine/torii-client";
+import { Entities, Entity, Subscription, ToriiClient, Ty } from "@dojoengine/torii-client";
 import { parseStruct } from "../utils";
 import { num } from "starknet";
 import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
+import { parseModels } from "@dope/dope-sdk";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
@@ -152,149 +153,156 @@ export class GameStoreClass {
 
     this.game = game;
   }
-
+  //////////////////////////////////////////////
   *loadGameEvents() {
-    const entities: Entities = yield this.toriiClient.getEventMessages(
-      {
-        clause: {
-          Keys: {
-            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-            models: [],
-            pattern_matching: "FixedLen",
-          },
+    const entities: Entities = yield this.toriiClient.getEventMessages({
+      clause: {
+        Keys: {
+          keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+          models: [],
+          pattern_matching: "FixedLen",
         },
-        limit: 1000,
-        offset: 0,
-        dont_include_hashed_keys: true,
-        entity_models: [],
-        entity_updated_after: 0,
+      },
+
+      pagination: {
+        limit: 10_000,
+        cursor: undefined,
+        direction: "Forward",
         order_by: [],
       },
-      true,
-    );
-    console.log(entities);
-    const gameEntity = Object.values(entities)[0];
-    if (!gameEntity) return;
+      no_hashed_keys: false,
+      models: [],
+      historical: true,
+    });
 
-    this.gameEvents = new EventClass(this.configStore, this.gameInfos!, gameEntity);
+    if (entities.items.length === 0) return;
+
+    this.gameEvents = new EventClass(this.configStore, this.gameInfos!, entities.items);
   }
 
   *loadGameInfos(gameId: string) {
-    const entities: Entities = yield this.toriiClient.getEntities(
-      {
-        clause: {
-          Member: {
-            member: "game_id",
-            model: "dopewars-Game",
-            operator: "Eq",
-            value: { Primitive: { U32: Number(gameId) } },
-          },
+    const entities: Entities = yield this.toriiClient.getEntities({
+      clause: {
+        Member: {
+          member: "game_id",
+          model: "dopewars-Game",
+          operator: "Eq",
+          value: { Primitive: { U32: Number(gameId) } },
         },
-        limit: 1,
-        offset: 0,
-        dont_include_hashed_keys: true,
-        entity_models: [],
-        // entity_models:["dopewars-Game"],
-        entity_updated_after: 0,
+      },
+      pagination: {
+        limit: 10,
+        cursor: undefined,
+        direction: "Forward",
         order_by: [],
       },
-      false,
-    );
+      no_hashed_keys: true,
+      models: ["dopewars-Game", "dopewars-GameStorePacked"],
+      historical: false,
+    });
 
     // console.log(entities)
-    const gameEntity = Object.values(entities)[0];
-    if (!gameEntity) return;
+    // const gameEntity = Object.values(entities)[0];
+    // if (!gameEntity) return;
 
-    const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
-    const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
+    // const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
+    // const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
+
+    const gameInfos = parseStruct(entities.items[0].models["dopewars-Game"]) as Game;
+    const gameStorePacked = parseModels(entities, "dopewars-GameStorePacked")[0] as GameStorePacked;
+
+    if (!gameInfos || !gameStorePacked) return;
 
     this.gameInfos = gameInfos;
     this.gameStorePacked = gameStorePacked;
   }
 
   *loadGameWithTokenId(gameId: string) {
-    const entities: Entities = yield this.toriiClient.getEntities(
-      {
-        clause: {
-          Member: {
-            member: "game_id",
-            model: "dopewars-GameWithTokenId",
-            operator: "Eq",
-            value: { Primitive: { U32: Number(gameId) } },
-          },
+    const entities: Entities = yield this.toriiClient.getEntities({
+      clause: {
+        Member: {
+          member: "game_id",
+          model: "dopewars-GameWithTokenId",
+          operator: "Eq",
+          value: { Primitive: { U32: Number(gameId) } },
         },
-        limit: 1,
-        offset: 0,
-        dont_include_hashed_keys: true,
-        // entity_models: [],
-        entity_models: ["dopewars-GameWithTokenId"],
-        entity_updated_after: 0,
+      },
+      pagination: {
+        limit: 100,
+        cursor: undefined,
+        direction: "Forward",
         order_by: [],
       },
-      false,
-    );
+      no_hashed_keys: true,
+      models: [],
+      historical: false,
+    });
 
-    // console.log(entities)
-    const gameEntity = Object.values(entities)[0];
-    if (!gameEntity) return;
+    const gameWithTokenId = parseModels(entities, "dopewars-GameWithTokenId")[0]; //as GameWithTokenId;
 
-    const gameWithTokenId = parseStruct(gameEntity["dopewars-GameWithTokenId"]) as GameWithTokenId;
+    if (!gameWithTokenId) return;
 
-    gameWithTokenId.equipment_by_slot = gameWithTokenId.equipment_by_slot.map((i) => Number(i));
+    gameWithTokenId.equipment_by_slot = gameWithTokenId.equipment_by_slot.map((i: string) => Number(i));
     // @ts-ignore
-    gameWithTokenId.token_id_type = gameEntity["dopewars-GameWithTokenId"].token_id.value?.option;
+    gameWithTokenId.token_id_type = gameWithTokenId.token_id.activeVariant();
     // @ts-ignore
-    gameWithTokenId.token_id = Number(gameEntity["dopewars-GameWithTokenId"].token_id.value?.value?.value);
+    gameWithTokenId.token_id = Number(gameWithTokenId.token_id.unwrap());
 
     this.gameWithTokenId = gameWithTokenId;
   }
 
   *loadSeasonSettings(season_version: string) {
-    const entities: Entities = yield this.toriiClient.getEntities(
-      {
-        clause: {
-          Keys: {
-            keys: [num.toHexString(season_version)],
-            models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
-            pattern_matching: "VariableLen",
-          },
+    const entities: Entities = yield this.toriiClient.getEntities({
+      clause: {
+        Keys: {
+          keys: [num.toHexString(season_version)],
+          models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+          pattern_matching: "VariableLen",
         },
-        limit: 1,
-        offset: 0,
-        dont_include_hashed_keys: true,
-        // entity_models:[],
-        entity_models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
-        entity_updated_after: 0,
+      },
+      pagination: {
+        limit: 100,
+        cursor: undefined,
+        direction: "Forward",
         order_by: [],
       },
-      false,
-    );
-    const seasonEntity = Object.values(entities)[0];
-    if (!seasonEntity) return;
+      no_hashed_keys: true,
+      models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+      historical: false,
+    });
 
-    const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
-    const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;
+    // const seasonEntity = Object.values(entities)[0];
+    // if (!seasonEntity) return;
 
-    // console.log("seasonSettings", seasonSettings);
-    // console.log("gameConfig", gameConfig);
+    // const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
+    // const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;
+
+    if (!entities.items[0]) return;
+
+    const seasonSettings = parseStruct(entities.items[0].models["dopewars-SeasonSettings"]) as SeasonSettings;
+    const gameConfig = parseStruct(entities.items[0].models["dopewars-GameConfig"]) as GameConfig;
+
+    if (!gameConfig || !seasonSettings) return;
 
     this.seasonSettings = seasonSettings;
     this.gameConfig = gameConfig;
   }
 
-  onEventMessage(entity: any, update: any) {
+  onEventMessage(key: string, entity: Entity) {
+    if (key === "0x0") return;
     // console.log("onEventMessage", entity, update);
-    this.gameEvents!.addEvent(update);
+    this.gameEvents!.addEvent(entity);
   }
 
-  onEntityUpdated(entity: any, update: any) {
-    // console.log("onEntityUpdated", entity, update);
+  onEntityUpdated(_entity: any, update: any) {
+    console.log("onEntityUpdated", _entity, update);
+
     const gameId = num.toHexString(this.gameInfos?.game_id);
 
     const prevState = this.game?.player;
 
-    if (update["dopewars-GameStorePacked"]) {
-      this.gameStorePacked = parseStruct(update["dopewars-GameStorePacked"]);
+    if (update.models["dopewars-GameStorePacked"]) {
+      this.gameStorePacked = parseStruct(update.models["dopewars-GameStorePacked"]);
       this.initGameStore();
 
       // if dead, handled in /event/consequence

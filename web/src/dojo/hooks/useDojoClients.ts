@@ -45,8 +45,7 @@ export const useDojoClients = (selectedChain: DojoChainConfig) => {
 
   useEffect(() => {
     const initAsync = async () => {
-      const torii = await import("@dojoengine/torii-client");
-      const client = await torii.createClient({
+      const client = await new ToriiClient({
         toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
         relayUrl: "",
         worldAddress: selectedChain.manifest.world.address || "",

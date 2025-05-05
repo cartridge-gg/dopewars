@@ -3089,7 +3089,6 @@ export type Dopewars_GameCreated = {
   hustler_id?: Maybe<Scalars['u16']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['felt252']>;
-  token_id?: Maybe<Dopewars_TokenId>;
 };
 
 export type Dopewars_GameCreatedConnection = {
@@ -3115,8 +3114,7 @@ export enum Dopewars_GameCreatedOrderField {
   GameMode = 'GAME_MODE',
   HustlerId = 'HUSTLER_ID',
   PlayerId = 'PLAYER_ID',
-  PlayerName = 'PLAYER_NAME',
-  TokenId = 'TOKEN_ID'
+  PlayerName = 'PLAYER_NAME'
 }
 
 export type Dopewars_GameCreatedWhereInput = {
@@ -3165,44 +3163,6 @@ export type Dopewars_GameCreatedWhereInput = {
   player_nameNEQ?: InputMaybe<Scalars['felt252']>;
   player_nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
   player_nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  token_id?: InputMaybe<Dopewars_GameCreated_Token_IdWhereInput>;
-};
-
-export type Dopewars_GameCreated_Token_IdWhereInput = {
-  GuestLootId?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerId?: InputMaybe<Scalars['felt252']>;
-  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  LootId?: InputMaybe<Scalars['felt252']>;
-  LootIdEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdGT?: InputMaybe<Scalars['felt252']>;
-  LootIdGTE?: InputMaybe<Scalars['felt252']>;
-  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  LootIdLT?: InputMaybe<Scalars['felt252']>;
-  LootIdLTE?: InputMaybe<Scalars['felt252']>;
-  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  option?: InputMaybe<Scalars['Enum']>;
 };
 
 export type Dopewars_GameEdge = {

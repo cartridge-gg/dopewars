@@ -1,16 +1,15 @@
-use starknet::ContractAddress;
 use dojo::world::WorldStorageTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
-
-use rollyourown::config::hustlers::ItemSlot;
 use dojo::world::{WorldStorage};
 
-
+use rollyourown::config::hustlers::ItemSlot;
 use rollyourown::interfaces::{
     dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
     dope_loot::{IDopeLootDispatcher, IDopeLootDispatcherTrait},
 };
+use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
+use rollyourown::events::{HustlerSlot, HustlerBody};
+use starknet::ContractAddress;
 
 pub type GearId = felt252;
 
