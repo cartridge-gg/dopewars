@@ -171,6 +171,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
                       >
                         <HustlerAvatarIcon
+                          gameId={game.game_id}
                           hustlerId={game.hustler_id}
                           // @ts-ignore
                           tokenIdType={game.token_id_type}

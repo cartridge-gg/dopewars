@@ -254,6 +254,7 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
                 <Td>
                   <HStack>
                     <HustlerAvatarIcon
+                      gameId={game.game_id}
                       hustlerId={game.hustler_id}
                       // @ts-ignore
                       tokenIdType={game?.token_id_type}

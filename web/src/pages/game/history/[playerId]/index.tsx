@@ -132,6 +132,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
               <Tr key={game.gameInfos.game_id} cursor="pointer" onClick={() => onClick(game)}>
                 <Td>
                   <HustlerAvatarIcon
+                    gameId={game.gameInfos.game_id}
                     hustlerId={game.gameInfos.hustler_id}
                     tokenIdType={game?.gameWithTokenId?.token_id_type}
                     tokenId={game?.gameWithTokenId?.token_id}

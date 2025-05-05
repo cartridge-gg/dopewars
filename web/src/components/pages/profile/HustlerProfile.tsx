@@ -9,12 +9,15 @@ import { useEffect, useMemo, useState } from "react";
 import ShareButton from "./ShareButton";
 import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
 import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
+import { HustlerPreviewFromGame } from "./HustlerPreviewFromGame";
 
 export const HustlerProfile = observer(() => {
   const { gameId } = useRouterContext();
-  const { game, gameInfos, gameWithTokenId, gameEvents } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
   const configStore = useConfigStore();
   const { toast } = useToast();
+
+  const gameWithTokenId = gameEvents?.gameWithTokenIdCreated?.event;
 
   // console.log(gameEvents?.gameWithTokenIdCreated);
 
@@ -72,7 +75,11 @@ export const HustlerProfile = observer(() => {
               <HustlerPreviewFromLoot tokenId={gameWithTokenId.token_id} renderMode={1} />
             )}
           {gameWithTokenId && gameWithTokenId.token_id_type === "HustlerId" && (
-            <HustlerPreviewFromHustler tokenId={gameWithTokenId.token_id} renderMode={1} />
+            <HustlerPreviewFromGame
+              gameId={gameWithTokenId.game_id}
+              tokenId={gameWithTokenId.token_id}
+              renderMode={1}
+            />
           )}
         </Box>
 

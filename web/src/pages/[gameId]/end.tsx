@@ -167,6 +167,7 @@ const End = () => {
               text={shortString.decodeShortString(num.toHexString(BigInt(game?.gameInfos.player_name?.value)))}
               icon={
                 <HustlerAvatarIcon
+                gameId={gameInfos.game_id}
                   hustlerId={gameInfos.hustler_id}
                   tokenIdType={gameWithTokenId?.token_id_type}
                   tokenId={gameWithTokenId?.token_id}

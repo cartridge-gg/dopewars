@@ -16,6 +16,7 @@ import { num } from "starknet";
 import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
 import { parseModels } from "@dope/dope-sdk";
+import { GameWithTokenIdCreated } from "@/components/layout/GlobalEvents";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
@@ -48,6 +49,8 @@ export class GameStoreClass {
   seasonSettings: SeasonSettings | null = null;
   subscriptions: Array<Subscription> = [];
 
+  allGameWithTokenIdCreated: GameWithTokenIdCreated[] = [];
+
   constructor({ toriiClient, client, configStore, router }: GameStoreProps) {
     this.toriiClient = toriiClient;
     this.client = client;
@@ -72,6 +75,7 @@ export class GameStoreClass {
       initGameStore: action,
       onEntityUpdated: action,
       onEventMessage: action,
+      getGameWithTokenIdCreated: flow,
     });
   }
 
@@ -329,5 +333,36 @@ export class GameStoreClass {
         }
       }
     }
+  }
+
+  *getGameWithTokenIdCreated(gameId: number) {
+    const loaded = this.allGameWithTokenIdCreated.find((i) => i.game_id === gameId);
+    if (loaded) return loaded;
+
+    const entities: Entities = yield this.toriiClient.getEventMessages({
+      clause: {
+        Member: {
+          member: "game_id",
+          model: "dopewars-GameWithTokenIdCreated",
+          operator: "Eq",
+          value: { Primitive: { U32: Number(gameId) } },
+        },
+      },
+      pagination: {
+        limit: 10,
+        cursor: undefined,
+        direction: "Forward",
+        order_by: [],
+      },
+      no_hashed_keys: true,
+      models: [],
+      historical: false,
+    });
+
+    const game = parseModels(entities, "dopewars-GameWithTokenIdCreated")[0];
+    if (game) {
+      this.allGameWithTokenIdCreated.push(game);
+    }
+    return game;
   }
 }

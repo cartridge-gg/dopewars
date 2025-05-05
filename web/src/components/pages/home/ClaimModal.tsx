@@ -93,6 +93,7 @@ export const ClaimModal = ({
                           <Td>
                             <HStack>
                               <HustlerAvatarIcon
+                                gameId={game.game_id}
                                 hustlerId={game.hustler_id % 3}
                                 // @ts-ignore
                                 tokenIdType={game.token_id_type}

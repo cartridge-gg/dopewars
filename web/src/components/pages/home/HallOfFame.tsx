@@ -71,6 +71,7 @@ const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterf
         {game && (
           <HStack w="full" gap={3}>
             <HustlerAvatarIcon
+              gameId={game.game_id}
               hustlerId={game.hustler_id}
               // @ts-ignore
               tokenIdType={game.token_id_type}

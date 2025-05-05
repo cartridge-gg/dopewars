@@ -31,6 +31,7 @@ export const ProfileLink = () => {
     <>
       <Button cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
         <HustlerAvatarIcon
+          gameId={gameInfos.game_id}
           hustlerId={gameInfos.hustler_id}
           tokenIdType={gameWithTokenId?.token_id_type}
           tokenId={gameWithTokenId?.token_id}
@@ -62,6 +63,7 @@ export const ProfileLinkMobile = () => {
     <>
       <MenuItem h="48px" borderRadius={0} onClick={onClick}>
         <HustlerAvatarIcon
+          gameId={gameInfos.game_id}
           hustlerId={gameInfos.hustler_id}
           tokenIdType={gameWithTokenId?.token_id_type}
           tokenId={gameWithTokenId?.token_id}
@@ -92,6 +94,7 @@ export const ProfileLinkDrawer = () => {
   return (
     <HStack borderRadius={0} onClick={onClick}>
       <HustlerAvatarIcon
+        gameId={gameInfos.game_id}
         hustlerId={gameInfos.hustler_id}
         tokenIdType={gameWithTokenId?.token_id_type}
         tokenId={gameWithTokenId?.token_id}

@@ -8,7 +8,7 @@ import { formatCashHeader } from "@/utils/ui";
 import { PaperIcon, Siren, Truck } from "../icons";
 import { playSound, Sounds } from "@/hooks/sound";
 import { parseStruct } from "@/dojo/utils";
-import { num, shortString } from "starknet";
+import { CairoOption, num, shortString } from "starknet";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
@@ -195,14 +195,13 @@ export interface GameCreated {
   hustler_id: number;
 }
 
-
 export interface GameWithTokenIdCreated {
   game_id: number;
   player_id: string;
   token_id_type: string;
   token_id: bigint;
-  hustler_equipment: any[];
-  hustler_body: any[];
+  hustler_equipment: { slot: string; gear_item_id: CairoOption<number> }[];
+  hustler_body: { slot: string; value: number }[];
 }
 
 export interface Traveled {
