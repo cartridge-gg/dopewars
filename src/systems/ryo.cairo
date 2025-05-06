@@ -30,18 +30,16 @@ mod ryo {
     use core::traits::Into;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
-    use rollyourown::elements::trophies::types::{Trophy, TrophyTrait, TROPHY_COUNT};
+    use rollyourown::elements::trophies::types::{TROPHY_COUNT, Trophy, TrophyTrait};
 
     use rollyourown::{
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress},},
-        models::{season::Season,}, utils::random::{RandomImpl},
+        config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress}}, constants::{ETHER},
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        store::{Store, StoreImpl, StoreTrait},
+        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, models::{season::Season},
+        store::{Store, StoreImpl, StoreTrait}, utils::random::{RandomImpl},
     };
     use starknet::ContractAddress;
     use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::info::get_tx_info;
     use starknet::{get_caller_address, get_contract_address};
 
     component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
@@ -249,13 +247,13 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
-            let account_contract_address = get_tx_info().unbox().account_contract_address;
+            let caller_address = get_caller_address();
             assert(
                 self
                     .world(@"dopewars")
                     .dispatcher
-                    .is_owner(selector_from_tag!("dopewars-ryo"), account_contract_address),
-                'not owner'
+                    .is_owner(selector_from_tag!("dopewars-ryo"), caller_address),
+                'not owner',
             );
         }
     }

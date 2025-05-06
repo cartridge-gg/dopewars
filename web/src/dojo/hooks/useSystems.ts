@@ -81,7 +81,7 @@ export const useSystems = (): SystemsInterface => {
   const { account } = useAccount();
   const { config } = useConfigStore();
 
-  const { toast, clear: clearToasts } = useToast();
+  const { toast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
