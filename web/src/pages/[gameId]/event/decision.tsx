@@ -4,6 +4,8 @@ import { CopsIcon, GangIcon } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { Footer, Layout } from "@/components/layout";
 import { TravelEncounter } from "@/components/layout/GlobalEvents";
+import { EncounterPreview } from "@/components/pages/encounter/EncounterPreview";
+import { HustlerPreviewFromGame } from "@/components/pages/profile/HustlerPreviewFromGame";
 import { HustlerStats } from "@/components/pages/profile/HustlerStats";
 import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
@@ -212,9 +214,17 @@ const Encounter = observer(
     const { gameInfos, gameWithTokenId } = useGameStore();
     const [imgUrl, setImgUrl] = useState<string | undefined>("");
 
+    const [playerStatus, setPlayerStatus] = useState(PlayerStatus.Normal);
+
+    useEffect(() => {
+      if (game && playerStatus === PlayerStatus.Normal) {
+        setPlayerStatus(game.player.status);
+      }
+    }, [game]);
+
     useEffect(() => {
       let url = "";
-      if (game.player.status === PlayerStatus.BeingArrested) {
+      if (playerStatus === PlayerStatus.BeingArrested) {
         url = `/images/events/cops/${encounterEvent.level}.gif`;
       } else {
         url = `/images/events/gang/${encounterEvent.level}.gif`;
@@ -228,7 +238,7 @@ const Encounter = observer(
       } else {
         setImgUrl(url);
       }
-    }, [encounterEvent /*game.player.status*/]);
+    }, [encounterEvent, playerStatus]);
 
     return (
       <VStack {...props}>
@@ -249,30 +259,36 @@ const Encounter = observer(
           position="relative"
           gap={[2, 12]}
         >
-          <HStack>
-            <Image
-              src={imgUrl}
-              alt="adverse event"
-              maxH={["30vh", "calc(100dvh - 300px)"]}
-              w="auto"
-              h={[150, 300]}
-            />
+          <HStack position="relative">
 
             <Box
               w="170px"
               h="160px"
               maxH={["30vh", "calc(100dvh - 300px)"]}
-              transform={["rotateY(180deg)", "scale(2) rotateY(180deg)"]}
+              transform={["", "scale(2)"]}
             >
               {gameWithTokenId &&
                 (gameWithTokenId.token_id_type === "LootId" || gameWithTokenId.token_id_type === "GuestLootId") && (
                   <HustlerPreviewFromLoot tokenId={gameWithTokenId.token_id} renderMode={0} />
                 )}
-              {gameWithTokenId &&
-                gameWithTokenId.token_id_type === "HustlerId" && (
-                  <HustlerPreviewFromHustler tokenId={gameWithTokenId.token_id} renderMode={0} />
-                )}
+              {gameWithTokenId && gameWithTokenId.token_id_type === "HustlerId" && (
+                <HustlerPreviewFromGame gameId={gameInfos?.game_id} tokenId={gameWithTokenId.token_id} renderMode={0} />
+              )}
             </Box>
+            <Box
+              w="170px"
+              h="160px"
+              maxH={["30vh", "calc(100dvh - 300px)"]}
+              transform={["rotateY(180deg)", "scale(2) rotateY(170deg)"]}
+            >
+              <EncounterPreview
+                playerStatus={playerStatus}
+                level={encounterEvent.level}
+                gameId={gameInfos?.game_id}
+                turn={encounterEvent.turn}
+              />
+            </Box>
+            {/* <Image src={imgUrl} alt="adverse event" maxH={["30vh", "calc(100dvh - 300px)"]} w="auto" h={[150, 300]} /> */}
           </HStack>
 
           <VStack w="320px" gap={[0, 3]}>
@@ -364,4 +380,3 @@ export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: Tr
     </HStack>
   );
 });
-
