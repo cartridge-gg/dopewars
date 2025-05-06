@@ -359,7 +359,8 @@ export const useSystems = (): SystemsInterface => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: `laundromat`,
         entrypoint: "claim",
-        calldata: CallData.compile([playerId, gameIds]),
+        calldata: [playerId, gameIds],
+        // calldata: CallData.compile([playerId, gameIds]),
       });
 
       return {

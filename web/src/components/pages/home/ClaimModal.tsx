@@ -44,6 +44,7 @@ export const ClaimModal = ({
   const onClaim = async () => {
     if (!account?.address) return;
 
+    console.log(claimable.gameIds)
     const { hash } = await claim(account?.address, claimable.gameIds);
 
     if (hash != "") {

@@ -298,15 +298,15 @@ export class GameStoreClass {
     this.gameEvents!.addEvent(entity);
   }
 
-  onEntityUpdated(_entity: any, update: any) {
-    console.log("onEntityUpdated", _entity, update);
+  onEntityUpdated(key: string, entity: Entity) {
+    // console.log("onEntityUpdated", key, entity);
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
 
     const prevState = this.game?.player;
 
-    if (update.models["dopewars-GameStorePacked"]) {
-      this.gameStorePacked = parseStruct(update.models["dopewars-GameStorePacked"]);
+    if (entity.models["dopewars-GameStorePacked"]) {
+      this.gameStorePacked = parseStruct(entity.models["dopewars-GameStorePacked"]);
       this.initGameStore();
 
       // if dead, handled in /event/consequence
