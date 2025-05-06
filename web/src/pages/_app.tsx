@@ -20,7 +20,8 @@ import { SeasonDetailsModal } from "@/components/pages/home/SeasonDetailsModal";
 import { GlobalEvents } from "@/components/layout/GlobalEvents";
 enableStaticRendering(typeof window === "undefined");
 
-import "@dope/dope-sdk/dist/style.css"
+import "@dope/dope-sdk/dist/style.css";
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
@@ -65,6 +66,13 @@ export default function App({ Component, pageProps }: AppProps) {
           <SeasonDetailsModal />
 
           <GlobalEvents />
+
+          <Toaster
+            gutter={0}
+            containerStyle={{
+              inset: 0,
+            }}
+          />
         </DojoContextProvider>
       </ChakraProvider>
     </>

@@ -28,7 +28,6 @@ export const HustlerAvatarIcon = ({
     } else if (tokenIdType === "HustlerId") {
       return (
         <Box w="30px" h="30px" {...rest}>
-          {/* <HustlerPreviewFromHustler tokenId={tokenId} renderMode={2} /> */}
           <HustlerPreviewFromGame gameId={gameId} tokenId={tokenId} renderMode={2} />
         </Box>
       );

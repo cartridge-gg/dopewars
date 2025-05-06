@@ -1,15 +1,13 @@
 import { Toast } from "@/components/common/Toast";
-import { useToast as useChakraToast } from "@chakra-ui/react";
 import { useCallback } from "react";
+import toast from "react-hot-toast";
 
 const TOAST_DURATION = 3500;
 
 export type ToastType = ReturnType<typeof useToast>;
 
 export const useToast = () => {
-  const chakraToast = useChakraToast();
-
-  const toast = useCallback(
+  const customToast = useCallback(
     ({
       message,
       icon,
@@ -23,41 +21,33 @@ export const useToast = () => {
       duration?: number;
       isError?: boolean;
     }) => {
-      chakraToast({
-        position: "top-left",
-        duration,
-        // default overrides
-        containerStyle: {
-          pointerEvents: "none",
-          maxW: "100%",
-          minW: "auto",
-          px: "24px",
-          m: 0,
-        },
-        isClosable: true,
-        render: () => (
+      toast(
+        (t) => (
           <Toast
             message={message}
             icon={icon}
-            // link={link}
-            isError={isError}
             onClose={() => {
-              // TODO: target close toast by id
-              chakraToast.closeAll();
+              toast.dismiss(t.id);
             }}
+            isError={isError}
           />
         ),
-      });
+        {
+          duration,
+          position: "top-left",
+          style: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            padding: 0,
+            margin: 0,
+          },
+        },
+      );
     },
-    [chakraToast],
+    [toast],
   );
 
-  const clear = useCallback(() => {
-    chakraToast.closeAll();
-  }, [chakraToast]);
-
   return {
-    toast,
-    clear,
+    toast: customToast,
   };
 };

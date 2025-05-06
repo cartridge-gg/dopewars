@@ -359,8 +359,13 @@ export class GameStoreClass {
       historical: false,
     });
 
+
     const game = parseModels(entities, "dopewars-GameWithTokenIdCreated")[0];
     if (game) {
+      // @ts-ignore
+      game.token_id_type = game.token_id.activeVariant();
+      // @ts-ignore
+      game.token_id = Number(game.token_id.unwrap());
       this.allGameWithTokenIdCreated.push(game);
     }
     return game;
