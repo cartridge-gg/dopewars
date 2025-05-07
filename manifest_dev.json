@@ -3173,8 +3173,8 @@
       ]
     },
     {
-      "address": "0x90fc584e6b576ebe6eae179d3112b8652524f02e46ce39dd2da9f38dd40914",
-      "class_hash": "0x7f6dd594ce6c39a319518656059453a602d915d919b0d588ed35776711bfc8a",
+      "address": "0xde202966c47005145e90801872601de66a08f7acc85d489f812b8d108bc45c",
+      "class_hash": "0x6e85f1b59247483e32563cbb4bfcef6778403f1f67afaf5a8c2ba1fcc2927d1",
       "abi": [
         {
           "type": "impl",
@@ -4052,7 +4052,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x2f77b4fe8ececafd5a8fdd8a0d806bba99cbdb3961dd6f3769d41bf56eafffd",
+      "class_hash": "0x7a74263ca474046753dbb6680fd25fc41e5bf489458ae5b6354e8b1506ffc2b",
       "abi": [
         {
           "type": "impl",

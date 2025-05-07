@@ -22,7 +22,7 @@ import { Box, Card, HStack, Heading, Text, VStack, Image, Flex, Tooltip } from "
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDojoTokens, useLootEquipment, useEquipment } from "@dope/dope-sdk/hooks";
+import { useDojoTokens, useLootEquipment, useEquipment, ParsedToken } from "@dope/dope-sdk/hooks";
 import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
 import { getContractByName } from "@dojoengine/core";
 import { useDopeStore } from "@dope/dope-sdk/store";
@@ -70,7 +70,7 @@ const New = observer(() => {
       const token_id = (h % 8000n) + 1n;
       tokens.push({ token_id });
     }
-    return tokens;
+    return tokens as ParsedToken[];
   }, [config?.ryo.season_version]);
 
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
@@ -507,8 +507,8 @@ const New = observer(() => {
                   </Tooltip>
                 )}
                 <Text>
-                  {selectedTokenIdType === TokenIdType.HustlerId ? "HUSTLER" : "DOPE"} #
-                  {Number(selectedToken?.token_id)}
+                  {selectedTokenIdType === TokenIdType.HustlerId ? `${selectedToken.metadata.name}`   : `DOPE #${Number(selectedToken?.token_id)}`} 
+                  
                 </Text>
               </HStack>
             ) : (

@@ -115,7 +115,8 @@ mod ryo {
         //
         //
         //
-        self.update_quests();
+        
+        // self.update_quests();
     }
 
 

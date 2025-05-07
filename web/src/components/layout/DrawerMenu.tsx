@@ -161,6 +161,14 @@ const DrawerMenu = () => {
                     <Calendar mr={2} /> SEASONS
                   </DrawerListItem>
 
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/gear");
+                    }}
+                  >
+                    <Cigarette mr={2} /> GEAR
+                  </DrawerListItem>
+
                   {/* DEV */}
 
                   {isAdmin && (
