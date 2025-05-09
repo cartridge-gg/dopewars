@@ -4,6 +4,7 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
+source = "git+https://github.com/cartridge-gg/arcade#87d44ac251f6d86592a921901669b4f3b48b6694"
 dependencies = [
  "dojo",
 ]
