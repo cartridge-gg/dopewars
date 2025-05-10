@@ -83,6 +83,7 @@ pub mod packing {
 
 pub mod systems {
     pub mod game;
+    pub mod decide;
     pub mod laundromat;
     pub mod ryo;
 

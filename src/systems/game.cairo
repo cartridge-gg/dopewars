@@ -61,6 +61,7 @@ mod game {
         packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
         store::{Store, StoreImpl, StoreTrait},
         systems::{
+            decide::{IDecideDispatcher, IDecideDispatcherTrait},
             game::EncounterActions,
             helpers::{game_loop, shopping, trading, traveling, traveling::EncounterOutcomes},
         },
@@ -264,35 +265,12 @@ mod game {
         }
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-
-            let ryo_addresses = store.ryo_addresses();
+            let world = self.world(@"dopewars");
+            let (decision_system_address, _) = world.dns(@"decision_system").unwrap();
+            let decision_system = IDecideDispatcher { contract_address: decision_system_address };
+            
             let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
-
-            //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
-
-            // check player status
-            assert(game_store.player.can_decide(), 'player cannot decide');
-
-            let mut randomizer = RandomImpl::new(random);
-            let mut season_settings = store.season_settings(game_store.game.season_version);
-
-            // // resolve decision
-            let is_dead = traveling::decide(
-                ref game_store, ref season_settings, ref randomizer, action,
-            );
-
-            // check if dead
-            if is_dead {
-                // save & gameover RIP
-                game_loop::on_game_over(ref game_store, ref store);
-            } else {
-                // on_turn_end & save
-                game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-            };
+            decision_system.decide(game_id, player_id, action);
         }
     }
 

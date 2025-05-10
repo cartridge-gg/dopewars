@@ -18,6 +18,8 @@ build-external-contracts = [
     "achievement::events::index::e_TrophyCreation",
     "achievement::events::index::e_TrophyProgression",
 ]
+sierra = true
+casm = true
 
 [dev-dependencies]
 cairo_test = "2.10.1"
