@@ -125,7 +125,7 @@ mod game {
                             .into();
                         let id: felt252 = ((hash % 8000) + 1).try_into().unwrap();
                         if guest_loot_id == id {
-                            println!("id: {} i {}", guest_loot_id, i);
+                            // println!("id: {} i {}", guest_loot_id, i);
                             is_valid = true;
                             break;
                         }
@@ -266,7 +266,7 @@ mod game {
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
             let world = self.world(@"dopewars");
-            let (decision_system_address, _) = world.dns(@"decision_system").unwrap();
+            let (decision_system_address, _) = world.dns(@"decide").unwrap();
             let decision_system = IDecideDispatcher { contract_address: decision_system_address };
             
             let player_id = get_caller_address();

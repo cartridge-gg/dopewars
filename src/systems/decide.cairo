@@ -7,7 +7,7 @@ trait IDecide<T> {
 }
 
 #[dojo::contract]
-mod decision_system {
+mod decide {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
