@@ -17,6 +17,13 @@ build-external-contracts = [
     "dojo::world::world_contract::world",
     "achievement::events::index::e_TrophyCreation",
     "achievement::events::index::e_TrophyProgression",
+    "tournaments::components::models::game::m_GameMetadata",
+    "tournaments::components::models::game::m_TokenMetadata",
+    "tournaments::components::models::game::m_GameCounter",
+    "tournaments::components::models::game::m_Score",
+    "tournaments::components::models::game::m_Settings",
+    "tournaments::components::models::game::m_SettingsDetails",
+    "tournaments::components::models::game::m_SettingsCounter",
 ]
 sierra = true
 casm = true
@@ -29,6 +36,7 @@ starknet = "2.10.1"
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.5.0" }
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 achievement = { git = "https://github.com/cartridge-gg/arcade" }
+tournaments = { git = "https://github.com/FemiOje/tournaments.git", branch = "feat/dojo-1.5.x"}
 # achievement = { git = "https://github.com/cartridge-gg/bushido", rev = "0b658f495885f387bf56d6a27e76514b9b4b772f" }
 
 # bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
@@ -37,6 +45,7 @@ achievement = { git = "https://github.com/cartridge-gg/arcade" }
 
 openzeppelin_access = "0.18.0" 
 openzeppelin_token = "0.18.0"
+openzeppelin_introspection = "0.18.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"

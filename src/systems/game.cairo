@@ -7,6 +7,7 @@ use rollyourown::{
 };
 use starknet::ContractAddress;
 
+
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
     Trade: trading::Trade,
@@ -37,13 +38,15 @@ mod game {
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
     use dojo::world::{WorldStorage};
-
+    use dojo::model::ModelStorage;
+    
     use rollyourown::{
         config::{
             drugs::{Drugs}, encounters::{Encounters}, game::{GameConfig}, locations::{Locations},
             ryo::{RyoConfig}, ryo_address::{RyoAddress},
         },
-        constants::{ETHER}, events::{GameCreated, GameWithTokenIdCreated},
+        constants::{ETHER, DEFAULT_NS, SCORE_ATTRIBUTE, SCORE_MODEL, SETTINGS_MODEL}, 
+        events::{GameCreated, GameWithTokenIdCreated},
         helpers::season_manager::{SeasonManagerTrait},
         interfaces::{
             dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
@@ -62,6 +65,7 @@ mod game {
         store::{Store, StoreImpl, StoreTrait},
         systems::{
             decide::{IDecideDispatcher, IDecideDispatcherTrait},
+            travel::{ITravelDispatcher, ITravelDispatcherTrait},
             game::EncounterActions,
             helpers::{game_loop, shopping, trading, traveling, traveling::EncounterOutcomes},
         },
@@ -69,6 +73,93 @@ mod game {
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
+    
+    use openzeppelin_introspection::src5::SRC5Component;
+    use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin_token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait, IERC721Metadata};
+    use openzeppelin_token::erc721::{ERC721Component, ERC721HooksEmptyImpl};
+    
+    use tournaments::components::game::game_component;
+    use tournaments::components::interfaces::{IGameDetails, IGameToken, ISettings};
+    use tournaments::components::libs::lifecycle::{LifecycleAssertionsImpl, LifecycleAssertionsTrait};
+    use tournaments::components::models::game::TokenMetadata;
+    use tournaments::components::models::lifecycle::Lifecycle;
+    
+    component!(path: game_component, storage: game, event: GameEvent);
+    component!(path: SRC5Component, storage: src5, event: SRC5Event);
+    component!(path: ERC721Component, storage: erc721, event: ERC721Event);
+    
+    #[abi(embed_v0)]
+    impl GameComponentImpl = game_component::GameImpl<ContractState>;
+    impl GameComponentInternalImpl = game_component::InternalImpl<ContractState>;
+    
+    #[abi(embed_v0)]
+    impl ERC721Impl = ERC721Component::ERC721Impl<ContractState>;
+    #[abi(embed_v0)]
+    impl ERC721CamelOnlyImpl = ERC721Component::ERC721CamelOnlyImpl<ContractState>;
+    impl ERC721InternalImpl = ERC721Component::InternalImpl<ContractState>;
+    
+    #[abi(embed_v0)]
+    impl SRC5Impl = SRC5Component::SRC5Impl<ContractState>;
+    
+    #[storage]
+    struct Storage {
+        #[substorage(v0)]
+        game: game_component::Storage,
+        #[substorage(v0)]
+        erc721: ERC721Component::Storage,
+        #[substorage(v0)]
+        src5: SRC5Component::Storage,
+    }
+    
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        #[flat]
+        GameEvent: game_component::Event,
+        #[flat]
+        ERC721Event: ERC721Component::Event,
+        #[flat]
+        SRC5Event: SRC5Component::Event,
+    }
+    
+    fn dojo_init(ref self: ContractState, creator_address: ContractAddress) {
+        self.erc721.initializer("Dope Wars", "DOPE", "https://dopewars.game");
+        self
+            .game
+            .initializer(
+                creator_address,
+                'Dope Wars',
+                "Dope Wars is an onchain adaptation of the original Drug Wars game, built on Starknet using the Dojo Engine.",
+                'Cartridge',
+                'Cartridge',
+                'Strategy',
+                "https://github.com/cartridge-gg/dopewars/blob/main/assets/icon.png",
+                DEFAULT_NS(),
+                SCORE_MODEL(),
+                SCORE_ATTRIBUTE(),
+                SETTINGS_MODEL(),
+            );
+    }
+
+    #[abi(embed_v0)]
+    impl SettingsImpl of ISettings<ContractState> {
+        fn setting_exists(self: @ContractState, settings_id: u32) -> bool {
+            let world: WorldStorage = self.world(@DEFAULT_NS());
+            let settings: GameConfig = world.read_model(settings_id);
+            settings.health > 0
+        }
+    }
+
+    #[abi(embed_v0)]
+    impl GameDetailsImpl of IGameDetails<ContractState> {
+        fn score(self: @ContractState, game_id: u64) -> u32 {
+            let world: WorldStorage = self.world(@DEFAULT_NS());
+            let game: Game = world.read_model(game_id);
+            game.final_score.into()
+        }
+    }
+    
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
         fn create_game(
@@ -220,48 +311,56 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let world = self.world(@"dopewars");
+            let (travel_system_address, _) = world.dns(@"travel").unwrap();
+            let travel_system = ITravelDispatcher { contract_address: travel_system_address };
+            
+            // let player_id = get_caller_address();
+            travel_system.travel(game_id, next_location, actions);
 
-            let ryo_addresses = store.ryo_addresses();
-            let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
+            // =========================================================
+            // let mut store = StoreImpl::new(self.world(@"dopewars"));
 
-            //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+            // let ryo_addresses = store.ryo_addresses();
+            // let player_id = get_caller_address();
+            // let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+            //     .consume_random(Source::Nonce(player_id));
 
-            // check if can travel
-            assert(game_store.can_continue(), 'player cannot travel');
-            assert(next_location != Locations::Home, 'cannot travel to Home');
-            assert(game_store.player.location != next_location, 'already at location');
+            // //
+            // let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
 
-            // execute actions (trades & shop)
-            let mut actions = actions;
-            self.execute_actions(ref game_store, ref actions);
+            // // check if can travel
+            // assert(game_store.can_continue(), 'player cannot travel');
+            // assert(next_location != Locations::Home, 'cannot travel to Home');
+            // assert(game_store.player.location != next_location, 'already at location');
 
-            let mut randomizer = RandomImpl::new(random);
-            let mut season_settings = store.season_settings(game_store.game.season_version);
-            // save next_location
-            game_store.player.next_location = next_location;
+            // // execute actions (trades & shop)
+            // let mut actions = actions;
+            // self.execute_actions(ref game_store, ref actions);
 
-            // traveling
-            let (is_dead, has_encounter) = game_loop::on_travel(
-                ref game_store, ref season_settings, ref randomizer,
-            );
+            // let mut randomizer = RandomImpl::new(random);
+            // let mut season_settings = store.season_settings(game_store.game.season_version);
+            // // save next_location
+            // game_store.player.next_location = next_location;
 
-            // check if dead
-            if is_dead {
-                // save & gameover RIP
-                game_loop::on_game_over(ref game_store, ref store);
-            } else {
-                if has_encounter {
-                    // save & no end turn
-                    game_store.save();
-                } else {
-                    // save & on_turn_end
-                    game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-                }
-            }
+            // // traveling
+            // let (is_dead, has_encounter) = game_loop::on_travel(
+            //     ref game_store, ref season_settings, ref randomizer,
+            // );
+
+            // // check if dead
+            // if is_dead {
+            //     // save & gameover RIP
+            //     game_loop::on_game_over(ref game_store, ref store);
+            // } else {
+            //     if has_encounter {
+            //         // save & no end turn
+            //         game_store.save();
+            //     } else {
+            //         // save & on_turn_end
+            //         game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
+            //     }
+            // }
         }
 
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {

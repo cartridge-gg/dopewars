@@ -1,8 +1,11 @@
 
 [env]
-rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
-account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
-keystore = "../../../sozo_acc"
+# rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
+# account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
+# keystore = "../../../sozo_acc"
+rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
+account_address = "0x52d109445831aa8e807a99a2d375b0387ccf5c0065a463288920caf05e16109"
+keystore = "deploy/keystore.json"
 
 [world]
 name = "Dope Wars"
@@ -25,6 +28,9 @@ skip_contracts = ["dopewars-vrf_provider_mock"]
     "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f", # vrf address
     "0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface",  # treasury: click_save controller address
 ]
+"dopwars-game" = [
+    "0x02CA2BAE77044D5646F0fc7Aaa0eDb75BDfA17a5F62635E8fddf930B26D4E764" #test address(jinius controller address)
+]
 
 [writers]
 "dopewars" = [
@@ -32,6 +38,7 @@ skip_contracts = ["dopewars-vrf_provider_mock"]
     "dopewars-laundromat",
     "dopewars-game",
     "dopewars-decide",
+    "dopewars-travel",
     "dopewars-ryo",
     "dopewars-paper_mock",
 ]
