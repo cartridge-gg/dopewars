@@ -145,9 +145,7 @@ mod game {
     #[abi(embed_v0)]
     impl SettingsImpl of ISettings<ContractState> {
         fn setting_exists(self: @ContractState, settings_id: u32) -> bool {
-            let world: WorldStorage = self.world(@DEFAULT_NS());
-            let settings: GameConfig = world.read_model(settings_id);
-            settings.health > 0
+            settings_id == 0
         }
     }
 
