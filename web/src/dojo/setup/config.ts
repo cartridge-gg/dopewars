@@ -126,7 +126,7 @@ const snMainnet: DojoChainConfig = {
   toriiUrl: "https://api.cartridge.gg/x/ryomainnet/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryomainnet/torii/graphql/ws",
   manifest: manifestMainnet,
-  slot: "ryomainnet",
+  slot: "arcade-dopewars",
   predeployedAccounts: [],
   paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
