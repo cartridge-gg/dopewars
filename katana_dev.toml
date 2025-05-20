@@ -1,6 +1,5 @@
 block_time = 2000
 
-
 [server]
 http_addr = "0.0.0.0"
 http_port = 5050
@@ -23,8 +22,6 @@ env.invoke_max_steps = 4200000000
 [cartridge]
 controllers = true
 paymaster = true
-
-
 
 
 [gpo]

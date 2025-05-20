@@ -27,7 +27,7 @@ trait IGameActions<T> {
     );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
-    fn decide(self: @T, game_id: u32, action: EncounterActions);
+    // fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
 
 #[dojo::contract]
@@ -62,7 +62,9 @@ mod game {
         store::{Store, StoreImpl, StoreTrait},
         systems::{
             game::EncounterActions,
-            helpers::{game_loop, shopping, trading, traveling, traveling::EncounterOutcomes},
+            helpers::{game_loop, shopping, trading
+                // , traveling, traveling::EncounterOutcomes
+            },
         },
         utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
     };
@@ -263,37 +265,37 @@ mod game {
             }
         }
 
-        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+        // fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
+        //     let mut store = StoreImpl::new(self.world(@"dopewars"));
 
-            let ryo_addresses = store.ryo_addresses();
-            let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
+        //     let ryo_addresses = store.ryo_addresses();
+        //     let player_id = get_caller_address();
+        //     let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
+        //         .consume_random(Source::Nonce(player_id));
 
-            //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+        //     //
+        //     let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
 
-            // check player status
-            assert(game_store.player.can_decide(), 'player cannot decide');
+        //     // check player status
+        //     assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new(random);
-            let mut season_settings = store.season_settings(game_store.game.season_version);
+        //     let mut randomizer = RandomImpl::new(random);
+        //     let mut season_settings = store.season_settings(game_store.game.season_version);
 
-            // // resolve decision
-            let is_dead = traveling::decide(
-                ref game_store, ref season_settings, ref randomizer, action,
-            );
+        //     // // resolve decision
+        //     let is_dead = traveling::decide(
+        //         ref game_store, ref season_settings, ref randomizer, action,
+        //     );
 
-            // check if dead
-            if is_dead {
-                // save & gameover RIP
-                game_loop::on_game_over(ref game_store, ref store);
-            } else {
-                // on_turn_end & save
-                game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-            };
-        }
+        //     // check if dead
+        //     if is_dead {
+        //         // save & gameover RIP
+        //         game_loop::on_game_over(ref game_store, ref store);
+        //     } else {
+        //         // on_turn_end & save
+        //         game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
+        //     };
+        // }
     }
 
 

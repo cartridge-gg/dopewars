@@ -86,12 +86,13 @@ export const useSystems = (): SystemsInterface => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const { gameAddress, laundromatAddress, dopeLootClaimAddress } = useMemo(() => {
+  const { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress } = useMemo(() => {
     const gameAddress = getContractByName(dojoProvider.manifest, DW_NS, "game").address;
+    const decideAddress = getContractByName(dojoProvider.manifest, DW_NS, "decide").address;
     const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
     const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dojo", "DopeLootClaim").address;
 
-    return { gameAddress, laundromatAddress, dopeLootClaimAddress };
+    return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress };
   }, [dojoProvider]);
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
@@ -260,7 +261,7 @@ export const useSystems = (): SystemsInterface => {
   const decide = useCallback(
     async (gameId: string, action: EncountersAction) => {
       const call = {
-        contractAddress: gameAddress,
+        contractAddress: decideAddress,
         entrypoint: "decide",
         calldata: CallData.compile([gameId, action]),
       };

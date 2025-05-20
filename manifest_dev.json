@@ -2000,8 +2000,229 @@
       ]
     },
     {
-      "address": "0x3906c449523adf37679ca103fbf39251b9ac66da64b03b4ef0387f1ad461003",
-      "class_hash": "0x20c3cf662b55702b22367a085cac803fe374274f0e5d1a364237092403639cd",
+      "address": "0x42135cb7adfbf18e2917d4a922e3341130e0b6c5c7cf41e6d5bd73322743bb2",
+      "class_hash": "0x61dc37f9deff6460b0e484862e2ee4089299bc088e95f78f04064b582a2d3a7",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "decide__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": []
+        },
+        {
+          "type": "impl",
+          "name": "decide__DeployedContractImpl",
+          "interface_name": "dojo::meta::interface::IDeployedResource"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::meta::interface::IDeployedResource",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "DecideImpl",
+          "interface_name": "rollyourown::systems::decide::IDecide"
+        },
+        {
+          "type": "enum",
+          "name": "rollyourown::systems::game::EncounterActions",
+          "variants": [
+            {
+              "name": "Run",
+              "type": "()"
+            },
+            {
+              "name": "Pay",
+              "type": "()"
+            },
+            {
+              "name": "Fight",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::decide::IDecide",
+          "items": [
+            {
+              "type": "function",
+              "name": "decide",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "action",
+                  "type": "rollyourown::systems::game::EncounterActions"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "rollyourown::systems::decide::decide::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "dopewars-decide",
+      "selector": "0xa286d28f9a4875e2d134c7492c16a0bad0faed58844c2bb3cbb7a78064181f",
+      "systems": [
+        "upgrade"
+      ]
+    },
+    {
+      "address": "0x66d8b0803fa70075b45b52ac9f97bbb1001ab0e8cf64791ec45a8611f669ccb",
+      "class_hash": "0x46ae02eb2ccb1e300caf33c0e63fc3017d31e4567280a28b04212e3e0736aa",
       "abi": [
         {
           "type": "impl",
@@ -2255,24 +2476,6 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "rollyourown::systems::game::EncounterActions",
-          "variants": [
-            {
-              "name": "Run",
-              "type": "()"
-            },
-            {
-              "name": "Pay",
-              "type": "()"
-            },
-            {
-              "name": "Fight",
-              "type": "()"
-            }
-          ]
-        },
-        {
           "type": "interface",
           "name": "rollyourown::systems::game::IGameActions",
           "items": [
@@ -2331,22 +2534,6 @@
                 {
                   "name": "actions",
                   "type": "core::array::Span::<rollyourown::systems::game::Actions>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "decide",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "action",
-                  "type": "rollyourown::systems::game::EncounterActions"
                 }
               ],
               "outputs": [],

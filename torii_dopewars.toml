@@ -1,7 +1,7 @@
 
 rpc = "https://api.cartridge.gg/x/dopewars/katana"
 
-world_address = "0x0685b5da23a2ca5714afb4304797f08102d4232cf1d5afdde1f0a8cc1b0a5c6e"
+world_address = "0x05d133456420b786bca33391f7b472b4f7af4fdd9d507ef50d85cc5cc19f8e56"
 
 [server]
 http_cors_origins = ["*"]
@@ -13,9 +13,9 @@ polling_interval = 1000
 
 max_concurrent_tasks = 2
 contracts = [
-    "ERC721:0x061750bde692dc101abb345ed5d66fee9a1867efcef806b80785241c14d83d78", # dope_loot
-    "ERC721:0x0658a1ce68ae9ac5e5241b093d528cccc1832f0a5c24bfe4cadcb403869bd394", # dope_hustlers
-    "ERC1155:0x075d3f8184f68f7de9ee82c9d8c407290964112af0f41248357c79bd23e1d460", # dope_gear
+    "ERC721:0x02cb1344b83c1b338d1c24c7656cd07fa8d2fd3f639ed2b1c2a03d8c3367d723", # dope_loot
+    "ERC721:0x003248dd97a865dd38c1d8a5a424580516c36900821d5f0f1e2110d2aa40029a", # dope_hustlers
+    "ERC1155:0x036d86b923c9814c59d7228340936f705ed5a53158832a91ddf6f4b3c319e204", # dope_gear
 ]
 
 [erc]
@@ -24,6 +24,7 @@ max_metadata_tasks = 2
 [sql]
 historical = [
     "dopewars-GameCreated",
+    "dopewars-GameWithTokenIdCreated",
     "dopewars-Traveled",
     "dopewars-GameOver",
     "dopewars-TradeDrug",

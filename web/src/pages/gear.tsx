@@ -48,7 +48,7 @@ export default function Gear() {
       }
     >
       <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-        Items
+        Dope Gear
       </Heading>
 
       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start">
@@ -56,8 +56,8 @@ export default function Gear() {
           <Text textStyle="subheading" fontSize={["9px", "11px"]}>
             Weapons
           </Text>
-          {items.weapons.map((i) => {
-            return <Item componentValue={i} />;
+          {items.weapons.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
           })}
         </VStack>
 
@@ -65,8 +65,8 @@ export default function Gear() {
           <Text textStyle="subheading" fontSize={["9px", "11px"]}>
             Clothes
           </Text>
-          {items.clothes.map((i) => {
-            return <Item componentValue={i} />;
+          {items.clothes.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
           })}
         </VStack>
 
@@ -74,8 +74,8 @@ export default function Gear() {
           <Text textStyle="subheading" fontSize={["9px", "11px"]}>
             Shoes
           </Text>
-          {items.foot.map((i) => {
-            return <Item componentValue={i} />;
+          {items.foot.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
           })}
         </VStack>
 
@@ -83,8 +83,8 @@ export default function Gear() {
           <Text textStyle="subheading" fontSize={["9px", "11px"]}>
             Vehicles
           </Text>
-          {items.vehicles.map((i) => {
-            return <Item componentValue={i} />;
+          {items.vehicles.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
           })}
         </VStack>
       </HStack>
@@ -118,7 +118,7 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
       <VStack alignItems="flex-start" gap={0}>
         {itemFull.levels.map((i, idx) => {
           return (
-            <HStack justifyContent="flex-start" w="full">
+            <HStack justifyContent="flex-start" w="full" key={idx}>
               <Text w="40px"> LVL {idx}</Text>
 
               <Text w="70px" textAlign="right">
@@ -147,11 +147,12 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
     );
   }, [itemFull]);
 
-
   return (
     <HStack w="full" gap={3} borderBottom="solid 1px" borderBottomColor="neon.700" mb={1} pb={1} fontSize={"xs"}>
       <Layer rects={componentValue.resources[0]} width="48px" height="48px" crop={true} />
-      <Text w="130px" ml={1}>{itemFull.name}</Text>
+      <Text w="130px" ml={1}>
+        {itemFull.name}
+      </Text>
       <ChakraTooltip label={desc} color="neon.400">
         <span>
           <TierIndicator tier={itemFull.tier} />

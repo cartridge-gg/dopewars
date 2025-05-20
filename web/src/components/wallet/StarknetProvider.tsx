@@ -89,6 +89,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   // console.log("cartridgeConnector", selectedChain.name);
   const paperAddress = selectedChain.paperAddress;
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
+  const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
   const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dojo", "DopeLootClaim").address;
 
@@ -104,9 +105,13 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [
           { entrypoint: "create_game" },
           { entrypoint: "travel" },
-          { entrypoint: "decide" },
           { entrypoint: "end_game" },
           { entrypoint: "travel" },
+        ],
+      },
+      [decideAddress]: {
+        methods: [
+          { entrypoint: "decide" },
         ],
       },
       [laundromatAddress]: {
