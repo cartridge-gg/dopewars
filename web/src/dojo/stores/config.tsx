@@ -228,7 +228,7 @@ export class ConfigStoreClass {
       ?.edges as DopewarsItemTierConfigEdge[];
     const dopewarsItemsTierConfigs = dopewarsItemsTierConfigsEdges.map((i) => i.node as DopewarsItemTierConfig);
 
-    const componentValuesEdges = data.dojoComponentValueEventModels?.edges as ComponentValueEventEdge[];
+    const componentValuesEdges = data.dopeComponentValueEventModels?.edges as ComponentValueEventEdge[];
     const componentValues = componentValuesEdges.map((i) => {
       const node = i.node as ComponentValueEvent;
       return {

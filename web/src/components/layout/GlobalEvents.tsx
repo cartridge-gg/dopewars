@@ -63,7 +63,7 @@ export const GlobalEvents = () => {
                   "dopewars-NewSeason",
                   "dopewars-NewHighScore",
                   "dopewars-GameOver",
-                  "dojo-DopeLootReleasedEvent",
+                  "dope-DopeLootReleasedEvent",
                 ],
                 pattern_matching: "VariableLen",
               },
@@ -171,8 +171,8 @@ export const GlobalEvents = () => {
       }
     }
 
-    if (entity.models["dojo-DopeLootReleasedEvent"]) {
-      const released = parseStruct(entity.models["dojo-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
+    if (entity.models["dope-DopeLootReleasedEvent"]) {
+      const released = parseStruct(entity.models["dope-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
       const id = Number(released.id);
       toast({
         icon: () => <HustlerAvatarIcon gameId={0} hustlerId={0 as Hustlers} tokenIdType={"LootId"} tokenId={id} />,

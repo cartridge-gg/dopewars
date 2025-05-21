@@ -90,7 +90,7 @@ export const useSystems = (): SystemsInterface => {
     const gameAddress = getContractByName(dojoProvider.manifest, DW_NS, "game").address;
     const decideAddress = getContractByName(dojoProvider.manifest, DW_NS, "decide").address;
     const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
-    const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dojo", "DopeLootClaim").address;
+    const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dope", "DopeLootClaim").address;
 
     return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress };
   }, [dojoProvider]);

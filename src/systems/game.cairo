@@ -104,7 +104,7 @@ mod game {
                 season_manager.on_game_start();
             }
 
-            let mut dope_world = self.world(@"dojo");
+            let mut dope_world = self.world(@"dope");
 
             let mut game_with_token_id_created = GameWithTokenIdCreated {
                 game_id,

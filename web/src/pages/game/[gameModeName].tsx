@@ -55,8 +55,8 @@ const New = observer(() => {
 
   const addresses = useMemo(() => {
     return [
-      getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address,
-      getContractByName(selectedChain.manifest, "dojo", "DopeHustlers")!.address,
+      getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
+      getContractByName(selectedChain.manifest, "dope", "DopeHustlers")!.address,
     ];
   }, [selectedChain.manifest]);
 
@@ -81,11 +81,11 @@ const New = observer(() => {
         return freeToPlay;
       case TokenIdType.LootId:
         return (accountTokens || []).filter(
-          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dojo", "DopeLoot")!.address,
+          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
         );
       case TokenIdType.HustlerId:
         return (accountTokens || []).filter(
-          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dojo", "DopeHustlers")!.address,
+          (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeHustlers")!.address,
         );
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);

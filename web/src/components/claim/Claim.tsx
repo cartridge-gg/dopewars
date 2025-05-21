@@ -26,7 +26,7 @@ export default function ClaimComponent() {
     clients: { toriiClient },
     contracts: { getDojoContract },
   } = useDojoContext();
-  const dopeLootClaimContract = getDojoContract("dojo-DopeLootClaim");
+  const dopeLootClaimContract = getDojoContract("dope-DopeLootClaim");
 
   const { account } = useAccount();
 
@@ -76,11 +76,11 @@ export default function ClaimComponent() {
         clause: {
           Keys: {
             keys: [ethAccount.address],
-            models: ["dojo-DopeLootClaimedEvent"],
+            models: ["dope-DopeLootClaimedEvent"],
             pattern_matching: "FixedLen",
           },
         },
-        models: ["dojo-DopeLootClaimedEvent"],
+        models: ["dope-DopeLootClaimedEvent"],
         historical: false,
         no_hashed_keys: true,
         pagination: {

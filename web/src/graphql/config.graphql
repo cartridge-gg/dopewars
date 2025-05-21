@@ -127,7 +127,7 @@ query Config {
     }
   }
 
-  dojoComponentValueEventModels(where: { collection_idEQ: "0x446f706547656172" }, limit: 1000) {
+  dopeComponentValueEventModels(where: { collection_idEQ: "0x446f706547656172" }, limit: 1000) {
     edges {
       node {
         collection_id

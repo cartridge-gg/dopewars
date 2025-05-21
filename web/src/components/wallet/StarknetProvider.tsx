@@ -91,7 +91,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
-  const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dojo", "DopeLootClaim").address;
+  const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dope", "DopeLootClaim").address;
 
   const policies: SessionPolicies = {
     contracts: {
