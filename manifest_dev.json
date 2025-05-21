@@ -2932,8 +2932,8 @@
       ]
     },
     {
-      "address": "0x18171d88ace034fa9210b29c038bc65f94d047ebd4b455505d82eeb83d1bee0",
-      "class_hash": "0x10307b37a2f0e57ea55ad11d0a4cd9787bb577476ef4ce837a2608b84cc5126",
+      "address": "0x6f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78",
+      "class_hash": "0x2e5fa64ff4273c952635dab0438012fb0388edfef730f49a8eff18551eeefd0",
       "abi": [
         {
           "type": "impl",
@@ -2991,6 +2991,50 @@
           "inputs": [],
           "outputs": [],
           "state_mutability": "external"
+        },
+        {
+          "type": "impl",
+          "name": "ERC20MetadataImpl",
+          "interface_name": "openzeppelin_token::erc20::interface::IERC20Metadata"
+        },
+        {
+          "type": "interface",
+          "name": "openzeppelin_token::erc20::interface::IERC20Metadata",
+          "items": [
+            {
+              "type": "function",
+              "name": "name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "symbol",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "decimals",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u8"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
         },
         {
           "type": "impl",

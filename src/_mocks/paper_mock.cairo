@@ -94,6 +94,21 @@ mod paper_mock {
         self.faucetTo(laundromat_address);
     }
 
+    #[abi(embed_v0)]
+    impl ERC20MetadataImpl of IERC20Metadata<ContractState> {
+        fn name(self: @ContractState) -> ByteArray {
+            self.erc20.name()
+        }
+
+        fn symbol(self: @ContractState) -> ByteArray {
+            self.erc20.symbol()
+        }
+
+        fn decimals(self: @ContractState) -> u8 {
+            18
+        }
+    }
+
     //
     // Faucet
     //
