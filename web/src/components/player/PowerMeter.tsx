@@ -8,9 +8,18 @@ interface PowerMeterProps {
   maxPower: number;
   displayedPower?: number;
   bg?: string;
+  onSelect?: Function;
 }
 
-export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower, bg = "neon.800" }: PowerMeterProps) => {
+export const PowerMeter = ({
+  text,
+  basePower,
+  power,
+  maxPower,
+  displayedPower,
+  onSelect,
+  bg = "neon.800",
+}: PowerMeterProps) => {
   return (
     <HStack p={2} bg={bg} clipPath={`polygon(${generatePixelBorderPath(4, 2)})`} alignItems="center" spacing={3}>
       {text && text !== "" && (
@@ -27,14 +36,37 @@ export const PowerMeter = ({ text, basePower, power, maxPower, displayedPower, b
       )}
       <HStack spacing={1.5} flexGrow={1}>
         {Array.from({ length: basePower }).map((_, index) => (
-          <Box key={index} h={4} w={3} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="neon.400" />
+          <Box
+            key={index}
+            h={4}
+            w={3}
+            clipPath={`polygon(${generatePixelBorderPath(2, 2)})`}
+            bg="neon.400"
+            onClick={() => onSelect && onSelect(index)}
+          >
+            {" "}
+          </Box>
         ))}
         {power !== undefined &&
           Array.from({ length: power - basePower }).map((_, index) => (
-            <Box key={index} h={4} w={3} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="yellow.400" />
+            <Box
+              key={index}
+              h={4}
+              w={3}
+              clipPath={`polygon(${generatePixelBorderPath(2, 2)})`}
+              bg="yellow.400"
+              onClick={() => onSelect && onSelect(index + basePower)}
+            ></Box>
           ))}
         {Array.from({ length: maxPower - (power ? Math.max(basePower, power) : basePower) }).map((_, index) => (
-          <Box key={index} h={4} w={3} clipPath={`polygon(${generatePixelBorderPath(2, 2)})`} bg="neon.600" />
+          <Box
+            key={index}
+            h={4}
+            w={3}
+            clipPath={`polygon(${generatePixelBorderPath(2, 2)})`}
+            bg="neon.600"
+            onClick={() => onSelect && onSelect(index + ((power || 0) - basePower))}
+          ></Box>
         ))}
         {displayedPower !== undefined && displayedPower > maxPower && (
           <Box

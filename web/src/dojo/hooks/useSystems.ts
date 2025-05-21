@@ -22,6 +22,7 @@ interface SystemsInterface {
     playerName: string,
     tokenIdType: number,
     tokenId: number,
+    multiplier: number,
   ) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
@@ -168,8 +169,8 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, hustlerId: number, playerName: string, tokenIdType: number, tokenId: number) => {
-      const paperFee = BigInt(config?.ryo.paper_fee) * ETHER;
+    async (gameMode: GameMode, hustlerId: number, playerName: string, tokenIdType: number, tokenId: number, multiplier: number) => {
+      const paperFee = BigInt(config?.ryo.paper_fee * multiplier) * ETHER;
       const paperAddress = selectedChain.paperAddress;
 
       //
@@ -188,6 +189,7 @@ export const useSystems = (): SystemsInterface => {
           shortString.encodeShortString(playerName),
           tokenIdType,
           tokenId,
+          // multiplier
         ]),
       };
 

@@ -1,7 +1,7 @@
 import { Button, Input } from "@/components/common";
 import { Arrow, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
-import { TierIndicator } from "@/components/player";
+import { PowerMeter, TierIndicator } from "@/components/player";
 import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
 import { gameModeFromName, gameModeFromNameKeys, itemSlotToDopeLootSlotId } from "@/dojo/helpers";
 import {
@@ -93,6 +93,7 @@ const New = observer(() => {
   const inputRef = useRef<null | HTMLDivElement>(null);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
+  const [multiplier, setMultipler] = useState(1);
   const isMobile = IsMobile();
 
   const selectedToken = useMemo(() => {
@@ -231,7 +232,7 @@ const New = observer(() => {
       const tokenIdType = selectedTokenIdType;
 
       const hustlerId = 420;
-      await createGame(gameMode, hustlerId, name, tokenIdType, selectedLootTokenId);
+      await createGame(gameMode, hustlerId, name, tokenIdType, selectedLootTokenId, multiplier);
     } catch (e) {
       console.log(e);
     }
@@ -507,8 +508,9 @@ const New = observer(() => {
                   </Tooltip>
                 )}
                 <Text>
-                  {selectedTokenIdType === TokenIdType.HustlerId ? `${selectedToken.metadata.name}`   : `DOPE #${Number(selectedToken?.token_id)}`} 
-                  
+                  {selectedTokenIdType === TokenIdType.HustlerId
+                    ? `${selectedToken.metadata.name}`
+                    : `DOPE #${Number(selectedToken?.token_id)}`}
                 </Text>
               </HStack>
             ) : (
@@ -518,13 +520,34 @@ const New = observer(() => {
 
           {
             /*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
-              <Card p={3}>
+              <Card p={3} w="300px">
                 <HStack gap={6} fontSize="14px">
-                  <VStack gap={0} alignItems="center" minW="240px">
-                    <HStack w="full" justifyContent="space-between">
+                  <VStack gap={0} alignItems="center" minW="240px" w="full">
+                    {gameMode == GameMode.Ranked && (
+                      <HStack w="full" justifyContent={"space-between"}>
+                        <Text color="yellow.400">STAKE x{multiplier}</Text>
+                        <PowerMeter
+                          basePower={0}
+                          maxPower={10}
+                          power={multiplier}
+                          onSelect={(i: number) => {
+                            setMultipler(i + 1);
+                          }}
+                        />
+                        <Tooltip color="yellow.400" title="Stake" label="More entry fee, more rewards." placement="top">
+                          <span>
+                            <Warning color="yellow.400" height={"16px"} width={"16px"} />
+                          </span>
+                        </Tooltip>
+                      </HStack>
+                    )}
+
+                    <HStack w="full" justifyContent="space-between" mt={1}>
                       <Text color="yellow.400">ENTRY FEE</Text>
                       {gameMode == GameMode.Ranked && (
-                        <Text color="yellow.400">{formatCash(season.paper_fee).replace("$", "")} PAPER</Text>
+                        <Text color="yellow.400">
+                          {formatCash(season.paper_fee * multiplier).replace("$", "")} PAPER
+                        </Text>
                       )}
                       {gameMode != GameMode.Ranked && (
                         <Text color="yellow.400">
