@@ -22,10 +22,12 @@ import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
 import { useRouter } from "next/router";
 import { DopeProvider } from "@dope/dope-sdk/store";
+import { DojoContractResult, useDojoContract } from "../hooks";
 
 export interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
+  contracts: DojoContractResult;
   masterAccount?: AccountInterface;
   burnerManager?: BurnerManager;
   isPrefundingPaper: boolean;
@@ -74,6 +76,8 @@ export const DojoContextProvider = observer(
     const { selectedChain, setSelectedChain, isKatana, chains } = useDojoChains(dojoContextConfig, intialChain);
 
     const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } = useDojoClients(selectedChain);
+
+    const { getDojoContract, getDojoContractManifest, getContractTagByAddress } = useDojoContract(selectedChain);
 
     const masterAccount = useMemo(() => {
       if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
@@ -209,6 +213,9 @@ export const DojoContextProvider = observer(
             graphqlClient,
             rpcProvider,
             toriiClient,
+          },
+          contracts: {
+            getDojoContract, getDojoContractManifest, getContractTagByAddress
           },
           burnerManager,
           isPrefundingPaper,

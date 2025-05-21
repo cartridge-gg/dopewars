@@ -110,15 +110,14 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         ],
       },
       [decideAddress]: {
-        methods: [
-          { entrypoint: "decide" },
-        ],
+        methods: [{ entrypoint: "decide" }],
       },
       [laundromatAddress]: {
         methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
       },
       [dopeLootClaimAddress]: {
-        methods: [{ entrypoint: "release" }],
+        methods: [{ entrypoint: "release" }, { entrypoint: "claim" }],
+       
       },
     },
   };

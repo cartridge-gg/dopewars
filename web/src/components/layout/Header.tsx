@@ -3,7 +3,7 @@ import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Box, Divider, Flex, HStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
@@ -13,11 +13,12 @@ import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { ConnectButton } from "../wallet/ConnectButton";
 
 import DrawerMenu from "./DrawerMenu";
+import { Cigarette, ExternalLink } from "../icons";
 
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { gameId } = useRouterContext();
+  const { router, gameId } = useRouterContext();
 
   const { account } = useAccount();
 
@@ -43,6 +44,11 @@ export const Header = observer(() => {
     >
       <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
+        {!gameId && !router.route.includes("/claim") && (
+          <Button variant="pixelated" h={"48px"} fontSize="14px" onClick={() => router.push("/claim")} mr={6}>
+           <Cigarette/> Migration
+          </Button>
+        )}
       </HStack>
 
       {game /*|| router.asPath.includes("logs")*/ && (

@@ -51,7 +51,7 @@ export default function Gear() {
         Dope Gear
       </Heading>
 
-      <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start">
+      <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" mt={9}>
         <VStack justifyContent="flex-start">
           <Text textStyle="subheading" fontSize={["9px", "11px"]}>
             Weapons
