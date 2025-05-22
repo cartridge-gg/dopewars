@@ -84,7 +84,7 @@ export const HustlerProfile = observer(() => {
         </Box>
 
         {!gameWithTokenId && hustlerStats && (
-          <Box alignItems="center" h={["190px", "300px"]} w="150px" position="relative" zIndex={99}>
+          <HStack alignItems="center" h={["190px", "300px"]} w="150px" position="relative" zIndex={99}>
             <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h={["190px", "300px"]} />
             <VStack gap={3}>
               <PowerMeter
@@ -119,7 +119,7 @@ export const HustlerProfile = observer(() => {
                 text="INV"
               />
             </VStack>
-          </Box>
+          </HStack>
         )}
       </HStack>
 

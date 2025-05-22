@@ -1,22 +1,22 @@
 use dojo::event::EventStorage;
-use dojo::world::{WorldStorage, IWorldDispatcher};
+use dojo::world::{IWorldDispatcher, WorldStorage};
 
 use rollyourown::{
     config::{
         ryo::{RyoConfig, RyoConfigTrait}, ryo_address::{RyoAddress},
-        settings::{SeasonSettingsImpl, SeasonSettings, SeasonSettingsTrait}
+        settings::{SeasonSettings, SeasonSettingsImpl, SeasonSettingsTrait},
+    },
+    constants::{ETHER}, events::NewHighScore,
+    interfaces::{
+        chips::{IChips, IChipsDispatcher, IChipsDispatcherTrait},
+        paper::{IPaperDispatcher, IPaperDispatcherTrait},
     },
     models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
-    interfaces::{
-        paper::{IPaperDispatcher, IPaperDispatcherTrait},
-        chips::{IChips, IChipsDispatcher, IChipsDispatcherTrait}
-    },
-    constants::{ETHER},
+    store::{Store, StoreImpl, StoreTrait},
     utils::{
-        math::{MathImpl, MathTrait}, random::{Random, RandomTrait},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl}
+        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait},
+        random::{Random, RandomTrait},
     },
-    store::{Store, StoreImpl, StoreTrait}, events::NewHighScore
 };
 use starknet::{get_caller_address, get_contract_address};
 
@@ -30,7 +30,7 @@ trait SeasonManagerTrait {
     fn get_current_version(ref self: SeasonManager) -> u16;
     fn get_next_version_timestamp(ref self: SeasonManager) -> u64;
     fn new_season(ref self: SeasonManager, ref randomizer: Random, version: u16);
-    fn on_game_start(ref self: SeasonManager);
+    fn on_game_start(ref self: SeasonManager, multiplier: u8);
     fn on_register_score(ref self: SeasonManager, ref game_store: GameStore) -> bool;
 }
 
@@ -64,7 +64,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         store.save_game_config(@game_config);
     }
 
-    fn on_game_start(ref self: SeasonManager) {
+    fn on_game_start(ref self: SeasonManager, multiplier: u8) {
         let mut store = self.store;
         let mut ryo_config = store.ryo_config();
 
@@ -76,8 +76,11 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         // check if enought time for a game before season end
         assert(season.can_create_game(), 'not enought time for a game');
 
+        // check multiplier
+        assert(multiplier > 0 && multiplier <= 10, 'invalid multiplier');
+
         // get paper_fee
-        let paper_fee: u32 = season.paper_fee.into();
+        let paper_fee: u32 = season.paper_fee.into() * multiplier.into();
         let paper_fee_eth: u256 = paper_fee.into() * ETHER;
 
         // calc treasury share
@@ -131,7 +134,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
                         cash: game_store.player.cash,
                         health: game_store.player.health,
                         reputation: game_store.player.reputation,
-                    }
+                    },
                 );
 
             true

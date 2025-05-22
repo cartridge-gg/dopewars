@@ -82,8 +82,8 @@ pub mod packing {
 }
 
 pub mod systems {
-    pub mod game;
     pub mod decide;
+    pub mod game;
     pub mod laundromat;
     pub mod ryo;
 
@@ -95,7 +95,7 @@ pub mod systems {
         pub mod traveling;
     }
     // pub mod slot;
-// pub mod devtools;
+    pub mod devtools;
 }
 
 pub mod tokens {
@@ -115,10 +115,10 @@ pub mod utils {
 
 pub mod interfaces {
     pub mod chips;
-    pub mod paper;
-    pub mod erc721;
     pub mod dope_hustlers;
     pub mod dope_loot;
+    pub mod erc721;
+    pub mod paper;
 }
 
 pub mod _mocks {

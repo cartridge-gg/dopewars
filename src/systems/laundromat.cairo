@@ -19,23 +19,23 @@ mod laundromat {
     use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
 
     use rollyourown::{
-        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},},
-        models::{season::{Season, SeasonImpl, SeasonTrait}, game::{Game, GameImpl, GameTrait}},
+        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress}}, constants::{ETHER},
+        events::{Claimed, NewSeason},
         helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        store::{Store, StoreImpl, StoreTrait},
+        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
+        models::{game::{Game, GameImpl, GameTrait}, season::{Season, SeasonImpl, SeasonTrait}},
+        packing::game_store::{GameStore, GameStoreImpl}, store::{Store, StoreImpl, StoreTrait},
         utils::{
-            sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl},
+            payout_structure::{get_payed_count, get_payout}, random::{RandomImpl},
+            sorted_list::{SortedListImpl, SortedListItem, SortedListTrait},
         },
-        packing::game_store::{GameStore, GameStoreImpl}, events::{NewSeason, Claimed}
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
         fn register_score(
-            self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress
+            self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress,
         ) {
             let world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
@@ -94,7 +94,9 @@ mod laundromat {
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
                 .consume_random(Source::Nonce(player_id));
 
-            let process_batch_size = 10; // around 276k steps / 10
+            // around 276k steps / 10
+            // almost free now, compute all in one
+            let process_batch_size = 100;
 
             let season = store.season(season_version);
 
@@ -109,10 +111,12 @@ mod laundromat {
             let list_id = season_version.into();
             let mut sorted_list = SortedListImpl::get(@store, list_id);
 
-            // set process_max_size && lock list
+            // set process_max_size & total_stake_mul then lock list
             if !sorted_list.locked {
                 let process_max_size = get_payed_count(sorted_list.size);
-                sorted_list.lock(ref store, process_max_size);
+                let stake_adj_paper_balance = sorted_list
+                    .calc_stake_adj_paper_balance::<Game>(ref store, process_max_size);
+                sorted_list.lock(ref store, process_max_size, stake_adj_paper_balance);
             }
 
             // if not process, process batch_size items
@@ -143,8 +147,8 @@ mod laundromat {
                         .emit_event(
                             @NewSeason {
                                 key: ryo_config.season_version,
-                                season_version: ryo_config.season_version
-                            }
+                                season_version: ryo_config.season_version,
+                            },
                         );
                 } else {
                     assert(false, 'launder already ended');
@@ -164,14 +168,14 @@ mod laundromat {
             bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
         }
 
-        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>,) {
+        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
             let world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
 
             let mut game_ids = game_ids;
 
-            // check max batch size
-            assert(game_ids.len() <= 10, 'too much game_ids');
+            // // check max batch size
+            // assert(game_ids.len() <= 10, 'too much game_ids');
 
             let mut total_claimable = 0;
 
@@ -207,8 +211,8 @@ mod laundromat {
                             player_id,
                             season_version: game.season_version,
                             paper: game.claimable,
-                            rank: game.position
-                        }
+                            rank: game.position,
+                        },
                     );
 
                 if game.position == 1 {

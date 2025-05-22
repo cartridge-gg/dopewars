@@ -24,6 +24,7 @@ LEFT
 JOIN "dopewars-GameWithTokenId" as gt on g.game_id = gt.game_id
 AND g.player_id = gt.player_id
 WHERE g.player_id = "${addAddressPadding(playerId)}" AND claimed = false AND claimable > 0
+ORDER BY position ASC
 LIMIT 1000;`;
 
 export const useClaimable = (playerId: string) => {

@@ -14,7 +14,6 @@ import { Glock } from "@/components/icons/items";
 import { gameModeName } from "@/dojo/helpers";
 
 export default function Home() {
-  
   const { router, isLocalhost } = useRouterContext();
   const { account } = useAccount();
   const { uiStore } = useDojoContext();
@@ -111,10 +110,10 @@ export default function Home() {
                   <Flipflop /> Play guest
                 </Button>
 
-                <Warning color="yellow.400" />
-                <VStack flex="1" h="full">
-                  <Text>Waiting for season end ...</Text>
-                </VStack>
+                <HStack flex="1" h="full">
+                  <Warning color="yellow.400" />
+                  <Text>Waiting for season end</Text>
+                </HStack>
               </HStack>
             )}
 

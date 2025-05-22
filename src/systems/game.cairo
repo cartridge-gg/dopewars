@@ -23,7 +23,12 @@ pub enum EncounterActions {
 #[starknet::interface]
 trait IGameActions<T> {
     fn create_game(
-        self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252, token_id: TokenId,
+        self: @T,
+        game_mode: GameMode,
+        hustler_id: u16,
+        player_name: felt252,
+        multiplier: u8,
+        token_id: TokenId,
     );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
@@ -60,12 +65,8 @@ mod game {
         },
         packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
         store::{Store, StoreImpl, StoreTrait},
-        systems::{
-            game::EncounterActions,
-            helpers::{game_loop, shopping, trading
-                // , traveling, traveling::EncounterOutcomes
-            },
-        },
+        systems::{game::EncounterActions, helpers::{game_loop, shopping, trading// , traveling, traveling::EncounterOutcomes
+        }},
         utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
@@ -77,6 +78,7 @@ mod game {
             game_mode: GameMode,
             hustler_id: u16,
             player_name: felt252,
+            multiplier: u8,
             token_id: TokenId,
         ) {
             self.assert_not_paused();
@@ -100,8 +102,8 @@ mod game {
 
             // if RANKED
             if game_mode == GameMode::Ranked {
-                // pay paper_fee
-                season_manager.on_game_start();
+                // pay paper_fee * multiplier
+                season_manager.on_game_start(multiplier);
             }
 
             let mut dope_world = self.world(@"dope");
@@ -178,7 +180,7 @@ mod game {
             // create game
             let mut game_config = store.game_config(season_version);
             let mut game = GameImpl::new(
-                game_id, player_id, season_version, game_mode, player_name, hustler_id,
+                game_id, player_id, season_version, game_mode, player_name, hustler_id, multiplier,
             );
 
             // save Game
@@ -265,37 +267,6 @@ mod game {
             }
         }
 
-        // fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
-        //     let mut store = StoreImpl::new(self.world(@"dopewars"));
-
-        //     let ryo_addresses = store.ryo_addresses();
-        //     let player_id = get_caller_address();
-        //     let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-        //         .consume_random(Source::Nonce(player_id));
-
-        //     //
-        //     let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
-
-        //     // check player status
-        //     assert(game_store.player.can_decide(), 'player cannot decide');
-
-        //     let mut randomizer = RandomImpl::new(random);
-        //     let mut season_settings = store.season_settings(game_store.game.season_version);
-
-        //     // // resolve decision
-        //     let is_dead = traveling::decide(
-        //         ref game_store, ref season_settings, ref randomizer, action,
-        //     );
-
-        //     // check if dead
-        //     if is_dead {
-        //         // save & gameover RIP
-        //         game_loop::on_game_over(ref game_store, ref store);
-        //     } else {
-        //         // on_turn_end & save
-        //         game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-        //     };
-        // }
     }
 
 

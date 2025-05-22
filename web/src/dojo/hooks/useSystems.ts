@@ -187,9 +187,9 @@ export const useSystems = (): SystemsInterface => {
           gameMode,
           hustlerId,
           shortString.encodeShortString(playerName),
+          multiplier,
           tokenIdType,
           tokenId,
-          // multiplier
         ]),
       };
 

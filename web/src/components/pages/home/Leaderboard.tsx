@@ -190,7 +190,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                           cursor="pointer"
                           onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
                         >
-                          {displayName}
+                          {displayName} <span style={{ fontSize: "9px" }}>(x{game.multiplier})</span>
                         </Text>
                       </HStack>
 
@@ -211,7 +211,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         </Text>
                       )}
 
-                      {game.season_version === config.ryo.season_version && index + 1 < payedCount && (
+                      {game.season_version === config.ryo.season_version && index + 1 <= payedCount && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
                           <Trophy opacity={0.5} />
                         </Text>

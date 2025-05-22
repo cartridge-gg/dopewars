@@ -11,10 +11,9 @@ import {
 } from "@/components/layout/GlobalEvents";
 import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
 import { Loadout } from "@/components/pages/profile/Loadout";
-import { Inventory } from "@/components/player";
+import { Inventory, PowerMeter } from "@/components/player";
 import { DojoEvent } from "@/dojo/class/Events";
 import { GameClass } from "@/dojo/class/Game";
-import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { EncounterOutcomes, EncountersAction, ItemSlot } from "@/dojo/types";
 import { formatCash } from "@/utils/ui";
@@ -232,6 +231,11 @@ const CustomLeftPanel = () => {
       </Box>
 
       <HustlerProfile />
+
+      <HStack justifyContent={"space-between"} mt={6}>
+        <Text color="yellow.400">STAKE x{game?.gameInfos.multiplier}</Text>
+        <PowerMeter basePower={0} maxPower={10} power={game?.gameInfos.multiplier} />
+      </HStack>
     </VStack>
   );
 };
@@ -292,7 +296,6 @@ function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
   );
 }
 
-
 function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
   if (!game.gameWithTokenId) {
     let item_id = 0;
@@ -332,7 +335,7 @@ function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
     let gear_item = game.configStore.getGearItemFull(
       getGearItem(BigInt(game.gameWithTokenId.equipment_by_slot[log.item_slot])),
     );
-    
+
     return (
       <Line
         key={key}

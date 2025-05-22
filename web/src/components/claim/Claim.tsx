@@ -138,7 +138,10 @@ export default function ClaimComponent() {
       });
 
       checkTxReceipt(txReceipt);
-      setIsLoading(false);
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1_000);
 
       return toast({
         // title: "Legend",

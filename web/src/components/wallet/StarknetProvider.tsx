@@ -117,14 +117,21 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       },
       [dopeLootClaimAddress]: {
         methods: [{ entrypoint: "release" }, { entrypoint: "claim" }],
-       
       },
     },
   };
 
   if (selectedChain.name !== "MAINNET") {
+    const devtoolsAddress = getContractByName(selectedChain.manifest, DW_NS, "devtools")?.address;
+
+    policies.contracts![devtoolsAddress] = { methods: [{ entrypoint: "create_fake_game" }] };
+
     policies.contracts![paperAddress].methods.push({
       entrypoint: "faucet",
+    });
+
+    policies.contracts![laundromatAddress].methods.push({
+      entrypoint: "supercharge_jackpot",
     });
 
     policies.contracts![selectedChain.vrfProviderAddress].methods.push({

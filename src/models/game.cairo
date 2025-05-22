@@ -18,7 +18,7 @@ struct Game {
     game_mode: GameMode,
     //
     player_name: Bytes16,
-    hustler_id: u16,
+    hustler_id: u16, 
     //
     game_over: bool,
     final_score: u32,
@@ -26,6 +26,8 @@ struct Game {
     claimed: bool,
     claimable: u32,
     position: u16,
+    //
+    multiplier: u8,
 }
 
 
@@ -45,6 +47,7 @@ impl GameImpl of GameTrait {
         game_mode: GameMode,
         player_name: felt252,
         hustler_id: u16,
+        multiplier: u8
     ) -> Game {
         Game {
             game_id,
@@ -62,6 +65,7 @@ impl GameImpl of GameTrait {
             claimed: false,
             claimable: 0,
             position: 0,
+            multiplier
         }
     }
 

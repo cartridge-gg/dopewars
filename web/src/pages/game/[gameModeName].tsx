@@ -1,4 +1,4 @@
-import { Button, Input } from "@/components/common";
+import { Button, Input, Tooltip } from "@/components/common";
 import { Arrow, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter, TierIndicator } from "@/components/player";
@@ -18,7 +18,7 @@ import { play } from "@/hooks/media";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { Box, Card, HStack, Heading, Text, VStack, Image, Flex, Tooltip } from "@chakra-ui/react";
+import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -268,7 +268,7 @@ const New = observer(() => {
                 >
                   Play
                 </Button>
-                {selectedChain.name !== "MAINNET" && balance < 1000n * ETHER && <PaperFaucetButton />}
+                {selectedChain.name !== "MAINNET" && balance < 10000n * ETHER && <PaperFaucetButton />}
               </>
             )}
             {gameMode == GameMode.Noob && (
@@ -498,9 +498,9 @@ const New = observer(() => {
                 {!isReleased && (
                   <Tooltip
                     color="yellow.400"
-                    title="DopeLoot Migration"
-                    label="Play a game with this DopeLoot to release it!"
-                    placement="top"
+                    title="Dope Migration"
+                    text="Play a game with this Dope to release it!"
+                    // placement="top"
                   >
                     <span>
                       <Warning color="yellow.400" ml={2} height={"16px"} width={"16px"} />
@@ -534,7 +534,11 @@ const New = observer(() => {
                             setMultipler(i + 1);
                           }}
                         />
-                        <Tooltip color="yellow.400" title="Stake" label="More entry fee, more rewards." placement="top">
+                        <Tooltip
+                          color="yellow.400"
+                          title="High stakes"
+                          text="The higher the stakes, the greater the rewards."
+                        >
                           <span>
                             <Warning color="yellow.400" height={"16px"} width={"16px"} />
                           </span>

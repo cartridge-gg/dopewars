@@ -38,10 +38,21 @@ fn get_payed_count(entrants: u32) -> u32 {
 }
 
 
-fn get_payout(rank: u32, entrants: u32, jackpot: u32) -> u32 {
-    let payout_pct = get_payout_pct(rank, entrants);
-    let payout_u128: u128 = jackpot.into() * payout_pct.into() / 10_000;
-    payout_u128.try_into().unwrap()
+fn get_payout(rank: u32, entrants: u32, jackpot: u32, round_up: bool) -> u32 {
+    let payout_pct: u128 = get_payout_pct(rank, entrants).into();
+    let jackpot: u128 = jackpot.into();
+
+    if !round_up {
+        let payout = jackpot * payout_pct / 10_000;
+        payout.try_into().unwrap()
+    } else {
+        let (payout, rem) = DivRem::div_rem((jackpot * payout_pct), 10_000);
+        if rem > 0 {
+            (payout + 1).try_into().unwrap()
+        } else {
+            payout.try_into().unwrap()
+        }
+    }
 }
 
 fn get_payout_pct(rank: u32, entrants: u32) -> u32 {
@@ -442,9 +453,9 @@ fn payout_501_700(rank: u32) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_payout, get_payout_pct, get_payed_count, payout_0_2, payout_3_10, payout_11_30,
-        payout_31_50, payout_51_75, payout_76_100, payout_101_150, payout_151_200, payout_201_250,
-        payout_251_300, payout_301_350, payout_351_400, payout_401_500, payout_501_700
+        get_payed_count, get_payout, get_payout_pct, payout_0_2, payout_101_150, payout_11_30,
+        payout_151_200, payout_201_250, payout_251_300, payout_301_350, payout_31_50,
+        payout_351_400, payout_3_10, payout_401_500, payout_501_700, payout_51_75, payout_76_100,
     };
 
 
@@ -463,9 +474,9 @@ mod tests {
 
     #[test]
     fn test_get_payout() {
-        assert(get_payout(1, 2, 1234) == 1234, 'invalid 1,2, 1234');
-        assert(get_payout(4, 120, 100_000) == 8600, 'invalid 4,120, 100_000'); // 860
-        assert(get_payout(20, 120, 100_000) == 0, 'invalid 4,120, 100_000');
+        assert(get_payout(1, 2, 1234, false) == 1234, 'invalid 1,2, 1234');
+        assert(get_payout(4, 120, 100_000, false) == 8600, 'invalid 4,120, 100_000'); // 860
+        assert(get_payout(20, 120, 100_000, false) == 0, 'invalid 4,120, 100_000');
     }
 
     #[test]

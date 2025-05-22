@@ -7,6 +7,7 @@ const TWO_MIN: u16 = 120;
 // const ONE_HOUR: u16 = 3600;
 // const HALF_HOUR: u16 = 1800;
 //
+const TEMP_VALUE: u32 = 1000;
 const HALF_HOUR: u32 = 1800;
 const ONE_HOUR: u32 = 3600;
 const ONE_DAY: u32 = 86_400;
@@ -39,8 +40,8 @@ impl RyoConfigImpl of RyoConfigTrait {
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: ONE_HOUR, //ONE_DAY, // ONE_HOUR, 
-            season_time_limit: TWO_MIN, // HALF_HOUR, // TWENTY_MIN,
+            season_duration: TEMP_VALUE, //ONE_DAY, 
+            season_time_limit: TWO_MIN, // HALF_HOUR, 
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 10,
