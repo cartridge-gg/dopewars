@@ -8,8 +8,9 @@ import { selector } from "starknet";
 type RouterContext = {
   router: NextRouter;
   gameId: string | undefined;
-  playerId: string | undefined;
   seasonId: number | undefined;
+  playerId: string | undefined;
+  hustlerId: number | undefined;
   location: LocationConfigFull | undefined;
   drugSlug: string | undefined;
   gameModeName: string | undefined;
@@ -31,6 +32,7 @@ export const useRouterContext = (): RouterContext => {
     router,
     gameId: undefined,
     playerId: undefined,
+    hustlerId: undefined,
     seasonId: undefined,
     location: undefined,
     gameModeName: undefined,
@@ -48,6 +50,7 @@ export const useRouterContext = (): RouterContext => {
     // console.log("useRouterContext", router.isReady, router.asPath);
     const gameId = router.query.gameId ? (router.query.gameId as string) : undefined;
     const playerId = router.query.playerId ? (router.query.playerId as string) : undefined;
+    const hustlerId = router.query.hustlerId ? Number(router.query.hustlerId) : undefined;
     const seasonId = router.query.seasonId ? Number(router.query.seasonId) : undefined;
     const location = router.query.locationSlug
       ? configStore.getLocation(router.query.locationSlug as string)
@@ -85,6 +88,7 @@ export const useRouterContext = (): RouterContext => {
       router,
       gameId,
       playerId,
+      hustlerId,
       seasonId,
       location,
       gameModeName,

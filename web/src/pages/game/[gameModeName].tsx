@@ -51,7 +51,7 @@ const New = observer(() => {
 
   const { toast } = useToast();
 
-  const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
+  const  [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
 
   const addresses = useMemo(() => {
     return [

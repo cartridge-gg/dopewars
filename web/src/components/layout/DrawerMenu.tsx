@@ -30,6 +30,7 @@ import { ProfileLinkDrawer } from "../pages/profile/Profile";
 import { useAccount } from "@starknet-react/core";
 
 import colors from "@/theme/colors";
+import { HustlerIcon, Hustlers } from "../hustlers";
 
 const slideAnim = keyframes`  
   0% {transform: translateX(0); color: ${colors.neon["500"]};}
@@ -167,6 +168,14 @@ const DrawerMenu = () => {
                     }}
                   >
                     <Cigarette mr={2} /> GEAR
+                  </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/dope");
+                    }}
+                  >
+                    <HustlerIcon hustler={Hustlers.Dragon} mr={2} /> DOPE
                   </DrawerListItem>
 
                   {/* DEV */}
