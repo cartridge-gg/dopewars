@@ -11,7 +11,7 @@ use rollyourown::{
         events::{RawEventEmitterTrait, RawEventEmitterImpl}
     },
     config::{
-        hustlers::{HustlerItemConfig, HustlerItemTiersConfig, ItemSlot},
+        hustlers::{ItemSlot},
         locations::{Locations, LocationsRandomizableImpl},
         encounters::{Encounters, EncounterSpawnerImpl, EncounterConfig, EncounterImpl},
         game::{GameConfig}, settings::{SeasonSettings}

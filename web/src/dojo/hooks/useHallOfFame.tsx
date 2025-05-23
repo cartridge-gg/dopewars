@@ -6,21 +6,17 @@ import { shortString } from "starknet";
 type HallOfFameResult = ReturnType<typeof useHallOfFame>;
 
 const sqlQuery = () => `SELECT season_version,
-g.game_id,
-g.player_id,
+game_id,
+player_id,
 "player_name.value",
-hustler_id,
 final_score,
 claimable,
 position,
-gt.token_id,
-gt."token_id.guestlootid",
-gt."token_id.lootid",
-gt."token_id.hustlerid"
-FROM "dopewars-Game" as g
-LEFT
-JOIN "dopewars-GameWithTokenId" as gt on g.game_id = gt.game_id
-AND g.player_id = gt.player_id
+token_id,
+"token_id.guestlootid",
+"token_id.lootid",
+"token_id.hustlerid"
+FROM "dopewars-Game" 
 WHERE position = 1
 ORDER BY season_version DESC
 LIMIT 1000;`;
@@ -31,7 +27,6 @@ export const useHallOfFame = () => {
   } = useDojoContext();
 
   const { data, isFetched, isFetching, refetch } = useSql(sqlQuery());
-
 
   const hallOfFame = useMemo(() => {
     if (!data) return [];

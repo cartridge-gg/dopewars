@@ -1,22 +1,16 @@
-import { GameWithTokenId } from "@/dojo/stores/game";
 import { Box, StyleProps } from "@chakra-ui/react";
 
 import colors from "@/theme/colors";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
-import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { HustlerPreviewFromGame } from "./HustlerPreviewFromGame";
 
 export const HustlerAvatarIcon = ({
   gameId,
-  hustlerId,
   tokenIdType,
   tokenId,
   color = colors.neon["400"].toString(),
   ...rest
-}: { gameId: number; hustlerId: number; tokenIdType?: string; tokenId?: number } & StyleProps) => {
-  if (!tokenIdType) {
-    return <HustlerIcon hustler={hustlerId as Hustlers} color={color} {...rest} />;
-  }
+}: { gameId: number; tokenIdType?: string; tokenId?: number } & StyleProps) => {
   if (tokenIdType && tokenId !== undefined) {
     if (tokenIdType === "LootId" || tokenIdType === "GuestLootId") {
       return (

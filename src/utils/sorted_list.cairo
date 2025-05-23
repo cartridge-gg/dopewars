@@ -321,9 +321,9 @@ impl SortedListImpl of SortedListTrait {
             let payout = get_payout((i + 1).into(), entrants, paper_balance, true); 
             stake_adj_paper_balance += payout * curr_item.get_multiplier();
 
-            println!(
-                "{} - {} - {} - {}", i, payout, curr_item.get_multiplier(), stake_adj_paper_balance,
-            );
+            // println!(
+            //     "{} - {} - {} - {}", i, payout, curr_item.get_multiplier(), stake_adj_paper_balance,
+            // );
 
             i += 1;
         };

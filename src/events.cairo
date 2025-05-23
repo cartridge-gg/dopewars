@@ -1,8 +1,8 @@
 use dojo::meta::introspect::Introspect;
+use rollyourown::models::game::{TokenId};
 use rollyourown::packing::game_store::{GameMode};
-use rollyourown::systems::game::{EncounterActions,};
-use rollyourown::systems::helpers::traveling::{EncounterOutcomes,};
-use rollyourown::models::game_with_token_id::{TokenId};
+use rollyourown::systems::game::{EncounterActions};
+use rollyourown::systems::helpers::traveling::{EncounterOutcomes};
 use starknet::ContractAddress;
 
 #[derive(Drop, Serde)]
@@ -14,7 +14,10 @@ pub struct GameCreated {
     pub player_id: ContractAddress,
     pub game_mode: GameMode,
     pub player_name: felt252,
-    pub hustler_id: u16,
+    pub multiplier: u8,
+    pub token_id: TokenId,
+    pub hustler_equipment: Span<HustlerSlot>,
+    pub hustler_body: Span<HustlerBody>,
 }
 
 #[derive(Debug, Drop, Serde, Introspect)]
@@ -28,21 +31,8 @@ pub struct HustlerBody {
 pub struct HustlerSlot {
     pub token_id: felt252,
     pub slot: felt252,
-    pub gear_item_id: Option<u256>, 
+    pub gear_item_id: Option<u256>,
 }
-
-#[derive(Drop, Serde)]
-#[dojo::event]
-pub struct GameWithTokenIdCreated {
-    #[key]
-    pub game_id: u32,
-    #[key]
-    pub player_id: ContractAddress,
-    pub token_id: TokenId,
-    pub hustler_equipment: Span<HustlerSlot>,
-    pub hustler_body: Span<HustlerBody>,
-}
-
 
 #[derive(Drop, Serde)]
 #[dojo::event]
@@ -66,7 +56,7 @@ pub struct GameOver {
     pub player_id: ContractAddress,
     pub season_version: u16,
     pub player_name: felt252,
-    pub hustler_id: u16,
+     pub token_id: TokenId,
     pub turn: u8,
     pub cash: u32,
     pub health: u8,
@@ -174,7 +164,7 @@ pub struct NewHighScore {
     #[key]
     pub season_version: u16,
     pub player_name: felt252,
-    pub hustler_id: u16,
+    pub token_id: TokenId,
     pub cash: u32,
     pub health: u8,
     pub reputation: u8,

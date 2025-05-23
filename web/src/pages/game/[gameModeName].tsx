@@ -231,8 +231,7 @@ const New = observer(() => {
       const selectedLootTokenId = selectableTokens!.length > 0 ? Number(selectedToken.token_id) : 0;
       const tokenIdType = selectedTokenIdType;
 
-      const hustlerId = 420;
-      await createGame(gameMode, hustlerId, name, tokenIdType, selectedLootTokenId, multiplier);
+      await createGame(gameMode, name, multiplier, tokenIdType, selectedLootTokenId);
     } catch (e) {
       console.log(e);
     }

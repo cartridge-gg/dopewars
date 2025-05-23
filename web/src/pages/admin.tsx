@@ -26,8 +26,6 @@ import { DrugTable } from "@/components/pages/admin/DrugTable";
 import { EncounterTable } from "@/components/pages/admin/EncounterTable";
 import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
 import { GameLayoutTable } from "@/components/pages/admin/GameLayoutTable";
-import { HustlerItemBaseTable } from "@/components/pages/admin/HustlerItemBaseTable";
-import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiersTable";
 import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
 import { Dropdown } from "@/components/common";
@@ -51,8 +49,7 @@ const Admin = () => {
           <Tab>SEASON</Tab>
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
-          <Tab>ITEMS</Tab>
-          <Tab>ITEMS TIERS</Tab>
+    
           <Tab>ENCOUNTERS</Tab>
           {/* <Tab>LAYOUTS</Tab> */}
 
@@ -104,22 +101,6 @@ const Admin = () => {
             <Card w="full">
               <CardBody>
                 <DrugTable />
-              </CardBody>
-            </Card>
-          </TabPanel>
-
-          <TabPanel p={0}>
-            <Card w="full">
-              <CardBody>
-                <HustlerItemBaseTable />
-              </CardBody>
-            </Card>
-          </TabPanel>
-
-          <TabPanel p={0}>
-            <Card w="full">
-              <CardBody>
-                <HustlerItemTiersTable />
               </CardBody>
             </Card>
           </TabPanel>

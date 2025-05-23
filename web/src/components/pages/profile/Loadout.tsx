@@ -1,41 +1,26 @@
 import { PowerMeter, TierIndicator } from "@/components/player";
-import { dopeLootSlotIdToItemSlot, itemUpgrades, slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
+import { itemUpgrades, slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
 import { useGameStore } from "@/dojo/hooks";
-import { GearItemFull, HustlerItemConfigFull } from "@/dojo/stores/config";
 import { IsMobile } from "@/utils/ui";
 import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
-import { getGearItem } from "@dope/dope-sdk/helpers";
 import { observer } from "mobx-react-lite";
 import { DopeGearItem } from "./DopeGearItem";
 import { ItemSlot } from "@/dojo/types";
 import { ItemInfos } from "@/dojo/class/Items";
 
 export const Loadout = () => {
-  const { game, gameInfos, gameWithTokenId, configStore } = useGameStore();
+  const { game, gameInfos, configStore } = useGameStore();
 
   if (!game || !gameInfos) return null;
 
-  if (!gameWithTokenId) {
-    return (
-      <VStack w="full" gap={6}>
-        <Item item={game.items.attack} stat={game?.items.attack.stat} />
-        <Item item={game.items.defense} stat={game?.items.defense.stat} />
-        <Item item={game.items.speed} stat={game?.items.speed.stat} />
-        <Item item={game.items.transport} stat={game?.items.transport.stat} />
-      </VStack>
-    );
-  }
-
-  if (gameWithTokenId) {
-    return (
-      <VStack w="full" gap={6}>
-        <GearItemInfos slot={ItemSlot.Weapon} item={game?.items.attack} level={game?.items.attackLevel} />
-        <GearItemInfos slot={ItemSlot.Clothes} item={game?.items.defense} level={game?.items.defenseLevel} />
-        <GearItemInfos slot={ItemSlot.Feet} item={game?.items.speed} level={game?.items.speedLevel} />
-        <GearItemInfos slot={ItemSlot.Transport} item={game?.items.transport} level={game?.items.transportLevel} />
-      </VStack>
-    );
-  }
+  return (
+    <VStack w="full" gap={6}>
+      <GearItemInfos slot={ItemSlot.Weapon} item={game?.items.attack} level={game?.items.attackLevel} />
+      <GearItemInfos slot={ItemSlot.Clothes} item={game?.items.defense} level={game?.items.defenseLevel} />
+      <GearItemInfos slot={ItemSlot.Feet} item={game?.items.speed} level={game?.items.speedLevel} />
+      <GearItemInfos slot={ItemSlot.Transport} item={game?.items.transport} level={game?.items.transportLevel} />
+    </VStack>
+  );
 };
 
 const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: ItemInfos; level: number }) => {
@@ -83,7 +68,7 @@ const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: I
 });
 
 const Item = observer(({ item, stat }: { item: ItemInfos; stat: number }) => {
-  /// @ts-ignore
+  // @ts-ignore
   const upgrades = itemUpgrades[item.slot][Number(item.base.id)];
   const isMobile = IsMobile();
 

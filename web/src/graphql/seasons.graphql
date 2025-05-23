@@ -117,25 +117,32 @@ query AllSeasonSettings {
   }
 }
 
-# use sql
-# query HallOfFame {
-#   dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
-#     edges {
-#       node {
-#         game_id
-#         player_id
-#         player_name {
-#           value
-#         }
-#         hustler_id
-#         season_version
-#         final_score
-#         position
-#         claimable
-#       }
-#     }
-#   }
-# }
+
+query HallOfFame {
+  dopewarsGameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
+    edges {
+      node {
+        game_id
+        player_id
+        player_name {
+          value
+        }
+        multiplier
+        season_version
+        final_score
+        position
+        claimable
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
+      }
+    }
+  }
+}
 
 # use sql
 query Claimable($playerId: ContractAddress) {
@@ -148,7 +155,13 @@ query Claimable($playerId: ContractAddress) {
         player_name {
           value
         }
-        hustler_id
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
         claimed
         claimable
         final_score

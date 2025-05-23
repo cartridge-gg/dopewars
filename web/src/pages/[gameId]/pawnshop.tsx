@@ -11,27 +11,24 @@ import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { getGearItem } from "@dope/dope-sdk/helpers";
-import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";
 
 const PawnShop = observer(() => {
   const { router, gameId } = useRouterContext();
-
-  const { account } = useAccount();
   const configStore = useConfigStore();
   const { config } = configStore;
-  const { game, gameConfig, gameWithTokenId } = useGameStore();
+  const { game, gameConfig, gameInfos } = useGameStore();
 
   const toaster = useToast();
 
   const [selectedShopItemsSlot, setSelectedShopItemSlot] = useState<ItemSlot | undefined>(undefined);
 
   const gearItems = useMemo(() => {
-    return gameWithTokenId?.equipment_by_slot.map((i) => {
+    return (gameInfos?.equipment_by_slot || []).map((i) => {
       return configStore.getGearItemFull(getGearItem(BigInt(i)));
     });
-  }, [gameWithTokenId, configStore]);
+  }, [gameInfos, configStore]);
 
   const selectItem = (shopItemSlot: ItemSlot) => {
     if (selectedShopItemsSlot === shopItemSlot) {
@@ -52,7 +49,7 @@ const PawnShop = observer(() => {
   const buy = async () => {
     if (!game || selectedShopItemsSlot === undefined) return;
 
-    let selectedItem = gearItems![selectedShopItemsSlot as keyof typeof gearItems];
+    let selectedItem = gearItems![selectedShopItemsSlot as keyof typeof gearItems] as unknown as GearItemFull;
     let cost = selectedItem.levels[game.items.levelByItemSlot[selectedShopItemsSlot] + 1].cost;
     let slot = selectedShopItemsSlot;
 

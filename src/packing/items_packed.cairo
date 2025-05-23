@@ -2,8 +2,8 @@ use super::super::config::gear::GearItemConfigTrait;
 use dojo::world::WorldStorageTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::gear::{GearItemConfig}, config::hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot},
-    models::game::{Game, GameMode}, models::game_with_token_id::{GameWithTokenId},
+    config::gear::{GearItemConfig}, config::hustlers::{ ItemSlot},
+    models::game::{Game, GameMode}, 
     utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
     store::{Store, StoreImpl, StoreTrait},
     libraries::dopewars_items::{
@@ -17,7 +17,7 @@ use starknet::ContractAddress;
 #[derive(Copy, Drop)]
 struct ItemsPacked {
     store: @Store,
-    game_with_token_id: GameWithTokenId,
+    game: Game,
     //
     packed: felt252,
 }
@@ -27,8 +27,8 @@ const DW_SLOT_IDS: [u8; 4] = [0, 1, 5, 2];
 
 #[generate_trait]
 impl ItemsPackedImpl of ItemsPackedTrait {
-    fn new(s: @Store, game_with_token_id: GameWithTokenId) -> ItemsPacked {
-        ItemsPacked { store: s, game_with_token_id, packed: 0 }
+    fn new(s: @Store, game: Game) -> ItemsPacked {
+        ItemsPacked { store: s, game, packed: 0 }
     }
 
     #[inline(always)]
@@ -44,7 +44,7 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         let level: u8 = bits.extract_into::<u8>(index, size).into();
 
         let slot_u8: u8 = slot.into();
-        let gear_id: u256 = (*self.game_with_token_id.equipment_by_slot.at(slot_u8.into())).into();
+        let gear_id: u256 = (*self.game.equipment_by_slot.at(slot_u8.into())).into();
         let item_id: u8 = (gear_id & 0xff).try_into().unwrap();
 
         // TODO: set dispatcher in storage ?

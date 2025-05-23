@@ -3,14 +3,14 @@ import { useEffect, useRef } from "react";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { useAccount } from "@starknet-react/core";
-import { Hustlers } from "../hustlers";
 import { formatCashHeader } from "@/utils/ui";
 import { PaperIcon, Siren, Truck } from "../icons";
 import { playSound, Sounds } from "@/hooks/sound";
 import { parseStruct } from "@/dojo/utils";
 import { CairoOption, num, shortString } from "starknet";
 import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
-import { sleep } from "@dope/dope-sdk/helpers";
+import { Dopewars_Game as Game } from "@/generated/graphql";
+import { parseModels } from "@dope/dope-sdk";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
@@ -88,34 +88,35 @@ export const GlobalEvents = () => {
     console.log("globalEvents::onEventMessage", key, entity);
 
     if (entity.models["dopewars-GameCreated"]) {
-      const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
+      // const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
+
+      const gameCreated = parseModels({ items: [entity], next_cursor: "" }, "dopewars-GameCreated")[0] as GameCreated;
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
 
-      if (BigInt(gameCreated.player_id) !== accountAddress.current) {
-        // wait for this event to exist ¯\_(ツ)_/¯
-        await sleep(1_500);
-        const gameWithTokenIdCreated = (await gameStore.getGameWithTokenIdCreated(
-          gameCreated.game_id,
-        )) as unknown as GameWithTokenIdCreated;
+      // @ts-ignore
+      gameCreated.game_mode = gameCreated.game_mode.activeVariant();
+      // @ts-ignore
+      gameCreated.token_id_type = gameCreated.token_id.activeVariant();
+      // @ts-ignore
+      gameCreated.token_id = Number(gameCreated.token_id.unwrap());
 
-        if (!gameWithTokenIdCreated) return;
-        toast({
-          icon: () => (
-            <HustlerAvatarIcon
-              gameId={gameCreated.game_id}
-              hustlerId={(gameCreated.hustler_id % 3) as Hustlers}
-              tokenIdType={gameWithTokenIdCreated.token_id_type}
-              tokenId={Number(gameWithTokenIdCreated.token_id)}
-            />
-          ),
-          message:
-            gameCreated.game_mode === "Ranked"
-              ? `${gameCreated.player_name} is ready to hustle...`
-              : `${gameCreated.player_name} is training...`,
-        });
-      } else {
-        router.push(`/${num.toHexString(gameCreated.game_id)}`);
-      }
+      // if (BigInt(gameCreated.player_id) !== accountAddress.current) {
+      toast({
+        icon: () => (
+          <HustlerAvatarIcon
+            gameId={gameCreated.game_id}
+            tokenIdType={gameCreated.token_id_type}
+            tokenId={Number(gameCreated.token_id)}
+          />
+        ),
+        message:
+          gameCreated.game_mode === "Ranked"
+            ? `${gameCreated.player_name} is ready to hustle...`
+            : `${gameCreated.player_name} is training...`,
+      });
+      // } else {
+      router.push(`/${num.toHexString(gameCreated.game_id)}`);
+      // }
     }
 
     if (entity.models["dopewars-NewSeason"]) {
@@ -131,16 +132,15 @@ export const GlobalEvents = () => {
       const newHighScore = parseStruct(entity.models["dopewars-NewHighScore"]) as NewHighScore;
       newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
 
-      const gameWithTokenIdCreated = (await gameStore.getGameWithTokenIdCreated(
-        newHighScore.game_id,
-      )) as unknown as GameWithTokenIdCreated;
+      const game = (await gameStore.getGameCreated(newHighScore.game_id)) as unknown as Game;
+
       toast({
         icon: () => (
           <HustlerAvatarIcon
             gameId={newHighScore.game_id}
-            hustlerId={(newHighScore.hustler_id % 3) as Hustlers}
-            tokenIdType={gameWithTokenIdCreated.token_id_type}
-            tokenId={Number(gameWithTokenIdCreated.token_id)}
+            ///@ts-ignore
+            tokenIdType={game.token_id_type}
+            tokenId={Number(game.token_id)}
           />
         ),
         message: `${newHighScore.player_name} rules with ${formatCashHeader(newHighScore.cash)}!`,
@@ -154,16 +154,14 @@ export const GlobalEvents = () => {
         if (gameOver.health === 0) {
           playSound(Sounds.Magnum357);
         }
-        const gameWithTokenIdCreated = (await gameStore.getGameWithTokenIdCreated(
-          gameOver.game_id,
-        )) as unknown as GameWithTokenIdCreated;
+        const game = (await gameStore.getGameCreated(gameOver.game_id)) as unknown as Game;
         toast({
           icon: () => (
             <HustlerAvatarIcon
               gameId={gameOver.game_id}
-              hustlerId={(gameOver.hustler_id % 3) as Hustlers}
-              tokenIdType={gameWithTokenIdCreated.token_id_type}
-              tokenId={Number(gameWithTokenIdCreated.token_id)}
+              ///@ts-ignore
+              tokenIdType={game.token_id_type}
+              tokenId={Number(game.token_id)}
             />
           ),
           message: gameOver.health === 0 ? `RIP ${gameOver.player_name}!` : `${gameOver.player_name} survived!`,
@@ -175,7 +173,7 @@ export const GlobalEvents = () => {
       const released = parseStruct(entity.models["dope-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
       const id = Number(released.id);
       toast({
-        icon: () => <HustlerAvatarIcon gameId={0} hustlerId={0 as Hustlers} tokenIdType={"LootId"} tokenId={id} />,
+        icon: () => <HustlerAvatarIcon gameId={0} tokenIdType={"LootId"} tokenId={id} />,
         message: `#${id} has been released!`,
       });
     }
@@ -189,12 +187,7 @@ export interface GameCreated {
   player_id: string;
   game_mode: string;
   player_name: string;
-  hustler_id: number;
-}
-
-export interface GameWithTokenIdCreated {
-  game_id: number;
-  player_id: string;
+  multiplier: number;
   token_id_type: string;
   token_id: bigint;
   hustler_equipment: { slot: string; gear_item_id: CairoOption<number> }[];
@@ -219,7 +212,8 @@ export interface NewHighScore {
   player_id: string;
   season_version: number;
   player_name: string;
-  hustler_id: number;
+  token_id_type: string;
+  token_id: bigint;
   cash: number;
   health: number;
   reputation: number;
@@ -230,7 +224,8 @@ export interface GameOver {
   player_id: string;
   season_version: number;
   player_name: string;
-  hustler_id: number;
+  token_id_type: string;
+  token_id: bigint;
   turn: number;
   cash: number;
   health: number;

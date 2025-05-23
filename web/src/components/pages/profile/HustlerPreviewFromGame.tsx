@@ -1,4 +1,4 @@
-import { GameWithTokenIdCreated } from "@/components/layout/GlobalEvents";
+import { GameCreated } from "@/components/layout/GlobalEvents";
 import { useGameStore } from "@/dojo/hooks";
 import { defaultHustlerMetadata, HustlerPreview } from "@dope/dope-sdk/components";
 import { feltToString } from "@dope/dope-sdk/helpers";
@@ -9,13 +9,13 @@ import { useEffect, useMemo, useState } from "react";
 export const HustlerPreviewFromGame = observer(
   ({ gameId, tokenId, renderMode = 0, ...props }: { gameId: number; tokenId: number; renderMode?: number }) => {
     const gameStore = useGameStore();
-    const [gameWithTokenId, setGameWithTokenId] = useState<undefined | GameWithTokenIdCreated>();
+    const [gameCreated, setGameCreated] = useState<undefined | GameCreated>();
 
     useEffect(() => {
-      const initAsync = async ()=> {
-        const game = await gameStore.getGameWithTokenIdCreated(gameId);
+      const initAsync = async () => {
+        const game = await gameStore.getGameCreated(gameId);
         // @ts-ignore
-        setGameWithTokenId(game as GameWithTokenIdCreated);
+        setGameCreated(game as GameCreated);
       };
 
       if (gameId) {
@@ -40,19 +40,19 @@ export const HustlerPreviewFromGame = observer(
     }, [tokenId]);
 
     const hustlerBody = useMemo(() => {
-      if (!gameWithTokenId) return [];
-      return gameWithTokenId.hustler_body.reduce(
+      if (!gameCreated) return [];
+      return gameCreated.hustler_body.reduce(
         (a, v) => ({
           ...a,
           [feltToString(v.slot)]: v.value,
         }),
         {},
       );
-    }, [gameWithTokenId]);
+    }, [gameCreated]);
 
     const hustlerEquipment = useMemo(() => {
-      if (!gameWithTokenId) return [];
-      return gameWithTokenId.hustler_equipment
+      if (!gameCreated) return [];
+      return gameCreated.hustler_equipment
         .filter((i) => i.gear_item_id.isSome())
         .reduce(
           (a, v) => ({
@@ -61,7 +61,7 @@ export const HustlerPreviewFromGame = observer(
           }),
           {},
         );
-    }, [gameWithTokenId]);
+    }, [gameCreated]);
 
     //
 
@@ -89,7 +89,7 @@ export const HustlerPreviewFromGame = observer(
       };
     }, [hustlerMeta]);
 
-    if (!gameWithTokenId || !hustlerEquipment) return null;
+    if (!gameCreated || !hustlerEquipment) return null;
     return (
       <>
         <HustlerPreview

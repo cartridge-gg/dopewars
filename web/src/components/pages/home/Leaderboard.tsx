@@ -150,8 +150,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
                 const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
-                // @ts-ignore
-                const isGameWithTokenId = game.token_id !== undefined;
+               
                 return (
                   <ListItem color={color} key={game.game_id}>
                     <HStack mr={3}>
@@ -172,7 +171,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                       >
                         <HustlerAvatarIcon
                           gameId={game.game_id}
-                          hustlerId={game.hustler_id}
                           // @ts-ignore
                           tokenIdType={game.token_id_type}
                           // @ts-ignore

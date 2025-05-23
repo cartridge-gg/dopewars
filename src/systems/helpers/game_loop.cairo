@@ -112,7 +112,7 @@ fn on_game_over(ref game_store: GameStore, ref store: Store) {
                 player_id: game_store.game.player_id,
                 season_version: game_store.game.season_version,
                 player_name: game_store.game.player_name.into(),
-                hustler_id: game_store.game.hustler_id,
+                token_id: game_store.game.token_id,
                 turn: game_store.player.turn,
                 cash: game_store.player.cash,
                 health: game_store.player.health,

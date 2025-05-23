@@ -24,7 +24,6 @@ max_metadata_tasks = 2
 [sql]
 historical = [
     "dopewars-GameCreated",
-    "dopewars-GameWithTokenIdCreated",
     "dopewars-Traveled",
     "dopewars-GameOver",
     "dopewars-TradeDrug",

@@ -130,7 +130,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
                         player_id: game_store.game.player_id,
                         season_version: game_store.game.season_version,
                         player_name: game_store.game.player_name.into(),
-                        hustler_id: game_store.game.hustler_id,
+                        token_id: game_store.game.token_id,
                         cash: game_store.player.cash,
                         health: game_store.player.health,
                         reputation: game_store.player.reputation,

@@ -25,7 +25,6 @@ artifacts_path = "torii_artifacts"
 [sql]
 historical = [
     "dopewars-GameCreated",
-    "dopewars-GameWithTokenIdCreated",
     "dopewars-Traveled",
     "dopewars-GameOver",
     "dopewars-TradeDrug",

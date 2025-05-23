@@ -64,7 +64,6 @@ pub mod helpers {
 pub mod models {
     pub mod game;
     pub mod game_store_packed;
-    pub mod game_with_token_id;
 
     pub mod season;
 }

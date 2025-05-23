@@ -17,7 +17,7 @@ mod devtools {
 
     use rollyourown::{
         helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        models::{game::{Game}, game_store_packed::{GameStorePacked}, season::{Season}},
+        models::{game::{Game, TokenId}, game_store_packed::{GameStorePacked}, season::{Season}},
         packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
         store::{Store, StoreImpl, StoreTrait},
         utils::{
@@ -53,8 +53,8 @@ mod devtools {
                 randomizer.between::<u32>(0, 100_000)
             };
 
-            let rand_hustler_id = randomizer.between::<u16>(0, 3);
             let multiplier = randomizer.between::<u8>(1, 10);
+            let loot_id = randomizer.between::<u32>(1, 8000);
 
             let mut game = Game {
                 game_id,
@@ -64,7 +64,7 @@ mod devtools {
                 game_mode: GameMode::Ranked,
                 //
                 player_name: Bytes16Impl::from('fake'),
-                hustler_id: rand_hustler_id,
+                multiplier,
                 //
                 game_over: true,
                 final_score: 0,
@@ -72,7 +72,8 @@ mod devtools {
                 claimed: false,
                 claimable: 0,
                 position: 0,
-                multiplier,
+                token_id: TokenId::LootId(loot_id.into()),
+                equipment_by_slot: array![0,0,0,0].span()
             };
 
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
@@ -98,7 +99,7 @@ mod devtools {
             sorted_list.add(ref store, game, (0, 0.try_into().unwrap()));
         }
 
-        fn create_new_season(self: @ContractState) {// let mut ryo_config = self.s().ryo_config();
+        fn create_new_season(self: @ContractState) { // let mut ryo_config = self.s().ryo_config();
         // ryo_config.season_version += 1;
         // self.s().save_ryo_config(@ryo_config);
 

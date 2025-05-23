@@ -297,56 +297,20 @@ function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
 }
 
 function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
-  if (!game.gameWithTokenId) {
-    let item_id = 0;
-    switch (log.item_slot) {
-      case ItemSlot.Weapon:
-        item_id = game.items.hustlerConfig.weapon.base.id;
-        break;
-      case ItemSlot.Clothes:
-        item_id = game.items.hustlerConfig.clothes.base.id;
-        break;
-      case ItemSlot.Feet:
-        item_id = game.items.hustlerConfig.feet.base.id;
-        break;
-      case ItemSlot.Transport:
-        item_id = game.items.hustlerConfig.transport.base.id;
-        break;
-      default:
-        item_id = 0;
-        break;
-    }
+  let gear_item = game.configStore.getGearItemFull(
+    getGearItem(BigInt(game.gameInfos.equipment_by_slot ? game.gameInfos.equipment_by_slot[log.item_slot] : 0)),
+  );
 
-    const item = game.configStore.getHustlerItemByIds(item_id, log.item_slot, log.item_level);
-
-    return (
-      <Line
-        key={key}
-        icon={item.icon}
-        text={`Upgraded ${item.upgradeName}`}
-        total={`- ${formatCash(item.tier.cost)}`}
-        color="yellow.400"
-        iconColor="yellow.400"
-      />
-    );
-  }
-
-  if (game.gameWithTokenId) {
-    let gear_item = game.configStore.getGearItemFull(
-      getGearItem(BigInt(game.gameWithTokenId.equipment_by_slot[log.item_slot])),
-    );
-
-    return (
-      <Line
-        key={key}
-        icon={Cigarette}
-        text={`Upgraded ${gear_item.name}`}
-        total={`- ${formatCash(gear_item.levels[log.item_level].cost)}`}
-        color="yellow.400"
-        iconColor="yellow.400"
-      />
-    );
-  }
+  return (
+    <Line
+      key={key}
+      icon={Cigarette}
+      text={`Upgraded ${gear_item.name}`}
+      total={`- ${formatCash(gear_item.levels[log.item_level].cost)}`}
+      color="yellow.400"
+      iconColor="yellow.400"
+    />
+  );
 }
 
 function renderTravelEncounter(

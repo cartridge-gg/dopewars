@@ -1,6 +1,6 @@
 use rollyourown::config::{
-    hustlers::{HustlerConfig, HustlerImpl}, game::{GameConfig}, drugs::{DrugConfig},
-    encounters::{EncounterConfig}, ryo::{RyoConfig}, settings::{SeasonSettingsModes},
+    drugs::{DrugConfig}, encounters::{EncounterConfig}, game::{GameConfig}, ryo::{RyoConfig},
+    settings::{SeasonSettingsModes},
 };
 
 #[starknet::interface]
@@ -12,7 +12,6 @@ trait IConfig<T> {
 #[derive(Drop, Serde)]
 struct Config {
     layouts: LayoutsConfig,
-    hustlers: Array<HustlerConfig>,
     ryo_config: RyoConfig,
     season_settings_modes: SeasonSettingsModes,
 }
@@ -32,48 +31,41 @@ struct LayoutItem {
 
 #[dojo::contract]
 mod config {
-    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use dojo::event::EventStorage;
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
 
     use rollyourown::{
         config::{
-            game::{GameConfig},
             drugs::{
-                initialize_drug_config_normal, initialize_drug_config_cheap,
-                initialize_drug_config_expensive, DrugConfig, Drugs,
-            },
-            locations::initialize_location_config,
-            hustlers::{
-                HustlerConfig, HustlerImpl, initialize_weapons_config, initialize_clothes_config,
-                initialize_feet_config, initialize_transport_config,
-                initialize_weapons_tiers_config, initialize_clothes_tiers_config,
-                initialize_feet_tiers_config, initialize_transport_tiers_config,
+                DrugConfig, Drugs, initialize_drug_config_cheap, initialize_drug_config_expensive,
+                initialize_drug_config_normal,
             },
             encounters::{
-                EncounterConfig, Encounters, EncounterTrait, initialize_encounter_stats_config,
+                EncounterConfig, EncounterTrait, Encounters, initialize_encounter_stats_config,
             },
-            ryo::{RyoConfig}, settings::{SeasonSettingsModes, SeasonSettingsModesImpl},
-        },
-        store::{Store, StoreImpl, StoreTrait},
-        packing::{
-            game_store_layout::{
-                GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
-                GameStoreLayoutIntoBytes31Impl,
-            },
-            player_layout::{
-                PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl,
-                PlayerLayoutIntoBytes31Impl,
-            },
+            game::{GameConfig}, locations::initialize_location_config, ryo::{RyoConfig},
+            settings::{SeasonSettingsModes, SeasonSettingsModesImpl},
         },
         libraries::dopewars_items::{
-            IDopewarsItemsLibraryDispatcher, IDopewarsItemsDispatcherTrait, DopewarsItemTier,
-            DopewarsItemTierConfig,
+            DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
+            IDopewarsItemsLibraryDispatcher,
         },
+        packing::{
+            game_store_layout::{
+                GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutIntoBytes31Impl,
+                GameStoreLayoutPackableImpl,
+            },
+            player_layout::{
+                PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutIntoBytes31Impl,
+                PlayerLayoutPackableImpl,
+            },
+        },
+        store::{Store, StoreImpl, StoreTrait},
     };
 
     use starknet::{get_caller_address, get_contract_address};
 
-    use super::{Config, LayoutsConfig, LayoutItem};
+    use super::{Config, LayoutItem, LayoutsConfig};
 
 
     fn dojo_init(ref self: ContractState) {
@@ -84,18 +76,6 @@ mod config {
         initialize_drug_config_expensive(ref store);
 
         initialize_location_config(ref store);
-
-        // hustlers items
-        initialize_weapons_config(ref store);
-        initialize_clothes_config(ref store);
-        initialize_feet_config(ref store);
-        initialize_transport_config(ref store);
-
-        // // hutlsers items tiers
-        initialize_weapons_tiers_config(ref store);
-        initialize_clothes_tiers_config(ref store);
-        initialize_feet_tiers_config(ref store);
-        initialize_transport_tiers_config(ref store);
 
         // encounters
         initialize_encounter_stats_config(ref store);
@@ -135,29 +115,13 @@ mod config {
                 };
             };
 
-            //
-
-            let mut hustlers: Array<HustlerConfig> = array![];
-            let mut hustler_ids = array![0_u16, 1_u16, 2_u16].span();
-
-            loop {
-                match hustler_ids.pop_front() {
-                    Option::Some(id) => {
-                        let hustler = HustlerImpl::get(@store, *id);
-                        hustlers.append(hustler.get_hustler_config());
-                    },
-                    Option::None => { break; },
-                };
-            };
-
             let ryo_config = store.ryo_config();
             let season_settings_modes = SeasonSettingsModesImpl::all();
 
             //
             Config {
                 ryo_config,
-                season_settings_modes,
-                hustlers,
+                season_settings_modes, // hustlers,
                 layouts: LayoutsConfig { game_store, player },
             }
         }

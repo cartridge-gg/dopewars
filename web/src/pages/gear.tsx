@@ -28,7 +28,6 @@ export default function Gear() {
     };
   }, [configStore]);
 
-  console.log(items);
 
   return (
     <Layout
@@ -100,7 +99,6 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
 
   const itemFull = useMemo(() => {
     const components = getCollectionComponentsById("DopeGear");
-    console.log(components);
     const related = components.find((i) => i.slug === componentValue.component_slug);
 
     return configStore.getGearItemFull({

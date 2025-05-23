@@ -7,23 +7,19 @@ import { addAddressPadding, shortString } from "starknet";
 type ClaimableResult = ReturnType<typeof useClaimable>;
 
 const sqlQuery = (playerId: string) => `SELECT season_version,
-g.game_id,
-g.player_id,
+game_id,
+player_id,
 "player_name.value",
-hustler_id,
 final_score,
 claimable,
 claimed,
 position,
-gt.token_id,
-gt."token_id.guestlootid",
-gt."token_id.lootid",
-gt."token_id.hustlerid"
-FROM "dopewars-Game" as g
-LEFT
-JOIN "dopewars-GameWithTokenId" as gt on g.game_id = gt.game_id
-AND g.player_id = gt.player_id
-WHERE g.player_id = "${addAddressPadding(playerId)}" AND claimed = false AND claimable > 0
+token_id,
+"token_id.guestlootid",
+"token_id.lootid",
+"token_id.hustlerid"
+FROM "dopewars-Game" 
+WHERE player_id = "${addAddressPadding(playerId)}" AND claimed = false AND claimable > 0
 ORDER BY position ASC
 LIMIT 1000;`;
 

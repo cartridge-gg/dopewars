@@ -6,7 +6,6 @@ import { parseStruct } from "../utils";
 import {
   GameCreated,
   GameOver,
-  GameWithTokenIdCreated,
   HighVolatility,
   TradeDrug,
   Traveled,
@@ -41,7 +40,6 @@ export class EventClass {
       isGameOver: computed,
       lastEncounter: computed,
       lastEncounterResult: computed,
-      gameWithTokenIdCreated: computed,
     });
   }
 
@@ -58,20 +56,6 @@ export class EventClass {
         return {
           eventName: "GameCreated",
           event: parseStruct(models[key]) as GameCreated,
-          idx: i,
-        };
-      }
-
-      if (key.startsWith("dopewars-GameWithTokenIdCreated")) {
-        const parsed = parseModels({ items: [entity], next_cursor: undefined }, "dopewars-GameWithTokenIdCreated")[0];
-        const gameWithTokenIdCreated = {
-          ...parsed,
-          token_id_type: parsed.token_id.activeVariant(),
-          token_id: Number(parsed.token_id.unwrap()),
-        };
-        return {
-          eventName: "GameWithTokenIdCreated",
-          event: gameWithTokenIdCreated as GameWithTokenIdCreated,
           idx: i,
         };
       }
@@ -170,9 +154,5 @@ export class EventClass {
 
   get lastEncounterResult() {
     return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "TravelEncounterResult");
-  }
-
-  get gameWithTokenIdCreated() {
-    return this.sortedEvents.findLast((i: DojoEvent) => i?.eventName === "GameWithTokenIdCreated");
   }
 }

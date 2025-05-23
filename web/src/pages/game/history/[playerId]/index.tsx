@@ -1,4 +1,3 @@
-import { Hustler, HustlerIcon, Hustlers } from "@/components/hustlers";
 import {
   Cigarette,
   CopsIcon,
@@ -18,9 +17,7 @@ import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import { Drugs } from "@/dojo/types";
-
 import { formatCashHeader } from "@/utils/ui";
-import { ControllerConnector } from "@cartridge/connector";
 import {
   HStack,
   Tab,
@@ -42,6 +39,7 @@ import {
   Box,
   Flex,
 } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 
 import { num, shortString } from "starknet";
 
@@ -81,7 +79,7 @@ export default function History() {
   );
 }
 
-const GameList = ({ games }: { games?: GameClass[] }) => {
+const GameList = observer(({ games }: { games?: GameClass[] }) => {
   const { router } = useRouterContext();
 
   const onClick = (game: GameClass) => {
@@ -133,9 +131,9 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
                 <Td>
                   <HustlerAvatarIcon
                     gameId={game.gameInfos.game_id}
-                    hustlerId={game.gameInfos.hustler_id}
-                    tokenIdType={game?.gameWithTokenId?.token_id_type}
-                    tokenId={game?.gameWithTokenId?.token_id}
+                    // @ts-ignore
+                    tokenIdType={game?.gameInfos?.token_id_type}
+                    tokenId={Number(game?.gameInfos?.token_id)}
                   />
                 </Td>
                 <Td textAlign="center">{game.gameInfos.season_version}</Td>
@@ -166,7 +164,7 @@ const GameList = ({ games }: { games?: GameClass[] }) => {
       </Table>
     </TableContainer>
   );
-};
+});
 
 const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
   return (
@@ -187,46 +185,12 @@ const CustomLeftPanel = ({ playerStats }: { playerStats?: PlayerStats }) => {
         <VStack gap={6}>
           <Tabs variant="unstyled" w="full">
             <TabList pb={6} overflowX="auto">
-              {/* <Tab>HUSTLERS</Tab> */}
               <Tab>GENERAL</Tab>
               <Tab>ENCOUNTERS</Tab>
               <Tab>DRUGS</Tab>
             </TabList>
 
             <TabPanels mt={0} /*maxH={["100%", "calc(100dvh - 580px)"]} overflowY="scroll"*/>
-              {/* <TabPanel p={0}>
-                <VStack w="full" alignItems="center" gap={3}>
-                  <HStack gap="40px" mt={2}>
-                    <VStack>
-                      <Hustler
-                        hustler={Hustlers.Dragon}
-                        w="50px"
-                        h={playerStats?.mostPlayedHustler[Hustlers.Dragon] ? "150px" : "120px"}
-                      />
-                      <Text>{playerStats?.gamesByHustler[Hustlers.Dragon]}</Text>
-                    </VStack>
-
-                    <VStack>
-                      <Hustler
-                        hustler={Hustlers.Monkey}
-                        w="50px"
-                        h={playerStats?.mostPlayedHustler[Hustlers.Monkey] ? "150px" : "120px"}
-                      />
-                      <Text>{playerStats?.gamesByHustler[Hustlers.Monkey]}</Text>
-                    </VStack>
-
-                    <VStack>
-                      <Hustler
-                        hustler={Hustlers.Rabbit}
-                        w="50px"
-                        h={playerStats?.mostPlayedHustler[Hustlers.Rabbit] ? "150px" : "120px"}
-                      />
-                      <Text>{playerStats?.gamesByHustler[Hustlers.Rabbit]}</Text>
-                    </VStack>
-                  </HStack>
-                </VStack>
-              </TabPanel> */}
-
               <TabPanel p={0}>
                 <VStack w="full" alignItems="center">
                   <HStack justify="center" alignItems="center">

@@ -1,6 +1,5 @@
 import {
   Dopewars_Game as Game,
-  Dopewars_GameWithTokenId as GameWithTokenIdRaw,
   Dopewars_GameConfig as GameConfig,
   Dopewars_GameStorePacked as GameStorePacked,
   Dopewars_SeasonSettings as SeasonSettings,
@@ -12,12 +11,10 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
-import { Hustlers } from "@/components/hustlers";
 import { Drugs } from "../types";
 import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
-import { GameWithTokenId } from "../stores/game";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -25,16 +22,7 @@ export type PlayerStats = {
   payRate: string;
   totalPaperClaimed: number;
   bestRanking: string;
-  gamesByHustler: {
-    [Hustlers.Dragon]: number;
-    [Hustlers.Monkey]: number;
-    [Hustlers.Rabbit]: number;
-  };
-  mostPlayedHustler: {
-    [Hustlers.Dragon]: boolean;
-    [Hustlers.Monkey]: boolean;
-    [Hustlers.Rabbit]: boolean;
-  };
+
   totalCopsEncounter: number;
   totalGangEncounter: number;
   totalFight: number;
@@ -140,26 +128,13 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
         (i) => i?.__typename === "dopewars_GameStorePacked",
       ) as GameStorePacked;
 
-      const gameWithTokenIdRaw = (i!.models || []).find(
-        (i) => i?.__typename === "dopewars_GameWithTokenId",
-      ) as GameWithTokenIdRaw;
-
-      const gameWithTokenId = gameWithTokenIdRaw
-        ? ({
-            game_id: gameWithTokenIdRaw.game_id,
-            player_id: gameWithTokenIdRaw.player_id,
-            token_id_type: gameWithTokenIdRaw.token_id?.option,
-            token_id: Number(
-              gameWithTokenIdRaw.token_id![
-                gameWithTokenIdRaw.token_id?.option as keyof typeof gameWithTokenIdRaw.token_id
-              ],
-            ),
-            equipment_by_slot: gameWithTokenIdRaw.equipment_by_slot,
-          } as GameWithTokenId)
-        : undefined;
-
       if (!gameInfos || !gameStorePacked) return [];
       if (gameInfos.season_version === 0) return [];
+
+      // @ts-ignore
+      gameInfos.token_id_type = gameInfos.token_id?.option;
+      // @ts-ignore
+      gameInfos.token_id = Number(gameInfos.token_id![gameInfos.token_id?.option as keyof typeof gameInfos.token_id]);
 
       const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
@@ -169,7 +144,7 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 
-      return [new GameClass(configStore, gameInfos, seasonSettings, gameConfig, gameStorePacked, gameWithTokenId)];
+      return [new GameClass(configStore, gameInfos, seasonSettings, gameConfig, gameStorePacked)];
     });
 
     return games;
@@ -197,12 +172,6 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       .sort((a, b) => a - b);
     const bestRanking = orderedRanks.length > 0 ? orderedRanks[0] : "Noob";
 
-    const dragonGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 0).length;
-    const monkeyGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 1).length;
-    const rabbitGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 2).length;
-
-    const maxPlayed = Math.max(dragonGames, monkeyGames, rabbitGames);
-
     const totalCopsEncounter = allTravelEncounters.filter((i) => i.encounter === "Cops").length || 0;
     const totalGangEncounter = allTravelEncounters.filter((i) => i.encounter === "Gang").length || 0;
     const totalFight = allTravelEncounterResults.filter((i) => i.action === "Fight").length || 0;
@@ -218,16 +187,7 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       payRate,
       totalPaperClaimed,
       bestRanking,
-      gamesByHustler: {
-        [Hustlers.Dragon]: dragonGames,
-        [Hustlers.Monkey]: monkeyGames,
-        [Hustlers.Rabbit]: rabbitGames,
-      },
-      mostPlayedHustler: {
-        [Hustlers.Dragon]: dragonGames === maxPlayed,
-        [Hustlers.Monkey]: monkeyGames === maxPlayed,
-        [Hustlers.Rabbit]: rabbitGames === maxPlayed,
-      },
+
       totalCopsEncounter,
       totalGangEncounter,
       totalFight,

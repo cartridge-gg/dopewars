@@ -16,7 +16,7 @@ import { num } from "starknet";
 import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
 import { parseModels } from "@dope/dope-sdk";
-import { GameWithTokenIdCreated } from "@/components/layout/GlobalEvents";
+import { GameCreated } from "@/components/layout/GlobalEvents";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
@@ -25,13 +25,13 @@ type GameStoreProps = {
   router: NextRouter;
 };
 
-export type GameWithTokenId = {
-  game_id: number;
-  player_id: bigint;
-  token_id: number;
-  token_id_type: string;
-  equipment_by_slot: number[];
-};
+// export type GameWithTokenId = {
+//   game_id: number;
+//   player_id: bigint;
+//   token_id: number;
+//   token_id_type: string;
+//   equipment_by_slot: number[];
+// };
 
 export class GameStoreClass {
   toriiClient: ToriiClient;
@@ -43,13 +43,12 @@ export class GameStoreClass {
   game: GameClass | null = null;
   gameEvents: EventClass | null = null;
   gameInfos: Game | null = null;
-  gameWithTokenId: GameWithTokenId | undefined = undefined;
   gameStorePacked: GameStorePacked | null = null;
   gameConfig: GameConfig | null = null;
   seasonSettings: SeasonSettings | null = null;
   subscriptions: Array<Subscription> = [];
 
-  allGameWithTokenIdCreated: GameWithTokenIdCreated[] = [];
+  allGamesCreated: GameCreated[] = [];
 
   constructor({ toriiClient, client, configStore, router }: GameStoreProps) {
     this.toriiClient = toriiClient;
@@ -61,21 +60,19 @@ export class GameStoreClass {
       game: observable,
       gameEvents: observable,
       gameInfos: observable,
-      gameWithTokenId: observable,
       gameConfig: observable,
       seasonSettings: observable,
       reset: action,
       cleanSubscriptions: action,
       init: flow,
       loadGameInfos: flow,
-      loadGameWithTokenId: flow,
       loadGameEvents: flow,
       loadSeasonSettings: flow,
       subscribe: flow,
       initGameStore: action,
       onEntityUpdated: action,
       onEventMessage: action,
-      getGameWithTokenIdCreated: flow,
+      getGameCreated: flow,
     });
   }
 
@@ -93,7 +90,6 @@ export class GameStoreClass {
 
   *init(gameId: string) {
     yield this.loadGameInfos(gameId);
-    yield this.loadGameWithTokenId(gameId);
     yield this.loadSeasonSettings(this.gameInfos?.season_version);
     yield this.loadGameEvents();
 
@@ -152,7 +148,6 @@ export class GameStoreClass {
       this.seasonSettings!,
       this.gameConfig!,
       this.gameStorePacked!,
-      this.gameWithTokenId,
     );
 
     this.game = game;
@@ -209,51 +204,24 @@ export class GameStoreClass {
     // const gameEntity = Object.values(entities)[0];
     // if (!gameEntity) return;
 
-    // const gameInfos = parseStruct(gameEntity["dopewars-Game"]) as Game;
-    // const gameStorePacked = parseStruct(gameEntity["dopewars-GameStorePacked"]) as GameStorePacked;
-
-    const gameInfos = parseStruct(entities.items[0].models["dopewars-Game"]) as Game;
+    // const gameInfos = parseStruct(entities.items[0].models["dopewars-Game"]) as Game;
+    const gameInfos = parseModels(entities, "dopewars-Game")[0] as Game;
     const gameStorePacked = parseModels(entities, "dopewars-GameStorePacked")[0] as GameStorePacked;
 
     if (!gameInfos || !gameStorePacked) return;
+   
+     // @ts-ignore
+    gameInfos.game_mode = gameInfos.game_mode.activeVariant();
+    gameInfos.equipment_by_slot = gameInfos.equipment_by_slot?.map((i: string) => Number(i));
+    // @ts-ignore
+    gameInfos.token_id_type = gameInfos.token_id.activeVariant();
+    // @ts-ignore
+    gameInfos.token_id = Number(gameInfos.token_id.unwrap());
 
     this.gameInfos = gameInfos;
     this.gameStorePacked = gameStorePacked;
   }
 
-  *loadGameWithTokenId(gameId: string) {
-    const entities: Entities = yield this.toriiClient.getEntities({
-      clause: {
-        Member: {
-          member: "game_id",
-          model: "dopewars-GameWithTokenId",
-          operator: "Eq",
-          value: { Primitive: { U32: Number(gameId) } },
-        },
-      },
-      pagination: {
-        limit: 100,
-        cursor: undefined,
-        direction: "Forward",
-        order_by: [],
-      },
-      no_hashed_keys: true,
-      models: [],
-      historical: false,
-    });
-
-    const gameWithTokenId = parseModels(entities, "dopewars-GameWithTokenId")[0]; //as GameWithTokenId;
-
-    if (!gameWithTokenId) return;
-
-    gameWithTokenId.equipment_by_slot = gameWithTokenId.equipment_by_slot.map((i: string) => Number(i));
-    // @ts-ignore
-    gameWithTokenId.token_id_type = gameWithTokenId.token_id.activeVariant();
-    // @ts-ignore
-    gameWithTokenId.token_id = Number(gameWithTokenId.token_id.unwrap());
-
-    this.gameWithTokenId = gameWithTokenId;
-  }
 
   *loadSeasonSettings(season_version: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
@@ -274,12 +242,6 @@ export class GameStoreClass {
       models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
       historical: false,
     });
-
-    // const seasonEntity = Object.values(entities)[0];
-    // if (!seasonEntity) return;
-
-    // const seasonSettings = parseStruct(seasonEntity["dopewars-SeasonSettings"]) as SeasonSettings;
-    // const gameConfig = parseStruct(seasonEntity["dopewars-GameConfig"]) as GameConfig;
 
     if (!entities.items[0]) return;
 
@@ -335,15 +297,15 @@ export class GameStoreClass {
     }
   }
 
-  *getGameWithTokenIdCreated(gameId: number) {
-    const loaded = this.allGameWithTokenIdCreated.find((i) => i.game_id === gameId);
+  *getGameCreated(gameId: number) {
+    const loaded = this.allGamesCreated.find((i) => i.game_id === gameId);
     if (loaded) return loaded;
 
     const entities: Entities = yield this.toriiClient.getEventMessages({
       clause: {
         Member: {
           member: "game_id",
-          model: "dopewars-GameWithTokenIdCreated",
+          model: "dopewars-GameCreated",
           operator: "Eq",
           value: { Primitive: { U32: Number(gameId) } },
         },
@@ -359,15 +321,14 @@ export class GameStoreClass {
       historical: false,
     });
 
-
-    const game = parseModels(entities, "dopewars-GameWithTokenIdCreated")[0];
-    if (game) {
+    const gameCreated = parseModels(entities, "dopewars-GameCreated")[0];
+    if (gameCreated) {
       // @ts-ignore
-      game.token_id_type = game.token_id.activeVariant();
+      gameCreated.token_id_type = gameCreated.token_id.activeVariant();
       // @ts-ignore
-      game.token_id = Number(game.token_id.unwrap());
-      this.allGameWithTokenIdCreated.push(game);
+      gameCreated.token_id = Number(gameCreated.token_id.unwrap());
+      this.allGamesCreated.push(gameCreated);
     }
-    return game;
+    return gameCreated;
   }
 }

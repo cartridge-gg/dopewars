@@ -1,17 +1,15 @@
-use dojo::model::{ModelStorage, ModelValueStorage, ModelStorageTest};
-use dojo::world::{WorldStorage, IWorldDispatcher};
+use dojo::model::{ModelStorage, ModelStorageTest, ModelValueStorage};
+use dojo::world::{IWorldDispatcher, WorldStorage};
 
 use rollyourown::{
     config::{
-        locations::{Locations}, ryo::{RyoConfig},
-        hustlers::{ItemSlot, HustlerItemBaseConfig, HustlerItemTiersConfig},
-        drugs::{Drugs, DrugConfig}, encounters::{Encounters, EncounterConfig, EncounterStatsConfig},
-        game::{GameConfig}, ryo_address::{RyoAddress},
-        settings::{SeasonSettings, EncountersMode, DrugsMode}
+        drugs::{DrugConfig, Drugs}, encounters::{EncounterConfig, EncounterStatsConfig, Encounters},
+        game::{GameConfig}, hustlers::{ItemSlot}, locations::{Locations}, ryo::{RyoConfig},
+        ryo_address::{RyoAddress}, settings::{DrugsMode, EncountersMode, SeasonSettings},
     },
-    models::{game::Game, game_with_token_id::GameWithTokenId, season::Season, game_store_packed::GameStorePacked,},
-    packing::{game_store::{GameStore, GameStorePackerImpl, GameMode}}, traits::{Packable, Packer},
-    utils::sorted_list::{SortedList, SortedListItem}
+    models::{game::Game, game_store_packed::GameStorePacked, season::Season},
+    packing::{game_store::{GameMode, GameStore, GameStorePackerImpl}}, traits::{Packable, Packer},
+    utils::sorted_list::{SortedList, SortedListItem},
 };
 use starknet::ContractAddress;
 
@@ -47,17 +45,9 @@ impl StoreImpl of StoreTrait {
     }
 
     fn encounter_stats_config(
-        self: @Store, encounter: Encounters, encounters_mode: EncountersMode
+        self: @Store, encounter: Encounters, encounters_mode: EncountersMode,
     ) -> EncounterStatsConfig {
         self.world.read_model((encounter, encounters_mode))
-    }
-
-    fn item_base_config(self: @Store, slot: ItemSlot, item_id: u16) -> HustlerItemBaseConfig {
-        self.world.read_model((slot, item_id))
-    }
-
-    fn item_tiers_config(self: @Store, slot: ItemSlot, tiers: u8) -> HustlerItemTiersConfig {
-        self.world.read_model((slot, tiers))
     }
 
     //
@@ -75,7 +65,7 @@ impl StoreImpl of StoreTrait {
     }
 
     fn game_store_packed(
-        self: @Store, game_id: u32, player_id: ContractAddress
+        self: @Store, game_id: u32, player_id: ContractAddress,
     ) -> GameStorePacked {
         self.world.read_model((game_id, player_id))
     }
@@ -86,7 +76,7 @@ impl StoreImpl of StoreTrait {
     }
 
     fn sorted_list_item(
-        self: @Store, list_id: felt252, item_k0: u32, item_k1: ContractAddress
+        self: @Store, list_id: felt252, item_k0: u32, item_k1: ContractAddress,
     ) -> SortedListItem {
         self.world.read_model((list_id, item_k0, item_k1))
     }
@@ -146,18 +136,10 @@ impl StoreImpl of StoreTrait {
     fn set_sorted_list_item(ref self: Store, item: @SortedListItem) {
         self.world.write_model(item)
     }
-
     //
 
-    fn game_with_token_id(self: @Store, game_id: u32, player_id: ContractAddress) -> GameWithTokenId {
-        self.world.read_model((game_id, player_id))
-    }
-    
-    fn set_game_with_token_id(ref self: Store, game_with_token_id: @GameWithTokenId) {
-        self.world.write_model(game_with_token_id);
-    }
     //
-    // fn set_slot_machine(ref self: Store, machine: @SlotMachine) {
+// fn set_slot_machine(ref self: Store, machine: @SlotMachine) {
 //     self.world.write_model(machine)
 // }
 

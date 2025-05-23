@@ -5,8 +5,6 @@ import {
   useRegisteredGamesBySeasonQuery,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
-import { useDojoClients } from "./useDojoClients";
-import { useDojoContext } from "./useDojoContext";
 import { useSql } from "./useSql";
 import { shortString } from "starknet";
 
@@ -18,28 +16,23 @@ interface RegisteredGamesBySeasonInterface {
 }
 
 const sqlQuery = (season_version: string) => `SELECT season_version,
-g.game_id,
-g.player_id,
+game_id,
+player_id,
 "player_name.value",
-hustler_id,
 final_score,
 registered,
 claimed,
 claimable,
 position,
 multiplier,
-gt.token_id,
-gt."token_id.guestlootid",
-gt."token_id.lootid",
-gt."token_id.hustlerid"
-FROM "dopewars-Game" as g
-LEFT
-JOIN "dopewars-GameWithTokenId" as gt on g.game_id = gt.game_id
-AND g.player_id = gt.player_id
+token_id,
+"token_id.guestlootid",
+"token_id.lootid",
+"token_id.hustlerid"
+FROM "dopewars-Game" 
 where season_version = ${season_version} and registered = true
 ORDER BY final_score DESC
 LIMIT 1000;`;
-
 
 export const useRegisteredGamesBySeason = (version: number): RegisteredGamesBySeasonInterface => {
   // const { data, isFetched, isFetching, refetch } = useRegisteredGamesBySeasonQuery({

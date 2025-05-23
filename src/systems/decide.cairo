@@ -1,7 +1,7 @@
 use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, models::game_with_token_id::{TokenId},
-    packing::game_store::{GameMode}, packing::game_store::{GameStore, GameStoreImpl},
-    systems::{helpers::{shopping, trading}, game::{Actions, EncounterActions}},
+    config::{hustlers::{ItemSlot}, locations::{Locations}}, packing::game_store::{GameMode},
+    packing::game_store::{GameStore, GameStoreImpl},
+    systems::{game::{Actions, EncounterActions}, helpers::{shopping, trading}},
 };
 use starknet::ContractAddress;
 
@@ -24,21 +24,13 @@ mod decide {
             drugs::{Drugs}, encounters::{Encounters}, game::{GameConfig}, locations::{Locations},
             ryo::{RyoConfig}, ryo_address::{RyoAddress},
         },
-        constants::{ETHER}, events::{GameCreated, GameWithTokenIdCreated},
-        helpers::season_manager::{SeasonManagerTrait},
+        constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
         interfaces::{
             dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
             erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
             paper::{IPaperDispatcher, IPaperDispatcherTrait},
         },
-        models::{
-            game::{Game, GameImpl}, game_store_packed::GameStorePacked,
-            game_with_token_id::{
-                GameWithTokenId, //  GameWithTokenIdCreatedImpl, GameWithTokenIdCreatedTrait,
-                GameWithTokenIdImpl, GameWithTokenIdTrait, TokenId,
-            },
-            season::{Season},
-        },
+        models::{game::{Game, GameImpl}, game_store_packed::GameStorePacked, season::{Season}},
         packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
         store::{Store, StoreImpl, StoreTrait},
         systems::{
@@ -83,6 +75,4 @@ mod decide {
             };
         }
     }
-
-
 }

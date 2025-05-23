@@ -6,10 +6,7 @@ import {
   Dopewars_EncounterStatsConfig as EncounterStatsConfig,
   Dopewars_EncounterStatsConfigEdge as EncounterStatsConfigEdge,
   Dopewars_GameConfig as GameConfig,
-  Dopewars_HustlerItemBaseConfig as HustlerItemBaseConfig,
-  Dopewars_HustlerItemBaseConfigEdge as HustlerItemBaseConfigEdge,
-  Dopewars_HustlerItemTiersConfig as HustlerItemTiersConfig,
-  Dopewars_HustlerItemTiersConfigEdge as HustlerItemTiersConfigEdge,
+  
   Dopewars_LocationConfig as LocationConfig,
   Dopewars_LocationConfigEdge as LocationConfigEdge,
   Dopewars_RyoAddress as RyoAddress,
@@ -21,8 +18,8 @@ import {
   Dopewars_DopewarsItemTierEdge as DopewarsItemTierEdge,
   Dopewars_DopewarsItemTierConfig as DopewarsItemTierConfig,
   Dopewars_DopewarsItemTierConfigEdge as DopewarsItemTierConfigEdge,
-  Dojo_ComponentValueEventEdge as ComponentValueEventEdge,
-  Dojo_ComponentValueEvent as ComponentValueEvent,
+  Dope_ComponentValueEventEdge as ComponentValueEventEdge,
+  Dope_ComponentValueEvent as ComponentValueEvent,
 } from "@/generated/graphql";
 import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
@@ -51,21 +48,21 @@ export type LayoutItem = {
   idx: bigint;
 };
 
-export type HustlerItemConfig = {
-  slot: ItemSlot;
-  level: number;
-  base: HustlerItemBaseConfig;
-  tier: HustlerItemTiersConfig;
-};
+// export type HustlerItemConfig = {
+//   slot: ItemSlot;
+//   level: number;
+//   base: HustlerItemBaseConfig;
+//   tier: HustlerItemTiersConfig;
+// };
 
-export type HustlerItemConfigFull = HustlerItemConfig & {
-  icon: React.FC;
-  upgradeName: string;
-};
+// export type HustlerItemConfigFull = HustlerItemConfig & {
+//   icon: React.FC;
+//   upgradeName: string;
+// };
 
-export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
-  icon: React.FC;
-};
+// export type HustlerItemBaseConfigFull = HustlerItemBaseConfig & {
+//   icon: React.FC;
+// };
 
 export type GearItemFull = {
   gearItem: GearItem;
@@ -77,13 +74,13 @@ export type GearItemFull = {
   }[];
 };
 
-export type HustlerConfig = {
-  hustler_id: number;
-  weapon: HustlerItemConfig;
-  clothes: HustlerItemConfig;
-  feet: HustlerItemConfig;
-  transport: HustlerItemConfig;
-};
+// export type HustlerConfig = {
+//   hustler_id: number;
+//   weapon: HustlerItemConfig;
+//   clothes: HustlerItemConfig;
+//   feet: HustlerItemConfig;
+//   transport: HustlerItemConfig;
+// };
 
 export type SeasonSettingsModes = {
   cash_modes: Array<CashMode>;
@@ -100,7 +97,7 @@ export type GetConfig = {
     game_store: Array<LayoutItem>;
     player: Array<LayoutItem>;
   };
-  hustlers: Array<HustlerConfig>;
+  // hustlers: Array<HustlerConfig>;
   ryo_config: RyoConfig;
   season_settings_modes: SeasonSettingsModes;
 };
@@ -110,8 +107,8 @@ export type Config = {
   ryoAddress: RyoAddress;
   drug: DrugConfigFull[];
   location: LocationConfigFull[];
-  items: HustlerItemBaseConfigFull[];
-  tiers: HustlerItemTiersConfig[];
+  // items: HustlerItemBaseConfigFull[];
+  // tiers: HustlerItemTiersConfig[];
   encounterStats: EncounterStatsConfig[];
   config: GetConfig;
 
@@ -178,21 +175,7 @@ export class ConfigStoreClass {
 
     //
 
-    const hustlerItemBaseConfigEdges = data.dopewarsHustlerItemBaseConfigModels!.edges as HustlerItemBaseConfigEdge[];
-    const hustlerItemBaseConfig = hustlerItemBaseConfigEdges.map((i) => {
-      const name = shortString.decodeShortString(i.node?.name);
-      return {
-        ...i.node,
-        name,
-        icon: itemIcons[shortString.decodeShortString(i.node?.name) as itemsIconsKeys],
-      } as HustlerItemBaseConfigFull;
-    });
-    //
-
-    const hustlerItemTiersConfigEdges = data.dopewarsHustlerItemTiersConfigModels!
-      .edges as HustlerItemTiersConfigEdge[];
-    const hustlerItemTiersConfig = hustlerItemTiersConfigEdges.map((i) => i.node as HustlerItemTiersConfig);
-
+   
     //
 
     const encounterStatsConfigEdges = data.dopewarsEncounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
@@ -257,8 +240,6 @@ export class ConfigStoreClass {
       ryoAddress: ryoAddress,
       drug: drugConfigFull,
       location: locationConfigFull,
-      items: hustlerItemBaseConfig,
-      tiers: hustlerItemTiersConfig,
 
       componentValues,
       dopewarsItemsTiers,
@@ -300,32 +281,7 @@ export class ConfigStoreClass {
     return this.config?.config.layouts.player.find((i) => i.name === name)!;
   }
 
-  // hustlers
-
-  getHustlerById(id: number): HustlerConfig {
-    return this.config?.config.hustlers.find((i) => Number(i.hustler_id) === Number(id))!;
-  }
-
-  getHustlerItemByIds(id: number, slot_id: number, level: number): HustlerItemConfigFull {
-    const base_config = this.config?.items.find(
-      (i) => Number(i.id) === Number(id) && Number(i.slot_id) === Number(slot_id),
-    )!;
-
-    const tier = base_config.initial_tier + level;
-    const tier_config = this.config?.tiers.find(
-      (i) => Number(i.slot_id) === Number(slot_id) && Number(i.tier) === Number(tier),
-    )!;
-
-    return {
-      slot: slot_id as ItemSlot,
-      level,
-      base: base_config,
-      tier: tier_config,
-      // @ts-ignore
-      upgradeName: itemUpgrades[Number(slot_id) as ItemSlot][Number(id)][Number(level)] || "Original",
-      icon: itemIcons[base_config.name as itemsIconsKeys],
-    };
-  }
+  
 
   // loot
 

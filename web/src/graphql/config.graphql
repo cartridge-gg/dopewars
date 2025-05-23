@@ -59,31 +59,31 @@ query Config {
     }
   }
 
-  # HustlerItemBaseConfig
-  dopewarsHustlerItemBaseConfigModels {
-    edges {
-      node {
-        slot
-        id
-        slot_id
-        name
-        initial_tier
-      }
-    }
-  }
+  # # HustlerItemBaseConfig
+  # dopewarsHustlerItemBaseConfigModels {
+  #   edges {
+  #     node {
+  #       slot
+  #       id
+  #       slot_id
+  #       name
+  #       initial_tier
+  #     }
+  #   }
+  # }
 
-  # HustlerItemTiersConfig
-  dopewarsHustlerItemTiersConfigModels(limit: 24) {
-    edges {
-      node {
-        slot
-        slot_id
-        tier
-        cost
-        stat
-      }
-    }
-  }
+  # # HustlerItemTiersConfig
+  # dopewarsHustlerItemTiersConfigModels(limit: 24) {
+  #   edges {
+  #     node {
+  #       slot
+  #       slot_id
+  #       tier
+  #       cost
+  #       stat
+  #     }
+  #   }
+  # }
 
   dopewarsEncounterStatsConfigModels(limit: 100) {
     edges {

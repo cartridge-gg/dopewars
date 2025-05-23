@@ -18,11 +18,10 @@ export const DW_NS = "dopewars";
 interface SystemsInterface {
   createGame: (
     gameMode: number,
-    hustlerId: number,
     playerName: string,
+    multiplier: number,
     tokenIdType: number,
     tokenId: number,
-    multiplier: number,
   ) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
@@ -169,7 +168,7 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const createGame = useCallback(
-    async (gameMode: GameMode, hustlerId: number, playerName: string, tokenIdType: number, tokenId: number, multiplier: number) => {
+    async (gameMode: GameMode, playerName: string, multiplier: number, tokenIdType: number, tokenId: number) => {
       const paperFee = BigInt(config?.ryo.paper_fee * multiplier) * ETHER;
       const paperAddress = selectedChain.paperAddress;
 
@@ -185,7 +184,6 @@ export const useSystems = (): SystemsInterface => {
         entrypoint: "create_game",
         calldata: CallData.compile([
           gameMode,
-          hustlerId,
           shortString.encodeShortString(playerName),
           multiplier,
           tokenIdType,
@@ -300,11 +298,11 @@ export const useSystems = (): SystemsInterface => {
       ];
 
       const playerId = account?.address;
-      const gameWithTokenIdEntities = await toriiClient.getEntities({
+      const gameEntities = await toriiClient.getEntities({
         clause: {
           Keys: {
             keys: [Number(gameId).toString(), playerId],
-            models: ["dopewars-GameWithTokenId"],
+            models: ["dopewars-Game"],
             pattern_matching: "FixedLen",
           },
         },
@@ -315,19 +313,19 @@ export const useSystems = (): SystemsInterface => {
           order_by: [],
         },
         no_hashed_keys: true,
-        models: ["dopewars-GameWithTokenId"],
+        models: ["dopewars-Game"],
         historical: false,
       });
 
-      if (Object.keys(gameWithTokenIdEntities).length > 0) {
+      if (Object.keys(gameEntities).length > 0) {
         // retrieve loot_id used with game_id
-        const gameWithTokenId = parseModels(gameWithTokenIdEntities, "dopewars-GameWithTokenId")[0];
+        const game = parseModels(gameEntities, "dopewars-Game")[0];
 
         let lootId = 0;
         // @ts-ignore
-        if (gameWithTokenId.token_id.activeVariant() === "LootId") {
+        if (game.token_id.activeVariant() === "LootId") {
           // @ts-ignore
-          lootId = Number(gameWithTokenId.token_id.unwrap());
+          lootId = Number(game.token_id.unwrap());
         }
 
         if (lootId > 0) {

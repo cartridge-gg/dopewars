@@ -1,9 +1,9 @@
 use dojo::meta::introspect::Introspect;
 
 use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, models::game_with_token_id::{TokenId},
+    config::{hustlers::{ItemSlot}, locations::{Locations}},
     packing::game_store::{GameMode}, packing::game_store::{GameStore, GameStoreImpl},
-    systems::helpers::{shopping, trading},
+    systems::helpers::{shopping, trading}, models::game::TokenId
 };
 use starknet::ContractAddress;
 
@@ -25,7 +25,6 @@ trait IGameActions<T> {
     fn create_game(
         self: @T,
         game_mode: GameMode,
-        hustler_id: u16,
         player_name: felt252,
         multiplier: u8,
         token_id: TokenId,
@@ -48,25 +47,24 @@ mod game {
             drugs::{Drugs}, encounters::{Encounters}, game::{GameConfig}, locations::{Locations},
             ryo::{RyoConfig}, ryo_address::{RyoAddress},
         },
-        constants::{ETHER}, events::{GameCreated, GameWithTokenIdCreated},
-        helpers::season_manager::{SeasonManagerTrait},
+        constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
         interfaces::{
             dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
             erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
             paper::{IPaperDispatcher, IPaperDispatcherTrait},
         },
         models::{
-            game::{Game, GameImpl}, game_store_packed::GameStorePacked,
-            game_with_token_id::{
-                GameWithTokenId, //  GameWithTokenIdCreatedImpl, GameWithTokenIdCreatedTrait,
-                GameWithTokenIdImpl, GameWithTokenIdTrait, TokenId,
-            },
+            game::{Game, GameImpl, TokenId},
+            game_store_packed::GameStorePacked,
             season::{Season},
         },
         packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
         store::{Store, StoreImpl, StoreTrait},
-        systems::{game::EncounterActions, helpers::{game_loop, shopping, trading// , traveling, traveling::EncounterOutcomes
-        }},
+        systems::{
+            game::EncounterActions,
+            helpers::{game_loop, shopping, trading // , traveling, traveling::EncounterOutcomes
+            },
+        },
         utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
@@ -76,7 +74,6 @@ mod game {
         fn create_game(
             self: @ContractState,
             game_mode: GameMode,
-            hustler_id: u16,
             player_name: felt252,
             multiplier: u8,
             token_id: TokenId,
@@ -108,9 +105,12 @@ mod game {
 
             let mut dope_world = self.world(@"dope");
 
-            let mut game_with_token_id_created = GameWithTokenIdCreated {
+            let mut game_created = GameCreated {
                 game_id,
                 player_id,
+                game_mode,
+                player_name,
+                multiplier,
                 token_id,
                 hustler_equipment: array![].span(),
                 hustler_body: array![].span(),
@@ -156,11 +156,11 @@ mod game {
                         contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
                     };
 
-                    game_with_token_id_created
+                    game_created
                         .hustler_equipment = dope_hustlers_dispatcher
                         .hustler_equipment(hustler_id.into());
 
-                    game_with_token_id_created
+                    game_created
                         .hustler_body = dope_hustlers_dispatcher
                         .hustler_body(hustler_id.into());
 
@@ -171,16 +171,17 @@ mod game {
                 },
             };
 
-            // create a GameWithTokenId
-            let mut game_with_token_id = GameWithTokenIdImpl::new(
-                dope_world, store, game_id, player_id, token_id,
-            );
-            store.set_game_with_token_id(@game_with_token_id);
-
             // create game
             let mut game_config = store.game_config(season_version);
             let mut game = GameImpl::new(
-                game_id, player_id, season_version, game_mode, player_name, hustler_id, multiplier,
+                dope_world,
+                game_id,
+                player_id,
+                season_version,
+                game_mode,
+                player_name,
+                multiplier,
+                token_id,
             );
 
             // save Game
@@ -188,18 +189,12 @@ mod game {
 
             // create & save GameStorePacked
             let game_store = GameStoreImpl::new(
-                store, ref game, ref game_config, ref game_with_token_id, ref randomizer,
+                store, ref game, ref game_config, ref randomizer,
             );
             game_store.save();
 
             // emit GameCreated
-            world
-                .emit_event(
-                    @GameCreated {
-                        game_id, player_id, game_mode, player_name, hustler_id // , token_id
-                    },
-                );
-            world.emit_event(@game_with_token_id_created);
+            world.emit_event(@game_created);
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
@@ -266,7 +261,6 @@ mod game {
                 }
             }
         }
-
     }
 
 

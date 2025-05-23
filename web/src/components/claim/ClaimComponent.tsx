@@ -114,6 +114,7 @@ export default function ClaimComponent() {
     setIsLoading(true);
 
     try {
+      // @ts-ignore
       const execution = await account?.execute([
         {
           contractAddress: dopeLootClaimContract.address,

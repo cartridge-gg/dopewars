@@ -14,7 +14,6 @@ import { MarketsClass } from "./Market";
 import { PlayerClass } from "./Player";
 import { WantedClass } from "./Wanted";
 import Bits from "./utils/Bits";
-import { GameWithTokenId } from "../stores/game";
 
 export type DrugMarket = {
   drug: string;
@@ -53,7 +52,6 @@ export class GameClass {
   configStore: ConfigStoreClass;
   gameInfos: Game;
   gameConfig: GameConfig;
-  gameWithTokenId?: GameWithTokenId;
   seasonSettings: SeasonSettings;
   packed: bigint;
 
@@ -71,13 +69,11 @@ export class GameClass {
     seasonSettings: SeasonSettings,
     gameConfig: GameConfig,
     gameStorePacked: GameStorePacked,
-    gameWithTokenId?: GameWithTokenId,
   ) {
     this.configStore = configStore;
     this.gameInfos = gameInfos;
     this.seasonSettings = seasonSettings;
     this.gameConfig = gameConfig;
-    this.gameWithTokenId = gameWithTokenId;
 
     this.packed = gameStorePacked.packed;
     //

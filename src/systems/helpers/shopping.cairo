@@ -7,7 +7,7 @@ use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
     models::game::{Game, GameImpl, GameTrait},
-    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations}},
+    config::{hustlers::{ ItemSlot}, locations::{Locations}},
     packing::{
         game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl},

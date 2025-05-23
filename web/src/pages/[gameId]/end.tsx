@@ -19,7 +19,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Button } from "@/components/common";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import {
   useDojoContext,
@@ -36,12 +35,11 @@ import { num, shortString } from "starknet";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { ChildrenOrConnect } from "@/components/wallet";
-import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 
 const End = () => {
   const gameStore = useGameStore();
-  const { game, gameInfos, gameWithTokenId } = gameStore;
+  const { game, gameInfos } = gameStore;
   const { router, gameId } = useRouterContext();
   const {
     clients: { rpcProvider },
@@ -167,10 +165,10 @@ const End = () => {
               text={shortString.decodeShortString(num.toHexString(BigInt(game?.gameInfos.player_name?.value)))}
               icon={
                 <HustlerAvatarIcon
-                gameId={gameInfos.game_id}
-                  hustlerId={gameInfos.hustler_id}
-                  tokenIdType={gameWithTokenId?.token_id_type}
-                  tokenId={gameWithTokenId?.token_id}
+                  gameId={gameInfos.game_id}
+                  // @ts-ignore
+                  tokenIdType={gameInfos?.token_id_type}
+                  tokenId={Number(gameInfos?.token_id)}
                 />
               }
             />

@@ -62,7 +62,6 @@ skip_contracts = [
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
 "dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-GameWithTokenId" = ["dopewars-game"]
 "dopewars-GameStorePacked" = ["dopewars-game"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
@@ -81,7 +80,6 @@ skip_contracts = [
 #
 
 "dopewars-GameCreated" = ["dopewars-game"]
-"dopewars-GameWithTokenIdCreated" = ["dopewars-game"]
 
 "dopewars-Traveled" = ["dopewars-game"]
 "dopewars-GameOver" = ["dopewars-game"]

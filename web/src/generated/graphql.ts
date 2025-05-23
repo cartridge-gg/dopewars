@@ -67,7 +67,7 @@ export type Erc1155__Token = {
 
 export type Erc__Token = Erc20__Token | Erc721__Token | Erc1155__Token;
 
-export type ModelUnion = Dope_Collection | Dope_CollectionComponent | Dope_CollectionComponentList | Dope_CollectionComponentSlug | Dope_ComponentValueEvent | Dope_ComponentValueResourceEvent | Dope_DopeLootClaimed | Dope_DopeLootClaimedEvent | Dope_DopeLootOpened | Dope_DopeLootOpenedEvent | Dope_DopeLootReleased | Dope_DopeLootReleasedEvent | Dope_HustlerBody | Dope_HustlerMetadata | Dope_HustlerSlot | Dope_PaletteEvent | Dope_StatEvent | Dopewars_Claimed | Dopewars_DopewarsItemTier | Dopewars_DopewarsItemTierConfig | Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameCreated | Dopewars_GameOver | Dopewars_GameStorePacked | Dopewars_GameWithTokenId | Dopewars_GameWithTokenIdCreated | Dopewars_HighVolatility | Dopewars_HustlerItemBaseConfig | Dopewars_HustlerItemTiersConfig | Dopewars_LocationConfig | Dopewars_NewHighScore | Dopewars_NewSeason | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem | Dopewars_TradeDrug | Dopewars_TravelEncounter | Dopewars_TravelEncounterResult | Dopewars_Traveled | Dopewars_TrophyCreation | Dopewars_TrophyProgression | Dopewars_UpgradeItem;
+export type ModelUnion = Dope_Collection | Dope_CollectionComponent | Dope_CollectionComponentList | Dope_CollectionComponentSlug | Dope_ComponentValueEvent | Dope_ComponentValueResourceEvent | Dope_DopeLootClaimed | Dope_DopeLootClaimedEvent | Dope_DopeLootOpened | Dope_DopeLootOpenedEvent | Dope_DopeLootReleased | Dope_DopeLootReleasedEvent | Dope_HustlerBody | Dope_HustlerMetadata | Dope_HustlerSlot | Dope_PaletteEvent | Dope_StatEvent | Dopewars_Claimed | Dopewars_DopewarsItemTier | Dopewars_DopewarsItemTierConfig | Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameCreated | Dopewars_GameOver | Dopewars_GameStorePacked | Dopewars_HighVolatility | Dopewars_LocationConfig | Dopewars_NewHighScore | Dopewars_NewSeason | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem | Dopewars_TradeDrug | Dopewars_TravelEncounter | Dopewars_TravelEncounterResult | Dopewars_Traveled | Dopewars_TrophyCreation | Dopewars_TrophyProgression | Dopewars_UpgradeItem;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -345,11 +345,7 @@ export type World__Query = {
   dopewarsGameModels?: Maybe<Dopewars_GameConnection>;
   dopewarsGameOverModels?: Maybe<Dopewars_GameOverConnection>;
   dopewarsGameStorePackedModels?: Maybe<Dopewars_GameStorePackedConnection>;
-  dopewarsGameWithTokenIdCreatedModels?: Maybe<Dopewars_GameWithTokenIdCreatedConnection>;
-  dopewarsGameWithTokenIdModels?: Maybe<Dopewars_GameWithTokenIdConnection>;
   dopewarsHighVolatilityModels?: Maybe<Dopewars_HighVolatilityConnection>;
-  dopewarsHustlerItemBaseConfigModels?: Maybe<Dopewars_HustlerItemBaseConfigConnection>;
-  dopewarsHustlerItemTiersConfigModels?: Maybe<Dopewars_HustlerItemTiersConfigConnection>;
   dopewarsLocationConfigModels?: Maybe<Dopewars_LocationConfigConnection>;
   dopewarsNewHighScoreModels?: Maybe<Dopewars_NewHighScoreConnection>;
   dopewarsNewSeasonModels?: Maybe<Dopewars_NewSeasonConnection>;
@@ -734,30 +730,6 @@ export type World__QueryDopewarsGameStorePackedModelsArgs = {
 };
 
 
-export type World__QueryDopewarsGameWithTokenIdCreatedModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_GameWithTokenIdCreatedOrder>;
-  where?: InputMaybe<Dopewars_GameWithTokenIdCreatedWhereInput>;
-};
-
-
-export type World__QueryDopewarsGameWithTokenIdModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_GameWithTokenIdOrder>;
-  where?: InputMaybe<Dopewars_GameWithTokenIdWhereInput>;
-};
-
-
 export type World__QueryDopewarsHighVolatilityModelsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -767,30 +739,6 @@ export type World__QueryDopewarsHighVolatilityModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Dopewars_HighVolatilityOrder>;
   where?: InputMaybe<Dopewars_HighVolatilityWhereInput>;
-};
-
-
-export type World__QueryDopewarsHustlerItemBaseConfigModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_HustlerItemBaseConfigOrder>;
-  where?: InputMaybe<Dopewars_HustlerItemBaseConfigWhereInput>;
-};
-
-
-export type World__QueryDopewarsHustlerItemTiersConfigModelsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Dopewars_HustlerItemTiersConfigOrder>;
-  where?: InputMaybe<Dopewars_HustlerItemTiersConfigWhereInput>;
 };
 
 
@@ -2900,18 +2848,19 @@ export type Dopewars_Game = {
   claimable?: Maybe<Scalars['u32']>;
   claimed?: Maybe<Scalars['bool']>;
   entity?: Maybe<World__Entity>;
+  equipment_by_slot?: Maybe<Array<Maybe<Scalars['felt252']>>>;
   eventMessage?: Maybe<World__EventMessage>;
   final_score?: Maybe<Scalars['u32']>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
-  hustler_id?: Maybe<Scalars['u16']>;
   multiplier?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Dopewars_Bytes16>;
   position?: Maybe<Scalars['u16']>;
   registered?: Maybe<Scalars['bool']>;
   season_version?: Maybe<Scalars['u16']>;
+  token_id?: Maybe<Dopewars_TokenId>;
 };
 
 export type Dopewars_GameConfig = {
@@ -3100,9 +3049,12 @@ export type Dopewars_GameCreated = {
   eventMessage?: Maybe<World__EventMessage>;
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
-  hustler_id?: Maybe<Scalars['u16']>;
+  hustler_body?: Maybe<Array<Maybe<Dopewars_HustlerBody>>>;
+  hustler_equipment?: Maybe<Array<Maybe<Dopewars_HustlerSlot>>>;
+  multiplier?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['felt252']>;
+  token_id?: Maybe<Dopewars_TokenId>;
 };
 
 export type Dopewars_GameCreatedConnection = {
@@ -3126,9 +3078,12 @@ export type Dopewars_GameCreatedOrder = {
 export enum Dopewars_GameCreatedOrderField {
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
-  HustlerId = 'HUSTLER_ID',
+  HustlerBody = 'HUSTLER_BODY',
+  HustlerEquipment = 'HUSTLER_EQUIPMENT',
+  Multiplier = 'MULTIPLIER',
   PlayerId = 'PLAYER_ID',
-  PlayerName = 'PLAYER_NAME'
+  PlayerName = 'PLAYER_NAME',
+  TokenId = 'TOKEN_ID'
 }
 
 export type Dopewars_GameCreatedWhereInput = {
@@ -3144,17 +3099,17 @@ export type Dopewars_GameCreatedWhereInput = {
   game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
   game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
-  hustler_id?: InputMaybe<Scalars['u16']>;
-  hustler_idEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idGT?: InputMaybe<Scalars['u16']>;
-  hustler_idGTE?: InputMaybe<Scalars['u16']>;
-  hustler_idIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idLIKE?: InputMaybe<Scalars['u16']>;
-  hustler_idLT?: InputMaybe<Scalars['u16']>;
-  hustler_idLTE?: InputMaybe<Scalars['u16']>;
-  hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idNOTLIKE?: InputMaybe<Scalars['u16']>;
+  multiplier?: InputMaybe<Scalars['u8']>;
+  multiplierEQ?: InputMaybe<Scalars['u8']>;
+  multiplierGT?: InputMaybe<Scalars['u8']>;
+  multiplierGTE?: InputMaybe<Scalars['u8']>;
+  multiplierIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  multiplierLIKE?: InputMaybe<Scalars['u8']>;
+  multiplierLT?: InputMaybe<Scalars['u8']>;
+  multiplierLTE?: InputMaybe<Scalars['u8']>;
+  multiplierNEQ?: InputMaybe<Scalars['u8']>;
+  multiplierNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
+  multiplierNOTLIKE?: InputMaybe<Scalars['u8']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -3177,6 +3132,44 @@ export type Dopewars_GameCreatedWhereInput = {
   player_nameNEQ?: InputMaybe<Scalars['felt252']>;
   player_nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
   player_nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  token_id?: InputMaybe<Dopewars_GameCreated_Token_IdWhereInput>;
+};
+
+export type Dopewars_GameCreated_Token_IdWhereInput = {
+  GuestLootId?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerId?: InputMaybe<Scalars['felt252']>;
+  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  LootId?: InputMaybe<Scalars['felt252']>;
+  LootIdEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdGT?: InputMaybe<Scalars['felt252']>;
+  LootIdGTE?: InputMaybe<Scalars['felt252']>;
+  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  LootIdLT?: InputMaybe<Scalars['felt252']>;
+  LootIdLTE?: InputMaybe<Scalars['felt252']>;
+  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  option?: InputMaybe<Scalars['Enum']>;
 };
 
 export type Dopewars_GameEdge = {
@@ -3193,17 +3186,18 @@ export type Dopewars_GameOrder = {
 export enum Dopewars_GameOrderField {
   Claimable = 'CLAIMABLE',
   Claimed = 'CLAIMED',
+  EquipmentBySlot = 'EQUIPMENT_BY_SLOT',
   FinalScore = 'FINAL_SCORE',
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
-  HustlerId = 'HUSTLER_ID',
   Multiplier = 'MULTIPLIER',
   PlayerId = 'PLAYER_ID',
   PlayerName = 'PLAYER_NAME',
   Position = 'POSITION',
   Registered = 'REGISTERED',
-  SeasonVersion = 'SEASON_VERSION'
+  SeasonVersion = 'SEASON_VERSION',
+  TokenId = 'TOKEN_ID'
 }
 
 export type Dopewars_GameOver = {
@@ -3213,11 +3207,11 @@ export type Dopewars_GameOver = {
   eventMessage?: Maybe<World__EventMessage>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
-  hustler_id?: Maybe<Scalars['u16']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['felt252']>;
   reputation?: Maybe<Scalars['u8']>;
   season_version?: Maybe<Scalars['u16']>;
+  token_id?: Maybe<Dopewars_TokenId>;
   turn?: Maybe<Scalars['u8']>;
 };
 
@@ -3243,11 +3237,11 @@ export enum Dopewars_GameOverOrderField {
   Cash = 'CASH',
   GameId = 'GAME_ID',
   Health = 'HEALTH',
-  HustlerId = 'HUSTLER_ID',
   PlayerId = 'PLAYER_ID',
   PlayerName = 'PLAYER_NAME',
   Reputation = 'REPUTATION',
   SeasonVersion = 'SEASON_VERSION',
+  TokenId = 'TOKEN_ID',
   Turn = 'TURN'
 }
 
@@ -3285,17 +3279,6 @@ export type Dopewars_GameOverWhereInput = {
   healthNEQ?: InputMaybe<Scalars['u8']>;
   healthNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   healthNOTLIKE?: InputMaybe<Scalars['u8']>;
-  hustler_id?: InputMaybe<Scalars['u16']>;
-  hustler_idEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idGT?: InputMaybe<Scalars['u16']>;
-  hustler_idGTE?: InputMaybe<Scalars['u16']>;
-  hustler_idIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idLIKE?: InputMaybe<Scalars['u16']>;
-  hustler_idLT?: InputMaybe<Scalars['u16']>;
-  hustler_idLTE?: InputMaybe<Scalars['u16']>;
-  hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idNOTLIKE?: InputMaybe<Scalars['u16']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -3340,6 +3323,7 @@ export type Dopewars_GameOverWhereInput = {
   season_versionNEQ?: InputMaybe<Scalars['u16']>;
   season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
   season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
+  token_id?: InputMaybe<Dopewars_GameOver_Token_IdWhereInput>;
   turn?: InputMaybe<Scalars['u8']>;
   turnEQ?: InputMaybe<Scalars['u8']>;
   turnGT?: InputMaybe<Scalars['u8']>;
@@ -3351,6 +3335,43 @@ export type Dopewars_GameOverWhereInput = {
   turnNEQ?: InputMaybe<Scalars['u8']>;
   turnNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   turnNOTLIKE?: InputMaybe<Scalars['u8']>;
+};
+
+export type Dopewars_GameOver_Token_IdWhereInput = {
+  GuestLootId?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerId?: InputMaybe<Scalars['felt252']>;
+  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  LootId?: InputMaybe<Scalars['felt252']>;
+  LootIdEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdGT?: InputMaybe<Scalars['felt252']>;
+  LootIdGTE?: InputMaybe<Scalars['felt252']>;
+  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  LootIdLT?: InputMaybe<Scalars['felt252']>;
+  LootIdLTE?: InputMaybe<Scalars['felt252']>;
+  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  option?: InputMaybe<Scalars['Enum']>;
 };
 
 export type Dopewars_GameStorePacked = {
@@ -3459,17 +3480,6 @@ export type Dopewars_GameWhereInput = {
   game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
   game_over?: InputMaybe<Scalars['bool']>;
-  hustler_id?: InputMaybe<Scalars['u16']>;
-  hustler_idEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idGT?: InputMaybe<Scalars['u16']>;
-  hustler_idGTE?: InputMaybe<Scalars['u16']>;
-  hustler_idIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idLIKE?: InputMaybe<Scalars['u16']>;
-  hustler_idLT?: InputMaybe<Scalars['u16']>;
-  hustler_idLTE?: InputMaybe<Scalars['u16']>;
-  hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idNOTLIKE?: InputMaybe<Scalars['u16']>;
   multiplier?: InputMaybe<Scalars['u8']>;
   multiplierEQ?: InputMaybe<Scalars['u8']>;
   multiplierGT?: InputMaybe<Scalars['u8']>;
@@ -3516,204 +3526,7 @@ export type Dopewars_GameWhereInput = {
   season_versionNEQ?: InputMaybe<Scalars['u16']>;
   season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
   season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
-};
-
-export type Dopewars_GameWithTokenId = {
-  __typename?: 'dopewars_GameWithTokenId';
-  entity?: Maybe<World__Entity>;
-  equipment_by_slot?: Maybe<Array<Maybe<Scalars['felt252']>>>;
-  eventMessage?: Maybe<World__EventMessage>;
-  game_id?: Maybe<Scalars['u32']>;
-  player_id?: Maybe<Scalars['ContractAddress']>;
-  token_id?: Maybe<Dopewars_TokenId>;
-};
-
-export type Dopewars_GameWithTokenIdConnection = {
-  __typename?: 'dopewars_GameWithTokenIdConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_GameWithTokenIdEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_GameWithTokenIdCreated = {
-  __typename?: 'dopewars_GameWithTokenIdCreated';
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  game_id?: Maybe<Scalars['u32']>;
-  hustler_body?: Maybe<Array<Maybe<Dopewars_HustlerBody>>>;
-  hustler_equipment?: Maybe<Array<Maybe<Dopewars_HustlerSlot>>>;
-  player_id?: Maybe<Scalars['ContractAddress']>;
-  token_id?: Maybe<Dopewars_TokenId>;
-};
-
-export type Dopewars_GameWithTokenIdCreatedConnection = {
-  __typename?: 'dopewars_GameWithTokenIdCreatedConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_GameWithTokenIdCreatedEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_GameWithTokenIdCreatedEdge = {
-  __typename?: 'dopewars_GameWithTokenIdCreatedEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_GameWithTokenIdCreated>;
-};
-
-export type Dopewars_GameWithTokenIdCreatedOrder = {
-  direction: OrderDirection;
-  field: Dopewars_GameWithTokenIdCreatedOrderField;
-};
-
-export enum Dopewars_GameWithTokenIdCreatedOrderField {
-  GameId = 'GAME_ID',
-  HustlerBody = 'HUSTLER_BODY',
-  HustlerEquipment = 'HUSTLER_EQUIPMENT',
-  PlayerId = 'PLAYER_ID',
-  TokenId = 'TOKEN_ID'
-}
-
-export type Dopewars_GameWithTokenIdCreatedWhereInput = {
-  game_id?: InputMaybe<Scalars['u32']>;
-  game_idEQ?: InputMaybe<Scalars['u32']>;
-  game_idGT?: InputMaybe<Scalars['u32']>;
-  game_idGTE?: InputMaybe<Scalars['u32']>;
-  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  game_idLIKE?: InputMaybe<Scalars['u32']>;
-  game_idLT?: InputMaybe<Scalars['u32']>;
-  game_idLTE?: InputMaybe<Scalars['u32']>;
-  game_idNEQ?: InputMaybe<Scalars['u32']>;
-  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
-  player_id?: InputMaybe<Scalars['ContractAddress']>;
-  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  token_id?: InputMaybe<Dopewars_GameWithTokenIdCreated_Token_IdWhereInput>;
-};
-
-export type Dopewars_GameWithTokenIdCreated_Token_IdWhereInput = {
-  GuestLootId?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerId?: InputMaybe<Scalars['felt252']>;
-  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  LootId?: InputMaybe<Scalars['felt252']>;
-  LootIdEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdGT?: InputMaybe<Scalars['felt252']>;
-  LootIdGTE?: InputMaybe<Scalars['felt252']>;
-  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  LootIdLT?: InputMaybe<Scalars['felt252']>;
-  LootIdLTE?: InputMaybe<Scalars['felt252']>;
-  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  option?: InputMaybe<Scalars['Enum']>;
-};
-
-export type Dopewars_GameWithTokenIdEdge = {
-  __typename?: 'dopewars_GameWithTokenIdEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_GameWithTokenId>;
-};
-
-export type Dopewars_GameWithTokenIdOrder = {
-  direction: OrderDirection;
-  field: Dopewars_GameWithTokenIdOrderField;
-};
-
-export enum Dopewars_GameWithTokenIdOrderField {
-  EquipmentBySlot = 'EQUIPMENT_BY_SLOT',
-  GameId = 'GAME_ID',
-  PlayerId = 'PLAYER_ID',
-  TokenId = 'TOKEN_ID'
-}
-
-export type Dopewars_GameWithTokenIdWhereInput = {
-  game_id?: InputMaybe<Scalars['u32']>;
-  game_idEQ?: InputMaybe<Scalars['u32']>;
-  game_idGT?: InputMaybe<Scalars['u32']>;
-  game_idGTE?: InputMaybe<Scalars['u32']>;
-  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  game_idLIKE?: InputMaybe<Scalars['u32']>;
-  game_idLT?: InputMaybe<Scalars['u32']>;
-  game_idLTE?: InputMaybe<Scalars['u32']>;
-  game_idNEQ?: InputMaybe<Scalars['u32']>;
-  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
-  player_id?: InputMaybe<Scalars['ContractAddress']>;
-  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
-  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  token_id?: InputMaybe<Dopewars_GameWithTokenId_Token_IdWhereInput>;
-};
-
-export type Dopewars_GameWithTokenId_Token_IdWhereInput = {
-  GuestLootId?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerId?: InputMaybe<Scalars['felt252']>;
-  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
-  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
-  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  LootId?: InputMaybe<Scalars['felt252']>;
-  LootIdEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdGT?: InputMaybe<Scalars['felt252']>;
-  LootIdGTE?: InputMaybe<Scalars['felt252']>;
-  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
-  LootIdLT?: InputMaybe<Scalars['felt252']>;
-  LootIdLTE?: InputMaybe<Scalars['felt252']>;
-  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
-  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  option?: InputMaybe<Scalars['Enum']>;
+  token_id?: InputMaybe<Dopewars_Game_Token_IdWhereInput>;
 };
 
 export type Dopewars_Game_Player_NameWhereInput = {
@@ -3728,6 +3541,43 @@ export type Dopewars_Game_Player_NameWhereInput = {
   valueNEQ?: InputMaybe<Scalars['u128']>;
   valueNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u128']>>>;
   valueNOTLIKE?: InputMaybe<Scalars['u128']>;
+};
+
+export type Dopewars_Game_Token_IdWhereInput = {
+  GuestLootId?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerId?: InputMaybe<Scalars['felt252']>;
+  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  LootId?: InputMaybe<Scalars['felt252']>;
+  LootIdEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdGT?: InputMaybe<Scalars['felt252']>;
+  LootIdGTE?: InputMaybe<Scalars['felt252']>;
+  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  LootIdLT?: InputMaybe<Scalars['felt252']>;
+  LootIdLTE?: InputMaybe<Scalars['felt252']>;
+  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  option?: InputMaybe<Scalars['Enum']>;
 };
 
 export type Dopewars_HighVolatility = {
@@ -3822,176 +3672,6 @@ export type Dopewars_HustlerBody = {
   value?: Maybe<Scalars['u8']>;
 };
 
-export type Dopewars_HustlerItemBaseConfig = {
-  __typename?: 'dopewars_HustlerItemBaseConfig';
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  id?: Maybe<Scalars['u32']>;
-  initial_tier?: Maybe<Scalars['u8']>;
-  name?: Maybe<Scalars['felt252']>;
-  slot?: Maybe<Scalars['Enum']>;
-  slot_id?: Maybe<Scalars['u8']>;
-};
-
-export type Dopewars_HustlerItemBaseConfigConnection = {
-  __typename?: 'dopewars_HustlerItemBaseConfigConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_HustlerItemBaseConfigEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_HustlerItemBaseConfigEdge = {
-  __typename?: 'dopewars_HustlerItemBaseConfigEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_HustlerItemBaseConfig>;
-};
-
-export type Dopewars_HustlerItemBaseConfigOrder = {
-  direction: OrderDirection;
-  field: Dopewars_HustlerItemBaseConfigOrderField;
-};
-
-export enum Dopewars_HustlerItemBaseConfigOrderField {
-  Id = 'ID',
-  InitialTier = 'INITIAL_TIER',
-  Name = 'NAME',
-  Slot = 'SLOT',
-  SlotId = 'SLOT_ID'
-}
-
-export type Dopewars_HustlerItemBaseConfigWhereInput = {
-  id?: InputMaybe<Scalars['u32']>;
-  idEQ?: InputMaybe<Scalars['u32']>;
-  idGT?: InputMaybe<Scalars['u32']>;
-  idGTE?: InputMaybe<Scalars['u32']>;
-  idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  idLIKE?: InputMaybe<Scalars['u32']>;
-  idLT?: InputMaybe<Scalars['u32']>;
-  idLTE?: InputMaybe<Scalars['u32']>;
-  idNEQ?: InputMaybe<Scalars['u32']>;
-  idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  idNOTLIKE?: InputMaybe<Scalars['u32']>;
-  initial_tier?: InputMaybe<Scalars['u8']>;
-  initial_tierEQ?: InputMaybe<Scalars['u8']>;
-  initial_tierGT?: InputMaybe<Scalars['u8']>;
-  initial_tierGTE?: InputMaybe<Scalars['u8']>;
-  initial_tierIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  initial_tierLIKE?: InputMaybe<Scalars['u8']>;
-  initial_tierLT?: InputMaybe<Scalars['u8']>;
-  initial_tierLTE?: InputMaybe<Scalars['u8']>;
-  initial_tierNEQ?: InputMaybe<Scalars['u8']>;
-  initial_tierNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  initial_tierNOTLIKE?: InputMaybe<Scalars['u8']>;
-  name?: InputMaybe<Scalars['felt252']>;
-  nameEQ?: InputMaybe<Scalars['felt252']>;
-  nameGT?: InputMaybe<Scalars['felt252']>;
-  nameGTE?: InputMaybe<Scalars['felt252']>;
-  nameIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  nameLIKE?: InputMaybe<Scalars['felt252']>;
-  nameLT?: InputMaybe<Scalars['felt252']>;
-  nameLTE?: InputMaybe<Scalars['felt252']>;
-  nameNEQ?: InputMaybe<Scalars['felt252']>;
-  nameNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
-  nameNOTLIKE?: InputMaybe<Scalars['felt252']>;
-  slot?: InputMaybe<Scalars['Enum']>;
-  slot_id?: InputMaybe<Scalars['u8']>;
-  slot_idEQ?: InputMaybe<Scalars['u8']>;
-  slot_idGT?: InputMaybe<Scalars['u8']>;
-  slot_idGTE?: InputMaybe<Scalars['u8']>;
-  slot_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  slot_idLIKE?: InputMaybe<Scalars['u8']>;
-  slot_idLT?: InputMaybe<Scalars['u8']>;
-  slot_idLTE?: InputMaybe<Scalars['u8']>;
-  slot_idNEQ?: InputMaybe<Scalars['u8']>;
-  slot_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  slot_idNOTLIKE?: InputMaybe<Scalars['u8']>;
-};
-
-export type Dopewars_HustlerItemTiersConfig = {
-  __typename?: 'dopewars_HustlerItemTiersConfig';
-  cost?: Maybe<Scalars['u32']>;
-  entity?: Maybe<World__Entity>;
-  eventMessage?: Maybe<World__EventMessage>;
-  slot?: Maybe<Scalars['Enum']>;
-  slot_id?: Maybe<Scalars['u8']>;
-  stat?: Maybe<Scalars['u32']>;
-  tier?: Maybe<Scalars['u8']>;
-};
-
-export type Dopewars_HustlerItemTiersConfigConnection = {
-  __typename?: 'dopewars_HustlerItemTiersConfigConnection';
-  edges?: Maybe<Array<Maybe<Dopewars_HustlerItemTiersConfigEdge>>>;
-  pageInfo: World__PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Dopewars_HustlerItemTiersConfigEdge = {
-  __typename?: 'dopewars_HustlerItemTiersConfigEdge';
-  cursor?: Maybe<Scalars['Cursor']>;
-  node?: Maybe<Dopewars_HustlerItemTiersConfig>;
-};
-
-export type Dopewars_HustlerItemTiersConfigOrder = {
-  direction: OrderDirection;
-  field: Dopewars_HustlerItemTiersConfigOrderField;
-};
-
-export enum Dopewars_HustlerItemTiersConfigOrderField {
-  Cost = 'COST',
-  Slot = 'SLOT',
-  SlotId = 'SLOT_ID',
-  Stat = 'STAT',
-  Tier = 'TIER'
-}
-
-export type Dopewars_HustlerItemTiersConfigWhereInput = {
-  cost?: InputMaybe<Scalars['u32']>;
-  costEQ?: InputMaybe<Scalars['u32']>;
-  costGT?: InputMaybe<Scalars['u32']>;
-  costGTE?: InputMaybe<Scalars['u32']>;
-  costIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  costLIKE?: InputMaybe<Scalars['u32']>;
-  costLT?: InputMaybe<Scalars['u32']>;
-  costLTE?: InputMaybe<Scalars['u32']>;
-  costNEQ?: InputMaybe<Scalars['u32']>;
-  costNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  costNOTLIKE?: InputMaybe<Scalars['u32']>;
-  slot?: InputMaybe<Scalars['Enum']>;
-  slot_id?: InputMaybe<Scalars['u8']>;
-  slot_idEQ?: InputMaybe<Scalars['u8']>;
-  slot_idGT?: InputMaybe<Scalars['u8']>;
-  slot_idGTE?: InputMaybe<Scalars['u8']>;
-  slot_idIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  slot_idLIKE?: InputMaybe<Scalars['u8']>;
-  slot_idLT?: InputMaybe<Scalars['u8']>;
-  slot_idLTE?: InputMaybe<Scalars['u8']>;
-  slot_idNEQ?: InputMaybe<Scalars['u8']>;
-  slot_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  slot_idNOTLIKE?: InputMaybe<Scalars['u8']>;
-  stat?: InputMaybe<Scalars['u32']>;
-  statEQ?: InputMaybe<Scalars['u32']>;
-  statGT?: InputMaybe<Scalars['u32']>;
-  statGTE?: InputMaybe<Scalars['u32']>;
-  statIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  statLIKE?: InputMaybe<Scalars['u32']>;
-  statLT?: InputMaybe<Scalars['u32']>;
-  statLTE?: InputMaybe<Scalars['u32']>;
-  statNEQ?: InputMaybe<Scalars['u32']>;
-  statNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
-  statNOTLIKE?: InputMaybe<Scalars['u32']>;
-  tier?: InputMaybe<Scalars['u8']>;
-  tierEQ?: InputMaybe<Scalars['u8']>;
-  tierGT?: InputMaybe<Scalars['u8']>;
-  tierGTE?: InputMaybe<Scalars['u8']>;
-  tierIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  tierLIKE?: InputMaybe<Scalars['u8']>;
-  tierLT?: InputMaybe<Scalars['u8']>;
-  tierLTE?: InputMaybe<Scalars['u8']>;
-  tierNEQ?: InputMaybe<Scalars['u8']>;
-  tierNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
-  tierNOTLIKE?: InputMaybe<Scalars['u8']>;
-};
-
 export type Dopewars_HustlerSlot = {
   __typename?: 'dopewars_HustlerSlot';
   gear_item_id?: Maybe<Dopewars_Optionu256>;
@@ -4075,11 +3755,11 @@ export type Dopewars_NewHighScore = {
   eventMessage?: Maybe<World__EventMessage>;
   game_id?: Maybe<Scalars['u32']>;
   health?: Maybe<Scalars['u8']>;
-  hustler_id?: Maybe<Scalars['u16']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['felt252']>;
   reputation?: Maybe<Scalars['u8']>;
   season_version?: Maybe<Scalars['u16']>;
+  token_id?: Maybe<Dopewars_TokenId>;
 };
 
 export type Dopewars_NewHighScoreConnection = {
@@ -4104,11 +3784,11 @@ export enum Dopewars_NewHighScoreOrderField {
   Cash = 'CASH',
   GameId = 'GAME_ID',
   Health = 'HEALTH',
-  HustlerId = 'HUSTLER_ID',
   PlayerId = 'PLAYER_ID',
   PlayerName = 'PLAYER_NAME',
   Reputation = 'REPUTATION',
-  SeasonVersion = 'SEASON_VERSION'
+  SeasonVersion = 'SEASON_VERSION',
+  TokenId = 'TOKEN_ID'
 }
 
 export type Dopewars_NewHighScoreWhereInput = {
@@ -4145,17 +3825,6 @@ export type Dopewars_NewHighScoreWhereInput = {
   healthNEQ?: InputMaybe<Scalars['u8']>;
   healthNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u8']>>>;
   healthNOTLIKE?: InputMaybe<Scalars['u8']>;
-  hustler_id?: InputMaybe<Scalars['u16']>;
-  hustler_idEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idGT?: InputMaybe<Scalars['u16']>;
-  hustler_idGTE?: InputMaybe<Scalars['u16']>;
-  hustler_idIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idLIKE?: InputMaybe<Scalars['u16']>;
-  hustler_idLT?: InputMaybe<Scalars['u16']>;
-  hustler_idLTE?: InputMaybe<Scalars['u16']>;
-  hustler_idNEQ?: InputMaybe<Scalars['u16']>;
-  hustler_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
-  hustler_idNOTLIKE?: InputMaybe<Scalars['u16']>;
   player_id?: InputMaybe<Scalars['ContractAddress']>;
   player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
   player_idGT?: InputMaybe<Scalars['ContractAddress']>;
@@ -4200,6 +3869,44 @@ export type Dopewars_NewHighScoreWhereInput = {
   season_versionNEQ?: InputMaybe<Scalars['u16']>;
   season_versionNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
   season_versionNOTLIKE?: InputMaybe<Scalars['u16']>;
+  token_id?: InputMaybe<Dopewars_NewHighScore_Token_IdWhereInput>;
+};
+
+export type Dopewars_NewHighScore_Token_IdWhereInput = {
+  GuestLootId?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdGTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLT?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdLTE?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  GuestLootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  GuestLootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerId?: InputMaybe<Scalars['felt252']>;
+  HustlerIdEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdGTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdLIKE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLT?: InputMaybe<Scalars['felt252']>;
+  HustlerIdLTE?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNEQ?: InputMaybe<Scalars['felt252']>;
+  HustlerIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  HustlerIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  LootId?: InputMaybe<Scalars['felt252']>;
+  LootIdEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdGT?: InputMaybe<Scalars['felt252']>;
+  LootIdGTE?: InputMaybe<Scalars['felt252']>;
+  LootIdIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdLIKE?: InputMaybe<Scalars['felt252']>;
+  LootIdLT?: InputMaybe<Scalars['felt252']>;
+  LootIdLTE?: InputMaybe<Scalars['felt252']>;
+  LootIdNEQ?: InputMaybe<Scalars['felt252']>;
+  LootIdNOTIN?: InputMaybe<Array<InputMaybe<Scalars['felt252']>>>;
+  LootIdNOTLIKE?: InputMaybe<Scalars['felt252']>;
+  option?: InputMaybe<Scalars['Enum']>;
 };
 
 export type Dopewars_NewSeason = {
@@ -5836,7 +5543,7 @@ export type Dopewars_U8u8 = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', dopewarsRyoAddressModels?: { __typename?: 'dopewars_RyoAddressConnection', edges?: Array<{ __typename?: 'dopewars_RyoAddressEdge', node?: { __typename?: 'dopewars_RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, dopewarsRyoConfigModels?: { __typename?: 'dopewars_RyoConfigConnection', edges?: Array<{ __typename?: 'dopewars_RyoConfigEdge', node?: { __typename?: 'dopewars_RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, dopewarsDrugConfigModels?: { __typename?: 'dopewars_DrugConfigConnection', edges?: Array<{ __typename?: 'dopewars_DrugConfigEdge', node?: { __typename?: 'dopewars_DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsLocationConfigModels?: { __typename?: 'dopewars_LocationConfigConnection', edges?: Array<{ __typename?: 'dopewars_LocationConfigEdge', node?: { __typename?: 'dopewars_LocationConfig', location?: any | null, location_id?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsHustlerItemBaseConfigModels?: { __typename?: 'dopewars_HustlerItemBaseConfigConnection', edges?: Array<{ __typename?: 'dopewars_HustlerItemBaseConfigEdge', node?: { __typename?: 'dopewars_HustlerItemBaseConfig', slot?: any | null, id?: any | null, slot_id?: any | null, name?: any | null, initial_tier?: any | null } | null } | null> | null } | null, dopewarsHustlerItemTiersConfigModels?: { __typename?: 'dopewars_HustlerItemTiersConfigConnection', edges?: Array<{ __typename?: 'dopewars_HustlerItemTiersConfigEdge', node?: { __typename?: 'dopewars_HustlerItemTiersConfig', slot?: any | null, slot_id?: any | null, tier?: any | null, cost?: any | null, stat?: any | null } | null } | null> | null } | null, dopewarsEncounterStatsConfigModels?: { __typename?: 'dopewars_EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'dopewars_EncounterStatsConfigEdge', node?: { __typename?: 'dopewars_EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierModels?: { __typename?: 'dopewars_DopewarsItemTierConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierEdge', node?: { __typename?: 'dopewars_DopewarsItemTier', slot_id?: any | null, item_id?: any | null, tier?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierConfigModels?: { __typename?: 'dopewars_DopewarsItemTierConfigConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierConfigEdge', node?: { __typename?: 'dopewars_DopewarsItemTierConfig', slot_id?: any | null, tier?: any | null, levels?: Array<{ __typename?: 'dopewars_ItemTierConfig', stat?: any | null, cost?: any | null } | null> | null } | null } | null> | null } | null, dopeComponentValueEventModels?: { __typename?: 'dope_ComponentValueEventConnection', edges?: Array<{ __typename?: 'dope_ComponentValueEventEdge', node?: { __typename?: 'dope_ComponentValueEvent', collection_id?: any | null, component_slug?: any | null, component_id?: any | null, id?: any | null, value?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', dopewarsRyoAddressModels?: { __typename?: 'dopewars_RyoAddressConnection', edges?: Array<{ __typename?: 'dopewars_RyoAddressEdge', node?: { __typename?: 'dopewars_RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null, laundromat?: any | null } | null } | null> | null } | null, dopewarsRyoConfigModels?: { __typename?: 'dopewars_RyoConfigConnection', edges?: Array<{ __typename?: 'dopewars_RyoConfigEdge', node?: { __typename?: 'dopewars_RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null } | null } | null> | null } | null, dopewarsDrugConfigModels?: { __typename?: 'dopewars_DrugConfigConnection', edges?: Array<{ __typename?: 'dopewars_DrugConfigEdge', node?: { __typename?: 'dopewars_DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsLocationConfigModels?: { __typename?: 'dopewars_LocationConfigConnection', edges?: Array<{ __typename?: 'dopewars_LocationConfigEdge', node?: { __typename?: 'dopewars_LocationConfig', location?: any | null, location_id?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsEncounterStatsConfigModels?: { __typename?: 'dopewars_EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'dopewars_EncounterStatsConfigEdge', node?: { __typename?: 'dopewars_EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierModels?: { __typename?: 'dopewars_DopewarsItemTierConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierEdge', node?: { __typename?: 'dopewars_DopewarsItemTier', slot_id?: any | null, item_id?: any | null, tier?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierConfigModels?: { __typename?: 'dopewars_DopewarsItemTierConfigConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierConfigEdge', node?: { __typename?: 'dopewars_DopewarsItemTierConfig', slot_id?: any | null, tier?: any | null, levels?: Array<{ __typename?: 'dopewars_ItemTierConfig', stat?: any | null, cost?: any | null } | null> | null } | null } | null> | null } | null, dopeComponentValueEventModels?: { __typename?: 'dope_ComponentValueEventConnection', edges?: Array<{ __typename?: 'dope_ComponentValueEventEdge', node?: { __typename?: 'dope_ComponentValueEvent', collection_id?: any | null, component_slug?: any | null, component_id?: any | null, id?: any | null, value?: any | null } | null } | null> | null } | null };
 
 export type GameConfigQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
@@ -5869,21 +5576,21 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, hustler_id?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type RegisteredGamesBySeasonQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, player_id?: any | null, hustler_id?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, player_id?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type GamesByPlayerQueryVariables = Exact<{
   playerId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, hustler_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameWithTokenId', game_id?: any | null, player_id?: any | null, equipment_by_slot?: Array<any | null> | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | { __typename: 'dopewars_GameWithTokenIdCreated' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, multiplier?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -5891,14 +5598,14 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameWithTokenId' } | { __typename: 'dopewars_GameWithTokenIdCreated' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameWithTokenId' } | { __typename: 'dopewars_GameWithTokenIdCreated' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerItemBaseConfig' } | { __typename: 'dopewars_HustlerItemTiersConfig' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dope_StatEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } };
 
 export type TravelEncounterByPlayerQueryVariables = Exact<{
   travelEncounterSelector?: InputMaybe<Scalars['String']>;
@@ -5954,12 +5661,17 @@ export type AllSeasonSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllSeasonSettingsQuery = { __typename?: 'World__Query', dopewarsSeasonSettingsModels?: { __typename?: 'dopewars_SeasonSettingsConnection', edges?: Array<{ __typename?: 'dopewars_SeasonSettingsEdge', node?: { __typename?: 'dopewars_SeasonSettings', season_version?: any | null, cash_mode?: any | null, health_mode?: any | null, turns_mode?: any | null, drugs_mode?: any | null, encounters_mode?: any | null, encounters_odds_mode?: any | null } | null } | null> | null } | null };
 
+export type HallOfFameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HallOfFameQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', game_id?: any | null, player_id?: any | null, multiplier?: any | null, season_version?: any | null, final_score?: any | null, position?: any | null, claimable?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
+
 export type ClaimableQueryVariables = Exact<{
   playerId?: InputMaybe<Scalars['ContractAddress']>;
 }>;
 
 
-export type ClaimableQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', game_id?: any | null, season_version?: any | null, player_id?: any | null, hustler_id?: any | null, claimed?: any | null, claimable?: any | null, final_score?: any | null, position?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+export type ClaimableQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', game_id?: any | null, season_version?: any | null, player_id?: any | null, equipment_by_slot?: Array<any | null> | null, claimed?: any | null, claimable?: any | null, final_score?: any | null, position?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type GameOverEventsQueryVariables = Exact<{
   gameOverSelector?: InputMaybe<Scalars['String']>;
@@ -6021,28 +5733,6 @@ export const ConfigDocument = `
         name {
           value
         }
-      }
-    }
-  }
-  dopewarsHustlerItemBaseConfigModels {
-    edges {
-      node {
-        slot
-        id
-        slot_id
-        name
-        initial_tier
-      }
-    }
-  }
-  dopewarsHustlerItemTiersConfigModels(limit: 24) {
-    edges {
-      node {
-        slot
-        slot_id
-        tier
-        cost
-        stat
       }
     }
   }
@@ -6309,7 +5999,6 @@ export const GameByIdDocument = `
         season_version
         game_id
         game_mode
-        hustler_id
         player_name {
           value
         }
@@ -6321,6 +6010,13 @@ export const GameByIdDocument = `
         claimable
         position
         multiplier
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
       }
     }
   }
@@ -6375,13 +6071,19 @@ export const RegisteredGamesBySeasonDocument = `
         player_name {
           value
         }
-        hustler_id
         final_score
         registered
         claimed
         claimable
         position
         multiplier
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
       }
     }
   }
@@ -6435,26 +6137,16 @@ export const GamesByPlayerDocument = `
             player_id
             season_version
             game_mode
-            hustler_id
             player_name {
               value
             }
+            multiplier
             game_over
             final_score
             registered
             claimed
             claimable
             position
-            multiplier
-          }
-          ... on dopewars_GameStorePacked {
-            game_id
-            player_id
-            packed
-          }
-          ... on dopewars_GameWithTokenId {
-            game_id
-            player_id
             token_id {
               option
               GuestLootId
@@ -6462,6 +6154,11 @@ export const GamesByPlayerDocument = `
               HustlerId
             }
             equipment_by_slot
+          }
+          ... on dopewars_GameStorePacked {
+            game_id
+            player_id
+            packed
           }
         }
       }
@@ -7024,6 +6721,71 @@ export const useInfiniteAllSeasonSettingsQuery = <
 useInfiniteAllSeasonSettingsQuery.getKey = (variables?: AllSeasonSettingsQueryVariables) => variables === undefined ? ['AllSeasonSettings.infinite'] : ['AllSeasonSettings.infinite', variables];
 ;
 
+export const HallOfFameDocument = `
+    query HallOfFame {
+  dopewarsGameModels(
+    limit: 420
+    where: {position: 1}
+    order: {field: SEASON_VERSION, direction: DESC}
+  ) {
+    edges {
+      node {
+        game_id
+        player_id
+        player_name {
+          value
+        }
+        multiplier
+        season_version
+        final_score
+        position
+        claimable
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
+      }
+    }
+  }
+}
+    `;
+export const useHallOfFameQuery = <
+      TData = HallOfFameQuery,
+      TError = unknown
+    >(
+      variables?: HallOfFameQueryVariables,
+      options?: UseQueryOptions<HallOfFameQuery, TError, TData>
+    ) =>
+    useQuery<HallOfFameQuery, TError, TData>(
+      variables === undefined ? ['HallOfFame'] : ['HallOfFame', variables],
+      useFetchData<HallOfFameQuery, HallOfFameQueryVariables>(HallOfFameDocument).bind(null, variables),
+      options
+    );
+
+useHallOfFameQuery.getKey = (variables?: HallOfFameQueryVariables) => variables === undefined ? ['HallOfFame'] : ['HallOfFame', variables];
+;
+
+export const useInfiniteHallOfFameQuery = <
+      TData = HallOfFameQuery,
+      TError = unknown
+    >(
+      variables?: HallOfFameQueryVariables,
+      options?: UseInfiniteQueryOptions<HallOfFameQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<HallOfFameQuery, HallOfFameQueryVariables>(HallOfFameDocument)
+    return useInfiniteQuery<HallOfFameQuery, TError, TData>(
+      variables === undefined ? ['HallOfFame.infinite'] : ['HallOfFame.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteHallOfFameQuery.getKey = (variables?: HallOfFameQueryVariables) => variables === undefined ? ['HallOfFame.infinite'] : ['HallOfFame.infinite', variables];
+;
+
 export const ClaimableDocument = `
     query Claimable($playerId: ContractAddress) {
   dopewarsGameModels(
@@ -7037,7 +6799,13 @@ export const ClaimableDocument = `
         player_name {
           value
         }
-        hustler_id
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
         claimed
         claimable
         final_score

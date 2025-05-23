@@ -39,7 +39,7 @@ export const Header = observer(() => {
       spacing="10px"
       zIndex="overlay"
       align="flex-start"
-      py={["0", "20px"]}
+      py={["0", "16px"]}
       fontSize={["14px", "16px"]}
     >
       <HStack gap={3} flex="1">

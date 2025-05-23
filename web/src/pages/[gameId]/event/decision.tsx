@@ -1,5 +1,4 @@
 import { Button } from "@/components/common";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { Footer, Layout } from "@/components/layout";
@@ -14,10 +13,9 @@ import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys } from "@/dojo/helpe
 import { useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
-import colors from "@/theme/colors";
 import { formatCash, formatCashHeader } from "@/utils/ui";
 import { Box, Card, Divider, Flex, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
-import { HustlerPreviewFromHustler, HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { num, shortString } from "starknet";
@@ -98,20 +96,8 @@ const Decision = observer(() => {
         playSound(Sounds.Run);
         break;
       case EncountersAction.Fight:
-        switch (gameInfos?.hustler_id) {
-          case 0:
-            playSound(Sounds.Uzi);
-            break;
-          case 1:
-            playSound(Sounds.Chains);
-            break;
-          case 2:
-            playSound(Sounds.Punch);
-            break;
-          default:
-            playSound(Sounds.Punch);
-            break;
-        }
+        playSound(Sounds.Punch);
+
         break;
     }
 
@@ -211,7 +197,7 @@ const Encounter = observer(
     game: GameClass;
     encounterEvent: TravelEncounter;
   } & StyleProps) => {
-    const { gameInfos, gameWithTokenId } = useGameStore();
+    const { gameInfos } = useGameStore();
     const [imgUrl, setImgUrl] = useState<string | undefined>("");
 
     const [playerStatus, setPlayerStatus] = useState(PlayerStatus.Normal);
@@ -260,19 +246,18 @@ const Encounter = observer(
           gap={[2, 12]}
         >
           <HStack position="relative">
-
-            <Box
-              w="170px"
-              h="160px"
-              maxH={["30vh", "calc(100dvh - 300px)"]}
-              transform={["", "scale(2)"]}
-            >
-              {gameWithTokenId &&
-                (gameWithTokenId.token_id_type === "LootId" || gameWithTokenId.token_id_type === "GuestLootId") && (
-                  <HustlerPreviewFromLoot tokenId={gameWithTokenId.token_id} renderMode={0} />
-                )}
-              {gameWithTokenId && gameWithTokenId.token_id_type === "HustlerId" && (
-                <HustlerPreviewFromGame gameId={gameInfos?.game_id} tokenId={gameWithTokenId.token_id} renderMode={0} />
+            <Box w="170px" h="160px" maxH={["30vh", "calc(100dvh - 300px)"]} transform={["", "scale(2)"]}>
+              {/* @ts-ignore */}
+              {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (
+                <HustlerPreviewFromLoot tokenId={Number(gameInfos.token_id)} renderMode={0} />
+              )}
+              {/* @ts-ignore */}
+              {gameInfos && gameInfos.token_id_type === "HustlerId" && (
+                <HustlerPreviewFromGame
+                  gameId={gameInfos?.game_id}
+                  tokenId={Number(gameInfos.token_id)}
+                  renderMode={0}
+                />
               )}
             </Box>
             <Box

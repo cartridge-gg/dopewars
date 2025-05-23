@@ -1,17 +1,11 @@
-import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { HustlerItemConfigFull } from "@/dojo/stores/config";
-import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Card, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { Tooltip } from "../common";
-import { Alert, Cigarette, DynamicReputation, PawnshopIcon } from "../icons";
+import { Alert, PawnshopIcon } from "../icons";
 import colors from "@/theme/colors";
-
 import { Sounds, playSound } from "@/hooks/sound";
 import { useAccount } from "@starknet-react/core";
 import { WeightIcon } from "../icons/Weigth";
-import { Reputation } from "../icons/items/Reputation";
-import { PowerMeter } from "./PowerMeter";
 import { ReputationIndicator } from "./ReputationIndicator";
 
 const blinkAnim = keyframes`  
