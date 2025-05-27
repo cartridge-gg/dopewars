@@ -34,7 +34,7 @@ import {
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
-import { getGearItem } from "@dope/dope-sdk/helpers";
+import { getGearItem } from "@/dope/helpers";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";

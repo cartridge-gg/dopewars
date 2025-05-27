@@ -4,9 +4,9 @@ import { dopeLootSlotIdToItemSlot, statName } from "@/dojo/helpers";
 import { useConfigStore, useRouterContext } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
 import { VStack, Text, Button, Heading, HStack, Box, Tooltip as ChakraTooltip } from "@chakra-ui/react";
-import { Layer } from "@dope/dope-sdk/components";
-import { ComponentValueEvent, useDopeStore } from "@dope/dope-sdk/store";
+import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 import { useEffect, useMemo } from "react";
+import { Layer } from "@/dope/components";
 
 export default function Gear() {
   const { router } = useRouterContext();
@@ -47,7 +47,7 @@ export default function Gear() {
       }
     >
       <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-        Dope Gear
+        Gear Tiers
       </Heading>
 
       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center" mt={9}>

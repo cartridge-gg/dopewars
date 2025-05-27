@@ -26,7 +26,6 @@
     "@dojoengine/torii-client": "1.5.0",
     "@dojoengine/torii-wasm": "1.5.0",
     "@dojoengine/utils": "1.5.0",
-    "@dope/dope-sdk": "../../dope-migration/dope-sdk",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@metamask/sdk": "^0.32.1",

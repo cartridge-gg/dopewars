@@ -4,7 +4,7 @@ import { ItemSlot, ShopAction } from "../types";
 import { GamePropertyClass } from "./ GameProperty";
 import { GameClass, isShopAction } from "./Game";
 import Bits from "./utils/Bits";
-import { GearItem, getGearItem } from "@dope/dope-sdk/helpers";
+import { GearItem, getGearItem } from "@/dope/helpers";
 import { Car } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { dopeLootSlotIdToItemSlot } from "../helpers";

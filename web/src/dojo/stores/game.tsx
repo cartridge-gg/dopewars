@@ -15,7 +15,7 @@ import { parseStruct } from "../utils";
 import { num } from "starknet";
 import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
-import { parseModels } from "@dope/dope-sdk";
+import { parseModels } from "@/dope/toriiUtils";
 import { GameCreated } from "@/components/layout/GlobalEvents";
 
 type GameStoreProps = {

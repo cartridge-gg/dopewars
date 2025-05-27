@@ -1,51 +1,63 @@
 import { Footer, Layout } from "@/components/layout";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
-import { Button, HStack, Box, Text } from "@chakra-ui/react";
-import { toToriiTokenId } from "@dope/dope-sdk";
-import { BodySlotValues, HustlerEquipment, HustlerPreview, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
-import { checkTxReceipt, errorMessage, isOg } from "@dope/dope-sdk/helpers";
-import { useDojoTokens, useEquipment, useHustler } from "@dope/dope-sdk/hooks";
-import { useDopeStore } from "@dope/dope-sdk/store";
+import { IsMobile } from "@/utils/ui";
+import { Button, HStack, Box, Text, Flex } from "@chakra-ui/react";
+import { toToriiTokenId } from "@/dope/toriiUtils";
+import {
+  backgroundColors,
+  BodySlotValues,
+  foregroundColors,
+  HustlerEquipment,
+  HustlerPreview,
+} from "@/dope/components";
+import { checkTxReceipt, errorMessage, isOg } from "@/dope/helpers";
+import { useDojoTokens, useEquipment, useHustler } from "@/dope/hooks";
+import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
 import { byteArray, cairo, shortString, uint256 } from "starknet";
+import { ComponentValuesSelector } from "@/components/editor/ComponentValuesSelector";
+import { GenderSelector } from "@/components/editor/GenderSelector";
+import { RenderModeSelector } from "@/components/editor/RenderModeSelector";
+import { ColorPicker } from "@/components/editor/ColorPicker";
+import { ItemPicker } from "@/components/editor/ItemPicker";
 
-function Dope() {
-  const { router } = useRouterContext();
-  const { account } = useAccount();
+// function Dope() {
+//   const { router } = useRouterContext();
+//   const { account } = useAccount();
 
-  const {
-    chains: { selectedChain },
-    clients: { toriiClient },
-  } = useDojoContext();
+//   const {
+//     chains: { selectedChain },
+//     clients: { toriiClient },
+//   } = useDojoContext();
 
-  return (
-    <Layout
-      isSinglePanel
-      footer={
-        <Footer>
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            onClick={() => {
-              router.back();
-            }}
-          >
-            Back
-          </Button>
-        </Footer>
-      }
-    >
-      <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center">
-        <Text>EDITOR</Text>
-      </HStack>
+//   return (
+//     <Layout
+//       isSinglePanel
+//       footer={
+//         <Footer>
+//           <Button
+//             w={["full", "auto"]}
+//             px={["auto", "20px"]}
+//             onClick={() => {
+//               router.back();
+//             }}
+//           >
+//             Back
+//           </Button>
+//         </Footer>
+//       }
+//     >
+//       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center">
+//         <Text>EDITOR</Text>
+//       </HStack>
 
-      <Box minH="80px"></Box>
-    </Layout>
-  );
-}
+//       <Box minH="80px"></Box>
+//     </Layout>
+//   );
+// }
 
 export default function Editor() {
   const { router, hustlerId } = useRouterContext();
@@ -79,9 +91,9 @@ export default function Editor() {
     return [dopeHustlersContractManifest.address];
   }, []);
 
-  const { tokens: hustlerTokens } = useDojoTokens(toriiClient, dopeHustlersAddressArr, undefined, tokenIds);
+  //   const { tokens: hustlerTokens } = useDojoTokens(toriiClient, dopeHustlersAddressArr, undefined, tokenIds);
 
-  //   const isMobile = useIsMobile();
+  const isMobile = IsMobile();
   const { equipment } = useEquipment(toriiClient, (hustlerId || 0).toString());
 
   const {
@@ -271,26 +283,22 @@ export default function Editor() {
         </Footer>
       }
     >
-      <div className="flex flex-col gap-6 items-center">
-        <div className="flex flex-col gap-12 items-center">
-          <div className="relative flex flex-row gap-3">
-            {/* <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px]">
-              <HustlerPreviewFromHustler tokenId={Number(hustlerId)} renderMode={1} />
-            </div> */}
-            <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px]">
-              <HustlerPreview
-                tokenId={Number(hustlerId)}
-                hustlerMeta={hustlerMeta}
-                setHustlerMeta={setHustlerMeta}
-                hustlerEquipment={hustlerEquipment}
-                hustlerBody={hustlerBody}
-                renderOptions={renderOptions}
-                noInput={false}
-              />
-            </div>
-            {/* Body Config */}
-            {/* <div className="flex flex-col items-center justify-between">
-            <div className="flex flex-col gap-2">
+      <Flex flexDirection="column" gap={6} alignItems={["flex-start", "center"]}>
+        <Flex position="relative" flexDirection="row" gap={3}>
+          <Box w={["280px", "300px"]} h={["280px", "300px"]}>
+            <HustlerPreview
+              tokenId={Number(hustlerId)}
+              hustlerMeta={hustlerMeta}
+              setHustlerMeta={setHustlerMeta}
+              hustlerEquipment={hustlerEquipment}
+              hustlerBody={hustlerBody}
+              renderOptions={renderOptions}
+              noInput={false}
+            />
+          </Box>
+          {/* Body Config */}
+          <Flex flexDirection="column" alignItems="center" justifyContent="space-between">
+            <Flex flexDirection="column" gap={2}>
               <GenderSelector
                 selectedId={hustlerBody["Gender"]}
                 setSelectedId={(value: number) =>
@@ -310,9 +318,9 @@ export default function Editor() {
                   })
                 }
               />
-            </div>
+            </Flex>
 
-            <div className="flex flex-col gap-2">
+            <Flex flexDirection="column" gap={2}>
               <ComponentValuesSelector
                 componentValues={bodySlotValues["Body"]!}
                 index={genderId}
@@ -362,9 +370,9 @@ export default function Editor() {
                   })
                 }
               />
-            </div>
+            </Flex>
 
-            <div className="flex flex-col gap-2">
+            <Flex flexDirection="column" gap={2}>
               <ColorPicker
                 colors={backgroundColors}
                 selectedColor={hustlerMeta.background}
@@ -386,18 +394,29 @@ export default function Editor() {
                   });
                 }}
               />
-            </div>
-          </div> */}
-          </div>
+            </Flex>
+          </Flex>
+        </Flex>
 
-          {/* Equipment ItemPickers */}
-          {/* <div className="flex flex-col md:flex-row md:justify-center gap-2 flex-wrap max-w-[800px]">
-          {equipmentComponentSlugs.map((component_slug) => {
+        {/* Equipment ItemPickers */}
+        {/* <div className="flex flex-col md:flex-row md:justify-center gap-2 flex-wrap max-w-[800px]"> */}
+        <Flex
+          flexDirection={["column", "row"]}
+          flexWrap="wrap"
+          maxW="700px"
+          w="full"
+          gap={2}
+          alignItems={["flex-start", "center"]}
+          justifyContent={"center"}
+        //   className="flex flex-col md:flex-row md:justify-center gap-2 flex-wrap max-w-[800px]"
+        >
+          {equipmentComponentSlugs.map((component_slug, idx) => {
             return (
               <ItemPicker
+                key={idx}
                 variant={isMobile ? "List" : "Image"}
                 title={component_slug}
-                collection="dope-DopeGear"
+                collection={"dope-DopeGear"}
                 selected={hustlerEquipment[component_slug]}
                 equipped={hustlerInitialEquipment[component_slug]}
                 setSelected={(selected) =>
@@ -408,17 +427,13 @@ export default function Editor() {
                 }
                 account={account}
                 itemFilter={(e) =>
-                  e?.metadata?.attributes?.find(
-                    (i: any) =>
-                      i.trait_type === "Slot" && i.value === component_slug,
-                  )
+                  e?.metadata?.attributes?.find((i: any) => i.trait_type === "Slot" && i.value === component_slug)
                 }
               />
             );
           })}
-        </div> */}
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     </Layout>
   );
 }

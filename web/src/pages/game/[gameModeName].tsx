@@ -1,5 +1,5 @@
 import { Button, Input, Tooltip } from "@/components/common";
-import { Arrow, Warning } from "@/components/icons";
+import { Arrow, ExternalLink, Link, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter, TierIndicator } from "@/components/player";
 import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
@@ -22,12 +22,13 @@ import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-u
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDojoTokens, useLootEquipment, useEquipment, ParsedToken } from "@dope/dope-sdk/hooks";
-import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
+import { useDojoTokens, useLootEquipment, useEquipment, ParsedToken } from "@/dope/hooks";
+import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@/dope/components";
 import { getContractByName } from "@dojoengine/core";
-import { useDopeStore } from "@dope/dope-sdk/store";
+import { useDopeStore } from "@/dope/store";
 import { hash } from "starknet";
-import { getGearItem } from "@dope/dope-sdk/helpers";
+import { getGearItem } from "@/dope/helpers";
+import { EditButton } from "@/components/pages/admin/tables";
 
 export enum TokenIdType {
   GuestLootId,
@@ -51,7 +52,7 @@ const New = observer(() => {
 
   const { toast } = useToast();
 
-  const  [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
+  const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
 
   const addresses = useMemo(() => {
     return [
@@ -488,7 +489,7 @@ const New = observer(() => {
             </VStack>
           )}
 
-          <VStack alignItems="center" marginTop="-40px" gap={0}>
+          <VStack alignItems="center" marginTop={["0px", "-40px"]} gap={0}>
             <Text>
               {selectedTokenIndex + 1}/{selectableTokens.length}{" "}
             </Text>
@@ -510,6 +511,13 @@ const New = observer(() => {
                   {selectedTokenIdType === TokenIdType.HustlerId
                     ? `${selectedToken.metadata.name}`
                     : `DOPE #${Number(selectedToken?.token_id)}`}
+                  {selectedTokenIdType === TokenIdType.HustlerId && (
+                    <ExternalLink
+                      ml={2}
+                      cursor="pointer"
+                      onClick={() => router.push(`/dope/editor/${selectedToken.token_id}`)}
+                    />
+                  )}
                 </Text>
               </HStack>
             ) : (

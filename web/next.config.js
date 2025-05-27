@@ -29,7 +29,7 @@ const nextConfig = {
   //   // root: path.resolve( import.meta.dirname,".."),
   //   resolveExtensions: [".tsx", ".ts", ".jsx", ".js", ".mjs", ".json", ".wasm"],
   //   resolveAlias: {
-  //     "@dope/dope-sdk": "./node_modules/@dope/dope-sdk",
+  //     "@/dope/": "./node_modules/@/dope/",
   //   },
   // },
 };

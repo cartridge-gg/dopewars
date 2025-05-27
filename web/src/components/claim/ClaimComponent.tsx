@@ -2,18 +2,19 @@ import { Button } from "@/components/common";
 import { Footer, Layout } from "@/components/layout";
 import EthProvider from "@/components/wallet/EthProvider";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { Heading, HStack, Input, Text, VStack } from "@chakra-ui/react";
+import { Grid, Heading, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
 import { useAccount as useEthAccount, useSignMessage as useEthSignMesage } from "wagmi";
 import { parseSignature, Signature } from "viem";
 import { useEffect, useState } from "react";
 import { merkle, hash, uint256 } from "starknet";
-import { checkTxReceipt, errorMessage } from "@dope/dope-sdk/helpers";
+// import { checkTxReceipt, errorMessage } from "@/dope/helpers";
 import { ChildrenOrConnect, ConnectButton } from "@/components/wallet";
 import { useToast } from "@/hooks/toast";
 
 import owners from "./snapshot-dopeLoot-22075548-owners.json";
+import { checkTxReceipt, errorMessage } from "@/dope/helpers";
 
 export default function ClaimComponent() {
   const { router, isLocalhost } = useRouterContext();
@@ -145,15 +146,12 @@ export default function ClaimComponent() {
       }, 1_000);
 
       return toast({
-        // title: "Legend",
         message: `You claimed!!`,
       });
     } catch (e: any) {
-      // console.log(e);
       setIsLoading(false);
 
       return toast({
-        // title: "Error",
         message: errorMessage(e?.message),
         isError: true,
       });
@@ -169,15 +167,18 @@ export default function ClaimComponent() {
         {ethAccount.isConnected && entry && (
           <VStack maxW="800px" gap={3}>
             <>
-              <Text>
-                Address {entry[0]} {hasClaimed ? <span>has claimed !</span> : <span>is eligible !</span>}
+              <Text align="center">
+                {entry[0]}
+                <br /> {hasClaimed ? <span>has claimed !</span> : <span>is eligible !</span>}
               </Text>
               <Text alignSelf="flex-start">
-                DopeLoot : <br /> {(entry[1] as number[]).join(", ")}
+                DopeLoot <br /> {(entry[1] as number[]).join(", ")}
               </Text>
-              <Text alignSelf="flex-start">
-                OGs : <br /> {(entry[2] as number[]).join(", ")}
-              </Text>
+              {entry[2].length > 0 && (
+                <Text alignSelf="flex-start">
+                  OGs <br /> {(entry[2] as number[]).join(", ")}
+                </Text>
+              )}
             </>
           </VStack>
         )}
@@ -220,18 +221,24 @@ export default function ClaimComponent() {
         )}
 
         {!ethAccount.isConnected && manualAddress && (
-          <div>
+          <VStack>
             {manualEntry ? (
               <>
-                <div>Address {manualEntry[0]} is Eligible !</div>
+                <Text align="center" mb={3}>
+                  {" "}
+                  Address {manualEntry[0]} is Eligible !
+                </Text>
                 <div>DopeLoot owned : {(manualEntry[1] as number[]).join(", ")}</div>
+
                 <div>OGs owned : {(manualEntry[2] as number[]).join(", ")}</div>
               </>
             ) : (
               <div>Not eligible</div>
             )}
-          </div>
+          </VStack>
         )}
+
+        {hasClaimed && <Button onClick={()=> router.push("/dope")}>My Dope</Button>}
       </VStack>
     </VStack>
   );

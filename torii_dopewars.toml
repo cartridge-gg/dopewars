@@ -11,15 +11,17 @@ http_cors_origins = ["*"]
 pending = true
 polling_interval = 1000
 
-max_concurrent_tasks = 2
+# max_concurrent_tasks = 2
 contracts = [
-    "ERC721:0x02cb1344b83c1b338d1c24c7656cd07fa8d2fd3f639ed2b1c2a03d8c3367d723", # dope_loot
-    "ERC721:0x003248dd97a865dd38c1d8a5a424580516c36900821d5f0f1e2110d2aa40029a", # dope_hustlers
-    "ERC1155:0x036d86b923c9814c59d7228340936f705ed5a53158832a91ddf6f4b3c319e204", # dope_gear
+    "ERC20:0x06f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78", # paper
+    #
+    "ERC721:0x016094ef477812ed35e10847fd335517312030e2ed4f8cbd5a746980085f2823", # dope_loot
+    "ERC721:0x027ba14794b7567025f1d7206090b545f48e3ce5a442eda5e95ae16906d5fc0e", # dope_hustlers
+    "ERC1155:0x000727c84f146c9c0e80ad0743a183425a3b34b49955863cb3c889c99e7e7081", # dope_gear
 ]
 
 [erc]
-max_metadata_tasks = 2
+max_metadata_tasks=100
 
 [sql]
 historical = [

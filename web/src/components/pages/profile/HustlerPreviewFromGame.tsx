@@ -1,8 +1,8 @@
 import { GameCreated } from "@/components/layout/GlobalEvents";
 import { useGameStore } from "@/dojo/hooks";
-import { defaultHustlerMetadata, HustlerPreview } from "@dope/dope-sdk/components";
-import { feltToString } from "@dope/dope-sdk/helpers";
-import { ParsedToken } from "@dope/dope-sdk/store";
+import { defaultHustlerMetadata, HustlerPreview } from "@/dope/components";
+import { feltToString } from "@/dope/helpers";
+import { ParsedToken } from "@/dope/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 

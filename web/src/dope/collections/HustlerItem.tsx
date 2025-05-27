@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ParsedToken } from "@dope/dope-sdk/hooks";
+import { ParsedToken } from "@/dope/hooks";
 import CardAnim from "./CardAnim";
 import Link from "next/link";
 import { Cigarette } from "@/components/icons";

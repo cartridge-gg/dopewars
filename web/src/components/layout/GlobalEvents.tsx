@@ -10,7 +10,7 @@ import { parseStruct } from "@/dojo/utils";
 import { CairoOption, num, shortString } from "starknet";
 import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
 import { Dopewars_Game as Game } from "@/generated/graphql";
-import { parseModels } from "@dope/dope-sdk";
+import { parseModels } from "@/dope/toriiUtils";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
@@ -85,7 +85,7 @@ export const GlobalEvents = () => {
   }, [selectedChain, accountAddress.current]);
 
   const onEventMessage = async (key: string, entity: Entity) => {
-    console.log("globalEvents::onEventMessage", key, entity);
+    // console.log("globalEvents::onEventMessage", key, entity);
 
     if (entity.models["dopewars-GameCreated"]) {
       // const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
@@ -100,23 +100,23 @@ export const GlobalEvents = () => {
       // @ts-ignore
       gameCreated.token_id = Number(gameCreated.token_id.unwrap());
 
-      // if (BigInt(gameCreated.player_id) !== accountAddress.current) {
-      toast({
-        icon: () => (
-          <HustlerAvatarIcon
-            gameId={gameCreated.game_id}
-            tokenIdType={gameCreated.token_id_type}
-            tokenId={Number(gameCreated.token_id)}
-          />
-        ),
-        message:
-          gameCreated.game_mode === "Ranked"
-            ? `${gameCreated.player_name} is ready to hustle...`
-            : `${gameCreated.player_name} is training...`,
-      });
-      // } else {
-      router.push(`/${num.toHexString(gameCreated.game_id)}`);
-      // }
+      if (BigInt(gameCreated.player_id) !== accountAddress.current) {
+        toast({
+          icon: () => (
+            <HustlerAvatarIcon
+              gameId={gameCreated.game_id}
+              tokenIdType={gameCreated.token_id_type}
+              tokenId={Number(gameCreated.token_id)}
+            />
+          ),
+          message:
+            gameCreated.game_mode === "Ranked"
+              ? `${gameCreated.player_name} is ready to hustle...`
+              : `${gameCreated.player_name} is training...`,
+        });
+      } else {
+        router.push(`/${num.toHexString(gameCreated.game_id)}`);
+      }
     }
 
     if (entity.models["dopewars-NewSeason"]) {

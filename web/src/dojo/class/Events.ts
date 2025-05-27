@@ -14,7 +14,7 @@ import {
   UpgradeItem,
 } from "@/components/layout/GlobalEvents";
 import { num, shortString } from "starknet";
-import { parseModels } from "@dope/dope-sdk";
+import { parseModels } from "@/dope/toriiUtils";
 
 export interface DojoEvent {
   eventName: string;

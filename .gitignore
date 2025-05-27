@@ -3,6 +3,7 @@ abis
 
 genesis
 genesis.json
+.DS_Store
 
 db
 db-1.0.0-rc2.zip

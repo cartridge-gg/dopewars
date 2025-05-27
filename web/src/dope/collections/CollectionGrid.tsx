@@ -1,5 +1,5 @@
 import { Flex, Grid } from "@chakra-ui/react";
-import { ParsedToken, ParsedTokenBalance } from "@dope/dope-sdk/hooks";
+import { ParsedToken, ParsedTokenBalance } from "@/dope/hooks";
 
 export default function CollectionGrid({
   tokens,

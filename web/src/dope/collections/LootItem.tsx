@@ -1,12 +1,13 @@
-import { ParsedToken, useDopeLootClaim, useERC721 } from "@dope/dope-sdk/hooks";
+import { ParsedToken, useDopeLootClaim, useERC721 } from "@/dope/hooks";
 import { useMemo, useState } from "react";
-import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 
-import { useDopeStore } from "@dope/dope-sdk/store";
+import { useDopeStore } from "@/dope/store";
 import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks";
 import CardAnim from "./CardAnim";
-import { GridItem } from "@chakra-ui/react";
+import { Box, GridItem } from "@chakra-ui/react";
+import { Button } from "@/components/common";
 
 export default function LootItem({ token }: { token: ParsedToken }) {
   const { toast } = useToast();
@@ -15,25 +16,19 @@ export default function LootItem({ token }: { token: ParsedToken }) {
     contracts: { getDojoContract },
   } = useDojoContext();
 
-//   const {
-//     onOpen,
-//     onRelease,
-//     isLoading: isOpening,
-//     isSuccess,
-//   } = useDopeLootClaim({ toast, getDojoContract });
+  const { onOpen, onRelease, isLoading: isOpening, isSuccess } = useDopeLootClaim({ toast, getDojoContract });
 
-//   const {
-//     transfer,
-//     isLoading: isTransfering,
-//     isSuccess: isTransferSuccess,
-//   } = useERC721({ toast, getDojoContract, contractTag: "dope-DopeLoot" });
+  //   const {
+  //     transfer,
+  //     isLoading: isTransfering,
+  //     isSuccess: isTransferSuccess,
+  //   } = useERC721({ toast, getDojoContract, contractTag: "dope-DopeLoot" });
 
   const [isFlipped, setIsFlipped] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [recipient, setRecipient] = useState("");
 
-  const dopeLootClaimState = useDopeStore(
-    (state) => state.dopeLootClaimState,
-  );
+  const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
   const { isOpened, isReleased } = useMemo(() => {
     const tokenState = dopeLootClaimState[Number(token.token_id)];
@@ -43,7 +38,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
   }, [dopeLootClaimState, dopeLootClaimState[Number(token.token_id)]]);
 
   return (
-    <CardAnim>
+    <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <GridItem onClick={() => setIsFlipped(!isFlipped)} className="cursor-pointer">
         {isFlipped ? (
           <img
@@ -70,23 +65,22 @@ export default function LootItem({ token }: { token: ParsedToken }) {
           </Button>
         </div>
       )}
-
-      {!isOpened  && (
-        <div className="absolute bottom-0 right-0 z-10">
+*/}
+      {!isOpened && isHovered && (
+        <Box position="absolute" bottom={0} right={0} zIndex={10}>
           <Button
-            className="w-[100px]"
+            w="80px"
             onClick={async () => {
               await onOpen(Number(token.token_id));
               // await initDopeLootClaimState();
             }}
             disabled={isOpening}
+            isLoading={isOpening}
           >
-            {!isOpening ? <>open</> : <Loader2 className="animate-spin" />}
+            Open
           </Button>
-        </div>
-      )} */}
-
-
+        </Box>
+      )}
     </CardAnim>
   );
 }

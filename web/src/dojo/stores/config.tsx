@@ -37,7 +37,7 @@ import {
   locationIconsKeys,
 } from "../helpers";
 import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
-import { GearItem } from "@dope/dope-sdk/helpers";
+import { GearItem } from "@/dope/helpers";
 
 export type DrugConfigFull = Omit<DrugConfig, "name"> & { icon: React.FC; name: string };
 export type LocationConfigFull = Omit<LocationConfig, "name"> & { icon: React.FC; name: string };

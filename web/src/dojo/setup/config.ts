@@ -7,16 +7,23 @@ import manifestDopewars from "../../manifests/manifest_dopewars.json";
 import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
 
-import {
-  manifestDev as manifestDopeDev,
-  manifestDope as manifestDopeDope,
-  manifestDopewars as manifestDopeDopewars,
-  manifestSepolia as manifestDopeSepolia,
-  manifestMainnet as manifestDopeMainnet,
-} from "@dope/dope-sdk/manifests";
+
+import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
+// import manifestDopeDope from "../../manifests_dope/manifest_dope.json";
+
+import manifestDopeDopewars from "../../manifests_dope/manifest_dopewars.json";
+import manifestDopeSepolia from "../../manifests_dope/manifest_dopewars.json";
+import manifestDopeMainnet from "../../manifests_dope/manifest_dopewars.json";
+// import {
+//   manifestDev as manifestDopeDev,
+//   manifestDope as manifestDopeDope,
+//   manifestDopewars as manifestDopeDopewars,
+//   manifestSepolia as manifestDopeSepolia,
+//   manifestMainnet as manifestDopeMainnet,
+// } from "@/dope/manifests";
 
 import { DW_NS } from "../hooks";
-import { mergeManifests } from "@dope/dope-sdk/helpers";
+import { mergeManifests } from "@/dope/helpers";
 
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";

@@ -59,8 +59,8 @@ migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $P
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
-slot_dopewars_katana = "slot d create -t insane  --team cartridge dopewars katana -v v1.5.0 --config ./katana_dopewars.toml"
-slot_dopewars_torii = "slot d create -t insane --team cartridge dopewars torii  -v v1.5.1 --config ./torii_dopewars.toml"
+slot_dopewars_katana = "slot d create -t insane --team cartridge dopewars katana -v v1.5.2 --config ./katana_dopewars.toml"
+slot_dopewars_torii = "slot d create -t insane --team cartridge dopewars torii  -v v1.5.5-preview.3 --config ./torii_dopewars.toml"
 
 # slot ryosepolia 
 slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"

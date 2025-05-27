@@ -10,7 +10,7 @@ http_cors_origins = ["*"]
 pending = true
 polling_interval = 1000
 
-max_concurrent_tasks = 2
+# max_concurrent_tasks = 2
 contracts = [
     "ERC20:0x06f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78", # paper
     #
@@ -20,7 +20,8 @@ contracts = [
 ]
 
 [erc]
-artifacts_path = "torii_artifacts"
+max_metadata_tasks=100
+
 
 [sql]
 historical = [

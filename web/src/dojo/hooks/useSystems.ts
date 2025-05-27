@@ -9,8 +9,8 @@ import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { buildVrfCalls, sleep } from "../utils";
-import { useDopeStore } from "@dope/dope-sdk/store";
-import { parseModels } from "@dope/dope-sdk";
+import { useDopeStore } from "@/dope/store";
+import { parseModels } from "@/dope/toriiUtils";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";

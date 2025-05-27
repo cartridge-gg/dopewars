@@ -21,7 +21,7 @@ import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
 import { useRouter } from "next/router";
-import { DopeProvider } from "@dope/dope-sdk/store";
+import { DopeProvider } from "@/dope/store";
 import { DojoContractResult, useDojoContract } from "../hooks";
 
 export interface DojoContextType {

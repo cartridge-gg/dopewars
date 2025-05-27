@@ -1,7 +1,7 @@
 import { Box, StyleProps } from "@chakra-ui/react";
 
 import colors from "@/theme/colors";
-import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 import { HustlerPreviewFromGame } from "./HustlerPreviewFromGame";
 
 export const HustlerAvatarIcon = ({

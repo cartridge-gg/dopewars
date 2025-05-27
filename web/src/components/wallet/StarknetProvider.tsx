@@ -92,6 +92,8 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
   const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dope", "DopeLootClaim").address;
+  const dopeGearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear").address;
+  const dopeHustlersAddress = getContractByName(selectedChain.manifest, "dope", "DopeHustlers").address;
 
   const policies: SessionPolicies = {
     contracts: {
@@ -116,7 +118,18 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
       },
       [dopeLootClaimAddress]: {
-        methods: [{ entrypoint: "release" }, { entrypoint: "claim" }],
+        methods: [{ entrypoint: "release" }, { entrypoint: "claim" }, { entrypoint: "open" }],
+      },
+      [dopeGearAddress]: {
+        methods: [{ entrypoint: "mint" }, { entrypoint: "set_approval_for_all" }],
+      },
+      [dopeHustlersAddress]: {
+        methods: [
+          { entrypoint: "update_hustler" },
+          { entrypoint: "update_hustler_body" },
+          { entrypoint: "equip" },
+          { entrypoint: "unequip" },
+        ],
       },
     },
   };

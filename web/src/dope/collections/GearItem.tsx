@@ -1,4 +1,4 @@
-import { ParsedToken } from "@dope/dope-sdk/hooks";
+import { ParsedToken } from "@/dope/hooks";
 import CardAnim from "./CardAnim";
 import { Box } from "@chakra-ui/react";
 

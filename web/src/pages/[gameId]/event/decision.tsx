@@ -15,7 +15,7 @@ import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { formatCash, formatCashHeader } from "@/utils/ui";
 import { Box, Card, Divider, Flex, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
-import { HustlerPreviewFromLoot } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { num, shortString } from "starknet";

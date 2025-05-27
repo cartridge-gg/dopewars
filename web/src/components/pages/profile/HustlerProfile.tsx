@@ -7,7 +7,7 @@ import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 import ShareButton from "./ShareButton";
-import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@dope/dope-sdk/components";
+import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@/dope/components";
 import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
 import { HustlerPreviewFromGame } from "./HustlerPreviewFromGame";
 

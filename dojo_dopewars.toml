@@ -61,8 +61,8 @@ skip_contracts = [
 "dopewars-HustlerItemTiersConfig" = ["dopewars-config"]
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
-"dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-GameStorePacked" = ["dopewars-game"]
+"dopewars-Game" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide"]
+"dopewars-GameStorePacked" = ["dopewars-game", "dopewars-decide"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-SeasonSettings" = [
@@ -81,20 +81,24 @@ skip_contracts = [
 
 "dopewars-GameCreated" = ["dopewars-game"]
 
-"dopewars-Traveled" = ["dopewars-game"]
-"dopewars-GameOver" = ["dopewars-game"]
-"dopewars-TradeDrug" = ["dopewars-game"]
-"dopewars-UpgradeItem" = ["dopewars-game"]
-"dopewars-HighVolatility" = ["dopewars-game"]
-"dopewars-TravelEncounter" = ["dopewars-game"]
-"dopewars-TravelEncounterResult" = ["dopewars-game"]
+"dopewars-Traveled" = ["dopewars-game", "dopewars-decide"]
+"dopewars-GameOver" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TradeDrug" = ["dopewars-game", "dopewars-decide"]
+"dopewars-UpgradeItem" = ["dopewars-game", "dopewars-decide"]
+"dopewars-HighVolatility" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TravelEncounter" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TravelEncounterResult" = ["dopewars-game", "dopewars-decide"]
 #
 "dopewars-NewSeason" = ["dopewars-laundromat"]
 "dopewars-NewHighScore" = ["dopewars-laundromat"]
 "dopewars-Claimed" = ["dopewars-laundromat"]
 
 # bushido
-"dopewars-TrophyProgression" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-TrophyProgression" = [
+    "dopewars-game",
+    "dopewars-laundromat",
+    "dopewars-decide",
+]
 "dopewars-TrophyCreation" = ["dopewars-ryo"]
 
 # items

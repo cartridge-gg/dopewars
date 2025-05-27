@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { defaultHustlerMetadata, HustlerBody, HustlerEquipment, HustlerPreview } from "@dope/dope-sdk/components";
-import { useDopeStore } from "@dope/dope-sdk/store";
-import { dopeRandomness } from "@dope/dope-sdk/helpers";
+import { defaultHustlerMetadata, HustlerBody, HustlerEquipment, HustlerPreview } from "@/dope/components";
+import { useDopeStore } from "@/dope/store";
+import { dopeRandomness } from "@/dope/helpers";
 import { PlayerStatus } from "@/dojo/types";
 
 export const EncounterPreview = ({

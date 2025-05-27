@@ -1,14 +1,16 @@
 import { Footer, Layout } from "@/components/layout";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { Button, HStack, Box, Tabs, Tab, TabList, TabPanels, TabPanel, Flex } from "@chakra-ui/react";
+import { Button, HStack, Box, Tabs, Tab, TabList, TabPanels, TabPanel, Flex, Text } from "@chakra-ui/react";
 import { getContractByName } from "@dojoengine/core";
-import { useDojoTokens } from "@dope/dope-sdk/hooks";
+import { useDojoTokens } from "@/dope/hooks";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
-import CollectionGrid from "./CollectionGrid";
-import LootItem from "./LootItem";
-import HustlerItem from "./HustlerItem";
-import GearItem from "./GearItem";
+import CollectionGrid from "@/dope/collections/CollectionGrid";
+import GearItem from "@/dope/collections/GearItem";
+import HustlerItem from "@/dope/collections/HustlerItem";
+import LootItem from "@/dope/collections/LootItem";
+import { Refresh } from "@/components/icons";
+import { Tooltip } from "@/components/common";
 
 export default function Dope() {
   const { router } = useRouterContext();
@@ -27,7 +29,11 @@ export default function Dope() {
     ];
   }, [selectedChain.manifest]);
 
-  const { tokens, tokensBalances, accountTokens } = useDojoTokens(toriiClient, addresses, account?.address);
+  const { tokens, tokensBalances, accountTokens, refetch, isLoading } = useDojoTokens(
+    toriiClient,
+    addresses,
+    account?.address,
+  );
 
   const { loot, hustlers, gear } = useMemo(() => {
     const loot = (accountTokens || []).filter(
@@ -63,9 +69,14 @@ export default function Dope() {
       <HStack w="full" gap={6} flexWrap="wrap" alignItems="flex-start" justifyContent="center">
         <Tabs variant="unstyled" w="full">
           <TabList pb={6}>
-            <Tab fontSize={["11px", "14px"]}>LOOT ({loot.length})</Tab>
+            <Tab fontSize={["11px", "14px"]}>
+              <Text>LOOT ({loot.length})</Text>
+            </Tab>
             <Tab fontSize={["11px", "14px"]}>HUSTLERS ({hustlers.length})</Tab>
             <Tab fontSize={["11px", "14px"]}>GEAR ({gear.length})</Tab>
+            <Box position="absolute" right={2} top={2} title="Refresh">
+              <Refresh onClick={() => refetch()} cursor="pointer"  />
+            </Box>
           </TabList>
 
           <TabPanels mt={0} maxH="calc(100dvh - 70px)" overflowY="scroll">

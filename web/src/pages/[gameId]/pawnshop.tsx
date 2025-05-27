@@ -10,7 +10,7 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import { getGearItem } from "@dope/dope-sdk/helpers";
+import { getGearItem } from "@/dope/helpers";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";
 
