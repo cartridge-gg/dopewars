@@ -9,6 +9,7 @@ pub mod tests;
 
 pub mod achievements {
     pub mod achievements_v0;
+    pub mod achievements_v1;
 }
 
 pub mod traits;
