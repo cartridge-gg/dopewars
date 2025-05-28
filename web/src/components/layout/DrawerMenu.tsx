@@ -167,7 +167,7 @@ const DrawerMenu = () => {
                       router.push("/gear");
                     }}
                   >
-                    <Cigarette mr={2} /> GEAR TIERS
+                    <Cigarette mr={2} /> GEAR
                   </DrawerListItem>
 
                   <DrawerListItem

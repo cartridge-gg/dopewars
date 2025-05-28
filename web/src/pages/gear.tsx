@@ -20,14 +20,26 @@ export default function Gear() {
     const foot = getComponentValuesBySlug("DopeGear", "Foot");
     const vehicles = getComponentValuesBySlug("DopeGear", "Vehicle");
 
+    const drugs = getComponentValuesBySlug("DopeGear", "Drug");
+    const waists = getComponentValuesBySlug("DopeGear", "Waist");
+    const hands = getComponentValuesBySlug("DopeGear", "Hand");
+    const necks = getComponentValuesBySlug("DopeGear", "Neck");
+    const rings = getComponentValuesBySlug("DopeGear", "Ring");
+    const accessories = getComponentValuesBySlug("DopeGear", "Accessory");
+
     return {
       weapons,
       clothes,
       foot,
       vehicles,
+      drugs,
+      waists,
+      hands,
+      necks,
+      rings,
+      accessories,
     };
   }, [configStore]);
-
 
   return (
     <Layout
@@ -47,7 +59,7 @@ export default function Gear() {
       }
     >
       <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-        Gear Tiers
+        Gear
       </Heading>
 
       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center" mt={9}>
@@ -88,6 +100,62 @@ export default function Gear() {
         </VStack>
       </HStack>
 
+      <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center" mt={9}>
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Drugs
+          </Text>
+          {items.drugs.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Waists
+          </Text>
+          {items.waists.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Hands
+          </Text>
+          {items.hands.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Accessories
+          </Text>
+          {items.accessories.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Neck
+          </Text>
+          {items.necks.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+
+        <VStack justifyContent="flex-start">
+          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
+            Rings
+          </Text>
+          {items.rings.map((i, idx) => {
+            return <Item componentValue={i} key={idx} />;
+          })}
+        </VStack>
+      </HStack>
+
       <Box minH="80px"></Box>
     </Layout>
   );
@@ -112,6 +180,7 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
   }, [componentValue]);
 
   const desc = useMemo(() => {
+    if (!itemFull.levels) return null;
     return (
       <VStack alignItems="flex-start" gap={0}>
         {itemFull.levels.map((i, idx) => {
@@ -151,11 +220,13 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
       <Text w="130px" ml={1}>
         {itemFull.name}
       </Text>
-      <ChakraTooltip label={desc} color="neon.400">
-        <span>
-          <TierIndicator tier={itemFull.tier} />
-        </span>
-      </ChakraTooltip>
+      {itemFull.tier && (
+        <ChakraTooltip label={desc} color="neon.400">
+          <span>
+            <TierIndicator tier={itemFull.tier} />
+          </span>
+        </ChakraTooltip>
+      )}
     </HStack>
   );
 };
