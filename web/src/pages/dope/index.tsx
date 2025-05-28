@@ -11,6 +11,7 @@ import HustlerItem from "@/dope/collections/HustlerItem";
 import LootItem from "@/dope/collections/LootItem";
 import { Refresh } from "@/components/icons";
 import { Tooltip } from "@/components/common";
+import { Loader, SmallLoader } from "@/components/layout/Loader";
 
 export default function Dope() {
   const { router } = useRouterContext();
@@ -49,6 +50,18 @@ export default function Dope() {
     return { loot, hustlers, gear };
   }, [accountTokens, addresses, account?.address]);
 
+  const [isRefetching, setIsRefetching] = useState(false);
+  const onRefetch = async () => {
+    if (isRefetching) {
+      return;
+    }
+    setIsRefetching(true);
+    await refetch();
+    setTimeout(() => {
+      setIsRefetching(false);
+    }, 500);
+  };
+
   return (
     <Layout
       isSinglePanel
@@ -74,8 +87,8 @@ export default function Dope() {
             </Tab>
             <Tab fontSize={["11px", "14px"]}>HUSTLERS ({hustlers.length})</Tab>
             <Tab fontSize={["11px", "14px"]}>GEAR ({gear.length})</Tab>
-            <Box position="absolute" right={2} top={2} title="Refresh">
-              <Refresh onClick={() => refetch()} cursor="pointer"  />
+            <Box position="absolute" w="24px" h="24px" right={[0, 2]} top={[0, 2]} title="Refresh">
+              {!isRefetching ? <Refresh onClick={onRefetch} cursor="pointer" /> : <SmallLoader />}
             </Box>
           </TabList>
 

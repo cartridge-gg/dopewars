@@ -23,6 +23,7 @@ import { GenderSelector } from "@/components/editor/GenderSelector";
 import { RenderModeSelector } from "@/components/editor/RenderModeSelector";
 import { ColorPicker } from "@/components/editor/ColorPicker";
 import { ItemPicker } from "@/components/editor/ItemPicker";
+import { SmallLoader } from "@/components/layout/Loader";
 
 // function Dope() {
 //   const { router } = useRouterContext();
@@ -277,7 +278,13 @@ export default function Editor() {
             Back
           </Button>
 
-          <Button w={["full", "auto"]} px={["auto", "20px"]} onClick={onSave} isLoading={isLoading}>
+          <Button
+            w={["full", "auto"]}
+            px={["auto", "20px"]}
+            onClick={onSave}
+            isLoading={isLoading}
+            spinner={<SmallLoader />}
+          >
             SAVE
           </Button>
         </Footer>
@@ -408,7 +415,7 @@ export default function Editor() {
           gap={2}
           alignItems={["flex-start", "center"]}
           justifyContent={"center"}
-        //   className="flex flex-col md:flex-row md:justify-center gap-2 flex-wrap max-w-[800px]"
+          //   className="flex flex-col md:flex-row md:justify-center gap-2 flex-wrap max-w-[800px]"
         >
           {equipmentComponentSlugs.map((component_slug, idx) => {
             return (

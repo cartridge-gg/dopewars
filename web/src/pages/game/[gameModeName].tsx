@@ -52,7 +52,10 @@ const New = observer(() => {
 
   const { toast } = useToast();
 
-  const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
+  // const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
+  const [selectedTokenIdType, setSelectedTokenIdType] = useState(
+    (Number(router.query.tokenIdType) as TokenIdType) || TokenIdType.GuestLootId,
+  );
 
   const addresses = useMemo(() => {
     return [
@@ -90,6 +93,13 @@ const New = observer(() => {
         );
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
+
+  useEffect(() => {
+    router.replace({
+      pathname: location.pathname,
+      search: `tokenIdType=${selectedTokenIdType}`,
+    });
+  }, [selectedTokenIdType]);
 
   const inputRef = useRef<null | HTMLDivElement>(null);
   const [error, setError] = useState("");

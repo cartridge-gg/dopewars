@@ -22,3 +22,11 @@ export const OGLoader = ({ text = "LOADING ..." }: { text?: string }) => {
     </VStack>
   );
 };
+
+export const SmallLoader = () => {
+  return (
+    <VStack gap={3}>
+      <Image src="/images/loading.gif" alt="loading" width="24px" height="24px" margin="auto" />
+    </VStack>
+  );
+};

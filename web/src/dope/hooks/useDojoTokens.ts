@@ -38,6 +38,8 @@ export const useDojoTokens = (
   const timeout = useRef<any>({});
 
   const refetch = async () => {
+    setTokens([])
+    setTokensBalances([])
     try {
       setIsLoading(true);
       const tokens = await toriiClient.getTokens(addresses, tokenIds || []);
