@@ -7,6 +7,10 @@ pub mod store;
 #[cfg(test)]
 pub mod tests;
 
+pub mod achievements {
+    pub mod achievements_v0;
+}
+
 pub mod traits;
 pub mod config {
     pub mod config;
@@ -19,42 +23,6 @@ pub mod config {
     pub mod ryo;
     pub mod ryo_address;
     pub mod settings;
-}
-
-pub mod elements {
-    pub mod quests {
-        pub mod brawlerC;
-        pub mod brawlerG;
-        pub mod cops;
-        pub mod dealer;
-        pub mod escape;
-        pub mod famous;
-        pub mod gangs;
-        pub mod hustler;
-        pub mod interface;
-        pub mod jailbird;
-        pub mod kingpin;
-        pub mod launderer;
-        pub mod rip;
-        pub mod stuffed;
-        pub mod types;
-    }
-    pub mod trophies {
-        pub mod brawler;
-        pub mod cops;
-        pub mod dealer;
-        pub mod escape;
-        pub mod famous;
-        pub mod gangs;
-        pub mod hustler;
-        pub mod interface;
-        pub mod jailbird;
-        pub mod kingpin;
-        pub mod launderer;
-        pub mod rip;
-        pub mod stuffed;
-        pub mod types;
-    }
 }
 
 pub mod helpers {

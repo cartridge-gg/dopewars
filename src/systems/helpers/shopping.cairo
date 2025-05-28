@@ -1,21 +1,20 @@
-use super::super::super::config::gear::GearItemConfigTrait;
 use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+use rollyourown::achievements::achievements_v0::Tasks;
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
+    config::{hustlers::{ItemSlot}, locations::{Locations}}, events::{UpgradeItem},
     models::game::{Game, GameImpl, GameTrait},
-    config::{hustlers::{ ItemSlot}, locations::{Locations}},
     packing::{
-        game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl},
+        game_store::{GameStore, GameStoreImpl}, items_packed::{ItemsPackedImpl},
+        player::{PlayerImpl}, wanted_packed::{WantedPacked, WantedPackedImpl},
     },
     store::{Store, StoreImpl, StoreTrait},
-    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
-    events::{UpgradeItem},
+    utils::{events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait}},
 };
+use super::super::super::config::gear::GearItemConfigTrait;
 
 
 #[derive(Copy, Drop, Serde)]
@@ -79,11 +78,13 @@ fn execute_action(ref game_store: GameStore, action: Action) {
         );
 
     if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
-        let quest_id = Quest::Stuffed.identifier(0);
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
         bushido_store
             .progress(
-                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp(),
+                game_store.game.player_id.into(),
+                Tasks::STUFFED,
+                1,
+                starknet::get_block_timestamp(),
             );
     }
 }

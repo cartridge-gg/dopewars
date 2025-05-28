@@ -1,18 +1,17 @@
 use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+use rollyourown::achievements::achievements_v0::Tasks;
 use rollyourown::{
+    config::{drugs::{DrugConfig, Drugs}, locations::{Locations}}, events::{TradeDrug},
     models::{game::{GameMode, GameTrait}},
-    config::{locations::{Locations}, drugs::{Drugs, DrugConfig},},
     packing::{
-        game_store::{GameStore, GameStoreTrait}, player::{PlayerImpl},
-        drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, items_packed::{ItemsPackedImpl},
-        markets_packed::{MarketsPackedImpl, MarketsPackedTrait}
+        drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, game_store::{GameStore, GameStoreTrait},
+        items_packed::{ItemsPackedImpl}, markets_packed::{MarketsPackedImpl, MarketsPackedTrait},
+        player::{PlayerImpl},
     },
     store::{Store, StoreImpl, StoreTrait},
-    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathTrait, MathImplU8}},
-    events::{TradeDrug}
+    utils::{events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImplU8, MathTrait}},
 };
 use starknet::ContractAddress;
 
@@ -47,7 +46,7 @@ fn execute_trade(ref game_store: GameStore, trade: Trade) {
     };
 }
 
-fn buy(ref game_store: GameStore, trade: Trade,) {
+fn buy(ref game_store: GameStore, trade: Trade) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -92,7 +91,7 @@ fn buy(ref game_store: GameStore, trade: Trade,) {
                 quantity: trade.quantity,
                 price: market_price,
                 is_buy: true,
-            }
+            },
         );
 }
 
@@ -133,17 +132,16 @@ fn sell(ref game_store: GameStore, trade: Trade) {
                 quantity: trade.quantity,
                 price: market_price,
                 is_buy: false,
-            }
+            },
         );
 
     if game_store.game.is_ranked() && total > 999_999 && !game_store.player.traded_million {
         game_store.player.traded_million = true;
 
         let bushido_store = BushidoStoreTrait::new(store.world);
-        let quest_id = Quest::Dealer.identifier(0);
         bushido_store
             .progress(
-                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp()
+                game_store.game.player_id.into(), Tasks::DEALER, 1, starknet::get_block_timestamp(),
             );
     }
 }

@@ -16,7 +16,7 @@ mod laundromat {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
-    use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+    use rollyourown::achievements::achievements_v0::Tasks;
 
     use rollyourown::{
         config::{ryo::{RyoConfig}, ryo_address::{RyoAddress}}, constants::{ETHER},
@@ -75,13 +75,12 @@ mod laundromat {
 
             // quests
             let bushido_store = BushidoStoreTrait::new(world);
-            let quest_id = Quest::Hustler.identifier(0);
-            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+            bushido_store
+                .progress(player_id.into(), Tasks::HUSTLER, 1, starknet::get_block_timestamp());
 
             if game_store.player.reputation == 100 {
-                let quest_id = Quest::Famous.identifier(0);
                 bushido_store
-                    .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+                    .progress(player_id.into(), Tasks::FAMOUS, 1, starknet::get_block_timestamp());
             }
         }
 
@@ -163,9 +162,9 @@ mod laundromat {
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(get_caller_address(), paper_reward_launderer);
 
-            let quest_id = Quest::Launderer.identifier(0);
             let bushido_store = BushidoStoreTrait::new(world);
-            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+            bushido_store
+                .progress(player_id.into(), Tasks::LAUNDERER, 1, starknet::get_block_timestamp());
         }
 
         fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
@@ -217,10 +216,11 @@ mod laundromat {
 
                 if game.position == 1 {
                     //
-                    let quest_id = Quest::Kingpin.identifier(0);
                     let bushido_store = BushidoStoreTrait::new(world);
                     bushido_store
-                        .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+                        .progress(
+                            player_id.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
+                        );
                 }
             };
 

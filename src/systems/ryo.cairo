@@ -30,7 +30,7 @@ mod ryo {
     use core::traits::Into;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
-    use rollyourown::elements::trophies::types::{TROPHY_COUNT, Trophy, TrophyTrait};
+    use rollyourown::achievements::achievements_v0::AchievementImpl;
 
     use rollyourown::{
         config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress}}, constants::{ETHER},
@@ -113,9 +113,9 @@ mod ryo {
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
         //
-        //
-        //
-        
+    //
+    //
+
         // self.update_quests();
     }
 
@@ -127,28 +127,7 @@ mod ryo {
 
             // [Event] Emit all Trophy events
             let world = self.world(@"dopewars");
-            let mut trophy_id: u8 = 1;
-            while trophy_id <= TROPHY_COUNT {
-                let trophy: Trophy = trophy_id.into();
-                self
-                    .achievable
-                    .create(
-                        world,
-                        id: trophy.identifier(),
-                        hidden: trophy.hidden(),
-                        index: trophy.index(),
-                        points: trophy.points(),
-                        start: trophy.start(),
-                        end: trophy.end(),
-                        group: trophy.group(),
-                        icon: trophy.icon(),
-                        title: trophy.title(),
-                        description: trophy.description(),
-                        tasks: trophy.tasks(),
-                        data: trophy.data(),
-                    );
-                trophy_id += 1;
-            }
+            AchievementImpl::declare_all(world);
         }
 
         fn set_paused(self: @ContractState, paused: bool) {

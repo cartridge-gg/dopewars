@@ -2,7 +2,7 @@ use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait}
 use dojo::event::EventStorage;
 use dojo::meta::introspect::Introspect;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+use rollyourown::achievements::achievements_v0::Tasks;
 
 use rollyourown::{
     models::game::{Game, GameMode, GameTrait},
@@ -182,32 +182,25 @@ fn decide(
         let player_id: felt252 = game_store.game.player_id.into();
 
         if result.outcome == EncounterOutcomes::Jailed {
-            let quest_id = Quest::Jailbird.identifier(0);
-            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+            bushido_store.progress(player_id, Tasks::JAILBIRD, 1, starknet::get_block_timestamp());
         } else if result.outcome == EncounterOutcomes::Died {
-            let quest_id = Quest::Rip.identifier(0);
-            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+            bushido_store.progress(player_id, Tasks::RIP, 1, starknet::get_block_timestamp());
         } else if result.outcome == EncounterOutcomes::Escaped {
-            let quest_id = Quest::Escape.identifier(0);
-            bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+            bushido_store.progress(player_id, Tasks::ESCAPE, 1, starknet::get_block_timestamp());
         } else if result.outcome == EncounterOutcomes::Victorious {
             if encounter.encounter == Encounters::Cops {
-                let quest_id = Quest::Cops.identifier(0);
-                bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                bushido_store.progress(player_id, Tasks::COPS, 1, starknet::get_block_timestamp());
 
                 if encounter.level == 6 {
-                    let quest_id = Quest::BrawlerC.identifier(0);
-                    bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                    bushido_store.progress(player_id, Tasks::BRAWLER_C, 1, starknet::get_block_timestamp());
                 }
             }
 
             if encounter.encounter == Encounters::Gang {
-                let quest_id = Quest::Gangs.identifier(0);
-                bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                bushido_store.progress(player_id, Tasks::GANGS, 1, starknet::get_block_timestamp());
 
                 if encounter.level == 6 {
-                    let quest_id = Quest::BrawlerG.identifier(0);
-                    bushido_store.progress(player_id, quest_id, 1, starknet::get_block_timestamp());
+                    bushido_store.progress(player_id, Tasks::BRAWLER_G, 1, starknet::get_block_timestamp());
                 }
             }
         }
