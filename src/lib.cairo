@@ -77,6 +77,7 @@ pub mod utils {
     pub mod introspect;
     pub mod math;
     pub mod payout_structure;
+    pub mod payout_items;
     pub mod random;
     pub mod sorted_list;
 }
@@ -85,6 +86,7 @@ pub mod interfaces {
     pub mod chips;
     pub mod dope_hustlers;
     pub mod dope_loot;
+    pub mod dope_gear;
     pub mod erc721;
     pub mod paper;
 }

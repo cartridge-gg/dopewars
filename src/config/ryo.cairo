@@ -7,11 +7,13 @@ const TWO_MIN: u16 = 120;
 // const ONE_HOUR: u16 = 3600;
 // const HALF_HOUR: u16 = 1800;
 //
-const TEMP_VALUE: u32 = 1000;
 const HALF_HOUR: u32 = 1800;
 const ONE_HOUR: u32 = 3600;
+const HALF_DAY: u32 = 43_200;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
+
+const TEMP_VALUE: u32 = 900;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -40,7 +42,7 @@ impl RyoConfigImpl of RyoConfigTrait {
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: TEMP_VALUE, //ONE_DAY, 
+            season_duration: HALF_DAY, // TEMP_VALUE, //ONE_DAY, 
             season_time_limit: TWO_MIN, // HALF_HOUR, 
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  

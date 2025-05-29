@@ -1874,8 +1874,8 @@
       ]
     },
     {
-      "address": "0x28bb385679c251f82cf4a1196fe1a2af3827fe994ee4092bc01510e275206fa",
-      "class_hash": "0x437c948f703a2d578b44195e05519112700d6aa7c23d84428375e26d53c61ef",
+      "address": "0x66c0e46e8bf13153c3bc20791481181dd6a9706b81b14fcc1ee211ecb1ca9ea",
+      "class_hash": "0x49091000ed9cd432fc1e13b163644f1a10c73f99e5d74734a1aa23feb09aac4",
       "abi": [
         {
           "type": "impl",
@@ -2308,8 +2308,8 @@
       ]
     },
     {
-      "address": "0x134cd3d476f73d3bebdac6987e28e11b6d13e62f05d9eb27514f7966e5abeee",
-      "class_hash": "0x494a85d986677a9abecad9d6d94dd640c098189e49ee589299c342c4464cb23",
+      "address": "0x119951926e6b05e52a04e73754912943958ecb207a5f9deef983c06e418c8a5",
+      "class_hash": "0x2d70f15904aa44b86df4c87c0e791a5e380fd006de94691539b469a3b422188",
       "abi": [
         {
           "type": "impl",
@@ -2751,8 +2751,8 @@
       ]
     },
     {
-      "address": "0x4eab92e6ddf8662dc44a9c9d06e698b2fe546227a841e026732f50b8b4ba62a",
-      "class_hash": "0x4c8847265986ea06bcc06bc5fa9ce2ff204095a2db2ae2d8b1baa415aa4d19d",
+      "address": "0x22d465c4a2b4ca2d69694e4e0dc87b7cc81c1377aa5398bd19b914e0a572c0b",
+      "class_hash": "0x43998d93c74064205e2222778fc0e7d12d44a10192c839aca8ed55a9c5011b1",
       "abi": [
         {
           "type": "impl",
@@ -3491,8 +3491,8 @@
       ]
     },
     {
-      "address": "0x6897dc4ee416665072377b6ecf68bbe007e57e960ab8d6c88a15f6918f5c426",
-      "class_hash": "0x12b367066b3f63bd91a8c945cd873df553afffb5f1c9a55118a53c51f39e32d",
+      "address": "0xce6531367afdefce5da6465e815bca98eb7b8d1763f306fef3e6a1dd1f596f",
+      "class_hash": "0x3959ab60320628a8ef1ff2a7f1bdf7d25684edaf43e728464c077c99aed4529",
       "abi": [
         {
           "type": "impl",
@@ -3910,8 +3910,8 @@
       ]
     },
     {
-      "address": "0x1d8ca1eec142892a2f35638737a4e99d7cd0f151dff1617e6799b9b2ca3e28",
-      "class_hash": "0x67f602f9ded46e09455b6ce242d9f48373ab08cf4c3ed4884f6c9c4f7756dd5",
+      "address": "0x190df78993fd7f5598e5a2c38e49fa7444db59e28129a9ee03f8cace6763865",
+      "class_hash": "0x33fa5f3e706557239153d124d70ae1108d0c62d91c8b1e829f85bf4fbf8512e",
       "abi": [
         {
           "type": "impl",

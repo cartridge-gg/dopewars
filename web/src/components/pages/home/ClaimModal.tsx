@@ -18,14 +18,16 @@ import {
   TableContainer,
   VStack,
   HStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { Claimable } from "./ClaimReward";
-import { PaperIcon } from "@/components/icons";
+import { PaperIcon, Trophy } from "@/components/icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { num, shortString } from "starknet";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
+import { RewardDetails } from "./Leaderboard";
 
 export const ClaimModal = ({
   claimable,
@@ -44,7 +46,7 @@ export const ClaimModal = ({
   const onClaim = async () => {
     if (!account?.address) return;
 
-    console.log(claimable.gameIds)
+    console.log(claimable.gameIds);
     const { hash } = await claim(account?.address, claimable.gameIds);
 
     if (hash != "") {
@@ -105,9 +107,26 @@ export const ClaimModal = ({
                               <Text>{game.player_name as string}</Text>
                             </HStack>
                           </Td>
-                          <Td color="yellow.400" isNumeric>
-                            {formatCash(game.claimable).replace("$", "")} <PaperIcon color="yellow.400" ml={1} />
+                          <Td>
+                            <Tooltip
+                              label={
+                                <RewardDetails
+                                  claimable={game.claimable}
+                                  position={game.position}
+                                  seasonVersion={game.season_version}
+                                />
+                              }
+                              color="neon.400"
+                              placement="right"
+                            >
+                              <span>
+                                <Trophy />
+                              </span>
+                            </Tooltip>
                           </Td>
+                          {/* <Td color="yellow.400" isNumeric>
+                            {formatCash(game.claimable).replace("$", "")} <PaperIcon color="yellow.400" ml={1} />
+                          </Td> */}
                         </Tr>
                       );
                     })}

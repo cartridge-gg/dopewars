@@ -1,19 +1,26 @@
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Loader } from "@/components/layout/Loader";
-import { useDojoContext, useRegisteredGamesBySeason, useRouterContext, useSeasonByVersion } from "@/dojo/hooks";
+import {
+  useConfigStore,
+  useDojoContext,
+  useRegisteredGamesBySeason,
+  useRouterContext,
+  useSeasonByVersion,
+} from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
-import { Box, HStack, ListItem, ListProps, StyleProps, Text, UnorderedList, VStack } from "@chakra-ui/react";
+import { Box, Heading, HStack, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
-import { num, shortString } from "starknet";
-import { Config, ConfigStoreClass } from "@/dojo/stores/config";
-import { getPayedCount } from "@/dojo/helpers";
+import { Config } from "@/dojo/stores/config";
+import { getGearItemRewards, getPayedCount } from "@/dojo/helpers";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
+import { ComponentValueEvent, useDopeStore } from "@/dope/store";
+import { hash, shortString, uint256 } from "starknet";
+import { Layer } from "@/dope/components";
 
 const renderer = ({
   days,
@@ -150,7 +157,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
                 const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
-               
+
                 return (
                   <ListItem color={color} key={game.game_id}>
                     <HStack mr={3}>
@@ -205,16 +212,39 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
                       {game.claimable > 0 && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                          <PaperIcon /> {game.claimable} ..
+                          <Tooltip
+                            placement="left"
+                            label={
+                              <RewardDetails
+                                claimable={game.claimable}
+                                position={game.position}
+                                seasonVersion={game.season_version}
+                              />
+                            }
+                            color="neon.400"
+                          >
+                            <span>
+                              <Trophy />
+                              {/* {game.claimable} .. */}
+                            </span>
+                          </Tooltip>
                         </Text>
                       )}
 
                       {game.season_version === config.ryo.season_version && index + 1 <= payedCount && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                          <Trophy opacity={0.5} />
+                          <Tooltip
+                            placement="left"
+                            label={<RewardDetails position={index + 1} seasonVersion={game.season_version} />}
+                            color="neon.400"
+                          >
+                            {/* getGearItemRewards(index + 1) */}
+                            <span>
+                              <Trophy opacity={0.5} />
+                            </span>
+                          </Tooltip>
                         </Text>
                       )}
-
                       <Text flexShrink={0} fontSize={["12px", "16px"]}>
                         {formatCash(game.final_score)}
                       </Text>
@@ -233,3 +263,123 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     </VStack>
   );
 });
+
+export const RewardDetails = observer(
+  ({ seasonVersion, position, claimable }: { seasonVersion: number; position: number; claimable?: number }) => {
+    const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
+    const configStore = useConfigStore();
+
+    const suffixes = getComponentValuesBySlug("DopeGear", "Suffixes");
+    const bodies = getComponentValuesBySlug("DopeHustlers", "Body");
+
+    const seed = uint256.bnToUint256(hash.computePoseidonHashOnElements([seasonVersion, position]));
+
+    const rewards = useMemo(() => {
+      const items: ComponentValueEvent[] = [];
+
+      if (position == 1) {
+        const slots = ["Weapon", "Clothe", "Vehicle", "Foot", "Accessory", "Drug", "Waist", "Hand", "Neck", "Ring"];
+        let suffix = undefined;
+
+        for (let slot of slots) {
+          const componentValues = getComponentValuesBySlug("DopeGear", slot);
+          const slot_slug = shortString.encodeShortString(slot);
+          const random = BigInt(hash.computePoseidonHashOnElements([slot_slug, seed.low, seed.high]));
+          let itemId = random % BigInt(componentValues.length);
+          if (slot === "Accessory") {
+            itemId = 0n; // crown
+          }
+          const item = Object.assign({}, componentValues.find((i) => BigInt(i.id) === itemId)!);
+
+          if (!suffix) {
+            const suffixId = (random % BigInt(suffixes.length - 1)) + 1n;
+            suffix = suffixes.find((i) => BigInt(i.id) === suffixId);
+          }
+          item.value = item.value + " " + suffix!.value + " +1";
+
+          items.push(item);
+        }
+      } else if (position == 2) {
+        const slots = ["Weapon", "Clothe", "Vehicle", "Foot", "Accessory"];
+        let suffix = undefined;
+
+        for (let slot of slots) {
+          const componentValues = getComponentValuesBySlug("DopeGear", slot);
+          const slot_slug = shortString.encodeShortString(slot);
+          const random = BigInt(hash.computePoseidonHashOnElements([slot_slug, seed.low, seed.high]));
+          let itemId = random % BigInt(componentValues.length);
+          if (slot === "Accessory" && itemId < 3) {
+            itemId = 27n; // paper id
+          }
+          const item = Object.assign({}, componentValues.find((i) => BigInt(i.id) === itemId)!);
+
+          if (!suffix) {
+            const suffixId = (random % BigInt(suffixes.length - 1)) + 1n;
+            suffix = suffixes.find((i) => BigInt(i.id) === suffixId);
+          }
+          item.value = item.value + " " + suffix!.value;
+          items.push(item);
+        }
+      } else if (position == 3) {
+        const slots = ["Weapon", "Clothe", "Vehicle", "Foot", "Accessory"];
+        for (let slot of slots) {
+          const componentValues = getComponentValuesBySlug("DopeGear", slot);
+          const slot_slug = shortString.encodeShortString(slot);
+          const random = BigInt(hash.computePoseidonHashOnElements([slot_slug, seed.low, seed.high]));
+          let itemId = random % BigInt(componentValues.length);
+          if (slot === "Accessory" && itemId < 3) {
+            itemId = 27n; // paper id
+          }
+          const item = Object.assign({}, componentValues.find((i) => BigInt(i.id) === itemId)!);
+          const dopeness = random % 21n;
+          if (dopeness > 14) {
+            const suffixId = (random % BigInt(suffixes.length - 1)) + 1n;
+            const suffix = suffixes.find((i) => BigInt(i.id) === suffixId);
+            item.value = item.value + " " + suffix!.value;
+          }
+
+          items.push(item);
+        }
+      } else {
+        const accessories = getComponentValuesBySlug("DopeGear", "Accessory");
+        const slot_slug = shortString.encodeShortString("Accessory");
+        const random = BigInt(hash.computePoseidonHashOnElements([slot_slug, seed.low, seed.high]));
+        let accessoryId = random % BigInt(accessories.length);
+        if (accessoryId < 3) {
+          accessoryId = 27n; // paper id
+        }
+        const accessory = accessories.find((i) => BigInt(i.id) === accessoryId)!;
+        items.push(accessory);
+      }
+
+      return items;
+    }, [position, seasonVersion]);
+
+    return (
+      <VStack alignItems="flex-start" p={1} gap={0}>
+        <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center"> 
+          RANK {position} REWARDS
+        </Text>
+        <HStack>
+          <PaperIcon width="24px" height="24px" />
+          <Text ml={2}>{claimable ? formatCash(claimable).replace("$", "") : "???"} Paper</Text>
+        </HStack>
+        {position <= 3 && (
+          <HStack>
+            <Layer rects={bodies[1].resources[0]} width="24px" height="24px" crop={true} />
+            <Text ml={2}>Naked Hustler</Text>
+          </HStack>
+        )}
+
+        {rewards.map((item) => {
+          return (
+            <HStack key={`${item.id}-${item.component_id}`}>
+              <Layer rects={item.resources[0]} width="24px" height="24px" crop={true} />
+              <Text ml={2}>{item.value}</Text>
+            </HStack>
+          );
+        })}
+      </VStack>
+    );
+  },
+);

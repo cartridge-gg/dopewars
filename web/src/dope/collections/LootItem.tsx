@@ -16,7 +16,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
     contracts: { getDojoContract },
   } = useDojoContext();
 
-  const { onOpen, onRelease, isLoading: isOpening, isSuccess } = useDopeLootClaim({ toast, getDojoContract });
+  const { onOpen, onRelease, isLoading: isOpening, isSuccess } = useDopeLootClaim({ getDojoContract });
 
   //   const {
   //     transfer,
@@ -38,6 +38,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
   }, [dopeLootClaimState, dopeLootClaimState[Number(token.token_id)]]);
 
   return (
+    // @ts-ignore
     <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <GridItem onClick={() => setIsFlipped(!isFlipped)} className="cursor-pointer">
         {isFlipped ? (

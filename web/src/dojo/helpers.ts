@@ -105,7 +105,6 @@ export const dopeLootSlotIdToItemSlot = {
   2: ItemSlot.Transport,
 };
 
-
 export const itemUpgrades = {
   [ItemSlot.Weapon]: {
     0: {
@@ -398,6 +397,10 @@ export const wantedModeColor = {
 };
 export type wantedModeColorKeys = keyof typeof wantedModeColor;
 
+//
+//  payout
+//
+
 export function getPayedCount(entrants: number): number {
   if (entrants <= 2) {
     return 1; // payout_0_2(rank)
@@ -430,6 +433,16 @@ export function getPayedCount(entrants: number): number {
   }
 }
 
-//
-//  payout count
-//
+export function getGearItemRewards(position: number) {
+  if (position == 1) {
+    return "Paper share & Fully assorted augmented item set & Crown";
+  }
+  if (position == 2) {
+    return "Paper share & Dopewars assorted item set & Accessory";
+  }
+  if (position == 3) {
+    return "Paper share & Random Dopewars item set & Accessory";
+  } else {
+    return "Paper share & Random Accessory";
+  }
+}

@@ -15,19 +15,24 @@ mod laundromat {
     use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
-    use dojo::world::IWorldDispatcherTrait;
+
+    use dojo::world::{WorldStorage, WorldStorageTrait, IWorldDispatcherTrait};
     use rollyourown::achievements::achievements_v0::Tasks;
 
     use rollyourown::{
         config::{ryo::{RyoConfig}, ryo_address::{RyoAddress}}, constants::{ETHER},
         events::{Claimed, NewSeason},
         helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait},
+        interfaces::{
+            paper::{IPaperDispatcher, IPaperDispatcherTrait},
+            dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
+            dope_gear::{IDopeGearDispatcher, IDopeGearDispatcherTrait},
+        },
         models::{game::{Game, GameImpl, GameTrait}, season::{Season, SeasonImpl, SeasonTrait}},
         packing::game_store::{GameStore, GameStoreImpl}, store::{Store, StoreImpl, StoreTrait},
         utils::{
-            payout_structure::{get_payed_count, get_payout}, random::{RandomImpl},
-            sorted_list::{SortedListImpl, SortedListItem, SortedListTrait},
+            payout_structure::{get_payed_count, get_payout}, payout_items::{add_items_payout},
+            random::{RandomImpl}, sorted_list::{SortedListImpl, SortedListItem, SortedListTrait},
         },
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
@@ -176,6 +181,19 @@ mod laundromat {
             // // check max batch size
             // assert(game_ids.len() <= 10, 'too much game_ids');
 
+            let mut dope_world = self.world(@"dope");
+
+            let mut gear_ids: Array<u256> = array![];
+            let mut gear_ids_values: Array<u256> = array![];
+            let mut hustler_count = 0;
+
+            let hustler_dispatcher = IDopeHustlersDispatcher {
+                contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
+            };
+            let gear_dispatcher = IDopeGearDispatcher {
+                contract_address: dope_world.dns_address(@"DopeGear").unwrap(),
+            };
+
             let mut total_claimable = 0;
 
             while let Option::Some(game_id) = game_ids.pop_front() {
@@ -200,8 +218,19 @@ mod laundromat {
                 game.claimed = true;
                 store.set_game(@game);
 
+
+                // add items rewards ids
+                add_items_payout(
+                    hustler_dispatcher,
+                    gear_dispatcher,
+                    ref gear_ids,
+                    ref gear_ids_values,
+                    ref hustler_count,
+                    game.season_version,
+                    game.position,
+                );
+
                 // emit Claimed event
-                // emit NewSeason
                 store
                     .world
                     .emit_event(
@@ -231,6 +260,15 @@ mod laundromat {
             // transfer reward to player_id
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(player_id, total_claimable);
+
+            // mint gear items
+            gear_dispatcher.mint_batch(player_id, gear_ids.span(), gear_ids_values.span(), array![].span());
+
+            // mint hustlers
+            while hustler_count > 0 {
+                hustler_dispatcher.mint_hustler_to(player_id);
+                hustler_count -= 1;
+            }
         }
 
         fn claim_treasury(self: @ContractState) {

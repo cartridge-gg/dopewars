@@ -83,7 +83,7 @@ export const EncounterPreview = ({
   };
 
   const isCop = playerStatus === PlayerStatus.BeingArrested;
- 
+
   let footId = dopeRandomness("FOOT", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Foot")!.length);
   let weaponId = dopeRandomness("WEAPON", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Weapon")!.length);
   let waistId = dopeRandomness("WAIST", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Waist")!.length);
@@ -146,12 +146,12 @@ export const EncounterPreview = ({
     },
   };
 
-  //   if (isCop) {
-  //     hustlerEquipment["Accessory"] = {
-  //       token_id: 2n, // police hat
-  //       ...dummyProps,
-  //     };
-  //   }
+  if (isCop) {
+    hustlerEquipment["Accessory"] = {
+      token_id: 37n, // combo police
+      ...dummyProps,
+    };
+  }
 
   if (!isCop) {
     hustlerEquipment["Drug"] = {
@@ -164,6 +164,10 @@ export const EncounterPreview = ({
     };
     hustlerEquipment["Ring"] = {
       token_id: dopeRandomness("RING", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Ring")!.length),
+      ...dummyProps,
+    };
+    hustlerEquipment["Accessory"] = {
+      token_id: 22n, //cigarette mouth
       ...dummyProps,
     };
   }

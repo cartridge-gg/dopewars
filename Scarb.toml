@@ -7,8 +7,6 @@ version = "0.1.0"
 [cairo]
 # sierra-replace-ids = true
 
-
-
 [tool.fmt]
 sort-module-level-items = true
 max-line-length = 100
@@ -28,17 +26,20 @@ cairo_test = "2.10.1"
 
 [dependencies]
 starknet = "2.10.1"
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.5.0" }
-cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
-achievement = { path = "../arcade/packages/achievement" }
-# achievement = { git = "https://github.com/cartridge-gg/bushido", rev = "0b658f495885f387bf56d6a27e76514b9b4b772f" }
-
-# bushido_trophy = { git = "https://github.com/cartridge-gg/bushido", branch = "bump_version_rc2" }
-# bushido_trophy = { git = "https://github.com/cartridge-gg/bushido" }
 # dojo = { path = "../dojo/crates/dojo/core" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.5.0" }
+# cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
+cartridge_vrf = { path = "../vrf" }
 
-openzeppelin_access = "0.18.0" 
-openzeppelin_token = "0.18.0"
+# achievement = { git = "https://github.com/cartridge-gg/arcade" }
+achievement = { path = "../arcade/packages/achievement" }
+
+# alexandria_bytes = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+# alexandria_encoding = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+dope_contracts = { path = "../dope-migration/cairo/contracts"}
+
+openzeppelin_access = "0.20.0" 
+openzeppelin_token = "0.20.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"
@@ -59,7 +60,7 @@ migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $P
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
-slot_dopewars_katana = "slot d create -t insane --team cartridge dopewars katana -v v1.5.2 --config ./katana_dopewars.toml"
+slot_dopewars_katana = "slot d create -t insane --team cartridge dopewars katana -v v1.5.0 --config ./katana_dopewars.toml"
 slot_dopewars_torii = "slot d create -t insane --team cartridge dopewars torii  -v v1.5.5-preview.3 --config ./torii_dopewars.toml"
 
 # slot ryosepolia 

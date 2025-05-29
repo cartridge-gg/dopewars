@@ -4,7 +4,7 @@ import EthProvider from "@/components/wallet/EthProvider";
 import { useRouterContext } from "@/dojo/hooks";
 import { Heading, VStack, Text } from "@chakra-ui/react";
 
-import ClaimComponent from "@/components/claim/ClaimComponent";
+import ClaimComponent from "@/components/pages/claim/ClaimComponent";
 
 export default function Claim() {
   const { router } = useRouterContext();

@@ -66,7 +66,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
         return (
           toast &&
           toast({
-            description: "Please connect your wallet",
+            message: "Please connect your wallet",
             isError: true,
           })
         );

@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x727c84f146c9c0e80ad0743a183425a3b34b49955863cb3c889c99e7e7081",
-      "class_hash": "0x15def0b2f0860206c60255abb0febe95f14b26116b89df9b8c46609818ceb8c",
+      "address": "0x607c2fb13a52b504b52e9a0e2ac43ae191193355742aa48ade1a9d6c5912085",
+      "class_hash": "0x5857520d910a63674b239ab763ef902139af77bf09c89b270d3fade6c4ebba8",
       "abi": [
         {
           "type": "impl",
@@ -1456,6 +1456,40 @@
           "state_mutability": "external"
         },
         {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u256>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u256>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "mint_batch",
+          "inputs": [
+            {
+              "name": "recipient",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "token_ids",
+              "type": "core::array::Span::<core::integer::u256>"
+            },
+            {
+              "name": "values",
+              "type": "core::array::Span::<core::integer::u256>"
+            },
+            {
+              "name": "data",
+              "type": "core::array::Span::<core::felt252>"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
           "type": "function",
           "name": "unsafe_transfer_from",
           "inputs": [
@@ -1510,6 +1544,74 @@
           ],
           "outputs": [],
           "state_mutability": "external"
+        },
+        {
+          "type": "enum",
+          "name": "core::option::Option::<core::felt252>",
+          "variants": [
+            {
+              "name": "Some",
+              "type": "core::felt252"
+            },
+            {
+              "name": "None",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dope_contracts::dope_gear::dope_gear_ext::GearItem",
+          "members": [
+            {
+              "name": "item",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "slot",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name_prefix",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "name_suffix",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "suffix",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "augmentation",
+              "type": "core::integer::u8"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "random_gear_item_id",
+          "inputs": [
+            {
+              "name": "seed",
+              "type": "core::integer::u256"
+            },
+            {
+              "name": "slot_slug",
+              "type": "core::felt252"
+            },
+            {
+              "name": "dopeness",
+              "type": "core::option::Option::<core::felt252>"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "dope_contracts::dope_gear::dope_gear_ext::GearItem"
+            }
+          ],
+          "state_mutability": "view"
         },
         {
           "type": "impl",
@@ -1700,16 +1802,6 @@
             {
               "name": "snapshot",
               "type": "@core::array::Array::<core::starknet::contract_address::ContractAddress>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::integer::u256>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u256>"
             }
           ]
         },
@@ -2409,7 +2501,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_gear::dope_gear::DopeGear::Event",
+          "name": "dope_contracts::dope_gear::dope_gear::DopeGear::Event",
           "kind": "enum",
           "variants": [
             {
@@ -2465,6 +2557,7 @@
         "pause",
         "unpause",
         "mint",
+        "mint_batch",
         "unsafe_transfer_from",
         "unequip",
         "set_renderer",
@@ -2486,8 +2579,8 @@
       ]
     },
     {
-      "address": "0x27ba14794b7567025f1d7206090b545f48e3ce5a442eda5e95ae16906d5fc0e",
-      "class_hash": "0x41c2c75f977ca72f8c01c61263f959d238516e6695d3c7a0d5c67450c7e1fd1",
+      "address": "0xc093de2d5cdbcc368a9670733bc0ed6ad4adfc0a79b0d919acada8a14e96b0",
+      "class_hash": "0x4a6e22ead504551eed7f492fde19074772f296c644c619ec944a7690862681b",
       "abi": [
         {
           "type": "impl",
@@ -2671,11 +2764,11 @@
         {
           "type": "impl",
           "name": "DopeHustlersImpl",
-          "interface_name": "contracts::dope_hustlers::dope_hustlers::IDopeHustlers"
+          "interface_name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlers"
         },
         {
           "type": "struct",
-          "name": "contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata",
           "members": [
             {
               "name": "token_id",
@@ -2701,7 +2794,7 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart",
           "members": [
             {
               "name": "slot",
@@ -2715,11 +2808,11 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts",
           "members": [
             {
               "name": "inner",
-              "type": "core::array::Array::<contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart>"
+              "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart>"
             }
           ]
         },
@@ -2739,7 +2832,7 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption",
           "members": [
             {
               "name": "token_id",
@@ -2757,7 +2850,7 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_hustlers::dope_hustlers_models::HustlerBody",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody",
           "members": [
             {
               "name": "token_id",
@@ -2775,7 +2868,7 @@
         },
         {
           "type": "interface",
-          "name": "contracts::dope_hustlers::dope_hustlers::IDopeHustlers",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlers",
           "items": [
             {
               "type": "function",
@@ -2799,7 +2892,7 @@
               "inputs": [
                 {
                   "name": "hustler_metadata",
-                  "type": "contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata"
+                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata"
                 }
               ],
               "outputs": [],
@@ -2815,7 +2908,7 @@
                 },
                 {
                   "name": "body_parts",
-                  "type": "contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts"
+                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts"
                 }
               ],
               "outputs": [],
@@ -2904,7 +2997,7 @@
               ],
               "outputs": [
                 {
-                  "type": "core::array::Array::<contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption>"
+                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption>"
                 }
               ],
               "state_mutability": "view"
@@ -2920,7 +3013,18 @@
               ],
               "outputs": [
                 {
-                  "type": "core::array::Array::<contracts::dope_hustlers::dope_hustlers_models::HustlerBody>"
+                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "get_slots",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::array::Array::<core::felt252>"
                 }
               ],
               "state_mutability": "view"
@@ -3868,7 +3972,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_hustlers::dope_hustlers::DopeHustlers::Event",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers::DopeHustlers::Event",
           "kind": "enum",
           "variants": [
             {
@@ -3959,8 +4063,8 @@
       ]
     },
     {
-      "address": "0x16094ef477812ed35e10847fd335517312030e2ed4f8cbd5a746980085f2823",
-      "class_hash": "0x448c00a0d2b71c53028bceedd7a89aae15283ab6664fe786c0857d1f7da7b6e",
+      "address": "0x5316a64437c10470f4f4a9c89bf926f923f846cdbfb97370669632668ab46fd",
+      "class_hash": "0x69d2f4ecb034cf99a6bad19ac82732b3db3f7ca4c9648ed1757eae5124b14e3",
       "abi": [
         {
           "type": "impl",
@@ -4139,7 +4243,7 @@
         {
           "type": "impl",
           "name": "TraitsValuesImpl",
-          "interface_name": "contracts::dope_loot::dope_loot::ITraitsValues"
+          "interface_name": "dope_contracts::dope_loot::dope_loot::ITraitsValues"
         },
         {
           "type": "struct",
@@ -4171,7 +4275,7 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_loot::dope_loot_ext::TraitValues",
+          "name": "dope_contracts::dope_loot::dope_loot_ext::TraitValues",
           "members": [
             {
               "name": "item",
@@ -4201,7 +4305,7 @@
         },
         {
           "type": "interface",
-          "name": "contracts::dope_loot::dope_loot::ITraitsValues",
+          "name": "dope_contracts::dope_loot::dope_loot::ITraitsValues",
           "items": [
             {
               "type": "function",
@@ -4214,7 +4318,7 @@
               ],
               "outputs": [
                 {
-                  "type": "core::array::Array::<contracts::dope_loot::dope_loot_ext::TraitValues>"
+                  "type": "core::array::Array::<dope_contracts::dope_loot::dope_loot_ext::TraitValues>"
                 }
               ],
               "state_mutability": "view"
@@ -5312,7 +5416,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_loot::dope_loot::DopeLoot::Event",
+          "name": "dope_contracts::dope_loot::dope_loot::DopeLoot::Event",
           "kind": "enum",
           "variants": [
             {
@@ -5407,8 +5511,8 @@
       ]
     },
     {
-      "address": "0x6bef4266561cc99d298cf804b39ad487de183cab0326906ac599222176e7de2",
-      "class_hash": "0x72520ed0e6241611521218434abb83e8dc7ed4035187c0fa081063e697f4cf4",
+      "address": "0x2167197f60fe3f7bec00c9dc3a0752c591002fc592e61027f36d28c4c701785",
+      "class_hash": "0x6a29290c7b33f3ebb2909c1facc9f3cd2158c1532cd70adb985223378681a8f",
       "abi": [
         {
           "type": "impl",
@@ -5479,7 +5583,7 @@
         {
           "type": "impl",
           "name": "DopeLootClaimImpl",
-          "interface_name": "contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim"
+          "interface_name": "dope_contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim"
         },
         {
           "type": "struct",
@@ -5503,7 +5607,7 @@
         },
         {
           "type": "struct",
-          "name": "contracts::dope_loot_claim::merkle::LeafData",
+          "name": "dope_contracts::dope_loot_claim::merkle::LeafData",
           "members": [
             {
               "name": "eth_address",
@@ -5535,7 +5639,7 @@
         },
         {
           "type": "interface",
-          "name": "contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim",
+          "name": "dope_contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim",
           "items": [
             {
               "type": "function",
@@ -5561,7 +5665,7 @@
                 },
                 {
                   "name": "data",
-                  "type": "contracts::dope_loot_claim::merkle::LeafData"
+                  "type": "dope_contracts::dope_loot_claim::merkle::LeafData"
                 },
                 {
                   "name": "v",
@@ -5809,7 +5913,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_loot_claim::dope_loot_claim::DopeLootClaim::Event",
+          "name": "dope_contracts::dope_loot_claim::dope_loot_claim::DopeLootClaim::Event",
           "kind": "enum",
           "variants": [
             {
@@ -5855,7 +5959,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x6073954aa3d3a7acd601e157948c3e50b6daad14c8587df01b49482b9db56fd",
+      "class_hash": "0x309c415bdb8268ef64b583853e1f84a292bb73cd5e5d3aac0627669699d1c67",
       "abi": [
         {
           "type": "impl",
@@ -6038,7 +6142,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_gear::dope_gear_renderer_default::DopeGearRendererDefault::Event",
+          "name": "dope_contracts::dope_gear::dope_gear_renderer_default::DopeGearRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -6055,7 +6159,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5e2a773a6c83b0437a1ff4d08da3a7cbbd7e0db94da2cb26ffd39cfea9f047f",
+      "class_hash": "0x1c0d16f7e9a74f585aaf76ce4a0a120fb38aa06317f2a2ab471328192d23da1",
       "abi": [
         {
           "type": "impl",
@@ -6322,7 +6426,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x466fee506b5a9373c7c1d9a077f7c304d9cfbbc1fb934f8b52f5362b833b6b4",
+      "class_hash": "0x551db98f973e68b5114fc0f5036ac46d53a9497d8460adbe70d58fceb817335",
       "abi": [
         {
           "type": "impl",
@@ -11921,7 +12025,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0xa66ff9232a14292b4195bff74379360913da1b2e4e836e2d1f9c6273e08ed9",
+      "class_hash": "0x7ddd24e50d07714a45a6875bbe640071063ca27b7b2ab561f454afba4338752",
       "abi": [
         {
           "type": "impl",
@@ -11976,7 +12080,7 @@
         {
           "type": "impl",
           "name": "RendererImpl",
-          "interface_name": "contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer"
+          "interface_name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer"
         },
         {
           "type": "struct",
@@ -12026,7 +12130,7 @@
         },
         {
           "type": "interface",
-          "name": "contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer",
           "items": [
             {
               "type": "function",
@@ -12090,7 +12194,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_hustlers::dope_hustlers_renderer_default::DopeHustlersRendererDefault::Event",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_renderer_default::DopeHustlersRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -15201,7 +15305,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x11c187a54bff32a7e3dcfc763528a4409b8cd4f7ea9de4db821fae90a7a57d7",
+      "class_hash": "0x477a2fe0a8f092d89f92112a7d743c420701a4b98c7199240878f415096d4cd",
       "abi": [
         {
           "type": "impl",
@@ -15384,7 +15488,7 @@
         },
         {
           "type": "event",
-          "name": "contracts::dope_loot::dope_loot_renderer_default::DopeLootRendererDefault::Event",
+          "name": "dope_contracts::dope_loot::dope_loot_renderer_default::DopeLootRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -18899,37 +19003,37 @@
     },
     {
       "members": [],
-      "class_hash": "0x69aad0c87f617a45bd1598ae256e755f159beb1fdafb9dad31f37d7ba341c79",
+      "class_hash": "0x2443eee67f41c7856a970630651056fd30be5e4a50aff8a2fce68eaeff081c9",
       "tag": "dope-DopeLootClaimed",
       "selector": "0x2365d20db67233cc112a2b1d9868c4454a75182c5f2d2613335db44f043b1ad"
     },
     {
       "members": [],
-      "class_hash": "0x49027398302b8c66a086978473b3a0fc7ebf115677f0dc9871a596b8b576be8",
+      "class_hash": "0x72d4561f7c291fa5ce0b58d36fcdb1522f1608fc042b3011d075121acf4ef9b",
       "tag": "dope-DopeLootOpened",
       "selector": "0x66181d53f51b0a7423c5652efddc0bc9e2489467cb5317264a201694f3e9a13"
     },
     {
       "members": [],
-      "class_hash": "0x6a319866f54c67680ee85fef67b375006f24632182a75e6ca3a6ef24da23252",
+      "class_hash": "0x30fbb2b9b0feeb2d1ab6153e3976f898d30b52426aa63ed615df9397b67c792",
       "tag": "dope-DopeLootReleased",
       "selector": "0x35b4d392e234a3b724c01d8188050be78e721ca680c07fc549666ae6be6c2b6"
     },
     {
       "members": [],
-      "class_hash": "0x1162a272bf21853595a6259ef78108f87648bb45ef421bf0ad4951b63f54139",
+      "class_hash": "0x2c072e41d110bbffbf6ba0275159d909e9b428951be46027fc869495162c393",
       "tag": "dope-HustlerBody",
       "selector": "0x5fe58cc5aeb6be55002d025d91f51449eb816c6bf7da98e9aedea43a11bbc56"
     },
     {
       "members": [],
-      "class_hash": "0x58908040856b59277c3a62f6a99e4beb31a3e8dfd4e636ab6c0b9010f7da8f5",
+      "class_hash": "0x7c4597984362fb25b3ef8d098e3ffabcafb8d74067c360c58e554c042fd2f74",
       "tag": "dope-HustlerMetadata",
       "selector": "0x7e34aa413be49332cb31763471d20764d21d7700802a117540fe9f247edb51e"
     },
     {
       "members": [],
-      "class_hash": "0x15f5bf2238057026d43a211afcce113f90a2ab4abd14eeb43cb71197cebdd3e",
+      "class_hash": "0x6be91bdcc06e29ce48f0ca5c42a76e18c80072a47dda68a7451469be339b9b4",
       "tag": "dope-HustlerSlot",
       "selector": "0x28bc2bd23c18c8d1ecb10ae934f9ef1ad21c18d45368731b1c7210aee787557"
     }
@@ -18949,19 +19053,19 @@
     },
     {
       "members": [],
-      "class_hash": "0x610d46f71c7a6dfcdb6b6e31a5fca5fd842e9a7b1c223c0b95de8da06c9ab9",
+      "class_hash": "0x53a8b56a7f773c21cd2f900d6fab28f762cca13a39ce70e5014199c74e728ce",
       "tag": "dope-DopeLootClaimedEvent",
       "selector": "0x6cd5806cf1ba8395f097762e7b718eb01508fc1d25856ad4e5de126345c846f"
     },
     {
       "members": [],
-      "class_hash": "0x3441cf81a6ce4f09951be774bc93428896bdaaa172229a1d5fc14dacbda671f",
+      "class_hash": "0x168f9819b2a5c1e1196bb6150240b95fc014c20d869f93e94511d1f58b10b44",
       "tag": "dope-DopeLootOpenedEvent",
       "selector": "0x50a3f36edbdab0a73ad28ae660d4467d592e35c3a4c63759567dfb59210609c"
     },
     {
       "members": [],
-      "class_hash": "0x76b1a215e9b80093562c703439de6962849d0e686dd563e796dfb8671cda5ed",
+      "class_hash": "0x150e04866be432ce4f2bb2dcbb7c67acec6f5d2fad65c3a1814a9009917d5c6",
       "tag": "dope-DopeLootReleasedEvent",
       "selector": "0x7171afface7f31c954c3fdf48dcfe9fa1ddc87fbd2158237bf5d424be32a8d3"
     },

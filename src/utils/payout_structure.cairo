@@ -1,7 +1,7 @@
 // https://www.wsop.com/how-to-play-poker/mtt-tournament-payouts/
 // MTT Payout Structure (top 10% paid)
 
-fn get_payed_count(entrants: u32) -> u32 {
+pub fn get_payed_count(entrants: u32) -> u32 {
     if entrants <= 200 {
         if entrants <= 2 {
             1 // payout_0_2(rank)
@@ -38,7 +38,7 @@ fn get_payed_count(entrants: u32) -> u32 {
 }
 
 
-fn get_payout(rank: u32, entrants: u32, jackpot: u32, round_up: bool) -> u32 {
+pub fn get_payout(rank: u32, entrants: u32, jackpot: u32, round_up: bool) -> u32 {
     let payout_pct: u128 = get_payout_pct(rank, entrants).into();
     let jackpot: u128 = jackpot.into();
 
@@ -55,7 +55,7 @@ fn get_payout(rank: u32, entrants: u32, jackpot: u32, round_up: bool) -> u32 {
     }
 }
 
-fn get_payout_pct(rank: u32, entrants: u32) -> u32 {
+pub fn get_payout_pct(rank: u32, entrants: u32) -> u32 {
     if entrants <= 200 {
         if entrants <= 2 {
             payout_0_2(rank)
@@ -91,7 +91,7 @@ fn get_payout_pct(rank: u32, entrants: u32) -> u32 {
     }
 }
 
-fn payout_0_2(rank: u32) -> u32 {
+pub fn payout_0_2(rank: u32) -> u32 {
     if rank == 1 {
         10000
     } else {
@@ -99,7 +99,7 @@ fn payout_0_2(rank: u32) -> u32 {
     }
 }
 
-fn payout_3_10(rank: u32) -> u32 {
+pub fn payout_3_10(rank: u32) -> u32 {
     if rank == 1 {
         7000
     } else if rank == 2 {
@@ -109,7 +109,7 @@ fn payout_3_10(rank: u32) -> u32 {
     }
 }
 
-fn payout_11_30(rank: u32) -> u32 {
+pub fn payout_11_30(rank: u32) -> u32 {
     if rank == 1 {
         5000
     } else if rank == 2 {
@@ -121,7 +121,7 @@ fn payout_11_30(rank: u32) -> u32 {
     }
 }
 
-fn payout_31_50(rank: u32) -> u32 {
+pub fn payout_31_50(rank: u32) -> u32 {
     if rank == 1 {
         3700
     } else if rank == 2 {
@@ -137,7 +137,7 @@ fn payout_31_50(rank: u32) -> u32 {
     }
 }
 
-fn payout_51_75(rank: u32) -> u32 {
+pub fn payout_51_75(rank: u32) -> u32 {
     if rank == 1 {
         3100
     } else if rank == 2 {
@@ -159,7 +159,7 @@ fn payout_51_75(rank: u32) -> u32 {
     }
 }
 
-fn payout_76_100(rank: u32) -> u32 {
+pub fn payout_76_100(rank: u32) -> u32 {
     if rank == 1 {
         3000
     } else if rank == 2 {
@@ -185,7 +185,7 @@ fn payout_76_100(rank: u32) -> u32 {
     }
 }
 
-fn payout_101_150(rank: u32) -> u32 {
+pub fn payout_101_150(rank: u32) -> u32 {
     if rank == 1 {
         2800
     } else if rank == 2 {
@@ -211,7 +211,7 @@ fn payout_101_150(rank: u32) -> u32 {
     }
 }
 
-fn payout_151_200(rank: u32) -> u32 {
+pub fn payout_151_200(rank: u32) -> u32 {
     if rank == 1 {
         2700
     } else if rank == 2 {
@@ -239,7 +239,7 @@ fn payout_151_200(rank: u32) -> u32 {
     }
 }
 
-fn payout_201_250(rank: u32) -> u32 {
+pub fn payout_201_250(rank: u32) -> u32 {
     if rank == 1 {
         2650
     } else if rank == 2 {
@@ -269,7 +269,7 @@ fn payout_201_250(rank: u32) -> u32 {
     }
 }
 
-fn payout_251_300(rank: u32) -> u32 {
+pub fn payout_251_300(rank: u32) -> u32 {
     if rank == 1 {
         2600
     } else if rank == 2 {
@@ -301,7 +301,7 @@ fn payout_251_300(rank: u32) -> u32 {
     }
 }
 
-fn payout_301_350(rank: u32) -> u32 {
+pub fn payout_301_350(rank: u32) -> u32 {
     if rank == 1 {
         2550
     } else if rank == 2 {
@@ -335,7 +335,7 @@ fn payout_301_350(rank: u32) -> u32 {
     }
 }
 
-fn payout_351_400(rank: u32) -> u32 {
+pub fn payout_351_400(rank: u32) -> u32 {
     if rank == 1 {
         2500
     } else if rank == 2 {
@@ -371,7 +371,7 @@ fn payout_351_400(rank: u32) -> u32 {
     }
 }
 
-fn payout_401_500(rank: u32) -> u32 {
+pub fn payout_401_500(rank: u32) -> u32 {
     if rank == 1 {
         2450
     } else if rank == 2 {
@@ -409,7 +409,7 @@ fn payout_401_500(rank: u32) -> u32 {
     }
 }
 
-fn payout_501_700(rank: u32) -> u32 {
+pub fn payout_501_700(rank: u32) -> u32 {
     if rank == 1 {
         2400
     } else if rank == 2 {
@@ -451,7 +451,7 @@ fn payout_501_700(rank: u32) -> u32 {
 
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::{
         get_payed_count, get_payout, get_payout_pct, payout_0_2, payout_101_150, payout_11_30,
         payout_151_200, payout_201_250, payout_251_300, payout_301_350, payout_31_50,
@@ -460,7 +460,7 @@ mod tests {
 
 
     #[test]
-    fn test_pedersen() {
+    pub fn test_pedersen() {
         let a = poseidon::poseidon_hash_span(array![1].span());
         let aa = 0x579e8877c7755365d5ec1ec7d3a94a457eff5d1f40482bbe9729c064cdead2;
         let b = poseidon::poseidon_hash_span(array![2].span());
@@ -473,14 +473,14 @@ mod tests {
     }
 
     #[test]
-    fn test_get_payout() {
+    pub fn test_get_payout() {
         assert(get_payout(1, 2, 1234, false) == 1234, 'invalid 1,2, 1234');
         assert(get_payout(4, 120, 100_000, false) == 8600, 'invalid 4,120, 100_000'); // 860
         assert(get_payout(20, 120, 100_000, false) == 0, 'invalid 4,120, 100_000');
     }
 
     #[test]
-    fn test_get_payout_pct() {
+    pub fn test_get_payout_pct() {
         assert(get_payout_pct(1, 2) == 10000, 'invalid 1,2');
         assert(get_payout_pct(2, 2) == 0, 'invalid 2,2');
 
@@ -491,7 +491,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_payed_count() {
+    pub fn test_get_payed_count() {
         assert(get_payed_count(5) == 2, 'invalid 5');
         assert(get_payed_count(420) == 50, 'invalid 420');
         assert(get_payed_count(89) == 10, 'invalid 89');
@@ -499,7 +499,7 @@ mod tests {
 
 
     #[test]
-    fn test_payout_0_2() {
+    pub fn test_payout_0_2() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -518,7 +518,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_3_10() {
+    pub fn test_payout_3_10() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -537,7 +537,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_11_30() {
+    pub fn test_payout_11_30() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -556,7 +556,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_31_50() {
+    pub fn test_payout_31_50() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -575,7 +575,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_51_75() {
+    pub fn test_payout_51_75() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -594,7 +594,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_76_100() {
+    pub fn test_payout_76_100() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -613,7 +613,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_101_150() {
+    pub fn test_payout_101_150() {
         let mut rank = 1;
         let mut max = 20;
         let mut total: u32 = 0;
@@ -632,7 +632,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_151_200() {
+    pub fn test_payout_151_200() {
         let mut rank = 1;
         let mut max = 25;
         let mut total: u32 = 0;
@@ -651,7 +651,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_201_250() {
+    pub fn test_payout_201_250() {
         let mut rank = 1;
         let mut max = 30;
         let mut total: u32 = 0;
@@ -670,7 +670,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_251_300() {
+    pub fn test_payout_251_300() {
         let mut rank = 1;
         let mut max = 40;
         let mut total: u32 = 0;
@@ -689,7 +689,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_301_350() {
+    pub fn test_payout_301_350() {
         let mut rank = 1;
         let mut max = 50;
         let mut total: u32 = 0;
@@ -708,7 +708,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_351_400() {
+    pub fn test_payout_351_400() {
         let mut rank = 1;
         let mut max = 50;
         let mut total: u32 = 0;
@@ -727,7 +727,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_401_500() {
+    pub fn test_payout_401_500() {
         let mut rank = 1;
         let mut max = 60;
         let mut total: u32 = 0;
@@ -746,7 +746,7 @@ mod tests {
     }
 
     #[test]
-    fn test_payout_501_700() {
+    pub fn test_payout_501_700() {
         let mut rank = 1;
         let mut max = 75;
         let mut total: u32 = 0;
