@@ -3,7 +3,7 @@ import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { Button, HStack, Box, Tabs, Tab, TabList, TabPanels, TabPanel, Flex, Text } from "@chakra-ui/react";
 import { getContractByName } from "@dojoengine/core";
 import { useDojoTokens } from "@/dope/hooks";
-import { useAccount } from "@starknet-react/core";
+import { useAccount, useConnect } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
 import CollectionGrid from "@/dope/collections/CollectionGrid";
 import GearItem from "@/dope/collections/GearItem";
@@ -12,10 +12,13 @@ import LootItem from "@/dope/collections/LootItem";
 import { Refresh } from "@/components/icons";
 import { Tooltip } from "@/components/common";
 import { Loader, SmallLoader } from "@/components/layout/Loader";
+import { ControllerConnector } from "@cartridge/connector";
+import { Cartridge } from "@/components/icons/branding/Cartridge";
 
 export default function Dope() {
   const { router } = useRouterContext();
   const { account } = useAccount();
+  const { connector } = useConnect();
 
   const {
     chains: { selectedChain },
@@ -36,18 +39,17 @@ export default function Dope() {
     account?.address,
   );
 
-  const { loot, hustlers, gear } = useMemo(() => {
+  const { loot, hustlers, gear, gearAddress } = useMemo(() => {
+    const gearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear")!.address;
     const loot = (accountTokens || []).filter(
       (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
     );
     const hustlers = (accountTokens || []).filter(
       (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeHustlers")!.address,
     );
-    const gear = (accountTokens || []).filter(
-      (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeGear")!.address,
-    );
+    const gear = (accountTokens || []).filter((i) => i.contract_address === gearAddress);
 
-    return { loot, hustlers, gear };
+    return { loot, hustlers, gear, gearAddress };
   }, [accountTokens, addresses, account?.address]);
 
   const [isRefetching, setIsRefetching] = useState(false);
@@ -62,13 +64,19 @@ export default function Dope() {
     }, 500);
   };
 
+  const onOpenController = (e: any, collectionAddress: string) => {
+    e.preventDefault();
+    const path = collectionAddress === gearAddress ? "collectible" : "collection";
+    (connector as unknown as ControllerConnector).controller.openProfileTo(`inventory/${path}/${collectionAddress}`);
+  };
+
   return (
     <Layout
       isSinglePanel
       footer={
         <Footer>
           <Button
-            w={["full", "auto"]}
+            w={["80%", "auto"]}
             px={["auto", "20px"]}
             onClick={() => {
               router.back();
@@ -81,15 +89,46 @@ export default function Dope() {
     >
       <HStack w="full" gap={6} flexWrap="wrap" alignItems="flex-start" justifyContent="center">
         <Tabs variant="unstyled" w="full">
-          <TabList pb={6}>
-            <Tab fontSize={["11px", "14px"]}>
-              <Text>LOOT ({loot.length})</Text>
+          <TabList pb={6} gap={[0, 3]}>
+            <Tab fontSize={["10px", "14px"]} px={2}>
+              <HStack w="full" justifyContent="space-between">
+                <Text>LOOT ({loot.length})</Text>
+                <Box
+                  cursor="pointer"
+                  onClick={(e) => {
+                    onOpenController(e, addresses[0]);
+                  }}
+                >
+                  <Cartridge />
+                </Box>
+              </HStack>
             </Tab>
-            <Tab fontSize={["11px", "14px"]}>HUSTLERS ({hustlers.length})</Tab>
-            <Tab fontSize={["11px", "14px"]}>GEAR ({gear.length})</Tab>
-            <Box position="absolute" w="24px" h="24px" right={[0, 2]} top={[0, 2]} title="Refresh">
-              {!isRefetching ? <Refresh onClick={onRefetch} cursor="pointer" /> : <SmallLoader />}
-            </Box>
+            <Tab fontSize={["10px", "14px"]} px={2}>
+              <HStack w="full" justifyContent="space-between">
+                <Text>HUSTLERS ({hustlers.length})</Text>
+                <Box
+                  cursor="pointer"
+                  onClick={(e) => {
+                    onOpenController(e, addresses[1]);
+                  }}
+                >
+                  <Cartridge />
+                </Box>
+              </HStack>
+            </Tab>
+            <Tab fontSize={["10px", "14px"]} px={2}>
+              <HStack w="full" justifyContent="space-between">
+                <Text>GEAR ({gear.length})</Text>
+                <Box
+                  cursor="pointer"
+                  onClick={(e) => {
+                    onOpenController(e, addresses[2]);
+                  }}
+                >
+                  <Cartridge />
+                </Box>
+              </HStack>
+            </Tab>
           </TabList>
 
           <TabPanels mt={0} maxH="calc(100dvh - 70px)" overflowY="scroll">
@@ -113,6 +152,10 @@ export default function Dope() {
           </TabPanels>
         </Tabs>
       </HStack>
+
+      <Box position="fixed" w="24px" h="24px" bottom={[7, 6]} right={[3, 6]} zIndex={1} title="Refresh">
+        {!isRefetching ? <Refresh onClick={onRefetch} cursor="pointer" /> : <SmallLoader />}
+      </Box>
 
       <Box minH="80px"></Box>
     </Layout>

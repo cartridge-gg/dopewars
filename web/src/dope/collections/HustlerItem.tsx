@@ -4,17 +4,34 @@ import CardAnim from "./CardAnim";
 import Link from "next/link";
 import { Cigarette } from "@/components/icons";
 import { Box } from "@chakra-ui/react";
+import { ControllerConnector } from "@cartridge/connector";
+import { useDojoContext } from "@/dojo/hooks";
+import { useConnect } from "@starknet-react/core";
+import { Cartridge } from "@/components/icons/branding/Cartridge";
 
 export default function HustlerItem({ token }: { token: ParsedToken }) {
   const id = BigInt(token.token_id || "0");
+  const { connector } = useConnect();
+  const {
+    contracts: { getDojoContract },
+  } = useDojoContext();
 
   const [details, setDetails] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  const hustlersAddress = getDojoContract("dope-DopeHustlers").address!;
+  const onOpenController = (e: any) => {
+    e.preventDefault();
+    (connector as unknown as ControllerConnector).controller.openProfileTo(
+      `inventory/collection/${hustlersAddress}/token/0x${token.token_id.toString(16).padStart(64, "0")}`,
+    );
+  };
   return (
     <Box display="flex" flexDirection="column">
       <Box position="relative">
         <Link href={`/dope/editor/${id}`}>
-          <CardAnim>
+          {/* @ts-ignore  */}
+          <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <>
               {token.metadata && token.metadata.image !== "" ? (
                 <img className="aspect-square w-full mb-1" src={token.metadata.image} loading="lazy" />
@@ -42,6 +59,11 @@ export default function HustlerItem({ token }: { token: ParsedToken }) {
                   })}
                 </Box>
               )} */}
+              {isHovered && (
+                <Box position="absolute" right={1} top={1} cursor="pointer" onClick={onOpenController}   bg="#33333366">
+                  <Cartridge />
+                </Box>
+              )}
             </>
           </CardAnim>
         </Link>

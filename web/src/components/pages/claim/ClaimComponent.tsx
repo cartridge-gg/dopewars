@@ -15,6 +15,8 @@ import { useToast } from "@/hooks/toast";
 
 import owners from "./snapshot-dopeLoot-22075548-owners.json";
 import { checkTxReceipt, errorMessage } from "@/dope/helpers";
+import { Glock } from "@/components/icons/items";
+import { Hustler, HustlerIcon, Hustlers } from "@/components/hustlers";
 
 export default function ClaimComponent() {
   const { router, isLocalhost } = useRouterContext();
@@ -238,7 +240,18 @@ export default function ClaimComponent() {
           </VStack>
         )}
 
-        {hasClaimed && <Button onClick={()=> router.push("/dope")}>My Dope</Button>}
+        {hasClaimed && (
+          <HStack>
+            <Button onClick={() => router.push("/dope")}>
+              <HustlerIcon hustler={Hustlers.Dragon} mr={2} />
+              My Dope
+            </Button>
+            <Button onClick={() => router.push("/game/Ranked?tokenIdType=1")}>
+              {" "}
+              <Glock /> Play
+            </Button>
+          </HStack>
+        )}
       </VStack>
     </VStack>
   );

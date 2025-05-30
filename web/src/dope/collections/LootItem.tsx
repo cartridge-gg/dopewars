@@ -8,16 +8,18 @@ import { useDojoContext } from "@/dojo/hooks";
 import CardAnim from "./CardAnim";
 import { Box, GridItem } from "@chakra-ui/react";
 import { Button } from "@/components/common";
+import { Cartridge } from "@/components/icons/branding/Cartridge";
+import { useConnect } from "@starknet-react/core";
+import { ControllerConnector } from "@cartridge/connector";
 
 export default function LootItem({ token }: { token: ParsedToken }) {
-  const { toast } = useToast();
+  const { connector } = useConnect();
 
   const {
     contracts: { getDojoContract },
   } = useDojoContext();
 
   const { onOpen, onRelease, isLoading: isOpening, isSuccess } = useDopeLootClaim({ getDojoContract });
-
   //   const {
   //     transfer,
   //     isLoading: isTransfering,
@@ -36,6 +38,14 @@ export default function LootItem({ token }: { token: ParsedToken }) {
     const isReleased = tokenState ? tokenState.isReleased : false;
     return { isOpened, isReleased };
   }, [dopeLootClaimState, dopeLootClaimState[Number(token.token_id)]]);
+
+  const lootAddress = getDojoContract("dope-DopeLoot").address!;
+  const onOpenController = (e: any) => {
+    e.preventDefault();
+    (connector as unknown as ControllerConnector).controller.openProfileTo(
+      `inventory/collection/${lootAddress}/token/0x${token.token_id.toString(16).padStart(64, "0")}`,
+    );
+  };
 
   return (
     // @ts-ignore
@@ -80,6 +90,12 @@ export default function LootItem({ token }: { token: ParsedToken }) {
           >
             Open
           </Button>
+        </Box>
+      )}
+
+      {isHovered && (
+        <Box position="absolute" right={1} top={1} cursor="pointer" onClick={onOpenController}  bg="#33333366">
+          <Cartridge />
         </Box>
       )}
     </CardAnim>

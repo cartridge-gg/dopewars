@@ -19,7 +19,7 @@ import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
+import { useAccount, useConnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDojoTokens, useLootEquipment, useEquipment, ParsedToken } from "@/dope/hooks";
@@ -29,6 +29,7 @@ import { useDopeStore } from "@/dope/store";
 import { hash } from "starknet";
 import { getGearItem } from "@/dope/helpers";
 import { EditButton } from "@/components/pages/admin/tables";
+import { ControllerConnector } from "@cartridge/connector";
 
 export enum TokenIdType {
   GuestLootId,
@@ -43,6 +44,7 @@ const New = observer(() => {
     chains: { selectedChain },
     clients: { toriiClient },
   } = useDojoContext();
+  const { connector } = useConnect();
 
   const { account } = useAccount();
   const { createGame, isPending } = useSystems();
@@ -106,6 +108,16 @@ const New = observer(() => {
   const [name, setName] = useState("");
   const [multiplier, setMultipler] = useState(1);
   const isMobile = IsMobile();
+
+  // useEffect(() => {
+  //   const initAsync = async () => {
+  //     const username = await (connector as unknown as ControllerConnector).controller.username();
+  //     setName(username?.substring(0,16) || "");
+  //   };
+  //   if (connector) {
+  //     initAsync();
+  //   }
+  // }, [connector]);
 
   const selectedToken = useMemo(() => {
     return selectableTokens[selectedTokenIndex];
@@ -496,6 +508,16 @@ const New = observer(() => {
           ) : (
             <VStack minH={"250px"} alignItems="center" justifyContent="center">
               <Text>ERROR 420: {selectedTokenIdType === TokenIdType.HustlerId ? "Hustler" : "Dope"} not found</Text>
+              <HStack>
+                <Button onClick={() => router.push("/claim")}>Migration</Button>
+                <Button
+                  onClick={() => {
+                    (connector as unknown as ControllerConnector).controller.openPurchaseCredits();
+                  }}
+                >
+                  Buy
+                </Button>
+              </HStack>
             </VStack>
           )}
 
@@ -601,7 +623,7 @@ const New = observer(() => {
               display="flex"
               mx="auto"
               maxW="260px"
-              maxLength={20}
+              maxLength={16}
               placeholder="Enter your name"
               autoFocus
               value={name}
@@ -612,9 +634,9 @@ const New = observer(() => {
             />
 
             <VStack w="full" h="30px">
-              <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
+              {/* <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
                 Max 20 characters
-              </Text>
+              </Text> */}
               <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
                 {error}
               </Text>
