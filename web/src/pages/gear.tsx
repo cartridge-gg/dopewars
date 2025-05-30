@@ -5,7 +5,7 @@ import { useConfigStore, useRouterContext } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
 import { VStack, Text, Button, Heading, HStack, Box, Tooltip as ChakraTooltip } from "@chakra-ui/react";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
-import { useEffect, useMemo } from "react";
+import React, { Children, ReactNode, useEffect, useMemo } from "react";
 import { Layer } from "@/dope/components";
 
 export default function Gear() {
@@ -58,108 +58,45 @@ export default function Gear() {
         </Footer>
       }
     >
-      <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+      {/* <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
         Gear
-      </Heading>
+      </Heading> */}
 
-      <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center" mt={9}>
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Weapons
-          </Text>
-          {items.weapons.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Clothes
-          </Text>
-          {items.clothes.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Shoes
-          </Text>
-          {items.foot.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Vehicles
-          </Text>
-          {items.vehicles.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
+      <HStack w="full" gap={9} flexWrap="wrap" alignItems="center" justifyContent="center" mt={9}>
+        <Items title="Weapons" items={items.weapons} />
+        <Items title="Clothes" items={items.clothes} />
+        <Items title="Shoes" items={items.foot} />
+        <Items title="Vehicles" items={items.vehicles} />
       </HStack>
 
       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center" mt={9}>
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Drugs
-          </Text>
-          {items.drugs.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Waists
-          </Text>
-          {items.waists.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Hands
-          </Text>
-          {items.hands.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Accessories
-          </Text>
-          {items.accessories.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Neck
-          </Text>
-          {items.necks.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
-
-        <VStack justifyContent="flex-start">
-          <Text textStyle="subheading" fontSize={["9px", "11px"]}>
-            Rings
-          </Text>
-          {items.rings.map((i, idx) => {
-            return <Item componentValue={i} key={idx} />;
-          })}
-        </VStack>
+        <Items title="Drugs" items={items.drugs} />
+        <Items title="Waists" items={items.waists} />
+        <Items title="Hands" items={items.hands} />
+        <Items title="Neck" items={items.necks} />
+        <Items title="Rings" items={items.rings} />
+        <Items title="Accessories" items={items.accessories} />
       </HStack>
 
       <Box minH="80px"></Box>
     </Layout>
   );
 }
+
+const Items = ({ title, items }: { title: string; items: ComponentValueEvent[] }) => {
+  return (
+    <VStack display="flex" justifyContent="center" gap={9} mb="30px">
+      <Text textStyle="subheading" fontSize={["11px", "13px"]}>
+        {title}
+      </Text>
+      <HStack w="full" flexWrap="wrap" justifyContent="center" gap={6}>
+        {items.map((i, idx) => {
+          return <Item componentValue={i} key={idx} />;
+        })}
+      </HStack>
+    </VStack>
+  );
+};
 
 const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
   const configStore = useConfigStore();
@@ -215,7 +152,10 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
   }, [itemFull]);
 
   return (
-    <HStack w="full" gap={3} borderBottom="solid 1px" borderBottomColor="neon.700" mb={1} pb={1} fontSize={"xs"}>
+    <HStack w="250px" gap={3} 
+    // borderBottom="solid 1px" 
+    // borderBottomColor="neon.700" 
+    mb={1} pb={1} fontSize={"xs"}>
       <Layer rects={componentValue.resources[0]} width="48px" height="48px" crop={true} />
       <Text w="130px" ml={1}>
         {itemFull.name}
