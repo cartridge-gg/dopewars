@@ -73,7 +73,7 @@ mod devtools {
                 claimable: 0,
                 position: 0,
                 token_id: TokenId::LootId(loot_id.into()),
-                equipment_by_slot: array![0,0,0,0].span()
+                equipment_by_slot: array![0, 0, 0, 0].span(),
             };
 
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
@@ -99,13 +99,18 @@ mod devtools {
             sorted_list.add(ref store, game, (0, 0.try_into().unwrap()));
         }
 
-        fn create_new_season(self: @ContractState) { // let mut ryo_config = self.s().ryo_config();
-        // ryo_config.season_version += 1;
-        // self.s().save_ryo_config(@ryo_config);
+        fn create_new_season(self: @ContractState) {
+            let world = self.world(@"dopewars");
 
-        // let mut randomizer = RandomImpl::new('devtools');
-        // let season_manager = SeasonManagerTrait::new(self.s());
-        // season_manager.new_season(ref randomizer, ryo_config.season_version);
+            let mut store = StoreImpl::new(world);
+
+            let mut ryo_config = store.ryo_config();
+            ryo_config.season_version += 1;
+            store.save_ryo_config(@ryo_config);
+
+            let mut randomizer = RandomImpl::new('devtools');
+            let mut season_manager = SeasonManagerTrait::new(store);
+            season_manager.new_season(ref randomizer, ryo_config.season_version);
         }
 
 

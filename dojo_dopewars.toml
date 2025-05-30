@@ -48,6 +48,11 @@ skip_contracts = [
 # ]
 
 [writers]
+
+
+"dopewars" = ["dopewars-devtools"]
+
+
 "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
 "dopewars-GameConfig" = [
     "dopewars-config",
