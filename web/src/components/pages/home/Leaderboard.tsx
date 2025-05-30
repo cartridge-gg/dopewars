@@ -214,6 +214,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
                           <Tooltip
                             placement="left"
+                            maxW="300px"
                             label={
                               <RewardDetails
                                 claimable={game.claimable}
@@ -234,6 +235,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                       {game.season_version === config.ryo.season_version && index + 1 <= payedCount && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
                           <Tooltip
+                            maxW="300px"
                             placement="left"
                             label={<RewardDetails position={index + 1} seasonVersion={game.season_version} />}
                             color="neon.400"
@@ -245,6 +247,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                           </Tooltip>
                         </Text>
                       )}
+                      {/* <RewardDetails position={index + 1} seasonVersion={game.season_version} /> */}
                       <Text flexShrink={0} fontSize={["12px", "16px"]}>
                         {formatCash(game.final_score)}
                       </Text>
@@ -356,16 +359,16 @@ export const RewardDetails = observer(
     }, [position, seasonVersion]);
 
     return (
-      <VStack alignItems="flex-start" p={1} gap={0}>
-        <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center"> 
+      <VStack alignItems="flex-start" p={1} gap={1}>
+        <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center" my={2}> 
           RANK {position} REWARDS
         </Text>
-        <HStack>
+        <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
           <PaperIcon width="24px" height="24px" />
           <Text ml={2}>{claimable ? formatCash(claimable).replace("$", "") : "???"} Paper</Text>
         </HStack>
         {position <= 3 && (
-          <HStack>
+          <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
             <Layer rects={bodies[1].resources[0]} width="24px" height="24px" crop={true} />
             <Text ml={2}>Naked Hustler</Text>
           </HStack>
@@ -373,9 +376,9 @@ export const RewardDetails = observer(
 
         {rewards.map((item) => {
           return (
-            <HStack key={`${item.id}-${item.component_id}`}>
+            <HStack w="full" key={`${item.id}-${item.component_id}`} borderBottom="solid 1px" borderColor="neon.700">
               <Layer rects={item.resources[0]} width="24px" height="24px" crop={true} />
-              <Text ml={2}>{item.value}</Text>
+              <Text ml={2} fontSize="xs" textOverflow="clip" whiteSpace="nowrap" overflow="hidden" w="250px">{item.value}</Text>
             </HStack>
           );
         })}
