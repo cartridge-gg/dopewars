@@ -118,6 +118,7 @@ export const ClaimModal = ({
                               }
                               color="neon.400"
                               placement="right"
+                              maxW="300px"
                             >
                               <span>
                                 <Trophy />

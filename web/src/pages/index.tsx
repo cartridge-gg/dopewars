@@ -93,11 +93,11 @@ export default function Home() {
                 </VStack>
               </HStack>
             )}
-            {!isPaused && isSeasonOpen && canCreateGame && (
+            {/* {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
                 <Flipflop /> Play guest
               </Button>
-            )}
+            )} */}
             {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
                 <Glock /> Play Ranked
@@ -106,9 +106,9 @@ export default function Home() {
 
             {!isPaused && isSeasonOpen && !canCreateGame && (
               <HStack w="full" color="yellow.400" justifyContent="center" gap={3}>
-                <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
+                {/* <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
                   <Flipflop /> Play guest
-                </Button>
+                </Button> */}
 
                 <HStack flex="1" h="full">
                   <Warning color="yellow.400" />
