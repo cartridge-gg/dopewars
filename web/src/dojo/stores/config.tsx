@@ -30,9 +30,6 @@ import { ABI as configAbi } from "../abis/configAbi";
 import {
   drugIcons,
   drugIconsKeys,
-  itemIcons,
-  itemUpgrades,
-  itemsIconsKeys,
   locationIcons,
   locationIconsKeys,
 } from "../helpers";

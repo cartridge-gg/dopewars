@@ -3,7 +3,7 @@ import { Arrow, ExternalLink, Link, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter, TierIndicator } from "@/components/player";
 import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
-import { gameModeFromName, gameModeFromNameKeys, itemSlotToDopeLootSlotId } from "@/dojo/helpers";
+import { gameModeFromName, gameModeFromNameKeys, itemSlotToDopeLootSlotId, weaponIdToSound } from "@/dojo/helpers";
 import {
   ETHER,
   useConfigStore,
@@ -15,7 +15,7 @@ import {
 } from "@/dojo/hooks";
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
-import { Sounds, playSound } from "@/hooks/sound";
+import { Sounds, WeaponSounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-ui/react";

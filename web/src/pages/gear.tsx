@@ -1,12 +1,13 @@
 import { Footer, Layout } from "@/components/layout";
 import { TierIndicator } from "@/components/player";
-import { dopeLootSlotIdToItemSlot, statName } from "@/dojo/helpers";
+import { dopeLootSlotIdToItemSlot, statName, weaponIdToSound } from "@/dojo/helpers";
 import { useConfigStore, useRouterContext } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
 import { VStack, Text, Button, Heading, HStack, Box, Tooltip as ChakraTooltip } from "@chakra-ui/react";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 import React, { Children, ReactNode, useEffect, useMemo } from "react";
 import { Layer } from "@/dope/components";
+import { playSound } from "@/hooks/sound";
 
 export default function Gear() {
   const { router } = useRouterContext();
@@ -152,10 +153,20 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
   }, [itemFull]);
 
   return (
-    <HStack w="250px" gap={3} 
-    // borderBottom="solid 1px" 
-    // borderBottomColor="neon.700" 
-    mb={1} pb={1} fontSize={"xs"}>
+    <HStack
+      w="250px"
+      gap={3}
+      // borderBottom="solid 1px"
+      // borderBottomColor="neon.700"
+      mb={1}
+      pb={1}
+      fontSize={"xs"}
+      onClick={() => {
+        if (componentValue.component_id === 0 /* weapon */) {
+          playSound(weaponIdToSound(componentValue.id));
+        }
+      }}
+    >
       <Layer rects={componentValue.resources[0]} width="48px" height="48px" crop={true} />
       <Text w="130px" ml={1}>
         {itemFull.name}

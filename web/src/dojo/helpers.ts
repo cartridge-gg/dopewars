@@ -25,6 +25,7 @@ import { AK47, BaseballBat, Boots, Kevlar, Leatherjacket, PlasticBag, Shirt, Sho
 import { Chain } from "@/components/icons/items/Chain";
 import { Shoes2 } from "@/components/icons/items/Shoes2";
 import colors from "@/theme/colors";
+import { Sounds, WeaponSounds } from "@/hooks/sound";
 
 export const gameModeName = {
   [GameMode.Ranked]: "Ranked",
@@ -105,67 +106,6 @@ export const dopeLootSlotIdToItemSlot = {
   2: ItemSlot.Transport,
 };
 
-export const itemUpgrades = {
-  [ItemSlot.Weapon]: {
-    0: {
-      1: "Extended Mag",
-      2: "Recoil Compensator",
-      3: "Laser Sight",
-    },
-    1: {
-      1: "Tactical Grip",
-      2: "Reinforced Links",
-      3: "Spiked End",
-    },
-    2: {
-      1: "Grip Tape",
-      2: "Corked Bat",
-      3: "Aluminum Bat",
-    },
-  },
-  [ItemSlot.Clothes]: {
-    0: {
-      1: "Reinforced Stitching",
-      2: "Polyester Blend",
-      3: "More Blood",
-    },
-    1: {
-      1: "Shoulder Straps",
-      2: "Thermal Ventilation",
-      3: "Ceramic Plate Inserts",
-    },
-    2: {
-      1: "Tailor Fitting",
-      2: "Treated Leather",
-      3: "Ballistic Inserts",
-    },
-  },
-  [ItemSlot.Feet]: {
-    0: {
-      1: "Fresh Laces",
-      2: "Ventilated Mesh",
-      3: "Memory Foam Insoles",
-    },
-    1: {
-      1: "Quick-Lace System",
-      2: "Anti-Slip Outsoles",
-      3: "Memory Foam Insoles",
-    },
-    2: {
-      1: "Locking Laces",
-      2: "Shock-Absorbing Insoles",
-      3: "Steel-toed Cap",
-    },
-  },
-  [ItemSlot.Transport]: {
-    0: {
-      1: "Fanny Pack",
-      2: "Backpack",
-      3: "Duffle Bag",
-    },
-  },
-};
-
 export const statName = {
   [ItemSlot.Weapon]: "ATK",
   [ItemSlot.Clothes]: "DEF",
@@ -204,24 +144,24 @@ export const drugIcons = {
 };
 export type drugIconsKeys = keyof typeof drugIcons;
 
-export const itemIcons = {
-  Naked: Cigarette,
-  //
-  AK47: AK47,
-  Chain: Chain,
-  "Baseball Bat": BaseballBat,
-  //
-  "Blood-Stained Shirt": Shirt,
-  "Bullet Proof Vest": Kevlar,
-  "Trench Coat": Leatherjacket,
-  //
-  "All-Black Sneakers": Shoes,
-  "Athletic Trainers": Shoes2,
-  "Work Boots": Boots,
-  //
-  "Plastic bag": PlasticBag,
-};
-export type itemsIconsKeys = keyof typeof itemIcons;
+// export const itemIcons = {
+//   Naked: Cigarette,
+//   //
+//   AK47: AK47,
+//   Chain: Chain,
+//   "Baseball Bat": BaseballBat,
+//   //
+//   "Blood-Stained Shirt": Shirt,
+//   "Bullet Proof Vest": Kevlar,
+//   "Trench Coat": Leatherjacket,
+//   //
+//   "All-Black Sneakers": Shoes,
+//   "Athletic Trainers": Shoes2,
+//   "Work Boots": Boots,
+//   //
+//   "Plastic bag": PlasticBag,
+// };
+// export type itemsIconsKeys = keyof typeof itemIcons;
 
 export const outcomes: OutcomeInfo[] = [
   {
@@ -433,16 +373,66 @@ export function getPayedCount(entrants: number): number {
   }
 }
 
-export function getGearItemRewards(position: number) {
-  if (position == 1) {
-    return "Paper share & Fully assorted augmented item set & Crown";
+export function weaponIdToSound(weaponId: number) {
+  switch (weaponId) {
+    case 0:
+      return WeaponSounds.PocketKnife;
+    case 1:
+      return WeaponSounds.Chain;
+    case 2:
+      return WeaponSounds.Knife;
+    case 3:
+      return WeaponSounds.Crowbar;
+    case 4:
+      return WeaponSounds.Handgun;
+    case 5:
+      return WeaponSounds.AK47;
+    case 6:
+      return WeaponSounds.Shovel;
+    case 7:
+      return WeaponSounds.BaseballBat;
+    case 8:
+      return WeaponSounds.TireIron;
+    case 9:
+      return WeaponSounds.PoiliceBaton;
+    case 10:
+      return WeaponSounds.PepperSpray;
+    case 11:
+      return WeaponSounds.RazorBlade;
+    case 12:
+      return WeaponSounds.Drone;
+    case 13:
+      return WeaponSounds.Taser;
+    case 14:
+      return WeaponSounds.BrassKnuckles;
+    case 15:
+      return WeaponSounds.Shotgun;
+    case 16:
+      return WeaponSounds.Glock;
+    case 17:
+      return WeaponSounds.Uzi;
+    default:
+      return Sounds.Ooo;
   }
-  if (position == 2) {
-    return "Paper share & Dopewars assorted item set & Accessory";
-  }
-  if (position == 3) {
-    return "Paper share & Random Dopewars item set & Accessory";
-  } else {
-    return "Paper share & Random Accessory";
-  }
+
+  // export enum WeaponSounds {
+  //   AK47 = "/weapons/AK47.mp3",
+  //   BaseballBat = "/weapons/Baseball_bat.mp3",
+  //   BrassKnuckles = "/weapons/Brass_Knuckles.mp3",
+  //   Chain = "/weapons/Chain.mp3",
+  //   Crowbar = "/weapons/Crowbar&Tire_Iron.mp3",
+  //   TireIron = "/weapons/Crowbar&Tire_Iron.mp3",
+  //   Drone = "/weapons/Drone.mp3",
+  //   Glock = "/weapons/Glock.mp3",
+  //   Handgun = "/weapons/Handgun.mp3",
+  //   Knife = "/weapons/Knife.mp3",
+  //   PepperSpray = "/weapons/Pepper_Spray.mp3",
+  //   PoiliceBaton = "/weapons/Police_baton.mp3",
+  //   RazorBlade = "/weapons/Razor Blade&Pocket Knife.mp3",
+  //   PocketKnife = "/weapons/Razor Blade&Pocket Knife.mp3",
+  //   Shotgun = "/weapons/Shotgun.mp3",
+  //   Shovel = "/weapons/Shovel.mp3",
+  //   Taser = "/weapons/Taser.mp3",
+  //   Uzi = "/weapons/Uzi.mp3",
+  // }
 }

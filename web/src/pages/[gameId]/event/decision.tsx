@@ -9,7 +9,7 @@ import { HustlerStats } from "@/components/pages/profile/HustlerStats";
 import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys } from "@/dojo/helpers";
+import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys, weaponIdToSound } from "@/dojo/helpers";
 import { useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
@@ -96,7 +96,7 @@ const Decision = observer(() => {
         playSound(Sounds.Run);
         break;
       case EncountersAction.Fight:
-        playSound(Sounds.Punch);
+        playSound(weaponIdToSound(game?.items.attack.id || 0));
 
         break;
     }
