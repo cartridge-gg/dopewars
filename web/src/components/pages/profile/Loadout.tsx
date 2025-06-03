@@ -39,7 +39,7 @@ const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: I
     >
       <Flex w="full" flexDirection={"row"} gap={[2, 9]} justifyContent={"space-between"}>
         <HStack w="full" gap={[3, 9]}>
-          <DopeGearItem itemSlot={slot} id={item.id!} />
+          <DopeGearItem itemSlot={slot} id={item.id!} level={level} />
           <VStack alignItems="flex-start" gap={1}>
             <HStack
               w={["120px", "180px"]}

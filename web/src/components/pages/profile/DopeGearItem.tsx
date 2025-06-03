@@ -5,7 +5,12 @@ import { Layer } from "@/dope/components";
 import { useDopeStore } from "@/dope/store";
 import { useMemo } from "react";
 
-export const DopeGearItem = ({ itemSlot, id, ...props }: { itemSlot: ItemSlot; id: number } & StyleProps) => {
+export const DopeGearItem = ({
+  itemSlot,
+  id,
+  level,
+  ...props
+}: { itemSlot: ItemSlot; id: number; level?: number } & StyleProps) => {
   const componentValues = useDopeStore((state) => state.componentValues);
   const slotSlug = itemSlotToSlotSlug[itemSlot];
 
@@ -14,5 +19,5 @@ export const DopeGearItem = ({ itemSlot, id, ...props }: { itemSlot: ItemSlot; i
   }, [componentValues]);
 
   if (!component) return null;
-  return <Layer rects={component.resources[0]} width="64px" height="64px" crop={true} />;
+  return <Layer rects={component.resources[0]} width="64px" height="64px" crop={true} glow={(level || 0) * 3} />;
 };
