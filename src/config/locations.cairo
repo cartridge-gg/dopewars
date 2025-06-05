@@ -1,28 +1,23 @@
-//
-//
-//
-
 use dojo::model::{ModelStorage};
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
 use rollyourown::{
-    store::{Store, StoreImpl, StoreTrait},
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::{Bytes31IntrospectionImpl}},
+    store::{Store, StoreImpl},
+    utils::{bytes16::{Bytes16, Bytes16Impl}, introspect::{Bytes31IntrospectionImpl}},
 };
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct LocationConfig {
+pub struct LocationConfig {
     #[key]
-    location: Locations,
-    location_id: u8,
-    name: Bytes16,
+    pub location: Locations,
+    pub location_id: u8,
+    pub name: Bytes16,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum Locations {
+pub enum Locations {
     Home,
     Queens,
     Bronx,
@@ -36,7 +31,7 @@ enum Locations {
 //
 //
 
-impl LocationsEnumerableImpl of Enumerable<Locations> {
+pub impl LocationsEnumerableImpl of Enumerable<Locations> {
     fn all() -> Span<Locations> {
         array![
             Locations::Queens,
@@ -54,7 +49,7 @@ impl LocationsEnumerableImpl of Enumerable<Locations> {
 //
 //
 
-impl LocationsRandomizableImpl of Randomizable<Locations> {
+pub impl LocationsRandomizableImpl of Randomizable<Locations> {
     fn random(ref randomizer: Random) -> Locations {
         let locations = LocationsEnumerableImpl::all();
         let index = randomizer.between::<u32>(0, locations.len().into());
@@ -66,7 +61,7 @@ impl LocationsRandomizableImpl of Randomizable<Locations> {
 //
 //
 
-impl LocationsIntoFelt252 of Into<Locations, felt252> {
+pub impl LocationsIntoFelt252 of Into<Locations, felt252> {
     fn into(self: Locations) -> felt252 {
         match self {
             Locations::Home => 'Home',
@@ -80,7 +75,7 @@ impl LocationsIntoFelt252 of Into<Locations, felt252> {
     }
 }
 
-impl LocationsIntoU8 of Into<Locations, u8> {
+pub impl LocationsIntoU8 of Into<Locations, u8> {
     fn into(self: Locations) -> u8 {
         match self {
             Locations::Home => 0,
@@ -95,7 +90,7 @@ impl LocationsIntoU8 of Into<Locations, u8> {
 }
 
 
-impl U8IntoLocations of Into<u8, Locations> {
+pub impl U8IntoLocations of Into<u8, Locations> {
     fn into(self: u8) -> Locations {
         let self252: felt252 = self.into();
         match self252 {
@@ -110,7 +105,8 @@ impl U8IntoLocations of Into<u8, Locations> {
         }
     }
 }
-fn initialize_location_config(ref store: Store) {
+
+pub fn initialize_location_config(ref store: Store) {
     store
         .world
         .write_model(

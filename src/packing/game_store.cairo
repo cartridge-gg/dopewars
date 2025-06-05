@@ -1,13 +1,10 @@
-use core::traits::TryInto;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
     config::{
-        drugs::{DrugConfig, Drugs, DrugsEnumerableImpl}, game::{GameConfig},
+        drugs::{Drugs, DrugsEnumerableImpl}, game::{GameConfig},
         locations::{Locations, LocationsEnumerableImpl},
-        settings::{DrugsMode, SeasonSettings, SeasonSettingsTrait},
+        settings::{SeasonSettings, SeasonSettingsTrait},
     },
-    models::{game::{Game, GameImpl, GameMode}, game_store_packed::{GameStorePacked}},
+    models::{game::{Game, GameImpl}, game_store_packed::{GameStorePacked}},
     packing::{
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
         game_store_layout::{
@@ -18,9 +15,9 @@ use rollyourown::{
         player::{Player, PlayerImpl, PlayerPackerImpl, PlayerStatus, PlayerUnpackerImpl},
         wanted_packed::{WantedPacked, WantedPackedImpl},
     },
-    store::{Store, StoreImpl, StoreTrait}, traits::{Packable, Packer},
+    store::{Store, StoreImpl, StoreTrait}, traits::{Packer},
     utils::{
-        bits::{Bits, BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImplU8, MathTrait},
+        bits::{BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImplU8, MathTrait},
         random::{Random, RandomImpl},
     },
 };
@@ -28,22 +25,22 @@ use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop)]
-struct GameStore {
-    store: Store,
-    game: Game,
-    game_config: Option<GameConfig>,
-    season_settings: Option<SeasonSettings>,
+pub struct GameStore {
+    pub store: Store,
+    pub game: Game,
+    pub game_config: Option<GameConfig>,
+    pub season_settings: Option<SeasonSettings>,
     //
-    markets: MarketsPacked,
-    items: ItemsPacked,
-    drugs: DrugsPacked,
-    wanted: WantedPacked,
-    player: Player,
+    pub markets: MarketsPacked,
+    pub items: ItemsPacked,
+    pub drugs: DrugsPacked,
+    pub wanted: WantedPacked,
+    pub player: Player,
 }
 
 // init new game state
 #[generate_trait]
-impl GameStoreImpl of GameStoreTrait {
+pub impl GameStoreImpl of GameStoreTrait {
     fn new(
         store: Store, ref game: Game, ref game_config: GameConfig, ref randomizer: Random,
     ) -> GameStore {
@@ -229,7 +226,7 @@ impl GameStoreImpl of GameStoreTrait {
 
 
 // pack
-impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
+pub impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
     fn pack(self: GameStore) -> GameStorePacked {
         let mut bits = BitsDefaultImpl::default();
         let mut layout = GameStoreLayoutEnumerableImpl::all();
@@ -263,7 +260,7 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 
 // unpack
 #[generate_trait]
-impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
+pub impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
     fn unpack(self: GameStorePacked, ref store: Store, ref game: Game) -> GameStore {
         let mut game_store = GameStoreImpl::empty(store, ref game);
         let mut layout = GameStoreLayoutEnumerableImpl::all();

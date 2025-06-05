@@ -50,10 +50,10 @@ trait IPaperMockFaucet<TState> {
 mod paper_mock {
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
-    use dojo::world::{WorldStorage, WorldStorageTrait};
+    use dojo::world::WorldStorageTrait;
     use openzeppelin_token::erc20::ERC20Component;
     use openzeppelin_token::erc20::interface::IERC20Metadata;
-    use rollyourown::store::{Store, StoreImpl, StoreTrait};
+    use rollyourown::store::StoreImpl;
     use starknet::{ContractAddress, get_caller_address};
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);

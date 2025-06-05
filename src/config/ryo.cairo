@@ -1,7 +1,5 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::{models::{season::{Season, SeasonImpl, SeasonTrait}}};
-use starknet::ContractAddress;
-use starknet::info::get_block_timestamp;
+use rollyourown::models::season::{Season, SeasonImpl};
+use starknet::get_block_timestamp;
 
 const TWO_MIN: u16 = 120;
 // const ONE_HOUR: u16 = 3600;
@@ -17,25 +15,25 @@ const TEMP_VALUE: u32 = 900;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct RyoConfig {
+pub struct RyoConfig {
     #[key]
-    key: u8,
-    initialized: bool,
-    paused: bool,
+    pub key: u8,
+    pub initialized: bool,
+    pub paused: bool,
     //
-    season_version: u16,
-    season_duration: u32,
-    season_time_limit: u16,
+    pub season_version: u16,
+    pub season_duration: u32,
+    pub season_time_limit: u16,
     //
-    paper_fee: u16,
-    paper_reward_launderer: u16,
-    treasury_fee_pct: u8,
-    treasury_balance: u32,
+    pub paper_fee: u16,
+    pub paper_reward_launderer: u16,
+    pub treasury_fee_pct: u8,
+    pub treasury_balance: u32,
 }
 
 
 #[generate_trait]
-impl RyoConfigImpl of RyoConfigTrait {
+pub impl RyoConfigImpl of RyoConfigTrait {
     fn build_initial_ryo_config() -> RyoConfig {
         RyoConfig {
             key: 0,

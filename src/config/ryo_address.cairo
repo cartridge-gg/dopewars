@@ -1,13 +1,11 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct RyoAddress {
+pub struct RyoAddress {
     #[key]
-    key: u8,
-    paper: ContractAddress,
-    treasury: ContractAddress,
-    vrf: ContractAddress,
-    laundromat: ContractAddress // could be removed
+    pub key: u8,
+    pub paper: ContractAddress,
+    pub treasury: ContractAddress,
+    pub vrf: ContractAddress,
 }

@@ -1,22 +1,21 @@
 // FELT PRIME
 // 2^251 + 17 * 2^192 + 1
 
-use traits::TryInto;
 const FELT252_PRIME: u256 = 0x800000000000011000000000000000000000000000000000000000000000001;
 
 #[derive(Copy, Drop, Serde)]
-struct Bits {
+pub struct Bits {
     bits: u256,
 }
 
-impl BitsDefaultImpl of Default<Bits> {
+pub impl BitsDefaultImpl of Default<Bits> {
     fn default() -> Bits {
         Bits { bits: 0 }
     }
 }
 
 #[generate_trait]
-impl BitsImpl of BitsTrait {
+pub impl BitsImpl of BitsTrait {
     fn from(bits: u256) -> Bits {
         Bits { bits }
     }
@@ -65,7 +64,7 @@ impl BitsImpl of BitsTrait {
 //
 
 #[generate_trait]
-impl BitsMathImpl of BitsMathTrait {
+pub impl BitsMathImpl of BitsMathTrait {
     fn mask<T, +TryInto<u256, T>, +Drop<T>, +Destruct<T>>(size: u8) -> T {
         let mask = pow2_const(size) - 1;
         mask.try_into().unwrap()
@@ -123,7 +122,7 @@ impl BitsMathImpl of BitsMathTrait {
 
 // }
 
-fn pow2_const(n: u8) -> u256 {
+pub fn pow2_const(n: u8) -> u256 {
     *POW_2.span().at(n.into())
 }
 

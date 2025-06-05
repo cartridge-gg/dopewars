@@ -1,28 +1,26 @@
-use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use achievement::store::{StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
     config::{hustlers::{ItemSlot}, locations::{Locations}}, events::{UpgradeItem},
-    models::game::{Game, GameImpl, GameTrait},
+    models::game::{GameImpl, GameTrait},
     packing::{
         game_store::{GameStore, GameStoreImpl}, items_packed::{ItemsPackedImpl},
-        player::{PlayerImpl}, wanted_packed::{WantedPacked, WantedPackedImpl},
+        player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
     },
-    store::{Store, StoreImpl, StoreTrait},
-    utils::{events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait}},
+    store::{StoreImpl}, utils::{math::{MathImpl, MathTrait}},
 };
 use super::super::super::config::gear::GearItemConfigTrait;
 
 
 #[derive(Copy, Drop, Serde)]
-struct Action {
-    slot: ItemSlot,
+pub struct Action {
+    pub slot: ItemSlot,
 }
 
-fn execute_action(ref game_store: GameStore, action: Action) {
+pub fn execute_action(ref game_store: GameStore, action: Action) {
     // get wanted
     let wanted = if game_store.player.location == Locations::Home {
         0

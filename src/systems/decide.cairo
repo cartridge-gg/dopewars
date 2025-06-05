@@ -1,10 +1,4 @@
-use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, packing::game_store::{GameMode},
-    packing::game_store::{GameStore, GameStoreImpl},
-    systems::{game::{Actions, EncounterActions}, helpers::{shopping, trading}},
-};
-use starknet::ContractAddress;
-
+use rollyourown::{packing::game_store::{GameStoreImpl}, systems::{game::{EncounterActions}}};
 
 #[starknet::interface]
 trait IDecide<T> {
@@ -14,31 +8,12 @@ trait IDecide<T> {
 #[dojo::contract]
 mod decide {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
-    use dojo::event::EventStorage;
-    use dojo::world::IWorldDispatcherTrait;
-    use dojo::world::WorldStorageTrait;
-    use dojo::world::{WorldStorage};
-
     use rollyourown::{
-        config::{
-            drugs::{Drugs}, encounters::{Encounters}, game::{GameConfig}, locations::{Locations},
-            ryo::{RyoConfig}, ryo_address::{RyoAddress},
-        },
-        constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
-        interfaces::{
-            erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
-            paper::{IPaperDispatcher, IPaperDispatcherTrait},
-        },
-        models::{game::{Game, GameImpl}, game_store_packed::GameStorePacked, season::{Season}},
-        packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
-        store::{Store, StoreImpl, StoreTrait},
-        systems::{
-            game::EncounterActions,
-            helpers::{game_loop, shopping, trading, traveling, traveling::EncounterOutcomes},
-        },
-        utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
+        packing::{game_store::{GameStoreImpl}, player::{PlayerImpl}},
+        store::{StoreImpl, StoreTrait}, systems::{helpers::{game_loop, traveling}},
+        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
     };
-    use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use starknet::get_caller_address;
 
     #[abi(embed_v0)]
     impl DecideImpl of super::IDecide<ContractState> {

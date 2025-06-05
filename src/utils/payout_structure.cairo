@@ -461,9 +461,9 @@ pub mod tests {
 
     #[test]
     pub fn test_pedersen() {
-        let a = poseidon::poseidon_hash_span(array![1].span());
+        let a = core::poseidon::poseidon_hash_span(array![1].span());
         let aa = 0x579e8877c7755365d5ec1ec7d3a94a457eff5d1f40482bbe9729c064cdead2;
-        let b = poseidon::poseidon_hash_span(array![2].span());
+        let b = core::poseidon::poseidon_hash_span(array![2].span());
         let bb = 0x20185e0ab367a55b068e0f8b7abda935f15b418737e7b67d84aaee133ec2572;
 
         println!("{:?}", a);

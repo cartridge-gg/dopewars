@@ -73,7 +73,6 @@ pub mod tokens {
 pub mod utils {
     pub mod bits;
     pub mod bytes16;
-    pub mod events;
     pub mod introspect;
     pub mod math;
     pub mod payout_items;

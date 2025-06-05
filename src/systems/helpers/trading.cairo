@@ -1,19 +1,14 @@
-use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use achievement::store::{StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::{
-    config::{drugs::{DrugConfig, Drugs}, locations::{Locations}}, events::{TradeDrug},
-    models::{game::{GameMode, GameTrait}},
+    config::{drugs::{Drugs}}, events::{TradeDrug}, models::{game::{GameMode, GameTrait}},
     packing::{
-        drugs_packed::{DrugsPackedImpl, DrugsUnpacked}, game_store::{GameStore, GameStoreTrait},
-        items_packed::{ItemsPackedImpl}, markets_packed::{MarketsPackedImpl, MarketsPackedTrait},
-        player::{PlayerImpl},
+        drugs_packed::{DrugsPackedImpl}, game_store::{GameStore, GameStoreTrait},
+        items_packed::{ItemsPackedImpl}, markets_packed::{MarketsPackedImpl}, player::{PlayerImpl},
     },
-    store::{Store, StoreImpl, StoreTrait},
-    utils::{events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImplU8, MathTrait}},
+    store::{StoreImpl, StoreTrait}, utils::{math::{MathImplU8}},
 };
-use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -37,7 +32,9 @@ const MIN_TICK: usize = 0;
 const MAX_TICK: usize = 63;
 
 
-fn execute_trade(ref game_store: GameStore, trade: Trade, is_first_sell: bool, is_first_buy: bool) {
+pub fn execute_trade(
+    ref game_store: GameStore, trade: Trade, is_first_sell: bool, is_first_buy: bool,
+) {
     // check if can trade
     assert(game_store.can_trade(), 'player cannot trade');
 
@@ -50,7 +47,7 @@ fn execute_trade(ref game_store: GameStore, trade: Trade, is_first_sell: bool, i
     };
 }
 
-fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
+pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -117,7 +114,7 @@ fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
 }
 
 
-fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
+pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 

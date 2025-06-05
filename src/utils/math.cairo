@@ -1,4 +1,6 @@
-trait MathTrait<T> {
+// use core::num::traits::Zero;
+
+pub trait MathTrait<T> {
     fn add_capped(self: T, value: T, cap: T) -> T;
     fn sub_capped(self: T, value: T, cap: T) -> T;
     fn pct(self: T, p: u128) -> T;
@@ -6,12 +8,11 @@ trait MathTrait<T> {
     fn max(lhs: T, rhs: T) -> T;
 }
 
-impl MathImpl<
+pub impl MathImpl<
     T,
     +PartialOrd<T>,
     +Add<T>,
-    +Sub<T>,
-    +Zeroable<T>,
+    +Sub<T>, // +Zeroable<T>,
     +Into<T, u128>,
     +TryInto<u128, T>,
     +Copy<T>,
@@ -55,10 +56,10 @@ impl MathImpl<
 }
 
 
-impl MathImplU8 = MathImpl<u8>;
-impl MathImplU16 = MathImpl<u16>;
-impl MathImplU32 = MathImpl<u32>;
-impl MathImplU64 = MathImpl<u64>;
-impl MathImplU128 = MathImpl<u128>;
-impl MathImplUSize = MathImpl<usize>;
+pub impl MathImplU8 = MathImpl<u8>;
+pub impl MathImplU16 = MathImpl<u16>;
+pub impl MathImplU32 = MathImpl<u32>;
+pub impl MathImplU64 = MathImpl<u64>;
+pub impl MathImplU128 = MathImpl<u128>;
+pub impl MathImplUSize = MathImpl<usize>;
 

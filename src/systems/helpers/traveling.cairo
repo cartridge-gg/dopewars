@@ -1,27 +1,21 @@
-use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use achievement::store::{StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
-use dojo::meta::introspect::Introspect;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::achievements::achievements_v1::Tasks;
 
 use rollyourown::{
     config::{
         encounters::{EncounterConfig, EncounterImpl, EncounterSpawnerImpl, Encounters},
-        game::{GameConfig}, hustlers::{ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
-        settings::{SeasonSettings},
+        locations::{LocationsRandomizableImpl}, settings::{SeasonSettings},
     },
-    events::{TravelEncounter, TravelEncounterResult}, models::game::{Game, GameMode, GameTrait},
+    events::{TravelEncounter, TravelEncounterResult}, models::game::{GameMode, GameTrait},
     packing::{
-        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked},
+        drugs_packed::{DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked},
         game_store::{GameStore, GameStoreImpl, GameStoreTrait},
         items_packed::{ItemsPackedImpl, ItemsPackedTrait}, player::{PlayerImpl, PlayerStatus},
-        wanted_packed::{WantedPacked, WantedPackedImpl},
+        wanted_packed::{WantedPackedImpl},
     },
-    store::{Store, StoreImpl, StoreTrait}, systems::game::{EncounterActions},
-    utils::{
-        events::{RawEventEmitterImpl, RawEventEmitterTrait},
-        math::{MathImpl, MathImplU8, MathTrait}, random::{Random, RandomImpl, RandomTrait},
-    },
+    store::StoreImpl, systems::game::{EncounterActions},
+    utils::{math::{MathImpl, MathImplU8, MathTrait}, random::{Random, RandomImpl, RandomTrait}},
 };
 
 
@@ -35,7 +29,7 @@ pub enum EncounterOutcomes {
     Hospitalized,
 }
 
-impl EncounterActionsIntoFelt252 of Into<EncounterActions, felt252> {
+pub impl EncounterActionsIntoFelt252 of Into<EncounterActions, felt252> {
     fn into(self: EncounterActions) -> felt252 {
         match self {
             EncounterActions::Run => 'Run',
@@ -45,7 +39,7 @@ impl EncounterActionsIntoFelt252 of Into<EncounterActions, felt252> {
     }
 }
 
-impl EncounterActionsIntoU8 of Into<EncounterActions, u8> {
+pub impl EncounterActionsIntoU8 of Into<EncounterActions, u8> {
     fn into(self: EncounterActions) -> u8 {
         match self {
             EncounterActions::Run => 0,
@@ -56,7 +50,7 @@ impl EncounterActionsIntoU8 of Into<EncounterActions, u8> {
 }
 
 
-impl EncounterOutcomesIntoFelt252 of Into<EncounterOutcomes, felt252> {
+pub impl EncounterOutcomesIntoFelt252 of Into<EncounterOutcomes, felt252> {
     fn into(self: EncounterOutcomes) -> felt252 {
         match self {
             EncounterOutcomes::Died => 'Died',
@@ -69,7 +63,7 @@ impl EncounterOutcomesIntoFelt252 of Into<EncounterOutcomes, felt252> {
     }
 }
 
-impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
+pub impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
     fn into(self: EncounterOutcomes) -> u8 {
         match self {
             EncounterOutcomes::Died => 0,
@@ -87,7 +81,7 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
 //
 
 // -> (is_dead, has_encounter)
-fn on_travel(
+pub fn on_travel(
     ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random,
 ) -> (bool, bool) {
     let has_encounter = match game_store.game.game_mode {
@@ -139,7 +133,7 @@ fn on_travel(
 //  DECIDE
 //
 
-fn decide(
+pub fn decide(
     ref game_store: GameStore,
     ref season_settings: SeasonSettings,
     ref randomizer: Random,

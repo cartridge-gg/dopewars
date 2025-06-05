@@ -1,31 +1,24 @@
-use core::traits::TryInto;
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    config::{
-        drugs::{DrugConfig, Drugs, DrugsEnumerableImpl},
-        locations::{Locations, LocationsEnumerableImpl},
-    },
-    events::HighVolatility, models::game::{Game, GameMode},
+    config::{drugs::{Drugs, DrugsEnumerableImpl}, locations::{Locations, LocationsEnumerableImpl}},
+    events::HighVolatility, models::game::{Game},
     packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl},
-    store::{Store, StoreImpl, StoreTrait},
+    store::{Store, StoreImpl},
     utils::{
-        bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
-        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImplU8, MathTrait},
+        bits::{BitsImpl, BitsMathImpl, BitsTrait}, math::{MathImplU8, MathTrait},
         random::{Random, RandomImpl, RandomTrait},
     },
 };
-use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde)]
-struct MarketsPacked {
-    packed: felt252,
+pub struct MarketsPacked {
+    pub packed: felt252,
 }
 
 #[generate_trait]
-impl MarketsPackedImpl of MarketsPackedTrait {
+pub impl MarketsPackedImpl of MarketsPackedTrait {
     #[inline(always)]
     fn new(rand: u256) -> MarketsPacked {
         let mask = BitsMathImpl::mask::<u256>(GameStoreLayout::Markets.bits());
@@ -166,7 +159,6 @@ impl MarketsPackedImpl of MarketsPackedTrait {
 
 #[cfg(test)]
 mod tests {
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     use super::{MarketsPacked, MarketsPackedImpl, RandomImpl};
     // #[test]
 // #[available_gas(100000000)]

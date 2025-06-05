@@ -2,11 +2,11 @@ use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct GameStorePacked {
+pub struct GameStorePacked {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    player_id: ContractAddress,
-    packed: felt252,
+    pub player_id: ContractAddress,
+    pub packed: felt252,
 }
 

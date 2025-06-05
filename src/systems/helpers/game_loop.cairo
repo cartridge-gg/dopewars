@@ -1,26 +1,19 @@
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
     config::{locations::{Locations}, settings::{SeasonSettings}}, events::{GameOver, Traveled},
-    helpers::season_manager::{SeasonManager, SeasonManagerTrait}, models::game::{Game},
     packing::{
         drugs_packed::{DrugsPackedTrait},
         game_store::{GameStore, GameStoreImpl, GameStorePackerImpl},
-        markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
+        markets_packed::MarketsPackedTrait, player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
     },
     store::{Store, StoreImpl, StoreTrait}, systems::helpers::{traveling},
-    utils::{
-        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait},
-        random::{Random},
-    },
+    utils::{math::{MathImpl, MathTrait}, random::{Random}},
 };
-use starknet::ContractAddress;
 
 
 // -> (is_dead, has_encounter)
-fn on_travel(
+pub fn on_travel(
     ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random,
 ) -> (bool, bool) {
     // update wanted
@@ -35,7 +28,7 @@ fn on_travel(
 }
 
 
-fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Store) -> bool {
+pub fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Store) -> bool {
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
@@ -89,7 +82,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
 }
 
 
-fn on_game_over(ref game_store: GameStore, ref store: Store) {
+pub fn on_game_over(ref game_store: GameStore, ref store: Store) {
     assert(game_store.game.game_over == false, 'already game_over');
 
     // save

@@ -1,15 +1,12 @@
-use dojo::world::WorldStorageTrait;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use dojo::world::{WorldStorage};
 use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
 
 
 use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
 use dope_contracts::dope_loot::dope_loot_store::{LootStoreImpl, LootStoreTrait};
-use dope_contracts::dope_loot::interface::{IDopeLootABIDispatcher, IDopeLootABIDispatcherTrait};
-use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
+use rollyourown::store::StoreImpl;
 
-use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}};
+use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl}}};
 use starknet::ContractAddress;
 
 pub type GearId = felt252;
@@ -56,7 +53,7 @@ pub struct Game {
 }
 
 #[generate_trait]
-impl GameImpl of GameTrait {
+pub impl GameImpl of GameTrait {
     fn new(
         dope_world: WorldStorage,
         game_id: u32,

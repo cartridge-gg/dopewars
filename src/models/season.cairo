@@ -1,36 +1,34 @@
-use starknet::ContractAddress;
-
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct Season {
+pub struct Season {
     #[key]
-    version: u16,
+    pub version: u16,
     // season config copied from RyoConfig
-    season_duration: u32,
-    season_time_limit: u16,
-    paper_fee: u16,
-    treasury_fee_pct: u8,
+    pub season_duration: u32,
+    pub season_time_limit: u16,
+    pub paper_fee: u16,
+    pub treasury_fee_pct: u8,
     // season datas
-    next_version_timestamp: u64, // updated on new highscore
-    paper_balance: u32,
-    high_score: u32,
+    pub next_version_timestamp: u64, // updated on new highscore
+    pub paper_balance: u32,
+    pub high_score: u32,
     //
 }
 
 
 #[generate_trait]
-impl SeasonImpl of SeasonTrait {
+pub impl SeasonImpl of SeasonTrait {
     fn exists(self: Season) -> bool {
         self.next_version_timestamp > 0
     }
 
     fn is_open(self: Season) -> bool {
-        let current_timestamp = starknet::info::get_block_timestamp();
+        let current_timestamp = starknet::get_block_timestamp();
         current_timestamp < self.next_version_timestamp
     }
 
     fn can_create_game(self: Season) -> bool {
-        let current_timestamp = starknet::info::get_block_timestamp();
+        let current_timestamp = starknet::get_block_timestamp();
         current_timestamp < self.next_version_timestamp - self.season_time_limit.into()
     }
 }

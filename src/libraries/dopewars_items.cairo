@@ -1,6 +1,3 @@
-use rollyourown::config::hustlers::ItemSlot;
-
-
 #[derive(Debug, Drop, Clone, Serde, Introspect)]
 pub struct ItemTierConfig {
     pub stat: u16,

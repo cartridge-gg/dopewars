@@ -1,11 +1,7 @@
-use dojo::meta::introspect::Introspect;
-
 use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, models::game::TokenId,
-    packing::game_store::{GameMode}, packing::game_store::{GameStore, GameStoreImpl},
-    systems::helpers::{shopping, trading},
+    config::locations::{Locations}, models::game::{GameMode, TokenId},
+    packing::game_store::{GameStoreImpl}, systems::helpers::{shopping, trading},
 };
-use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
@@ -27,47 +23,29 @@ trait IGameActions<T> {
     );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
-    // fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
 
 #[dojo::contract]
 mod game {
-    use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+    use achievement::store::{StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
-    use dojo::world::{WorldStorage};
-    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlotOption, HustlerSlots};
-
+    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
     use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
     use rollyourown::achievements::achievements_v1::Tasks;
-
     use rollyourown::{
-        config::{
-            drugs::{Drugs}, encounters::{Encounters}, game::{GameConfig}, locations::{Locations},
-            ryo::{RyoConfig}, ryo_address::{RyoAddress},
-        },
-        constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
-        interfaces::{
-            erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
-            paper::{IPaperDispatcher, IPaperDispatcherTrait},
-        },
-        models::{
-            game::{Game, GameImpl, TokenId}, game_store_packed::GameStorePacked, season::{Season},
-        },
-        packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
-        store::{Store, StoreImpl, StoreTrait},
-        systems::{
-            game::EncounterActions,
-            helpers::{
-                game_loop, shopping, trading,
-                trading::{TradeDirection} // , traveling, traveling::EncounterOutcomes
-            },
-        },
-        utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
+        config::{locations::{Locations}}, events::{GameCreated},
+        helpers::season_manager::{SeasonManagerTrait},
+        interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
+        models::{game::{GameImpl, GameMode, TokenId}},
+        packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
+        store::{StoreImpl, StoreTrait},
+        systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
+        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
     };
-    use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use starknet::get_caller_address;
 
 
     #[abi(embed_v0)]
@@ -123,7 +101,7 @@ mod game {
                     let mut i: u32 = 0;
                     let mut is_valid = false;
                     while i < 8 {
-                        let hash: u256 = poseidon::poseidon_hash_span(
+                        let hash: u256 = core::poseidon::poseidon_hash_span(
                             array![season_version.into(), i.into()].span(),
                         )
                             .into();

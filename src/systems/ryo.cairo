@@ -1,5 +1,3 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{config::ryo::{RyoConfig}};
 use starknet::ContractAddress;
 
@@ -27,20 +25,15 @@ trait IRyo<T> {
 #[dojo::contract]
 mod ryo {
     use achievement::components::achievable::AchievableComponent;
-    use core::traits::Into;
-
-    use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
+    use core::num::traits::Zero;
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use rollyourown::achievements::achievements_v1::AchievementImpl;
-
     use rollyourown::{
-        config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress}}, constants::{ETHER},
-        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, models::{season::Season},
-        store::{Store, StoreImpl, StoreTrait}, utils::random::{RandomImpl},
+        config::{ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
+        store::{StoreImpl, StoreTrait}, utils::random::{RandomImpl},
     };
-    use starknet::ContractAddress;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::{get_caller_address, get_contract_address};
+    use starknet::get_caller_address;
+    use starknet::{ContractAddress};
 
     component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
     impl AchievableInternalImpl = AchievableComponent::InternalImpl<ContractState>;
@@ -98,11 +91,8 @@ mod ryo {
             vrf_address
         };
 
-        let (laundromat_address, _) = world.dns(@"laundromat").unwrap();
-
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address;
-        ryo_addresses.laundromat = laundromat_address; // could be removed
         ryo_addresses.vrf = vrf_address;
 
         // save
@@ -202,10 +192,9 @@ mod ryo {
         }
 
         fn laundromat(self: @ContractState) -> ContractAddress {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-            store.ryo_addresses().laundromat
+            let world = self.world(@"dopewars");
+            world.dns_address(@"laundromat").unwrap()
         }
-
 
         fn paused(self: @ContractState) -> bool {
             let mut store = StoreImpl::new(self.world(@"dopewars"));

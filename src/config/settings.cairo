@@ -5,64 +5,64 @@ use rollyourown::{
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct SeasonSettings {
+pub struct SeasonSettings {
     #[key]
-    season_version: u16,
-    cash_mode: CashMode,
-    health_mode: HealthMode,
-    turns_mode: TurnsMode,
+    pub season_version: u16,
+    pub cash_mode: CashMode,
+    pub health_mode: HealthMode,
+    pub turns_mode: TurnsMode,
     //
-    encounters_mode: EncountersMode,
-    encounters_odds_mode: EncountersOddsMode,
-    drugs_mode: DrugsMode,
-    wanted_mode: WantedMode,
+    pub encounters_mode: EncountersMode,
+    pub encounters_odds_mode: EncountersOddsMode,
+    pub drugs_mode: DrugsMode,
+    pub wanted_mode: WantedMode,
 }
 
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum CashMode {
+pub enum CashMode {
     Broke,
     Average,
     Rich,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum HealthMode {
+pub enum HealthMode {
     Junkie,
     Hustler,
     Streetboss,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum TurnsMode {
+pub enum TurnsMode {
     OnSpeed,
     OnWeed,
     OnMush,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum EncountersMode {
+pub enum EncountersMode {
     Chill,
     NoJokes,
     UltraViolence,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum EncountersOddsMode {
+pub enum EncountersOddsMode {
     Easy,
     Normal,
     Hard,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum DrugsMode {
+pub enum DrugsMode {
     Cheap,
     Normal,
     Expensive,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum WantedMode {
+pub enum WantedMode {
     KoolAndTheGang,
     ThugLife,
     MostWanted,
@@ -70,7 +70,7 @@ enum WantedMode {
 
 
 #[generate_trait]
-impl SeasonSettingsImpl of SeasonSettingsTrait {
+pub impl SeasonSettingsImpl of SeasonSettingsTrait {
     fn random(ref randomizer: Random, season_version: u16) -> SeasonSettings {
         SeasonSettings {
             season_version,
@@ -167,44 +167,44 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
 //
 //
 
-impl CashModeEnumerableImpl of Enumerable<CashMode> {
+pub impl CashModeEnumerableImpl of Enumerable<CashMode> {
     fn all() -> Span<CashMode> {
         array![CashMode::Broke, CashMode::Average, CashMode::Rich].span()
     }
 }
 
-impl HealthModeEnumerableImpl of Enumerable<HealthMode> {
+pub impl HealthModeEnumerableImpl of Enumerable<HealthMode> {
     fn all() -> Span<HealthMode> {
         array![HealthMode::Junkie, HealthMode::Hustler, HealthMode::Streetboss].span()
     }
 }
 
-impl TurnsModeEnumerableImpl of Enumerable<TurnsMode> {
+pub impl TurnsModeEnumerableImpl of Enumerable<TurnsMode> {
     fn all() -> Span<TurnsMode> {
         array![TurnsMode::OnSpeed, TurnsMode::OnWeed, TurnsMode::OnMush].span()
     }
 }
 
-impl EncountersModeEnumerableImpl of Enumerable<EncountersMode> {
+pub impl EncountersModeEnumerableImpl of Enumerable<EncountersMode> {
     fn all() -> Span<EncountersMode> {
         array![EncountersMode::Chill, EncountersMode::NoJokes, EncountersMode::UltraViolence].span()
     }
 }
 
-impl EncountersOddsModeEnumerableImpl of Enumerable<EncountersOddsMode> {
+pub impl EncountersOddsModeEnumerableImpl of Enumerable<EncountersOddsMode> {
     fn all() -> Span<EncountersOddsMode> {
         array![EncountersOddsMode::Easy, EncountersOddsMode::Normal, EncountersOddsMode::Hard]
             .span()
     }
 }
 
-impl DrugsModeEnumerableImpl of Enumerable<DrugsMode> {
+pub impl DrugsModeEnumerableImpl of Enumerable<DrugsMode> {
     fn all() -> Span<DrugsMode> {
         array![DrugsMode::Cheap, DrugsMode::Normal, DrugsMode::Expensive].span()
     }
 }
 
-impl WantedModeEnumerableImpl of Enumerable<WantedMode> {
+pub impl WantedModeEnumerableImpl of Enumerable<WantedMode> {
     fn all() -> Span<WantedMode> {
         array![WantedMode::KoolAndTheGang, WantedMode::ThugLife, WantedMode::MostWanted].span()
     }
@@ -212,19 +212,19 @@ impl WantedModeEnumerableImpl of Enumerable<WantedMode> {
 
 
 #[derive(Copy, Drop, Serde)]
-struct SeasonSettingsModes {
-    cash_modes: Span<CashMode>,
-    health_modes: Span<HealthMode>,
-    turns_modes: Span<TurnsMode>,
+pub struct SeasonSettingsModes {
+    pub cash_modes: Span<CashMode>,
+    pub health_modes: Span<HealthMode>,
+    pub turns_modes: Span<TurnsMode>,
     //
-    encounters_modes: Span<EncountersMode>,
-    encounters_odds_modes: Span<EncountersOddsMode>,
-    drugs_modes: Span<DrugsMode>,
-    wanted_modes: Span<WantedMode>,
+    pub encounters_modes: Span<EncountersMode>,
+    pub encounters_odds_modes: Span<EncountersOddsMode>,
+    pub drugs_modes: Span<DrugsMode>,
+    pub wanted_modes: Span<WantedMode>,
 }
 
 #[generate_trait]
-impl SeasonSettingsModesImpl of SeasonSettingsModesTrait {
+pub impl SeasonSettingsModesImpl of SeasonSettingsModesTrait {
     fn all() -> SeasonSettingsModes {
         SeasonSettingsModes {
             cash_modes: CashModeEnumerableImpl::all(),

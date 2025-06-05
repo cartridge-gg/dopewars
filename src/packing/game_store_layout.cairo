@@ -1,7 +1,7 @@
 use rollyourown::{traits::{Enumerable, Packable}};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
-enum GameStoreLayout {
+pub enum GameStoreLayout {
     Markets,
     Items,
     Drugs,
@@ -9,7 +9,7 @@ enum GameStoreLayout {
     Player,
 }
 
-impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
+pub impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
     fn into(self: GameStoreLayout) -> bytes31 {
         let value = match self {
             GameStoreLayout::Markets => 'Markets',
@@ -25,7 +25,7 @@ impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
 
 // Enumerable
 
-impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
+pub impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
     fn all() -> Span<GameStoreLayout> {
         let items = array![
             GameStoreLayout::Markets,
@@ -40,7 +40,7 @@ impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
 
 // Packable
 
-impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
+pub impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
     fn bits(self: @GameStoreLayout) -> u8 {
         match *self {
             GameStoreLayout::Markets => 144,

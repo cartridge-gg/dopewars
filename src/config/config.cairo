@@ -1,7 +1,4 @@
-use rollyourown::config::{
-    drugs::{DrugConfig}, encounters::{EncounterConfig}, game::{GameConfig}, ryo::{RyoConfig},
-    settings::{SeasonSettingsModes},
-};
+use rollyourown::config::{ryo::{RyoConfig}, settings::{SeasonSettingsModes}};
 
 #[starknet::interface]
 trait IConfig<T> {
@@ -10,41 +7,38 @@ trait IConfig<T> {
 }
 
 #[derive(Drop, Serde)]
-struct Config {
-    layouts: LayoutsConfig,
-    ryo_config: RyoConfig,
-    season_settings_modes: SeasonSettingsModes,
+pub struct Config {
+    pub layouts: LayoutsConfig,
+    pub ryo_config: RyoConfig,
+    pub season_settings_modes: SeasonSettingsModes,
 }
 
 #[derive(Drop, Serde)]
-struct LayoutsConfig {
-    game_store: Array<LayoutItem>,
-    player: Array<LayoutItem>,
+pub struct LayoutsConfig {
+    pub game_store: Array<LayoutItem>,
+    pub player: Array<LayoutItem>,
 }
 
 #[derive(Copy, Drop, Serde)]
-struct LayoutItem {
-    name: bytes31,
-    idx: u8,
-    bits: u8,
+pub struct LayoutItem {
+    pub name: bytes31,
+    pub idx: u8,
+    pub bits: u8,
 }
 
 #[dojo::contract]
 mod config {
     use dojo::event::EventStorage;
-    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
+    use dojo::world::WorldStorageTrait;
 
     use rollyourown::{
         config::{
             drugs::{
-                DrugConfig, Drugs, initialize_drug_config_cheap, initialize_drug_config_expensive,
+                initialize_drug_config_cheap, initialize_drug_config_expensive,
                 initialize_drug_config_normal,
             },
-            encounters::{
-                EncounterConfig, EncounterTrait, Encounters, initialize_encounter_stats_config,
-            },
-            game::{GameConfig}, locations::initialize_location_config, ryo::{RyoConfig},
-            settings::{SeasonSettingsModes, SeasonSettingsModesImpl},
+            encounters::{initialize_encounter_stats_config}, locations::initialize_location_config,
+            settings::{SeasonSettingsModesImpl},
         },
         libraries::dopewars_items::{
             DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
@@ -52,18 +46,16 @@ mod config {
         },
         packing::{
             game_store_layout::{
-                GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutIntoBytes31Impl,
+                GameStoreLayoutEnumerableImpl, GameStoreLayoutIntoBytes31Impl,
                 GameStoreLayoutPackableImpl,
             },
             player_layout::{
-                PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutIntoBytes31Impl,
-                PlayerLayoutPackableImpl,
+                PlayerLayoutEnumerableImpl, PlayerLayoutIntoBytes31Impl, PlayerLayoutPackableImpl,
             },
         },
-        store::{Store, StoreImpl, StoreTrait},
+        store::{StoreImpl, StoreTrait},
     };
 
-    use starknet::{get_caller_address, get_contract_address};
 
     use super::{Config, LayoutItem, LayoutsConfig};
 

@@ -1,36 +1,33 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::{game::{GameConfig}, settings::{EncountersMode, EncountersOddsMode, SeasonSettings}},
+    config::{settings::{EncountersMode, EncountersOddsMode, SeasonSettings}},
     packing::{game_store::{GameStore}}, store::{Store, StoreImpl, StoreTrait},
     utils::{
-        bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
-        bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, math::{MathImplU8, MathTrait},
-        random::{Random, RandomImpl},
+        bits::{BitsImpl, BitsMathImpl}, bytes16::{Bytes16Impl}, math::{MathImplU8, MathTrait},
+        random::{RandomImpl},
     },
 };
-use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct EncounterStatsConfig {
+pub struct EncounterStatsConfig {
     #[key]
-    encounter: Encounters,
+    pub encounter: Encounters,
     #[key]
-    encounters_mode: EncountersMode,
+    pub encounters_mode: EncountersMode,
     //
-    health_base: u8,
-    health_step: u8,
-    attack_base: u8,
-    attack_step: u8,
-    defense_base: u8,
-    defense_step: u8,
-    speed_base: u8,
-    speed_step: u8,
+    pub health_base: u8,
+    pub health_step: u8,
+    pub attack_base: u8,
+    pub attack_step: u8,
+    pub defense_base: u8,
+    pub defense_step: u8,
+    pub speed_base: u8,
+    pub speed_step: u8,
 }
 
 
-fn initialize_encounter_stats_config(ref store: Store) {
+pub fn initialize_encounter_stats_config(ref store: Store) {
     // Chill
 
     store
@@ -140,12 +137,12 @@ fn initialize_encounter_stats_config(ref store: Store) {
 //
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum Encounters {
+pub enum Encounters {
     Cops,
     Gang,
 }
 
-impl EncountersIntoFelt252 of Into<Encounters, felt252> {
+pub impl EncountersIntoFelt252 of Into<Encounters, felt252> {
     fn into(self: Encounters) -> felt252 {
         match self {
             Encounters::Cops => 'Cops',
@@ -154,7 +151,7 @@ impl EncountersIntoFelt252 of Into<Encounters, felt252> {
     }
 }
 
-impl EncountersIntoU8 of Into<Encounters, u8> {
+pub impl EncountersIntoU8 of Into<Encounters, u8> {
     fn into(self: Encounters) -> u8 {
         match self {
             Encounters::Cops => 0,
@@ -169,18 +166,18 @@ impl EncountersIntoU8 of Into<Encounters, u8> {
 //
 
 #[derive(Copy, Drop, Serde)]
-struct EncounterConfig {
-    encounter: Encounters,
+pub struct EncounterConfig {
+    pub encounter: Encounters,
     //
-    level: u8,
-    health: u8,
-    attack: u8, // *
-    defense: u8, // % dmg reduction
-    speed: u8, // run: rand speed win | fight: initiative  
+    pub level: u8,
+    pub health: u8,
+    pub attack: u8, // *
+    pub defense: u8, // % dmg reduction
+    pub speed: u8, // run: rand speed win | fight: initiative  
     //
-    rep_pay: u8, // reputation modifier for paying NEGATIVE
-    rep_run: u8, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
-    rep_fight: u8 // reputation modifier for fighting
+    pub rep_pay: u8, // reputation modifier for paying NEGATIVE
+    pub rep_run: u8, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
+    pub rep_fight: u8 // reputation modifier for fighting
 }
 
 
@@ -189,7 +186,7 @@ struct EncounterConfig {
 //
 
 #[generate_trait]
-impl EncounterSpawnerImpl of EncounterSpawnerTrait {
+pub impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     fn get_encounter_level(ref season_settings: SeasonSettings, reputation: u8) -> u8 {
         let level = match season_settings.encounters_odds_mode {
             EncountersOddsMode::Easy => { reputation / 20 + 1 },
@@ -205,7 +202,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     ) -> EncounterConfig {
         let level = Self::get_encounter_level(ref season_settings, game_store.player.reputation);
 
-        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+        let rand_from_game_store: u256 = core::poseidon::poseidon_hash_span(
             array![game_store.markets.packed, game_store.game.game_id.into()].span(),
         )
             .into() % 2;
@@ -241,7 +238,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     }
 
     fn get_random_demand_pct(ref game_store: GameStore) -> u8 {
-        let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
+        let rand_from_game_store: u256 = core::poseidon::poseidon_hash_span(
             array![game_store.markets.packed, game_store.game.game_id.into()].span(),
         )
             .into();
@@ -268,7 +265,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
 //
 
 #[generate_trait]
-impl EncounterImpl of EncounterTrait {
+pub impl EncounterImpl of EncounterTrait {
     #[inline(always)]
     fn is_dead(ref self: EncounterConfig) -> bool {
         self.health == 0

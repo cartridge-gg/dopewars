@@ -1,14 +1,11 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
     config::settings::{DrugsMode}, store::{Store, StoreImpl, StoreTrait}, traits::{Enumerable},
-    utils::introspect::{Bytes31IntrospectionImpl},
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
+    utils::introspect::{Bytes31IntrospectionImpl}, utils::{bytes16::{Bytes16, Bytes16Impl}},
 };
 
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum Drugs {
+pub enum Drugs {
     Ludes,
     Speed,
     Weed,
@@ -21,16 +18,16 @@ enum Drugs {
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct DrugConfig {
+pub struct DrugConfig {
     #[key]
-    drugs_mode: DrugsMode,
+    pub drugs_mode: DrugsMode,
     #[key]
-    drug: Drugs,
-    drug_id: u8,
-    base: u16,
-    step: u16,
-    weight: u16,
-    name: Bytes16,
+    pub drug: Drugs,
+    pub drug_id: u8,
+    pub base: u16,
+    pub step: u16,
+    pub weight: u16,
+    pub name: Bytes16,
 }
 
 
@@ -38,7 +35,7 @@ struct DrugConfig {
 //
 //
 
-impl DrugsEnumerableImpl of Enumerable<Drugs> {
+pub impl DrugsEnumerableImpl of Enumerable<Drugs> {
     #[inline(always)]
     fn all() -> Span<Drugs> {
         let mut items = array![
@@ -59,7 +56,7 @@ impl DrugsEnumerableImpl of Enumerable<Drugs> {
 //
 //
 
-impl DrugsIntoFelt252 of Into<Drugs, felt252> {
+pub impl DrugsIntoFelt252 of Into<Drugs, felt252> {
     fn into(self: Drugs) -> felt252 {
         match self {
             Drugs::Ludes => 'Ludes',
@@ -74,7 +71,7 @@ impl DrugsIntoFelt252 of Into<Drugs, felt252> {
     }
 }
 
-impl DrugsIntoU8 of Into<Drugs, u8> {
+pub impl DrugsIntoU8 of Into<Drugs, u8> {
     fn into(self: Drugs) -> u8 {
         match self {
             Drugs::Ludes => 0,
@@ -89,7 +86,7 @@ impl DrugsIntoU8 of Into<Drugs, u8> {
     }
 }
 
-impl U8IntoDrugs of Into<u8, Drugs> {
+pub impl U8IntoDrugs of Into<u8, Drugs> {
     fn into(self: u8) -> Drugs {
         let self252: felt252 = self.into();
         match self252 {
@@ -111,7 +108,7 @@ impl U8IntoDrugs of Into<u8, Drugs> {
 //
 //
 
-fn initialize_drug_config_normal(ref store: Store) {
+pub fn initialize_drug_config_normal(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {
@@ -217,7 +214,7 @@ fn initialize_drug_config_normal(ref store: Store) {
         );
 }
 
-fn initialize_drug_config_cheap(ref store: Store) {
+pub fn initialize_drug_config_cheap(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {
@@ -323,7 +320,7 @@ fn initialize_drug_config_cheap(ref store: Store) {
         );
 }
 
-fn initialize_drug_config_expensive(ref store: Store) {
+pub fn initialize_drug_config_expensive(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {

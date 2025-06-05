@@ -1,15 +1,14 @@
-use dojo::model::{ModelStorage, ModelStorageTest, ModelValueStorage};
-use dojo::world::{IWorldDispatcher, WorldStorage};
+use dojo::model::ModelStorage;
+use dojo::world::WorldStorage;
 
 use rollyourown::{
     config::{
-        drugs::{DrugConfig, Drugs}, encounters::{EncounterConfig, EncounterStatsConfig, Encounters},
-        game::{GameConfig}, hustlers::{ItemSlot}, locations::{Locations}, ryo::{RyoConfig},
-        ryo_address::{RyoAddress}, settings::{DrugsMode, EncountersMode, SeasonSettings},
+        drugs::{DrugConfig, Drugs}, encounters::{EncounterStatsConfig, Encounters},
+        game::{GameConfig}, ryo::{RyoConfig}, ryo_address::{RyoAddress},
+        settings::{DrugsMode, EncountersMode, SeasonSettings},
     },
-    models::{game::Game, game_store_packed::GameStorePacked, season::Season},
-    packing::{game_store::{GameMode, GameStore, GameStorePackerImpl}}, traits::{Packable, Packer},
-    utils::sorted_list::{SortedList, SortedListItem},
+    models::{game::{Game}, game_store_packed::GameStorePacked, season::Season},
+    packing::{game_store::GameStorePackerImpl}, utils::sorted_list::{SortedList, SortedListItem},
 };
 use starknet::ContractAddress;
 
@@ -21,7 +20,7 @@ pub struct Store {
 }
 
 #[generate_trait]
-impl StoreImpl of StoreTrait {
+pub impl StoreImpl of StoreTrait {
     fn new(world: WorldStorage) -> Store {
         Store { world }
     }

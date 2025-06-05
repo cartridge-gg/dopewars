@@ -1,5 +1,3 @@
-use starknet::ContractAddress;
-
 #[starknet::interface]
 trait IDevtools<T> {
     fn failing_tx(self: @T);
@@ -16,20 +14,14 @@ mod devtools {
     use dojo::world::IWorldDispatcherTrait;
 
     use rollyourown::{
-        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        models::{game::{Game, TokenId}, game_store_packed::{GameStorePacked}, season::{Season}},
-        packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
-        store::{Store, StoreImpl, StoreTrait},
+        helpers::season_manager::{SeasonManagerTrait}, models::{game::{Game, GameMode, TokenId}},
+        packing::game_store::{GameStoreImpl, GameStorePackerImpl}, store::{StoreImpl, StoreTrait},
         utils::{
-            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            events::{RawEventEmitterImpl, RawEventEmitterTrait}, random::{RandomImpl},
-            sorted_list::{SortedListImpl, SortedListItem, SortedListTrait},
+            bytes16::{Bytes16Impl}, random::{RandomImpl},
+            sorted_list::{SortedListImpl, SortedListTrait},
         },
     };
-    use starknet::ContractAddress;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
     use starknet::get_caller_address;
-    use starknet::info::get_tx_info;
 
     use super::IDevtools;
 

@@ -1,25 +1,19 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::{drugs::{Drugs}, locations::{Locations, LocationsEnumerableImpl}},
-    models::game::{Game, GameImpl, GameMode},
-    packing::{drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}, game_store::{GameStore}},
-    utils::{
-        bits::{Bits, BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait},
-        math::{MathImplU8, MathTrait},
-    },
+    config::{locations::{Locations, LocationsEnumerableImpl}}, models::game::{GameImpl},
+    packing::{drugs_packed::{DrugsPackedImpl}},
+    utils::{bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait}, math::{MathImplU8}},
 };
-use starknet::ContractAddress;
 
 
 // 18 bits : 3 bits x 6 locations
 #[derive(Copy, Drop, Serde)]
-struct WantedPacked {
-    packed: felt252,
+pub struct WantedPacked {
+    pub packed: felt252,
 }
 
 
 #[generate_trait]
-impl WantedPackedImpl of WantedPackedTrait {
+pub impl WantedPackedImpl of WantedPackedTrait {
     fn new(rand: u256) -> WantedPacked {
         let mask = BitsMathImpl::mask::<u256>(18);
         let safe_packed: felt252 = (rand & mask).try_into().unwrap();

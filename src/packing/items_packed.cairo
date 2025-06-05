@@ -1,31 +1,25 @@
 use dojo::world::WorldStorageTrait;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::gear::{GearItemConfig}, config::hustlers::{ItemSlot},
-    libraries::dopewars_items::{
-        DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
-        IDopewarsItemsLibraryDispatcher,
-    },
-    models::game::{Game, GameMode}, packing::game_store::{GameStore},
-    store::{Store, StoreImpl, StoreTrait}, utils::bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
+    config::gear::{GearItemConfig, GearItemConfigTrait}, config::hustlers::{ItemSlot},
+    libraries::dopewars_items::{IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher},
+    models::game::{Game}, store::{Store, StoreImpl},
+    utils::bits::{BitsImpl, BitsMathImpl, BitsTrait},
 };
-use starknet::ContractAddress;
-use super::super::config::gear::GearItemConfigTrait;
 
 
 #[derive(Copy, Drop)]
-struct ItemsPacked {
-    store: @Store,
-    game: Game,
+pub struct ItemsPacked {
+    pub store: @Store,
+    pub game: Game,
     //
-    packed: felt252,
+    pub packed: felt252,
 }
 
 
 const DW_SLOT_IDS: [u8; 4] = [0, 1, 5, 2];
 
 #[generate_trait]
-impl ItemsPackedImpl of ItemsPackedTrait {
+pub impl ItemsPackedImpl of ItemsPackedTrait {
     fn new(s: @Store, game: Game) -> ItemsPacked {
         ItemsPacked { store: s, game, packed: 0 }
     }

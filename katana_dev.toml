@@ -18,6 +18,7 @@ total_accounts = 30
 
 [starknet]
 env.invoke_max_steps = 4200000000
+env.compile_native = true
 
 [cartridge]
 controllers = true

@@ -1,9 +1,8 @@
+use core::num::traits::Zero;
 use core::traits::TryInto;
-use debug::PrintTrait;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::{game::Game, season::Season}, store::{Store, StoreImpl, StoreTrait},
+    models::{game::Game}, store::{Store, StoreImpl, StoreTrait},
     utils::payout_structure::{get_payout},
 };
 use starknet::ContractAddress;
@@ -11,35 +10,35 @@ use starknet::ContractAddress;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct SortedList {
+pub struct SortedList {
     #[key]
-    list_id: felt252,
-    size: u32,
-    locked: bool,
-    processed: bool,
-    process_max_size: u32, // max number of item to process
-    process_size: u32, // number of item processed
-    process_cursor_k0: u32,
-    process_cursor_k1: ContractAddress,
-    stake_adj_paper_balance: u32,
+    pub list_id: felt252,
+    pub size: u32,
+    pub locked: bool,
+    pub processed: bool,
+    pub process_max_size: u32, // max number of item to process
+    pub process_size: u32, // number of item processed
+    pub process_cursor_k0: u32,
+    pub process_cursor_k1: ContractAddress,
+    pub stake_adj_paper_balance: u32,
 }
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct SortedListItem {
+pub struct SortedListItem {
     #[key]
-    list_id: felt252,
+    pub list_id: felt252,
     #[key]
-    item_k0: u32,
+    pub item_k0: u32,
     #[key]
-    item_k1: ContractAddress,
+    pub item_k1: ContractAddress,
     //
-    next_k0: u32,
-    next_k1: ContractAddress,
+    pub next_k0: u32,
+    pub next_k1: ContractAddress,
 }
 
 
-trait SortableItem<T> {
+pub trait SortableItem<T> {
     fn get_keys(self: T) -> (u32, ContractAddress);
     fn get_value(self: T) -> u32;
     fn get_by_keys(store: @Store, keys: (u32, ContractAddress)) -> T;
@@ -56,7 +55,7 @@ trait SortableItem<T> {
 }
 
 
-impl SortableItemGameImpl of SortableItem<Game> {
+pub impl SortableItemGameImpl of SortableItem<Game> {
     fn get_keys(self: Game) -> (u32, ContractAddress) {
         (self.game_id, self.player_id)
     }
@@ -101,7 +100,7 @@ impl SortableItemGameImpl of SortableItem<Game> {
 
 
 #[generate_trait]
-impl SortedListImpl of SortedListTrait {
+pub impl SortedListImpl of SortedListTrait {
     fn new(list_id: felt252) -> SortedList {
         // TODO check if exists ?
         SortedList {
@@ -144,7 +143,7 @@ impl SortedListImpl of SortedListTrait {
         let (item_k0, item_k1) = item.get_keys();
         let item_value = item.get_value();
 
-        assert(item_k0 != Self::root() && Zeroable::is_non_zero(item_k1), 'reserved root value');
+        assert(item_k0 != Self::root() && item_k1.is_non_zero(), 'reserved root value');
 
         let (prev_k0, prev_k1) = self.find_prev_keys::<T>(ref store, item_value, prev_item_keys);
         // let mut prev = get!(world, (self.list_id, prev_k0, prev_k1), (SortedListItem));
@@ -184,9 +183,9 @@ impl SortedListImpl of SortedListTrait {
         let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
         let mut next_item = SortableItem::<T>::get_by_keys(@store, (next.item_k0, next.item_k1));
 
-        if ((curr.item_k0 == Self::root() && Zeroable::is_zero(curr.item_k1))
+        if ((curr.item_k0 == Self::root() && curr.item_k1.is_zero())
             || curr_item.get_value() >= item_value)
-            && ((next.item_k0 == Self::root() && Zeroable::is_zero(next.item_k1))
+            && ((next.item_k0 == Self::root() && next.item_k1.is_zero())
                 || next_item.get_value() < item_value) {
             true
         } else {
@@ -261,7 +260,7 @@ impl SortedListImpl of SortedListTrait {
         let mut i = 0;
 
         loop {
-            if curr.next_k0 == Self::root() && Zeroable::is_zero(curr.next_k1) {
+            if curr.next_k0 == Self::root() && curr.next_k1.is_zero() {
                 self.processed = true;
                 break;
             }
