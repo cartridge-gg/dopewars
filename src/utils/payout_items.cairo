@@ -1,14 +1,13 @@
 use dojo::world::WorldStorage;
-use rollyourown::interfaces::{
-    dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
-    dope_gear::{IDopeGearDispatcher, IDopeGearDispatcherTrait},
-};
 
 use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
+use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
+use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
+use dope_contracts::dope_gear::dope_gear_store::{GearStoreImpl, GearStoreTrait};
 
 pub fn add_items_payout(
-    hustler_dispatcher: IDopeHustlersDispatcher,
-    gear_dispatcher: IDopeGearDispatcher,
+    ref dope_world: WorldStorage,
     ref ids: Array<u256>,
     ref values: Array<u256>,
     ref hustler_count: u8,
@@ -23,14 +22,17 @@ pub fn add_items_payout(
         hustler_count += 1;
     }
 
+    let mut hustler_store = HustlerStoreImpl::new(dope_world);
+    let mut gear_store = GearStoreImpl::new(dope_world);
+
     if position == 1 { // full augmented set from XXX + CROWN
-        let mut slots = hustler_dispatcher.get_slots();
+        let mut slots = hustler_store.get_all_slots();
         let mut maybe_suffix = Option::None;
 
         for slot in slots {
-            let mut gear_item = gear_dispatcher
+            let mut gear_item = gear_store
                 .random_gear_item_id(
-                    seed.into(), slot, Option::Some(21),
+                    seed.into(), *slot, Option::Some(21),
                 ); // 21 = get all suffix/prefixes/augmented
 
             // force match set from XXX
@@ -41,7 +43,7 @@ pub fn add_items_payout(
             }
 
             // if accessory -> force crown
-            if slot == 'Accessory' {
+            if *slot == HustlerSlots::Accessory {
                 gear_item.item = 0; // crown id
             }
 
@@ -51,11 +53,17 @@ pub fn add_items_payout(
             values.append(1);
         }
     } else if position == 2 { // set from XXX
-        let mut slots = array!['Weapon', 'Clothe', 'Vehicle', 'Foot', 'Accessory'];
+        let mut slots = array![
+            HustlerSlots::Weapon,
+            HustlerSlots::Clothe,
+            HustlerSlots::Foot,
+            HustlerSlots::Vehicle,
+            HustlerSlots::Accessory,
+        ];
         let mut maybe_suffix = Option::None;
 
         for slot in slots {
-            let mut gear_item = gear_dispatcher
+            let mut gear_item = gear_store
                 .random_gear_item_id(seed.into(), slot, Option::Some(15)); // 15 = get a suffix
 
             // force match set from XXX
@@ -66,7 +74,7 @@ pub fn add_items_payout(
             }
 
             // if accessory -> force NOT crown/mr fax/sausage
-            if slot == 'Accessory' && gear_item.item < 3 {
+            if slot == HustlerSlots::Accessory && gear_item.item < 3 {
                 gear_item.item = 27; // paper id
             }
 
@@ -76,14 +84,20 @@ pub fn add_items_payout(
             values.append(1);
         }
     } else if position == 3 { // full random
-        let mut slots = array!['Weapon', 'Clothe', 'Vehicle', 'Foot', 'Accessory'];
+        let mut slots = array![
+            HustlerSlots::Weapon,
+            HustlerSlots::Clothe,
+            HustlerSlots::Foot,
+            HustlerSlots::Vehicle,
+            HustlerSlots::Accessory,
+        ];
 
         for slot in slots {
-            let mut gear_item = gear_dispatcher
+            let mut gear_item = gear_store
                 .random_gear_item_id(seed.into(), slot, Option::None); // None = full random
 
             // if accessory ->force NOT crown/mr fax/sausage
-            if slot == 'Accessory' && gear_item.item < 3 {
+            if slot == HustlerSlots::Accessory && gear_item.item < 3 {
                 gear_item.item = 27; // paper id
             }
             let gear_item_id: u256 = gear_item.into();
@@ -93,8 +107,10 @@ pub fn add_items_payout(
             values.append(1);
         }
     } else { // random accessory
-        let mut gear_item = gear_dispatcher
-            .random_gear_item_id(seed.into(), 'Accessory', Option::None); // None = full random
+        let mut gear_item = gear_store
+            .random_gear_item_id(
+                seed.into(), HustlerSlots::Accessory, Option::None,
+            ); // None = full random
 
         // force NOT crown
         if gear_item.item < 3 {

@@ -26,7 +26,6 @@ mod decide {
         },
         constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
         interfaces::{
-            dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
             erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
             paper::{IPaperDispatcher, IPaperDispatcherTrait},
         },

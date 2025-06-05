@@ -8,7 +8,7 @@ pub mod store;
 pub mod tests;
 
 pub mod achievements {
-    pub mod achievements_v0;
+    // pub mod achievements_v0;
     pub mod achievements_v1;
 }
 
@@ -84,9 +84,6 @@ pub mod utils {
 
 pub mod interfaces {
     pub mod chips;
-    pub mod dope_hustlers;
-    pub mod dope_loot;
-    pub mod dope_gear;
     pub mod erc721;
     pub mod paper;
 }

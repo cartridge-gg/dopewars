@@ -1,26 +1,31 @@
 id;group;index;title;points;icon;hidden;tasks;description
 BRAWLER;Brawler;0;Brawler;80;fa-person-rifle;0;"BRAWLER_C:1:Defeat a max level Cop
 BRAWLER_G:1:Defeat a max level Gang";I am what I am. A fighter.
-COPS_1;Encounters;0;Patrol Buster;10;fa-user-police;0;COPS:10:Defeat 10 Cops;When the streets talk back, the law listens
-COPS_2;Encounters;1;Precinct Nightmare;25;fa-siren;0;COPS:100:Defeat 100 Cops;When the streets talk back, the law listens
-COPS_3;Encounters;2;Five-O Reaper;50;fa-helicopter;0;COPS:500:Defeat 500 Cops;When the streets talk back, the law listens
-DEALER_1;Dealer;0;Operator;10;fa-tablets;0;DEALER:100:Make 100 deals worth over a million;Only drug dealers and software companies call their customers 'users'
-DEALER_2;Dealer;1;Broker;30;fa-capsules;0;DEALER:200:Make 200 deals worth over a million;Only drug dealers and software companies call their customers 'users'
-DEALER_3;Dealer;2;Cartel;75;fa-bong;0;DEALER:500:Make 500 deals worth over a million;Only drug dealers and software companies call their customers 'users'
-ESCAPE_1;Escape;0;Quickstep;10;fa-person-running-fast;0;ESCAPE:10:Escape Cops or Gangs 10 times;It's not outrunning them, it's outsmarting them.
-ESCAPE_2;Escape;1;Shadow;25;fa-motorcycle;0;ESCAPE:20:Escape Cops or Gangs 20 times;It's not outrunning them, it's outsmarting them.
-ESCAPE_3;Escape;2;Eel;50;fa-snake;0;ESCAPE:50:Escape Cops or Gangs 50 times;It's not outrunning them, it's outsmarting them.
-FAMOUS;Notorious;0;Notorious;80;fa-joint;0;FAMOUS:1:End a game with max reputation;The game is the game. Always.
-GANGS_1;Encounters;0;Turf Taker;10;fa-hand-back-fist;0;GANGS:10:Defeat 10 Gangs;Your rep is your currency and every shot fired is an investment
-GANGS_2;Encounters;1;Block Boss;25;fa-knife-kitchen;0;GANGS:100:Defeat 100 Gangs;Your rep is your currency and every shot fired is an investment
-GANGS_3;Encounters;2;Syndicate Slayer;50;fa-gun;0;GANGS:500:Defeat 500 Gangs;Your rep is your currency and every shot fired is an investment
-HUSTLER_1;Block Ambition;0;Slinger;20;fa-head-side-mask;0;HUSTLER:10:Play 10 ranked games;It's not about becoming someone. It's about becoming someone they can't ignore
-HUSTLER_2;Block Ambition;1;Hustler;50;fa-user-hoodie;0;HUSTLER:50:Play 50 ranked games;It's not about becoming someone. It's about becoming someone they can't ignore
-HUSTLER_3;Block Ambition;2;OG;75;fa-luchador-mask;0;HUSTLER:100:Play 100 ranked games;It's not about becoming someone. It's about becoming someone they can't ignore
-JAILBIRD_1;Jailbird;0;Outlaw;10;fa-hands-bound;1;JAILBIRD:1:Get jailed once;The walls have ears, and they've heard enough
-JAILBIRD_2;Jailbird;1;Criminal;25;fa-handcuffs;1;JAILBIRD:3:Get jailed 3 times;The walls have ears, and they've heard enough
-JAILBIRD_3;Jailbird;2;Jailbird;50;fa-dungeon;1;JAILBIRD:1:Get jailed 10 times;The walls have ears, and they've heard enough
-KINGPIN;Domination;0;Kingpin;100;fa-crown;0;KINGPIN:1:Win a season of Dopewars;In the boss's domain, every decision is a command, every order, law.
-LAUNDERER;Launderer;0;The Cleaner;50;fa-washing-machine;1;LAUNDERER:1:Launder the results at the end of a season.;Mixing the dirt with the dough
-RIP;Rip;0;Flatliner;10;fa-skull-crossbones;1;RIP:1:Die;We all got a number, and it's not the one you dial
-STUFFED;Fully Loaded;0;Fully Loaded;80;fa-user-ninja;1;STUFFED:1:Max out equipment;If they bring a knife to the fight, we bring a gun
+FAMOUS;Notorious;0;Notorious;50;fa-joint;0;FAMOUS:1:End a game with max reputation;The game is the game. Always.
+KINGPIN;Domination;0;Kingpin;80;fa-crown;0;KINGPIN:1:Win a season of Dopewars;In the boss's domain, every decision is a command, every order, law.
+STUFFED;Fully Loaded;0;Fully Loaded;50;fa-user-ninja;1;STUFFED:1:Max out equipment;If they bring a knife to the fight, we bring a gun
+BLSH_1;Dealer;0;BLSH 1;10;;0;"BUY_LOW:20:Buy drugs at the lowest price 20 times
+SELL_HIGH:20:Sell drugs at the highest price 20 times";buy low, sell high, profit
+BLSH_2;Dealer;1;BLSH 2;30;;0;"BUY_LOW:100:Buy drugs at the lowest price 100 times
+SELL_HIGH:100:Sell drugs at the highest price 100 times";buy low, sell high, profit
+BLSH_3;Dealer;2;BLSH 3;80;;0;"BUY_LOW:500:Buy drugs at the lowest price 500 times
+SELL_HIGH:500:Sell drugs at the highest price 500 times";buy low, sell high, profit
+VOLUME_1;Dealer;0;Operator;10;fa-tablets;0;VOLUME:69000000:Sell drugs for 69 Millions;trading volume
+VOLUME_2;Dealer;1;Broker;30;fa-capsules;0;VOLUME:420000000:Sell drugs for 420 Millions;trading volume
+VOLUME_3;Dealer;2;Cartel;75;fa-bong;0;VOLUME:69000000000:Sell drugs for 69 Billions;trading volume
+HIGHSTAKES_1;Gambler;0;Gambler 1;10;;0;HIGH_STAKES:5:Play 5 games with max stake multiplier;play games with max stake multiplier
+HIGHSTAKES_2;Gambler;1;Gambler 2;30;;0;HIGH_STAKES:25:Play 25 games with max stake multiplier;play games with max stake multiplier
+HIGHSTAKES_3;Gambler;2;Gambler 3;80;;0;HIGH_STAKES:100:Play 100 games with max stake multiplier;play games with max stake multiplier
+PAPER_1;Launderer;0;paper1;10;;0;PAPER:100000:Claim 69.000 $PAPER;amount of paper claimed as reward
+PAPER_2;Launderer;1;paper2;30;;0;PAPER:420000:Claim 420.000 $PAPER;amount of paper claimed as reward
+PAPER_3;Launderer;2;paper3;80;;0;PAPER:1000000:Claim 1.000.000 $PAPER;amount of paper claimed as reward
+GEAR_FROM;Represents;0;gear from;25;;1;GEAR_FROM:1:Play a game with a set of items from XXX;Always remind where you come from.
+SURVIVOR;Survivor;0;Survivor;10;;1;SURVIVOR:1:End a game with 1hp;end a game with 1hp
+ENCOUNTERS_1;Encounters;0;encounters 1;10;;0;ENCOUNTER:100:Defeat 100 Cops or Gangs;description
+ENCOUNTERS_2;Encounters;1;encounters 2;30;;0;ENCOUNTER:500:Defeat 500 Cops or Gangs;description
+ENCOUNTERS_3;Encounters;2;encounters 3;80;;0;ENCOUNTER:1000:Defeat 1000 Cops or Gangs;description
+ELEGANT;Elegant;0;elegant;25;;1;ELEGANT:1:Start a game with an accessory;description
+FULL_EARLY;Strategist;0;full early;20;;1;FULL_EARLY:5:Play 5 games with full early items;description
+FULL_MID;Strategist;1;full mid;20;;1;FULL_MID:5:Play 5 games with full mid items;description
+FULL_LATE;Strategist;2;full late;20;;1;FULL_LATE:5:Play 5 games with full late items;description
+OG;OG;0;Original Gangsta;25;;1;OG:1:Play a game with an OG;description

@@ -73,7 +73,7 @@ struct Player {
     next_location: Locations,
     drug_level: u8,
     reputation: u8,
-    traded_million: bool,
+    traded_million: bool, // TODO: remove or find another use ?
 }
 
 

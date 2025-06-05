@@ -5,10 +5,12 @@ use dojo::world::{WorldStorage};
 
 use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}}};
 use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
-use rollyourown::interfaces::{
-    dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
-    dope_loot::{IDopeLootDispatcher, IDopeLootDispatcherTrait},
-};
+
+
+use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
+use dope_contracts::dope_loot::interface::{IDopeLootABIDispatcher, IDopeLootABIDispatcherTrait};
+use dope_contracts::dope_loot::dope_loot_store::{LootStoreImpl, LootStoreTrait};
 
 pub type GearId = felt252;
 
@@ -68,48 +70,48 @@ impl GameImpl of GameTrait {
         let equipment_by_slot = match token_id {
             TokenId::GuestLootId(loot_id) |
             TokenId::LootId(loot_id) => {
-                let dope_loot = IDopeLootDispatcher {
-                    contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
-                };
+                let mut loot_store = LootStoreImpl::new(dope_world);
 
+                let loot_id: u256 = loot_id.into();
                 let mut equipment = array![
-                    dope_loot.gear_item_id(loot_id.into(), 'Weapon').try_into().unwrap(),
-                    dope_loot.gear_item_id(loot_id.into(), 'Clothe').try_into().unwrap(),
-                    dope_loot.gear_item_id(loot_id.into(), 'Foot').try_into().unwrap(),
-                    dope_loot.gear_item_id(loot_id.into(), 'Vehicle').try_into().unwrap(),
+                    loot_store.gear_item_id(loot_id, HustlerSlots::Weapon).try_into().unwrap(),
+                    loot_store.gear_item_id(loot_id, HustlerSlots::Clothe).try_into().unwrap(),
+                    loot_store.gear_item_id(loot_id, HustlerSlots::Foot).try_into().unwrap(),
+                    loot_store.gear_item_id(loot_id, HustlerSlots::Vehicle).try_into().unwrap(),
                 ];
 
                 equipment.span()
             },
             TokenId::HustlerId(hustler_id) => {
-                let dope_hustlers = IDopeHustlersDispatcher {
-                    contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
-                };
+                let mut hustler_store = HustlerStoreImpl::new(dope_world);
 
-                let mut equipment = array![
-                    dope_hustlers
-                        .gear_item_id(hustler_id.into(), 'Weapon')
-                        .expect('must equip a weapon')
-                        .try_into()
-                        .unwrap(),
-                    dope_hustlers
-                        .gear_item_id(hustler_id.into(), 'Clothe')
-                        .expect('must equip a clothe')
-                        .try_into()
-                        .unwrap(),
-                    dope_hustlers
-                        .gear_item_id(hustler_id.into(), 'Foot')
-                        .expect('must equip a foot')
-                        .try_into()
-                        .unwrap(),
-                    dope_hustlers
-                        .gear_item_id(hustler_id.into(), 'Vehicle')
-                        .expect('must equip a vehicle')
-                        .try_into()
-                        .unwrap(),
-                ];
+                let weapon = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Weapon);
+                let clothe = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Clothe);
+                let foot = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Foot);
+                let vehicle = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Vehicle);
 
-                equipment.span()
+                let weapon_id: felt252 = weapon
+                    .gear_item_id
+                    .expect('must equip a weapon')
+                    .try_into()
+                    .unwrap();
+                let clothe_id: felt252 = clothe
+                    .gear_item_id
+                    .expect('must equip a clothe')
+                    .try_into()
+                    .unwrap();
+                let foot_id: felt252 = foot
+                    .gear_item_id
+                    .expect('must equip a foot')
+                    .try_into()
+                    .unwrap();
+                let vehicle_id: felt252 = vehicle
+                    .gear_item_id
+                    .expect('must equip a weapon')
+                    .try_into()
+                    .unwrap();
+
+                array![weapon_id, clothe_id, foot_id, vehicle_id].span()
             },
         };
         Game {
@@ -130,8 +132,7 @@ impl GameImpl of GameTrait {
             position: 0,
             //
             token_id,
-            equipment_by_slot
-            
+            equipment_by_slot,
         }
     }
 

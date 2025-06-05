@@ -2579,8 +2579,8 @@
       ]
     },
     {
-      "address": "0xc093de2d5cdbcc368a9670733bc0ed6ad4adfc0a79b0d919acada8a14e96b0",
-      "class_hash": "0x4a6e22ead504551eed7f492fde19074772f296c644c619ec944a7690862681b",
+      "address": "0x3724aab7ab0eb9a10b6a28b616c5468c9255eab6d5ac0fcddcbd917c5569140",
+      "class_hash": "0x513524010f4c37981596444cdaee7ea4bf538114e97fe97ef3b1fad3d861791",
       "abi": [
         {
           "type": "impl",
@@ -2817,56 +2817,6 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u256>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u256"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption",
-          "members": [
-            {
-              "name": "token_id",
-              "type": "core::felt252"
-            },
-            {
-              "name": "slot",
-              "type": "core::felt252"
-            },
-            {
-              "name": "gear_item_id",
-              "type": "core::option::Option::<core::integer::u256>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody",
-          "members": [
-            {
-              "name": "token_id",
-              "type": "core::felt252"
-            },
-            {
-              "name": "slot",
-              "type": "core::felt252"
-            },
-            {
-              "name": "value",
-              "type": "core::integer::u8"
-            }
-          ]
-        },
-        {
           "type": "interface",
           "name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlers",
           "items": [
@@ -2945,89 +2895,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "gear_item_id",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "slot_slug",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::option::Option::<core::integer::u256>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "body_slot",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "slot_slug",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::integer::u8"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "hustler_equipment",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "hustler_body",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_slots",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<core::felt252>"
-                }
-              ],
-              "state_mutability": "view"
             }
           ]
         },

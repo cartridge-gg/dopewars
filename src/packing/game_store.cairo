@@ -122,12 +122,15 @@ impl GameStoreImpl of GameStoreTrait {
     // Markets
     //
 
-    fn get_drug_price(ref self: GameStore, location: Locations, drug: Drugs) -> usize {
+    fn get_tick_and_drug_price(
+        ref self: GameStore, location: Locations, drug: Drugs,
+    ) -> (usize, usize) {
         let season_settings = self.season_settings();
         let drug_config = self.store.drug_config(season_settings.drugs_mode, drug);
         let tick = self.markets.get_tick(location, drug);
 
-        tick * drug_config.step.into() + drug_config.base.into()
+        let price = tick * drug_config.step.into() + drug_config.base.into();
+        (tick, price)
     }
 
     //

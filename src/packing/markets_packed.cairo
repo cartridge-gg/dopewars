@@ -57,13 +57,6 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     }
 
 
-    // fn get_drug_price( ref self: MarketsPacked,s: IStoreLibraryDispatcher, location: Locations,
-    // drug: Drugs) -> usize {
-    //     let drug_config = s.drug_config(drug);
-    //     let tick = self.get_tick(location, drug);
-
-    //     tick * drug_config.step.into() + drug_config.base.into()
-    // }
 
     //
     //

@@ -1,7 +1,7 @@
 use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::achievements::achievements_v0::Tasks;
+use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::{
     config::{drugs::{DrugConfig, Drugs}, locations::{Locations}}, events::{TradeDrug},
     models::{game::{GameMode, GameTrait}},
@@ -16,24 +16,28 @@ use rollyourown::{
 use starknet::ContractAddress;
 
 
-#[derive(Copy, Drop, Serde)]
-enum TradeDirection {
+#[derive(Copy, Drop, Serde, PartialEq)]
+pub enum TradeDirection {
     Sell,
     Buy,
 }
 
 #[derive(Copy, Drop, Serde)]
-struct Trade {
-    direction: TradeDirection,
-    drug: Drugs,
-    quantity: u32,
+pub struct Trade {
+    pub direction: TradeDirection,
+    pub drug: Drugs,
+    pub quantity: u32,
 }
 
 //
 //
 //
 
-fn execute_trade(ref game_store: GameStore, trade: Trade) {
+const MIN_TICK: usize = 0;
+const MAX_TICK: usize = 63;
+
+
+fn execute_trade(ref game_store: GameStore, trade: Trade, is_first_sell: bool, is_first_buy: bool) {
     // check if can trade
     assert(game_store.can_trade(), 'player cannot trade');
 
@@ -41,12 +45,12 @@ fn execute_trade(ref game_store: GameStore, trade: Trade) {
     assert(game_store.game.game_mode != GameMode::Warrior, 'warriors dont trade');
 
     match trade.direction {
-        TradeDirection::Sell => sell(ref game_store, trade),
-        TradeDirection::Buy => buy(ref game_store, trade),
+        TradeDirection::Sell => sell(ref game_store, trade, is_first_sell),
+        TradeDirection::Buy => buy(ref game_store, trade, is_first_buy),
     };
 }
 
-fn buy(ref game_store: GameStore, trade: Trade) {
+fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -66,7 +70,8 @@ fn buy(ref game_store: GameStore, trade: Trade) {
     assert(trade.quantity <= max_transport, 'not enought space');
 
     // check cash
-    let market_price = game_store.get_drug_price(game_store.player.location, trade.drug);
+    let (tick, market_price) = game_store
+        .get_tick_and_drug_price(game_store.player.location, trade.drug);
     let total_cost = market_price * trade.quantity;
     assert(game_store.player.cash >= total_cost, 'not enought ca$h');
 
@@ -93,10 +98,26 @@ fn buy(ref game_store: GameStore, trade: Trade) {
                 is_buy: true,
             },
         );
+
+    if game_store.game.is_ranked() {
+        let bushido_store = BushidoStoreTrait::new(store.world);
+
+        if is_first_buy {
+            if tick == MIN_TICK {
+                bushido_store
+                    .progress(
+                        game_store.game.player_id.into(),
+                        Tasks::BUY_LOW,
+                        1,
+                        starknet::get_block_timestamp(),
+                    );
+            };
+        };
+    }
 }
 
 
-fn sell(ref game_store: GameStore, trade: Trade) {
+fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -109,7 +130,8 @@ fn sell(ref game_store: GameStore, trade: Trade) {
     // must have enought to sell
     assert(drugs.quantity >= trade.quantity, 'not enought drug');
 
-    let market_price = game_store.get_drug_price(game_store.player.location, trade.drug);
+    let (tick, market_price) = game_store
+        .get_tick_and_drug_price(game_store.player.location, trade.drug);
     let total = market_price * trade.quantity;
 
     // update drug
@@ -135,13 +157,27 @@ fn sell(ref game_store: GameStore, trade: Trade) {
             },
         );
 
-    if game_store.game.is_ranked() && total > 999_999 && !game_store.player.traded_million {
-        game_store.player.traded_million = true;
-
+    if game_store.game.is_ranked() {
         let bushido_store = BushidoStoreTrait::new(store.world);
-        bushido_store
-            .progress(
-                game_store.game.player_id.into(), Tasks::DEALER, 1, starknet::get_block_timestamp(),
-            );
+
+        if is_first_sell {
+            bushido_store
+                .progress(
+                    game_store.game.player_id.into(),
+                    Tasks::VOLUME,
+                    total.into(),
+                    starknet::get_block_timestamp(),
+                );
+
+            if tick == MAX_TICK {
+                bushido_store
+                    .progress(
+                        game_store.game.player_id.into(),
+                        Tasks::SELL_HIGH,
+                        1,
+                        starknet::get_block_timestamp(),
+                    );
+            };
+        };
     }
 }

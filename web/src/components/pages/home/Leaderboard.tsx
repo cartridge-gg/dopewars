@@ -16,7 +16,7 @@ import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
 import { Config } from "@/dojo/stores/config";
-import { getGearItemRewards, getPayedCount } from "@/dojo/helpers";
+import { getPayedCount } from "@/dojo/helpers";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 import { hash, shortString, uint256 } from "starknet";
@@ -360,17 +360,21 @@ export const RewardDetails = observer(
 
     return (
       <VStack alignItems="flex-start" p={1} gap={1}>
-        <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center" my={2}> 
+        <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center" my={2}>
           RANK {position} REWARDS
         </Text>
         <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
           <PaperIcon width="24px" height="24px" />
-          <Text ml={2}>{claimable ? formatCash(claimable).replace("$", "") : "???"} Paper</Text>
+          <Text letterSpacing={0} ml={2} fontSize="xs">
+            {claimable ? formatCash(claimable).replace("$", "") : "???"} Paper
+          </Text>
         </HStack>
         {position <= 3 && (
           <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
             <Layer rects={bodies[1].resources[0]} width="24px" height="24px" crop={true} />
-            <Text ml={2}>Naked Hustler</Text>
+            <Text letterSpacing={0} ml={2} fontSize="xs">
+              Naked Hustler
+            </Text>
           </HStack>
         )}
 
@@ -378,7 +382,17 @@ export const RewardDetails = observer(
           return (
             <HStack w="full" key={`${item.id}-${item.component_id}`} borderBottom="solid 1px" borderColor="neon.700">
               <Layer rects={item.resources[0]} width="24px" height="24px" crop={true} />
-              <Text ml={2} fontSize="xs" textOverflow="clip" whiteSpace="nowrap" overflow="hidden" w="250px">{item.value}</Text>
+              <Text
+                letterSpacing={0}
+                ml={2}
+                fontSize="xs"
+                textOverflow="clip"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                w="250px"
+              >
+                {item.value}
+              </Text>
             </HStack>
           );
         })}

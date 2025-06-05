@@ -1,9 +1,9 @@
 use dojo::meta::introspect::Introspect;
 
 use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}},
-    packing::game_store::{GameMode}, packing::game_store::{GameStore, GameStoreImpl},
-    systems::helpers::{shopping, trading}, models::game::TokenId
+    config::{hustlers::{ItemSlot}, locations::{Locations}}, packing::game_store::{GameMode},
+    packing::game_store::{GameStore, GameStoreImpl}, systems::helpers::{shopping, trading},
+    models::game::TokenId,
 };
 use starknet::ContractAddress;
 
@@ -23,11 +23,7 @@ pub enum EncounterActions {
 #[starknet::interface]
 trait IGameActions<T> {
     fn create_game(
-        self: @T,
-        game_mode: GameMode,
-        player_name: felt252,
-        multiplier: u8,
-        token_id: TokenId,
+        self: @T, game_mode: GameMode, player_name: felt252, multiplier: u8, token_id: TokenId,
     );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
@@ -49,25 +45,30 @@ mod game {
         },
         constants::{ETHER}, events::{GameCreated}, helpers::season_manager::{SeasonManagerTrait},
         interfaces::{
-            dope_hustlers::{IDopeHustlersDispatcher, IDopeHustlersDispatcherTrait},
             erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait},
             paper::{IPaperDispatcher, IPaperDispatcherTrait},
         },
         models::{
-            game::{Game, GameImpl, TokenId},
-            game_store_packed::GameStorePacked,
-            season::{Season},
+            game::{Game, GameImpl, TokenId}, game_store_packed::GameStorePacked, season::{Season},
         },
         packing::{game_store::{GameMode, GameStore, GameStoreImpl}, player::{Player, PlayerImpl}},
         store::{Store, StoreImpl, StoreTrait},
         systems::{
             game::EncounterActions,
-            helpers::{game_loop, shopping, trading // , traveling, traveling::EncounterOutcomes
+            helpers::{
+                game_loop, shopping, trading,
+                trading::{TradeDirection} // , traveling, traveling::EncounterOutcomes
             },
         },
         utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
     };
+    use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+    use rollyourown::achievements::achievements_v1::Tasks;
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
+
+    use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlotOption, HustlerSlots};
+
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
@@ -152,22 +153,33 @@ mod game {
                     let erc721_dispatcher = IERC721ABIDispatcher {
                         contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
                     };
-                    let dope_hustlers_dispatcher = IDopeHustlersDispatcher {
-                        contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
-                    };
-
-                    game_created
-                        .hustler_equipment = dope_hustlers_dispatcher
-                        .hustler_equipment(hustler_id.into());
-
-                    game_created
-                        .hustler_body = dope_hustlers_dispatcher
-                        .hustler_body(hustler_id.into());
 
                     assert(
                         player_id == erc721_dispatcher.owner_of(hustler_id.into()),
                         'caller is not hustler owner',
                     );
+
+                    let mut hustler_store = HustlerStoreImpl::new(dope_world);
+
+                    game_created
+                        .hustler_equipment = hustler_store
+                        .hustler_slot_full(hustler_id.into());
+
+                    game_created.hustler_body = hustler_store.hustler_body_full(hustler_id.into());
+
+                    let accessory = hustler_store
+                        .hustler_slot(hustler_id.into(), HustlerSlots::Accessory);
+
+                    let bushido_store = BushidoStoreTrait::new(world);
+                    if accessory.gear_item_id.is_some() {
+                        bushido_store
+                            .progress(
+                                player_id.into(),
+                                Tasks::ELEGANT,
+                                1,
+                                starknet::get_block_timestamp(),
+                            );
+                    };
                 },
             };
 
@@ -188,9 +200,7 @@ mod game {
             store.set_game(@game);
 
             // create & save GameStorePacked
-            let game_store = GameStoreImpl::new(
-                store, ref game, ref game_config, ref randomizer,
-            );
+            let game_store = GameStoreImpl::new(store, ref game, ref game_config, ref randomizer);
             game_store.save();
 
             // emit GameCreated
@@ -277,11 +287,21 @@ mod game {
             self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>,
         ) {
             let mut has_shopped = false;
+            let mut is_first_sell = true;
+            let mut is_first_buy = true;
 
             while let Option::Some(action) = actions.pop_front() {
                 match action {
                     super::Actions::Trade(trade_action) => {
-                        trading::execute_trade(ref game_store, *trade_action);
+                        trading::execute_trade(
+                            ref game_store, *trade_action, is_first_sell, is_first_buy,
+                        );
+                        if *trade_action.direction == TradeDirection::Sell {
+                            is_first_sell = false;
+                        };
+                        if *trade_action.direction == TradeDirection::Buy {
+                            is_first_sell = false;
+                        };
                     },
                     super::Actions::Shop(shop_action) => {
                         assert(has_shopped == false, 'one upgrade by turn');

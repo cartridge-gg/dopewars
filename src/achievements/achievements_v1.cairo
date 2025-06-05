@@ -1,4 +1,3 @@
-
 use achievement::store::{Store, StoreTrait};
 use achievement::types::task::{Task as AchievementTask, TaskTrait as AchievementTaskTrait};
 use dojo::world::WorldStorage;
@@ -18,18 +17,23 @@ pub struct Achievement {
 
 pub mod Tasks {
     pub const BRAWLER_C: felt252 = 'BRAWLER_C';
-pub const BRAWLER_G: felt252 = 'BRAWLER_G';
-pub const COPS: felt252 = 'COPS';
-pub const DEALER: felt252 = 'DEALER';
-pub const ESCAPE: felt252 = 'ESCAPE';
-pub const FAMOUS: felt252 = 'FAMOUS';
-pub const GANGS: felt252 = 'GANGS';
-pub const HUSTLER: felt252 = 'HUSTLER';
-pub const JAILBIRD: felt252 = 'JAILBIRD';
-pub const KINGPIN: felt252 = 'KINGPIN';
-pub const LAUNDERER: felt252 = 'LAUNDERER';
-pub const RIP: felt252 = 'RIP';
-pub const STUFFED: felt252 = 'STUFFED';
+    pub const BRAWLER_G: felt252 = 'BRAWLER_G';
+    pub const FAMOUS: felt252 = 'FAMOUS';
+    pub const KINGPIN: felt252 = 'KINGPIN';
+    pub const STUFFED: felt252 = 'STUFFED';
+    pub const BUY_LOW: felt252 = 'BUY_LOW';
+    pub const SELL_HIGH: felt252 = 'SELL_HIGH';
+    pub const VOLUME: felt252 = 'VOLUME';
+    pub const HIGH_STAKES: felt252 = 'HIGH_STAKES';
+    pub const PAPER: felt252 = 'PAPER';
+    pub const GEAR_FROM: felt252 = 'GEAR_FROM';
+    pub const SURVIVOR: felt252 = 'SURVIVOR';
+    pub const ENCOUNTER: felt252 = 'ENCOUNTER';
+    pub const ELEGANT: felt252 = 'ELEGANT';
+    pub const FULL_EARLY: felt252 = 'FULL_EARLY';
+    pub const FULL_MID: felt252 = 'FULL_MID';
+    pub const FULL_LATE: felt252 = 'FULL_LATE';
+    pub const OG: felt252 = 'OG';
 }
 
 #[generate_trait]
@@ -55,46 +59,54 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
     fn declare_all(mut world: WorldStorage) {
-        let mut achievements: Array<Achievement> = array![Self::brawler(),
-Self::cops_1(),
-Self::cops_2(),
-Self::cops_3(),
-Self::dealer_1(),
-Self::dealer_2(),
-Self::dealer_3(),
-Self::escape_1(),
-Self::escape_2(),
-Self::escape_3(),
-Self::famous(),
-Self::gangs_1(),
-Self::gangs_2(),
-Self::gangs_3(),
-Self::hustler_1(),
-Self::hustler_2(),
-Self::hustler_3(),
-Self::jailbird_1(),
-Self::jailbird_2(),
-Self::jailbird_3(),
-Self::kingpin(),
-Self::launderer(),
-Self::rip(),
-Self::stuffed(),];
+        let mut achievements: Array<Achievement> = array![
+            Self::brawler(),
+            Self::famous(),
+            Self::kingpin(),
+            Self::stuffed(),
+            Self::blsh_1(),
+            Self::blsh_2(),
+            Self::blsh_3(),
+            Self::volume_1(),
+            Self::volume_2(),
+            Self::volume_3(),
+            Self::highstakes_1(),
+            Self::highstakes_2(),
+            Self::highstakes_3(),
+            Self::paper_1(),
+            Self::paper_2(),
+            Self::paper_3(),
+            Self::gear_from(),
+            Self::survivor(),
+            Self::encounters_1(),
+            Self::encounters_2(),
+            Self::encounters_3(),
+            Self::elegant(),
+            Self::full_early(),
+            Self::full_mid(),
+            Self::full_late(),
+            Self::og(),
+        ];
         while let Option::Some(achievement) = achievements.pop_front() {
             achievement.declare(world);
         }
     }
 
-    fn progress(world: WorldStorage, player_id: felt252, task_id: felt252, count: u32, time: u64) {
+    fn progress(world: WorldStorage, player_id: felt252, task_id: felt252, count: u128, time: u64) {
         let store: Store = StoreTrait::new(world);
         store.progress(player_id: player_id, task_id: task_id, count: count, time: time)
     }
 
-    
-      #[inline]
+
+    #[inline]
     fn brawler() -> Achievement {
         let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::BRAWLER_C, total: 1, description: "Defeat a max level Cop", ),
-AchievementTaskTrait::new( id: Tasks::BRAWLER_G, total: 1, description: "Defeat a max level Gang", ),
+            AchievementTaskTrait::new(
+                id: Tasks::BRAWLER_C, total: 1, description: "Defeat a max level Cop",
+            ),
+            AchievementTaskTrait::new(
+                id: Tasks::BRAWLER_G, total: 1, description: "Defeat a max level Gang",
+            ),
         ];
         Achievement {
             id: 'BRAWLER',
@@ -108,189 +120,20 @@ AchievementTaskTrait::new( id: Tasks::BRAWLER_G, total: 1, description: "Defeat 
             tasks: tasks.span(),
         }
     }
-      
 
-      #[inline]
-    fn cops_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::COPS, total: 10, description: "Defeat 10 Cops", ),
-        ];
-        Achievement {
-            id: 'COPS_1',
-            hidden: false,
-            index: 0,
-            points: 10,
-            group: 'Encounters',
-            icon: 'fa-user-police',
-            title: 'Patrol Buster',
-            description: "When the streets talk back, the law listens",
-            tasks: tasks.span(),
-        }
-    }
-      
 
-      #[inline]
-    fn cops_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::COPS, total: 100, description: "Defeat 100 Cops", ),
-        ];
-        Achievement {
-            id: 'COPS_2',
-            hidden: false,
-            index: 1,
-            points: 25,
-            group: 'Encounters',
-            icon: 'fa-siren',
-            title: 'Precinct Nightmare',
-            description: "When the streets talk back, the law listens",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn cops_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::COPS, total: 500, description: "Defeat 500 Cops", ),
-        ];
-        Achievement {
-            id: 'COPS_3',
-            hidden: false,
-            index: 2,
-            points: 50,
-            group: 'Encounters',
-            icon: 'fa-helicopter',
-            title: 'Five-O Reaper',
-            description: "When the streets talk back, the law listens",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn dealer_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::DEALER, total: 100, description: "Make 100 deals worth over a million", ),
-        ];
-        Achievement {
-            id: 'DEALER_1',
-            hidden: false,
-            index: 0,
-            points: 10,
-            group: 'Dealer',
-            icon: 'fa-tablets',
-            title: 'Operator',
-            description: "Only drug dealers and software companies call their customers 'users'",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn dealer_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::DEALER, total: 200, description: "Make 200 deals worth over a million", ),
-        ];
-        Achievement {
-            id: 'DEALER_2',
-            hidden: false,
-            index: 1,
-            points: 30,
-            group: 'Dealer',
-            icon: 'fa-capsules',
-            title: 'Broker',
-            description: "Only drug dealers and software companies call their customers 'users'",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn dealer_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::DEALER, total: 500, description: "Make 500 deals worth over a million", ),
-        ];
-        Achievement {
-            id: 'DEALER_3',
-            hidden: false,
-            index: 2,
-            points: 75,
-            group: 'Dealer',
-            icon: 'fa-bong',
-            title: 'Cartel',
-            description: "Only drug dealers and software companies call their customers 'users'",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn escape_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::ESCAPE, total: 10, description: "Escape Cops or Gangs 10 times", ),
-        ];
-        Achievement {
-            id: 'ESCAPE_1',
-            hidden: false,
-            index: 0,
-            points: 10,
-            group: 'Escape',
-            icon: 'fa-person-running-fast',
-            title: 'Quickstep',
-            description: "It's not outrunning them, it's outsmarting them.",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn escape_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::ESCAPE, total: 20, description: "Escape Cops or Gangs 20 times", ),
-        ];
-        Achievement {
-            id: 'ESCAPE_2',
-            hidden: false,
-            index: 1,
-            points: 25,
-            group: 'Escape',
-            icon: 'fa-motorcycle',
-            title: 'Shadow',
-            description: "It's not outrunning them, it's outsmarting them.",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn escape_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::ESCAPE, total: 50, description: "Escape Cops or Gangs 50 times", ),
-        ];
-        Achievement {
-            id: 'ESCAPE_3',
-            hidden: false,
-            index: 2,
-            points: 50,
-            group: 'Escape',
-            icon: 'fa-snake',
-            title: 'Eel',
-            description: "It's not outrunning them, it's outsmarting them.",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
+    #[inline]
     fn famous() -> Achievement {
         let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::FAMOUS, total: 1, description: "End a game with max reputation", ),
+            AchievementTaskTrait::new(
+                id: Tasks::FAMOUS, total: 1, description: "End a game with max reputation",
+            ),
         ];
         Achievement {
             id: 'FAMOUS',
             hidden: false,
             index: 0,
-            points: 80,
+            points: 50,
             group: 'Notorious',
             icon: 'fa-joint',
             title: 'Notorious',
@@ -298,189 +141,20 @@ AchievementTaskTrait::new( id: Tasks::BRAWLER_G, total: 1, description: "Defeat 
             tasks: tasks.span(),
         }
     }
-      
 
-      #[inline]
-    fn gangs_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::GANGS, total: 10, description: "Defeat 10 Gangs", ),
-        ];
-        Achievement {
-            id: 'GANGS_1',
-            hidden: false,
-            index: 0,
-            points: 10,
-            group: 'Encounters',
-            icon: 'fa-hand-back-fist',
-            title: 'Turf Taker',
-            description: "Your rep is your currency and every shot fired is an investment",
-            tasks: tasks.span(),
-        }
-    }
-      
 
-      #[inline]
-    fn gangs_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::GANGS, total: 100, description: "Defeat 100 Gangs", ),
-        ];
-        Achievement {
-            id: 'GANGS_2',
-            hidden: false,
-            index: 1,
-            points: 25,
-            group: 'Encounters',
-            icon: 'fa-knife-kitchen',
-            title: 'Block Boss',
-            description: "Your rep is your currency and every shot fired is an investment",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn gangs_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::GANGS, total: 500, description: "Defeat 500 Gangs", ),
-        ];
-        Achievement {
-            id: 'GANGS_3',
-            hidden: false,
-            index: 2,
-            points: 50,
-            group: 'Encounters',
-            icon: 'fa-gun',
-            title: 'Syndicate Slayer',
-            description: "Your rep is your currency and every shot fired is an investment",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn hustler_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::HUSTLER, total: 10, description: "Play 10 ranked games", ),
-        ];
-        Achievement {
-            id: 'HUSTLER_1',
-            hidden: false,
-            index: 0,
-            points: 20,
-            group: 'Block Ambition',
-            icon: 'fa-head-side-mask',
-            title: 'Slinger',
-            description: "It's not about becoming someone. It's about becoming someone they can't ignore",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn hustler_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::HUSTLER, total: 50, description: "Play 50 ranked games", ),
-        ];
-        Achievement {
-            id: 'HUSTLER_2',
-            hidden: false,
-            index: 1,
-            points: 50,
-            group: 'Block Ambition',
-            icon: 'fa-user-hoodie',
-            title: 'Hustler',
-            description: "It's not about becoming someone. It's about becoming someone they can't ignore",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn hustler_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::HUSTLER, total: 100, description: "Play 100 ranked games", ),
-        ];
-        Achievement {
-            id: 'HUSTLER_3',
-            hidden: false,
-            index: 2,
-            points: 75,
-            group: 'Block Ambition',
-            icon: 'fa-luchador-mask',
-            title: 'OG',
-            description: "It's not about becoming someone. It's about becoming someone they can't ignore",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn jailbird_1() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::JAILBIRD, total: 1, description: "Get jailed once", ),
-        ];
-        Achievement {
-            id: 'JAILBIRD_1',
-            hidden: true,
-            index: 0,
-            points: 10,
-            group: 'Jailbird',
-            icon: 'fa-hands-bound',
-            title: 'Outlaw',
-            description: "The walls have ears, and they've heard enough",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn jailbird_2() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::JAILBIRD, total: 3, description: "Get jailed 3 times", ),
-        ];
-        Achievement {
-            id: 'JAILBIRD_2',
-            hidden: true,
-            index: 1,
-            points: 25,
-            group: 'Jailbird',
-            icon: 'fa-handcuffs',
-            title: 'Criminal',
-            description: "The walls have ears, and they've heard enough",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
-    fn jailbird_3() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::JAILBIRD, total: 1, description: "Get jailed 10 times", ),
-        ];
-        Achievement {
-            id: 'JAILBIRD_3',
-            hidden: true,
-            index: 2,
-            points: 50,
-            group: 'Jailbird',
-            icon: 'fa-dungeon',
-            title: 'Jailbird',
-            description: "The walls have ears, and they've heard enough",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
+    #[inline]
     fn kingpin() -> Achievement {
         let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::KINGPIN, total: 1, description: "Win a season of Dopewars", ),
+            AchievementTaskTrait::new(
+                id: Tasks::KINGPIN, total: 1, description: "Win a season of Dopewars",
+            ),
         ];
         Achievement {
             id: 'KINGPIN',
             hidden: false,
             index: 0,
-            points: 100,
+            points: 80,
             group: 'Domination',
             icon: 'fa-crown',
             title: 'Kingpin',
@@ -488,56 +162,20 @@ AchievementTaskTrait::new( id: Tasks::BRAWLER_G, total: 1, description: "Defeat 
             tasks: tasks.span(),
         }
     }
-      
 
-      #[inline]
-    fn launderer() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::LAUNDERER, total: 1, description: "Launder the results at the end of a season.", ),
-        ];
-        Achievement {
-            id: 'LAUNDERER',
-            hidden: true,
-            index: 0,
-            points: 50,
-            group: 'Launderer',
-            icon: 'fa-washing-machine',
-            title: 'The Cleaner',
-            description: "Mixing the dirt with the dough",
-            tasks: tasks.span(),
-        }
-    }
-      
 
-      #[inline]
-    fn rip() -> Achievement {
-        let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::RIP, total: 1, description: "Die", ),
-        ];
-        Achievement {
-            id: 'RIP',
-            hidden: true,
-            index: 0,
-            points: 10,
-            group: 'Rip',
-            icon: 'fa-skull-crossbones',
-            title: 'Flatliner',
-            description: "We all got a number, and it's not the one you dial",
-            tasks: tasks.span(),
-        }
-    }
-      
-
-      #[inline]
+    #[inline]
     fn stuffed() -> Achievement {
         let tasks: Array<AchievementTask> = array![
-            AchievementTaskTrait::new( id: Tasks::STUFFED, total: 1, description: "Max out equipment", ),
+            AchievementTaskTrait::new(
+                id: Tasks::STUFFED, total: 1, description: "Max out equipment",
+            ),
         ];
         Achievement {
             id: 'STUFFED',
             hidden: true,
             index: 0,
-            points: 80,
+            points: 50,
             group: 'Fully Loaded',
             icon: 'fa-user-ninja',
             title: 'Fully Loaded',
@@ -545,5 +183,495 @@ AchievementTaskTrait::new( id: Tasks::BRAWLER_G, total: 1, description: "Defeat 
             tasks: tasks.span(),
         }
     }
-      
+
+
+    #[inline]
+    fn blsh_1() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::BUY_LOW,
+                total: 20,
+                description: "Buy drugs at the lowest price 20 times",
+            ),
+            AchievementTaskTrait::new(
+                id: Tasks::SELL_HIGH,
+                total: 20,
+                description: "Sell drugs at the highest price 20 times",
+            ),
+        ];
+        Achievement {
+            id: 'BLSH_1',
+            hidden: false,
+            index: 0,
+            points: 10,
+            group: 'Dealer',
+            icon: '',
+            title: 'BLSH 1',
+            description: "buy low, sell high, profit",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn blsh_2() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::BUY_LOW,
+                total: 100,
+                description: "Buy drugs at the lowest price 100 times",
+            ),
+            AchievementTaskTrait::new(
+                id: Tasks::SELL_HIGH,
+                total: 100,
+                description: "Sell drugs at the highest price 100 times",
+            ),
+        ];
+        Achievement {
+            id: 'BLSH_2',
+            hidden: false,
+            index: 1,
+            points: 30,
+            group: 'Dealer',
+            icon: '',
+            title: 'BLSH 2',
+            description: "buy low, sell high, profit",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn blsh_3() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::BUY_LOW,
+                total: 500,
+                description: "Buy drugs at the lowest price 500 times",
+            ),
+            AchievementTaskTrait::new(
+                id: Tasks::SELL_HIGH,
+                total: 500,
+                description: "Sell drugs at the highest price 500 times",
+            ),
+        ];
+        Achievement {
+            id: 'BLSH_3',
+            hidden: false,
+            index: 2,
+            points: 80,
+            group: 'Dealer',
+            icon: '',
+            title: 'BLSH 3',
+            description: "buy low, sell high, profit",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn volume_1() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::VOLUME, total: 69000000, description: "Sell drugs for 69 Millions",
+            ),
+        ];
+        Achievement {
+            id: 'VOLUME_1',
+            hidden: false,
+            index: 0,
+            points: 10,
+            group: 'Dealer',
+            icon: 'fa-tablets',
+            title: 'Operator',
+            description: "trading volume",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn volume_2() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::VOLUME, total: 420000000, description: "Sell drugs for 420 Millions",
+            ),
+        ];
+        Achievement {
+            id: 'VOLUME_2',
+            hidden: false,
+            index: 1,
+            points: 30,
+            group: 'Dealer',
+            icon: 'fa-capsules',
+            title: 'Broker',
+            description: "trading volume",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn volume_3() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::VOLUME, total: 69000000000, description: "Sell drugs for 69 Billions",
+            ),
+        ];
+        Achievement {
+            id: 'VOLUME_3',
+            hidden: false,
+            index: 2,
+            points: 75,
+            group: 'Dealer',
+            icon: 'fa-bong',
+            title: 'Cartel',
+            description: "trading volume",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn highstakes_1() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::HIGH_STAKES,
+                total: 5,
+                description: "Play 5 games with max stake multiplier",
+            ),
+        ];
+        Achievement {
+            id: 'HIGHSTAKES_1',
+            hidden: false,
+            index: 0,
+            points: 10,
+            group: 'Gambler',
+            icon: '',
+            title: 'Gambler 1',
+            description: "play games with max stake multiplier",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn highstakes_2() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::HIGH_STAKES,
+                total: 25,
+                description: "Play 25 games with max stake multiplier",
+            ),
+        ];
+        Achievement {
+            id: 'HIGHSTAKES_2',
+            hidden: false,
+            index: 1,
+            points: 30,
+            group: 'Gambler',
+            icon: '',
+            title: 'Gambler 2',
+            description: "play games with max stake multiplier",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn highstakes_3() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::HIGH_STAKES,
+                total: 100,
+                description: "Play 100 games with max stake multiplier",
+            ),
+        ];
+        Achievement {
+            id: 'HIGHSTAKES_3',
+            hidden: false,
+            index: 2,
+            points: 80,
+            group: 'Gambler',
+            icon: '',
+            title: 'Gambler 3',
+            description: "play games with max stake multiplier",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn paper_1() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::PAPER, total: 100000, description: "Claim 69.000 $PAPER",
+            ),
+        ];
+        Achievement {
+            id: 'PAPER_1',
+            hidden: false,
+            index: 0,
+            points: 10,
+            group: 'Launderer',
+            icon: '',
+            title: 'paper1',
+            description: "amount of paper claimed as reward",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn paper_2() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::PAPER, total: 420000, description: "Claim 420.000 $PAPER",
+            ),
+        ];
+        Achievement {
+            id: 'PAPER_2',
+            hidden: false,
+            index: 1,
+            points: 30,
+            group: 'Launderer',
+            icon: '',
+            title: 'paper2',
+            description: "amount of paper claimed as reward",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn paper_3() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::PAPER, total: 1000000, description: "Claim 1.000.000 $PAPER",
+            ),
+        ];
+        Achievement {
+            id: 'PAPER_3',
+            hidden: false,
+            index: 2,
+            points: 80,
+            group: 'Launderer',
+            icon: '',
+            title: 'paper3',
+            description: "amount of paper claimed as reward",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn gear_from() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::GEAR_FROM,
+                total: 1,
+                description: "Play a game with a set of items from XXX",
+            ),
+        ];
+        Achievement {
+            id: 'GEAR_FROM',
+            hidden: true,
+            index: 0,
+            points: 25,
+            group: 'Represents',
+            icon: '',
+            title: 'gear from',
+            description: "Always remind where you come from.",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn survivor() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::SURVIVOR, total: 1, description: "End a game with 1hp",
+            ),
+        ];
+        Achievement {
+            id: 'SURVIVOR',
+            hidden: true,
+            index: 0,
+            points: 10,
+            group: 'Survivor',
+            icon: '',
+            title: 'Survivor',
+            description: "end a game with 1hp",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn encounters_1() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::ENCOUNTER, total: 100, description: "Defeat 100 Cops or Gangs",
+            ),
+        ];
+        Achievement {
+            id: 'ENCOUNTERS_1',
+            hidden: false,
+            index: 0,
+            points: 10,
+            group: 'Encounters',
+            icon: '',
+            title: 'encounters 1',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn encounters_2() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::ENCOUNTER, total: 500, description: "Defeat 500 Cops or Gangs",
+            ),
+        ];
+        Achievement {
+            id: 'ENCOUNTERS_2',
+            hidden: false,
+            index: 1,
+            points: 30,
+            group: 'Encounters',
+            icon: '',
+            title: 'encounters 2',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn encounters_3() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::ENCOUNTER, total: 1000, description: "Defeat 1000 Cops or Gangs",
+            ),
+        ];
+        Achievement {
+            id: 'ENCOUNTERS_3',
+            hidden: false,
+            index: 2,
+            points: 80,
+            group: 'Encounters',
+            icon: '',
+            title: 'encounters 3',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn elegant() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::ELEGANT, total: 1, description: "Start a game with an accessory",
+            ),
+        ];
+        Achievement {
+            id: 'ELEGANT',
+            hidden: true,
+            index: 0,
+            points: 25,
+            group: 'Elegant',
+            icon: '',
+            title: 'elegant',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn full_early() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::FULL_EARLY, total: 5, description: "Play 5 games with full early items",
+            ),
+        ];
+        Achievement {
+            id: 'FULL_EARLY',
+            hidden: true,
+            index: 0,
+            points: 20,
+            group: 'Strategist',
+            icon: '',
+            title: 'full early',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn full_mid() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::FULL_MID, total: 5, description: "Play 5 games with full mid items",
+            ),
+        ];
+        Achievement {
+            id: 'FULL_MID',
+            hidden: true,
+            index: 1,
+            points: 20,
+            group: 'Strategist',
+            icon: '',
+            title: 'full mid',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn full_late() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::FULL_LATE, total: 5, description: "Play 5 games with full late items",
+            ),
+        ];
+        Achievement {
+            id: 'FULL_LATE',
+            hidden: true,
+            index: 2,
+            points: 20,
+            group: 'Strategist',
+            icon: '',
+            title: 'full late',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
+
+
+    #[inline]
+    fn og() -> Achievement {
+        let tasks: Array<AchievementTask> = array![
+            AchievementTaskTrait::new(
+                id: Tasks::OG, total: 1, description: "Play a game with an OG",
+            ),
+        ];
+        Achievement {
+            id: 'OG',
+            hidden: true,
+            index: 0,
+            points: 25,
+            group: 'OG',
+            icon: '',
+            title: 'Original Gangsta',
+            description: "description",
+            tasks: tasks.span(),
+        }
+    }
 }

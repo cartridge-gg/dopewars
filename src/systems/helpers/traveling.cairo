@@ -2,28 +2,27 @@ use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait}
 use dojo::event::EventStorage;
 use dojo::meta::introspect::Introspect;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::achievements::achievements_v0::Tasks;
+use rollyourown::achievements::achievements_v1::Tasks;
 
 use rollyourown::{
     models::game::{Game, GameMode, GameTrait},
     utils::{
         random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImpl, MathImplU8},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl}
+        events::{RawEventEmitterTrait, RawEventEmitterImpl},
     },
     config::{
-        hustlers::{ItemSlot},
-        locations::{Locations, LocationsRandomizableImpl},
+        hustlers::{ItemSlot}, locations::{Locations, LocationsRandomizableImpl},
         encounters::{Encounters, EncounterSpawnerImpl, EncounterConfig, EncounterImpl},
-        game::{GameConfig}, settings::{SeasonSettings}
+        game::{GameConfig}, settings::{SeasonSettings},
     },
     packing::{
         game_store::{GameStore, GameStoreImpl, GameStoreTrait}, player::{PlayerImpl, PlayerStatus},
         wanted_packed::{WantedPacked, WantedPackedImpl},
         items_packed::{ItemsPackedImpl, ItemsPackedTrait},
-        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait}
+        drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked, DrugsPackedTrait},
     },
-    systems::game::{EncounterActions,}, store::{Store, StoreImpl, StoreTrait},
-    events::{TravelEncounter, TravelEncounterResult}
+    systems::game::{EncounterActions}, store::{Store, StoreImpl, StoreTrait},
+    events::{TravelEncounter, TravelEncounterResult},
 };
 
 
@@ -90,7 +89,7 @@ impl EncounterOutcomesIntoU8 of Into<EncounterOutcomes, u8> {
 
 // -> (is_dead, has_encounter)
 fn on_travel(
-    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
+    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random,
 ) -> (bool, bool) {
     let has_encounter = match game_store.game.game_mode {
         GameMode::Ranked |
@@ -99,7 +98,7 @@ fn on_travel(
             let wanted_risk = game_store.get_wanted_risk(game_store.player.next_location);
             randomizer.occurs(wanted_risk)
         },
-        GameMode::Warrior => { true }
+        GameMode::Warrior => { true },
     };
 
     if has_encounter {
@@ -128,7 +127,7 @@ fn on_travel(
                     speed: encounter.speed,
                     demand_pct: encounter.get_demand_pct(ref game_store),
                     payout: encounter.get_payout(ref game_store),
-                }
+                },
             );
 
         (game_store.player.is_dead(), true)
@@ -145,7 +144,7 @@ fn decide(
     ref game_store: GameStore,
     ref season_settings: SeasonSettings,
     ref randomizer: Random,
-    action: EncounterActions
+    action: EncounterActions,
 ) -> bool {
     // get encounter
     let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store, ref season_settings);
@@ -181,26 +180,20 @@ fn decide(
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
         let player_id: felt252 = game_store.game.player_id.into();
 
-        if result.outcome == EncounterOutcomes::Jailed {
-            bushido_store.progress(player_id, Tasks::JAILBIRD, 1, starknet::get_block_timestamp());
-        } else if result.outcome == EncounterOutcomes::Died {
-            bushido_store.progress(player_id, Tasks::RIP, 1, starknet::get_block_timestamp());
-        } else if result.outcome == EncounterOutcomes::Escaped {
-            bushido_store.progress(player_id, Tasks::ESCAPE, 1, starknet::get_block_timestamp());
-        } else if result.outcome == EncounterOutcomes::Victorious {
-            if encounter.encounter == Encounters::Cops {
-                bushido_store.progress(player_id, Tasks::COPS, 1, starknet::get_block_timestamp());
+        if result.outcome == EncounterOutcomes::Victorious {
+            bushido_store.progress(player_id, Tasks::ENCOUNTER, 1, starknet::get_block_timestamp());
 
+            if encounter.encounter == Encounters::Cops {
                 if encounter.level == 6 {
-                    bushido_store.progress(player_id, Tasks::BRAWLER_C, 1, starknet::get_block_timestamp());
+                    bushido_store
+                        .progress(player_id, Tasks::BRAWLER_C, 1, starknet::get_block_timestamp());
                 }
             }
 
             if encounter.encounter == Encounters::Gang {
-                bushido_store.progress(player_id, Tasks::GANGS, 1, starknet::get_block_timestamp());
-
                 if encounter.level == 6 {
-                    bushido_store.progress(player_id, Tasks::BRAWLER_G, 1, starknet::get_block_timestamp());
+                    bushido_store
+                        .progress(player_id, Tasks::BRAWLER_G, 1, starknet::get_block_timestamp());
                 }
             }
         }
@@ -212,7 +205,6 @@ fn decide(
     }
 
     game_store.player.is_dead()
-    // game_store
 }
 
 //
@@ -220,7 +212,7 @@ fn decide(
 //
 
 fn create_travel_encounter_result(
-    ref game_store: GameStore, action: EncounterActions
+    ref game_store: GameStore, action: EncounterActions,
 ) -> TravelEncounterResult {
     TravelEncounterResult {
         game_id: game_store.game.game_id,
@@ -247,10 +239,10 @@ fn create_travel_encounter_result(
 //
 
 fn on_pay(
-    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
+    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig,
 ) -> TravelEncounterResult {
     let mut result: TravelEncounterResult = create_travel_encounter_result(
-        ref game_store, EncounterActions::Pay
+        ref game_store, EncounterActions::Pay,
     );
 
     result.outcome = EncounterOutcomes::Paid;
@@ -305,7 +297,7 @@ fn on_pay(
 //
 
 fn on_run(
-    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
+    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig,
 ) -> TravelEncounterResult {
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Run);
 
@@ -326,7 +318,7 @@ fn on_run(
 
         if is_captured {
             let encounter_win_result = ResolutionImpl::encounter_race_win(
-                ref game_store, ref encounter, ref randomizer, ref drug_unpacked
+                ref game_store, ref encounter, ref randomizer, ref drug_unpacked,
             );
 
             result
@@ -381,7 +373,7 @@ fn on_run(
                             result.rep_neg += encounter.rep_run;
 
                             EncounterOutcomes::Hospitalized
-                        }
+                        },
                     }
                 }
             };
@@ -394,7 +386,7 @@ fn on_run(
 //
 
 fn on_fight(
-    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig
+    ref game_store: GameStore, ref randomizer: Random, ref encounter: EncounterConfig,
 ) -> TravelEncounterResult {
     let mut result = create_travel_encounter_result(ref game_store, EncounterActions::Fight);
 
@@ -407,7 +399,7 @@ fn on_fight(
         match initiator {
             Fighters::Hustler => {
                 let hustler_result = ResolutionImpl::hustler_attack(
-                    ref game_store, ref encounter, ref randomizer
+                    ref game_store, ref encounter, ref randomizer,
                 );
                 result.dmg_dealt.append((hustler_result.dmg_dealt, hustler_result.dmg_shield));
                 if hustler_result.killed {
@@ -415,7 +407,7 @@ fn on_fight(
                 }
 
                 let encounter_result = ResolutionImpl::encounter_attack(
-                    ref game_store, ref encounter, ref randomizer
+                    ref game_store, ref encounter, ref randomizer,
                 );
                 result.dmg_taken.append((encounter_result.dmg_dealt, encounter_result.dmg_shield));
                 if encounter_result.killed {
@@ -424,7 +416,7 @@ fn on_fight(
             },
             Fighters::Encounter => {
                 let encounter_result = ResolutionImpl::encounter_attack(
-                    ref game_store, ref encounter, ref randomizer
+                    ref game_store, ref encounter, ref randomizer,
                 );
                 result.dmg_taken.append((encounter_result.dmg_dealt, encounter_result.dmg_shield));
                 if encounter_result.killed {
@@ -432,7 +424,7 @@ fn on_fight(
                 }
 
                 let hustler_result = ResolutionImpl::hustler_attack(
-                    ref game_store, ref encounter, ref randomizer
+                    ref game_store, ref encounter, ref randomizer,
                 );
                 result.dmg_dealt.append((hustler_result.dmg_dealt, hustler_result.dmg_shield));
                 if hustler_result.killed {
@@ -509,7 +501,7 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn race(
-        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random,
     ) -> RaceResult {
         let rand_player = randomizer.between::<u8>(0, game_store.items.speed());
         let rand_encounter = randomizer.between::<u8>(0, encounter.speed);
@@ -521,10 +513,10 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn hustler_attack(
-        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random,
     ) -> AttackResult {
         let hustler_attack: u8 = Self::plus_or_less_random_pct(
-            game_store.items.attack(), 20, ref randomizer
+            game_store.items.attack(), 20, ref randomizer,
         );
 
         let dmg_shield = hustler_attack.pct(encounter.defense.into());
@@ -537,10 +529,10 @@ impl ResolutionImpl of ResolutionTrait {
     }
 
     fn encounter_attack(
-        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random
+        ref game_store: GameStore, ref encounter: EncounterConfig, ref randomizer: Random,
     ) -> AttackResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
-            encounter.attack, 20, ref randomizer
+            encounter.attack, 20, ref randomizer,
         );
 
         encounter_attack = encounter.attack / 3; // TODO: config ***
@@ -559,10 +551,10 @@ impl ResolutionImpl of ResolutionTrait {
         ref game_store: GameStore,
         ref encounter: EncounterConfig,
         ref randomizer: Random,
-        ref drug_unpacked: DrugsUnpacked
+        ref drug_unpacked: DrugsUnpacked,
     ) -> EncounterRaceWinResult {
         let mut encounter_attack = Self::plus_or_less_random_pct(
-            encounter.attack, 20, ref randomizer
+            encounter.attack, 20, ref randomizer,
         );
 
         encounter_attack = encounter.attack / 5; // TODO: config ***

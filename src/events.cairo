@@ -5,6 +5,8 @@ use rollyourown::systems::game::{EncounterActions};
 use rollyourown::systems::helpers::traveling::{EncounterOutcomes};
 use starknet::ContractAddress;
 
+use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerBody, HustlerSlotOption};
+
 #[derive(Drop, Serde)]
 #[dojo::event]
 pub struct GameCreated {
@@ -16,23 +18,10 @@ pub struct GameCreated {
     pub player_name: felt252,
     pub multiplier: u8,
     pub token_id: TokenId,
-    pub hustler_equipment: Span<HustlerSlot>,
+    pub hustler_equipment: Span<HustlerSlotOption>,
     pub hustler_body: Span<HustlerBody>,
 }
 
-#[derive(Debug, Drop, Serde, Introspect)]
-pub struct HustlerBody {
-    pub token_id: felt252,
-    pub slot: felt252,
-    pub value: u8,
-}
-
-#[derive(Debug, Drop, Serde, Introspect)]
-pub struct HustlerSlot {
-    pub token_id: felt252,
-    pub slot: felt252,
-    pub gear_item_id: Option<u256>,
-}
 
 #[derive(Drop, Serde)]
 #[dojo::event]

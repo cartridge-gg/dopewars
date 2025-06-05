@@ -95,7 +95,7 @@ export class PlayerClass extends GamePropertyClass {
     const hasShop = this.game.pending.find((i) => isShopAction(i));
     if (!hasShop) return this._reputation;
 
-    return Math.min(this._reputation + 1, 100);
+    return Math.min(this._reputation + 3, 100); // should use config instead of hardcoded 3
   }
 
   canBuy(drug: Drugs) {

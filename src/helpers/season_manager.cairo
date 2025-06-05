@@ -6,7 +6,7 @@ use rollyourown::{
         ryo::{RyoConfig, RyoConfigTrait}, ryo_address::{RyoAddress},
         settings::{SeasonSettings, SeasonSettingsImpl, SeasonSettingsTrait},
     },
-    constants::{ETHER}, events::NewHighScore,
+    constants::{ETHER, MAX_MULTIPLIER}, events::NewHighScore,
     interfaces::{
         chips::{IChips, IChipsDispatcher, IChipsDispatcherTrait},
         paper::{IPaperDispatcher, IPaperDispatcherTrait},
@@ -77,7 +77,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         assert(season.can_create_game(), 'not enought time for a game');
 
         // check multiplier
-        assert(multiplier > 0 && multiplier <= 10, 'invalid multiplier');
+        assert(multiplier > 0 && multiplier <= MAX_MULTIPLIER, 'invalid multiplier');
 
         // get paper_fee
         let paper_fee: u32 = season.paper_fee.into() * multiplier.into();

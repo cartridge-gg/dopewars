@@ -64,6 +64,7 @@ export const GlobalEvents = () => {
                   "dopewars-NewHighScore",
                   "dopewars-GameOver",
                   "dope-DopeLootReleasedEvent",
+                  "dopewars-TrophyProgression",
                 ],
                 pattern_matching: "VariableLen",
               },
@@ -177,6 +178,19 @@ export const GlobalEvents = () => {
         message: `#${id} has been released!`,
       });
     }
+
+    // uncomment to check TrophyProgression
+    // if (entity.models["dopewars-TrophyProgression"]) {
+    //   const progression = parseStruct(entity.models["dopewars-TrophyProgression"]);
+    //   progression.task_id = shortString.decodeShortString(progression.task_id);
+    //   progression.count = Number(progression.count);
+    //   if (BigInt(progression.player_id) === accountAddress.current) {
+    //     console.log("TrophyProgression", progression.task_id, progression.count);
+    //   }
+    //   toast({
+    //     message: `TrophyProgression: ${progression.task_id} ${progression.count}`,
+    //   });
+    // }
   };
 
   return null;

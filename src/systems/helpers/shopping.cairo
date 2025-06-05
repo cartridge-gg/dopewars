@@ -1,7 +1,7 @@
 use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::achievements::achievements_v0::Tasks;
+use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{

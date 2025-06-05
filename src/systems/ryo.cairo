@@ -30,7 +30,7 @@ mod ryo {
     use core::traits::Into;
 
     use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
-    use rollyourown::achievements::achievements_v0::AchievementImpl;
+    use rollyourown::achievements::achievements_v1::AchievementImpl;
 
     use rollyourown::{
         config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress}}, constants::{ETHER},
