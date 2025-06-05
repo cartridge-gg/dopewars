@@ -8,8 +8,8 @@ use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
 use rollyourown::{
-    utils::{introspect::{Bytes31IntrospectionImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,}},
-    store::{Store, StoreImpl, StoreTrait}
+    store::{Store, StoreImpl, StoreTrait},
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, introspect::{Bytes31IntrospectionImpl}},
 };
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
@@ -44,7 +44,7 @@ impl LocationsEnumerableImpl of Enumerable<Locations> {
             Locations::Brooklyn,
             Locations::Jersey,
             Locations::Central,
-            Locations::Coney
+            Locations::Coney,
         ]
             .span()
     }
@@ -117,8 +117,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Home,
                 location_id: Locations::Home.into(),
-                name: Bytes16Impl::from('Home')
-            }
+                name: Bytes16Impl::from('Home'),
+            },
         );
 
     store
@@ -127,8 +127,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Queens,
                 location_id: Locations::Queens.into(),
-                name: Bytes16Impl::from('Queens')
-            }
+                name: Bytes16Impl::from('Queens'),
+            },
         );
 
     store
@@ -137,8 +137,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Bronx,
                 location_id: Locations::Bronx.into(),
-                name: Bytes16Impl::from('The Bronx')
-            }
+                name: Bytes16Impl::from('The Bronx'),
+            },
         );
 
     store
@@ -147,8 +147,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Brooklyn,
                 location_id: Locations::Brooklyn.into(),
-                name: Bytes16Impl::from('Brooklyn')
-            }
+                name: Bytes16Impl::from('Brooklyn'),
+            },
         );
 
     store
@@ -157,8 +157,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Jersey,
                 location_id: Locations::Jersey.into(),
-                name: Bytes16Impl::from('Jersey City')
-            }
+                name: Bytes16Impl::from('Jersey City'),
+            },
         );
 
     store
@@ -167,8 +167,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Central,
                 location_id: Locations::Central.into(),
-                name: Bytes16Impl::from('Central Park')
-            }
+                name: Bytes16Impl::from('Central Park'),
+            },
         );
 
     store
@@ -177,8 +177,8 @@ fn initialize_location_config(ref store: Store) {
             @LocationConfig {
                 location: Locations::Coney,
                 location_id: Locations::Coney.into(),
-                name: Bytes16Impl::from('Coney Island')
-            }
+                name: Bytes16Impl::from('Coney Island'),
+            },
         );
 }
 

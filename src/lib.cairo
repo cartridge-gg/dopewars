@@ -76,8 +76,8 @@ pub mod utils {
     pub mod events;
     pub mod introspect;
     pub mod math;
-    pub mod payout_structure;
     pub mod payout_items;
+    pub mod payout_structure;
     pub mod random;
     pub mod sorted_list;
 }

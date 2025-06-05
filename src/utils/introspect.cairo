@@ -1,5 +1,5 @@
 use dojo::meta::Layout;
-use dojo::meta::introspect::{Enum, Member, Ty, Introspect};
+use dojo::meta::introspect::{Enum, Introspect, Member, Ty};
 
 use rollyourown::utils::bytes16::Bytes16;
 

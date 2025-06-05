@@ -1,12 +1,12 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    models::game::{Game, GameImpl, GameMode,},
     config::{drugs::{Drugs}, locations::{Locations, LocationsEnumerableImpl}},
+    models::game::{Game, GameImpl, GameMode},
+    packing::{drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}, game_store::{GameStore}},
     utils::{
-        math::{MathTrait, MathImplU8},
-        bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl}
+        bits::{Bits, BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait},
+        math::{MathImplU8, MathTrait},
     },
-    packing::{game_store::{GameStore}, drugs_packed::{DrugsPacked, DrugsPackedImpl, DrugsUnpacked}}
 };
 use starknet::ContractAddress;
 
@@ -14,7 +14,7 @@ use starknet::ContractAddress;
 // 18 bits : 3 bits x 6 locations
 #[derive(Copy, Drop, Serde)]
 struct WantedPacked {
-    packed: felt252
+    packed: felt252,
 }
 
 

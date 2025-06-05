@@ -15,7 +15,7 @@ impl MathImpl<
     +Into<T, u128>,
     +TryInto<u128, T>,
     +Copy<T>,
-    +Drop<T>
+    +Drop<T>,
 > of MathTrait<T> {
     fn add_capped(self: T, value: T, cap: T) -> T {
         if self + value >= cap {

@@ -1,6 +1,7 @@
 use dojo::world::IWorldDispatcher;
 use rollyourown::{
-    utils::random::{Random, RandomImpl}, models::game::{Game}, store::{Store, StoreImpl, StoreTrait}
+    models::game::{Game}, store::{Store, StoreImpl, StoreTrait},
+    utils::random::{Random, RandomImpl},
 };
 use starknet::ContractAddress;
 

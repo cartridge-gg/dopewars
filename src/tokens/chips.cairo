@@ -37,7 +37,7 @@ mod chips {
         token_address: ContractAddress,
         #[key]
         owner: ContractAddress,
-        balance: u256
+        balance: u256,
     }
 
     #[abi(embed_v0)]
@@ -98,14 +98,14 @@ mod chips {
             ref self: ERC20Component::ComponentState<ContractState>,
             from: ContractAddress,
             recipient: ContractAddress,
-            amount: u256
+            amount: u256,
         ) {}
 
         fn after_update(
             ref self: ERC20Component::ComponentState<ContractState>,
             from: ContractAddress,
             recipient: ContractAddress,
-            amount: u256
+            amount: u256,
         ) {
             let contract_state = self.get_contract();
             let balance_from = contract_state.erc20.balance_of(from);
@@ -118,16 +118,16 @@ mod chips {
                     @ERC20BalanceEvent {
                         token_address: starknet::get_contract_address(),
                         owner: from,
-                        balance: balance_from
-                    }
+                        balance: balance_from,
+                    },
                 );
             world
                 .emit_event(
                     @ERC20BalanceEvent {
                         token_address: starknet::get_contract_address(),
                         owner: recipient,
-                        balance: balance_recipient
-                    }
+                        balance: balance_recipient,
+                    },
                 );
         }
     }

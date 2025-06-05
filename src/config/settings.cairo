@@ -1,6 +1,6 @@
 use rollyourown::{
-    config::{game::{GameConfig}}, utils::random::{Random, RandomImpl,},
-    traits::{Enumerable, RandomizableImpl}
+    config::{game::{GameConfig}}, traits::{Enumerable, RandomizableImpl},
+    utils::random::{Random, RandomImpl},
 };
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
@@ -37,7 +37,7 @@ enum HealthMode {
 enum TurnsMode {
     OnSpeed,
     OnWeed,
-    OnMush
+    OnMush,
 }
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
@@ -127,10 +127,10 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
     fn get_max_turns(self: SeasonSettings) -> u8 {
         4
         // match self.turns_mode {
-        //     TurnsMode::OnSpeed => { 15 },
-        //     TurnsMode::OnWeed => { 18 },
-        //     TurnsMode::OnMush => { 21 },
-        // }
+    //     TurnsMode::OnSpeed => { 15 },
+    //     TurnsMode::OnWeed => { 18 },
+    //     TurnsMode::OnMush => { 21 },
+    // }
     }
 
     //
@@ -169,7 +169,7 @@ impl SeasonSettingsImpl of SeasonSettingsTrait {
 
 impl CashModeEnumerableImpl of Enumerable<CashMode> {
     fn all() -> Span<CashMode> {
-        array![CashMode::Broke, CashMode::Average, CashMode::Rich,].span()
+        array![CashMode::Broke, CashMode::Average, CashMode::Rich].span()
     }
 }
 
@@ -181,33 +181,32 @@ impl HealthModeEnumerableImpl of Enumerable<HealthMode> {
 
 impl TurnsModeEnumerableImpl of Enumerable<TurnsMode> {
     fn all() -> Span<TurnsMode> {
-        array![TurnsMode::OnSpeed, TurnsMode::OnWeed, TurnsMode::OnMush,].span()
+        array![TurnsMode::OnSpeed, TurnsMode::OnWeed, TurnsMode::OnMush].span()
     }
 }
 
 impl EncountersModeEnumerableImpl of Enumerable<EncountersMode> {
     fn all() -> Span<EncountersMode> {
-        array![EncountersMode::Chill, EncountersMode::NoJokes, EncountersMode::UltraViolence,]
-            .span()
+        array![EncountersMode::Chill, EncountersMode::NoJokes, EncountersMode::UltraViolence].span()
     }
 }
 
 impl EncountersOddsModeEnumerableImpl of Enumerable<EncountersOddsMode> {
     fn all() -> Span<EncountersOddsMode> {
-        array![EncountersOddsMode::Easy, EncountersOddsMode::Normal, EncountersOddsMode::Hard,]
+        array![EncountersOddsMode::Easy, EncountersOddsMode::Normal, EncountersOddsMode::Hard]
             .span()
     }
 }
 
 impl DrugsModeEnumerableImpl of Enumerable<DrugsMode> {
     fn all() -> Span<DrugsMode> {
-        array![DrugsMode::Cheap, DrugsMode::Normal, DrugsMode::Expensive,].span()
+        array![DrugsMode::Cheap, DrugsMode::Normal, DrugsMode::Expensive].span()
     }
 }
 
 impl WantedModeEnumerableImpl of Enumerable<WantedMode> {
     fn all() -> Span<WantedMode> {
-        array![WantedMode::KoolAndTheGang, WantedMode::ThugLife, WantedMode::MostWanted,].span()
+        array![WantedMode::KoolAndTheGang, WantedMode::ThugLife, WantedMode::MostWanted].span()
     }
 }
 

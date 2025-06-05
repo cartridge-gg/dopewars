@@ -3,25 +3,25 @@ use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game, GameMode}, events::HighVolatility,
-    utils::{
-        events::{RawEventEmitterTrait, RawEventEmitterImpl},
-        random::{Random, RandomImpl, RandomTrait}, math::{MathTrait, MathImplU8},
-        bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
-    },
     config::{
-        drugs::{Drugs, DrugsEnumerableImpl, DrugConfig},
+        drugs::{DrugConfig, Drugs, DrugsEnumerableImpl},
         locations::{Locations, LocationsEnumerableImpl},
     },
-    store::{Store, StoreImpl, StoreTrait},
+    events::HighVolatility, models::game::{Game, GameMode},
     packing::game_store_layout::{GameStoreLayout, GameStoreLayoutPackableImpl},
+    store::{Store, StoreImpl, StoreTrait},
+    utils::{
+        bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
+        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImplU8, MathTrait},
+        random::{Random, RandomImpl, RandomTrait},
+    },
 };
 use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde)]
 struct MarketsPacked {
-    packed: felt252
+    packed: felt252,
 }
 
 #[generate_trait]
@@ -57,7 +57,6 @@ impl MarketsPackedImpl of MarketsPackedTrait {
     }
 
 
-
     //
     //
     //
@@ -88,7 +87,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
             match locations.pop_front() {
                 Option::Some(location) => {
                     // limit to 4 drugs slots == [0,1,2,3]
-                    let mut drugs = array![Drugs::Ludes, Drugs::Speed, Drugs::Weed, Drugs::Shrooms,]
+                    let mut drugs = array![Drugs::Ludes, Drugs::Speed, Drugs::Weed, Drugs::Shrooms]
                         .span();
 
                     loop {
@@ -129,15 +128,15 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                                                 location_id: (*location).into(),
                                                 drug_id: (*drug).into(),
                                                 increase: direction.into(),
-                                            }
+                                            },
                                         )
                                 }
                             },
-                            Option::None => { break; }
+                            Option::None => { break; },
                         };
                     };
                 },
-                Option::None(_) => { break; }
+                Option::None(_) => { break; },
             };
         };
     }
@@ -155,7 +154,7 @@ impl MarketsPackedImpl of MarketsPackedTrait {
                     let rand_tick = randomizer.between::<usize>(0, 63).into();
                     self.set_tick(*location, drug_slot.into(), rand_tick);
                 },
-                Option::None(_) => { break; }
+                Option::None(_) => { break; },
             };
         };
     }

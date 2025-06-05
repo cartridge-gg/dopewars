@@ -5,7 +5,7 @@ mod vrf_provider_mock {
     use cartridge_vrf::vrf_provider::vrf_provider_component::VrfProviderComponent;
 
     use openzeppelin_access::ownable::OwnableComponent;
-    use starknet::{ContractAddress, ClassHash};
+    use starknet::{ClassHash, ContractAddress};
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
     component!(path: VrfProviderComponent, storage: vrf_provider, event: VrfProviderEvent);
@@ -36,6 +36,6 @@ mod vrf_provider_mock {
 
     fn dojo_init(ref self: ContractState, pubkey_x: felt252, pubkey_y: felt252) {
         self.ownable.initializer(starknet::get_caller_address());
-        self.vrf_provider.initializer(PublicKey { x: pubkey_x, y: pubkey_y, });
+        self.vrf_provider.initializer(PublicKey { x: pubkey_x, y: pubkey_y });
     }
 }

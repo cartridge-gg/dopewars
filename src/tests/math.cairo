@@ -3,7 +3,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 // use rollyourown::tests::test_helper::{spawn_world, SystemDispatchers};
 
-use rollyourown::utils::math::{MathTrait, MathImplU8};
+use rollyourown::utils::math::{MathImplU8, MathTrait};
 // #[test]
 // fn test_math_pct() {
 //     let (world, contracts) = spawn_world();

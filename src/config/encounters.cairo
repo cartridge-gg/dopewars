@@ -1,12 +1,12 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::{game::{GameConfig}, settings::{SeasonSettings, EncountersMode, EncountersOddsMode}},
+    config::{game::{GameConfig}, settings::{EncountersMode, EncountersOddsMode, SeasonSettings}},
+    packing::{game_store::{GameStore}}, store::{Store, StoreImpl, StoreTrait},
     utils::{
-        random::{Random, RandomImpl}, math::{MathTrait, MathImplU8},
-        bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl},
-        bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}
+        bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
+        bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, math::{MathImplU8, MathTrait},
+        random::{Random, RandomImpl},
     },
-    packing::{game_store::{GameStore},}, store::{Store, StoreImpl, StoreTrait}
 };
 use starknet::ContractAddress;
 
@@ -46,7 +46,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 9 - 2,
                 speed_base: 6 - 2,
                 speed_step: 8 - 2,
-            }
+            },
         );
 
     store
@@ -62,7 +62,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 8 - 2,
                 speed_base: 2,
                 speed_step: 8 - 2,
-            }
+            },
         );
 
     // NoJokes
@@ -80,7 +80,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 9,
                 speed_base: 6,
                 speed_step: 8,
-            }
+            },
         );
 
     store
@@ -96,7 +96,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 8,
                 speed_base: 2,
                 speed_step: 8,
-            }
+            },
         );
 
     // UltraViolence
@@ -114,7 +114,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 9 + 2,
                 speed_base: 6 + 2,
                 speed_step: 8 + 2,
-            }
+            },
         );
 
     store
@@ -130,7 +130,7 @@ fn initialize_encounter_stats_config(ref store: Store) {
                 defense_step: 8 + 3,
                 speed_base: 2 + 3,
                 speed_step: 8 + 3,
-            }
+            },
         );
 }
 
@@ -180,7 +180,7 @@ struct EncounterConfig {
     //
     rep_pay: u8, // reputation modifier for paying NEGATIVE
     rep_run: u8, // reputation modifier for running POSITIVE(success) or NEGATIVE(fail)
-    rep_fight: u8, // reputation modifier for fighting
+    rep_fight: u8 // reputation modifier for fighting
 }
 
 
@@ -201,12 +201,12 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
     }
 
     fn get_encounter(
-        ref game_store: GameStore, ref season_settings: SeasonSettings
+        ref game_store: GameStore, ref season_settings: SeasonSettings,
     ) -> EncounterConfig {
         let level = Self::get_encounter_level(ref season_settings, game_store.player.reputation);
 
         let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
-            array![game_store.markets.packed, game_store.game.game_id.into()].span()
+            array![game_store.markets.packed, game_store.game.game_id.into()].span(),
         )
             .into() % 2;
 
@@ -234,7 +234,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
             //
             rep_pay: level * 5, //(level * 3) * 2, // reputation modifier for paying NEGATIVE
             rep_run: level * 2, // reputation modifier for running POSITIVE(success)
-            rep_fight: level * 3, // reputation modifier for fighting
+            rep_fight: level * 3 // reputation modifier for fighting
         };
 
         encounter
@@ -242,7 +242,7 @@ impl EncounterSpawnerImpl of EncounterSpawnerTrait {
 
     fn get_random_demand_pct(ref game_store: GameStore) -> u8 {
         let rand_from_game_store: u256 = poseidon::poseidon_hash_span(
-            array![game_store.markets.packed, game_store.game.game_id.into()].span()
+            array![game_store.markets.packed, game_store.game.game_id.into()].span(),
         )
             .into();
 

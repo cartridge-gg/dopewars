@@ -1,9 +1,9 @@
 use dojo::meta::introspect::Introspect;
 
 use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, packing::game_store::{GameMode},
-    packing::game_store::{GameStore, GameStoreImpl}, systems::helpers::{shopping, trading},
-    models::game::TokenId,
+    config::{hustlers::{ItemSlot}, locations::{Locations}}, models::game::TokenId,
+    packing::game_store::{GameMode}, packing::game_store::{GameStore, GameStoreImpl},
+    systems::helpers::{shopping, trading},
 };
 use starknet::ContractAddress;
 
@@ -32,11 +32,16 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
+    use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
     use dojo::world::{WorldStorage};
+    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlotOption, HustlerSlots};
+
+    use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+    use rollyourown::achievements::achievements_v1::Tasks;
 
     use rollyourown::{
         config::{
@@ -62,12 +67,7 @@ mod game {
         },
         utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}, random::{Random, RandomImpl}},
     };
-    use achievement::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
-    use rollyourown::achievements::achievements_v1::Tasks;
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
-
-    use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
-    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlotOption, HustlerSlots};
 
 
     #[abi(embed_v0)]

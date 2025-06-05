@@ -7,6 +7,6 @@ struct GameStorePacked {
     game_id: u32,
     #[key]
     player_id: ContractAddress,
-    packed: felt252
+    packed: felt252,
 }
 

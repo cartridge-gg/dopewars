@@ -1,17 +1,16 @@
-use super::super::config::gear::GearItemConfigTrait;
 use dojo::world::WorldStorageTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::{
-    config::gear::{GearItemConfig}, config::hustlers::{ ItemSlot},
-    models::game::{Game, GameMode}, 
-    utils::bits::{Bits, BitsImpl, BitsTrait, BitsMathImpl}, packing::game_store::{GameStore},
-    store::{Store, StoreImpl, StoreTrait},
+    config::gear::{GearItemConfig}, config::hustlers::{ItemSlot},
     libraries::dopewars_items::{
-        IDopewarsItemsLibraryDispatcher, IDopewarsItemsDispatcherTrait, DopewarsItemTier,
-        DopewarsItemTierConfig,
+        DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
+        IDopewarsItemsLibraryDispatcher,
     },
+    models::game::{Game, GameMode}, packing::game_store::{GameStore},
+    store::{Store, StoreImpl, StoreTrait}, utils::bits::{Bits, BitsImpl, BitsMathImpl, BitsTrait},
 };
 use starknet::ContractAddress;
+use super::super::config::gear::GearItemConfigTrait;
 
 
 #[derive(Copy, Drop)]
@@ -57,8 +56,6 @@ impl ItemsPackedImpl of ItemsPackedTrait {
         let levels = items_disp.get_tier_config(dw_slot, tier).span();
 
         GearItemConfig { slot, item_id, level, levels }
-
-
     }
 
     // assume you checked its possible or overflow crack boom OD

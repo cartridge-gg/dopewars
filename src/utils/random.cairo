@@ -41,9 +41,9 @@ impl RandomImpl of RandomTrait {
         +PartialOrd<T>,
         +Zeroable<T>,
         +Copy<T>,
-        +Drop<T>
+        +Drop<T>,
     >(
-        ref self: Random, min: T, max: T
+        ref self: Random, min: T, max: T,
     ) -> T {
         let seed: u256 = self.next().into();
 

@@ -1,4 +1,4 @@
-use rollyourown::{traits::{Enumerable, Packable},};
+use rollyourown::{traits::{Enumerable, Packable}};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 enum PlayerLayout {

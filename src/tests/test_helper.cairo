@@ -5,18 +5,17 @@ use dojo::test_utils::{spawn_test_world};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::models::{
-    game::{game, Game}, player::{player, Player}, drug::{drug, Drug},
-    encounter::{encounter, Encounter}, item::{item, Item},
-    market_packed::{market_packed, MarketPacked}
+    drug::{Drug, drug}, encounter::{Encounter, encounter}, game::{Game, game}, item::{Item, item},
+    market_packed::{MarketPacked, market_packed}, player::{Player, player},
 };
 
 
 use rollyourown::systems::{
-    decide::{decide, IDecideDispatcher, IDecideDispatcherTrait},
-    lobby::{lobby, ILobbyDispatcher, ILobbyDispatcherTrait},
-    shop::{shop, IShopDispatcher, IShopDispatcherTrait},
-    trade::{trade, ITradeDispatcher, ITradeDispatcherTrait},
-    travel::{travel, ITravelDispatcher, ITravelDispatcherTrait}
+    decide::{IDecideDispatcher, IDecideDispatcherTrait, decide},
+    lobby::{ILobbyDispatcher, ILobbyDispatcherTrait, lobby},
+    shop::{IShopDispatcher, IShopDispatcherTrait, shop},
+    trade::{ITradeDispatcher, ITradeDispatcherTrait, trade},
+    travel::{ITravelDispatcher, ITravelDispatcherTrait, travel},
 };
 
 use starknet::ContractAddress;
@@ -58,23 +57,23 @@ fn spawn_world() -> (IWorldDispatcher, SystemDispatchers) {
     let systems = SystemDispatchers {
         decide: IDecideDispatcher {
             contract_address: world
-                .deploy_contract('paper', decide::TEST_CLASS_HASH.try_into().unwrap())
+                .deploy_contract('paper', decide::TEST_CLASS_HASH.try_into().unwrap()),
         },
         lobby: ILobbyDispatcher {
             contract_address: world
-                .deploy_contract('paper', lobby::TEST_CLASS_HASH.try_into().unwrap())
+                .deploy_contract('paper', lobby::TEST_CLASS_HASH.try_into().unwrap()),
         },
         shop: IShopDispatcher {
             contract_address: world
-                .deploy_contract('paper', shop::TEST_CLASS_HASH.try_into().unwrap())
+                .deploy_contract('paper', shop::TEST_CLASS_HASH.try_into().unwrap()),
         },
         trade: ITradeDispatcher {
             contract_address: world
-                .deploy_contract('paper', trade::TEST_CLASS_HASH.try_into().unwrap())
+                .deploy_contract('paper', trade::TEST_CLASS_HASH.try_into().unwrap()),
         },
         travel: ITravelDispatcher {
             contract_address: world
-                .deploy_contract('paper', travel::TEST_CLASS_HASH.try_into().unwrap())
+                .deploy_contract('paper', travel::TEST_CLASS_HASH.try_into().unwrap()),
         },
     };
 

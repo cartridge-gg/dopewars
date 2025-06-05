@@ -2,28 +2,26 @@ use dojo::event::EventStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game},
-    utils::{
-        random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl},
-        math::{MathImpl, MathTrait}
-    },
-    store::{Store, StoreImpl, StoreTrait},
-    config::{locations::{Locations}, settings::{SeasonSettings}},
+    config::{locations::{Locations}, settings::{SeasonSettings}}, events::{GameOver, Traveled},
+    helpers::season_manager::{SeasonManager, SeasonManagerTrait}, models::game::{Game},
     packing::{
+        drugs_packed::{DrugsPackedTrait},
         game_store::{GameStore, GameStoreImpl, GameStorePackerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
         markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
-        drugs_packed::{DrugsPackedTrait}
+        wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
     },
-    events::{GameOver, Traveled}, systems::helpers::{traveling},
-    helpers::season_manager::{SeasonManager, SeasonManagerTrait}
+    store::{Store, StoreImpl, StoreTrait}, systems::helpers::{traveling},
+    utils::{
+        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait},
+        random::{Random},
+    },
 };
 use starknet::ContractAddress;
 
 
 // -> (is_dead, has_encounter)
 fn on_travel(
-    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
+    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random,
 ) -> (bool, bool) {
     // update wanted
     game_store.update_wanted();
@@ -74,7 +72,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
                     turn: game_store.player.turn,
                     from_location_id: game_store.player.prev_location.into(),
                     to_location_id: game_store.player.location.into(),
-                }
+                },
             );
     }
 
@@ -117,7 +115,7 @@ fn on_game_over(ref game_store: GameStore, ref store: Store) {
                 cash: game_store.player.cash,
                 health: game_store.player.health,
                 reputation: game_store.player.reputation,
-            }
+            },
         );
 }
 

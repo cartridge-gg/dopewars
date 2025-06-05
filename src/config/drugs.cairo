@@ -1,9 +1,9 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,}}, config::settings::{DrugsMode},
-    store::{Store, StoreImpl, StoreTrait},
+    config::settings::{DrugsMode}, store::{Store, StoreImpl, StoreTrait}, traits::{Enumerable},
+    utils::introspect::{Bytes31IntrospectionImpl},
+    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait}},
 };
 
 
@@ -49,7 +49,7 @@ impl DrugsEnumerableImpl of Enumerable<Drugs> {
             Drugs::Acid,
             Drugs::Ketamine,
             Drugs::Heroin,
-            Drugs::Cocaine
+            Drugs::Cocaine,
         ];
         items.span()
     }
@@ -121,8 +121,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 24,
                 step: 2,
                 weight: 10,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -134,8 +134,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 150,
                 step: 8,
                 weight: 14,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -147,8 +147,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 402,
                 step: 16,
                 weight: 19,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -160,8 +160,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 906,
                 step: 32,
                 weight: 27,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -173,8 +173,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 1914,
                 step: 64,
                 weight: 37,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -186,8 +186,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 3930,
                 step: 128,
                 weight: 52,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -199,8 +199,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 7962,
                 step: 256,
                 weight: 72,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -212,8 +212,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 16026,
                 step: 512,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }
 
@@ -227,8 +227,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 18,
                 step: 1,
                 weight: 5,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -240,8 +240,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 85,
                 step: 6,
                 weight: 10,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -253,8 +253,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 290,
                 step: 18,
                 weight: 15,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -266,8 +266,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 980,
                 step: 54,
                 weight: 25,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -279,8 +279,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 2900,
                 step: 111,
                 weight: 30,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -292,8 +292,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 6800,
                 step: 186,
                 weight: 45,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -305,8 +305,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 13500,
                 step: 231,
                 weight: 65,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -318,8 +318,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 19800,
                 step: 284,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }
 
@@ -333,8 +333,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 25,
                 step: 1,
                 weight: 12,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -346,8 +346,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 76,
                 step: 3,
                 weight: 17,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -359,8 +359,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 218,
                 step: 10,
                 weight: 23,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -372,8 +372,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 796,
                 step: 28,
                 weight: 31,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -385,8 +385,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 1989,
                 step: 56,
                 weight: 41,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -398,8 +398,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 4467,
                 step: 109,
                 weight: 58,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -411,8 +411,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 7934,
                 step: 186,
                 weight: 76,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -424,7 +424,7 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 17220,
                 step: 333,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }

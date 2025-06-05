@@ -19,5 +19,5 @@ struct GameConfig {
     rep_buy_item: u8, // reputation earn when buying item
     rep_carry_drugs: u8, // reputation earn when traveling with >5 drug.quantity
     rep_hospitalized: u8, // reputation earn when Hospitalized
-    rep_jailed: u8, // reputation earn when Jailed
+    rep_jailed: u8 // reputation earn when Jailed
 }

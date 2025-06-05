@@ -1,4 +1,4 @@
-use core::bytes_31::{bytes31, Felt252TryIntoBytes31};
+use core::bytes_31::{Felt252TryIntoBytes31, bytes31};
 
 
 //
@@ -9,8 +9,8 @@ use dojo::model::{ModelStorage};
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    store::{Store, StoreImpl, StoreTrait},
+    store::{Store, StoreImpl, StoreTrait}, traits::{Enumerable},
+    utils::introspect::{Bytes31IntrospectionImpl},
 };
 
 

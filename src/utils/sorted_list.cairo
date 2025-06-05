@@ -318,11 +318,12 @@ impl SortedListImpl of SortedListTrait {
             curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
 
             // to adjust payout we will divide by stake_adj_paper_balance so we round it up
-            let payout = get_payout((i + 1).into(), entrants, paper_balance, true); 
+            let payout = get_payout((i + 1).into(), entrants, paper_balance, true);
             stake_adj_paper_balance += payout * curr_item.get_multiplier();
 
             // println!(
-            //     "{} - {} - {} - {}", i, payout, curr_item.get_multiplier(), stake_adj_paper_balance,
+            //     "{} - {} - {} - {}", i, payout, curr_item.get_multiplier(),
+            //     stake_adj_paper_balance,
             // );
 
             i += 1;

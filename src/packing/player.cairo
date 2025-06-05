@@ -2,17 +2,17 @@ use core::traits::TryInto;
 use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game}, traits::{Enumerable, Packable, Packer},
-    config::{locations::Locations, game::{GameConfig}, drugs::{Drugs}},
-    utils::{
-        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}
-    },
+    config::{drugs::{Drugs}, game::{GameConfig}, locations::Locations}, models::game::{Game},
     packing::{
-        game_store::{GameStore, GameStoreTrait},
+        drugs_packed::{DrugsPacked, DrugsPackedImpl}, game_store::{GameStore, GameStoreTrait},
+        markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait},
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
-        drugs_packed::{DrugsPacked, DrugsPackedImpl},
-        markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
+    },
+    traits::{Enumerable, Packable, Packer},
+    utils::{
+        bits::{Bits, BitsDefaultImpl, BitsImpl, BitsTrait},
+        events::{RawEventEmitterImpl, RawEventEmitterTrait}, math::{MathImpl, MathTrait},
+        random::{Random, RandomImpl},
     },
 };
 use starknet::ContractAddress;
@@ -73,7 +73,7 @@ struct Player {
     next_location: Locations,
     drug_level: u8,
     reputation: u8,
-    traded_million: bool, // TODO: remove or find another use ?
+    traded_million: bool // TODO: remove or find another use ?
 }
 
 
@@ -132,10 +132,10 @@ impl PlayerImpl of PlayerTrait {
         self.health = self.health.sub_capped(amount, 0);
     }
 
-    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random,) {
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
         // level up each rep_drug_step capped to 4
         let mut drug_level: u8 = MathImpl::min(
-            self.reputation / game_store.game_config().rep_drug_step, 4
+            self.reputation / game_store.game_config().rep_drug_step, 4,
         );
 
         // check if already the right level

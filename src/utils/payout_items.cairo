@@ -1,10 +1,10 @@
 use dojo::world::WorldStorage;
 
 use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
-use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
-use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
-use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
 use dope_contracts::dope_gear::dope_gear_store::{GearStoreImpl, GearStoreTrait};
+use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
+use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
+use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
 
 pub fn add_items_payout(
     ref dope_world: WorldStorage,

@@ -1,11 +1,11 @@
 use dojo::meta::introspect::Introspect;
+
+use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerBody, HustlerSlotOption};
 use rollyourown::models::game::{TokenId};
 use rollyourown::packing::game_store::{GameMode};
 use rollyourown::systems::game::{EncounterActions};
 use rollyourown::systems::helpers::traveling::{EncounterOutcomes};
 use starknet::ContractAddress;
-
-use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerBody, HustlerSlotOption};
 
 #[derive(Drop, Serde)]
 #[dojo::event]
@@ -45,7 +45,7 @@ pub struct GameOver {
     pub player_id: ContractAddress,
     pub season_version: u16,
     pub player_name: felt252,
-     pub token_id: TokenId,
+    pub token_id: TokenId,
     pub turn: u8,
     pub cash: u32,
     pub health: u8,
